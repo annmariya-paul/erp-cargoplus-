@@ -1,7 +1,7 @@
 const ROUTES = {
   SIDEBAR:"/",
   DASHBOARD:"/dashboard",
- LEAD:"/lead",
+  LEAD:"/lead",
   LAYOUT:"/layout",
   LEADLIST:"/lead_list"
 };

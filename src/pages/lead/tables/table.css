@@ -2,7 +2,7 @@
     font-weight: 500 !important;
 } */
 table {
-  background-color: #eff4f7;
+  
   border-radius: 4px;
 }
 th,
@@ -11,9 +11,11 @@ td {
   
 }
 th {
+  
   font-weight: 500;
 }
 td {
   
   color: rgb(101, 109, 114);
 }
+thead{background-color: #f1f3f5;}

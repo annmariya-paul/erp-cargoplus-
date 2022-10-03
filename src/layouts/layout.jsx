@@ -8,10 +8,10 @@ export default function Layout({children}) {
     <>
       <div className="container-fluid">
         <div className="d-flex">
-          <div className="col-sm-2">
+          <div className="col-1 col-sm-2">
             <Sidebar />
           </div>
-          <div className="col-10 d-flex justify-content-center">
+          <div className="col-11 col-sm-10 d-flex justify-content-center">
             <Outlet />
           </div>
         </div>

@@ -1,0 +1,102 @@
+@use "../../styles/variables.scss";
+
+// #cdf9fe
+$color_1: white;
+$hoverlabels: #80fcf6;
+$bg-color_1: #0d8bd4;
+$hover-labels: #2a96d4;
+
+.navbar {
+	z-index: 9999;
+}
+.bimenu {
+	font-size: 2rem !important;
+}
+.dashboard {
+	color: $color_1;
+	font-size: 18px;
+}
+.anticon {
+	vertical-align: .05rem !important;
+	padding-right: 6px;
+	font-size: 19px;
+}
+.nav-menu {
+	background-color: $bg-color_1;
+	width: 220px;
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	position: fixed;
+	top: 0;
+	left: -100%;
+	transition: 850ms;
+}
+.nav-menu.active {
+	left: 0;
+	transition: 350ms;
+}
+.nav-text {
+	display: flex;
+	justify-content: start;
+	align-items: center;
+	padding: 0px 0px 9px ;
+	list-style: none;
+	height: 53px;
+	a {
+		text-decoration: none;
+		color: $color_1;
+		font-size: 15px;
+		width: 100%;
+		height: 100%;
+		display: flex;
+		align-items: center;
+		border-radius: 4px;
+		&:hover {
+			background-color: $color-1;
+			color: $hover-labels;
+			opacity: 0.9;
+			width: 100%;
+		}
+    &:active{
+    //   background-color: $hover-labels;
+      color: $hoverlabels;
+    }
+	}
+}
+
+.nav-close {
+	display: flex;
+	justify-content: start;
+	align-items: center;
+	padding: 0px 0px 8px 0px;
+	list-style: none;
+	height: 60px;
+	text-decoration: none;
+	color: $color_1;
+	font-size: 15px;
+	width: 95%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	border-radius: 4px;
+}
+.nav-menu-items {
+	width: 100%;
+}
+.navbar-toggle {
+	background-color: $bg-color_1;
+	width: 100%;
+	height: 80px;
+	display: flex;
+	justify-content: end;
+	align-items: center;
+	padding-right: 1rem;
+}
+
+
+@media screen and (max-width: 570px) {
+	.bimenu{
+		font-size: 1.5rem !important;
+	}
+}

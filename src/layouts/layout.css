@@ -1,0 +1,7 @@
+.sidebarWrapper {
+    width: 220px;
+}
+
+.contentWrapper {
+    width: calc(100% - 220px);
+}

@@ -1,0 +1,145 @@
+@use "../../styles/variables.scss";
+
+$radiobutton: rgb(110, 110, 110);
+$color_2: #eff4f7;
+
+
+/* ########## Tabs ######### */
+
+*, ::before, ::after {
+  box-sizing: border-box;
+  // margin: 0;
+  padding: 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+  margin: 20px auto 0;
+}
+
+.bloc-tabs {
+  display: flex;
+  padding:0px;
+}
+.tabs {
+    font-size: 15px;
+    box-shadow: 2px 2px 12px variables.$boxshadow;
+    width: 100% !important;
+    margin-inline: 0.5px !important;
+    display: block;
+    flex: 1;
+    text-align: center;
+    padding-block: 7px;
+    background: white;
+    cursor: pointer;
+    border-radius: 2px;
+    box-sizing: content-box;
+    position: relative;
+//   outline: none;
+&:hover{
+    color:variables.$primary;
+}
+}
+
+.active-tabs {
+	background: variables.$white;
+	border: 1px solid variables.$primary;
+	color: variables.$primary;
+	&::before {
+		content: "";
+		display: block;
+		position: absolute;
+		// left: 50%;
+		background: #166ea4;
+	}
+}
+button {
+  border: none;
+}
+.content-tabs {
+  border-radius: 3px;
+  height:38rem;
+  flex-grow : 1;
+  box-shadow: 2px 2px 12px variables.$boxshadow;
+}
+.content {
+  background: white;
+  padding: 15px;
+  display: none;
+}
+.active-content {
+  display: block;
+}
+
+// ###### Form ######
+
+.form-control,.form-select {
+  background-color: variables.$inputfield !important;
+  border-color: variables.$inputfield !important;
+  border-radius: 3px;
+  width: 100% !important;
+  outline: none !important;
+  &:focus{
+    // border-color:#b5c4da !important;
+  box-shadow: none;
+}
+}
+
+.form-label,.para {
+  font-size: 15px;
+}
+.form-check-label {
+  color: $radiobutton !important;
+  font-size: 15px !important;
+}
+.form-check-input[type="radio"] {
+  color: $radiobutton !important;
+  font-size: 15px !important;
+}
+.form-check-input {
+  &:checked {
+    background-color: variables.$primary;
+    border-color: variables.$primary;
+  }
+}
+// .btn_save {
+//   border-radius: 4px;
+//   padding-inline: 2rem;
+//   padding-block: 7px;
+//   background: variables.$primary;
+//   &:hover {
+//     background: variables.$button-hover !important;
+//   }
+// }
+// .btnadd {
+//   border: none;
+//   padding-inline: 2rem;
+//   padding-block: 8px;
+//   background: variables.$primary;
+//   padding-inline: 13px !important;
+//   padding-block: 2px !important;
+//   font-size: 18px;
+//   float: right;
+//   &:hover {
+//     background: variables.$button-hover !important;
+//   }
+// }
+
+// ######### media Query ##########
+
+@media screen and (max-width: 570px) {
+ .content-tabs {
+    height:fit-content;
+  }
+  .tabs{
+font-size: 15px;
+  }
+  .content{padding-inline: 2px;}
+  .bloc-tabs{
+    display:flex;
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,19 @@
+/* .table>:not(:last-child)>:last-child>*{
+    font-weight: 500 !important;
+} */
+table {
+  background-color: #eff4f7;
+  border-radius: 4px;
+}
+th,
+td {
+  text-align: center;
+  
+}
+th {
+  font-weight: 500;
+}
+td {
+  
+  color: rgb(101, 109, 114);
+}

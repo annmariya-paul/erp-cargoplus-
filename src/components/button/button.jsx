@@ -1,7 +1,7 @@
 import React from 'react';
 import "./button.scss";
 
-const Buttons = React.forwardRef((props, ref) => {
+const Button = React.forwardRef((props, ref) => {
 const {
   btnType = "",
   children,
@@ -51,4 +51,4 @@ return (
 );
     })
 
-export default Buttons; 
+export default Button; 

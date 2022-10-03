@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./lead.styles.scss";
 import axios from "axios";
-import { Form,Button } from "react-bootstrap";
-import Buttons from '../../components/button/button'
+import { Form } from "react-bootstrap";
+import Button from '../../components/button/button'
 import { ROUTES } from "../../routes";
 import { useForm } from "react-hook-form";
 import { PlusOutlined } from "@ant-design/icons";
@@ -288,9 +288,9 @@ function Lead() {
                     </div>
 
                     <div className="col pt-3">
-                      <Buttons onClick={Submit} btnType="save">
+                      <Button onClick={Submit} btnType="save">
                         Save
-                      </Buttons>
+                      </Button>
                       {/* <Button type="submit" className="btn_save">
                           Save
                         </Button>  */}
@@ -310,14 +310,12 @@ function Lead() {
                 <div className="row px-1" style={{ borderRadius: "3px" }}>
                   <div className="container">
                     <div className="col-md-12">
-                      <Buttons
-                        className=""
+                      <Button
                         btnType="add"
-                        
                         onClick={() => setModalContact(true)}
                       >
                         Add <PlusOutlined />
-                      </Buttons>
+                      </Button>
                       <AddContact
                         show={modalContact}
                         onHide={() => setModalContact(false)}
@@ -327,7 +325,7 @@ function Lead() {
                       <ContactTable />
                     </div>
                     <div className="col mt-4">
-                      <Button className="btn_save" type="submit">
+                      <Button onClick={Submit} btnType="save">
                         Save
                       </Button>
                     </div>
@@ -342,14 +340,10 @@ function Lead() {
                 <div className="row my-4 px-1" style={{ borderRadius: "3px" }}>
                   <div className="col-lg-12">
                     <Button
-                      className="btnadd"
+                      btnType="add"
                       onClick={() => setModalAddress(true)}
                     >
-                      Add
-                      <i
-                        className="bi bi-plus"
-                        style={{ fontSize: "22px", paddingLeft: "4px" }}
-                      />
+                      Add <PlusOutlined />
                     </Button>
                     <AddAddress
                       show={modalAddress}
@@ -360,7 +354,9 @@ function Lead() {
                     <AddressTable />
                   </div>
                   <div className="col mt-4">
-                    <Button className="btn_save">Save</Button>
+                    <Button onClick={Submit} btnType="save">
+                      Save
+                    </Button>
                   </div>
                 </div>
               </div>

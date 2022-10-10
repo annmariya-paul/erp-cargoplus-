@@ -1,9 +1,5 @@
 @use "../../styles/variables.scss";
 
-// variables.$white: white;
-$hoverlabels: #80fcf6;
-$hover-labels: #2a96d4;
-
 .navbar {
 	z-index: 9999;
 }
@@ -15,10 +11,10 @@ $hover-labels: #2a96d4;
 	color: variables.$white;
 	font-size: 18px;
 }
-.anticon {
-	vertical-align: .05rem !important;
+.sidebar_icons {
+	// vertical-align: .05rem !important;
 	padding-right: 6px;
-	font-size: 19px;
+	font-size: 26px !important;
 }
 .nav-menu {
 	background-color: variables.$primary;
@@ -32,43 +28,46 @@ $hover-labels: #2a96d4;
 	transition: 850ms;
 }
 .nav-menu.active {
-	left: 0;
-	transition: 350ms;
+	left: 0px;
+	transition: 355ms;
 }
 .nav-text {
 	display: flex;
-	justify-content: start;
+	justify-content: center;
 	align-items: center;
-	padding: 0px 0px 9px ;
+	padding: 0px 0px 10px ;
+	margin-left: -31px;
 	list-style: none;
-	height: 53px;
+	height: 51px;
 	a {
 		text-decoration: none;
 		color: variables.$white;
 		font-size: 15px;
+		padding-left: 30px;
 		width: 100%;
 		height: 100%;
 		display: flex;
 		align-items: center;
-		border-radius: 4px;
+		
 		&:hover {
 			background-color: variables.$white;
-			color: $hover-labels;
-			opacity: 0.9;
+			color: variables.$primary;
 			width: 100%;
 		}
-    &:active{
-      background-color: variables.$white !important;
-      color: $hover-labels !important;
-    }
+	// 	&:active{
+    //   background-color: variables.$white !important;
+    //   color: variables.$primary !important;
+    // }
 	}
 }
+
+		
 
 .nav-close {
 	display: flex;
 	justify-content: start;
 	align-items: center;
-	padding: 0px 0px 8px 0px;
+	padding: 0px 0px 15px;
 	list-style: none;
 	height: 60px;
 	text-decoration: none;
@@ -90,7 +89,7 @@ $hover-labels: #2a96d4;
 	display: flex;
 	justify-content: end;
 	align-items: center;
-	padding-right: 1rem;
+	padding-right: 6px;
 }
 
 

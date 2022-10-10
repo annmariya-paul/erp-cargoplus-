@@ -1,5 +1,20 @@
-$primary:#0997d9;
+$primary:#0891d1;
 $inputfield:#f4f4f7;
-$button-hover:#43b0eb;
-$boxshadow:#e1dede;
+$button-hover:#3997ca;
+$boxshadow:#dfdcdc;
 $white:#ffffff;
+
+::-webkit-scrollbar {
+  width: 3px;
+  height: 3px;
+}
+::-webkit-scrollbar-track { 
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: $boxshadow; 
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: $boxshadow; }
+

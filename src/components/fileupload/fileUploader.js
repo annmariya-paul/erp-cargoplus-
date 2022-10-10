@@ -62,7 +62,7 @@ export default function FileUpload() {
                   className=" dropzone-content "
                   style={{ textAlign: "center", cursor: "pointer" }}
                 >
-                  <i class="bi5 bi-file-earmark-arrow-up-fill" />
+                  <i className="bi5 bi-file-earmark-arrow-up-fill" />
                   <br />
                   Release to drop the files here
                 </p>
@@ -71,7 +71,7 @@ export default function FileUpload() {
                   className="dropzone-content "
                   style={{ textAlign: "center", cursor: "pointer" }}
                 >
-                  <i class="bi5 bi-file-earmark-arrow-up-fill" />
+                  <i className="bi5 bi-file-earmark-arrow-up-fill" />
                   <br />
                   Drop Your Files
                 </p>
@@ -101,7 +101,7 @@ export default function FileUpload() {
             <div className="row">
               <div>
                 <i
-                  class="bi bi-file-earmark-arrow-up-fill"
+                  className="bi bi-file-earmark-arrow-up-fill"
                   style={{ fontSize: "5rem", color: "#099ed9" }}
                 />
               </div>

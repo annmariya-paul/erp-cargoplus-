@@ -1,0 +1,91 @@
+@use "../../styles/variables.scss";
+
+$grey: #777777;
+
+.lead_list {
+  height: 650px;
+  border-radius: 4px;
+  box-shadow: 2px 2px 12px variables.$boxshadow;
+}
+.lead_text {
+  color: variables.$primary;
+  font-weight: 499;
+}
+.leadlist_icons_panel {
+  list-style: none;
+}
+.icon-border {
+  display: inline-block;
+  border-radius: 50%;
+  border: 1px solid rgb(162, 162, 162);
+  margin: 4px;
+  color: $grey;
+  &:hover {
+    border-color: variables.$primary;
+  }
+}
+.icon {
+  color: rgb(136, 135, 135);
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  text-decoration: none;
+  padding-bottom: 5px;
+  // height: 34px;
+  width: 37px;
+  font-size: 20px;
+  &:hover {
+    color: variables.$primary !important;
+  }
+}
+.ant-input-group .ant-input {
+  border: none;
+  height: 2.4rem;
+  border-radius: 4px !important;
+  &:focus {
+    box-shadow: none;
+  }
+}
+.ant-select:not(.ant-select-customize-input) .ant-select-selector {
+  border: none !important;
+  padding-block: 3px !important;
+  height: 2.2rem !important;
+  border-radius: 4px !important;
+  &:focus {
+    box-shadow: none !important;
+  }
+}
+.ant-input-search
+  > .ant-input-group
+  > .ant-input-group-addon:last-child
+  .ant-input-search-button:not(.ant-btn-primary) {
+  border: none;
+  box-shadow: none;
+  border-radius: 4px !important;
+  &:focus {
+    box-shadow: none;
+  }
+}
+.select_search {
+  background-color: rgb(255, 255, 255) !important;
+  border-radius: 4px;
+  margin-top: 4px;
+}
+.actionEdit {
+  font-size: 16px !important;
+}
+.actionView,
+.actionEdit {
+  font-size: 19px;
+  padding-inline: 5px;
+  color: $grey;
+  &:hover {
+    color: variables.$primary;
+  }
+}
+// .select_search{
+//   color:#777777;
+//   option{color:black}
+// }
+
+

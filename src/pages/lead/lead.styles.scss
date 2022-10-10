@@ -12,12 +12,12 @@ $color_2: #eff4f7;
   padding: 0;
 }
 
-.container {
+.lead_container {
   display: flex;
   flex-direction: column;
   position: relative;
   width: 100%;
-  margin: 20px auto 0;
+  // margin: 0px auto 0 ;
 }
 
 .bloc-tabs {
@@ -84,7 +84,7 @@ button {
   outline: none !important;
   &:focus{
     // border-color:#b5c4da !important;
-  box-shadow: none;
+  box-shadow: none !important;
 }
 }
 
@@ -141,5 +141,9 @@ font-size: 15px;
   .bloc-tabs{
     display:flex;
     flex-direction: column;
+  }
+  .lead_container{
+margin:4px;
+column-width:100vh;
   }
 }

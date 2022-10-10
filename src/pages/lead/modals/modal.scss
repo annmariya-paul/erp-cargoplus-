@@ -1,6 +1,7 @@
-$modal_title: #099ed9;
+@use "../../../styles/variables.scss";
+
 $bg_closebtn: #e6e4e4;
-$flag_tab_border: #dde0e2;
+$flag_tab_border: #dadddf;
 
 Button.btn-close {
   border-radius: 50%;
@@ -13,7 +14,7 @@ Button.btn-close {
 }
 .modal-title,
 .success_msg {
-  color: $modal_title;
+  color: variables.$primary;
 }
 .modal-footer {
   border-top: none;
@@ -30,7 +31,7 @@ Button.btn-close {
 .flag-dropdown {
   border-left: none !important;
   border-block: none !important;
-  border-color: $flag-tab-border !important;
+  border-color: $flag_tab_border !important;
 }
 .invalid {
   border: 1px solid red !important;

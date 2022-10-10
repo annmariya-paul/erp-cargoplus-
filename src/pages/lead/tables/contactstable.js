@@ -1,7 +1,7 @@
-import "./table.css"
+import "./table.css";
 function ContactTable() {
   return (
-    <div class="table-responsive">
+    <div className="table-responsive">
       <table className="table table-borderless ">
         <thead className="thead">
           <tr>

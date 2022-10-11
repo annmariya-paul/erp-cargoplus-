@@ -35,7 +35,6 @@ export default function LeadList() {
   const MyPagination = ({ total, onChange, current,showSizeChanger }) => {
     return (
       <Pagination
-        // pageSizeOptions={ ["10", "20", "50", "100"]}
         size="small"
         onChange={onChange}
         total={total}
@@ -467,18 +466,6 @@ export default function LeadList() {
             <TableData
               data={getData(current, pageSize)}
               columns={columns}
-              // pagination={{
-              //   size: "small",
-              //   pageSizeOptions: ["10", "20", "50", "100"],
-              //   defaultPageSize: 10,
-              //   showSizeChanger: true,
-              //   current: page,
-              //   pageSize: pageSize,
-              //   onChange: (page, pageSize) => {
-              //     setPage(page);
-              //     setPageSize(pageSize);
-              //   },
-              // }}
             />
           </div>
           <div className="d-flex py-2 justify-content-center">

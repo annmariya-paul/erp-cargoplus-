@@ -87,6 +87,12 @@ $grey: #777777;
  box-shadow: -1px 2px 5px  variables.$boxshadow;
  border-radius: 3px;
 }
+.ant-pagination-item-active {
+  border: none !important;
+  border-radius: 50px !important;
+  background-color: variables.$primary !important;
+  color:white !important;
+}
 
 @media screen and (max-width: 570px) {
  .datatable,.lead_list {

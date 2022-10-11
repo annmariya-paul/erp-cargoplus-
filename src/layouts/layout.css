@@ -5,3 +5,9 @@
 .contentWrapper {
   width: calc(100% - 220px);
 }
+
+/* @media screen and (min-width: 950px) {
+  .contentWrapper{
+    padding-inline: 50px !important;
+  }
+} */

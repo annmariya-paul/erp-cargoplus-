@@ -3,7 +3,7 @@
 $grey: #777777;
 
 .lead_list {
-  height: 650px;
+  min-height: 650px;
   border-radius: 4px;
   box-shadow: 2px 2px 12px variables.$boxshadow;
 }
@@ -83,9 +83,13 @@ $grey: #777777;
     color: variables.$primary;
   }
 }
-// .select_search{
-//   color:#777777;
-//   option{color:black}
-// }
+.ant-select-single.ant-select-sm:not(.ant-select-customize-input).ant-select-show-arrow .ant-select-selection-item{
+ box-shadow: -1px 2px 5px  variables.$boxshadow;
+ border-radius: 3px;
+}
 
-
+@media screen and (max-width: 570px) {
+ .datatable,.lead_list {
+    height:fit-content;
+  }
+}

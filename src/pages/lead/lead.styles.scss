@@ -61,7 +61,7 @@ button {
 }
 .content-tabs {
   border-radius: 3px;
-  height:38rem;
+  min-height:38rem;
   flex-grow : 1;
   box-shadow: 2px 2px 12px variables.$boxshadow;
 }

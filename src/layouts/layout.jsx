@@ -23,7 +23,7 @@ export default function Layout({ children }) {
           </div>
           <div
             className={` ${
-              showMenu ? "contentWrapper col-10 mt-3" : " col-11 mt-3 mx-5 "
+              showMenu ? "contentWrapper col-10 mt-3" : " col-11 mt-3 pe-2 ms-4 "
             }`}
           >
             <Outlet />

@@ -16,12 +16,35 @@ import TableData from "../../components/table/table_data";
 import { LeadStatus } from "../../utils/leadStatus";
 import { SmallDashOutlined } from "@ant-design/icons";
 
+
+
 export default function LeadList() {
   const [searchedText, setSearchedText] = useState("");
   const [searchType, setSearchType] = useState("");
   const [searchStatus, setSearchStatus] = useState("");
-  const [page,setPage] = useState();
-  const [pageSize,setPageSize] = useState();
+  // const [page,setPage] = useState();
+  const [pageSize, setPageSize] = useState("10", "20", "50", "100");
+  const [current, setCurrent] = useState(1);
+
+  
+
+  const getData = (current, pageSize) => {
+    return data.slice((current - 1) * pageSize, current * pageSize);
+  };
+
+  const MyPagination = ({ total, onChange, current,showSizeChanger }) => {
+    return (
+      <Pagination
+        // pageSizeOptions={ ["10", "20", "50", "100"]}
+        size="small"
+        onChange={onChange}
+        total={total}
+        current={current}
+        pageSize={pageSize}
+        showSizeChanger={showSizeChanger}
+      />
+    );
+  };
  
   
 
@@ -440,24 +463,35 @@ export default function LeadList() {
               </Select>
             </div>
           </div>
-         
-          <TableData
-            data={data}
-            columns={columns}
-            pagination={{
-              size:"small",
-            pageSizeOptions: ["10", "20", "50", "100"],
-            defaultPageSize: 10,
-            showSizeChanger: true,
-            current: page,
-            pageSize: pageSize,
-            onChange: (page, pageSize) => {
-              setPage(page);
-              setPageSize(pageSize);
-            },
-            }}
-          />
-          
+          <div className="datatable">
+            <TableData
+              data={getData(current, pageSize)}
+              columns={columns}
+              // pagination={{
+              //   size: "small",
+              //   pageSizeOptions: ["10", "20", "50", "100"],
+              //   defaultPageSize: 10,
+              //   showSizeChanger: true,
+              //   current: page,
+              //   pageSize: pageSize,
+              //   onChange: (page, pageSize) => {
+              //     setPage(page);
+              //     setPageSize(pageSize);
+              //   },
+              // }}
+            />
+          </div>
+          <div className="d-flex py-2 justify-content-center">
+            <MyPagination
+              total={data.length}
+              current={current}
+              showSizeChanger= {true}
+             onChange={(current, pageSize) => {
+                  setCurrent(current)
+                  setPageSize(pageSize)
+                }}
+            />
+          </div>
         </div>
       </div>
     </>

@@ -1,0 +1,9 @@
+@media screen and (orientation: landscape) {
+  .land_scape {
+    margin: 0;
+    overflow: hidden;
+    transform-origin: right;
+    transform: rotate(-90deg);
+    writing-mode: vertical-rl;
+  }
+}

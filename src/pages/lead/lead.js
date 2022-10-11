@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import "./lead.styles.scss";
-import axios from "axios";
 import { Form } from "react-bootstrap";
 import Button from '../../components/button/button'
 import { ROUTES } from "../../routes";
 import { useForm } from "react-hook-form";
-import { PlusOutlined } from "@ant-design/icons";
+import { AiOutlinePlus } from "react-icons/ai";
 import FileUpload from "../../components/fileupload/fileUploader";
 import ContactTable from "./tables/contactstable";
 import AddressTable from "./tables/addresstable";
 import AddAddress from "./modals/modal_addaddress";
-import AddContact from "./modals/modal_addcontact"
+import AddContact from "./modals/modal_addcontact";
+import { LeadStatus } from "../../utils/leadStatus";
 import SuccessMesssage from "../../components/modal_success/success_modal";
 // import ErrorMsg from "../../components/errormessage";
 import Countrystate from "./location/countryselect"
@@ -57,7 +57,7 @@ function Lead() {
   return (
     <>
       <div className="container-fluid">
-        <div className="container">
+        <div className="lead_container">
           <div className="row justify-content-md-center">
             <div className="bloc-tabs tabs-responsive">
               <button
@@ -274,7 +274,7 @@ function Lead() {
                             trigger("leadstatus");
                           }}
                         >
-                          <option value="Lead">Lead</option>
+                          {/* <option value="Lead">Lead</option>
                           <option value="Opportunity">Opportunity</option>
                           <option value="Quotation">Quotation</option>
                           <option value="Interested" selected>
@@ -282,7 +282,21 @@ function Lead() {
                           </option>
                           <option value="Converted">Converted</option>
                           <option value="Lost">Lost</option>
-                          <option value="DND">DND</option>
+                          <option value="DND">DND</option> */}
+                          {LeadStatus &&
+                            LeadStatus.map((item, index) => {
+                              return (
+                                <option
+                                  key={item.id}
+                                  value={item.value}
+                                  {...(item.id == 3
+                                    ? "selected"
+                                    : "")}
+                                >
+                                  {item.name}
+                                </option>
+                              );
+                            })}
                         </Form.Select>
                       </Form.Group>
                     </div>
@@ -307,28 +321,23 @@ function Lead() {
                   toggleState === 2 ? "content  active-content" : "content"
                 }
               >
-                <div className="row px-1" style={{ borderRadius: "3px" }}>
-                  <div className="container">
-                    <div className="col-md-12">
-                      <Button
-                        btnType="add"
-                        onClick={() => setModalContact(true)}
-                      >
-                        Add <PlusOutlined />
-                      </Button>
-                      <AddContact
-                        show={modalContact}
-                        onHide={() => setModalContact(false)}
-                      />
-                    </div>
-                    <div className="col-12 mt-4">
-                      <ContactTable />
-                    </div>
-                    <div className="col mt-4">
-                      <Button onClick={Submit} btnType="save">
-                        Save
-                      </Button>
-                    </div>
+                <div className="row mt-3 px-1" style={{ borderRadius: "3px" }}>
+                  <div className="col-md-12">
+                    <Button btnType="add" onClick={() => setModalContact(true)}>
+                      Add <AiOutlinePlus />
+                    </Button>
+                    <AddContact
+                      show={modalContact}
+                      onHide={() => setModalContact(false)}
+                    />
+                  </div>
+                  <div className="col-12 mt-4">
+                    <ContactTable />
+                  </div>
+                  <div className="col mt-4">
+                    <Button onClick={Submit} btnType="save">
+                      Save
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -337,13 +346,10 @@ function Lead() {
                   toggleState === 3 ? "content  active-content" : "content"
                 }
               >
-                <div className="row my-4 px-1" style={{ borderRadius: "3px" }}>
-                  <div className="col-lg-12">
-                    <Button
-                      btnType="add"
-                      onClick={() => setModalAddress(true)}
-                    >
-                      Add <PlusOutlined />
+                <div className="row mt-3 px-1" style={{ borderRadius: "3px" }}>
+                  <div className="col-md-12">
+                    <Button btnType="add" onClick={() => setModalAddress(true)}>
+                      Add <AiOutlinePlus />
                     </Button>
                     <AddAddress
                       show={modalAddress}

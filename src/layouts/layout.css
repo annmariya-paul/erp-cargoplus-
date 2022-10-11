@@ -1,7 +1,13 @@
 .sidebarWrapper {
-    width: 220px;
+  width: 220px;
 }
 
 .contentWrapper {
-    width: calc(100% - 220px);
+  width: calc(100% - 220px);
 }
+
+/* @media screen and (min-width: 950px) {
+  .contentWrapper{
+    padding-inline: 50px !important;
+  }
+} */

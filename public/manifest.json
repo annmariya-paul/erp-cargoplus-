@@ -1,5 +1,5 @@
 {
-  "short_name": "React App",
+  "short_name": "React Erp",
   "name": "Create React App Sample",
   "icons": [
     {
@@ -18,8 +18,9 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": ".",
+  "start_url": "/",
   "display": "standalone",
+  "orientation": "landscape",
   "theme_color": "#000000",
   "background_color": "#ffffff"
 }

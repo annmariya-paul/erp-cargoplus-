@@ -4,6 +4,7 @@ const ROUTES = {
   LEAD: "/lead",
   LAYOUT: "/layout",
   LEADLIST: "/lead_list",
+  CATEGORY:"/category"
 };
 
 module.exports = { ROUTES };

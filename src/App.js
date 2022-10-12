@@ -6,6 +6,7 @@ import Layout from "./layouts/layout";
 import Lead from "./pages/lead/lead";
 import LeadList from "./pages/lead_list/lead_list";
 import Dashboard from "./pages/dashboard/dashboard";
+import Category from "./pages/category/category";
 import TestPage from "./pages/testpage";
 // import Lead from "./pages/lead/lead";
 
@@ -20,6 +21,7 @@ function App() {
             <Route path={ROUTES.LEADLIST} element={<LeadList />} />
             <Route path={ROUTES.LEAD} element={<Lead />} />
             <Route path={ROUTES.DASHBOARD} element={<Dashboard />} />
+            <Route path={ROUTES.CATEGORY} element={<Category />} />
             <Route path={ROUTES.TEST_PAGE} element={<TestPage />} />
           </Route>
         </Routes>

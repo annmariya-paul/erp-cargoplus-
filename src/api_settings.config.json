@@ -1,0 +1,11 @@
+{
+   "app_version": 1,
+   "crm": {
+      "version": 1,
+      "version_name": "v1"
+   },
+   "leads": {
+      "version": 1,
+      "version_name": "v1"
+   }
+}

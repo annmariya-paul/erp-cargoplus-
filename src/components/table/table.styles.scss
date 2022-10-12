@@ -5,7 +5,6 @@
     background-color: rgb(240, 248, 254);
     font-size: 0.8rem;
      padding:9px;
-     opacity: 1 !important;
 }
 .ant-table-tbody > tr > td{
      font-size: 0.8rem;
@@ -23,8 +22,8 @@
      padding:7px;
 }
 .table_data{
-    height: 445px !important; 
-    overflow-y: auto !important;
+    // height: 445px !important; 
+    // overflow-y: auto !important;
     thead{
       z-index: 1;
        background-color: rgb(240, 248, 254);
@@ -38,7 +37,7 @@
             border-color: rgb(237, 239, 240);
             td{
               font-size: 0.8rem;
-     padding:5px;   
+              padding:5px;   
             }
         }
     }

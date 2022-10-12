@@ -15,7 +15,6 @@ import "antd/dist/antd.css";
 import TableData from "../../components/table/table_data";
 import { LeadStatus } from "../../utils/leadStatus";
 
-
 export default function LeadList() {
   const [searchedText, setSearchedText] = useState("");
   const [searchType, setSearchType] = useState("");
@@ -27,7 +26,7 @@ export default function LeadList() {
     return data.slice((current - 1) * pageSize, current * pageSize);
   };
 
-  const MyPagination = ({ total, onChange, current,showSizeChanger }) => {
+  const MyPagination = ({ total, onChange, current, showSizeChanger }) => {
     return (
       <Pagination
         size="small"
@@ -39,8 +38,6 @@ export default function LeadList() {
       />
     );
   };
- 
-  
 
   const action = () => {
     return (
@@ -76,7 +73,7 @@ export default function LeadList() {
       type: "Lead",
       name: "Reontech",
       organization: "Testname",
-      action:  action(),
+      action: action(),
       status: "Converted",
       key: "3",
     },
@@ -84,7 +81,7 @@ export default function LeadList() {
       type: "Customer",
       name: "Techpark",
       organization: "Tech",
-      action:  action(),
+      action: action(),
       status: "Quotation",
       key: "4",
     },
@@ -92,7 +89,7 @@ export default function LeadList() {
       type: "Lead",
       name: "Reon",
       organization: "Reon",
-      action:  action(),
+      action: action(),
       status: "Interested",
       key: "5",
     },
@@ -100,7 +97,7 @@ export default function LeadList() {
       type: "Customer",
       name: "test",
       organization: "Test1",
-      action:  action(),
+      action: action(),
       status: "Opportunity",
       key: "6",
     },
@@ -108,7 +105,7 @@ export default function LeadList() {
       type: "Lead",
       name: "Infotech",
       organization: "Reon",
-      action:  action(),
+      action: action(),
       status: "Lead",
       key: "7",
     },
@@ -116,7 +113,7 @@ export default function LeadList() {
       type: "Customer",
       name: "Techpark",
       organization: "Tech",
-      action:  action(),
+      action: action(),
       status: "DND",
       key: "8",
     },
@@ -124,7 +121,7 @@ export default function LeadList() {
       type: "Lead",
       name: "Reon",
       organization: "Reon",
-      action:  action(),
+      action: action(),
       status: "Lead",
       key: "9",
     },
@@ -132,7 +129,7 @@ export default function LeadList() {
       type: "Customer",
       name: "test",
       organization: "Reon",
-      action:  action(),
+      action: action(),
       status: "Opportunity",
       key: "10",
     },
@@ -140,7 +137,7 @@ export default function LeadList() {
       type: "Lead",
       name: "Infotech",
       organization: "Reon",
-      action:  action(),
+      action: action(),
       status: "Converted",
       key: "11",
     },
@@ -148,7 +145,7 @@ export default function LeadList() {
       type: "Customer",
       name: "Techpark",
       organization: "Tech",
-      action:  action(),
+      action: action(),
       status: "Quotation",
       key: "12",
     },
@@ -156,7 +153,7 @@ export default function LeadList() {
       type: "Lead",
       name: "Reon",
       organization: "Reon",
-      action:  action(),
+      action: action(),
       status: "Lost",
       key: "13",
     },
@@ -164,7 +161,7 @@ export default function LeadList() {
       type: "Customer",
       name: "test",
       organization: "Reon",
-      action:  action(),
+      action: action(),
       status: "Opportunity",
       key: "14",
     },
@@ -172,7 +169,7 @@ export default function LeadList() {
       type: "Lead",
       name: "Infotech",
       organization: "Reon",
-      action:  action(),
+      action: action(),
       status: "Lead",
       key: "14",
     },
@@ -180,7 +177,7 @@ export default function LeadList() {
       type: "Lead",
       name: "Infotech",
       organization: "Tech",
-      action:  action(),
+      action: action(),
       status: "Interested",
       key: "16",
     },
@@ -188,7 +185,7 @@ export default function LeadList() {
       type: "Lead",
       name: "Reon",
       organization: "Reon",
-      action:  action(),
+      action: action(),
       status: "Lead",
       key: "17",
     },
@@ -196,7 +193,7 @@ export default function LeadList() {
       type: "Customer",
       name: "test",
       organization: "Reon",
-      action:  action(),
+      action: action(),
       status: "Opportunity",
       key: "18",
     },
@@ -204,7 +201,7 @@ export default function LeadList() {
       type: "Lead",
       name: "Infotech",
       organization: "Testname",
-      action:  action(),
+      action: action(),
       status: "Converted",
       key: "19",
     },
@@ -212,7 +209,7 @@ export default function LeadList() {
       type: "Customer",
       name: "Techpark",
       organization: "Tech",
-      action:  action(),
+      action: action(),
       status: "Quotation",
       key: "20",
     },
@@ -220,7 +217,7 @@ export default function LeadList() {
       type: "Lead",
       name: "Reon",
       organization: "Reon",
-      action:  action(),
+      action: action(),
       status: "Interested",
       key: "21",
     },
@@ -228,7 +225,7 @@ export default function LeadList() {
       type: "Customer",
       name: "test",
       organization: "Test1",
-      action:  action(),
+      action: action(),
       status: "Opportunity",
       key: "22",
     },
@@ -236,7 +233,7 @@ export default function LeadList() {
       type: "Lead",
       name: "Infotech",
       organization: "Reon",
-      action:  action(),
+      action: action(),
       status: "Lead",
       key: "23",
     },
@@ -244,7 +241,7 @@ export default function LeadList() {
       type: "Customer",
       name: "Techpark",
       organization: "Tech",
-      action:  action(),
+      action: action(),
       status: "Quotation",
       key: "24",
     },
@@ -252,7 +249,7 @@ export default function LeadList() {
       type: "Lead",
       name: "Reon",
       organization: "Reon",
-      action:  action(),
+      action: action(),
       status: "Lead",
       key: "25",
     },
@@ -260,7 +257,7 @@ export default function LeadList() {
       type: "Customer",
       name: "test",
       organization: "Reon",
-      action:  action(),
+      action: action(),
       status: "Opportunity",
       key: "26",
     },
@@ -268,7 +265,7 @@ export default function LeadList() {
       type: "Lead",
       name: "Infotech",
       organization: "Reon",
-      action:  action(),
+      action: action(),
       status: "Converted",
       key: "27",
     },
@@ -276,7 +273,7 @@ export default function LeadList() {
       type: "Customer",
       name: "Techpark",
       organization: "Tech",
-      action:  action(),
+      action: action(),
       status: "Quotation",
       key: "28",
     },
@@ -284,7 +281,7 @@ export default function LeadList() {
       type: "Lead",
       name: "Reon",
       organization: "Reon",
-      action:  action(),
+      action: action(),
       status: "Lead",
       key: "29",
     },
@@ -292,7 +289,7 @@ export default function LeadList() {
       type: "Customer",
       name: "test",
       organization: "Reon",
-      action:  action(),
+      action: action(),
       status: "Opportunity",
       key: "30",
     },
@@ -300,7 +297,7 @@ export default function LeadList() {
       type: "Lead",
       name: "Infotech",
       organization: "Reon",
-      action:  action(),
+      action: action(),
       status: "Lead",
       key: "31",
     },
@@ -308,7 +305,7 @@ export default function LeadList() {
       type: "Lead",
       name: "Infotech",
       organization: "Tech",
-      action:  action(),
+      action: action(),
       status: "Interested",
       key: "32",
     },
@@ -457,9 +454,13 @@ export default function LeadList() {
               </Select>
             </div>
           </div>
-          
+
           <div className="datatable">
-            <TableData data={getData(current, pageSize)} columns={columns} />
+            <TableData
+              data={getData(current, pageSize)}
+              columns={columns}
+              custom_table_css="table_lead_list"
+            />
           </div>
           <div className="d-flex py-2 justify-content-center">
             <MyPagination

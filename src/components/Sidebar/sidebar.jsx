@@ -47,6 +47,11 @@ export default function Sidebar({ showSidebar }) {
                   Lead List
                 </Link>
               </li>
+              <li className="nav-text">
+                <Link to="/category" className="nav-link">
+                  Category
+                </Link>
+              </li>
             </ul>
           </nav>
         </div>

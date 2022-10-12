@@ -1,8 +1,12 @@
 import { CRM_BASE_URL } from "../api/bootapi";
 import PublicFetch from "../utils/PublicFetch";
 import { useState, useEffect } from "react";
+import VersionSettings from "../version_settings.config.json";
+import TestCore from "../components/testComponets/TestCore/TestCore";
+import TestV1 from "../components/testComponets/TestV1/TestV1";
 
 function TestPage() {
+  const { version, version_name } = VersionSettings.crm;
   const getAllLeads = async () => {
     try {
       const allLeadsRes = await PublicFetch.get(
@@ -14,11 +18,24 @@ function TestPage() {
     }
   };
 
+  const inputOneChange = (e) => {
+    console.log(e.target.value);
+  };
+
   useEffect(() => {
     getAllLeads();
   }, []);
 
-  return <div>TestPage</div>;
+  return (
+    <div>
+      TestPage {version} - {version_name}
+      <div>
+        <TestCore inputOneChange={inputOneChange}>
+          {VersionSettings.crm.version_name === "v1" ? <TestV1></TestV1> : null}
+        </TestCore>
+      </div>
+    </div>
+  );
 }
 
 export default TestPage;

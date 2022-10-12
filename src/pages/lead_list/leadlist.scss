@@ -86,6 +86,7 @@ $grey: #777777;
 .ant-select-single.ant-select-sm:not(.ant-select-customize-input).ant-select-show-arrow .ant-select-selection-item{
  box-shadow: -1px 2px 5px  variables.$boxshadow;
  border-radius: 3px;
+// margin-left: -125px !important;
 }
 .ant-pagination-item-active {
   border: none !important;
@@ -93,6 +94,23 @@ $grey: #777777;
   background-color: variables.$primary !important;
   color:white !important;
 }
+span.ant-select-selection-item{
+  padding-left: 5px !important;
+}
+// .page_sizer{
+//   .ant-pagination-item a{
+//   display:none !important;
+// }
+// .ant-pagination-item-active{
+//   display: none !important;
+// }
+// .ant-pagination.ant-pagination-mini .ant-pagination-prev .ant-pagination-item-link{
+//   display: none !important;
+// }
+// .anticon svg{
+//   display:none !important;
+// }
+// }
 
 @media screen and (max-width: 570px) {
  .datatable,.lead_list {

@@ -9,24 +9,19 @@ import {
 } from "react-icons/fa";
 import { MdFileCopy, MdPageview } from "react-icons/md";
 import { AiFillPrinter } from "react-icons/ai";
-import { Input, Select, Option,Pagination } from "antd";
+import { Input, Select, Pagination } from "antd";
 import "antd/dist/antd.css";
 // import { Table } from "antd";
 import TableData from "../../components/table/table_data";
 import { LeadStatus } from "../../utils/leadStatus";
-import { SmallDashOutlined } from "@ant-design/icons";
-
 
 
 export default function LeadList() {
   const [searchedText, setSearchedText] = useState("");
   const [searchType, setSearchType] = useState("");
   const [searchStatus, setSearchStatus] = useState("");
-  // const [page,setPage] = useState();
   const [pageSize, setPageSize] = useState("10", "20", "50", "100");
   const [current, setCurrent] = useState(1);
-
-  
 
   const getData = (current, pageSize) => {
     return data.slice((current - 1) * pageSize, current * pageSize);
@@ -462,21 +457,19 @@ export default function LeadList() {
               </Select>
             </div>
           </div>
+          
           <div className="datatable">
-            <TableData
-              data={getData(current, pageSize)}
-              columns={columns}
-            />
+            <TableData data={getData(current, pageSize)} columns={columns} />
           </div>
           <div className="d-flex py-2 justify-content-center">
             <MyPagination
               total={data.length}
               current={current}
-              showSizeChanger= {true}
-             onChange={(current, pageSize) => {
-                  setCurrent(current)
-                  setPageSize(pageSize)
-                }}
+              showSizeChanger={true}
+              onChange={(current, pageSize) => {
+                setCurrent(current);
+                setPageSize(pageSize);
+              }}
             />
           </div>
         </div>

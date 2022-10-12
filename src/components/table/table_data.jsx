@@ -11,7 +11,6 @@ export default function TableData({ columns, data }) {
     <>
       <div className="row mt-3 table_data">
         <Table columns={columns} dataSource={data} pagination={false}/>
-        
       </div>
     </>
   );

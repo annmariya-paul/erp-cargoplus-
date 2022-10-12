@@ -4,7 +4,8 @@ const ROUTES = {
   LEAD: "/lead",
   LAYOUT: "/layout",
   LEADLIST: "/lead_list",
-  CATEGORY:"/category"
+  CATEGORY:"/category",
+  TEST_PAGE: "/test-page",
 };
 
 module.exports = { ROUTES };

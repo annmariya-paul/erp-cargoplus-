@@ -96,7 +96,7 @@ function Lead() {
                     toggleState === 1 ? "content  active-content" : "content"
                   }
                 >
-                  <div className="row px-1" style={{ borderRadius: "3px" }}>
+                  <div className="row px-1" >
                     <div className="col-sm-4 pt-2">
                       <Form.Group className="mb-2" controlId="type">
                         <Form.Label>Type</Form.Label>
@@ -305,9 +305,7 @@ function Lead() {
                       <Button onClick={Submit} btnType="save">
                         Save
                       </Button>
-                      {/* <Button type="submit" className="btn_save">
-                          Save
-                        </Button>  */}
+                    
                       <SuccessMesssage
                         show={modalShow}
                         onHide={() => setModalShow(false)}

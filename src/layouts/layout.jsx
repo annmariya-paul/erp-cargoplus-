@@ -6,7 +6,7 @@ export default function Layout({ children }) {
   const [showMenu, setShowMenu] = useState(true);
   return (
     <>
-      <div className="container-fluid">
+      <div className="container-fluid screen_orientation">
         <div className="d-flex">
           <div className={` ${showMenu ? "d-none" : "menu-bars"}`}>
             <i
@@ -23,7 +23,9 @@ export default function Layout({ children }) {
           </div>
           <div
             className={` ${
-              showMenu ? "contentWrapper col-10 mt-3" : " col-11 mt-3 pe-2 ms-4 "
+              showMenu
+                ? "contentWrapper col-10 mt-3"
+                : " col-11 mt-3 pe-2 ms-4 "
             }`}
           >
             <Outlet />

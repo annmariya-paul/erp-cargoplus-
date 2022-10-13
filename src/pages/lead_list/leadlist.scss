@@ -3,7 +3,7 @@
 $grey: #777777;
 
 .lead_list {
-  min-height: 650px;
+  height: 650px;
   border-radius: 4px;
   box-shadow: 2px 2px 12px variables.$boxshadow;
 }
@@ -63,7 +63,7 @@ $grey: #777777;
   box-shadow: none;
   border-radius: 4px !important;
   &:focus {
-    box-shadow: none;
+    box-shadow: none !important;
   }
 }
 .select_search {
@@ -86,6 +86,7 @@ $grey: #777777;
 .ant-select-single.ant-select-sm:not(.ant-select-customize-input).ant-select-show-arrow .ant-select-selection-item{
  box-shadow: -1px 2px 5px  variables.$boxshadow;
  border-radius: 3px;
+// margin-left: -125px !important;
 }
 .ant-pagination-item-active {
   border: none !important;
@@ -93,6 +94,14 @@ $grey: #777777;
   background-color: variables.$primary !important;
   color:white !important;
 }
+span.ant-select-selection-item{
+  padding-left: 5px !important;
+}
+.table_lead_list{
+  height: 445px !important; 
+    overflow-y: auto !important;
+}
+
 
 @media screen and (max-width: 570px) {
  .datatable,.lead_list {

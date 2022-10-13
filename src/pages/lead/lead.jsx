@@ -96,7 +96,7 @@ function Lead() {
                     toggleState === 1 ? "content  active-content" : "content"
                   }
                 >
-                  <div className="row px-1" style={{ borderRadius: "3px" }}>
+                  <div className="row px-1" >
                     <div className="col-sm-4 pt-2">
                       <Form.Group className="mb-2" controlId="type">
                         <Form.Label>Type</Form.Label>
@@ -274,7 +274,7 @@ function Lead() {
                             trigger("leadstatus");
                           }}
                         >
-                          {/* <option value="Lead">Lead</option>
+                          <option value="Lead">Lead</option>
                           <option value="Opportunity">Opportunity</option>
                           <option value="Quotation">Quotation</option>
                           <option value="Interested" selected>
@@ -282,8 +282,8 @@ function Lead() {
                           </option>
                           <option value="Converted">Converted</option>
                           <option value="Lost">Lost</option>
-                          <option value="DND">DND</option> */}
-                          {LeadStatus &&
+                          <option value="DND">DND</option>
+                          {/* {LeadStatus &&
                             LeadStatus.map((item, index) => {
                               return (
                                 <option
@@ -296,7 +296,7 @@ function Lead() {
                                   {item.name}
                                 </option>
                               );
-                            })}
+                            })} */}
                         </Form.Select>
                       </Form.Group>
                     </div>
@@ -305,9 +305,7 @@ function Lead() {
                       <Button onClick={Submit} btnType="save">
                         Save
                       </Button>
-                      {/* <Button type="submit" className="btn_save">
-                          Save
-                        </Button>  */}
+                    
                       <SuccessMesssage
                         show={modalShow}
                         onHide={() => setModalShow(false)}
@@ -331,7 +329,7 @@ function Lead() {
                       onHide={() => setModalContact(false)}
                     />
                   </div>
-                  <div className="col-12 mt-4">
+                  <div className="col-12 mt-2">
                     <ContactTable />
                   </div>
                   <div className="col mt-4">
@@ -356,7 +354,7 @@ function Lead() {
                       onHide={() => setModalAddress(false)}
                     />
                   </div>
-                  <div className="col-12 mt-4">
+                  <div className="row mt-2 ms-2">
                     <AddressTable />
                   </div>
                   <div className="col mt-4">

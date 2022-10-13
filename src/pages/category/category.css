@@ -1,10 +1,5 @@
-.savebtn{
-    margin-left: 10%;
-}
 
-
-.ant-select-selector{
-
+.tree .ant-select-selector{
     background-color:rgba(244 , 244, 247, 1) !important;
 }
 

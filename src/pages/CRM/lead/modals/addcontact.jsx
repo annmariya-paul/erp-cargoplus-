@@ -3,8 +3,11 @@ import { useForm } from "react-hook-form";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { Form } from "react-bootstrap";
-import Button from "../../../../components/button/button"
+import Button from "../../../../components/button/button";
 import Custom_model from "../../../../components/custom_modal/custom_model";
+import { CRM_BASE_URL } from "../../../../api/bootapi";
+import PublicFetch from "../../../../utils/PublicFetch";
+import { message } from "antd";
 // import ErrorMsg from "../../components/errormessage";
 
 export default function AddContact(props) {
@@ -14,7 +17,40 @@ export default function AddContact(props) {
   const [modalShow, setModalShow] = React.useState(false);
   const [show, setShow] = useState(false);
   const [count, setCount] = useState(0);
- 
+  const [ContactName, setContactName] = useState();
+  const [email, setEmail] = useState();
+  // const [phoneno, setPhoneno] = useState();
+  // const [mobileno, setMobileno] = useState();
+  const [designation, setDesignation] = useState();
+
+  const AddContact = () => {
+    PublicFetch.post(`${CRM_BASE_URL}/lead/1/contact`, {
+      contact_person_name: ContactName,
+      contact_email: email,
+      contact_phone_1: phone,
+      contact_phone_2: mobile,
+      contact_designation: designation,
+    })
+      .then((res) => {
+        if (res.data.success) {
+          setContactName();
+          setEmail();
+          setPhone();
+          setMobile();
+          setDesignation();
+        } else {
+          console.log("Cannot Get Data while fetching data");
+        }
+      })
+      .catch((err) => {
+        message.error("error while adding data", err);
+      });
+  };
+
+  useEffect(() => {
+    AddContact();
+  }, []);
+
   const {
     register,
     handleSubmit,
@@ -30,9 +66,9 @@ export default function AddContact(props) {
     }
   };
 
-  useEffect(() => {
-    setIsSubmit(false);
-  },[phone]);
+  // useEffect(() => {
+  //   setIsSubmit(false);
+  // }, [phone]);
 
   const submit = (data) => {
     !phone && setIsSubmit(true);

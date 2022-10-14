@@ -8,13 +8,15 @@ import Custom_model from "../../../../components/custom_modal/custom_model";
 import { CRM_BASE_URL } from "../../../../api/bootapi";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { message } from "antd";
+import PhoneNumber from "../../../../components/phone_number/phonenumber";
 // import ErrorMsg from "../../components/errormessage";
 
 export default function AddContact(props) {
   const [phone, setPhone] = useState();
   const [isSubmit, setIsSubmit] = useState(false);
   const [mobile, setMobile] = useState();
-  const [modalShow, setModalShow] = React.useState(false);
+  const [modalShow, setModalShow] = useState(true);
+  const [showSuccessMOdal, setShowSuccessModal] = useState(false);
   const [show, setShow] = useState(false);
   const [count, setCount] = useState(0);
   const [ContactName, setContactName] = useState();
@@ -38,6 +40,11 @@ export default function AddContact(props) {
           setPhone();
           setMobile();
           setDesignation();
+          setShowSuccessModal(true);
+          props.onHide();
+          setModalShow(false);
+          reset();
+          close_modal(showSuccessMOdal, 1000);
         } else {
           console.log("Cannot Get Data while fetching data");
         }
@@ -58,10 +65,11 @@ export default function AddContact(props) {
     reset,
     trigger,
   } = useForm();
+
   const close_modal = (mShow, time) => {
     if (!mShow) {
       setTimeout(() => {
-        setModalShow(false);
+        setShowSuccessModal(false);
       }, time);
     }
   };
@@ -70,25 +78,24 @@ export default function AddContact(props) {
   //   setIsSubmit(false);
   // }, [phone]);
 
-  const submit = (data) => {
-    !phone && setIsSubmit(true);
-    console.log(isSubmit);
-    console.log(data);
-    if (phone) {
-      data.phone = phone;
-      if (data) {
-        localStorage.setItem("Form", JSON.stringify(data));
-        setModalShow(true);
-        close_modal(modalShow, 1000);
-        props.onHide();
-        reset();
-      } else {
-        {
-          // <ErrorMsg />;
-        }
-      }
-    }
-  };
+  // const submit = (data) => {
+  //   !phone && setIsSubmit(true);
+  //   console.log(isSubmit);
+  //   console.log(data);
+  //   if (phone) {
+  //     data.phone = phone;
+  //     if (data) {
+  //       localStorage.setItem("Form", JSON.stringify(data));
+
+  //
+  //       reset();
+  //     } else {
+  //       {
+  //         // <ErrorMsg />;
+  //       }
+  //     }
+  //   }
+  // };
 
   return (
     <>
@@ -97,14 +104,10 @@ export default function AddContact(props) {
         show={modalShow}
         onHide={() => setModalShow(false)}
         header="Add Contacts"
-        footer={[
-          <Button onClick={submit} btnType="save">
-            Save
-          </Button>,
-        ]}
+        footer={false}
         {...props}
       >
-        <Form onSubmit={handleSubmit(submit)}>
+        <Form onSubmit={handleSubmit(AddContact)}>
           <div className="row">
             <div className="px-5">
               <Form.Group className="mb-3" controlId="addName">
@@ -130,6 +133,8 @@ export default function AddContact(props) {
                   onKeyUp={() => {
                     trigger("addName");
                   }}
+                  value={ContactName}
+                  onChange={(e) => setContactName(e.target.value)}
                 />
                 {errors.addName && (
                   <small className="text-danger">
@@ -153,6 +158,8 @@ export default function AddContact(props) {
                   onKeyUp={() => {
                     trigger("email");
                   }}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
                 {errors.email && (
                   <small className="text-danger">{errors.email.message}</small>
@@ -163,7 +170,7 @@ export default function AddContact(props) {
                 <label for="phone" className="form-label">
                   Phone
                 </label>
-                <PhoneInput
+                {/* <PhoneInput
                   country={"in"}
                   value={phone}
                   // required={true}
@@ -172,6 +179,11 @@ export default function AddContact(props) {
                   onKeyUp={(e) => {
                     console.log(e);
                   }}
+                /> */}
+                <PhoneNumber
+                  defaultCountry={"IN"}
+                  value={phone}
+                  onChange={(value) => setPhone(value)}
                 />
                 {errors.phone && (
                   <small className="text-danger">{errors.phone.message}</small>
@@ -181,7 +193,7 @@ export default function AddContact(props) {
                 <label for="phone" className="form-label">
                   Mobile
                 </label>
-                <PhoneInput
+                {/* <PhoneInput
                   country={"in"}
                   value={mobile}
                   onChange={setMobile}
@@ -189,6 +201,11 @@ export default function AddContact(props) {
                   onKeyUp={(e) => {
                     console.log(e);
                   }}
+                /> */}
+                <PhoneNumber
+                  defaultCountry={"IN"}
+                  value={mobile}
+                  onChange={(value) => setMobile(value)}
                 />
               </div>
               <Form.Group className="mb-1" controlId="designation">
@@ -213,6 +230,8 @@ export default function AddContact(props) {
                   onKeyUp={() => {
                     trigger("designation");
                   }}
+                  value={designation}
+                  onChange={(e) => setDesignation(e.target.value)}
                 />
                 {errors.designation && (
                   <small className="text-danger">
@@ -221,6 +240,7 @@ export default function AddContact(props) {
                 )}
               </Form.Group>
             </div>
+            <Button btnType="save">Save</Button>
           </div>
         </Form>
       </Custom_model>
@@ -228,8 +248,8 @@ export default function AddContact(props) {
         centered
         size={`sm`}
         success
-        show={modalShow}
-        onHide={() => setModalShow(false)}
+        show={showSuccessMOdal}
+        onHide={() => setShowSuccessModal(false)}
       />
     </>
   );

@@ -8,7 +8,7 @@ function ContactTable() {
   const [contactTable, setContactTable] = useState();
 
   const getcontacttable = () => {
-    PublicFetch.get(`${CRM_BASE_URL}/lead/8/contact`)
+    PublicFetch.get(`${CRM_BASE_URL}/lead/1/contact`)
       .then((res) => {
         if (res.data.success) {
           setContactTable(res.data.data);

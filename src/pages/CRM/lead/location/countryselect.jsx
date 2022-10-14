@@ -1,73 +1,75 @@
-import React, { useEffect,useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import SuccessMesssage from "../../../components/modal_success/success_modal";
-import axios from 'axios';
+import Custom_model from "../../../../components/custom_modal/custom_model";
+import axios from "axios";
 
 function Countrystate() {
-   const [modalShow, setModalShow] = useState(false);
+  const [modalShow, setModalShow] = useState(false);
   const [data, setData] = useState([]);
   const [getCountry, setCountry] = useState();
   const [getState, setState] = useState([]);
-  const [selectedState,setSelectedState]=useState();
-  const [getCity,setCity]=useState([]);
+  const [selectedState, setSelectedState] = useState();
+  const [getCity, setCity] = useState([]);
 
-   const {
-     register,
-     handleSubmit,
-     formState: { errors },
-     reset,
-     trigger,
-   } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+    trigger,
+  } = useForm();
 
-    const close_modal = (mShow, time) => {
-      if (!mShow) {
-        setTimeout(() => {
-          setModalShow(false);
-        }, time);
-      }
-    };
+  const close_modal = (mShow, time) => {
+    if (!mShow) {
+      setTimeout(() => {
+        setModalShow(false);
+      }, time);
+    }
+  };
 
-   const Submit = (data) => {
-     console.log(data);
-     if (data) {
-       localStorage.setItem("Form", JSON.stringify(data));
-       setModalShow(true);
-       close_modal(modalShow,1200);
-       reset();
-     } else {
+  const Submit = (data) => {
+    console.log(data);
+    if (data) {
+      localStorage.setItem("Form", JSON.stringify(data));
+      setModalShow(true);
+      close_modal(modalShow, 1200);
+      reset();
+    } else {
       //  setError(true);
-     }
-   };
+    }
+  };
 
   const fetchData = () => {
     axios
-      .get("https://pkgstore.datahub.io/core/world-cities/world-cities_json/data/5b3dd46ad10990bca47b04b4739a02ba/world-cities_json.json")
-      .then(function(response){
+      .get(
+        "https://pkgstore.datahub.io/core/world-cities/world-cities_json/data/5b3dd46ad10990bca47b04b4739a02ba/world-cities_json.json"
+      )
+      .then(function (response) {
         setData(response.data);
       })
       .catch(function (error) {
         console.log(error);
       });
   };
-useEffect(() => {
-  fetchData();
-}, []);
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-const country = [...new Set(data.map(item=>item.country))];
-country.sort();
+  const country = [...new Set(data.map((item) => item.country))];
+  country.sort();
 
-const handleCountry=(e)=>{
- let states = data.filter(state=> state.country ===e.target.value);
- states = [...new Set(states.map(item=> item.subcountry))];
- states.sort();
- setState(states);
-}
-const handleState=(e)=>{
-  let cities = data.filter(city => city.subcountry ===e.target.value);
-  cities.sort();
-  setCity(cities);
-}
+  const handleCountry = (e) => {
+    let states = data.filter((state) => state.country === e.target.value);
+    states = [...new Set(states.map((item) => item.subcountry))];
+    states.sort();
+    setState(states);
+  };
+  const handleState = (e) => {
+    let cities = data.filter((city) => city.subcountry === e.target.value);
+    cities.sort();
+    setCity(cities);
+  };
   return (
     <>
       {" "}
@@ -150,8 +152,10 @@ const handleState=(e)=>{
             >
               Save
             </Button>
-            <SuccessMesssage
-              aria-labelledby="modal2"
+            <Custom_model
+              centered
+              size={`sm`}
+              success
               show={modalShow}
               onHide={() => setModalShow(false)}
             />

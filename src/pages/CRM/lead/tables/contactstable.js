@@ -1,5 +1,5 @@
 import "./table.scss";
-import TableData from "../../../components/table/table_data";
+import TableData from "../../../../components/table/table_data";
 function ContactTable() {
   const columns = [
     {
@@ -42,7 +42,7 @@ function ContactTable() {
       phone: "8989898956",
       mobile: "3434466753",
       designation: "Manager",
-      key:"1"
+      key: "1",
     },
     {
       serialno: "1",
@@ -51,7 +51,7 @@ function ContactTable() {
       phone: "8989898956",
       mobile: "3434466753",
       designation: "HR",
-      key:"2",
+      key: "2",
     },
   ];
   return (

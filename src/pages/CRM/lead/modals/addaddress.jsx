@@ -1,24 +1,29 @@
-import React, { useState,useEffect } from "react";
-import {CRM_BASE_URL} from "../../../../api/bootapi";
+import React, { useState, useEffect } from "react";
+import { CRM_BASE_URL } from "../../../../api/bootapi";
 import { Form } from "react-bootstrap";
-import {  FormGroup } from "react-bootstrap";
+
+import { FormGroup } from "react-bootstrap";
 import Button from "../../../../components/button/button";
 import { useForm } from "react-hook-form";
-import 'react-phone-number-input/style.css';
+import "react-phone-number-input/style.css";
 import Custom_model from "../../../../components/custom_modal/custom_model";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { isPossiblePhoneNumber } from "react-phone-number-input";
-import PhoneInput,{formatPhoneNumber,formatPhoneNumberIntl,isValidPhoneNumber} from "react-phone-number-input";
+import PhoneInput, {
+  formatPhoneNumber,
+  formatPhoneNumberIntl,
+  isValidPhoneNumber,
+} from "react-phone-number-input";
 import PhoneNumber from "../../../../components/phone_number/phonenumber";
 import { message } from "antd";
 
 export default function AddAddress(props) {
   const [modalShow, setModalShow] = React.useState(false);
 
-  const [title,setTitle]= useState();
-  const [address_data,setAddress_data] = useState();
-  const [pincode,setPincode]=useState();
-  const [value, setValue]=useState();
+  const [title, setTitle] = useState();
+  const [address_data, setAddress_data] = useState();
+  const [pincode, setPincode] = useState();
+  const [value, setValue] = useState();
 
   const getAllAddress = async () => {
     try {
@@ -36,41 +41,32 @@ export default function AddAddress(props) {
   }, []);
 
   const submit = (data) => {
-   
-    PublicFetch.post(`${CRM_BASE_URL}/lead/1/address`,{
-     address_title:title,
-     address_content:address_data,
-     address_pin:pincode,
-     address_contact:value,
+    PublicFetch.post(`${CRM_BASE_URL}/lead/1/address`, {
+      address_title: title,
+      address_content: address_data,
+      address_pin: pincode,
+      address_contact: value,
     })
       .then(function (response) {
         console.log("hello", response);
-       if (response.data.success){
-         getAllAddress();
-         setAddress_data();
-         setValue();
-         setPincode();
-         setTitle();
-         setModalShow(true)
-       }else {
-         message.error("fetch data error")
-       }
+        if (response.data.success) {
+          getAllAddress();
+          setAddress_data();
+          setValue();
+          setPincode();
+          setTitle();
+          setModalShow(true);
+        } else {
+          message.error("fetch data error");
+        }
       })
       .catch(function (error) {
         console.log(error);
       });
-  }
-    useEffect(() => {
-      submit();
-    }, []);
- 
- 
-
-
-
-
-
-
+  };
+  useEffect(() => {
+    submit();
+  }, []);
 
   const {
     register,
@@ -135,10 +131,12 @@ export default function AddAddress(props) {
                   trigger("address_title");
                 }}
                 value={title}
-                onChange={(e)=> setTitle(e.target.value)}
+                onChange={(e) => setTitle(e.target.value)}
               />
               {errors.address_title && (
-                <small className="text-danger">{errors.address_title.message}</small>
+                <small className="text-danger">
+                  {errors.address_title.message}
+                </small>
               )}
             </Form.Group>
             <Form.Group className="mb-3" controlId="address_content">
@@ -161,7 +159,7 @@ export default function AddAddress(props) {
                 onKeyUp={() => {
                   trigger("address_content");
                 }}
-                onChange={(e)=> setAddress_data(e.target.value)}
+                onChange={(e) => setAddress_data(e.target.value)}
               />
               {errors.address_content && (
                 <small className="text-danger">
@@ -185,33 +183,30 @@ export default function AddAddress(props) {
                   trigger("address_pin");
                 }}
                 value={pincode}
-                onChange={(e)=> setPincode(e.target.value)}
-
+                onChange={(e) => setPincode(e.target.value)}
               />
               {errors.address_pin && (
-                <small className="text-danger">{errors.address_pin.message}</small>
+                <small className="text-danger">
+                  {errors.address_pin.message}
+                </small>
               )}
             </Form.Group>
-            <FormGroup >
-              <div className="row mb-3">
+            <FormGroup>
+              <div className="Phno row mb-3" >
                 <label for="phone" className="form-label">
                   Mobile
                 </label>
-
                 <PhoneNumber
-  
-  defaultCountry="IN"
-
-  
-  value={value}
-  onChange={value=>setValue(value)}
-  
-  />
-  is this number possible :{value&&isPossiblePhoneNumber(value)?"yes":"Its not a valid Phone Number"}
-</div>
-            
-              </FormGroup>
-                
+                  defaultCountry="IN"
+                  value={value}
+                  onChange={(value) => setValue(value)}
+                />
+                Is this number possible :
+                {value && isPossiblePhoneNumber(value)
+                  ? "yes"
+                  : "Its not a valid Phone Number"}
+              </div>
+            </FormGroup>
           </div>
         </Form>
       </Custom_model>
@@ -225,4 +220,3 @@ export default function AddAddress(props) {
     </>
   );
 }
-

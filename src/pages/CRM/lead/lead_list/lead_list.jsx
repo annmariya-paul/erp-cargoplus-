@@ -12,8 +12,8 @@ import { AiFillPrinter } from "react-icons/ai";
 import { Input, Select, Pagination } from "antd";
 import "antd/dist/antd.css";
 // import { Table } from "antd";
-import TableData from "../../components/table/table_data";
-import { LeadStatus } from "../../utils/leadStatus";
+import TableData from "../../../../components/table/table_data";
+import { LeadStatus } from "../../../../utils/leadStatus";
 
 export default function LeadList() {
   const [searchedText, setSearchedText] = useState("");

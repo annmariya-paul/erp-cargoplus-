@@ -1,0 +1,26 @@
+table {
+  border-radius: 4px;
+}
+.addresstable,
+.contact_table {
+  height: fit-content !important;
+  width:100% !important;
+  overflow-x: scroll !important;
+}
+.addresstable,
+.contact_table {
+  td {
+    color: rgb(101, 109, 114);
+    text-align: center;
+    padding-block: 10px !important;
+  }
+}
+
+// #######   media screen   ########
+
+@media screen and (max-width: 570px) {
+  .datatable,
+  .lead_list {
+    height: fit-content;
+  }
+}

@@ -1,5 +1,5 @@
 import axios from "axios";
-
+console.log("Public fetch base url : ", process.env.REACT_APP_BASE_URL);
 const PublicFetch = axios.create({
   baseURL: process.env.REACT_APP_BASE_URL,
   headers: {

@@ -340,6 +340,28 @@ function Lead() {
                         show={modalShow}
                         onHide={() => setModalShow(false)}
                       />
+                        <div className="opr col pt-3" style={{marginTop:'-8%'}}>
+                      <Button style={{height:'2%',width:'47%',marginLeft:'-15%'}} onClick={Submit} btnType="save">
+                        Add Opertunity
+                      </Button>
+                      <Custom_model
+                        size={`sm`}
+                        success
+                        show={modalShow}
+                        onHide={() => setModalShow(false)}
+                      />
+                    
+                    
+                      <Button className="oprview" style={{height:'2%',width:'50%'}} onClick={Submit} btnType="save">
+                      View Opertunity
+                      </Button>
+                      <Custom_model
+                        size={`sm`}
+                        success
+                        show={modalShow}
+                        onHide={() => setModalShow(false)}
+                      />
+                   </div>
                     </div>
                   </div>
                 </div>

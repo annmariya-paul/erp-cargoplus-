@@ -5,6 +5,7 @@ import Button from "../../../components/button/button";
 import { ROUTES } from "../../../routes";
 import { useForm } from "react-hook-form";
 import { AiOutlinePlus } from "react-icons/ai";
+import {  BsPlusCircleFill } from "react-icons/bs";
 import FileUpload from "../../../components/fileupload/fileUploader";
 import ContactTable from "./tables/contactstable";
 import AddressTable from "./tables/addresstable";
@@ -39,13 +40,13 @@ function Lead() {
     setToggleState(index);
   };
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-    trigger,
-  } = useForm();
+  // const {
+  //   register,
+  //   handleSubmit,
+  //   formState: { errors },
+  //   reset,
+  //   trigger,
+  // } = useForm();
 
   const close_modal = (mShow, time) => {
     if (!mShow) {
@@ -126,7 +127,7 @@ function Lead() {
             </div>
 
             <div className="content-tabs">
-              <Form onSubmit={handleSubmit(Submit)}>
+              <Form >
                 <div
                   className={
                     toggleState === 1 ? "content  active-content" : "content"
@@ -136,17 +137,7 @@ function Lead() {
                     <div className="col-sm-4 pt-2">
                       <Form.Group className="mb-2" controlId="lead_type">
                         <Form.Label>Type</Form.Label>
-                        <Form.Select
-                          aria-label="lead_type"
-                          name="lead_type"
-                          className={`${errors.lead_type && "invalid"}`}
-                          {...register("lead_type", {
-                            required: "Type is required",
-                          })}
-                          onKeyUp={() => {
-                            trigger("lead_type");
-                          }}
-                        >
+                        <Form.Select aria-label="lead_type" name="lead_type">
                           <option value="Lead" selected>
                             Lead
                           </option>
@@ -164,32 +155,7 @@ function Lead() {
                           type="text"
                           name="lead_customer_name"
                           placeholder="Name"
-                          className={`${
-                            errors.lead_customer_name && "invalid"
-                          }`}
-                          {...register("lead_customer_name", {
-                            required: "Please enter a valid Name",
-                            minLength: {
-                              value: 3,
-                              message: "Minimum Required length is 3",
-                            },
-                            maxLength: {
-                              value: 100,
-                            },
-                            pattern: {
-                              value: /^[a-zA-Z0-9 ]*$/,
-                              message: "Only letters and numbers are allowed!",
-                            },
-                          })}
-                          onKeyUp={() => {
-                            trigger("lead_customer_name");
-                          }}
                         />
-                        {errors.lead_customer_name && (
-                          <small className="text-danger">
-                            {errors.lead_customer_name.message}
-                          </small>
-                        )}
                       </Form.Group>
                     </div>
                     <div className="col-sm-4 pt-2">
@@ -198,13 +164,6 @@ function Lead() {
                         <Form.Select
                           aria-label="lead_user_type"
                           name="lead_user_type"
-                          className={`${errors.lead_user_type && "invalid"}`}
-                          {...register("lead_user_type", {
-                            required: "User type is required",
-                          })}
-                          onKeyUp={() => {
-                            trigger("lead_user_type");
-                          }}
                         >
                           <option value="Organisation" selected>
                             Organisation
@@ -219,31 +178,7 @@ function Lead() {
                         controlId="lead_organization"
                       >
                         <Form.Label>Organisation</Form.Label>
-                        <Form.Control
-                          type="text"
-                          className={`${errors.lead_organization && "invalid"}`}
-                          {...register("lead_organization", {
-                            minLength: {
-                              value: 3,
-                              message: "Minimum Required length is 3",
-                            },
-                            maxLength: {
-                              value: 100,
-                            },
-                            pattern: {
-                              value: /^[a-zA-Z0-9 ]*$/,
-                              message: "Only letters and numbers are allowed!",
-                            },
-                          })}
-                          onKeyUp={() => {
-                            trigger("lead_organization");
-                          }}
-                        />{" "}
-                        {errors.lead_organization && (
-                          <small className="text-danger">
-                            {errors.lead_organization.message}
-                          </small>
-                        )}
+                        <Form.Control type="text" name="lead_organization" />
                       </Form.Group>
                     </div>
                     <div className="col-sm-4 pt-2">
@@ -252,16 +187,6 @@ function Lead() {
                         <Form.Select
                           aria-label="lead_source"
                           name="lead_source"
-                          className={`${errors.lead_source && "invalid"}`}
-                          {...register("lead_source", {
-                            minLength: {
-                              value: 5,
-                              message: "Minimum Required length is 5",
-                            },
-                          })}
-                          onKeyUp={() => {
-                            trigger("lead_source");
-                          }}
                         >
                           <option value="Reference">Reference</option>
                           <option value="Direct Visit">Direct Visit</option>
@@ -273,11 +198,6 @@ function Lead() {
                     </div>
                     <div className="col-12 mt-3">
                       <FileUpload
-                        className={`${errors.attachments && "invalid"}`}
-                        {...register("attachments")}
-                        onKeyUp={() => {
-                          trigger("attachments");
-                        }}
                       />
                     </div>
                     <div className="col-sm-8 pt-3">
@@ -286,49 +206,62 @@ function Lead() {
                         <Form.Control
                           as="textarea"
                           rows={3}
-                          className={`${errors.lead_description && "invalid"}`}
-                          {...register("lead_description", {
-                            minLength: {
-                              value: 5,
-                              message: "Minimum Required length is 5",
-                            },
-                          })}
-                          onKeyUp={() => {
-                            trigger("lead_description");
-                          }}
+                          
                         />
-                        {errors.lead_description && (
-                          <small className="text-danger">
-                            {errors.lead_description.message}
-                          </small>
-                        )}
+                       
                       </Form.Group>
                     </div>
                     <div className="col-sm-4 pt-3">
-                      <Form.Group className="mb-2" controlId="lead_status">
-                        <Form.Label>Lead Status</Form.Label>
-                        <Form.Select
-                          aria-label="lead_status"
-                          name="lead_status"
-                          className={`${errors.lead_status && "invalid"}`}
-                          {...register("lead_status", {
-                            required: "Status is required",
-                          })}
-                          onKeyUp={() => {
-                            trigger("lead_status");
-                          }}
-                        >
-                          <option value="Lead">Lead</option>
-                          <option value="Opportunity">Opportunity</option>
-                          <option value="Quotation">Quotation</option>
-                          <option value="Interested" selected>
-                            Interested
-                          </option>
-                          <option value="Converted">Converted</option>
-                          <option value="Lost">Lost</option>
-                          <option value="DND">DND</option>
-                        </Form.Select>
-                      </Form.Group>
+                      <div className="row">
+                        <div className="col-12">
+                          <Form.Group className="mb-2" controlId="lead_status">
+                            <Form.Label>Lead Status</Form.Label>
+                            <Form.Select
+                              aria-label="lead_status"
+                              name="lead_status"
+                             
+                            >
+                              <option value="Lead">Lead</option>
+                              <option value="Opportunity">Opportunity</option>
+                              <option value="Quotation">Quotation</option>
+                              <option value="Interested" selected>
+                                Interested
+                              </option>
+                              <option value="Converted">Converted</option>
+                              <option value="Lost">Lost</option>
+                              <option value="DND">DND</option>
+                            </Form.Select>
+                          </Form.Group>
+                        </div>
+                        <div className="col-12">
+                          <div className="row">
+                            <div
+                              className="col-xl-6 d-flex"
+                              style={{ justifyContent: "center" }}
+                            >
+                              <Button
+                                btnType="add_borderless"
+                                onClick={() => setModalOpportunity(true)}
+                              >
+                                <BsPlusCircleFill /> Add Opportunity
+                              </Button>
+                              <AddOpportunity
+                                show={modalOpportunity}
+                                onHide={() => setModalOpportunity(false)}
+                                style="width:1250px"
+                              />
+                            </div>
+                            <div
+                              className="col-xl-6 d-flex"
+                              style={{ justifyContent: "center" }}
+                            >
+                              <Button onClick={Submit} btnType="add_borderless">
+                                <BsPlusCircleFill /> View Opportunity
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
 
                     <div className="col pt-3">
@@ -342,36 +275,7 @@ function Lead() {
                         onHide={() => setModalShow(false)}
                       />
 
-                      <div
-                        className="opr col pt-3"
-                        style={{ marginTop: "-8%" }}
-                      >
-                        <Button
-                          style={{
-                            height: "2%",
-                            width: "51%",
-                            marginLeft: "-15%",
-                          }}
-                          btnType="save"
-                          onClick={() => setModalOpportunity(true)}
-                        >
-                          <AiOutlinePlus />
-                          Add Opportunity
-                        </Button>
-                        <AddOpportunity 
-                          show={modalOpportunity}
-                          onHide={() => setModalOpportunity(false)}
-                          style="width:1250px"
-                        />
-
-                        <Button
-                          className="oprview"
-                          style={{ height: "2%", width: "50%" }}
-                          onClick={Submit}
-                          btnType="save"
-                        >
-                          View Opportunity
-                        </Button>
+                      <div className="col">
                         <Custom_model
                           size={`sm`}
                           success

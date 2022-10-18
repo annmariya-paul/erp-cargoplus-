@@ -25,6 +25,14 @@
   }
 }
 
+.btn_add_borderless{
+ border: none;
+ background:white;
+ color:variables.$primary !important;
+  padding-inline: 0px !important;
+  font-size: 16px;
+  padding-block: 7px !important;
+}
 // .prepend-icon{
 //     font-size: 19px;
 //     padding-left: 4px;

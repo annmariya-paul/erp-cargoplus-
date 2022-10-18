@@ -502,7 +502,7 @@ export default function LeadList() {
             </div>
           </div>
           <div className="row my-3">
-            <div className="col-3">
+            <div className="col-3 px-3 ">
               <Select
                 // defaultValue={"25"}
                 bordered={false}
@@ -512,22 +512,31 @@ export default function LeadList() {
               >
                 {/* <Select.Option value="5">5 | pages</Select.Option> */}
                 <Select.Option value="25">
-                  Show |
-                  <span style={{ color: "lightblue" }} className="ms-2">
+                  Show{" "}
+                  <span style={{ color: "lightgray" }} className="ms-1">
+                    |
+                  </span>
+                  <span style={{ color: "#2f6b8f" }} className="ms-2">
                     25
                   </span>{" "}
                 </Select.Option>
                 <Select.Option value="50">
                   {" "}
-                  Show |
-                  <span style={{ color: "lightblue" }} className="ms-1">
+                  Show{" "}
+                  <span style={{ color: "lightgray" }} className="ms-1">
+                    |
+                  </span>
+                  <span style={{ color: "#2f6b8f" }} className="ms-1">
                     50
                   </span>{" "}
                 </Select.Option>
                 <Select.Option value="100">
                   {" "}
-                  Show |
-                  <span style={{ color: "lightblue" }} className="ms-1">
+                  Show{" "}
+                  <span style={{ color: "lightgray" }} className="ms-1">
+                    |
+                  </span>
+                  <span style={{ color: "#2f6b8f" }} className="ms-1">
                     100
                   </span>{" "}
                 </Select.Option>

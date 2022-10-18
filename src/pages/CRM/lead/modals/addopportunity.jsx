@@ -124,8 +124,8 @@ export default function AddOpportunity(props) {
         ]}
         {...props}
       >
-        {/* <Form onSubmit={handleSubmit(submit)}>
-          <div className="px-5"> */}
+        <Form onSubmit={handleSubmit(submit)}>
+          <div className="px-5">
            <div className="row px-1">
                     <div className="col-sm-4 pt-2">
                       <Form.Group className="mb-2" controlId="lead_type">
@@ -407,7 +407,8 @@ export default function AddOpportunity(props) {
         
                       </div>
                   
-           
+           </div>
+        </Form>
            
       </Custom_model>
       <Custom_model

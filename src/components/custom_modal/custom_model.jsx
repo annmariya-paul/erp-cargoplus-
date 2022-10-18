@@ -13,10 +13,12 @@ function Custom_model({
   onHide,
   size,
   centered,
+  dialogClassName,
+
 }) {
   return (
     <div>
-      <Modal size={size} onClick={onClick} onHide={onHide} show={show} centered>
+      <Modal size={size} onClick={onClick} onHide={onHide} show={show} dialogClassName={dialogClassName} centered>
         {Adding_contents && (
           <>
            

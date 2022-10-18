@@ -10,6 +10,7 @@ import ContactTable from "./tables/contactstable";
 import AddressTable from "./tables/addresstable";
 import AddAddress from "./modals/addaddress";
 import AddContact from "./modals/addcontact";
+import AddOpportunity from "./modals/addopportunity";
 import PublicFetch from "../../../utils/PublicFetch";
 import { LeadStatus } from "../../../utils/leadStatus";
 import { CRM_BASE_URL } from "../../../api/bootapi";
@@ -23,15 +24,15 @@ function Lead() {
   const [modalShow, setModalShow] = useState(false);
   const [modalContact, setModalContact] = useState(false);
   const [modalAddress, setModalAddress] = useState(false);
-  
-  const [leadType,setLeadType] = useState();
-  const [leadName,setLeadName] = useState();
-  const [leadUsertype,setLeadUsertype] = useState();
-  const [leadOrganization,setLeadOrganization] = useState();
-  const [leadSource,setLeadSource] = useState();
-  const [leadDescription,setLeadDescription] = useState();
-  const [leadAttachment,setLeadAttachment] = useState();
-  const [leadStatus,setLeadStatus] = useState();
+  const [modalOpportunity, setModalOpportunity] = useState(false);
+  const [leadType, setLeadType] = useState();
+  const [leadName, setLeadName] = useState();
+  const [leadUsertype, setLeadUsertype] = useState();
+  const [leadOrganization, setLeadOrganization] = useState();
+  const [leadSource, setLeadSource] = useState();
+  const [leadDescription, setLeadDescription] = useState();
+  const [leadAttachment, setLeadAttachment] = useState();
+  const [leadStatus, setLeadStatus] = useState();
 
   const [error, setError] = useState(false);
   const toggleTab = (index) => {
@@ -57,20 +58,20 @@ function Lead() {
   const Submit = (data) => {
     const formData = new FormData();
     formData.append("lead_type", leadType);
-    formData.append("lead_customer_name",leadName);
-    formData.append("lead_user_type",leadUsertype);
-    formData.append("lead_user_type",leadOrganization);
-    formData.append("lead_source",leadSource);
-    formData.append("lead_description",leadDescription);
-    formData.append("attachments",leadAttachment);
-    formData.append("lead_status",leadStatus);
+    formData.append("lead_customer_name", leadName);
+    formData.append("lead_user_type", leadUsertype);
+    formData.append("lead_user_type", leadOrganization);
+    formData.append("lead_source", leadSource);
+    formData.append("lead_description", leadDescription);
+    formData.append("attachments", leadAttachment);
+    formData.append("lead_status", leadStatus);
     //  console.log(data);
-    PublicFetch.post(`${CRM_BASE_URL}/lead/basic`,data)
+    PublicFetch.post(`${CRM_BASE_URL}/lead/basic`, data)
       .then(function (response) {
         console.log("hello", response);
-      setModalShow(true);
-      close_modal(modalShow, 1000);
-      setModalContact(false);
+        setModalShow(true);
+        close_modal(modalShow, 1000);
+        setModalContact(false);
       })
       .catch(function (error) {
         console.log(error);
@@ -340,6 +341,44 @@ function Lead() {
                         show={modalShow}
                         onHide={() => setModalShow(false)}
                       />
+
+                      <div
+                        className="opr col pt-3"
+                        style={{ marginTop: "-8%" }}
+                      >
+                        <Button
+                          style={{
+                            height: "2%",
+                            width: "51%",
+                            marginLeft: "-15%",
+                          }}
+                          btnType="save"
+                          onClick={() => setModalOpportunity(true)}
+                        >
+                          <AiOutlinePlus />
+                          Add Opportunity
+                        </Button>
+                        <AddOpportunity 
+                          show={modalOpportunity}
+                          onHide={() => setModalOpportunity(false)}
+                          style="width:1250px"
+                        />
+
+                        <Button
+                          className="oprview"
+                          style={{ height: "2%", width: "50%" }}
+                          onClick={Submit}
+                          btnType="save"
+                        >
+                          View Opportunity
+                        </Button>
+                        <Custom_model
+                          size={`sm`}
+                          success
+                          show={modalShow}
+                          onHide={() => setModalShow(false)}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>

@@ -1,36 +1,60 @@
 import "./table.scss";
 import TableData from "../../../../components/table/table_data";
+import { useEffect, useState } from "react";
+import PublicFetch from "../../../../utils/PublicFetch";
+import { CRM_BASE_URL } from "../../../../api/bootapi";
+import { message } from "antd";
 function ContactTable() {
+  const [contactTable, setContactTable] = useState();
+
+  const getcontacttable = () => {
+    PublicFetch.get(`${CRM_BASE_URL}/lead/1/contact`)
+      .then((res) => {
+        if (res.data.success) {
+          setContactTable(res.data.data);
+        } else {
+          console.log("Failed to fetch data");
+        }
+      })
+      .catch((err) => {
+        console.log("Error While Getting Data", err);
+      });
+  };
+
+  useEffect(() => {
+    getcontacttable();
+  }, []);
+
   const columns = [
     {
       title: "#",
-      dataIndex: "serialno",
-      key: "key",
+      dataIndex: "contact_id",
+      key: "contact_id",
     },
     {
       title: "NAME",
-      dataIndex: "name",
-      key: "key",
+      dataIndex: "contact_person_name",
+      key: "contact_email",
     },
     {
       title: "EMAIL",
-      dataIndex: "email",
-      key: "key",
+      dataIndex: "contact_email",
+      key: "contact_email",
     },
     {
       title: "PHONE",
-      dataIndex: "phone",
-      key: "key",
+      dataIndex: "contact_phone_1",
+      key: "contact_phone_1",
     },
     {
       title: "MOBILE",
-      dataIndex: "mobile",
-      key: "key",
+      dataIndex: "contact_phone_2",
+      key: "contact_phone_2",
     },
     {
       title: "DESIGNATION",
-      dataIndex: "designation",
-      key: "key",
+      dataIndex: "contact_designation",
+      key: "contact_designation",
     },
   ];
 
@@ -57,7 +81,7 @@ function ContactTable() {
   return (
     <div className="datatable">
       <TableData
-        data={data}
+        data={contactTable}
         columns={columns}
         custom_table_css="contact_table"
       />

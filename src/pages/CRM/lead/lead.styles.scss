@@ -3,10 +3,11 @@
 $radiobutton: rgb(110, 110, 110);
 $color_2: #eff4f7;
 
-
 /* ########## Tabs ######### */
 
-*, ::before, ::after {
+*,
+::before,
+::after {
   box-sizing: border-box;
   // margin: 0;
   padding: 0;
@@ -22,47 +23,47 @@ $color_2: #eff4f7;
 
 .bloc-tabs {
   display: flex;
-  padding:0px;
+  padding: 0px;
 }
 .tabs {
-    font-size: 15px;
-    box-shadow: 2px 2px 12px variables.$boxshadow;
-    width: 100% !important;
-    margin-inline: 0.5px !important;
-    display: block;
-    flex: 1;
-    text-align: center;
-    padding-block: 7px;
-    background: white;
-    cursor: pointer;
-    border-radius: 2px;
-    box-sizing: content-box;
-    position: relative;
-//   outline: none;
-&:hover{
-    color:variables.$primary;
-}
+  font-size: 15px;
+  box-shadow: 2px 2px 12px variables.$boxshadow;
+  width: 100% !important;
+  margin-inline: 0.5px !important;
+  display: block;
+  flex: 1;
+  text-align: center;
+  padding-block: 7px;
+  background: white;
+  cursor: pointer;
+  border-radius: 2px;
+  box-sizing: content-box;
+  position: relative;
+  //   outline: none;
+  &:hover {
+    color: variables.$primary;
+  }
 }
 
 .active-tabs {
-	background: variables.$white;
-	border: 1px solid variables.$primary;
-	color: variables.$primary;
-	&::before {
-		content: "";
-		display: block;
-		position: absolute;
-		// left: 50%;
-		background: #166ea4;
-	}
+  background: variables.$white;
+  border: 1px solid variables.$primary;
+  color: variables.$primary;
+  &::before {
+    content: "";
+    display: block;
+    position: absolute;
+    // left: 50%;
+    background: #166ea4;
+  }
 }
 button {
   border: none;
 }
 .content-tabs {
   border-radius: 3px;
-  min-height:38rem;
-  flex-grow : 1;
+  min-height: 38rem;
+  flex-grow: 1;
   box-shadow: 2px 2px 12px variables.$boxshadow;
 }
 .content {
@@ -76,18 +77,20 @@ button {
 
 // ###### Form ######
 
-.form-control,.form-select {
+.form-control,
+.form-select {
   background-color: variables.$inputfield !important;
   border-color: variables.$inputfield !important;
   border-radius: 3px;
   width: 100% !important;
   outline: none !important;
-  &:focus{
-  box-shadow: none !important;
-}
+  &:focus {
+    box-shadow: none !important;
+  }
 }
 
-.form-label,.para {
+.form-label,
+.para {
   font-size: 15px;
 }
 .form-check-label {
@@ -130,38 +133,27 @@ button {
 // ######### media Query ##########
 
 @media screen and (max-width: 570px) {
- .content-tabs {
-    height:fit-content;
+  .content-tabs {
+    height: fit-content;
   }
-  .tabs{
-font-size: 15px;
+  .tabs {
+    font-size: 15px;
   }
-  .content{padding-inline: 2px;}
-  .bloc-tabs{
-    display:flex;
+  .content {
+    padding-inline: 2px;
+  }
+  .bloc-tabs {
+    display: flex;
     flex-direction: column;
   }
-  .lead_container{
-margin:4px;
-column-width:100vh;
+  .lead_container {
+    margin: 4px;
+    column-width: 100vh;
   }
 }
 // .porsave{
 //   margin-top: -4%;
 //     margin-left: 79%;
 // }
-// .oprview{
-  
-//   margin-top: -6%;
-//   margin-left: 90%;
-// }
-.opr{
-  margin-left: 75%;
-    display: flex;
-    margin-top: -10%;
-    
 
-}
-.oprview{
-  margin-left: 10%;
-}
+

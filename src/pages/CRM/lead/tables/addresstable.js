@@ -42,9 +42,9 @@ function AddressTable() {
 
   const columns = [
     {
-      title: "#",
-      dataIndex: "serialno",
-      key: "serialno",
+      title: "No",
+      dataIndex: "address_id",
+      key: "address_id",
     },
     {
       title: "TITLE",

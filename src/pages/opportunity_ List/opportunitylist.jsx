@@ -6,6 +6,7 @@ import {
   FaBookOpen,
   FaEdit,
 } from "react-icons/fa";
+import { FiEdit } from "react-icons/fi";
 import { AiFillPrinter } from "react-icons/ai";
 import { MdFileCopy, MdPageview } from "react-icons/md";
 import { Input, Select, Pagination } from "antd";
@@ -535,12 +536,19 @@ function Opportunitylist() {
         View_list
         list_content={
           <div className="container-fluid p-3">
-            <div className="d-flex justify-content-between">
-              <div className="my-2">
+            <div className="d-flex justify-content-between my-1">
+              <div className="mt-3">
                 <h5 className="opportunity_heading">Opportunity</h5>
               </div>
-              <div>
-                <Button />
+              <div className="">
+                <Button btnType="add_borderless">
+                  <span
+                    className="d-flex align-items-center justify-content-between gap-1  p-1 button_span"
+                    style={{ fontSize: "14px" }}
+                  >
+                    Edit <FiEdit />
+                  </span>
+                </Button>
               </div>
             </div>
             <div className="row mt-4">

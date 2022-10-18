@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 // import { CRM_BASE_URL } from "../../../../api/bootapi";
+
+import moment from 'moment';
 import { Form } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 
@@ -20,8 +22,11 @@ import Custom_model from "../../../../components/custom_modal/custom_model";
 import { message } from "antd";
 
 export default function AddOpportunity(props) {
-//   const [modalShow, setModalShow] = React.useState(false);
 
+
+  
+//   const [modalShow, setModalShow] = React.useState(false);
+const today = new Date().toISOString().split("T")[0];
   const [modalOpportunity, setModalOpportunity] = useState();
   const [modalShow, setModalShow] = useState();
   // const [selectedDate, setSelectedDate]= useState(null);
@@ -92,8 +97,8 @@ export default function AddOpportunity(props) {
     if (!mShow) {
       setTimeout(() => {
         setModalShow(false);
-        close_modal(modalShow, 1200);
-        props.onHide();
+        // close_modal(modalShow, 1200);
+        // props.onHide();
       }, time);
     }
   };
@@ -149,6 +154,7 @@ export default function AddOpportunity(props) {
                         </Form.Select>
                       </Form.Group>
                     </div>
+                    
                     <div className="col-sm-4 pt-2">
                       <Form.Group
                         className="mb-2"
@@ -166,6 +172,11 @@ export default function AddOpportunity(props) {
                             trigger("lead_customer_from");
                           }}
                         >
+                           {errors.lead_customer_from && (
+                  <small className="text-danger">
+                    {errors.lead_customer_from.message}
+                  </small>
+                )}
                           {/* <option value="Sales" selected>
                          Sales
                           </option> */}
@@ -181,7 +192,7 @@ export default function AddOpportunity(props) {
                       </Form.Group>
                     </div>
                     <div className="col-sm-4 pt-2">
-                      <Form.Group className="mb-2" controlId="lead_user_type">
+                      <Form.Group className="mb-2" controlId="lead_customer_generated">
                         <Form.Label>Generated/Converted by</Form.Label>
                         <Form.Control
                           type="text"
@@ -207,8 +218,13 @@ export default function AddOpportunity(props) {
                           onKeyUp={() => {
                             trigger("lead_customer_generated");
                           }}
+
                         />
-                          
+                           {errors.lead_customer_generated && (
+                  <small className="text-danger">
+                    {errors.lead_customer_generated.message}
+                  </small>
+                )}
                       </Form.Group>
                     </div>
 
@@ -275,7 +291,8 @@ export default function AddOpportunity(props) {
                         <div className="form-control">
                          <input type="date" 
                           style={{borderWidth: 0 }}
-                         
+                          // max={moment().format("DD-MM-YYYY")}
+                          min={today}
                           onChange={date=>setDate(date)
                           }/>
                        </div>
@@ -313,7 +330,7 @@ export default function AddOpportunity(props) {
                       <Form.Group className="mb-2" controlId="lead_expecting_amt">
                         <Form.Label>Expecting Amount</Form.Label>
                         <Form.Control
-                          type="text"
+                          type="text" min="1"
                           className={`${errors.lead_expecting_amt && "invalid"}`}
                           {...register("lead_expecting_amt", {
                             minLength: {
@@ -323,9 +340,10 @@ export default function AddOpportunity(props) {
                             maxLength: {
                               value: 100,
                             },
+                            
                             pattern: {
                               value: /^[a-zA-Z0-9 ]*$/,
-                              message: "Only letters and numbers are allowed!",
+                              message: "Please enter a proper amount!",
                             },
                           })}
                           onKeyUp={() => {

@@ -14,16 +14,39 @@ import "antd/dist/antd.css";
 // import { Table } from "antd";
 import TableData from "../../../../components/table/table_data";
 import { LeadStatus } from "../../../../utils/leadStatus";
+import PublicFetch from "../../../../utils/PublicFetch";
+import { CRM_BASE_URL } from "../../../../api/bootapi";
 
 export default function LeadList() {
   const [searchedText, setSearchedText] = useState("");
   const [searchType, setSearchType] = useState("");
   const [searchStatus, setSearchStatus] = useState("");
-  const [pageSize, setPageSize] = useState("10", "20", "50", "100");
+  const [pageSize, setPageSize] = useState("25");
   const [current, setCurrent] = useState(1);
 
+  const [allLeadList, setAllLeadList] = useState();
+
+  const GetAllLeadData = () => {
+    PublicFetch.get(`${CRM_BASE_URL}/lead?startIndex=0&noOfItems=${pageSize}`)
+      .then((res) => {
+        if (res?.data?.success) {
+          console.log("All lead data", res?.data?.data);
+          setAllLeadList(res?.data?.data?.leads);
+        } else {
+          console.log("FAILED T LOAD DATA");
+        }
+      })
+      .catch((err) => {
+        console.log("Errror while getting data", err);
+      });
+  };
+
+  useEffect(() => {
+    GetAllLeadData();
+  }, []);
+
   const getData = (current, pageSize) => {
-    return data.slice((current - 1) * pageSize, current * pageSize);
+    return allLeadList?.slice((current - 1) * pageSize, current * pageSize);
   };
 
   const MyPagination = ({ total, onChange, current, showSizeChanger }) => {
@@ -34,7 +57,7 @@ export default function LeadList() {
         total={total}
         current={current}
         pageSize={pageSize}
-        showSizeChanger={showSizeChanger}
+        // showSizeChanger={showSizeChanger}
       />
     );
   };
@@ -314,47 +337,71 @@ export default function LeadList() {
   const columns = [
     {
       title: "TYPE",
-      dataIndex: "type",
-      key: "key",
+      dataIndex: "lead_type",
+      key: "lead_type",
       filteredValue: [searchType],
       onFilter: (value, record) => {
-        return String(record.type).toLowerCase().includes(value.toLowerCase());
+        return String(record.lead_type)
+          .toLowerCase()
+          .includes(value.toLowerCase());
       },
+      align: "center",
     },
     {
       title: "NAME",
-      dataIndex: "name",
-      key: "key",
+      dataIndex: "lead_customer_name",
+      key: "lead_customer_name",
       width: "23%",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.name).toLowerCase().includes(value.toLowerCase());
+        return String(record.lead_customer_name)
+          .toLowerCase()
+          .includes(value.toLowerCase());
       },
+      align: "center",
     },
     {
       title: "ORGANIZATION",
-      dataIndex: "organization",
-      key: "key",
+      dataIndex: "lead_organization",
+      key: "lead_organization",
       width: "23%",
+      align: "center",
     },
     {
       title: "ACTION",
       dataIndex: "action",
       key: "key",
       width: "14%",
+      render: (data, index) => {
+        return (
+          <div>
+            <a href="" className="actionEdit">
+              <FaEdit />
+            </a>
+            <a href="" className="actionView">
+              <MdPageview />
+            </a>
+          </div>
+        );
+      },
+      align: "center",
     },
     {
       title: "STATUS",
-      dataIndex: "status",
-      key: "key",
+      dataIndex: "lead_status",
+      key: "lead_status",
       filteredValue: [searchStatus],
       onFilter: (value, record) => {
-        return String(record.status)
+        return String(record.lead_status)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
+      align: "center",
     },
   ];
+
+  console.log("saag eywrbzxcjhasdbf yryeraeuif:::::", allLeadList);
+  console.log("page size", pageSize);
 
   return (
     <>
@@ -427,8 +474,8 @@ export default function LeadList() {
                   setSearchType(event ? [event] : []);
                 }}
               >
-                <Select.Option value="Lead">Lead</Select.Option>
-                <Select.Option value="Customer">Customer</Select.Option>
+                <Select.Option value="L">Lead</Select.Option>
+                <Select.Option value="C">Customer</Select.Option>
               </Select>
             </div>
             <div className="col-4">
@@ -454,17 +501,50 @@ export default function LeadList() {
               </Select>
             </div>
           </div>
-
+          <div className="row my-3">
+            <div className="col-3">
+              <Select
+                // defaultValue={"25"}
+                bordered={false}
+                className="w-50 page_size_style"
+                value={pageSize}
+                onChange={(e) => setPageSize(e)}
+              >
+                {/* <Select.Option value="5">5 | pages</Select.Option> */}
+                <Select.Option value="25">
+                  Show |
+                  <span style={{ color: "lightblue" }} className="ms-2">
+                    25
+                  </span>{" "}
+                </Select.Option>
+                <Select.Option value="50">
+                  {" "}
+                  Show |
+                  <span style={{ color: "lightblue" }} className="ms-1">
+                    50
+                  </span>{" "}
+                </Select.Option>
+                <Select.Option value="100">
+                  {" "}
+                  Show |
+                  <span style={{ color: "lightblue" }} className="ms-1">
+                    100
+                  </span>{" "}
+                </Select.Option>
+              </Select>
+            </div>
+          </div>
           <div className="datatable">
             <TableData
               data={getData(current, pageSize)}
+              // data={allLeadList}
               columns={columns}
               custom_table_css="table_lead_list"
             />
           </div>
           <div className="d-flex py-2 justify-content-center">
             <MyPagination
-              total={data.length}
+              total={allLeadList?.length}
               current={current}
               showSizeChanger={true}
               onChange={(current, pageSize) => {

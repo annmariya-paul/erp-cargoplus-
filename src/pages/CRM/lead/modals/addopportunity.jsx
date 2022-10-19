@@ -3,9 +3,9 @@ import React, { useState, useEffect } from "react";
 
 import moment from 'moment';
 import { Form } from "react-bootstrap";
-import DatePicker from "react-datepicker";
+// import DatePicker from "react-datepicker";
 
-import 'react-datepicker/dist/react-datepicker.css';
+// import "react-datepicker/dist/react-datepicker.css";
 import { FormGroup } from "react-bootstrap";
 import Button from "../../../../components/button/button";
 import { useForm } from "react-hook-form";
@@ -30,7 +30,7 @@ const today = new Date().toISOString().split("T")[0];
   const [modalOpportunity, setModalOpportunity] = useState();
   const [modalShow, setModalShow] = useState();
   // const [selectedDate, setSelectedDate]= useState(null);
-  const [date,setDate]=useState();
+  const [date, setDate] = useState();
   // const [title, setTitle] = useState();
   // const [leadType, setLeadType] = useState();
   // const [leadName, setLeadName] = useState();
@@ -41,49 +41,48 @@ const today = new Date().toISOString().split("T")[0];
   // const [leadAttachment, setLeadAttachment] = useState();
   // const [leadStatus, setLeadStatus] = useState();
 
-//   const getAllAddress = async () => {
-//     try {
-//       const allAddress = await PublicFetch.get(
-//         `${CRM_BASE_URL}/lead/1/address`
-//       );
-//       console.log("All leads res : ", allAddress);
-//     } catch (err) {
-//       console.log("error while getting all leads: ", err);
-//     }
-// //   };
+  //   const getAllAddress = async () => {
+  //     try {
+  //       const allAddress = await PublicFetch.get(
+  //         `${CRM_BASE_URL}/lead/1/address`
+  //       );
+  //       console.log("All leads res : ", allAddress);
+  //     } catch (err) {
+  //       console.log("error while getting all leads: ", err);
+  //     }
+  // //   };
 
-//   useEffect(() => {
-//     getAllAddress();
-//   }, []);
+  //   useEffect(() => {
+  //     getAllAddress();
+  //   }, []);
 
-//   const submit = (data) => {
-//     PublicFetch.post(`${CRM_BASE_URL}/lead/1/address`, {
-//       address_title: title,
-//       address_content: address_data,
-//       address_pin: pincode,
-//       address_contact: value,
-//     })
-//       .then(function (response) {
-//         console.log("hello", response);
-//         if (response.data.success) {
-//           getAllAddress();
-//           setAddress_data();
-//           setValue();
-//           setPincode();
-//           setTitle();
-//           setModalShow(true);
-//         } else {
-//           message.error("fetch data error");
-//         }
-//       })
-//       .catch(function (error) {
-//         console.log(error);
-//       });
-//   };
-//   useEffect(() => {
-//     submit();
-//   }, []);
-
+  //   const submit = (data) => {
+  //     PublicFetch.post(`${CRM_BASE_URL}/lead/1/address`, {
+  //       address_title: title,
+  //       address_content: address_data,
+  //       address_pin: pincode,
+  //       address_contact: value,
+  //     })
+  //       .then(function (response) {
+  //         console.log("hello", response);
+  //         if (response.data.success) {
+  //           getAllAddress();
+  //           setAddress_data();
+  //           setValue();
+  //           setPincode();
+  //           setTitle();
+  //           setModalShow(true);
+  //         } else {
+  //           message.error("fetch data error");
+  //         }
+  //       })
+  //       .catch(function (error) {
+  //         console.log(error);
+  //       });
+  //   };
+  //   useEffect(() => {
+  //     submit();
+  //   }, []);
 
   const {
     register,
@@ -228,59 +227,187 @@ const today = new Date().toISOString().split("T")[0];
                       </Form.Group>
                     </div>
 
-                    <div className="col-sm-4 pt-2">
-                      <Form.Group className="mb-2" controlId="lead_source">
-                        <Form.Label>Source</Form.Label>
-                        <Form.Select
-                          aria-label="lead_source"
-                          name="lead_source"
-                          className={`${errors.lead_source && "invalid"}`}
-                          {...register("lead_source", {
-                            minLength: {
-                              value: 5,
-                              message: "Minimum Required length is 5",
-                            },
-                          })}
-                          onKeyUp={() => {
-                            trigger("lead_source");
-                          }}
-                        >
-                          <option value="Reference" selected>Reference</option>
-                          <option value="Direct Visit">Direct Visit</option>
-                          <option value="Online Registraion" >
-                            Online Registration
-                          </option>
-                        </Form.Select>
-                      </Form.Group>
-                    </div>
+                 
+              <div className="col-sm-4 pt-2">
+                <Form.Group className="mb-2" controlId="lead_user_type">
+                  <Form.Label>Generated/Converted by</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="lead_customer_generated"
+                    placeholder="User ID"
+                    className={`${errors.lead_customer_generated && "invalid"}`}
+                    {...register("lead_customer_generated", {
+                      required: "Please enter a valid User ID",
+                      minLength: {
+                        value: 3,
+                        message: "Minimum Required length is 3",
+                      },
+                      maxLength: {
+                        value: 100,
+                      },
+                      pattern: {
+                        value: /^[a-zA-Z0-9 ]*$/,
+                        message: "Only letters and numbers are allowed!",
+                      },
+                    })}
+                    onKeyUp={() => {
+                      trigger("lead_customer_generated");
+                    }}
+                  />
+                   {errors.lead_customer_from && (
+                    <small className="text-danger">
+                      {errors.lead_customer_from.message}
+                    </small>
+                  )}
+                </Form.Group>
+              </div>
+             
+              <div className="col-sm-4 pt-2">
+                <Form.Group className="mb-2" controlId="lead_source">
+                  <Form.Label>Source</Form.Label>
+                  <Form.Select
+                    aria-label="lead_source"
+                    name="lead_source"
+                    className={`${errors.lead_source && "invalid"}`}
+                    {...register("lead_source", {
+                      minLength: {
+                        value: 5,
+                        message: "Minimum Required length is 5",
+                      },
+                    })}
+                    onKeyUp={() => {
+                      trigger("lead_source");
+                    }}
+                  >
+                    <option value="Reference" selected>
+                      Reference
+                    </option>
+                    <option value="Direct Visit">Direct Visit</option>
+                    <option value="Online Registraion">
+                      Online Registration
+                    </option>
+                  </Form.Select>
+                </Form.Group>
+              </div>
 
-                    <div className="col-sm-4 pt-2">
-                      <Form.Group className="mb-2" controlId="lead_party">
-                        <Form.Label>Party</Form.Label>
-                        <Form.Select
-                          aria-label="lead_party"
-                          name="lead_party"
-                          className={`${errors.lead_party && "invalid"}`}
-                          {...register("lead_party", {
-                            minLength: {
-                              value: 5,
-                              message: "Minimum Required length is 5",
-                            },
-                          })}
-                          onKeyUp={() => {
-                            trigger("lead_party");
-                          }}
-                        >
-                          <option value="Database" selected>data</option>
-                          <option value="Direct Visit"></option>
-                        
-                        </Form.Select>
-                      </Form.Group>
-                    </div>
+              <div className="col-sm-4 pt-2">
+                <Form.Group className="mb-2" controlId="lead_party">
+                  <Form.Label>Party</Form.Label>
+                  <Form.Select
+                    aria-label="lead_party"
+                    name="lead_party"
+                    className={`${errors.lead_party && "invalid"}`}
+                    {...register("lead_party", {
+                      minLength: {
+                        value: 5,
+                        message: "Minimum Required length is 5",
+                      },
+                    })}
+                    onKeyUp={() => {
+                      trigger("lead_party");
+                    }}
+                  >
+                    <option value="Database" selected>
+                      data
+                    </option>
+                    <option value="Direct Visit"></option>
+                  </Form.Select>
+                </Form.Group>
+              </div>
 
+              <div className="col-sm-4 pt-2">
+                <Form.Group className="mb-2" controlId="lead_valid_up_to">
+                  <Form.Label>Valid Up to</Form.Label>
+                  <div className="form-control">
+                    <input
+                      type="date"
+                      style={{ borderWidth: 0 }}
+                      onChange={(date) => setDate(date)}
+                    />
+                  </div>
+                </Form.Group>
+              </div>
 
+              <div className="col-sm-8 pt-3">
+                <Form.Group className="mb-2" controlId="lead_details">
+                  <Form.Label>Details</Form.Label>
+                  <Form.Control
+                    as="textarea"
+                    rows={3}
+                    className={`${errors.lead_details && "invalid"}`}
+                    {...register("lead_details", {
+                      minLength: {
+                        value: 5,
+                        message: "Minimum Required length is 5",
+                      },
+                    })}
+                    onKeyUp={() => {
+                      trigger("lead_details");
+                    }}
+                  />
+                  {errors.lead_details && (
+                    <small className="text-danger">
+                      {errors.lead_details.message}
+                    </small>
+                  )}
+                </Form.Group>
+              </div>
+              <div className="col-sm-4 pt-3">
+                <Form.Group className="mb-2" controlId="lead_expecting_amt">
+                  <Form.Label>Expecting Amount</Form.Label>
+                  <Form.Control
+                    type="text"
+                    className={`${errors.lead_expecting_amt && "invalid"}`}
+                    {...register("lead_expecting_amt", {
+                      minLength: {
+                        value: 3,
+                        message: "Minimum Required length is 3",
+                      },
+                      maxLength: {
+                        value: 100,
+                      },
+                      pattern: {
+                        value: /^[a-zA-Z0-9 ]*$/,
+                        message: "Only letters and numbers are allowed!",
+                      },
+                    })}
+                    onKeyUp={() => {
+                      trigger("lead_expecting_amt");
+                    }}
+                  />{" "}
+                  {errors.lead_expecting_amt && (
+                    <small className="text-danger">
+                      {errors.lead_expecting_amt.message}
+                    </small>
+                  )}
+                </Form.Group>
+              </div>
 
-
+              <div className="col-sm-4 pt-2">
+                <Form.Group className="mb-2" controlId="lead_probability">
+                  <Form.Label>Probability of conversion</Form.Label>
+                  <Form.Select
+                    aria-label="lead_probability"
+                    name="lead_probability"
+                    className={`${errors.lead_probability && "invalid"}`}
+                    {...register("lead_probability", {
+                      minLength: {
+                        value: 5,
+                        message: "Minimum Required length is 5",
+                      },
+                    })}
+                    onKeyUp={() => {
+                      trigger("lead_probability");
+                    }}
+                  >
+                    <option value="low" selected>
+                      low
+                    </option>
+                    <option value="medium">medium</option>
+                    <option value="high">high</option>
+                  </Form.Select>
+                </Form.Group>
+              </div>
 
                     <div className="col-sm-4 pt-2">
                       <Form.Group
@@ -427,7 +554,6 @@ const today = new Date().toISOString().split("T")[0];
                   
            </div>
         </Form>
-           
       </Custom_model>
       <Custom_model
         centered
@@ -436,10 +562,6 @@ const today = new Date().toISOString().split("T")[0];
         show={modalShow}
         onHide={() => setModalShow(false)}
       />
-      
     </>
-    
-  )
-        
-    }
-               
+  );
+}

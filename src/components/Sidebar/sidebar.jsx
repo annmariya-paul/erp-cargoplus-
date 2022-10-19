@@ -52,6 +52,11 @@ export default function Sidebar({ showSidebar }) {
                   Category
                 </Link>
               </li>
+              <li className="nav-text">
+                <Link to={ROUTES.OPPORTUNITY} className="nav-link">
+                  opportunity
+                </Link>
+              </li>
             </ul>
           </nav>
         </div>

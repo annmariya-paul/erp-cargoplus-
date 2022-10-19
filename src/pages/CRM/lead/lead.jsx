@@ -243,7 +243,8 @@ function Lead() {
                                 btnType="add_borderless"
                                 onClick={() => setModalOpportunity(true)}
                               >
-                                <BsPlusCircleFill /> Add Opportunity
+                                <BsPlusCircleFill /> 
+                                Add Opportunity
                               </Button>
                               <AddOpportunity
                                 show={modalOpportunity}

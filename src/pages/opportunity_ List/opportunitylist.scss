@@ -1,3 +1,5 @@
+@use "../../styles//variables.scss";
+
 .modal_view_p_style {
   color: black;
   font-weight: 500;
@@ -14,5 +16,24 @@
 }
 .button_span {
   border-radius: 3px;
-  box-shadow: 0px 0px 2px 1px rgb(228, 228, 228);
+  box-shadow: 0px 2px 5px variables.$boxshadow;
+}
+.input_type_style {
+  border: 0;
+  background-color: whitesmoke;
+  padding: 5px;
+  outline: none;
+  border-radius: 3px;
+}
+.cancel_button {
+  border-radius: 3px;
+  padding: 5px;
+  background-color: #979797;
+  color: #fff;
+}
+.save_button {
+  border-radius: 3px;
+  padding: 5px;
+  background-color: #0092ce;
+  color: #fff;
 }

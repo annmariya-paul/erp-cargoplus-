@@ -5,6 +5,7 @@ import { Form } from "react-bootstrap";
 import Button from "../../components/button/button";
 import { useForm } from "react-hook-form";
 import "antd/dist/antd.css";
+import FileUpload from "../../components/fileupload/fileUploader";
 
 function Category() {
   const [toggleState, setToggleState] = useState(1);
@@ -220,6 +221,20 @@ function Category() {
                     )}
                   </Form.Group>
                 </div>
+                <div className="row " >
+                <div className="col-2 pt-3  " >
+                <Form.Group className="mb-2" controlId="cat_img" style={{width:946,marginLeft:10}}>
+                    <Form.Label>category Image</Form.Label>
+                      <FileUpload style={{marginLeft:10}}
+                        className={`${errors.attachments && "invalid"}`}
+                        {...register("attachments")}
+                        onKeyUp={() => {
+                          trigger("attachments");
+                        }}
+                      />
+                      </Form.Group>
+                    </div>
+                    </div>
                 <div className="d-flex mt-3">
                   <Button className="savebtn" onClick={Submit} btnType="save">
                     Save

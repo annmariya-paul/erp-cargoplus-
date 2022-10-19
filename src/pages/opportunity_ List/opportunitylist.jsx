@@ -6,6 +6,7 @@ import {
   FaBookOpen,
   FaEdit,
 } from "react-icons/fa";
+import { FiEdit } from "react-icons/fi";
 import { AiFillPrinter } from "react-icons/ai";
 import { MdFileCopy, MdPageview } from "react-icons/md";
 import { Input, Select, Pagination } from "antd";
@@ -13,13 +14,17 @@ import { Input, Select, Pagination } from "antd";
 import "../CRM/lead/lead_list/leadlist.scss";
 import TableData from "../../components/table/table_data";
 import MyPagination from "../../components/Pagination/MyPagination";
+import CustomModel from "../../components/custom_modal/custom_model";
+import Button from "../../components/button/button";
+import "./opportunitylist.scss";
 
 function Opportunitylist() {
-  const [pageSize, setPageSize] = useState("10");
+  const [pageSize, setPageSize] = useState("25");
   const [current, setCurrent] = useState(1);
   const [searchedText, setSearchedText] = useState("");
   const [searchType, setSearchType] = useState("");
   const [searchStatus, setSearchStatus] = useState("");
+  const [showViewModal, setShowViewModal] = useState(false);
 
   const getData = (current, pageSize) => {
     return data.slice((current - 1) * pageSize, current * pageSize);
@@ -27,27 +32,27 @@ function Opportunitylist() {
 
   const data = [
     {
-      lead_type: "Lead",
-      lead_customer_name: "Infotech",
-      lead_organization: "Tech",
-      //   action: action(),
-      lead_status: "Interested",
+      lead_type: "Sales",
+      lead_customer_name: "Customer",
+      lead_organization: "HJKGF23456",
+      action: "Refefence",
+      lead_status: "Database",
       key: "1",
     },
     {
-      lead_type: "Lead",
-      lead_customer_name: "Infotech",
-      lead_organization: "Tech",
-      //   action: action(),
-      lead_status: "Interested",
+      lead_type: "Maintenance",
+      lead_customer_name: "Lead",
+      lead_organization: "HJGHRF34356",
+      action: "Direct Visit",
+      lead_status: "Database",
       key: "2",
     },
     {
-      lead_type: "Lead",
-      lead_customer_name: "Infotech",
-      lead_organization: "Tech",
-      //   action: action(),
-      lead_status: "Interested",
+      lead_type: "Support",
+      lead_customer_name: "Customer",
+      lead_organization: "GHFVY56447",
+      action: "Online Registration",
+      lead_status: "Database",
       key: "3",
     },
     // {
@@ -296,9 +301,9 @@ function Opportunitylist() {
             {/* <a href="" className="actionEdit">
               <FaEdit />
             </a> */}
-            <a href="" className="actionView">
+            <div onClick={() => setShowViewModal(true)} className="actionView">
               <MdPageview />
-            </a>
+            </div>
           </div>
         );
       },
@@ -321,9 +326,9 @@ function Opportunitylist() {
       dataIndex: "lead_customer_name",
       key: "key",
       width: "23%",
-      filteredValue: [searchedText],
+      filteredValue: [searchStatus],
       onFilter: (value, record) => {
-        return String(record.lead_customer_name)
+        return String(record.lead_status)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
@@ -342,17 +347,18 @@ function Opportunitylist() {
       key: "key",
       width: "14%",
       align: "center",
+      filteredValue: [searchedText],
+      onFilter: (value, record) => {
+        return String(record.lead_customer_name)
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      },
     },
     {
       title: "PARTY",
       dataIndex: "lead_status",
       key: "key",
-      filteredValue: [searchStatus],
-      onFilter: (value, record) => {
-        return String(record.lead_status)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
+
       align: "center",
     },
   ];
@@ -428,8 +434,9 @@ function Opportunitylist() {
                   setSearchType(event ? [event] : []);
                 }}
               >
-                <Select.Option value="L">Lead</Select.Option>
-                <Select.Option value="C">Customer</Select.Option>
+                <Select.Option value="sales">sales</Select.Option>
+                <Select.Option value="maintenance">Maintenance</Select.Option>
+                <Select.Option value="support">support</Select.Option>
               </Select>
             </div>
             <div className="col-4">
@@ -452,9 +459,8 @@ function Opportunitylist() {
                       </Select.Option>
                     );
                   })} */}
-                <Select.Option value="sales">sales</Select.Option>
-                <Select.Option value="maintenance">Maintenance</Select.Option>
-                <Select.Option value="support">support</Select.Option>
+                <Select.Option value="L">Lead</Select.Option>
+                <Select.Option value="C">Customer</Select.Option>
               </Select>
             </div>
           </div>
@@ -524,6 +530,125 @@ function Opportunitylist() {
           {/* {"mcncncncncncncnc"} */}
         </div>
       </div>
+      <CustomModel
+        show={showViewModal}
+        onHide={() => setShowViewModal(false)}
+        View_list
+        list_content={
+          <div className="container-fluid p-3">
+            <div className="d-flex justify-content-between my-1">
+              <div className="mt-3">
+                <h5 className="opportunity_heading">Opportunity</h5>
+              </div>
+              <div className="">
+                <Button btnType="add_borderless">
+                  <span
+                    className="d-flex align-items-center justify-content-between gap-1  p-1 button_span"
+                    style={{ fontSize: "14px" }}
+                  >
+                    Edit <FiEdit />
+                  </span>
+                </Button>
+              </div>
+            </div>
+            <div className="row mt-4">
+              <div className="col-5">
+                <p style={{ color: "#000" }} className="modal_view_p_style">
+                  Type
+                </p>
+              </div>
+              <div className="col-1">:</div>
+              <div className="col-6 justify-content-start">
+                <p className="modal_view_p_sub">Sales</p>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-5">
+                <p className="modal_view_p_style">From </p>
+              </div>
+              <div className="col-1">:</div>
+              <div className="col-6 justify-content-start">
+                <p className="modal_view_p_sub">Customer</p>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-5">
+                <p className="modal_view_p_style">Converted By</p>
+              </div>
+              <div className="col-1">:</div>
+              <div className="col-6 justify-content-start">
+                <p className="modal_view_p_sub">HGJK4536FC</p>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-5">
+                <p className="modal_view_p_style">Source</p>
+              </div>
+              <div className="col-1">:</div>
+              <div className="col-6 justify-content-start">
+                <p className="modal_view_p_sub">Reference</p>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-5">
+                <p className="modal_view_p_style">Party</p>
+              </div>
+              <div className="col-1">:</div>
+              <div className="col-6 justify-content-start">
+                <p className="modal_view_p_sub">Database</p>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-5">
+                <p className="modal_view_p_style">Valid up to</p>
+              </div>
+              <div className="col-1">:</div>
+              <div className="col-6 justify-content-start">
+                <p className="modal_view_p_sub">17-10-2022</p>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-5">
+                <p className="modal_view_p_style">Details</p>
+              </div>
+              <div className="col-1">:</div>
+              <div className="col-6 justify-content-start">
+                <p className="modal_view_p_sub">
+                  Lorem Ipsum has been the industry's standard dummy text ever
+                  since the 1500s
+                </p>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-5">
+                <p className="modal_view_p_style">Expecting Amount</p>
+              </div>
+              <div className="col-1">:</div>
+              <div className="col-6 justify-content-start">
+                <p className="modal_view_p_sub">6000</p>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-5">
+                <p className="modal_view_p_style">Probability of conversion</p>
+              </div>
+              <div className="col-1">:</div>
+              <div className="col-6 justify-content-start">
+                <p className="modal_view_p_sub">Low</p>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-5">
+                <p className="modal_view_p_style">status</p>
+              </div>
+              <div className="col-1">:</div>
+              <div className="col-6 justify-content-start">
+                <p className="modal_view_p_sub">Interested</p>
+              </div>
+            </div>
+          </div>
+        }
+      />
     </div>
   );
 }

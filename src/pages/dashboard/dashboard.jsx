@@ -14,10 +14,7 @@ import React, { useState } from "react";
 
 import { Form, InputGroup, Button } from "react-bootstrap";
 
-// import "./styles.css";
-
 function App() {
-  // const [formValidated, setFormValidated] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [leadName, setLeadName] = useState("");
 

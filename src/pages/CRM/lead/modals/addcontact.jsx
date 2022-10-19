@@ -49,6 +49,7 @@ export default function AddContact(props) {
     })
       .then((res) => {
         if (res.data.success) {
+          getAllContact();
           setContactName();
           setEmail();
           setPhone();
@@ -69,7 +70,7 @@ export default function AddContact(props) {
   };
 
   useEffect(() => {
-    AddContact();
+    getAllContact();
   }, []);
 
   const {

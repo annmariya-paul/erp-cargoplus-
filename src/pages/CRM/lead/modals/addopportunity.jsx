@@ -190,6 +190,9 @@ const today = new Date().toISOString().split("T")[0];
                         )}
                       </Form.Group>
                     </div>
+
+
+
                     <div className="col-sm-4 pt-2">
                       <Form.Group className="mb-2" controlId="lead_customer_generated">
                         <Form.Label>Generated/Converted by</Form.Label>
@@ -228,39 +231,7 @@ const today = new Date().toISOString().split("T")[0];
                     </div>
 
                  
-              <div className="col-sm-4 pt-2">
-                <Form.Group className="mb-2" controlId="lead_user_type">
-                  <Form.Label>Generated/Converted by</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="lead_customer_generated"
-                    placeholder="User ID"
-                    className={`${errors.lead_customer_generated && "invalid"}`}
-                    {...register("lead_customer_generated", {
-                      required: "Please enter a valid User ID",
-                      minLength: {
-                        value: 3,
-                        message: "Minimum Required length is 3",
-                      },
-                      maxLength: {
-                        value: 100,
-                      },
-                      pattern: {
-                        value: /^[a-zA-Z0-9 ]*$/,
-                        message: "Only letters and numbers are allowed!",
-                      },
-                    })}
-                    onKeyUp={() => {
-                      trigger("lead_customer_generated");
-                    }}
-                  />
-                   {errors.lead_customer_from && (
-                    <small className="text-danger">
-                      {errors.lead_customer_from.message}
-                    </small>
-                  )}
-                </Form.Group>
-              </div>
+          
              
               <div className="col-sm-4 pt-2">
                 <Form.Group className="mb-2" controlId="lead_source">
@@ -352,6 +323,8 @@ const today = new Date().toISOString().split("T")[0];
                   )}
                 </Form.Group>
               </div>
+
+
               <div className="col-sm-4 pt-3">
                 <Form.Group className="mb-2" controlId="lead_expecting_amt">
                   <Form.Label>Expecting Amount</Form.Label>
@@ -409,107 +382,11 @@ const today = new Date().toISOString().split("T")[0];
                 </Form.Group>
               </div>
 
-                    <div className="col-sm-4 pt-2">
-                      <Form.Group
-                        className="mb-2"
-                        controlId="lead_valid_up_to"
-                      >
-                        <Form.Label>Valid Up to</Form.Label>
-                        <div className="form-control">
-                         <input type="date" 
-                          style={{borderWidth: 0 }}
-                          // max={moment().format("DD-MM-YYYY")}
-                          min={today}
-                          onChange={date=>setDate(date)
-                          }/>
-                       </div>
-                        
+                  
+                   
                  
-                      </Form.Group>
-                    </div>
-                   
-                   
-                    <div className="col-sm-8 pt-3">
-                      <Form.Group className="mb-2" controlId="lead_details">
-                        <Form.Label>Details</Form.Label>
-                        <Form.Control
-                          as="textarea"
-                          rows={3}
-                          className={`${errors.lead_details && "invalid"}`}
-                          {...register("lead_details", {
-                            minLength: {
-                              value: 5,
-                              message: "Minimum Required length is 5",
-                            },
-                          })}
-                          onKeyUp={() => {
-                            trigger("lead_details");
-                          }}
-                        />
-                        {errors.lead_details && (
-                          <small className="text-danger">
-                            {errors.lead_details.message}
-                          </small>
-                        )}
-                      </Form.Group>
-                    </div>
-                    <div className="col-sm-4 pt-3">
-                      <Form.Group className="mb-2" controlId="lead_expecting_amt">
-                        <Form.Label>Expecting Amount</Form.Label>
-                        <Form.Control
-                          type="text" min="1"
-                          className={`${errors.lead_expecting_amt && "invalid"}`}
-                          {...register("lead_expecting_amt", {
-                            minLength: {
-                              value: 3,
-                              message: "Minimum Required length is 3",
-                            },
-                            maxLength: {
-                              value: 100,
-                            },
-                            
-                            pattern: {
-                              value: /^[a-zA-Z0-9 ]*$/,
-                              message: "Please enter a proper amount!",
-                            },
-                          })}
-                          onKeyUp={() => {
-                            trigger("lead_expecting_amt");
-                          }}
-                        />{" "}
-                        {errors.lead_expecting_amt && (
-                          <small className="text-danger">
-                            {errors.lead_expecting_amt.message}
-                          </small>
-                        )}
-                      </Form.Group>
-                    </div>
+                 
 
-                    <div className="col-sm-4 pt-2">
-                      <Form.Group className="mb-2" controlId="lead_probability">
-                        <Form.Label>Probability of conversion</Form.Label>
-                        <Form.Select
-                          aria-label="lead_probability"
-                          name="lead_probability"
-                          className={`${errors.lead_probability && "invalid"}`}
-                          {...register("lead_probability", {
-                            minLength: {
-                              value: 5,
-                              message: "Minimum Required length is 5",
-                            },
-                          })}
-                          onKeyUp={() => {
-                            trigger("lead_probability");
-                          }}
-                        >
-                          <option value="low" selected>low</option>
-                          <option value="medium">medium</option>
-                          <option value="high" >
-                          high
-                          </option>
-                        </Form.Select>
-                      </Form.Group>
-                    </div>
 
                     <div className="col-sm-4 pt-2">
                       <Form.Group className="mb-2" controlId="lead_status">

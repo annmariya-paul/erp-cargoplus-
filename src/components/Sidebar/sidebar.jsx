@@ -57,6 +57,11 @@ export default function Sidebar({ showSidebar }) {
                   opportunity
                 </Link>
               </li>
+              <li className="nav-text">
+                <Link to="/leadReport" className="nav-link">
+                 Lead Report
+                </Link>
+              </li>
             </ul>
           </nav>
         </div>

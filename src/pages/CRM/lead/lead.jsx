@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./lead.styles.scss";
+import { Link } from "react-router-dom";
 import { Form } from "react-bootstrap";
 import Button from "../../../components/button/button";
 import { ROUTES } from "../../../routes";
@@ -170,19 +171,16 @@ function Lead() {
                     className="col-2 d-flex"
                     style={{ justifyContent: "center" }}
                   >
-                    <Button onClick={Submit} btnType="add_borderless">
-                      <BsPlusCircleFill style={{ fontSize: "16px" }} /> View
-                      Opportunity
-                    </Button>
+                    <Link to={ROUTES.OPPORTUNITY} className="nav-link">
+                      <Button onClick={Submit} btnType="add_borderless">
+                        <BsPlusCircleFill style={{ fontSize: "16px" }} /> View
+                        Opportunity
+                      </Button>
+                    </Link>
                   </div>
                 </div>
                 {/* </div> */}
-                <Form
-                  noValidate
-                  id="bidForm"
-                  onSubmit={Submit}
-                  
-                >
+                <Form noValidate id="bidForm" onSubmit={Submit}>
                   <div className="row px-1">
                     <div className="col-sm-4 pt-2">
                       <Form.Group className="mb-2" controlId="lead_type">
@@ -217,13 +215,11 @@ function Lead() {
                             (leadName?.length || formSubmitted)
                           }
                           onChange={(e) => setLeadName(e.target.value)}
-                         
                         />
                         <Form.Control.Feedback type="invalid">
                           name is not registered
                         </Form.Control.Feedback>
                       </Form.Group>
-                     
                     </div>
                     <div className="col-sm-4 pt-2">
                       <Form.Group className="mb-2" controlId="lead_user_type">

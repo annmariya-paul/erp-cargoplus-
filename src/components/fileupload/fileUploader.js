@@ -48,7 +48,7 @@ export default function FileUpload() {
   return (
     <>
       <div className="row justify-content-center">
-        <div className="col-xl-3 col-md-4 col-sm-6 ">
+        <div className="imgwid col-xl-3 col-md-4 col-sm-6 " >
           <div className="dropzone-div" {...getRootProps()}>
             <input
               ref={register}

@@ -73,7 +73,7 @@ export default function Sidebar({ showSidebar }) {
                   className={({ isActive }) =>
                     isActive ? "active-link" : "link"
                   }
-                  to="/category"
+                  to={ROUTES.CATEGORY_LIST}
                 >
                   <RiTeamFill className="sidebar_icons" />
                   Category

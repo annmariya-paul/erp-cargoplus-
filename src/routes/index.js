@@ -8,6 +8,7 @@ const ROUTES = {
   TEST_PAGE: "/test-page",
   OPPORTUNITY: "/opportunity",
   CATEGORY_LIST:"/categorylist",
+  LEAD_REPORT:"/leadReport",
 };
 
 module.exports = { ROUTES };

@@ -17,14 +17,54 @@ import MyPagination from "../../components/Pagination/MyPagination";
 import CustomModel from "../../components/custom_modal/custom_model";
 import Button from "../../components/button/button";
 import "./opportunitylist.scss";
+import { BsPlusCircleFill } from "react-icons/bs";
 
-function Opportunitylist() {
+import { Route } from "react-router-dom";
+import OpportunityEdit from "../CRM/lead/modals/OpportunityEdit";
+import { useForm } from "react-hook-form";
+import { Form } from "react-bootstrap";
+import Leadlist_Icons from "../../components/lead_list_icon/lead_list_icon";
+
+function Opportunitylist(props) {
   const [pageSize, setPageSize] = useState("25");
   const [current, setCurrent] = useState(1);
   const [searchedText, setSearchedText] = useState("");
   const [searchType, setSearchType] = useState("");
   const [searchStatus, setSearchStatus] = useState("");
   const [showViewModal, setShowViewModal] = useState(false);
+  const [ShowEditModal, setShowEditModal] = useState(false);
+  const [showProgressModal, setShowProgresssModal] = useState(false);
+  const [successPopup, setSuccessPopup] = useState(false);
+  const [date, setDate] = useState();
+
+  const close_modal = (mShow, time) => {
+    if (!mShow) {
+      setTimeout(() => {
+        setSuccessPopup(false);
+        // close_modal(modalShow, 1200);
+        // props.onHide();
+      }, time);
+    }
+  };
+
+  const submit = (data) => {
+    console.log(data);
+    localStorage.setItem("Form", JSON.stringify(data));
+    setShowViewModal(false);
+    setShowEditModal(false);
+    setSuccessPopup(true);
+    close_modal(successPopup, 1200);
+    props.onHide();
+    reset();
+  };
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+    trigger,
+  } = useForm();
 
   const getData = (current, pageSize) => {
     return data.slice((current - 1) * pageSize, current * pageSize);
@@ -363,50 +403,86 @@ function Opportunitylist() {
     },
   ];
 
+  const progress = [
+    {
+      title: "SLNo:",
+      dataIndex: "slno",
+      key: "key",
+
+      align: "center",
+    },
+    {
+      title: "RESPONSE",
+      dataIndex: "response",
+      key: "key",
+
+      align: "center",
+    },
+    {
+      title: "NEXT CONTACT DATE",
+      dataIndex: "next_date",
+      key: "key",
+      width: "35%",
+      align: "center",
+    },
+    {
+      title: "DETAILS",
+      dataIndex: "details",
+      key: "key",
+
+      align: "center",
+    },
+  ];
+
+  const progress_data = [
+    {
+      slno: "01",
+      response: "Interested",
+      next_date: "01-01-2023",
+      details:
+        "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
+    },
+    {
+      slno: "02",
+      response: "Positive",
+      next_date: "12-01-2023",
+      details:
+        "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
+    },
+    {
+      slno: "03",
+      response: "Busy",
+      next_date: "03-01-2023",
+      details:
+        "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
+    },
+    {
+      slno: "04",
+      response: "Call Back",
+      next_date: "23-01-2023",
+      details:
+        "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
+    },
+    {
+      slno: "05",
+      response: "Rejected",
+      next_date: "01-01-2023",
+      details:
+        "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
+    },
+  ];
+
   return (
     <div>
       <div className="container-fluid lead_list  my-3 py-3">
+        {/* opportunity listing section One */}
+
         <div>
           <div className="row flex-wrap">
             <div className="col">
               <h5 className="lead_text">Opportunity</h5>
             </div>
-            <div className="col-auto">
-              <div className="row flex-wrap">
-                <ul className="leadlist_icons_panel">
-                  <li className="icon-border">
-                    <a className="icon" href="#">
-                      <MdFileCopy />
-                    </a>
-                  </li>
-                  <li className="icon-border">
-                    <a className="icon" href="#">
-                      <FaFileExcel />
-                    </a>
-                  </li>
-                  <li className="icon-border">
-                    <a className="icon" href="#">
-                      <FaFileCsv />
-                    </a>
-                  </li>
-                  <li className="icon-border">
-                    <a className="icon" href="#">
-                      <FaFilePdf />
-                    </a>
-                  </li>
-                  <li className="icon-border">
-                    <a className="icon" href="#">
-                      <AiFillPrinter />
-                    </a>
-                  </li>
-                  <li className="icon-border">
-                    <a className="icon" href="#">
-                      <FaBookOpen />
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
+            <Leadlist_Icons />
           </div>
           <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
             <div className="col-4">
@@ -529,6 +605,8 @@ function Opportunitylist() {
           </div>
           {/* {"mcncncncncncncnc"} */}
         </div>
+
+        {/*  {/* {View model of opportunity  section Two    }  */}
       </div>
       <CustomModel
         show={showViewModal}
@@ -545,105 +623,480 @@ function Opportunitylist() {
                   <span
                     className="d-flex align-items-center justify-content-between gap-1  p-1 button_span"
                     style={{ fontSize: "14px" }}
+                    onClick={() => {
+                      setShowEditModal(true);
+                      setShowViewModal(false);
+                    }}
                   >
                     Edit <FiEdit />
                   </span>
                 </Button>
               </div>
             </div>
-            <div className="row mt-4">
-              <div className="col-5">
-                <p style={{ color: "#000" }} className="modal_view_p_style">
-                  Type
-                </p>
+            <div className="border-bottom">
+              <div className="row mt-4">
+                <div className="col-5">
+                  <p style={{ color: "#000" }} className="modal_view_p_style">
+                    Type
+                  </p>
+                </div>
+                <div className="col-1">:</div>
+                <div className="col-6 justify-content-start">
+                  <p className="modal_view_p_sub">Sales</p>
+                </div>
               </div>
-              <div className="col-1">:</div>
-              <div className="col-6 justify-content-start">
-                <p className="modal_view_p_sub">Sales</p>
+              <div className="row">
+                <div className="col-5">
+                  <p className="modal_view_p_style">From </p>
+                </div>
+                <div className="col-1">:</div>
+                <div className="col-6 justify-content-start">
+                  <p className="modal_view_p_sub">Customer</p>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-5">
+                  <p className="modal_view_p_style">Converted By</p>
+                </div>
+                <div className="col-1">:</div>
+                <div className="col-6 justify-content-start">
+                  <p className="modal_view_p_sub">HGJK4536FC</p>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-5">
+                  <p className="modal_view_p_style">Source</p>
+                </div>
+                <div className="col-1">:</div>
+                <div className="col-6 justify-content-start">
+                  <p className="modal_view_p_sub">Reference</p>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-5">
+                  <p className="modal_view_p_style">Party</p>
+                </div>
+                <div className="col-1">:</div>
+                <div className="col-6 justify-content-start">
+                  <p className="modal_view_p_sub">Database</p>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-5">
+                  <p className="modal_view_p_style">Valid up to</p>
+                </div>
+                <div className="col-1">:</div>
+                <div className="col-6 justify-content-start">
+                  <p className="modal_view_p_sub">17-10-2022</p>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-5">
+                  <p className="modal_view_p_style">Details</p>
+                </div>
+                <div className="col-1">:</div>
+                <div className="col-6 justify-content-start">
+                  <p className="modal_view_p_sub">
+                    Lorem Ipsum has been the industry's standard dummy text ever
+                    since the 1500s
+                  </p>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-5">
+                  <p className="modal_view_p_style">Expecting Amount</p>
+                </div>
+                <div className="col-1">:</div>
+                <div className="col-6 justify-content-start">
+                  <p className="modal_view_p_sub">6000</p>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-5">
+                  <p className="modal_view_p_style">
+                    Probability of conversion
+                  </p>
+                </div>
+                <div className="col-1">:</div>
+                <div className="col-6 justify-content-start">
+                  <p className="modal_view_p_sub">Low</p>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-5">
+                  <p className="modal_view_p_style">status</p>
+                </div>
+                <div className="col-1">:</div>
+                <div className="col-6 justify-content-start">
+                  <p className="modal_view_p_sub">Interested</p>
+                </div>
               </div>
             </div>
-            <div className="row">
-              <div className="col-5">
-                <p className="modal_view_p_style">From </p>
+            <div className="d-flex justify-content-between my-1">
+              <div className="mt-3">
+                <h5 className="opportunity_heading">Opportunity Progress</h5>
               </div>
-              <div className="col-1">:</div>
-              <div className="col-6 justify-content-start">
-                <p className="modal_view_p_sub">Customer</p>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-5">
-                <p className="modal_view_p_style">Converted By</p>
-              </div>
-              <div className="col-1">:</div>
-              <div className="col-6 justify-content-start">
-                <p className="modal_view_p_sub">HGJK4536FC</p>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-5">
-                <p className="modal_view_p_style">Source</p>
-              </div>
-              <div className="col-1">:</div>
-              <div className="col-6 justify-content-start">
-                <p className="modal_view_p_sub">Reference</p>
+              <div className="">
+                <Button btnType="add_borderless">
+                  <span
+                    className="d-flex align-items-center justify-content-between gap-1  p-1 "
+                    style={{ fontSize: "14px" }}
+                    onClick={() => {
+                      setShowProgresssModal(true);
+                      setShowViewModal(false);
+                    }}
+                  >
+                    <BsPlusCircleFill fontSize={18} /> Add
+                  </span>
+                </Button>
               </div>
             </div>
-            <div className="row">
-              <div className="col-5">
-                <p className="modal_view_p_style">Party</p>
-              </div>
-              <div className="col-1">:</div>
-              <div className="col-6 justify-content-start">
-                <p className="modal_view_p_sub">Database</p>
-              </div>
+            <div>
+              <TableData columns={progress} data={progress_data} />
             </div>
-            <div className="row">
-              <div className="col-5">
-                <p className="modal_view_p_style">Valid up to</p>
+          </div>
+        }
+      />
+      {/* Edit opportunity modal   section THREE */}
+      <CustomModel
+        Adding_contents
+        show={ShowEditModal}
+        onHide={() => setShowEditModal(false)}
+        header="Edit Opportunity"
+        size={`xl`}
+        footer={[
+          <Button onClick={submit} btnType="save">
+            Save
+          </Button>,
+        ]}
+        {...props}
+      >
+        <Form onSubmit={handleSubmit(submit)}>
+          <div className="px-5">
+            <div className="row px-1">
+              <div className="col-sm-4 pt-2">
+                <Form.Group className="mb-2" controlId="lead_type">
+                  <Form.Label>Type</Form.Label>
+                  <Form.Select
+                    aria-label="lead_type"
+                    name="lead_type"
+                    className={`${errors.lead_type && "invalid"}`}
+                    {...register("lead_type", {
+                      required: "Type is required",
+                    })}
+                    onKeyUp={() => {
+                      trigger("lead_type");
+                    }}
+                  >
+                    <option value="Sales" selected>
+                      Sales
+                    </option>
+                    <option value="Support">Support</option>
+                    <option value="maintenance">Maintenance</option>
+                  </Form.Select>
+                </Form.Group>
               </div>
-              <div className="col-1">:</div>
-              <div className="col-6 justify-content-start">
-                <p className="modal_view_p_sub">17-10-2022</p>
+
+              <div className="col-sm-4 pt-2">
+                <Form.Group className="mb-2" controlId="lead_customer_from">
+                  <Form.Label>From</Form.Label>
+                  <Form.Select
+                    aria-label="lead_customer_from"
+                    name="lead_customer_from"
+                    className={`${errors.lead_customer_from && "invalid"}`}
+                    {...register("lead_customer_from", {
+                      required: "Type is required",
+                    })}
+                    onKeyUp={() => {
+                      trigger("lead_customer_from");
+                    }}
+                  >
+                    {errors.lead_customer_from && (
+                      <small className="text-danger">
+                        {errors.lead_customer_from.message}
+                      </small>
+                    )}
+                    {/* <option value="Sales" selected>
+                         Sales
+                          </option> */}
+                    <option value="Customer" selected>
+                      Customer
+                    </option>
+                    <option value="Lead">Lead</option>
+                  </Form.Select>
+
+                  {errors.lead_customer_from && (
+                    <small className="text-danger">
+                      {errors.lead_customer_from.message}
+                    </small>
+                  )}
+                </Form.Group>
               </div>
+
+              <div className="col-sm-4 pt-2">
+                <Form.Group
+                  className="mb-2"
+                  controlId="lead_customer_generated"
+                >
+                  <Form.Label>Generated/Converted by</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="lead_customer_generated"
+                    placeholder="User ID"
+                    className={`${errors.lead_customer_generated && "invalid"}`}
+                    {...register("lead_customer_generated", {
+                      required: "Please enter a valid User ID",
+                      minLength: {
+                        value: 3,
+                        message: "Minimum Required length is 3",
+                      },
+                      maxLength: {
+                        value: 100,
+                      },
+                      pattern: {
+                        value: /^[a-zA-Z0-9 ]*$/,
+                        message: "Only letters and numbers are allowed!",
+                      },
+                    })}
+                    onKeyUp={() => {
+                      trigger("lead_customer_generated");
+                    }}
+                  />
+                  {errors.lead_customer_generated && (
+                    <small className="text-danger">
+                      {errors.lead_customer_generated.message}
+                    </small>
+                  )}
+                </Form.Group>
+              </div>
+
+              <div className="col-sm-4 pt-2">
+                <Form.Group className="mb-2" controlId="lead_source">
+                  <Form.Label>Source</Form.Label>
+                  <Form.Select
+                    aria-label="lead_source"
+                    name="lead_source"
+                    className={`${errors.lead_source && "invalid"}`}
+                    {...register("lead_source", {
+                      minLength: {
+                        value: 5,
+                        message: "Minimum Required length is 5",
+                      },
+                    })}
+                    onKeyUp={() => {
+                      trigger("lead_source");
+                    }}
+                  >
+                    <option value="Reference" selected>
+                      Reference
+                    </option>
+                    <option value="Direct Visit">Direct Visit</option>
+                    <option value="Online Registraion">
+                      Online Registration
+                    </option>
+                  </Form.Select>
+                </Form.Group>
+              </div>
+
+              <div className="col-sm-4 pt-2">
+                <Form.Group className="mb-2" controlId="lead_party">
+                  <Form.Label>Party</Form.Label>
+                  <Form.Select
+                    aria-label="lead_party"
+                    name="lead_party"
+                    className={`${errors.lead_party && "invalid"}`}
+                    {...register("lead_party", {
+                      minLength: {
+                        value: 5,
+                        message: "Minimum Required length is 5",
+                      },
+                    })}
+                    onKeyUp={() => {
+                      trigger("lead_party");
+                    }}
+                  >
+                    <option value="Database" selected>
+                      data
+                    </option>
+                    <option value="Direct Visit"></option>
+                  </Form.Select>
+                </Form.Group>
+              </div>
+
+              <div className="col-sm-4 pt-2">
+                <Form.Group className="mb-2" controlId="lead_valid_up_to">
+                  <Form.Label>Valid Up to</Form.Label>
+                  <div className="form-control">
+                    <input
+                      type="date"
+                      style={{ borderWidth: 0 }}
+                      onChange={(date) => setDate(date)}
+                    />
+                  </div>
+                </Form.Group>
+              </div>
+
+              <div className="col-sm-8 pt-3">
+                <Form.Group className="mb-2" controlId="lead_details">
+                  <Form.Label>Details</Form.Label>
+                  <Form.Control
+                    as="textarea"
+                    rows={3}
+                    className={`${errors.lead_details && "invalid"}`}
+                    {...register("lead_details", {
+                      minLength: {
+                        value: 5,
+                        message: "Minimum Required length is 5",
+                      },
+                    })}
+                    onKeyUp={() => {
+                      trigger("lead_details");
+                    }}
+                  />
+                  {errors.lead_details && (
+                    <small className="text-danger">
+                      {errors.lead_details.message}
+                    </small>
+                  )}
+                </Form.Group>
+              </div>
+
+              <div className="col-sm-4 pt-3">
+                <Form.Group className="mb-2" controlId="lead_expecting_amt">
+                  <Form.Label>Expecting Amount</Form.Label>
+                  <Form.Control
+                    type="text"
+                    className={`${errors.lead_expecting_amt && "invalid"}`}
+                    {...register("lead_expecting_amt", {
+                      minLength: {
+                        value: 3,
+                        message: "Minimum Required length is 3",
+                      },
+                      maxLength: {
+                        value: 100,
+                      },
+                      pattern: {
+                        value: /^[a-zA-Z0-9 ]*$/,
+                        message: "Only letters and numbers are allowed!",
+                      },
+                    })}
+                    onKeyUp={() => {
+                      trigger("lead_expecting_amt");
+                    }}
+                  />{" "}
+                  {errors.lead_expecting_amt && (
+                    <small className="text-danger">
+                      {errors.lead_expecting_amt.message}
+                    </small>
+                  )}
+                </Form.Group>
+              </div>
+
+              <div className="col-sm-4 pt-2">
+                <Form.Group className="mb-2" controlId="lead_probability">
+                  <Form.Label>Probability of conversion</Form.Label>
+                  <Form.Select
+                    aria-label="lead_probability"
+                    name="lead_probability"
+                    className={`${errors.lead_probability && "invalid"}`}
+                    {...register("lead_probability", {
+                      minLength: {
+                        value: 5,
+                        message: "Minimum Required length is 5",
+                      },
+                    })}
+                    onKeyUp={() => {
+                      trigger("lead_probability");
+                    }}
+                  >
+                    <option value="low" selected>
+                      low
+                    </option>
+                    <option value="medium">medium</option>
+                    <option value="high">high</option>
+                  </Form.Select>
+                </Form.Group>
+              </div>
+
+              <div className="col-sm-4 pt-2">
+                <Form.Group className="mb-2" controlId="lead_status">
+                  <Form.Label>Status</Form.Label>
+                  <Form.Select
+                    aria-label="lead_status"
+                    name="lead_status"
+                    className={`${errors.lead_status && "invalid"}`}
+                    {...register("lead_status", {
+                      minLength: {
+                        value: 5,
+                        message: "Minimum Required length is 5",
+                      },
+                    })}
+                    onKeyUp={() => {
+                      trigger("lead_status");
+                    }}
+                  >
+                    <option value="quotation" selected>
+                      quotation
+                    </option>
+                    <option value="interested">interested</option>
+                    <option value="converted">converted</option>
+                    <option value="lost">lost</option>
+                    <option value="DND">DND</option>
+                  </Form.Select>
+                </Form.Group>
+              </div>
+              {/* <div className="col-12 d-flex justify-content-center my-2">
+                <Button onClick={submit} btnType="save">
+                  Save
+                </Button>
+              </div> */}
             </div>
-            <div className="row">
-              <div className="col-5">
-                <p className="modal_view_p_style">Details</p>
+          </div>
+        </Form>
+      </CustomModel>
+      <CustomModel
+        size={"sm"}
+        show={successPopup}
+        onHide={() => setSuccessPopup(false)}
+        success
+      />
+      {/* ADD OPPORTUNITY PROGRESS MODAL    SECTION FOUR */}
+      <CustomModel
+        show={showProgressModal}
+        onHide={() => setShowProgresssModal(false)}
+        View_list
+        list_content={
+          <div>
+            <div className="container-fluid">
+              <div className="d-flex justify-content-between my-1">
+                <div className="mt-3">
+                  <h5 className="opportunity_heading">Add Progress</h5>
+                </div>
               </div>
-              <div className="col-1">:</div>
-              <div className="col-6 justify-content-start">
-                <p className="modal_view_p_sub">
-                  Lorem Ipsum has been the industry's standard dummy text ever
-                  since the 1500s
-                </p>
+              <div className="row p-3">
+                <div className="col-6 my-1">
+                  <label className="my-1">Response</label>
+                  <input type="text" className="input_type_style w-100 " />
+                </div>
+                <div className="col-6 my-1">
+                  <label className="my-1">Next Contact Date</label>
+                  <input type="text" className="input_type_style w-100" />
+                </div>
+                <div className="col-12 my-1">
+                  <label className="my-1">Details</label>
+                  <textarea type="text" className="input_type_style w-100" />
+                </div>
               </div>
-            </div>
-            <div className="row">
-              <div className="col-5">
-                <p className="modal_view_p_style">Expecting Amount</p>
-              </div>
-              <div className="col-1">:</div>
-              <div className="col-6 justify-content-start">
-                <p className="modal_view_p_sub">6000</p>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-5">
-                <p className="modal_view_p_style">Probability of conversion</p>
-              </div>
-              <div className="col-1">:</div>
-              <div className="col-6 justify-content-start">
-                <p className="modal_view_p_sub">Low</p>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-5">
-                <p className="modal_view_p_style">status</p>
-              </div>
-              <div className="col-1">:</div>
-              <div className="col-6 justify-content-start">
-                <p className="modal_view_p_sub">Interested</p>
+              <div className="row my-3">
+                <div className="col-12 d-flex justify-content-center align-items-center gap-3">
+                  <Button className="save_button">Save</Button>
+                  <Button
+                    className="cancel_button"
+                    onClick={() => setShowProgresssModal(false)}
+                  >
+                    cancel
+                  </Button>
+                </div>
               </div>
             </div>
           </div>

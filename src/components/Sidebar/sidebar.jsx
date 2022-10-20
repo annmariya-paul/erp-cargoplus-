@@ -4,6 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import { AiOutlineAppstore } from "react-icons/ai";
 import { RiTeamFill } from "react-icons/ri";
 import { ROUTES } from "../../routes";
+import { NavLink } from "react-router-dom";
 
 export default function Sidebar({ showSidebar }) {
   // const [sidebar, setSidebar] = useState(true);
@@ -30,38 +31,75 @@ export default function Sidebar({ showSidebar }) {
                   />
                 </div>
               </li>
-              <li className="nav-text">
-                <Link to="/dashboard" className="nav-link">
+              <li className="nav-text ">
+                <NavLink
+                  className={({ isActive }) =>
+                    isActive ? "active-link" : "link"
+                  }
+                  to="/dashboard"
+                >
                   <AiOutlineAppstore className="sidebar_icons" />
                   Dashboard
-                </Link>
+                </NavLink>
+                {/* <Link to="/dashboard" className="nav-link">
+                  <AiOutlineAppstore className="sidebar_icons" />
+                  Dashboard
+                </Link> */}
               </li>
-              <li className="nav-text">
-                <Link to="/lead" className="nav-link">
+              <li className="nav-text ">
+                <NavLink
+                  className={({ isActive }) =>
+                    isActive ? "active-link" : "link"
+                  }
+                  to="/lead"
+                >
                   <RiTeamFill className="sidebar_icons" />
                   Lead
-                </Link>
+                </NavLink>
               </li>
               <li className="nav-text">
-                <Link to={ROUTES.LEADLIST} className="nav-link">
+                <NavLink
+                  className={({ isActive }) =>
+                    isActive ? "active-link" : "link"
+                  }
+                  to={ROUTES.LEADLIST}
+                >
+                  <RiTeamFill className="sidebar_icons" />
                   Lead List
-                </Link>
+                </NavLink>
+              </li>
+              <li className="nav-text">
+                <NavLink
+                  className={({ isActive }) =>
+                    isActive ? "active-link" : "link"
+                  }
+                  to={ROUTES.CATEGORY_LIST}
+                >
+                  <RiTeamFill className="sidebar_icons" />
+                  Category
+                </NavLink>
+              </li>
+              <li className="nav-text">
+                <NavLink
+                  className={({ isActive }) =>
+                    isActive ? "active-link" : "link"
+                  }
+                  to="/leadReport"
+                >
+                  <RiTeamFill className="sidebar_icons" />
+                  Lead Report
+                </NavLink>
               </li>
               {/* <li className="nav-text">
-                <Link to="/category" className="nav-link">
-                  Category
-                </Link>
+                <NavLink
+                  className={({ isActive }) =>
+                    isActive ? "active-link" : "link"
+                  }
+                  to="#"
+                >
+                  <RiTeamFill className="sidebar_icons" />
+                </NavLink>
               </li> */}
-              <li className="nav-text">
-                <Link to={ROUTES.OPPORTUNITY} className="nav-link">
-                  opportunity
-                </Link>
-              </li>
-              <li className="nav-text">
-                <Link to={ROUTES.CATEGORY_LIST} className="nav-link">
-                   Category
-                </Link>
-              </li>
             </ul>
           </nav>
         </div>

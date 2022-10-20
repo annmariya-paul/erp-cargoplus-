@@ -25,7 +25,7 @@ export default function Layout({ children }) {
             className={` ${
               showMenu
                 ? "contentWrapper col-10 mt-3"
-                : " col-11 mt-3 pe-2 ms-4 "
+                : " col-11 mt-3 pe-2 ms-2 "
             }`}
           >
             <Outlet />

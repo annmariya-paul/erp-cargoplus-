@@ -40,8 +40,8 @@ Button.btn-close {
 .form-control {
   outline: none !important;
 }
-.input[type='date']{
-     border: none !important;
-    width: inherit;
-    
+input[type='date']{
+    width: 100%;
+    background-color: variables.$inputfield;
+    outline:none;
 }

@@ -19,6 +19,14 @@
 .ant-picker{
   height:34px;
 }
+input[type='date']{
+    width: 100%;
+    background-color: variables.$inputfield;
+    outline:none;
+    border: none;
+    height:34px;
+    border-radius: 3px;
+}
 
 // ######## Second Container #########
 .lead_report{
@@ -87,4 +95,12 @@
 }
 .active-report-content {
   display: block;
+}
+
+
+
+@media screen and (max-width: 500px) {
+  .lead_report_container1{
+    width:100%;
+  }
 }

@@ -36,6 +36,7 @@ function Lead() {
   const [leadDescription, setLeadDescription] = useState();
   const [leadAttachment, setLeadAttachment] = useState();
   const [leadStatus, setLeadStatus] = useState();
+  const [leadId, setLeadId] = useState();
 
   const [error, setError] = useState(false);
   const toggleTab = (index) => {
@@ -78,17 +79,24 @@ function Lead() {
     })
       .then(function (response) {
         console.log("hello", response);
-        setLeadType();
-        setLeadName();
-        setLeadUsertype();
-        setLeadOrganization();
-        setLeadSource();
-        setLeadAttachment();
-        setLeadDescription();
-        setLeadStatus();
-        setModalShow(true);
-        close_modal(modalShow, 1000);
-        setModalContact(false);
+        if (response.data.success) {
+          console.log("hello", response.data.data);
+          setLeadType();
+          setLeadName();
+          setLeadUsertype();
+          setLeadOrganization();
+          setLeadSource();
+          setLeadAttachment();
+          setLeadDescription();
+          setLeadStatus();
+          setModalShow(true);
+          close_modal(modalShow, 1000);
+          setModalContact(false);
+          toggleTab(2);
+          setLeadId(response?.data?.data?.lead_id);
+        } else {
+          console.log("Failed while adding data");
+        }
       })
       .catch(function (error) {
         console.log(error);
@@ -106,6 +114,8 @@ function Lead() {
   //     setError(true);
   //   }
   // };
+
+  console.log("lead id::", leadId);
 
   return (
     <>
@@ -335,13 +345,18 @@ function Lead() {
                     <Button btnType="add" onClick={() => setModalContact(true)}>
                       Add <AiOutlinePlus />
                     </Button>
-                    <AddContact
+                    {/* <AddContact
+                      lead={leadId}
                       show={modalContact}
                       onHide={() => setModalContact(false)}
-                    />
+                    /> */}
                   </div>
                   <div className="col-12 mt-2">
-                    <ContactTable />
+                    <ContactTable
+                      show={modalContact}
+                      onHide={() => setModalContact(false)}
+                      lead={leadId}
+                    />
                   </div>
                   <div className="col mt-4">
                     <Button onClick={Submit} btnType="save">
@@ -360,13 +375,17 @@ function Lead() {
                     <Button btnType="add" onClick={() => setModalAddress(true)}>
                       Add <AiOutlinePlus />
                     </Button>
-                    <AddAddress
+                    {/* <AddAddress
+                      show={modalAddress}
+                      onHide={() => setModalAddress(false)}
+                    /> */}
+                  </div>
+                  <div className="row mt-2 ms-2">
+                    <AddressTable
+                      lead={leadId}
                       show={modalAddress}
                       onHide={() => setModalAddress(false)}
                     />
-                  </div>
-                  <div className="row mt-2 ms-2">
-                    <AddressTable />
                   </div>
                   <div className="col mt-4">
                     <Button onClick={Submit} btnType="save">

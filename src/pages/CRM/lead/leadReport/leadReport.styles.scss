@@ -1,0 +1,90 @@
+@use "../../../../styles/variables.scss";
+
+.lead_report_container1{
+   display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 60%;
+  padding:18px;
+  box-shadow: 2px 2px 12px variables.$boxshadow;
+}
+
+ .lead_report_container1 .ant-select-selector,.ant-picker
+ ,.ant-picker:hover{
+ background-color: variables.$inputfield !important;
+  border-color: variables.$inputfield !important;
+  border-radius: 3px; 
+  width:100%;
+}
+.ant-picker{
+  height:34px;
+}
+
+// ######## Second Container #########
+.lead_report{
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+  height:40rem;
+  box-shadow: 2px 2px 12px variables.$boxshadow;
+  // margin: 0px auto 0 ;
+  // margin-right:-10px;
+  padding-inline:0px;
+}
+.report_heading {
+  color: variables.$primary;
+  font-weight: 499;
+}
+
+// ###### Tabs ######
+.report_bloc-tabs {
+  display: flex;
+  padding: 0px;
+}
+.report-tabs {
+  font-size: 15px;
+  box-shadow: 2px 2px 12px variables.$boxshadow;
+  width: 100% !important;
+  margin-inline: 0.5px !important;
+  display: block;
+  flex: 1;
+  text-align: center;
+  padding-block: 3px;
+  background: white;
+  cursor: pointer;
+  border-radius: 2px;
+  box-sizing: content-box;
+  position: relative;
+  &:hover {
+    color: variables.$primary;
+  }
+}
+
+.active-report-tabs {
+  background: variables.$white;
+  border: 1px solid variables.$primary;
+  color: variables.$primary;
+  &::before {
+    content: "";
+    display: block;
+    position: absolute;
+    // left: 50%;
+    background: #166ea4;
+  }
+}
+
+// ###### Contents ######
+.report-content-tabs {
+  border-radius: 3px;
+  min-height: 38rem;
+  flex-grow: 1;
+}
+.report-content {
+  background: white;
+  padding-inline: 12px;
+  display: none;
+}
+.active-report-content {
+  display: block;
+}

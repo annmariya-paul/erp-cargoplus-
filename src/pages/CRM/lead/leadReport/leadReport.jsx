@@ -6,7 +6,8 @@ import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon
 import { LeadStatus } from "../../../../utils/leadStatus";
 import { Input, Select, Pagination, DatePicker } from "antd";
 import "antd/dist/antd.css";
-// import { format } from "date-fns";
+import PublicFetch from "../../../../utils/PublicFetch";
+import { CRM_BASE_URL } from "../../../../api/bootapi";
 
 export default function LeadReport() {
   const { Option } = Select;
@@ -17,6 +18,8 @@ export default function LeadReport() {
   const [pageSize, setPageSize] = useState("25");
   const [current, setCurrent] = useState(1);
   const [allLeadList, setAllLeadList] = useState();
+  const [generateTable, setGenerateTable] = useState();
+  const [convertedTable, setConvertedTable] = useState();
   const [dateCriteria, setDateCriteria] = useState("daily");
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
@@ -27,9 +30,61 @@ export default function LeadReport() {
   const onChange = (date, dateString) => {
     console.log(date, dateString);
   };
+  // # function GetAllLeadData - get all lead data
+  const GetAllLeadData = () => {
+    PublicFetch.get(`${CRM_BASE_URL}/lead?startIndex=0&noOfItems=${pageSize}`)
+      .then((res) => {
+        if (res?.data?.success) {
+          console.log("All lead data", res?.data?.data);
+          //   filtering lead Status Opportunity option to converted table - Annmariya- 20/10/22
+          let arr = [];
+          let Arry = [];
+          res?.data?.data?.leads.forEach((item, index) => {
+            setAllLeadList(item.lead_status);
+            if (item.lead_status == "OP") {
+              arr.push({
+                lead_customer_name: item?.lead_customer_name,
+                lead_description: item?.lead_description,
+                lead_id: item?.lead_id,
+                lead_organization: item?.lead_organization,
+                lead_source: item?.lead_source,
+                lead_status: item?.lead_status,
+                lead_type: item?.lead_type,
+                lead_user_type: item?.lead_user_type,
+              });
+              setConvertedTable(arr);
+            }
+            if (item.lead_status !== "OP") {
+              Arry.push({
+                lead_customer_name: item?.lead_customer_name,
+                lead_description: item?.lead_description,
+                lead_id: item?.lead_id,
+                lead_organization: item?.lead_organization,
+                lead_source: item?.lead_source,
+                lead_status: item?.lead_status,
+                lead_type: item?.lead_type,
+                lead_user_type: item?.lead_user_type,
+              });
+              setGenerateTable(Arry);
+            }
+          });
+        } else {
+          console.log("FAILED TO LOAD DATA");
+        }
+      })
+      .catch((err) => {
+        console.log("Errror while getting data", err);
+      });
+  };
 
-  const getData = (current, pageSize) => {
-    return allLeadList?.slice((current - 1) * pageSize, current * pageSize);
+  useEffect(() => {
+    GetAllLeadData();
+  }, []);
+  const getGenerateData = (current, pageSize) => {
+    return generateTable?.slice((current - 1) * pageSize, current * pageSize);
+  };
+  const getConvertData = (current, pageSize) => {
+    return convertedTable?.slice((current - 1) * pageSize, current * pageSize);
   };
   const columns = [
     {
@@ -78,13 +133,16 @@ export default function LeadReport() {
     },
   ];
 
+  console.log("fdjghrffer:::", convertedTable);
+  console.log("eeerererererer:::", generateTable);
+
   return (
     <>
       {toggleState === 1 && (
         <div className="container mb-2 d-flex justify-content-center">
           <div className="lead_report_container1">
             <div className="row">
-              <h5 className="report_heading my-2">Lead</h5>
+              <h5 className="report_heading mb-2">Lead</h5>
             </div>
             <div className="row my-4 mx-2">
               <div className="col-md-6 col-sm-12">
@@ -93,7 +151,6 @@ export default function LeadReport() {
                   name="criteria"
                   defaultValue="daily"
                   style={{ width: " 100% " }}
-                  onChange={(e) => setDateCriteria(e)}
                 >
                   <Option value="daily">Daily</Option>
                   <Option value="BtwnTwoDates">Between Two Dates</Option>
@@ -143,7 +200,7 @@ export default function LeadReport() {
         <div className="container mb-2 d-flex justify-content-center">
           <div className="lead_report_container1">
             <div className="row">
-              <h5 className="report_heading my-2">Lead</h5>
+              <h5 className="report_heading mb-2">Lead</h5>
             </div>
             <div className="row my-4 mx-2">
               <div className="col-md-6 col-sm-12">
@@ -345,9 +402,10 @@ export default function LeadReport() {
             </div>
             <div className="datatable">
               <TableData
-                data={getData(current, pageSize)}
+                data={getGenerateData(current, pageSize)}
                 columns={columns}
                 custom_table_css="table_lead_list"
+                // value={generateTable}
               />
             </div>
           </div>
@@ -466,7 +524,7 @@ export default function LeadReport() {
             </div>
             <div className="datatable">
               <TableData
-                data={getData(current, pageSize)}
+                data={getConvertData(current, pageSize)}
                 columns={columns}
                 custom_table_css="table_lead_list"
               />

@@ -9,6 +9,7 @@ import Dashboard from "./pages/dashboard/dashboard";
 import Category from "./pages/category/category";
 import TestPage from "./pages/testpage";
 import Opportunitylist from "./pages/opportunity_ List/opportunitylist";
+import Categorylist from "./pages/category/viewCategory";
 // import Lead from "./pages/lead/lead";
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
             <Route path={ROUTES.CATEGORY} element={<Category />} />
             <Route path={ROUTES.TEST_PAGE} element={<TestPage />} />
             <Route path={ROUTES.OPPORTUNITY} element={<Opportunitylist />} />
+            <Route path={ROUTES.CATEGORY_LIST} element={<Categorylist />} />
           </Route>
         </Routes>
       </BrowserRouter>

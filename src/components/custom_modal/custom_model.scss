@@ -1,6 +1,6 @@
 @use "../../styles/variables.scss";
 
-$bg_closebtn: #e6e4e4;
+$bg_closebtn: #e8e8e8;
 $flag_tab_border: #dadddf;
 
 Button.btn-close {
@@ -21,6 +21,7 @@ Button.btn-close {
   justify-content: center;
 }
 .modal {
+  z-index: 9999;
   border: none;
 }
 .ant-modal-title,
@@ -38,4 +39,9 @@ Button.btn-close {
 }
 .form-control {
   outline: none !important;
+}
+input[type='date']{
+    width: 100%;
+    background-color: variables.$inputfield;
+    outline:none;
 }

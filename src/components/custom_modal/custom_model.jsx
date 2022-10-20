@@ -1,4 +1,4 @@
-import "./custom_model.scss"
+import "./custom_model.scss";
 import React from "react";
 import { Modal } from "react-bootstrap";
 
@@ -13,13 +13,22 @@ function Custom_model({
   onHide,
   size,
   centered,
+  dialogClassName,
+  View_list,
+  list_content,
 }) {
   return (
     <div>
-      <Modal size={size} onClick={onClick} onHide={onHide} show={show} centered>
+      <Modal
+        size={size}
+        onClick={onClick}
+        onHide={onHide}
+        show={show}
+        dialogClassName={dialogClassName}
+        centered
+      >
         {Adding_contents && (
           <>
-           
             <Modal.Header closeButton>
               <h4 className="modal-title text-center w-100">{header}</h4>
             </Modal.Header>
@@ -39,6 +48,7 @@ function Custom_model({
             </div>
           </Modal.Body>
         )}
+        {View_list && <div>{list_content}</div>}
       </Modal>
     </div>
   );

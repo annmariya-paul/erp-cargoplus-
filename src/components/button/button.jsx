@@ -19,6 +19,9 @@ const {
     if (btnType === "add") {
       classNames += "btn_add";
     }
+     if (btnType === "add_borderless") {
+       classNames += "btn_add_borderless";
+     }
 
     if (prependIcon) {
       classNames += "prepend-icon";

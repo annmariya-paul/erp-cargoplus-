@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
 import "./lead.styles.scss";
+import { Link } from "react-router-dom";
 import { Form } from "react-bootstrap";
 import Button from "../../../components/button/button";
 import { ROUTES } from "../../../routes";
 import { useForm } from "react-hook-form";
 import { AiOutlinePlus } from "react-icons/ai";
+import { BsPlusCircleFill } from "react-icons/bs";
 import FileUpload from "../../../components/fileupload/fileUploader";
 import ContactTable from "./tables/contactstable";
 import AddressTable from "./tables/addresstable";
 import AddAddress from "./modals/addaddress";
 import AddContact from "./modals/addcontact";
+import AddOpportunity from "./modals/addopportunity";
 import PublicFetch from "../../../utils/PublicFetch";
 import { LeadStatus } from "../../../utils/leadStatus";
 import { CRM_BASE_URL } from "../../../api/bootapi";
@@ -20,31 +23,32 @@ import Custom_model from "../../../components/custom_modal/custom_model";
 function Lead() {
   const [toggleState, setToggleState] = useState(1);
   const [basicinfoData, setBasicinfoData] = useState([]);
+  const [formSubmitted, setFormSubmitted] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [modalContact, setModalContact] = useState(false);
   const [modalAddress, setModalAddress] = useState(false);
-  
-  const [leadType,setLeadType] = useState();
-  const [leadName,setLeadName] = useState();
-  const [leadUsertype,setLeadUsertype] = useState();
-  const [leadOrganization,setLeadOrganization] = useState();
-  const [leadSource,setLeadSource] = useState();
-  const [leadDescription,setLeadDescription] = useState();
-  const [leadAttachment,setLeadAttachment] = useState();
-  const [leadStatus,setLeadStatus] = useState();
+  const [modalOpportunity, setModalOpportunity] = useState(false);
+  const [leadType, setLeadType] = useState();
+  const [leadName, setLeadName] = useState();
+  const [leadUsertype, setLeadUsertype] = useState();
+  const [leadOrganization, setLeadOrganization] = useState();
+  const [leadSource, setLeadSource] = useState();
+  const [leadDescription, setLeadDescription] = useState();
+  const [leadAttachment, setLeadAttachment] = useState();
+  const [leadStatus, setLeadStatus] = useState();
 
   const [error, setError] = useState(false);
   const toggleTab = (index) => {
     setToggleState(index);
   };
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-    trigger,
-  } = useForm();
+  // const {
+  //   register,
+  //   handleSubmit,
+  //   formState: { errors },
+  //   reset,
+  //   trigger,
+  // } = useForm();
 
   const close_modal = (mShow, time) => {
     if (!mShow) {
@@ -54,31 +58,45 @@ function Lead() {
     }
   };
 
-  const Submit = (data) => {
+  const Submit = (event) => {
+    const form = event.currentTarget;
+    event.preventDefault();
+    event.stopPropagation();
+    setFormSubmitted(true);
     const formData = new FormData();
     formData.append("lead_type", leadType);
-    formData.append("lead_customer_name",leadName);
-    formData.append("lead_user_type",leadUsertype);
-    formData.append("lead_user_type",leadOrganization);
-    formData.append("lead_source",leadSource);
-    formData.append("lead_description",leadDescription);
-    formData.append("attachments",leadAttachment);
-    formData.append("lead_status",leadStatus);
+    formData.append("lead_customer_name", leadName);
+    formData.append("lead_user_type", leadUsertype);
+    formData.append("lead_organization", leadOrganization);
+    formData.append("lead_source", leadSource);
+    formData.append("lead_description", leadDescription);
+    formData.append("attachments", leadAttachment);
+    formData.append("lead_status", leadStatus);
     //  console.log(data);
-    PublicFetch.post(`${CRM_BASE_URL}/lead/basic`,data)
+    PublicFetch.post(`${CRM_BASE_URL}/lead/basic`, formData, {
+      "Content-Type": "Multipart/form-Data",
+    })
       .then(function (response) {
         console.log("hello", response);
-      setModalShow(true);
-      close_modal(modalShow, 1000);
-      setModalContact(false);
+        setLeadType();
+        setLeadName();
+        setLeadUsertype();
+        setLeadOrganization();
+        setLeadSource();
+        setLeadAttachment();
+        setLeadDescription();
+        setLeadStatus();
+        setModalShow(true);
+        close_modal(modalShow, 1000);
+        setModalContact(false);
       })
       .catch(function (error) {
         console.log(error);
       });
   };
-  useEffect(() => {
-    Submit();
-  }, []);
+  // useEffect(() => {
+  //   Submit();
+  // }, []);
   // const Submit = (data) => {
   //   console.log(data);
   //   if (data) {
@@ -125,12 +143,44 @@ function Lead() {
             </div>
 
             <div className="content-tabs">
-              <Form onSubmit={handleSubmit(Submit)}>
-                <div
-                  className={
-                    toggleState === 1 ? "content  active-content" : "content"
-                  }
-                >
+              <div
+                className={
+                  toggleState === 1 ? "content  active-content" : "content"
+                }
+              >
+                {/* <div className="col-12"> */}
+                <div className="row mb-2 justify-content-end">
+                  <div
+                    className="col-2 d-flex"
+                    style={{ justifyContent: "center" }}
+                  >
+                    <Button
+                      btnType="add_borderless"
+                      onClick={() => setModalOpportunity(true)}
+                    >
+                      <BsPlusCircleFill style={{ fontSize: "16px" }} /> Add
+                      Opportunity
+                    </Button>
+                    <AddOpportunity
+                      show={modalOpportunity}
+                      onHide={() => setModalOpportunity(false)}
+                      style="width:1250px"
+                    />
+                  </div>
+                  <div
+                    className="col-2 d-flex"
+                    style={{ justifyContent: "center" }}
+                  >
+                    <Link to={ROUTES.OPPORTUNITY} className="nav-link">
+                      <Button onClick={Submit} btnType="add_borderless">
+                        <BsPlusCircleFill style={{ fontSize: "16px" }} /> View
+                        Opportunity
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+                {/* </div> */}
+                <Form noValidate id="bidForm" onSubmit={Submit}>
                   <div className="row px-1">
                     <div className="col-sm-4 pt-2">
                       <Form.Group className="mb-2" controlId="lead_type">
@@ -138,18 +188,13 @@ function Lead() {
                         <Form.Select
                           aria-label="lead_type"
                           name="lead_type"
-                          className={`${errors.lead_type && "invalid"}`}
-                          {...register("lead_type", {
-                            required: "Type is required",
-                          })}
-                          onKeyUp={() => {
-                            trigger("lead_type");
-                          }}
+                          value={leadType}
+                          onChange={(e) => setLeadType(e.target.value)}
                         >
-                          <option value="Lead" selected>
+                          <option value="L" selected="selected">
                             Lead
                           </option>
-                          <option value="Customer">Customer</option>
+                          <option value="C">Customer</option>
                         </Form.Select>
                       </Form.Group>
                     </div>
@@ -163,32 +208,17 @@ function Lead() {
                           type="text"
                           name="lead_customer_name"
                           placeholder="Name"
-                          className={`${
-                            errors.lead_customer_name && "invalid"
-                          }`}
-                          {...register("lead_customer_name", {
-                            required: "Please enter a valid Name",
-                            minLength: {
-                              value: 3,
-                              message: "Minimum Required length is 3",
-                            },
-                            maxLength: {
-                              value: 100,
-                            },
-                            pattern: {
-                              value: /^[a-zA-Z0-9 ]*$/,
-                              message: "Only letters and numbers are allowed!",
-                            },
-                          })}
-                          onKeyUp={() => {
-                            trigger("lead_customer_name");
-                          }}
+                          required
+                          value={leadName}
+                          isInvalid={
+                            !leadName?.length > 0 &&
+                            (leadName?.length || formSubmitted)
+                          }
+                          onChange={(e) => setLeadName(e.target.value)}
                         />
-                        {errors.lead_customer_name && (
-                          <small className="text-danger">
-                            {errors.lead_customer_name.message}
-                          </small>
-                        )}
+                        <Form.Control.Feedback type="invalid">
+                          name is not registered
+                        </Form.Control.Feedback>
                       </Form.Group>
                     </div>
                     <div className="col-sm-4 pt-2">
@@ -197,18 +227,13 @@ function Lead() {
                         <Form.Select
                           aria-label="lead_user_type"
                           name="lead_user_type"
-                          className={`${errors.lead_user_type && "invalid"}`}
-                          {...register("lead_user_type", {
-                            required: "User type is required",
-                          })}
-                          onKeyUp={() => {
-                            trigger("lead_user_type");
-                          }}
+                          value={leadUsertype}
+                          onChange={(e) => setLeadUsertype(e.target.value)}
                         >
-                          <option value="Organisation" selected>
+                          <option value="O" selected>
                             Organisation
                           </option>
-                          <option value="Individual">Indivdual</option>
+                          <option value="I">Indivdual</option>
                         </Form.Select>
                       </Form.Group>
                     </div>
@@ -220,29 +245,10 @@ function Lead() {
                         <Form.Label>Organisation</Form.Label>
                         <Form.Control
                           type="text"
-                          className={`${errors.lead_organization && "invalid"}`}
-                          {...register("lead_organization", {
-                            minLength: {
-                              value: 3,
-                              message: "Minimum Required length is 3",
-                            },
-                            maxLength: {
-                              value: 100,
-                            },
-                            pattern: {
-                              value: /^[a-zA-Z0-9 ]*$/,
-                              message: "Only letters and numbers are allowed!",
-                            },
-                          })}
-                          onKeyUp={() => {
-                            trigger("lead_organization");
-                          }}
-                        />{" "}
-                        {errors.lead_organization && (
-                          <small className="text-danger">
-                            {errors.lead_organization.message}
-                          </small>
-                        )}
+                          name="lead_organization"
+                          value={leadOrganization}
+                          onChange={(e) => setLeadOrganization(e.target.value)}
+                        />
                       </Form.Group>
                     </div>
                     <div className="col-sm-4 pt-2">
@@ -251,20 +257,12 @@ function Lead() {
                         <Form.Select
                           aria-label="lead_source"
                           name="lead_source"
-                          className={`${errors.lead_source && "invalid"}`}
-                          {...register("lead_source", {
-                            minLength: {
-                              value: 5,
-                              message: "Minimum Required length is 5",
-                            },
-                          })}
-                          onKeyUp={() => {
-                            trigger("lead_source");
-                          }}
+                          value={leadSource}
+                          onChange={(e) => setLeadSource(e.target.value)}
                         >
-                          <option value="Reference">Reference</option>
-                          <option value="Direct Visit">Direct Visit</option>
-                          <option value="Online Registraion" selected>
+                          <option value="reference">Reference</option>
+                          <option value="direct visit">Direct Visit</option>
+                          <option value="online registration" selected>
                             Online Registration
                           </option>
                         </Form.Select>
@@ -272,11 +270,8 @@ function Lead() {
                     </div>
                     <div className="col-12 mt-3">
                       <FileUpload
-                        className={`${errors.attachments && "invalid"}`}
-                        {...register("attachments")}
-                        onKeyUp={() => {
-                          trigger("attachments");
-                        }}
+                        value={leadAttachment}
+                        onChange={(e) => setLeadAttachment(e.target.value)}
                       />
                     </div>
                     <div className="col-sm-8 pt-3">
@@ -285,53 +280,39 @@ function Lead() {
                         <Form.Control
                           as="textarea"
                           rows={3}
-                          className={`${errors.lead_description && "invalid"}`}
-                          {...register("lead_description", {
-                            minLength: {
-                              value: 5,
-                              message: "Minimum Required length is 5",
-                            },
-                          })}
-                          onKeyUp={() => {
-                            trigger("lead_description");
-                          }}
+                          value={leadDescription}
+                          onChange={(e) => setLeadDescription(e.target.value)}
                         />
-                        {errors.lead_description && (
-                          <small className="text-danger">
-                            {errors.lead_description.message}
-                          </small>
-                        )}
                       </Form.Group>
                     </div>
                     <div className="col-sm-4 pt-3">
-                      <Form.Group className="mb-2" controlId="lead_status">
-                        <Form.Label>Lead Status</Form.Label>
-                        <Form.Select
-                          aria-label="lead_status"
-                          name="lead_status"
-                          className={`${errors.lead_status && "invalid"}`}
-                          {...register("lead_status", {
-                            required: "Status is required",
-                          })}
-                          onKeyUp={() => {
-                            trigger("lead_status");
-                          }}
-                        >
-                          <option value="Lead">Lead</option>
-                          <option value="Opportunity">Opportunity</option>
-                          <option value="Quotation">Quotation</option>
-                          <option value="Interested" selected>
-                            Interested
-                          </option>
-                          <option value="Converted">Converted</option>
-                          <option value="Lost">Lost</option>
-                          <option value="DND">DND</option>
-                        </Form.Select>
-                      </Form.Group>
+                      <div className="row">
+                        <div className="col-12">
+                          <Form.Group className="mb-2" controlId="lead_status">
+                            <Form.Label>Lead Status</Form.Label>
+                            <Form.Select
+                              aria-label="lead_status"
+                              name="lead_status"
+                              value={leadStatus}
+                              onChange={(e) => setLeadStatus(e.target.value)}
+                            >
+                              <option value="LE">Lead</option>
+                              <option value="OP">Opportunity</option>
+                              <option value="QU">Quotation</option>
+                              <option value="IN" selected>
+                                Interested
+                              </option>
+                              <option value="CO">Converted</option>
+                              <option value="LO">Lost</option>
+                              <option value="DN">DND</option>
+                            </Form.Select>
+                          </Form.Group>
+                        </div>
+                      </div>
                     </div>
 
                     <div className="col pt-3">
-                      <Button onClick={Submit} btnType="save">
+                      <Button type="submit" onClick={Submit} btnType="save">
                         Save
                       </Button>
                       <Custom_model
@@ -340,32 +321,10 @@ function Lead() {
                         show={modalShow}
                         onHide={() => setModalShow(false)}
                       />
-                        <div className="opr col pt-3" style={{marginTop:'-8%'}}>
-                      <Button style={{height:'2%',width:'47%',marginLeft:'-15%'}} onClick={Submit} btnType="save">
-                        Add Opertunity
-                      </Button>
-                      <Custom_model
-                        size={`sm`}
-                        success
-                        show={modalShow}
-                        onHide={() => setModalShow(false)}
-                      />
-                    
-                    
-                      <Button className="oprview" style={{height:'2%',width:'50%'}} onClick={Submit} btnType="save">
-                      View Opertunity
-                      </Button>
-                      <Custom_model
-                        size={`sm`}
-                        success
-                        show={modalShow}
-                        onHide={() => setModalShow(false)}
-                      />
-                   </div>
                     </div>
                   </div>
-                </div>
-              </Form>
+                </Form>
+              </div>
               <div
                 className={
                   toggleState === 2 ? "content  active-content" : "content"

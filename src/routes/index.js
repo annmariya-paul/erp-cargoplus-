@@ -4,8 +4,11 @@ const ROUTES = {
   LEAD: "/lead",
   LAYOUT: "/layout",
   LEADLIST: "/lead_list",
-  CATEGORY:"/category",
+  CATEGORY: "/category",
   TEST_PAGE: "/test-page",
+  OPPORTUNITY: "/opportunity",
+  CATEGORY_LIST:"/categorylist",
+  LEAD_REPORT:"/leadReport",
 };
 
 module.exports = { ROUTES };

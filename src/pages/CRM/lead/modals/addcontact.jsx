@@ -22,8 +22,22 @@ export default function AddContact(props) {
   const [ContactName, setContactName] = useState();
   const [email, setEmail] = useState();
   // const [phoneno, setPhoneno] = useState();
-  // const [mobileno, setMobileno] = useState();
+  const [AllContact, setAllcontact] = useState();
   const [designation, setDesignation] = useState();
+
+  const getAllContact = () => {
+    PublicFetch.post(`${CRM_BASE_URL}/lead/1/contact`)
+      .then((res) => {
+        if (res.data.success) {
+          setAllcontact(res.data.data);
+        } else {
+          console.log("Failed to fetch data:");
+        }
+      })
+      .catch((err) => {
+        console.log("error while getting data", err);
+      });
+  };
 
   const AddContact = () => {
     PublicFetch.post(`${CRM_BASE_URL}/lead/1/contact`, {
@@ -35,6 +49,7 @@ export default function AddContact(props) {
     })
       .then((res) => {
         if (res.data.success) {
+          getAllContact();
           setContactName();
           setEmail();
           setPhone();
@@ -50,12 +65,12 @@ export default function AddContact(props) {
         }
       })
       .catch((err) => {
-        message.error("error while adding data", err);
+        console.log("error while adding data", err);
       });
   };
 
   useEffect(() => {
-    AddContact();
+    getAllContact();
   }, []);
 
   const {
@@ -240,7 +255,9 @@ export default function AddContact(props) {
                 )}
               </Form.Group>
             </div>
-            <Button btnType="save">Save</Button>
+            <div className="d-flex justify-content-center mt-3">
+              <Button btnType="save">Save</Button>
+            </div>
           </div>
         </Form>
       </Custom_model>

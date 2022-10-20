@@ -13,11 +13,11 @@ function ContactTable() {
         if (res.data.success) {
           setContactTable(res.data.data);
         } else {
-          message.error("Failed to fetch data");
+          console.log("Failed to fetch data");
         }
       })
       .catch((err) => {
-        message.error("Error While Getting Data");
+        console.log("Error While Getting Data", err);
       });
   };
 

@@ -1,0 +1,39 @@
+@use "../../styles//variables.scss";
+
+.modal_view_p_style {
+  color: black;
+  font-weight: 500;
+  //   font-family: "poppins", serif;
+}
+.modal_view_p_sub {
+  color: rgb(153, 151, 151);
+  //   color: #d9d9d9;
+  font-weight: 500;
+  //   font-family: "poppins", s;
+}
+.opportunity_heading {
+  color: #0891d1;
+}
+.button_span {
+  border-radius: 3px;
+  box-shadow: 0px 2px 5px variables.$boxshadow;
+}
+.input_type_style {
+  border: 0;
+  background-color: whitesmoke;
+  padding: 5px;
+  outline: none;
+  border-radius: 3px;
+}
+.cancel_button {
+  border-radius: 3px;
+  padding: 5px;
+  background-color: #979797;
+  color: #fff;
+}
+.save_button {
+  border-radius: 3px;
+  padding: 5px;
+  background-color: #0092ce;
+  color: #fff;
+}

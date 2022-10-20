@@ -23,6 +23,7 @@ import { Route } from "react-router-dom";
 import OpportunityEdit from "../CRM/lead/modals/OpportunityEdit";
 import { useForm } from "react-hook-form";
 import { Form } from "react-bootstrap";
+import Leadlist_Icons from "../../components/lead_list_icon/lead_list_icon";
 
 function Opportunitylist(props) {
   const [pageSize, setPageSize] = useState("25");
@@ -481,42 +482,7 @@ function Opportunitylist(props) {
             <div className="col">
               <h5 className="lead_text">Opportunity</h5>
             </div>
-            <div className="col-auto">
-              <div className="row flex-wrap">
-                <ul className="leadlist_icons_panel">
-                  <li className="icon-border">
-                    <a className="icon" href="#">
-                      <MdFileCopy />
-                    </a>
-                  </li>
-                  <li className="icon-border">
-                    <a className="icon" href="#">
-                      <FaFileExcel />
-                    </a>
-                  </li>
-                  <li className="icon-border">
-                    <a className="icon" href="#">
-                      <FaFileCsv />
-                    </a>
-                  </li>
-                  <li className="icon-border">
-                    <a className="icon" href="#">
-                      <FaFilePdf />
-                    </a>
-                  </li>
-                  <li className="icon-border">
-                    <a className="icon" href="#">
-                      <AiFillPrinter />
-                    </a>
-                  </li>
-                  <li className="icon-border">
-                    <a className="icon" href="#">
-                      <FaBookOpen />
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
+            <Leadlist_Icons />
           </div>
           <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
             <div className="col-4">

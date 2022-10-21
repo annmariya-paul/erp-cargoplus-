@@ -1,5 +1,6 @@
 @use "../../../../styles/variables.scss";
 
+// ######## First Container - Date Criteria #########
 .lead_report_container1{
    display: flex;
   flex-direction: column;
@@ -18,14 +19,6 @@
 }
 .ant-picker{
   height:34px;
-}
-input[type='date']{
-    width: 100%;
-    background-color: variables.$inputfield;
-    outline:none;
-    border: none;
-    height:34px;
-    border-radius: 3px;
 }
 
 // ######## Second Container #########
@@ -82,7 +75,7 @@ input[type='date']{
   }
 }
 
-// ###### Contents ######
+// ###### Tab Contents ######
 .report-content-tabs {
   border-radius: 3px;
   min-height: 38rem;
@@ -96,8 +89,6 @@ input[type='date']{
 .active-report-content {
   display: block;
 }
-
-
 
 @media screen and (max-width: 500px) {
   .lead_report_container1{

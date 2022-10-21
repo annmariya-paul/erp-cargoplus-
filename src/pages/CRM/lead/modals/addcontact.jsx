@@ -40,7 +40,7 @@ export default function AddContact(props) {
   };
 
   const AddContact = () => {
-    PublicFetch.post(`${CRM_BASE_URL}/lead/1/contact`, {
+    PublicFetch.post(`${CRM_BASE_URL}/lead/${props.lead}/contact`, {
       contact_person_name: ContactName,
       contact_email: email,
       contact_phone_1: phone,
@@ -48,6 +48,7 @@ export default function AddContact(props) {
       contact_designation: designation,
     })
       .then((res) => {
+        console.log("contactdata,", res);
         if (res.data.success) {
           getAllContact();
           setContactName();

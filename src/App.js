@@ -11,7 +11,11 @@ import TestPage from "./pages/testpage";
 import LeadReport from "./pages/CRM/lead/leadReport/leadReport";
 import Opportunitylist from "./pages/opportunity_ List/opportunitylist";
 import Categorylist from "./pages/category/viewCategory";
+<<<<<<< HEAD
+import BrandsList from "./pages/CRM/lead/brands/BrandsList";
+=======
 import OpportunityReport from "./pages/opportunityReport/OpportunityReport";
+>>>>>>> 38bacf5053fc599070ebe02a7a005b395be75adf
 // import Lead from "./pages/lead/lead";
 
 function App() {
@@ -30,10 +34,14 @@ function App() {
             <Route path={ROUTES.OPPORTUNITY} element={<Opportunitylist />} />
             <Route path={ROUTES.CATEGORY_LIST} element={<Categorylist />} />
             <Route path={ROUTES.LEAD_REPORT} element={<LeadReport />} />
+<<<<<<< HEAD
+            <Route path={ROUTES.BRANDS} element={<BrandsList />} />
+=======
             <Route
               path={ROUTES.OPPORTUNITY_REPORT}
               element={<OpportunityReport />}
             />
+>>>>>>> 38bacf5053fc599070ebe02a7a005b395be75adf
           </Route>
         </Routes>
       </BrowserRouter>

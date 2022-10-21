@@ -11,7 +11,7 @@ import { CRM_BASE_URL } from "../../../../api/bootapi";
 
 export default function LeadReport() {
   const { Option } = Select;
-  const [toggleState, setToggleState] = useState(1);
+
   const [searchedText, setSearchedText] = useState("");
   const [searchType, setSearchType] = useState("");
   const [searchStatus, setSearchStatus] = useState("");
@@ -21,12 +21,16 @@ export default function LeadReport() {
   const [generateTable, setGenerateTable] = useState();
   const [convertedTable, setConvertedTable] = useState();
   const [dateCriteria, setDateCriteria] = useState("daily");
-  const [startDate, setStartDate] = useState();
-  const [endDate, setEndDate] = useState();
 
+  const [selectedDate, setSelectedDate] = useState();
+  const [backend, setBackEnd] = useState();
+  const [toggleState, setToggleState] = useState(1);
   const toggleTab = (index) => {
     setToggleState(index);
   };
+
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
   const onChange = (date, dateString) => {
     console.log(date, dateString);
   };
@@ -68,6 +72,26 @@ export default function LeadReport() {
               setGenerateTable(Arry);
             }
           });
+          // if (selectedDate) {
+          //   let array1 = [];
+          //   res?.data?.data?.leads.forEach((item, index) => {
+          //     setBackEnd(item.lead_created_at);
+          //     if (selectedDate.includes(item.lead_created_at.format("DD-MM-YYY"))) {
+          //       array1.push({
+          //         lead_customer_name: item?.lead_customer_name,
+          //         lead_description: item?.lead_description,
+          //         lead_id: item?.lead_id,
+          //         lead_organization: item?.lead_organization,
+          //         lead_source: item?.lead_source,
+          //         lead_status: item?.lead_status,
+          //         lead_type: item?.lead_type,
+          //         lead_user_type: item?.lead_user_type,
+          //       });
+          //       setGenerateTable(array1);
+          //     }
+          //     console.log("dat eeendsgj:::", array1);
+          //   });
+          // }
         } else {
           console.log("FAILED TO LOAD DATA");
         }
@@ -132,10 +156,7 @@ export default function LeadReport() {
       align: "center",
     },
   ];
-
-  console.log("fdjghrffer:::", convertedTable);
-  console.log("eeerererererer:::", generateTable);
-
+  console.log("bxhgddtd::::", backend);
   return (
     <>
       {toggleState === 1 && (
@@ -151,6 +172,7 @@ export default function LeadReport() {
                   name="criteria"
                   defaultValue="daily"
                   style={{ width: " 100% " }}
+                  onChange={(e) => setDateCriteria(e)}
                 >
                   <Option value="daily">Daily</Option>
                   <Option value="BtwnTwoDates">Between Two Dates</Option>
@@ -160,7 +182,14 @@ export default function LeadReport() {
               {dateCriteria === "daily" && (
                 <div className="col-md-6 col-sm-12">
                   <label htmlFor="date">Date</label>
-                  <DatePicker onChange={onChange} />
+                  <DatePicker
+                    // onChange={onChange}
+                    format={"DD-MM-YY"}
+                    onChange={(e) => {
+                      setSelectedDate([e.format("DD-MM-YYYY")]);
+                    }}
+                    allowClear={false}
+                  />
                 </div>
               )}
               {dateCriteria === "monthly" && (
@@ -405,7 +434,6 @@ export default function LeadReport() {
                 data={getGenerateData(current, pageSize)}
                 columns={columns}
                 custom_table_css="table_lead_list"
-                // value={generateTable}
               />
             </div>
           </div>
@@ -469,6 +497,7 @@ export default function LeadReport() {
                   onChange={(event) => {
                     setSearchStatus(event ? [event] : []);
                   }}
+                  disabled
                 >
                   {LeadStatus &&
                     LeadStatus.map((item, index) => {

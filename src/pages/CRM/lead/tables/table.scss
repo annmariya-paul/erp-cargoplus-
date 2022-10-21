@@ -4,7 +4,7 @@ table {
 .addresstable,
 .contact_table {
   height: fit-content !important;
-  width:100% !important;
+  width: 100% !important;
   overflow-x: scroll !important;
 }
 .addresstable,
@@ -23,4 +23,7 @@ table {
   .lead_list {
     height: fit-content;
   }
+}
+.PhoneInputInput {
+  outline: none !important;
 }

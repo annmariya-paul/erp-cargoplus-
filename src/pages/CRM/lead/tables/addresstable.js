@@ -73,18 +73,6 @@ function AddressTable(props) {
     },
   ];
 
-  // const data = [
-  //   {
-  //     serialno: "1",
-  //     address_title: {title},
-  //     address_content: {address_data},
-  //     address_pin: {pincode},
-  //     address_contact:{value},
-  //     key: "1",
-  //   },
-
-  // ];
-
   const submit = (data) => {
     PublicFetch.post(`${CRM_BASE_URL}/lead/${props.lead}/address`, {
       address_title: title,
@@ -160,22 +148,22 @@ function AddressTable(props) {
               <Form.Control
                 type="text"
                 placeholder="Name"
-                className={`${errors.address_title && "invalid"}`}
-                {...register("address_title", {
-                  required: "Please enter a valid Title",
-                  minLength: {
-                    value: 3,
-                    message: "Minimum Required length is 3",
-                  },
-                  maxLength: {
-                    value: 100,
-                  },
-                })}
-                onKeyUp={() => {
-                  trigger("address_title");
-                }}
                 value={title}
+                // className={`${errors.address_title && "invalid"}`}
+                // {...register("address_title", {
+                //   required: "Please enter a valid Title",
+                //   minLength: {
+                //     value: 3,
+                //     message: "Minimum Required length is 3",
+                //   },
+                //   maxLength: {
+                //     value: 100,
+                //   },
+                // })}
                 onChange={(e) => setTitle(e.target.value)}
+                // onKeyUp={() => {
+                //   trigger("address_title");
+                // }}
               />
               {errors.address_title && (
                 <small className="text-danger">
@@ -188,21 +176,21 @@ function AddressTable(props) {
               <Form.Control
                 as="textarea"
                 rows={3}
-                className={`${errors.address_content && "invalid"}`}
-                {...register("address_content", {
-                  required: "Please enter a valid Address",
-                  minLength: {
-                    value: 6,
-                    message: "Minimum Required length is 6",
-                  },
-                  maxLength: {
-                    value: 500,
-                  },
-                })}
+                // className={`${errors.address_content && "invalid"}`}
+                // {...register("address_content", {
+                //   required: "Please enter a valid Address",
+                //   minLength: {
+                //     value: 6,
+                //     message: "Minimum Required length is 6",
+                //   },
+                //   maxLength: {
+                //     value: 500,
+                //   },
+                // })}
                 value={address_data}
-                onKeyUp={() => {
-                  trigger("address_content");
-                }}
+                // onKeyUp={() => {
+                //   trigger("address_content");
+                // }}
                 onChange={(e) => setAddress_data(e.target.value)}
               />
               {errors.address_content && (
@@ -215,25 +203,25 @@ function AddressTable(props) {
               <Form.Label>PIN</Form.Label>
               <Form.Control
                 type="text"
-                className={`form-control ${errors.address_pin && "invalid"}`}
-                {...register("address_pin", {
-                  required: "Please enter valid PIN eg:345 678",
-                  pattern: {
-                    value: /^[A-Z0-9- ]{2,10}$/i,
-                    message: "Please enter valid PIN eg:345 678",
-                  },
-                })}
-                onKeyUp={() => {
-                  trigger("address_pin");
-                }}
+                // className={`form-control ${errors.address_pin && "invalid"}`}
+                // {...register("address_pin", {
+                //   required: "Please enter valid PIN eg:345 678",
+                //   pattern: {
+                //     value: /^[A-Z0-9- ]{2,10}$/i,
+                //     message: "Please enter valid PIN eg:345 678",
+                //   },
+                // })}
+                // onKeyUp={() => {
+                //   trigger("address_pin");
+                // }}
                 value={pincode}
                 onChange={(e) => setPincode(e.target.value)}
               />
-              {errors.address_pin && (
+              {/* {errors.address_pin && (
                 <small className="text-danger">
                   {errors.address_pin.message}
                 </small>
-              )}
+              )} */}
             </Form.Group>
             <FormGroup>
               <div className="Phno row mb-3">
@@ -245,10 +233,15 @@ function AddressTable(props) {
                   value={phone}
                   onChange={(value) => setPhone(value)}
                 />
-                Is this number possible :
-                {phone && isPossiblePhoneNumber(phone)
-                  ? "yes"
-                  : "Its not a valid Phone Number"}
+                {phone ? ( 
+                  <small style={{ color: "red" }}>
+                    {phone && isPossiblePhoneNumber(phone)
+                      ? " "
+                      : "Enter a valid Phone Number"}
+                  </small>
+                ) : (
+                  ""
+                )}
               </div>
             </FormGroup>
           </div>

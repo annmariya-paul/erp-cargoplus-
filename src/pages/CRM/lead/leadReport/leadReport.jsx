@@ -133,9 +133,6 @@ export default function LeadReport() {
     },
   ];
 
-  console.log("fdjghrffer:::", convertedTable);
-  console.log("eeerererererer:::", generateTable);
-
   return (
     <>
       {toggleState === 1 && (
@@ -151,6 +148,7 @@ export default function LeadReport() {
                   name="criteria"
                   defaultValue="daily"
                   style={{ width: " 100% " }}
+                  onChange={(e) => setDateCriteria(e)}
                 >
                   <Option value="daily">Daily</Option>
                   <Option value="BtwnTwoDates">Between Two Dates</Option>
@@ -405,7 +403,6 @@ export default function LeadReport() {
                 data={getGenerateData(current, pageSize)}
                 columns={columns}
                 custom_table_css="table_lead_list"
-                // value={generateTable}
               />
             </div>
           </div>
@@ -469,6 +466,7 @@ export default function LeadReport() {
                   onChange={(event) => {
                     setSearchStatus(event ? [event] : []);
                   }}
+                  disabled
                 >
                   {LeadStatus &&
                     LeadStatus.map((item, index) => {

@@ -7,8 +7,9 @@ const ROUTES = {
   CATEGORY: "/category",
   TEST_PAGE: "/test-page",
   OPPORTUNITY: "/opportunity",
-  CATEGORY_LIST:"/categorylist",
-  LEAD_REPORT:"/leadReport",
+  CATEGORY_LIST: "/categorylist",
+  LEAD_REPORT: "/leadReport",
+  OPPORTUNITY_REPORT: "/opportunity-report",
 };
 
 module.exports = { ROUTES };

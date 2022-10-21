@@ -1,22 +1,41 @@
+//Opportunity adding model created 14.10.22 shahida
+
 import React, { useState, useEffect } from "react";
-
-import moment from "moment";
 import { Form } from "react-bootstrap";
-
-import { FormGroup } from "react-bootstrap";
 import Button from "../../../../components/button/button";
 import { useForm } from "react-hook-form";
-
 import Custom_model from "../../../../components/custom_modal/custom_model";
-
+import { CRM_BASE_URL } from "../../../../api/bootapi";
+import PublicFetch from "../../../../utils/PublicFetch";
 import { message } from "antd";
 
 export default function AddOpportunity(props) {
   const today = new Date().toISOString().split("T")[0];
   const [modalOpportunity, setModalOpportunity] = useState();
   const [modalShow, setModalShow] = useState();
-
   const [date, setDate] = useState();
+  const [name, setName] = useState();
+ const [value, setValue] = useState([]);
+
+//API added
+  useEffect(() => {
+    getAllContact();
+  }, []);
+
+  const getAllContact = async () => {
+    try {
+      const allNames = await PublicFetch.get(`${CRM_BASE_URL}/lead/1/contact`);
+     if (allNames.data.success) {
+        setValue(allNames.data.data);
+       console.log("hello data names new add content", allNames.data.data);
+      } else {
+        message.error("fetch data error");
+      }
+      console.log("All leads res : ", allNames);
+    } catch (err) {
+      console.log("error while getting all leads: ", err);
+    }
+  };
 
   const {
     register,
@@ -33,7 +52,7 @@ export default function AddOpportunity(props) {
       }, time);
     }
   };
-
+//local storage
   const submit = (data) => {
     console.log(data);
     localStorage.setItem("Form", JSON.stringify(data));
@@ -182,28 +201,27 @@ export default function AddOpportunity(props) {
                   </Form.Select>
                 </Form.Group>
               </div>
-
+{/* upadations on fetching data from api 21.10.22 shahida */}
               <div className="col-sm-4 pt-2">
                 <Form.Group className="mb-2" controlId="lead_party">
                   <Form.Label>Party</Form.Label>
                   <Form.Select
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                     aria-label="lead_party"
                     name="lead_party"
-                    className={`${errors.lead_party && "invalid"}`}
+                    
                     {...register("lead_party", {
-                      minLength: {
-                        value: 5,
-                        message: "Minimum Required length is 5",
-                      },
+                   
                     })}
-                    onKeyUp={() => {
-                      trigger("lead_party");
-                    }}
+                 
                   >
-                    <option value="Database" selected>
-                      data
-                    </option>
-                    <option value="Direct Visit"></option>
+                    {value &&
+                      value.map((item, index) => (
+                        <option key={index} value={item.contact_id}>
+                          {item.contact_person_name}
+                        </option>
+                      ))}
                   </Form.Select>
                 </Form.Group>
               </div>
@@ -252,19 +270,19 @@ export default function AddOpportunity(props) {
                   <Form.Label>Expecting Amount</Form.Label>
                   <Form.Control
                     type="text"
-                    className={`${errors.lead_expecting_amt && "invalid"}`}
                     {...register("lead_expecting_amt", {
                       maxLength: {
                         value: 100,
                       },
                       pattern: {
-                        value: /^[-+]?[0-9]+\.[0-9]+$/,
-                        message: "Only  numbers are allowed!",
+                        value: /^[1-9]\d*(\.\d+)?$/,
+                        message: "Please enter a valid amount!",
                       },
                     })}
                     onKeyUp={() => {
                       trigger("lead_expecting_amt");
                     }}
+                    className={`${errors.lead_expecting_amt && "invalid"}`}
                   />{" "}
                   {errors.lead_expecting_amt && (
                     <small className="text-danger">

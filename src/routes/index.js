@@ -9,6 +9,7 @@ const ROUTES = {
   OPPORTUNITY: "/opportunity",
   CATEGORY_LIST: "/categorylist",
   LEAD_REPORT: "/leadReport",
+  BRANDS: "/brands",
   OPPORTUNITY_REPORT: "/opportunity-report",
   UNIT_LIST: "/unit-list",
 };

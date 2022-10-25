@@ -26,16 +26,19 @@ import { Form } from "react-bootstrap";
 import Leadlist_Icons from "../../components/lead_list_icon/lead_list_icon";
 
 function Opportunitylist(props) {
-  const [pageSize, setPageSize] = useState("25");
-  const [current, setCurrent] = useState(1);
-  const [searchedText, setSearchedText] = useState("");
-  const [searchType, setSearchType] = useState("");
-  const [searchStatus, setSearchStatus] = useState("");
-  const [showViewModal, setShowViewModal] = useState(false);
-  const [ShowEditModal, setShowEditModal] = useState(false);
-  const [showProgressModal, setShowProgresssModal] = useState(false);
-  const [successPopup, setSuccessPopup] = useState(false);
-  const [date, setDate] = useState();
+  const [pageSize, setPageSize] = useState("25"); // page size
+  const [current, setCurrent] = useState(1); // current page
+  const [searchedText, setSearchedText] = useState(""); // search by text input
+  const [searchType, setSearchType] = useState(""); //search by type select box
+  const [searchStatus, setSearchStatus] = useState(""); //search by status select box
+  const [showViewModal, setShowViewModal] = useState(false); //oppertunity view modal
+  const [ShowEditModal, setShowEditModal] = useState(false); //oppertunity edit modal
+  const [showProgressModal, setShowProgresssModal] = useState(false); //Oppoertunity progress modal
+  const [successPopup, setSuccessPopup] = useState(false); //success popups
+  const [date, setDate] = useState(); //for date
+  const [showAddOpportunity, setShowAddOpportunity] = useState(false); //adding opportunity
+
+  // {timeout set for success popups }
 
   const close_modal = (mShow, time) => {
     if (!mShow) {
@@ -328,6 +331,7 @@ function Opportunitylist(props) {
     //   key: "32",
     // },
   ];
+  // {columns is opportunity listing table componenet }
 
   const columns = [
     {
@@ -541,7 +545,7 @@ function Opportunitylist(props) {
             </div>
           </div>
           <div className="row my-3">
-            <div className="col-3 px-3 ">
+            <div className="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-12  px-3">
               <Select
                 // defaultValue={"25"}
                 bordered={false}
@@ -580,6 +584,15 @@ function Opportunitylist(props) {
                   </span>{" "}
                 </Select.Option>
               </Select>
+            </div>
+            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-8 col-12"></div>
+            <div className="col-lg-3 col-lg-3 col-md-3 col-sm-12 col-12 d-flex justify-content-end">
+              <Button
+                onClick={() => setShowAddOpportunity(true)}
+                className="add_opportunity"
+              >
+                Add Opportunity
+              </Button>
             </div>
           </div>
           <div className="datatable">
@@ -757,6 +770,306 @@ function Opportunitylist(props) {
           </div>
         }
       />
+
+      {/* {Adding Opportunity Modal in Opportunity page} */}
+
+      <CustomModel
+        Adding_contents
+        show={showAddOpportunity}
+        onHide={() => setShowAddOpportunity(false)}
+        header="Add Opportunity"
+        size={`xl`}
+        footer={[
+          <Button onClick={submit} btnType="save">
+            Save
+          </Button>,
+        ]}
+        {...props}
+      >
+        <Form onSubmit={handleSubmit(submit)}>
+          <div className="px-5">
+            <div className="row px-1">
+              <div className="col-sm-4 pt-2">
+                <Form.Group className="mb-2" controlId="lead_type">
+                  <Form.Label>Type</Form.Label>
+                  <Form.Select
+                    aria-label="lead_type"
+                    name="lead_type"
+                    className={`${errors.lead_type && "invalid"}`}
+                    {...register("lead_type", {
+                      required: "Type is required",
+                    })}
+                    onKeyUp={() => {
+                      trigger("lead_type");
+                    }}
+                  >
+                    <option value="Sales" selected>
+                      Sales
+                    </option>
+                    <option value="Support">Support</option>
+                    <option value="maintenance">Maintenance</option>
+                  </Form.Select>
+                </Form.Group>
+              </div>
+
+              <div className="col-sm-4 pt-2">
+                <Form.Group className="mb-2" controlId="lead_customer_from">
+                  <Form.Label>From</Form.Label>
+                  <Form.Select
+                    aria-label="lead_customer_from"
+                    name="lead_customer_from"
+                    className={`${errors.lead_customer_from && "invalid"}`}
+                    {...register("lead_customer_from", {
+                      required: "Type is required",
+                    })}
+                    onKeyUp={() => {
+                      trigger("lead_customer_from");
+                    }}
+                  >
+                    {errors.lead_customer_from && (
+                      <small className="text-danger">
+                        {errors.lead_customer_from.message}
+                      </small>
+                    )}
+                    {/* <option value="Sales" selected>
+                         Sales
+                          </option> */}
+                    <option value="Customer" selected>
+                      Customer
+                    </option>
+                    <option value="Lead">Lead</option>
+                  </Form.Select>
+
+                  {errors.lead_customer_from && (
+                    <small className="text-danger">
+                      {errors.lead_customer_from.message}
+                    </small>
+                  )}
+                </Form.Group>
+              </div>
+
+              <div className="col-sm-4 pt-2">
+                <Form.Group
+                  className="mb-2"
+                  controlId="lead_customer_generated"
+                >
+                  <Form.Label>Generated/Converted by</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="lead_customer_generated"
+                    placeholder="User ID"
+                    className={`${errors.lead_customer_generated && "invalid"}`}
+                    {...register("lead_customer_generated", {
+                      required: "Please enter a valid User ID",
+                      minLength: {
+                        value: 3,
+                        message: "Minimum Required length is 3",
+                      },
+                      maxLength: {
+                        value: 100,
+                      },
+                      pattern: {
+                        value: /^[a-zA-Z0-9 ]*$/,
+                        message: "Only letters and numbers are allowed!",
+                      },
+                    })}
+                    onKeyUp={() => {
+                      trigger("lead_customer_generated");
+                    }}
+                  />
+                  {errors.lead_customer_generated && (
+                    <small className="text-danger">
+                      {errors.lead_customer_generated.message}
+                    </small>
+                  )}
+                </Form.Group>
+              </div>
+
+              <div className="col-sm-4 pt-2">
+                <Form.Group className="mb-2" controlId="lead_source">
+                  <Form.Label>Source</Form.Label>
+                  <Form.Select
+                    aria-label="lead_source"
+                    name="lead_source"
+                    className={`${errors.lead_source && "invalid"}`}
+                    {...register("lead_source", {
+                      minLength: {
+                        value: 5,
+                        message: "Minimum Required length is 5",
+                      },
+                    })}
+                    onKeyUp={() => {
+                      trigger("lead_source");
+                    }}
+                  >
+                    <option value="Reference" selected>
+                      Reference
+                    </option>
+                    <option value="Direct Visit">Direct Visit</option>
+                    <option value="Online Registraion">
+                      Online Registration
+                    </option>
+                  </Form.Select>
+                </Form.Group>
+              </div>
+
+              <div className="col-sm-4 pt-2">
+                <Form.Group className="mb-2" controlId="lead_party">
+                  <Form.Label>Party</Form.Label>
+                  <Form.Select
+                    aria-label="lead_party"
+                    name="lead_party"
+                    className={`${errors.lead_party && "invalid"}`}
+                    {...register("lead_party", {
+                      minLength: {
+                        value: 5,
+                        message: "Minimum Required length is 5",
+                      },
+                    })}
+                    onKeyUp={() => {
+                      trigger("lead_party");
+                    }}
+                  >
+                    <option value="Database" selected>
+                      data
+                    </option>
+                    <option value="Direct Visit"></option>
+                  </Form.Select>
+                </Form.Group>
+              </div>
+
+              <div className="col-sm-4 pt-2">
+                <Form.Group className="mb-2" controlId="lead_valid_up_to">
+                  <Form.Label>Valid Up to</Form.Label>
+                  <div className="form-control">
+                    <input
+                      type="date"
+                      style={{ borderWidth: 0 }}
+                      onChange={(date) => setDate(date)}
+                    />
+                  </div>
+                </Form.Group>
+              </div>
+
+              <div className="col-sm-8 pt-3">
+                <Form.Group className="mb-2" controlId="lead_details">
+                  <Form.Label>Details</Form.Label>
+                  <Form.Control
+                    as="textarea"
+                    rows={3}
+                    className={`${errors.lead_details && "invalid"}`}
+                    {...register("lead_details", {
+                      minLength: {
+                        value: 5,
+                        message: "Minimum Required length is 5",
+                      },
+                    })}
+                    onKeyUp={() => {
+                      trigger("lead_details");
+                    }}
+                  />
+                  {errors.lead_details && (
+                    <small className="text-danger">
+                      {errors.lead_details.message}
+                    </small>
+                  )}
+                </Form.Group>
+              </div>
+
+              <div className="col-sm-4 pt-3">
+                <Form.Group className="mb-2" controlId="lead_expecting_amt">
+                  <Form.Label>Expecting Amount</Form.Label>
+                  <Form.Control
+                    type="text"
+                    className={`${errors.lead_expecting_amt && "invalid"}`}
+                    {...register("lead_expecting_amt", {
+                      minLength: {
+                        value: 3,
+                        message: "Minimum Required length is 3",
+                      },
+                      maxLength: {
+                        value: 100,
+                      },
+                      pattern: {
+                        value: /^[a-zA-Z0-9 ]*$/,
+                        message: "Only letters and numbers are allowed!",
+                      },
+                    })}
+                    onKeyUp={() => {
+                      trigger("lead_expecting_amt");
+                    }}
+                  />{" "}
+                  {errors.lead_expecting_amt && (
+                    <small className="text-danger">
+                      {errors.lead_expecting_amt.message}
+                    </small>
+                  )}
+                </Form.Group>
+              </div>
+
+              <div className="col-sm-4 pt-2">
+                <Form.Group className="mb-2" controlId="lead_probability">
+                  <Form.Label>Probability of conversion</Form.Label>
+                  <Form.Select
+                    aria-label="lead_probability"
+                    name="lead_probability"
+                    className={`${errors.lead_probability && "invalid"}`}
+                    {...register("lead_probability", {
+                      minLength: {
+                        value: 5,
+                        message: "Minimum Required length is 5",
+                      },
+                    })}
+                    onKeyUp={() => {
+                      trigger("lead_probability");
+                    }}
+                  >
+                    <option value="low" selected>
+                      low
+                    </option>
+                    <option value="medium">medium</option>
+                    <option value="high">high</option>
+                  </Form.Select>
+                </Form.Group>
+              </div>
+
+              <div className="col-sm-4 pt-2">
+                <Form.Group className="mb-2" controlId="lead_status">
+                  <Form.Label>Status</Form.Label>
+                  <Form.Select
+                    aria-label="lead_status"
+                    name="lead_status"
+                    className={`${errors.lead_status && "invalid"}`}
+                    {...register("lead_status", {
+                      minLength: {
+                        value: 5,
+                        message: "Minimum Required length is 5",
+                      },
+                    })}
+                    onKeyUp={() => {
+                      trigger("lead_status");
+                    }}
+                  >
+                    <option value="quotation" selected>
+                      quotation
+                    </option>
+                    <option value="interested">interested</option>
+                    <option value="converted">converted</option>
+                    <option value="lost">lost</option>
+                    <option value="DND">DND</option>
+                  </Form.Select>
+                </Form.Group>
+              </div>
+              {/* <div className="col-12 d-flex justify-content-center my-2">
+                <Button onClick={submit} btnType="save">
+                  Save
+                </Button>
+              </div> */}
+            </div>
+          </div>
+        </Form>
+      </CustomModel>
+
       {/* Edit opportunity modal   section THREE */}
       <CustomModel
         Adding_contents
@@ -1054,6 +1367,8 @@ function Opportunitylist(props) {
           </div>
         </Form>
       </CustomModel>
+
+      {/* {Success successPopup Modal } */}
       <CustomModel
         size={"sm"}
         show={successPopup}

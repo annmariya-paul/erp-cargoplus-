@@ -161,7 +161,7 @@ function Lead() {
                 {/* <div className="col-12"> */}
                 <div className="row mb-2 justify-content-end">
                   <div
-                    className="col-2 d-flex"
+                    className="col-md-3 col-xl-2 col-sm-6 d-flex"
                     style={{ justifyContent: "center" }}
                   >
                     <Button
@@ -178,7 +178,7 @@ function Lead() {
                     />
                   </div>
                   <div
-                    className="col-2 d-flex"
+                    className="col-md-3 col-xl-2 col-sm-6 d-flex"
                     style={{ justifyContent: "center" }}
                   >
                     <Link to={ROUTES.OPPORTUNITY} className="nav-link">

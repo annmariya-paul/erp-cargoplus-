@@ -24,6 +24,7 @@ function ContactTable(props) {
   const [AllContact, setAllcontact] = useState();
   const [designation, setDesignation] = useState();
 
+  // # funtion getcontacttable to fetch contacts to contact table - Noufal
   const getcontacttable = () => {
     PublicFetch.get(`${CRM_BASE_URL}/lead/${props.lead}/contact`)
       .then((res) => {
@@ -76,27 +77,7 @@ function ContactTable(props) {
     },
   ];
 
-  const data = [
-    {
-      serialno: "1",
-      name: "Test",
-      email: "test@gmail.com",
-      phone: "8989898956",
-      mobile: "3434466753",
-      designation: "Manager",
-      key: "1",
-    },
-    {
-      serialno: "1",
-      name: "Testhr",
-      email: "hrtest@gmail.com",
-      phone: "8989898956",
-      mobile: "3434466753",
-      designation: "HR",
-      key: "2",
-    },
-  ];
-
+  // # function AddContact to add contacts - Noufal
   const AddContact = () => {
     PublicFetch.post(`${CRM_BASE_URL}/lead/${props.lead}/contact`, {
       contact_person_name: ContactName,

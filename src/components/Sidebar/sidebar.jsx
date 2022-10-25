@@ -102,16 +102,28 @@ export default function Sidebar({ showSidebar }) {
                   Opportunity Report
                 </NavLink>
               </li>
-              {/* <li className="nav-text">
+              <li className="nav-text">
                 <NavLink
                   className={({ isActive }) =>
                     isActive ? "active-link" : "link"
                   }
-                  to="#"
+                  to={ROUTES.BRANDS}
                 >
                   <RiTeamFill className="sidebar_icons" />
+                  Brands
                 </NavLink>
-              </li> */}
+              </li>
+              <li className="nav-text">
+                <NavLink
+                  className={({ isActive }) =>
+                    isActive ? "active-link" : "link"
+                  }
+                  to={ROUTES.PRODUCT}
+                >
+                  <RiTeamFill className="sidebar_icons" />
+                  Products
+                </NavLink>
+              </li>
             </ul>
           </nav>
         </div>

@@ -10,6 +10,7 @@ const ROUTES = {
   CATEGORY_LIST: "/categorylist",
   LEAD_REPORT: "/leadReport",
   OPPORTUNITY_REPORT: "/opportunity-report",
+  UNIT_LIST: "/unit-list",
 };
 
 module.exports = { ROUTES };

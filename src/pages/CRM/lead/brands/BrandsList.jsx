@@ -15,7 +15,8 @@ import "../lead_list/leadlist.scss";
 import TableData from "../../../../components/table/table_data";
 import MyPagination from "../../../../components/Pagination/MyPagination";
 // import CustomModel from "../../components/custom_modal/custom_model";
-// import Button from "../../components/button/button";
+import Button from "../../../../components/button/button";
+
 import "../../../opportunity_ List/opportunitylist.scss";
 // import { BsPlusCircleFill } from "react-icons/bs";
 
@@ -23,6 +24,7 @@ import "../../../opportunity_ List/opportunitylist.scss";
 // import { useForm } from "react-hook-form";
 // import { Form } from "react-bootstrap";
 import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
+import { Link } from "react-router-dom";
 
 function BrandsList() {
   const [pageSize, setPageSize] = useState("25"); // page size
@@ -70,13 +72,13 @@ function BrandsList() {
       width: "14%",
       render: (data, index) => {
         return (
-          <div>
-            {/* <a href="" className="actionEdit">
+          <div className="d-flex justify-content-center align-items-center gap-4">
+            <div className="actionEdit m-0 p-0">
               <FaEdit />
-            </a> */}
+            </div>
             <div
               //   onClick={() => setShowViewModal(true)}
-              className="actionView"
+              className="actionView m-0 p-0"
             >
               <MdPageview />
             </div>
@@ -86,10 +88,27 @@ function BrandsList() {
       align: "center",
     },
     {
+      title: "IMAGE",
+      dataIndex: { Leadlist_Icons },
+      key: "key",
+      width: "23%",
+      // filteredValue: [searchStatus],
+      // onFilter: (value, record) => {
+      //   return String(record.lead_status)
+      //     .toLowerCase()
+      //     .includes(value.toLowerCase());
+      // },
+
+      align: "center",
+      render: (theImageURL, records) => (
+        <img alt={Leadlist_Icons} src={Leadlist_Icons} />
+      ),
+    },
+    {
       title: "NAME",
       dataIndex: "lead_type",
       key: "key",
-      filteredValue: [searchType],
+      filteredValue: [searchedText],
       onFilter: (value, record) => {
         return String(record.lead_type)
           .toLowerCase()
@@ -98,19 +117,7 @@ function BrandsList() {
       align: "center",
       width: "23%",
     },
-    {
-      title: "IMAGE",
-      dataIndex: "lead_customer_name",
-      key: "key",
-      width: "23%",
-      filteredValue: [searchStatus],
-      onFilter: (value, record) => {
-        return String(record.lead_status)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
-      align: "center",
-    },
+
     {
       title: "DESCRIPTION",
       dataIndex: "lead_organization",
@@ -166,7 +173,7 @@ function BrandsList() {
                   }}
                 />
               </div>
-              <div className="col-4">
+              <div className="col-4 d-none">
                 <Select
                   allowClear
                   showSearch
@@ -187,7 +194,7 @@ function BrandsList() {
                   <Select.Option value="support">support</Select.Option>
                 </Select>
               </div>
-              <div className="col-4">
+              <div className="col-4 d-none">
                 <Select
                   allowClear
                   showSearch
@@ -259,12 +266,14 @@ function BrandsList() {
               </div>
               <div className="col-xl-6 col-lg-6 col-md-6 col-sm-8 col-12"></div>
               <div className="col-lg-3 col-lg-3 col-md-3 col-sm-12 col-12 d-flex justify-content-end">
-                {/* <Button
-                  //   onClick={() => setShowAddOpportunity(true)}
-                  className="add_opportunity"
-                >
-                  Add Opportunity
-                </Button> */}
+                <Link href="#">
+                  <Button
+                    //   onClick={() => setShowAddOpportunity(true)}
+                    className="add_opportunity"
+                  >
+                    Add Brand
+                  </Button>
+                </Link>
               </div>
             </div>
             <div className="datatable">

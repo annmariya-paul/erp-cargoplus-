@@ -25,6 +25,11 @@ import "../../../opportunity_ List/opportunitylist.scss";
 // import { Form } from "react-bootstrap";
 import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
 import { Link } from "react-router-dom";
+import { ROUTES } from "../../../../routes";
+import CustomModel from "../../../../components/custom_modal/custom_model";
+import FileUpload from "../../../../components/fileupload/fileUploader";
+import logo from "../../../../components/img/logo192.png";
+import ErrorMsg from "../../../../components/error/ErrorMessage";
 
 function BrandsList() {
   const [pageSize, setPageSize] = useState("25"); // page size
@@ -32,7 +37,10 @@ function BrandsList() {
   const [searchedText, setSearchedText] = useState(""); // search by text input
   const [searchType, setSearchType] = useState(""); //search by type select box
   const [searchStatus, setSearchStatus] = useState("");
-
+  const [BrandEditPopup, setBrandEditPopup] = useState(false);
+  const [BrandViewpopup, setBrandViewPopup] = useState(false);
+  const [successPopup, setSuccessPopup] = useState(false);
+  const [error, setError] = useState(false);
   const getData = (current, pageSize) => {
     return data.slice((current - 1) * pageSize, current * pageSize);
   };
@@ -62,7 +70,7 @@ function BrandsList() {
       key: "3",
     },
   ];
-  // {columns is opportunity listing table componenet }
+  // {columns is brand listing table componenet }
 
   const columns = [
     {
@@ -73,11 +81,14 @@ function BrandsList() {
       render: (data, index) => {
         return (
           <div className="d-flex justify-content-center align-items-center gap-4">
-            <div className="actionEdit m-0 p-0">
+            <div
+              onClick={() => setBrandEditPopup(true)}
+              className="actionEdit m-0 p-0"
+            >
               <FaEdit />
             </div>
             <div
-              //   onClick={() => setShowViewModal(true)}
+              onClick={() => setBrandViewPopup(true)}
               className="actionView m-0 p-0"
             >
               <MdPageview />
@@ -89,7 +100,7 @@ function BrandsList() {
     },
     {
       title: "IMAGE",
-      dataIndex: { Leadlist_Icons },
+      dataIndex: { logo },
       key: "key",
       width: "23%",
       // filteredValue: [searchStatus],
@@ -101,7 +112,7 @@ function BrandsList() {
 
       align: "center",
       render: (theImageURL, records) => (
-        <img alt={Leadlist_Icons} src={Leadlist_Icons} />
+        <img alt={logo} src={logo} height="20px" width={"20px"} />
       ),
     },
     {
@@ -150,7 +161,7 @@ function BrandsList() {
     <div>
       <div>
         <div className="container-fluid lead_list  my-3 py-3">
-          {/* opportunity listing section One */}
+          {/* brand listing section One */}
 
           <div>
             <div className="row flex-wrap">
@@ -266,14 +277,20 @@ function BrandsList() {
               </div>
               <div className="col-xl-6 col-lg-6 col-md-6 col-sm-8 col-12"></div>
               <div className="col-lg-3 col-lg-3 col-md-3 col-sm-12 col-12 d-flex justify-content-end">
-                <Link href="#">
-                  <Button
-                    //   onClick={() => setShowAddOpportunity(true)}
-                    className="add_opportunity"
-                  >
-                    Add Brand
-                  </Button>
-                </Link>
+                <Button
+                  //   onClick={() => setShowAddOpportunity(true)}
+                  className="add_opportunity"
+                >
+                  <Link to={ROUTES.BRANDCREATE}>
+                    <span
+                      style={{
+                        color: "white",
+                      }}
+                    >
+                      Add Brand
+                    </span>
+                  </Link>
+                </Button>
               </div>
             </div>
             <div className="datatable">
@@ -300,9 +317,125 @@ function BrandsList() {
             {/* {"mcncncncncncncnc"} */}
           </div>
 
-          {/*  {/* {View model of opportunity  section Two    }  */}
+          {/*  {/* {View model of Brands  section Two    }  */}
+
+          <CustomModel
+            show={BrandViewpopup}
+            onHide={() => setBrandViewPopup(false)}
+            View_list
+            list_content={
+              <>
+                <div className="container-fluid px-4 my-4">
+                  <div className="">
+                    <h5 className="lead_text">Brand</h5>
+                  </div>
+                  <div className="row my-3">
+                    <div className="col-12 d-flex justify-content-center ">
+                      <img
+                        src={logo}
+                        alt={logo}
+                        style={{ height: "70px", width: "70px" }}
+                      />
+                    </div>
+                    <div className="">
+                      <div className="row mt-4">
+                        <div className="col-5">
+                          <p
+                            style={{ color: "#000" }}
+                            className="modal_view_p_style"
+                          >
+                            Name
+                          </p>
+                        </div>
+                        <div className="col-1">:</div>
+                        <div className="col-6 justify-content-start">
+                          <p className="modal_view_p_sub">Sales</p>
+                        </div>
+                      </div>
+                      <div className="row mt-4">
+                        <div className="col-5">
+                          <p
+                            style={{ color: "#000" }}
+                            className="modal_view_p_style"
+                          >
+                            Description
+                          </p>
+                        </div>
+                        <div className="col-1">:</div>
+                        <div className="col-6 justify-content-start">
+                          <p className="modal_view_p_sub">
+                            Lorem Ipsum has been the industry's standard dummy
+                            text ever since the 1500s
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </>
+            }
+          />
         </div>
       </div>
+      {/* { edit brand modal } */}
+      <CustomModel
+        size={"sm"}
+        show={BrandEditPopup}
+        onHide={() => setBrandEditPopup(false)}
+        View_list
+        list_content={
+          <div>
+            <div className="container-fluid px-4 my-3">
+              <div>
+                <h5 className="lead_text">Edit Brand</h5>
+              </div>
+              <div className="row my-3 ">
+                <div className="col-12">
+                  <p>Name</p>
+                  <input
+                    type="text"
+                    rules={{ required: true, message: "Please enter name" }}
+                    className="input_type_style w-100"
+                  />
+                </div>
+                <div className="col-12 my-2">
+                  <p>Description</p>
+                  <textarea className="input_type_style w-100" />
+                </div>
+                <div className="col-12 my-3">
+                  <FileUpload />
+                </div>
+                <div className="col-12 d-flex justify-content-center mt-3">
+                  <Button
+                    onClick={() => {
+                      setSuccessPopup(true);
+                      setBrandEditPopup(false);
+                      setError(true);
+                    }}
+                    className="save_button"
+                  >
+                    Save
+                  </Button>
+                </div>
+              </div>
+              {error ? (
+                <div className="">
+                  <ErrorMsg code={"400"} />
+                </div>
+              ) : (
+                ""
+              )}
+            </div>
+          </div>
+        }
+      />
+      {/* {success popups} */}
+      <CustomModel
+        size={"sm"}
+        show={successPopup}
+        onHide={() => setSuccessPopup(false)}
+        success
+      />
     </div>
   );
 }

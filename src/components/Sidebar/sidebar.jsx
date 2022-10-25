@@ -113,6 +113,17 @@ export default function Sidebar({ showSidebar }) {
                   Brands
                 </NavLink>
               </li>
+              <li className="nav-text">
+                <NavLink
+                  className={({ isActive }) =>
+                    isActive ? "active-link" : "link"
+                  }
+                  to={ROUTES.PRODUCT}
+                >
+                  <RiTeamFill className="sidebar_icons" />
+                  Products
+                </NavLink>
+              </li>
             </ul>
           </nav>
         </div>

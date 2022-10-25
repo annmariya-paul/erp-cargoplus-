@@ -12,6 +12,8 @@ const ROUTES = {
   BRANDS: "/brands",
 
   OPPORTUNITY_REPORT: "/opportunity-report",
+
+  UNIT_LIST: "/unit-list",
 };
 
 module.exports = { ROUTES };

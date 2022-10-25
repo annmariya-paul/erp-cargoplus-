@@ -13,6 +13,9 @@ import Opportunitylist from "./pages/opportunity_ List/opportunitylist";
 import Categorylist from "./pages/category/viewCategory";
 import BrandsList from "./pages/CRM/lead/brands/BrandsList";
 import OpportunityReport from "./pages/opportunityReport/OpportunityReport";
+
+import Viewunit from "./pages/unit/ViewUnit";
+
 // import Lead from "./pages/lead/lead";
 
 function App() {
@@ -38,6 +41,7 @@ function App() {
               path={ROUTES.OPPORTUNITY_REPORT}
               element={<OpportunityReport />}
             />
+            <Route path={ROUTES.UNIT_LIST} element={<Viewunit />} />
           </Route>
         </Routes>
       </BrowserRouter>

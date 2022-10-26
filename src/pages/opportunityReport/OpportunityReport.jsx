@@ -1,235 +1,118 @@
 import React, { useEffect, useState } from "react";
-import "./leadReport.styles.scss";
-import Button from "../../../../components/button/button";
-import TableData from "../../../../components/table/table_data";
-import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
-import { LeadStatus } from "../../../../utils/leadStatus";
+// import "./leadReport.styles.scss";
+import Button from "../../components/button/button";
+import TableData from "../../components/table/table_data";
+import Leadlist_Icons from "../../components/lead_list_icon/lead_list_icon";
+import { LeadStatus } from "../../utils/leadStatus";
 import { Input, Select, Pagination, DatePicker } from "antd";
 import "antd/dist/antd.css";
-import PublicFetch from "../../../../utils/PublicFetch";
-import { CRM_BASE_URL } from "../../../../api/bootapi";
-
-export default function LeadReport() {
+function OpportunityReport() {
   const { Option } = Select;
-
+  const [toggleState, setToggleState] = useState(1);
   const [searchedText, setSearchedText] = useState("");
   const [searchType, setSearchType] = useState("");
   const [searchStatus, setSearchStatus] = useState("");
   const [pageSize, setPageSize] = useState("25");
   const [current, setCurrent] = useState(1);
   const [allLeadList, setAllLeadList] = useState();
-  const [generateTable, setGenerateTable] = useState();
-  const [convertedTable, setConvertedTable] = useState();
   const [dateCriteria, setDateCriteria] = useState("daily");
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
 
-  const [selectedDate, setSelectedDate] = useState();
-  const [backend, setBackEnd] = useState();
-  const [toggleState, setToggleState] = useState(1);
   const toggleTab = (index) => {
     setToggleState(index);
   };
-
-  const [startDate, setStartDate] = useState();
-  const [endDate, setEndDate] = useState();
   const onChange = (date, dateString) => {
     console.log(date, dateString);
   };
-  // # function GetAllLeadData - get all lead data
-  const GetAllLeadData = () => {
-    PublicFetch.get(`${CRM_BASE_URL}/lead?startIndex=0&noOfItems=${pageSize}`)
-      .then((res) => {
-        if (res?.data?.success) {
-          console.log("All lead data", res?.data?.data);
-          //   filtering lead Status Opportunity option to converted table - Annmariya- 20/10/22
-          let arr = [];
-          let Arry = [];
-          res?.data?.data?.leads.forEach((item, index) => {
-            setAllLeadList(item.lead_status);
-            if (item.lead_status == "OP") {
-              arr.push({
-                lead_customer_name: item?.lead_customer_name,
-                lead_description: item?.lead_description,
-                lead_id: item?.lead_id,
-                lead_organization: item?.lead_organization,
-                lead_source: item?.lead_source,
-                lead_status: item?.lead_status,
-                lead_type: item?.lead_type,
-                lead_user_type: item?.lead_user_type,
-              });
-              setConvertedTable(arr);
-            }
-            if (item.lead_status !== "OP") {
-              Arry.push({
-                lead_customer_name: item?.lead_customer_name,
-                lead_description: item?.lead_description,
-                lead_id: item?.lead_id,
-                lead_organization: item?.lead_organization,
-                lead_source: item?.lead_source,
-                lead_status: item?.lead_status,
-                lead_type: item?.lead_type,
-                lead_user_type: item?.lead_user_type,
-              });
-              setGenerateTable(Arry);
-            }
-          });
-          // if (selectedDate) {
-          //   let array1 = [];
-          //   res?.data?.data?.leads.forEach((item, index) => {
-          //     setBackEnd(item.lead_created_at);
-          //     if (selectedDate.includes(item.lead_created_at.format("DD-MM-YYY"))) {
-          //       array1.push({
-          //         lead_customer_name: item?.lead_customer_name,
-          //         lead_description: item?.lead_description,
-          //         lead_id: item?.lead_id,
-          //         lead_organization: item?.lead_organization,
-          //         lead_source: item?.lead_source,
-          //         lead_status: item?.lead_status,
-          //         lead_type: item?.lead_type,
-          //         lead_user_type: item?.lead_user_type,
-          //       });
-          //       setGenerateTable(array1);
-          //     }
-          //     console.log("dat eeendsgj:::", array1);
-          //   });
-          // }
-        } else {
-          console.log("FAILED TO LOAD DATA");
-        }
-      })
-      .catch((err) => {
-        console.log("Errror while getting data", err);
-      });
-  };
 
-  useEffect(() => {
-    GetAllLeadData();
-  }, []);
-  const getGenerateData = (current, pageSize) => {
-    return generateTable?.slice((current - 1) * pageSize, current * pageSize);
-  };
-  const getConvertData = (current, pageSize) => {
-    return convertedTable?.slice((current - 1) * pageSize, current * pageSize);
-  };
+  // const getData = (current, pageSize) => {
+  //   return allLeadList?.slice((current - 1) * pageSize, current * pageSize);
+  // };
+
   const columns = [
     {
-      title: "NAME",
-      dataIndex: "lead_customer_name",
-      key: "lead_customer_name",
+      title: "TYPE",
+      dataIndex: "oportunity_type",
+      key: "oportunity_type",
       width: "24%",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.lead_customer_name)
+        return String(record.oportunity_type)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
       align: "center",
     },
     {
-      title: "TYPE",
-      dataIndex: "lead_type",
-      key: "lead_type",
+      title: "FROM",
+      dataIndex: "oportunity_from",
+      key: "oportunity_from",
       filteredValue: [searchType],
       onFilter: (value, record) => {
-        return String(record.lead_type)
+        return String(record.oportunity_from)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
       align: "center",
     },
     {
-      title: "ORGANIZATION",
-      dataIndex: "lead_organization",
+      title: "CONVERTED BY",
+      dataIndex: "oportunity_convertedby",
       key: "lead_organization",
       width: "29%",
       align: "center",
     },
     {
-      title: "STATUS",
-      dataIndex: "lead_status",
-      key: "lead_status",
+      title: "SOURCE",
+      dataIndex: "oportunity_source",
+      key: "oportunity_source",
       filteredValue: [searchStatus],
       onFilter: (value, record) => {
-        return String(record.lead_status)
+        return String(record.oportunity_source)
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      },
+      align: "center",
+    },
+    {
+      title: "PARTY",
+      dataIndex: "oportunity_party",
+      key: "oportunity_party",
+      filteredValue: [searchStatus],
+      onFilter: (value, record) => {
+        return String(record.oportunity_party)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
       align: "center",
     },
   ];
-  console.log("bxhgddtd::::", backend);
+
+  const opdata = [
+    {
+      oportunity_type: "sales",
+      oportunity_from: "customer",
+      oportunity_convertedby: "hdndksjnsf",
+      oportunity_source: "reference",
+      oportunity_party: "database",
+    },
+    {
+      oportunity_type: "support",
+      oportunity_from: "Lead",
+      oportunity_convertedby: "cedjmjnfk",
+      oportunity_source: "direct visit",
+      oportunity_party: "database",
+    },
+  ];
+
   return (
     <>
       {toggleState === 1 && (
         <div className="container mb-2 d-flex justify-content-center">
           <div className="lead_report_container1">
             <div className="row">
-              <h5 className="report_heading mb-2">Lead</h5>
-            </div>
-            <div className="row my-4 mx-2">
-              <div className="col-md-6 col-sm-12">
-                <label htmlFor="criteria">Select Date Criteria</label>
-                <Select
-                  name="criteria"
-                  defaultValue="daily"
-                  style={{ width: " 100% " }}
-                  onChange={(e) => setDateCriteria(e)}
-                >
-                  <Option value="daily">Daily</Option>
-                  <Option value="BtwnTwoDates">Between Two Dates</Option>
-                  <Option value="monthly">Monthly</Option>
-                </Select>
-              </div>
-              {dateCriteria === "daily" && (
-                <div className="col-md-6 col-sm-12">
-                  <label htmlFor="date">Date</label>
-                  <DatePicker
-                    // onChange={onChange}
-                    format={"DD-MM-YY"}
-                    onChange={(e) => {
-                      setSelectedDate([e.format("DD-MM-YYYY")]);
-                    }}
-                    allowClear={false}
-                  />
-                </div>
-              )}
-              {dateCriteria === "monthly" && (
-                <div className="col-md-6 col-sm-12">
-                  <label htmlFor="month">Month</label>
-                  <DatePicker onChange={onChange} picker="month" />
-                </div>
-              )}
-              {dateCriteria === "BtwnTwoDates" && (
-                <div className="col-md-6 col-sm-12">
-                  <div className="row">
-                    <div className="col-md-6">
-                      <label htmlFor="startDate">Start Date</label>
-                      <DatePicker
-                        value={startDate}
-                        onChange={(e) => setStartDate(e.target.value)}
-                      />
-                    </div>
-                    <div className="col-md-6">
-                      <label htmlFor="endDate">End Date</label>
-                      <DatePicker
-                        value={endDate}
-                        onChange={(e) => setEndDate(e.target.value)}
-                      />
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-            <div className="row justify-content-center my-2">
-              <Button btnType="save">Search</Button>
-            </div>
-          </div>
-        </div>
-      )}
-      {toggleState === 2 && (
-        <div className="container mb-2 d-flex justify-content-center">
-          <div className="lead_report_container1">
-            <div className="row">
-              <h5 className="report_heading mb-2">Lead</h5>
+              <h5 className="report_heading my-2">Opportunity</h5>
             </div>
             <div className="row my-4 mx-2">
               <div className="col-md-6 col-sm-12">
@@ -285,7 +168,66 @@ export default function LeadReport() {
         </div>
       )}
 
-      <br />
+      {toggleState === 2 && (
+        <div className="container mb-2 d-flex justify-content-center">
+          <div className="lead_report_container1">
+            <div className="row">
+              <h5 className="report_heading my-2">Opportunity</h5>
+            </div>
+            <div className="row my-4 mx-2">
+              <div className="col-md-6 col-sm-12">
+                <label htmlFor="criteria">Select Date Criteria</label>
+                <Select
+                  name="criteria"
+                  defaultValue="daily"
+                  style={{ width: " 100% " }}
+                  onChange={(e) => setDateCriteria(e)}
+                >
+                  <Option value="daily">Daily</Option>
+                  <Option value="BtwnTwoDates">Between Two Dates</Option>
+                  <Option value="monthly">Monthly</Option>
+                </Select>
+              </div>
+              {dateCriteria === "daily" && (
+                <div className="col-md-6 col-sm-12">
+                  <label htmlFor="date">Date</label>
+                  <DatePicker onChange={onChange} />
+                </div>
+              )}
+              {dateCriteria === "monthly" && (
+                <div className="col-md-6 col-sm-12">
+                  <label htmlFor="month">Month</label>
+                  <DatePicker onChange={onChange} picker="month" />
+                </div>
+              )}
+              {dateCriteria === "BtwnTwoDates" && (
+                <div className="col-md-6 col-sm-12">
+                  <div className="row">
+                    <div className="col-md-6">
+                      <label htmlFor="startDate">Start Date</label>
+                      <DatePicker
+                        value={startDate}
+                        onChange={(e) => setStartDate(e.target.value)}
+                      />
+                    </div>
+                    <div className="col-md-6">
+                      <label htmlFor="endDate">End Date</label>
+                      <DatePicker
+                        value={endDate}
+                        onChange={(e) => setEndDate(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className="row justify-content-center my-2">
+              <Button btnType="save">Search</Button>
+            </div>
+          </div>
+        </div>
+      )}
+      <div className="py-3"></div>
       <div className="container lead_report">
         <div className="row">
           <div className="col-sm-4">
@@ -330,7 +272,7 @@ export default function LeadReport() {
             <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
               <div className="col-4">
                 <Input.Search
-                  placeholder="Search by Name"
+                  placeholder="Search by type"
                   style={{ margin: "5px", borderRadius: "5px" }}
                   value={searchedText}
                   onChange={(e) => {
@@ -350,7 +292,7 @@ export default function LeadReport() {
                     marginTop: "8px",
                     borderRadius: "5px",
                   }}
-                  placeholder="Search by Type"
+                  placeholder="Search by party"
                   className="select_search"
                   optionFilterProp="children"
                   onChange={(event) => {
@@ -431,7 +373,8 @@ export default function LeadReport() {
             </div>
             <div className="datatable">
               <TableData
-                data={getGenerateData(current, pageSize)}
+                // data={getData(current, pageSize)}
+                data={opdata}
                 columns={columns}
                 custom_table_css="table_lead_list"
               />
@@ -497,7 +440,6 @@ export default function LeadReport() {
                   onChange={(event) => {
                     setSearchStatus(event ? [event] : []);
                   }}
-                  disabled
                 >
                   {LeadStatus &&
                     LeadStatus.map((item, index) => {
@@ -553,7 +495,8 @@ export default function LeadReport() {
             </div>
             <div className="datatable">
               <TableData
-                data={getConvertData(current, pageSize)}
+                // data={getData(current, pageSize)}
+                data={opdata}
                 columns={columns}
                 custom_table_css="table_lead_list"
               />
@@ -564,3 +507,4 @@ export default function LeadReport() {
     </>
   );
 }
+export default OpportunityReport;

@@ -3,7 +3,7 @@
 $grey: #777777;
 
 .lead_list {
-  // height: 650px;
+  height: 658px;
   border-radius: 4px;
   box-shadow: 2px 2px 12px variables.$boxshadow;
 }
@@ -98,8 +98,10 @@ $grey: #777777;
 span.ant-select-selection-item {
   padding-left: 5px !important;
 }
+
+// ##### Lead list table ######
 .table_lead_list {
-  height: 445px !important;
+  height: 414px !important;
   overflow-y: auto !important;
 }
 

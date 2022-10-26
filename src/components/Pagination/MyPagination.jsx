@@ -1,7 +1,7 @@
 import { Pagination } from "antd";
 import React from "react";
 
-function MyPagination({ total, onChange, current, showSizeChanger, pageSize }) {
+function MyPagination({ total, onChange, current, pageSize }) {
   return (
     <div>
       <Pagination

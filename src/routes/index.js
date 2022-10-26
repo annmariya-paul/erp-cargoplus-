@@ -1,19 +1,18 @@
 const ROUTES = {
+  LAYOUT: "/layout",
   SIDEBAR: "/",
   DASHBOARD: "/dashboard",
   LEAD: "/lead",
-  LAYOUT: "/layout",
   LEADLIST: "/lead_list",
   CATEGORY: "/category",
   TEST_PAGE: "/test-page",
   OPPORTUNITY: "/opportunity",
+  OPPORTUNITY_REPORT: "/opportunity-report",
   CATEGORY_LIST: "/categorylist",
   LEAD_REPORT: "/leadReport",
-<<<<<<< HEAD
   BRANDS: "/brands",
-=======
-  OPPORTUNITY_REPORT: "/opportunity-report",
->>>>>>> 38bacf5053fc599070ebe02a7a005b395be75adf
+  ATTRIBUTES: "/attributes",
+  ADD_ATTRIBUTES: "/add_attribute",
 };
 
 module.exports = { ROUTES };

@@ -549,7 +549,7 @@ function Opportunitylist(props) {
               <Select
                 // defaultValue={"25"}
                 bordered={false}
-                className="w-50 page_size_style"
+                className=" page_size_style"
                 value={pageSize}
                 onChange={(e) => setPageSize(e)}
               >

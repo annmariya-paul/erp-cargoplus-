@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Input, Select, Pagination } from "antd";
+import { Input, Select, Pagination, Checkbox } from "antd";
 import {
   FaFileExcel,
   FaFileCsv,
@@ -18,6 +18,10 @@ import MyPagination from "../../../../components/Pagination/MyPagination";
 import logo from "../../../../components/img/logo192.png";
 import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
 import "../lead.styles.scss";
+import "../../.././opportunity_ List/opportunitylist.scss";
+import CustomModel from "../../../../components/custom_modal/custom_model";
+import FileUpload from "../../../../components/fileupload/fileUploader";
+import ErrorMsg from "../../../../components/error/ErrorMessage";
 
 function Productlist() {
   const [pageSize, setPageSize] = useState("25"); // page size
@@ -25,6 +29,10 @@ function Productlist() {
   const [searchedText, setSearchedText] = useState(""); // search by text input
   const [searchType, setSearchType] = useState(""); //search by type select box
   const [searchStatus, setSearchStatus] = useState("");
+  const [showProductEditModal, setShowProductEditModal] = useState(false);
+  const [productView, setProductView] = useState(false);
+  const [successPopup, setSuccessPopup] = useState(false);
+  const [error, setError] = useState(false);
 
   const getData = (current, pageSize) => {
     return data.slice((current - 1) * pageSize, current * pageSize);
@@ -56,7 +64,7 @@ function Productlist() {
       key: "3",
     },
   ];
-  // {columns is brand listing table componenet }
+  // {columns is product listing table componenet }
 
   const columns = [
     {
@@ -68,13 +76,13 @@ function Productlist() {
         return (
           <div className="d-flex justify-content-center align-items-center gap-4">
             <div
-              //   onClick={() => setBrandEditPopup(true)}
+              onClick={() => setShowProductEditModal(true)}
               className="actionEdit m-0 p-0"
             >
               <FaEdit />
             </div>
             <div
-              //   onClick={() => setBrandViewPopup(true)}
+              onClick={() => setProductView(true)}
               className="actionView m-0 p-0"
             >
               <MdPageview />
@@ -151,6 +159,7 @@ function Productlist() {
     <div>
       <div className="container-fluid lead_list my-3 py-3">
         <div>
+          {/* {product listing starts section one} */}
           <div className="row flex-wrap">
             <div className="col">
               <h5 className="lead_text">Products</h5>
@@ -226,7 +235,7 @@ function Productlist() {
               <Select
                 // defaultValue={"25"}
                 bordered={false}
-                className="w-50 page_size_style"
+                className=" page_size_style"
                 value={pageSize}
                 onChange={(e) => setPageSize(e)}
               >
@@ -301,9 +310,332 @@ function Productlist() {
               }}
             />
           </div>
-          {/* {"mcncncncncncncnc"} */}
+          {/* {"mcncncncncncncnc"}  {product listing ends } */}
         </div>
+        {/* {section Two Product Edit modal starts} */}
+        <CustomModel
+          Adding_contents
+          show={showProductEditModal}
+          onHide={() => setShowProductEditModal(false)}
+          header="Edit Product"
+          size={`xl`}
+          footer={[
+            <Button
+              onClick={() => {
+                setSuccessPopup(true);
+                setError(true);
+              }}
+              btnType="save"
+            >
+              Save
+            </Button>,
+            <Button
+              onClick={() => {
+                setShowProductEditModal(false);
+              }}
+              className="cancel_button p-2"
+            >
+              cancel
+            </Button>,
+            ,
+          ]}
+          // {...props}
+        >
+          <div className="container">
+            <div style={{ borderRadius: "8px" }} className="card border-0  ">
+              <div className="container ">
+                <div className="my-3 d-none">
+                  <h5 className="lead_text">Basic Info</h5>
+                </div>
+                <div className="row ">
+                  <div className="col-4">
+                    <p>Name</p>
+                    <div>
+                      <input type="text" className="input_type_style w-100" />
+                    </div>
+                  </div>
+                  <div className="col-4">
+                    <p>Code</p>
+                    <div>
+                      <input type={"text"} className="input_type_style w-100" />
+                    </div>
+                  </div>
+                  <div className="col-4 ">
+                    <p>Category</p>
+                    <div>
+                      <Select
+                        style={{
+                          backgroundColor: "whitesmoke",
+                          borderRadius: "5px",
+                        }}
+                        bordered={false}
+                        className="w-100 "
+                      >
+                        <Select.Option>Watch</Select.Option>
+                      </Select>
+                    </div>
+                  </div>
+                  <div className="col-6 mt-2">
+                    <p>Brand</p>
+                    <div>
+                      <Select
+                        style={{
+                          backgroundColor: "whitesmoke",
+                          borderRadius: "5px",
+                        }}
+                        bordered={false}
+                        className="w-100 "
+                      >
+                        <Select.Option>Watch</Select.Option>
+                      </Select>
+                    </div>
+                  </div>
+                  <div className="col-6 mt-2">
+                    <p>Unit</p>
+                    <div>
+                      <Select
+                        style={{
+                          backgroundColor: "whitesmoke",
+                          borderRadius: "5px",
+                        }}
+                        bordered={false}
+                        className="w-100 "
+                      >
+                        <Select.Option>Watch</Select.Option>
+                      </Select>
+                    </div>
+                  </div>
+                  <div className="col-6 mt-2">
+                    <p>Attributes</p>
+                    <div
+                      style={{
+                        backgroundColor: "whitesmoke",
+                        borderRadius: "5px",
+                      }}
+                    >
+                      <div
+                        style={{
+                          backgroundColor: "whitesmoke",
+                          borderRadius: "5px",
+                          height: "160px",
+                          overflow: "scroll",
+                        }}
+                        className="card border-0 px-4 py-2"
+                      >
+                        <label style={{ color: "gray" }} className="my-2 ">
+                          <Checkbox className="me-2" />
+                          color
+                        </label>
+                        <label style={{ color: "gray" }} className="my-2">
+                          <Checkbox className="me-2" />
+                          warrenty
+                        </label>
+                        <label style={{ color: "gray" }} className="my-2">
+                          <Checkbox className="me-2" />
+                          Size
+                        </label>
+                        <label style={{ color: "gray" }} className="my-2">
+                          <Checkbox className="me-2" />
+                          weight
+                        </label>
+                        <label style={{ color: "gray" }} className="my-2">
+                          <Checkbox className="me-2" />
+                          weight
+                        </label>
+                        <label style={{ color: "gray" }} className="my-2">
+                          <Checkbox className="me-2" />
+                          weight
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-6 mt-2">
+                    <p>Display Picture</p>
+                    <FileUpload />
+                  </div>
+                  <div className="col-6 mt-2">
+                    <p>Description</p>
+                    <div>
+                      <textarea
+                        style={{ height: "100px" }}
+                        className="input_type_style w-100"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {error ? <ErrorMsg code="500" /> : ""}
+          </div>
+        </CustomModel>
+        {/* {Modal for viewing product details} */}
+
+        <CustomModel
+          show={productView}
+          onHide={() => setProductView(false)}
+          View_list
+          list_content={
+            <div>
+              <div className="container ps-4 my-4">
+                <div className=" d-flex justify-content-between">
+                  <h5 className="lead_text">Products</h5>
+                  <div className="">
+                    <Button
+                      style={{ backgroundColor: "white", color: "#0092ce" }}
+                      className="d-flex justify-content-end"
+                    >
+                      <span
+                        className="d-flex align-items-center justify-content-between gap-1  p-1 button_span"
+                        style={{ fontSize: "13px" }}
+                        onClick={() => {
+                          setShowProductEditModal(true);
+                          setProductView(false);
+                        }}
+                      >
+                        Edit <FiEdit fontSize={"12px"} />
+                      </span>
+                    </Button>
+                  </div>
+                </div>
+                <div className="row my-3">
+                  <div className="col-12 d-flex justify-content-center ">
+                    <img
+                      src={logo}
+                      alt={logo}
+                      style={{ height: "70px", width: "70px" }}
+                    />
+                  </div>
+                  <div className="">
+                    <div className="row mt-4">
+                      <div className="col-5">
+                        <p
+                          style={{ color: "#000" }}
+                          className="modal_view_p_style"
+                        >
+                          Name
+                        </p>
+                      </div>
+                      <div className="col-1">:</div>
+                      <div className="col-6 justify-content-start">
+                        <p className="modal_view_p_sub">Rolex</p>
+                      </div>
+                    </div>
+                    <div className="row mt-2">
+                      <div className="col-5">
+                        <p
+                          style={{ color: "#000" }}
+                          className="modal_view_p_style"
+                        >
+                          Code
+                        </p>
+                      </div>
+                      <div className="col-1">:</div>
+                      <div className="col-6 justify-content-start">
+                        <p className="modal_view_p_sub">HJKGF23456</p>
+                      </div>
+                    </div>
+                    <div className="row mt-2">
+                      <div className="col-5">
+                        <p
+                          style={{ color: "#000" }}
+                          className="modal_view_p_style"
+                        >
+                          Category
+                        </p>
+                      </div>
+                      <div className="col-1">:</div>
+                      <div className="col-6 justify-content-start">
+                        <p className="modal_view_p_sub">Watch</p>
+                      </div>
+                    </div>
+                    <div className="row mt-2">
+                      <div className="col-5">
+                        <p
+                          style={{ color: "#000" }}
+                          className="modal_view_p_style"
+                        >
+                          Brand
+                        </p>
+                      </div>
+                      <div className="col-1">:</div>
+                      <div className="col-6 justify-content-start">
+                        <p className="modal_view_p_sub">Rolex</p>
+                      </div>
+                    </div>
+                    <div className="row mt-2">
+                      <div className="col-5">
+                        <p
+                          style={{ color: "#000" }}
+                          className="modal_view_p_style"
+                        >
+                          Unit
+                        </p>
+                      </div>
+                      <div className="col-1">:</div>
+                      <div className="col-6 justify-content-start">
+                        <p className="modal_view_p_sub">HJKGF23456</p>
+                      </div>
+                    </div>
+                    <div className="row mt-2">
+                      <div className="col-5">
+                        <p
+                          style={{ color: "#000" }}
+                          className="modal_view_p_style"
+                        >
+                          Attributes
+                        </p>
+                      </div>
+                      <div className="col-1">:</div>
+                      <div className="col-6 justify-content-start">
+                        <p className="modal_view_p_sub">color</p>
+                      </div>
+                    </div>
+                    <div className="row mt-2">
+                      <div className="col-5">
+                        <p
+                          style={{ color: "#000" }}
+                          className="modal_view_p_style"
+                        >
+                          Description
+                        </p>
+                      </div>
+                      <div className="col-1">:</div>
+                      <div className="col-6 justify-content-start">
+                        <p className="modal_view_p_sub">
+                          Lorem Ipsum has been the industry's standard dummy
+                          text ever since the 1500s
+                        </p>
+                      </div>
+                    </div>
+                    <div className="row mt-2">
+                      <div className="col-5">
+                        <p
+                          style={{ color: "#000" }}
+                          className="modal_view_p_style"
+                        >
+                          Status
+                        </p>
+                      </div>
+                      <div className="col-1">:</div>
+                      <div className="col-6 justify-content-start">
+                        <p className="modal_view_p_sub_active">Active</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+        />
       </div>
+
+      {/* {modal for success popups} */}
+      <CustomModel
+        size={"sm"}
+        show={successPopup}
+        onHide={() => setSuccessPopup(false)}
+        success
+      />
     </div>
   );
 }

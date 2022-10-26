@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./leadlist.scss";
-import { Link ,useParams} from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import {
   FaFileExcel,
   FaFileCsv,
@@ -59,6 +59,8 @@ export default function LeadList() {
         total={total}
         current={current}
         pageSize={pageSize}
+        defaultPageSize={25}
+        pageSizeOptions={("25", "50", "100")}
         // showSizeChanger={showSizeChanger}
       />
     );
@@ -77,7 +79,6 @@ export default function LeadList() {
     );
   };
 
-
   // <Link to={ROUTES.OPPORTUNITY} className="nav-link">
   //                     <Button onClick={Submit} btnType="add_borderless">
   //                       <BsPlusCircleFill style={{ fontSize: "16px" }} /> View
@@ -95,15 +96,20 @@ export default function LeadList() {
       render: (data, index) => {
         // console.log("id is : ",index.lead_id);
         return (
-          <div>
-             <Link to={`/LeadEdit/${index.lead_id}`} className="nav-link">
-            {/* <a href="/edit_lead_list" className="actionEdit"> */}
-              <FaEdit />
-            {/* </a>  */}
-           </Link>
-            <a href="" className="actionView">
-              <MdPageview />
-            </a>
+          <div className="d-flex justify-content-center align-items-center gap-2">
+            <div className="m-0">
+              <Link to={`/LeadEdit/${index.lead_id}`} className="nav-link">
+                {/* <a href="/edit_lead_list" className="actionEdit"> */}
+
+                <FaEdit />
+              </Link>{" "}
+            </div>
+
+            <div className="actionView m-0">
+              <Link>
+                <MdPageview />
+              </Link>
+            </div>
           </div>
         );
       },

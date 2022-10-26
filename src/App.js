@@ -11,10 +11,24 @@ import TestPage from "./pages/testpage";
 import LeadReport from "./pages/CRM/lead/leadReport/leadReport";
 import Opportunitylist from "./pages/opportunity_ List/opportunitylist";
 import Categorylist from "./pages/category/viewCategory";
+
 import BrandsList from "./pages/CRM/lead/brands/BrandsList";
 import OpportunityReport from "./pages/opportunityReport/OpportunityReport";
 import Unitlist from "./pages/CRM/lead/unit/Unitlist";
 import Addunit from "./pages/CRM/lead/unit/Addunit";
+
+import LeadEdit from "./pages/CRM/lead/lead_list/edit_lead_list";
+
+import Attribute from "./pages/CRM/attributes/attributes";
+import Add_Attribute from "./pages/CRM/attributes/add_attribute";
+
+import BrandsList from "./pages/CRM/lead/brands/BrandsList";
+import OpportunityReport from "./pages/opportunityReport/OpportunityReport";
+
+import Viewunit from "./pages/unit/ViewUnit";
+import BrandCreate from "./pages/CRM/lead/brands/BrandCreate";
+import Productlist from "./pages/CRM/lead/Product/Productlist";
+import ProductCreate from "./pages/CRM/lead/Product/ProductCreate";
 
 // import Lead from "./pages/lead/lead";
 
@@ -34,14 +48,23 @@ function App() {
             <Route path={ROUTES.OPPORTUNITY} element={<Opportunitylist />} />
             <Route path={ROUTES.CATEGORY_LIST} element={<Categorylist />} />
             <Route path={ROUTES.LEAD_REPORT} element={<LeadReport />} />
-
+            <Route path="/LeadEdit/:id" element={<LeadEdit />} />
             <Route path={ROUTES.BRANDS} element={<BrandsList />} />
+            <Route path={ROUTES.ATTRIBUTES} element={<Attribute />} />
+            <Route path={ROUTES.ADD_ATTRIBUTES} element={<Add_Attribute />} />
+
             <Route
               path={ROUTES.OPPORTUNITY_REPORT}
               element={<OpportunityReport />}
             />
+
             <Route path={ROUTES.UNIT_LIST} element={<Unitlist />} />
             <Route path={ROUTES.ADD_UNIT} element={<Addunit />} />
+
+            <Route path={ROUTES.UNIT_LIST} element={<Viewunit />} />
+            <Route path={ROUTES.BRANDCREATE} element={<BrandCreate />} />
+            <Route path={ROUTES.PRODUCT} element={<Productlist />} />
+            <Route path={ROUTES.PRODUCTCREATE} element={<ProductCreate />} />
           </Route>
         </Routes>
       </BrowserRouter>

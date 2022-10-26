@@ -220,7 +220,9 @@ export default function LeadReport() {
               )}
             </div>
             <div className="row justify-content-center my-2">
-              <Button btnType="save">Search</Button>
+              <div className="col-xl-3 col-lg-3 col-12 d-flex justify-content-center">
+                <Button btnType="save">Search</Button>
+              </div>
             </div>
           </div>
         </div>
@@ -279,7 +281,9 @@ export default function LeadReport() {
               )}
             </div>
             <div className="row justify-content-center my-2">
-              <Button btnType="save">Search</Button>
+              <div className="col-xl-3 col-lg-3 col-12 d-flex justify-content-center">
+                <Button btnType="save">Search</Button>
+              </div>
             </div>
           </div>
         </div>

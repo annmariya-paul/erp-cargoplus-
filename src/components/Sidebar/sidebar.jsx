@@ -109,12 +109,32 @@ export default function Sidebar({ showSidebar }) {
                   className={({ isActive }) =>
                     isActive ? "active-link" : "link"
                   }
+<<<<<<< HEAD
                   to={ROUTES.ATTRIBUTES}
                 >
                   <BsFillXDiamondFill className="sidebar_icons" />
                   Attributes
                 </NavLink>
               </li>
+=======
+                  to={ROUTES.BRANDS}
+                >
+                  <RiTeamFill className="sidebar_icons" />
+                  Brands
+                </NavLink>
+              </li>
+              <li className="nav-text">
+                <NavLink
+                  className={({ isActive }) =>
+                    isActive ? "active-link" : "link"
+                  }
+                  to={ROUTES.PRODUCT}
+                >
+                  <RiTeamFill className="sidebar_icons" />
+                  Products
+                </NavLink>
+              </li>
+>>>>>>> 1353d62335126fa06d072b9304075451d6df855b
             </ul>
           </nav>
         </div>

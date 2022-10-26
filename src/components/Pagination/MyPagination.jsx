@@ -10,6 +10,8 @@ function MyPagination({ total, onChange, current, pageSize }) {
         total={total}
         current={current}
         pageSize={pageSize}
+        defaultPageSize={25}
+        pageSizeOptions={("25", "50", "100")}
         // showSizeChanger={showSizeChanger}
       />
     </div>

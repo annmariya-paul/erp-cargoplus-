@@ -17,6 +17,15 @@ export default function AddOpportunity(props) {
   const [name, setName] = useState();
  const [value, setValue] = useState([]);
 
+ const [amount,setAmount]=useState();
+//  const result=Number(amount).toFixed(2);
+
+const onBlur = (e) => {
+  const float = parseFloat(e.target.value)
+  setAmount(float.toFixed(2))
+}
+
+
 //API added
   useEffect(() => {
     getAllContact();
@@ -269,20 +278,24 @@ export default function AddOpportunity(props) {
                 <Form.Group className="mb-2" controlId="lead_expecting_amt">
                   <Form.Label>Expecting Amount</Form.Label>
                   <Form.Control
-                    type="text"
-                    {...register("lead_expecting_amt", {
-                      maxLength: {
-                        value: 100,
-                      },
-                      pattern: {
-                        value: /^[1-9]\d*(\.\d+)?$/,
-                        message: "Please enter a valid amount!",
-                      },
-                    })}
-                    onKeyUp={() => {
-                      trigger("lead_expecting_amt");
-                    }}
-                    className={`${errors.lead_expecting_amt && "invalid"}`}
+                    type="number"
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                    onBlur={onBlur}
+                    // {...register("lead_expecting_amt", {
+                    //   maxLength: {
+                    //     value: 100,
+                    //   },
+                    //   pattern: {
+                    //     value: /^[1-9]\d*(\.\d+)?$/,
+                    //     message: "Please enter a valid amount!",
+                    //   },
+                    // })}
+                  // onBlur={result}
+                    // onKeyUp={() => {
+                    //   trigger("lead_expecting_amt");
+                    // }}
+                    // className={`${errors.lead_expecting_amt && "invalid"}`}
                   />{" "}
                   {errors.lead_expecting_amt && (
                     <small className="text-danger">

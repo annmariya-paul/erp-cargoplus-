@@ -51,7 +51,13 @@ export default function LeadList() {
     return allLeadList?.slice((current - 1) * pageSize, current * pageSize);
   };
 
-  const MyPagination = ({ total, onChange, current, showSizeChanger }) => {
+  const MyPagination = ({
+    total,
+    onChange,
+    current,
+    pageSizeOptions,
+    defaultPageSize,
+  }) => {
     return (
       <Pagination
         size="small"
@@ -59,8 +65,8 @@ export default function LeadList() {
         total={total}
         current={current}
         pageSize={pageSize}
-        defaultPageSize={25}
-        pageSizeOptions={("25", "50", "100")}
+        defaultPageSize={defaultPageSize}
+        pageSizeOptions={pageSizeOptions}
         // showSizeChanger={showSizeChanger}
       />
     );
@@ -232,33 +238,40 @@ export default function LeadList() {
               <Select
                 // defaultValue={"25"}
                 bordered={false}
-                className="w-50 page_size_style"
+                className="page_size_style"
                 value={pageSize}
                 onChange={(e) => setPageSize(e)}
               >
                 {/* <Select.Option value="5">5 | pages</Select.Option> */}
-                <Select.Option value="25">
-                  Show{" "}
+                <Select.Option value="10">
+                  Show
                   <span style={{ color: "lightgray" }} className="ms-1">
                     |
                   </span>
-                  <span style={{ color: "#2f6b8f" }} className="ms-2">
+                  <span style={{ color: "#2f6b8f" }} className="ms-1">
+                    10
+                  </span>
+                </Select.Option>
+                <Select.Option value="25">
+                  Show
+                  <span style={{ color: "lightgray" }} className="ms-1">
+                    |
+                  </span>
+                  <span style={{ color: "#2f6b8f" }} className="ms-1">
                     25
-                  </span>{" "}
+                  </span>
                 </Select.Option>
                 <Select.Option value="50">
-                  {" "}
-                  Show{" "}
+                  Show
                   <span style={{ color: "lightgray" }} className="ms-1">
                     |
                   </span>
                   <span style={{ color: "#2f6b8f" }} className="ms-1">
                     50
-                  </span>{" "}
+                  </span>
                 </Select.Option>
                 <Select.Option value="100">
-                  {" "}
-                  Show{" "}
+                  Show
                   <span style={{ color: "lightgray" }} className="ms-1">
                     |
                   </span>
@@ -282,6 +295,8 @@ export default function LeadList() {
               total={allLeadList?.length}
               current={current}
               showSizeChanger={true}
+              defaultPageSize={10}
+              pageSizeOptions={["10", "25", "50", "100"]}
               onChange={(current, pageSize) => {
                 setCurrent(current);
                 setPageSize(pageSize);

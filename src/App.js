@@ -11,6 +11,7 @@ import TestPage from "./pages/testpage";
 import LeadReport from "./pages/CRM/lead/leadReport/leadReport";
 import Opportunitylist from "./pages/opportunity_ List/opportunitylist";
 import Categorylist from "./pages/category/viewCategory";
+import LeadEdit from "./pages/CRM/lead/lead_list/edit_lead_list";
 // import Lead from "./pages/lead/lead";
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
             <Route path={ROUTES.OPPORTUNITY} element={<Opportunitylist />} />
             <Route path={ROUTES.CATEGORY_LIST} element={<Categorylist />} />
             <Route path={ROUTES.LEAD_REPORT} element={<LeadReport />} />
+            <Route path="/LeadEdit/:id" element={<LeadEdit />} />
           </Route>
         </Routes>
       </BrowserRouter>

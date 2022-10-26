@@ -11,6 +11,11 @@ import TestPage from "./pages/testpage";
 import LeadReport from "./pages/CRM/lead/leadReport/leadReport";
 import Opportunitylist from "./pages/opportunity_ List/opportunitylist";
 import Categorylist from "./pages/category/viewCategory";
+import LeadEdit from "./pages/CRM/lead/lead_list/edit_lead_list";
+
+import Attribute from "./pages/CRM/attributes/attributes";
+import Add_Attribute from "./pages/CRM/attributes/add_attribute";
+
 import BrandsList from "./pages/CRM/lead/brands/BrandsList";
 import OpportunityReport from "./pages/opportunityReport/OpportunityReport";
 
@@ -37,8 +42,10 @@ function App() {
             <Route path={ROUTES.OPPORTUNITY} element={<Opportunitylist />} />
             <Route path={ROUTES.CATEGORY_LIST} element={<Categorylist />} />
             <Route path={ROUTES.LEAD_REPORT} element={<LeadReport />} />
-
+            <Route path="/LeadEdit/:id" element={<LeadEdit />} />
             <Route path={ROUTES.BRANDS} element={<BrandsList />} />
+            <Route path={ROUTES.ATTRIBUTES} element={<Attribute />} />
+            <Route path={ROUTES.ADD_ATTRIBUTES} element={<Add_Attribute />} />
 
             <Route
               path={ROUTES.OPPORTUNITY_REPORT}

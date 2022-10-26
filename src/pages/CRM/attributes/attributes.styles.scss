@@ -1,0 +1,17 @@
+@use "../../../styles/variables.scss";
+
+.attribute_list {
+  height: 41rem;
+  border-radius: 4px;
+  box-shadow: 2px 2px 12px variables.$boxshadow;
+}
+.attribute_table {
+  height: 25rem;
+}
+
+.vertical {
+  color: lightgrey;
+}
+.sizes {
+  color: variables.$primary;
+}

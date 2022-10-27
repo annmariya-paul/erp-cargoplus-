@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {} from "react-bootstrap";
 import { message } from "antd";
 // import "./lead.styles.scss";
@@ -28,6 +28,7 @@ function LeadEdit() {
   // const history=useHistory();
   const { id } = useParams();
   // console.log("ID is ...",id);
+ 
   const [useredit, setUseredit] = useState();
   const [toggleState, setToggleState] = useState(1);
   const [basicinfoData, setBasicinfoData] = useState([]);
@@ -50,6 +51,9 @@ function LeadEdit() {
   const toggleTab = (index) => {
     setToggleState(index);
   };
+const navigate =useNavigate();
+
+const goToLeadlist=()=>{navigate("/lead_list")}
 
   // const {
   //   register,
@@ -158,7 +162,9 @@ function LeadEdit() {
       "Content-Type": "Multipart/form-Data",
     })
       .then(function (response) {
+        goToLeadlist();
         console.log("hellooooooo", response);
+       
         if (response.data.success) {
           console.log("hello", response.data.data);
         } else {
@@ -213,6 +219,7 @@ function LeadEdit() {
               >
                 {/* <div className="col-12"> */}
                 <div className="row mb-2 justify-content-end">
+                <div class="col"><h5 class="lead_text">Lead Edit</h5></div>
                   <div
                     className="col-2 d-flex"
                     style={{ justifyContent: "center" }}
@@ -364,7 +371,9 @@ function LeadEdit() {
                   </div>
 
                   <div className="col pt-3">
-                    <Button type="submit" onClick={updateUser} btnType="save">
+                    <Button type="submit"  onClick={updateUser}
+                     
+                     btnType="save">
                       Update
                     </Button>
                     <Custom_model
@@ -386,19 +395,19 @@ function LeadEdit() {
                     <Button btnType="add" onClick={() => setModalContact(true)}>
                       Add <AiOutlinePlus />
                     </Button>
-                    {/* <AddContact
+                     {/* <AddContact
                       lead={leadId}
                       show={modalContact}
                       onHide={() => setModalContact(false)}
-                    /> */}
+                    />  */}
                   </div>
-                  {/* <div className="col-12 mt-2">
+                  <div className="col-12 mt-2">
                     <ContactTable
                       show={modalContact}
                       onHide={() => setModalContact(false)}
                       lead={id}
                     />
-                  </div> */}
+                  </div> 
                   <div className="col mt-4">
                     <Button onClick={Submit} btnType="save">
                       Save

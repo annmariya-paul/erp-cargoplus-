@@ -15,7 +15,7 @@
   color: #5aa15e;
 }
 .opportunity_heading {
-  color: #0891d1;
+  color: variables.$primary;
 }
 .button_span {
   border-radius: 3px;
@@ -32,16 +32,16 @@
   border-radius: 3px;
   padding: 5px;
   background-color: #979797;
-  color: #fff;
+  color: variables.$white;
 }
 .save_button {
   border-radius: 3px;
   padding: 5px;
-  background-color: #0092ce;
-  color: #fff;
+  background-color: variables.$primary;
+  color: variables.$white;
 }
 .add_opportunity {
-  background-color: #0092ce;
-  color: #fff;
+  background-color: variables.$primary;
+  color: variables.$white;
   border-radius: 5px;
 }

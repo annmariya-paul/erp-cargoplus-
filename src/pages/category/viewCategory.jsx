@@ -43,8 +43,6 @@ function Categorylist(props) {
   const handleOk = () => {
     setIsModalOpen(false);
     submit();
-
-    
   };
   const handleCancel = () => {
     setIsModalOpen(false);
@@ -155,41 +153,41 @@ function Categorylist(props) {
       key: "key",
       width: "14%",
       render: (data, index) => {
-    //     return (
-    //       <div>
-    //         <div className="row">
-    //           <div className="action col">
-    //             <div
-    //               onClick={() => setShowViewModal(true)}
-    //               className="actionView"
-    //             >
-    //               <MdPageview />
-    //             </div>
-    //           </div>
-    //           <div className="actiondel col">
-    //             <a href="" className="actionTrash">
-    //               <FaTrash />
-    //             </a>
-    //           </div>
-    //         </div>
-    //       </div>
-    //     );
-    //   },
-    //   align: "center",
-    // },
-    return (
-      <div className="actions">
-        <div className="actionEdit"   onClick={() => setShowViewModal(true)}>
-          <FaEdit />
-        </div>
-        <div className="actionDel">
-        <FaTrash />
-        </div>
-      </div>
-    );
-  },
-  align: "center",
-},
+        //     return (
+        //       <div>
+        //         <div className="row">
+        //           <div className="action col">
+        //             <div
+        //               onClick={() => setShowViewModal(true)}
+        //               className="actionView"
+        //             >
+        //               <MdPageview />
+        //             </div>
+        //           </div>
+        //           <div className="actiondel col">
+        //             <a href="" className="actionTrash">
+        //               <FaTrash />
+        //             </a>
+        //           </div>
+        //         </div>
+        //       </div>
+        //     );
+        //   },
+        //   align: "center",
+        // },
+        return (
+          <div className="actions">
+            <div className="actionEdit" onClick={() => setShowViewModal(true)}>
+              <FaEdit />
+            </div>
+            <div className="actionDel">
+              <FaTrash />
+            </div>
+          </div>
+        );
+      },
+      align: "center",
+    },
     {
       title: "CATEGORY NAME",
       dataIndex: "category_name",

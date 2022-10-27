@@ -5,16 +5,21 @@ import { useForm } from "react-hook-form";
 import PublicFetch from "../../../utils/PublicFetch";
 import { CRM_BASE_URL } from "../../../api/bootapi";
 import { Input, Select, Pagination } from "antd";
-import { FiEdit } from "react-icons/fi";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { MdPageview } from "react-icons/md";
+import { FiEdit } from "react-icons/fi";
+import { AiOutlineClose } from "react-icons/ai";
+import { Form } from "react-bootstrap";
 import TableData from "../../../components/table/table_data";
 import MyPagination from "../../../components/Pagination/MyPagination";
 import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
 import Button from "../../../components/button/button";
+import Custom_model from "../../../components/custom_modal/custom_model";
 import { ROUTES } from "../../../routes";
 
 export default function Attribute(props) {
+  const [showViewModal, setShowViewModal] = useState(false);
+  const [showModalEdit, setShowModalEdit] = useState(false);
   const [searchedText, setSearchedText] = useState("");
   const [pageSize, setPageSize] = useState("25");
   const [current, setCurrent] = useState(1);
@@ -44,13 +49,23 @@ export default function Attribute(props) {
       width: "14%",
       render: (data, index) => {
         return (
-          <div>
-            <a href="" className="actionEdit">
+          <div className="d-flex justify-content-center align-items-center gap-3">
+            <div
+              className="editIcon m-0"
+              onClick={() => setShowViewModal(true)}
+            >
               <FaEdit />
-            </a>
-            <a href="" className="actionView">
+            </div>
+            <div className="viewIcon m-0">
+              {/* <Link> */}
               <MdPageview />
-            </a>
+              {/* </Link> */}
+            </div>
+            <div className="deleteIcon m-0">
+              {/* <Link> */}
+              <FaTrash />
+              {/* </Link> */}
+            </div>
           </div>
         );
       },
@@ -151,6 +166,100 @@ export default function Attribute(props) {
             }}
           />
         </div>
+        <Custom_model
+          show={showViewModal}
+          onHide={() => setShowViewModal(false)}
+          View_list
+          list_content={
+            <div className="container-fluid p-4">
+              <div className="row">
+                <div className="col-10">
+                  <h5 className="lead_text">Attribute</h5>
+                </div>
+                <div className="col">
+                  <Button
+                    btnType="add_borderless"
+                    className="edit_button"
+                    onClick={() => {
+                      setShowModalEdit(true);
+                      setShowViewModal(false);
+                    }}
+                  >
+                    Edit
+                    <FiEdit
+                      style={{ marginBottom: "4px", marginInline: "3px" }}
+                    />
+                  </Button>
+                </div>
+              </div>
+              <div className="row mt-4">
+                <div className="col-4">
+                  <p>Name</p>
+                </div>
+                <div className="col-1">:</div>
+                <div className="col-6 justify-content-start">
+                  <p className="modal-view-data">Test</p>
+                </div>
+              </div>
+              <div className="row my-4">
+                <div className="col-4">
+                  <p>Description</p>
+                </div>
+                <div className="col-1">:</div>
+                <div className="col-7 justify-content-start">
+                  <p className="modal-view-data">
+                    Simply dummy text of the printing and typesetting
+                  </p>
+                </div>
+              </div>
+            </div>
+          }
+        />
+        <Custom_model
+          size={"sm"}
+          show={showModalEdit}
+          onHide={() => setShowModalEdit(false)}
+          header="Attributes"
+          footer={false}
+          {...props}
+          View_list
+          list_content={
+            <div className="container-fluid p-3">
+              <div className="d-flex justify-content-between">
+                <div>
+                  <h5 className="lead_text">Attribute</h5>
+                </div>
+                <div
+                  onClick={() => {
+                    setShowModalEdit(false);
+                  }}
+                >
+                  <AiOutlineClose className="closeModal" />
+                </div>
+              </div>
+              <div className="row px-2 my-3">
+                <Form.Group className="mb-3" controlId="attribute_name">
+                  <Form.Label>Name</Form.Label>
+                  <Form.Control type="text" placeholder="Name" />
+                </Form.Group>
+              </div>
+              <div className="row px-2">
+                <Form.Group className="mb-3" controlId="attribute_description">
+                  <Form.Label>Description</Form.Label>
+                  <Form.Control
+                    as="textarea"
+                    rows={3}
+                    // value={leadDescription}
+                    // onChange={(e) => setLeadDescription(e.target.value)}
+                  />
+                </Form.Group>
+              </div>
+              <div className="row justify-content-center my-3">
+                <Button btnType="save" >Save</Button>
+              </div>
+            </div>
+          }
+        />
       </div>
     </>
   );

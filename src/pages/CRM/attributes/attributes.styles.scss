@@ -1,6 +1,7 @@
 @use "../../../styles/variables.scss";
 
-.attribute_list {
+.attribute_list,
+.add_attributes {
   height: 41rem;
   border-radius: 4px;
   box-shadow: 2px 2px 12px variables.$boxshadow;
@@ -8,10 +9,47 @@
 .attribute_table {
   height: 25rem;
 }
-
+.add_attributes,
+.attribute_table {
+  height: 23rem !important;
+}
 .vertical {
   color: lightgrey;
 }
 .sizes {
   color: variables.$primary;
+}
+
+// ##### Action icons #####
+.editIcon {
+  font-size: 15px;
+  color: variables.$primary;
+}
+.viewIcon {
+  font-size: 17px;
+  color: variables.$primary;
+}
+.deleteIcon {
+  font-size: 14px;
+  color: variables.$primary;
+}
+
+// ######  attribute view pop-up #####
+.edit_button {
+  box-shadow: -1px 2px 5px 1px variables.$boxshadow;
+  border-radius: 2px;
+  padding: 4px !important;
+}
+.modal-view-data {
+  color: gray;
+  font-weight: 499;
+}
+.closeModal {
+  color: gray;
+  font-size: 20px;
+  padding: 3px;
+  &:hover {
+    border-radius: 50px;
+    background-color: #eeeeee;
+  }
 }

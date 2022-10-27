@@ -119,7 +119,7 @@ export default function Attribute(props) {
           <div className="col-3 px-3 ">
             <Select
               bordered={false}
-              className="w-50 page_size_style"
+              className="page_size_style"
               value={pageSize}
               onChange={(e) => setPageSize(e)}
             >
@@ -255,7 +255,7 @@ export default function Attribute(props) {
                 </Form.Group>
               </div>
               <div className="row justify-content-center my-3">
-                <Button btnType="save" >Save</Button>
+                <Button btnType="save">Save</Button>
               </div>
             </div>
           }

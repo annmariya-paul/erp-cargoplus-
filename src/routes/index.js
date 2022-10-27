@@ -23,9 +23,6 @@ const ROUTES = {
   BRANDS: "/brands",
   ATTRIBUTES: "/attributes",
   ADD_ATTRIBUTES: "/add_attribute",
-
-  OPPORTUNITY_REPORT: "/opportunity-report",
-
   UNIT_LIST: "/unit-list",
 
   ADD_UNIT: "/add-unit",

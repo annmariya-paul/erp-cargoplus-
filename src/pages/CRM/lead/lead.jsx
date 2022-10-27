@@ -278,11 +278,13 @@ function Lead() {
                         </Form.Select>
                       </Form.Group>
                     </div>
-                    <div className="col-12 mt-3">
-                      <FileUpload
-                        value={leadAttachment}
-                        onChange={(e) => setLeadAttachment(e.target.value)}
-                      />
+                    <div className="row justify-content-center">
+                      <div className="col-lg-3 col-xs-12 col-sm-5 col-md-5 mt-3">
+                        <FileUpload
+                          value={leadAttachment}
+                          onChange={(e) => setLeadAttachment(e.target.value)}
+                        />
+                      </div>
                     </div>
                     <div className="col-sm-8 pt-3">
                       <Form.Group className="mb-2" controlId="lead_description">

@@ -42,7 +42,6 @@ function App() {
             <Route path={ROUTES.OPPORTUNITY} element={<Opportunitylist />} />
             <Route path={ROUTES.CATEGORY_LIST} element={<Categorylist />} />
             <Route path={ROUTES.LEAD_REPORT} element={<LeadReport />} />
-            {/* <Route path="/LeadEdit/:id" element={<LeadEdit />} /> */}
             <Route path={ROUTES.LEAD_EDIT_ID} element={<LeadEdit />} />
            
             <Route path={ROUTES.BRANDS} element={<BrandsList />} />

@@ -92,17 +92,7 @@
   padding-right: 6px;
 }
 
-@media screen and (max-width: 570px) {
-  .bimenu {
-    font-size: 1.5rem !important;
-  }
-  .nav-menu {
-    width: 130px;
-  }
-  .nav-text {
-    margin-left: -45px;
-  }
-}
+
 
 .active-link {
   background-color: variables.$white;
@@ -165,4 +155,12 @@ a.dropdown-item {
   // background-color: whitesmoke;
   // color: variables.$primary !important;
   color: white;
+}
+
+// ########   Media screen     #######
+
+@media screen and (max-width: 570px) {
+  .bimenu {
+    font-size: 1.5rem !important;
+  }
 }

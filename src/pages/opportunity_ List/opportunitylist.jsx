@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import PublicFetch from "../../utils/PublicFetch";
+import { CRM_BASE_URL } from "../../api/bootapi";
 import {
   FaFileExcel,
   FaFileCsv,
@@ -19,14 +21,15 @@ import Button from "../../components/button/button";
 import "./opportunitylist.scss";
 import { BsPlusCircleFill } from "react-icons/bs";
 
-import { Route } from "react-router-dom";
+// import { Route } from "react-router-dom";
 import OpportunityEdit from "../CRM/lead/modals/OpportunityEdit";
 import { useForm } from "react-hook-form";
 import { Form } from "react-bootstrap";
 import Leadlist_Icons from "../../components/lead_list_icon/lead_list_icon";
 
 function Opportunitylist(props) {
-  const [pageSize, setPageSize] = useState("25"); // page size
+  const [numOfItems, setNumOfItems] = useState("25");
+  const [pageSize, setPageSize] = useState(0); // page size
   const [current, setCurrent] = useState(1); // current page
   const [searchedText, setSearchedText] = useState(""); // search by text input
   const [searchType, setSearchType] = useState(""); //search by type select box
@@ -38,28 +41,51 @@ function Opportunitylist(props) {
   const [date, setDate] = useState(); //for date
   const [showAddOpportunity, setShowAddOpportunity] = useState(false); //adding opportunity
 
+  // { function to get all opportunity data - Ann mariya(27/10/22)}
+
+  const [OpportunityList, setOpportunityList] = useState();
+
+  const GetOpportunityData = () => {
+    PublicFetch.get(
+      `${CRM_BASE_URL}/opportunity/basic?startIndex=${pageSize}&noOfItems=${numOfItems}`
+    )
+      .then((res) => {
+        if (res?.data?.success) {
+          console.log("All opportunity data", res?.data?.data);
+          setOpportunityList(res?.data?.data?.leads);
+        } else {
+          console.log("Failed to load data !");
+        }
+      })
+      .catch((err) => {
+        console.log("Errror while getting data", err);
+      });
+  };
+  console.log("fhhthhh", OpportunityList);
+  useEffect(() => {
+    GetOpportunityData();
+  }, [numOfItems, pageSize]);
+
   // {timeout set for success popups }
 
   const close_modal = (mShow, time) => {
     if (!mShow) {
       setTimeout(() => {
         setSuccessPopup(false);
-        // close_modal(modalShow, 1200);
-        // props.onHide();
       }, time);
     }
   };
 
-  const submit = (data) => {
-    console.log(data);
-    localStorage.setItem("Form", JSON.stringify(data));
-    setShowViewModal(false);
-    setShowEditModal(false);
-    setSuccessPopup(true);
-    close_modal(successPopup, 1200);
-    props.onHide();
-    reset();
-  };
+  // const submit = (data) => {
+  //   console.log(data);
+  //   localStorage.setItem("Form", JSON.stringify(data));
+  //   setShowViewModal(false);
+  //   setShowEditModal(false);
+  //   setSuccessPopup(true);
+  //   close_modal(successPopup, 1200);
+  //   props.onHide();
+  //   reset();
+  // };
 
   const {
     register,
@@ -70,43 +96,16 @@ function Opportunitylist(props) {
   } = useForm();
 
   const getData = (current, pageSize) => {
-    return data.slice((current - 1) * pageSize, current * pageSize);
+    return OpportunityList?.slice((current - 1) * pageSize, current * pageSize);
   };
 
-  const data = [
-    {
-      lead_type: "Sales",
-      lead_customer_name: "Customer",
-      lead_organization: "HJKGF23456",
-      action: "Refefence",
-      lead_status: "Database",
-      key: "1",
-    },
-    {
-      lead_type: "Maintenance",
-      lead_customer_name: "Lead",
-      lead_organization: "HJGHRF34356",
-      action: "Direct Visit",
-      lead_status: "Database",
-      key: "2",
-    },
-    {
-      lead_type: "Support",
-      lead_customer_name: "Customer",
-      lead_organization: "GHFVY56447",
-      action: "Online Registration",
-      lead_status: "Database",
-      key: "3",
-    },
-  
-  ];
   // {columns is opportunity listing table componenet }
 
   const columns = [
     {
       title: "ACTION",
       dataIndex: "action",
-      key: "key",
+      key: "action",
       width: "14%",
       render: (data, index) => {
         return (
@@ -124,8 +123,8 @@ function Opportunitylist(props) {
     },
     {
       title: "TYPE",
-      dataIndex: "lead_type",
-      key: "key",
+      dataIndex: "opportunity_type",
+      key: "opportunity_type",
       filteredValue: [searchType],
       onFilter: (value, record) => {
         return String(record.lead_type)
@@ -136,8 +135,8 @@ function Opportunitylist(props) {
     },
     {
       title: "FROM",
-      dataIndex: "lead_customer_name",
-      key: "key",
+      dataIndex: "opportunity_from",
+      key: "opportunity_from",
       width: "23%",
       filteredValue: [searchStatus],
       onFilter: (value, record) => {
@@ -149,15 +148,15 @@ function Opportunitylist(props) {
     },
     {
       title: "CONVERTED BY",
-      dataIndex: "lead_organization",
-      key: "key",
+      dataIndex: "opportunity_created_by",
+      key: "opportunity_created_by",
       width: "23%",
       align: "center",
     },
     {
       title: "SOURCE",
-      dataIndex: "action",
-      key: "key",
+      dataIndex: "opportunity_source",
+      key: "opportunity_source",
       width: "14%",
       align: "center",
       filteredValue: [searchedText],
@@ -169,8 +168,8 @@ function Opportunitylist(props) {
     },
     {
       title: "PARTY",
-      dataIndex: "lead_status",
-      key: "key",
+      dataIndex: "opportunity_party",
+      key: "opportunity_party",
 
       align: "center",
     },
@@ -319,8 +318,8 @@ function Opportunitylist(props) {
                 // defaultValue={"25"}
                 bordered={false}
                 className=" page_size_style"
-                value={pageSize}
-                onChange={(e) => setPageSize(e)}
+                value={numOfItems}
+                onChange={(e) => setNumOfItems(e)}
               >
                 {/* <Select.Option value="5">5 | pages</Select.Option> */}
                 <Select.Option value="25">
@@ -366,16 +365,16 @@ function Opportunitylist(props) {
           </div>
           <div className="datatable">
             <TableData
-              data={getData(current, pageSize)}
+              data={getData(current, numOfItems, pageSize)}
               // data={allLeadList}
-              //   data={data}
+              // data={OpportunityList}
               columns={columns}
               custom_table_css="table_lead_list"
             />
           </div>
           <div className="d-flex py-2 justify-content-center">
             <MyPagination
-              total={data.length}
+              total={getData.length}
               current={current}
               showSizeChanger={true}
               pageSize={pageSize}
@@ -548,14 +547,12 @@ function Opportunitylist(props) {
         onHide={() => setShowAddOpportunity(false)}
         header="Add Opportunity"
         size={`xl`}
-        footer={[
-          <Button onClick={submit} btnType="save">
-            Save
-          </Button>,
-        ]}
+        footer={[<Button btnType="save">Save</Button>]}
         {...props}
       >
-        <Form onSubmit={handleSubmit(submit)}>
+        <Form
+        // onSubmit={handleSubmit(submit)}
+        >
           <div className="px-5">
             <div className="row px-1">
               <div className="col-sm-4 pt-2">
@@ -846,14 +843,12 @@ function Opportunitylist(props) {
         onHide={() => setShowEditModal(false)}
         header="Edit Opportunity"
         size={`xl`}
-        footer={[
-          <Button onClick={submit} btnType="save">
-            Save
-          </Button>,
-        ]}
+        footer={[<Button btnType="save">Save</Button>]}
         {...props}
       >
-        <Form onSubmit={handleSubmit(submit)}>
+        <Form
+        // onSubmit={handleSubmit(submit)}
+        >
           <div className="px-5">
             <div className="row px-1">
               <div className="col-sm-4 pt-2">

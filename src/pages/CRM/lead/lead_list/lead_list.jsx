@@ -49,8 +49,8 @@ export default function LeadList() {
     GetAllLeadData();
   }, []);
 
-  const getData = (current, pageSize) => {
-    return allLeadList?.slice((current - 1) * pageSize, current * pageSize);
+  const getData = (current, numOfItems) => {
+    return allLeadList?.slice((current - 1) * numOfItems, current * numOfItems);
   };
 
   const MyPagination = ({
@@ -106,7 +106,10 @@ export default function LeadList() {
         return (
           <div className="d-flex justify-content-center align-items-center gap-2">
             <div className="m-0">
-              <Link to={`${ROUTES.LEAD_EDIT}/${index.lead_id}`} className="nav-link">
+              <Link
+                to={`${ROUTES.LEAD_EDIT}/${index.lead_id}`}
+                className="nav-link"
+              >
                 {/* <a href="/edit_lead_list" className="actionEdit"> */}
 
                 <FaEdit />

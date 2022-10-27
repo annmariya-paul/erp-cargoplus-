@@ -239,7 +239,7 @@ function BrandsList() {
                 <Select
                   // defaultValue={"25"}
                   bordered={false}
-                  className="w-50 page_size_style"
+                  className=" page_size_style"
                   value={pageSize}
                   onChange={(e) => setPageSize(e)}
                 >
@@ -326,8 +326,24 @@ function BrandsList() {
             list_content={
               <>
                 <div className="container-fluid px-4 my-4">
-                  <div className="">
-                    <h5 className="lead_text">Brand</h5>
+                  <div className="d-flex justify-content-between">
+                    <h5 className="lead_text">Brands</h5>
+                    <div className="">
+                      <Button
+                        style={{ backgroundColor: "white", color: "#0092ce" }}
+                      >
+                        <span
+                          className="d-flex align-items-center justify-content-between gap-1  p-1 button_span"
+                          style={{ fontSize: "13px" }}
+                          onClick={() => {
+                            setBrandEditPopup(true);
+                            setBrandViewPopup(false);
+                          }}
+                        >
+                          Edit <FiEdit fontSize={"12px"} />
+                        </span>
+                      </Button>
+                    </div>
                   </div>
                   <div className="row my-3">
                     <div className="col-12 d-flex justify-content-center ">

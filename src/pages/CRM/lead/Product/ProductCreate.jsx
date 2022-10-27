@@ -1,6 +1,8 @@
-import { Select } from "antd";
+import { Checkbox, Select } from "antd";
 import React, { useState } from "react";
 import Button from "../../../../components/button/button";
+import CustomModel from "../../../../components/custom_modal/custom_model";
+import ErrorMsg from "../../../../components/error/ErrorMessage";
 import FileUpload from "../../../../components/fileupload/fileUploader";
 
 function ProductCreate() {
@@ -93,72 +95,30 @@ function ProductCreate() {
                       height: "160px",
                       overflow: "scroll",
                     }}
-                    className="card border-0 px-4 py-3"
+                    className="card border-0 px-4 py-2"
                   >
-                    <label className="my-2 ">
-                      <input
-                        style={{
-                          backgroundColor: "whitesmoke",
-                          //   borderRadius: "5px",
-                        }}
-                        type={"checkbox"}
-                        className="me-2"
-                      />
+                    <label style={{ color: "gray" }} className="my-2 ">
+                      <Checkbox className="me-2" />
                       color
                     </label>
-                    <label className="my-2">
-                      <input
-                        style={{
-                          backgroundColor: "whitesmoke",
-                          //   borderRadius: "5px",
-                        }}
-                        type={"checkbox"}
-                        className="me-2"
-                      />
+                    <label style={{ color: "gray" }} className="my-2">
+                      <Checkbox className="me-2" />
                       warrenty
                     </label>
-                    <label className="my-2">
-                      <input
-                        style={{
-                          backgroundColor: "whitesmoke",
-                          //   borderRadius: "5px",
-                        }}
-                        type={"checkbox"}
-                        className="me-2"
-                      />
+                    <label style={{ color: "gray" }} className="my-2">
+                      <Checkbox className="me-2" />
                       Size
                     </label>
-                    <label className="my-2">
-                      <input
-                        style={{
-                          backgroundColor: "whitesmoke",
-                          //   borderRadius: "5px",
-                        }}
-                        type={"checkbox"}
-                        className="me-2"
-                      />
+                    <label style={{ color: "gray" }} className="my-2">
+                      <Checkbox className="me-2" />
                       weight
                     </label>
-                    <label className="my-2">
-                      <input
-                        style={{
-                          backgroundColor: "whitesmoke",
-                          //   borderRadius: "5px",
-                        }}
-                        type={"checkbox"}
-                        className="me-2"
-                      />
+                    <label style={{ color: "gray" }} className="my-2">
+                      <Checkbox className="me-2" />
                       weight
                     </label>
-                    <label className="my-2">
-                      <input
-                        style={{
-                          backgroundColor: "whitesmoke",
-                          //   borderRadius: "5px",
-                        }}
-                        type={"checkbox"}
-                        className="me-2"
-                      />
+                    <label style={{ color: "gray" }} className="my-2">
+                      <Checkbox className="me-2" />
                       weight
                     </label>
                   </div>
@@ -171,10 +131,13 @@ function ProductCreate() {
               <div className="col-6 mt-2">
                 <p>Description</p>
                 <div>
-                  <textarea className="input_type_style w-100" />
+                  <textarea
+                    style={{ height: "100px" }}
+                    className="input_type_style w-100"
+                  />
                 </div>
               </div>
-              <div className="col-12 d-flex justify-content-center py-5">
+              <div className="col-12 d-flex justify-content-center pt-5">
                 <Button
                   onClick={() => {
                     setSuccessPopup(true);
@@ -189,6 +152,14 @@ function ProductCreate() {
           </div>
         </div>
       </div>
+      {error ? <ErrorMsg code={"500"} /> : ""}
+
+      <CustomModel
+        size={"sm"}
+        success
+        show={successPopup}
+        onHide={() => setSuccessPopup(false)}
+      />
     </div>
   );
 }

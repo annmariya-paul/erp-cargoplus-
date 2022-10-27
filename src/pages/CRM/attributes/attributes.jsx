@@ -255,7 +255,7 @@ export default function Attribute(props) {
                 </Form.Group>
               </div>
               <div className="row justify-content-center my-3">
-                <Button btnType="save" >Save</Button>
+                <Button btnType="save">Save</Button>
               </div>
             </div>
           }

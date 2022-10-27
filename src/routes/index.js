@@ -9,7 +9,8 @@ const ROUTES = {
   OPPORTUNITY: "/opportunity",
   CATEGORY_LIST:"/categorylist",
   LEAD_REPORT:"/leadReport",
-  LEAD_EDIT:"/edit_lead_list/:id",
+  LEAD_EDIT:"/edit_lead_list",
+  LEAD_EDIT_ID:"/edit_lead_list/:id",
 
   OPPORTUNITY_REPORT: "/opportunity-report",
   CATEGORY_LIST: "/categorylist",

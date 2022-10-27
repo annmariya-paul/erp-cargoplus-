@@ -61,7 +61,7 @@ function Opportunitylist(props) {
         console.log("Errror while getting data", err);
       });
   };
-  console.log("fhhthhh", OpportunityList);
+
   useEffect(() => {
     GetOpportunityData();
   }, [numOfItems, pageSize]);

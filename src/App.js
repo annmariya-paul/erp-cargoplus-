@@ -12,8 +12,8 @@ import LeadReport from "./pages/CRM/lead/leadReport/leadReport";
 import Opportunitylist from "./pages/opportunity_ List/opportunitylist";
 import Categorylist from "./pages/category/viewCategory";
 
-import BrandsList from "./pages/CRM/lead/brands/BrandsList";
-import OpportunityReport from "./pages/opportunityReport/OpportunityReport";
+// import BrandsList from "./pages/CRM/lead/brands/BrandsList";
+// import OpportunityReport from "./pages/opportunityReport/OpportunityReport";
 import Unitlist from "./pages/CRM/lead/unit/Unitlist";
 import Addunit from "./pages/CRM/lead/unit/Addunit";
 
@@ -25,7 +25,6 @@ import Add_Attribute from "./pages/CRM/attributes/add_attribute";
 import BrandsList from "./pages/CRM/lead/brands/BrandsList";
 import OpportunityReport from "./pages/opportunityReport/OpportunityReport";
 
-import Viewunit from "./pages/unit/ViewUnit";
 import BrandCreate from "./pages/CRM/lead/brands/BrandCreate";
 import Productlist from "./pages/CRM/lead/Product/Productlist";
 import ProductCreate from "./pages/CRM/lead/Product/ProductCreate";
@@ -61,7 +60,6 @@ function App() {
             <Route path={ROUTES.UNIT_LIST} element={<Unitlist />} />
             <Route path={ROUTES.ADD_UNIT} element={<Addunit />} />
 
-            <Route path={ROUTES.UNIT_LIST} element={<Viewunit />} />
             <Route path={ROUTES.BRANDCREATE} element={<BrandCreate />} />
             <Route path={ROUTES.PRODUCT} element={<Productlist />} />
             <Route path={ROUTES.PRODUCTCREATE} element={<ProductCreate />} />

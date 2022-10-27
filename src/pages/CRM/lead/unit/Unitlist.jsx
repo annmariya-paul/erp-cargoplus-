@@ -16,12 +16,14 @@ import { ROUTES } from "../../../../routes";
 // import { ROUTES } from "../../../routes";
 function Unitlist() {
   const [pageSize, setPageSize] = useState("25"); // page size
+  const [current, setCurrent] = useState(1);
   const [searchedText, setSearchedText] = useState(""); // search by text input
   const [searchType, setSearchType] = useState(""); //search by type select box
   const [searchStatus, setSearchStatus] = useState("");
-  const [addUnitModal, setaddUnitModal] = useState(false);
+
   const [editShow, setEditShow] = useState(false);
   const [viewUnitModal, setViewUnitModal] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
 
   const unitdata = [
     {
@@ -57,7 +59,7 @@ function Unitlist() {
         return (
           <div className="d-flex justify-content-center gap-2">
             <span
-              // onClick={() => setEditShow(true)}
+              onClick={() => setEditShow(true)}
               className="actioneditdelete"
             >
               <FaEdit />
@@ -274,29 +276,74 @@ function Unitlist() {
         />
 
         <Custom_model
+          size={"sm"}
           show={editShow}
           onHide={() => {
             setEditShow(false);
           }}
           View_list
           list_content={
-            <div className="container">
-              <h5>Add Units and Measures</h5>
-              <div></div>
+            <div className="container-fluid px-4 my-4 ">
+              <h6 className="lead_text">Edits Units and Measurements</h6>
+
+              <div className="row">
+                <div className="col-12">
+                  <label>Name</label>
+                  <div>
+                    <input
+                      type="text"
+                      className="input_style"
+                      rules={{ required: true, message: "Please enter name" }}
+                    />
+                  </div>
+                </div>
+                <div className="col-12 py-2">
+                  <label>Code</label>
+                  <div>
+                    <input type="text" className="input_style" />
+                  </div>
+                </div>
+                <div className="col-12 py-2">
+                  <label>Description</label>
+                  <div>
+                    <textarea className="input_style " />
+                  </div>
+                </div>
+                <div className="row d-flex justify-content-center">
+                  <div className="col-xl-2 col-lg-2 col-12 justify-content-center">
+                    <Button
+                      btnType="save"
+                      onClick={() => {
+                        setEditShow(false);
+                        setSaveSuccess(true);
+                      }}
+                    >
+                      Save
+                    </Button>
+                  </div>
+                </div>
+              </div>
             </div>
           }
         />
 
+        <Custom_model
+          size={"sm"}
+          show={saveSuccess}
+          onHide={() => setSaveSuccess(false)}
+          success
+        />
+
         <div className="d-flex py-2 justify-content-center">
           <MyPagination
-            // total={data.length}
-            // current={current}
+            total={unitdata.length}
+            current={current}
             showSizeChanger={true}
             pageSize={pageSize}
-            // onChange={(current, pageSize) => {
-            //   setCurrent(current);
-            //   setPageSize(pageSize);
-            // }}
+            onChange={(current, pageSize) => {
+              setCurrent(current);
+              setPageSize(pageSize);
+            }}
           />
         </div>
       </div>

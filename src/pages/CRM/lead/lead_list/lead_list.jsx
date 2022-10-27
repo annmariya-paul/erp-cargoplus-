@@ -8,6 +8,7 @@ import {
   FaBookOpen,
   FaEdit,
 } from "react-icons/fa";
+
 import { MdFileCopy, MdPageview } from "react-icons/md";
 import { AiFillPrinter } from "react-icons/ai";
 import { Input, Select, Pagination } from "antd";
@@ -18,6 +19,7 @@ import { LeadStatus } from "../../../../utils/leadStatus";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { CRM_BASE_URL } from "../../../../api/bootapi";
 import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
+import { ROUTES } from "../../../../routes";
 
 export default function LeadList() {
   const [searchedText, setSearchedText] = useState("");
@@ -98,7 +100,7 @@ export default function LeadList() {
         return (
           <div className="d-flex justify-content-center align-items-center gap-2">
             <div className="m-0">
-              <Link to={`/LeadEdit/${index.lead_id}`} className="nav-link">
+              <Link to={`${ROUTES.LEAD_EDIT}/${index.lead_id}`} className="nav-link">
                 {/* <a href="/edit_lead_list" className="actionEdit"> */}
 
                 <FaEdit />

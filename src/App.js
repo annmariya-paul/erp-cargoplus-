@@ -23,6 +23,8 @@ import Viewunit from "./pages/unit/ViewUnit";
 import BrandCreate from "./pages/CRM/lead/brands/BrandCreate";
 import Productlist from "./pages/CRM/lead/Product/Productlist";
 import ProductCreate from "./pages/CRM/lead/Product/ProductCreate";
+import ProductDetails from "./pages/CRM/lead/Product/ProductDetails";
+import Varients from "./pages/CRM/lead/Product/Varient/Varients";
 
 // import Lead from "./pages/lead/lead";
 
@@ -33,10 +35,11 @@ function App() {
         <Routes>
           <Route path={ROUTES.SIDEBAR} element={<Sidebar />} />
           <Route path={ROUTES.Layout} element={<Layout />}>
-            <Route index element={<Lead />} />
+            <Route path={ROUTES.DASHBOARD} element={<Dashboard />} />
+            <Route path={ROUTES.LEAD} element={<Lead />} />
             <Route path={ROUTES.LEADLIST} element={<LeadList />} />
             <Route path={ROUTES.LEAD} element={<Lead />} />
-            <Route path={ROUTES.DASHBOARD} element={<Dashboard />} />
+
             <Route path={ROUTES.CATEGORY} element={<Category />} />
             <Route path={ROUTES.TEST_PAGE} element={<TestPage />} />
             <Route path={ROUTES.OPPORTUNITY} element={<Opportunitylist />} />
@@ -56,6 +59,8 @@ function App() {
             <Route path={ROUTES.BRANDCREATE} element={<BrandCreate />} />
             <Route path={ROUTES.PRODUCT} element={<Productlist />} />
             <Route path={ROUTES.PRODUCTCREATE} element={<ProductCreate />} />
+            <Route path={ROUTES.PRODUCTDETAILS} element={<ProductDetails />} />
+            <Route path={ROUTES.PRODUCTVARIENTS} element={<Varients />} />
           </Route>
         </Routes>
       </BrowserRouter>

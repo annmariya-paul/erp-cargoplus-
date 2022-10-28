@@ -41,6 +41,20 @@ function Opportunitylist(props) {
   const [date, setDate] = useState(); //for date
   const [showAddOpportunity, setShowAddOpportunity] = useState(false); //adding opportunity
 
+  // view oppurtunity
+  const [viewoppurtunity, setviewoppurtunity] = useState({
+    id: "",
+    opportunity_type: "",
+    opportunity_from: "",
+    convertedby: "",
+    opportunity_source: "",
+    opportunity_party: "",
+    opportunity_validity: "",
+    opportunity_description: "",
+    opportunity_amount: "",
+    opportunity_probability: "",
+    opportunity_status: "",
+  });
   // { function to get all opportunity data - Ann mariya(27/10/22)}
 
   const [OpportunityList, setOpportunityList] = useState();
@@ -100,6 +114,24 @@ function Opportunitylist(props) {
   };
 
   // {columns is opportunity listing table componenet }
+  const Viewoppurtunties = (item) => {
+    console.log("all oppurtunity issss:", item);
+    setviewoppurtunity({
+      ...viewoppurtunity,
+      id: item.opportunity_id,
+      opportunity_type: item.opportunity_type,
+      opportunity_from: item.opportunity_from,
+      convertedby: item.opportunity_created_by,
+      opportunity_source: item.opportunity_source,
+      opportunity_party: item.opportunity_party,
+      opportunity_validity: item.opportunity_validity,
+      opportunity_description: item.opportunity_description,
+      opportunity_amount: item.opportunity_amount,
+      opportunity_probability: item.opportunity_probability,
+      opportunity_status: item.opportunity_status,
+    });
+    setShowViewModal(true);
+  };
 
   const columns = [
     {
@@ -112,8 +144,9 @@ function Opportunitylist(props) {
           <div>
             {/* <a href="" className="actionEdit">
               <FaEdit />
+              onClick={() => setShowViewModal(true)}
             </a> */}
-            <div onClick={() => setShowViewModal(true)} className="actionView">
+            <div onClick={() => Viewoppurtunties(index)} className="actionView">
               <MdPageview />
             </div>
           </div>
@@ -414,7 +447,67 @@ function Opportunitylist(props) {
                 </Button>
               </div>
             </div>
-            <div className="border-bottom">
+
+            <div>
+              <table className="table table-borderless">
+                <thead></thead>
+
+                <tbody>
+                  <tr>
+                    <td>Type</td>
+                    <td>:</td>
+                    <td>{viewoppurtunity.opportunity_type}</td>
+                  </tr>
+                  <tr>
+                    <td>From</td>
+                    <td>:</td>
+                    <td>{viewoppurtunity.opportunity_from}</td>
+                  </tr>
+                  <tr>
+                    <td>Converted By</td>
+                    <td>:</td>
+                    <td>{viewoppurtunity.convertedby}</td>
+                  </tr>
+                  <tr>
+                    <td>Source</td>
+                    <td>:</td>
+                    <td>{viewoppurtunity.opportunity_source}</td>
+                  </tr>
+                  <tr>
+                    <td>Party</td>
+                    <td>:</td>
+                    <td>{viewoppurtunity.opportunity_party}</td>
+                  </tr>
+                  <tr>
+                    <td>Valid up to</td>
+                    <td>:</td>
+                    <td>{viewoppurtunity.opportunity_validity}</td>
+                  </tr>
+                  <tr>
+                    <td>details</td>
+                    <td>:</td>
+                    <td>{viewoppurtunity.opportunity_description}</td>
+                  </tr>
+                  <tr>
+                    <td>expecting Amount</td>
+                    <td>:</td>
+                    <td>{viewoppurtunity.opportunity_amount}</td>
+                  </tr>
+                  <tr>
+                    <td>Probability of conversion</td>
+                    <td>:</td>
+                    <td>{viewoppurtunity.opportunity_probability}</td>
+                  </tr>
+                  <tr>
+                    <td>status </td>
+                    <td>:</td>
+                    <td>{viewoppurtunity.opportunity_status}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            {/* <div className="border-bottom">
               <div className="row mt-4">
                 <div className="col-5">
                   <p style={{ color: "#000" }} className="modal_view_p_style">
@@ -512,7 +605,8 @@ function Opportunitylist(props) {
                   <p className="modal_view_p_sub">Interested</p>
                 </div>
               </div>
-            </div>
+            </div> */}
+
             <div className="d-flex justify-content-between my-1">
               <div className="mt-3">
                 <h5 className="opportunity_heading">Opportunity Progress</h5>

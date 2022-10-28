@@ -71,6 +71,17 @@ export default function Sidebar({ showSidebar }) {
                   </div>
                 </Link>
               </li>
+              <li className="nav-text">
+                <NavLink
+                  className={({ isActive }) =>
+                    isActive ? "active-link" : "link"
+                  }
+                  to={ROUTES.UNIT_LIST}
+                >
+                  <RiTeamFill className="sidebar_icons" />
+                  Units and Measures
+                </NavLink>
+              </li>
               {CRMopen ? (
                 <>
                   <li

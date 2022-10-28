@@ -1,0 +1,36 @@
+@use "../../../../styles/variables.scss";
+$grey: #777777;
+.actioneditdelete {
+  font-size: 14px;
+  //   padding-inline: 5px;
+  color: $grey;
+  &:hover {
+    color: variables.$primary;
+  }
+}
+.content-tabs {
+  border-radius: 3px;
+  min-height: 38rem;
+  flex-grow: 1;
+  box-shadow: 2px 2px 12px variables.$boxshadow;
+}
+.input_style {
+  width: 100%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border: 0;
+  background-color: whitesmoke;
+  outline: none;
+  border-radius: 3px;
+  padding: 13px;
+}
+.save_button {
+  border-radius: 3px;
+  padding: 5px;
+  background-color: #0092ce;
+  color: #fff;
+}
+.fw_label {
+  font-weight: 400;
+  font-size: 15px;
+}

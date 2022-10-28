@@ -42,7 +42,7 @@ export default function Sidebar({ showSidebar }) {
                   className={({ isActive }) =>
                     isActive ? "active-link" : "link"
                   }
-                  to="/dashboard"
+                  to={ROUTES.DASHBOARD}
                 >
                   <AiOutlineAppstore className="sidebar_icons" />
                   Dashboard
@@ -61,7 +61,7 @@ export default function Sidebar({ showSidebar }) {
               >
                 <Link
                   className={CRMopen ? "active-link_main" : "link"}
-                  to="/"
+                  // to="/"
                   onClick={() => setCRMopen(!CRMopen)}
                 >
                   <RiTeamFill className="sidebar_icons" />
@@ -70,6 +70,17 @@ export default function Sidebar({ showSidebar }) {
                     <AiOutlineCaretDown className="toggle_btn " />
                   </div>
                 </Link>
+              </li>
+              <li className="nav-text">
+                <NavLink
+                  className={({ isActive }) =>
+                    isActive ? "active-link" : "link"
+                  }
+                  to={ROUTES.UNIT_LIST}
+                >
+                  <RiTeamFill className="sidebar_icons" />
+                  Units and Measures
+                </NavLink>
               </li>
               {CRMopen ? (
                 <>
@@ -82,7 +93,7 @@ export default function Sidebar({ showSidebar }) {
                   >
                     <Link
                       className={Saleopen ? "active-link" : "link"}
-                      to="/"
+                      // to="/"
                       onClick={() => setSaleOpen(!Saleopen)}
                     >
                       <RiTeamFill className="sidebar_icons ms-3" />
@@ -125,7 +136,7 @@ export default function Sidebar({ showSidebar }) {
                       >
                         <Link
                           className={CRMReport ? "active-link" : "link"}
-                          to="/"
+                          // to="/"
                           onClick={() => setCRMReport(!CRMReport)}
                         >
                           <RiTeamFill className="sidebar_icons ms-4" />
@@ -177,7 +188,7 @@ export default function Sidebar({ showSidebar }) {
                   >
                     <Link
                       className={CRMselling ? "active-link" : "link"}
-                      to="/"
+                      // to="/"
                       onClick={() => setCRMselling(!CRMselling)}
                     >
                       <RiTeamFill className="sidebar_icons ms-3" />

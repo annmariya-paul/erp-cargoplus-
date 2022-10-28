@@ -1,10 +1,12 @@
 @use "../../styles/variables.scss";
 
 .btn_save {
-  border :none;
+  border: none;
   border-radius: 4px;
-  color:white;
-  width:6rem;
+  color: white;
+  // width:6rem;
+  // width: 100%;
+  padding: 0.4rem;
   padding-block: 8px;
   background: variables.$primary;
   &:hover {
@@ -14,21 +16,21 @@
 .btn_add {
   border: none;
   border-radius: 4px;
-  color:white !important;
+  color: white !important;
   background: variables.$primary !important;
   padding-inline: 10px !important;
   padding-block: 7px !important;
-//   font-size: 18px;
+  //   font-size: 18px;
   float: right;
   &:hover {
     background: variables.$button-hover !important;
   }
 }
 
-.btn_add_borderless{
- border: none;
- background:white;
- color:variables.$primary !important;
+.btn_add_borderless {
+  border: none;
+  background: white;
+  color: variables.$primary !important;
   padding-inline: 0px !important;
   // font-size: 15px;
   padding-block: 7px !important;
@@ -42,7 +44,7 @@
 //     padding-right: 4px !important;
 // }
 .erp__btn-append-icon-wrapper {
-    margin-left: 0.5rem;
+  margin-left: 0.5rem;
 }
 
 // .erp__btn-prepend-icon-wrapper {
@@ -52,5 +54,5 @@
 //     display: flex;
 //     align-items: center;
 //     justify-content: center;
-   
+
 // }

@@ -1,7 +1,7 @@
 const ROUTES = {
   LAYOUT: "/layout",
-  SIDEBAR: "/",
-  DASHBOARD: "/dashboard",
+  SIDEBAR: "/sidebar",
+  DASHBOARD: "/",
   LEAD: "/lead",
   LEADLIST: "/lead_list",
   CATEGORY: "/category",
@@ -11,6 +11,12 @@ const ROUTES = {
   CATEGORY_LIST: "/categorylist",
   LEAD_REPORT: "/leadReport",
   LEAD_EDIT: "/edit_lead_list/:id",
+
+  OPPORTUNITY_REPORT: "/opportunity-report",
+
+  // CATEGORY_LIST: "/categorylist",
+  // LEAD_REPORT: "/leadReport",
+  // LEAD_EDIT: "/edit_lead_list/:id",
 
   // CATEGORY_LIST: "/categorylist",
   // LEAD_REPORT: "/leadReport",
@@ -30,6 +36,8 @@ const ROUTES = {
   BRANDCREATE: "/createbrand",
   PRODUCT: "/product",
   PRODUCTCREATE: "/create_product",
+  PRODUCTDETAILS: "/product_details",
+  PRODUCTVARIENTS: "/product_varients",
 };
 
 module.exports = { ROUTES };

@@ -81,12 +81,14 @@ function Productlist() {
             >
               <FaEdit />
             </div>
-            <div
-              onClick={() => setProductView(true)}
-              className="actionView m-0 p-0"
-            >
-              <MdPageview />
-            </div>
+            <Link to={ROUTES.PRODUCTDETAILS}>
+              <div
+                // onClick={() => setProductView(true)}
+                className="actionView m-0 p-0"
+              >
+                <MdPageview />
+              </div>
+            </Link>
           </div>
         );
       },

@@ -161,8 +161,10 @@ function OpportunityReport() {
                 </div>
               )}
             </div>
-            <div className="row justify-content-center my-2">
-              <Button btnType="save">Search</Button>
+            <div className="row  justify-content-center my-2">
+              <div className="col-xl-3 col-lg-3 col-12 d-flex justify-content-center">
+                <Button btnType="save">Search</Button>
+              </div>
             </div>
           </div>
         </div>
@@ -221,8 +223,12 @@ function OpportunityReport() {
                 </div>
               )}
             </div>
-            <div className="row justify-content-center my-2">
-              <Button btnType="save">Search</Button>
+            <div className="row justify-content-center  my-2">
+              <div className="col-xl-3 col-lg-3 col-12 d-flex justify-content-center">
+                <Button btnType="save" className="">
+                  Search
+                </Button>
+              </div>
             </div>
           </div>
         </div>

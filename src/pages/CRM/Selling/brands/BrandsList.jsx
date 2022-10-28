@@ -11,11 +11,9 @@ import { AiFillPrinter } from "react-icons/ai";
 import { MdFileCopy, MdPageview } from "react-icons/md";
 import { Input, Select, Pagination } from "antd";
 
-import "../lead_list/leadlist.scss";
-import TableData from "../../../../components/table/table_data";
-import MyPagination from "../../../../components/Pagination/MyPagination";
+import "../../lead/lead_list/leadlist.scss";
+
 // import CustomModel from "../../components/custom_modal/custom_model";
-import Button from "../../../../components/button/button";
 
 import "../../../opportunity_ List/opportunitylist.scss";
 // import { BsPlusCircleFill } from "react-icons/bs";
@@ -23,12 +21,17 @@ import "../../../opportunity_ List/opportunitylist.scss";
 // import { Route } from "react-router-dom";
 // import { useForm } from "react-hook-form";
 // import { Form } from "react-bootstrap";
-import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
+
 import { Link } from "react-router-dom";
+
+import logo from "../../../../components/img/logo192.png";
+import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
+import Button from "../../../../components/button/button";
 import { ROUTES } from "../../../../routes";
+import TableData from "../../../../components/table/table_data";
+import MyPagination from "../../../../components/Pagination/MyPagination";
 import CustomModel from "../../../../components/custom_modal/custom_model";
 import FileUpload from "../../../../components/fileupload/fileUploader";
-import logo from "../../../../components/img/logo192.png";
 import ErrorMsg from "../../../../components/error/ErrorMessage";
 
 function BrandsList() {

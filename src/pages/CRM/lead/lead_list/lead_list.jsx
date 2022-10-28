@@ -246,18 +246,12 @@ export default function LeadList() {
               <Select
                 // defaultValue={"25"}
                 bordered={false}
-<<<<<<< HEAD
                 className="w-50 page_size_style"
                 value={noofItems}
                 onChange={(e) => {
                   console.log("On page size selected : ", e);
                   setNoofItems(e);
                 }}
-=======
-                className="page_size_style"
-                value={pageSize}
-                onChange={(e) => setPageSize(e)}
->>>>>>> 9d3c46c584f1148e410ed3fa54844e6d17b332e0
               >
                 {/* <Select.Option value="5">5 | pages</Select.Option> */}
                 <Select.Option value="10">

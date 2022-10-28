@@ -7,14 +7,7 @@ const ROUTES = {
   CATEGORY: "/category",
   TEST_PAGE: "/test-page",
   OPPORTUNITY: "/opportunity",
-<<<<<<< HEAD
-  CATEGORY_LIST: "/categorylist",
-  LEAD_REPORT: "/leadReport",
-  LEAD_EDIT: "/edit_lead_list/:id",
 
-  OPPORTUNITY_REPORT: "/opportunity-report",
-=======
->>>>>>> 9d3c46c584f1148e410ed3fa54844e6d17b332e0
   CATEGORY_LIST: "/categorylist",
   LEAD_REPORT: "/leadReport",
   LEAD_EDIT: "/edit_lead_list",

@@ -16,15 +16,16 @@ import LeadEdit from "./pages/CRM/lead/lead_list/edit_lead_list";
 import Attribute from "./pages/CRM/attributes/attributes";
 import Add_Attribute from "./pages/CRM/attributes/add_attribute";
 
-import BrandsList from "./pages/CRM/lead/brands/BrandsList";
 import OpportunityReport from "./pages/opportunityReport/OpportunityReport";
 
 import Viewunit from "./pages/unit/ViewUnit";
-import BrandCreate from "./pages/CRM/lead/brands/BrandCreate";
-import Productlist from "./pages/CRM/lead/Product/Productlist";
-import ProductCreate from "./pages/CRM/lead/Product/ProductCreate";
-import ProductDetails from "./pages/CRM/lead/Product/ProductDetails";
-import Varients from "./pages/CRM/lead/Product/Varient/Varients";
+
+import BrandCreate from "./pages/CRM/Selling/brands/BrandCreate";
+import BrandsList from "./pages/CRM/Selling/brands/BrandsList";
+import Productlist from "./pages/CRM/Selling/Product/Productlist";
+import ProductCreate from "./pages/CRM/Selling/Product/ProductCreate";
+import ProductDetails from "./pages/CRM/Selling/Product/ProductDetails";
+import Varients from "./pages/CRM/Selling/Product/Varient/Varients";
 
 // import Lead from "./pages/lead/lead";
 
@@ -46,7 +47,7 @@ function App() {
             <Route path={ROUTES.CATEGORY_LIST} element={<Categorylist />} />
             <Route path={ROUTES.LEAD_REPORT} element={<LeadReport />} />
             <Route path={ROUTES.LEAD_EDIT_ID} element={<LeadEdit />} />
-           
+
             <Route path={ROUTES.BRANDS} element={<BrandsList />} />
             <Route path={ROUTES.ATTRIBUTES} element={<Attribute />} />
             <Route path={ROUTES.ADD_ATTRIBUTES} element={<Add_Attribute />} />

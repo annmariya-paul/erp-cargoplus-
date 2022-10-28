@@ -1,6 +1,6 @@
 import { Input } from "antd";
 import React, { useState } from "react";
-import "../lead.styles.scss";
+import "../../lead/lead.styles.scss";
 import "../../../opportunity_ List/opportunitylist.scss";
 import FileUpload from "../../../../components/fileupload/fileUploader";
 import Button from "../../../../components/button/button";

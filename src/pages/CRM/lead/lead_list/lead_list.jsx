@@ -252,9 +252,6 @@ export default function LeadList() {
                   console.log("On page size selected : ", e);
                   setNoofItems(e);
                 }}
-                // className="page_size_style"
-                // value={pageSize}
-                // onChange={(e) => setPageSize(e)}
               >
                 {/* <Select.Option value="5">5 | pages</Select.Option> */}
                 <Select.Option value="10">

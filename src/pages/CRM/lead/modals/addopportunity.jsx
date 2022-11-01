@@ -375,8 +375,9 @@ const onBlur = (e) => {
               </div>
             </div>
           </div>
-          <button onClick={oppdata} >Save</button>
-        
+          <div className="col-12 d-flex justify-content-center pt-2">
+          <Button btnType="save"  onClick={oppdata} >Save</Button>
+          </div>
       </Custom_model>
       <Custom_model
         centered

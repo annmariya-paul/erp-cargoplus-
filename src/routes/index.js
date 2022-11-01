@@ -7,6 +7,12 @@ const ROUTES = {
   CATEGORY: "/category",
   TEST_PAGE: "/test-page",
   OPPORTUNITY: "/opportunity",
+<<<<<<< HEAD
+
+  CATEGORY_LIST: "/categorylist",
+  LEAD_REPORT: "/leadReport",
+  LEAD_EDIT: "/edit_lead_list",
+=======
 
   CATEGORY_LIST: "/categorylist",
   LEAD_REPORT: "/leadReport",
@@ -21,6 +27,7 @@ const ROUTES = {
   // CATEGORY_LIST: "/categorylist",
   // LEAD_REPORT: "/leadReport",
   // LEAD_EDIT: "/edit_lead_list",
+>>>>>>> bc65e7f1a6ce3c8efd01559d456351777f366b6b
   LEAD_EDIT_ID: "/edit_lead_list/:id",
 
   // OPPORTUNITY_REPORT: "/opportunity-report",

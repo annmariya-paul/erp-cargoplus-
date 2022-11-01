@@ -182,7 +182,7 @@ function Lead() {
                 }
               >
                 {/* <div className="col-12"> */}
-                <div className="row mb-2 justify-content-end">
+                {/* <div className="row mb-2 justify-content-end">
                   <div
                     className="col-md-3 col-xl-2 col-sm-6 d-flex"
                     style={{ justifyContent: "center" }}
@@ -211,7 +211,7 @@ function Lead() {
                       </Button>
                     </Link>
                   </div>
-                </div>
+                </div> */}
                 {/* </div> */}
                 <Form
                   noValidate

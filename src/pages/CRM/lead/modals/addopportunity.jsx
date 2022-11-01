@@ -1,6 +1,7 @@
 //Opportunity adding model created 14.10.22 shahida
 
 import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { Form } from "react-bootstrap";
 import Button from "../../../../components/button/button";
 import { useForm } from "react-hook-form";
@@ -9,22 +10,108 @@ import { CRM_BASE_URL } from "../../../../api/bootapi";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { message } from "antd";
 
+
 export default function AddOpportunity(props) {
+  const { id } = useParams();
+ console.log("ID is ...",id);
+ 
+ 
+
   const today = new Date().toISOString().split("T")[0];
   const [modalOpportunity, setModalOpportunity] = useState();
-  const [modalShow, setModalShow] = useState();
+  const [modalShow, setModalShow] = useState(false);
   const [date, setDate] = useState();
+  console.log(date);
   const [name, setName] = useState();
  const [value, setValue] = useState([]);
+ const [ShowEditModal, setShowEditModal] = useState(false); //oppertunity edit modal
+ const [showProgressModal, setShowProgresssModal] = useState(false); //Oppoertunity progress modal
+ const [successPopup, setSuccessPopup] = useState(false); //success popups
+ const [showViewModal, setShowViewModal] = useState(false);
 
  const [amount,setAmount]=useState();
 //  const result=Number(amount).toFixed(2);
 
 const onBlur = (e) => {
   const float = parseFloat(e.target.value)
-  setAmount(float.toFixed(2))
+  setOppAmount(float.toFixed(2))
 }
 
+
+  const [opptype, setOppType] = useState();
+  console.log(opptype);
+  const [oppfrom, setOppFrom] = useState();
+  console.log(oppfrom);
+  const [oppId, setOppID] = useState(parseInt(id));
+  console.log(oppId);
+  const [oppsource, setOppSource] = useState();
+  console.log(oppsource);
+  const [oppparty, setOppParty] = useState();
+  console.log(oppparty);
+  // const [date, setDate] = useState(); //for date
+
+
+
+  const [oppvalidity, setOppValidity] = useState();
+  const [oppamount, setOppAmount] = useState();
+  console.log(oppamount);
+  const [oppprobability, setOppProbaility] = useState();
+  console.log(oppprobability);
+  const [oppdescription, setOppDescription] = useState();
+  console.log(oppdescription);
+  const [oppstatus, setOppStatus] = useState();
+  console.log(typeof oppstatus);
+ 
+  const oppdata = (data) => {
+    console.log("ssss")
+    PublicFetch.post(`${CRM_BASE_URL}/opportunity/basic`, {
+    
+      opportunity_type: opptype,
+      opportunity_from: oppfrom,
+      opportunity_lead_id:oppId,
+      opportunity_source: oppsource,
+      opportunity_party: name,
+      opportunity_validity: date,
+      opportunity_amount: oppamount,
+      opportunity_probability: oppprobability,
+      opportunity_description: oppdescription,
+      opportunity_status:oppstatus,
+     
+    }).then(function (response) {
+      console.log("post of opportuity", response);
+      if (response.data.success) {
+        setOppType();
+        setOppFrom();
+        setOppSource();
+        setOppParty();
+        setDate();
+        setOppAmount();
+        setOppProbaility();
+        setOppDescription();
+        setName();
+        setAmount();
+        setDate();
+        setOppValidity();
+        setOppID();
+        setOppStatus();
+        setModalShow(true);
+        setShowViewModal(false);
+        setShowEditModal(false);
+        setSuccessPopup(true);
+        close_modal(successPopup, 1200);
+        props.onHide();
+        reset();
+      } else {
+        message.error("fetch data error");
+      }
+    })
+    .catch(function (error) {
+      console.log(error);
+    })
+  };
+  useEffect(() => {
+    oppdata();
+  }, []);
 
 //API added
   useEffect(() => {
@@ -33,7 +120,7 @@ const onBlur = (e) => {
 
   const getAllContact = async () => {
     try {
-      const allNames = await PublicFetch.get(`${CRM_BASE_URL}/lead/1/contact`);
+      const allNames = await PublicFetch.get(`${CRM_BASE_URL}/lead/${id}/contact`);
      if (allNames.data.success) {
         setValue(allNames.data.data);
        console.log("hello data names new add content", allNames.data.data);
@@ -48,7 +135,7 @@ const onBlur = (e) => {
 
   const {
     register,
-    handleSubmit,
+    // handleSubmit,
     formState: { errors },
     reset,
     trigger,
@@ -62,14 +149,14 @@ const onBlur = (e) => {
     }
   };
 //local storage
-  const submit = (data) => {
-    console.log(data);
-    localStorage.setItem("Form", JSON.stringify(data));
-    setModalShow(true);
-    close_modal(modalShow, 1200);
-    props.onHide();
-    reset();
-  };
+  // const submit = (data) => {
+  //   console.log(data);
+  //   localStorage.setItem("Form", JSON.stringify(data));
+  //   setModalShow(true);
+  //   close_modal(modalShow, 1200);
+  //   props.onHide();
+  //   reset();
+  // };
 
   return (
     <>
@@ -79,14 +166,10 @@ const onBlur = (e) => {
         onHide={() => setModalOpportunity(false)}
         header="Add Opportunity"
         size={`xl`}
-        footer={[
-          <Button onClick={submit} btnType="save">
-            Save
-          </Button>,
-        ]}
+       
         {...props}
       >
-        <Form onSubmit={handleSubmit(submit)}>
+        
           <div className="px-5">
             <div className="row px-1">
               <div className="col-sm-4 pt-2">
@@ -95,19 +178,14 @@ const onBlur = (e) => {
                   <Form.Select
                     aria-label="lead_type"
                     name="lead_type"
-                    className={`${errors.lead_type && "invalid"}`}
-                    {...register("lead_type", {
-                      required: "Type is required",
-                    })}
-                    onKeyUp={() => {
-                      trigger("lead_type");
-                    }}
+                    value={opptype}
+                    onChange={(e) => setOppType(e.target.value)}
                   >
-                    <option value="Sales" selected>
-                      Sales
+                    <option value="sales">
+                      sales
                     </option>
-                    <option value="Support">Support</option>
-                    <option value="maintenance">Maintenance</option>
+                    <option value="support">support</option>
+                    <option value="maintenance">maintenance</option>
                   </Form.Select>
                 </Form.Group>
               </div>
@@ -118,31 +196,18 @@ const onBlur = (e) => {
                   <Form.Select
                     aria-label="lead_customer_from"
                     name="lead_customer_from"
-                    className={`${errors.lead_customer_from && "invalid"}`}
-                    {...register("lead_customer_from", {
-                      required: "Type is required",
-                    })}
-                    onKeyUp={() => {
-                      trigger("lead_customer_from");
-                    }}
+                    value={oppfrom}
+                    onChange={(e)=>setOppFrom(e.target.value)}
                   >
-                    {errors.lead_customer_from && (
-                      <small className="text-danger">
-                        {errors.lead_customer_from.message}
-                      </small>
-                    )}
+                   
 
-                    <option value="Customer" selected>
-                      Customer
+                    <option value="customer" >
+                      customer
                     </option>
-                    <option value="Lead">Lead</option>
+                    <option value="lead">lead</option>
                   </Form.Select>
 
-                  {errors.lead_customer_from && (
-                    <small className="text-danger">
-                      {errors.lead_customer_from.message}
-                    </small>
-                  )}
+                 
                 </Form.Group>
               </div>
 
@@ -155,31 +220,11 @@ const onBlur = (e) => {
                   <Form.Control
                     type="text"
                     name="lead_customer_generated"
-                    placeholder="User ID"
-                    className={`${errors.lead_customer_generated && "invalid"}`}
-                    {...register("lead_customer_generated", {
-                      required: "Please enter a valid User ID",
-                      minLength: {
-                        value: 3,
-                        message: "Minimum Required length is 3",
-                      },
-                      maxLength: {
-                        value: 100,
-                      },
-                      pattern: {
-                        value: /^[a-zA-Z0-9 ]*$/,
-                        message: "Only letters and numbers are allowed!",
-                      },
-                    })}
-                    onKeyUp={() => {
-                      trigger("lead_customer_generated");
-                    }}
+                   value={oppId}
+           
+                   
                   />
-                  {errors.lead_customer_generated && (
-                    <small className="text-danger">
-                      {errors.lead_customer_generated.message}
-                    </small>
-                  )}
+                 
                 </Form.Group>
               </div>
 
@@ -189,23 +234,15 @@ const onBlur = (e) => {
                   <Form.Select
                     aria-label="lead_source"
                     name="lead_source"
-                    className={`${errors.lead_source && "invalid"}`}
-                    {...register("lead_source", {
-                      minLength: {
-                        value: 5,
-                        message: "Minimum Required length is 5",
-                      },
-                    })}
-                    onKeyUp={() => {
-                      trigger("lead_source");
-                    }}
+                    value={oppsource}
+                    onChange={(e)=>setOppSource(e.target.value)}
                   >
-                    <option value="Reference" selected>
-                      Reference
+                    <option value="reference" >
+                      reference
                     </option>
-                    <option value="Direct Visit">Direct Visit</option>
-                    <option value="Online Registraion">
-                      Online Registration
+                    <option value="direct visit">direct visit</option>
+                    <option value="online registration">
+                      online registration
                     </option>
                   </Form.Select>
                 </Form.Group>
@@ -215,23 +252,25 @@ const onBlur = (e) => {
                 <Form.Group className="mb-2" controlId="lead_party">
                   <Form.Label>Party</Form.Label>
                   <Form.Select
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
+                   
+                    // value={name}
+                    onChange={(e) => setName(parseInt(e.target.value))}
                     aria-label="lead_party"
                     name="lead_party"
                     
-                    {...register("lead_party", {
-                   
-                    })}
+                  // value={oppparty}
+                  // onChange={(e)=>{
+                  //   console.log(e.target.value);
+                  //   setOppParty(e.target.value)}}
                  
                   >
                     {value &&
                       value.map((item, index) => (
-                        <option key={index} value={item.contact_id}>
+                        <option key={item.contact_id} value={item.contact_id}>
                           {item.contact_person_name}
                         </option>
                       ))}
-                  </Form.Select>
+                 </Form.Select>
                 </Form.Group>
               </div>
 
@@ -240,10 +279,16 @@ const onBlur = (e) => {
                   <Form.Label>Valid Up to</Form.Label>
                   <div className="form-control">
                     <input
-                      type="date"
+                     type="date"
+                     
                       style={{ borderWidth: 0 }}
-                      onChange={(date) => setDate(date)}
+                      // onChange={(date) => setDate(date)}
                       min={today}
+                      // value={oppvalidity}
+                      onChange={(e)=>{console.log("date mmm",e.target.value);
+                      setDate(e.target.value) }
+                       }
+                    
                     />
                   </div>
                 </Form.Group>
@@ -254,23 +299,13 @@ const onBlur = (e) => {
                   <Form.Label>Details</Form.Label>
                   <Form.Control
                     as="textarea"
-                    rows={3}
-                    className={`${errors.lead_details && "invalid"}`}
-                    {...register("lead_details", {
-                      minLength: {
-                        value: 5,
-                        message: "Minimum Required length is 5",
-                      },
-                    })}
-                    onKeyUp={() => {
-                      trigger("lead_details");
-                    }}
+                    value={oppdescription}
+                    onChange={(e)=>setOppDescription(e.target.value)}
+                  
+                   
                   />
-                  {errors.lead_details && (
-                    <small className="text-danger">
-                      {errors.lead_details.message}
-                    </small>
-                  )}
+                  
+                 
                 </Form.Group>
               </div>
 
@@ -278,9 +313,9 @@ const onBlur = (e) => {
                 <Form.Group className="mb-2" controlId="lead_expecting_amt">
                   <Form.Label>Expecting Amount</Form.Label>
                   <Form.Control
-                    type="number"
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
+                   type="number"
+                    value={oppamount}
+                    // onChange={(e) => setOppAmount(e.target.value)}
                     onBlur={onBlur}
                     // {...register("lead_expecting_amt", {
                     //   maxLength: {
@@ -296,12 +331,8 @@ const onBlur = (e) => {
                     //   trigger("lead_expecting_amt");
                     // }}
                     // className={`${errors.lead_expecting_amt && "invalid"}`}
-                  />{" "}
-                  {errors.lead_expecting_amt && (
-                    <small className="text-danger">
-                      {errors.lead_expecting_amt.message}
-                    </small>
-                  )}
+                  />
+                  
                 </Form.Group>
               </div>
 
@@ -311,22 +342,14 @@ const onBlur = (e) => {
                   <Form.Select
                     aria-label="lead_probability"
                     name="lead_probability"
-                    className={`${errors.lead_probability && "invalid"}`}
-                    {...register("lead_probability", {
-                      minLength: {
-                        value: 5,
-                        message: "Minimum Required length is 5",
-                      },
-                    })}
-                    onKeyUp={() => {
-                      trigger("lead_probability");
-                    }}
+                    value={oppprobability}
+                    onChange={(e)=>setOppProbaility(e.target.value)}
                   >
-                    <option value="low" selected>
-                      low
+                    <option value="L">
+                      Low
                     </option>
-                    <option value="medium">medium</option>
-                    <option value="high">high</option>
+                    <option value="M">Medium</option>
+                    <option value="H">High</option>
                   </Form.Select>
                 </Form.Group>
               </div>
@@ -337,30 +360,23 @@ const onBlur = (e) => {
                   <Form.Select
                     aria-label="lead_status"
                     name="lead_status"
-                    className={`${errors.lead_status && "invalid"}`}
-                    {...register("lead_status", {
-                      minLength: {
-                        value: 5,
-                        message: "Minimum Required length is 5",
-                      },
-                    })}
-                    onKeyUp={() => {
-                      trigger("lead_status");
-                    }}
+                    value={oppstatus}
+                    onChange={(e)=>setOppStatus(parseInt(e.target.value) )}
                   >
-                    <option value="quotation" selected>
+                    <option value="1">
                       quotation
                     </option>
-                    <option value="interested">interested</option>
-                    <option value="converted">converted</option>
-                    <option value="lost">lost</option>
-                    <option value="DND">DND</option>
+                    <option value="2">interested</option>
+                    <option value="3">converted</option>
+                    <option value="4">lost</option>
+                    <option value="5">DND</option>
                   </Form.Select>
                 </Form.Group>
               </div>
             </div>
           </div>
-        </Form>
+          <button onClick={oppdata} >Save</button>
+        
       </Custom_model>
       <Custom_model
         centered

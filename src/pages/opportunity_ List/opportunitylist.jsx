@@ -10,7 +10,7 @@ import { FiEdit } from "react-icons/fi";
 import { AiFillPrinter } from "react-icons/ai";
 import { MdFileCopy, MdPageview } from "react-icons/md";
 import { Input, Select, Pagination } from "antd";
-
+import {ROUTES} from "../../routes";
 import "../CRM/lead/lead_list/leadlist.scss";
 import TableData from "../../components/table/table_data";
 import MyPagination from "../../components/Pagination/MyPagination";
@@ -19,7 +19,7 @@ import Button from "../../components/button/button";
 import "./opportunitylist.scss";
 import { BsPlusCircleFill } from "react-icons/bs";
 
-import { Route } from "react-router-dom";
+import { Link, Route } from "react-router-dom";
 import OpportunityEdit from "../CRM/lead/modals/OpportunityEdit";
 import { useForm } from "react-hook-form";
 import { Form } from "react-bootstrap";
@@ -356,12 +356,13 @@ function Opportunitylist(props) {
             </div>
             <div className="col-xl-6 col-lg-6 col-md-6 col-sm-8 col-12"></div>
             <div className="col-lg-3 col-lg-3 col-md-3 col-sm-12 col-12 d-flex justify-content-end">
+             <Link to={ROUTES.LEADLIST}>
               <Button
-                onClick={() => setShowAddOpportunity(true)}
+                // onClick={() => setShowAddOpportunity(true)}
                 className="add_opportunity"
               >
                 Add Opportunity
-              </Button>
+              </Button></Link>
             </div>
           </div>
           <div className="datatable">

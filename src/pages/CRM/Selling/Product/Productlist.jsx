@@ -17,8 +17,8 @@ import TableData from "../../../../components/table/table_data";
 import MyPagination from "../../../../components/Pagination/MyPagination";
 import logo from "../../../../components/img/logo192.png";
 import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
-import "../lead.styles.scss";
-import "../../.././opportunity_ List/opportunitylist.scss";
+// import "../lead.styles.scss";
+// import "../../.././opportunity_ List/opportunitylist.scss";
 import CustomModel from "../../../../components/custom_modal/custom_model";
 import FileUpload from "../../../../components/fileupload/fileUploader";
 import ErrorMsg from "../../../../components/error/ErrorMessage";
@@ -81,12 +81,14 @@ function Productlist() {
             >
               <FaEdit />
             </div>
-            <div
-              onClick={() => setProductView(true)}
-              className="actionView m-0 p-0"
-            >
-              <MdPageview />
-            </div>
+            <Link to={ROUTES.PRODUCTDETAILS}>
+              <div
+                // onClick={() => setProductView(true)}
+                className="actionView m-0 p-0"
+              >
+                <MdPageview />
+              </div>
+            </Link>
           </div>
         );
       },
@@ -440,11 +442,11 @@ function Productlist() {
                         </label>
                         <label style={{ color: "gray" }} className="my-2">
                           <Checkbox className="me-2" />
-                          weight
+                          Ratio
                         </label>
                         <label style={{ color: "gray" }} className="my-2">
                           <Checkbox className="me-2" />
-                          weight
+                          Test
                         </label>
                       </div>
                     </div>
@@ -481,7 +483,10 @@ function Productlist() {
                   <h5 className="lead_text">Products</h5>
                   <div className="">
                     <Button
-                      style={{ backgroundColor: "white", color: "#0092ce" }}
+                      style={{
+                        backgroundColor: "white",
+                        color: "#0092ce",
+                      }}
                       className="d-flex justify-content-end"
                     >
                       <span
@@ -502,7 +507,10 @@ function Productlist() {
                     <img
                       src={logo}
                       alt={logo}
-                      style={{ height: "70px", width: "70px" }}
+                      style={{
+                        height: "70px",
+                        width: "70px",
+                      }}
                     />
                   </div>
                   <div className="">

@@ -220,7 +220,9 @@ export default function LeadReport() {
               )}
             </div>
             <div className="row justify-content-center my-2">
-              <Button btnType="save">Search</Button>
+              <div className="col-xl-3 col-lg-3 col-12 d-flex justify-content-center">
+                <Button btnType="save">Search</Button>
+              </div>
             </div>
           </div>
         </div>
@@ -279,7 +281,9 @@ export default function LeadReport() {
               )}
             </div>
             <div className="row justify-content-center my-2">
-              <Button btnType="save">Search</Button>
+              <div className="col-xl-3 col-lg-3 col-12 d-flex justify-content-center">
+                <Button btnType="save">Search</Button>
+              </div>
             </div>
           </div>
         </div>
@@ -328,7 +332,7 @@ export default function LeadReport() {
               <Leadlist_Icons />
             </div>
             <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
-              <div className="col-4">
+              <div className="col-sm-4 col-xs-12">
                 <Input.Search
                   placeholder="Search by Name"
                   style={{ margin: "5px", borderRadius: "5px" }}
@@ -341,7 +345,7 @@ export default function LeadReport() {
                   }}
                 />
               </div>
-              <div className="col-4">
+              <div className="col-sm-4 col-xs-12">
                 <Select
                   allowClear
                   showSearch
@@ -361,7 +365,7 @@ export default function LeadReport() {
                   <Select.Option value="C">Customer</Select.Option>
                 </Select>
               </div>
-              <div className="col-4">
+              <div className="col-sm-4 col-xs-12">
                 <Select
                   allowClear
                   showSearch
@@ -393,7 +397,7 @@ export default function LeadReport() {
               <div className="col-3 px-3 ">
                 <Select
                   bordered={false}
-                  className="w-50 page_size_style"
+                  className="page_size_style"
                   value={pageSize}
                   onChange={(e) => setPageSize(e)}
                 >
@@ -402,7 +406,7 @@ export default function LeadReport() {
                     <span style={{ color: "lightgray" }} className="ms-1">
                       |
                     </span>
-                    <span style={{ color: "#2f6b8f" }} className="ms-2">
+                    <span style={{ color: "#2f6b8f" }} className="ms-1">
                       25
                     </span>{" "}
                   </Select.Option>
@@ -449,7 +453,7 @@ export default function LeadReport() {
               <Leadlist_Icons />
             </div>
             <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
-              <div className="col-4">
+              <div className="col-sm-4 col-xs-12">
                 <Input.Search
                   placeholder="Search by Name"
                   style={{ margin: "5px", borderRadius: "5px" }}
@@ -462,7 +466,7 @@ export default function LeadReport() {
                   }}
                 />
               </div>
-              <div className="col-4">
+              <div className="col-sm-4 col-xs-12">
                 <Select
                   allowClear
                   showSearch
@@ -482,7 +486,7 @@ export default function LeadReport() {
                   <Select.Option value="C">Customer</Select.Option>
                 </Select>
               </div>
-              <div className="col-4">
+              <div className="col-sm-4 col-xs-12">
                 <Select
                   allowClear
                   showSearch
@@ -515,38 +519,36 @@ export default function LeadReport() {
               <div className="col-3 px-3 ">
                 <Select
                   bordered={false}
-                  className="w-50 page_size_style"
+                  className="page_size_style"
                   value={pageSize}
                   onChange={(e) => setPageSize(e)}
                 >
                   <Select.Option value="25">
-                    Show{" "}
+                    Show
                     <span style={{ color: "lightgray" }} className="ms-1">
                       |
                     </span>
-                    <span style={{ color: "#2f6b8f" }} className="ms-2">
+                    <span style={{ color: "#2f6b8f" }} className="ms-1">
                       25
-                    </span>{" "}
+                    </span>
                   </Select.Option>
                   <Select.Option value="50">
-                    {" "}
-                    Show{" "}
+                    Show
                     <span style={{ color: "lightgray" }} className="ms-1">
                       |
                     </span>
                     <span style={{ color: "#2f6b8f" }} className="ms-1">
                       50
-                    </span>{" "}
+                    </span>
                   </Select.Option>
                   <Select.Option value="100">
-                    {" "}
-                    Show{" "}
+                    Show
                     <span style={{ color: "lightgray" }} className="ms-1">
                       |
                     </span>
                     <span style={{ color: "#2f6b8f" }} className="ms-1">
                       100
-                    </span>{" "}
+                    </span>
                   </Select.Option>
                 </Select>
               </div>

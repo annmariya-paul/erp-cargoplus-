@@ -25,13 +25,16 @@ export default function LeadList() {
   const [searchedText, setSearchedText] = useState("");
   const [searchType, setSearchType] = useState("");
   const [searchStatus, setSearchStatus] = useState("");
-  const [pageSize, setPageSize] = useState("25");
+  const [noofItems, setNoofItems] = useState("25");
+  const [pageSize, setPageSize] = useState(0);
   const [current, setCurrent] = useState(1);
 
   const [allLeadList, setAllLeadList] = useState();
 
   const GetAllLeadData = () => {
-    PublicFetch.get(`${CRM_BASE_URL}/lead?startIndex=0&noOfItems=${pageSize}`)
+    PublicFetch.get(
+      `${CRM_BASE_URL}/lead?startIndex=${pageSize}&noOfItems=${noofItems}`
+    )
       .then((res) => {
         if (res?.data?.success) {
           console.log("All lead data", res?.data?.data);
@@ -47,10 +50,10 @@ export default function LeadList() {
 
   useEffect(() => {
     GetAllLeadData();
-  }, []);
+  }, [noofItems, pageSize]);
 
-  const getData = (current, pageSize) => {
-    return allLeadList?.slice((current - 1) * pageSize, current * pageSize);
+  const getData = (current, numOfItems) => {
+    return allLeadList?.slice((current - 1) * numOfItems, current * numOfItems);
   };
 
   const MyPagination = ({
@@ -106,7 +109,10 @@ export default function LeadList() {
         return (
           <div className="d-flex justify-content-center align-items-center gap-2">
             <div className="m-0">
-              <Link to={`${ROUTES.LEAD_EDIT}/${index.lead_id}`} className="nav-link">
+              <Link
+                to={`${ROUTES.LEAD_EDIT}/${index.lead_id}`}
+                className="nav-link"
+              >
                 {/* <a href="/edit_lead_list" className="actionEdit"> */}
 
                 <FaEdit />
@@ -240,9 +246,12 @@ export default function LeadList() {
               <Select
                 // defaultValue={"25"}
                 bordered={false}
-                className="page_size_style"
-                value={pageSize}
-                onChange={(e) => setPageSize(e)}
+                className="w-50 page_size_style"
+                value={noofItems}
+                onChange={(e) => {
+                  console.log("On page size selected : ", e);
+                  setNoofItems(e);
+                }}
               >
                 {/* <Select.Option value="5">5 | pages</Select.Option> */}
                 <Select.Option value="10">
@@ -286,7 +295,7 @@ export default function LeadList() {
           </div>
           <div className="datatable">
             <TableData
-              data={getData(current, pageSize)}
+              data={getData(current, noofItems, pageSize)}
               // data={allLeadList}
               columns={columns}
               custom_table_css="table_lead_list"

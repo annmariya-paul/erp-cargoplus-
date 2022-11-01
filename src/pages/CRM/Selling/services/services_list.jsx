@@ -80,7 +80,7 @@ function Services() {
             >
               <FaEdit />
             </div>
-            <Link to={ROUTES.PRODUCTDETAILS}>
+            <Link to={ROUTES.SERVICEDETAILS}>
               <div
                 // onClick={() => setProductView(true)}
                 className="actionView m-0 p-0"

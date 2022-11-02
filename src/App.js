@@ -32,11 +32,8 @@ import Productlist from "./pages/CRM/Selling/Product/Productlist";
 import ProductCreate from "./pages/CRM/Selling/Product/ProductCreate";
 import ProductDetails from "./pages/CRM/Selling/Product/ProductDetails";
 import Varients from "./pages/CRM/Selling/Product/Varient/Varients";
-// import BrandCreate from "./pages/CRM/lead/brands/BrandCreate";
-// import Productlist from "./pages/CRM/lead/Product/Productlist";
-// import ProductCreate from "./pages/CRM/lead/Product/ProductCreate";
-// import ProductDetails from "./pages/CRM/lead/Product/ProductDetails";
-// import Varients from "./pages/CRM/lead/Product/Varient/Varients";
+import Services from "./pages/CRM/Selling/services/services_list";
+import ServiceCreate from "./pages/CRM/Selling/services/ServiceCreate";
 
 // import Lead from "./pages/lead/lead";
 
@@ -76,6 +73,8 @@ function App() {
             <Route path={ROUTES.PRODUCTCREATE} element={<ProductCreate />} />
             <Route path={ROUTES.PRODUCTDETAILS} element={<ProductDetails />} />
             <Route path={ROUTES.PRODUCTVARIENTS} element={<Varients />} />
+            <Route path={ROUTES.SERVICES} element={<Services />} />
+            <Route path={ROUTES.SERVICECREATE} element={<ServiceCreate />} />
           </Route>
         </Routes>
       </BrowserRouter>

@@ -1,5 +1,8 @@
 import { Select } from "antd";
 import React, { useState } from "react";
+import { FaEdit } from "react-icons/fa";
+import { MdDelete, MdPageview } from "react-icons/md";
+import { Link } from "react-router-dom";
 import TextArea from "../../../../../components/ InputType TextArea/TextArea";
 import Button from "../../../../../components/button/button";
 import CustomModel from "../../../../../components/custom_modal/custom_model";
@@ -7,6 +10,8 @@ import ErrorMsg from "../../../../../components/error/ErrorMessage";
 import FileUpload from "../../../../../components/fileupload/fileUploader";
 import InputType from "../../../../../components/Input Type textbox/InputType";
 import SelectBox from "../../../../../components/Select Box/SelectBox";
+import TableData from "../../../../../components/table/table_data";
+import { ROUTES } from "../../../../../routes";
 
 function Varients() {
   const [toggleState, setToggleState] = useState(1);
@@ -16,6 +21,63 @@ function Varients() {
   const toggleTab = (index) => {
     setToggleState(index);
   };
+
+  const columns = [
+    {
+      title: "ACTION",
+      dataIndex: "action",
+      key: "key",
+      width: "14%",
+      render: (data, index) => {
+        return (
+          <div className="d-flex justify-content-center align-items-center gap-3">
+            <div
+              // onClick={() => setShowProductEditModal(true)}
+              className="actionEdit m-0 p-0"
+            >
+              <FaEdit />
+            </div>
+            <Link to={ROUTES.PRODUCTDETAILS}>
+              <div
+                // onClick={() => setProductView(true)}
+                className="actionView m-0 p-0"
+              >
+                <MdPageview />
+              </div>
+            </Link>
+            <div>
+              <MdDelete />
+            </div>
+          </div>
+        );
+      },
+      align: "center",
+    },
+    {
+      title: "ATTRIBUTE NAME",
+      dataIndex: "name",
+      width: "14%",
+      key: "key",
+      align: "center",
+    },
+    {
+      title: "ATTRIBUTE VALUE",
+      dataIndex: "value",
+      width: "14%",
+      key: "key",
+      align: "center",
+    },
+  ];
+
+  const data = [
+    {
+      action: "action",
+      name: "color",
+      value: "Red",
+      key: "1",
+    },
+  ];
+
   return (
     <div>
       <div className="container-fluid">
@@ -65,39 +127,84 @@ function Varients() {
                       <div className="col-4 mt-3">
                         <label>Name</label>
                         <div>
-                          <InputType />
+                          <InputType
+                            rules={{
+                              required: true,
+                              message:
+                                "Please Enter Name Minimum No of letter 3",
+                            }}
+                          />
                         </div>
                       </div>
                       <div className="col-4 mt-3">
                         <label>Variant Code</label>
                         <div>
-                          <InputType />
+                          <InputType
+                            rules={{
+                              required: true,
+                              message:
+                                "Please Enter Name Minimum No of letter 3",
+                            }}
+                          />
                         </div>
                       </div>
                       <div className="col-4 mt-3">
                         <label>Variant Code</label>
                         <div>
                           <SelectBox>
-                            <Select.Option></Select.Option>
+                            <Select.Option>xcddssd</Select.Option>
                           </SelectBox>
                         </div>
                       </div>
-                      <div className="col-4 mt-3">
+                      <div className="col-6 mt-3">
                         <label>Quantity</label>
                         <div>
-                          <InputType />
+                          <InputType
+                            rules={{
+                              required: true,
+                              message:
+                                "Please Enter Name Minimum No of letter 3",
+                            }}
+                          />
+                        </div>
+                      </div>
+                      <div className="col-6 mt-3">
+                        <label>Tax Rate</label>
+                        <div>
+                          <InputType
+                            rules={{
+                              required: true,
+                              message: "",
+                            }}
+                          />
                         </div>
                       </div>
                       <div className="col-12 d-flex justify-content-center my-4">
-                        {/* <label>Variant Code</label> */}
                         <div>
+                          <label className="my-1">Display Picture</label>
                           <FileUpload />
                         </div>
                       </div>
-                      <div className="col-4 mt-3">
-                        <label>Tax Rate</label>
+                      <div className="col-6 mt-3">
+                        <label>Minimum Price</label>
                         <div>
-                          <InputType />
+                          <InputType
+                            rules={{
+                              required: true,
+                              message: "Please Enter Minimum price",
+                            }}
+                          />
+                        </div>
+                      </div>
+                      <div className="col-6 mt-3">
+                        <label>Maximum Price</label>
+                        <div>
+                          <InputType
+                            rules={{
+                              required: true,
+                              message: "Please Enter Maximum Price",
+                            }}
+                          />
                         </div>
                       </div>
                       <div className="col-8 mt-3">
@@ -160,6 +267,9 @@ function Varients() {
                             save
                           </Button>
                         </div>
+                      </div>
+                      <div className="col-12 mt-3">
+                        <TableData columns={columns} data={data} />
                       </div>
                     </div>
                   </div>

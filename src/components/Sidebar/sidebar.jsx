@@ -7,6 +7,8 @@ import { RiTeamFill } from "react-icons/ri";
 import { MdEventNote } from "react-icons/md";
 import { ROUTES } from "../../routes";
 import { NavLink } from "react-router-dom";
+import { FiSettings } from "react-icons/fi";
+
 
 export default function Sidebar({ showSidebar }) {
   // const [sidebar, setSidebar] = useState(true);
@@ -242,6 +244,17 @@ export default function Sidebar({ showSidebar }) {
                         >
                           <RiTeamFill className="sidebar_icons ms-4" />
                           Products
+                        </NavLink>
+                      </li>
+                      <li className="nav-text">
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.SERVICES}
+                        >
+                          <FiSettings className="sidebar_icons ms-4" />
+                          Services
                         </NavLink>
                       </li>
                     </>

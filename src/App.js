@@ -24,6 +24,10 @@ import Add_Attribute from "./pages/CRM/attributes/add_attribute";
 
 import OpportunityReport from "./pages/opportunityReport/OpportunityReport";
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> f675399d832ce79cbeade2607a2a2a96cea48722
 // import Viewunit from "./pages/unit/ViewUnit";
 
 import BrandCreate from "./pages/CRM/Selling/brands/BrandCreate";
@@ -32,6 +36,11 @@ import Productlist from "./pages/CRM/Selling/Product/Productlist";
 import ProductCreate from "./pages/CRM/Selling/Product/ProductCreate";
 import ProductDetails from "./pages/CRM/Selling/Product/ProductDetails";
 import Varients from "./pages/CRM/Selling/Product/Varient/Varients";
+<<<<<<< HEAD
+=======
+import Services from "./pages/CRM/Selling/services/services_list";
+import ServiceCreate from "./pages/CRM/Selling/services/ServiceCreate";
+>>>>>>> f675399d832ce79cbeade2607a2a2a96cea48722
 
 // import Lead from "./pages/lead/lead";
 
@@ -71,6 +80,8 @@ function App() {
             <Route path={ROUTES.PRODUCTCREATE} element={<ProductCreate />} />
             <Route path={ROUTES.PRODUCTDETAILS} element={<ProductDetails />} />
             <Route path={ROUTES.PRODUCTVARIENTS} element={<Varients />} />
+            <Route path={ROUTES.SERVICES} element={<Services />} />
+            <Route path={ROUTES.SERVICECREATE} element={<ServiceCreate />} />
           </Route>
         </Routes>
       </BrowserRouter>

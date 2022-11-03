@@ -30,8 +30,8 @@ function Services() {
   const [searchedText, setSearchedText] = useState(""); // search by text input
   const [searchType, setSearchType] = useState(""); //search by type select box
   const [searchStatus, setSearchStatus] = useState("");
-  const [showProductEditModal, setShowProductEditModal] = useState(false);
-  const [productView, setProductView] = useState(false);
+  const [showServiceEditModal, setShowServiceEditModal] = useState(false);
+  const [serviceView, setServiceView] = useState(false);
   const [successPopup, setSuccessPopup] = useState(false);
   const [error, setError] = useState(false);
 
@@ -63,7 +63,7 @@ function Services() {
       key: "3",
     },
   ];
-  // {columns is product listing table componenet }
+  // {columns is service listing table componenet }
 
   const columns = [
     {
@@ -75,14 +75,14 @@ function Services() {
         return (
           <div className="d-flex justify-content-center align-items-center gap-4">
             <div
-              onClick={() => setShowProductEditModal(true)}
+              onClick={() => setShowServiceEditModal(true)}
               className="actionEdit m-0 p-0"
             >
               <FaEdit />
             </div>
             <Link to={ROUTES.SERVICEDETAILS}>
               <div
-                // onClick={() => setProductView(true)}
+                onClick={() => setServiceView(true)}
                 className="actionView m-0 p-0"
               >
                 <MdPageview />
@@ -169,7 +169,7 @@ function Services() {
     <div>
       <div className="container-fluid lead_list my-3 py-3">
         <div>
-          {/* {product listing starts section one} */}
+          {/* {service listing starts section one} */}
           <div className="row flex-wrap">
             <div className="col">
               <h5 className="lead_text">Services</h5>
@@ -321,14 +321,14 @@ function Services() {
               }}
             />
           </div>
-          {/* {"mcncncncncncncnc"}  {product listing ends } */}
+       
         </div>
-        {/* {section Two Product Edit modal starts} */}
-        {/* <CustomModel
+        {/* {section Two service Edit modal starts} */}
+        <CustomModel
           Adding_contents
-          show={showProductEditModal}
-          onHide={() => setShowProductEditModal(false)}
-          header="Edit Product"
+          show={showServiceEditModal}
+          onHide={() => setShowServiceEditModal(false)}
+          header="Edit Service"
           size={`xl`}
           footer={[
             <Button
@@ -342,7 +342,7 @@ function Services() {
             </Button>,
             <Button
               onClick={() => {
-                setShowProductEditModal(false);
+                setShowServiceEditModal(false);
               }}
               className="cancel_button p-2"
             >
@@ -386,8 +386,8 @@ function Services() {
                       </Select>
                     </div>
                   </div>
-                    <div className="col-4 ">
-                    <p>Category</p>
+                    <div className="col-6 ">
+                    <p>HSN</p>
                     <div>
                       <Select
                         style={{
@@ -402,79 +402,15 @@ function Services() {
                     </div>
                   </div>
                   <div className="col-6 mt-2">
-                    <p>Brand</p>
+                    <p>Tax Rate</p>
                     <div>
-                      <Select
-                        style={{
-                          backgroundColor: "whitesmoke",
-                          borderRadius: "5px",
-                        }}
-                        bordered={false}
-                        className="w-100 "
-                      >
-                        <Select.Option>Watch</Select.Option>
-                      </Select>
-                    </div>
-                  </div>
-                  <div className="col-6 mt-2">
-                    <p>Unit</p>
                     <div>
-                      <Select
-                        style={{
-                          backgroundColor: "whitesmoke",
-                          borderRadius: "5px",
-                        }}
-                        bordered={false}
-                        className="w-100 "
-                      >
-                        <Select.Option>Watch</Select.Option>
-                      </Select>
+                      <input type={"text"} className="input_type_style w-100" />
+                    </div>
                     </div>
                   </div>
-                  <div className="col-6 mt-2">
-                    <p>Attributes</p>
-                    <div
-                      style={{
-                        backgroundColor: "whitesmoke",
-                        borderRadius: "5px",
-                      }}
-                    >
-                      <div
-                        style={{
-                          backgroundColor: "whitesmoke",
-                          borderRadius: "5px",
-                          height: "160px",
-                          overflow: "scroll",
-                        }}
-                        className="card border-0 px-4 py-2"
-                      >
-                        <label style={{ color: "gray" }} className="my-2 ">
-                          <Checkbox className="me-2" />
-                          color
-                        </label>
-                        <label style={{ color: "gray" }} className="my-2">
-                          <Checkbox className="me-2" />
-                          warrenty
-                        </label>
-                        <label style={{ color: "gray" }} className="my-2">
-                          <Checkbox className="me-2" />
-                          Size
-                        </label>
-                        <label style={{ color: "gray" }} className="my-2">
-                          <Checkbox className="me-2" />
-                          weight
-                        </label>
-                        <label style={{ color: "gray" }} className="my-2">
-                          <Checkbox className="me-2" />
-                          Ratio
-                        </label>
-                        <label style={{ color: "gray" }} className="my-2">
-                          <Checkbox className="me-2" />
-                          Test
-                        </label>
-                      </div>
-                    </div>
-                  </div>
+                 
+               
                   <div className="col-6 mt-2">
                     <p>Display Picture</p>
                     <FileUpload />
@@ -493,18 +429,19 @@ function Services() {
             </div>
             {error ? <ErrorMsg code="500" /> : ""}
           </div>
-        </CustomModel> */}
-        {/* {Modal for viewing product details} */}
+        </CustomModel> 
+        {/* {Modal for viewing service details} */}
 
-        {/* <CustomModel
-          show={productView}
-          onHide={() => setProductView(false)}
+         <CustomModel
+         size="xl"
+          show={serviceView}
+          onHide={() => setServiceView(false)}
           View_list
           list_content={
             <div>
               <div className="container ps-4 my-4">
                 <div className=" d-flex justify-content-between">
-                  <h5 className="lead_text">Products</h5>
+                  <h5 className="lead_text">Services</h5>
                   <div className="">
                     <Button
                       style={{
@@ -517,8 +454,8 @@ function Services() {
                         className="d-flex align-items-center justify-content-between gap-1  p-1 button_span"
                         style={{ fontSize: "13px" }}
                         onClick={() => {
-                          setShowProductEditModal(true);
-                          setProductView(false);
+                          setShowServiceEditModal(true);
+                          setServiceView(false);
                         }}
                       >
                         Edit <FiEdit fontSize={"12px"} />
@@ -551,7 +488,7 @@ function Services() {
                       </div>
                       <div className="col-1">:</div>
                       <div className="col-6 justify-content-start">
-                        <p className="modal_view_p_sub">Rolex</p>
+                        <p className="modal_view_p_sub">Polishing</p>
                       </div>
                     </div>
                     <div className="row mt-2">
@@ -579,7 +516,7 @@ function Services() {
                       </div>
                       <div className="col-1">:</div>
                       <div className="col-6 justify-content-start">
-                        <p className="modal_view_p_sub">Watch</p>
+                        <p className="modal_view_p_sub">Tyre Polish</p>
                       </div>
                     </div>
                     
@@ -589,12 +526,12 @@ function Services() {
                           style={{ color: "#000" }}
                           className="modal_view_p_style"
                         >
-                          Brand
+                          HSN
                         </p>
                       </div>
                       <div className="col-1">:</div>
                       <div className="col-6 justify-content-start">
-                        <p className="modal_view_p_sub">Rolex</p>
+                        <p className="modal_view_p_sub">Watch</p>
                       </div>
                     </div>
                     <div className="row mt-2">
@@ -603,12 +540,12 @@ function Services() {
                           style={{ color: "#000" }}
                           className="modal_view_p_style"
                         >
-                          Unit
+                         Tax Rate
                         </p>
                       </div>
                       <div className="col-1">:</div>
                       <div className="col-6 justify-content-start">
-                        <p className="modal_view_p_sub">HJKGF23456</p>
+                        <p className="modal_view_p_sub">5%</p>
                       </div>
                     </div>
                     <div className="row mt-2">
@@ -617,51 +554,21 @@ function Services() {
                           style={{ color: "#000" }}
                           className="modal_view_p_style"
                         >
-                          Attributes
+                         Description
                         </p>
                       </div>
                       <div className="col-1">:</div>
                       <div className="col-6 justify-content-start">
-                        <p className="modal_view_p_sub">color</p>
+                        <p className="modal_view_p_sub">Lorem ipsum, dolor sit amet consectetur adipisicing elit.</p>
                       </div>
                     </div>
-                    <div className="row mt-2">
-                      <div className="col-5">
-                        <p
-                          style={{ color: "#000" }}
-                          className="modal_view_p_style"
-                        >
-                          Description
-                        </p>
-                      </div>
-                      <div className="col-1">:</div>
-                      <div className="col-6 justify-content-start">
-                        <p className="modal_view_p_sub">
-                          Lorem Ipsum has been the industry's standard dummy
-                          text ever since the 1500s
-                        </p>
-                      </div>
-                    </div>
-                    <div className="row mt-2">
-                      <div className="col-5">
-                        <p
-                          style={{ color: "#000" }}
-                          className="modal_view_p_style"
-                        >
-                          Status
-                        </p>
-                      </div>
-                      <div className="col-1">:</div>
-                      <div className="col-6 justify-content-start">
-                        <p className="modal_view_p_sub_active">Active</p>
-                      </div>
-                    </div>
+                  
                   </div>
                 </div>
               </div>
             </div>
           }
-        /> */}
+        /> 
       </div>
 
       {/* {modal for success popups} */}

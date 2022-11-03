@@ -5,6 +5,9 @@ import CustomModel from "../../../../components/custom_modal/custom_model";
 import ErrorMsg from "../../../../components/error/ErrorMessage";
 import FileUpload from "../../../../components/fileupload/fileUploader";
 
+
+
+
 function ServiceCreate() {
   const [successPopup, setSuccessPopup] = useState(false);
   const [error, setError] = useState(false);
@@ -127,9 +130,12 @@ function ServiceCreate() {
                   </div>
                 </div>
               </div> */}
-              <div className="col-12 mt-2">
+
+              <div className="col-12 mt-2 d-flex  justify-content-center ">
+                <div className="text-center">
                 <p>Display Picture</p>
                 <FileUpload />
+              </div>
               </div>
               <div className="col-6 mt-2">
                 <p>Description</p>
@@ -140,8 +146,9 @@ function ServiceCreate() {
                   />
                 </div>
               </div>
-              <div className="col-12 d-flex justify-content-center pt-5">
-                <Button
+              <div className="col-12 d-flex justify-content-center pt-5 gap-3 ">
+                
+                <Button 
                   onClick={() => {
                     setSuccessPopup(true);
                     setError(true);
@@ -149,12 +156,25 @@ function ServiceCreate() {
                   className="save_button"
                 >
                   Save
-                </Button>
-              </div>
+                </Button>{' '}
+                {/* <Button
+                  onClick={() => {
+                    setSuccessPopup(true);
+                    setError(true);
+                  }}
+                  className="clear_button"
+                >
+                 Clear
+                </Button> */}
+
+                <Button as="input" type="reset" value="Reset" > Clear
+                </Button> 
+                </div>
+              
+               </div>
             </div>
           </div>
-        </div>
-      </div>
+         </div>
       {error ? <ErrorMsg code={"500"} /> : ""}
 
       <CustomModel

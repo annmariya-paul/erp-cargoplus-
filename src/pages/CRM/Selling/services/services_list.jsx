@@ -496,7 +496,7 @@ function Services() {
         </CustomModel> */}
         {/* {Modal for viewing product details} */}
 
-        <CustomModel
+        {/* <CustomModel
           show={productView}
           onHide={() => setProductView(false)}
           View_list
@@ -661,7 +661,7 @@ function Services() {
               </div>
             </div>
           }
-        />
+        /> */}
       </div>
 
       {/* {modal for success popups} */}

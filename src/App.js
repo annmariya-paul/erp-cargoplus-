@@ -24,8 +24,7 @@ import Add_Attribute from "./pages/CRM/attributes/add_attribute";
 
 import OpportunityReport from "./pages/opportunityReport/OpportunityReport";
 
-<<<<<<< HEAD
-import Viewunit from "./pages/unit/ViewUnit";
+// import Viewunit from "./pages/unit/ViewUnit";
 
 import BrandCreate from "./pages/CRM/Selling/brands/BrandCreate";
 import BrandsList from "./pages/CRM/Selling/brands/BrandsList";
@@ -33,13 +32,6 @@ import Productlist from "./pages/CRM/Selling/Product/Productlist";
 import ProductCreate from "./pages/CRM/Selling/Product/ProductCreate";
 import ProductDetails from "./pages/CRM/Selling/Product/ProductDetails";
 import Varients from "./pages/CRM/Selling/Product/Varient/Varients";
-=======
-import BrandCreate from "./pages/CRM/lead/brands/BrandCreate";
-import Productlist from "./pages/CRM/lead/Product/Productlist";
-import ProductCreate from "./pages/CRM/lead/Product/ProductCreate";
-import ProductDetails from "./pages/CRM/lead/Product/ProductDetails";
-import Varients from "./pages/CRM/lead/Product/Varient/Varients";
->>>>>>> bc65e7f1a6ce3c8efd01559d456351777f366b6b
 
 // import Lead from "./pages/lead/lead";
 

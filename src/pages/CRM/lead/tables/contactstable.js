@@ -9,6 +9,34 @@ import PublicFetch from "../../../../utils/PublicFetch";
 import { CRM_BASE_URL } from "../../../../api/bootapi";
 import { message } from "antd";
 import PhoneNumber from "../../../../components/phone_number/phonenumber";
+import { useFormik } from "formik";
+import * as yup from "yup";
+
+const phoneRegExp =
+  /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/i;
+
+const validationSchema = yup.object({
+  contact_person_name: yup
+    .string()
+    .min(2, "Please Enter Name of minimum 2 Letter")
+    .max(100, "Name is exceeded")
+    .required("Name is Required"),
+  contact_email: yup
+    .string()
+    .email("Please Enter valid Email Address")
+    .required("Email Address is Required"),
+  contact_phone_1: yup
+    .string()
+    .max(14, "plase enter valid number")
+    .min(10, "please enter valid number of minimum 10")
+    .required("Phone Number is Required"),
+  contact_phone_2: yup.number().min(10, "Please enter Valid Mobile Number"),
+  contact_designation: yup
+    .string()
+    .min(2, "Please Enter valid Designation of minimum length of 2")
+    .required("Please enter Valid Designation"),
+});
+
 function ContactTable(props) {
   const [contactTable, setContactTable] = useState();
   const [phone, setPhone] = useState();
@@ -21,8 +49,11 @@ function ContactTable(props) {
   const [ContactName, setContactName] = useState();
   const [email, setEmail] = useState();
   // const [phoneno, setPhoneno] = useState();
-  const [AllContact, setAllcontact] = useState();
+  const [AllContact, setAllcontact] = useState({});
   const [designation, setDesignation] = useState();
+  const [validated, setValidated] = useState(false);
+  const [validateErr, setValidateErr] = useState(false);
+  const [showError, setShowError] = useState(false);
 
   // # funtion getcontacttable to fetch contacts to contact table - Noufal
   const getcontacttable = () => {
@@ -78,31 +109,26 @@ function ContactTable(props) {
   ];
 
   // # function AddContact to add contacts - Noufal
-  const AddContact = () => {
-    PublicFetch.post(`${CRM_BASE_URL}/lead/${props.lead}/contact`, {
-      contact_person_name: ContactName,
-      contact_email: email,
-      contact_phone_1: phone,
-      contact_phone_2: mobile,
-      contact_designation: designation,
-    })
+  const onSubmit = (values) => {
+    console.log("all values from formik", values);
+    PublicFetch.post(`${CRM_BASE_URL}/lead/${props.lead}/contact`, values)
       .then((res) => {
         console.log("contactdata,", res);
+
         if (res.data.success) {
           // getAllContact();
           getcontacttable();
-          setContactName();
-          setEmail();
-          setPhone();
-          setMobile();
-          setDesignation();
+          formik.resetForm();
+
           setShowSuccessModal(true);
+
           props.onHide();
           setModalShow(false);
           reset();
           close_modal(showSuccessMOdal, 1000);
         } else {
           console.log("Cannot Get Data while fetching data");
+          // validateForm();
         }
       })
       .catch((err) => {
@@ -125,6 +151,34 @@ function ContactTable(props) {
       }, time);
     }
   };
+
+  // Function for add adding data to data base formik is used
+
+  const formik = useFormik({
+    initialValues: {
+      contact_person_name: "",
+      contact_email: "",
+      contact_phone_1: "",
+      contact_phone_2: "",
+      contact_designation: "",
+    },
+    validateOnBlur: true,
+    onSubmit,
+    validationSchema: validationSchema,
+  });
+
+  console.log("errors:::", formik.errors);
+  console.log(
+    "phone:::",
+    formik?.values?.contact_phone_1,
+    formik.values.contact_phone_2,
+    formik.values.contact_person_name,
+    formik.values.contact_email,
+    formik.values.contact_designation
+  );
+  console.log("phone:::", formik.values.contact_phone_2);
+  console.log("phone:::iiiii", formik.values);
+
   return (
     <div>
       <div className="datatable">
@@ -142,7 +196,7 @@ function ContactTable(props) {
         footer={false}
         {...props}
       >
-        <Form onSubmit={handleSubmit(AddContact)}>
+        <Form onSubmit={formik.handleSubmit}>
           <div className="row">
             <div className="px-5">
               <Form.Group className="mb-3" controlId="addName">
@@ -150,133 +204,152 @@ function ContactTable(props) {
                 <Form.Control
                   type="text"
                   placeholder="Name"
-                  className={`${errors.addName && "invalid"}`}
-                  {...register("addName", {
-                    required: "Please enter a valid Name",
-                    minLength: {
-                      value: 3,
-                      message: "Minimum Required length is 3",
-                    },
-                    maxLength: {
-                      value: 100,
-                    },
-                    pattern: {
-                      value: /^[a-zA-Z0-9 ]*$/,
-                      message: "Only letters and numbers are allowed!",
-                    },
-                  })}
-                  onKeyUp={() => {
-                    trigger("addName");
-                  }}
-                  value={ContactName}
-                  onChange={(e) => setContactName(e.target.value)}
+                  id="contact_person_name"
+                  name="contact_person_name"
+                  className={formik.touched ? "" : "invalid"}
+                  value={formik.values.contact_person_name}
+                  // onChange={(e) => setContactName(e.target.value)}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                 />
-                {errors.addName && (
-                  <small className="text-danger">
-                    {errors.addName.message}
-                  </small>
-                )}
+                {/* <Form.Control.Feedback type="invalid">
+                  Please provide a valid Name.
+                </Form.Control.Feedback> */}
+                <p style={{ color: "red", fontSize: "10px" }}>
+                  {formik.touched.contact_person_name &&
+                  formik.errors.contact_person_name
+                    ? formik.errors.contact_person_name
+                    : ""}
+                </p>
               </Form.Group>
               <Form.Group className="mb-3" controlId="email">
                 <Form.Label>Email address</Form.Label>
                 <Form.Control
                   type="email"
                   placeholder="Enter email"
+                  required
+                  id="contact_email"
+                  name="contact_email"
                   className={`form-control ${errors.email && "invalid"}`}
-                  {...register("email", {
-                    required: "Email is Required",
-                    pattern: {
-                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                      message: "Invalid email address",
-                    },
-                  })}
-                  onKeyUp={() => {
-                    trigger("email");
-                  }}
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={formik.values.contact_email}
+                  // onChange={(e) => setEmail(e.target.value)}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                 />
-                {errors.email && (
-                  <small className="text-danger">{errors.email.message}</small>
+                <p style={{ color: "red", fontSize: "10px" }}>
+                  {formik.touched.contact_email && formik.errors.contact_email
+                    ? formik.errors.contact_email
+                    : ""}
+                </p>
+                {/* {showError && (
+                  <label style={{ color: "red" }}>
+                    Please enter a valid email address.
+                  </label>
                 )}
+                <Form.Control.Feedback type="invalid">
+                  Please provide a valid Email.
+                </Form.Control.Feedback> */}
               </Form.Group>
 
               <div className="row mb-3">
                 <label for="phone" className="form-label">
                   Phone
                 </label>
-                {/* <PhoneInput
-                  country={"in"}
-                  value={phone}
-                  // required={true}
-                  onChange={setPhone}
-                  className={`${isSubmit ? "invalid" : ""}`}
-                  onKeyUp={(e) => {
-                    console.log(e);
-                  }}
-                /> */}
                 <PhoneNumber
                   defaultCountry={"IN"}
-                  value={phone}
-                  onChange={(value) => setPhone(value)}
+                  value={formik.values.contact_phone_1}
+                  id="contact_phone_1"
+                  name="contact_phone_1"
+                  // onChange={(value) => setPhone(value)}
+                  onChange={(e) => formik.setFieldValue("contact_phone_1", e)}
+                  onBlur={formik.handleBlur("contact_phone_1")}
                 />
-                {errors.phone && (
+                {/* {errors.phone && (
                   <small className="text-danger">{errors.phone.message}</small>
-                )}
+                )} */}
+                <p style={{ color: "red", fontSize: "10px" }}>
+                  {formik?.touched?.contact_phone_1 &&
+                  formik?.errors?.contact_phone_1
+                    ? formik?.errors?.contact_phone_1
+                    : ""}
+                </p>
               </div>
               <div className="row mb-3">
                 <label for="phone" className="form-label">
                   Mobile
                 </label>
-                {/* <PhoneInput
-                  country={"in"}
-                  value={mobile}
-                  onChange={setMobile}
-                  className={`${isSubmit ? "invalid" : ""}`}
-                  onKeyUp={(e) => {
-                    console.log(e);
-                  }}
-                /> */}
+
                 <PhoneNumber
                   defaultCountry={"IN"}
-                  value={mobile}
-                  onChange={(value) => setMobile(value)}
+                  value={formik.values.contact_phone_2}
+                  id="contact_phone_2"
+                  name="contact_phone_2"
+                  // onChange={(value) => setMobile(value)}
+                  onChange={(e) => formik.setFieldValue("contact_phone_2", e)}
+                  onBlur={formik.handleBlur("contact_phone_2")}
                 />
+                <p style={{ color: "red", fontSize: "10px" }}>
+                  {formik.touched.contact_phone_2 &&
+                  formik.errors.contact_phone_2
+                    ? formik.errors.contact_phone_2
+                    : ""}
+                </p>
               </div>
               <Form.Group className="mb-1" controlId="designation">
                 <Form.Label>Designation/Department</Form.Label>
                 <Form.Control
                   type="text"
+                  required
+                  id="contact_designation"
+                  name="contact_designation"
                   className={`${errors.designation && "invalid"}`}
-                  {...register("designation", {
-                    required: "Please enter a Designation eg:Manager",
-                    minLength: {
-                      value: 3,
-                      message: "Minimum Required length is 3",
-                    },
-                    maxLength: {
-                      value: 100,
-                    },
-                    pattern: {
-                      value: /^[a-zA-Z0-9 ]*$/,
-                      message: "Only letters and numbers are allowed!",
-                    },
-                  })}
+                  // {...register("designation", {
+                  //   required: "Please enter a Designation eg:Manager",
+                  //   minLength: {
+                  //     value: 3,
+                  //     message: "Minimum Required length is 3",
+                  //   },
+                  //   maxLength: {
+                  //     value: 100,
+                  //   },
+                  //   pattern: {
+                  //     value: /^[a-zA-Z0-9 ]*$/,
+                  //     message: "Only letters and numbers are allowed!",
+                  //   },
+                  // })}
                   onKeyUp={() => {
                     trigger("designation");
                   }}
-                  value={designation}
-                  onChange={(e) => setDesignation(e.target.value)}
+                  value={formik.values.contact_designation}
+                  // onChange={(e) => setDesignation(e.target.value)}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                 />
-                {errors.designation && (
+                <p style={{ color: "red", fontSize: "10px" }}>
+                  {formik.touched.contact_designation &&
+                  formik.errors.contact_designation
+                    ? formik.errors.contact_designation
+                    : ""}
+                </p>
+                {/* {errors.designation && (
                   <small className="text-danger">
                     {errors.designation.message}
                   </small>
-                )}
+                )} */}
+                {/* <Form.Control.Feedback type="invalid">
+                  Please provide a valid Designation/Department eg:Manager.
+                </Form.Control.Feedback> */}
               </Form.Group>
             </div>
             <div className="d-flex justify-content-center mt-3">
-              <Button btnType="save">Save</Button>
+              <Form.Group>
+                <Button
+                  disabled={!formik.isValid || !formik.dirty}
+                  btnType="save"
+                >
+                  Save
+                </Button>
+              </Form.Group>
             </div>
           </div>
         </Form>

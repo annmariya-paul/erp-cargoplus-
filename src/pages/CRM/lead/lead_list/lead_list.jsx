@@ -26,6 +26,7 @@ export default function LeadList() {
   const [searchType, setSearchType] = useState("");
   const [searchStatus, setSearchStatus] = useState("");
   const [noofItems, setNoofItems] = useState("25");
+  const [totalCount, setTotalcount] = useState();
   const [pageSize, setPageSize] = useState(0);
   const [current, setCurrent] = useState(1);
 
@@ -39,6 +40,7 @@ export default function LeadList() {
         if (res?.data?.success) {
           console.log("All lead data", res?.data?.data);
           setAllLeadList(res?.data?.data?.leads);
+          setTotalcount(res?.data?.data?.totalCount);
         } else {
           console.log("FAILED T LOAD DATA");
         }
@@ -48,12 +50,14 @@ export default function LeadList() {
       });
   };
 
+  console.log("total count data", totalCount);
+
   useEffect(() => {
     GetAllLeadData();
   }, [noofItems, pageSize]);
 
-  const getData = (current, pageSize) => {
-    return allLeadList?.slice((current - 1) * pageSize, current * pageSize);
+  const getData = (current, numOfItems, pageSize) => {
+    return allLeadList?.slice((current - 1) * numOfItems, current * numOfItems);
   };
 
   const MyPagination = ({

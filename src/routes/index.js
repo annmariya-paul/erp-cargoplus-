@@ -28,6 +28,8 @@ const ROUTES = {
   PRODUCTCREATE: "/create_product",
   PRODUCTDETAILS: "/product_details",
   PRODUCTVARIENTS: "/product_varients",
+  SERVICES: "/services",
+  SERVICECREATE: "/create_service",
 };
 
 module.exports = { ROUTES };

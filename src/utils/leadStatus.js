@@ -2,37 +2,37 @@ const LeadStatus = [
   {
     id: "1",
     name: "Lead",
-    value: "LE",
+    value: "1",
   },
   {
     id: "2",
     name: "Opportunity",
-    value: "OP",
+    value: "2",
   },
   {
     id: "3",
     name: "Quotation",
-    value: "QU",
+    value: "3",
   },
   {
     id: "4",
     name: "Interested",
-    value: "IN",
+    value: "4",
   },
   {
     id: "5",
     name: "Converted",
-    value: "CO",
+    value: "5",
   },
   {
     id: "6",
     name: "Lost",
-    value: "LO",
+    value: "6",
   },
   {
     id: "7",
     name: "DND",
-    value: "DN",
+    value: "7",
   },
 ];
 module.exports = { LeadStatus };

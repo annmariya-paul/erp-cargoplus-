@@ -26,6 +26,7 @@ export default function LeadList() {
   const [searchType, setSearchType] = useState("");
   const [searchStatus, setSearchStatus] = useState("");
   const [noofItems, setNoofItems] = useState("25");
+  const [totalCount, setTotalcount] = useState();
   const [pageSize, setPageSize] = useState(0);
   const [current, setCurrent] = useState(1);
 
@@ -39,6 +40,7 @@ export default function LeadList() {
         if (res?.data?.success) {
           console.log("All lead data", res?.data?.data);
           setAllLeadList(res?.data?.data?.leads);
+          setTotalcount(res?.data?.data?.totalCount);
         } else {
           console.log("FAILED T LOAD DATA");
         }
@@ -48,11 +50,13 @@ export default function LeadList() {
       });
   };
 
+  console.log("total count data", totalCount);
+
   useEffect(() => {
     GetAllLeadData();
   }, [noofItems, pageSize]);
 
-  const getData = (current, numOfItems) => {
+  const getData = (current, numOfItems, pageSize) => {
     return allLeadList?.slice((current - 1) * numOfItems, current * numOfItems);
   };
 
@@ -109,10 +113,7 @@ export default function LeadList() {
         return (
           <div className="d-flex justify-content-center align-items-center gap-2">
             <div className="m-0">
-              <Link
-                to={`${ROUTES.LEAD_EDIT}/${index.lead_id}`}
-                className="nav-link"
-              >
+              <Link to={`${ROUTES.LEAD_EDIT}/${index.lead_id}`} className="nav-link">
                 {/* <a href="/edit_lead_list" className="actionEdit"> */}
 
                 <FaEdit />

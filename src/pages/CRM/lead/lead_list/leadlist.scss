@@ -116,3 +116,10 @@ span.ant-select-selection-item {
   box-shadow: 0px 2px 5px variables.$boxshadow;
   border-radius: 4px;
 }
+.editcolor {
+  // color: $grey;
+  color: variables.$primary;
+  // &:hover {
+  //   color: variables.$primary;
+  // }
+}

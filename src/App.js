@@ -24,7 +24,6 @@ import Add_Attribute from "./pages/CRM/attributes/add_attribute";
 
 import OpportunityReport from "./pages/opportunityReport/OpportunityReport";
 
-
 // import Viewunit from "./pages/unit/ViewUnit";
 
 import BrandCreate from "./pages/CRM/Selling/brands/BrandCreate";
@@ -33,6 +32,7 @@ import Productlist from "./pages/CRM/Selling/Product/Productlist";
 import ProductCreate from "./pages/CRM/Selling/Product/ProductCreate";
 import ProductDetails from "./pages/CRM/Selling/Product/ProductDetails";
 import Varients from "./pages/CRM/Selling/Product/Varient/Varients";
+
 import Services from "./pages/CRM/Selling/services/services_list";
 import ServiceCreate from "./pages/CRM/Selling/services/ServiceCreate";
 

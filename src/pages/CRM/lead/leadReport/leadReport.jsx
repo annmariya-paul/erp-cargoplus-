@@ -4,7 +4,7 @@ import Button from "../../../../components/button/button";
 import TableData from "../../../../components/table/table_data";
 import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
 import { LeadStatus } from "../../../../utils/leadStatus";
-import { Input, Select, Pagination, DatePicker } from "antd";
+import { Input, Select, DatePicker } from "antd";
 import moment from "moment";
 import "antd/dist/antd.css";
 import MyPagination from "../../../../components/Pagination/MyPagination";
@@ -19,8 +19,8 @@ export default function LeadReport() {
   const [searchStatus, setSearchStatus] = useState("");
   const [pageSize, setPageSize] = useState(0);
   const [numOfItems, setNumOfItems] = useState("25");
-  const [modeDefault, setDefault] = useState("default");
-  const [modeCustom, setCustom] = useState("custom");
+  // const [modeDefault, setDefault] = useState("default");
+  // const [modeCustom, setCustom] = useState("custom");
   const [noOfDays, setNoOfDays] = useState(1);
   const [current, setCurrent] = useState(1);
   const [allLeadList, setAllLeadList] = useState();
@@ -42,7 +42,7 @@ export default function LeadReport() {
     console.log(date, dateString);
   };
 
-  // # function GetAllLeadData - get all lead data
+  // { function GetAllLeadData - get all lead data }
   const GetAllLeadData = () => {
     PublicFetch.get(
       `${CRM_BASE_URL}/lead?startIndex=${pageSize}&noOfItems=${numOfItems}`
@@ -50,7 +50,7 @@ export default function LeadReport() {
       .then((res) => {
         if (res?.data?.success) {
           console.log("All lead data", res?.data?.data);
-          //   filtering lead Status Opportunity option to converted table - Annmariya- 20/10/22
+          //   { filtering lead Status Opportunity option to converted table - Annmariya- 20/10/22 }
           let arr = [];
           let Arry = [];
           res?.data?.data?.leads.forEach((item, index) => {
@@ -91,31 +91,27 @@ export default function LeadReport() {
 
   useEffect(() => {
     GetAllLeadData();
+     Searchbydate();
   }, [numOfItems, pageSize]);
 
-  useEffect(() => {
-    Searchbydate();
-  }, []);
-  console.log(
-    "hdfsgfsdhjs",
-    startDate,
-    endDate,
-  );
-  const dateFormat = "YYYY/MM/DD";
-  const customFormat = (value) => `custom format: ${value.format(dateFormat)}`;
+ 
+  console.log("hdfsgfsdhjs", selectedDate, endDate);
   const Searchbydate = () => {
+    let selecteddate = moment(selectedDate).format("MM-DD-YYYY");
     PublicFetch.post(`${CRM_BASE_URL}/lead/report`, {
-      startIndex: pageSize,
-      noOfItems: numOfItems,
-      mode: dateCriteria === "BtwnTwoDates" ? modeCustom : modeDefault,
-      noOfDays: noOfDays,
-      startDate: startDate,
-      endDate: endDate,
+      startIndex: parseInt(pageSize),
+      noOfItems: parseInt(numOfItems),
+      mode: dateCriteria === "BtwnTwoDates" ? "custom" : "default",
+      noOfDays: 1,
+      startDate: selecteddate,
+      endDate: selecteddate,
     })
       .then(function (response) {
-        console.log("hello", response);
+        console.log("testhelllooo.....", response);
         if (response.data.success) {
           console.log("hello", response.data.data);
+          setConvertedTable(response?.data?.data?.converted?.data);
+          setGenerateTable(response?.data?.data?.generated?.data);
         } else {
           console.log("Failed while adding data");
         }
@@ -179,7 +175,7 @@ export default function LeadReport() {
   console.log("bxhgddtd::::", backend);
   return (
     <>
-      {toggleState === 1 && (
+      {/* {toggleState === 1 && ( */}
         <div className="container mb-2 d-flex justify-content-center">
           <div className="lead_report_container1">
             <div className="row">
@@ -203,11 +199,10 @@ export default function LeadReport() {
                 <div className="col-md-6 col-sm-12">
                   <label htmlFor="date">Date</label>
                   <DatePicker
-                    // onChange={onChange}
-                    format={"DD-MM-YY"}
+                    format={"MM/DD/YYYY"}
                     value={selectedDate}
-                    onChange={(value) => {
-                      setSelectedDate(value);
+                    onChange={(e) => {
+                      setSelectedDate(e);
                     }}
                     allowClear={false}
                   />
@@ -217,10 +212,10 @@ export default function LeadReport() {
                 <div className="col-md-6 col-sm-12">
                   <label htmlFor="month">Month</label>
                   <DatePicker
-                    format={"DD-MM-YY"}
+                    format={"MM/DD/YYYY"}
                     value={selectedMonth}
-                    onChange={(value) => {
-                      setSelectedMonth(value);
+                    onChange={(e) => {
+                      setSelectedMonth(e);
                     }}
                     picker="month"
                   />
@@ -232,19 +227,17 @@ export default function LeadReport() {
                     <div className="col-md-6">
                       <label htmlFor="startDate">Start Date</label>
                       <DatePicker
-                        // format={"DD-MM-YYYY"}
+                        format={"MM/DD/YYYY"}
                         value={startDate}
-                        onChange={(value) => setStartDate(value)}
+                        onChange={(e) => setStartDate(e)}
                       />
                     </div>
                     <div className="col-md-6">
                       <label htmlFor="endDate">End Date</label>
                       <DatePicker
-                        // format={"DD-MM-YYYY"}
-                        defaultValue={moment("2015/01/01", dateFormat)}
-                        format={customFormat}
+                        format={"MM/DD/YYYY"}
                         value={endDate}
-                        onChange={(value) => setEndDate(value)}
+                        onChange={(e) => setEndDate(e)}
                       />
                     </div>
                   </div>
@@ -253,13 +246,15 @@ export default function LeadReport() {
             </div>
             <div className="row justify-content-center my-2">
               <div className="col-xl-3 col-lg-3 col-12 d-flex justify-content-center">
-                <Button btnType="save">Search</Button>
+                <Button btnType="save" onClick={Searchbydate}>
+                  Search
+                </Button>
               </div>
             </div>
           </div>
         </div>
-      )}
-      {toggleState === 2 && (
+      {/* )} */}
+      {/* {toggleState === 2 && (
         <div className="container mb-2 d-flex justify-content-center">
           <div className="lead_report_container1">
             <div className="row">
@@ -282,7 +277,14 @@ export default function LeadReport() {
               {dateCriteria === "daily" && (
                 <div className="col-md-6 col-sm-12">
                   <label htmlFor="date">Date</label>
-                  <DatePicker onChange={onChange} />
+                  <DatePicker
+                    format={"MM/DD/YYYY"}
+                    value={selectedDate}
+                    onChange={(e) => {
+                      setSelectedDate(e);
+                    }}
+                    allowClear={false}
+                  />
                 </div>
               )}
               {dateCriteria === "monthly" && (
@@ -314,12 +316,14 @@ export default function LeadReport() {
             </div>
             <div className="row justify-content-center my-2">
               <div className="col-xl-3 col-lg-3 col-12 d-flex justify-content-center">
-                <Button btnType="save">Search</Button>
+                <Button btnType="save" onClick={Searchbydate}>
+                  Search
+                </Button>
               </div>
             </div>
           </div>
         </div>
-      )}
+      )} */}
 
       <br />
       <div className="container lead_report">
@@ -456,6 +460,8 @@ export default function LeadReport() {
               />
             </div>
           </div>
+
+          {/* { -------- Converted table Lead list ----------} */}
 
           <div
             className={

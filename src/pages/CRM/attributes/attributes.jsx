@@ -17,6 +17,7 @@ import Button from "../../../components/button/button";
 import Custom_model from "../../../components/custom_modal/custom_model";
 import { ROUTES } from "../../../routes";
 
+// { List all attibutes, view and edit an attribute - Ann mariya }
 export default function Attribute(props) {
   const [showViewModal, setShowViewModal] = useState(false);
   const [showModalEdit, setShowModalEdit] = useState(false);
@@ -31,12 +32,12 @@ export default function Attribute(props) {
   const data = [
     {
       key: "1",
-      attribute_name: "test",
+      attribute_name: "color",
       attribute_description: "this is a test",
     },
     {
       key: "2",
-      attribute_name: "testREon",
+      attribute_name: "size",
       attribute_description: "this is a test description",
     },
   ];
@@ -52,19 +53,18 @@ export default function Attribute(props) {
           <div className="d-flex justify-content-center align-items-center gap-3">
             <div
               className="editIcon m-0"
-              onClick={() => setShowViewModal(true)}
+              onClick={() => setShowModalEdit(true)}
             >
               <FaEdit />
             </div>
-            <div className="viewIcon m-0">
-              {/* <Link> */}
+            <div
+              className="viewIcon m-0"
+              onClick={() => setShowViewModal(true)}
+            >
               <MdPageview />
-              {/* </Link> */}
             </div>
             <div className="deleteIcon m-0">
-              {/* <Link> */}
               <FaTrash />
-              {/* </Link> */}
             </div>
           </div>
         );
@@ -255,7 +255,9 @@ export default function Attribute(props) {
                 </Form.Group>
               </div>
               <div className="row justify-content-center my-3">
-                <Button btnType="save">Save</Button>
+                <div className="col-4">
+                  <Button btnType="save"> Save </Button>
+                </div>
               </div>
             </div>
           }

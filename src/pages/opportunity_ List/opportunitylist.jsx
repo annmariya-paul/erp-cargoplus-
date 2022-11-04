@@ -26,9 +26,11 @@ import { useForm } from "react-hook-form";
 import { Form } from "react-bootstrap";
 import Leadlist_Icons from "../../components/lead_list_icon/lead_list_icon";
 import moment from "moment";
+import { DatePicker } from "antd";
 // const editformData = new FormData();
 
 function Opportunitylist(props) {
+  const today = new Date().toISOString().split("T")[0];
   const [numOfItems, setNumOfItems] = useState("25");
   const [pageSize, setPageSize] = useState(0); // page size
   const [current, setCurrent] = useState(1); // current page
@@ -47,11 +49,13 @@ function Opportunitylist(props) {
   const [oppurtunityfrom, setOppurtunityfrom] = useState("");
   const [oppurtunitysource, setOppurtunitysource] = useState("");
   const [oppurtunityparty, setOppurtunityparty] = useState("");
-  const [oppurtunityvalidity, setOppurtunityvalidity] = useState(null);
+  const [oppurtunityvalidity, setOppurtunityvalidity] = useState();
   const [oppurtunityamount, setOppurtunityamount] = useState("");
   const [oppurtunityprobability, setOppurtunityProbability] = useState("");
   const [opportunitydescription, setOpportunitydescription] = useState("");
   const [oppurtunitystatus, setOppurtunitystatus] = useState("");
+
+  const dateFormat = "DD-MM-YYYY";
 
   const [contact, setContact] = useState([]);
   // view oppurtunity
@@ -123,6 +127,10 @@ function Opportunitylist(props) {
 
       setOneoppurtunity(oneoppurtunities.data.data);
       console.log("typeee:", oneoppurtunities.data?.data?.opportunity_type);
+      console.log(
+        "date validity iss",
+        oneoppurtunities.data?.data?.opportunity_validity
+      );
 
       setoppurtunitytype(oneoppurtunities.data?.data?.opportunity_type);
       setOppurtunityfrom(oneoppurtunities.data?.data?.opportunity_from);
@@ -1342,17 +1350,26 @@ function Opportunitylist(props) {
                 </Form.Group>
               </div>
 
-              <div className="col-sm-4 pt-2">
+              <div className=" col-4 col-sm-4  pt-2">
+                {/* <label>Valid Up To</label>
+                <DatePicker
+                  defaultValue={moment("10-09-2022", dateFormat)}
+                  format={dateFormat}
+                /> */}
                 <Form.Group className="mb-2" controlId="lead_valid_up_to">
                   <Form.Label>Valid Up to</Form.Label>
+
                   <div className="form-control">
                     <input
                       type="date"
                       name="lead_validity"
                       style={{ borderWidth: 0 }}
                       // onChange={(date) => setDate(date)}
-                      value={moment(oppurtunityvalidity).format("DD/MM/YYYY")}
-                      onChange={(e) => setDate(e.target.value)}
+                      // defaultValue={moment(oppurtunityvalidity).format(
+                      //   "DD/MM/YYYY"
+                      // )}
+
+                      onChange={(e) => setOppurtunityvalidity(e.target.value)}
                     />
                   </div>
                 </Form.Group>

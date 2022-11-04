@@ -1,4 +1,4 @@
-export default function ErrorMsg({ code }) {
+export default function ErrorMsg({ code, messages }) {
   return (
     <>
       <div className="row mt-4">
@@ -11,7 +11,9 @@ export default function ErrorMsg({ code }) {
             class="bi bi-exclamation-circle-fill"
             style={{ paddingRight: "6px" }}
           />
-          <span>Sorry an Error Occured Error Code: {code}</span>
+          <span>
+            {messages}: {code}
+          </span>
         </div>
       </div>
     </>

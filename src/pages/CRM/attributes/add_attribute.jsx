@@ -45,15 +45,15 @@ export default function Add_Attribute() {
                   placeholder="Name"
                   required
                   value={attributeName}
-                  isInvalid={
-                    !attributeName?.length > 0 &&
-                    (attributeName?.length || formSubmitted)
-                  }
+                  // isInvalid={
+                  //   !attributeName?.length > 0 &&
+                  //   (attributeName?.length || formSubmitted)
+                  // }
                   onChange={(e) => setAttributeName(e.target.value)}
                 />
-                <Form.Control.Feedback type="invalid">
+                {/* <Form.Control.Feedback type="invalid">
                   name is not registered
-                </Form.Control.Feedback>
+                </Form.Control.Feedback> */}
               </Form.Group>
             </div>
             <div className="col-sm-6 pt-3">

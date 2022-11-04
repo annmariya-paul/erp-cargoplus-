@@ -3,7 +3,6 @@ import "./leadReport.styles.scss";
 import Button from "../../../../components/button/button";
 import TableData from "../../../../components/table/table_data";
 import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
-import { LeadStatus } from "../../../../utils/leadStatus";
 import { Input, Select, DatePicker } from "antd";
 import moment from "moment";
 import "antd/dist/antd.css";
@@ -19,15 +18,14 @@ export default function LeadReport() {
   const [searchStatus, setSearchStatus] = useState("");
   const [pageSize, setPageSize] = useState(0);
   const [numOfItems, setNumOfItems] = useState("25");
-  // const [modeDefault, setDefault] = useState("default");
-  // const [modeCustom, setCustom] = useState("custom");
   const [noOfDays, setNoOfDays] = useState(1);
   const [current, setCurrent] = useState(1);
   const [allLeadList, setAllLeadList] = useState();
   const [generateTable, setGenerateTable] = useState();
   const [convertedTable, setConvertedTable] = useState();
   const [dateCriteria, setDateCriteria] = useState("daily");
-
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
   const [selectedDate, setSelectedDate] = useState();
   const [selectedMonth, setSelectedMonth] = useState();
   const [backend, setBackEnd] = useState();
@@ -36,13 +34,11 @@ export default function LeadReport() {
     setToggleState(index);
   };
 
-  const [startDate, setStartDate] = useState();
-  const [endDate, setEndDate] = useState();
   const onChange = (date, dateString) => {
     console.log(date, dateString);
   };
 
-  // { function GetAllLeadData - get all lead data }
+  // { function GetAllLeadData to get lead data separately as generated lead and converted lead list- Ann mariya (20/10/22)}
   const GetAllLeadData = () => {
     PublicFetch.get(
       `${CRM_BASE_URL}/lead?startIndex=${pageSize}&noOfItems=${numOfItems}`
@@ -50,13 +46,13 @@ export default function LeadReport() {
       .then((res) => {
         if (res?.data?.success) {
           console.log("All lead data", res?.data?.data);
-          //   { filtering lead Status Opportunity option to converted table - Annmariya- 20/10/22 }
-          let arr = [];
-          let Arry = [];
+          //   { dividing as lead generated and lead converted table - Annmariya (20/10/22) }
+          let arr1 = [];
+          let arr2 = [];
           res?.data?.data?.leads.forEach((item, index) => {
             setAllLeadList(item.lead_status);
             if (item.lead_status == 5) {
-              arr.push({
+              arr1.push({
                 lead_customer_name: item?.lead_customer_name,
                 lead_id: item?.lead_id,
                 lead_organization: item?.lead_organization,
@@ -65,10 +61,10 @@ export default function LeadReport() {
                 lead_type: item?.lead_type,
                 lead_user_type: item?.lead_user_type,
               });
-              setConvertedTable(arr);
+              setConvertedTable(arr1);
             }
             if (item.lead_status == 1) {
-              Arry.push({
+              arr2.push({
                 lead_customer_name: item?.lead_customer_name,
                 lead_id: item?.lead_id,
                 lead_organization: item?.lead_organization,
@@ -77,7 +73,7 @@ export default function LeadReport() {
                 lead_type: item?.lead_type,
                 lead_user_type: item?.lead_user_type,
               });
-              setGenerateTable(Arry);
+              setGenerateTable(arr2);
             }
           });
         } else {
@@ -91,21 +87,44 @@ export default function LeadReport() {
 
   useEffect(() => {
     GetAllLeadData();
-     Searchbydate();
+    Searchbydate();
   }, [numOfItems, pageSize]);
 
- 
-  console.log("hdfsgfsdhjs", selectedDate, endDate);
+  // console.log("hdfsgfsdhjs", selectedDate, endDate);
   const Searchbydate = () => {
     let selecteddate = moment(selectedDate).format("MM-DD-YYYY");
-    PublicFetch.post(`${CRM_BASE_URL}/lead/report`, {
-      startIndex: parseInt(pageSize),
-      noOfItems: parseInt(numOfItems),
-      mode: dateCriteria === "BtwnTwoDates" ? "custom" : "default",
-      noOfDays: 1,
-      startDate: selecteddate,
-      endDate: selecteddate,
-    })
+    let startdate = moment(startDate).format("MM-DD-YYYY");
+    let enddate = moment(endDate).format("MM-DD-YYYY");
+    let selectedmonth = moment(selectedMonth).format("MM-01-YYYY");
+    PublicFetch.post(
+      `${CRM_BASE_URL}/lead/report`,
+      dateCriteria == "daily"
+        ? {
+            startIndex: parseInt(pageSize),
+            noOfItems: parseInt(numOfItems),
+            mode: "default",
+            noOfDays: 1,
+            startDate: selecteddate,
+            endDate: selecteddate,
+          }
+        : dateCriteria === "BtwnTwoDates"
+        ? {
+            startIndex: parseInt(pageSize),
+            noOfItems: parseInt(numOfItems),
+            mode: "custom",
+            noOfDays: 1,
+            startDate: startdate,
+            endDate: enddate,
+          }
+        : {
+            startIndex: parseInt(pageSize),
+            noOfItems: parseInt(numOfItems),
+            mode: "default",
+            noOfDays: 31,
+            startDate: selectedmonth,
+            endDate: selectedmonth,
+          }
+    )
       .then(function (response) {
         console.log("testhelllooo.....", response);
         if (response.data.success) {
@@ -176,83 +195,82 @@ export default function LeadReport() {
   return (
     <>
       {/* {toggleState === 1 && ( */}
-        <div className="container mb-2 d-flex justify-content-center">
-          <div className="lead_report_container1">
-            <div className="row">
-              <h5 className="report_heading mb-2">Lead</h5>
+      <div className="container mb-2 d-flex justify-content-center">
+        <div className="lead_report_container1">
+          <div className="row">
+            <h5 className="report_heading mb-2">Lead</h5>
+          </div>
+          <div className="row my-4 mx-2">
+            <div className="col-md-6 col-sm-12">
+              <label htmlFor="criteria">Select Date Criteria</label>
+              <Select
+                name="criteria"
+                defaultValue="daily"
+                style={{ width: " 100% " }}
+                onChange={(e) => setDateCriteria(e)}
+              >
+                <Option value="daily">Daily</Option>
+                <Option value="BtwnTwoDates">Between Two Dates</Option>
+                <Option value="monthly">Monthly</Option>
+              </Select>
             </div>
-            <div className="row my-4 mx-2">
+            {dateCriteria === "daily" && (
               <div className="col-md-6 col-sm-12">
-                <label htmlFor="criteria">Select Date Criteria</label>
-                <Select
-                  name="criteria"
-                  defaultValue="daily"
-                  style={{ width: " 100% " }}
-                  onChange={(e) => setDateCriteria(e)}
-                >
-                  <Option value="daily">Daily</Option>
-                  <Option value="BtwnTwoDates">Between Two Dates</Option>
-                  <Option value="monthly">Monthly</Option>
-                </Select>
+                <label htmlFor="date">Date</label>
+                <DatePicker
+                  format={"MM/DD/YYYY"}
+                  value={selectedDate}
+                  onChange={(e) => {
+                    setSelectedDate(e);
+                  }}
+                />
               </div>
-              {dateCriteria === "daily" && (
-                <div className="col-md-6 col-sm-12">
-                  <label htmlFor="date">Date</label>
-                  <DatePicker
-                    format={"MM/DD/YYYY"}
-                    value={selectedDate}
-                    onChange={(e) => {
-                      setSelectedDate(e);
-                    }}
-                    allowClear={false}
-                  />
-                </div>
-              )}
-              {dateCriteria === "monthly" && (
-                <div className="col-md-6 col-sm-12">
-                  <label htmlFor="month">Month</label>
-                  <DatePicker
-                    format={"MM/DD/YYYY"}
-                    value={selectedMonth}
-                    onChange={(e) => {
-                      setSelectedMonth(e);
-                    }}
-                    picker="month"
-                  />
-                </div>
-              )}
-              {dateCriteria === "BtwnTwoDates" && (
-                <div className="col-md-6 col-sm-12">
-                  <div className="row">
-                    <div className="col-md-6">
-                      <label htmlFor="startDate">Start Date</label>
-                      <DatePicker
-                        format={"MM/DD/YYYY"}
-                        value={startDate}
-                        onChange={(e) => setStartDate(e)}
-                      />
-                    </div>
-                    <div className="col-md-6">
-                      <label htmlFor="endDate">End Date</label>
-                      <DatePicker
-                        format={"MM/DD/YYYY"}
-                        value={endDate}
-                        onChange={(e) => setEndDate(e)}
-                      />
-                    </div>
+            )}
+            {dateCriteria === "monthly" && (
+              <div className="col-md-6 col-sm-12">
+                <label htmlFor="month">Month</label>
+                <DatePicker
+                  format={"MM/01/YYYY"}
+                  value={selectedMonth}
+                  onChange={(e) => {
+                    setSelectedMonth(e);
+                  }}
+                  picker="month"
+                />
+              </div>
+            )}
+            {dateCriteria === "BtwnTwoDates" && (
+              <div className="col-md-6 col-sm-12">
+                <div className="row">
+                  <div className="col-md-6">
+                    <label htmlFor="startDate">Start Date</label>
+                    <DatePicker
+                      format={"MM/DD/YYYY"}
+                      value={startDate}
+                      onChange={(e) => setStartDate(e)}
+                    />
+                  </div>
+                  <div className="col-md-6">
+                    <label htmlFor="endDate">End Date</label>
+                    <DatePicker
+                      format={"MM/DD/YYYY"}
+                      value={endDate}
+                      onChange={(e) => setEndDate(e)}
+                    />
                   </div>
                 </div>
-              )}
-            </div>
-            <div className="row justify-content-center my-2">
-              <div className="col-xl-3 col-lg-3 col-12 d-flex justify-content-center">
-                <Button btnType="save" onClick={Searchbydate}>
-                  Search
-                </Button>
               </div>
+            )}
+          </div>
+          <div className="row justify-content-center my-2">
+            <div className="col-xl-3 col-lg-3 col-12 d-flex justify-content-center">
+              <Button btnType="save" onClick={Searchbydate}>
+                Search
+              </Button>
             </div>
           </div>
         </div>
+      </div>
       {/* )} */}
       {/* {toggleState === 2 && (
         <div className="container mb-2 d-flex justify-content-center">
@@ -572,3 +590,32 @@ export default function LeadReport() {
     </>
   );
 }
+
+// {
+//  dateCriteria == "daily"
+//    ? {
+//        startIndex: parseInt(pageSize),
+//        noOfItems: parseInt(numOfItems),
+//        mode: "default",
+//        noOfDays: 1,
+//        startDate: selectedDate,
+//        endDate: selectedDate,
+//      }
+//    : dateCriteria == "BtwnTwoDates"
+//    ? {
+//        startIndex: parseInt(pageSize),
+//        noOfItems: parseInt(numOfItems),
+//        mode: "custom",
+//        noOfDays: 2,
+//        startDate: startDate,
+//        endDate: endDate,
+//      }
+//    : {
+//        startIndex: parseInt(pageSize),
+//        noOfItems: parseInt(numOfItems),
+//        mode: "default",
+//        noOfDays: 31,
+//        startDate: selectedMonth,
+//        endDate: selectedMonth,
+//      };
+// }

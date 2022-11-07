@@ -30,7 +30,6 @@ import { DatePicker } from "antd";
 // const editformData = new FormData();
 
 function Opportunitylist(props) {
-  const today = new Date().toISOString().split("T")[0];
   const [numOfItems, setNumOfItems] = useState("25");
   const [pageSize, setPageSize] = useState(0); // page size
   const [current, setCurrent] = useState(1); // current page
@@ -54,8 +53,6 @@ function Opportunitylist(props) {
   const [oppurtunityprobability, setOppurtunityProbability] = useState("");
   const [opportunitydescription, setOpportunitydescription] = useState("");
   const [oppurtunitystatus, setOppurtunitystatus] = useState("");
-
-  const dateFormat = "DD-MM-YYYY";
 
   const [contact, setContact] = useState([]);
   // view oppurtunity
@@ -97,15 +94,23 @@ function Opportunitylist(props) {
   // { function to get all opportunity data - Ann mariya(27/10/22)}
 
   const [OpportunityList, setOpportunityList] = useState();
+  // const [oppurtunityid, setOppurtunityid] = useState();
 
   const GetOpportunityData = () => {
     PublicFetch.get(
-      `${CRM_BASE_URL}/opportunity/basic?startIndex=${pageSize}&noOfItems=${numOfItems}`
+      `${CRM_BASE_URL}/opportunity?startIndex=${pageSize}&noOfItems=${numOfItems}`
     )
       .then((res) => {
         if (res?.data?.success) {
           console.log("All opportunity data", res?.data?.data);
           setOpportunityList(res?.data?.data?.leads);
+          // let samplearry = [];
+          // res?.data?.data?.leads.forEach((item, index) => {
+          //   samplearry.push(item.opportunity_id);
+          // });
+          // console.log("pushedd ", samplearry);
+
+          // setOppurtunityid(samplearry);
         } else {
           console.log("Failed to load data !");
         }
@@ -128,8 +133,8 @@ function Opportunitylist(props) {
       setOneoppurtunity(oneoppurtunities.data.data);
       console.log("typeee:", oneoppurtunities.data?.data?.opportunity_type);
       console.log(
-        "date validity iss",
-        oneoppurtunities.data?.data?.opportunity_validity
+        "oppurtunitypartyy is",
+        oneoppurtunities.data?.data?.opportunity_party
       );
 
       setoppurtunitytype(oneoppurtunities.data?.data?.opportunity_type);
@@ -146,12 +151,6 @@ function Opportunitylist(props) {
       );
       setOppurtunitystatus(oneoppurtunities.data?.data?.opportunity_status);
       setOppurtunitylead(oneoppurtunities.data?.data?.opportunity_lead_id);
-
-      // if (oneoppurtunity.data.data) {
-      //   setOneoppurtunity();
-      //   setoppurtunitytype();
-      // }
-      // setOneoppurtunity(oneoppurtunity.data.data);
     } catch (err) {
       console.log("error while getting all leads: ", err);
     }
@@ -237,6 +236,24 @@ function Opportunitylist(props) {
     setShowViewModal(true);
   };
 
+  const handleEditedclick = (e) => {
+    // console.log("edittingg ", e);
+    // setEditOppurtunity();
+    // oppurtunitytype.e.opportunity_type,
+    //   oppurtunityfrom.e.opportunity_from,
+    //   oppurtunitysource.e.opportunity_source,
+    //   oppurtunityparty.e.opportunity_party,
+    //   oppurtunityvalidity.e.opportunity_validity,
+    //   opportunitydescription.e.opportunity_description,
+    //   oppurtunityamount.e.opportunity_amount,
+    //   oppurtunityprobability.e.opportunity_probability,
+    //   oppurtunitystatus.e.opportunity_status,
+    //   oppurtunitylead.e.opportunity_lead_id,
+    // getAllContact();
+    setShowEditModal(true);
+    // updateOppurtunity();
+  };
+
   const handleEditclick = () => {
     // console.log("edit data is ::", item);
 
@@ -318,7 +335,7 @@ function Opportunitylist(props) {
   //     });
   // };
 
-  const updateOppurtunity = async (updatedData) => {
+  const updatedOppurtunity = async (updatedData) => {
     const UpdatedFormdata = {
       // id: viewoppurtunity.id,
       opportunity_lead_id: oppurtunitylead,
@@ -335,7 +352,7 @@ function Opportunitylist(props) {
 
     try {
       const editoppurtunity = await PublicFetch.patch(
-        `${CRM_BASE_URL}/opportunity/basic/${viewoppurtunity.id}`,
+        `${CRM_BASE_URL}/opportunity/basic/${editOppurtunity.opportunity_id}`,
         UpdatedFormdata
       );
 
@@ -344,15 +361,42 @@ function Opportunitylist(props) {
         GetOpportunityData();
         setShowEditModal(false);
       }
-      //  else {
-      //   message.error(
-      //     `Failed to update ${editoppurtunity?.data?.data?.message}`
-      //   );
-      // }
     } catch (err) {
       console.log("error while getting all leads: ", err);
     }
   };
+
+  // const updateOppurtunity = async (updatedData) => {
+  //   const UpdatedFormdata = {
+  //     // id: viewoppurtunity.id,
+  //     opportunity_lead_id: oppurtunitylead,
+  //     opportunity_type: oppurtunitytype,
+  //     opportunity_from: oppurtunityfrom,
+  //     opportunity_source: oppurtunitysource,
+  //     opportunity_party: oppurtunityparty,
+  //     opportunity_validity: oppurtunityvalidity,
+  //     opportunity_description: opportunitydescription,
+  //     opportunity_amount: oppurtunityamount,
+  //     opportunity_probability: oppurtunityprobability,
+  //     opportunity_status: oppurtunitystatus,
+  //   };
+
+  //   try {
+  //     const editoppurtunity = await PublicFetch.patch(
+  //       `${CRM_BASE_URL}/opportunity/basic/${viewoppurtunity.id}`,
+  //       UpdatedFormdata
+  //     );
+
+  //     console.log("editdata", editoppurtunity);
+  //     if (editoppurtunity.data.success) {
+  //       GetOpportunityData();
+  //       setShowEditModal(false);
+  //     }
+
+  //   } catch (err) {
+  //     console.log("error while getting all leads: ", err);
+  //   }
+  // };
 
   const editdata = () => {};
 
@@ -368,7 +412,7 @@ function Opportunitylist(props) {
         return (
           <div className="d-flex justify-content-center gap-2">
             <div className="editcolor">
-              {/* <FaEdit onClick={() => handleEditclick(index)} /> */}
+              <FaEdit onClick={() => handleEditedclick(index)} />
             </div>
             <div className="editcolor">
               <MdPageview onClick={() => Viewoppurtunties(index)} />
@@ -501,6 +545,7 @@ function Opportunitylist(props) {
     },
   ];
 
+  // console.log("oppurtunity id iss", oppurtunityid);
   return (
     <div>
       <div className="container-fluid lead_list  my-3 py-3">
@@ -1172,7 +1217,8 @@ function Opportunitylist(props) {
           <Button
             btnType="save"
             onClick={() => {
-              updateOppurtunity();
+              // updateOppurtunity();
+              updatedOppurtunity();
             }}
           >
             Save
@@ -1364,12 +1410,12 @@ function Opportunitylist(props) {
                       type="date"
                       name="lead_validity"
                       style={{ borderWidth: 0 }}
-                      // onChange={(date) => setDate(date)}
-                      // defaultValue={moment(oppurtunityvalidity).format(
-                      //   "DD/MM/YYYY"
-                      // )}
-
-                      onChange={(e) => setOppurtunityvalidity(e.target.value)}
+                      // defaultValue={todaydate}
+                      value={moment(oppurtunityvalidity).format("YYYY-MM-DD")}
+                      onChange={(event) => {
+                        console.log("selected datae : ", event.target.value);
+                        setOppurtunityvalidity(event.target.value);
+                      }}
                     />
                   </div>
                 </Form.Group>

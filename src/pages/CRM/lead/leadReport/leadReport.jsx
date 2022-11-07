@@ -90,14 +90,13 @@ export default function LeadReport() {
     Searchbydate();
   }, [numOfItems, pageSize]);
 
-  // console.log("hdfsgfsdhjs", selectedDate, endDate);
   const Searchbydate = () => {
     let selecteddate = moment(selectedDate).format("MM-DD-YYYY");
     let startdate = moment(startDate).format("MM-DD-YYYY");
     let enddate = moment(endDate).format("MM-DD-YYYY");
     let selectedmonth = moment(selectedMonth).format("MM-01-YYYY");
     PublicFetch.post(
-      `${CRM_BASE_URL}/lead/report`,
+      `${CRM_BASE_URL}/report/lead`,
       dateCriteria == "daily"
         ? {
             startIndex: parseInt(pageSize),

@@ -11,6 +11,7 @@ import { message } from "antd";
 import PhoneNumber from "../../../../components/phone_number/phonenumber";
 import { useFormik } from "formik";
 import * as yup from "yup";
+import Lead from "../lead";
 
 const phoneRegExp =
   /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/i;
@@ -55,9 +56,20 @@ function ContactTable(props) {
   const [validateErr, setValidateErr] = useState(false);
   const [showError, setShowError] = useState(false);
 
+  const getoneleads = async () => {
+    try {
+      const onelead = await PublicFetch.get(
+        `${CRM_BASE_URL}/lead/${props.lead}`
+      );
+      console.log("getoneleaddds isss", onelead);
+    } catch (err) {
+      console.log("error while getting all leads: ", err);
+    }
+  };
+
   // # funtion getcontacttable to fetch contacts to contact table - Noufal
   const getcontacttable = () => {
-    PublicFetch.get(`${CRM_BASE_URL}/lead/${props.lead}/contact`)
+    PublicFetch.get(`${CRM_BASE_URL}/contact`)
       .then((res) => {
         console.log("fjehfer", res);
         if (res.data.success) {
@@ -73,6 +85,7 @@ function ContactTable(props) {
 
   useEffect(() => {
     getcontacttable();
+    getoneleads();
   }, []);
 
   const columns = [
@@ -111,7 +124,8 @@ function ContactTable(props) {
   // # function AddContact to add contacts - Noufal
   const onSubmit = (values) => {
     console.log("all values from formik", values);
-    PublicFetch.post(`${CRM_BASE_URL}/lead/${props.lead}/contact`, values)
+    PublicFetch.post(`${CRM_BASE_URL}/contact`, values)
+
       .then((res) => {
         console.log("contactdata,", res);
 
@@ -156,6 +170,7 @@ function ContactTable(props) {
 
   const formik = useFormik({
     initialValues: {
+      // contact_lead_id: props.lead,
       contact_person_name: "",
       contact_email: "",
       contact_phone_1: "",
@@ -170,6 +185,7 @@ function ContactTable(props) {
   console.log("errors:::", formik.errors);
   console.log(
     "phone:::",
+    // formik?.values?.contact_lead_id,
     formik?.values?.contact_phone_1,
     formik.values.contact_phone_2,
     formik.values.contact_person_name,
@@ -178,6 +194,7 @@ function ContactTable(props) {
   );
   console.log("phone:::", formik.values.contact_phone_2);
   console.log("phone:::iiiii", formik.values);
+  // console.log("leadid iss",);
 
   return (
     <div>

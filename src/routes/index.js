@@ -12,12 +12,8 @@ const ROUTES = {
   LEAD_REPORT: "/leadReport",
   LEAD_EDIT: "/edit_lead_list",
 
-<<<<<<< HEAD
-=======
   OPPORTUNITY_REPORT: "/opportunity-report",
 
-  
->>>>>>> f675399d832ce79cbeade2607a2a2a96cea48722
   LEAD_EDIT_ID: "/edit_lead_list/:id",
 
   // OPPORTUNITY_REPORT: "/opportunity-report",
@@ -35,8 +31,8 @@ const ROUTES = {
   PRODUCTCREATE: "/create_product",
   PRODUCTDETAILS: "/product_details",
   PRODUCTVARIENTS: "/product_varients",
-  SERVICES:"/services",
-  SERVICECREATE:"/create_service",
+  SERVICES: "/services",
+  SERVICECREATE: "/create_service",
 };
 
 module.exports = { ROUTES };

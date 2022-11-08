@@ -27,14 +27,14 @@ export default function LeadList() {
   const [searchStatus, setSearchStatus] = useState("");
   const [noofItems, setNoofItems] = useState("25");
   const [totalCount, setTotalcount] = useState();
-  const [pageSize, setPageSize] = useState(0);
+  const [pageIndex, setPageIndex] = useState(0);
   const [current, setCurrent] = useState(1);
 
   const [allLeadList, setAllLeadList] = useState();
 
   const GetAllLeadData = () => {
     PublicFetch.get(
-      `${CRM_BASE_URL}/lead?startIndex=${pageSize}&noOfItems=${noofItems}`
+      `${CRM_BASE_URL}/lead?startIndex=${pageIndex}&noOfItems=${noofItems}`
     )
       .then((res) => {
         if (res?.data?.success) {
@@ -54,7 +54,7 @@ export default function LeadList() {
 
   useEffect(() => {
     GetAllLeadData();
-  }, [noofItems, pageSize]);
+  }, [noofItems, pageIndex]);
 
   const getData = (current, numOfItems, pageSize) => {
     return allLeadList?.slice((current - 1) * numOfItems, current * numOfItems);
@@ -73,7 +73,7 @@ export default function LeadList() {
         onChange={onChange}
         total={total}
         current={current}
-        pageSize={pageSize}
+        pageSize={noofItems / totalCount}
         defaultPageSize={defaultPageSize}
         pageSizeOptions={pageSizeOptions}
         // showSizeChanger={showSizeChanger}
@@ -180,7 +180,8 @@ export default function LeadList() {
   ];
 
   console.log("saag eywrbzxcjhasdbf yryeraeuif:::::", allLeadList);
-  console.log("page size", pageSize);
+  console.log("page size", pageIndex);
+  console.log(totalCount / noofItems);
 
   return (
     <>
@@ -258,7 +259,7 @@ export default function LeadList() {
                 }}
               >
                 {/* <Select.Option value="5">5 | pages</Select.Option> */}
-                <Select.Option value="10">
+                {/* <Select.Option value="10">
                   Show
                   <span style={{ color: "lightgray" }} className="ms-1">
                     |
@@ -266,7 +267,7 @@ export default function LeadList() {
                   <span style={{ color: "#2f6b8f" }} className="ms-1">
                     10
                   </span>
-                </Select.Option>
+                </Select.Option> */}
                 <Select.Option value="25">
                   Show
                   <span style={{ color: "lightgray" }} className="ms-1">
@@ -299,7 +300,7 @@ export default function LeadList() {
           </div>
           <div className="datatable">
             <TableData
-              data={getData(current, noofItems, pageSize)}
+              data={getData(current, noofItems, pageIndex)}
               // data={allLeadList}
               columns={columns}
               custom_table_css="table_lead_list"
@@ -313,8 +314,9 @@ export default function LeadList() {
               defaultPageSize={10}
               pageSizeOptions={["10", "25", "50", "100"]}
               onChange={(current, pageSize) => {
+                console.log("page index", current, pageSize);
                 setCurrent(current);
-                setPageSize(pageSize);
+                // setPageSize(pageSize);
               }}
             />
           </div>

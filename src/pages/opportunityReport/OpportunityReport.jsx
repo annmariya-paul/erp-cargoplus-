@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-// import "./leadReport.styles.scss";
+import "../../pages/CRM/lead/leadReport/leadReport.styles.scss";
 import Button from "../../components/button/button";
 import TableData from "../../components/table/table_data";
 import Leadlist_Icons from "../../components/lead_list_icon/lead_list_icon";
@@ -34,9 +34,6 @@ function OpportunityReport() {
 
   const toggleTab = (index) => {
     setToggleState(index);
-  };
-  const onChange = (date, dateString) => {
-    console.log(date, dateString);
   };
 
   // { function GetOpportunityData to get opportunity data separately as generated opportuninty and converted opportunity list - Ann mariya (04/11/22)}
@@ -89,54 +86,54 @@ function OpportunityReport() {
     // Searchbydate();
   }, [numOfItems, pageSize]);
 
-  const Searchbydate =()=>{
+  const Searchbydate = () => {
     let selecteddate = moment(selectedDate).format("MM-DD-YYYY");
     let startdate = moment(startDate).format("MM-DD-YYYY");
     let enddate = moment(endDate).format("MM-DD-YYYY");
     let selectedmonth = moment(selectedMonth).format("MM-01-YYYY");
-   PublicFetch.post(
-     `${CRM_BASE_URL}/report/opportunity`,
-     dateCriteria == "daily"
-       ? {
-           startIndex: parseInt(pageSize),
-           noOfItems: parseInt(numOfItems),
-           mode: "default",
-           noOfDays: 1,
-           startDate: selecteddate,
-           endDate: selecteddate,
-         }
-       : dateCriteria === "BtwnTwoDates"
-       ? {
-           startIndex: parseInt(pageSize),
-           noOfItems: parseInt(numOfItems),
-           mode: "custom",
-           noOfDays: 1,
-           startDate: startdate,
-           endDate: enddate,
-         }
-       : {
-           startIndex: parseInt(pageSize),
-           noOfItems: parseInt(numOfItems),
-           mode: "default",
-           noOfDays: 31,
-           startDate: selectedmonth,
-           endDate: selectedmonth,
-         }
-   )
-     .then(function (response) {
-       console.log("testhelllooo.....", response);
-       if (response.data.success) {
-         console.log("hello", response.data.data);
-         setConvertedTable(response?.data?.data?.converted?.data);
-         setGenerateTable(response?.data?.data?.generated?.data);
-       } else {
-         console.log("Failed while adding data");
-       }
-     })
-     .catch(function (error) {
-       console.log(error);
-     });
-  }
+    PublicFetch.post(
+      `${CRM_BASE_URL}/report/opportunity`,
+      dateCriteria === "daily"
+        ? {
+            startIndex: parseInt(pageSize),
+            noOfItems: parseInt(numOfItems),
+            mode: "default",
+            noOfDays: 1,
+            startDate: selecteddate,
+            endDate: selecteddate,
+          }
+        : dateCriteria === "BtwnTwoDates"
+        ? {
+            startIndex: parseInt(pageSize),
+            noOfItems: parseInt(numOfItems),
+            mode: "custom",
+            noOfDays: 1,
+            startDate: startdate,
+            endDate: enddate,
+          }
+        : {
+            startIndex: parseInt(pageSize),
+            noOfItems: parseInt(numOfItems),
+            mode: "default",
+            noOfDays: 31,
+            startDate: selectedmonth,
+            endDate: selectedmonth,
+          }
+    )
+      .then(function (response) {
+        console.log("testhelllooo.....", response);
+        if (response.data.success) {
+          console.log("hello", response.data.data);
+          setConvertedTable(response?.data?.data?.converted?.data);
+          setGenerateTable(response?.data?.data?.generated?.data);
+        } else {
+          console.log("Failed while adding data");
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
 
   const getGenerateData = (current, pageSize) => {
     return generateTable?.slice((current - 1) * pageSize, current * pageSize);
@@ -206,10 +203,10 @@ function OpportunityReport() {
 
   return (
     <>
-      <div className="container mb-2 d-flex justify-content-center">
-        <div className="lead_report_container1">
+      <div className="container mb-3 d-flex justify-content-center">
+        <div className="report_container1">
           <div className="row">
-            <h5 className="report_heading my-2">Opportunity</h5>
+            <h5 className="report_heading mb-2">Opportunity</h5>
           </div>
           <div className="row my-4 mx-2">
             <div className="col-md-6 col-sm-12">
@@ -283,7 +280,7 @@ function OpportunityReport() {
         </div>
       </div>
 
-      <div className="container lead_report">
+      <div className="container report_content">
         <div className="row">
           <div className="col-sm-4">
             <div className="report_bloc-tabs tabs-responsive">
@@ -310,7 +307,7 @@ function OpportunityReport() {
                 Converted
               </button>
             </div>
-          </div>{" "}
+          </div>
         </div>
 
         <div className="report-content-tabs">
@@ -325,7 +322,7 @@ function OpportunityReport() {
               <Leadlist_Icons />
             </div>
             <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
-              <div className="col-4">
+              <div className="col-sm-4 col-xs-12">
                 <Input.Search
                   placeholder="Search by type"
                   style={{ margin: "5px", borderRadius: "5px" }}
@@ -338,7 +335,7 @@ function OpportunityReport() {
                   }}
                 />
               </div>
-              <div className="col-4">
+              <div className="col-sm-4 col-xs-12">
                 <Select
                   allowClear
                   showSearch
@@ -390,21 +387,21 @@ function OpportunityReport() {
               <div className="col-3 px-3 ">
                 <Select
                   bordered={false}
-                  className="w-50 page_size_style"
+                  className="page_size_style"
                   value={numOfItems}
                   onChange={(e) => setNumOfItems(e)}
                 >
                   <Select.Option value="25">
-                    Show{" "}
+                    Show
                     <span style={{ color: "lightgray" }} className="ms-1">
                       |
                     </span>
-                    <span style={{ color: "#2f6b8f" }} className="ms-2">
+                    <span style={{ color: "#2f6b8f" }} className="ms-1">
                       25
-                    </span>{" "}
+                    </span>
                   </Select.Option>
                   <Select.Option value="50">
-                    Show{" "}
+                    Show
                     <span style={{ color: "lightgray" }} className="ms-1">
                       |
                     </span>
@@ -428,7 +425,7 @@ function OpportunityReport() {
               <TableData
                 data={getGenerateData(current, numOfItems, pageSize)}
                 columns={columns}
-                custom_table_css="table_lead_list"
+                custom_table_css="table_report_list"
               />
             </div>
             <div className="d-flex py-2 justify-content-center">
@@ -521,16 +518,16 @@ function OpportunityReport() {
               <div className="col-3 px-3 ">
                 <Select
                   bordered={false}
-                  className="w-50 page_size_style"
-                  value={pageSize}
-                  onChange={(e) => setPageSize(e)}
+                  className="page_size_style"
+                  value={numOfItems}
+                  onChange={(e) => setNumOfItems(e)}
                 >
                   <Select.Option value="25">
                     Show
                     <span style={{ color: "lightgray" }} className="ms-1">
                       |
                     </span>
-                    <span style={{ color: "#2f6b8f" }} className="ms-2">
+                    <span style={{ color: "#2f6b8f" }} className="ms-1">
                       25
                     </span>
                   </Select.Option>
@@ -544,7 +541,6 @@ function OpportunityReport() {
                     </span>
                   </Select.Option>
                   <Select.Option value="100">
-                    
                     Show
                     <span style={{ color: "lightgray" }} className="ms-1">
                       |
@@ -560,7 +556,7 @@ function OpportunityReport() {
               <TableData
                 data={getConvertData(current, numOfItems, pageSize)}
                 columns={columns}
-                custom_table_css="table_lead_list"
+                custom_table_css="table_report_list"
               />
             </div>
             <div className="d-flex py-2 justify-content-center">

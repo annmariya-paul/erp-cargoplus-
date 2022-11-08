@@ -30,6 +30,8 @@ const ROUTES = {
   PRODUCTVARIENTS: "/product_varients",
   SERVICES: "/services",
   SERVICECREATE: "/create_service",
+  ADD_BRANCHES:"/add_branches",
+  ADD_DEPARTMENT:"/add_departments"
 };
 
 module.exports = { ROUTES };

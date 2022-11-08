@@ -19,8 +19,10 @@ import { CRM_BASE_URL } from "../../../api/bootapi";
 // import ErrorMsg from "../../components/errormessage";
 import Countrystate from "./location/countryselect";
 import Custom_model from "../../../components/custom_modal/custom_model";
+import { message } from "antd";
+// import { useForm } from "react-hook-form";
 
-function Lead() {
+function Lead({}) {
   const [toggleState, setToggleState] = useState(1);
   const [basicinfoData, setBasicinfoData] = useState([]);
   const [formSubmitted, setFormSubmitted] = useState(false);
@@ -28,20 +30,33 @@ function Lead() {
   const [modalContact, setModalContact] = useState(false);
   const [modalAddress, setModalAddress] = useState(false);
   const [modalOpportunity, setModalOpportunity] = useState(false);
-  const [leadType, setLeadType] = useState();
+  const [leadType, setLeadType] = useState("L");
+
   const [leadName, setLeadName] = useState();
-  const [leadUsertype, setLeadUsertype] = useState();
+  const [leadUsertype, setLeadUsertype] = useState("O");
   const [leadOrganization, setLeadOrganization] = useState();
-  const [leadSource, setLeadSource] = useState();
+  const [leadSource, setLeadSource] = useState("online registration");
   const [leadDescription, setLeadDescription] = useState();
   const [leadAttachment, setLeadAttachment] = useState();
-  const [leadStatus, setLeadStatus] = useState();
+  const [leadStatus, setLeadStatus] = useState("4");
   const [leadId, setLeadId] = useState();
 
   const [error, setError] = useState(false);
   const toggleTab = (index) => {
     setToggleState(index);
   };
+
+  const [validated, setValidated] = useState(false);
+
+  const handleSubmit = (event) => {
+    const form = event.currentTarget;
+    if (form.checkValidity() === false) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    setValidated(true);
+  };
+  const [validname, setValidname] = useState("");
 
   // const {
   //   register,
@@ -60,9 +75,13 @@ function Lead() {
   };
 
   const Submit = (event) => {
-    const form = event.currentTarget;
-    event.preventDefault();
-    event.stopPropagation();
+    // const form = event.currentTarget;
+    // if (form.checkValidity() === false) {
+    // event.preventDefault();
+    // event.stopPropagation();
+    // }
+    // setValidated(true);
+
     setFormSubmitted(true);
     const formData = new FormData();
     formData.append("lead_type", leadType);
@@ -74,21 +93,21 @@ function Lead() {
     formData.append("attachments", leadAttachment);
     formData.append("lead_status", leadStatus);
     //  console.log(data);
-    PublicFetch.post(`${CRM_BASE_URL}/lead/basic`, formData, {
+    PublicFetch.post(`${CRM_BASE_URL}/lead`, formData, {
       "Content-Type": "Multipart/form-Data",
     })
       .then(function (response) {
         console.log("hello", response);
         if (response.data.success) {
           console.log("hello", response.data.data);
-          setLeadType();
-          setLeadName();
-          setLeadUsertype();
-          setLeadOrganization();
-          setLeadSource();
-          setLeadAttachment();
-          setLeadDescription();
-          setLeadStatus();
+          // setLeadType();
+          // setLeadName();
+          // setLeadUsertype();
+          // setLeadOrganization();
+          // setLeadSource();
+          // setLeadAttachment();
+          // setLeadDescription();
+          // setLeadStatus();
           setModalShow(true);
           close_modal(modalShow, 1000);
           setModalContact(false);
@@ -101,7 +120,9 @@ function Lead() {
       .catch(function (error) {
         console.log(error);
       });
+    // }
   };
+
   // useEffect(() => {
   //   Submit();
   // }, []);
@@ -116,6 +137,8 @@ function Lead() {
   // };
 
   console.log("lead id::", leadId);
+
+  // console.log("leadd id iss", leadType.leadtypes.options[0]);
 
   return (
     <>
@@ -190,152 +213,160 @@ function Lead() {
                   </div>
                 </div> */}
                 {/* </div> */}
-                <Form noValidate id="bidForm" onSubmit={Submit}>
-                  <div className="row px-1">
-                    <div className="col-sm-4 pt-2">
-                      <Form.Group className="mb-2" controlId="lead_type">
-                        <Form.Label>Type</Form.Label>
-                        <Form.Select
-                          aria-label="lead_type"
-                          name="lead_type"
-                          value={leadType}
-                          onChange={(e) => setLeadType(e.target.value)}
-                        >
-                          <option value="L" selected="selected">
-                            Lead
-                          </option>
-                          <option value="C">Customer</option>
-                        </Form.Select>
-                      </Form.Group>
-                    </div>
-                    <div className="col-sm-4 pt-2">
-                      <Form.Group
-                        className="mb-2"
-                        controlId="lead_customer_name"
+                {/* <Form
+                  // noValidate
+                  id="bidForm"
+                  // onSubmit={Submit}
+                  // validated={validated}
+                  // onSubmit={Submit}
+                > */}
+                <div className="row px-1">
+                  <div className="col-sm-4 pt-2">
+                    <Form.Group className="mb-2" controlId="lead_type">
+                      <Form.Label>Type</Form.Label>
+                      <Form.Select
+                        // required
+                        aria-label="lead_type"
+                        name="lead_type"
+                        value={leadType}
+                        // value={leadType.leadtypes.selected.value}
+                        onChange={(e) => setLeadType(e.target.value)}
                       >
-                        <Form.Label>Name</Form.Label>
-                        <Form.Control
-                          type="text"
-                          name="lead_customer_name"
-                          placeholder="Name"
-                          required
-                          value={leadName}
-                          isInvalid={
-                            !leadName?.length > 0 &&
-                            (leadName?.length || formSubmitted)
-                          }
-                          onChange={(e) => setLeadName(e.target.value)}
-                        />
-                        <Form.Control.Feedback type="invalid">
-                          name is not registered
-                        </Form.Control.Feedback>
-                      </Form.Group>
-                    </div>
-                    <div className="col-sm-4 pt-2">
-                      <Form.Group className="mb-2" controlId="lead_user_type">
-                        <Form.Label>User Type</Form.Label>
-                        <Form.Select
-                          aria-label="lead_user_type"
-                          name="lead_user_type"
-                          value={leadUsertype}
-                          onChange={(e) => setLeadUsertype(e.target.value)}
-                        >
-                          <option value="O" selected>
-                            Organisation
-                          </option>
-                          <option value="I">Indivdual</option>
-                        </Form.Select>
-                      </Form.Group>
-                    </div>
-                    <div className="col-sm-4 pt-2">
-                      <Form.Group
-                        className="mb-2"
-                        controlId="lead_organization"
-                      >
-                        <Form.Label>Organisation</Form.Label>
-                        <Form.Control
-                          type="text"
-                          name="lead_organization"
-                          value={leadOrganization}
-                          onChange={(e) => setLeadOrganization(e.target.value)}
-                        />
-                      </Form.Group>
-                    </div>
-                    <div className="col-sm-4 pt-2">
-                      <Form.Group className="mb-2" controlId="lead_source">
-                        <Form.Label>Source</Form.Label>
-                        <Form.Select
-                          aria-label="lead_source"
-                          name="lead_source"
-                          value={leadSource}
-                          onChange={(e) => setLeadSource(e.target.value)}
-                        >
-                          <option value="reference">Reference</option>
-                          <option value="direct visit">Direct Visit</option>
-                          <option value="online registration" selected>
-                            Online Registration
-                          </option>
-                        </Form.Select>
-                      </Form.Group>
-                    </div>
-                    <div className="row justify-content-center">
-                      <div className="col-lg-3 col-xs-12 col-sm-5 col-md-5 mt-3">
-                        <FileUpload
-                          value={leadAttachment}
-                          onChange={(e) => setLeadAttachment(e.target.value)}
-                        />
-                      </div>
-                    </div>
-                    <div className="col-sm-8 pt-3">
-                      <Form.Group className="mb-2" controlId="lead_description">
-                        <Form.Label>Description</Form.Label>
-                        <Form.Control
-                          as="textarea"
-                          rows={3}
-                          value={leadDescription}
-                          onChange={(e) => setLeadDescription(e.target.value)}
-                        />
-                      </Form.Group>
-                    </div>
-                    <div className="col-sm-4 pt-3">
-                      <div className="row">
-                        <div className="col-12">
-                          <Form.Group className="mb-2" controlId="lead_status">
-                            <Form.Label>Lead Status</Form.Label>
-                            <Form.Select
-                              aria-label="lead_status"
-                              name="lead_status"
-                              value={leadStatus}
-                              onChange={(e) => setLeadStatus(e.target.value)}
-                            >
-                              <option value="LE">Lead</option>
-                              <option value="OP">Opportunity</option>
-                              <option value="QU">Quotation</option>
-                              <option value="IN" selected>
-                                Interested
-                              </option>
-                              <option value="CO">Converted</option>
-                              <option value="LO">Lost</option>
-                              <option value="DN">DND</option>
-                            </Form.Select>
-                          </Form.Group>
-                        </div>
-                      </div>
-                    </div>
+                        <option value="L">Lead</option>
+                        <option value="C">Customer</option>
+                      </Form.Select>
+                    </Form.Group>
+                  </div>
+                  <div className="col-sm-4 pt-2">
+                    <Form.Group className="mb-2" controlId="lead_customer_name">
+                      <Form.Label>Name</Form.Label>
+                      <Form.Control
+                        minLength={2}
+                        maxLength={100}
+                        type="text"
+                        name="lead_customer_name"
+                        placeholder="Name"
+                        // required
+                        value={leadName}
+                        // isInvalid={
+                        //   !leadName?.length > 0 &&
+                        //   (leadName?.length || formSubmitted)
+                        // }
+                        onChange={(e) => setLeadName(e.target.value)}
+                      />
 
-                    <div className="col pt-3">
-                      <Button type="submit" onClick={Submit} btnType="save">
-                        Save
-                      </Button>
-                      <Custom_model
-                        size={`sm`}
-                        success
-                        show={modalShow}
-                        onHide={() => setModalShow(false)}
+                      <Form.Control.Feedback type="invalid">
+                        Please enter valid name
+                      </Form.Control.Feedback>
+                    </Form.Group>
+                  </div>
+                  <div className="col-sm-4 pt-2">
+                    <Form.Group className="mb-2" controlId="lead_user_type">
+                      <Form.Label>User Type</Form.Label>
+                      <Form.Select
+                        aria-label="lead_user_type"
+                        name="lead_user_type"
+                        value={leadUsertype}
+                        onChange={(e) => setLeadUsertype(e.target.value)}
+                      >
+                        <option value="O">Organisation</option>
+                        <option value="I">Indivdual</option>
+                      </Form.Select>
+                    </Form.Group>
+                  </div>
+                  <div className="col-sm-4 pt-2">
+                    <Form.Group className="mb-2" controlId="lead_organization">
+                      <Form.Label>Organisation</Form.Label>
+                      <Form.Control
+                        // required
+                        type="text"
+                        name="lead_organization"
+                        value={leadOrganization}
+                        onChange={(e) => setLeadOrganization(e.target.value)}
+                      />
+                    </Form.Group>
+                  </div>
+                  <div className="col-sm-4 pt-2">
+                    <Form.Group className="mb-2" controlId="lead_source">
+                      <Form.Label>Source</Form.Label>
+                      <Form.Select
+                        // required
+                        aria-label="lead_source"
+                        name="lead_source"
+                        value={leadSource}
+                        onChange={(e) => setLeadSource(e.target.value)}
+                      >
+                        <option value="reference">Reference</option>
+                        <option value="direct visit">Direct Visit</option>
+                        <option value="online registration">
+                          Online Registration
+                        </option>
+                      </Form.Select>
+                    </Form.Group>
+                  </div>
+                  <div className="row justify-content-center">
+                    <div className="col-lg-3 col-xs-12 col-sm-5 col-md-5 mt-3">
+                      <FileUpload
+                        value={leadAttachment}
+                        onChange={(e) => setLeadAttachment(e.target.value)}
                       />
                     </div>
                   </div>
-                </Form>
+                  <div className="col-sm-8 pt-3">
+                    <Form.Group className="mb-2" controlId="lead_description">
+                      <Form.Label>Description</Form.Label>
+                      <Form.Control
+                        as="textarea"
+                        rows={3}
+                        value={leadDescription}
+                        onChange={(e) => setLeadDescription(e.target.value)}
+                      />
+                    </Form.Group>
+                  </div>
+                  <div className="col-sm-4 pt-3">
+                    <div className="row">
+                      <div className="col-12">
+                        <Form.Group className="mb-2" controlId="lead_status">
+                          <Form.Label>Lead Status</Form.Label>
+                          <Form.Select
+                            // required
+                            aria-label="lead_status"
+                            name="lead_status"
+                            value={leadStatus}
+                            onChange={(e) => setLeadStatus(e.target.value)}
+                          >
+                            <option value="1">Lead</option>
+                            <option value="2">Opportunity</option>
+                            <option value="3">Quotation</option>
+                            <option value="4">Interested</option>
+                            <option value="5">Converted</option>
+                            <option value="6">Lost</option>
+                            <option value="7">DND</option>
+                          </Form.Select>
+                        </Form.Group>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="col pt-3">
+                    <Button
+                      type="submit"
+                      btnType="save"
+                      onClick={() => {
+                        Submit();
+                      }}
+                    >
+                      Save
+                    </Button>
+                    <Custom_model
+                      size={`sm`}
+                      success
+                      show={modalShow}
+                      onHide={() => setModalShow(false)}
+                    />
+                  </div>
+                </div>
+                {/* </Form> */}
               </div>
               <div
                 className={
@@ -357,13 +388,12 @@ function Lead() {
                     <ContactTable
                       show={modalContact}
                       onHide={() => setModalContact(false)}
-                      lead={leadId}
+                      // leads
+                      leadscontid={leadId}
                     />
                   </div>
                   <div className="col mt-4">
-                    <Button onClick={Submit} btnType="save">
-                      Save
-                    </Button>
+                    <Button btnType="save">Save</Button>
                   </div>
                 </div>
               </div>
@@ -390,9 +420,7 @@ function Lead() {
                     />
                   </div>
                   <div className="col mt-4">
-                    <Button onClick={Submit} btnType="save">
-                      Save
-                    </Button>
+                    <Button btnType="save">Save</Button>
                   </div>
                 </div>
               </div>

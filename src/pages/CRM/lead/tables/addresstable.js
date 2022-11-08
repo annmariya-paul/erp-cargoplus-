@@ -26,9 +26,7 @@ function AddressTable(props) {
 
   const getAllAddress = async () => {
     try {
-      const allAddress = await PublicFetch.get(
-        `${CRM_BASE_URL}/lead/${props.lead}/address`
-      );
+      const allAddress = await PublicFetch.get(`${CRM_BASE_URL}/address`);
       if (allAddress.data.success) {
         setValue(allAddress.data.data);
         console.log("hello data", allAddress.data.data);
@@ -233,7 +231,7 @@ function AddressTable(props) {
                   value={phone}
                   onChange={(value) => setPhone(value)}
                 />
-                {phone ? ( 
+                {phone ? (
                   <small style={{ color: "red" }}>
                     {phone && isPossiblePhoneNumber(phone)
                       ? " "

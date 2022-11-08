@@ -247,8 +247,10 @@ function Categorylist(props) {
                 <Button btnType="add">Add Category</Button>
               </Link>
               <Modal
+             width={700}
                 title="Edit Category"
                 open={isModalOpen}
+              
                 onOk={handleOk}
                 onCancel={handleCancel}
               >
@@ -458,6 +460,7 @@ function Categorylist(props) {
       </div>
       <CustomModel
         show={showViewModal}
+        size='xl'
         onHide={() => setShowViewModal(false)}
         View_list
         list_content={

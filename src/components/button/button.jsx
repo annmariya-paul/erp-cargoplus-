@@ -33,7 +33,7 @@ const Button = React.forwardRef((props, ref) => {
   return (
     <button
       ref={ref}
-      onClick={() => onClick()}
+      onClick={onClick}
       className={`px-3 ${classNames} ${className}`}
       {...rest}
     >

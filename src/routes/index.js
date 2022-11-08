@@ -16,9 +16,6 @@ const ROUTES = {
 
   LEAD_EDIT_ID: "/edit_lead_list/:id",
 
-  // OPPORTUNITY_REPORT: "/opportunity-report",
-  // CATEGORY_LIST: "/categorylist",
-  // LEAD_REPORT: "/leadReport",
   BRANDS: "/brands",
   ATTRIBUTES: "/attributes",
   ADD_ATTRIBUTES: "/add_attribute",

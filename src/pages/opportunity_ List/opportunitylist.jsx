@@ -12,7 +12,7 @@ import { FiEdit } from "react-icons/fi";
 import { AiFillPrinter } from "react-icons/ai";
 import { MdFileCopy, MdPageview } from "react-icons/md";
 import { Input, Select, Pagination } from "antd";
-import {ROUTES} from "../../routes";
+import { ROUTES } from "../../routes";
 import "../CRM/lead/lead_list/leadlist.scss";
 import TableData from "../../components/table/table_data";
 import MyPagination from "../../components/Pagination/MyPagination";
@@ -20,12 +20,14 @@ import CustomModel from "../../components/custom_modal/custom_model";
 import Button from "../../components/button/button";
 import "./opportunitylist.scss";
 import { BsPlusCircleFill } from "react-icons/bs";
-
 import { Link, Route } from "react-router-dom";
 import OpportunityEdit from "../CRM/lead/modals/OpportunityEdit";
 import { useForm } from "react-hook-form";
 import { Form } from "react-bootstrap";
 import Leadlist_Icons from "../../components/lead_list_icon/lead_list_icon";
+import moment from "moment";
+import { DatePicker } from "antd";
+// const editformData = new FormData();
 
 function Opportunitylist(props) {
   const [numOfItems, setNumOfItems] = useState("25");
@@ -41,6 +43,18 @@ function Opportunitylist(props) {
   const [date, setDate] = useState(); //for date
   const [showAddOpportunity, setShowAddOpportunity] = useState(false); //adding opportunity
 
+  const [oppurtunitylead, setOppurtunitylead] = useState("");
+  const [oppurtunitytype, setoppurtunitytype] = useState("");
+  const [oppurtunityfrom, setOppurtunityfrom] = useState("");
+  const [oppurtunitysource, setOppurtunitysource] = useState("");
+  const [oppurtunityparty, setOppurtunityparty] = useState("");
+  const [oppurtunityvalidity, setOppurtunityvalidity] = useState();
+  const [oppurtunityamount, setOppurtunityamount] = useState("");
+  const [oppurtunityprobability, setOppurtunityProbability] = useState("");
+  const [opportunitydescription, setOpportunitydescription] = useState("");
+  const [oppurtunitystatus, setOppurtunitystatus] = useState("");
+
+  const [contact, setContact] = useState([]);
   // view oppurtunity
   const [viewoppurtunity, setviewoppurtunity] = useState({
     id: "",
@@ -54,19 +68,49 @@ function Opportunitylist(props) {
     opportunity_amount: "",
     opportunity_probability: "",
     opportunity_status: "",
+    opportunity_leadid: "",
   });
+  const [editOppurtunity, setEditOppurtunity] = useState({
+    // opportunity_id: "",
+    // opportunity_lead_id: "",
+    // opportunity_type: "",
+    // opportunity_from: "",
+    // opportunity_created_by: "",
+
+    opportunity_id: "",
+    oppurtunityleadid: "",
+    opportunitytype: "",
+    opportunityfrom: "",
+    convertedby: "",
+    opportunitysource: "",
+    opportunityparty: "",
+    opportunityvalidity: "",
+    opportunitydescription: "",
+    opportunityamount: "",
+    opportunityprobability: "",
+    opportunitystatus: "",
+  });
+
   // { function to get all opportunity data - Ann mariya(27/10/22)}
 
   const [OpportunityList, setOpportunityList] = useState();
+  // const [oppurtunityid, setOppurtunityid] = useState();
 
   const GetOpportunityData = () => {
     PublicFetch.get(
-      `${CRM_BASE_URL}/opportunity/basic?startIndex=${pageSize}&noOfItems=${numOfItems}`
+      `${CRM_BASE_URL}/opportunity?startIndex=${pageSize}&noOfItems=${numOfItems}`
     )
       .then((res) => {
         if (res?.data?.success) {
           console.log("All opportunity data", res?.data?.data);
           setOpportunityList(res?.data?.data?.leads);
+          // let samplearry = [];
+          // res?.data?.data?.leads.forEach((item, index) => {
+          //   samplearry.push(item.opportunity_id);
+          // });
+          // console.log("pushedd ", samplearry);
+
+          // setOppurtunityid(samplearry);
         } else {
           console.log("Failed to load data !");
         }
@@ -76,12 +120,67 @@ function Opportunitylist(props) {
       });
   };
 
+  // get one oppurtunity
+  const [oneoppurtunity, setOneoppurtunity] = useState();
+
+  const getoneoppurtunity = async () => {
+    try {
+      const oneoppurtunities = await PublicFetch.get(
+        `${CRM_BASE_URL}/opportunity/basic/${viewoppurtunity.id}`
+      );
+      console.log("one oppurtunitiesss::: ", oneoppurtunities.data.data);
+
+      setOneoppurtunity(oneoppurtunities.data.data);
+      console.log("typeee:", oneoppurtunities.data?.data?.opportunity_type);
+      console.log(
+        "oppurtunitypartyy is",
+        oneoppurtunities.data?.data?.opportunity_party
+      );
+
+      setoppurtunitytype(oneoppurtunities.data?.data?.opportunity_type);
+      setOppurtunityfrom(oneoppurtunities.data?.data?.opportunity_from);
+      setOppurtunitysource(oneoppurtunities.data?.data?.opportunity_source);
+      setOppurtunityparty(oneoppurtunities.data?.data?.opportunity_party);
+      setOppurtunityvalidity(oneoppurtunities.data?.data?.opportunity_validity);
+      setOpportunitydescription(
+        oneoppurtunities.data?.data?.opportunity_description
+      );
+      setOppurtunityamount(oneoppurtunities.data?.data?.opportunity_amount);
+      setOppurtunityProbability(
+        oneoppurtunities.data?.data?.opportunity_probability
+      );
+      setOppurtunitystatus(oneoppurtunities.data?.data?.opportunity_status);
+      setOppurtunitylead(oneoppurtunities.data?.data?.opportunity_lead_id);
+    } catch (err) {
+      console.log("error while getting all leads: ", err);
+    }
+  };
+
+  const getAllContact = async () => {
+    try {
+      const allNames = await PublicFetch.get(
+        `${CRM_BASE_URL}/lead/${viewoppurtunity.opportunity_leadid}/contact`
+      );
+      if (allNames.data.success) {
+        setContact(allNames.data.data);
+        console.log("all contact data names ::::", allNames.data.data);
+      }
+      // else {
+      //   message.error("fetch data error");
+      // }
+      console.log("All leads res : ", allNames);
+    } catch (err) {
+      console.log("error while getting all leads: ", err);
+    }
+  };
+
   useEffect(() => {
     GetOpportunityData();
+    // getAllContact();
   }, [numOfItems, pageSize]);
 
   // {timeout set for success popups }
-
+  // console.log("bjfnj", oneoppurtunity);
   const close_modal = (mShow, time) => {
     if (!mShow) {
       setTimeout(() => {
@@ -89,7 +188,7 @@ function Opportunitylist(props) {
       }, time);
     }
   };
-
+  // console.log("id oppurtunity is", OpportunityList);
   // const submit = (data) => {
   //   console.log(data);
   //   localStorage.setItem("Form", JSON.stringify(data));
@@ -113,9 +212,10 @@ function Opportunitylist(props) {
     return OpportunityList?.slice((current - 1) * pageSize, current * pageSize);
   };
 
-  // {columns is opportunity listing table componenet }
+  // function to view oppurtunity unnimaya
+
   const Viewoppurtunties = (item) => {
-    console.log("all oppurtunity issss:", item);
+    console.log("view oppurtunity issss:", item);
     setviewoppurtunity({
       ...viewoppurtunity,
       id: item.opportunity_id,
@@ -124,14 +224,183 @@ function Opportunitylist(props) {
       convertedby: item.opportunity_created_by,
       opportunity_source: item.opportunity_source,
       opportunity_party: item.opportunity_party,
-      opportunity_validity: item.opportunity_validity,
+      opportunity_validity: moment(item.opportunity_validity).format(
+        "DD/MM/YYYY"
+      ),
       opportunity_description: item.opportunity_description,
       opportunity_amount: item.opportunity_amount,
       opportunity_probability: item.opportunity_probability,
       opportunity_status: item.opportunity_status,
+      opportunity_leadid: item.opportunity_lead_id,
     });
     setShowViewModal(true);
   };
+
+  const handleEditedclick = (e) => {
+    // console.log("edittingg ", e);
+    // setEditOppurtunity();
+    // oppurtunitytype.e.opportunity_type,
+    //   oppurtunityfrom.e.opportunity_from,
+    //   oppurtunitysource.e.opportunity_source,
+    //   oppurtunityparty.e.opportunity_party,
+    //   oppurtunityvalidity.e.opportunity_validity,
+    //   opportunitydescription.e.opportunity_description,
+    //   oppurtunityamount.e.opportunity_amount,
+    //   oppurtunityprobability.e.opportunity_probability,
+    //   oppurtunitystatus.e.opportunity_status,
+    //   oppurtunitylead.e.opportunity_lead_id,
+    // getAllContact();
+    setShowEditModal(true);
+    // updateOppurtunity();
+  };
+
+  const handleEditclick = () => {
+    // console.log("edit data is ::", item);
+
+    // setviewoppurtunity({
+    //   ...viewoppurtunity,
+    //   id: item.opportunity_id,
+    //   opportunity_type: item.opportunity_type,
+    //   opportunity_from: item.opportunity_from,
+    //   convertedby: item.opportunity_created_by,
+    //   opportunity_source: item.opportunity_source,
+    //   opportunity_party: item.opportunity_party,
+    //   opportunity_validity: item.opportunity_validity,
+    //   opportunity_description: item.opportunity_description,
+    //   opportunity_amount: item.opportunity_amount,
+    //   opportunity_probability: item.opportunity_probability,
+    //   opportunity_status: item.opportunity_status,
+    // });
+
+    getoneoppurtunity();
+    getAllContact();
+
+    // setEditOppurtunity({
+    //   ...editOppurtunity,
+    //   opportunity_id: e.opportunity_id,
+    //   oppurtunityleadid: e.opportunity_lead_id,
+    //   opportunitytype: e.opportunity_type,
+    //   opportunityfrom: e.opportunity_from,
+    //   opportunitysource: e.opportunity_source,
+    //   opportunityparty: e.opportunity_party,
+    //   opportunityvalidity: e.opportunity_validity,
+    //   opportunityamount: e.opportunity_amount,
+    //   opportunityprobability: e.opportunity_probability,
+    //   opportunitydescription: e.opportunity_description,
+    //   opportunitystatus: e.opportunity_status,
+
+    // });
+
+    setShowEditModal(true);
+    // updateOppurtunity();
+  };
+
+  // const updateOppurtunity = (event) => {
+  //   setFormSubmitted(true);
+  //   const formData = new FormData();
+  //   formData.append("opportunity_type", editOppurtunity.opportunitytype);
+  //   formData.append("opportunity_from", editOppurtunity.opportunityfrom);
+  //   formData.append("opportunity_source", editOppurtunity.opportunitysource);
+  //   formData.append("opportunity_party", editOppurtunity.opportunityparty);
+  //   formData.append(
+  //     "opportunity_validity",
+  //     editOppurtunity.opportunityvalidity
+  //   );
+  //   formData.append("opportunity_amount", editOppurtunity.opportunityamount);
+  //   formData.append(
+  //     "opportunity_probability",
+  //     editOppurtunity.opportunityprobability
+  //   );
+  //   formData.append(
+  //     "opportunity_description",
+  //     editOppurtunity.opportunitydescription
+  //   );
+  //   formData.append("opportunity_status", editOppurtunity.opportunitystatus);
+
+  //   PublicFetch.patch(
+  //     `${CRM_BASE_URL}/opportunity/basic/${viewoppurtunity.id}`,
+  //     formData
+  //   )
+  //     .then(function (response) {
+  //       console.log("edit oppurt:::", response);
+
+  //       if (response.data.success) {
+  //         console.log("Oppurr", response.data.data);
+  //       } else {
+  //         console.log("Failed while adding data");
+  //       }
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error);
+  //     });
+  // };
+
+  const updatedOppurtunity = async (updatedData) => {
+    const UpdatedFormdata = {
+      // id: viewoppurtunity.id,
+      opportunity_lead_id: oppurtunitylead,
+      opportunity_type: oppurtunitytype,
+      opportunity_from: oppurtunityfrom,
+      opportunity_source: oppurtunitysource,
+      opportunity_party: oppurtunityparty,
+      opportunity_validity: oppurtunityvalidity,
+      opportunity_description: opportunitydescription,
+      opportunity_amount: oppurtunityamount,
+      opportunity_probability: oppurtunityprobability,
+      opportunity_status: oppurtunitystatus,
+    };
+
+    try {
+      const editoppurtunity = await PublicFetch.patch(
+        `${CRM_BASE_URL}/opportunity/basic/${editOppurtunity.opportunity_id}`,
+        UpdatedFormdata
+      );
+
+      console.log("editdata", editoppurtunity);
+      if (editoppurtunity.data.success) {
+        GetOpportunityData();
+        setShowEditModal(false);
+      }
+    } catch (err) {
+      console.log("error while getting all leads: ", err);
+    }
+  };
+
+  // const updateOppurtunity = async (updatedData) => {
+  //   const UpdatedFormdata = {
+  //     // id: viewoppurtunity.id,
+  //     opportunity_lead_id: oppurtunitylead,
+  //     opportunity_type: oppurtunitytype,
+  //     opportunity_from: oppurtunityfrom,
+  //     opportunity_source: oppurtunitysource,
+  //     opportunity_party: oppurtunityparty,
+  //     opportunity_validity: oppurtunityvalidity,
+  //     opportunity_description: opportunitydescription,
+  //     opportunity_amount: oppurtunityamount,
+  //     opportunity_probability: oppurtunityprobability,
+  //     opportunity_status: oppurtunitystatus,
+  //   };
+
+  //   try {
+  //     const editoppurtunity = await PublicFetch.patch(
+  //       `${CRM_BASE_URL}/opportunity/basic/${viewoppurtunity.id}`,
+  //       UpdatedFormdata
+  //     );
+
+  //     console.log("editdata", editoppurtunity);
+  //     if (editoppurtunity.data.success) {
+  //       GetOpportunityData();
+  //       setShowEditModal(false);
+  //     }
+
+  //   } catch (err) {
+  //     console.log("error while getting all leads: ", err);
+  //   }
+  // };
+
+  const editdata = () => {};
+
+  //  columns is opportunity listing table componenet
 
   const columns = [
     {
@@ -141,13 +410,12 @@ function Opportunitylist(props) {
       width: "14%",
       render: (data, index) => {
         return (
-          <div>
-            {/* <a href="" className="actionEdit">
-              <FaEdit />
-              onClick={() => setShowViewModal(true)}
-            </a> */}
-            <div onClick={() => Viewoppurtunties(index)} className="actionView">
-              <MdPageview />
+          <div className="d-flex justify-content-center gap-2">
+            <div className="editcolor">
+              <FaEdit onClick={() => handleEditedclick(index)} />
+            </div>
+            <div className="editcolor">
+              <MdPageview onClick={() => Viewoppurtunties(index)} />
             </div>
           </div>
         );
@@ -277,6 +545,7 @@ function Opportunitylist(props) {
     },
   ];
 
+  // console.log("oppurtunity id iss", oppurtunityid);
   return (
     <div>
       <div className="container-fluid lead_list  my-3 py-3">
@@ -388,13 +657,14 @@ function Opportunitylist(props) {
             </div>
             <div className="col-xl-6 col-lg-6 col-md-6 col-sm-8 col-12"></div>
             <div className="col-lg-3 col-lg-3 col-md-3 col-sm-12 col-12 d-flex justify-content-end">
-             <Link to={ROUTES.LEADLIST}>
-              <Button
-                // onClick={() => setShowAddOpportunity(true)}
-                className="add_opportunity"
-              >
-                Add Opportunity
-              </Button></Link>
+              <Link to={ROUTES.LEADLIST}>
+                <Button
+                  // onClick={() => setShowAddOpportunity(true)}
+                  className="add_opportunity"
+                >
+                  Add Opportunity
+                </Button>
+              </Link>
             </div>
           </div>
           <div className="datatable">
@@ -439,7 +709,10 @@ function Opportunitylist(props) {
                     className="d-flex align-items-center justify-content-between gap-1  p-1 button_span"
                     style={{ fontSize: "14px" }}
                     onClick={() => {
-                      setShowEditModal(true);
+                      // setShowEditModal(true);
+                      // handleEditclick(viewoppurtunity?.id);
+                      handleEditclick(viewoppurtunity);
+                      console.log("edit :::", viewoppurtunity);
                       setShowViewModal(false);
                     }}
                   >
@@ -737,6 +1010,8 @@ function Opportunitylist(props) {
                     onKeyUp={() => {
                       trigger("lead_customer_generated");
                     }}
+                    value={oppurtunitylead}
+                    onChange={(e) => {}}
                   />
                   {errors.lead_customer_generated && (
                     <small className="text-danger">
@@ -938,8 +1213,19 @@ function Opportunitylist(props) {
         onHide={() => setShowEditModal(false)}
         header="Edit Opportunity"
         size={`xl`}
-        footer={[<Button btnType="save">Save</Button>]}
+        footer={[
+          <Button
+            btnType="save"
+            onClick={() => {
+              // updateOppurtunity();
+              updatedOppurtunity();
+            }}
+          >
+            Save
+          </Button>,
+        ]}
         {...props}
+        // Form={editformData}
       >
         <Form
         // onSubmit={handleSubmit(submit)}
@@ -959,11 +1245,13 @@ function Opportunitylist(props) {
                     onKeyUp={() => {
                       trigger("lead_type");
                     }}
+                    value={oppurtunitytype}
+                    onChange={(e) => {
+                      setoppurtunitytype(e.target.value);
+                    }}
                   >
-                    <option value="Sales" selected>
-                      Sales
-                    </option>
-                    <option value="Support">Support</option>
+                    <option value="sales">Sales</option>
+                    <option value="support">Support</option>
                     <option value="maintenance">Maintenance</option>
                   </Form.Select>
                 </Form.Group>
@@ -982,6 +1270,10 @@ function Opportunitylist(props) {
                     onKeyUp={() => {
                       trigger("lead_customer_from");
                     }}
+                    value={oppurtunityfrom}
+                    onChange={(e) => {
+                      setOppurtunityfrom(e.target.value);
+                    }}
                   >
                     {errors.lead_customer_from && (
                       <small className="text-danger">
@@ -991,10 +1283,8 @@ function Opportunitylist(props) {
                     {/* <option value="Sales" selected>
                          Sales
                           </option> */}
-                    <option value="Customer" selected>
-                      Customer
-                    </option>
-                    <option value="Lead">Lead</option>
+                    <option value="customer">Customer</option>
+                    <option value="lead">Lead</option>
                   </Form.Select>
 
                   {errors.lead_customer_from && (
@@ -1015,6 +1305,7 @@ function Opportunitylist(props) {
                     type="text"
                     name="lead_customer_generated"
                     placeholder="User ID"
+                    value={viewoppurtunity?.convertedby}
                     className={`${errors.lead_customer_generated && "invalid"}`}
                     {...register("lead_customer_generated", {
                       required: "Please enter a valid User ID",
@@ -1058,12 +1349,14 @@ function Opportunitylist(props) {
                     onKeyUp={() => {
                       trigger("lead_source");
                     }}
+                    value={oppurtunitysource}
+                    onChange={(e) => {
+                      setOppurtunitysource(e.target.value);
+                    }}
                   >
-                    <option value="Reference" selected>
-                      Reference
-                    </option>
-                    <option value="Direct Visit">Direct Visit</option>
-                    <option value="Online Registraion">
+                    <option value="reference">Reference</option>
+                    <option value="direct visit">Direct Visit</option>
+                    <option value="online registration">
                       Online Registration
                     </option>
                   </Form.Select>
@@ -1086,23 +1379,43 @@ function Opportunitylist(props) {
                     onKeyUp={() => {
                       trigger("lead_party");
                     }}
+                    // value={oppurtunityparty}
+                    onChange={(e) => {
+                      setOppurtunityparty(parseInt(e.target.value));
+                    }}
                   >
-                    <option value="Database" selected>
-                      data
-                    </option>
-                    <option value="Direct Visit"></option>
+                    {contact &&
+                      contact > 0 &&
+                      contact.map((item, index) => {
+                        // console.log("item innn", item);
+                        <option key={item.contact_id} value={item.contact_id}>
+                          {item.contact_person_name}
+                        </option>;
+                      })}
                   </Form.Select>
                 </Form.Group>
               </div>
 
-              <div className="col-sm-4 pt-2">
+              <div className=" col-4 col-sm-4  pt-2">
+                {/* <label>Valid Up To</label>
+                <DatePicker
+                  defaultValue={moment("10-09-2022", dateFormat)}
+                  format={dateFormat}
+                /> */}
                 <Form.Group className="mb-2" controlId="lead_valid_up_to">
                   <Form.Label>Valid Up to</Form.Label>
+
                   <div className="form-control">
                     <input
                       type="date"
+                      name="lead_validity"
                       style={{ borderWidth: 0 }}
-                      onChange={(date) => setDate(date)}
+                      // defaultValue={todaydate}
+                      value={moment(oppurtunityvalidity).format("YYYY-MM-DD")}
+                      onChange={(event) => {
+                        console.log("selected datae : ", event.target.value);
+                        setOppurtunityvalidity(event.target.value);
+                      }}
                     />
                   </div>
                 </Form.Group>
@@ -1113,6 +1426,7 @@ function Opportunitylist(props) {
                   <Form.Label>Details</Form.Label>
                   <Form.Control
                     as="textarea"
+                    name="lead_details"
                     rows={3}
                     className={`${errors.lead_details && "invalid"}`}
                     {...register("lead_details", {
@@ -1123,6 +1437,10 @@ function Opportunitylist(props) {
                     })}
                     onKeyUp={() => {
                       trigger("lead_details");
+                    }}
+                    value={opportunitydescription}
+                    onChange={(e) => {
+                      setOpportunitydescription(e.target.value);
                     }}
                   />
                   {errors.lead_details && (
@@ -1138,6 +1456,7 @@ function Opportunitylist(props) {
                   <Form.Label>Expecting Amount</Form.Label>
                   <Form.Control
                     type="text"
+                    name="lead_expecting_amt"
                     className={`${errors.lead_expecting_amt && "invalid"}`}
                     {...register("lead_expecting_amt", {
                       minLength: {
@@ -1154,6 +1473,10 @@ function Opportunitylist(props) {
                     })}
                     onKeyUp={() => {
                       trigger("lead_expecting_amt");
+                    }}
+                    value={oppurtunityamount}
+                    onChange={(e) => {
+                      setOppurtunityamount(e.target.value);
                     }}
                   />{" "}
                   {errors.lead_expecting_amt && (
@@ -1180,12 +1503,14 @@ function Opportunitylist(props) {
                     onKeyUp={() => {
                       trigger("lead_probability");
                     }}
+                    value={oppurtunityprobability}
+                    onChange={(e) => {
+                      setOppurtunityProbability(e.target.value);
+                    }}
                   >
-                    <option value="low" selected>
-                      low
-                    </option>
-                    <option value="medium">medium</option>
-                    <option value="high">high</option>
+                    <option value="L">low</option>
+                    <option value="M">medium</option>
+                    <option value="H">high</option>
                   </Form.Select>
                 </Form.Group>
               </div>
@@ -1206,14 +1531,14 @@ function Opportunitylist(props) {
                     onKeyUp={() => {
                       trigger("lead_status");
                     }}
+                    value={oppurtunitystatus}
+                    onChange={(e) => setOppurtunitystatus(e.target.value)}
                   >
-                    <option value="quotation" selected>
-                      quotation
-                    </option>
-                    <option value="interested">interested</option>
-                    <option value="converted">converted</option>
-                    <option value="lost">lost</option>
-                    <option value="DND">DND</option>
+                    <option value="1">quotation</option>
+                    <option value="2">interested</option>
+                    <option value="3">converted</option>
+                    <option value="4">lost</option>
+                    <option value="5">DND</option>
                   </Form.Select>
                 </Form.Group>
               </div>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./attributes.styles.scss";
 import { Link } from "react-router-dom";
 import { Form } from "react-bootstrap";
-import Button from "../../../components/button/button";
+import Button from "../../../../components/button/button";
 
 export default function Add_Attribute() {
   const [formSubmitted, setFormSubmitted] = useState(false);
@@ -78,5 +78,3 @@ export default function Add_Attribute() {
     </>
   );
 }
-// BsCircleHalf
-// FaArrowsAlt

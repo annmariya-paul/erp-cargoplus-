@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import "./category.css";
 import { TreeSelect } from "antd";
 import { Form } from "react-bootstrap";
-import Button from "../../components/button/button";
+import Button from "../../../../components/button/button";
 import { useForm } from "react-hook-form";
 import "antd/dist/antd.css";
-import FileUpload from "../../components/fileupload/fileUploader";
+import FileUpload from "../../../../components/fileupload/fileUploader";
+import PublicFetch from "../../../../utils/PublicFetch";
+import { CRM_BASE_URL } from "../../../../api/bootapi";
 
 function Category() {
   const [toggleState, setToggleState] = useState(1);
@@ -221,23 +223,21 @@ function Category() {
                     )}
                   </Form.Group>
                 </div>
-                <div className="row " >
-                <div className="col-12 " >
-                <Form.Group className="mb-2" controlId="cat_img" >
-                    <Form.Label>category Image</Form.Label>
-                    
-                      <FileUpload 
+                <div className="row ">
+                  <div className="col-12 ">
+                    <Form.Group className="mb-2" controlId="cat_img">
+                      <Form.Label>category Image</Form.Label>
+
+                      <FileUpload
                         className={`${errors.attachments && "invalid"}`}
                         {...register("attachments")}
                         onKeyUp={() => {
                           trigger("attachments");
                         }}
-                       
                       />
-                      
-                      </Form.Group>
-                    </div>
-                    </div>
+                    </Form.Group>
+                  </div>
+                </div>
                 <div className="d-flex mt-3">
                   <Button className="savebtn" onClick={Submit} btnType="save">
                     Save

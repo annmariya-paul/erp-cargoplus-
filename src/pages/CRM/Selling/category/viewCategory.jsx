@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+// import "../../../CRM/lead/lead_list/leadlist.scss";
 import { Modal } from "antd";
 import {
   FaFileExcel,
@@ -9,22 +10,22 @@ import {
   FaTrash,
 } from "react-icons/fa";
 import { TreeSelect } from "antd";
-import FileUpload from "../../components/fileupload/fileUploader";
+import FileUpload from "../../../../components/fileupload/fileUploader";
 import { FormGroup } from "react-bootstrap";
 import { Form } from "react-bootstrap";
 import { FiEdit } from "react-icons/fi";
-import Custom_model from "../../components/custom_modal/custom_model";
+import Custom_model from "../../../../components/custom_modal/custom_model";
 import { useForm } from "react-hook-form";
 import { AiFillPrinter } from "react-icons/ai";
 import { MdFileCopy, MdPageview } from "react-icons/md";
 import { Input, Select, Pagination } from "antd";
-import "../CRM/lead/lead_list/leadlist.scss";
-import TableData from "../../components/table/table_data";
-import MyPagination from "../../components/Pagination/MyPagination";
-import CustomModel from "../../components/custom_modal/custom_model";
-import Button from "../../components/button/button";
+import TableData from "../../../../components/table/table_data";
+import MyPagination from "../../../../components/Pagination/MyPagination";
+import CustomModel from "../../../../components/custom_modal/custom_model";
+import Button from "../../../../components/button/button";
 import "./viewCategory.scss";
 import { Link } from "react-router-dom";
+import { ROUTES } from "../../../../routes"
 
 function Categorylist(props) {
   const [pageSize, setPageSize] = useState("25");
@@ -247,10 +248,9 @@ function Categorylist(props) {
                 <Button btnType="add">Add Category</Button>
               </Link>
               <Modal
-             width={700}
+                width={700}
                 title="Edit Category"
                 open={isModalOpen}
-              
                 onOk={handleOk}
                 onCancel={handleCancel}
               >
@@ -460,7 +460,7 @@ function Categorylist(props) {
       </div>
       <CustomModel
         show={showViewModal}
-        size='xl'
+        size="xl"
         onHide={() => setShowViewModal(false)}
         View_list
         list_content={

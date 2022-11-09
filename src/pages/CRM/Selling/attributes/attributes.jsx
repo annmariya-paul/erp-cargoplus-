@@ -2,20 +2,20 @@ import React, { useState } from "react";
 import "./attributes.styles.scss";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import PublicFetch from "../../../utils/PublicFetch";
-import { CRM_BASE_URL } from "../../../api/bootapi";
+import PublicFetch from "../../../../utils/PublicFetch";
+import { CRM_BASE_URL } from "../../../../api/bootapi";
 import { Input, Select, Pagination } from "antd";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { MdPageview } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
 import { AiOutlineClose } from "react-icons/ai";
 import { Form } from "react-bootstrap";
-import TableData from "../../../components/table/table_data";
-import MyPagination from "../../../components/Pagination/MyPagination";
-import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
-import Button from "../../../components/button/button";
-import Custom_model from "../../../components/custom_modal/custom_model";
-import { ROUTES } from "../../../routes";
+import TableData from "../../../../components/table/table_data";
+import MyPagination from "../../../../components/Pagination/MyPagination";
+import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
+import Button from "../../../../components/button/button";
+import Custom_model from "../../../../components/custom_modal/custom_model";
+import { ROUTES } from "../../../../routes";
 
 // { List all attibutes, view and edit an attribute - Ann mariya }
 export default function Attribute(props) {

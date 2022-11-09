@@ -1,7 +1,7 @@
 @use "../../../../styles/variables.scss";
 
 // ######## First Container - Date Criteria #########
-.lead_report_container1{
+.report_container1{
    display: flex;
   flex-direction: column;
   position: relative;
@@ -10,7 +10,7 @@
   box-shadow: 2px 2px 12px variables.$boxshadow;
 }
 
- .lead_report_container1 .ant-select-selector,.ant-picker
+ .report_container1 .ant-select-selector,.ant-picker
  ,.ant-picker:hover{
  background-color: variables.$inputfield !important;
   border-color: variables.$inputfield !important;
@@ -22,7 +22,7 @@
 }
 
 // ######## Second Container #########
-.lead_report{
+.report_content{
   display: flex;
   flex-direction: column;
   position: relative;
@@ -78,20 +78,29 @@
 // ###### Tab Contents ######
 .report-content-tabs {
   border-radius: 3px;
-  min-height: 38rem;
+  min-height: 40rem;
   flex-grow: 1;
 }
 .report-content {
+height: 610px;
   background: white;
   padding-inline: 12px;
   display: none;
 }
 .active-report-content {
+  height: 610px;
   display: block;
+}
+.table_report_list
+{
+  height: 381px !important;
+  overflow-y: auto !important;
 }
 
 @media screen and (max-width: 500px) {
-  .lead_report_container1{
+  .report_container1{
     width:100%;
   }
+  // .report-content,.active-report-content{height: fit-content !important;}
+  // .report-content-tabs{min-height: 50rem;}
 }

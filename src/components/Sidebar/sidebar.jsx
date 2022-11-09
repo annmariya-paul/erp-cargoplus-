@@ -14,6 +14,7 @@ export default function Sidebar({ showSidebar }) {
   // const [sidebar, setSidebar] = useState(true);
   // const showSidebar = () => setSidebar(!sidebar);
   const [Saleopen, setSaleOpen] = useState(false);
+  const [HRMSopen, setHRMSopen] = useState(false);
   const [CRMopen, setCRMopen] = useState(false);
   const [CRMReport, setCRMReport] = useState(false);
   const [CRMselling, setCRMselling] = useState(false);
@@ -56,6 +57,54 @@ export default function Sidebar({ showSidebar }) {
               </li>
               <li
                 className={
+                  HRMSopen
+                    ? "nav-text  items_hrms open"
+                    : "nav-text  items_hrms "
+                }
+              >
+                <Link
+                  className={HRMSopen ? "active-link_main" : "link"}
+                  // to="/"
+                  onClick={() => setHRMSopen(!HRMSopen)}
+                >
+                  <RiTeamFill className="sidebar_icons" />
+                  HRMS
+                  <div className="d-flex justify-content-end ms-5 ps-5">
+                    <AiOutlineCaretDown className="toggle_btn " />
+                  </div>
+                </Link>
+              </li>
+              {HRMSopen ? (
+                <>
+                  <li className="nav-text ">
+                    <NavLink
+                      className={({ isActive }) =>
+                        isActive ? "active-link" : "link"
+                      }
+                      to={ROUTES.ADD_BRANCHES}
+                    >
+                      <RiTeamFill className="sidebar_icons ms-4" />
+                      Branches
+                    </NavLink>
+                  </li>
+                  <li className="nav-text ">
+                    <NavLink
+                      className={({ isActive }) =>
+                        isActive ? "active-link" : "link"
+                      }
+                      to={ROUTES.ADD_DEPARTMENT}
+                    >
+                      <RiTeamFill className="sidebar_icons ms-4" />
+                      Departments
+                    </NavLink>
+                  </li>
+                </>
+              ) : (
+                ""
+              )}
+
+              <li
+                className={
                   CRMopen
                     ? "nav-text  items_hrms open"
                     : "nav-text  items_hrms "
@@ -73,17 +122,7 @@ export default function Sidebar({ showSidebar }) {
                   </div>
                 </Link>
               </li>
-              <li className="nav-text">
-                <NavLink
-                  className={({ isActive }) =>
-                    isActive ? "active-link" : "link"
-                  }
-                  to={ROUTES.UNIT_LIST}
-                >
-                  <RiTeamFill className="sidebar_icons" />
-                  Units and Measures
-                </NavLink>
-              </li>
+
               {CRMopen ? (
                 <>
                   <li
@@ -265,6 +304,17 @@ export default function Sidebar({ showSidebar }) {
               ) : (
                 ""
               )}
+              <li className="nav-text">
+                <NavLink
+                  className={({ isActive }) =>
+                    isActive ? "active-link" : "link"
+                  }
+                  to={ROUTES.UNIT_LIST}
+                >
+                  <RiTeamFill className="sidebar_icons" />
+                  Units and Measures
+                </NavLink>
+              </li>
             </ul>
           </nav>
         </div>

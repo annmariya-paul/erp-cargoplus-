@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import "antd/dist/antd.css";
 import FileUpload from "../../../../components/fileupload/fileUploader";
 import PublicFetch from "../../../../utils/PublicFetch";
-import { CRM_BASE_URL } from "../../../../api/bootapi";
+import { CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
 
 function Category() {
   const [toggleState, setToggleState] = useState(1);

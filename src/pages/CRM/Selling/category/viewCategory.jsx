@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 // import "../../../CRM/lead/lead_list/leadlist.scss";
 import { Modal } from "antd";
 import {
@@ -26,6 +26,8 @@ import Button from "../../../../components/button/button";
 import "./viewCategory.scss";
 import { Link } from "react-router-dom";
 import { ROUTES } from "../../../../routes"
+import { CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
+import PublicFetch from "../../../../utils/PublicFetch";
 
 function Categorylist(props) {
   const [pageSize, setPageSize] = useState("25");
@@ -66,6 +68,24 @@ function Categorylist(props) {
       }, time);
     }
   };
+
+   const getAllContact = async () => {
+     try {
+       const allNames = await PublicFetch.get(
+         `${CRM_BASE_URL_SELLING}/category`
+       );
+     
+       // else {
+       //   message.error("fetch data error");
+       // }
+       console.log("All Category : ", allNames);
+     } catch (err) {
+       console.log("error while getting all leads: ", err);
+     }
+   };
+   useEffect(()=>{
+getAllContact();
+   },[])
 
   const treeData = [
     {

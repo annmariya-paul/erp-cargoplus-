@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
-import "../lead_list/leadlist.scss";
+import "../../../CRM/lead/lead_list/leadlist.scss";
 import { Input, Select, Pagination } from "antd";
 import { FaEdit } from "react-icons/fa";
 import { FiEdit } from "react-icons/fi";
@@ -13,6 +13,8 @@ import Button from "../../../../components/button/button";
 import "./viewunit.scss";
 import { Link } from "react-router-dom";
 import { ROUTES } from "../../../../routes";
+import PublicFetch from "../../../../utils/PublicFetch";
+import { CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
 // import { ROUTES } from "../../../routes";
 function Unitlist() {
   const [pageSize, setPageSize] = useState("25"); // page size
@@ -24,6 +26,32 @@ function Unitlist() {
   const [editShow, setEditShow] = useState(false);
   const [viewUnitModal, setViewUnitModal] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
+ const [allunit,setAllunit]=useState()
+
+ const getData = (current, pageSize) => {
+  return allunit?.slice((current - 1) * pageSize, current * pageSize);
+};
+
+
+const getallunits=async ()=>{
+try{
+const  allunits =await PublicFetch.get(
+  `${CRM_BASE_URL_SELLING}/unit`)
+  console.log("all units are ::",allunits?.data?.data)
+
+  // if(allunits?.data.success){}
+  setAllunit(allunits?.data?.data)
+}
+catch(err) {
+console.log("error to getting all units",err)
+}
+
+}
+
+useEffect(()=>{
+  getallunits()
+},[])
+
 
   const unitdata = [
     {
@@ -81,7 +109,7 @@ function Unitlist() {
     {
       title: "NAME",
       dataIndex: "unit_name",
-      key: "key",
+      key: "unit_name",
       filteredValue: [searchType],
       onFilter: (value, record) => {
         return String(record.unit_name)
@@ -94,7 +122,7 @@ function Unitlist() {
     {
       title: "CODE",
       dataIndex: "unit_code",
-      key: "key",
+      key: "unit_code",
       width: "23%",
       filteredValue: [searchStatus],
       onFilter: (value, record) => {
@@ -107,7 +135,7 @@ function Unitlist() {
     {
       title: "DESCRIPTION",
       dataIndex: "unit_description",
-      key: "key",
+      key: "unit_description",
       //   width: "23%",
       align: "center",
     },
@@ -213,9 +241,9 @@ function Unitlist() {
 
         <div className="datatable">
           <TableData
-            // data={getData(current, pageSize)}
+            data={getData(current, pageSize)}
             // data={allLeadList}
-            data={unitdata}
+            // data={unitdata}
             columns={columns}
             custom_table_css="table_lead_list"
           />

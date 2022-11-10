@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FaFileExcel,
   FaFileCsv,
@@ -33,6 +33,8 @@ import MyPagination from "../../../../components/Pagination/MyPagination";
 import CustomModel from "../../../../components/custom_modal/custom_model";
 import FileUpload from "../../../../components/fileupload/fileUploader";
 import ErrorMsg from "../../../../components/error/ErrorMessage";
+import PublicFetch from "../../../../utils/PublicFetch";
+import { CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
 
 function BrandsList() {
   const [pageSize, setPageSize] = useState("25"); // page size
@@ -44,9 +46,28 @@ function BrandsList() {
   const [BrandViewpopup, setBrandViewPopup] = useState(false);
   const [successPopup, setSuccessPopup] = useState(false);
   const [error, setError] = useState(false);
+  const [brands,setBrands]=useState()
   const getData = (current, pageSize) => {
-    return data.slice((current - 1) * pageSize, current * pageSize);
+    return brands?.slice((current - 1) * pageSize, current * pageSize);
   };
+
+const getallbrand=async()=>{
+try{
+const allbrands = await PublicFetch.get(
+  `${CRM_BASE_URL_SELLING}/brand`)
+  console.log("all brands are",allbrands.data.data)
+  setBrands(allbrands.data.data)
+}
+catch (err) {
+  console.log("error while getting the brands: ", err);
+}
+}
+
+
+useEffect(()=>{
+  getallbrand()
+},[])
+
   const data = [
     {
       lead_type: "Sales",
@@ -103,8 +124,8 @@ function BrandsList() {
     },
     {
       title: "IMAGE",
-      dataIndex: { logo },
-      key: "key",
+      dataIndex: "brand_pic",
+      key: "brand_pic",
       width: "23%",
       // filteredValue: [searchStatus],
       // onFilter: (value, record) => {
@@ -114,14 +135,14 @@ function BrandsList() {
       // },
 
       align: "center",
-      render: (theImageURL, records) => (
-        <img alt={logo} src={logo} height="20px" width={"20px"} />
+      render: ( records, brand_pic) => (
+        <img  src={brand_pic} height="20px" width={"20px"} />
       ),
     },
     {
       title: "NAME",
-      dataIndex: "lead_type",
-      key: "key",
+      dataIndex: "brand_name",
+      key: "brand_name",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
         return String(record.lead_type)
@@ -134,8 +155,8 @@ function BrandsList() {
 
     {
       title: "DESCRIPTION",
-      dataIndex: "lead_organization",
-      key: "key",
+      dataIndex: "brand_description",
+      key: "brand_description",
       //   width: "23%",
       align: "center",
     },

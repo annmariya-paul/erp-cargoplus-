@@ -14,8 +14,8 @@ import Categorylist from "./pages/CRM/Selling/category/viewCategory";
 
 // import BrandsList from "./pages/CRM/lead/brands/BrandsList";
 // import OpportunityReport from "./pages/opportunityReport/OpportunityReport";
-import Unitlist from "./pages/CRM/lead/unit/Unitlist";
-import Addunit from "./pages/CRM/lead/unit/Addunit";
+import Unitlist from "./pages/CRM/Selling/unit/Unitlist";
+import Addunit from "./pages/CRM/Selling/unit/Addunit";
 
 import LeadEdit from "./pages/CRM/lead/lead_list/edit_lead_list";
 

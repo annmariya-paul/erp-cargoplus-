@@ -3,40 +3,44 @@ import React, { useEffect, useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { useForm } from "react-hook-form";
 import { Form, Button, Modal } from "react-bootstrap";
+import { message, Upload } from "antd";
+import { InboxOutlined } from "@ant-design/icons";
 
-export default function FileUpload() {
-  const [files, setFiles] = useState([]);
-  const { register, handleSubmit } = useForm();
+const { Dragger } = Upload;
+export default function FileUpload({multiple,listType,onChange,onClick,accept}) {
 
-  const onDrop = useCallback((acceptedFiles) => {
-    setFiles(
-      acceptedFiles.map((file) =>
-        Object.assign(file, {
-          preview: URL.createObjectURL(file),
-        })
-      )
-    );
-  }, []);
-  const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
-    accept: [],
-    noClick: false,
-    noKeyboard: true,
-    onDrop,
-  });
+  // const [files, setFiles] = useState([]);
+  // const { register, handleSubmit } = useForm();
 
-  const thumbs = files.map((file) => (
-    <div key={file.name}>
-      <small>{file.name}</small>
-      {/* <img src={file.preview} alt={file.name} style={{width:"30px",padding:"2px"}}/> */}
-    </div>
-  ));
+  // const onDrop = useCallback((acceptedFiles) => {
+  //   setFiles(
+  //     acceptedFiles.map((file) =>
+  //       Object.assign(file, {
+  //         preview: URL.createObjectURL(file),
+  //       })
+  //     )
+  //   );
+  // }, []);
+  // const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
+  //   accept: [],
+  //   noClick: false,
+  //   noKeyboard: true,
+  //   onDrop,
+  // });
 
-  useEffect(
-    () => () => {
-      files.forEach((file) => URL.revokeObjectURL(file.preview));
-    },
-    [files]
-  );
+  // const thumbs = files.map((file) => (
+  //   <div key={file.name}>
+  //     <small>{file.name}</small>
+  //     {/* <img src={file.preview} alt={file.name} style={{width:"30px",padding:"2px"}}/> */}
+  //   </div>
+  // ));
+
+  // useEffect(
+  //   () => () => {
+  //     files.forEach((file) => URL.revokeObjectURL(file.preview));
+  //   },
+  //   [files]
+  // );
   // const filess =acceptedFiles.map((file) => {
   //   return (
   //     <li key={file.path}>
@@ -47,7 +51,32 @@ export default function FileUpload() {
 
   return (
     <>
-      <div className="row ">
+        <Dragger
+                      multiple={multiple}
+                      listType={listType}
+                      accept={accept}
+                      onChange={onChange}
+                     onClick={onClick}
+                    >
+                      {/* <p className="ant-upload-drag-icon">
+                        <InboxOutlined />
+                      </p>
+                      <p className="ant-upload-text">
+                        Click or drag file to this area to upload
+                      </p>
+                      <p className="ant-upload-hint">
+                        Support for a single or bulk upload.
+                      </p> */}
+                       <p
+                  className="dropzone-content "
+                  style={{ textAlign: "center", cursor: "pointer" }}
+                >
+                  <i className="bi5 bi-file-earmark-arrow-up-fill" />
+                  <br />
+                  Drop Your Files
+                </p>
+                    </Dragger>
+      {/* <div className="row ">
         <div className=" w-100 ">
           <div className="dropzone-div" {...getRootProps()}>
             <input
@@ -87,14 +116,12 @@ export default function FileUpload() {
               </p>
               <aside>
                 {thumbs}
-                {/* {files ? (<ul style={{listStyle:"none"}}>{image}</ul>):
-              (<ul style={{ textAlign: "center" }}>{files}</ul>)
-              } */}
+               
               </aside>
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* <label id="" htmlFor="file" name="">
           <div className="card filerow">

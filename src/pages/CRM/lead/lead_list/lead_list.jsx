@@ -13,7 +13,7 @@ import { MdFileCopy, MdPageview } from "react-icons/md";
 import { AiFillPrinter } from "react-icons/ai";
 import { Input, Select, Pagination } from "antd";
 import "antd/dist/antd.css";
-// import { Table } from "antd";
+import Button from "../../../../components/button/button";
 import TableData from "../../../../components/table/table_data";
 import { LeadStatus } from "../../../../utils/leadStatus";
 import PublicFetch from "../../../../utils/PublicFetch";
@@ -243,11 +243,11 @@ export default function LeadList() {
             </div>
           </div>
           <div className="row my-3">
-            <div className="col-3 px-3 ">
+            <div className="col-3 px-3">
               <Select
                 // defaultValue={"25"}
                 bordered={false}
-                className="w-50 page_size_style"
+                className="page_size_style"
                 value={noofItems}
                 onChange={(e) => {
                   console.log("On page size selected : ", e);
@@ -292,6 +292,16 @@ export default function LeadList() {
                   </span>{" "}
                 </Select.Option>
               </Select>
+            </div>
+            <div className="col-9 d-flex justify-content-end">
+              <Link to={ROUTES.LEAD}>
+                <Button
+                btnType="add"
+                  // className="add_opportunity"
+                >
+                  Add Lead
+                </Button>
+              </Link>
             </div>
           </div>
           <div className="datatable">

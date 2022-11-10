@@ -21,7 +21,7 @@ export default function LeadReport() {
   const [noOfDays, setNoOfDays] = useState(1);
   const [current, setCurrent] = useState(1);
   const [allLeadList, setAllLeadList] = useState();
-  const [generateTable, setGenerateTable] = useState();
+  const [generatedTable, setGeneratedTable] = useState();
   const [convertedTable, setConvertedTable] = useState();
   const [dateCriteria, setDateCriteria] = useState("daily");
   const [startDate, setStartDate] = useState();
@@ -34,10 +34,6 @@ export default function LeadReport() {
     setToggleState(index);
   };
 
-  const onChange = (date, dateString) => {
-    console.log(date, dateString);
-  };
-
   // { function GetAllLeadData to get lead data separately as generated lead and converted lead list- Ann mariya (20/10/22)}
   const GetAllLeadData = () => {
     PublicFetch.get(
@@ -47,12 +43,12 @@ export default function LeadReport() {
         if (res?.data?.success) {
           console.log("All lead data", res?.data?.data);
           //   { dividing as lead generated and lead converted table - Annmariya (20/10/22) }
-          let arr1 = [];
-          let arr2 = [];
+          let arrA = [];
+          let arrB = [];
           res?.data?.data?.leads.forEach((item, index) => {
             setAllLeadList(item.lead_status);
-            if (item.lead_status == 5) {
-              arr1.push({
+            if (item.lead_status === 5) {
+              arrA.push({
                 lead_customer_name: item?.lead_customer_name,
                 lead_id: item?.lead_id,
                 lead_organization: item?.lead_organization,
@@ -61,10 +57,10 @@ export default function LeadReport() {
                 lead_type: item?.lead_type,
                 lead_user_type: item?.lead_user_type,
               });
-              setConvertedTable(arr1);
+              setConvertedTable(arrA);
             }
-            if (item.lead_status == 1) {
-              arr2.push({
+            if (item.lead_status === 1) {
+              arrB.push({
                 lead_customer_name: item?.lead_customer_name,
                 lead_id: item?.lead_id,
                 lead_organization: item?.lead_organization,
@@ -73,7 +69,7 @@ export default function LeadReport() {
                 lead_type: item?.lead_type,
                 lead_user_type: item?.lead_user_type,
               });
-              setGenerateTable(arr2);
+              setGeneratedTable(arrB);
             }
           });
         } else {
@@ -87,18 +83,17 @@ export default function LeadReport() {
 
   useEffect(() => {
     GetAllLeadData();
-    Searchbydate();
+    // Searchbydate();
   }, [numOfItems, pageSize]);
 
-  // console.log("hdfsgfsdhjs", selectedDate, endDate);
   const Searchbydate = () => {
     let selecteddate = moment(selectedDate).format("MM-DD-YYYY");
     let startdate = moment(startDate).format("MM-DD-YYYY");
     let enddate = moment(endDate).format("MM-DD-YYYY");
     let selectedmonth = moment(selectedMonth).format("MM-01-YYYY");
     PublicFetch.post(
-      `${CRM_BASE_URL}/lead/report`,
-      dateCriteria == "daily"
+      `${CRM_BASE_URL}/report/lead`,
+      dateCriteria === "daily"
         ? {
             startIndex: parseInt(pageSize),
             noOfItems: parseInt(numOfItems),
@@ -130,7 +125,7 @@ export default function LeadReport() {
         if (response.data.success) {
           console.log("hello", response.data.data);
           setConvertedTable(response?.data?.data?.converted?.data);
-          setGenerateTable(response?.data?.data?.generated?.data);
+          setGeneratedTable(response?.data?.data?.generated?.data);
         } else {
           console.log("Failed while adding data");
         }
@@ -140,7 +135,7 @@ export default function LeadReport() {
       });
   };
   const getGenerateData = (current, pageSize) => {
-    return generateTable?.slice((current - 1) * pageSize, current * pageSize);
+    return generatedTable?.slice((current - 1) * pageSize, current * pageSize);
   };
   const getConvertData = (current, pageSize) => {
     return convertedTable?.slice((current - 1) * pageSize, current * pageSize);
@@ -195,8 +190,8 @@ export default function LeadReport() {
   return (
     <>
       {/* {toggleState === 1 && ( */}
-      <div className="container mb-2 d-flex justify-content-center">
-        <div className="lead_report_container1">
+      <div className="container mb-1 d-flex justify-content-center">
+        <div className="report_container1">
           <div className="row">
             <h5 className="report_heading mb-2">Lead</h5>
           </div>
@@ -272,79 +267,9 @@ export default function LeadReport() {
         </div>
       </div>
       {/* )} */}
-      {/* {toggleState === 2 && (
-        <div className="container mb-2 d-flex justify-content-center">
-          <div className="lead_report_container1">
-            <div className="row">
-              <h5 className="report_heading mb-2">Lead</h5>
-            </div>
-            <div className="row my-4 mx-2">
-              <div className="col-md-6 col-sm-12">
-                <label htmlFor="criteria">Select Date Criteria</label>
-                <Select
-                  name="criteria"
-                  defaultValue="daily"
-                  style={{ width: " 100% " }}
-                  onChange={(e) => setDateCriteria(e)}
-                >
-                  <Option value="daily">Daily</Option>
-                  <Option value="BtwnTwoDates">Between Two Dates</Option>
-                  <Option value="monthly">Monthly</Option>
-                </Select>
-              </div>
-              {dateCriteria === "daily" && (
-                <div className="col-md-6 col-sm-12">
-                  <label htmlFor="date">Date</label>
-                  <DatePicker
-                    format={"MM/DD/YYYY"}
-                    value={selectedDate}
-                    onChange={(e) => {
-                      setSelectedDate(e);
-                    }}
-                    allowClear={false}
-                  />
-                </div>
-              )}
-              {dateCriteria === "monthly" && (
-                <div className="col-md-6 col-sm-12">
-                  <label htmlFor="month">Month</label>
-                  <DatePicker onChange={onChange} picker="month" />
-                </div>
-              )}
-              {dateCriteria === "BtwnTwoDates" && (
-                <div className="col-md-6 col-sm-12">
-                  <div className="row">
-                    <div className="col-md-6">
-                      <label htmlFor="startDate">Start Date</label>
-                      <DatePicker
-                        value={startDate}
-                        onChange={(e) => setStartDate(e.target.value)}
-                      />
-                    </div>
-                    <div className="col-md-6">
-                      <label htmlFor="endDate">End Date</label>
-                      <DatePicker
-                        value={endDate}
-                        onChange={(e) => setEndDate(e.target.value)}
-                      />
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-            <div className="row justify-content-center my-2">
-              <div className="col-xl-3 col-lg-3 col-12 d-flex justify-content-center">
-                <Button btnType="save" onClick={Searchbydate}>
-                  Search
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )} */}
 
       <br />
-      <div className="container lead_report">
+      <div className="container report_content">
         <div className="row">
           <div className="col-sm-4">
             <div className="report_bloc-tabs tabs-responsive">
@@ -385,7 +310,7 @@ export default function LeadReport() {
               <Leadlist_Icons />
             </div>
             <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
-              <div className="col-sm-4 col-xs-12">
+              <div className="col-sm-4">
                 <Input.Search
                   placeholder="Search by Name"
                   style={{ margin: "5px", borderRadius: "5px" }}
@@ -398,7 +323,7 @@ export default function LeadReport() {
                   }}
                 />
               </div>
-              <div className="col-sm-4 col-xs-12">
+              <div className="col-sm-4">
                 <Select
                   allowClear
                   showSearch
@@ -435,7 +360,7 @@ export default function LeadReport() {
                     </span>
                     <span style={{ color: "#2f6b8f" }} className="ms-1">
                       25
-                    </span>{" "}
+                    </span>
                   </Select.Option>
                   <Select.Option value="50">
                     Show
@@ -444,16 +369,16 @@ export default function LeadReport() {
                     </span>
                     <span style={{ color: "#2f6b8f" }} className="ms-1">
                       50
-                    </span>{" "}
+                    </span>
                   </Select.Option>
                   <Select.Option value="100">
-                    Show{" "}
+                    Show
                     <span style={{ color: "lightgray" }} className="ms-1">
                       |
                     </span>
                     <span style={{ color: "#2f6b8f" }} className="ms-1">
                       100
-                    </span>{" "}
+                    </span>
                   </Select.Option>
                 </Select>
               </div>
@@ -462,7 +387,7 @@ export default function LeadReport() {
               <TableData
                 data={getGenerateData(current, numOfItems, pageSize)}
                 columns={columns}
-                custom_table_css="table_lead_list"
+                custom_table_css="table_report_list"
               />
             </div>
             <div className="d-flex py-2 justify-content-center">
@@ -492,7 +417,7 @@ export default function LeadReport() {
               <Leadlist_Icons />
             </div>
             <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
-              <div className="col-sm-4 col-xs-12">
+              <div className="col-md-4 col-sm-6">
                 <Input.Search
                   placeholder="Search by Name"
                   style={{ margin: "5px", borderRadius: "5px" }}
@@ -505,7 +430,7 @@ export default function LeadReport() {
                   }}
                 />
               </div>
-              <div className="col-sm-4 col-xs-12">
+              <div className="col-md-4 col-sm-6">
                 <Select
                   allowClear
                   showSearch
@@ -569,7 +494,7 @@ export default function LeadReport() {
               <TableData
                 data={getConvertData(current, numOfItems, pageSize)}
                 columns={columns}
-                custom_table_css="table_lead_list"
+                custom_table_css="table_report_list"
               />
             </div>
             <div className="d-flex py-2 justify-content-center">
@@ -590,32 +515,3 @@ export default function LeadReport() {
     </>
   );
 }
-
-// {
-//  dateCriteria == "daily"
-//    ? {
-//        startIndex: parseInt(pageSize),
-//        noOfItems: parseInt(numOfItems),
-//        mode: "default",
-//        noOfDays: 1,
-//        startDate: selectedDate,
-//        endDate: selectedDate,
-//      }
-//    : dateCriteria == "BtwnTwoDates"
-//    ? {
-//        startIndex: parseInt(pageSize),
-//        noOfItems: parseInt(numOfItems),
-//        mode: "custom",
-//        noOfDays: 2,
-//        startDate: startDate,
-//        endDate: endDate,
-//      }
-//    : {
-//        startIndex: parseInt(pageSize),
-//        noOfItems: parseInt(numOfItems),
-//        mode: "default",
-//        noOfDays: 31,
-//        startDate: selectedMonth,
-//        endDate: selectedMonth,
-//      };
-// }

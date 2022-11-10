@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-// import "./leadReport.styles.scss";
+import "../../pages/CRM/lead/leadReport/leadReport.styles.scss";
 import Button from "../../components/button/button";
 import TableData from "../../components/table/table_data";
 import Leadlist_Icons from "../../components/lead_list_icon/lead_list_icon";
@@ -35,14 +35,11 @@ function OpportunityReport() {
   const toggleTab = (index) => {
     setToggleState(index);
   };
-  const onChange = (date, dateString) => {
-    console.log(date, dateString);
-  };
 
   // { function GetOpportunityData to get opportunity data separately as generated opportuninty and converted opportunity list - Ann mariya (04/11/22)}
   const GetOpportunityData = () => {
     PublicFetch.get(
-      `${CRM_BASE_URL}/opportunity/basic?startIndex=${pageSize}&noOfItems=${numOfItems}`
+      `${CRM_BASE_URL}/opportunity?startIndex=${pageSize}&noOfItems=${numOfItems}`
     )
       .then((res) => {
         if (res?.data?.success) {
@@ -52,7 +49,7 @@ function OpportunityReport() {
           let arr2 = [];
           res?.data?.data?.leads.forEach((item, index) => {
             setAllOpportunityList(item.opportunity_status);
-            if (item.opportunity_status == 5) {
+            if (item.opportunity_status === 5) {
               arr1.push({
                 opportunity_type: item?.opportunity_type,
                 opportunity_from: item?.opportunity_from,
@@ -63,7 +60,7 @@ function OpportunityReport() {
               });
               setConvertedTable(arr1);
             }
-            if (item.opportunity_status == 2) {
+            if (item.opportunity_status === 2) {
               arr2.push({
                 opportunity_type: item?.opportunity_type,
                 opportunity_from: item?.opportunity_from,
@@ -88,6 +85,55 @@ function OpportunityReport() {
     GetOpportunityData();
     // Searchbydate();
   }, [numOfItems, pageSize]);
+
+  const Searchbydate = () => {
+    let selecteddate = moment(selectedDate).format("MM-DD-YYYY");
+    let startdate = moment(startDate).format("MM-DD-YYYY");
+    let enddate = moment(endDate).format("MM-DD-YYYY");
+    let selectedmonth = moment(selectedMonth).format("MM-01-YYYY");
+    PublicFetch.post(
+      `${CRM_BASE_URL}/report/opportunity`,
+      dateCriteria === "daily"
+        ? {
+            startIndex: parseInt(pageSize),
+            noOfItems: parseInt(numOfItems),
+            mode: "default",
+            noOfDays: 1,
+            startDate: selecteddate,
+            endDate: selecteddate,
+          }
+        : dateCriteria === "BtwnTwoDates"
+        ? {
+            startIndex: parseInt(pageSize),
+            noOfItems: parseInt(numOfItems),
+            mode: "custom",
+            noOfDays: 1,
+            startDate: startdate,
+            endDate: enddate,
+          }
+        : {
+            startIndex: parseInt(pageSize),
+            noOfItems: parseInt(numOfItems),
+            mode: "default",
+            noOfDays: 31,
+            startDate: selectedmonth,
+            endDate: selectedmonth,
+          }
+    )
+      .then(function (response) {
+        console.log("testhelllooo.....", response);
+        if (response.data.success) {
+          console.log("hello", response.data.data);
+          setConvertedTable(response?.data?.data?.converted?.data);
+          setGenerateTable(response?.data?.data?.generated?.data);
+        } else {
+          console.log("Failed while adding data");
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
 
   const getGenerateData = (current, pageSize) => {
     return generateTable?.slice((current - 1) * pageSize, current * pageSize);
@@ -157,10 +203,10 @@ function OpportunityReport() {
 
   return (
     <>
-      <div className="container mb-2 d-flex justify-content-center">
-        <div className="lead_report_container1">
+      <div className="container mb-3 d-flex justify-content-center">
+        <div className="report_container1">
           <div className="row">
-            <h5 className="report_heading my-2">Opportunity</h5>
+            <h5 className="report_heading mb-2">Opportunity</h5>
           </div>
           <div className="row my-4 mx-2">
             <div className="col-md-6 col-sm-12">
@@ -179,13 +225,26 @@ function OpportunityReport() {
             {dateCriteria === "daily" && (
               <div className="col-md-6 col-sm-12">
                 <label htmlFor="date">Date</label>
-                <DatePicker onChange={onChange} />
+                <DatePicker
+                  format={"MM/DD/YYYY"}
+                  value={selectedDate}
+                  onChange={(e) => {
+                    setSelectedDate(e);
+                  }}
+                />
               </div>
             )}
             {dateCriteria === "monthly" && (
               <div className="col-md-6 col-sm-12">
                 <label htmlFor="month">Month</label>
-                <DatePicker onChange={onChange} picker="month" />
+                <DatePicker
+                  format={"MM/01/YYYY"}
+                  value={selectedMonth}
+                  onChange={(e) => {
+                    setSelectedMonth(e);
+                  }}
+                  picker="month"
+                />
               </div>
             )}
             {dateCriteria === "BtwnTwoDates" && (
@@ -194,15 +253,17 @@ function OpportunityReport() {
                   <div className="col-md-6">
                     <label htmlFor="startDate">Start Date</label>
                     <DatePicker
+                      format={"MM/DD/YYYY"}
                       value={startDate}
-                      onChange={(e) => setStartDate(e.target.value)}
+                      onChange={(e) => setStartDate(e)}
                     />
                   </div>
                   <div className="col-md-6">
                     <label htmlFor="endDate">End Date</label>
                     <DatePicker
+                      format={"MM/DD/YYYY"}
                       value={endDate}
-                      onChange={(e) => setEndDate(e.target.value)}
+                      onChange={(e) => setEndDate(e)}
                     />
                   </div>
                 </div>
@@ -211,13 +272,15 @@ function OpportunityReport() {
           </div>
           <div className="row  justify-content-center my-2">
             <div className="col-xl-3 col-lg-3 col-12 d-flex justify-content-center">
-              <Button btnType="save">Search</Button>
+              <Button btnType="save" onClick={Searchbydate}>
+                Search
+              </Button>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="container lead_report">
+      <div className="container report_content">
         <div className="row">
           <div className="col-sm-4">
             <div className="report_bloc-tabs tabs-responsive">
@@ -244,7 +307,7 @@ function OpportunityReport() {
                 Converted
               </button>
             </div>
-          </div>{" "}
+          </div>
         </div>
 
         <div className="report-content-tabs">
@@ -259,7 +322,7 @@ function OpportunityReport() {
               <Leadlist_Icons />
             </div>
             <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
-              <div className="col-4">
+              <div className="col-sm-4 col-xs-12">
                 <Input.Search
                   placeholder="Search by type"
                   style={{ margin: "5px", borderRadius: "5px" }}
@@ -272,7 +335,7 @@ function OpportunityReport() {
                   }}
                 />
               </div>
-              <div className="col-4">
+              <div className="col-sm-4 col-xs-12">
                 <Select
                   allowClear
                   showSearch
@@ -324,38 +387,36 @@ function OpportunityReport() {
               <div className="col-3 px-3 ">
                 <Select
                   bordered={false}
-                  className="w-50 page_size_style"
-                  value={pageSize}
-                  onChange={(e) => setPageSize(e)}
+                  className="page_size_style"
+                  value={numOfItems}
+                  onChange={(e) => setNumOfItems(e)}
                 >
                   <Select.Option value="25">
-                    Show{" "}
+                    Show
                     <span style={{ color: "lightgray" }} className="ms-1">
                       |
                     </span>
-                    <span style={{ color: "#2f6b8f" }} className="ms-2">
+                    <span style={{ color: "#2f6b8f" }} className="ms-1">
                       25
-                    </span>{" "}
+                    </span>
                   </Select.Option>
                   <Select.Option value="50">
-                    {" "}
-                    Show{" "}
+                    Show
                     <span style={{ color: "lightgray" }} className="ms-1">
                       |
                     </span>
                     <span style={{ color: "#2f6b8f" }} className="ms-1">
                       50
-                    </span>{" "}
+                    </span>
                   </Select.Option>
                   <Select.Option value="100">
-                    {" "}
-                    Show{" "}
+                    Show
                     <span style={{ color: "lightgray" }} className="ms-1">
                       |
                     </span>
                     <span style={{ color: "#2f6b8f" }} className="ms-1">
                       100
-                    </span>{" "}
+                    </span>
                   </Select.Option>
                 </Select>
               </div>
@@ -364,7 +425,7 @@ function OpportunityReport() {
               <TableData
                 data={getGenerateData(current, numOfItems, pageSize)}
                 columns={columns}
-                custom_table_css="table_lead_list"
+                custom_table_css="table_report_list"
               />
             </div>
             <div className="d-flex py-2 justify-content-center">
@@ -457,38 +518,36 @@ function OpportunityReport() {
               <div className="col-3 px-3 ">
                 <Select
                   bordered={false}
-                  className="w-50 page_size_style"
-                  value={pageSize}
-                  onChange={(e) => setPageSize(e)}
+                  className="page_size_style"
+                  value={numOfItems}
+                  onChange={(e) => setNumOfItems(e)}
                 >
                   <Select.Option value="25">
-                    Show{" "}
+                    Show
                     <span style={{ color: "lightgray" }} className="ms-1">
                       |
                     </span>
-                    <span style={{ color: "#2f6b8f" }} className="ms-2">
+                    <span style={{ color: "#2f6b8f" }} className="ms-1">
                       25
-                    </span>{" "}
+                    </span>
                   </Select.Option>
                   <Select.Option value="50">
-                    {" "}
-                    Show{" "}
+                    Show
                     <span style={{ color: "lightgray" }} className="ms-1">
                       |
                     </span>
                     <span style={{ color: "#2f6b8f" }} className="ms-1">
                       50
-                    </span>{" "}
+                    </span>
                   </Select.Option>
                   <Select.Option value="100">
-                    {" "}
-                    Show{" "}
+                    Show
                     <span style={{ color: "lightgray" }} className="ms-1">
                       |
                     </span>
                     <span style={{ color: "#2f6b8f" }} className="ms-1">
                       100
-                    </span>{" "}
+                    </span>
                   </Select.Option>
                 </Select>
               </div>
@@ -497,7 +556,7 @@ function OpportunityReport() {
               <TableData
                 data={getConvertData(current, numOfItems, pageSize)}
                 columns={columns}
-                custom_table_css="table_lead_list"
+                custom_table_css="table_report_list"
               />
             </div>
             <div className="d-flex py-2 justify-content-center">

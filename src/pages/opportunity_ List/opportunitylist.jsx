@@ -8,6 +8,7 @@ import {
   FaBookOpen,
   FaEdit,
 } from "react-icons/fa";
+import { message } from "antd";
 import { FiEdit } from "react-icons/fi";
 import { AiFillPrinter } from "react-icons/ai";
 import { MdFileCopy, MdPageview } from "react-icons/md";
@@ -30,6 +31,9 @@ import { DatePicker } from "antd";
 // const editformData = new FormData();
 
 function Opportunitylist(props) {
+
+
+
   const [numOfItems, setNumOfItems] = useState("25");
   const [pageSize, setPageSize] = useState(0); // page size
   const [current, setCurrent] = useState(1); // current page
@@ -55,6 +59,7 @@ function Opportunitylist(props) {
   const [oppurtunitystatus, setOppurtunitystatus] = useState("");
   const [oppurtunityviewprogress,setoppurtunityviewprogress]=useState()
   // const [oppurtunityid,setOppurtunityid]=useState()
+
 
   const [contact, setContact] = useState([]);
   const [progressResponse,setProgressResponse]=useState("")
@@ -82,6 +87,7 @@ const [count,setcount]=useState(0)
     opportunity_status: "",
     opportunity_leadid: "",
   });
+ 
   const [editOppurtunity, setEditOppurtunity] = useState({
     // opportunity_id: "",
     // opportunity_lead_id: "",
@@ -191,6 +197,11 @@ const [count,setcount]=useState(0)
     // getAllContact();
   }, [numOfItems, pageSize]);
 
+
+
+
+
+
   // {timeout set for success popups }
   // console.log("bjfnj", oneoppurtunity);
   const close_modal = (mShow, time) => {
@@ -285,6 +296,7 @@ const getOppurtunityProgress=async(viewoppurtunity)=>{
     setShowEditModal(true);
     // updateOppurtunity();
   };
+
 
   const handleEditclick = () => {
     // console.log("edit data is ::", item);
@@ -911,6 +923,7 @@ catch (err){
                     className="d-flex align-items-center justify-content-between gap-1  p-1 "
                     style={{ fontSize: "14px" }}
                     onClick={() => {
+                     
                       handleAddclick(viewoppurtunity.id)
                       console.log("id is inn",viewoppurtunity)
                       setShowProgresssModal(true);
@@ -1599,6 +1612,7 @@ catch (err){
               <div className="row p-3">
                 <div className="col-6 my-1">
                   <label className="my-1">Response</label>
+                  {/* <input type="text" className="input_type_style w-100 "  */}
                   <input type="text" className="input_type_style w-100 "
                   value={progressResponse}
                   onChange={(e)=>setProgressResponse(e.target.value)}
@@ -1607,6 +1621,8 @@ catch (err){
                 <div className="col-6 my-1">
                   <label className="my-1">Next Contact Date</label>
                   <input type="date" className="input_type_style w-100" 
+                
+                      // />
                   value={progressUpdatenextDate}
                   onChange={(e)=>setProgressUpdatenextDate(e.target.value)}
                   />
@@ -1614,6 +1630,7 @@ catch (err){
                 <div className="col-12 my-1">
                   <label className="my-1">Details</label>
                   <textarea type="text" className="input_type_style w-100" 
+                    // />
                   value={progressDetails}
                   onChange={(e)=>setProgressDetails(e.target.value) }
                   
@@ -1622,6 +1639,7 @@ catch (err){
               </div>
               <div className="row my-3">
                 <div className="col-12 d-flex justify-content-center align-items-center gap-3">
+                  {/* <Button className="save_button" >Save</Button> */}
                   <Button className="save_button"  onClick={()=>{addOppurtunityProgress()}} >Save</Button>
                   <Button
                     className="cancel_button"

@@ -8,6 +8,7 @@ import {
   FaBookOpen,
   FaEdit,
 } from "react-icons/fa";
+import { message } from "antd";
 import { FiEdit } from "react-icons/fi";
 import { AiFillPrinter } from "react-icons/ai";
 import { MdFileCopy, MdPageview } from "react-icons/md";
@@ -30,6 +31,9 @@ import { DatePicker } from "antd";
 // const editformData = new FormData();
 
 function Opportunitylist(props) {
+
+
+
   const [numOfItems, setNumOfItems] = useState("25");
   const [pageSize, setPageSize] = useState(0); // page size
   const [current, setCurrent] = useState(1); // current page
@@ -53,8 +57,21 @@ function Opportunitylist(props) {
   const [oppurtunityprobability, setOppurtunityProbability] = useState("");
   const [opportunitydescription, setOpportunitydescription] = useState("");
   const [oppurtunitystatus, setOppurtunitystatus] = useState("");
+  const [oppurtunityviewprogress,setoppurtunityviewprogress]=useState()
+  // const [oppurtunityid,setOppurtunityid]=useState()
+
 
   const [contact, setContact] = useState([]);
+  const [progressResponse,setProgressResponse]=useState("")
+  const [progressDetails,setProgressDetails]= useState("")
+  const[progressUpdatenextDate,setProgressUpdatenextDate]=useState()
+  const[progressUpdatestatus,setProgressUpdatestatus]=useState(5)
+
+//view progress
+const[tableprogress,setTableprogress]=useState("")
+const [count,setcount]=useState(0)
+
+
   // view oppurtunity
   const [viewoppurtunity, setviewoppurtunity] = useState({
     id: "",
@@ -70,6 +87,7 @@ function Opportunitylist(props) {
     opportunity_status: "",
     opportunity_leadid: "",
   });
+ 
   const [editOppurtunity, setEditOppurtunity] = useState({
     // opportunity_id: "",
     // opportunity_lead_id: "",
@@ -126,17 +144,17 @@ function Opportunitylist(props) {
   const getoneoppurtunity = async () => {
     try {
       const oneoppurtunities = await PublicFetch.get(
-        `${CRM_BASE_URL}/opportunity/basic/${viewoppurtunity.id}`
+        `${CRM_BASE_URL}/opportunity/${viewoppurtunity.id}`
       );
       console.log("one oppurtunitiesss::: ", oneoppurtunities.data.data);
 
       setOneoppurtunity(oneoppurtunities.data.data);
       console.log("typeee:", oneoppurtunities.data?.data?.opportunity_type);
-      console.log(
-        "oppurtunitypartyy is",
-        oneoppurtunities.data?.data?.opportunity_party
-      );
-
+      // console.log(
+      //   "oppurtunityidd is",
+      //   oneoppurtunities.data?.data?.opportunity_id
+      // );
+      // setOppurtunityid(oneoppurtunities.data?.data?.opportunity_id)
       setoppurtunitytype(oneoppurtunities.data?.data?.opportunity_type);
       setOppurtunityfrom(oneoppurtunities.data?.data?.opportunity_from);
       setOppurtunitysource(oneoppurtunities.data?.data?.opportunity_source);
@@ -178,6 +196,11 @@ function Opportunitylist(props) {
     GetOpportunityData();
     // getAllContact();
   }, [numOfItems, pageSize]);
+
+
+
+
+
 
   // {timeout set for success popups }
   // console.log("bjfnj", oneoppurtunity);
@@ -232,9 +255,29 @@ function Opportunitylist(props) {
       opportunity_probability: item.opportunity_probability,
       opportunity_status: item.opportunity_status,
       opportunity_leadid: item.opportunity_lead_id,
+      
     });
+    getOppurtunityProgress(item)
+    
     setShowViewModal(true);
   };
+// function to view progress 
+
+
+const getOppurtunityProgress=async(viewoppurtunity)=>{  
+  try{
+  const opportunityprogress=await PublicFetch.get(
+    `${CRM_BASE_URL}/opportunity/${viewoppurtunity.opportunity_id}/progress`)
+  console.log("progresss iss",opportunityprogress.data.data)
+  setoppurtunityviewprogress(opportunityprogress.data.data)
+  setTableprogress(opportunityprogress.data.data)
+  }
+  catch (err){
+    console.log("error while getting oppurtunity progress: ", err);
+  }
+  
+  }
+ 
 
   const handleEditedclick = (e) => {
     // console.log("edittingg ", e);
@@ -254,23 +297,10 @@ function Opportunitylist(props) {
     // updateOppurtunity();
   };
 
+
   const handleEditclick = () => {
     // console.log("edit data is ::", item);
 
-    // setviewoppurtunity({
-    //   ...viewoppurtunity,
-    //   id: item.opportunity_id,
-    //   opportunity_type: item.opportunity_type,
-    //   opportunity_from: item.opportunity_from,
-    //   convertedby: item.opportunity_created_by,
-    //   opportunity_source: item.opportunity_source,
-    //   opportunity_party: item.opportunity_party,
-    //   opportunity_validity: item.opportunity_validity,
-    //   opportunity_description: item.opportunity_description,
-    //   opportunity_amount: item.opportunity_amount,
-    //   opportunity_probability: item.opportunity_probability,
-    //   opportunity_status: item.opportunity_status,
-    // });
 
     getoneoppurtunity();
     getAllContact();
@@ -366,39 +396,37 @@ function Opportunitylist(props) {
     }
   };
 
-  // const updateOppurtunity = async (updatedData) => {
-  //   const UpdatedFormdata = {
-  //     // id: viewoppurtunity.id,
-  //     opportunity_lead_id: oppurtunitylead,
-  //     opportunity_type: oppurtunitytype,
-  //     opportunity_from: oppurtunityfrom,
-  //     opportunity_source: oppurtunitysource,
-  //     opportunity_party: oppurtunityparty,
-  //     opportunity_validity: oppurtunityvalidity,
-  //     opportunity_description: opportunitydescription,
-  //     opportunity_amount: oppurtunityamount,
-  //     opportunity_probability: oppurtunityprobability,
-  //     opportunity_status: oppurtunitystatus,
-  //   };
+ const  handleAddclick =()=>{
+  getoneoppurtunity()
+ }
 
-  //   try {
-  //     const editoppurtunity = await PublicFetch.patch(
-  //       `${CRM_BASE_URL}/opportunity/basic/${viewoppurtunity.id}`,
-  //       UpdatedFormdata
-  //     );
+// function to add oppurtunityprogress
+ 
+const addOppurtunityProgress=async()=>{
+try{
+const opportunityprogress=await PublicFetch.post(
+  `${CRM_BASE_URL}/opportunity/${viewoppurtunity.id}/progress`,{
+    
+    opportunity_progress_response:progressResponse,
+    opportunity_progress_details:progressResponse,
+    opportunity_update_next_date_contact:progressUpdatenextDate,
+    opportunity_update_status:progressUpdatestatus
 
-  //     console.log("editdata", editoppurtunity);
-  //     if (editoppurtunity.data.success) {
-  //       GetOpportunityData();
-  //       setShowEditModal(false);
-  //     }
+  })
 
-  //   } catch (err) {
-  //     console.log("error while getting all leads: ", err);
-  //   }
-  // };
+console.log("progresss iss",opportunityprogress.data.success)
+if(opportunityprogress.data.success){
+  setoppurtunityviewprogress()
+setShowProgresssModal(false)
 
-  const editdata = () => {};
+}
+
+}
+catch (err){
+  console.log("error while getting oppurtunity progress: ", err);
+}
+
+}
 
   //  columns is opportunity listing table componenet
 
@@ -415,7 +443,10 @@ function Opportunitylist(props) {
               <FaEdit onClick={() => handleEditedclick(index)} />
             </div>
             <div className="editcolor">
-              <MdPageview onClick={() => Viewoppurtunties(index)} />
+              <MdPageview 
+                // onClick={()=>viewprogressoppurtunity(index)}
+              onClick={() => Viewoppurtunties(index)}
+              />
             </div>
           </div>
         );
@@ -471,37 +502,38 @@ function Opportunitylist(props) {
       title: "PARTY",
       dataIndex: "opportunity_party",
       key: "opportunity_party",
-
       align: "center",
     },
   ];
 
   const progress = [
+ 
     {
+     
       title: "SLNo:",
-      dataIndex: "slno",
-      key: "key",
-
+      dataIndex: "opportunity_progress_id",
+      key:  "opportunity_progress_id",
       align: "center",
+      // render:(count)=>{return <p>{setcount(count+1) } </p> }
     },
     {
       title: "RESPONSE",
-      dataIndex: "response",
-      key: "key",
-
+      dataIndex: "opportunity_progress_response",
+      key: "opportunity_progress_response",
       align: "center",
     },
     {
       title: "NEXT CONTACT DATE",
-      dataIndex: "next_date",
-      key: "key",
+      dataIndex: "opportunity_update_next_date_contact",
+      key: "opportunity_update_next_date_contact",
       width: "35%",
       align: "center",
+      render:(opportunity_update_next_date_contact)=>{return <label>{moment(opportunity_update_next_date_contact).format("DD-MM-YYYY")}</label> }
     },
     {
       title: "DETAILS",
-      dataIndex: "details",
-      key: "key",
+      dataIndex: "opportunity_progress_details",
+      key: "opportunity_progress_details",
 
       align: "center",
     },
@@ -891,6 +923,9 @@ function Opportunitylist(props) {
                     className="d-flex align-items-center justify-content-between gap-1  p-1 "
                     style={{ fontSize: "14px" }}
                     onClick={() => {
+                     
+                      handleAddclick(viewoppurtunity.id)
+                      console.log("id is inn",viewoppurtunity)
                       setShowProgresssModal(true);
                       setShowViewModal(false);
                     }}
@@ -900,9 +935,11 @@ function Opportunitylist(props) {
                 </Button>
               </div>
             </div>
+            {tableprogress && 
             <div>
-              <TableData columns={progress} data={progress_data} />
+              <TableData columns={progress} data={tableprogress} />
             </div>
+        }
           </div>
         }
       />
@@ -1575,23 +1612,40 @@ function Opportunitylist(props) {
               <div className="row p-3">
                 <div className="col-6 my-1">
                   <label className="my-1">Response</label>
-                  <input type="text" className="input_type_style w-100 " />
+                  {/* <input type="text" className="input_type_style w-100 "  */}
+                  <input type="text" className="input_type_style w-100 "
+                  value={progressResponse}
+                  onChange={(e)=>setProgressResponse(e.target.value)}
+                  />
                 </div>
                 <div className="col-6 my-1">
                   <label className="my-1">Next Contact Date</label>
-                  <input type="text" className="input_type_style w-100" />
+                  <input type="date" className="input_type_style w-100" 
+                
+                      // />
+                  value={progressUpdatenextDate}
+                  onChange={(e)=>setProgressUpdatenextDate(e.target.value)}
+                  />
                 </div>
                 <div className="col-12 my-1">
                   <label className="my-1">Details</label>
-                  <textarea type="text" className="input_type_style w-100" />
+                  <textarea type="text" className="input_type_style w-100" 
+                    // />
+                  value={progressDetails}
+                  onChange={(e)=>setProgressDetails(e.target.value) }
+                  
+                  />
                 </div>
               </div>
               <div className="row my-3">
                 <div className="col-12 d-flex justify-content-center align-items-center gap-3">
-                  <Button className="save_button">Save</Button>
+                  {/* <Button className="save_button" >Save</Button> */}
+                  <Button className="save_button"  onClick={()=>{addOppurtunityProgress()}} >Save</Button>
                   <Button
                     className="cancel_button"
-                    onClick={() => setShowProgresssModal(false)}
+                    onClick={() => 
+                      
+                      setShowProgresssModal(false)}
                   >
                     cancel
                   </Button>

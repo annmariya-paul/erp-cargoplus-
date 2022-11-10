@@ -281,9 +281,7 @@ function ContactTable(props) {
                   onChange={(e) => formik.setFieldValue("contact_phone_1", e)}
                   onBlur={formik.handleBlur("contact_phone_1")}
                 />
-                {/* {errors.phone && (
-                  <small className="text-danger">{errors.phone.message}</small>
-                )} */}
+               
                 <p style={{ color: "red", fontSize: "10px" }}>
                   {formik?.touched?.contact_phone_1 &&
                   formik?.errors?.contact_phone_1

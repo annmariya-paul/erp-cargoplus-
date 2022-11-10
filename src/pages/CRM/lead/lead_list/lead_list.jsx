@@ -32,9 +32,12 @@ export default function LeadList() {
 
   const [allLeadList, setAllLeadList] = useState();
 
+  const pageofIndex = noofItems * (current - 1) - 1 + 1;
+  const numofItemsTo = noofItems * current;
+
   const GetAllLeadData = () => {
     PublicFetch.get(
-      `${CRM_BASE_URL}/lead?startIndex=${pageIndex}&noOfItems=${noofItems}`
+      `${CRM_BASE_URL}/lead?startIndex=${pageofIndex}&noOfItems=${numofItemsTo}`
     )
       .then((res) => {
         if (res?.data?.success) {
@@ -51,14 +54,23 @@ export default function LeadList() {
   };
 
   console.log("total count data", totalCount);
+  // console.log("page&&&& index", pageIndex);
 
   useEffect(() => {
     GetAllLeadData();
-  }, [noofItems, pageIndex]);
+  }, [numofItemsTo, pageofIndex]);
 
-  const getData = (current, numOfItems, pageSize) => {
-    return allLeadList?.slice((current - 1) * numOfItems, current * numOfItems);
+  const getData = (numofItemsTo, pageofIndex) => {
+    return allLeadList?.slice(
+      noofItems * (current - 1) - 1 + 1,
+      noofItems * current
+    );
   };
+
+  const pageofSize = Math.ceil(totalCount / numofItemsTo);
+  console.log("ffgsdgsd,", pageofSize);
+  console.log("ffgsdgsd%$%^$%^,", pageofIndex);
+  console.log("%$%^$%^,", numofItemsTo);
 
   const MyPagination = ({
     total,
@@ -73,7 +85,7 @@ export default function LeadList() {
         onChange={onChange}
         total={total}
         current={current}
-        pageSize={noofItems / totalCount}
+        pageSize={pageofSize}
         defaultPageSize={defaultPageSize}
         pageSizeOptions={pageSizeOptions}
         // showSizeChanger={showSizeChanger}
@@ -113,7 +125,10 @@ export default function LeadList() {
         return (
           <div className="d-flex justify-content-center align-items-center gap-2">
             <div className="m-0">
-              <Link to={`${ROUTES.LEAD_EDIT}/${index.lead_id}`} className="nav-link">
+              <Link
+                to={`${ROUTES.LEAD_EDIT}/${index.lead_id}`}
+                className="nav-link"
+              >
                 {/* <a href="/edit_lead_list" className="actionEdit"> */}
 
                 <FaEdit />
@@ -297,7 +312,7 @@ export default function LeadList() {
             <div className="col-9 d-flex justify-content-end">
               <Link to={ROUTES.LEAD}>
                 <Button
-                btnType="add"
+                  btnType="add"
                   // className="add_opportunity"
                 >
                   Add Lead
@@ -307,8 +322,8 @@ export default function LeadList() {
           </div>
           <div className="datatable">
             <TableData
-              data={getData(current, noofItems, pageIndex)}
-              // data={allLeadList}
+              // data={getData(numofItemsTo, pageofIndex)}
+              data={allLeadList}
               columns={columns}
               custom_table_css="table_lead_list"
             />
@@ -318,8 +333,8 @@ export default function LeadList() {
               total={allLeadList?.length}
               current={current}
               showSizeChanger={true}
-              defaultPageSize={10}
-              pageSizeOptions={["10", "25", "50", "100"]}
+              // defaultPageSize={10}
+              // pageSizeOptions={["10", "25", "50", "100"]}
               onChange={(current, pageSize) => {
                 console.log("page index", current, pageSize);
                 setCurrent(current);

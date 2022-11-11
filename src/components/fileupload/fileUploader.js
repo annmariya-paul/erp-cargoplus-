@@ -7,8 +7,13 @@ import { message, Upload } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
 
 const { Dragger } = Upload;
-export default function FileUpload({multiple,listType,onChange,onClick,accept}) {
-
+export default function FileUpload({
+  multiple,
+  listType,
+  onChange,
+  onClick,
+  accept,
+}) {
   // const [files, setFiles] = useState([]);
   // const { register, handleSubmit } = useForm();
 
@@ -51,14 +56,19 @@ export default function FileUpload({multiple,listType,onChange,onClick,accept}) 
 
   return (
     <>
-        <Dragger
-                      multiple={multiple}
-                      listType={listType}
-                      accept={accept}
-                      onChange={onChange}
-                     onClick={onClick}
-                    >
-                      {/* <p className="ant-upload-drag-icon">
+      <Dragger
+        action={() =>
+          setTimeout(() => {
+            console.log();
+          }, 100)
+        }
+        multiple={multiple}
+        listType={listType}
+        accept={accept}
+        onChange={onChange}
+        onClick={onClick}
+      >
+        {/* <p className="ant-upload-drag-icon">
                         <InboxOutlined />
                       </p>
                       <p className="ant-upload-text">
@@ -67,15 +77,15 @@ export default function FileUpload({multiple,listType,onChange,onClick,accept}) 
                       <p className="ant-upload-hint">
                         Support for a single or bulk upload.
                       </p> */}
-                       <p
-                  className="dropzone-content "
-                  style={{ textAlign: "center", cursor: "pointer" }}
-                >
-                  <i className="bi5 bi-file-earmark-arrow-up-fill" />
-                  <br />
-                  Drop Your Files
-                </p>
-                    </Dragger>
+        <p
+          className="dropzone-content "
+          style={{ textAlign: "center", cursor: "pointer" }}
+        >
+          <i className="bi5 bi-file-earmark-arrow-up-fill" />
+          <br />
+          Drop Your Files
+        </p>
+      </Dragger>
       {/* <div className="row ">
         <div className=" w-100 ">
           <div className="dropzone-div" {...getRootProps()}>

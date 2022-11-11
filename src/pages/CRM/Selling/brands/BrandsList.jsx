@@ -9,7 +9,7 @@ import {
 import { FiEdit } from "react-icons/fi";
 import { AiFillPrinter } from "react-icons/ai";
 import { MdFileCopy, MdPageview } from "react-icons/md";
-import { Input, Select, Pagination } from "antd";
+import { Input, Select, Pagination, Form } from "antd";
 
 import "../../lead/lead_list/leadlist.scss";
 
@@ -35,6 +35,8 @@ import FileUpload from "../../../../components/fileupload/fileUploader";
 import ErrorMsg from "../../../../components/error/ErrorMessage";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
+import InputType from "../../../../components/Input Type textbox/InputType";
+import TextArea from "../../../../components/ InputType TextArea/TextArea";
 
 function BrandsList() {
   const [pageSize, setPageSize] = useState("25"); // page size
@@ -46,27 +48,110 @@ function BrandsList() {
   const [BrandViewpopup, setBrandViewPopup] = useState(false);
   const [successPopup, setSuccessPopup] = useState(false);
   const [error, setError] = useState(false);
-  const [brands,setBrands]=useState()
+  const [brands, setBrands] = useState();
+  const [brandName, setBrandName] = useState();
+  const [BrandImg, setBrandImg] = useState();
+  const [brand_id, setBrand_id] = useState();
+  const [description, setDescription] = useState();
+  const [singleBrand, setSingleBrand] = useState();
+  const [NameInput, setNameInput] = useState();
+  const [DescriptionInput, setDescriptionInput] = useState();
+  const [ImageInput, setImageInput] = useState();
+
   const getData = (current, pageSize) => {
     return brands?.slice((current - 1) * pageSize, current * pageSize);
   };
 
-const getallbrand=async()=>{
-try{
-const allbrands = await PublicFetch.get(
-  `${CRM_BASE_URL_SELLING}/brand`)
-  console.log("all brands are",allbrands.data.data)
-  setBrands(allbrands.data.data)
-}
-catch (err) {
-  console.log("error while getting the brands: ", err);
-}
-}
+  const getallbrand = async () => {
+    try {
+      const allbrands = await PublicFetch.get(`${CRM_BASE_URL_SELLING}/brand`);
+      console.log("all brands are", allbrands.data.data);
+      setBrands(allbrands.data.data);
+    } catch (err) {
+      console.log("error while getting the brands: ", err);
+    }
+  };
 
+  useEffect(() => {
+    getallbrand();
+  }, []);
 
-useEffect(()=>{
-  getallbrand()
-},[])
+  const close_modal = (mShow, time) => {
+    if (!mShow) {
+      setTimeout(() => {
+        setSuccessPopup(false);
+      }, time);
+    }
+  };
+
+  const handleViewData = (e) => {
+    console.log("view data", e);
+
+    setBrandName(e.brand_name);
+    setBrandImg(e.brand_pic);
+    setBrand_id(e.brand_id);
+    setDescription(e.brand_description);
+    setBrandViewPopup(true);
+  };
+
+  const handleEditPhase1 = (e) => {
+    console.log("editPhase1", e);
+
+    PublicFetch.get(`${CRM_BASE_URL_SELLING}/brand/${e}`)
+      .then((res) => {
+        console.log("single brand value", res);
+        if (res.data.success) {
+          setSingleBrand(res.data.data);
+          setNameInput(res.data.data.brand_name);
+          setDescriptionInput(res.data.data.brand_description);
+          setBrand_id(res.data.data.brand_id);
+          setImageInput(res.data.data.brand_pic);
+          setBrandEditPopup(true);
+          setBrandViewPopup(false);
+        }
+      })
+      .catch((err) => {
+        console.log("error formed", err);
+      });
+  };
+
+  const handleEditPhase2 = (e) => {
+    console.log("editPhase2", e);
+    setNameInput(e.brand_name);
+    setDescriptionInput(e.brand_description);
+    setImageInput(e.brand_pic);
+    setBrand_id(e.brand_id);
+    setBrandEditPopup(true);
+  };
+
+  const handleUpdate = (e) => {
+    console.log("edit data", e);
+    const formData = new FormData();
+
+    formData.append("brand_name", NameInput);
+    formData.append("brand_pic", ImageInput);
+    formData.append("brand_description", DescriptionInput);
+
+    PublicFetch.patch(`${CRM_BASE_URL_SELLING}/brand/${brand_id}`, formData, {
+      "Content-Type": "Multipart/form-Data",
+    })
+      .then((res) => {
+        console.log("success", res);
+        if (res.data.success) {
+          console.log("successDataa", res.data.data);
+          getallbrand();
+          setSuccessPopup(true);
+          close_modal(successPopup, 1000);
+          setBrandEditPopup(false);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+        setError(true);
+      });
+  };
+
+  console.log("all view data", brandName, BrandImg, brand_id, description);
 
   const data = [
     {
@@ -106,13 +191,13 @@ useEffect(()=>{
         return (
           <div className="d-flex justify-content-center align-items-center gap-4">
             <div
-              onClick={() => setBrandEditPopup(true)}
+              onClick={() => handleEditPhase2(index)}
               className="actionEdit m-0 p-0"
             >
               <FaEdit />
             </div>
             <div
-              onClick={() => setBrandViewPopup(true)}
+              onClick={() => handleViewData(index)}
               className="actionView m-0 p-0"
             >
               <MdPageview />
@@ -135,8 +220,13 @@ useEffect(()=>{
       // },
 
       align: "center",
-      render: ( records, brand_pic) => (
-        <img  src={brand_pic} height="20px" width={"20px"} />
+      render: (theImageURL, records) => (
+        // console.log("image url", theImageURL);
+        <img
+          src={`${process.env.REACT_APP_BASE_URL}/${theImageURL}`}
+          height="20px"
+          width={"20px"}
+        />
       ),
     },
     {
@@ -145,7 +235,7 @@ useEffect(()=>{
       key: "brand_name",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.lead_type)
+        return String(record.brand_name)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
@@ -360,8 +450,7 @@ useEffect(()=>{
                           className="d-flex align-items-center justify-content-between gap-1  p-1 button_span"
                           style={{ fontSize: "13px" }}
                           onClick={() => {
-                            setBrandEditPopup(true);
-                            setBrandViewPopup(false);
+                            handleEditPhase1(brand_id);
                           }}
                         >
                           Edit <FiEdit fontSize={"12px"} />
@@ -372,8 +461,8 @@ useEffect(()=>{
                   <div className="row my-3">
                     <div className="col-12 d-flex justify-content-center ">
                       <img
-                        src={logo}
-                        alt={logo}
+                        src={`${process.env.REACT_APP_BASE_URL}/${BrandImg}`}
+                        // alt={logo}
                         style={{ height: "70px", width: "70px" }}
                       />
                     </div>
@@ -389,7 +478,7 @@ useEffect(()=>{
                         </div>
                         <div className="col-1">:</div>
                         <div className="col-6 justify-content-start">
-                          <p className="modal_view_p_sub">Sales</p>
+                          <p className="modal_view_p_sub">{brandName}</p>
                         </div>
                       </div>
                       <div className="row mt-4">
@@ -403,10 +492,7 @@ useEffect(()=>{
                         </div>
                         <div className="col-1">:</div>
                         <div className="col-6 justify-content-start">
-                          <p className="modal_view_p_sub">
-                            Lorem Ipsum has been the industry's standard dummy
-                            text ever since the 1500s
-                          </p>
+                          <p className="modal_view_p_sub">{description}</p>
                         </div>
                       </div>
                     </div>
@@ -419,7 +505,7 @@ useEffect(()=>{
       </div>
       {/* { edit brand modal } */}
       <CustomModel
-        size={"sm"}
+        size={"xl"}
         show={BrandEditPopup}
         onHide={() => setBrandEditPopup(false)}
         View_list
@@ -430,33 +516,78 @@ useEffect(()=>{
                 <h5 className="lead_text">Edit Brand</h5>
               </div>
               <div className="row my-3 ">
-                <div className="col-12">
+                {/* <Form onFinish={handleUpdate}> */}
+                <div className="col-6">
                   <p>Name</p>
-                  <input
+                  {/* <Form.Item
+                      name="BrandName"
+                      rules={{ required: true, message: "Please enter name" }}
+                    > */}
+                  <InputType
                     type="text"
-                    rules={{ required: true, message: "Please enter name" }}
+                    // rules={{ required: true, message: "Please enter name" }}
                     className="input_type_style w-100"
+                    value={NameInput}
+                    onChange={(e) => {
+                      setNameInput(e.target.value);
+                    }}
                   />
+                  {/* </Form.Item> */}
                 </div>
-                <div className="col-12 my-2">
+                <div className="col-6 my-2">
                   <p>Description</p>
-                  <textarea className="input_type_style w-100" />
+                  {/* <Form.Item name="description"> */}
+                  <TextArea
+                    value={DescriptionInput}
+                    className="input_type_style w-100"
+                    onChange={(e) => {
+                      setDescriptionInput(e.target.value);
+                    }}
+                  />
+                  {/* </Form.Item> */}
                 </div>
                 <div className="col-12 my-3">
-                  <FileUpload />
+                  {/* <Form.Item name="image"> */}
+                  <FileUpload
+                    multiple
+                    listType="picture"
+                    accept=".png,.jpg,.jpeg"
+                    beforeUpload={false}
+                    onChange={(file) => {
+                      console.log("Before upload", file.file);
+                      console.log("Before upload file size", file.file.size);
+
+                      if (file.file.size > 1000 && file.file.size < 50000) {
+                        setImageInput(file.file.originFileObj);
+                        console.log(
+                          "image grater than 1 kb and less than 50 kb"
+                        );
+                      } else {
+                        console.log("hgrtryyryr");
+                      }
+                    }}
+                  />
+                  {/* </Form.Item> */}
+                  <img
+                    src={`${process.env.REACT_APP_BASE_URL}/${ImageInput}`}
+                    height="40px"
+                    width={"40px"}
+                  />
                 </div>
-                <div className="col-12 d-flex justify-content-center mt-3">
+                <div className="col-12 d-flex justify-content-center mt-5">
                   <Button
                     onClick={() => {
-                      setSuccessPopup(true);
-                      setBrandEditPopup(false);
-                      setError(true);
+                      // setSuccessPopup(true);
+                      // setBrandEditPopup(false);
+
+                      handleUpdate();
                     }}
                     className="save_button"
                   >
                     Save
                   </Button>
                 </div>
+                {/* </Form> */}
               </div>
               {error ? (
                 <div className="">

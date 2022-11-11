@@ -21,7 +21,7 @@ Button.btn-close {
   justify-content: center;
 }
 .modal {
-  z-index: 9999;
+  z-index: 1050;
   border: none;
 }
 .ant-modal-title,
@@ -45,3 +45,17 @@ input[type='date']{
     background-color: variables.$inputfield;
     outline:none;
 }
+.modal_window_style {
+  :global {
+    .ant-modal-content {
+      position: relative;
+      background-color: #fff;
+      background-clip: padding-box;
+      border: 0;
+      border-radius: 15px;
+      pointer-events: auto;
+    }
+  }
+}
+.ant-modal-centered .ant-modal {
+   top: 10%!important; }

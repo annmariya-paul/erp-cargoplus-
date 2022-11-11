@@ -296,6 +296,17 @@ export default function Sidebar({ showSidebar }) {
                           Services
                         </NavLink>
                       </li>
+                      <li className="nav-text">
+                <NavLink
+                  className={({ isActive }) =>
+                    isActive ? "active-link" : "link"
+                  }
+                  to={ROUTES.UNIT_LIST}
+                >
+                  <RiTeamFill className="sidebar_icons ms-4" />
+                  Units and Measures
+                </NavLink>
+              </li>
                     </>
                   ) : (
                     ""
@@ -304,17 +315,7 @@ export default function Sidebar({ showSidebar }) {
               ) : (
                 ""
               )}
-              <li className="nav-text">
-                <NavLink
-                  className={({ isActive }) =>
-                    isActive ? "active-link" : "link"
-                  }
-                  to={ROUTES.UNIT_LIST}
-                >
-                  <RiTeamFill className="sidebar_icons" />
-                  Units and Measures
-                </NavLink>
-              </li>
+           
             </ul>
           </nav>
         </div>

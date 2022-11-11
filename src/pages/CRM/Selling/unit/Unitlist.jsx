@@ -20,18 +20,106 @@ function Unitlist() {
   const [pageSize, setPageSize] = useState("25"); // page size
   const [current, setCurrent] = useState(1);
   const [searchedText, setSearchedText] = useState(""); // search by text input
-  const [searchType, setSearchType] = useState(""); //search by type select box
+  const [searchType, setSearchType] = useState(""); //Add Bransearch by type select box
   const [searchStatus, setSearchStatus] = useState("");
 
   const [editShow, setEditShow] = useState(false);
   const [viewUnitModal, setViewUnitModal] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
  const [allunit,setAllunit]=useState()
+const [unitName,setUnitName]= useState("")
+const [unitcode,setUnitCode]=useState("")
+const [unitDescription,setUnitDescription]= useState("")
+
 
  const getData = (current, pageSize) => {
   return allunit?.slice((current - 1) * pageSize, current * pageSize);
 };
 
+const [viewUnit, setViewUnit]=useState({
+  id:"",
+  unitname:"",
+  unitcode:"",
+  unitdescription:"",
+  unit_status:"",
+  
+})
+
+// const [editunit,setEditunit]= useState({
+//   unitid:"",
+//   units_name:"",
+//   units_code:"",
+//   units_description:""
+// })
+
+// function to view units
+
+const handleViewClick=(item)=>{
+console.log("view units iss",item)
+setViewUnit({
+  ...viewUnit,
+  id:item.unit_id,
+  unitname:item?.unit_name,
+  unitcode:item?.unit_code,
+  unitdescription:item?.unit_description,
+  
+})
+
+}
+
+const handleEditonViewpage=(e)=>{
+  // console.log("editing unitss iss",e)
+  setUnitName(e.unitname)
+  setUnitCode(e.unitcode)
+  setUnitDescription(e.unitdescription)
+  setEditShow(true);
+  setViewUnitModal(false);
+}
+// function to editunits
+
+const handleEditclick=(item)=>{
+  console.log("edittjf",item)
+setUnitName(item?.unit_name)
+setUnitCode(item?.unit_code)
+setUnitDescription(item?.unit_description)
+  // getoneunit(id)
+
+}
+
+const updateClick=async (id)=>{
+try{
+const updating= await PublicFetch.patch(
+  `${CRM_BASE_URL_SELLING}/unit/${viewUnit.id}`,{
+    unit_name:unitName,
+    unit_code:unitcode,
+    unit_description:unitDescription
+  })
+  console.log("editedd data is",updating)
+  if(updating.data.success){
+   console.log("successfully updating ")
+   setViewUnitModal(false)
+    
+  }
+}
+catch(err) {
+      console.log("error to getting all units",err)
+    }
+}
+
+
+// const getoneunit = async(id)=>{
+//   try{
+//  const oneunit =await PublicFetch.get(
+//   `${CRM_BASE_URL_SELLING}/unit/${id}`
+//  )
+//   }
+//   catch(err) {
+//     console.log("error to getting all units",err)
+//   }
+// }
+
+
+// function to get allunits
 
 const getallunits=async ()=>{
 try{
@@ -87,13 +175,17 @@ useEffect(()=>{
         return (
           <div className="d-flex justify-content-center gap-2">
             <span
-              onClick={() => setEditShow(true)}
+              onClick={() =>{ 
+                handleEditclick(index)
+                setEditShow(true)}}
               className="actioneditdelete"
             >
               <FaEdit />
             </span>
             <span
-              onClick={() => setViewUnitModal(true)}
+              onClick={() => {
+                handleViewClick(index)
+                setViewUnitModal(true)}}
               className="actioneditdelete"
             >
               <RiFileSearchFill />
@@ -266,10 +358,9 @@ useEffect(()=>{
                     <span
                       className="d-flex align-items-center justify-content-between gap-1  p-1 button_span"
                       style={{ fontSize: "14px" }}
-                      onClick={() => {
-                        setEditShow(true);
-                        setViewUnitModal(false);
-                      }}
+                      onClick={() => 
+                        // handleEditclick(viewUnit)
+                        handleEditonViewpage(viewUnit)}
                     >
                       Edit
                       <FiEdit />
@@ -284,17 +375,17 @@ useEffect(()=>{
                     <tr>
                       <td>Name</td>
                       <td>:</td>
-                      <td>Kilogrm</td>
+                      <td>{viewUnit.unitname} </td>
                     </tr>
                     <tr>
                       <td>Code</td>
                       <td>:</td>
-                      <td>Kg</td>
+                      <td>{viewUnit.unitcode}</td>
                     </tr>
                     <tr>
-                      <td>Name</td>
+                      <td>Description</td>
                       <td>:</td>
-                      <td>simply dummy text of printing setting</td>
+                      <td>{viewUnit.unitdescription}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -321,6 +412,8 @@ useEffect(()=>{
                     <input
                       type="text"
                       className="input_style"
+                      value={ unitName }
+                      onChange={(e)=>setUnitName(e.target.value) }
                       rules={{ required: true, message: "Please enter name" }}
                     />
                   </div>
@@ -328,22 +421,29 @@ useEffect(()=>{
                 <div className="col-12 py-2">
                   <label>Code</label>
                   <div>
-                    <input type="text" className="input_style" />
+                    <input type="text" className="input_style"
+                    value={unitcode}
+                    onChange={(e)=>setUnitCode(e.target.value) }
+                    />
                   </div>
                 </div>
                 <div className="col-12 py-2">
                   <label>Description</label>
                   <div>
-                    <textarea className="input_style " />
+                    <textarea className="input_style " 
+                    value={unitDescription }
+                    onChange={(e)=>setUnitDescription(e.target.value)}
+                    />
                   </div>
                 </div>
                 <div className="row d-flex justify-content-center">
                   <div className="col-xl-2 col-lg-2 col-12 justify-content-center">
                     <Button
                       btnType="save"
-                      onClick={() => {
+                      onClick={(id) => {
+                        updateClick()
                         setEditShow(false);
-                        setSaveSuccess(true);
+                        // setSaveSuccess(true);
                       }}
                     >
                       Save

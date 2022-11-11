@@ -86,8 +86,8 @@ export default function LeadList() {
         total={total}
         current={current}
         pageSize={pageofSize}
-        defaultPageSize={defaultPageSize}
-        pageSizeOptions={pageSizeOptions}
+        defaultPageSize={false}
+        pageSizeOptions={false}
         // showSizeChanger={showSizeChanger}
       />
     );
@@ -333,8 +333,6 @@ export default function LeadList() {
               total={allLeadList?.length}
               current={current}
               showSizeChanger={true}
-              // defaultPageSize={10}
-              // pageSizeOptions={["10", "25", "50", "100"]}
               onChange={(current, pageSize) => {
                 console.log("page index", current, pageSize);
                 setCurrent(current);

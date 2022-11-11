@@ -57,6 +57,7 @@ function BrandsList() {
   const [NameInput, setNameInput] = useState();
   const [DescriptionInput, setDescriptionInput] = useState();
   const [ImageInput, setImageInput] = useState();
+  const [ImageUpload, setImageUpload] = useState();
 
   const getData = (current, pageSize) => {
     return brands?.slice((current - 1) * pageSize, current * pageSize);
@@ -129,10 +130,9 @@ function BrandsList() {
     const formData = new FormData();
 
     formData.append("brand_name", NameInput);
-    if (ImageInput && ImageInput !== 0) {
-      formData.append("brand_pic", ImageInput);
+    if (ImageUpload && ImageUpload !== 0) {
+      formData.append("brand_pic", ImageUpload);
     }
-
     formData.append("brand_description", DescriptionInput);
 
     PublicFetch.patch(`${CRM_BASE_URL_SELLING}/brand/${brand_id}`, formData, {
@@ -428,11 +428,12 @@ function BrandsList() {
             </div>
             <div className="d-flex py-2 justify-content-center">
               <MyPagination
-                total={data.length}
+                total={brands?.length}
                 current={current}
                 showSizeChanger={true}
                 pageSize={pageSize}
                 onChange={(current, pageSize) => {
+                  console.log("ggdhffs", current, pageSize);
                   setCurrent(current);
                   setPageSize(pageSize);
                 }}
@@ -568,7 +569,7 @@ function BrandsList() {
                       console.log("Before upload file size", file.file.size);
 
                       if (file.file.size > 1000 && file.file.size < 50000) {
-                        setImageInput(file.file.originFileObj);
+                        setImageUpload(file.file.originFileObj);
                         console.log(
                           "image grater than 1 kb and less than 50 kb"
                         );

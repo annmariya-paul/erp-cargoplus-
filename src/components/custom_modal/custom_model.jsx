@@ -32,7 +32,8 @@ function Custom_model({
         dialogClassName={dialogClassName}
         centered
         className={"modal_window_style" }
-        footer={footer}
+        footer={false}
+        destroyOnClose={true}
       >
         {Adding_contents && (
           <>

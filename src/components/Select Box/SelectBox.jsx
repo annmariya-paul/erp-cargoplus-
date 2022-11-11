@@ -1,7 +1,7 @@
 import { Select } from "antd";
 import React, { Children } from "react";
 
-function SelectBox({ className, value, onChange, onClick, children }) {
+function SelectBox({ className, value, onChange, onClick, children ,placeholder}) {
   return (
     <div>
       <div>
@@ -15,6 +15,7 @@ function SelectBox({ className, value, onChange, onClick, children }) {
           onClick={onClick}
           onChange={onChange}
           value={value}
+          placeholder={placeholder}
         >
           {children}
         </Select>

@@ -2,43 +2,60 @@
 
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Form } from "react-bootstrap";
+// import { Form } from "react-bootstrap";
+import { DatePicker, Form,  Select } from "antd";
 import Button from "../../../../components/button/button";
 import { useForm } from "react-hook-form";
 import Custom_model from "../../../../components/custom_modal/custom_model";
 import { CRM_BASE_URL } from "../../../../api/bootapi";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { message } from "antd";
-
-
+// import TextArea from "antd/lib/input/TextArea";
+import SelectBox from "../../../../components/Select Box/SelectBox";
+import InputType from "../../../../components/Input Type textbox/InputType";
+import TextArea from "../../../../components/ InputType TextArea/TextArea";
 export default function AddOpportunity(props) {
   const { id } = useParams();
- console.log("ID is ...",id);
- 
- 
+  console.log("ID is ...", id);
+
+  const [form] = Form.useForm();
+
+  // const typevalues = [
+  //   {
+  //     value: "sales",
+  //     label: "sales",
+  //   },
+  //   {
+  //     value: "support",
+  //     label: "support",
+  //   },
+  //   {
+  //     value: "maintenance",
+  //     label: "maintenance",
+  //   },
+  // ];
 
   const today = new Date().toISOString().split("T")[0];
-  const [modalOpportunity, setModalOpportunity] = useState();
+  const [modalOpportunity, setModalOpportunity] = useState(true);
   const [modalShow, setModalShow] = useState(false);
   const [date, setDate] = useState();
   console.log(date);
   const [name, setName] = useState();
- const [value, setValue] = useState([]);
- const [ShowEditModal, setShowEditModal] = useState(false); //oppertunity edit modal
- const [showProgressModal, setShowProgresssModal] = useState(false); //Oppoertunity progress modal
- const [successPopup, setSuccessPopup] = useState(false); //success popups
- const [showViewModal, setShowViewModal] = useState(false);
+  const [value, setValue] = useState([]);
+  const [ShowEditModal, setShowEditModal] = useState(false); //oppertunity edit modal
+  const [showProgressModal, setShowProgresssModal] = useState(false); //Oppoertunity progress modal
+  const [successPopup, setSuccessPopup] = useState(false); //success popups
+  const [showViewModal, setShowViewModal] = useState(false);
 
- const [amount,setAmount]=useState();
-//  const result=Number(amount).toFixed(2);
+  const [amount, setAmount] = useState();
+  //  const result=Number(amount).toFixed(2);
 
-const onBlur = (e) => {
-  const float = parseFloat(e.target.value)
-  setOppAmount(float.toFixed(2))
-}
+  const numberChange = (e) => {
+    const float = parseFloat(e.target.value);
+    setOppAmount(float.toFixed(2));
+  };
 
-
-  const [opptype, setOppType] = useState();
+  const [opptype, setOppType] = useState(null);
   console.log(opptype);
   const [oppfrom, setOppFrom] = useState();
   console.log(oppfrom);
@@ -50,80 +67,77 @@ const onBlur = (e) => {
   console.log(oppparty);
   // const [date, setDate] = useState(); //for date
 
-
-
   const [oppvalidity, setOppValidity] = useState();
   const [oppamount, setOppAmount] = useState();
-  console.log(oppamount);
+  console.log(typeof oppamount);
   const [oppprobability, setOppProbaility] = useState();
   console.log(oppprobability);
   const [oppdescription, setOppDescription] = useState();
   console.log(oppdescription);
   const [oppstatus, setOppStatus] = useState();
   console.log(typeof oppstatus);
- 
+
   const oppdata = (data) => {
-    console.log("ssss")
-    PublicFetch.post(`${CRM_BASE_URL}/opportunity/basic`, {
-    
+    console.log("ssss");
+    PublicFetch.post(`${CRM_BASE_URL}/opportunity`, {
       opportunity_type: opptype,
       opportunity_from: oppfrom,
-      opportunity_lead_id:oppId,
+      opportunity_lead_id: oppId,
       opportunity_source: oppsource,
       opportunity_party: name,
       opportunity_validity: date,
       opportunity_amount: oppamount,
       opportunity_probability: oppprobability,
       opportunity_description: oppdescription,
-      opportunity_status:oppstatus,
-     
-    }).then(function (response) {
-      console.log("post of opportuity", response);
-      if (response.data.success) {
-        setOppType();
-        setOppFrom();
-        setOppSource();
-        setOppParty();
-        setDate();
-        setOppAmount();
-        setOppProbaility();
-        setOppDescription();
-        setName();
-        setAmount();
-        setDate();
-        setOppValidity();
-        setOppID();
-        setOppStatus();
-        setModalShow(true);
-        setShowViewModal(false);
-        setShowEditModal(false);
-        setSuccessPopup(true);
-        close_modal(successPopup, 1200);
-        props.onHide();
-        reset();
-      } else {
-        message.error("fetch data error");
-      }
+      opportunity_status: oppstatus,
     })
-    .catch(function (error) {
-      console.log(error);
-    })
+      .then(function (response) {
+        console.log("post of opportuity", response);
+        if (response.data.success) {
+          setOppType();
+          setOppFrom();
+          setOppSource();
+          setOppParty();
+          setDate();
+          setOppAmount();
+          setOppProbaility();
+          setOppDescription();
+          setName();
+          setAmount();
+          setDate();
+          setOppValidity();
+          setOppID();
+          setOppStatus();
+          setModalShow(true);
+          setShowViewModal(false);
+          setShowEditModal(false);
+          setSuccessPopup(true);
+          close_modal(successPopup, 1200);
+          props.onCancel();
+          form.resetFields();
+        } else {
+          message.error("fetch data error");
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
   useEffect(() => {
     oppdata();
   }, []);
 
-//API added
+  //API added
   useEffect(() => {
     getAllContact();
   }, []);
 
   const getAllContact = async () => {
     try {
-      const allNames = await PublicFetch.get(`${CRM_BASE_URL}/lead/${id}/contact`);
-     if (allNames.data.success) {
+      const allNames = await PublicFetch.get(`${CRM_BASE_URL}/contact`);
+      if (allNames.data.success) {
         setValue(allNames.data.data);
-       console.log("hello data names new add content", allNames.data.data);
+        console.log("hello data names new add content", allNames.data.data);
       } else {
         message.error("fetch data error");
       }
@@ -148,7 +162,7 @@ const onBlur = (e) => {
       }, time);
     }
   };
-//local storage
+  //local storage
   // const submit = (data) => {
   //   console.log(data);
   //   localStorage.setItem("Form", JSON.stringify(data));
@@ -161,230 +175,281 @@ const onBlur = (e) => {
   return (
     <>
       <Custom_model
-        Adding_contents
-        show={modalOpportunity}
-        onHide={() => setModalOpportunity(false)}
+       Adding_contents
+        width={900}
+        // Adding_contents
+        // visible={props.modalOpportunity}
+        show={props.modalOpportunity}
+        onHide={props.onCancel}
+        // header="Add Opportunity"
         header="Add Opportunity"
-        size={`xl`}
-       
-        {...props}
-      >
+      
         
+        centered
+        footer={false}
+        View_list
+        list_content={
+          <>
+            <Form form={form}>
           <div className="px-5">
             <div className="row px-1">
               <div className="col-sm-4 pt-2">
-                <Form.Group className="mb-2" controlId="lead_type">
-                  <Form.Label>Type</Form.Label>
-                  <Form.Select
-                    aria-label="lead_type"
-                    name="lead_type"
-                    value={opptype}
-                    onChange={(e) => setOppType(e.target.value)}
-                  >
-                    <option value="sales">
-                      sales
-                    </option>
-                    <option value="support">support</option>
-                    <option value="maintenance">maintenance</option>
-                  </Form.Select>
-                </Form.Group>
-              </div>
-
-              <div className="col-sm-4 pt-2">
-                <Form.Group className="mb-2" controlId="lead_customer_from">
-                  <Form.Label>From</Form.Label>
-                  <Form.Select
-                    aria-label="lead_customer_from"
-                    name="lead_customer_from"
-                    value={oppfrom}
-                    onChange={(e)=>setOppFrom(e.target.value)}
-                  >
-                   
-
-                    <option value="customer" >
-                      customer
-                    </option>
-                    <option value="lead">lead</option>
-                  </Form.Select>
-
-                 
-                </Form.Group>
-              </div>
-
-              <div className="col-sm-4 pt-2">
-                <Form.Group
-                  className="mb-2"
-                  controlId="lead_customer_generated"
+                <p>Type</p>
+                <Form.Item
+                  name="lead_type"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please Select a value",
+                    },
+                  ]}
                 >
-                  <Form.Label>Generated/Converted by</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="lead_customer_generated"
-                   value={oppId}
-           
-                   
-                  />
-                 
-                </Form.Group>
+                  <SelectBox
+                    placeholder={"--Please Select--"}
+                    value={opptype}
+                    onChange={(e) => setOppType(e)}
+                  >
+                    <Select.Option value="sales">sales</Select.Option>
+                    <Select.Option value="support">support</Select.Option>
+                    <Select.Option value="maintenance">
+                      maintenance
+                    </Select.Option>
+                  </SelectBox>
+                </Form.Item>
               </div>
 
               <div className="col-sm-4 pt-2">
-                <Form.Group className="mb-2" controlId="lead_source">
-                  <Form.Label>Source</Form.Label>
-                  <Form.Select
-                    aria-label="lead_source"
-                    name="lead_source"
-                    value={oppsource}
-                    onChange={(e)=>setOppSource(e.target.value)}
+                <p>From</p>
+                <Form.Item
+                  name="lead_customer_from"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please Select a value",
+                    },
+                  ]}
+                >
+                  <SelectBox
+                    placeholder={"--Please Select--"}
+                    value={oppfrom}
+                    onChange={(e) => setOppFrom(e)}
                   >
-                    <option value="reference" >
-                      reference
-                    </option>
-                    <option value="direct visit">direct visit</option>
-                    <option value="online registration">
-                      online registration
-                    </option>
-                  </Form.Select>
-                </Form.Group>
+                    <Select.Option value="customer">customer</Select.Option>
+                    <Select.Option value="lead">lead</Select.Option>
+                  </SelectBox>
+                </Form.Item>
               </div>
-{/* upadations on fetching data from api 21.10.22 shahida */}
+
               <div className="col-sm-4 pt-2">
-                <Form.Group className="mb-2" controlId="lead_party">
-                  <Form.Label>Party</Form.Label>
-                  <Form.Select
-                   
-                    // value={name}
-                    onChange={(e) => setName(parseInt(e.target.value))}
-                    aria-label="lead_party"
-                    name="lead_party"
-                    
-                  // value={oppparty}
-                  // onChange={(e)=>{
-                  //   console.log(e.target.value);
-                  //   setOppParty(e.target.value)}}
-                 
+                <p>Generated/Converted by</p>
+                <Form.Item name="lead_customer_generated">
+                  <SelectBox placeholder={"--Please Select--"} value={oppId}>
+                    <Select.Option value="oppId">{oppId}</Select.Option>
+                  </SelectBox>
+                </Form.Item>
+              </div>
+
+              <div className="col-sm-4 pt-2">
+                <p>Source</p>
+                <Form.Item
+                  name="lead_source"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please Select a value",
+                    },
+                  ]}
+                >
+                  <SelectBox
+                    placeholder={"--Please Select--"}
+                    value={oppsource}
+                    onChange={(e) => setOppSource(e)}
+                  >
+                    <Select.Option value="reference">reference</Select.Option>
+                    <Select.Option value="direct visit">
+                      direct visit
+                    </Select.Option>
+                    <Select.Option value="online registration">
+                      online registration
+                    </Select.Option>
+                  </SelectBox>
+                </Form.Item>
+              </div>
+
+              <div className="col-sm-4 pt-2">
+                <p>Party</p>
+                <Form.Item
+                  name="lead_party"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please Select a value",
+                    },
+                  ]}
+                >
+                  <SelectBox
+                    placeholder={"--Please Select--"}
+                    value={name}
+                    onChange={(e) => setName(parseInt(e))}
                   >
                     {value &&
-                      value.map((item, index) => (
-                        <option key={item.contact_id} value={item.contact_id}>
-                          {item.contact_person_name}
-                        </option>
-                      ))}
-                 </Form.Select>
-                </Form.Group>
+                      value.length > 0 &&
+                      value.map((item, index) => {
+                        if (id == item.contact_lead_id) {
+                          return (
+                            <option
+                              key={item.contact_id}
+                              value={item.contact_id}
+                            >
+                              {item.contact_person_name}
+                            </option>
+                          );
+                        }
+                      })}
+                  </SelectBox>
+                </Form.Item>
               </div>
 
               <div className="col-sm-4 pt-2">
-                <Form.Group className="mb-2" controlId="lead_valid_up_to">
-                  <Form.Label>Valid Up to</Form.Label>
-                  <div className="form-control">
-                    <input
-                     type="date"
-                     
-                      style={{ borderWidth: 0 }}
-                      // onChange={(date) => setDate(date)}
-                      min={today}
-                      // value={oppvalidity}
-                      onChange={(e)=>{console.log("date mmm",e.target.value);
-                      setDate(e.target.value) }
-                       }
-                    
-                    />
-                  </div>
-                </Form.Group>
-              </div>
-
-              <div className="col-sm-8 pt-3">
-                <Form.Group className="mb-2" controlId="lead_details">
-                  <Form.Label>Details</Form.Label>
-                  <Form.Control
-                    as="textarea"
-                    value={oppdescription}
-                    onChange={(e)=>setOppDescription(e.target.value)}
-                  
-                   
+                <p>Valid Up to</p>
+                <Form.Item name="lead_valid_up_to"
+                
+                
+                rules={[
+                  {
+                    required: true,
+                    message: "Please select a date",
+                  },
+                ]}
+                >
+                  {/* <SelectBox placeholder={"--Please Select--"} value={oppId}>
+                    <Select.Option value="oppId">{oppId}</Select.Option>
+                  </SelectBox> */}
+                  <DatePicker
+                    style={{ borderWidth: 0 }}
+                    //  disabledDate={today}
+                    disabledDate={(d) => !d || d.isBefore(today)}
+                    onChange={(e) => {
+                      console.log("date mmm", e);
+                      setDate(e);
+                    }}
                   />
-                  
-                 
-                </Form.Group>
-              </div>
-
-              <div className="col-sm-4 pt-3">
-                <Form.Group className="mb-2" controlId="lead_expecting_amt">
-                  <Form.Label>Expecting Amount</Form.Label>
-                  <Form.Control
-                   type="number"
-                    value={oppamount}
-                    // onChange={(e) => setOppAmount(e.target.value)}
-                    onBlur={onBlur}
-                    // {...register("lead_expecting_amt", {
-                    //   maxLength: {
-                    //     value: 100,
-                    //   },
-                    //   pattern: {
-                    //     value: /^[1-9]\d*(\.\d+)?$/,
-                    //     message: "Please enter a valid amount!",
-                    //   },
-                    // })}
-                  // onBlur={result}
-                    // onKeyUp={() => {
-                    //   trigger("lead_expecting_amt");
-                    // }}
-                    // className={`${errors.lead_expecting_amt && "invalid"}`}
-                  />
-                  
-                </Form.Group>
+                </Form.Item>
               </div>
 
               <div className="col-sm-4 pt-2">
-                <Form.Group className="mb-2" controlId="lead_probability">
-                  <Form.Label>Probability of conversion</Form.Label>
-                  <Form.Select
-                    aria-label="lead_probability"
-                    name="lead_probability"
+                <p>Details</p>
+                <Form.Item
+                  name="lead_details"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter a value",
+                    },
+                  ]}
+                >
+                <TextArea value={oppdescription}
+                  onChange={(e) => setOppDescription(e.target.value)}
+                />
+                </Form.Item>
+              </div>
+              
+              <div className="col-sm-4 pt-2">
+                <p>Expecting Amount</p>
+                <Form.Item
+                  name="lead_expecting_amt"
+                  // type="number"
+                  rules={[
+                    {
+                      required: true,
+                      pattern: new RegExp("^[0-9.]+$"),
+                      message: "Please enter valid amount",
+                    },
+                  ]}
+                >
+              <InputType 
+                  value={oppamount} 
+                  // onBlur={ float = parseFloat(e.target.value),
+                  //   setOppAmount(float.toFixed(2))}
+                  onChange={(e) => setOppAmount(parseFloat(e.target.value).toFixed(2))}
+                  />
+                </Form.Item>
+              </div>
+
+              <div className="col-sm-4 pt-2">
+                <p>Probability of conversion</p>
+                <Form.Item
+                  name="lead_probability"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please Select a value",
+                    },
+                  ]}
+                >
+                  <SelectBox
+                    placeholder={"--Please Select--"}
                     value={oppprobability}
-                    onChange={(e)=>setOppProbaility(e.target.value)}
+                    onChange={(e) => setOppProbaility(e)}
                   >
-                    <option value="L">
-                      Low
-                    </option>
-                    <option value="M">Medium</option>
-                    <option value="H">High</option>
-                  </Form.Select>
-                </Form.Group>
+                    <Select.Option value="L">Low</Select.Option>
+                    <Select.Option value="M">
+                    Medium
+                    </Select.Option>
+                    <Select.Option value="H">
+                    High
+                    </Select.Option>
+                  </SelectBox>
+                </Form.Item>
+              </div>
+              <div className="col-sm-4 pt-2">
+                <p>Status</p>
+                <Form.Item
+                  name="lead_status"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please Select a value",
+                    },
+                  ]}
+                >
+                  <SelectBox
+                    placeholder={"--Please Select--"}
+                    value={oppstatus}
+                    onChange={(e) => setOppStatus(e)}
+                  >
+                    <Select.Option value={1}>quotation</Select.Option>
+                  <Select.Option value={2}>interested</Select.Option>
+                  <Select.Option value={3}>converted</Select.Option>
+                  <Select.Option value={4}>lost</Select.Option>
+                  <Select.Option value={5}>DND</Select.Option>
+                  </SelectBox>
+                </Form.Item>
               </div>
 
-              <div className="col-sm-4 pt-2">
-                <Form.Group className="mb-2" controlId="lead_status">
-                  <Form.Label>Status</Form.Label>
-                  <Form.Select
-                    aria-label="lead_status"
-                    name="lead_status"
-                    value={oppstatus}
-                    onChange={(e)=>setOppStatus(parseInt(e.target.value) )}
-                  >
-                    <option value="1">
-                      quotation
-                    </option>
-                    <option value="2">interested</option>
-                    <option value="3">converted</option>
-                    <option value="4">lost</option>
-                    <option value="5">DND</option>
-                  </Form.Select>
-                </Form.Group>
-              </div>
+             
             </div>
           </div>
+
           <div className="col-12 d-flex justify-content-center pt-2">
-          <Button btnType="save"  onClick={oppdata} >Save</Button>
+            <Button btnType="save" onClick={oppdata}>
+              Save
+            </Button>
           </div>
+        </Form>
+          </>
+        }
+        // {...props}
+      >
+        
       </Custom_model>
       <Custom_model
-        centered
+        
         size={`sm`}
         success
         show={modalShow}
         onHide={() => setModalShow(false)}
+        footer={false}
       />
     </>
   );

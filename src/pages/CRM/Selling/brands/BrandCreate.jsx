@@ -90,6 +90,7 @@ function BrandCreate() {
                     {/* <input type="text" className="input_type_style w-100" /> */}
                     <Form.Item
                       name="brand"
+                      
                       rules={[
                         {
                           required: true,

@@ -129,7 +129,10 @@ function BrandsList() {
     const formData = new FormData();
 
     formData.append("brand_name", NameInput);
-    formData.append("brand_pic", ImageInput);
+    if (ImageInput && ImageInput !== 0) {
+      formData.append("brand_pic", ImageInput);
+    }
+
     formData.append("brand_description", DescriptionInput);
 
     PublicFetch.patch(`${CRM_BASE_URL_SELLING}/brand/${brand_id}`, formData, {
@@ -152,6 +155,13 @@ function BrandsList() {
   };
 
   console.log("all view data", brandName, BrandImg, brand_id, description);
+  console.log(
+    "new view data",
+    NameInput,
+    ImageInput,
+    brand_id,
+    DescriptionInput
+  );
 
   const data = [
     {

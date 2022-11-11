@@ -232,8 +232,8 @@ const goToLeadlist=()=>{navigate("/lead_list")}
                       Opportunity
                     </Button>
                     <AddOpportunity
-                      show={modalOpportunity}
-                      onHide={() => setModalOpportunity(false)}
+                      modalOpportunity={modalOpportunity}
+                      onCancel={() => setModalOpportunity(false)}
                       style="width:1250px"
                     />
                   </div>

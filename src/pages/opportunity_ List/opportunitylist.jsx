@@ -418,6 +418,7 @@ console.log("progresss iss",opportunityprogress.data.success)
 if(opportunityprogress.data.success){
   setoppurtunityviewprogress()
 setShowProgresssModal(false)
+setSuccessPopup(true)
 
 }
 
@@ -935,11 +936,11 @@ catch (err){
                 </Button>
               </div>
             </div>
-            {tableprogress && 
+            {tableprogress?  (tableprogress && 
             <div>
               <TableData columns={progress} data={tableprogress} />
             </div>
-        }
+  ):(<div> </div>)}
           </div>
         }
       />

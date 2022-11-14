@@ -14,8 +14,8 @@ import Categorylist from "./pages/CRM/Selling/category/viewCategory";
 
 // import BrandsList from "./pages/CRM/lead/brands/BrandsList";
 // import OpportunityReport from "./pages/opportunityReport/OpportunityReport";
-import Unitlist from "./pages/CRM/Selling/unit/Unitlist";
-import Addunit from "./pages/CRM/Selling/unit/Addunit";
+// import Unitlist from "./pages/CRM/Selling/unit/Unitlist";
+// import Addunit from "./pages/CRM/Selling/unit/Addunit";
 
 import LeadEdit from "./pages/CRM/lead/lead_list/edit_lead_list";
 
@@ -32,12 +32,13 @@ import Productlist from "./pages/CRM/Selling/Product/Productlist";
 import ProductCreate from "./pages/CRM/Selling/Product/ProductCreate";
 import ProductDetails from "./pages/CRM/Selling/Product/ProductDetails";
 import Varients from "./pages/CRM/Selling/Product/Varient/Varients";
-
 import Services from "./pages/CRM/Selling/services/services_list";
 import ServiceCreate from "./pages/CRM/Selling/services/ServiceCreate";
 
 import Add_Branch from "./pages/HRMS/branches/add_branches";
 import Add_Department from "./pages/HRMS/departments/add_deparments";
+import Unitlist from "./pages/CRM/Selling/unit/Unitlist";
+import Addunit from "./pages/CRM/Selling/unit/Addunit";
 // import Lead from "./pages/lead/lead";
 
 function App() {
@@ -68,8 +69,11 @@ function App() {
               element={<OpportunityReport />}
             />
 
-            <Route path={ROUTES.UNIT_LIST} element={<Unitlist />} />
-            <Route path={ROUTES.ADD_UNIT} element={<Addunit />} />
+            {/* <Route path={ROUTES.UNIT_LIST} element={<Unitlist />} /> */}
+            {/* <Route path={ROUTES.ADD_UNIT} element={<Addunit />} /> */}
+
+            <Route path={ROUTES.UNIT_LIST} element={<Unitlist/>}/>
+            <Route path={ROUTES.ADD_UNIT} element={<Addunit/>}/>
 
             <Route path={ROUTES.BRANDCREATE} element={<BrandCreate />} />
             <Route path={ROUTES.PRODUCT} element={<Productlist />} />

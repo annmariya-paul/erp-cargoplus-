@@ -1,28 +1,80 @@
 import React, { useState, useEffect } from "react";
 import "./attributes.styles.scss";
 import { Link } from "react-router-dom";
-import { Form } from "react-bootstrap";
+// import { Form } from "react-bootstrap";
+import { Form, Input } from "antd";
 import Button from "../../../../components/button/button";
+import PublicFetch from "../../../../utils/PublicFetch";
+import { CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
+import InputType from "../../../../components/Input Type textbox/InputType";
+import TextArea from "../../../../components/ InputType TextArea/TextArea";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../../../../routes";
+import Custom_model from "../../../../components/custom_modal/custom_model";
 
 export default function Add_Attribute() {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [error, setError] = useState(false);
-  const [attributeName, setAttributeName] = useState();
-  const [attributeDescription, setAttributeDescription] = useState();
+  const [saveSuccess, setSaveSuccess] =useState(false)
+  const [attributeName, setAttributeName] = useState("");
+  const [attributeDescription, setAttributeDescription] = useState("");
+  
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    Submit();
-  }, []);
-  const Submit = (event,data) => {
-    // const form = event.currentTarget;
-    // event.preventDefault();
-    // event.stopPropagation();
-    setFormSubmitted(true);
-    console.log(data);
-    if (data) {
-      localStorage.setItem("Form", JSON.stringify(data));
+  // useEffect(() => {
+  //   Submit();
+  // }, []);
+  // const Submit = (event,data) => {
+  //   // const form = event.currentTarget;
+  //   // event.preventDefault();
+  //   // event.stopPropagation();
+  //   setFormSubmitted(true);
+  //   console.log(data);
+  //   if (data) {
+  //     localStorage.setItem("Form", JSON.stringify(data));
+  //   }
+  // };
+
+  const close_modal = (mShow, time) => {
+    if (!mShow) {
+      setTimeout(() => {
+        setSaveSuccess(false);
+      }, time);
     }
   };
+
+
+
+  // function to create attributes
+
+  const createAttributes =async()=>{
+  try{
+const addattributes = await PublicFetch.post(
+  `${CRM_BASE_URL_SELLING}/attribute`,{
+    attribute_name:attributeName,
+    attribute_description:attributeDescription
+  })
+  console.log("attributes added successfully",addattributes)
+  if(addattributes.data.success){
+  
+    close_modal(saveSuccess,1000 )
+    navigate("/attributes")
+    
+  }
+  }
+  catch(err){
+  console.log("err to add the attributes",err)
+  }
+
+  }
+
+  const onFinish = (values) => {
+    console.log('Success:', values);
+  };
+  const onFinishFailed = (errorInfo) => {
+    console.log('Failed:', errorInfo);
+  };
+
   return (
     <>
       <div className="row my-3">
@@ -34,46 +86,72 @@ export default function Add_Attribute() {
             <h6 className="lead_text">Basic Info</h6>
           </div>
         </div>
-        <Form noValidate id="bidForm" onSubmit={Submit}>
+
+        <Form  
+         onFinish={onFinish}
+         onFinishFailed={onFinishFailed} >
           <div className="row py-1">
             <div className="col-sm-6 pt-3">
-              <Form.Group className="mb-2" controlId="attribute_name">
-                <Form.Label>Name</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="attribute_name"
-                  placeholder="Name"
-                  required
-                  value={attributeName}
-                  // isInvalid={
-                  //   !attributeName?.length > 0 &&
-                  //   (attributeName?.length || formSubmitted)
-                  // }
-                  onChange={(e) => setAttributeName(e.target.value)}
-                />
-                {/* <Form.Control.Feedback type="invalid">
-                  name is not registered
-                </Form.Control.Feedback> */}
-              </Form.Group>
-            </div>
-            <div className="col-sm-6 pt-3">
-              <Form.Group className="mb-2" controlId="attribute_description">
-                <Form.Label>Description</Form.Label>
-                <Form.Control
-                  as="textarea"
-                  rows={3}
-                  value={attributeDescription}
-                  onChange={(e) => setAttributeDescription(e.target.value)}
-                />
-              </Form.Group>
+                <label>Name</label>
+                <Form.Item
+                      name="unitname"
+                      rules={[
+                        {
+                          required: true,
+                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+
+                          message: "Please enter a Valid Unit Name",
+                        },
+
+                        {
+                          whitespace: true,
+                        },
+                        {
+                          min: 3,
+                        },
+                      ]}
+                    >
+                      <InputType value={attributeName} onChange={(e)=>setAttributeName(e.target.value) } />
+                    </Form.Item>
+                  </div>
+                  <div className="col-sm-6 pt-3">
+                  <label>Description</label>
+                  <Form.Item
+                      name="description"
+                      rules={[
+                        {
+                          required: true,
+                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+
+                          message: "Please enter a Valid Unit Name",
+                        },
+
+                        {
+                          whitespace: true,
+                        },
+                        {
+                          min: 3,
+                        },
+                      ]}
+                    >
+                      <TextArea value={attributeDescription} 
+                      onChange={(e)=>setAttributeDescription(e.target.value)} />
+                    </Form.Item>
             </div>
           </div>
           <div className="row justify-content-center mt-5">
             <div className="col-1">
-              <Button btnType="save">Save</Button>
+              <Button btnType="save" onClick={()=> createAttributes()} >Save</Button>
             </div>
           </div>
         </Form>
+
+        <Custom_model
+        size={"sm"}
+        show={saveSuccess}
+        onHide={() => setSaveSuccess(false)}
+        success
+      />
       </div>
     </>
   );

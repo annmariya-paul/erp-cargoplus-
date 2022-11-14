@@ -1,6 +1,7 @@
 import "./custom_model.scss";
 import React from "react";
-import { Modal } from "react-bootstrap";
+// import { Modal } from "react-bootstrap";
+import {Modal} from "antd"
 
 function Custom_model({
   onClick,
@@ -16,28 +17,35 @@ function Custom_model({
   dialogClassName,
   View_list,
   list_content,
+  ...rest
 }) {
   return (
     <div>
       <Modal
+      {...rest}
         size={size}
         onClick={onClick}
-        onHide={onHide}
-        show={show}
+        // onHide={onHide}
+        onCancel={onHide}
+        // show={show}
+        visible={show}
         dialogClassName={dialogClassName}
         centered
+        className={"modal_window_style" }
+        footer={false}
+        destroyOnClose={true}
       >
         {Adding_contents && (
           <>
-            <Modal.Header closeButton>
+            <div closeButton>
               <h4 className="modal-title text-center w-100">{header}</h4>
-            </Modal.Header>
-            <Modal.Body>{children}</Modal.Body>
-            <Modal.Footer>{footer}</Modal.Footer>
+            </div>
+            <div>{children}</div>
+            <div>{footer}</div>
           </>
         )}
         {success && (
-          <Modal.Body size="sm">
+          < div>
             <div className="row">
               <i
                 className="success_msg bi bi-patch-check-fill"
@@ -46,7 +54,7 @@ function Custom_model({
               <h4 className="success_msg">Save Success !</h4>
               <p style={{ textAlign: "center" }}>Your Data was Saved</p>
             </div>
-          </Modal.Body>
+          </div>
         )}
         {View_list && <div>{list_content}</div>}
       </Modal>

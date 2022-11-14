@@ -76,34 +76,49 @@ function Categorylist(props) {
         if (res?.data?.success) {
           console.log("All category data", res?.data?.data);
 
-          let temp = [];
-          res?.data?.data.forEach((item, index) => {
-            console.log("ggfdvccx", item);
-            let tempArr = [];
-            tempArr.push(item?.category_name);
-            item.other_crm_v1_categories.forEach((i, idx) => {
-              console.log("fshshd", i);
-              tempArr.push(i.category_name);
-            });
-            console.log("pushed", tempArr);
-            let temmp = ""
-            tempArr.forEach((item, indx) => {
-              console.log("temporary data", item);
+          const categories = arr =>{
+            let newArr = [];
+            for(let i=0; i<arr?.length; i++)
+            if(Array.isArray(arr[i])){
+          let moreCate = categories(arr[i]);
+          newArr = newArr.concat(moreCate);
+            }else {
+              newArr.push(arr[i])
+            }
+            return newArr;
+          }
+          console.log("categorisss",categories(res?.data?.data));
+         
+            // let temp = [];
+            // res?.data?.data.forEach((item, index) => {
+            //   let tempArr = [];
+            //    item.other_crm_v1_categories.forEach((i, idx) => {
+            //      tempArr.push(i.category_name);
+            //    });
+            //   let tmpArr_id = [];
+            //   item.other_crm_v1_categories.forEach((itm, indx) => {
+            //     tmpArr_id.push(itm.category_code);
+            //   });
+            //   let tmpArry = [];
+            //   item.other_crm_v1_categories.forEach((itm, indx) => {
+            //     tmpArry.push(itm.category_description);
+            //   });
+            //   temp.push({
+            //     category_code: item?.category_code,
+            //     category_name: item?.category_name,
+            //     category_description: item?.category_description,
+            //   });
+            //   temp.push({ 
+            //     category_name: tempArr,
+            //     category_code: tmpArr_id,
+            //     category_description: tmpArry,
+            //   });
               
-            });
-
-            temp.push({
-              category_name: item,
-              category_code: item?.category_code,
-
-              //  other_crm_v1_categories: tmpArry_id,
-              category_description: item?.category_description,
-            });
-          });
-          console.log("pushed", temp);
-          setCategoryList(temp);
+            // });
+          setCategoryList();
+          
         } else {
-          console.log("Failed to load data !");
+          console.log("Failed to load data!");
         }
       })
       .catch((err) => {

@@ -27,14 +27,17 @@ export default function LeadList() {
   const [searchStatus, setSearchStatus] = useState("");
   const [noofItems, setNoofItems] = useState("25");
   const [totalCount, setTotalcount] = useState();
-  const [pageSize, setPageSize] = useState(0);
+  const [pageIndex, setPageIndex] = useState(0);
   const [current, setCurrent] = useState(1);
 
   const [allLeadList, setAllLeadList] = useState();
 
+  const pageofIndex = noofItems * (current - 1) - 1 + 1;
+  const numofItemsTo = noofItems * current;
+
   const GetAllLeadData = () => {
     PublicFetch.get(
-      `${CRM_BASE_URL}/lead?startIndex=${pageSize}&noOfItems=${noofItems}`
+      `${CRM_BASE_URL}/lead?startIndex=${pageofIndex}&noOfItems=${numofItemsTo}`
     )
       .then((res) => {
         if (res?.data?.success) {
@@ -51,14 +54,23 @@ export default function LeadList() {
   };
 
   console.log("total count data", totalCount);
+  // console.log("page&&&& index", pageIndex);
 
   useEffect(() => {
     GetAllLeadData();
-  }, [noofItems, pageSize]);
+  }, [numofItemsTo, pageofIndex]);
 
-  const getData = (current, numOfItems, pageSize) => {
-    return allLeadList?.slice((current - 1) * numOfItems, current * numOfItems);
+  const getData = (numofItemsTo, pageofIndex) => {
+    return allLeadList?.slice(
+      noofItems * (current - 1) - 1 + 1,
+      noofItems * current
+    );
   };
+
+  const pageofSize = Math.ceil(totalCount / numofItemsTo);
+  console.log("ffgsdgsd,", pageofSize);
+  console.log("ffgsdgsd%$%^$%^,", pageofIndex);
+  console.log("%$%^$%^,", numofItemsTo);
 
   const MyPagination = ({
     total,
@@ -73,9 +85,9 @@ export default function LeadList() {
         onChange={onChange}
         total={total}
         current={current}
-        pageSize={pageSize}
-        defaultPageSize={defaultPageSize}
-        pageSizeOptions={pageSizeOptions}
+        pageSize={pageofSize}
+        defaultPageSize={false}
+        pageSizeOptions={false}
         // showSizeChanger={showSizeChanger}
       />
     );
@@ -113,7 +125,10 @@ export default function LeadList() {
         return (
           <div className="d-flex justify-content-center align-items-center gap-2">
             <div className="m-0">
-              <Link to={`${ROUTES.LEAD_EDIT}/${index.lead_id}`} className="nav-link">
+              <Link
+                to={`${ROUTES.LEAD_EDIT}/${index.lead_id}`}
+                className="nav-link"
+              >
                 {/* <a href="/edit_lead_list" className="actionEdit"> */}
 
                 <FaEdit />
@@ -177,7 +192,8 @@ export default function LeadList() {
   ];
 
   console.log("saag eywrbzxcjhasdbf yryeraeuif:::::", allLeadList);
-  console.log("page size", pageSize);
+  console.log("page size", pageIndex);
+  console.log(totalCount / noofItems);
 
   return (
     <>
@@ -255,7 +271,7 @@ export default function LeadList() {
                 }}
               >
                 {/* <Select.Option value="5">5 | pages</Select.Option> */}
-                <Select.Option value="10">
+                {/* <Select.Option value="10">
                   Show
                   <span style={{ color: "lightgray" }} className="ms-1">
                     |
@@ -263,7 +279,7 @@ export default function LeadList() {
                   <span style={{ color: "#2f6b8f" }} className="ms-1">
                     10
                   </span>
-                </Select.Option>
+                </Select.Option> */}
                 <Select.Option value="25">
                   Show
                   <span style={{ color: "lightgray" }} className="ms-1">
@@ -296,7 +312,7 @@ export default function LeadList() {
             <div className="col-9 d-flex justify-content-end">
               <Link to={ROUTES.LEAD}>
                 <Button
-                btnType="add"
+                  btnType="add"
                   // className="add_opportunity"
                 >
                   Add Lead
@@ -306,8 +322,8 @@ export default function LeadList() {
           </div>
           <div className="datatable">
             <TableData
-              data={getData(current, noofItems, pageSize)}
-              // data={allLeadList}
+              // data={getData(numofItemsTo, pageofIndex)}
+              data={allLeadList}
               columns={columns}
               custom_table_css="table_lead_list"
             />
@@ -317,11 +333,10 @@ export default function LeadList() {
               total={allLeadList?.length}
               current={current}
               showSizeChanger={true}
-              defaultPageSize={10}
-              pageSizeOptions={["10", "25", "50", "100"]}
               onChange={(current, pageSize) => {
+                console.log("page index", current, pageSize);
                 setCurrent(current);
-                setPageSize(pageSize);
+                // setPageSize(pageSize);
               }}
             />
           </div>

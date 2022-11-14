@@ -51,9 +51,9 @@ function Opportunitylist(props) {
   const [oppId, setOppID] = useState(parseInt(id));
   console.log(oppId);
   const [oppurtunitylead, setOppurtunitylead] = useState("");
-  const [oppurtunitytype, setoppurtunitytype] = useState("");
-  const [oppurtunityfrom, setOppurtunityfrom] = useState("");
-  const [oppurtunitysource, setOppurtunitysource] = useState("");
+  const [oppurtunitytype, setoppurtunitytype] = useState();
+  const [oppurtunityfrom, setOppurtunityfrom] = useState();
+  const [oppurtunitysource, setOppurtunitysource] = useState();
   const [oppurtunityparty, setOppurtunityparty] = useState("");
   const [oppurtunityvalidity, setOppurtunityvalidity] = useState();
   const [oppurtunityamount, setOppurtunityamount] = useState("");
@@ -61,7 +61,7 @@ function Opportunitylist(props) {
   const [opportunitydescription, setOpportunitydescription] = useState("");
   const [oppurtunitystatus, setOppurtunitystatus] = useState("");
   const [oppurtunityviewprogress,setoppurtunityviewprogress]=useState()
-  // const [oppurtunityid,setOppurtunityid]=useState()
+  const [oppurtunityid,setOppurtunityid]=useState()
 
 
   const [contact, setContact] = useState([]);
@@ -157,7 +157,7 @@ const [count,setcount]=useState(0)
       //   "oppurtunityidd is",
       //   oneoppurtunities.data?.data?.opportunity_id
       // );
-      // setOppurtunityid(oneoppurtunities.data?.data?.opportunity_id)
+      setOppurtunityid(oneoppurtunities.data?.data?.opportunity_id)
       setoppurtunitytype(oneoppurtunities.data?.data?.opportunity_type);
       setOppurtunityfrom(oneoppurtunities.data?.data?.opportunity_from);
       setOppurtunitysource(oneoppurtunities.data?.data?.opportunity_source);
@@ -282,91 +282,35 @@ const getOppurtunityProgress=async(viewoppurtunity)=>{
   }
  
 
-  const handleEditedclick = (e) => {
-    // console.log("edittingg ", e);
-    // setEditOppurtunity();
-    // oppurtunitytype.e.opportunity_type,
-    //   oppurtunityfrom.e.opportunity_from,
-    //   oppurtunitysource.e.opportunity_source,
-    //   oppurtunityparty.e.opportunity_party,
-    //   oppurtunityvalidity.e.opportunity_validity,
-    //   opportunitydescription.e.opportunity_description,
-    //   oppurtunityamount.e.opportunity_amount,
-    //   oppurtunityprobability.e.opportunity_probability,
-    //   oppurtunitystatus.e.opportunity_status,
-    //   oppurtunitylead.e.opportunity_lead_id,
+  const handleEditedclick = (i) => {
+    console.log("edittingg in list::: ", i);
+  
+    setOppurtunityid(i.opportunity_id)
+    setoppurtunitytype(i.opportunity_type)
+    setOppurtunityfrom(i.opportunity_from)
+    setOppurtunityparty(i.opportunity_party)
+    setOppurtunitysource(i.opportunity_source)
+    setOppurtunityvalidity(i.opportunity_source)
+    setOppurtunityamount(i.opportunity_amount)
+    setOpportunitydescription(i.opportunity_description)
+    setOppurtunityProbability(i.opportunity_probability)
+    setOppurtunitystatus(i.opportunity_status)
+    setOppurtunitylead(i.opportunity_lead_id)
     // getAllContact();
+  
     setShowEditModal(true);
-    // updateOppurtunity();
+  
   };
 
 
-  const handleEditclick = () => {
+  const handleEditclick = (e) => {
     // console.log("edit data is ::", item);
-
-
-    getoneoppurtunity();
+    getoneoppurtunity(e);
     getAllContact();
-
-    // setEditOppurtunity({
-    //   ...editOppurtunity,
-    //   opportunity_id: e.opportunity_id,
-    //   oppurtunityleadid: e.opportunity_lead_id,
-    //   opportunitytype: e.opportunity_type,
-    //   opportunityfrom: e.opportunity_from,
-    //   opportunitysource: e.opportunity_source,
-    //   opportunityparty: e.opportunity_party,
-    //   opportunityvalidity: e.opportunity_validity,
-    //   opportunityamount: e.opportunity_amount,
-    //   opportunityprobability: e.opportunity_probability,
-    //   opportunitydescription: e.opportunity_description,
-    //   opportunitystatus: e.opportunity_status,
-
-    // });
-
     setShowEditModal(true);
-    // updateOppurtunity();
   };
 
-  // const updateOppurtunity = (event) => {
-  //   setFormSubmitted(true);
-  //   const formData = new FormData();
-  //   formData.append("opportunity_type", editOppurtunity.opportunitytype);
-  //   formData.append("opportunity_from", editOppurtunity.opportunityfrom);
-  //   formData.append("opportunity_source", editOppurtunity.opportunitysource);
-  //   formData.append("opportunity_party", editOppurtunity.opportunityparty);
-  //   formData.append(
-  //     "opportunity_validity",
-  //     editOppurtunity.opportunityvalidity
-  //   );
-  //   formData.append("opportunity_amount", editOppurtunity.opportunityamount);
-  //   formData.append(
-  //     "opportunity_probability",
-  //     editOppurtunity.opportunityprobability
-  //   );
-  //   formData.append(
-  //     "opportunity_description",
-  //     editOppurtunity.opportunitydescription
-  //   );
-  //   formData.append("opportunity_status", editOppurtunity.opportunitystatus);
 
-  //   PublicFetch.patch(
-  //     `${CRM_BASE_URL}/opportunity/basic/${viewoppurtunity.id}`,
-  //     formData
-  //   )
-  //     .then(function (response) {
-  //       console.log("edit oppurt:::", response);
-
-  //       if (response.data.success) {
-  //         console.log("Oppurr", response.data.data);
-  //       } else {
-  //         console.log("Failed while adding data");
-  //       }
-  //     })
-  //     .catch(function (error) {
-  //       console.log(error);
-  //     });
-  // };
 
   const updatedOppurtunity = async (updatedData) => {
     const UpdatedFormdata = {
@@ -385,7 +329,7 @@ const getOppurtunityProgress=async(viewoppurtunity)=>{
 
     try {
       const editoppurtunity = await PublicFetch.patch(
-        `${CRM_BASE_URL}/opportunity/basic/${editOppurtunity.opportunity_id}`,
+        `${CRM_BASE_URL}/opportunity/basic/${oppurtunityid}`,
         UpdatedFormdata
       );
 
@@ -1280,12 +1224,12 @@ catch (err){
                     aria-label="lead_type"
                     name="lead_type"
                     className={`${errors.lead_type && "invalid"}`}
-                    {...register("lead_type", {
-                      required: "Type is required",
-                    })}
-                    onKeyUp={() => {
-                      trigger("lead_type");
-                    }}
+                    // {...register("lead_type", {
+                    //   required: "Type is required",
+                    // })}
+                    // onKeyUp={() => {
+                    //   trigger("lead_type");
+                    // }}
                     value={oppurtunitytype}
                     onChange={(e) => {
                       setoppurtunitytype(e.target.value);
@@ -1305,12 +1249,12 @@ catch (err){
                     aria-label="lead_customer_from"
                     name="lead_customer_from"
                     className={`${errors.lead_customer_from && "invalid"}`}
-                    {...register("lead_customer_from", {
-                      required: "Type is required",
-                    })}
-                    onKeyUp={() => {
-                      trigger("lead_customer_from");
-                    }}
+                    // {...register("lead_customer_from", {
+                    //   required: "Type is required",
+                    // })}
+                    // onKeyUp={() => {
+                    //   trigger("lead_customer_from");
+                    // }}
                     value={oppurtunityfrom}
                     onChange={(e) => {
                       setOppurtunityfrom(e.target.value);
@@ -1348,23 +1292,23 @@ catch (err){
                     placeholder="User ID"
                     value={viewoppurtunity?.convertedby}
                     className={`${errors.lead_customer_generated && "invalid"}`}
-                    {...register("lead_customer_generated", {
-                      required: "Please enter a valid User ID",
-                      minLength: {
-                        value: 3,
-                        message: "Minimum Required length is 3",
-                      },
-                      maxLength: {
-                        value: 100,
-                      },
-                      pattern: {
-                        value: /^[a-zA-Z0-9 ]*$/,
-                        message: "Only letters and numbers are allowed!",
-                      },
-                    })}
-                    onKeyUp={() => {
-                      trigger("lead_customer_generated");
-                    }}
+                    // {...register("lead_customer_generated", {
+                    //   required: "Please enter a valid User ID",
+                    //   minLength: {
+                    //     value: 3,
+                    //     message: "Minimum Required length is 3",
+                    //   },
+                    //   maxLength: {
+                    //     value: 100,
+                    //   },
+                    //   pattern: {
+                    //     value: /^[a-zA-Z0-9 ]*$/,
+                    //     message: "Only letters and numbers are allowed!",
+                    //   },
+                    // })}
+                    // onKeyUp={() => {
+                    //   trigger("lead_customer_generated");
+                    // }}
                   />
                   {errors.lead_customer_generated && (
                     <small className="text-danger">
@@ -1381,15 +1325,15 @@ catch (err){
                     aria-label="lead_source"
                     name="lead_source"
                     className={`${errors.lead_source && "invalid"}`}
-                    {...register("lead_source", {
-                      minLength: {
-                        value: 5,
-                        message: "Minimum Required length is 5",
-                      },
-                    })}
-                    onKeyUp={() => {
-                      trigger("lead_source");
-                    }}
+                    // {...register("lead_source", {
+                    //   minLength: {
+                    //     value: 5,
+                    //     message: "Minimum Required length is 5",
+                    //   },
+                    // })}
+                    // onKeyUp={() => {
+                    //   trigger("lead_source");
+                    // }}
                     value={oppurtunitysource}
                     onChange={(e) => {
                       setOppurtunitysource(e.target.value);
@@ -1411,16 +1355,16 @@ catch (err){
                     aria-label="lead_party"
                     name="lead_party"
                     className={`${errors.lead_party && "invalid"}`}
-                    {...register("lead_party", {
-                      minLength: {
-                        value: 5,
-                        message: "Minimum Required length is 5",
-                      },
-                    })}
-                    onKeyUp={() => {
-                      trigger("lead_party");
-                    }}
-                    // value={oppurtunityparty}
+                    // {...register("lead_party", {
+                    //   minLength: {
+                    //     value: 5,
+                    //     message: "Minimum Required length is 5",
+                    //   },
+                    // })}
+                    // onKeyUp={() => {
+                    //   trigger("lead_party");
+                    // }}
+                    value={oppurtunityparty}
                     onChange={(e) => {
                       setOppurtunityparty(parseInt(e.target.value));
                     }}
@@ -1470,15 +1414,15 @@ catch (err){
                     name="lead_details"
                     rows={3}
                     className={`${errors.lead_details && "invalid"}`}
-                    {...register("lead_details", {
-                      minLength: {
-                        value: 5,
-                        message: "Minimum Required length is 5",
-                      },
-                    })}
-                    onKeyUp={() => {
-                      trigger("lead_details");
-                    }}
+                    // {...register("lead_details", {
+                    //   minLength: {
+                    //     value: 5,
+                    //     message: "Minimum Required length is 5",
+                    //   },
+                    // })}
+                    // onKeyUp={() => {
+                    //   trigger("lead_details");
+                    // }}
                     value={opportunitydescription}
                     onChange={(e) => {
                       setOpportunitydescription(e.target.value);
@@ -1499,22 +1443,22 @@ catch (err){
                     type="text"
                     name="lead_expecting_amt"
                     className={`${errors.lead_expecting_amt && "invalid"}`}
-                    {...register("lead_expecting_amt", {
-                      minLength: {
-                        value: 3,
-                        message: "Minimum Required length is 3",
-                      },
-                      maxLength: {
-                        value: 100,
-                      },
-                      pattern: {
-                        value: /^[a-zA-Z0-9 ]*$/,
-                        message: "Only letters and numbers are allowed!",
-                      },
-                    })}
-                    onKeyUp={() => {
-                      trigger("lead_expecting_amt");
-                    }}
+                    // {...register("lead_expecting_amt", {
+                    //   minLength: {
+                    //     value: 3,
+                    //     message: "Minimum Required length is 3",
+                    //   },
+                    //   maxLength: {
+                    //     value: 100,
+                    //   },
+                    //   pattern: {
+                    //     value: /^[a-zA-Z0-9 ]*$/,
+                    //     message: "Only letters and numbers are allowed!",
+                    //   },
+                    // })}
+                    // onKeyUp={() => {
+                    //   trigger("lead_expecting_amt");
+                    // }}
                     value={oppurtunityamount}
                     onChange={(e) => {
                       setOppurtunityamount(e.target.value);
@@ -1535,15 +1479,15 @@ catch (err){
                     aria-label="lead_probability"
                     name="lead_probability"
                     className={`${errors.lead_probability && "invalid"}`}
-                    {...register("lead_probability", {
-                      minLength: {
-                        value: 5,
-                        message: "Minimum Required length is 5",
-                      },
-                    })}
-                    onKeyUp={() => {
-                      trigger("lead_probability");
-                    }}
+                    // {...register("lead_probability", {
+                    //   minLength: {
+                    //     value: 5,
+                    //     message: "Minimum Required length is 5",
+                    //   },
+                    // })}
+                    // onKeyUp={() => {
+                    //   trigger("lead_probability");
+                    // }}
                     value={oppurtunityprobability}
                     onChange={(e) => {
                       setOppurtunityProbability(e.target.value);
@@ -1563,15 +1507,15 @@ catch (err){
                     aria-label="lead_status"
                     name="lead_status"
                     className={`${errors.lead_status && "invalid"}`}
-                    {...register("lead_status", {
-                      minLength: {
-                        value: 5,
-                        message: "Minimum Required length is 5",
-                      },
-                    })}
-                    onKeyUp={() => {
-                      trigger("lead_status");
-                    }}
+                    // {...register("lead_status", {
+                    //   minLength: {
+                    //     value: 5,
+                    //     message: "Minimum Required length is 5",
+                    //   },
+                    // })}
+                    // onKeyUp={() => {
+                    //   trigger("lead_status");
+                    // }}
                     value={oppurtunitystatus}
                     onChange={(e) => setOppurtunitystatus(e.target.value)}
                   >

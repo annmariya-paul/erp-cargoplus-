@@ -15,6 +15,7 @@ import { Link } from "react-router-dom";
 import { ROUTES } from "../../../../routes";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
+import { message, Popconfirm } from 'antd';
 // import { ROUTES } from "../../../routes";
 function Unitlist() {
   const [pageSize, setPageSize] = useState("25"); // page size
@@ -27,13 +28,15 @@ function Unitlist() {
   const [viewUnitModal, setViewUnitModal] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
  const [allunit,setAllunit]=useState()
+ const[unitTable,setunitTable]=useState("")
 const [unitName,setUnitName]= useState("")
 const [unitcode,setUnitCode]=useState("")
 const [unitDescription,setUnitDescription]= useState("")
+const[unitid,setUnitid]=useState()
 
 
  const getData = (current, pageSize) => {
-  return allunit?.slice((current - 1) * pageSize, current * pageSize);
+  return unitTable?.slice((current - 1) * pageSize, current * pageSize);
 };
 
 const [viewUnit, setViewUnit]=useState({
@@ -68,7 +71,8 @@ setViewUnit({
 }
 
 const handleEditonViewpage=(e)=>{
-  // console.log("editing unitss iss",e)
+  console.log("editing unitss iss",e)
+  setUnitid(e.id)
   setUnitName(e.unitname)
   setUnitCode(e.unitcode)
   setUnitDescription(e.unitdescription)
@@ -79,6 +83,7 @@ const handleEditonViewpage=(e)=>{
 
 const handleEditclick=(item)=>{
   console.log("edittjf",item)
+setUnitid(item?.unit_id)  
 setUnitName(item?.unit_name)
 setUnitCode(item?.unit_code)
 setUnitDescription(item?.unit_description)
@@ -89,7 +94,7 @@ setUnitDescription(item?.unit_description)
 const updateClick=async (id)=>{
 try{
 const updating= await PublicFetch.patch(
-  `${CRM_BASE_URL_SELLING}/unit/${viewUnit.id}`,{
+  `${CRM_BASE_URL_SELLING}/unit/${unitid}`,{
     unit_name:unitName,
     unit_code:unitcode,
     unit_description:unitDescription
@@ -98,12 +103,27 @@ const updating= await PublicFetch.patch(
   if(updating.data.success){
    console.log("successfully updating ")
    setViewUnitModal(false)
-    
+   getallunits()
+  //  setSaveSuccess(true)
   }
 }
 catch(err) {
       console.log("error to getting all units",err)
     }
+}
+
+// function to delete unit
+
+const handleDeleteClick = async()=>{
+try{
+const deleting= await PublicFetch.delete(
+  `${CRM_BASE_URL_SELLING}/unit/`
+)
+}
+catch{
+
+}
+
 }
 
 
@@ -129,6 +149,7 @@ const  allunits =await PublicFetch.get(
 
   // if(allunits?.data.success){}
   setAllunit(allunits?.data?.data)
+  setunitTable(allunits?.data?.data)
 }
 catch(err) {
 console.log("error to getting all units",err)
@@ -140,6 +161,14 @@ useEffect(()=>{
   getallunits()
 },[])
 
+const confirm = (e) => {
+  console.log(e);
+  message.success('Click on Yes');
+};
+const cancel = (e) => {
+  console.log(e);
+  message.error('Click on No');
+};
 
   const unitdata = [
     {
@@ -190,8 +219,21 @@ useEffect(()=>{
             >
               <RiFileSearchFill />
             </span>
-            <span className="actioneditdelete">
+            {/* <span className="actioneditdelete" onClick={()=>{
+              handleDeleteClick(index)
+            }} >
               <MdDelete />
+            </span> */}
+            <span className="actioneditdelete">
+            <Popconfirm
+             title="Are you sure to delete the units?"
+             onConfirm={handleDeleteClick(index)}
+             onCancel={cancel}
+             okText="Yes"
+             cancelText="No"
+             >
+            <MdDelete />
+            </Popconfirm>
             </span>
           </div>
         );
@@ -443,7 +485,7 @@ useEffect(()=>{
                       onClick={(id) => {
                         updateClick()
                         setEditShow(false);
-                        // setSaveSuccess(true);
+                        setSaveSuccess(true);
                       }}
                     >
                       Save

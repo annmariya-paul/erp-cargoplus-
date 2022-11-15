@@ -18,7 +18,7 @@ import Custom_model from "../../../../components/custom_modal/custom_model";
 import { useForm } from "react-hook-form";
 import { AiFillPrinter } from "react-icons/ai";
 import { MdFileCopy, MdPageview } from "react-icons/md";
-import { Input, Select, Pagination } from "antd";
+import { Input, Select } from "antd";
 import TableData from "../../../../components/table/table_data";
 import MyPagination from "../../../../components/Pagination/MyPagination";
 import CustomModel from "../../../../components/custom_modal/custom_model";
@@ -76,47 +76,48 @@ function Categorylist(props) {
         if (res?.data?.success) {
           console.log("All category data", res?.data?.data);
 
-          const categories = arr =>{
-            let newArr = [];
-            for(let i=0; i<arr?.length; i++)
-            if(Array.isArray(arr[i])){
-          let moreCate = categories(arr[i]);
-          newArr = newArr.concat(moreCate);
-            }else {
-              newArr.push(arr[i])
-            }
-            return newArr;
-          }
-          console.log("categorisss",categories(res?.data?.data));
-         
-            // let temp = [];
-            // res?.data?.data.forEach((item, index) => {
-            //   let tempArr = [];
-            //    item.other_crm_v1_categories.forEach((i, idx) => {
-            //      tempArr.push(i.category_name);
-            //    });
-            //   let tmpArr_id = [];
-            //   item.other_crm_v1_categories.forEach((itm, indx) => {
-            //     tmpArr_id.push(itm.category_code);
-            //   });
-            //   let tmpArry = [];
-            //   item.other_crm_v1_categories.forEach((itm, indx) => {
-            //     tmpArry.push(itm.category_description);
-            //   });
-            //   temp.push({
-            //     category_code: item?.category_code,
-            //     category_name: item?.category_name,
-            //     category_description: item?.category_description,
-            //   });
-            //   temp.push({ 
-            //     category_name: tempArr,
-            //     category_code: tmpArr_id,
-            //     category_description: tmpArry,
-            //   });
-              
-            // });
-          setCategoryList();
-          
+          // const categories = (arr) => {
+          //   let newArr = [];
+          //   for (let i = 0; i < arr?.length; i++) {
+          //     if (Array.isArray(arr[i])) {
+          //       let moreCate = categories(arr[i]);
+          //       newArr = newArr.concat(moreCate);
+          //     } else {
+          //       newArr.push(arr[i]);
+          //     }
+          //   }
+
+          //   console.log("gfwrdywqeywqtqwwed", newArr);
+          //   return newArr;
+          // };
+          // console.log("categorisss",categories());
+
+          let temp = [];
+          res?.data?.data.forEach((item, index) => {
+            let tempArr = [];
+            item.other_crm_v1_categories.forEach((i, idx) => {
+              tempArr.push(i.category_name);
+            });
+            let tmpArr_id = [];
+            item.other_crm_v1_categories.forEach((itm, indx) => {
+              tmpArr_id.push(itm.category_code);
+            });
+            let tmpArry = [];
+            item.other_crm_v1_categories.forEach((itm, indx) => {
+              tmpArry.push(itm.category_description);
+            });
+            temp.push({
+              category_code: item?.category_code,
+              category_name: item?.category_name,
+              category_description: item?.category_description,
+            });
+            temp.push({
+              category_name: tempArr,
+              category_code: tmpArr_id,
+              category_description: tmpArry,
+            });
+          });
+          setCategoryList(temp);
         } else {
           console.log("Failed to load data!");
         }
@@ -203,7 +204,7 @@ function Categorylist(props) {
     {
       title: "ACTIONS",
       dataIndex: "actions",
-      key: "key",
+      key: "actions",
       width: "14%",
       render: (data, index) => {
         return (
@@ -274,7 +275,7 @@ function Categorylist(props) {
               <h5 className="lead_text">Category</h5>
             </div>
             <div className="col-auto" style={{ marginBottom: 12 }}>
-              <Link to="/category">
+              <Link to={ROUTES.CATEGORY}>
                 <Button btnType="add">Add Category</Button>
               </Link>
               <Modal

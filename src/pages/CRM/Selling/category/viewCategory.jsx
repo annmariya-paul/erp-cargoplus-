@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 // import "../../../CRM/lead/lead_list/leadlist.scss";
 import { Modal } from "antd";
 import {
@@ -18,14 +18,14 @@ import Custom_model from "../../../../components/custom_modal/custom_model";
 import { useForm } from "react-hook-form";
 import { AiFillPrinter } from "react-icons/ai";
 import { MdFileCopy, MdPageview } from "react-icons/md";
-import { Input, Select, Pagination } from "antd";
+import { Input, Select } from "antd";
 import TableData from "../../../../components/table/table_data";
 import MyPagination from "../../../../components/Pagination/MyPagination";
 import CustomModel from "../../../../components/custom_modal/custom_model";
 import Button from "../../../../components/button/button";
 import "./viewCategory.scss";
 import { Link } from "react-router-dom";
-import { ROUTES } from "../../../../routes"
+import { ROUTES } from "../../../../routes";
 import { CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
 import PublicFetch from "../../../../utils/PublicFetch";
 
@@ -51,7 +51,7 @@ function Categorylist(props) {
     setIsModalOpen(false);
   };
   const getData = (current, pageSize) => {
-    return data.slice((current - 1) * pageSize, current * pageSize);
+    return CategoryList?.slice((current - 1) * pageSize, current * pageSize);
   };
   const submit = (data) => {
     console.log(data);
@@ -69,23 +69,66 @@ function Categorylist(props) {
     }
   };
 
-   const getAllContact = async () => {
-     try {
-       const allNames = await PublicFetch.get(
-         `${CRM_BASE_URL_SELLING}/category`
-       );
-     
-       // else {
-       //   message.error("fetch data error");
-       // }
-       console.log("All Category : ", allNames);
-     } catch (err) {
-       console.log("error while getting all leads: ", err);
-     }
-   };
-   useEffect(()=>{
-getAllContact();
-   },[])
+  const [CategoryList, setCategoryList] = useState();
+  const getAllCategory = async () => {
+    PublicFetch.get(`${CRM_BASE_URL_SELLING}/category`)
+      .then((res) => {
+        if (res?.data?.success) {
+          console.log("All category data", res?.data?.data);
+
+          // const categories = (arr) => {
+          //   let newArr = [];
+          //   for (let i = 0; i < arr?.length; i++) {
+          //     if (Array.isArray(arr[i])) {
+          //       let moreCate = categories(arr[i]);
+          //       newArr = newArr.concat(moreCate);
+          //     } else {
+          //       newArr.push(arr[i]);
+          //     }
+          //   }
+
+          //   console.log("gfwrdywqeywqtqwwed", newArr);
+          //   return newArr;
+          // };
+          // console.log("categorisss",categories());
+
+          let temp = [];
+          res?.data?.data.forEach((item, index) => {
+            let tempArr = [];
+            item.other_crm_v1_categories.forEach((i, idx) => {
+              tempArr.push(i.category_name);
+            });
+            let tmpArr_id = [];
+            item.other_crm_v1_categories.forEach((itm, indx) => {
+              tmpArr_id.push(itm.category_code);
+            });
+            let tmpArry = [];
+            item.other_crm_v1_categories.forEach((itm, indx) => {
+              tmpArry.push(itm.category_description);
+            });
+            temp.push({
+              category_code: item?.category_code,
+              category_name: item?.category_name,
+              category_description: item?.category_description,
+            });
+            temp.push({
+              category_name: tempArr,
+              category_code: tmpArr_id,
+              category_description: tmpArry,
+            });
+          });
+          setCategoryList(temp);
+        } else {
+          console.log("Failed to load data!");
+        }
+      })
+      .catch((err) => {
+        console.log("Errror while getting data", err);
+      });
+  };
+  useEffect(() => {
+    getAllCategory();
+  }, []);
 
   const treeData = [
     {
@@ -112,7 +155,7 @@ getAllContact();
       ],
     },
     {
-      title: " Parent Node2",
+      title: "Parent Node2",
       value: "0-1",
       key: "0-1",
     },
@@ -156,46 +199,14 @@ getAllContact();
     reset,
     trigger,
   } = useForm();
-  const data = [
-    {
-      category_name: "Electronics",
-      category_code: "C006",
-      parent_category: "AXZ",
-      cat_description: "Refefence",
-
-      key: "1",
-    },
-  ];
 
   const columns = [
     {
       title: "ACTIONS",
       dataIndex: "actions",
-      key: "key",
+      key: "actions",
       width: "14%",
       render: (data, index) => {
-        //     return (
-        //       <div>
-        //         <div className="row">
-        //           <div className="action col">
-        //             <div
-        //               onClick={() => setShowViewModal(true)}
-        //               className="actionView"
-        //             >
-        //               <MdPageview />
-        //             </div>
-        //           </div>
-        //           <div className="actiondel col">
-        //             <a href="" className="actionTrash">
-        //               <FaTrash />
-        //             </a>
-        //           </div>
-        //         </div>
-        //       </div>
-        //     );
-        //   },
-        //   align: "center",
-        // },
         return (
           <div className="actions">
             <div className="actionEdit" onClick={() => setShowViewModal(true)}>
@@ -212,7 +223,7 @@ getAllContact();
     {
       title: "CATEGORY NAME",
       dataIndex: "category_name",
-      key: "key",
+      key: "category_name",
       filteredValue: [searchType],
       onFilter: (value, record) => {
         return String(record.lead_type)
@@ -224,7 +235,7 @@ getAllContact();
     {
       title: "CODE",
       dataIndex: "category_code",
-      key: "key",
+      key: "category_code",
       filteredValue: [searchType],
       onFilter: (value, record) => {
         return String(record.lead_type)
@@ -235,8 +246,8 @@ getAllContact();
     },
     {
       title: "PARENT CATEGORY",
-      dataIndex: "parent_category",
-      key: "key",
+      dataIndex: "category_parent_id",
+      key: "category_parent_id",
       width: "23%",
       filteredValue: [searchStatus],
       onFilter: (value, record) => {
@@ -248,8 +259,8 @@ getAllContact();
     },
     {
       title: "DESCRIPTION",
-      dataIndex: "cat_description",
-      key: "key",
+      dataIndex: "category_description",
+      key: "category_description",
       width: "23%",
       align: "center",
     },
@@ -264,7 +275,7 @@ getAllContact();
               <h5 className="lead_text">Category</h5>
             </div>
             <div className="col-auto" style={{ marginBottom: 12 }}>
-              <Link to="/category">
+              <Link to={ROUTES.CATEGORY}>
                 <Button btnType="add">Add Category</Button>
               </Link>
               <Modal
@@ -421,38 +432,36 @@ getAllContact();
             <div className="col-3 px-3 ">
               <Select
                 bordered={false}
-                className="w-50 page_size_style"
+                className="page_size_style"
                 value={pageSize}
                 onChange={(e) => setPageSize(e)}
               >
                 <Select.Option value="25">
-                  Show{" "}
+                  Show
                   <span style={{ color: "lightgray" }} className="ms-1">
                     |
                   </span>
-                  <span style={{ color: "#2f6b8f" }} className="ms-2">
+                  <span style={{ color: "#2f6b8f" }} className="ms-1">
                     25
-                  </span>{" "}
+                  </span>
                 </Select.Option>
                 <Select.Option value="50">
-                  {" "}
-                  Show{" "}
+                  Show
                   <span style={{ color: "lightgray" }} className="ms-1">
                     |
                   </span>
-                  <span style={{ color: "#2f6b8f" }} className="ms-2">
+                  <span style={{ color: "#2f6b8f" }} className="ms-1">
                     50
-                  </span>{" "}
+                  </span>
                 </Select.Option>
                 <Select.Option value="100">
-                  {" "}
-                  Show{" "}
+                  Show
                   <span style={{ color: "lightgray" }} className="ms-1">
                     |
                   </span>
-                  <span style={{ color: "#2f6b8f" }} className="ms-2">
+                  <span style={{ color: "#2f6b8f" }} className="ms-1">
                     100
-                  </span>{" "}
+                  </span>
                 </Select.Option>
               </Select>
             </div>
@@ -466,7 +475,7 @@ getAllContact();
           </div>
           <div className="d-flex py-2 justify-content-center">
             <MyPagination
-              total={data.length}
+              total={CategoryList?.length}
               current={current}
               showSizeChanger={true}
               pageSize={pageSize}

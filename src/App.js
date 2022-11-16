@@ -39,6 +39,7 @@ import Add_Branch from "./pages/HRMS/branches/add_branches";
 import Add_Department from "./pages/HRMS/departments/add_deparments";
 import Unitlist from "./pages/CRM/Selling/unit/Unitlist";
 import Addunit from "./pages/CRM/Selling/unit/Addunit";
+import Designation from "./pages/HRMS/designation/designation";
 // import Lead from "./pages/lead/lead";
 
 function App() {
@@ -84,6 +85,7 @@ function App() {
             <Route path={ROUTES.SERVICECREATE} element={<ServiceCreate />} />
             <Route path={ROUTES.ADD_BRANCHES} element={<Add_Branch />} />
             <Route path={ROUTES.ADD_DEPARTMENT} element={<Add_Department />} />
+            <Route path={ROUTES.DESIGNATION} element={<Designation/>}/>
           </Route>
         </Routes>
       </BrowserRouter>

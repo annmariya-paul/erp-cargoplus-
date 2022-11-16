@@ -299,6 +299,7 @@ export default function LeadReport() {
           </div>
         </div>
         <div className="report-content-tabs">
+          {/* { -------- Generated Lead list table ----------} */}
           <div
             className={
               toggleState === 1
@@ -404,7 +405,7 @@ export default function LeadReport() {
             </div>
           </div>
 
-          {/* { -------- Converted table Lead list ----------} */}
+          {/* { -------- Converted Lead list table ----------} */}
 
           <div
             className={

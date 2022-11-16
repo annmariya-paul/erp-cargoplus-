@@ -31,7 +31,8 @@ const ROUTES = {
   SERVICES: "/services",
   SERVICECREATE: "/create_service",
   ADD_BRANCHES:"/add_branches",
-  ADD_DEPARTMENT:"/add_departments"
+  ADD_DEPARTMENT:"/add_departments",
+  DESIGNATION:"/designation",
 };
 
 module.exports = { ROUTES };

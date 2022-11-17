@@ -48,7 +48,6 @@ const handleViewClick=(item)=>{
   attributename:item.attribute_name,
   attributedescription:item.attribute_description,
   attriutestatus:item.attribute_status
-
   })
 
   setShowViewModal(true)
@@ -255,12 +254,12 @@ getallattributes()
           onHide={() => setShowViewModal(false)}
           View_list
           list_content={
-            <div className="container-fluid p-4">
+            <div className="container-fluid p-3">
               <div className="row">
                 <div className="col-10">
                   <h5 className="lead_text">Attribute</h5>
                 </div>
-                <div className="col">
+                <div className="col-2">
                   <Button
                     btnType="add_borderless"
                     className="edit_button"
@@ -313,13 +312,6 @@ getallattributes()
               <div className="d-flex justify-content-between">
                 <div>
                   <h5 className="lead_text">Attribute</h5>
-                </div>
-                <div
-                  onClick={() => {
-                    setShowModalEdit(false);
-                  }}
-                >
-                  <AiOutlineClose className="closeModal" />
                 </div>
               </div>
               <div className="row px-2 my-3">

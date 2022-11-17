@@ -35,11 +35,12 @@ import Varients from "./pages/CRM/Selling/Product/Varient/Varients";
 import Services from "./pages/CRM/Selling/services/services_list";
 import ServiceCreate from "./pages/CRM/Selling/services/ServiceCreate";
 
-import Add_Branch from "./pages/HRMS/branches/add_branches";
-import Add_Department from "./pages/HRMS/departments/add_deparments";
+import Branches from "./pages/HRMS/branches/branches";
+import Departments from "./pages/HRMS/departments/departments";
 import Unitlist from "./pages/CRM/Selling/unit/Unitlist";
 import Addunit from "./pages/CRM/Selling/unit/Addunit";
 import Designation from "./pages/HRMS/designation/designation";
+import EmploymentType from "./pages/HRMS/employment_type/employment_type";
 // import Lead from "./pages/lead/lead";
 
 function App() {
@@ -83,9 +84,10 @@ function App() {
             <Route path={ROUTES.PRODUCTVARIENTS} element={<Varients />} />
             <Route path={ROUTES.SERVICES} element={<Services />} />
             <Route path={ROUTES.SERVICECREATE} element={<ServiceCreate />} />
-            <Route path={ROUTES.ADD_BRANCHES} element={<Add_Branch />} />
-            <Route path={ROUTES.ADD_DEPARTMENT} element={<Add_Department />} />
+            <Route path={ROUTES.BRANCHES} element={<Branches />} />
+            <Route path={ROUTES.DEPARTMENTS} element={<Departments />} />
             <Route path={ROUTES.DESIGNATION} element={<Designation/>}/>
+            <Route path={ROUTES.EMPLOYMENT_TYPE} element={<EmploymentType/>}/>
           </Route>
         </Routes>
       </BrowserRouter>

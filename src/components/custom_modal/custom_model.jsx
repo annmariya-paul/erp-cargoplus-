@@ -13,6 +13,7 @@ function Custom_model({
   show,
   onHide,
   size,
+  width,
   centered,
   dialogClassName,
   View_list,
@@ -29,6 +30,7 @@ function Custom_model({
         onCancel={onHide}
         // show={show}
         visible={show}
+        width={width}
         dialogClassName={dialogClassName}
         centered
         className={"modal_window_style" }
@@ -38,7 +40,7 @@ function Custom_model({
         {Adding_contents && (
           <>
             <div closeButton>
-              <h4 className="modal-title text-center w-100">{header}</h4>
+              <h5 className="modal-title text-center w-100">{header}</h5>
             </div>
             <div>{children}</div>
             <div>{footer}</div>

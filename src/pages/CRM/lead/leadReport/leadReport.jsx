@@ -34,7 +34,7 @@ export default function LeadReport() {
     setToggleState(index);
   };
 
-  // { function GetAllLeadData to get lead data separately as generated lead and converted lead list- Ann mariya (20/10/22)}
+  // { function GetAllLeadData to import lead data - Ann mariya (20/10/22)}
   const GetAllLeadData = () => {
     PublicFetch.get(
       `${CRM_BASE_URL}/lead?startIndex=${pageSize}&noOfItems=${numOfItems}`
@@ -42,7 +42,7 @@ export default function LeadReport() {
       .then((res) => {
         if (res?.data?.success) {
           console.log("All lead data", res?.data?.data);
-          //   { dividing as lead generated and lead converted table - Annmariya (20/10/22) }
+          //   { dividing data to generated and converted table - Annmariya (20/10/22) }
           let arrA = [];
           let arrB = [];
           res?.data?.data?.leads.forEach((item, index) => {
@@ -83,9 +83,9 @@ export default function LeadReport() {
 
   useEffect(() => {
     GetAllLeadData();
-    // Searchbydate();
   }, [numOfItems, pageSize]);
 
+// { function to search data by date - Ann mariya (04/11/22)}
   const Searchbydate = () => {
     let selecteddate = moment(selectedDate).format("MM-DD-YYYY");
     let startdate = moment(startDate).format("MM-DD-YYYY");
@@ -189,6 +189,8 @@ export default function LeadReport() {
   console.log("bxhgddtd::::", backend);
   return (
     <>
+      {/* {  Search lead data by date by datepicker - Ann mariya (19/10/22)} */}
+      
       {/* {toggleState === 1 && ( */}
       <div className="container mb-1 d-flex justify-content-center">
         <div className="report_container1">
@@ -268,6 +270,7 @@ export default function LeadReport() {
       </div>
       {/* )} */}
 
+      {/* { generated and converted lead list - Ann mariya (19/10/22)} */}
       <br />
       <div className="container report_content">
         <div className="row">

@@ -11,13 +11,15 @@ import Custom_model from "../../../components/custom_modal/custom_model";
 import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
 import { ROUTES } from "../../../routes";
 
+// { Add and list Designation - Ann mariya - 15/11/22 }
 export default function Designation(){
     const [error, setError] = useState(false);
     const [addForm, setAddForm] = useState();
     const [successModal, setSuccessModal] = useState(false);
     const [designation,setDesignation] = useState();
     const [designationList,setDesignationList] = useState();
-    const [searchedText,setSearchedText] = useState();
+    const [searchedText,setSearchedText] = useState("");
+    const [pageSize,setPageSize] = useState("25");
 
      const close_modal = (mShow, time) => {
        if (!mShow) {
@@ -30,10 +32,10 @@ export default function Designation(){
      useEffect(() => {
        Submit();
      }, []);
-     const Submit = (value) => {
-       console.log(value);
-       if (value) {
-         localStorage.setItem("Form", JSON.stringify(value));
+     const Submit = (data) => {
+       console.log(data);
+       if (data) {
+         localStorage.setItem("Form", JSON.stringify(data));
          setSuccessModal(true);
          close_modal(successModal, 1000);
        } else {
@@ -52,9 +54,12 @@ export default function Designation(){
             return (
               <div className="d-flex justify-content-center align-items-center gap-2">
                 <div className="m-0">
-                  <Link to={`#`} className="nav-link">
+                  <div
+                    className="editIcon m-0"
+                    //   onClick={() => handleEditclick(index)}
+                  >
                     <FaEdit />
-                  </Link>
+                  </div>
                 </div>
               </div>
             );
@@ -64,10 +69,11 @@ export default function Designation(){
         {
           title: "DESIGNATION NAME",
           dataIndex: "designation_name",
-          key: "key",
+          key: "designation_name",
+          width: "70%",
           filteredValue: [searchedText],
           onFilter: (value, record) => {
-            return String(record.lead_type)
+            return String(record.designation_name)
               .toLowerCase()
               .includes(value.toLowerCase());
           },
@@ -83,6 +89,10 @@ export default function Designation(){
         {
           designation_name: "Developer",
           key: "2",
+        },
+        {
+          designation_name: "HR",
+          key: "3",
         },
       ];
 return (
@@ -102,9 +112,7 @@ return (
             }}
           >
             <div className="row flex-wrap pt-1">
-              <div className="row">
-                <h6 className="lead_text">Basic Info</h6>
-              </div>
+             
               <div className="row ms-0 py-1">
                 <div className="col-12 pt-3">
                   <label htmlfor="designation">Designation Name</label>
@@ -152,13 +160,13 @@ return (
           <Input.Search
             placeholder="Search by Designation"
             style={{ margin: "5px", borderRadius: "5px" }}
-            // value={searchedText}
-            // onChange={(e) => {
-            //   setSearchedText(e.target.value ? [e.target.value] : []);
-            // }}
-            // onSearch={(value) => {
-            //   setSearchedText(value);
-            // }}
+            value={searchedText}
+            onChange={(e) => {
+              setSearchedText(e.target.value ? [e.target.value] : []);
+            }}
+            onSearch={(value) => {
+              setSearchedText(value);
+            }}
           />
         </div>
       </div>
@@ -167,13 +175,13 @@ return (
           <Select
             bordered={false}
             className="page_size_style"
-            // value={pageSize}
-            // onChange={(e) => setPageSize(e)}
+            value={pageSize}
+            onChange={(e) => setPageSize(e)}
           >
             <Select.Option value="25">
               Show
               <span className="vertical ms-1">|</span>
-              <span className="sizes ms-1"> 25</span>
+              <span className="sizes ms-1">25</span>
             </Select.Option>
             <Select.Option value="50">
               Show

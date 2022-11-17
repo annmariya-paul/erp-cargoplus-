@@ -109,6 +109,17 @@ export default function Sidebar({ showSidebar }) {
                       Designation
                     </NavLink>
                   </li>
+                  <li className="nav-text ">
+                    <NavLink
+                      className={({ isActive }) =>
+                        isActive ? "active-link" : "link"
+                      }
+                      to={ROUTES.EMPLOYMENT_TYPE}
+                    >
+                      <RiTeamFill className="sidebar_icons ms-4" />
+                     Employment Type
+                    </NavLink>
+                  </li>
                 </>
               ) : (
                 ""

@@ -75,48 +75,44 @@ function Categorylist(props) {
       .then((res) => {
         if (res?.data?.success) {
           console.log("All category data", res?.data?.data);
-
-          // const categories = (arr) => {
-          //   let newArr = [];
-          //   for (let i = 0; i < arr?.length; i++) {
-          //     if (Array.isArray(arr[i])) {
-          //       let moreCate = categories(arr[i]);
-          //       newArr = newArr.concat(moreCate);
-          //     } else {
-          //       newArr.push(arr[i]);
-          //     }
-          //   }
-
-          //   console.log("gfwrdywqeywqtqwwed", newArr);
-          //   return newArr;
-          // };
-          // console.log("categorisss",categories());
-
           let temp = [];
-          res?.data?.data.forEach((item, index) => {
-            let tempArr = [];
-            item.other_crm_v1_categories.forEach((i, idx) => {
-              tempArr.push(i.category_name);
-            });
-            let tmpArr_id = [];
-            item.other_crm_v1_categories.forEach((itm, indx) => {
-              tmpArr_id.push(itm.category_code);
-            });
-            let tmpArry = [];
-            item.other_crm_v1_categories.forEach((itm, indx) => {
-              tmpArry.push(itm.category_description);
-            });
-            temp.push({
-              category_code: item?.category_code,
-              category_name: item?.category_name,
-              category_description: item?.category_description,
-            });
-            temp.push({
-              category_name: tempArr,
-              category_code: tmpArr_id,
-              category_description: tmpArry,
-            });
-          });
+        if (
+          res?.data?.data.other_crm_v1_categories &&
+          res?.data?.data.other_crm_v1_categories.length > 0
+        )
+        {
+          
+          res?.data?.data.other_crm_v1_categories.forEach(
+            async (item, index) => {
+             
+            }
+          );
+        }
+          // let temp = [];
+          // res?.data?.data.forEach((item, index) => {
+          //   let tempArr = [];
+          //   item.other_crm_v1_categories.forEach((i, idx) => {
+          //     tempArr.push(i.category_name);
+          //   });
+          //   let tmpArr_id = [];
+          //   item.other_crm_v1_categories.forEach((itm, indx) => {
+          //     tmpArr_id.push(itm.category_code);
+          //   });
+          //   let tmpArry = [];
+          //   item.other_crm_v1_categories.forEach((itm, indx) => {
+          //     tmpArry.push(itm.category_description);
+          //   });
+          //   temp.push({
+          //     category_code: item?.category_code,
+          //     category_name: item?.category_name,
+          //     category_description: item?.category_description,
+          //   });
+          //   temp.push({
+          //     category_name: tempArr,
+          //     category_code: tmpArr_id,
+          //     category_description: tmpArry,
+          //   });
+          // });
           setCategoryList(temp);
         } else {
           console.log("Failed to load data!");

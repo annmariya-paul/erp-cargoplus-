@@ -36,7 +36,7 @@ function OpportunityReport() {
     setToggleState(index);
   };
 
-  // { function GetOpportunityData to get opportunity data separately as generated opportuninty and converted opportunity list - Ann mariya (04/11/22)}
+  // { function GetOpportunityData to import opportunity data - Ann mariya (04/11/22)}
   const GetOpportunityData = () => {
     PublicFetch.get(
       `${CRM_BASE_URL}/opportunity?startIndex=${pageSize}&noOfItems=${numOfItems}`
@@ -44,7 +44,7 @@ function OpportunityReport() {
       .then((res) => {
         if (res?.data?.success) {
           console.log("All opportunity data", res?.data?.data);
-          //   { dividing as opportunities generated and opportunities converted table  - Annmariya (04/11/22) }
+          //   { dividing data to generated and converted table   - Annmariya (04/11/22) }
           let arr1 = [];
           let arr2 = [];
           res?.data?.data?.leads.forEach((item, index) => {
@@ -86,6 +86,7 @@ function OpportunityReport() {
     // Searchbydate();
   }, [numOfItems, pageSize]);
 
+  // { function to search data by date - Ann mariya (07/11/22)}
   const Searchbydate = () => {
     let selecteddate = moment(selectedDate).format("MM-DD-YYYY");
     let startdate = moment(startDate).format("MM-DD-YYYY");

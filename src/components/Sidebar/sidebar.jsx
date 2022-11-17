@@ -81,7 +81,7 @@ export default function Sidebar({ showSidebar }) {
                       className={({ isActive }) =>
                         isActive ? "active-link" : "link"
                       }
-                      to={ROUTES.ADD_BRANCHES}
+                      to={ROUTES.BRANCHES}
                     >
                       <RiTeamFill className="sidebar_icons ms-4" />
                       Branches
@@ -92,7 +92,7 @@ export default function Sidebar({ showSidebar }) {
                       className={({ isActive }) =>
                         isActive ? "active-link" : "link"
                       }
-                      to={ROUTES.ADD_DEPARTMENT}
+                      to={ROUTES.DEPARTMENTS}
                     >
                       <RiTeamFill className="sidebar_icons ms-4" />
                       Departments

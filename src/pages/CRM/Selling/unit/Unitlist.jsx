@@ -114,17 +114,17 @@ catch(err) {
 
 // function to delete unit
 
-const handleDeleteClick = async()=>{
-try{
-const deleting= await PublicFetch.delete(
-  `${CRM_BASE_URL_SELLING}/unit/`
-)
-}
-catch{
+// const handleDeleteClick = async()=>{
+// try{
+// const deleting= await PublicFetch.delete(
+//   `${CRM_BASE_URL_SELLING}/unit/`
+// )
+// }
+// catch{
 
-}
+// }
 
-}
+// }
 
 
 // const getoneunit = async(id)=>{
@@ -227,7 +227,7 @@ const cancel = (e) => {
             <span className="actioneditdelete">
             <Popconfirm
              title="Are you sure to delete the units?"
-             onConfirm={handleDeleteClick(index)}
+            //  onConfirm={handleDeleteClick(index)}
              onCancel={cancel}
              okText="Yes"
              cancelText="No"

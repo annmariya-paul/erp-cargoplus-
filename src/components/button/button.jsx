@@ -30,6 +30,9 @@ const Button = React.forwardRef((props, ref) => {
   if (appendIcon) {
     classNames += "append-icon";
   }
+  if(btnType=== "cancel" ){
+    classNames += "btn_cancel"
+  }
   return (
     <button
       ref={ref}

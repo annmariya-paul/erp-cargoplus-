@@ -933,7 +933,7 @@ catch (err){
 
               <div className="col-sm-4 pt-2">
                 <Form.Group className="mb-2" controlId="lead_customer_from">
-                  <Form.Label>From</Form.Label>
+                  <Form.Label>From </Form.Label>
                   <Form.Select
                     aria-label="lead_customer_from"
                     name="lead_customer_from"

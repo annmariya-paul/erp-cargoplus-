@@ -78,7 +78,7 @@ function App() {
             <Route path={ROUTES.BRANDCREATE} element={<BrandCreate />} />
             <Route path={ROUTES.PRODUCT} element={<Productlist />} />
             <Route path={ROUTES.PRODUCTCREATE} element={<ProductCreate />} />
-            <Route path={ROUTES.PRODUCTDETAILS} element={<ProductDetails />} />
+            <Route path={ROUTES.PRODUCTDETAIL_ID} element={<ProductDetails />} />
             <Route path={ROUTES.PRODUCTVARIENTS} element={<Varients />} />
             <Route path={ROUTES.SERVICES} element={<Services />} />
             <Route path={ROUTES.SERVICECREATE} element={<ServiceCreate />} />

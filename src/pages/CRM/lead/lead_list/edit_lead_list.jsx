@@ -278,9 +278,9 @@ const goToLeadlist=()=>{navigate("/lead_list")}
                         value={leadName}
                         onChange={(e) => setLeadName(e.target.value)}
                       />
-                      <Form.Control.Feedback type="invalid">
+                      {/* <Form.Control.Feedback type="invalid">
                         name is not registered
-                      </Form.Control.Feedback>
+                      </Form.Control.Feedback> */}
                     </Form.Group>
                   </div>
                   <div className="col-sm-4 pt-2">

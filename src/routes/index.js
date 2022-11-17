@@ -26,7 +26,10 @@ const ROUTES = {
   BRANDCREATE: "/createbrand",
   PRODUCT: "/product",
   PRODUCTCREATE: "/create_product",
-  PRODUCTDETAILS: "/product_details",
+  PRODUCTDETAIL: "/product_details",
+  PRODUCTDETAIL_ID: "/product_details/:id",
+
+
   PRODUCTVARIENTS: "/product_varients",
   SERVICES: "/services",
   SERVICECREATE: "/create_service",

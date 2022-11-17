@@ -56,3 +56,16 @@
 //     justify-content: center;
 
 // }
+.btn_cancel{
+  border: none;
+  border-radius: 4px;
+  color: white;
+  // width:6rem;
+  // width: 100%;
+  padding: 0.4rem;
+  padding-block: 8px;
+  background:rgb(174, 172, 172) ;
+  // &:hover {
+  //   background: variables.$button-hover !important;
+  // }
+}

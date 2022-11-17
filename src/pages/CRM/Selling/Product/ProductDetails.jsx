@@ -1,11 +1,15 @@
 // import { Button } from "antd";
 import { Checkbox, Input, Select } from "antd";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { BsPlusCircleFill } from "react-icons/bs";
 import { FaEdit } from "react-icons/fa";
 import { FiEdit } from "react-icons/fi";
 import { MdDelete, MdPageview } from "react-icons/md";
 import { Link } from "react-router-dom";
+import { CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
+import PublicFetch from "../../../../utils/PublicFetch";
+
 import Button from "../../../../components/button/button";
 import CustomModel from "../../../../components/custom_modal/custom_model";
 import ErrorMsg from "../../../../components/error/ErrorMessage";
@@ -15,8 +19,10 @@ import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon
 import MyPagination from "../../../../components/Pagination/MyPagination";
 import TableData from "../../../../components/table/table_data";
 import { ROUTES } from "../../../../routes";
+import Item from "antd/lib/list/Item";
 
 function ProductDetails() {
+  const { id } = useParams();
   const [toggleState, setToggleState] = useState(1);
   const [pageSize, setPageSize] = useState("25"); // page size
   const [current, setCurrent] = useState(1);
@@ -26,14 +32,81 @@ function ProductDetails() {
   const [successPopup, setSuccessPopup] = useState(false);
   const [error, setError] = useState(false);
   const [showProductEditModal, setShowProductEditModal] = useState(false);
+  const [prname, setPrName] = useState();
+  const [newvalue, setNewvalue] = useState();
+  // console.log("attributes in state:", prattributes);
 
+  const [prcode, setPrcode] = useState();
+  const [prcategory, setPrCategory] = useState();
+  const [prbrand, setPrBrand] = useState();
+  const [prunit, setPrUnit] = useState();
+  const [prattributes, setPrAttributes] = useState();
+
+  const [setProductDescription, setPrDescription] = useState();
+  const [primage, setPrImage] = useState();
+  const [attributes, setAttributes] = useState("");
   const toggleTab = (index) => {
     setToggleState(index);
   };
 
-  const getData = (current, pageSize) => {
-    return data.slice((current - 1) * pageSize, current * pageSize);
+  // const getallattributes = async () => {
+  //   try {
+  //     const allattributes = await PublicFetch.get(
+  //       `${CRM_BASE_URL_SELLING}/attribute`
+  //     );
+  //     console.log("getting all attributes name", allattributes.data.data);
+  //     setAttributes(allattributes.data.data);
+  //     allattributes.data.data.forEach((item, index) => {
+  //       // console.log("Attribute value",item);
+  //       // console.log("QQQQQQQQQQQQQQQ",allprList);
+  //       // console.log("item.Attribute value",item.attribute_id);
+  //       // console.log("product Attribute value", allprList?.product_attributes);
+  //       if (item.attribute_id.includes(prattributes?.product_attributes)) {
+  //         setNewvalue(item.attribute_name);
+  //       }
+  //     });
+  //   } catch (err) {
+  //     console.log("error to fetching  attributes", err);
+  //   }
+  // };
+  // // console.log("All Attributes are >>>>", attributes);
+
+  // useEffect(() => {
+  //   getallattributes();
+  // }, []);
+
+  const [allprList, setAllPrList] = useState();//state for all products
+
+// Start API call for get one product
+  const GetAllProductData = () => {
+    // console.log("Entered");
+    PublicFetch.get(`${CRM_BASE_URL_SELLING}/product/${id}`)
+      .then((res) => {
+        if (res?.data?.success) {
+          setAllPrList(res.data.data);
+          setPrName(res?.data?.data?.product_name);
+          setPrcode(res?.data?.data?.product_code);
+          setPrCategory(res?.data?.data?.product_category_id);
+          setPrBrand(res?.data?.data?.product_brand_id);
+          setPrUnit(res?.data?.data?.product_unit_id);
+          setPrAttributes(res?.data?.data?.product_attributes);
+          setPrDescription(res?.data?.data?.product_description);
+
+          setPrImage(res?.data?.data?.product_pic);
+        } else {
+          console.log("FAILED T LOAD DATA");
+        }
+      })
+      .catch((err) => {
+        console.log("Errror while getting data", err);
+      });
   };
+
+  useEffect(() => {
+    GetAllProductData();
+  }, []);
+
+  //End
   const data = [
     {
       lead_type: "color",
@@ -63,7 +136,12 @@ function ProductDetails() {
       key: "3",
     },
   ];
-  // {columns is brand listing table componenet }
+
+  const getData = (current, pageSize) => {
+    return data.slice((current - 1) * pageSize, current * pageSize);
+  };
+
+  // {columns is product listing table componenet }
 
   const columns = [
     {
@@ -75,13 +153,13 @@ function ProductDetails() {
         return (
           <div className="d-flex justify-content-center align-items-center gap-3">
             <div
-              // onClick={() => setBrandEditPopup(true)}
+              
               className="actionEdit m-0 p-0"
             >
               <FaEdit />
             </div>
             <div
-              // onClick={() => setBrandViewPopup(true)}
+              
               className="actionView m-0 p-0"
             >
               <MdPageview />
@@ -248,7 +326,9 @@ function ProductDetails() {
                         </div>
                         <div className="col-1">:</div>
                         <div className="col-6 justify-content-start">
-                          <p className="modal_view_p_sub">Rolex</p>
+                          <p className="modal_view_p_sub">
+                            {allprList?.product_name}
+                          </p>
                         </div>
                       </div>
                       <div className="row mt-2">
@@ -264,7 +344,9 @@ function ProductDetails() {
                         </div>
                         <div className="col-1">:</div>
                         <div className="col-6 justify-content-start">
-                          <p className="modal_view_p_sub">HJKGF23456</p>
+                          <p className="modal_view_p_sub">
+                            {allprList?.product_code}
+                          </p>
                         </div>
                       </div>
                       <div className="row mt-2">
@@ -280,7 +362,9 @@ function ProductDetails() {
                         </div>
                         <div className="col-1">:</div>
                         <div className="col-6 justify-content-start">
-                          <p className="modal_view_p_sub">Watch</p>
+                          <p className="modal_view_p_sub">
+                            {allprList?.product_category_id}
+                          </p>
                         </div>
                       </div>
                       <div className="row mt-2">
@@ -296,7 +380,9 @@ function ProductDetails() {
                         </div>
                         <div className="col-1">:</div>
                         <div className="col-6 justify-content-start">
-                          <p className="modal_view_p_sub">Rolex</p>
+                          <p className="modal_view_p_sub">
+                            {allprList?.product_brand_id}
+                          </p>
                         </div>
                       </div>
                       <div className="row mt-2">
@@ -312,7 +398,9 @@ function ProductDetails() {
                         </div>
                         <div className="col-1">:</div>
                         <div className="col-6 justify-content-start">
-                          <p className="modal_view_p_sub">HJKGF23456</p>
+                          <p className="modal_view_p_sub">
+                            {allprList?.product_unit_id}
+                          </p>
                         </div>
                       </div>
                       <div className="row mt-2">
@@ -328,7 +416,10 @@ function ProductDetails() {
                         </div>
                         <div className="col-1">:</div>
                         <div className="col-6 justify-content-start">
-                          <p className="modal_view_p_sub">color</p>
+                          <p className="modal_view_p_sub">
+                            {allprList?.product_attributes}
+                          </p>
+                          {/* <p className="modal_view_p_sub">{newvalue}</p> */}
                         </div>
                       </div>
                       <div className="row mt-2">
@@ -345,8 +436,7 @@ function ProductDetails() {
                         <div className="col-1">:</div>
                         <div className="col-6 justify-content-start">
                           <p className="modal_view_p_sub">
-                            Lorem Ipsum has been the industry's standard dummy
-                            text ever since the 1500s
+                            {allprList?.product_description}
                           </p>
                         </div>
                       </div>
@@ -443,14 +533,7 @@ function ProductDetails() {
                             setSearchStatus(event ? [event] : []);
                           }}
                         >
-                          {/* {LeadStatus &&
-                  LeadStatus.map((item, index) => {
-                    return (
-                      <Select.Option key={item.id} value={item.value}>
-                        {item.name}
-                      </Select.Option>
-                    );
-                  })} */}
+                         
                           <Select.Option value="one">First Test</Select.Option>
                           <Select.Option value="two">Second Test</Select.Option>
                           <Select.Option value="three">

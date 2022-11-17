@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Input, Select, Pagination, Checkbox } from "antd";
 import {
   FaFileExcel,
@@ -7,6 +7,9 @@ import {
   FaBookOpen,
   FaEdit,
 } from "react-icons/fa";
+
+import PublicFetch from "../../../../utils/PublicFetch";
+import { CRM_BASE_URL_SELLING} from "../../../../api/bootapi";
 import { FiEdit } from "react-icons/fi";
 import { AiFillPrinter } from "react-icons/ai";
 import { MdFileCopy, MdPageview } from "react-icons/md";
@@ -24,6 +27,7 @@ import FileUpload from "../../../../components/fileupload/fileUploader";
 import ErrorMsg from "../../../../components/error/ErrorMessage";
 
 function Productlist() {
+  const [numOfItems, setNumOfItems] = useState("25");
   const [pageSize, setPageSize] = useState("25"); // page size
   const [current, setCurrent] = useState(1);
   const [searchedText, setSearchedText] = useState(""); // search by text input
@@ -33,39 +37,112 @@ function Productlist() {
   const [productView, setProductView] = useState(false);
   const [successPopup, setSuccessPopup] = useState(false);
   const [error, setError] = useState(false);
+  const  [products, setProducts] = useState();
+  console.log("products are :::",products);
+  // const  [productname, setProductName] = useState();
+  // const  [productcode, setProductCode] = useState();
+  // const  [productcatid, setProductcatid] = useState();
+  // const  [brandid, setBrandId] = useState();
+  // const  [productunitid, setProductUnitid] = useState();
+  // const  [productimg, setProductImg] = useState();
+  // const  [productattributes, setProductAttributes] = useState([]);
+  // const  [productdes, setProductDescription] = useState();
 
-  const getData = (current, pageSize) => {
-    return data.slice((current - 1) * pageSize, current * pageSize);
+
+  // const getData = (current, pageSize) => {
+  //   return products?.slice((current - 1) * pageSize, current * pageSize);
+  // };
+  const [viewproduct, setViewproduct] = useState({
+    product_id: "",
+    product_name: "",
+    product_code: "",
+    product_category_id: "",
+    product_brand_id: "",
+    product_unit_id: "",
+    product_pic: "",
+    product_attributes: "",
+    product_description: "",
+   
+  });
+  const Viewproducts = (item) => {
+    console.log("view oppurtunity issss:", item);
+    setViewproduct({
+      ...viewproduct,
+      product_id:item.product_id,
+    product_name:item.product_name,
+    product_code: item.product_code,
+    product_category_id: item.product_category_id,
+    product_brand_id: item.product_brand_id,
+    product_unit_id: item.product_unit_id,
+    product_pic: item.product_pic,
+    product_attributes: item.product_attributes,
+    product_description: item.product_description,
+      
+    });
+    // getOppurtunityProgress(item)
+    
+    // setShowViewModal(true);
   };
+ 
 
-  const data = [
-    {
-      lead_type: "Rolex",
-      category: "Watch",
-      code: "HJKGF23456",
-      action: "Refefence",
-      lead_status: "Database",
-      key: "1",
-    },
-    {
-      lead_type: "Fry pan",
-      category: "cookware",
-      code: "HJGHRF34356",
-      action: "Direct Visit",
-      lead_status: "Database",
-      key: "2",
-    },
-    {
-      lead_type: "Addidas",
-      category: "shoe",
-      code: "GHFVY56447",
-      action: "Online Registration",
-      lead_status: "Database",
-      key: "3",
-    },
-  ];
+
+
   // {columns is product listing table componenet }
+  // const getallproduct = async () => {
+  //   try {
+  //     const allproduct = await PublicFetch.get(`${CRM_BASE_URL_SELLING}/product`);
+  //     console.log("all products are", allproduct.data.data);
+  //     setProducts(allproduct.data.data);
+  //   } catch (err) {
+  //     console.log("error while getting the products: ", err);
+  //   }
+  // };
 
+  const getallproduct = () => {
+    PublicFetch.get(
+      `${CRM_BASE_URL_SELLING}/product?startIndex=0&noOfItems=10`
+    )
+    .then((res) => {
+        if (res?.data?.success) {
+          console.log("All products success::: ", res?.data?.data.products)
+          setProducts(res?.data?.data.products);
+          // let samplearry = [];
+          // res?.data?.data?.leads.forEach((item, index) => {
+          //   samplearry.push(item.opportunity_id);
+          // });
+          // console.log("pushedd ", samplearry);
+
+          // setOppurtunityid(samplearry);
+        } else {
+          console.log("Failed to load data !");
+        }
+      })
+      .catch((err) => {
+        console.log("Errror while getting data", err);
+      });
+  };
+useEffect(() => {
+    getallproduct();
+  }, []);
+
+  // const getData = (current, pageSize) => {
+  //   return products?.slice((current - 1) * pageSize, current * pageSize);
+  // };
+
+  // const getallproduct = async () => {
+  //   try {
+  //     const allproducts = await PublicFetch.get(
+  //       `${CRM_BASE_URL_SELLING}/product?startIndex=0&noOfItems=40`)
+  //     console.log("all  are", allproducts.data?.data?.products[0]);
+  //     setProducts(allproducts.data?.data);
+  //   } catch (err) {
+  //     console.log("error while getting the products: ", err);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   getallproduct();
+  // }, []);
   const columns = [
     {
       title: "ACTION",
@@ -73,6 +150,7 @@ function Productlist() {
       key: "key",
       width: "14%",
       render: (data, index) => {
+        
         return (
           <div className="d-flex justify-content-center align-items-center gap-4">
             <div
@@ -81,12 +159,13 @@ function Productlist() {
             >
               <FaEdit />
             </div>
-            <Link to={ROUTES.PRODUCTDETAILS}>
+            
+            <Link to={`${ROUTES.PRODUCTDETAIL}/${index.product_id}`}>
               <div
                 // onClick={() => setProductView(true)}
                 className="actionView m-0 p-0"
               >
-                <MdPageview />
+                <MdPageview  />
               </div>
             </Link>
           </div>
@@ -113,11 +192,11 @@ function Productlist() {
     },
     {
       title: "NAME",
-      dataIndex: "lead_type",
-      key: "key",
+      dataIndex: "product_name",
+      key: "product_name",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.lead_type)
+        return String(record.product_name)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
@@ -127,24 +206,24 @@ function Productlist() {
 
     {
       title: "CODE",
-      dataIndex: "code",
-      key: "key",
+      dataIndex: "product_code",
+      key: "product_code",
       //   width: "23%",
       align: "center",
       filteredValue: [searchType],
       onFilter: (value, record) => {
-        return String(record.code).toLowerCase().includes(value.toLowerCase());
+        return String(record.product_code).toLowerCase().includes(value.toLowerCase());
       },
     },
     {
       title: "CATEGORY",
-      dataIndex: "category",
-      key: "key",
+      dataIndex: "product_category_id",
+      key: "product_category_id",
       width: "14%",
       align: "center",
       filteredValue: [searchStatus],
       onFilter: (value, record) => {
-        return String(record.category)
+        return String(record.product_category_id)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
@@ -293,15 +372,16 @@ function Productlist() {
           </div>
           <div className="datatable">
             <TableData
-              data={getData(current, pageSize)}
-              // data={allLeadList}
+              // data={getData(current,numOfItems, pageSize)}
+              data={products}
               //   data={data}
               columns={columns}
               custom_table_css="table_lead_list"
             />
+            
           </div>
           <div className="d-flex py-2 justify-content-center">
-            <MyPagination
+            {/* <MyPagination
               total={data.length}
               current={current}
               showSizeChanger={true}
@@ -310,7 +390,7 @@ function Productlist() {
                 setCurrent(current);
                 setPageSize(pageSize);
               }}
-            />
+            /> */}
           </div>
           {/* {"mcncncncncncncnc"}  {product listing ends } */}
         </div>
@@ -369,7 +449,12 @@ function Productlist() {
                         style={{
                           backgroundColor: "whitesmoke",
                           borderRadius: "5px",
+                          
                         }}
+                        value={numOfItems}
+                          onChange={(e)=>
+                            setNumOfItems(e)
+                          }
                         bordered={false}
                         className="w-100 "
                       >
@@ -502,7 +587,7 @@ function Productlist() {
                     </Button>
                   </div>
                 </div>
-                <div className="row my-3">
+                {/* <div className="row my-3">
                   <div className="col-12 d-flex justify-content-center ">
                     <img
                       src={logo}
@@ -520,12 +605,12 @@ function Productlist() {
                           style={{ color: "#000" }}
                           className="modal_view_p_style"
                         >
-                          Name
+                          Namedddddddddd
                         </p>
                       </div>
                       <div className="col-1">:</div>
                       <div className="col-6 justify-content-start">
-                        <p className="modal_view_p_sub">Rolex</p>
+                        <p className="modal_view_p_sub">{viewproduct.product_name}</p>
                       </div>
                     </div>
                     <div className="row mt-2">
@@ -630,7 +715,7 @@ function Productlist() {
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
           }

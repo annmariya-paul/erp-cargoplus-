@@ -87,7 +87,7 @@ if(updated.data.success){
 }
   }
   catch(err) {
- console.log("error to update attriutes")
+ console.log("error to update attributes")
   }
 }
 
@@ -161,9 +161,10 @@ getallattributes()
       width: "23%",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.attribute_name)
+        console.log("valuesss in", record )
+        return String(record.attribute_name) && (record.attribute_description)
           .toLowerCase()
-          .includes(value.toLowerCase());
+          .includes(value.toLowerCase())
       },
       align: "center",
     },
@@ -186,7 +187,7 @@ getallattributes()
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
-              placeholder="Search by Name"
+              placeholder="Search by Name and Description "
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
               onChange={(e) => {
@@ -223,7 +224,7 @@ getallattributes()
               </Select.Option>
             </Select>
           </div>
-          <div className="col mb-2">
+          <div className="col mb-2 px-4">
             <Link to={ROUTES.ADD_ATTRIBUTES} style={{ color: "white" }}>
               <Button btnType="add">Add Attribute</Button>
             </Link>
@@ -264,7 +265,7 @@ getallattributes()
                     btnType="add_borderless"
                     className="edit_button"
                     onClick={() => {
-                      handleviewtoedit(viewattributes )
+                      handleviewtoedit(viewattributes)
                       // setShowModalEdit(true);
                       setShowViewModal(false);
                     }}
@@ -303,12 +304,12 @@ getallattributes()
           size={"sm"}
           show={showModalEdit}
           onHide={() => setShowModalEdit(false)}
-          header="Attributes"
+          // header="Attributes"
           footer={false}
           {...props}
           View_list
           list_content={
-            <div className="container-fluid p-3">
+            <div className="container-fluid p-4">
               <div className="d-flex justify-content-between">
                 <div>
                   <h5 className="lead_text">Attribute</h5>

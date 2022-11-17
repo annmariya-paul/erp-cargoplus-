@@ -10,6 +10,7 @@ import TextArea from "../../../../components/ InputType TextArea/TextArea";
 import ErrorMsg from "../../../../components/error/ErrorMessage";
 import { ROUTES } from "../../../../routes";
 import { Link,  } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Addunit() {
   const [error, setError] = useState(false);
@@ -17,8 +18,18 @@ function Addunit() {
   const[unitName,setUnitName]=useState("")
   const[unitCode,setUnitCode]=useState("")
   const[unitDescription,setUnitDescription]= useState("")
+  const navigate = useNavigate();
+  
+  const [addForm]=Form.useForm()
 
-
+  const close_modal = (mShow, time) => {
+    if (!mShow) {
+      setTimeout(() => {
+        setSaveSuccess(false);
+        navigate(ROUTES.UNIT_LIST)
+      }, time);
+    }
+  };
   
 
   const onFinish = (values) => {
@@ -39,15 +50,13 @@ const addunit= await PublicFetch.post(
   })
  console.log("unit data is added ",addunit)
  if(addunit.data.success){
-  setSaveSuccess(true)
-  return(
-    <div><Link>{ROUTES.UNIT_LIST} </Link> </div>
-  )
+  // setSaveSuccess(true)
+  close_modal(saveSuccess,1000)
+ 
  }
  else{
    <ErrorMsg code={"500"} />
  }
-
 }
 catch(err) {
  console.log("err to add the unit",err)
@@ -64,7 +73,10 @@ catch(err) {
             <h5 className="lead_text">Basic Info</h5>
           </div>
            <Form
-               onFinish={onFinish}
+              //  onFinish={onFinish}
+              onFinish={(value)=>{
+                console.log("the formvaluess iss",value)
+              }}
                onFinishFailed={onFinishFailed}
             >
           <div className="row ">

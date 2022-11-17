@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import PublicFetch from "../../utils/PublicFetch";
 import { CRM_BASE_URL } from "../../api/bootapi";
 import {
@@ -32,7 +33,8 @@ import { DatePicker } from "antd";
 
 function Opportunitylist(props) {
 
-
+  const { id } = useParams();
+  console.log("ID is ...", id);
 
   const [numOfItems, setNumOfItems] = useState("25");
   const [pageSize, setPageSize] = useState(0); // page size
@@ -46,7 +48,8 @@ function Opportunitylist(props) {
   const [successPopup, setSuccessPopup] = useState(false); //success popups
   const [date, setDate] = useState(); //for date
   const [showAddOpportunity, setShowAddOpportunity] = useState(false); //adding opportunity
-
+  const [oppId, setOppID] = useState(parseInt(id));
+  console.log(oppId);
   const [oppurtunitylead, setOppurtunitylead] = useState("");
   const [oppurtunitytype, setoppurtunitytype] = useState();
   const [oppurtunityfrom, setOppurtunityfrom] = useState();
@@ -96,7 +99,7 @@ const [count,setcount]=useState(0)
     // opportunity_created_by: "",
 
     opportunity_id: "",
-    oppurtunityleadid: "",
+    opportunity_lead_id: oppId,
     opportunitytype: "",
     opportunityfrom: "",
     convertedby: "",
@@ -930,7 +933,7 @@ catch (err){
 
               <div className="col-sm-4 pt-2">
                 <Form.Group className="mb-2" controlId="lead_customer_from">
-                  <Form.Label>From</Form.Label>
+                  <Form.Label>From </Form.Label>
                   <Form.Select
                     aria-label="lead_customer_from"
                     name="lead_customer_from"

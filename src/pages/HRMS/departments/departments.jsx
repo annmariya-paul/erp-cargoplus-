@@ -6,7 +6,7 @@ import Custom_model from "../../../components/custom_modal/custom_model";
 import { Link } from "react-router-dom";
 import { Form, Input, Select } from "antd";
 import { FaEdit } from "react-icons/fa";
-import MyPagination from "../../../components/Pagination/MyPagination"; 
+import MyPagination from "../../../components/Pagination/MyPagination";
 import TableData from "../../../components/table/table_data";
 import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
 import { ROUTES } from "../../../routes";
@@ -21,8 +21,7 @@ export default function Departments(props) {
   const [deptName, setDeptName] = useState();
   const [deptCode, setDeptCode] = useState();
   const [pageSize, setPageSize] = useState("25");
-  const [current, setCurrent] = useState("")
-  
+  const [current, setCurrent] = useState("");
 
   const close_modal = (mShow, time) => {
     if (!mShow) {
@@ -93,17 +92,17 @@ export default function Departments(props) {
 
   const data = [
     {
-      dept_name: "Department A",
+      dept_name: "Dept test",
       dept_code: "DEPTAA",
       key: "1",
     },
     {
-      dept_name: "Department B",
+      dept_name: "Dept sample",
       dept_code: "DEPTBB",
       key: "2",
     },
     {
-      dept_name: "Department C",
+      dept_name: "Technical",
       dept_code: "DEPTCC",
       key: "3",
     },
@@ -166,8 +165,8 @@ export default function Departments(props) {
         </div>
         <div className="datatable">
           <TableData
-            data={getData(current, pageSize)}
-            // data={data}
+            // data={getData(current, pageSize)}
+            data={data}
             columns={columns}
             custom_table_css="table_lead_list"
           />
@@ -191,7 +190,7 @@ export default function Departments(props) {
         Adding_contents
         show={modalAddDept}
         onHide={() => setModalAddDept(false)}
-        header="Add Branch"
+        header="Add Department"
         footer={false}
         {...props}
       >
@@ -262,7 +261,7 @@ export default function Departments(props) {
               </Form.Item>
             </div>
           </div>
-          <div className="row justify-content-center mt-5">
+          <div className="row justify-content-center">
             <div className="col-auto">
               <Button btnType="save">Save</Button>
             </div>

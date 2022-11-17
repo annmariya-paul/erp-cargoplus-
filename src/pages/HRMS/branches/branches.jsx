@@ -28,20 +28,20 @@ export default function Branches(props) {
       }, time);
     }
   };
-
-  useEffect(() => {
-    Submit();
-  }, []);
-  const Submit = (value) => {
-    console.log(value);
-    if (value) {
-      localStorage.setItem("Form", JSON.stringify(value));
+ 
+  const Submit = (data) => {
+    console.log(data);
+    if (data) {
+      localStorage.setItem("addForm", JSON.stringify(data));
       setSuccessModal(true);
       close_modal(successModal, 1000);
     } else {
       setError(true);
     }
   };
+  useEffect(() => {
+    Submit();
+  }, []);
 
   const columns = [
     {
@@ -87,12 +87,12 @@ export default function Branches(props) {
 
   const data = [
     {
-      branch_name: "Branch A",
+      branch_name: "Branch X",
       branch_code: "ABC",
       key: "1",
     },
     {
-      branch_name: "Branch B",
+      branch_name: "Branch Y",
       branch_code: "XYZ",
       key: "2",
     },
@@ -179,8 +179,8 @@ export default function Branches(props) {
         <Form
           name="addForm"
           form={addForm}
-          onFinish={(value) => {
-            console.log("valuezzzzzzz", value);
+          onFinish={(data) => {
+            console.log("valuezzzzzzz", data);
             Submit();
           }}
           onFinishFailed={(error) => {

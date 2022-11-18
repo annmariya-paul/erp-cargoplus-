@@ -175,7 +175,7 @@ export default function AddOpportunity(props) {
   return (
     <>
       <Custom_model
-       Adding_contents
+        //  Adding_contents
         width={900}
         // Adding_contents
         // visible={props.modalOpportunity}
@@ -183,268 +183,265 @@ export default function AddOpportunity(props) {
         onHide={props.onCancel}
         // header="Add Opportunity"
         header="Add Opportunity"
-      
-        
         centered
         footer={false}
         View_list
         list_content={
           <>
             <Form form={form}>
-          <div className="px-5">
-            <div className="row px-1">
-              <div className="col-sm-4 pt-2">
-                <p>Type</p>
-                <Form.Item
-                  name="lead_type"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please Select a value",
-                    },
-                  ]}
-                >
-                  <SelectBox
-                    placeholder={"--Please Select--"}
-                    value={opptype}
-                    onChange={(e) => setOppType(e)}
-                  >
-                    <Select.Option value="sales">sales</Select.Option>
-                    <Select.Option value="support">support</Select.Option>
-                    <Select.Option value="maintenance">
-                      maintenance
-                    </Select.Option>
-                  </SelectBox>
-                </Form.Item>
-              </div>
+              <div className="px-5">
+                <h5 className="lead_text">Add Opportunity</h5>
+                <div className="row px-1">
+                  <div className="col-sm-4 pt-2">
+                    <p>Type</p>
+                    <Form.Item
+                      name="lead_type"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please Select a value",
+                        },
+                      ]}
+                    >
+                      <SelectBox
+                        placeholder={"--Please Select--"}
+                        value={opptype}
+                        onChange={(e) => setOppType(e)}
+                      >
+                        <Select.Option value="sales">sales</Select.Option>
+                        <Select.Option value="support">support</Select.Option>
+                        <Select.Option value="maintenance">
+                          maintenance
+                        </Select.Option>
+                      </SelectBox>
+                    </Form.Item>
+                  </div>
 
-              <div className="col-sm-4 pt-2">
-                <p>From</p>
-                <Form.Item
-                  name="lead_customer_from"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please Select a value",
-                    },
-                  ]}
-                >
-                  <SelectBox
-                    placeholder={"--Please Select--"}
-                    value={oppfrom}
-                    onChange={(e) => setOppFrom(e)}
-                  >
-                    <Select.Option value="customer">customer</Select.Option>
-                    <Select.Option value="lead">lead</Select.Option>
-                  </SelectBox>
-                </Form.Item>
-              </div>
+                  <div className="col-sm-4 pt-2">
+                    <p>From</p>
+                    <Form.Item
+                      name="lead_customer_from"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please Select a value",
+                        },
+                      ]}
+                    >
+                      <SelectBox
+                        placeholder={"--Please Select--"}
+                        value={oppfrom}
+                        onChange={(e) => setOppFrom(e)}
+                      >
+                        <Select.Option value="customer">customer</Select.Option>
+                        <Select.Option value="lead">lead</Select.Option>
+                      </SelectBox>
+                    </Form.Item>
+                  </div>
 
-              <div className="col-sm-4 pt-2">
-                <p>Generated/Converted by</p>
-                <Form.Item name="lead_customer_generated">
-                  <SelectBox placeholder={"--Please Select--"} value={oppId}>
-                    <Select.Option value="oppId">{oppId}</Select.Option>
-                  </SelectBox>
-                </Form.Item>
-              </div>
+                  <div className="col-sm-4 pt-2">
+                    <p>Generated/Converted by</p>
+                    <Form.Item name="lead_customer_generated">
+                      <SelectBox
+                        placeholder={"--Please Select--"}
+                        value={oppId}
+                      >
+                        <Select.Option value="oppId">{oppId}</Select.Option>
+                      </SelectBox>
+                    </Form.Item>
+                  </div>
 
-              <div className="col-sm-4 pt-2">
-                <p>Source</p>
-                <Form.Item
-                  name="lead_source"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please Select a value",
-                    },
-                  ]}
-                >
-                  <SelectBox
-                    placeholder={"--Please Select--"}
-                    value={oppsource}
-                    onChange={(e) => setOppSource(e)}
-                  >
-                    <Select.Option value="reference">reference</Select.Option>
-                    <Select.Option value="direct visit">
-                      direct visit
-                    </Select.Option>
-                    <Select.Option value="online registration">
-                      online registration
-                    </Select.Option>
-                  </SelectBox>
-                </Form.Item>
-              </div>
+                  <div className="col-sm-4 pt-2">
+                    <p>Source</p>
+                    <Form.Item
+                      name="lead_source"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please Select a value",
+                        },
+                      ]}
+                    >
+                      <SelectBox
+                        placeholder={"--Please Select--"}
+                        value={oppsource}
+                        onChange={(e) => setOppSource(e)}
+                      >
+                        <Select.Option value="reference">
+                          reference
+                        </Select.Option>
+                        <Select.Option value="direct visit">
+                          direct visit
+                        </Select.Option>
+                        <Select.Option value="online registration">
+                          online registration
+                        </Select.Option>
+                      </SelectBox>
+                    </Form.Item>
+                  </div>
 
-              <div className="col-sm-4 pt-2">
-                <p>Party</p>
-                <Form.Item
-                  name="lead_party"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please Select a value",
-                    },
-                  ]}
-                >
-                  <SelectBox
-                    placeholder={"--Please Select--"}
-                    value={name}
-                    onChange={(e) => setName(parseInt(e))}
-                  >
-                    {value &&
-                      value.length > 0 &&
-                      value.map((item, index) => {
-                        if (id == item.contact_lead_id) {
-                          return (
-                            <option
-                              key={item.contact_id}
-                              value={item.contact_id}
-                            >
-                              {item.contact_person_name}
-                            </option>
-                          );
-                        }
-                      })}
-                  </SelectBox>
-                </Form.Item>
-              </div>
+                  <div className="col-sm-4 pt-2">
+                    <p>Party</p>
+                    <Form.Item
+                      name="lead_party"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please Select a value",
+                        },
+                      ]}
+                    >
+                      <SelectBox
+                        placeholder={"--Please Select--"}
+                        value={name}
+                        onChange={(e) => setName(parseInt(e))}
+                      >
+                        {value &&
+                          value.length > 0 &&
+                          value.map((item, index) => {
+                            if (id == item.contact_lead_id) {
+                              return (
+                                <option
+                                  key={item.contact_id}
+                                  value={item.contact_id}
+                                >
+                                  {item.contact_person_name}
+                                </option>
+                              );
+                            }
+                          })}
+                      </SelectBox>
+                    </Form.Item>
+                  </div>
 
-              <div className="col-sm-4 pt-2">
-                <p>Valid Up to</p>
-                <Form.Item name="lead_valid_up_to"
-                
-                
-                rules={[
-                  {
-                    required: true,
-                    message: "Please select a date",
-                  },
-                ]}
-                >
-                  {/* <SelectBox placeholder={"--Please Select--"} value={oppId}>
+                  <div className="col-sm-4 pt-2">
+                    <p>Valid Up to</p>
+                    <Form.Item
+                      name="lead_valid_up_to"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please select a date",
+                        },
+                      ]}
+                    >
+                      {/* <SelectBox placeholder={"--Please Select--"} value={oppId}>
                     <Select.Option value="oppId">{oppId}</Select.Option>
                   </SelectBox> */}
-                  <DatePicker
-                    style={{ borderWidth: 0 }}
-                    //  disabledDate={today}
-                    disabledDate={(d) => !d || d.isBefore(today)}
-                    onChange={(e) => {
-                      console.log("date mmm", e);
-                      setDate(e);
-                    }}
-                  />
-                </Form.Item>
+                      <DatePicker
+                        style={{ borderWidth: 0 }}
+                        //  disabledDate={today}
+                        disabledDate={(d) => !d || d.isBefore(today)}
+                        onChange={(e) => {
+                          console.log("date mmm", e);
+                          setDate(e);
+                        }}
+                      />
+                    </Form.Item>
+                  </div>
+
+                  <div className="col-sm-4 pt-2">
+                    <p>Details</p>
+                    <Form.Item
+                      name="lead_details"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please enter a value",
+                        },
+                      ]}
+                    >
+                      <TextArea
+                        value={oppdescription}
+                        onChange={(e) => setOppDescription(e.target.value)}
+                      />
+                    </Form.Item>
+                  </div>
+
+                  <div className="col-sm-4 pt-2">
+                    <p>Expecting Amount</p>
+                    <Form.Item
+                      name="lead_expecting_amt"
+                      // type="number"
+                      rules={[
+                        {
+                          required: true,
+                          pattern: new RegExp("^[0-9.]+$"),
+                          message: "Please enter valid amount",
+                        },
+                      ]}
+                    >
+                      <InputType
+                        value={oppamount}
+                        // onBlur={ float = parseFloat(e.target.value),
+                        //   setOppAmount(float.toFixed(2))}
+                        onChange={(e) =>
+                          setOppAmount(parseFloat(e.target.value).toFixed(2))
+                        }
+                      />
+                    </Form.Item>
+                  </div>
+
+                  <div className="col-sm-4 pt-2">
+                    <p>Probability of conversion</p>
+                    <Form.Item
+                      name="lead_probability"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please Select a value",
+                        },
+                      ]}
+                    >
+                      <SelectBox
+                        placeholder={"--Please Select--"}
+                        value={oppprobability}
+                        onChange={(e) => setOppProbaility(e)}
+                      >
+                        <Select.Option value="L">Low</Select.Option>
+                        <Select.Option value="M">Medium</Select.Option>
+                        <Select.Option value="H">High</Select.Option>
+                      </SelectBox>
+                    </Form.Item>
+                  </div>
+                  <div className="col-sm-4 pt-2">
+                    <p>Status</p>
+                    <Form.Item
+                      name="lead_status"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please Select a value",
+                        },
+                      ]}
+                    >
+                      <SelectBox
+                        placeholder={"--Please Select--"}
+                        value={oppstatus}
+                        onChange={(e) => setOppStatus(e)}
+                      >
+                        <Select.Option value={1}>quotation</Select.Option>
+                        <Select.Option value={2}>interested</Select.Option>
+                        <Select.Option value={3}>converted</Select.Option>
+                        <Select.Option value={4}>lost</Select.Option>
+                        <Select.Option value={5}>DND</Select.Option>
+                      </SelectBox>
+                    </Form.Item>
+                  </div>
+                </div>
               </div>
 
-              <div className="col-sm-4 pt-2">
-                <p>Details</p>
-                <Form.Item
-                  name="lead_details"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please enter a value",
-                    },
-                  ]}
-                >
-                <TextArea value={oppdescription}
-                  onChange={(e) => setOppDescription(e.target.value)}
-                />
-                </Form.Item>
+              <div className="col-12 d-flex justify-content-center pt-2">
+                <Button btnType="save" onClick={oppdata}>
+                  Save
+                </Button>
               </div>
-              
-              <div className="col-sm-4 pt-2">
-                <p>Expecting Amount</p>
-                <Form.Item
-                  name="lead_expecting_amt"
-                  // type="number"
-                  rules={[
-                    {
-                      required: true,
-                      pattern: new RegExp("^[0-9.]+$"),
-                      message: "Please enter valid amount",
-                    },
-                  ]}
-                >
-              <InputType 
-                  value={oppamount} 
-                  // onBlur={ float = parseFloat(e.target.value),
-                  //   setOppAmount(float.toFixed(2))}
-                  onChange={(e) => setOppAmount(parseFloat(e.target.value).toFixed(2))}
-                  />
-                </Form.Item>
-              </div>
-
-              <div className="col-sm-4 pt-2">
-                <p>Probability of conversion</p>
-                <Form.Item
-                  name="lead_probability"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please Select a value",
-                    },
-                  ]}
-                >
-                  <SelectBox
-                    placeholder={"--Please Select--"}
-                    value={oppprobability}
-                    onChange={(e) => setOppProbaility(e)}
-                  >
-                    <Select.Option value="L">Low</Select.Option>
-                    <Select.Option value="M">
-                    Medium
-                    </Select.Option>
-                    <Select.Option value="H">
-                    High
-                    </Select.Option>
-                  </SelectBox>
-                </Form.Item>
-              </div>
-              <div className="col-sm-4 pt-2">
-                <p>Status</p>
-                <Form.Item
-                  name="lead_status"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please Select a value",
-                    },
-                  ]}
-                >
-                  <SelectBox
-                    placeholder={"--Please Select--"}
-                    value={oppstatus}
-                    onChange={(e) => setOppStatus(e)}
-                  >
-                    <Select.Option value={1}>quotation</Select.Option>
-                  <Select.Option value={2}>interested</Select.Option>
-                  <Select.Option value={3}>converted</Select.Option>
-                  <Select.Option value={4}>lost</Select.Option>
-                  <Select.Option value={5}>DND</Select.Option>
-                  </SelectBox>
-                </Form.Item>
-              </div>
-
-             
-            </div>
-          </div>
-
-          <div className="col-12 d-flex justify-content-center pt-2">
-            <Button btnType="save" onClick={oppdata}>
-              Save
-            </Button>
-          </div>
-        </Form>
+            </Form>
           </>
         }
         // {...props}
-      >
-        
-      </Custom_model>
+      ></Custom_model>
       <Custom_model
-        
         size={`sm`}
         success
         show={modalShow}

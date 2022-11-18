@@ -10,6 +10,7 @@ import TextArea from "../../../../components/ InputType TextArea/TextArea";
 import ErrorMsg from "../../../../components/error/ErrorMessage";
 import { ROUTES } from "../../../../routes";
 import { Link,  } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Addunit() {
   const [error, setError] = useState(false);
@@ -17,9 +18,23 @@ function Addunit() {
   const[unitName,setUnitName]=useState("")
   const[unitCode,setUnitCode]=useState("")
   const[unitDescription,setUnitDescription]= useState("")
-
-
+  const navigate = useNavigate();
   
+  const [addForm]=Form.useForm()
+
+  const close_modal = (mShow, time) => {
+    if (!mShow) {
+      setTimeout(() => {
+        setSaveSuccess(false);
+        navigate(ROUTES.UNIT_LIST)
+      }, time);
+    }
+  };
+  
+  const handleCancel=()=>{
+    navigate(ROUTES.UNIT_LIST)
+  }
+
 
   const onFinish = (values) => {
     console.log('Success:', values);
@@ -39,15 +54,13 @@ const addunit= await PublicFetch.post(
   })
  console.log("unit data is added ",addunit)
  if(addunit.data.success){
-  setSaveSuccess(true)
-  return(
-    <div><Link>{ROUTES.UNIT_LIST} </Link> </div>
-  )
+  // setSaveSuccess(true)
+  close_modal(saveSuccess,1000)
+ 
  }
  else{
    <ErrorMsg code={"500"} />
  }
-
 }
 catch(err) {
  console.log("err to add the unit",err)
@@ -64,8 +77,14 @@ catch(err) {
             <h5 className="lead_text">Basic Info</h5>
           </div>
            <Form
-               onFinish={onFinish}
-               onFinishFailed={onFinishFailed}
+              //  onFinish={onFinish}
+              onFinish={(value)=>{
+                console.log("the formvaluess iss",value)
+                submitaddunit()
+              }}
+            onFinishFailed={(error) => {
+            console.log(error);
+            }}
             >
           <div className="row ">
             <div className="col-xl-5 col-lg-5 col-12">
@@ -151,10 +170,15 @@ catch(err) {
           </div>
 
           
-          <div className="row justify-content-center  my-2">
-            <div className="col-xl-2 col-lg-2 col-12 d-flex justify-content-center">
-              <Button btnType="save" className="" onClick={()=>{submitaddunit()}} >
+          <div className="row d-flex justify-content-center  my-2">
+            <div className="col-xl-1 col-lg-1 col-12 d-flex justify-content-center">
+              <Button btnType="save" className=""  >
                 Save
+              </Button>
+            </div>
+            <div className="col-xl-1 col-lg-1 col-12  justify-content-center">
+              <Button btnType="cancel"onClick={()=>{handleCancel()}}  className=""  >
+                Cancel
               </Button>
             </div>
           </div>

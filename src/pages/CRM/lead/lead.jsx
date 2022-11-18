@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./lead.styles.scss";
 import { Link } from "react-router-dom";
-import { Form } from "react-bootstrap";
+// import { Form } from "react-bootstrap";
+import { Form, Input } from "antd";
 import Button from "../../../components/button/button";
 import { ROUTES } from "../../../routes";
 import { useForm } from "react-hook-form";
@@ -19,7 +20,10 @@ import { CRM_BASE_URL } from "../../../api/bootapi";
 // import ErrorMsg from "../../components/errormessage";
 import Countrystate from "./location/countryselect";
 import Custom_model from "../../../components/custom_modal/custom_model";
-import { message } from "antd";
+import { message, Select } from "antd";
+import SelectBox from "../../../components/Select Box/SelectBox";
+import InputType from "../../../components/Input Type textbox/InputType";
+import TextArea from "../../../components/ InputType TextArea/TextArea";
 // import { useForm } from "react-hook-form";
 
 function Lead({}) {
@@ -40,11 +44,38 @@ function Lead({}) {
   const [leadAttachment, setLeadAttachment] = useState();
   const [leadStatus, setLeadStatus] = useState("4");
   const [leadId, setLeadId] = useState();
+  const [previewVisible, setPreviewVisible] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+  const [previewTitle, setPreviewTitle] = useState("");
+  const [leadimg, setLeadimg]= useState([])
+  const [addForm] = Form.useForm();
 
   const [error, setError] = useState(false);
   const toggleTab = (index) => {
     setToggleState(index);
   };
+
+
+  const getBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+
+
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setPreviewImage(file.url || file.preview);
+    setPreviewVisible(true);
+    setPreviewTitle(
+      file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
+    );
+  };
+
 
   const [validated, setValidated] = useState(false);
 
@@ -74,6 +105,8 @@ function Lead({}) {
     }
   };
 
+
+  
   const Submit = (event) => {
     // const form = event.currentTarget;
     // if (form.checkValidity() === false) {
@@ -90,7 +123,7 @@ function Lead({}) {
     formData.append("lead_organization", leadOrganization);
     formData.append("lead_source", leadSource);
     formData.append("lead_description", leadDescription);
-    formData.append("attachments", leadAttachment);
+    formData.append("attachments", leadimg);
     formData.append("lead_status", leadStatus);
     //  console.log(data);
     PublicFetch.post(`${CRM_BASE_URL}/lead`, formData, {
@@ -100,14 +133,14 @@ function Lead({}) {
         console.log("hello", response);
         if (response.data.success) {
           console.log("hello", response.data.data);
-          // setLeadType();
-          // setLeadName();
-          // setLeadUsertype();
-          // setLeadOrganization();
-          // setLeadSource();
-          // setLeadAttachment();
-          // setLeadDescription();
-          // setLeadStatus();
+          setLeadType();
+          setLeadName();
+          setLeadUsertype();
+          setLeadOrganization();
+          setLeadSource();
+          setLeadAttachment();
+          setLeadDescription();
+          setLeadStatus();
           setModalShow(true);
           close_modal(modalShow, 1000);
           setModalContact(false);
@@ -122,6 +155,17 @@ function Lead({}) {
       });
     // }
   };
+
+   const options=[
+    {
+      value: 'L',
+      label: 'Lead',
+    },
+    {
+      value: 'c',
+      label: 'Customer',
+    }
+   ]
 
   // useEffect(() => {
   //   Submit();
@@ -220,12 +264,43 @@ function Lead({}) {
                   // validated={validated}
                   // onSubmit={Submit}
                 > */}
+              
+              <Form  
+                form={addForm}
+                onFinish={(value) => {
+                  console.log("values111333", value);
+                  // setDescription(value.description);
+                  // setBrand(value.brand);
+                  Submit();
+                }}
+                onFinishFailed={(error) => {
+                  console.log(error);
+                }}
+                >
                 <div className="row px-1">
+               
                   <div className="col-sm-4 pt-2">
-                    <Form.Group className="mb-2" controlId="lead_type">
-                      <Form.Label>Type</Form.Label>
-                      <Form.Select
-                        // required
+                    {/* <Form.Group className="mb-2" controlId="lead_type"> */}
+                      {/* <Form.Label>Type</Form.Label> */}
+                      <label className="mb-2">Type</label>
+                      <Form.Item>
+                     <SelectBox
+                      value={leadType}
+                      // value={leadType.leadtypes.selected.value}
+                      onChange={(e) => 
+                        // console.log("leaddtype",e)
+                        setLeadType(e)
+                      }
+                      // options={options}
+                      
+                     >
+                     <Select.Option value="L">Lead</Select.Option>
+                     <Select.Option value="C">Customer</Select.Option>
+                     </SelectBox>
+                     </Form.Item>
+
+                      {/* <Form.Select
+                      
                         aria-label="lead_type"
                         name="lead_type"
                         value={leadType}
@@ -234,34 +309,63 @@ function Lead({}) {
                       >
                         <option value="L">Lead</option>
                         <option value="C">Customer</option>
-                      </Form.Select>
-                    </Form.Group>
+                      </Form.Select> */}
+                    {/* </Form.Group> */}
                   </div>
                   <div className="col-sm-4 pt-2">
-                    <Form.Group className="mb-2" controlId="lead_customer_name">
-                      <Form.Label>Name</Form.Label>
-                      <Form.Control
-                        minLength={2}
-                        maxLength={100}
-                        type="text"
-                        name="lead_customer_name"
-                        placeholder="Name"
+                    {/* <Form.Group className="mb-2" controlId="lead_customer_name"> */}
+                      <label>Name</label>
+                      <Form.Item
+                       
+                       name="leadcustomername"
+                      rules={[
+                        {
+                          required: true,
+                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+
+                          message: "Please enter a  Name",
+                        },
+                        {
+                          min:3
+                        },
+                        {
+                          max:100
+                        }
+                      ]}
+                        // type="text"
+                        // name="lead_customer_name"
+                        // placeholder="Name"
                         // required
-                        value={leadName}
+                        // value={leadName}
                         // isInvalid={
                         //   !leadName?.length > 0 &&
                         //   (leadName?.length || formSubmitted)
                         // }
-                        onChange={(e) => setLeadName(e.target.value)}
-                      />
+                        // onChange={(e) => setLeadName(e.target.value)}
+                      >
+                        <InputType  value={leadName}  onChange={(e) => setLeadName(e.target.value)} />
+                        </Form.Item>
 
-                      <Form.Control.Feedback type="invalid">
+                      {/* <Form.Control.Feedback type="invalid">
                         Please enter valid name
-                      </Form.Control.Feedback>
-                    </Form.Group>
+                      </Form.Control.Feedback> */}
+                    {/* </Form.Group> */}
                   </div>
                   <div className="col-sm-4 pt-2">
-                    <Form.Group className="mb-2" controlId="lead_user_type">
+                  <label className="mb-2">User Type</label>
+                  <Form.Item>
+                     <SelectBox
+                       value={leadUsertype}
+                    
+                       onChange={(e) => setLeadUsertype(e)}
+                   
+                     >
+                    <Select.Option value="O">Organisation</Select.Option>
+                    <Select.Option value="I">Indivdual</Select.Option>
+
+                     </SelectBox>
+                     </Form.Item>
+                    {/* <Form.Group className="mb-2" controlId="lead_user_type">
                       <Form.Label>User Type</Form.Label>
                       <Form.Select
                         aria-label="lead_user_type"
@@ -272,10 +376,35 @@ function Lead({}) {
                         <option value="O">Organisation</option>
                         <option value="I">Indivdual</option>
                       </Form.Select>
-                    </Form.Group>
+                    </Form.Group> */}
                   </div>
                   <div className="col-sm-4 pt-2">
-                    <Form.Group className="mb-2" controlId="lead_organization">
+                  <label>Organisation</label>
+                      <Form.Item
+                       
+                       name="organization"
+                       rules={[
+                        // {
+                        //   required: true,
+                        //   pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+
+                        //   message: "Please enter a Name",
+                        // },
+                        {
+                          min: 2,
+                          message:"organisation has atleast 2 characters"
+                        },
+                        {
+                          max:100,
+                          message:"organisation cannot be longer than 100 characters"
+                        }
+                      ]}
+                       
+                      >
+                        <InputType  value={leadOrganization}
+                        onChange={(e) => setLeadOrganization(e.target.value)} />
+                        </Form.Item>
+                    {/* <Form.Group className="mb-2" controlId="lead_organization">
                       <Form.Label>Organisation</Form.Label>
                       <Form.Control
                         // required
@@ -284,10 +413,32 @@ function Lead({}) {
                         value={leadOrganization}
                         onChange={(e) => setLeadOrganization(e.target.value)}
                       />
-                    </Form.Group>
+                    </Form.Group> */}
                   </div>
                   <div className="col-sm-4 pt-2">
-                    <Form.Group className="mb-2" controlId="lead_source">
+                  <label className="mb-2" >Source</label>
+                  <Form.Item
+                         rules={[
+                          {
+                            required: true,
+                            message: "Please select  source",
+                          },
+                        ]}
+                  >
+                     <SelectBox
+                       value={leadSource}
+                       onChange={(e) => setLeadSource(e)}
+                       
+                     >
+                        <Select.Option value="reference">Reference</Select.Option>
+                        <Select.Option value="direct visit">Direct Visit</Select.Option>
+                        <Select.Option value="online registration">
+                          Online Registration
+                        </Select.Option>
+
+                     </SelectBox>
+                     </Form.Item>
+                    {/* <Form.Group className="mb-2" controlId="lead_source">
                       <Form.Label>Source</Form.Label>
                       <Form.Select
                         // required
@@ -302,18 +453,72 @@ function Lead({}) {
                           Online Registration
                         </option>
                       </Form.Select>
-                    </Form.Group>
+                    </Form.Group> */}
                   </div>
                   <div className="row justify-content-center">
                     <div className="col-lg-3 col-xs-12 col-sm-5 col-md-5 mt-3">
+                      <Form.Item 
+                          name="new"
+                       rules={[
+                        // {
+                        //   required: true,
+                        //   message: "Please select an image file",
+                        // },
+                      ]}
+                      >
                       <FileUpload
-                        value={leadAttachment}
-                        onChange={(e) => setLeadAttachment(e.target.value)}
+                        multiple
+                        listType="picture"
+                      accept=".pdf,.docs,"
+                      onPreview={handlePreview}
+
+                        // value={leadAttachment}
+                        // onChange={(e) => setLeadAttachment(e.target.value)}
+                        onChange={(file) => {
+                          console.log("Before upload", file.file);
+                          console.log("Before upload file size", file.file.size);
+  
+                          if (file.file.size > 1000 && file.file.size < 50000) {
+                            setLeadimg (file.file.originFileObj);
+                            console.log(
+                              "image grater than 1 kb and less than 50 kb"
+                            );
+                          } else {
+                            console.log("hgrtryyryr");
+                          }
+                        }}
                       />
+                      </Form.Item>
+                    
                     </div>
                   </div>
                   <div className="col-sm-8 pt-3">
-                    <Form.Group className="mb-2" controlId="lead_description">
+                  <label>Description</label>
+                      <Form.Item
+                       
+                       name="Description"
+                      rules={[
+                        // {
+                        //   required: true,
+                        //   pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+
+                        //   message: "Please enter a Valid Unit Name",
+                        // },
+                        
+                        {
+                          min:5,
+                          message: "Description have must be 5 characters"
+                        },
+                        
+                      ]}
+                       
+                      >
+                        <TextArea  value={leadDescription}
+                        onChange={(e) => setLeadDescription(e.target.value)}/>
+                        
+                        </Form.Item>
+
+                    {/* <Form.Group className="mb-2" controlId="lead_description">
                       <Form.Label>Description</Form.Label>
                       <Form.Control
                         as="textarea"
@@ -321,12 +526,29 @@ function Lead({}) {
                         value={leadDescription}
                         onChange={(e) => setLeadDescription(e.target.value)}
                       />
-                    </Form.Group>
+                    </Form.Group> */}
                   </div>
                   <div className="col-sm-4 pt-3">
                     <div className="row">
                       <div className="col-12">
-                        <Form.Group className="mb-2" controlId="lead_status">
+                      <label>Lead Status</label>
+                      <Form.Item>
+                     <SelectBox
+                       value={leadStatus}
+                       onChange={(e) => setLeadStatus(e)}
+                
+                     >
+                            <Select.Option value="1">Lead</Select.Option>
+                            <Select.Option value="2">Opportunity</Select.Option>
+                            <Select.Option value="3">Quotation</Select.Option>
+                            <Select.Option value="4">Interested</Select.Option>
+                            <Select.Option value="5">Converted</Select.Option>
+                            <Select.Option value="6">Lost</Select.Option>
+                            <Select.Option value="7">DND</Select.Option>
+
+                     </SelectBox>
+                     </Form.Item>
+                        {/* <Form.Group className="mb-2" controlId="lead_status">
                           <Form.Label>Lead Status</Form.Label>
                           <Form.Select
                             // required
@@ -343,7 +565,7 @@ function Lead({}) {
                             <option value="6">Lost</option>
                             <option value="7">DND</option>
                           </Form.Select>
-                        </Form.Group>
+                        </Form.Group> */}
                       </div>
                     </div>
                   </div>
@@ -352,9 +574,9 @@ function Lead({}) {
                     <Button
                       type="submit"
                       btnType="save"
-                      onClick={() => {
-                        Submit();
-                      }}
+                      // onClick={() => {
+                      //   Submit();
+                      // }}
                     >
                       Save
                     </Button>
@@ -365,8 +587,12 @@ function Lead({}) {
                       onHide={() => setModalShow(false)}
                     />
                   </div>
+                 
                 </div>
-                {/* </Form> */}
+                </Form>
+               
+
+
               </div>
               <div
                 className={

@@ -6,7 +6,7 @@ import Custom_model from "../../../components/custom_modal/custom_model";
 import { Link } from "react-router-dom";
 import { Form, Input, Select } from "antd";
 import { FaEdit } from "react-icons/fa";
-import MyPagination from "../../../components/Pagination/MyPagination"; 
+import MyPagination from "../../../components/Pagination/MyPagination";
 import TableData from "../../../components/table/table_data";
 import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
 import { ROUTES } from "../../../routes";
@@ -21,8 +21,7 @@ export default function Departments(props) {
   const [deptName, setDeptName] = useState();
   const [deptCode, setDeptCode] = useState();
   const [pageSize, setPageSize] = useState("25");
-  const [current, setCurrent] = useState("")
-  
+  const [current, setCurrent] = useState("");
 
   const close_modal = (mShow, time) => {
     if (!mShow) {
@@ -93,17 +92,17 @@ export default function Departments(props) {
 
   const data = [
     {
-      dept_name: "Department A",
+      dept_name: "Dept test",
       dept_code: "DEPTAA",
       key: "1",
     },
     {
-      dept_name: "Department B",
+      dept_name: "Dept sample",
       dept_code: "DEPTBB",
       key: "2",
     },
     {
-      dept_name: "Department C",
+      dept_name: "Technical",
       dept_code: "DEPTCC",
       key: "3",
     },
@@ -166,8 +165,8 @@ export default function Departments(props) {
         </div>
         <div className="datatable">
           <TableData
-            data={getData(current, pageSize)}
-            // data={data}
+            // data={getData(current, pageSize)}
+            data={data}
             columns={columns}
             custom_table_css="table_lead_list"
           />
@@ -187,88 +186,94 @@ export default function Departments(props) {
       </div>
 
       <Custom_model
-        width={400}
-        Adding_contents
         show={modalAddDept}
         onHide={() => setModalAddDept(false)}
-        header="Add Branch"
         footer={false}
-        {...props}
-      >
-        <Form
-          name="addForm"
-          form={addForm}
-          onFinish={(value) => {
-            console.log("valuezzzzzzz", value);
-            Submit();
-          }}
-          onFinishFailed={(error) => {
-            console.log(error);
-          }}
-        >
-          <div className="row py-4">
-            <div className="col-12 pt-1">
-              <label htmlfor="dept_name">Department Name</label>
-              <Form.Item
-                name="dept_name"
-                rules={[
-                  {
-                    required: true,
-                    pattern: new RegExp("^[A-Za-z ]+$"),
-                    message: "Please enter a Valid Department Name",
-                  },
-                  {
-                    whitespace: true,
-                  },
-                  {
-                    min: 3,
-                    message: "Department Name must be atleast 3 characters",
-                  },
-                  {
-                    max: 100,
-                    message:
-                      "Department Name cannot be longer than 100 characters",
-                  },
-                ]}
-                onChange={(e) => setDeptName(e.target.value)}
-              >
-                <InputType />
-              </Form.Item>
+        // {...props}
+        View_list
+        list_content={
+          <>
+            <div className="row">
+              <h5 className="lead_text">
+                Add Department
+              </h5>
             </div>
+            <Form
+              name="addForm"
+              form={addForm}
+              onFinish={(value) => {
+                console.log("valuezzzzzzz", value);
+                Submit();
+              }}
+              onFinishFailed={(error) => {
+                console.log(error);
+              }}
+            >
+              <div className="row py-4">
+                <div className="col-12 pt-1">
+                  <label htmlfor="dept_name">Department Name</label>
+                  <Form.Item
+                    name="dept_name"
+                    rules={[
+                      {
+                        required: true,
+                        pattern: new RegExp("^[A-Za-z ]+$"),
+                        message: "Please enter a Valid Department Name",
+                      },
+                      {
+                        whitespace: true,
+                      },
+                      {
+                        min: 3,
+                        message: "Department Name must be atleast 3 characters",
+                      },
+                      {
+                        max: 100,
+                        message:
+                          "Department Name cannot be longer than 100 characters",
+                      },
+                    ]}
+                    onChange={(e) => setDeptName(e.target.value)}
+                  >
+                    <InputType />
+                  </Form.Item>
+                </div>
 
-            <div className="col-12 pt-3">
-              <label htmlfor="dept_code">Department Code</label>
-              <Form.Item
-                name="dept_code"
-                rules={[
-                  {
-                    required: true,
-                    pattern: new RegExp("^[A-Za-z]+$"),
-                    message: "Please enter a Valid Department code",
-                  },
-                  {
-                    min: 3,
-                    message: "Department code must be atleast 3 characters",
-                  },
-                  {
-                    max: 15,
-                    message:
-                      "Department code cannot be longer than 15 characters",
-                  },
-                ]}
-                onChange={(e) => setDeptCode(e.target.value)}
-              >
-                <InputType />
-              </Form.Item>
-            </div>
-          </div>
-          <div className="row justify-content-center mt-5">
-            <div className="col-auto">
-              <Button btnType="save">Save</Button>
-            </div>
-          </div>
-        </Form>
-      </Custom_model>
+                <div className="col-12 pt-3">
+                  <label htmlfor="dept_code">Department Code</label>
+                  <Form.Item
+                    name="dept_code"
+                    rules={[
+                      {
+                        required: true,
+                        pattern: new RegExp("^[A-Za-z]+$"),
+                        message: "Please enter a Valid Department code",
+                      },
+                      {
+                        min: 3,
+                        message: "Department code must be atleast 3 characters",
+                      },
+                      {
+                        max: 15,
+                        message:
+                          "Department code cannot be longer than 15 characters",
+                      },
+                    ]}
+                    onChange={(e) => setDeptCode(e.target.value)}
+                  >
+                    <InputType />
+                  </Form.Item>
+                </div>
+              </div>
+              <div className="row justify-content-center">
+                <div className="col-auto">
+                  <Button btnType="save">Save</Button>
+                </div>
+              </div>
+            </Form>
+          </>
+        }
+      ></Custom_model>
     </>
   );
 }

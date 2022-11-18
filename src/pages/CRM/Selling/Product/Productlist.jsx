@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Input, Select, Pagination, Checkbox } from "antd";
 import {
   FaFileExcel,
@@ -9,7 +9,7 @@ import {
 } from "react-icons/fa";
 
 import PublicFetch from "../../../../utils/PublicFetch";
-import { CRM_BASE_URL_SELLING} from "../../../../api/bootapi";
+import { CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
 import { FiEdit } from "react-icons/fi";
 import { AiFillPrinter } from "react-icons/ai";
 import { MdFileCopy, MdPageview } from "react-icons/md";
@@ -25,6 +25,7 @@ import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon
 import CustomModel from "../../../../components/custom_modal/custom_model";
 import FileUpload from "../../../../components/fileupload/fileUploader";
 import ErrorMsg from "../../../../components/error/ErrorMessage";
+import ProductEditModal from "./ProductEditModal";
 
 function Productlist() {
   const [numOfItems, setNumOfItems] = useState("25");
@@ -37,8 +38,11 @@ function Productlist() {
   const [productView, setProductView] = useState(false);
   const [successPopup, setSuccessPopup] = useState(false);
   const [error, setError] = useState(false);
-  const  [products, setProducts] = useState();
-  console.log("products are :::",products);
+  const [products, setProducts] = useState();
+  console.log("products are :::", products);
+  const [modalOpportunity, setModalOpportunity] = useState(false);
+  const [productid, setProductID] = useState();
+  console.log("pr id from state", productid);
   // const  [productname, setProductName] = useState();
   // const  [productcode, setProductCode] = useState();
   // const  [productcatid, setProductcatid] = useState();
@@ -47,7 +51,6 @@ function Productlist() {
   // const  [productimg, setProductImg] = useState();
   // const  [productattributes, setProductAttributes] = useState([]);
   // const  [productdes, setProductDescription] = useState();
-
 
   // const getData = (current, pageSize) => {
   //   return products?.slice((current - 1) * pageSize, current * pageSize);
@@ -62,49 +65,43 @@ function Productlist() {
     product_pic: "",
     product_attributes: "",
     product_description: "",
-   
   });
   const Viewproducts = (item) => {
     console.log("view oppurtunity issss:", item);
     setViewproduct({
       ...viewproduct,
-      product_id:item.product_id,
-    product_name:item.product_name,
-    product_code: item.product_code,
-    product_category_id: item.product_category_id,
-    product_brand_id: item.product_brand_id,
-    product_unit_id: item.product_unit_id,
-    product_pic: item.product_pic,
-    product_attributes: item.product_attributes,
-    product_description: item.product_description,
-      
+      product_id: item.product_id,
+      product_name: item.product_name,
+      product_code: item.product_code,
+      product_category_id: item.product_category_id,
+      product_brand_id: item.product_brand_id,
+      product_unit_id: item.product_unit_id,
+      product_pic: item.product_pic,
+      product_attributes: item.product_attributes,
+      product_description: item.product_description,
     });
     // getOppurtunityProgress(item)
-    
+
     // setShowViewModal(true);
   };
- 
 
-
+  const handleEdit = (e) => {
+    console.log("data in event ", e);
+    if (e) {
+      setProductID(e.product_id);
+      setModalOpportunity(true);
+     
+    }
+  };
 
   // {columns is product listing table componenet }
-  // const getallproduct = async () => {
-  //   try {
-  //     const allproduct = await PublicFetch.get(`${CRM_BASE_URL_SELLING}/product`);
-  //     console.log("all products are", allproduct.data.data);
-  //     setProducts(allproduct.data.data);
-  //   } catch (err) {
-  //     console.log("error while getting the products: ", err);
-  //   }
-  // };
+ 
 
   const getallproduct = () => {
-    PublicFetch.get(
-      `${CRM_BASE_URL_SELLING}/product?startIndex=0&noOfItems=10`
-    )
-    .then((res) => {
+    PublicFetch.get(`${CRM_BASE_URL_SELLING}/product?startIndex=0&noOfItems=10`)
+      .then((res) => {
         if (res?.data?.success) {
-          console.log("All products success::: ", res?.data?.data.products)
+          console.log("All products success::: ", res?.data?.data.products);
           setProducts(res?.data?.data.products);
           // let samplearry = [];
           // res?.data?.data?.leads.forEach((item, index) => {
@@ -121,7 +118,7 @@ function Productlist() {
         console.log("Errror while getting data", err);
       });
   };
-useEffect(() => {
+  useEffect(() => {
     getallproduct();
   }, []);
 
@@ -129,20 +126,7 @@ useEffect(() => {
   //   return products?.slice((current - 1) * pageSize, current * pageSize);
   // };
 
-  // const getallproduct = async () => {
-  //   try {
-  //     const allproducts = await PublicFetch.get(
-  //       `${CRM_BASE_URL_SELLING}/product?startIndex=0&noOfItems=40`)
-  //     console.log("all  are", allproducts.data?.data?.products[0]);
-  //     setProducts(allproducts.data?.data);
-  //   } catch (err) {
-  //     console.log("error while getting the products: ", err);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   getallproduct();
-  // }, []);
+  
   const columns = [
     {
       title: "ACTION",
@@ -150,22 +134,31 @@ useEffect(() => {
       key: "key",
       width: "14%",
       render: (data, index) => {
-        
+        console.log("data", data);
+        console.log("index", index);
+
         return (
           <div className="d-flex justify-content-center align-items-center gap-4">
             <div
-              onClick={() => setShowProductEditModal(true)}
+              // onClick={() => setModalOpportunity(true)}
+              onClick={() => {
+                handleEdit(index);
+              }}
               className="actionEdit m-0 p-0"
             >
-              <FaEdit />
-            </div>
             
+
+              <FiEdit fontSize={"12px"} />
+
+            
+            </div>
+
             <Link to={`${ROUTES.PRODUCTDETAIL}/${index.product_id}`}>
               <div
-                // onClick={() => setProductView(true)}
+                
                 className="actionView m-0 p-0"
               >
-                <MdPageview  />
+                <MdPageview />
               </div>
             </Link>
           </div>
@@ -212,7 +205,9 @@ useEffect(() => {
       align: "center",
       filteredValue: [searchType],
       onFilter: (value, record) => {
-        return String(record.product_code).toLowerCase().includes(value.toLowerCase());
+        return String(record.product_code)
+          .toLowerCase()
+          .includes(value.toLowerCase());
       },
     },
     {
@@ -378,7 +373,6 @@ useEffect(() => {
               columns={columns}
               custom_table_css="table_lead_list"
             />
-            
           </div>
           <div className="d-flex py-2 justify-content-center">
             {/* <MyPagination
@@ -449,12 +443,9 @@ useEffect(() => {
                         style={{
                           backgroundColor: "whitesmoke",
                           borderRadius: "5px",
-                          
                         }}
                         value={numOfItems}
-                          onChange={(e)=>
-                            setNumOfItems(e)
-                          }
+                        onChange={(e) => setNumOfItems(e)}
                         bordered={false}
                         className="w-100 "
                       >
@@ -721,6 +712,12 @@ useEffect(() => {
           }
         />
       </div>
+      <ProductEditModal
+        show={modalOpportunity}
+        onHide={() => setModalOpportunity(false)}
+        style="width:1250px"
+        prid={productid}
+      />
 
       {/* {modal for success popups} */}
       <CustomModel

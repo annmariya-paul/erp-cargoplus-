@@ -28,6 +28,8 @@ export default function Attribute(props) {
   const [attributeName,setAttributeName]=useState("")
   const [attributedescription,setAttributeDescription]=useState("")
   const [attributeId,setAttributeId] =useState()
+  const [searcheddesText, setSearcheddesText] = useState("");
+
   const [viewattributes,setViewAttributes]=useState({
     id:"",
     attributename:"",
@@ -128,11 +130,12 @@ getallattributes()
     {
       title: "ACTION",
       dataIndex: "action",
+      align: "left",
       key: "key",
       width: "14%",
       render: (data, index) => {
         return (
-          <div className="d-flex justify-content-center align-items-center gap-3">
+          <div className="d-flex  align-items-center gap-3">
             <div
               className="editIcon m-0"
               onClick={() =>
@@ -152,27 +155,32 @@ getallattributes()
           </div>
         );
       },
-      align: "center",
+    
     },
     {
       title: "NAME",
       dataIndex: "attribute_name",
       key: "key",
-      width: "23%",
+      width: "25%",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
         console.log("valuesss in", record )
-        return String(record.attribute_name) && (record.attribute_description)
+        return String(record.attribute_name) 
+          .toLowerCase()
+          .includes(value.toLowerCase()) || String(record.attribute_description)
           .toLowerCase()
           .includes(value.toLowerCase())
       },
-      align: "center",
+      align: "left",
     },
     {
+    
       title: "DESCRIPTION",
       dataIndex: "attribute_description",
+      width:"30%",
       key: "key",
-      align: "center",
+     
+      align: "left",
     },
   ];
   return (
@@ -192,9 +200,11 @@ getallattributes()
               value={searchedText}
               onChange={(e) => {
                 setSearchedText(e.target.value ? [e.target.value] : []);
+                
               }}
               onSearch={(value) => {
                 setSearchedText(value);
+                
               }}
             />
           </div>

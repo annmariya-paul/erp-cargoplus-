@@ -202,7 +202,7 @@ const cancel = (e) => {
       width: "14%",
       render: (data, index) => {
         return (
-          <div className="d-flex justify-content-center gap-2">
+          <div className="d-flex  gap-2">
             <span
               onClick={() =>{ 
                 handleEditclick(index)
@@ -238,7 +238,7 @@ const cancel = (e) => {
           </div>
         );
       },
-      align: "center",
+      align: "left",
     },
     {
       title: "NAME",
@@ -250,7 +250,7 @@ const cancel = (e) => {
           .toLowerCase()
           .includes(value.toLowerCase());
       },
-      align: "center",
+      align: "left",
       width: "23%",
     },
     {
@@ -258,20 +258,20 @@ const cancel = (e) => {
       dataIndex: "unit_code",
       key: "unit_code",
       width: "23%",
-      filteredValue: [searchStatus],
+      filteredValue: [searchedText],
       onFilter: (value, record) => {
         return String(record.unit_code)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
-      align: "center",
+      align: "left",
     },
     {
       title: "DESCRIPTION",
       dataIndex: "unit_description",
       key: "unit_description",
       //   width: "23%",
-      align: "center",
+      align: "left",
     },
   ];
 
@@ -290,6 +290,19 @@ const cancel = (e) => {
             <Input.Search
               placeholder="Search by Name"
               style={{ margin: "5px", borderRadius: "5px" }}
+              value={searchType}
+              onChange={(e) => {
+                setSearchType(e.target.value ? [e.target.value] : []);
+              }}
+              onSearch={(value) => {
+                setSearchType(value);
+              }}
+            />
+          </div>
+          <div className="col-4">
+          <Input.Search
+              placeholder="Search by code"
+              style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
               onChange={(e) => {
                 setSearchedText(e.target.value ? [e.target.value] : []);
@@ -298,9 +311,7 @@ const cancel = (e) => {
                 setSearchedText(value);
               }}
             />
-          </div>
-          <div className="col-4">
-            <Select
+            {/* <Select
               allowClear
               showSearch
               style={{
@@ -318,7 +329,7 @@ const cancel = (e) => {
               <Select.Option value="sales">sales</Select.Option>
               <Select.Option value="maintenance">Maintenance</Select.Option>
               <Select.Option value="support">support</Select.Option>
-            </Select>
+            </Select> */}
           </div>
         </div>
 

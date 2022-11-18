@@ -127,7 +127,7 @@ export default function LeadList() {
             <div className="m-0">
               <Link
                 to={`${ROUTES.LEAD_EDIT}/${index.lead_id}`}
-                className="nav-link"
+                className="editcolor"
               >
                 {/* <a href="/edit_lead_list" className="actionEdit"> */}
 

@@ -23,7 +23,8 @@ function Custom_model({
   return (
     <div>
       <Modal
-      {...rest}
+        {...rest}
+        bodyStyle={{ height:620, overflowY:"auto" }}
         size={size}
         onClick={onClick}
         // onHide={onHide}
@@ -32,8 +33,8 @@ function Custom_model({
         visible={show}
         width={width}
         dialogClassName={dialogClassName}
-        centered
-        className={"modal_window_style" }
+        centered={centered}
+        className={"modal_window_style"}
         footer={false}
         destroyOnClose={true}
       >
@@ -42,12 +43,12 @@ function Custom_model({
             <div closeButton>
               <h5 className="modal-title text-center w-100">{header}</h5>
             </div>
-            <div>{children}</div>
+            <div className="modal_body">{children}</div>
             <div>{footer}</div>
           </>
         )}
         {success && (
-          < div>
+          <div>
             <div className="row">
               <i
                 className="success_msg bi bi-patch-check-fill"

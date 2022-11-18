@@ -31,6 +31,10 @@ function Addunit() {
     }
   };
   
+  const handleCancel=()=>{
+    navigate(ROUTES.UNIT_LIST)
+  }
+
 
   const onFinish = (values) => {
     console.log('Success:', values);
@@ -76,8 +80,11 @@ catch(err) {
               //  onFinish={onFinish}
               onFinish={(value)=>{
                 console.log("the formvaluess iss",value)
+                submitaddunit()
               }}
-               onFinishFailed={onFinishFailed}
+            onFinishFailed={(error) => {
+            console.log(error);
+            }}
             >
           <div className="row ">
             <div className="col-xl-5 col-lg-5 col-12">
@@ -163,10 +170,15 @@ catch(err) {
           </div>
 
           
-          <div className="row justify-content-center  my-2">
-            <div className="col-xl-2 col-lg-2 col-12 d-flex justify-content-center">
-              <Button btnType="save" className="" onClick={()=>{submitaddunit()}} >
+          <div className="row d-flex justify-content-center  my-2">
+            <div className="col-xl-1 col-lg-1 col-12 d-flex justify-content-center">
+              <Button btnType="save" className=""  >
                 Save
+              </Button>
+            </div>
+            <div className="col-xl-1 col-lg-1 col-12  justify-content-center">
+              <Button btnType="cancel"onClick={()=>{handleCancel()}}  className=""  >
+                Cancel
               </Button>
             </div>
           </div>

@@ -53,7 +53,7 @@ export default function Add_Attribute() {
 
   const createAttributes =async()=>{
   try{
-const addattributes = await PublicFetch.post(
+  const addattributes = await PublicFetch.post(
   `${CRM_BASE_URL_SELLING}/attribute`,{
     attribute_name:attributeName,
     attribute_description:attributeDescription
@@ -95,8 +95,13 @@ const addattributes = await PublicFetch.post(
 
         <Form  
         form={addForm}
-         onFinish={onFinish}
-         onFinishFailed={onFinishFailed} >
+         onFinish={(values)=>{
+          console.log("values iss",values)
+          createAttributes()
+         }}
+         onFinishFailed={(error) => {
+          console.log(error);
+        }} >
           <div className="row py-1">
             <div className="col-sm-6 pt-3">
                 <label>Name</label>
@@ -154,7 +159,7 @@ const addattributes = await PublicFetch.post(
           </div>
           <div className="row justify-content-center mt-5">
             <div className="col-1">
-              <Button btnType="save" onClick={()=> createAttributes()} >Save</Button>
+              <Button btnType="save"  >Save</Button>
               
             </div>
             <div className="col-1">

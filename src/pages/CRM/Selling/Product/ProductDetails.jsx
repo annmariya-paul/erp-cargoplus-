@@ -1,15 +1,17 @@
 // import { Button } from "antd";
-import { Checkbox, Input, Select } from "antd";
+import {  Input, Select } from "antd";
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { BsPlusCircleFill } from "react-icons/bs";
+import { Checkbox, Col, Row } from "antd";
 import { FaEdit } from "react-icons/fa";
 import { FiEdit } from "react-icons/fi";
 import { MdDelete, MdPageview } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
 import PublicFetch from "../../../../utils/PublicFetch";
-
+import { Form } from "antd";
+import ProductEditModal from "../../Selling/Product/ProductEditModal";
 import Button from "../../../../components/button/button";
 import CustomModel from "../../../../components/custom_modal/custom_model";
 import ErrorMsg from "../../../../components/error/ErrorMessage";
@@ -20,10 +22,11 @@ import MyPagination from "../../../../components/Pagination/MyPagination";
 import TableData from "../../../../components/table/table_data";
 import { ROUTES } from "../../../../routes";
 import Item from "antd/lib/list/Item";
-
+import SelectBox from "../../../../components/Select Box/SelectBox";
 function ProductDetails() {
   const { id } = useParams();
   const [toggleState, setToggleState] = useState(1);
+  const [modalOpportunity, setModalOpportunity] = useState(false);
   const [pageSize, setPageSize] = useState("25"); // page size
   const [current, setCurrent] = useState(1);
   const [searchedText, setSearchedText] = useState(""); // search by text input
@@ -34,6 +37,13 @@ function ProductDetails() {
   const [showProductEditModal, setShowProductEditModal] = useState(false);
   const [prname, setPrName] = useState();
   const [newvalue, setNewvalue] = useState();
+  const [brand, setBrand] = useState();
+ 
+  const [unit, setUnit] = useState("");
+  const [attributes, setAttributes] = useState();
+  const [allunit, setAllunit] = useState();
+  const [brands, setBrands] = useState();
+  const [addForm] = Form.useForm();
   // console.log("attributes in state:", prattributes);
 
   const [prcode, setPrcode] = useState();
@@ -44,9 +54,32 @@ function ProductDetails() {
 
   const [setProductDescription, setPrDescription] = useState();
   const [primage, setPrImage] = useState();
-  const [attributes, setAttributes] = useState("");
+ const [img, setImg] = useState([]);
+  console.log("set image", img);
+  const [previewVisible, setPreviewVisible] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+  const [previewTitle, setPreviewTitle] = useState("");
+  console.log("set image", img);
+  const getBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+
   const toggleTab = (index) => {
     setToggleState(index);
+  };
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setPreviewImage(file.url || file.preview);
+    setPreviewVisible(true);
+    setPreviewTitle(
+      file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
+    );
   };
 
   // const getallattributes = async () => {
@@ -106,6 +139,56 @@ function ProductDetails() {
     GetAllProductData();
   }, []);
 
+
+  const getallbrand = async () => {
+    try {
+      const allbrands = await PublicFetch.get(`${CRM_BASE_URL_SELLING}/brand`);
+      console.log("all brands are", allbrands.data.data);
+      setBrands(allbrands.data.data);
+      // setbrandName()
+    } catch (err) {
+      console.log("error while getting the brands: ", err);
+    }
+  };
+
+  useEffect(() => {
+    getallbrand();
+  }, []);
+
+  const getallunits = async () => {
+    try {
+      const allunits = await PublicFetch.get(`${CRM_BASE_URL_SELLING}/unit`);
+      console.log("all units are ::", allunits?.data?.data);
+
+      // if(allunits?.data.success){}
+      setAllunit(allunits?.data?.data);
+      // setunitTable(allunits?.data?.data)
+    } catch (err) {
+      console.log("error to getting all units", err);
+    }
+  };
+
+  useEffect(() => {
+    getallunits();
+  }, []);
+
+
+  const getallattributes = async () => {
+    try {
+      const allattributes = await PublicFetch.get(
+        `${CRM_BASE_URL_SELLING}/attribute`
+      );
+      console.log("getting all attributes", allattributes.data.data);
+      setAttributes(allattributes.data.data);
+    } catch (err) {
+      console.log("error to fetching  attributes", err);
+    }
+  };
+
+  useEffect(() => {
+    getallattributes();
+  }, []);
+
   //End
   const data = [
     {
@@ -139,6 +222,10 @@ function ProductDetails() {
 
   const getData = (current, pageSize) => {
     return data.slice((current - 1) * pageSize, current * pageSize);
+  };
+
+  const newValues = (checkedValues) => {
+    console.log("checked = ", checkedValues);
   };
 
   // {columns is product listing table componenet }
@@ -283,23 +370,18 @@ function ProductDetails() {
                   <div className=" d-flex justify-content-end">
                     <h5 className="lead_text d-none">Products</h5>
                     <Button
-                      style={{
-                        backgroundColor: "white",
-                        color: "#0092ce",
-                      }}
-                      className="d-flex justify-content-end"
+                       onClick={() => setModalOpportunity(true)}
                     >
-                      <span
-                        className="d-flex align-items-center justify-content-between gap-1  p-1 button_span"
-                        style={{ fontSize: "13px" }}
-                        onClick={() => {
-                          setShowProductEditModal(true);
-                          // setProductView(false);
-                        }}
-                      >
+                      
+                        
                         Edit <FiEdit fontSize={"12px"} />
-                      </span>
+                     
                     </Button>
+                    <ProductEditModal
+                      show={modalOpportunity}
+                      onHide={() => setModalOpportunity(false)}
+                      style="width:1250px"
+                    />
                   </div>
                   <div className="row my-3">
                     <div className="col-12 d-flex justify-content-center ">
@@ -663,164 +745,10 @@ function ProductDetails() {
           </div>
         </div>
       </div>
-      <CustomModel
-        Adding_contents
-        show={showProductEditModal}
-        onHide={() => setShowProductEditModal(false)}
-        header="Edit Product"
-        size={`xl`}
-        footer={[
-          <Button
-            onClick={() => {
-              setSuccessPopup(true);
-              setError(true);
-            }}
-            btnType="save"
-          >
-            Save
-          </Button>,
-          <Button
-            onClick={() => {
-              setShowProductEditModal(false);
-            }}
-            className="cancel_button p-2"
-          >
-            cancel
-          </Button>,
-          ,
-        ]}
-        // {...props}
-      >
-        <div className="container">
-          <div style={{ borderRadius: "8px" }} className="card border-0  ">
-            <div className="container ">
-              <div className="my-3 d-none">
-                <h5 className="lead_text">Basic Info</h5>
-              </div>
-              <div className="row ">
-                <div className="col-4">
-                  <p>Name</p>
-                  <div>
-                    <input type="text" className="input_type_style w-100" />
-                  </div>
-                </div>
-                <div className="col-4">
-                  <p>Code</p>
-                  <div>
-                    <input type={"text"} className="input_type_style w-100" />
-                  </div>
-                </div>
-                <div className="col-4 ">
-                  <p>Category</p>
-                  <div>
-                    <Select
-                      style={{
-                        backgroundColor: "whitesmoke",
-                        borderRadius: "5px",
-                      }}
-                      bordered={false}
-                      className="w-100 "
-                    >
-                      <Select.Option>Watch</Select.Option>
-                    </Select>
-                  </div>
-                </div>
-                <div className="col-6 mt-2">
-                  <p>Brand</p>
-                  <div>
-                    <Select
-                      style={{
-                        backgroundColor: "whitesmoke",
-                        borderRadius: "5px",
-                      }}
-                      bordered={false}
-                      className="w-100 "
-                    >
-                      <Select.Option>Watch</Select.Option>
-                    </Select>
-                  </div>
-                </div>
-                <div className="col-6 mt-2">
-                  <p>Unit</p>
-                  <div>
-                    <Select
-                      style={{
-                        backgroundColor: "whitesmoke",
-                        borderRadius: "5px",
-                      }}
-                      bordered={false}
-                      className="w-100 "
-                    >
-                      <Select.Option>Watch</Select.Option>
-                    </Select>
-                  </div>
-                </div>
-                <div className="col-6 mt-2">
-                  <p>Attributes</p>
-                  <div
-                    style={{
-                      backgroundColor: "whitesmoke",
-                      borderRadius: "5px",
-                    }}
-                  >
-                    <div
-                      style={{
-                        backgroundColor: "whitesmoke",
-                        borderRadius: "5px",
-                        height: "160px",
-                        overflow: "scroll",
-                      }}
-                      className="card border-0 px-4 py-2"
-                    >
-                      <label style={{ color: "gray" }} className="my-2 ">
-                        <Checkbox className="me-2" />
-                        color
-                      </label>
-                      <label style={{ color: "gray" }} className="my-2">
-                        <Checkbox className="me-2" />
-                        warrenty
-                      </label>
-                      <label style={{ color: "gray" }} className="my-2">
-                        <Checkbox className="me-2" />
-                        Size
-                      </label>
-                      <label style={{ color: "gray" }} className="my-2">
-                        <Checkbox className="me-2" />
-                        weight
-                      </label>
-                      <label style={{ color: "gray" }} className="my-2">
-                        <Checkbox className="me-2" />
-                        weight
-                      </label>
-                      <label style={{ color: "gray" }} className="my-2">
-                        <Checkbox className="me-2" />
-                        weight
-                      </label>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-6 mt-2">
-                  <p>Display Picture</p>
-                  <FileUpload />
-                </div>
-                <div className="col-6 mt-2">
-                  <p>Description</p>
-                  <div>
-                    <textarea
-                      style={{ height: "100px" }}
-                      className="input_type_style w-100"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          {error ? <ErrorMsg code="500" /> : ""}
-        </div>
-      </CustomModel>
+    
       <CustomModel
         size={"sm"}
-        show={successPopup}
+        // show={successPopup}
         onHide={() => setSuccessPopup(false)}
         success
       />

@@ -1,0 +1,15 @@
+@use "../../../styles/variables.scss";
+
+.container1 {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 40%;
+  padding: 18px;
+  box-shadow: 2px 2px 12px variables.$boxshadow;
+}
+.container2{
+  height: 610px;
+  border-radius: 3px;
+  box-shadow: 2px 2px 12px variables.$boxshadow;
+}

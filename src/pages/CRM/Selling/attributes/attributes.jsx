@@ -28,6 +28,8 @@ export default function Attribute(props) {
   const [attributeName,setAttributeName]=useState("")
   const [attributedescription,setAttributeDescription]=useState("")
   const [attributeId,setAttributeId] =useState()
+  const [searcheddesText, setSearcheddesText] = useState("");
+
   const [viewattributes,setViewAttributes]=useState({
     id:"",
     attributename:"",
@@ -48,7 +50,6 @@ const handleViewClick=(item)=>{
   attributename:item.attribute_name,
   attributedescription:item.attribute_description,
   attriutestatus:item.attribute_status
-
   })
 
   setShowViewModal(true)
@@ -88,7 +89,7 @@ if(updated.data.success){
 }
   }
   catch(err) {
- console.log("error to update attriutes")
+ console.log("error to update attributes")
   }
 }
 
@@ -129,11 +130,12 @@ getallattributes()
     {
       title: "ACTION",
       dataIndex: "action",
+      align: "left",
       key: "key",
       width: "14%",
       render: (data, index) => {
         return (
-          <div className="d-flex justify-content-center align-items-center gap-3">
+          <div className="d-flex  align-items-center gap-3">
             <div
               className="editIcon m-0"
               onClick={() =>
@@ -153,26 +155,32 @@ getallattributes()
           </div>
         );
       },
-      align: "center",
+    
     },
     {
       title: "NAME",
       dataIndex: "attribute_name",
       key: "key",
-      width: "23%",
+      width: "25%",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.attribute_name)
+        console.log("valuesss in", record )
+        return String(record.attribute_name) 
           .toLowerCase()
-          .includes(value.toLowerCase());
+          .includes(value.toLowerCase()) || String(record.attribute_description)
+          .toLowerCase()
+          .includes(value.toLowerCase())
       },
-      align: "center",
+      align: "left",
     },
     {
+    
       title: "DESCRIPTION",
       dataIndex: "attribute_description",
+      width:"30%",
       key: "key",
-      align: "center",
+     
+      align: "left",
     },
   ];
   return (
@@ -187,14 +195,16 @@ getallattributes()
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
-              placeholder="Search by Name"
+              placeholder="Search by Name and Description "
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
               onChange={(e) => {
                 setSearchedText(e.target.value ? [e.target.value] : []);
+                
               }}
               onSearch={(value) => {
                 setSearchedText(value);
+                
               }}
             />
           </div>
@@ -224,7 +234,7 @@ getallattributes()
               </Select.Option>
             </Select>
           </div>
-          <div className="col mb-2">
+          <div className="col mb-2 px-4">
             <Link to={ROUTES.ADD_ATTRIBUTES} style={{ color: "white" }}>
               <Button btnType="add">Add Attribute</Button>
             </Link>
@@ -255,17 +265,17 @@ getallattributes()
           onHide={() => setShowViewModal(false)}
           View_list
           list_content={
-            <div className="container-fluid p-4">
+            <div className="container-fluid p-3">
               <div className="row">
                 <div className="col-10">
                   <h5 className="lead_text">Attribute</h5>
                 </div>
-                <div className="col">
+                <div className="col-2">
                   <Button
                     btnType="add_borderless"
                     className="edit_button"
                     onClick={() => {
-                      handleviewtoedit(viewattributes )
+                      handleviewtoedit(viewattributes)
                       // setShowModalEdit(true);
                       setShowViewModal(false);
                     }}
@@ -304,22 +314,15 @@ getallattributes()
           size={"sm"}
           show={showModalEdit}
           onHide={() => setShowModalEdit(false)}
-          header="Attributes"
+          // header="Attributes"
           footer={false}
           {...props}
           View_list
           list_content={
-            <div className="container-fluid p-3">
+            <div className="container-fluid p-4">
               <div className="d-flex justify-content-between">
                 <div>
                   <h5 className="lead_text">Attribute</h5>
-                </div>
-                <div
-                  onClick={() => {
-                    setShowModalEdit(false);
-                  }}
-                >
-                  <AiOutlineClose className="closeModal" />
                 </div>
               </div>
               <div className="row px-2 my-3">

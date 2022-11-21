@@ -26,12 +26,17 @@ const ROUTES = {
   BRANDCREATE: "/createbrand",
   PRODUCT: "/product",
   PRODUCTCREATE: "/create_product",
-  PRODUCTDETAILS: "/product_details",
+  PRODUCTDETAIL: "/product_details",
+  PRODUCTDETAIL_ID: "/product_details/:id",
+
+
   PRODUCTVARIENTS: "/product_varients",
   SERVICES: "/services",
   SERVICECREATE: "/create_service",
-  ADD_BRANCHES:"/add_branches",
-  ADD_DEPARTMENT:"/add_departments"
+  BRANCHES:"/branches",
+  DEPARTMENTS:"/departments",
+  DESIGNATION:"/designation",
+  EMPLOYMENT_TYPE:"/employment_type"
 };
 
 module.exports = { ROUTES };

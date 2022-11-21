@@ -81,7 +81,7 @@ export default function Sidebar({ showSidebar }) {
                       className={({ isActive }) =>
                         isActive ? "active-link" : "link"
                       }
-                      to={ROUTES.ADD_BRANCHES}
+                      to={ROUTES.BRANCHES}
                     >
                       <RiTeamFill className="sidebar_icons ms-4" />
                       Branches
@@ -92,10 +92,32 @@ export default function Sidebar({ showSidebar }) {
                       className={({ isActive }) =>
                         isActive ? "active-link" : "link"
                       }
-                      to={ROUTES.ADD_DEPARTMENT}
+                      to={ROUTES.DEPARTMENTS}
                     >
                       <RiTeamFill className="sidebar_icons ms-4" />
                       Departments
+                    </NavLink>
+                  </li>
+                  <li className="nav-text ">
+                    <NavLink
+                      className={({ isActive }) =>
+                        isActive ? "active-link" : "link"
+                      }
+                      to={ROUTES.DESIGNATION}
+                    >
+                      <RiTeamFill className="sidebar_icons ms-4" />
+                      Designation
+                    </NavLink>
+                  </li>
+                  <li className="nav-text ">
+                    <NavLink
+                      className={({ isActive }) =>
+                        isActive ? "active-link" : "link"
+                      }
+                      to={ROUTES.EMPLOYMENT_TYPE}
+                    >
+                      <RiTeamFill className="sidebar_icons ms-4" />
+                     Employment Type
                     </NavLink>
                   </li>
                 </>
@@ -297,16 +319,16 @@ export default function Sidebar({ showSidebar }) {
                         </NavLink>
                       </li>
                       <li className="nav-text">
-                <NavLink
-                  className={({ isActive }) =>
-                    isActive ? "active-link" : "link"
-                  }
-                  to={ROUTES.UNIT_LIST}
-                >
-                  <RiTeamFill className="sidebar_icons ms-4" />
-                  Units and Measures
-                </NavLink>
-              </li>
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.UNIT_LIST}
+                        >
+                          <RiTeamFill className="sidebar_icons ms-4" />
+                          Units and Measures
+                        </NavLink>
+                      </li>
                     </>
                   ) : (
                     ""
@@ -315,7 +337,6 @@ export default function Sidebar({ showSidebar }) {
               ) : (
                 ""
               )}
-           
             </ul>
           </nav>
         </div>

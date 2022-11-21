@@ -1,9 +1,10 @@
 @use "../../../../styles/variables.scss";
 $grey: #777777;
 .actioneditdelete {
-  font-size: 14px;
+  font-size: 16px;
   //   padding-inline: 5px;
-  color: $grey;
+  color: variables.$primary;
+  // color: $grey;
   &:hover {
     color: variables.$primary;
   }

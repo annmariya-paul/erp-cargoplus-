@@ -18,6 +18,7 @@ import TableData from "../../../../components/table/table_data";
 import { LeadStatus } from "../../../../utils/leadStatus";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { CRM_BASE_URL } from "../../../../api/bootapi";
+import Custom_model from "../../../../components/custom_modal/custom_model";
 import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
 import { ROUTES } from "../../../../routes";
 
@@ -29,8 +30,37 @@ export default function LeadList() {
   const [totalCount, setTotalcount] = useState();
   const [pageIndex, setPageIndex] = useState(0);
   const [current, setCurrent] = useState(1);
+  const [modalViewLead, setModalViewLead] = useState(false);
 
   const [allLeadList, setAllLeadList] = useState();
+
+  const [viewLead, setViewLead] = useState({
+    type: "",
+    lead_name: "",
+    user_type: "",
+    organisation: "",
+    source:"",
+    attachments:"",
+    description:"",
+    status:"",
+  });
+// { function to view selected Lead's data - Ann mariya (18/11/22)}
+  const handleViewData = (item) => {
+    console.log("view all attributes", item);
+    setViewLead({
+      ...viewLead,
+      type: item.lead_type,
+      lead_name: item.lead_customer_name,
+      user_type: item.lead_user_type,
+      organisation: item.lead_organization,
+      source: item.lead_source,
+      attachments: item.attachments,
+      description: item.lead_description,
+      status: item.lead_status,
+    });
+
+    setModalViewLead(true);
+  };
 
   const pageofIndex = noofItems * (current - 1) - 1 + 1;
   const numofItemsTo = noofItems * current;
@@ -93,19 +123,9 @@ export default function LeadList() {
     );
   };
 
-  const action = () => {
-    return (
-      <div>
-        <a href="" className="actionEdit">
-          <FaEdit />
-        </a>
-        <a href="" className="actionView">
-          <MdPageview />
-        </a>
-      </div>
-    );
-  };
+ 
 
+ 
   // <Link to={ROUTES.OPPORTUNITY} className="nav-link">
   //                     <Button onClick={Submit} btnType="add_borderless">
   //                       <BsPlusCircleFill style={{ fontSize: "16px" }} /> View
@@ -127,18 +147,17 @@ export default function LeadList() {
             <div className="m-0">
               <Link
                 to={`${ROUTES.LEAD_EDIT}/${index.lead_id}`}
-                className="nav-link"
+                className="editcolor"
               >
-                {/* <a href="/edit_lead_list" className="actionEdit"> */}
-
                 <FaEdit />
               </Link>{" "}
             </div>
 
             <div className="actionView m-0">
-              <Link>
-                <MdPageview />
-              </Link>
+              <div className="editcolor" onClick={() => handleViewData(index)}>
+                <MdPageview
+                />
+              </div>
             </div>
           </div>
         );
@@ -340,6 +359,70 @@ export default function LeadList() {
               }}
             />
           </div>
+
+          <Custom_model
+            show={modalViewLead}
+            onHide={() => setModalViewLead(false)}
+            View_list
+            list_content={
+              <>
+                <div className="container-fluid p-3">
+                  <div className="d-flex justify-content-between">
+                    <div>
+                      <h5 className="lead_text">Lead</h5>
+                    </div>
+                  </div>
+
+                  <div className="mt-2">
+                    <table className="table table-borderless">
+                      <tbody>
+                        <tr>
+                          <td>Type</td>
+                          <td>:</td>
+                          <td>{viewLead.type}</td>
+                        </tr>
+                        <tr>
+                          <td>Name</td>
+                          <td>:</td>
+                          <td>{viewLead.lead_name}</td>
+                        </tr>
+                        <tr>
+                          <td>User Type</td>
+                          <td>:</td>
+                          <td>{viewLead.user_type}</td>
+                        </tr>
+                        <tr>
+                          <td>Organisation</td>
+                          <td>:</td>
+                          <td>{viewLead.organisation}</td>
+                        </tr>
+                        <tr>
+                          <td>Source</td>
+                          <td>:</td>
+                          <td>{viewLead.source}</td>
+                        </tr>
+                        <tr>
+                          <td>Attachments</td>
+                          <td>:</td>
+                          <td className="lead_text">{viewLead.attachments}</td>
+                        </tr>
+                        <tr>
+                          <td>Description</td>
+                          <td>:</td>
+                          <td>{viewLead.description}</td>
+                        </tr>
+                        <tr>
+                          <td>Lead Status</td>
+                          <td>:</td>
+                          <td>{viewLead.status}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </>
+            }
+          />
         </div>
       </div>
     </>

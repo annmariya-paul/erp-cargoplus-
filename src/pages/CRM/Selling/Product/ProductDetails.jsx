@@ -1,11 +1,17 @@
 // import { Button } from "antd";
-import { Checkbox, Input, Select } from "antd";
-import React, { useState } from "react";
+import {  Input, Select } from "antd";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { BsPlusCircleFill } from "react-icons/bs";
+import { Checkbox, Col, Row } from "antd";
 import { FaEdit } from "react-icons/fa";
 import { FiEdit } from "react-icons/fi";
 import { MdDelete, MdPageview } from "react-icons/md";
 import { Link } from "react-router-dom";
+import { CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
+import PublicFetch from "../../../../utils/PublicFetch";
+import { Form } from "antd";
+import ProductEditModal from "../../Selling/Product/ProductEditModal";
 import Button from "../../../../components/button/button";
 import CustomModel from "../../../../components/custom_modal/custom_model";
 import ErrorMsg from "../../../../components/error/ErrorMessage";
@@ -15,9 +21,12 @@ import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon
 import MyPagination from "../../../../components/Pagination/MyPagination";
 import TableData from "../../../../components/table/table_data";
 import { ROUTES } from "../../../../routes";
-
+import Item from "antd/lib/list/Item";
+import SelectBox from "../../../../components/Select Box/SelectBox";
 function ProductDetails() {
+  const { id } = useParams();
   const [toggleState, setToggleState] = useState(1);
+  const [modalOpportunity, setModalOpportunity] = useState(false);
   const [pageSize, setPageSize] = useState("25"); // page size
   const [current, setCurrent] = useState(1);
   const [searchedText, setSearchedText] = useState(""); // search by text input
@@ -26,14 +35,161 @@ function ProductDetails() {
   const [successPopup, setSuccessPopup] = useState(false);
   const [error, setError] = useState(false);
   const [showProductEditModal, setShowProductEditModal] = useState(false);
+  const [prname, setPrName] = useState();
+  const [newvalue, setNewvalue] = useState();
+  const [brand, setBrand] = useState();
+ 
+  const [unit, setUnit] = useState("");
+  const [attributes, setAttributes] = useState();
+  const [allunit, setAllunit] = useState();
+  const [brands, setBrands] = useState();
+  const [addForm] = Form.useForm();
+  // console.log("attributes in state:", prattributes);
+
+  const [prcode, setPrcode] = useState();
+  const [prcategory, setPrCategory] = useState();
+  const [prbrand, setPrBrand] = useState();
+  const [prunit, setPrUnit] = useState();
+  const [prattributes, setPrAttributes] = useState();
+
+  const [setProductDescription, setPrDescription] = useState();
+  const [primage, setPrImage] = useState();
+ const [img, setImg] = useState([]);
+  console.log("set image", img);
+  const [previewVisible, setPreviewVisible] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+  const [previewTitle, setPreviewTitle] = useState("");
+  console.log("set image", img);
+  const getBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
 
   const toggleTab = (index) => {
     setToggleState(index);
   };
-
-  const getData = (current, pageSize) => {
-    return data.slice((current - 1) * pageSize, current * pageSize);
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setPreviewImage(file.url || file.preview);
+    setPreviewVisible(true);
+    setPreviewTitle(
+      file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
+    );
   };
+
+  // const getallattributes = async () => {
+  //   try {
+  //     const allattributes = await PublicFetch.get(
+  //       `${CRM_BASE_URL_SELLING}/attribute`
+  //     );
+  //     console.log("getting all attributes name", allattributes.data.data);
+  //     setAttributes(allattributes.data.data);
+  //     allattributes.data.data.forEach((item, index) => {
+  //       // console.log("Attribute value",item);
+  //       // console.log("QQQQQQQQQQQQQQQ",allprList);
+  //       // console.log("item.Attribute value",item.attribute_id);
+  //       // console.log("product Attribute value", allprList?.product_attributes);
+  //       if (item.attribute_id.includes(prattributes?.product_attributes)) {
+  //         setNewvalue(item.attribute_name);
+  //       }
+  //     });
+  //   } catch (err) {
+  //     console.log("error to fetching  attributes", err);
+  //   }
+  // };
+  // // console.log("All Attributes are >>>>", attributes);
+
+  // useEffect(() => {
+  //   getallattributes();
+  // }, []);
+
+  const [allprList, setAllPrList] = useState();//state for all products
+
+// Start API call for get one product
+  const GetAllProductData = () => {
+    // console.log("Entered");
+    PublicFetch.get(`${CRM_BASE_URL_SELLING}/product/${id}`)
+      .then((res) => {
+        if (res?.data?.success) {
+          setAllPrList(res.data.data);
+          setPrName(res?.data?.data?.product_name);
+          setPrcode(res?.data?.data?.product_code);
+          setPrCategory(res?.data?.data?.product_category_id);
+          setPrBrand(res?.data?.data?.product_brand_id);
+          setPrUnit(res?.data?.data?.product_unit_id);
+          setPrAttributes(res?.data?.data?.product_attributes);
+          setPrDescription(res?.data?.data?.product_description);
+
+          setPrImage(res?.data?.data?.product_pic);
+        } else {
+          console.log("FAILED T LOAD DATA");
+        }
+      })
+      .catch((err) => {
+        console.log("Errror while getting data", err);
+      });
+  };
+
+  useEffect(() => {
+    GetAllProductData();
+  }, []);
+
+
+  const getallbrand = async () => {
+    try {
+      const allbrands = await PublicFetch.get(`${CRM_BASE_URL_SELLING}/brand`);
+      console.log("all brands are", allbrands.data.data);
+      setBrands(allbrands.data.data);
+      // setbrandName()
+    } catch (err) {
+      console.log("error while getting the brands: ", err);
+    }
+  };
+
+  useEffect(() => {
+    getallbrand();
+  }, []);
+
+  const getallunits = async () => {
+    try {
+      const allunits = await PublicFetch.get(`${CRM_BASE_URL_SELLING}/unit`);
+      console.log("all units are ::", allunits?.data?.data);
+
+      // if(allunits?.data.success){}
+      setAllunit(allunits?.data?.data);
+      // setunitTable(allunits?.data?.data)
+    } catch (err) {
+      console.log("error to getting all units", err);
+    }
+  };
+
+  useEffect(() => {
+    getallunits();
+  }, []);
+
+
+  const getallattributes = async () => {
+    try {
+      const allattributes = await PublicFetch.get(
+        `${CRM_BASE_URL_SELLING}/attribute`
+      );
+      console.log("getting all attributes", allattributes.data.data);
+      setAttributes(allattributes.data.data);
+    } catch (err) {
+      console.log("error to fetching  attributes", err);
+    }
+  };
+
+  useEffect(() => {
+    getallattributes();
+  }, []);
+
+  //End
   const data = [
     {
       lead_type: "color",
@@ -63,7 +219,16 @@ function ProductDetails() {
       key: "3",
     },
   ];
-  // {columns is brand listing table componenet }
+
+  const getData = (current, pageSize) => {
+    return data.slice((current - 1) * pageSize, current * pageSize);
+  };
+
+  const newValues = (checkedValues) => {
+    console.log("checked = ", checkedValues);
+  };
+
+  // {columns is product listing table componenet }
 
   const columns = [
     {
@@ -75,13 +240,13 @@ function ProductDetails() {
         return (
           <div className="d-flex justify-content-center align-items-center gap-3">
             <div
-              // onClick={() => setBrandEditPopup(true)}
+              
               className="actionEdit m-0 p-0"
             >
               <FaEdit />
             </div>
             <div
-              // onClick={() => setBrandViewPopup(true)}
+              
               className="actionView m-0 p-0"
             >
               <MdPageview />
@@ -205,23 +370,18 @@ function ProductDetails() {
                   <div className=" d-flex justify-content-end">
                     <h5 className="lead_text d-none">Products</h5>
                     <Button
-                      style={{
-                        backgroundColor: "white",
-                        color: "#0092ce",
-                      }}
-                      className="d-flex justify-content-end"
+                       onClick={() => setModalOpportunity(true)}
                     >
-                      <span
-                        className="d-flex align-items-center justify-content-between gap-1  p-1 button_span"
-                        style={{ fontSize: "13px" }}
-                        onClick={() => {
-                          setShowProductEditModal(true);
-                          // setProductView(false);
-                        }}
-                      >
+                      
+                        
                         Edit <FiEdit fontSize={"12px"} />
-                      </span>
+                     
                     </Button>
+                    <ProductEditModal
+                      show={modalOpportunity}
+                      onHide={() => setModalOpportunity(false)}
+                      style="width:1250px"
+                    />
                   </div>
                   <div className="row my-3">
                     <div className="col-12 d-flex justify-content-center ">
@@ -248,7 +408,9 @@ function ProductDetails() {
                         </div>
                         <div className="col-1">:</div>
                         <div className="col-6 justify-content-start">
-                          <p className="modal_view_p_sub">Rolex</p>
+                          <p className="modal_view_p_sub">
+                            {allprList?.product_name}
+                          </p>
                         </div>
                       </div>
                       <div className="row mt-2">
@@ -264,7 +426,9 @@ function ProductDetails() {
                         </div>
                         <div className="col-1">:</div>
                         <div className="col-6 justify-content-start">
-                          <p className="modal_view_p_sub">HJKGF23456</p>
+                          <p className="modal_view_p_sub">
+                            {allprList?.product_code}
+                          </p>
                         </div>
                       </div>
                       <div className="row mt-2">
@@ -280,7 +444,9 @@ function ProductDetails() {
                         </div>
                         <div className="col-1">:</div>
                         <div className="col-6 justify-content-start">
-                          <p className="modal_view_p_sub">Watch</p>
+                          <p className="modal_view_p_sub">
+                            {allprList?.product_category_id}
+                          </p>
                         </div>
                       </div>
                       <div className="row mt-2">
@@ -296,7 +462,9 @@ function ProductDetails() {
                         </div>
                         <div className="col-1">:</div>
                         <div className="col-6 justify-content-start">
-                          <p className="modal_view_p_sub">Rolex</p>
+                          <p className="modal_view_p_sub">
+                            {allprList?.product_brand_id}
+                          </p>
                         </div>
                       </div>
                       <div className="row mt-2">
@@ -312,7 +480,9 @@ function ProductDetails() {
                         </div>
                         <div className="col-1">:</div>
                         <div className="col-6 justify-content-start">
-                          <p className="modal_view_p_sub">HJKGF23456</p>
+                          <p className="modal_view_p_sub">
+                            {allprList?.product_unit_id}
+                          </p>
                         </div>
                       </div>
                       <div className="row mt-2">
@@ -328,7 +498,10 @@ function ProductDetails() {
                         </div>
                         <div className="col-1">:</div>
                         <div className="col-6 justify-content-start">
-                          <p className="modal_view_p_sub">color</p>
+                          <p className="modal_view_p_sub">
+                            {allprList?.product_attributes}
+                          </p>
+                          {/* <p className="modal_view_p_sub">{newvalue}</p> */}
                         </div>
                       </div>
                       <div className="row mt-2">
@@ -345,8 +518,7 @@ function ProductDetails() {
                         <div className="col-1">:</div>
                         <div className="col-6 justify-content-start">
                           <p className="modal_view_p_sub">
-                            Lorem Ipsum has been the industry's standard dummy
-                            text ever since the 1500s
+                            {allprList?.product_description}
                           </p>
                         </div>
                       </div>
@@ -443,14 +615,7 @@ function ProductDetails() {
                             setSearchStatus(event ? [event] : []);
                           }}
                         >
-                          {/* {LeadStatus &&
-                  LeadStatus.map((item, index) => {
-                    return (
-                      <Select.Option key={item.id} value={item.value}>
-                        {item.name}
-                      </Select.Option>
-                    );
-                  })} */}
+                         
                           <Select.Option value="one">First Test</Select.Option>
                           <Select.Option value="two">Second Test</Select.Option>
                           <Select.Option value="three">
@@ -580,164 +745,10 @@ function ProductDetails() {
           </div>
         </div>
       </div>
-      <CustomModel
-        Adding_contents
-        show={showProductEditModal}
-        onHide={() => setShowProductEditModal(false)}
-        header="Edit Product"
-        size={`xl`}
-        footer={[
-          <Button
-            onClick={() => {
-              setSuccessPopup(true);
-              setError(true);
-            }}
-            btnType="save"
-          >
-            Save
-          </Button>,
-          <Button
-            onClick={() => {
-              setShowProductEditModal(false);
-            }}
-            className="cancel_button p-2"
-          >
-            cancel
-          </Button>,
-          ,
-        ]}
-        // {...props}
-      >
-        <div className="container">
-          <div style={{ borderRadius: "8px" }} className="card border-0  ">
-            <div className="container ">
-              <div className="my-3 d-none">
-                <h5 className="lead_text">Basic Info</h5>
-              </div>
-              <div className="row ">
-                <div className="col-4">
-                  <p>Name</p>
-                  <div>
-                    <input type="text" className="input_type_style w-100" />
-                  </div>
-                </div>
-                <div className="col-4">
-                  <p>Code</p>
-                  <div>
-                    <input type={"text"} className="input_type_style w-100" />
-                  </div>
-                </div>
-                <div className="col-4 ">
-                  <p>Category</p>
-                  <div>
-                    <Select
-                      style={{
-                        backgroundColor: "whitesmoke",
-                        borderRadius: "5px",
-                      }}
-                      bordered={false}
-                      className="w-100 "
-                    >
-                      <Select.Option>Watch</Select.Option>
-                    </Select>
-                  </div>
-                </div>
-                <div className="col-6 mt-2">
-                  <p>Brand</p>
-                  <div>
-                    <Select
-                      style={{
-                        backgroundColor: "whitesmoke",
-                        borderRadius: "5px",
-                      }}
-                      bordered={false}
-                      className="w-100 "
-                    >
-                      <Select.Option>Watch</Select.Option>
-                    </Select>
-                  </div>
-                </div>
-                <div className="col-6 mt-2">
-                  <p>Unit</p>
-                  <div>
-                    <Select
-                      style={{
-                        backgroundColor: "whitesmoke",
-                        borderRadius: "5px",
-                      }}
-                      bordered={false}
-                      className="w-100 "
-                    >
-                      <Select.Option>Watch</Select.Option>
-                    </Select>
-                  </div>
-                </div>
-                <div className="col-6 mt-2">
-                  <p>Attributes</p>
-                  <div
-                    style={{
-                      backgroundColor: "whitesmoke",
-                      borderRadius: "5px",
-                    }}
-                  >
-                    <div
-                      style={{
-                        backgroundColor: "whitesmoke",
-                        borderRadius: "5px",
-                        height: "160px",
-                        overflow: "scroll",
-                      }}
-                      className="card border-0 px-4 py-2"
-                    >
-                      <label style={{ color: "gray" }} className="my-2 ">
-                        <Checkbox className="me-2" />
-                        color
-                      </label>
-                      <label style={{ color: "gray" }} className="my-2">
-                        <Checkbox className="me-2" />
-                        warrenty
-                      </label>
-                      <label style={{ color: "gray" }} className="my-2">
-                        <Checkbox className="me-2" />
-                        Size
-                      </label>
-                      <label style={{ color: "gray" }} className="my-2">
-                        <Checkbox className="me-2" />
-                        weight
-                      </label>
-                      <label style={{ color: "gray" }} className="my-2">
-                        <Checkbox className="me-2" />
-                        weight
-                      </label>
-                      <label style={{ color: "gray" }} className="my-2">
-                        <Checkbox className="me-2" />
-                        weight
-                      </label>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-6 mt-2">
-                  <p>Display Picture</p>
-                  <FileUpload />
-                </div>
-                <div className="col-6 mt-2">
-                  <p>Description</p>
-                  <div>
-                    <textarea
-                      style={{ height: "100px" }}
-                      className="input_type_style w-100"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          {error ? <ErrorMsg code="500" /> : ""}
-        </div>
-      </CustomModel>
+    
       <CustomModel
         size={"sm"}
-        show={successPopup}
+        // show={successPopup}
         onHide={() => setSuccessPopup(false)}
         success
       />

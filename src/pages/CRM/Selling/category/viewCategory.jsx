@@ -99,9 +99,12 @@ function Categorylist(props) {
               tempArr.push(i.category_name);
             });
             let tmpArr_id = [];
-            item.other_crm_v1_categories.forEach((itm, indx) => {
-              tmpArr_id.push(itm.category_code);
-            });
+            if (item.other_crm_v1_categories.length > 0) {
+              item.other_crm_v1_categories.forEach((itm, indx) => {
+                tmpArr_id.push(itm.category_code);
+              });
+            }
+
             let tmpArry = [];
             item.other_crm_v1_categories.forEach((itm, indx) => {
               tmpArry.push(itm.category_description);
@@ -116,7 +119,10 @@ function Categorylist(props) {
               category_code: tmpArr_id,
               category_description: tmpArry,
             });
+            console.log("datat guyss", tmpArr_id);
           });
+
+          // console.log("datat guyss",tmpArr_id);
           setCategoryList(temp);
         } else {
           console.log("Failed to load data!");

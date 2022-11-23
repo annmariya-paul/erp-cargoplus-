@@ -73,6 +73,20 @@ function ContactTable(props) {
       .then((res) => {
         console.log("fjehfer", res);
         if (res.data.success) {
+// let array = [];
+// res?.data?.data?.contact_lead_id.forEach((item, index) => {
+//   setContactLeadId(item.contact_lead_id);
+//   if (item.contact_lead_id === getoneleads) {
+//     {
+//       array.push({
+//         contact_person_name: item?.contact_person_name,
+//         contact_email: item?.contact_email,
+//       });
+//       setContactTable(array);
+//     }
+//   }
+// });
+
           setContactTable(res.data.data);
         } else {
           console.log("Failed to fetch data");

@@ -76,7 +76,7 @@ function Opportunitylist(props) {
 
 //view progress
 const[tableprogress,setTableprogress]=useState("")
-const [count,setcount]=useState(0)
+const [count,setcount]=useState(1)
 const [editForm] = Form.useForm();
 
   // view oppurtunity
@@ -116,19 +116,29 @@ const [editForm] = Form.useForm();
     opportunitystatus: "",
   });
 
+  
   // { function to get all opportunity data - Ann mariya(27/10/22)}
 
   const [OpportunityList, setOpportunityList] = useState();
+  const [totalCount,setTotalcount] =useState()
   // const [oppurtunityid, setOppurtunityid] = useState();
+
+
+  const pageofIndex = numOfItems * (current - 1) - 1 + 1;
+  
+  const pagesizecount = Math.ceil(totalCount/numOfItems)
+  console.log("page number isss", pagesizecount)
 
   const GetOpportunityData = () => {
     PublicFetch.get(
-      `${CRM_BASE_URL}/opportunity?startIndex=${pageSize}&noOfItems=${numOfItems}`
+      `${CRM_BASE_URL}/opportunity?startIndex=${pageofIndex}&noOfItems=${numOfItems}`
     )
       .then((res) => {
         if (res?.data?.success) {
           console.log("All opportunity data", res?.data?.data);
           setOpportunityList(res?.data?.data?.leads);
+          setTotalcount(res?.data?.data?.totalCount)
+          console.log("totalcount iss",res?.data?.data?.totalCount)
           // let samplearry = [];
           // res?.data?.data?.leads.forEach((item, index) => {
           //   samplearry.push(item.opportunity_id);
@@ -144,6 +154,12 @@ const [editForm] = Form.useForm();
         console.log("Errror while getting data", err);
       });
   };
+
+
+  useEffect(() => {
+    GetOpportunityData();
+    // getAllContact();
+  }, [numOfItems, pageofIndex, pagesizecount ]);
 
   // get one oppurtunity
   const [oneoppurtunity, setOneoppurtunity] = useState();
@@ -199,15 +215,6 @@ const [editForm] = Form.useForm();
       console.log("error while getting all leads: ", err);
     }
   };
-
-  useEffect(() => {
-    GetOpportunityData();
-    // getAllContact();
-  }, [numOfItems, pageSize]);
-
-
-
-
 
 
   // {timeout set for success popups }
@@ -334,14 +341,15 @@ const getOppurtunityProgress=async(viewoppurtunity)=>{
 
     try {
       const editoppurtunity = await PublicFetch.patch(
-        `${CRM_BASE_URL}/opportunity/basic/${oppurtunityid}`,
+        `${CRM_BASE_URL}/opportunity/${oppurtunityid}`,
         UpdatedFormdata
       );
 
-      console.log("editdata", editoppurtunity);
+      console.log("editdataaa", editoppurtunity);
       if (editoppurtunity.data.success) {
-        GetOpportunityData();
+       
         setShowEditModal(false);
+        GetOpportunityData();
       }
     } catch (err) {
       console.log("error while getting all leads: ", err);
@@ -462,12 +470,11 @@ catch (err){
   const progress = [
  
     {
-     
       title: "SLNo:",
-      dataIndex: "opportunity_progress_id",
-      key:  "opportunity_progress_id",
+      dataIndex: "slno",
+      key:  "slno",
       align: "center",
-      // render:(count)=>{return <p>{setcount(count+1) } </p> }
+      render:( value,item,indx)=> (count )+indx
     },
     {
       title: "RESPONSE",
@@ -654,7 +661,7 @@ catch (err){
           </div>
           <div className="datatable">
             <TableData
-              data={getData(current, numOfItems, pageSize)}
+              data={OpportunityList}
               // data={allLeadList}
               // data={OpportunityList}
               columns={columns}
@@ -663,14 +670,14 @@ catch (err){
           </div>
           <div className="d-flex py-2 justify-content-center">
             <MyPagination
-              total={getData.length}
+              total={parseInt(totalCount)}
               current={current}
-              showSizeChanger={true}
-              pageSize={pageSize}
+              pageSize={numOfItems}
               onChange={(current, pageSize) => {
                 setCurrent(current);
-                setPageSize(pageSize);
+               
               }}
+            
             />
           </div>
           {/* {"mcncncncncncncnc"} */}
@@ -1204,18 +1211,18 @@ catch (err){
         onHide={() => setShowEditModal(false)}
         header="Edit Opportunity"
         // size={`xl`}
-        footer={[
-          <Button
-            btnType="save"
-            onClick={() => {
-              // updateOppurtunity();
-              // updatedOppurtunity();
-            }}
-          >
-            Save
-          </Button>,
-        ]}
-        {...props}
+        // footer={[
+        //   <Button
+        //     btnType="save"
+        //     onClick={() => {
+       
+        //       updatedOppurtunity();
+        //     }}
+        //   >
+        //     Save
+        //   </Button>,
+        // ]}
+        // {...props}
         // Form={editformData}
       >
         <Form 
@@ -1224,7 +1231,7 @@ catch (err){
             console.log("values111333", value);
             // setDescription(value.description);
             // setBrand(value.brand);
-            updatedOppurtunity();
+            // updatedOppurtunity();
           }}
         // onSubmit={handleSubmit(submit)}
         onFinishFailed={(error) => {
@@ -1504,11 +1511,11 @@ catch (err){
                   </Form.Item>
                 {/* </Form.Group> */}
               </div>
-              {/* <div className="col-12 d-flex justify-content-center my-2">
-                <Button onClick={submit} btnType="save">
+              <div className="col-12 d-flex justify-content-center my-2">
+                <Button onClick={()=>{  updatedOppurtunity() }}  btnType="save">
                   Save
                 </Button>
-              </div> */}
+              </div>
             </div>
           </div>
         </Form>

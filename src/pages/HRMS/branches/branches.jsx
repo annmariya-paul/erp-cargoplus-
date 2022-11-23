@@ -28,20 +28,20 @@ export default function Branches(props) {
       }, time);
     }
   };
-
-  useEffect(() => {
-    Submit();
-  }, []);
-  const Submit = (value) => {
-    console.log(value);
-    if (value) {
-      localStorage.setItem("Form", JSON.stringify(value));
+ 
+  const Submit = (data) => {
+    console.log(data);
+    if (data) {
+      localStorage.setItem("addForm", JSON.stringify(data));
       setSuccessModal(true);
       close_modal(successModal, 1000);
     } else {
       setError(true);
     }
   };
+  useEffect(() => {
+    Submit();
+  }, []);
 
   const columns = [
     {
@@ -87,12 +87,12 @@ export default function Branches(props) {
 
   const data = [
     {
-      branch_name: "Branch A",
+      branch_name: "Branch X",
       branch_code: "ABC",
       key: "1",
     },
     {
-      branch_name: "Branch B",
+      branch_name: "Branch Y",
       branch_code: "XYZ",
       key: "2",
     },
@@ -168,87 +168,93 @@ export default function Branches(props) {
       </div>
 
       <Custom_model
-        width={400}
-        Adding_contents
         show={modalAddBranch}
         onHide={() => setModalAddBranch(false)}
         header="Add Branch"
         footer={false}
-        {...props}
-      >
-        <Form
-          name="addForm"
-          form={addForm}
-          onFinish={(value) => {
-            console.log("valuezzzzzzz", value);
-            Submit();
-          }}
-          onFinishFailed={(error) => {
-            console.log(error);
-          }}
-        >
-            <div className="row py-4">
-              <div className="col-12 pt-1">
-                <label htmlfor="branchname">Branch Name</label>
-                <Form.Item
-                  name="branchname"
-                  rules={[
-                    {
-                      required: true,
-                      pattern: new RegExp("^[A-Za-z ]+$"),
-                      message: "Please enter a Valid Branch Name",
-                    },
-                    {
-                      whitespace: true,
-                    },
-                    {
-                      min: 3,
-                      message: "Branch Name must be atleast 3 characters",
-                    },
-                    {
-                      max: 100,
-                      message:
-                        "Branch Name cannot be longer than 100 characters",
-                    },
-                  ]}
-                  onChange={(e) => setBranchName(e.target.value)}
-                >
-                  <InputType />
-                </Form.Item>
-              </div>
+        // {...props}
+        View_list
+        list_content={
+          <>
+            <div className="row">
+              <h5 className="lead_text">Add Branch</h5>
+            </div>
+            <Form
+              name="addForm"
+              form={addForm}
+              onFinish={(data) => {
+                console.log("valuezzzzzzz", data);
+                Submit();
+              }}
+              onFinishFailed={(error) => {
+                console.log(error);
+              }}
+            >
+              <div className="row py-4">
+                <div className="col-12 pt-1">
+                  <label htmlfor="branchname">Branch Name</label>
+                  <Form.Item
+                    name="branchname"
+                    rules={[
+                      {
+                        required: true,
+                        pattern: new RegExp("^[A-Za-z ]+$"),
+                        message: "Please enter a Valid Branch Name",
+                      },
+                      {
+                        whitespace: true,
+                      },
+                      {
+                        min: 3,
+                        message: "Branch Name must be atleast 3 characters",
+                      },
+                      {
+                        max: 100,
+                        message:
+                          "Branch Name cannot be longer than 100 characters",
+                      },
+                    ]}
+                    onChange={(e) => setBranchName(e.target.value)}
+                  >
+                    <InputType />
+                  </Form.Item>
+                </div>
 
-              <div className="col-12 pt-1">
-                <label htmlfor="branchcode">Branch Code</label>
-                <Form.Item
-                  name="branchcode"
-                  rules={[
-                    {
-                      required: true,
-                      pattern: new RegExp("^[A-Za-z]+$"),
-                      message: "Please enter a Valid Branch Code",
-                    },
-                    {
-                      min: 3,
-                      message: "Branch Code must be atleast 3 characters",
-                    },
-                    {
-                      max: 15,
-                      message:
-                        "Branch code cannot be longer than 15 characters",
-                    },
-                  ]}
-                  onChange={(e) => setBranchCode(e.target.value)}
-                >
-                  <InputType />
-                </Form.Item>
+                <div className="col-12 pt-1">
+                  <label htmlfor="branchcode">Branch Code</label>
+                  <Form.Item
+                    name="branchcode"
+                    rules={[
+                      {
+                        required: true,
+                        pattern: new RegExp("^[A-Za-z]+$"),
+                        message: "Please enter a Valid Branch Code",
+                      },
+                      {
+                        min: 3,
+                        message: "Branch Code must be atleast 3 characters",
+                      },
+                      {
+                        max: 15,
+                        message:
+                          "Branch code cannot be longer than 15 characters",
+                      },
+                    ]}
+                    onChange={(e) => setBranchCode(e.target.value)}
+                  >
+                    <InputType />
+                  </Form.Item>
+                </div>
               </div>
-            </div>
-            <div className="row justify-content-center ">
-              <div className="col-auto">
-                <Button btnType="save">Save</Button>
+              <div className="row justify-content-center ">
+                <div className="col-auto">
+                  <Button btnType="save">Save</Button>
+                </div>
               </div>
-            </div>
-        </Form>
+            </Form>
+          </>
+        }
+      >
         <Custom_model
           size={"sm"}
           show={successModal}

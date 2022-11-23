@@ -18,7 +18,7 @@ import { ROUTES } from "../../routes";
 import "../CRM/lead/lead_list/leadlist.scss";
 import TableData from "../../components/table/table_data";
 import MyPagination from "../../components/Pagination/MyPagination";
-import CustomModel from "../../components/custom_modal/custom_model";
+import Custom_model from "../../components/custom_modal/custom_model";
 import Button from "../../components/button/button";
 import "./opportunitylist.scss";
 import { BsPlusCircleFill } from "react-icons/bs";
@@ -43,7 +43,7 @@ function Opportunitylist(props) {
   const [numOfItems, setNumOfItems] = useState("25");
   const [pageSize, setPageSize] = useState(0); // page size
   const [current, setCurrent] = useState(1); // current page
-  const [searchedText, setSearchedText] = useState(""); // search by text input
+  const [searchSource, setSearchSource] = useState(""); // search by text input
   const [searchType, setSearchType] = useState(""); //search by type select box
   const [searchStatus, setSearchStatus] = useState(""); //search by status select box
   const [showViewModal, setShowViewModal] = useState(false); //oppertunity view modal
@@ -386,7 +386,6 @@ setSuccessPopup(true)
 catch (err){
   console.log("error while getting oppurtunity progress: ", err);
 }
-
 }
 
   //  columns is opportunity listing table componenet
@@ -396,7 +395,7 @@ catch (err){
       title: "ACTION",
       dataIndex: "action",
       key: "action",
-      width: "14%",
+      width: "15%",
       render: (data, index) => {
         return (
           <div className="d-flex justify-content-center gap-2">
@@ -420,41 +419,39 @@ catch (err){
       key: "opportunity_type",
       filteredValue: [searchType],
       onFilter: (value, record) => {
-        return String(record.lead_type)
+        return String(record.opportunity_type)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
-      align: "center",
+      align: "left",
     },
     {
       title: "FROM",
       dataIndex: "opportunity_from",
       key: "opportunity_from",
-      width: "23%",
       filteredValue: [searchStatus],
       onFilter: (value, record) => {
-        return String(record.lead_status)
+        return String(record.opportunity_from)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
-      align: "center",
+      align: "left",
     },
     {
       title: "CONVERTED BY",
       dataIndex: "opportunity_created_by",
       key: "opportunity_created_by",
-      width: "23%",
+      width: "17%",
       align: "center",
     },
     {
       title: "SOURCE",
       dataIndex: "opportunity_source",
       key: "opportunity_source",
-      width: "14%",
-      align: "center",
-      filteredValue: [searchedText],
+      align: "left",
+      filteredValue: [searchSource],
       onFilter: (value, record) => {
-        return String(record.lead_customer_name)
+        return String(record.opportunity_source)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
@@ -550,19 +547,25 @@ catch (err){
             </div>
             <Leadlist_Icons />
           </div>
-          <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
+          <div className="row pb-2" style={{ backgroundColor: "#f4f4f7" }}>
             <div className="col-4">
-              <Input.Search
-                placeholder="Search by Name"
-                style={{ margin: "5px", borderRadius: "5px" }}
-                value={searchedText}
-                onChange={(e) => {
-                  setSearchedText(e.target.value ? [e.target.value] : []);
+              <Select
+                allowClear
+                showSearch
+                style={{ width: "100%", marginTop: "8px", borderRadius: "5px" }}
+                placeholder="Search by Source"
+                className="select_search"
+                optionFilterProp="children"
+                onChange={(event) => {
+                  setSearchSource(event ? [event] : []);
                 }}
-                onSearch={(value) => {
-                  setSearchedText(value);
-                }}
-              />
+              >
+                <Select.Option value="reference">Reference</Select.Option>
+                <Select.Option value="direct visit">Direct visit</Select.Option>
+                <Select.Option value="online registration">
+                  Online Registration
+                </Select.Option>
+              </Select>
             </div>
             <div className="col-4">
               <Select
@@ -650,12 +653,7 @@ catch (err){
             <div className="col-xl-6 col-lg-6 col-md-6 col-sm-8 col-12"></div>
             <div className="col-lg-3 col-lg-3 col-md-3 col-sm-12 col-12 d-flex justify-content-end">
               <Link to={ROUTES.LEADLIST}>
-                <Button
-                  // onClick={() => setShowAddOpportunity(true)}
-                  className="add_opportunity"
-                >
-                  Add Opportunity
-                </Button>
+                <Button btnType="add">Add Opportunity</Button>
               </Link>
             </div>
           </div>
@@ -685,7 +683,7 @@ catch (err){
 
         {/*  {/* {View model of opportunity  section Two    }  */}
       </div>
-      <CustomModel
+      <Custom_model
         show={showViewModal}
         onHide={() => setShowViewModal(false)}
         View_list
@@ -717,7 +715,6 @@ catch (err){
             <div>
               <table className="table table-borderless">
                 <thead></thead>
-
                 <tbody>
                   <tr>
                     <td>Type</td>
@@ -883,9 +880,8 @@ catch (err){
                     className="d-flex align-items-center justify-content-between gap-1  p-1 "
                     style={{ fontSize: "14px" }}
                     onClick={() => {
-                     
-                      handleAddclick(viewoppurtunity.id)
-                      console.log("id is inn",viewoppurtunity)
+                      handleAddclick(viewoppurtunity.id);
+                      console.log("id is inn", viewoppurtunity);
                       setShowProgresssModal(true);
                       setShowViewModal(false);
                     }}
@@ -895,24 +891,28 @@ catch (err){
                 </Button>
               </div>
             </div>
-            {tableprogress?  (tableprogress && 
-            <div>
-              <TableData columns={progress} data={tableprogress} />
-            </div>
-  ):(<div> </div>)}
+            {tableprogress ? (
+              tableprogress && (
+                <div>
+                  <TableData columns={progress} data={tableprogress} />
+                </div>
+              )
+            ) : (
+              <div> </div>
+            )}
           </div>
         }
       />
 
       {/* {Adding Opportunity Modal in Opportunity page} */}
 
-      <CustomModel
+      <Custom_model
         Adding_contents
         show={showAddOpportunity}
         onHide={() => setShowAddOpportunity(false)}
         header="Add Opportunity"
         size={`xl`}
-        footer={[<Button btnType="save">Save</Button>]}
+        // footer={[<Button btnType="save">Save</Button>]}
         {...props}
       >
         <Form
@@ -1201,16 +1201,17 @@ catch (err){
             </div>
           </div>
         </Form>
-      </CustomModel>
+      </Custom_model>
 
       {/* Edit opportunity modal   section THREE */}
-      <CustomModel
+      <Custom_model
         Adding_contents
         width={1000}
         show={ShowEditModal}
         onHide={() => setShowEditModal(false)}
         header="Edit Opportunity"
         // size={`xl`}
+
         // footer={[
         //   <Button
         //     btnType="save"
@@ -1223,9 +1224,24 @@ catch (err){
         //   </Button>,
         // ]}
         // {...props}
+
+        centered
+        footer={[
+          <Button
+            btnType="save"
+            onClick={() => {
+              // updateOppurtunity();
+              // updatedOppurtunity();
+            }}
+          >
+            Save
+          </Button>,
+        ]}
+        {...props}
+
         // Form={editformData}
       >
-        <Form 
+        <Form
           form={editForm}
           onFinish={(value) => {
             console.log("values111333", value);
@@ -1233,55 +1249,50 @@ catch (err){
             // setBrand(value.brand);
             // updatedOppurtunity();
           }}
-        // onSubmit={handleSubmit(submit)}
-        onFinishFailed={(error) => {
-          console.log(error);
-        }}
+          // onSubmit={handleSubmit(submit)}
+          onFinishFailed={(error) => {
+            console.log(error);
+          }}
         >
           <div className="px-5">
             <div className="row px-1">
               <div className="col-sm-4 pt-2">
-                  <label>Lead Type</label>
-                  <Form.Item
-                
-                  >
+                <label>Lead Type</label>
+                <Form.Item>
                   <SelectBox
-
-                     value={oppurtunitytype}
+                    value={oppurtunitytype}
                     onChange={(e) => {
                       setoppurtunitytype(e);
                     }}
                   >
                     <Select.Option value="sales">Sales</Select.Option>
                     <Select.Option value="support">Support</Select.Option>
-                    <Select.Option value="maintenance">Maintenance</Select.Option>
+                    <Select.Option value="maintenance">
+                      Maintenance
+                    </Select.Option>
                   </SelectBox>
-                 
-                   
-                  </Form.Item>
+                </Form.Item>
                 {/* </Form.Group> */}
               </div>
 
               <div className="col-sm-4 pt-2">
                 {/* <Form.Group className="mb-2" controlId="lead_customer_from"> */}
-                  {/* <Form.Label>From</Form.Label> */}
-                  <label>Lead From</label>
-                  <Form.Item
-                    // aria-label="lead_customer_from"
-                    // name="lead_customer_from"
-                   
+                {/* <Form.Label>From</Form.Label> */}
+                <label>Lead From</label>
+                <Form.Item
+                // aria-label="lead_customer_from"
+                // name="lead_customer_from"
+                >
+                  <SelectBox
+                    value={oppurtunityfrom}
+                    onChange={(e) => {
+                      setOppurtunityfrom(e);
+                    }}
                   >
-                    <SelectBox
-                      value={oppurtunityfrom}
-                      onChange={(e) => {
-                        setOppurtunityfrom(e);
-                      }}
-                    >
-                     
                     <Select.Option value="lead">Lead</Select.Option>
                     <Select.Option value="customer">Customer</Select.Option>
-                    </SelectBox>
-                  </Form.Item>
+                  </SelectBox>
+                </Form.Item>
               </div>
 
               <div className="col-sm-4 pt-2">
@@ -1289,90 +1300,78 @@ catch (err){
                   className="mb-2"
                   controlId="lead_customer_generated"
                 > */}
-                  <label>Generated/Converted by</label>
-                  <Form.Item
-                    // type="text"
-                    // name="lead_customer_generated"
-                    // placeholder="User ID"
-                    // value={viewoppurtunity?.convertedby}
-                    // className={`${errors.lead_customer_generated && "invalid"}`}
-                   
-                  >
-                 <InputType  value={oppurtunitylead} />
+                <label>Generated/Converted by</label>
+                <Form.Item
+                // type="text"
+                // name="lead_customer_generated"
+                // placeholder="User ID"
+                // value={viewoppurtunity?.convertedby}
+                // className={`${errors.lead_customer_generated && "invalid"}`}
+                >
+                  <InputType value={oppurtunitylead} />
+                </Form.Item>
 
-                  </Form.Item>
-                 
                 {/* </Form.Group> */}
               </div>
 
               <div className="col-sm-4 pt-2">
                 {/* <Form.Group className="mb-2" controlId="lead_source"> */}
-                  <label>Source</label>
+                <label>Source</label>
 
-                  <Form.Item
-                    // aria-label="lead_customer_from"
-                    // name="lead_customer_from"
-                   
+                <Form.Item
+                // aria-label="lead_customer_from"
+                // name="lead_customer_from"
+                >
+                  <SelectBox
+                    value={oppurtunitysource}
+                    onChange={(e) => {
+                      setOppurtunitysource(e);
+                    }}
                   >
-                    <SelectBox
-                      value={oppurtunitysource}
-                      onChange={(e) => {
-                        setOppurtunitysource(e);
-                      }}
-                    >
-                   <Select.Option value="reference">Reference</Select.Option>
-                    <Select.Option value="direct visit">Direct Visit</Select.Option>
+                    <Select.Option value="reference">Reference</Select.Option>
+                    <Select.Option value="direct visit">
+                      Direct Visit
+                    </Select.Option>
                     <Select.Option value="online registration">
                       Online Registration
                     </Select.Option>
-                    </SelectBox>
-                  
-                  
-                     
-                  </Form.Item>
+                  </SelectBox>
+                </Form.Item>
                 {/* </Form.Group> */}
               </div>
 
               <div className="col-sm-4 pt-2">
-                
-                  <label>Party</label>
-                  <Form.Item 
+                <label>Party</label>
+                <Form.Item>
+                  <SelectBox
+                    value={oppurtunityparty}
+                    onChange={(e) => {
+                      setOppurtunityparty(parseInt(e.target.value));
+                    }}
+                    // value={item?.contact_person_name}
+
+                    // value={ oppurtunityparty ===item?.contact_lead_id ? item.contact_person_name:"" }
                   >
-               
-                          <SelectBox
-                             value={oppurtunityparty}
-                            onChange={(e) => {
-                           setOppurtunityparty(parseInt(e.target.value));
-                            }}
-                          // value={item?.contact_person_name}
-                          
-                          // value={ oppurtunityparty ===item?.contact_lead_id ? item.contact_person_name:"" }
-                         >
-                      {contact &&
+                    {contact &&
                       contact.length > 0 &&
                       contact.map((item, index) => {
-                        
-                         console.log("item innn", item);
-                         if( oppurtunitylead == item.contact_lead_id){
-                          return(
-                            <Select.Option key={item.contact_id} value={item.contact_id}>
-                               {item.contact_person_name }
-                           
-                             </Select.Option>
-                             )
-                         }
+                        console.log("item innn", item);
+                        if (oppurtunitylead == item.contact_lead_id) {
+                          return (
+                            <Select.Option
+                              key={item.contact_id}
+                              value={item.contact_id}
+                            >
+                              {item.contact_person_name}
+                            </Select.Option>
+                          );
+                        }
                         //  else{
                         //   <Select.Option></Select.Option>
                         //  }
-
                       })}
-                        </SelectBox>
-                        
-                   
-              
-                   
-                  </Form.Item>
-                
+                  </SelectBox>
+                </Form.Item>
               </div>
 
               <div className=" col-4 col-sm-4  pt-2">
@@ -1382,8 +1381,8 @@ catch (err){
                   format={dateFormat}
                 /> */}
                 {/* <Form.Group className="mb-2" controlId="lead_valid_up_to"> */}
-                  <label>Valid Up to</label>
-                  <Form.Item>
+                <label>Valid Up to</label>
+                <Form.Item>
                   <div className="form-control">
                     <input
                       type="date"
@@ -1397,18 +1396,18 @@ catch (err){
                       }}
                     />
                   </div>
-                  </Form.Item>
+                </Form.Item>
                 {/* </Form.Group> */}
               </div>
 
               <div className="col-sm-8 pt-3">
                 {/* <Form.Group className="mb-2" controlId="lead_details"> */}
-                  <label>Details</label>
-                  <Form.Item 
-                     rules={[
+                <label>Details</label>
+                <Form.Item
+                  rules={
+                    [
                       // {
                       //   required: true,
-                        
                       // },
                       // {
                       //   min:3
@@ -1416,99 +1415,90 @@ catch (err){
                       // {
                       //   max:100
                       // }
-                    ]}
-                  >
-                    {/* as="textarea"
+                    ]
+                  }
+                >
+                  {/* as="textarea"
                     name="lead_details"
                     rows={3}
                     // className={`${errors.lead_details && "invalid"}`} */}
-                    
-                  
-                  <TextArea value={opportunitydescription }
-                  onChange={(e)=>{
-                    setOpportunitydescription(e.target.value)
-                  }}
+
+                  <TextArea
+                    value={opportunitydescription}
+                    onChange={(e) => {
+                      setOpportunitydescription(e.target.value);
+                    }}
                   />
-                  </Form.Item>
+                </Form.Item>
                 {/* </Form.Group> */}
               </div>
 
               <div className="col-sm-4 pt-3">
-              
-                  {/* <label>Expecting Amount</label>
+                {/* <label>Expecting Amount</label>
                   <Form.Item
                     // type="text"
                     name="lead_expecting_amt"
                   >
                   <InputType value={oppurtunityamount} />
                   </Form.Item> */}
-                  
-                  <label>Expecting Amount</label>
-                  <Form.Item
-                    // type="text"
-                    // name="lead_customer_generated"
-                    // placeholder="User ID"
-                    // value={viewoppurtunity?.convertedby}
-                    // className={`${errors.lead_customer_generated && "invalid"}`}
-                   
-                  >
-                 <InputType  value={oppurtunityamount} onChange={(e)=>{ setOppurtunityamount(e.target.value) }} />
 
-                  </Form.Item>
+                <label>Expecting Amount</label>
+                <Form.Item
+                // type="text"
+                // name="lead_customer_generated"
+                // placeholder="User ID"
+                // value={viewoppurtunity?.convertedby}
+                // className={`${errors.lead_customer_generated && "invalid"}`}
+                >
+                  <InputType
+                    value={oppurtunityamount}
+                    onChange={(e) => {
+                      setOppurtunityamount(e.target.value);
+                    }}
+                  />
+                </Form.Item>
               </div>
 
               <div className="col-sm-4 pt-2">
                 {/* <Form.Group className="mb-2" controlId="lead_probability"> */}
-                  <label>Probability of conversion</label>
-                  <Form.Item
-                    // aria-label="lead_probability"
-                    // name="lead_probability"
-                    // className={`${errors.lead_probability && "invalid"}`}
-                    
-                    
-                  >
+                <label>Probability of conversion</label>
+                <Form.Item
+                // aria-label="lead_probability"
+                // name="lead_probability"
+                // className={`${errors.lead_probability && "invalid"}`}
+                >
                   <SelectBox
-
-                     value={oppurtunityprobability}
+                    value={oppurtunityprobability}
                     onChange={(e) => {
                       setOppurtunityProbability(e);
                     }}
                   >
-
                     <Select.Option value="L">low</Select.Option>
                     <Select.Option value="M">medium</Select.Option>
                     <Select.Option value="H">high</Select.Option>
                   </SelectBox>
-
-                   
-                  </Form.Item>
+                </Form.Item>
                 {/* </Form.Group> */}
               </div>
 
               <div className="col-sm-4 pt-2">
                 {/* <Form.Group className="mb-2" controlId="lead_status"> */}
-                  <label>Status</label>
-                  <Form.Item
-                    // aria-label="lead_status"
-                    // name="lead_status"/
-                    
+                <label>Status</label>
+                <Form.Item
+                // aria-label="lead_status"
+                // name="lead_status"/
+                >
+                  <SelectBox
+                    value={oppurtunitystatus}
+                    onChange={(e) => setOppurtunitystatus(e)}
                   >
-
-                    <SelectBox
-                      value={oppurtunitystatus}
-                     onChange={(e) => setOppurtunitystatus(e)}
-                      >
-
                     <Select.Option value="1">quotation</Select.Option>
                     <Select.Option value="2">interested</Select.Option>
                     <Select.Option value="3">converted</Select.Option>
                     <Select.Option value="4">lost</Select.Option>
                     <Select.Option value="5">DND</Select.Option>
-                   
-                 </SelectBox>
-
-                   
-                  </Form.Item>
+                  </SelectBox>
+                </Form.Item>
                 {/* </Form.Group> */}
               </div>
               <div className="col-12 d-flex justify-content-center my-2">
@@ -1519,17 +1509,17 @@ catch (err){
             </div>
           </div>
         </Form>
-      </CustomModel>
+      </Custom_model>
 
       {/* {Success successPopup Modal } */}
-      <CustomModel
+      <Custom_model
         size={"sm"}
         show={successPopup}
         onHide={() => setSuccessPopup(false)}
         success
       />
       {/* ADD OPPORTUNITY PROGRESS MODAL    SECTION FOUR */}
-      <CustomModel
+      <Custom_model
         show={showProgressModal}
         onHide={() => setShowProgresssModal(false)}
         View_list
@@ -1545,39 +1535,48 @@ catch (err){
                 <div className="col-6 my-1">
                   <label className="my-1">Response</label>
                   {/* <input type="text" className="input_type_style w-100 "  */}
-                  <input type="text" className="input_type_style w-100 "
-                  value={progressResponse}
-                  onChange={(e)=>setProgressResponse(e.target.value)}
+                  <input
+                    type="text"
+                    className="input_type_style w-100 "
+                    value={progressResponse}
+                    onChange={(e) => setProgressResponse(e.target.value)}
                   />
                 </div>
                 <div className="col-6 my-1">
                   <label className="my-1">Next Contact Date</label>
-                  <input type="date" className="input_type_style w-100" 
-                
-                      // />
-                  value={progressUpdatenextDate}
-                  onChange={(e)=>setProgressUpdatenextDate(e.target.value)}
+                  <input
+                    type="date"
+                    className="input_type_style w-100"
+                    // />
+                    value={progressUpdatenextDate}
+                    onChange={(e) => setProgressUpdatenextDate(e.target.value)}
                   />
                 </div>
                 <div className="col-12 my-1">
                   <label className="my-1">Details</label>
-                  <textarea type="text" className="input_type_style w-100" 
+                  <textarea
+                    type="text"
+                    className="input_type_style w-100"
                     // />
-                  value={progressDetails}
-                  onChange={(e)=>setProgressDetails(e.target.value) }
-                  
+                    value={progressDetails}
+                    onChange={(e) => setProgressDetails(e.target.value)}
                   />
                 </div>
               </div>
               <div className="row my-3">
                 <div className="col-12 d-flex justify-content-center align-items-center gap-3">
                   {/* <Button className="save_button" >Save</Button> */}
-                  <Button className="save_button"  onClick={()=>{addOppurtunityProgress()}} >Save</Button>
+                  <Button
+                    className="save_button"
+                    onClick={() => {
+                      addOppurtunityProgress();
+                    }}
+                  >
+                    Save
+                  </Button>
                   <Button
                     className="cancel_button"
-                    onClick={() => 
-                      
-                      setShowProgresssModal(false)}
+                    onClick={() => setShowProgresssModal(false)}
                   >
                     cancel
                   </Button>

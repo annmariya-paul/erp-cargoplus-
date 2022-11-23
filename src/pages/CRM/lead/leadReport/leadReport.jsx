@@ -26,14 +26,16 @@ export default function LeadReport() {
   const [dateCriteria, setDateCriteria] = useState("daily");
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
+
   const [selectedDate, setSelectedDate] = useState();
   const [selectedMonth, setSelectedMonth] = useState();
-  const [backend, setBackEnd] = useState();
   const [toggleState, setToggleState] = useState(1);
+  const [generateCount, setGenerateCount] = useState();
+  const [convertCount, setConvertCount] = useState();
   const toggleTab = (index) => {
     setToggleState(index);
   };
-
+   const newDate = new Date();
   // { function GetAllLeadData to import lead data - Ann mariya (20/10/22)}
   const GetAllLeadData = () => {
     PublicFetch.get(
@@ -42,24 +44,37 @@ export default function LeadReport() {
       .then((res) => {
         if (res?.data?.success) {
           console.log("All lead data", res?.data?.data);
+
           //   { dividing data to generated and converted table - Annmariya (20/10/22) }
           let arrA = [];
           let arrB = [];
           res?.data?.data?.leads.forEach((item, index) => {
             setAllLeadList(item.lead_status);
+
+            var date1 = moment(item.lead_created_at).format("MM-DD-YYYY");
+ console.log("fggfg", date1);
             if (item.lead_status === 5) {
-              arrA.push({
-                lead_customer_name: item?.lead_customer_name,
-                lead_id: item?.lead_id,
-                lead_organization: item?.lead_organization,
-                lead_source: item?.lead_source,
-                lead_status: item?.lead_status,
-                lead_type: item?.lead_type,
-                lead_user_type: item?.lead_user_type,
-              });
-              setConvertedTable(arrA);
+              {
+                arrA.push({
+                  lead_customer_name: item?.lead_customer_name,
+                  lead_id: item?.lead_id,
+                  lead_organization: item?.lead_organization,
+                  lead_source: item?.lead_source,
+                  lead_status: item?.lead_status,
+                  lead_type: item?.lead_type,
+                  lead_user_type: item?.lead_user_type,
+                });
+                setConvertedTable(arrA);
+              }
             }
+           
+                       
             if (item.lead_status === 1) {
+               const newDate = new Date();
+               const currentdate = newDate.filter(date1)
+               const Format = moment(newDate).format("MM-DD-YYYY");
+              if(currentdate){
+              console.log("hgdddfffffffffffffffff")
               arrB.push({
                 lead_customer_name: item?.lead_customer_name,
                 lead_id: item?.lead_id,
@@ -70,6 +85,7 @@ export default function LeadReport() {
                 lead_user_type: item?.lead_user_type,
               });
               setGeneratedTable(arrB);
+            } 
             }
           });
         } else {
@@ -85,9 +101,12 @@ export default function LeadReport() {
     GetAllLeadData();
   }, [numOfItems, pageSize]);
 
-// { function to search data by date - Ann mariya (04/11/22)}
+  // console.log("lllllllll", format);
+
+  //  console.log("ffffffffffff", selectdate);
+  // { function to search data by date - Ann mariya (04/11/22)}
   const Searchbydate = () => {
-    let selecteddate = moment(selectedDate).format("MM-DD-YYYY");
+    let selectdate = moment(selectedDate).format("MM-DD-YYYY");
     let startdate = moment(startDate).format("MM-DD-YYYY");
     let enddate = moment(endDate).format("MM-DD-YYYY");
     let selectedmonth = moment(selectedMonth).format("MM-01-YYYY");
@@ -99,8 +118,8 @@ export default function LeadReport() {
             noOfItems: parseInt(numOfItems),
             mode: "default",
             noOfDays: 1,
-            startDate: selecteddate,
-            endDate: selecteddate,
+            startDate: selectdate,
+            endDate: selectdate,
           }
         : dateCriteria === "BtwnTwoDates"
         ? {
@@ -124,6 +143,8 @@ export default function LeadReport() {
         console.log("testhelllooo.....", response);
         if (response.data.success) {
           console.log("hello", response.data.data);
+          setGenerateCount(response?.data?.data?.generated?.totalCount);
+          setConvertCount(response?.data?.data?.converted?.totalCount);
           setConvertedTable(response?.data?.data?.converted?.data);
           setGeneratedTable(response?.data?.data?.generated?.data);
         } else {
@@ -186,11 +207,11 @@ export default function LeadReport() {
       align: "center",
     },
   ];
-  console.log("bxhgddtd::::", backend);
+
   return (
     <>
       {/* {  Search lead data by date by datepicker - Ann mariya (19/10/22)} */}
-      
+
       {/* {toggleState === 1 && ( */}
       <div className="container mb-1 d-flex justify-content-center">
         <div className="report_container1">
@@ -215,7 +236,8 @@ export default function LeadReport() {
               <div className="col-md-6 col-sm-12">
                 <label htmlFor="date">Date</label>
                 <DatePicker
-                  format={"MM/DD/YYYY"}
+                  format={"MM-DD-YYYY"}
+                  defaultValue={moment(newDate)}
                   value={selectedDate}
                   onChange={(e) => {
                     setSelectedDate(e);
@@ -285,7 +307,7 @@ export default function LeadReport() {
                 }
                 onClick={() => toggleTab(1)}
               >
-                Generated
+                Generated ({generateCount})
               </button>
               <button
                 id="button-tabs"
@@ -296,7 +318,7 @@ export default function LeadReport() {
                 }
                 onClick={() => toggleTab(2)}
               >
-                Converted
+                Converted ({convertCount})
               </button>
             </div>
           </div>

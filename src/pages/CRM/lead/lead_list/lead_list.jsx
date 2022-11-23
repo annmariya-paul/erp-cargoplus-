@@ -21,6 +21,7 @@ import { CRM_BASE_URL } from "../../../../api/bootapi";
 import Custom_model from "../../../../components/custom_modal/custom_model";
 import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
 import { ROUTES } from "../../../../routes";
+import MyPagination from "../../../../components/Pagination/MyPagination";
 
 export default function LeadList() {
   const [searchedText, setSearchedText] = useState("");
@@ -33,6 +34,9 @@ export default function LeadList() {
   const [modalViewLead, setModalViewLead] = useState(false);
 
   const [allLeadList, setAllLeadList] = useState();
+  
+  const [currentcount,setCurrentcount]= useState()
+  // pageindex =0 ->  25 * (1-1)- 1+1 
 
   const [viewLead, setViewLead] = useState({
     type: "",
@@ -63,17 +67,30 @@ export default function LeadList() {
   };
 
   const pageofIndex = noofItems * (current - 1) - 1 + 1;
-  const numofItemsTo = noofItems * current;
+  const numofItemsTo = noofItems * current ;
+
+
+
+
+  const pagesizecount = Math.ceil(totalCount/noofItems)
+  console.log("page number isss", pagesizecount)
+
+
+
+  // console.log("saag eywrbzxcjhasdbf yryeraeuif:::::", allLeadList);
+  // console.log("page size", pageIndex);
+  // console.log(totalCount / noofItems);
 
   const GetAllLeadData = () => {
     PublicFetch.get(
-      `${CRM_BASE_URL}/lead?startIndex=${pageofIndex}&noOfItems=${numofItemsTo}`
+      `${CRM_BASE_URL}/lead?startIndex=${pageofIndex}&noOfItems=${noofItems}`
     )
       .then((res) => {
         if (res?.data?.success) {
           console.log("All lead data", res?.data?.data);
           setAllLeadList(res?.data?.data?.leads);
           setTotalcount(res?.data?.data?.totalCount);
+          setCurrentcount(res?.data?.data?.currentCount)
         } else {
           console.log("FAILED T LOAD DATA");
         }
@@ -83,12 +100,12 @@ export default function LeadList() {
       });
   };
 
-  console.log("total count data", totalCount);
+  // console.log("total count data", totalCount);
   // console.log("page&&&& index", pageIndex);
 
   useEffect(() => {
     GetAllLeadData();
-  }, [numofItemsTo, pageofIndex]);
+  }, [noofItems, pageofIndex, pagesizecount]);
 
   const getData = (numofItemsTo, pageofIndex) => {
     return allLeadList?.slice(
@@ -97,31 +114,32 @@ export default function LeadList() {
     );
   };
 
-  const pageofSize = Math.ceil(totalCount / numofItemsTo);
-  console.log("ffgsdgsd,", pageofSize);
-  console.log("ffgsdgsd%$%^$%^,", pageofIndex);
-  console.log("%$%^$%^,", numofItemsTo);
 
-  const MyPagination = ({
-    total,
-    onChange,
-    current,
-    pageSizeOptions,
-    defaultPageSize,
-  }) => {
-    return (
-      <Pagination
-        size="small"
-        onChange={onChange}
-        total={total}
-        current={current}
-        pageSize={pageofSize}
-        defaultPageSize={false}
-        pageSizeOptions={false}
-        // showSizeChanger={showSizeChanger}
-      />
-    );
-  };
+  // const pageofSize = Math.ceil(totalCount / numofItemsTo);
+  // console.log("ffgsdgsd,", pageofSize);
+  // console.log("ffgsdgsd%$%^$%^,", pageofIndex);
+  // console.log("%$%^$%^,", numofItemsTo);
+
+  // const MyPagination = ({
+  //   total,
+  //   onChange,
+  //   current,
+  //   pageSizeOptions,
+  //   defaultPageSize,
+  // }) => {
+  //   return (
+  //     <Pagination
+  //       size="small"
+  //       onChange={onChange}
+  //       total={total}
+  //       current={current}
+  //       pageSize={pageofSize}
+  //       defaultPageSize={false}
+  //       pageSizeOptions={false}
+  //       // showSizeChanger={showSizeChanger}
+  //     />
+  //   );
+  // };
 
  
 
@@ -210,9 +228,7 @@ export default function LeadList() {
     },
   ];
 
-  console.log("saag eywrbzxcjhasdbf yryeraeuif:::::", allLeadList);
-  console.log("page size", pageIndex);
-  console.log(totalCount / noofItems);
+
 
   return (
     <>
@@ -348,13 +364,16 @@ export default function LeadList() {
             />
           </div>
           <div className="d-flex py-2 justify-content-center">
+
             <MyPagination
-              total={allLeadList?.length}
+              total={parseInt(totalCount) }
               current={current}
-              showSizeChanger={true}
-              onChange={(current, pageSize) => {
-                console.log("page index", current, pageSize);
-                setCurrent(current);
+              pageSize={noofItems}
+              // defaultPageSize={noofItems}
+              showSizeChanger={false}
+              onChange={(current,pageSize) => {
+                console.log("page index", pageSize);
+                setCurrent(current  );
                 // setPageSize(pageSize);
               }}
             />

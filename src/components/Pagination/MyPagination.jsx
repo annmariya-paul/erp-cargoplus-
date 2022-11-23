@@ -1,21 +1,41 @@
 import { Pagination } from "antd";
 import React from "react";
+// import "./Pagination.scss"
 
-function MyPagination({ total, onChange, current, pageSize }) {
+function MyPagination({ total, onChange, current, defaultPageSize,  pageSize, totalposts,postperpage ,setcurrentpage}) {
+
+// let pages =[]
+
+// for (let i=1 ; i<= Math.ceil(totalposts/postperpage);i++){
+//   pages.push(i)
+// }
+
+
+
   return (
     <div>
-      <Pagination
+
+{/* {pages.map((page, indx)=>{
+  return <button key={indx}  onClick={()=> setcurrentpage(page)} >{page} </button>
+}) } */}
+
+ 
+     <Pagination
         size="small"
         onChange={onChange}
         total={total}
         current={current}
         pageSize={pageSize}
-        defaultPageSize={25}
-        pageSizeOptions={("25", "50", "100")}
+        showSizeChanger={false}
+        // defaultCurrent={1}
+        // pageSizeOptions={("25", "50", "100")}
         // showSizeChanger={showSizeChanger}
       />
+  
     </div>
   );
 }
 
 export default MyPagination;
+
+

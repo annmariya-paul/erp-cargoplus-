@@ -11,16 +11,14 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { useForm } from "react-hook-form";
 import { BsPlusCircleFill } from "react-icons/bs";
 import FileUpload from "../../../../components/fileupload/fileUploader";
-import ContactTable from "../tables/contactstable";
+import EditContact from "../tables/edit_contacts";
+import Edit_Address from "../tables/edit_address";
 import AddressTable from "../tables/contactstable";
-import AddAddress from "../modals/addaddress";
-import Addcontact from "../modals/addcontact";
 import AddOpportunity from "../modals/addopportunity";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { LeadStatus } from "../../../../utils/leadStatus";
 import { CRM_BASE_URL } from "../../../../api/bootapi";
 import Countrystate from "../location/countryselect";
-
 // import ErrorMsg from "../../components/errormessage";
 import Custom_model from "../../../../components/custom_modal/custom_model";
 
@@ -28,7 +26,7 @@ function LeadEdit() {
   // const history=useHistory();
   const { id } = useParams();
   // console.log("ID is ...",id);
- 
+
   const [useredit, setUseredit] = useState();
   const [toggleState, setToggleState] = useState(1);
   const [basicinfoData, setBasicinfoData] = useState([]);
@@ -51,17 +49,11 @@ function LeadEdit() {
   const toggleTab = (index) => {
     setToggleState(index);
   };
-const navigate =useNavigate();
+  const navigate = useNavigate();
 
-const goToLeadlist=()=>{navigate("/lead_list")}
-
-  // const {
-  //   register,
-  //   handleSubmit,
-  //   formState: { errors },
-  //   reset,
-  //   trigger,
-  // } = useForm();
+  const goToLeadlist = () => {
+    navigate("/lead_list");
+  };
 
   const close_modal = (mShow, time) => {
     if (!mShow) {
@@ -70,15 +62,14 @@ const goToLeadlist=()=>{navigate("/lead_list")}
       }, time);
     }
   };
-  const [allLeadList, setAllLeadList] = useState();
+  const [oneLeadData, setOneLeadData] = useState();
 
-  const GetAllLeadData = () => {
-    PublicFetch.get(`${CRM_BASE_URL}/lead/basic/${id}`)
+  const GetLeadData = () => {
+    PublicFetch.get(`${CRM_BASE_URL}/lead/${id}`)
       .then((res) => {
         if (res?.data?.success) {
-          console.log("All lead datassssssssssss", res?.data?.data);
-          console.log("LLLLLLLLLLLLLLLL", res?.data?.data);
-          setAllLeadList(res?.data?.data);
+          console.log("Unique Lead Id data", res?.data?.data);
+          setOneLeadData(res?.data?.data);
           setLeadType(res?.data?.data?.lead_type);
           setLeadName(res?.data?.data?.lead_customer_name);
           setLeadUsertype(res?.data?.data?.lead_user_type);
@@ -97,10 +88,10 @@ const goToLeadlist=()=>{navigate("/lead_list")}
   };
 
   useEffect(() => {
-    GetAllLeadData();
+    GetLeadData();
   }, []);
 
-  console.log("grt all data", allLeadList);
+  console.log("grt all data", oneLeadData);
 
   const Submit = (event) => {
     // const form = event.currentTarget;
@@ -158,13 +149,13 @@ const goToLeadlist=()=>{navigate("/lead_list")}
     formData.append("attachments", leadAttachment);
     formData.append("lead_status", leadStatus);
 
-    PublicFetch.patch(`${CRM_BASE_URL}/lead/basic/${id}`, formData, {
+    PublicFetch.patch(`${CRM_BASE_URL}/lead/${id}`, formData, {
       "Content-Type": "Multipart/form-Data",
     })
       .then(function (response) {
         goToLeadlist();
         console.log("hellooooooo", response);
-       
+
         if (response.data.success) {
           console.log("hello", response.data.data);
         } else {
@@ -175,6 +166,7 @@ const goToLeadlist=()=>{navigate("/lead_list")}
         console.log(error);
       });
   };
+
   console.log("kkkkkk", leadDescription, leadName);
   return (
     <>
@@ -219,7 +211,9 @@ const goToLeadlist=()=>{navigate("/lead_list")}
               >
                 {/* <div className="col-12"> */}
                 <div className="row mb-2 justify-content-end">
-                <div class="col"><h5 class="lead_text">Lead Edit</h5></div>
+                  <div class="col">
+                    <h5 class="lead_text">Lead Edit ({leadName})</h5>
+                  </div>
                   <div
                     className="col-2 d-flex"
                     style={{ justifyContent: "center" }}
@@ -371,9 +365,7 @@ const goToLeadlist=()=>{navigate("/lead_list")}
                   </div>
 
                   <div className="col pt-3">
-                    <Button type="submit"  onClick={updateUser}
-                     
-                     btnType="save">
+                    <Button type="submit" onClick={updateUser} btnType="save">
                       Update
                     </Button>
                     <Custom_model
@@ -390,24 +382,19 @@ const goToLeadlist=()=>{navigate("/lead_list")}
                   toggleState === 2 ? "content  active-content" : "content"
                 }
               >
-                <div className="row mt-3 px-1" style={{ borderRadius: "3px" }}>
+                <div className="row mt-2 ps-3" style={{ borderRadius: "3px" }}>
                   <div className="col-md-12">
                     <Button btnType="add" onClick={() => setModalContact(true)}>
                       Add <AiOutlinePlus />
                     </Button>
-                     {/* <AddContact
-                      lead={leadId}
-                      show={modalContact}
-                      onHide={() => setModalContact(false)}
-                    />  */}
                   </div>
                   <div className="col-12 mt-2">
-                    <ContactTable
+                    <EditContact
                       show={modalContact}
                       onHide={() => setModalContact(false)}
-                      lead={id}
+                      leadid={id}
                     />
-                  </div> 
+                  </div>
                   <div className="col mt-4">
                     <Button onClick={Submit} btnType="save">
                       Save
@@ -420,19 +407,19 @@ const goToLeadlist=()=>{navigate("/lead_list")}
                   toggleState === 3 ? "content  active-content" : "content"
                 }
               >
-                <div className="row mt-3 px-1" style={{ borderRadius: "3px" }}>
+                <div className="row mt-2 ps-3" style={{ borderRadius: "3px" }}>
                   <div className="col-md-12">
                     <Button btnType="add" onClick={() => setModalAddress(true)}>
                       Add <AiOutlinePlus />
                     </Button>
-                    <AddAddress
+                    {/* <Edit_Address
                       show={modalAddress}
                       onHide={() => setModalAddress(false)}
-                    />
+                    /> */}
                   </div>
-                  <div className="row mt-2 ms-2">
-                    <AddressTable
-                      lead={leadId}
+                  <div className="col-12 mt-2">
+                    <Edit_Address
+                      leadid={id}
                       show={modalAddress}
                       onHide={() => setModalAddress(false)}
                     />

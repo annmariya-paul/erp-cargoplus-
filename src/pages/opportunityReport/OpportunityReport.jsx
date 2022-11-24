@@ -31,6 +31,8 @@ function OpportunityReport() {
   const [selectedDate, setSelectedDate] = useState();
   const [selectedMonth, setSelectedMonth] = useState();
   const [backend, setBackEnd] = useState();
+  const [generatedcount,setGeneratedcount]= useState("")
+  const [convertedcount,setConvertedcount]= useState("")
 
   const toggleTab = (index) => {
     setToggleState(index);
@@ -89,6 +91,7 @@ function OpportunityReport() {
   // { function to search data by date - Ann mariya (07/11/22)}
   const Searchbydate = () => {
     let selecteddate = moment(selectedDate).format("MM-DD-YYYY");
+    // console.log("date",selecteddate)
     let startdate = moment(startDate).format("MM-DD-YYYY");
     let enddate = moment(endDate).format("MM-DD-YYYY");
     let selectedmonth = moment(selectedMonth).format("MM-01-YYYY");
@@ -125,6 +128,9 @@ function OpportunityReport() {
         console.log("testhelllooo.....", response);
         if (response.data.success) {
           console.log("hello", response.data.data);
+          // console.log("generated iss",response.data.data.converted.totalCount)
+          setGeneratedcount(response.data.data.generated)
+          setConvertedcount(response.data.data.converted.totalCount)
           setConvertedTable(response?.data?.data?.converted?.data);
           setGenerateTable(response?.data?.data?.generated?.data);
         } else {
@@ -201,6 +207,8 @@ function OpportunityReport() {
       align: "center",
     },
   ];
+
+  console.log("coverteddd data is  ", generatedcount.totalCount)
 
   return (
     <>
@@ -294,9 +302,13 @@ function OpportunityReport() {
                 }
                 onClick={() => toggleTab(1)}
               >
-                Generated
+                {/* Generated () */}
+                <label>Generated <span>({generatedcount.totalCount})</span></label>  
               </button>
+              
+              
               <button
+             
                 id="button-tabs"
                 className={
                   toggleState === 2
@@ -305,8 +317,12 @@ function OpportunityReport() {
                 }
                 onClick={() => toggleTab(2)}
               >
-                Converted
+              {convertedcount== 0?(
+             <label>Converted</label> 
+              ):(  <label>Converted <span>({convertedcount})</span></label>   )  }
+                
               </button>
+
             </div>
           </div>
         </div>

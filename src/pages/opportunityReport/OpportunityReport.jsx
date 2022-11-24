@@ -37,7 +37,7 @@ function OpportunityReport() {
   const toggleTab = (index) => {
     setToggleState(index);
   };
-
+  const newDate = new Date();
   // { function GetOpportunityData to import opportunity data - Ann mariya (04/11/22)}
   const GetOpportunityData = () => {
     PublicFetch.get(
@@ -84,8 +84,8 @@ function OpportunityReport() {
   };
 
   useEffect(() => {
-    GetOpportunityData();
-    // Searchbydate();
+    // GetOpportunityData();
+    Searchbydate();
   }, [numOfItems, pageSize]);
 
   // { function to search data by date - Ann mariya (07/11/22)}
@@ -129,7 +129,7 @@ function OpportunityReport() {
         if (response.data.success) {
           console.log("hello", response.data.data);
           // console.log("generated iss",response.data.data.converted.totalCount)
-          setGeneratedcount(response.data.data.generated)
+          setGeneratedcount(response.data.data.generated.totalCount)
           setConvertedcount(response.data.data.converted.totalCount)
           setConvertedTable(response?.data?.data?.converted?.data);
           setGenerateTable(response?.data?.data?.generated?.data);
@@ -236,6 +236,7 @@ function OpportunityReport() {
                 <label htmlFor="date">Date</label>
                 <DatePicker
                   format={"MM/DD/YYYY"}
+                  defaultValue={moment(newDate)}
                   value={selectedDate}
                   onChange={(e) => {
                     setSelectedDate(e);
@@ -302,8 +303,10 @@ function OpportunityReport() {
                 }
                 onClick={() => toggleTab(1)}
               >
-                {/* Generated () */}
-                <label>Generated <span>({generatedcount.totalCount})</span></label>  
+                 {/* {convertedcount== 0?(
+             <label>Generated</label> 
+              ):(  <label>Generated <span>({generatedcount})</span></label>   )  } */}
+                  <label>Generated ({generatedcount}) </label> 
               </button>
               
               
@@ -317,10 +320,10 @@ function OpportunityReport() {
                 }
                 onClick={() => toggleTab(2)}
               >
-              {convertedcount== 0?(
+              {/* {convertedcount== 0?(
              <label>Converted</label> 
-              ):(  <label>Converted <span>({convertedcount})</span></label>   )  }
-                
+              ):(  <label>Converted <span>({convertedcount})</span></label>   )  } */}
+                  <label>Converted({convertedcount}) </label> 
               </button>
 
             </div>
@@ -447,10 +450,10 @@ function OpportunityReport() {
             </div>
             <div className="d-flex py-2 justify-content-center">
               <MyPagination
-                total={getGenerateData.length}
+                total={parseInt(generateTable?.length)}
                 current={current}
                 showSizeChanger={true}
-                pageSize={pageSize}
+                pageSize={numOfItems}
                 onChange={(current, pageSize) => {
                   setCurrent(current);
                   setPageSize(pageSize);
@@ -578,10 +581,10 @@ function OpportunityReport() {
             </div>
             <div className="d-flex py-2 justify-content-center">
               <MyPagination
-                total={getConvertData.length}
+                total={parseInt(convertedTable?.length)}
                 current={current}
                 showSizeChanger={true}
-                pageSize={pageSize}
+                pageSize={numOfItems}
                 onChange={(current, pageSize) => {
                   setCurrent(current);
                   setPageSize(pageSize);

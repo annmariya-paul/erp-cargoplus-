@@ -36,6 +36,7 @@ export default function LeadReport() {
     setToggleState(index);
   };
    const newDate = new Date();
+
   // { function GetAllLeadData to import lead data - Ann mariya (20/10/22)}
   const GetAllLeadData = () => {
     PublicFetch.get(
@@ -52,7 +53,7 @@ export default function LeadReport() {
             setAllLeadList(item.lead_status);
 
             var date1 = moment(item.lead_created_at).format("MM-DD-YYYY");
- console.log("fggfg", date1);
+//  console.log("fggfg", date1);
             if (item.lead_status === 5) {
               {
                 arrA.push({
@@ -69,12 +70,12 @@ export default function LeadReport() {
             }
            
                        
-            if (item.lead_status === 1) {
-               const newDate = new Date();
-               const currentdate = newDate.filter(date1)
-               const Format = moment(newDate).format("MM-DD-YYYY");
-              if(currentdate){
-              console.log("hgdddfffffffffffffffff")
+            if (item.lead_status === 1  ) {
+              //  const newDate = new Date();
+              //  const currentdate = newDate.filter(date1)
+              //  const Format = moment(newDate).format("MM-DD-YYYY");
+              // if(currentdate){
+              // console.log("current date iss",currentdate)
               arrB.push({
                 lead_customer_name: item?.lead_customer_name,
                 lead_id: item?.lead_id,
@@ -83,10 +84,15 @@ export default function LeadReport() {
                 lead_status: item?.lead_status,
                 lead_type: item?.lead_type,
                 lead_user_type: item?.lead_user_type,
+                lead_created_date:item?.lead_created_at,
               });
               setGeneratedTable(arrB);
-            } 
+              
+              
+            // } 
+        
             }
+            
           });
         } else {
           console.log("FAILED TO LOAD DATA");
@@ -97,8 +103,14 @@ export default function LeadReport() {
       });
   };
 
+
+console.log("generated data isss ", generatedTable )
+
+
+
   useEffect(() => {
-    GetAllLeadData();
+    // GetAllLeadData();
+    Searchbydate()
   }, [numOfItems, pageSize]);
 
   // console.log("lllllllll", format);
@@ -307,7 +319,10 @@ export default function LeadReport() {
                 }
                 onClick={() => toggleTab(1)}
               >
-                Generated ({generateCount})
+                 {generateCount== 0?(
+             <label>Generated</label> 
+              ):(  <label>Generated <span>({generateCount})</span></label>)}
+              
               </button>
               <button
                 id="button-tabs"
@@ -318,7 +333,11 @@ export default function LeadReport() {
                 }
                 onClick={() => toggleTab(2)}
               >
-                Converted ({convertCount})
+                 {convertCount== 0?(
+             <label>Converted</label> 
+              ):(  <label>Converted <span>({convertCount})</span></label>)}
+
+                
               </button>
             </div>
           </div>
@@ -412,19 +431,20 @@ export default function LeadReport() {
             <div className="datatable">
               <TableData
                 data={getGenerateData(current, numOfItems, pageSize)}
+                // data={generatedTable}
                 columns={columns}
                 custom_table_css="table_report_list"
               />
             </div>
             <div className="d-flex py-2 justify-content-center">
               <MyPagination
-                total={getGenerateData.length}
+                total={parseInt(generatedTable?.length)}
                 current={current}
                 showSizeChanger={true}
-                pageSize={pageSize}
+                pageSize={numOfItems}
                 onChange={(current, pageSize) => {
                   setCurrent(current);
-                  setPageSize(pageSize);
+                  // setPageSize(pageSize);
                 }}
               />
             </div>
@@ -525,13 +545,14 @@ export default function LeadReport() {
             </div>
             <div className="d-flex py-2 justify-content-center">
               <MyPagination
-                total={getConvertData.length}
+              
+                total={parseInt(convertedTable?.length)}
                 current={current}
                 showSizeChanger={true}
-                pageSize={pageSize}
+                pageSize={numOfItems}
                 onChange={(current, pageSize) => {
                   setCurrent(current);
-                  setPageSize(pageSize);
+                  // setPageSize(pageSize);
                 }}
               />
             </div>

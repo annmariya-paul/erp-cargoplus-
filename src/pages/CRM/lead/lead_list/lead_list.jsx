@@ -43,12 +43,12 @@ export default function LeadList() {
     lead_name: "",
     user_type: "",
     organisation: "",
-    source:"",
-    attachments:"",
-    description:"",
-    status:"",
+    source: "",
+    attachments: "",
+    description: "",
+    status: "",
   });
-// { function to view selected Lead's data - Ann mariya (18/11/22)}
+  // { function to view selected Lead's data - Ann mariya (18/11/22)}
   const handleViewData = (item) => {
     console.log("view all attributes", item);
     setViewLead({
@@ -141,9 +141,6 @@ export default function LeadList() {
   //   );
   // };
 
- 
-
- 
   // <Link to={ROUTES.OPPORTUNITY} className="nav-link">
   //                     <Button onClick={Submit} btnType="add_borderless">
   //                       <BsPlusCircleFill style={{ fontSize: "16px" }} /> View
@@ -173,8 +170,7 @@ export default function LeadList() {
 
             <div className="actionView m-0">
               <div className="editcolor" onClick={() => handleViewData(index)}>
-                <MdPageview
-                />
+                <MdPageview />
               </div>
             </div>
           </div>

@@ -43,18 +43,18 @@ function EditContact(props) {
   const [contactLeadId, setContactLeadId] = useState();
   const [phone, setPhone] = useState();
   const [isSubmit, setIsSubmit] = useState(false);
-  const [mobile, setMobile] = useState();
+  const [mobile, setMobile] = useState("");
   const [editContactModal, setEditContactModel] = useState(false);
   const [modalShow, setModalShow] = useState(true);
   const [showSuccessMOdal, setShowSuccessModal] = useState(false);
   const [show, setShow] = useState(false);
   const [count, setCount] = useState(0);
   const [ContactName, setContactName] = useState();
-  const [email, setEmail] = useState();
+  const [email, setEmail] = useState("");
   // const [phoneno, setPhoneno] = useState();
   const [serialNo, setserialNo] = useState(1);
   const [AllContact, setAllcontact] = useState({});
-  const [designation, setDesignation] = useState();
+  const [designation, setDesignation] = useState("");
   const [validated, setValidated] = useState(false);
   const [validateErr, setValidateErr] = useState(false);
   const [showError, setShowError] = useState(false);
@@ -117,8 +117,12 @@ function EditContact(props) {
 
   const handleEditedclick = (i) => {
     console.log("edit in list...", i);
-    setContactName(i.contact_person_name)
-     setEditContactModel(true);
+    setContactName(i.contact_person_name);
+    setEmail(i.contact_email);
+    setPhone(i.contact_phone_1);
+    setMobile(i.contact_phone_2);
+    setDesignation(i.contact_designation);
+    setEditContactModel(true);
   };
   const columns = [
     {
@@ -139,7 +143,7 @@ function EditContact(props) {
               <FaEdit onClick={() => handleEditedclick(index)} />
             </div>
             <div className="editcolor">
-              <FaTrash/>
+              <FaTrash />
             </div>
           </div>
         );
@@ -217,23 +221,7 @@ function EditContact(props) {
       }, time);
     }
   };
-
   
- const editformik = useFormik({
- initialValues: {
-     
-      cont_person_name: "",
-      cont_email: "",
-      cont_phone_1: "",
-      cont_phone_2: "",
-      cont_designation: "",
-    },
-    validateOnBlur: true,
-    onSubmit,
-    validationSchema: validationSchema,
-  });
-
-
 
   // Function for add adding data to data base formik is used
 
@@ -446,10 +434,9 @@ function EditContact(props) {
         onHide={() => setEditContactModel(false)}
         View_list
         footer={false}
-        
         list_content={
           <>
-            <Form onSubmit={formik.handleSubmit}>
+            <Form >
               <div className="row">
                 <h5 className="lead_text">Edit Contact</h5>
               </div>
@@ -460,23 +447,10 @@ function EditContact(props) {
                     <Form.Control
                       type="text"
                       placeholder="Name"
-                      id="contact_person_name"
-                      name="contact_person_name"
-                      className={formik.touched ? "" : "invalid"}
-                      value={formik.values.contact_person_name}
-                      // onChange={(e) => setContactName(e.target.value)}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
+                      required
+                      value={ContactName}
+                      onChange={(e) => setContactName(e.target.value)}
                     />
-                    {/* <Form.Control.Feedback type="invalid">
-                  Please provide a valid Name.
-                </Form.Control.Feedback> */}
-                    <p style={{ color: "red", fontSize: "10px" }}>
-                      {formik.touched.contact_person_name &&
-                      formik.errors.contact_person_name
-                        ? formik.errors.contact_person_name
-                        : ""}
-                    </p>
                   </Form.Group>
                   <Form.Group className="mb-3" controlId="email">
                     <Form.Label>Email address</Form.Label>
@@ -484,20 +458,13 @@ function EditContact(props) {
                       type="email"
                       placeholder="Enter email"
                       required
-                      id="contact_email"
-                      name="contact_email"
-                      className={`form-control ${errors.email && "invalid"}`}
-                      value={formik.values.contact_email}
-                      // onChange={(e) => setEmail(e.target.value)}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
+                      value={email}
+                      onChange={(e) => {
+                        setEmail(e.target.value);
+                      }}
+                      // onBlur={formik.handleBlur}
                     />
-                    <p style={{ color: "red", fontSize: "10px" }}>
-                      {formik.touched.contact_email &&
-                      formik.errors.contact_email
-                        ? formik.errors.contact_email
-                        : ""}
-                    </p>
+
                     {/* {showError && (
                   <label style={{ color: "red" }}>
                     Please enter a valid email address.
@@ -514,22 +481,22 @@ function EditContact(props) {
                     </label>
                     <PhoneNumber
                       defaultCountry={"IN"}
-                      value={formik.values.contact_phone_1}
+                      value={phone}
                       id="contact_phone_1"
                       name="contact_phone_1"
-                      // onChange={(value) => setPhone(value)}
-                      onChange={(e) =>
-                        formik.setFieldValue("contact_phone_1", e)
-                      }
-                      onBlur={formik.handleBlur("contact_phone_1")}
+                      onChange={(value) => setPhone(value)}
+                      // onChange={(e) =>
+                      //   formik.setFieldValue("contact_phone_1", e)
+                      // }
+                      // onBlur={formik.handleBlur("contact_phone_1")}
                     />
 
-                    <p style={{ color: "red", fontSize: "10px" }}>
+                    {/* <p style={{ color: "red", fontSize: "10px" }}>
                       {formik?.touched?.contact_phone_1 &&
                       formik?.errors?.contact_phone_1
                         ? formik?.errors?.contact_phone_1
                         : ""}
-                    </p>
+                    </p> */}
                   </div>
                   <div className="row mb-3">
                     <label for="phone" className="form-label">
@@ -538,58 +505,41 @@ function EditContact(props) {
 
                     <PhoneNumber
                       defaultCountry={"IN"}
-                      value={formik.values.contact_phone_2}
+                      value={mobile}
                       id="contact_phone_2"
                       name="contact_phone_2"
-                      // onChange={(value) => setMobile(value)}
-                      onChange={(e) =>
-                        formik.setFieldValue("contact_phone_2", e)
-                      }
-                      onBlur={formik.handleBlur("contact_phone_2")}
+                      onChange={(value) => setMobile(value)}
+                      // onChange={(e) =>
+                      //   formik.setFieldValue("contact_phone_2", e)
+                      // }
+                      // onBlur={formik.handleBlur("contact_phone_2")}
                     />
-                    <p style={{ color: "red", fontSize: "10px" }}>
+                    {/* <p style={{ color: "red", fontSize: "10px" }}>
                       {formik.touched.contact_phone_2 &&
                       formik.errors.contact_phone_2
                         ? formik.errors.contact_phone_2
                         : ""}
-                    </p>
+                    </p> */}
                   </div>
                   <Form.Group className="mb-1" controlId="designation">
                     <Form.Label>Designation/Department</Form.Label>
                     <Form.Control
                       type="text"
                       required
-                      id="contact_designation"
-                      name="contact_designation"
-                      className={`${errors.designation && "invalid"}`}
-                      // {...register("designation", {
-                      //   required: "Please enter a Designation eg:Manager",
-                      //   minLength: {
-                      //     value: 3,
-                      //     message: "Minimum Required length is 3",
-                      //   },
-                      //   maxLength: {
-                      //     value: 100,
-                      //   },
-                      //   pattern: {
-                      //     value: /^[a-zA-Z0-9 ]*$/,
-                      //     message: "Only letters and numbers are allowed!",
-                      //   },
-                      // })}
-                      onKeyUp={() => {
-                        trigger("designation");
-                      }}
-                      value={formik.values.contact_designation}
-                      // onChange={(e) => setDesignation(e.target.value)}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
+                      // id="contact_designation"
+                      // name="contact_designation"
+                      // className={`${errors.designation && "invalid"}`}
+                      value={designation}
+                      onChange={(e) => setDesignation(e.target.value)}
+                      // onChange={formik.handleChange}
+                      // onBlur={formik.handleBlur}
                     />
-                    <p style={{ color: "red", fontSize: "10px" }}>
+                    {/* <p style={{ color: "red", fontSize: "10px" }}>
                       {formik.touched.contact_designation &&
                       formik.errors.contact_designation
                         ? formik.errors.contact_designation
                         : ""}
-                    </p>
+                    </p> */}
                   </Form.Group>
                 </div>
                 <div className="d-flex justify-content-center mt-3">

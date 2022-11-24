@@ -218,6 +218,23 @@ function EditContact(props) {
     }
   };
 
+  
+ const editformik = useFormik({
+ initialValues: {
+     
+      cont_person_name: "",
+      cont_email: "",
+      cont_phone_1: "",
+      cont_phone_2: "",
+      cont_designation: "",
+    },
+    validateOnBlur: true,
+    onSubmit,
+    validationSchema: validationSchema,
+  });
+
+
+
   // Function for add adding data to data base formik is used
 
   const formik = useFormik({
@@ -240,7 +257,7 @@ function EditContact(props) {
     // formik?.values?.contact_lead_id,
     formik?.values?.contact_phone_1,
     formik.values.contact_phone_2,
-    formik.values.contact_person_name,
+    formik.values.ContactName,
     formik.values.contact_email,
     formik.values.contact_designation
   );
@@ -434,7 +451,7 @@ function EditContact(props) {
           <>
             <Form onSubmit={formik.handleSubmit}>
               <div className="row">
-                <h5 className="lead_text">Add Contact</h5>
+                <h5 className="lead_text">Edit Contact</h5>
               </div>
               <div className="row mt-3">
                 <div className="px-3">

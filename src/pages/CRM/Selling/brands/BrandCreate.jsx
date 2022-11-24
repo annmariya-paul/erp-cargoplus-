@@ -54,6 +54,9 @@ function BrandCreate() {
     }
   };
 
+  const handleCancel=()=>{
+    navigate(ROUTES.BRANDS)
+  }
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj);
@@ -244,9 +247,12 @@ function BrandCreate() {
                   </Form.Item>
                 </div>
 
-                <div className="col-12 d-flex justify-content-center py-5">
+                <div className="col-12 d-flex justify-content-center  gap-2 py-5">
                   <Button onClick={() => {}} className="save_button">
                     Save
+                  </Button>
+                  <Button  btnType="cancel"  onClick={() => {handleCancel()}} >
+                    cancel
                   </Button>
                 </div>
               </div>

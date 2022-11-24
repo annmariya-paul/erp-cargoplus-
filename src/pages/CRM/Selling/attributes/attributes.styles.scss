@@ -2,16 +2,18 @@
 
 .attribute_list,
 .add_attributes {
-  height: 41rem;
+  height: 42rem;
   border-radius: 4px;
   box-shadow: 2px 2px 12px variables.$boxshadow;
+  // overflow-y: auto;
 }
 .attribute_table {
-  height: 25rem;
+  height: 26rem;
+  overflow-y: auto;
 }
 .add_attributes,
 .attribute_table {
-  height: 23rem !important;
+  height: 26rem !important;
 }
 .vertical {
   color: lightgrey;

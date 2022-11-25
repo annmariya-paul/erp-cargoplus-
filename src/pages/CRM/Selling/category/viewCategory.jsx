@@ -28,6 +28,7 @@ import { Link } from "react-router-dom";
 import { ROUTES } from "../../../../routes";
 import { CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
 import PublicFetch from "../../../../utils/PublicFetch";
+import { date } from "yup/lib/locale";
 
 function Categorylist(props) {
   const [pageSize, setPageSize] = useState("25");
@@ -37,6 +38,8 @@ function Categorylist(props) {
   const [searchStatus, setSearchStatus] = useState("");
   const [modalShow, setModalShow] = useState();
   const [showViewModal, setShowViewModal] = useState(false);
+  const [dataCategory, setDataCategory] = useState();
+  console.log("dataCategory", dataCategory);
   // const [showEditModal, setShowEditModal] = useState(false);
   const [State, setState] = useState("null");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -75,45 +78,95 @@ function Categorylist(props) {
       .then((res) => {
         if (res?.data?.success) {
           console.log("All category data", res?.data?.data);
-          let temp = [];
-        if (
-          res?.data?.data.other_crm_v1_categories &&
-          res?.data?.data.other_crm_v1_categories.length > 0
-        )
-        {
-          
-          res?.data?.data.other_crm_v1_categories.forEach(
-            async (item, index) => {
-             
+          // // let temp = [];
+          // if (
+          //   res?.data?.data.other_crm_v1_categories &&
+          //   res?.data?.data.other_crm_v1_categories.length > 0
+          // ) {
+          //   res?.data?.data.other_crm_v1_categories.forEach((item, index) => {
+
+          //   }
+          //   );
+          // }
+          const traverseTree = (treeData) => {
+            console.log("shfsa", treeData);
+            let categories = [];
+            if (!treeData || treeData.length <= 0) {
+              return;
             }
-          );
-        }
-          // let temp = [];
-          // res?.data?.data.forEach((item, index) => {
-          //   let tempArr = [];
-          //   item.other_crm_v1_categories.forEach((i, idx) => {
-          //     tempArr.push(i.category_name);
-          //   });
-          //   let tmpArr_id = [];
-          //   item.other_crm_v1_categories.forEach((itm, indx) => {
-          //     tmpArr_id.push(itm.category_code);
-          //   });
-          //   let tmpArry = [];
-          //   item.other_crm_v1_categories.forEach((itm, indx) => {
-          //     tmpArry.push(itm.category_description);
-          //   });
-          //   temp.push({
-          //     category_code: item?.category_code,
-          //     category_name: item?.category_name,
-          //     category_description: item?.category_description,
-          //   });
-          //   temp.push({
-          //     category_name: tempArr,
-          //     category_code: tmpArr_id,
-          //     category_description: tmpArry,
-          //   });
-          // });
-          setCategoryList(temp);
+            //   creating queue
+            let queue = [...treeData];
+            //   queue.push(treeData);
+            //   console.log(queue);
+            //   return;
+            while (queue.length !== 0) {
+              let length = queue.length;
+              while (length > 0) {
+                let firstItem = queue.shift();
+
+                categories.push({
+                  category_name: firstItem.category_name,
+                  category_id: firstItem.category_id,
+                  category_code: firstItem.category_code,
+                  category_description: firstItem.category_description,
+
+                  // category_parent_id: firstItem.category_parent_id,
+                  category_parent_id: firstItem.category_parent_id,
+                });
+                // if (firstItem?.other_crm_v1_categories?.length > 0) {
+                for (
+                  let i = 0;
+                  i < firstItem.other_crm_v1_categories.length;
+                  i++
+                ) {
+                  queue.push(firstItem.other_crm_v1_categories[i]);
+                }
+                // }
+                length--;
+              }
+            }
+            setCategoryList(categories);
+            setDataCategory(categories);
+            return categories;
+          };
+          console.log("daaa", traverseTree(res.data.data));
+          let temp = [];
+          res?.data?.data.forEach((item, index) => {
+            // let tempArr = [];
+            // item.other_crm_v1_categories.forEach((i, idx) => {
+            //   tempArr.push(i.category_name);
+            // });
+            let tmpArr_id = [];
+            item.other_crm_v1_categories.forEach((itm, indx) => {
+              tmpArr_id.push(itm.category_code);
+            });
+            let tmpArry = [];
+            item.other_crm_v1_categories.forEach((itm, indx) => {
+              tmpArry.push(itm.category_description);
+            });
+            let Categoryname = [];
+            // for (let i = 0; i < traverseTree(res.data.data).length; ++i) {
+            //   Categoryname = traverseTree(res.data.data)[i];
+            // }
+
+            // dataCategory.forEach((item, index) => {
+
+            //   Categoryname.push();
+            // });
+
+            temp.push({
+              category_code: item?.category_code,
+              category_name: Categoryname,
+              category_description: item?.category_description,
+            });
+            // temp.push({
+            //   category_name: ,
+            //   category_code: tmpArr_id,
+            //   category_description: tmpArry,
+            // });
+          });
+          // setCategoryList(res?.data?.data);
+          // setCategoryList(temp);
         } else {
           console.log("Failed to load data!");
         }

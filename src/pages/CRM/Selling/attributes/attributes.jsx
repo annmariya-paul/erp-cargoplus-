@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { message, Checkbox } from "antd";
 import { CRM_BASE_URL, CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
-import { Input, Select, Pagination } from "antd";
+import { Input, Select } from "antd";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { MdPageview } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
@@ -136,7 +136,7 @@ getallattributes()
       width: "14%",
       render: (data, index) => {
         return (
-          <div className="d-flex  align-items-center gap-3">
+          <div className="d-flex justify-content-center align-items-center gap-3">
             <div
               className="editIcon m-0"
               onClick={() =>
@@ -300,8 +300,11 @@ getallattributes()
           />
         </div>
         <div className="d-flex py-2 justify-content-center">
+          
+          
+
           <MyPagination
-            total={data.length}
+            total={attributes?.length}
             current={current}
             showSizeChanger={true}
             pageSize={pageSize}
@@ -311,6 +314,8 @@ getallattributes()
             }}
           />
         </div>
+
+
         <Custom_model
           show={showViewModal}
           onHide={() => setShowViewModal(false)}

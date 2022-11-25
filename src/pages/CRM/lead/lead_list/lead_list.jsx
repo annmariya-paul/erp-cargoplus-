@@ -18,8 +18,10 @@ import TableData from "../../../../components/table/table_data";
 import { LeadStatus } from "../../../../utils/leadStatus";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { CRM_BASE_URL } from "../../../../api/bootapi";
+import Custom_model from "../../../../components/custom_modal/custom_model";
 import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
 import { ROUTES } from "../../../../routes";
+import MyPagination from "../../../../components/Pagination/MyPagination";
 
 export default function LeadList() {
   const [searchedText, setSearchedText] = useState("");
@@ -29,21 +31,66 @@ export default function LeadList() {
   const [totalCount, setTotalcount] = useState();
   const [pageIndex, setPageIndex] = useState(0);
   const [current, setCurrent] = useState(1);
+  const [modalViewLead, setModalViewLead] = useState(false);
 
   const [allLeadList, setAllLeadList] = useState();
+  
+  const [currentcount,setCurrentcount]= useState()
+  // pageindex =0 ->  25 * (1-1)- 1+1 
+
+  const [viewLead, setViewLead] = useState({
+    type: "",
+    lead_name: "",
+    user_type: "",
+    organisation: "",
+    source: "",
+    attachments: "",
+    description: "",
+    status: "",
+  });
+  // { function to view selected Lead's data - Ann mariya (18/11/22)}
+  const handleViewData = (item) => {
+    console.log("view all attributes", item);
+    setViewLead({
+      ...viewLead,
+      type: item.lead_type,
+      lead_name: item.lead_customer_name,
+      user_type: item.lead_user_type,
+      organisation: item.lead_organization,
+      source: item.lead_source,
+      attachments: item.attachments,
+      description: item.lead_description,
+      status: item.lead_status,
+    });
+
+    setModalViewLead(true);
+  };
 
   const pageofIndex = noofItems * (current - 1) - 1 + 1;
-  const numofItemsTo = noofItems * current;
+  const numofItemsTo = noofItems * current ;
+
+
+
+
+  const pagesizecount = Math.ceil(totalCount/noofItems)
+  console.log("page number isss", pagesizecount)
+
+
+
+  // console.log("saag eywrbzxcjhasdbf yryeraeuif:::::", allLeadList);
+  // console.log("page size", pageIndex);
+  // console.log(totalCount / noofItems);
 
   const GetAllLeadData = () => {
     PublicFetch.get(
-      `${CRM_BASE_URL}/lead?startIndex=${pageofIndex}&noOfItems=${numofItemsTo}`
+      `${CRM_BASE_URL}/lead?startIndex=${pageofIndex}&noOfItems=${noofItems}`
     )
       .then((res) => {
         if (res?.data?.success) {
           console.log("All lead data", res?.data?.data);
           setAllLeadList(res?.data?.data?.leads);
           setTotalcount(res?.data?.data?.totalCount);
+          setCurrentcount(res?.data?.data?.currentCount)
         } else {
           console.log("FAILED T LOAD DATA");
         }
@@ -53,12 +100,12 @@ export default function LeadList() {
       });
   };
 
-  console.log("total count data", totalCount);
+  // console.log("total count data", totalCount);
   // console.log("page&&&& index", pageIndex);
 
   useEffect(() => {
     GetAllLeadData();
-  }, [numofItemsTo, pageofIndex]);
+  }, [noofItems, pageofIndex, pagesizecount]);
 
   const getData = (numofItemsTo, pageofIndex) => {
     return allLeadList?.slice(
@@ -67,44 +114,32 @@ export default function LeadList() {
     );
   };
 
-  const pageofSize = Math.ceil(totalCount / numofItemsTo);
-  console.log("ffgsdgsd,", pageofSize);
-  console.log("ffgsdgsd%$%^$%^,", pageofIndex);
-  console.log("%$%^$%^,", numofItemsTo);
 
-  const MyPagination = ({
-    total,
-    onChange,
-    current,
-    pageSizeOptions,
-    defaultPageSize,
-  }) => {
-    return (
-      <Pagination
-        size="small"
-        onChange={onChange}
-        total={total}
-        current={current}
-        pageSize={pageofSize}
-        defaultPageSize={false}
-        pageSizeOptions={false}
-        // showSizeChanger={showSizeChanger}
-      />
-    );
-  };
+  // const pageofSize = Math.ceil(totalCount / numofItemsTo);
+  // console.log("ffgsdgsd,", pageofSize);
+  // console.log("ffgsdgsd%$%^$%^,", pageofIndex);
+  // console.log("%$%^$%^,", numofItemsTo);
 
-  const action = () => {
-    return (
-      <div>
-        <a href="" className="actionEdit">
-          <FaEdit />
-        </a>
-        <a href="" className="actionView">
-          <MdPageview />
-        </a>
-      </div>
-    );
-  };
+  // const MyPagination = ({
+  //   total,
+  //   onChange,
+  //   current,
+  //   pageSizeOptions,
+  //   defaultPageSize,
+  // }) => {
+  //   return (
+  //     <Pagination
+  //       size="small"
+  //       onChange={onChange}
+  //       total={total}
+  //       current={current}
+  //       pageSize={pageofSize}
+  //       defaultPageSize={false}
+  //       pageSizeOptions={false}
+  //       // showSizeChanger={showSizeChanger}
+  //     />
+  //   );
+  // };
 
   // <Link to={ROUTES.OPPORTUNITY} className="nav-link">
   //                     <Button onClick={Submit} btnType="add_borderless">
@@ -129,16 +164,14 @@ export default function LeadList() {
                 to={`${ROUTES.LEAD_EDIT}/${index.lead_id}`}
                 className="editcolor"
               >
-                {/* <a href="/edit_lead_list" className="actionEdit"> */}
-
                 <FaEdit />
               </Link>{" "}
             </div>
 
             <div className="actionView m-0">
-              <Link>
+              <div className="editcolor" onClick={() => handleViewData(index)}>
                 <MdPageview />
-              </Link>
+              </div>
             </div>
           </div>
         );
@@ -191,9 +224,7 @@ export default function LeadList() {
     },
   ];
 
-  console.log("saag eywrbzxcjhasdbf yryeraeuif:::::", allLeadList);
-  console.log("page size", pageIndex);
-  console.log(totalCount / noofItems);
+
 
   return (
     <>
@@ -329,17 +360,84 @@ export default function LeadList() {
             />
           </div>
           <div className="d-flex py-2 justify-content-center">
+
             <MyPagination
-              total={allLeadList?.length}
+              total={parseInt(totalCount) }
               current={current}
-              showSizeChanger={true}
-              onChange={(current, pageSize) => {
-                console.log("page index", current, pageSize);
-                setCurrent(current);
+              pageSize={noofItems}
+              // defaultPageSize={noofItems}
+              showSizeChanger={false}
+              onChange={(current,pageSize) => {
+                console.log("page index", pageSize);
+                setCurrent(current  );
                 // setPageSize(pageSize);
               }}
             />
           </div>
+
+          <Custom_model
+            show={modalViewLead}
+            onHide={() => setModalViewLead(false)}
+            View_list
+            list_content={
+              <>
+                <div className="container-fluid p-3">
+                  <div className="d-flex justify-content-between">
+                    <div>
+                      <h5 className="lead_text">Lead</h5>
+                    </div>
+                  </div>
+
+                  <div className="mt-2">
+                    <table className="table table-borderless">
+                      <tbody>
+                        <tr>
+                          <td>Type</td>
+                          <td>:</td>
+                          <td>{viewLead.type}</td>
+                        </tr>
+                        <tr>
+                          <td>Name</td>
+                          <td>:</td>
+                          <td>{viewLead.lead_name}</td>
+                        </tr>
+                        <tr>
+                          <td>User Type</td>
+                          <td>:</td>
+                          <td>{viewLead.user_type}</td>
+                        </tr>
+                        <tr>
+                          <td>Organisation</td>
+                          <td>:</td>
+                          <td>{viewLead.organisation}</td>
+                        </tr>
+                        <tr>
+                          <td>Source</td>
+                          <td>:</td>
+                          <td>{viewLead.source}</td>
+                        </tr>
+                        <tr>
+                          <td>Attachments</td>
+                          <td>:</td>
+                          <td className="lead_text">{viewLead.attachments}</td>
+                        </tr>
+                        <tr>
+                          <td>Description</td>
+                          <td>:</td>
+                          <td>{viewLead.description}</td>
+                        </tr>
+                        <tr>
+                          <td>Lead Status</td>
+                          <td>:</td>
+                          <td>{viewLead.status}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </>
+            }
+          />
         </div>
       </div>
     </>

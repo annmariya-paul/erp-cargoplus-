@@ -31,11 +31,13 @@ function OpportunityReport() {
   const [selectedDate, setSelectedDate] = useState();
   const [selectedMonth, setSelectedMonth] = useState();
   const [backend, setBackEnd] = useState();
+  const [generatedcount,setGeneratedcount]= useState("")
+  const [convertedcount,setConvertedcount]= useState("")
 
   const toggleTab = (index) => {
     setToggleState(index);
   };
-
+  const newDate = new Date();
   // { function GetOpportunityData to import opportunity data - Ann mariya (04/11/22)}
   const GetOpportunityData = () => {
     PublicFetch.get(
@@ -82,13 +84,14 @@ function OpportunityReport() {
   };
 
   useEffect(() => {
-    GetOpportunityData();
-    // Searchbydate();
+    // GetOpportunityData();
+    Searchbydate();
   }, [numOfItems, pageSize]);
 
   // { function to search data by date - Ann mariya (07/11/22)}
   const Searchbydate = () => {
     let selecteddate = moment(selectedDate).format("MM-DD-YYYY");
+    // console.log("date",selecteddate)
     let startdate = moment(startDate).format("MM-DD-YYYY");
     let enddate = moment(endDate).format("MM-DD-YYYY");
     let selectedmonth = moment(selectedMonth).format("MM-01-YYYY");
@@ -125,6 +128,9 @@ function OpportunityReport() {
         console.log("testhelllooo.....", response);
         if (response.data.success) {
           console.log("hello", response.data.data);
+          // console.log("generated iss",response.data.data.converted.totalCount)
+          setGeneratedcount(response.data.data.generated.totalCount)
+          setConvertedcount(response.data.data.converted.totalCount)
           setConvertedTable(response?.data?.data?.converted?.data);
           setGenerateTable(response?.data?.data?.generated?.data);
         } else {
@@ -202,6 +208,8 @@ function OpportunityReport() {
     },
   ];
 
+  console.log("coverteddd data is  ", generatedcount.totalCount)
+
   return (
     <>
       <div className="container mb-3 d-flex justify-content-center">
@@ -228,6 +236,7 @@ function OpportunityReport() {
                 <label htmlFor="date">Date</label>
                 <DatePicker
                   format={"MM/DD/YYYY"}
+                  defaultValue={moment(newDate)}
                   value={selectedDate}
                   onChange={(e) => {
                     setSelectedDate(e);
@@ -294,9 +303,15 @@ function OpportunityReport() {
                 }
                 onClick={() => toggleTab(1)}
               >
-                Generated
+                 {/* {convertedcount== 0?(
+             <label>Generated</label> 
+              ):(  <label>Generated <span>({generatedcount})</span></label>   )  } */}
+                  <label>Generated ({generatedcount}) </label> 
               </button>
+              
+              
               <button
+             
                 id="button-tabs"
                 className={
                   toggleState === 2
@@ -305,8 +320,12 @@ function OpportunityReport() {
                 }
                 onClick={() => toggleTab(2)}
               >
-                Converted
+              {/* {convertedcount== 0?(
+             <label>Converted</label> 
+              ):(  <label>Converted <span>({convertedcount})</span></label>   )  } */}
+                  <label>Converted({convertedcount}) </label> 
               </button>
+
             </div>
           </div>
         </div>
@@ -431,10 +450,10 @@ function OpportunityReport() {
             </div>
             <div className="d-flex py-2 justify-content-center">
               <MyPagination
-                total={getGenerateData.length}
+                total={parseInt(generateTable?.length)}
                 current={current}
                 showSizeChanger={true}
-                pageSize={pageSize}
+                pageSize={numOfItems}
                 onChange={(current, pageSize) => {
                   setCurrent(current);
                   setPageSize(pageSize);
@@ -562,10 +581,10 @@ function OpportunityReport() {
             </div>
             <div className="d-flex py-2 justify-content-center">
               <MyPagination
-                total={getConvertData.length}
+                total={parseInt(convertedTable?.length)}
                 current={current}
                 showSizeChanger={true}
-                pageSize={pageSize}
+                pageSize={numOfItems}
                 onChange={(current, pageSize) => {
                   setCurrent(current);
                   setPageSize(pageSize);

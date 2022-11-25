@@ -41,6 +41,7 @@ import Unitlist from "./pages/CRM/Selling/unit/Unitlist";
 import Addunit from "./pages/CRM/Selling/unit/Addunit";
 import Designation from "./pages/HRMS/designation/designation";
 import EmploymentType from "./pages/HRMS/employment_type/employment_type";
+import OpportunityLeadlist from "./pages/opportunity_ List/opportunityleadlist";
 // import Lead from "./pages/lead/lead";
 
 function App() {
@@ -58,6 +59,7 @@ function App() {
             <Route path={ROUTES.CATEGORY} element={<Category />} />
             <Route path={ROUTES.TEST_PAGE} element={<TestPage />} />
             <Route path={ROUTES.OPPORTUNITY} element={<Opportunitylist />} />
+            <Route path={ROUTES.OPPORTUNITY_LEAD_ID} element={<OpportunityLeadlist />} />
             <Route path={ROUTES.CATEGORY_LIST} element={<Categorylist />} />
             <Route path={ROUTES.LEAD_REPORT} element={<LeadReport />} />
             <Route path={ROUTES.LEAD_EDIT_ID} element={<LeadEdit />} />

@@ -153,7 +153,7 @@ return (
         <div className="col">
           <h5 className="lead_text">Designation</h5>
         </div>
-        <Leadlist_Icons />
+        {/* <Leadlist_Icons /> */}
       </div>
       <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
         <div className="col-4">

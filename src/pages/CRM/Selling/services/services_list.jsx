@@ -174,7 +174,24 @@ function Services() {
             <div className="col">
               <h5 className="lead_text">Services</h5>
             </div>
-            <Leadlist_Icons />
+            {/* <Leadlist_Icons 
+              datas={attributes}
+              columns={filteredColumns}
+              items={data12}
+              xlheading={AttributeHeads}
+              filename="data.csv"
+            
+              chechboxes={
+                <Checkbox.Group onChange={onChange} value={selectedColumns}>
+                  {columnsKeys.map((column) => (
+                    <li>
+                      <Checkbox value={column} key={column}>
+                        {column}
+                      </Checkbox>
+                    </li>
+                  ))}
+                </Checkbox.Group>
+              } /> */}
           </div>
           <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
             <div className="col-4">

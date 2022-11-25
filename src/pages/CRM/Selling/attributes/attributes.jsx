@@ -3,6 +3,7 @@ import "./attributes.styles.scss";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import PublicFetch from "../../../../utils/PublicFetch";
+import { message, Checkbox } from "antd";
 import { CRM_BASE_URL, CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
 import { Input, Select, Pagination } from "antd";
 import { FaEdit, FaTrash } from "react-icons/fa";
@@ -24,7 +25,7 @@ export default function Attribute(props) {
   const [searchedText, setSearchedText] = useState("");
   const [pageSize, setPageSize] = useState("25");
   const [current, setCurrent] = useState(1);
-  const [attributes,setAttributes]=useState("")
+  const [attributes,setAttributes]=useState([])
   const [attributeName,setAttributeName]=useState("")
   const [attributedescription,setAttributeDescription]=useState("")
   const [attributeId,setAttributeId] =useState()
@@ -131,7 +132,7 @@ getallattributes()
       title: "ACTION",
       dataIndex: "action",
       align: "left",
-      key: "key",
+      key: "ACTION",
       width: "14%",
       render: (data, index) => {
         return (
@@ -160,7 +161,7 @@ getallattributes()
     {
       title: "NAME",
       dataIndex: "attribute_name",
-      key: "key",
+      key: "NAME",
       width: "25%",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
@@ -178,11 +179,44 @@ getallattributes()
       title: "DESCRIPTION",
       dataIndex: "attribute_description",
       width:"30%",
-      key: "key",
+      key: "DESCRIPTION",
      
       align: "left",
     },
   ];
+
+
+  
+   //for show or hide colums start--Shahida 25.11.22
+   const columnsKeys = columns.map((column) => column.key);
+
+   const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
+   const filteredColumns = columns.filter((column) =>
+     selectedColumns.includes(column.key)
+   );
+ console.log("filtered columns::",filteredColumns);
+   const onChange = (checkedValues) => {
+     setSelectedColumns(checkedValues);
+   };
+
+   const data12 = attributes?.map((item) => [
+    item.action,
+    item.attribute_name,
+    item.attribute_description,
+    
+    
+  ]);
+
+  const AttributeHeads = 
+  [
+    [
+      "attribute_id",
+      "attribute_name",
+      "attribute_description",
+     
+
+    ],
+  ]
   return (
     <>
       <div className="container-fluid attribute_list pt-3">
@@ -190,7 +224,24 @@ getallattributes()
           <div className="col">
             <h5 className="lead_text">Attributes</h5>
           </div>
-          <Leadlist_Icons />
+          <Leadlist_Icons 
+              datas={attributes}
+              columns={filteredColumns}
+              items={data12}
+              xlheading={AttributeHeads}
+              filename="data.csv"
+            
+              chechboxes={
+                <Checkbox.Group onChange={onChange} value={selectedColumns}>
+                  {columnsKeys.map((column) => (
+                    <li>
+                      <Checkbox value={column} key={column}>
+                        {column}
+                      </Checkbox>
+                    </li>
+                  ))}
+                </Checkbox.Group>
+              } />
         </div>
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
@@ -244,7 +295,7 @@ getallattributes()
         <div className="datatable">
           <TableData
             data={getData(current, pageSize)}
-            columns={columns}
+            columns={filteredColumns}
             custom_table_css="attribute_table"
           />
         </div>

@@ -320,7 +320,7 @@ function OpportunityReport() {
             }
           >
             <div className="row  justify-content-md-end">
-              <Leadlist_Icons />
+              {/* <Leadlist_Icons /> */}
             </div>
             <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
               <div className="col-sm-4 col-xs-12">
@@ -451,7 +451,7 @@ function OpportunityReport() {
             }
           >
             <div className="row  justify-content-md-end">
-              <Leadlist_Icons />
+              {/* <Leadlist_Icons /> */}
             </div>
             <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
               <div className="col-4">

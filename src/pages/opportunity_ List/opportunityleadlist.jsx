@@ -1,9 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import PublicFetch from "../../utils/PublicFetch";
 import { CRM_BASE_URL } from "../../api/bootapi";
-import Dropdown from "react-bootstrap/Dropdown";
-
 import {
   FaFileExcel,
   FaFileCsv,
@@ -11,7 +9,7 @@ import {
   FaBookOpen,
   FaEdit,
 } from "react-icons/fa";
-import { message, Checkbox } from "antd";
+import { message } from "antd";
 import { FiEdit } from "react-icons/fi";
 import { AiFillPrinter } from "react-icons/ai";
 import { MdFileCopy, MdPageview } from "react-icons/md";
@@ -22,7 +20,6 @@ import TableData from "../../components/table/table_data";
 import MyPagination from "../../components/Pagination/MyPagination";
 import Custom_model from "../../components/custom_modal/custom_model";
 import Button from "../../components/button/button";
-
 import "./opportunitylist.scss";
 import { BsPlusCircleFill } from "react-icons/bs";
 import { Link, Route } from "react-router-dom";
@@ -37,21 +34,10 @@ import SelectBox from "../../components/Select Box/SelectBox";
 import InputType from "../../components/Input Type textbox/InputType";
 import TextArea from "../../components/ InputType TextArea/TextArea";
 // const editformData = new FormData();
-import { CSVLink } from "react-csv";
-import jsPDF from "jspdf";
-import ReactToPrint, { useReactToPrint } from "react-to-print";
-import "jspdf-autotable";
-import * as XLSX from "xlsx/xlsx.js"; //for xl download
 
-import CopyToClipboard, { copyToClipboard } from "react-copy-to-clipboard"; //copy to clipboard
-import { Toaster, toast } from "react-hot-toast"; // copy to clip board
-
-// import {forwardRef} from "react";
-// import {useTable} from "react-table";
-
-function Opportunitylist(props) {
+function OpportunityLeadlist(props) {
   const { id } = useParams();
-  console.log("ID is ...", id);
+  console.log("ID is in leadopportunity ...", id);
 
   const [numOfItems, setNumOfItems] = useState("25");
   const [pageSize, setPageSize] = useState(0); // page size
@@ -91,37 +77,6 @@ function Opportunitylist(props) {
   const [count, setcount] = useState(0);
   const [editForm] = Form.useForm();
 
-  const componentRef = useRef();
-
-  //pdf file start
-  // const exportPDF = () => {
-  //   const unit = "pt";
-  //   const size = "A4"; // Use A1, A2, A3 or A4
-  //   const orientation = "portrait"; // portrait or landscape
-
-  //   const marginLeft = 40;
-  //   const doc = new jsPDF(orientation, unit, size);
-
-  //   doc.setFontSize(15);
-
-  // const title = "My Awesome Report";
-  // const headers = [["NAME", "PROFESSION"]];
-
-  //   let content = {
-  //     startY: 50,
-  //     // head: headers,
-  //     body: data,
-  //   };
-
-  //   // doc.text(title, marginLeft, 40);
-  //   doc.autoTable({
-  //     columns: columns.map((col) => ({ ...col, dataIndex: col.key })),
-  //     body: data,
-  //   });
-  //   doc.save("report.pdf");
-  // };
-  //pdf end
-
   // view oppurtunity
   const [viewoppurtunity, setviewoppurtunity] = useState({
     id: "",
@@ -139,6 +94,12 @@ function Opportunitylist(props) {
   });
 
   const [editOppurtunity, setEditOppurtunity] = useState({
+    // opportunity_id: "",
+    // opportunity_lead_id: "",
+    // opportunity_type: "",
+    // opportunity_from: "",
+    // opportunity_created_by: "",
+
     opportunity_id: "",
     opportunity_lead_id: oppId,
     opportunitytype: "",
@@ -155,16 +116,30 @@ function Opportunitylist(props) {
 
   // { function to get all opportunity data - Ann mariya(27/10/22)}
 
-  const [OpportunityList, setOpportunityList] = useState([]);
+  const [newOpportunityList, setNewOpportunityList] = useState();
+  console.log("QQQQQQQQQQQQQ", newOpportunityList);
+  // const [oppurtunityid, setOppurtunityid] = useState();
 
   const GetOpportunityData = () => {
-    PublicFetch.get(
-      `${CRM_BASE_URL}/opportunity?startIndex=${pageSize}&noOfItems=${numOfItems}`
-    )
+    PublicFetch.get(`${CRM_BASE_URL}/opportunity/${id}`)
       .then((res) => {
         if (res?.data?.success) {
-          console.log("All opportunity data", res?.data?.data);
-          setOpportunityList(res?.data?.data?.leads);
+          //   console.log("All opportunity data", res?.data?.data);
+          //   setNewOpportunityList(res?.data?.data);
+          let samplearry = [];
+          samplearry.push({
+            opportunity_type: res?.data?.data?.opportunity_type,
+            opportunity_from: res?.data?.data?.opportunity_from,
+            opportunity_created_by: res?.data?.data?.opportunity_created_by,
+            opportunity_source: res?.data?.data?.opportunity_source,
+            opportunity_party: res?.data?.data?.opportunity_party,
+          });
+          // res?.data?.data?.leads.forEach((item, index) => {
+          //   samplearry.push(item.opportunity_id);
+          // });
+          // console.log("pushedd ", samplearry);
+
+          setNewOpportunityList(samplearry);
         } else {
           console.log("Failed to load data !");
         }
@@ -185,8 +160,11 @@ function Opportunitylist(props) {
       console.log("one oppurtunitiesss::: ", oneoppurtunities.data.data);
 
       setOneoppurtunity(oneoppurtunities.data.data);
-      // console.log("typeee:", oneoppurtunities.data?.data?.opportunity_type);
-
+      console.log("typeee:", oneoppurtunities.data?.data?.opportunity_type);
+      // console.log(
+      //   "oppurtunityidd is",
+      //   oneoppurtunities.data?.data?.opportunity_id
+      // );
       setOppurtunityid(oneoppurtunities.data?.data?.opportunity_id);
       setoppurtunitytype(oneoppurtunities.data?.data?.opportunity_type);
       setOppurtunityfrom(oneoppurtunities.data?.data?.opportunity_from);
@@ -215,7 +193,9 @@ function Opportunitylist(props) {
         setContact(allNames.data.data);
         console.log("all contact data names ::::", allNames.data.data);
       }
-
+      // else {
+      //   message.error("fetch data error");
+      // }
       console.log("All leads res : ", allNames);
     } catch (err) {
       console.log("error while getting all leads: ", err);
@@ -225,7 +205,7 @@ function Opportunitylist(props) {
   useEffect(() => {
     GetOpportunityData();
     // getAllContact();
-  }, [numOfItems, pageSize]);
+  }, [numOfItems, pageSize, id]);
 
   // {timeout set for success popups }
   // console.log("bjfnj", oneoppurtunity);
@@ -236,6 +216,17 @@ function Opportunitylist(props) {
       }, time);
     }
   };
+  // console.log("id oppurtunity is", OpportunityList);
+  // const submit = (data) => {
+  //   console.log(data);
+  //   localStorage.setItem("Form", JSON.stringify(data));
+  //   setShowViewModal(false);
+  //   setShowEditModal(false);
+  //   setSuccessPopup(true);
+  //   close_modal(successPopup, 1200);
+  //   props.onHide();
+  //   reset();
+  // };
 
   const {
     register,
@@ -245,9 +236,9 @@ function Opportunitylist(props) {
     trigger,
   } = useForm();
 
-  const getData = (current, pageSize) => {
-    return OpportunityList?.slice((current - 1) * pageSize, current * pageSize);
-  };
+  //   const getData = (current, pageSize) => {
+  //     return OpportunityList?.slice((current - 1) * pageSize, current * pageSize);
+  //   };
 
   // function to view oppurtunity unnimaya
 
@@ -304,67 +295,9 @@ function Opportunitylist(props) {
     setOppurtunitystatus(i.opportunity_status);
     setOppurtunitylead(i.opportunity_lead_id);
     getAllContact();
+
     setShowEditModal(true);
   };
-
-  //for xlsx download
-
-  // const handleExport = () => {
-  //   var wb = XLSX.utils.book_new();
-  //   var ws = XLSX.utils.json_to_sheet(OpportunityList);
-  //   XLSX.utils.book_append_sheet(wb, ws, "Reports");
-  //   XLSX.utils.sheet_add_aoa(
-  //     ws,
-  //     [
-  //       [
-  //         "opportunity_id",
-  //         "opportunity_type",
-  //         "opportunity_source",
-  //         "opportunity_validity",
-  //         "opportunity_description",
-  //         "opportunity_status",
-  //         "opportunity_amount",
-  //       ],
-  //     ],
-  //     { origin: "A1" }
-  //   );
-  //   // ws["!cols"] = [{ wch: 15 }];
-  //   let row = [
-  //     { v: "Courier: 24", t: "s", s: { font: { name: "Courier", sz: 24 } } },
-  //     {
-  //       v: "bold & color",
-  //       t: "s",
-  //       s: { font: { bold: true, color: { rgb: "FF0000" } } },
-  //     },
-  //     {
-  //       v: "fill: color",
-  //       t: "s",
-  //       s: { fill: { fgColor: { rgb: "E9E9E9" } } },
-  //     },
-  //     { v: "line\nbreak", t: "s", s: { alignment: { wrapText: true } } },
-  //   ];
-  //   var wscols = [
-  //     { wch: 15 },
-  //     { wch: 15 },
-  //     { wch: 15 },
-  //     { wch: 15 },
-  //     { wch: 15 },
-  //     { wch: 15 },
-  //     { wch: 15 },
-  //     { wch: 15 },
-  //     { wch: 15 },
-  //     { wch: 17 },
-  //     { wch: 15 },
-  //   ];
-  //   ws["!cols"] = wscols;
-
-  //   XLSX.writeFile(wb, "Student Report.xlsx");
-  //   console.log("xlsx data", ws);
-  //   return addStyle();
-  // };
-  // const addStyle = () => {
-  //   console.log("xlsx downloaded");
-  // };
 
   const handleEditclick = (e) => {
     // console.log("edit data is ::", item);
@@ -404,6 +337,10 @@ function Opportunitylist(props) {
     }
   };
 
+  const handleAddclick = () => {
+    getoneoppurtunity();
+  };
+
   // function to add oppurtunityprogress
 
   const addOppurtunityProgress = async () => {
@@ -429,23 +366,13 @@ function Opportunitylist(props) {
     }
   };
 
-  const handleAddclick = () => {
-    getoneoppurtunity();
-  };
-
-  //   const handlePrint = () => {
-  //     console.log("hhhhhhhhhh");
-  //     window.print();
-  //     setTimeout(function () { window.close(); }, 100);
-  // }
-
   //  columns is opportunity listing table componenet
 
   const columns = [
     {
       title: "ACTION",
       dataIndex: "action",
-      key: "ACTION",
+      key: "action",
       width: "15%",
       render: (data, index) => {
         return (
@@ -467,8 +394,7 @@ function Opportunitylist(props) {
     {
       title: "TYPE",
       dataIndex: "opportunity_type",
-      key: "TYPE",
-
+      key: "opportunity_type",
       filteredValue: [searchType],
       onFilter: (value, record) => {
         return String(record.opportunity_type)
@@ -480,7 +406,7 @@ function Opportunitylist(props) {
     {
       title: "FROM",
       dataIndex: "opportunity_from",
-      key: "FROM",
+      key: "opportunity_from",
       filteredValue: [searchStatus],
       onFilter: (value, record) => {
         return String(record.opportunity_from)
@@ -489,18 +415,17 @@ function Opportunitylist(props) {
       },
       align: "left",
     },
-
     {
       title: "CONVERTED BY",
       dataIndex: "opportunity_created_by",
-      key: "CONVERTED BY",
+      key: "opportunity_created_by",
       width: "17%",
       align: "center",
     },
     {
       title: "SOURCE",
       dataIndex: "opportunity_source",
-      key: "SOURCE",
+      key: "opportunity_source",
       align: "left",
       filteredValue: [searchSource],
       onFilter: (value, record) => {
@@ -512,35 +437,11 @@ function Opportunitylist(props) {
     {
       title: "PARTY",
       dataIndex: "opportunity_party",
-      key: "PARTY",
+      key: "opportunity_party",
       align: "center",
     },
   ];
 
-  //for show or hide colums start
-  const columnsKeys = columns.map((column) => column.key);
-
-  const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
-  const filteredColumns = columns.filter((column) =>
-    selectedColumns.includes(column.key)
-  );
-
-  const onChange = (checkedValues) => {
-    setSelectedColumns(checkedValues);
-  };
-  const OppHeads = 
-  [
-    [
-      "opportunity_id",
-      "opportunity_type",
-      "opportunity_source",
-      "opportunity_validity",
-      "opportunity_description",
-      "opportunity_status",
-      "opportunity_amount",
-    ],
-  ]
-  //end
   const progress = [
     {
       title: "SLNo:",
@@ -615,14 +516,7 @@ function Opportunitylist(props) {
         "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
     },
   ];
-  const data12 = OpportunityList.map((item) => [
-    item.action,
-    item.opportunity_type,
-    item.opportunity_from,
-    item.opportunity_lead_id,
-    item.opportunity_source,
-    item.opportunity_party,
-  ]);
+
   console.log("oppurtunity amt iss", oppurtunityamount);
   return (
     <div>
@@ -632,86 +526,12 @@ function Opportunitylist(props) {
         <div>
           <div className="row flex-wrap">
             <div className="col">
-              <h5 className="lead_text">Opportunities</h5>
-
-              {/* //for csv download */}
-              {/* <CSVLink data={OpportunityList} filename="data.csv">
-                Export userdata
-              </CSVLink>{" "} */}
-
-              {/* //for pdf */}
-              {/* <button onClick={() => exportPDF()}>Generate PDF Report</button>{" "} */}
-
-              {/* //for xls */}
-              {/* <button onClick={() => handleExport()}>
-                Generate XLS Report
-              </button> */}
+              <h5 className="lead_text">Opportunities of {id} </h5>
             </div>
-            
-            <Leadlist_Icons
-              datas={OpportunityList}
-              columns={columns}
-              items={data12}
-              xlheading={OppHeads}
-              
-              filename="data.csv"
-              chechboxes={
-                <Checkbox.Group onChange={onChange} value={selectedColumns}>
-                  {columnsKeys.map((column) => (
-                    <li>
-                      <Checkbox value={column} key={column}>
-                        {column}
-                      </Checkbox>
-                    </li>
-                  ))}
-                </Checkbox.Group>
-              }
-              
-              
-            />
-            {/* //show or hide columns */}
-            {/* <Checkbox.Group onChange={onChange} value={selectedColumns}>
-           
-                {columnsKeys.map((column) => (
-                  <li>
-                    <Checkbox value={column} key={column}>
-                        {column}
-                    </Checkbox>
-                    </li> 
-                ))}
-               
-            </Checkbox.Group>
- */}
-            {/* <Dropdown>
-      <Dropdown.Toggle >
-      <FaBookOpen /> 
-      </Dropdown.Toggle>
-              
-            
-      <Dropdown.Menu style={{backgroundColor:"white"}}>
-              
-              
-       </Dropdown.Menu>
-                     
-                         </Dropdown> */}
-            {/* //print the page */}
-            {/* <ReactToPrint
-              trigger={() => {
-                return <button onClick={handlePrint()}>Print the table</button>;
-              }}
-            /> */}
-            {/* //copy data on clipboard */}
-            {/* <CopyToClipboard text={JSON.stringify(OpportunityList)}>
-              <button
-                onClick={() => toast("Text Copied", { positon: "top-right" })}
-              >
-                COPY
-              </button>
-            </CopyToClipboard> */}
-            {/* <button onClick={handlePrint}>Print this out!</button> */}
+            <Leadlist_Icons />
           </div>
           <div className="row pb-2" style={{ backgroundColor: "#f4f4f7" }}>
-            <div className="col-3">
+            <div className="col-4">
               <Select
                 allowClear
                 showSearch
@@ -730,7 +550,7 @@ function Opportunitylist(props) {
                 </Select.Option>
               </Select>
             </div>
-            <div className="col-3">
+            <div className="col-4">
               <Select
                 allowClear
                 showSearch
@@ -747,32 +567,7 @@ function Opportunitylist(props) {
                 <Select.Option value="support">support</Select.Option>
               </Select>
             </div>
-            <div className="col-3">
-              <Select
-                allowClear
-                showSearch
-                style={{ width: "100%", marginTop: "8px", borderRadius: "5px" }}
-                placeholder="Search by Name"
-                className="select_search"
-                optionFilterProp="children"
-                onChange={(event) => {
-                  setSearchType(event ? [event] : []);
-                }}
-              >
-                {/* {LeadStatus &&
-                  LeadStatus.map((item, index) => {
-                    return (
-                      <Select.Option key={item.id} value={item.value}>
-                        {item.name}
-                      </Select.Option>
-                    );
-                  })} */}
-                {/* <Select.Option value="sales">sales</Select.Option> */}
-                {/* <Select.Option value="maintenance">Maintenance</Select.Option>
-                <Select.Option value="support">support</Select.Option> */}
-              </Select>
-            </div>
-            <div className="col-3">
+            <div className="col-4">
               <Select
                 allowClear
                 showSearch
@@ -847,17 +642,17 @@ function Opportunitylist(props) {
           </div>
           <div className="datatable">
             <TableData
-              data={getData(current, numOfItems, pageSize)}
+              //   data={getData(current, numOfItems, pageSize)}
               // data={allLeadList}
-              // data={OpportunityList}
-              columns={filteredColumns}
+              data={newOpportunityList}
+              columns={columns}
               custom_table_css="table_lead_list"
             />
           </div>
           <div className="d-flex py-2 justify-content-center">
             <MyPagination
-              total={getData.length}
-              current={current}
+              //   total={getData.length}
+              //   current={current}
               showSizeChanger={true}
               pageSize={pageSize}
               onChange={(current, pageSize) => {
@@ -1663,4 +1458,4 @@ function Opportunitylist(props) {
   );
 }
 
-export default Opportunitylist;
+export default OpportunityLeadlist;

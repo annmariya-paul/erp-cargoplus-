@@ -311,7 +311,7 @@ export default function LeadReport() {
             }
           >
             <div className="row  justify-content-md-end">
-              <Leadlist_Icons />
+              {/* <Leadlist_Icons /> */}
             </div>
             <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
               <div className="col-sm-4">
@@ -418,7 +418,7 @@ export default function LeadReport() {
             }
           >
             <div className="row  justify-content-md-end">
-              <Leadlist_Icons />
+              {/* <Leadlist_Icons /> */}
             </div>
             <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
               <div className="col-md-4 col-sm-6">

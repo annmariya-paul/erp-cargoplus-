@@ -156,7 +156,7 @@ function Opportunitylist(props) {
   
   // { function to get all opportunity data - Ann mariya(27/10/22)}
 
-  const [OpportunityList, setOpportunityList] = useState();
+  const [OpportunityList, setOpportunityList] = useState([]);
   const [totalCount,setTotalcount] =useState()
   // const [oppurtunityid, setOppurtunityid] = useState();
 
@@ -636,7 +636,7 @@ function Opportunitylist(props) {
         "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
     },
   ];
-  const data12 = OpportunityList.map((item) => [
+  const data12 = OpportunityList?.map((item) => [
     item.action,
     item.opportunity_type,
     item.opportunity_from,

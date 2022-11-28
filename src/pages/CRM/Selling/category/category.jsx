@@ -27,14 +27,18 @@ function Category() {
     let treeStructure = [];
     if (categories && Array.isArray(categories) && categories.length > 0) {
       categories.forEach((category, categoryIndex) => {
+        // if (category?.other_crm_v1_categories?.length > 0) {
+        let ch = structureTreeData(category?.other_crm_v1_categories);
         treeStructure.push({
           value: category?.category_id,
           title: category?.category_name,
-          children: [],
+          children: ch,
         });
+        // }
       });
     }
     return treeStructure;
+    // console.log("Tree structure : ", treeStructure);
   };
   const getCategorydata = () => {
     PublicFetch.get(`${CRM_BASE_URL_SELLING}/category`)
@@ -44,6 +48,7 @@ function Category() {
           setTreeData(res.data.data);
           // getTreeData(res.data.data);
           let d = structureTreeData(res.data.data);
+          console.log("Structured Tree : ", d);
           setCategoryTree(d);
           console.log("all data", res.data.data);
         }

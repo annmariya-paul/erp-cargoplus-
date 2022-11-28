@@ -555,7 +555,7 @@ function ProductDetails() {
                       <div className="col">
                         <h5 className="lead_text"></h5>
                       </div>
-                      <Leadlist_Icons />
+                      {/* <Leadlist_Icons /> */}
                     </div>
                     <div
                       className="row py-1"

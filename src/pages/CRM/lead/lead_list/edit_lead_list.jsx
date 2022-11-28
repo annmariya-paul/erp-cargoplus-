@@ -235,7 +235,8 @@ function LeadEdit() {
                     className="col-2 d-flex"
                     style={{ justifyContent: "center" }}
                   >
-                    <Link to={ROUTES.OPPORTUNITY} className="nav-link">
+                    <Link to={`${ROUTES.OPPORTUNITY_LEAD}/${id}`}
+                    className="nav-link">
                       <Button onClick={Submit} btnType="add_borderless">
                         <BsPlusCircleFill style={{ fontSize: "16px" }} /> View
                         Opportunity

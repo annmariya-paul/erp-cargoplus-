@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
 import "../../../CRM/lead/lead_list/leadlist.scss";
-import { Input, Select, Pagination } from "antd";
+import { Input, Select, Pagination ,Checkbox} from "antd";
 import { FaEdit } from "react-icons/fa";
 import { FiEdit } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
@@ -27,7 +27,7 @@ function Unitlist() {
   const [editShow, setEditShow] = useState(false);
   const [viewUnitModal, setViewUnitModal] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
- const [allunit,setAllunit]=useState()
+ const [allunit,setAllunit]=useState([])
  const[unitTable,setunitTable]=useState("")
 const [unitName,setUnitName]= useState("")
 const [unitcode,setUnitCode]=useState("")
@@ -198,7 +198,7 @@ const cancel = (e) => {
     {
       title: "ACTION",
       dataIndex: "action",
-      key: "key",
+      key: "ACTION",
       width: "14%",
       render: (data, index) => {
         return (
@@ -243,7 +243,7 @@ const cancel = (e) => {
     {
       title: "NAME",
       dataIndex: "unit_name",
-      key: "unit_name",
+      key: "NAME",
       filteredValue: [searchType],
       onFilter: (value, record) => {
         return String(record.unit_name)
@@ -256,7 +256,7 @@ const cancel = (e) => {
     {
       title: "CODE",
       dataIndex: "unit_code",
-      key: "unit_code",
+      key: "CODE",
       width: "23%",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
@@ -269,11 +269,47 @@ const cancel = (e) => {
     {
       title: "DESCRIPTION",
       dataIndex: "unit_description",
-      key: "unit_description",
+      key: "DESCRIPTION",
       //   width: "23%",
       align: "left",
     },
   ];
+
+  //heder icons starts --Shahida 25.11.22
+
+  //for show or hide colums 
+  const columnsKeys = columns.map((column) => column.key);
+
+  const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
+  const filteredColumns = columns.filter((column) =>
+    selectedColumns.includes(column.key)
+  );
+console.log("filtered columns::",filteredColumns);
+  const onChange = (checkedValues) => {
+    setSelectedColumns(checkedValues);
+  };
+
+  //for Xlsx data
+  const UnitHeads = 
+  [
+    [
+      "unit_id",
+      "unit_name",
+      "unit_code",
+      "unit_description",
+     
+
+    ],
+  ]
+  //for pdf download
+  const data12 = allunit?.map((item) => [
+    item.action,
+    item.unit_name,
+    item.unit_code,
+    item.unit_description,
+    
+  ]);
+  //heder icons end
 
   return (
     <>
@@ -281,7 +317,24 @@ const cancel = (e) => {
         <div className=" d-flex justify-content-between">
           <h6 className="lead_text">UNITS</h6>
           <div>
-            <Leadlist_Icons />
+          <Leadlist_Icons 
+              datas={allunit}
+              columns={filteredColumns}
+              items={data12}
+              xlheading={UnitHeads}
+              filename="data.csv"
+            
+              chechboxes={
+                <Checkbox.Group onChange={onChange} value={selectedColumns}>
+                  {columnsKeys.map((column) => (
+                    <li>
+                      <Checkbox value={column} key={column}>
+                        {column}
+                      </Checkbox>
+                    </li>
+                  ))}
+                </Checkbox.Group>
+              } />
           </div>
         </div>
 
@@ -389,7 +442,7 @@ const cancel = (e) => {
             data={getData(current, pageSize)}
             // data={allLeadList}
             // data={unitdata}
-            columns={columns}
+            columns={filteredColumns}
             custom_table_css="table_lead_list"
           />
         </div>

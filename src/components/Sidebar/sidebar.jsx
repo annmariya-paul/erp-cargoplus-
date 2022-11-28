@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import "./sidebar.styles.scss";
 import { Link, useLocation } from "react-router-dom";
-import { AiOutlineAppstore, AiOutlineCaretDown } from "react-icons/ai";
+import {
+  AiOutlineAppstore,
+  AiOutlineCaretDown,
+  AiOutlineMenu,
+} from "react-icons/ai";
 import { BsFillXDiamondFill, BsBookmarkFill } from "react-icons/bs";
 import { RiTeamFill } from "react-icons/ri";
 import { MdEventNote } from "react-icons/md";
@@ -34,10 +38,12 @@ export default function Sidebar({ showSidebar }) {
             <ul className="nav-menu-items">
               <li className="navbar-toggle nav-close" onClick={showSidebar}>
                 <div to="" className="nav-link">
-                  <i
-                    className="bi bi-list"
+                  {" "}
+                  <AiOutlineMenu style={{ fontSize: "25px", color: "white" }} />
+                  {/* <i
+                    className=""
                     style={{ fontSize: "25px", color: "white" }}
-                  />
+                  /> */}
                 </div>
               </li>
               <li className="nav-text ">
@@ -117,7 +123,7 @@ export default function Sidebar({ showSidebar }) {
                       to={ROUTES.EMPLOYMENT_TYPE}
                     >
                       <RiTeamFill className="sidebar_icons ms-4" />
-                     Employment Type
+                      Employment Type
                     </NavLink>
                   </li>
                 </>

@@ -460,11 +460,11 @@ function Categorylist(props) {
             </div>
           </div>
           <div className="datatable">
-            {/* <TableData
+            <TableData
               data={getData(current, pageSize)}
               columns={columns}
               custom_table_css="table_lead_list"
-            /> */}
+            />
             <ul>
               {DisplayDataa &&
                 DisplayDataa.flatMap((item, index) => {

@@ -365,7 +365,7 @@ function Categorylist(props) {
               <h5 className="lead_text">Category</h5>
             </div>
             <div className="col-auto" style={{}}>
-              <Leadlist_Icons />
+              {/* <Leadlist_Icons /> */}
             </div>
           </div>
           <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>

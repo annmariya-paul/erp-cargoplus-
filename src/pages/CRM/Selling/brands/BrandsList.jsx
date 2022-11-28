@@ -23,6 +23,7 @@ import "../../../opportunity_ List/opportunitylist.scss";
 // import { Form } from "react-bootstrap";
 
 import { Link } from "react-router-dom";
+import { message, Checkbox } from "antd";
 
 import logo from "../../../../components/img/logo192.png";
 import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
@@ -48,7 +49,8 @@ function BrandsList() {
   const [BrandViewpopup, setBrandViewPopup] = useState(false);
   const [successPopup, setSuccessPopup] = useState(false);
   const [error, setError] = useState(false);
-  const [brands, setBrands] = useState();
+  const [brands, setBrands] = useState([]);
+  console.log("ddddddddd",brands);
   const [brandName, setBrandName] = useState();
   const [BrandImg, setBrandImg] = useState();
   const [brand_id, setBrand_id] = useState();
@@ -84,6 +86,15 @@ function BrandsList() {
       }, time);
     }
   };
+
+  const data12 = brands?.map((item) => [
+    item.action,
+    item.brand_pic,
+    item.brand_name,
+    item.brand_description,
+    
+  ]);
+  // console.log("sssssssss",data12);
 
   const handleViewData = (e) => {
     console.log("view data", e);
@@ -163,6 +174,8 @@ function BrandsList() {
     DescriptionInput
   );
 
+ 
+
   const data = [
     {
       lead_type: "Sales",
@@ -195,7 +208,7 @@ function BrandsList() {
     {
       title: "ACTION",
       dataIndex: "action",
-      key: "key",
+      key: "ACTION",
       width: "14%",
       render: (data, index) => {
         return (
@@ -220,7 +233,7 @@ function BrandsList() {
     {
       title: "IMAGE",
       dataIndex: "brand_pic",
-      key: "brand_pic",
+      key: "IMAGE",
       width: "23%",
       // filteredValue: [searchStatus],
       // onFilter: (value, record) => {
@@ -242,7 +255,7 @@ function BrandsList() {
     {
       title: "NAME",
       dataIndex: "brand_name",
-      key: "brand_name",
+      key: "NAME",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
         return String(record.brand_name)
@@ -256,7 +269,7 @@ function BrandsList() {
     {
       title: "DESCRIPTION",
       dataIndex: "brand_description",
-      key: "brand_description",
+      key: "DESCRIPTION",
       //   width: "23%",
       align: "center",
     },
@@ -281,6 +294,30 @@ function BrandsList() {
     //   align: "center",
     // },
   ];
+
+
+   //for show or hide colums start--Shahida
+   const columnsKeys = columns.map((column) => column.key);
+
+   const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
+   const filteredColumns = columns.filter((column) =>
+     selectedColumns.includes(column.key)
+   );
+ console.log("filtered columns::",filteredColumns);
+   const onChange = (checkedValues) => {
+     setSelectedColumns(checkedValues);
+   };
+
+   const BrandHeads = 
+  [
+    [
+      "brand_id",
+      "brand_name",
+      "brand_pic",
+      "brand_description",
+
+    ],
+  ]
   return (
     <div>
       <div>
@@ -292,7 +329,24 @@ function BrandsList() {
               <div className="col">
                 <h5 className="lead_text">Brands</h5>
               </div>
-              <Leadlist_Icons />
+              <Leadlist_Icons 
+              datas={brands}
+              columns={filteredColumns}
+              items={data12}
+              xlheading={BrandHeads}
+              filename="data.csv"
+            
+              chechboxes={
+                <Checkbox.Group onChange={onChange} value={selectedColumns}>
+                  {columnsKeys.map((column) => (
+                    <li>
+                      <Checkbox value={column} key={column}>
+                        {column}
+                      </Checkbox>
+                    </li>
+                  ))}
+                </Checkbox.Group>
+              } />
             </div>
             <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
               <div className="col-4">
@@ -422,7 +476,7 @@ function BrandsList() {
                 data={getData(current, pageSize)}
                 // data={allLeadList}
                 //   data={data}
-                columns={columns}
+                columns={filteredColumns}
                 custom_table_css="table_lead_list"
               />
             </div>

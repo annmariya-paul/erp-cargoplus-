@@ -38,7 +38,7 @@ function Productlist() {
   const [productView, setProductView] = useState(false);
   const [successPopup, setSuccessPopup] = useState(false);
   const [error, setError] = useState(false);
-  const [products, setProducts] = useState();
+  const [products, setProducts] = useState([]);
   console.log("products are :::", products);
   const [modalOpportunity, setModalOpportunity] = useState(false);
   const [productid, setProductID] = useState();
@@ -122,6 +122,15 @@ function Productlist() {
     getallproduct();
   }, []);
 
+
+  const data12 = products?.map((item) => [
+    item.action,
+    item.product_pic,
+    item.product_name,
+    item.product_code,
+    item.product_category_id,
+    
+  ]);
   // const getData = (current, pageSize) => {
   //   return products?.slice((current - 1) * pageSize, current * pageSize);
   // };
@@ -131,7 +140,7 @@ function Productlist() {
     {
       title: "ACTION",
       dataIndex: "action",
-      key: "key",
+      key: "ACTION",
       width: "14%",
       render: (data, index) => {
         console.log("data", data);
@@ -169,7 +178,7 @@ function Productlist() {
     {
       title: "IMAGE",
       dataIndex: { logo },
-      key: "key",
+      key: "IMAGE",
       width: "23%",
       // filteredValue: [searchStatus],
       // onFilter: (value, record) => {
@@ -186,7 +195,7 @@ function Productlist() {
     {
       title: "NAME",
       dataIndex: "product_name",
-      key: "product_name",
+      key: "NAME",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
         return String(record.product_name)
@@ -200,7 +209,7 @@ function Productlist() {
     {
       title: "CODE",
       dataIndex: "product_code",
-      key: "product_code",
+      key: "CODE",
       //   width: "23%",
       align: "center",
       filteredValue: [searchType],
@@ -213,7 +222,7 @@ function Productlist() {
     {
       title: "CATEGORY",
       dataIndex: "product_category_id",
-      key: "product_category_id",
+      key: "CATEGORY",
       width: "14%",
       align: "center",
       filteredValue: [searchStatus],
@@ -231,6 +240,33 @@ function Productlist() {
     //   align: "center",
     // },
   ];
+
+  const ProductHeads = 
+  [
+    [
+      "product_id",
+      "product_name",
+      "product_code",
+      "product_category_id",
+      "product_brand_id",
+      "product_unit_id",
+      "product_pic",
+      "product_attributes",
+      "product_description",
+
+    ],
+  ]
+  //for show or hide colums start-- shahida 
+  const columnsKeys = columns.map((column) => column.key);
+
+  const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
+  const filteredColumns = columns.filter((column) =>
+    selectedColumns.includes(column.key)
+  );
+console.log("filtered columns::",filteredColumns);
+  const onChange = (checkedValues) => {
+    setSelectedColumns(checkedValues);
+  };
   return (
     <div>
       <div className="container-fluid lead_list my-3 py-3">
@@ -240,7 +276,26 @@ function Productlist() {
             <div className="col">
               <h5 className="lead_text">Products</h5>
             </div>
-            <Leadlist_Icons />
+            {/* <Leadlist_Icons /> */}
+            <Leadlist_Icons 
+              datas={products}
+              columns={filteredColumns}
+              items={data12}
+              xlheading={ProductHeads}
+              filename="data.csv"
+            
+              chechboxes={
+                <Checkbox.Group onChange={onChange} value={selectedColumns}>
+                  {columnsKeys.map((column) => (
+                    <li>
+                      <Checkbox value={column} key={column}>
+                        {column}
+                      </Checkbox>
+                    </li>
+                  ))}
+                </Checkbox.Group>
+              } />
+
           </div>
           <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
             <div className="col-4">
@@ -370,7 +425,7 @@ function Productlist() {
               // data={getData(current,numOfItems, pageSize)}
               data={products}
               //   data={data}
-              columns={columns}
+              columns={filteredColumns}
               custom_table_css="table_lead_list"
             />
           </div>

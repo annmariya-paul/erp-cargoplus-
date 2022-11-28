@@ -13,6 +13,8 @@ const ROUTES = {
   LEAD_EDIT: "/edit_lead_list",
 
   OPPORTUNITY_REPORT: "/opportunity-report",
+  OPPORTUNITY_LEAD_ID:"/opportunity_lead/:id",
+  OPPORTUNITY_LEAD:"/opportunity_lead",
 
   LEAD_EDIT_ID: "/edit_lead_list/:id",
 

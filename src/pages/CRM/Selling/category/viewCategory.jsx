@@ -28,6 +28,8 @@ import { Link } from "react-router-dom";
 import { ROUTES } from "../../../../routes";
 import { CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
 import PublicFetch from "../../../../utils/PublicFetch";
+import { date } from "yup/lib/locale";
+import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
 
 function Categorylist(props) {
   const [pageSize, setPageSize] = useState("25");
@@ -37,6 +39,10 @@ function Categorylist(props) {
   const [searchStatus, setSearchStatus] = useState("");
   const [modalShow, setModalShow] = useState();
   const [showViewModal, setShowViewModal] = useState(false);
+  const [dataCategory, setDataCategory] = useState();
+  const [DisplayDataa, setDisplayDataa] = useState();
+  const [displayChild, setDisplayChild] = useState();
+  console.log("dataCategory", dataCategory);
   // const [showEditModal, setShowEditModal] = useState(false);
   const [State, setState] = useState("null");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -75,45 +81,97 @@ function Categorylist(props) {
       .then((res) => {
         if (res?.data?.success) {
           console.log("All category data", res?.data?.data);
-          let temp = [];
-        if (
-          res?.data?.data.other_crm_v1_categories &&
-          res?.data?.data.other_crm_v1_categories.length > 0
-        )
-        {
-          
-          res?.data?.data.other_crm_v1_categories.forEach(
-            async (item, index) => {
-             
+          // // let temp = [];
+          // if (
+          //   res?.data?.data.other_crm_v1_categories &&
+          //   res?.data?.data.other_crm_v1_categories.length > 0
+          // ) {
+          //   res?.data?.data.other_crm_v1_categories.forEach((item, index) => {
+
+          //   }
+          //   );
+          // }
+          setDisplayDataa(res.data.data);
+          DisplayCategories(res.data.data);
+          const traverseTree = (treeData) => {
+            console.log("shfsa", treeData);
+            let categories = [];
+            if (!treeData || treeData.length <= 0) {
+              return;
             }
-          );
-        }
-          // let temp = [];
-          // res?.data?.data.forEach((item, index) => {
-          //   let tempArr = [];
-          //   item.other_crm_v1_categories.forEach((i, idx) => {
-          //     tempArr.push(i.category_name);
-          //   });
-          //   let tmpArr_id = [];
-          //   item.other_crm_v1_categories.forEach((itm, indx) => {
-          //     tmpArr_id.push(itm.category_code);
-          //   });
-          //   let tmpArry = [];
-          //   item.other_crm_v1_categories.forEach((itm, indx) => {
-          //     tmpArry.push(itm.category_description);
-          //   });
-          //   temp.push({
-          //     category_code: item?.category_code,
-          //     category_name: item?.category_name,
-          //     category_description: item?.category_description,
-          //   });
-          //   temp.push({
-          //     category_name: tempArr,
-          //     category_code: tmpArr_id,
-          //     category_description: tmpArry,
-          //   });
-          // });
-          setCategoryList(temp);
+            //   creating queue
+            let queue = [...treeData];
+            //   queue.push(treeData);
+            //   console.log(queue);
+            //   return;
+            while (queue.length !== 0) {
+              let length = queue.length;
+              while (length > 0) {
+                let firstItem = queue.shift();
+
+                categories.push({
+                  category_name: firstItem.category_name,
+                  category_id: firstItem.category_id,
+                  category_code: firstItem.category_code,
+                  category_description: firstItem.category_description,
+
+                  // category_parent_id: firstItem.category_parent_id,
+                  category_parent_id: firstItem.category_parent_id,
+                });
+                // if (firstItem?.other_crm_v1_categories?.length > 0) {
+                for (
+                  let i = 0;
+                  i < firstItem.other_crm_v1_categories.length;
+                  i++
+                ) {
+                  queue.push(firstItem.other_crm_v1_categories[i]);
+                }
+                // }
+                length--;
+              }
+            }
+            setCategoryList(categories);
+            setDataCategory(categories);
+            return categories;
+          };
+          console.log("daaa", traverseTree(res.data.data));
+          let temp = [];
+          res?.data?.data.forEach((item, index) => {
+            // let tempArr = [];
+            // item.other_crm_v1_categories.forEach((i, idx) => {
+            //   tempArr.push(i.category_name);
+            // });
+            let tmpArr_id = [];
+            item.other_crm_v1_categories.forEach((itm, indx) => {
+              tmpArr_id.push(itm.category_code);
+            });
+            let tmpArry = [];
+            item.other_crm_v1_categories.forEach((itm, indx) => {
+              tmpArry.push(itm.category_description);
+            });
+            let Categoryname = [];
+            // for (let i = 0; i < traverseTree(res.data.data).length; ++i) {
+            //   Categoryname = traverseTree(res.data.data)[i];
+            // }
+
+            // dataCategory.forEach((item, index) => {
+
+            //   Categoryname.push();
+            // });
+
+            temp.push({
+              category_code: item?.category_code,
+              category_name: Categoryname,
+              category_description: item?.category_description,
+            });
+            // temp.push({
+            //   category_name: ,
+            //   category_code: tmpArr_id,
+            //   category_description: tmpArry,
+            // });
+          });
+          // setCategoryList(res?.data?.data);
+          // setCategoryList(temp);
         } else {
           console.log("Failed to load data!");
         }
@@ -261,6 +319,42 @@ function Categorylist(props) {
       align: "center",
     },
   ];
+  console.log("going well", DisplayDataa);
+  const DisplayCategories = (data) => {
+    // console.log("dispalying data type", data);
+    data?.map((item, index) => {
+      // console.log("data type", item);
+      if (item?.other_crm_v1_categories) {
+        // setDisplayDataa(item);
+        return (
+          <li key={item.category_id} title={item.category_name}>
+            {DisplayCategories(item?.other_crm_v1_categories)}
+          </li>
+        );
+      }
+      return <li key={item.category_id} title={item.category_name}></li>;
+    });
+  };
+  console.log("bdfrwe1121212121cfbsdhvbg", DisplayDataa);
+
+  function DisplayCategoriesData(DisplayDataa) {
+    console.log("bdfrwecfbsdhvbg", DisplayDataa);
+    // const nestedCategories = DisplayDataa.map((item, index) => {
+    //   console.log("jfgdsd", item);
+    //   (item.other_crm_v1_categories || []).map((data) => {
+    //     return <li key={data.category_id}>{data.category_name}</li>;
+    //   });
+    return (
+      <div>
+        <div></div>
+        noufal rahman
+        {/* {nestedCategories} */}
+      </div>
+    );
+    // });
+
+    // console.log("hfsdhfsdhfhjdsfhd", DisplayDataa);
+  }
 
   return (
     <div>
@@ -270,110 +364,8 @@ function Categorylist(props) {
             <div className="col">
               <h5 className="lead_text">Category</h5>
             </div>
-            <div className="col-auto" style={{ marginBottom: 12 }}>
-              <Link to={ROUTES.CATEGORY}>
-                <Button btnType="add">Add Category</Button>
-              </Link>
-              <Modal
-                width={700}
-                title="Edit Category"
-                open={isModalOpen}
-                onOk={handleOk}
-                onCancel={handleCancel}
-              >
-                <div className="container-fluid p-3">
-                  <Form.Group className="mb-2" controlId="Category_name">
-                    <div className="row">
-                      <div className="col-5">
-                        <Form.Label>Category Name</Form.Label>
-                      </div>
-                      <div className="col-1">:</div>
-                      <div className="col-6 justify-content-start">
-                        <Form.Control
-                          type="text"
-                          name="Cat_name"
-                          placeholder="Electronics"
-                        />
-                      </div>
-                    </div>
-                  </Form.Group>
-                  <Form.Group className="mb-2" controlId="Category_code">
-                    <div className="row">
-                      <div className="col-5">
-                        <Form.Label>Category Code</Form.Label>
-                      </div>
-                      <div className="col-1">:</div>
-                      <div className="col-6 justify-content-start">
-                        <Form.Control
-                          type="text"
-                          name="Cat_code"
-                          placeholder="C006"
-                        />
-                      </div>
-                    </div>
-                  </Form.Group>
-                  <Form.Group className="mb-2" controlId="Category_description">
-                    <div className="row" style={{ marginTop: 10 }}>
-                      <div className="col-5">
-                        <Form.Label>Description</Form.Label>
-                      </div>
-                      <div className="col-1">:</div>
-                      <div className="col-6 justify-content-start">
-                        <Form.Control
-                          as="textarea"
-                          rows={7}
-                          name="Cat_description"
-                          placeholder=" Aenean commodo ligula eget dolor. Aenean massa. Cum sociis"
-                        />
-                      </div>
-                    </div>
-                  </Form.Group>
-                  <div>
-                    <Form.Group className="mb-2" controlId="Category_code">
-                      <div className="row">
-                        <div className="col-5">
-                          <Form.Label>category Image</Form.Label>
-                        </div>
-                        <div className="col-1">:</div>
-                        <div className="col-6 justify-content-start">
-                          <FileUpload
-                            className={`${errors.attachments && "invalid"}`}
-                            {...register("attachments")}
-                            onKeyUp={() => {
-                              trigger("attachments");
-                            }}
-                          />
-                        </div>
-                      </div>
-                    </Form.Group>
-                    <div className="row">
-                      <div className="col-5">
-                        <p className="form-group">Parent Category</p>
-                      </div>
-                      <div className="col-1">:</div>
-                      <div className="col-6 justify-content-start">
-                        <div className="trdata">
-                          <TreeSelect
-                            className="tree"
-                            name="tree"
-                            style={{ width: "100%" }}
-                            value={setState.value}
-                            dropdownStyle={{
-                              maxHeight: 400,
-                              overflow: "auto",
-                            }}
-                            treeData={treeData}
-                            placeholder="Please select"
-                            treeDefaultExpandAll
-                            onChange={onChange}
-                            onSelect={onSelect}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </Modal>
+            <div className="col-auto" style={{}}>
+              {/* <Leadlist_Icons /> */}
             </div>
           </div>
           <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
@@ -461,16 +453,35 @@ function Categorylist(props) {
                 </Select.Option>
               </Select>
             </div>
+            <div className="col-9 d-flex justify-content-end" style={{}}>
+              <Link to={ROUTES.CATEGORY}>
+                <Button btnType="add">Add Category</Button>
+              </Link>
+            </div>
           </div>
           <div className="datatable">
-            <TableData
+            {/* <TableData
               data={getData(current, pageSize)}
               columns={columns}
               custom_table_css="table_lead_list"
-            />
+            /> */}
+            <ul>
+              {DisplayDataa &&
+                DisplayDataa.flatMap((item, index) => {
+                  return (
+                    <>
+                      <li style={{ listStyle: "none" }} key={item.category_id}>
+                        {item.category_name}
+                        {/* {DisplayCategoriesData(item)} */}
+                      </li>
+                    </>
+                  );
+                })}
+              {/* {DisplayCategoriesData(DisplayDataa)} */}
+            </ul>
           </div>
           <div className="d-flex py-2 justify-content-center">
-            <MyPagination
+            {/* <MyPagination
               total={CategoryList?.length}
               current={current}
               showSizeChanger={true}
@@ -479,7 +490,7 @@ function Categorylist(props) {
                 setCurrent(current);
                 setPageSize(pageSize);
               }}
-            />
+            /> */}
           </div>
         </div>
       </div>
@@ -555,6 +566,102 @@ function Categorylist(props) {
           </div>
         }
       />
+      <Modal
+        width={700}
+        title="Edit Category"
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <div className="container-fluid p-3">
+          <Form.Group className="mb-2" controlId="Category_name">
+            <div className="row">
+              <div className="col-5">
+                <Form.Label>Category Name</Form.Label>
+              </div>
+              <div className="col-1">:</div>
+              <div className="col-6 justify-content-start">
+                <Form.Control
+                  type="text"
+                  name="Cat_name"
+                  placeholder="Electronics"
+                />
+              </div>
+            </div>
+          </Form.Group>
+          <Form.Group className="mb-2" controlId="Category_code">
+            <div className="row">
+              <div className="col-5">
+                <Form.Label>Category Code</Form.Label>
+              </div>
+              <div className="col-1">:</div>
+              <div className="col-6 justify-content-start">
+                <Form.Control type="text" name="Cat_code" placeholder="C006" />
+              </div>
+            </div>
+          </Form.Group>
+          <Form.Group className="mb-2" controlId="Category_description">
+            <div className="row" style={{ marginTop: 10 }}>
+              <div className="col-5">
+                <Form.Label>Description</Form.Label>
+              </div>
+              <div className="col-1">:</div>
+              <div className="col-6 justify-content-start">
+                <Form.Control
+                  as="textarea"
+                  rows={7}
+                  name="Cat_description"
+                  placeholder=" Aenean commodo ligula eget dolor. Aenean massa. Cum sociis"
+                />
+              </div>
+            </div>
+          </Form.Group>
+          <div>
+            <Form.Group className="mb-2" controlId="Category_code">
+              <div className="row">
+                <div className="col-5">
+                  <Form.Label>category Image</Form.Label>
+                </div>
+                <div className="col-1">:</div>
+                <div className="col-6 justify-content-start">
+                  <FileUpload
+                    className={`${errors.attachments && "invalid"}`}
+                    {...register("attachments")}
+                    onKeyUp={() => {
+                      trigger("attachments");
+                    }}
+                  />
+                </div>
+              </div>
+            </Form.Group>
+            <div className="row">
+              <div className="col-5">
+                <p className="form-group">Parent Category</p>
+              </div>
+              <div className="col-1">:</div>
+              <div className="col-6 justify-content-start">
+                <div className="trdata">
+                  <TreeSelect
+                    className="tree"
+                    name="tree"
+                    style={{ width: "100%" }}
+                    value={setState.value}
+                    dropdownStyle={{
+                      maxHeight: 400,
+                      overflow: "auto",
+                    }}
+                    treeData={treeData}
+                    placeholder="Please select"
+                    treeDefaultExpandAll
+                    onChange={onChange}
+                    onSelect={onSelect}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Modal>
       <Custom_model
         centered
         size={`sm`}

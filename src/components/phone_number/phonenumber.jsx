@@ -1,6 +1,10 @@
 import React from "react";
 import 'react-phone-number-input/style.css';
-import PhoneInput from "react-phone-number-input";
+import PhoneInput, {
+  formatPhoneNumber,
+  formatPhoneNumberIntl,
+  isValidPhoneNumber,
+} from "react-phone-number-input";
 import 'react-phone-number-input/style.css';
 import "./phonenumber.scss"
 
@@ -9,23 +13,23 @@ function PhoneNumber(
     {
         defaultCountry,
         value,
-        onChange
+        onChange,
+        error
 
     }
 ){
  
-    return(
-     <div>
- <PhoneInput
- defaultCountry={defaultCountry}
-  className="phoneInput"
-  
-  value={value}
-  onChange={onChange}
-  
-  />
-
-     </div>
-    )
+    return (
+      <div>
+        <PhoneInput
+          defaultCountry={defaultCountry}
+          className="phoneInput"
+        //   international
+          value={value}
+          onChange={onChange}
+          error={error}
+        />
+      </div>
+    );
 }
 export default PhoneNumber;

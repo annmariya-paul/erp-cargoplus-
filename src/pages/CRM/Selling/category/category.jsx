@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./category.css";
 import { TreeSelect } from "antd";
 import { Form } from "react-bootstrap";
@@ -10,6 +10,7 @@ import PublicFetch from "../../../../utils/PublicFetch";
 import { CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
 
 function Category() {
+  const { TreeNode } = TreeSelect;
   const [toggleState, setToggleState] = useState(1);
   const [modalShow, setModalShow] = React.useState(false);
   const [error, setError] = useState(false);
@@ -19,6 +20,49 @@ function Category() {
   const toggleTab = (index) => {
     setToggleState(index);
   };
+  const [TreeData, setTreeData] = useState();
+  const [categoryTree, setCategoryTree] = useState([]);
+  const getCategoryChildren = (categoryId) => {};
+  const structureTreeData = (categories) => {
+    let treeStructure = [];
+    if (categories && Array.isArray(categories) && categories.length > 0) {
+      categories.forEach((category, categoryIndex) => {
+        // if (category?.other_crm_v1_categories?.length > 0) {
+        let ch = structureTreeData(category?.other_crm_v1_categories);
+        treeStructure.push({
+          value: category?.category_id,
+          title: category?.category_name,
+          children: ch,
+        });
+        // }
+      });
+    }
+    return treeStructure;
+    // console.log("Tree structure : ", treeStructure);
+  };
+  const getCategorydata = () => {
+    PublicFetch.get(`${CRM_BASE_URL_SELLING}/category`)
+      .then((res) => {
+        console.log("response Data", res);
+        if (res.data.success) {
+          setTreeData(res.data.data);
+          // getTreeData(res.data.data);
+          let d = structureTreeData(res.data.data);
+          console.log("Structured Tree : ", d);
+          setCategoryTree(d);
+          console.log("all data", res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+  useEffect(() => {
+    getCategorydata();
+  }, []);
+
+  console.log("Tree state dataa", TreeData);
 
   const treeData = [
     {
@@ -75,12 +119,12 @@ function Category() {
     return path;
   }
   const onChange = (value) => {
-    console.log("Change", getPath(value));
+    console.log("Change", value);
     setState({ value });
   };
 
   const onSelect = (value) => {
-    console.log("Select:", getPath(value));
+    console.log("Select:", value);
   };
 
   const {
@@ -109,6 +153,59 @@ function Category() {
     } else {
       setError(true);
     }
+  };
+  // const renderTreeNodes = (data) => {
+  //   TreeData.map((item) => {
+  //     if (item.children) {
+  //       return (
+  //         <TreeNode
+  //           title={item.title}
+  //           key={item.key}
+  //           dataRef={item}
+  //           isLeaf={false}
+  //         >
+  //           {this.renderTreeNodes(item.children)}
+  //         </TreeNode>
+  //       );
+  //     }
+  //     return (
+  //       <TreeNode key={item.key} {...item} title={item.title} dataRef={item} />
+  //     );
+  //   });
+
+  const getTreeData = (data) => {
+    // console.log("hai buddies", data);
+    data?.map((item, index) => {
+      console.log("happy birthday", item);
+
+      if (item?.other_crm_v1_categories) {
+        console.log("hai halo");
+        return (
+          <>
+            <div className="">Nothing</div>
+            <TreeNode
+              title={item?.category_name}
+              value={item?.category_id}
+              key={item?.category_id}
+              dataRef={item}
+              isLeaf={true}
+            >
+              {getTreeData(item?.other_crm_v1_categories)}
+            </TreeNode>
+          </>
+        );
+      } else {
+        console.log("bei bei");
+        return (
+          <TreeNode
+            key={item?.category_id}
+            {...item}
+            title={item?.category_name}
+            dataRef={item}
+          />
+        );
+      }
+    });
   };
 
   return (
@@ -197,12 +294,21 @@ function Category() {
                       maxHeight: 400,
                       overflow: "auto",
                     }}
-                    treeData={treeData}
+                    // treeData={TreeData?.map((item, index) => ({
+                    //   title: item?.category_name,
+                    //   value: item?.category_id,
+                    //   match: item?.category_id,
+                    //   key: item?.category_id,
+                    //   children: item?.other_crm_v1_categories,
+                    // }))}
+                    treeData={categoryTree}
                     placeholder="Please select"
-                    treeDefaultExpandAll
+                    // treeDefaultExpandAll
                     onChange={onChange}
                     onSelect={onSelect}
-                  />
+                  >
+                    {/* {getTreeData(TreeData)} */}
+                  </TreeSelect>
                 </div>
                 <div className=" col-sm-5 pt-3">
                   <Form.Group className="mb-2" controlId="cat_description">

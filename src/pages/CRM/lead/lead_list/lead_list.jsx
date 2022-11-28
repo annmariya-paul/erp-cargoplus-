@@ -11,7 +11,7 @@ import {
 
 import { MdFileCopy, MdPageview } from "react-icons/md";
 import { AiFillPrinter } from "react-icons/ai";
-import { Input, Select, Pagination } from "antd";
+import { Input, Select, Pagination,Checkbox } from "antd";
 import "antd/dist/antd.css";
 import Button from "../../../../components/button/button";
 import TableData from "../../../../components/table/table_data";
@@ -33,22 +33,22 @@ export default function LeadList() {
   const [current, setCurrent] = useState(1);
   const [modalViewLead, setModalViewLead] = useState(false);
 
-  const [allLeadList, setAllLeadList] = useState();
-  
-  const [currentcount,setCurrentcount]= useState()
-  // pageindex =0 ->  25 * (1-1)- 1+1 
+  const [allLeadList, setAllLeadList] = useState([]);
+
+  const [currentcount, setCurrentcount] = useState();
+  // pageindex =0 ->  25 * (1-1)- 1+1
 
   const [viewLead, setViewLead] = useState({
     type: "",
     lead_name: "",
     user_type: "",
     organisation: "",
-    source:"",
-    attachments:"",
-    description:"",
-    status:"",
+    source: "",
+    attachments: "",
+    description: "",
+    status: "",
   });
-// { function to view selected Lead's data - Ann mariya (18/11/22)}
+  // { function to view selected Lead's data - Ann mariya (18/11/22)}
   const handleViewData = (item) => {
     console.log("view all attributes", item);
     setViewLead({
@@ -67,15 +67,10 @@ export default function LeadList() {
   };
 
   const pageofIndex = noofItems * (current - 1) - 1 + 1;
-  const numofItemsTo = noofItems * current ;
+  const numofItemsTo = noofItems * current;
 
-
-
-
-  const pagesizecount = Math.ceil(totalCount/noofItems)
-  console.log("page number isss", pagesizecount)
-
-
+  const pagesizecount = Math.ceil(totalCount / noofItems);
+  console.log("page number isss", pagesizecount);
 
   // console.log("saag eywrbzxcjhasdbf yryeraeuif:::::", allLeadList);
   // console.log("page size", pageIndex);
@@ -90,7 +85,7 @@ export default function LeadList() {
           console.log("All lead data", res?.data?.data);
           setAllLeadList(res?.data?.data?.leads);
           setTotalcount(res?.data?.data?.totalCount);
-          setCurrentcount(res?.data?.data?.currentCount)
+          setCurrentcount(res?.data?.data?.currentCount);
         } else {
           console.log("FAILED T LOAD DATA");
         }
@@ -113,7 +108,6 @@ export default function LeadList() {
       noofItems * current
     );
   };
-
 
   // const pageofSize = Math.ceil(totalCount / numofItemsTo);
   // console.log("ffgsdgsd,", pageofSize);
@@ -141,9 +135,6 @@ export default function LeadList() {
   //   );
   // };
 
- 
-
- 
   // <Link to={ROUTES.OPPORTUNITY} className="nav-link">
   //                     <Button onClick={Submit} btnType="add_borderless">
   //                       <BsPlusCircleFill style={{ fontSize: "16px" }} /> View
@@ -155,7 +146,7 @@ export default function LeadList() {
     {
       title: "ACTION",
       dataIndex: "action",
-      key: "key",
+      key: "ACTION",
       width: "14%",
 
       render: (data, index) => {
@@ -173,8 +164,7 @@ export default function LeadList() {
 
             <div className="actionView m-0">
               <div className="editcolor" onClick={() => handleViewData(index)}>
-                <MdPageview
-                />
+                <MdPageview />
               </div>
             </div>
           </div>
@@ -185,7 +175,7 @@ export default function LeadList() {
     {
       title: "TYPE",
       dataIndex: "lead_type",
-      key: "lead_type",
+      key: "TYPE",
       filteredValue: [searchType],
       onFilter: (value, record) => {
         return String(record.lead_type)
@@ -197,7 +187,7 @@ export default function LeadList() {
     {
       title: "NAME",
       dataIndex: "lead_customer_name",
-      key: "lead_customer_name",
+      key: "NAME",
       width: "23%",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
@@ -210,14 +200,14 @@ export default function LeadList() {
     {
       title: "ORGANIZATION",
       dataIndex: "lead_organization",
-      key: "lead_organization",
+      key: "ORGANIZATION",
       width: "23%",
       align: "center",
     },
     {
       title: "STATUS",
       dataIndex: "lead_status",
-      key: "lead_status",
+      key: "STATUS",
       filteredValue: [searchStatus],
       onFilter: (value, record) => {
         return String(record.lead_status)
@@ -228,7 +218,39 @@ export default function LeadList() {
     },
   ];
 
+  //for show or hide colums start--Shahida 25.11.22
+  const columnsKeys = columns.map((column) => column.key);
 
+  const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
+  const filteredColumns = columns.filter((column) =>
+    selectedColumns.includes(column.key)
+  );
+  console.log("filtered columns::", filteredColumns);
+  const onChange = (checkedValues) => {
+    setSelectedColumns(checkedValues);
+  };
+
+  const data12 = allLeadList?.map((item) => [
+    item.action,
+    item.lead_type,
+    item.lead_customer_name,
+    item.lead_organization,
+    item.lead_status,
+  ]);
+
+  const LeadHeads = [
+    [
+      "lead_id",
+      "lead_type",
+      "lead_customer_name",
+      "lead_user_type",
+      "lead_organization",
+      "lead_source",
+      "lead_description",
+
+      "lead_status",
+    ],
+  ];
 
   return (
     <>
@@ -238,7 +260,24 @@ export default function LeadList() {
             <div className="col">
               <h5 className="lead_text">Lead</h5>
             </div>
-            <Leadlist_Icons />
+            <Leadlist_Icons
+              datas={allLeadList}
+              columns={filteredColumns}
+              items={data12}
+              xlheading={LeadHeads}
+              filename="data.csv"
+              chechboxes={
+                <Checkbox.Group onChange={onChange} value={selectedColumns}>
+                  {columnsKeys.map((column) => (
+                    <li>
+                      <Checkbox value={column} key={column}>
+                        {column}
+                      </Checkbox>
+                    </li>
+                  ))}
+                </Checkbox.Group>
+              }
+            />
           </div>
           <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
             <div className="col-4">
@@ -364,14 +403,13 @@ export default function LeadList() {
             <TableData
               // data={getData(numofItemsTo, pageofIndex)}
               data={allLeadList}
-              columns={columns}
+              columns={filteredColumns}
               custom_table_css="table_lead_list"
             />
           </div>
           <div className="d-flex py-2 justify-content-center">
-
             <MyPagination
-              total={parseInt(totalCount) }
+              total={parseInt(totalCount)}
               current={current}
               pageSize={noofItems}
               // defaultPageSize={noofItems}

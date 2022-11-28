@@ -1,10 +1,12 @@
 import "./custom_model.scss";
 import React from "react";
+import {HiBadgeCheck} from "react-icons/hi"
 // import { Modal } from "react-bootstrap";
 import {Modal} from "antd"
 
 function Custom_model({
   onClick,
+  bodyStyle,
   header,
   Adding_contents,
   children,
@@ -13,6 +15,7 @@ function Custom_model({
   show,
   onHide,
   size,
+  closable,
   width,
   centered,
   dialogClassName,
@@ -24,12 +27,12 @@ function Custom_model({
     <div>
       <Modal
         {...rest}
-        bodyStyle={{ height:620, overflowY:"auto" }}
+        bodyStyle={bodyStyle}
         size={size}
         onClick={onClick}
         // onHide={onHide}
         onCancel={onHide}
-        // show={show}
+        closable={closable}
         visible={show}
         width={width}
         dialogClassName={dialogClassName}
@@ -50,8 +53,8 @@ function Custom_model({
         {success && (
           <div>
             <div className="row">
-              <i
-                className="success_msg bi bi-patch-check-fill"
+              <HiBadgeCheck
+                className="success_msg"
                 style={{ fontSize: "100px" }}
               />
               <h4 className="success_msg">Save Success !</h4>

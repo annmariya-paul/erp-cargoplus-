@@ -4,11 +4,23 @@ import "antd/dist/antd.css";
 import "./table.styles.scss";
 // import { Pagination } from "antd";
 
-export default function TableData({ columns, data, custom_table_css }) {
+export default function TableData({
+  columns,
+  data,
+  custom_table_css,
+  expandable,
+  expandIconColumnIndex,
+}) {
   return (
     <>
       <div className={`row mt-3 table_data ${custom_table_css}`}>
-        <Table columns={columns} dataSource={data} pagination={false} />
+        <Table
+          columns={columns}
+          dataSource={data}
+          pagination={false}
+          expandable={expandable}
+          expandIconColumnIndex={expandIconColumnIndex}
+        />
       </div>
     </>
   );

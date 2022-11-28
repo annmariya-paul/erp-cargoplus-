@@ -339,10 +339,15 @@ export default function LeadList() {
                 bordered={false}
                 className="page_size_style"
                 value={noofItems}
-                onChange={(e) => {
-                  console.log("On page size selected : ", e);
-                  setNoofItems(e);
+              // onChange={handleLastNameChange}
+                onChange={(event, current) => {
+                  console.log("On page size selected : ", event);
+                  console.log("nfjnjfv", current)
+                  setNoofItems(event)
+                  setCurrent(1)
                 }}
+            
+            
               >
                 {/* <Select.Option value="5">5 | pages</Select.Option> */}
                 {/* <Select.Option value="10">
@@ -409,10 +414,12 @@ export default function LeadList() {
               pageSize={noofItems}
               // defaultPageSize={noofItems}
               showSizeChanger={false}
-              onChange={(current, pageSize) => {
-                console.log("page index", pageSize);
+              onChange={(current,pageSize) => {
+                console.log("page index isss", pageSize);
                 setCurrent(current);
                 // setPageSize(pageSize);
+                // setNoofItems(pageSize);
+                // setCurrent(noofItems !== pageSize ? 0 : current);
               }}
             />
           </div>

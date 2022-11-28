@@ -30,6 +30,7 @@ import { CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { date } from "yup/lib/locale";
 import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
+import { Table } from "antd";
 
 function Categorylist(props) {
   const [pageSize, setPageSize] = useState("25");
@@ -75,6 +76,27 @@ function Categorylist(props) {
     }
   };
 
+  const structureTreeData = (categories) => {
+    let treeStructure = [];
+    if (categories && Array.isArray(categories) && categories.length > 0) {
+      categories.forEach((category, categoryIndex) => {
+        // if (category?.other_crm_v1_categories?.length > 0) {
+        let ch = structureTreeData(category?.other_crm_v1_categories);
+        treeStructure.push({
+          key: category?.category_id,
+          category_name: category?.category_name,
+          category_parent_id: category?.category_parent_id,
+          category_code: category?.category_code,
+          category_description: category?.category_description,
+          children: ch,
+        });
+        // }
+      });
+    }
+    return treeStructure;
+    // console.log("Tree structure : ", treeStructure);
+  };
+
   const [CategoryList, setCategoryList] = useState();
   const getAllCategory = async () => {
     PublicFetch.get(`${CRM_BASE_URL_SELLING}/category`)
@@ -93,6 +115,9 @@ function Categorylist(props) {
           // }
           setDisplayDataa(res.data.data);
           DisplayCategories(res.data.data);
+          let d = structureTreeData(res.data.data);
+          console.log("structre tree", d);
+          setCategoryList(d);
           const traverseTree = (treeData) => {
             console.log("shfsa", treeData);
             let categories = [];
@@ -130,7 +155,7 @@ function Categorylist(props) {
                 length--;
               }
             }
-            setCategoryList(categories);
+            // setCategoryList(categories);
             setDataCategory(categories);
             return categories;
           };
@@ -262,7 +287,7 @@ function Categorylist(props) {
       width: "14%",
       render: (data, index) => {
         return (
-          <div className="actions">
+          <div className="actions ">
             <div className="actionEdit" onClick={() => setShowViewModal(true)}>
               <FaEdit />
             </div>
@@ -286,6 +311,7 @@ function Categorylist(props) {
       },
       align: "center",
     },
+    // Table.EXPAND_COLUMN,
     {
       title: "CODE",
       dataIndex: "category_code",
@@ -336,25 +362,6 @@ function Categorylist(props) {
     });
   };
   console.log("bdfrwe1121212121cfbsdhvbg", DisplayDataa);
-
-  function DisplayCategoriesData(DisplayDataa) {
-    console.log("bdfrwecfbsdhvbg", DisplayDataa);
-    // const nestedCategories = DisplayDataa.map((item, index) => {
-    //   console.log("jfgdsd", item);
-    //   (item.other_crm_v1_categories || []).map((data) => {
-    //     return <li key={data.category_id}>{data.category_name}</li>;
-    //   });
-    return (
-      <div>
-        <div></div>
-        noufal rahman
-        {/* {nestedCategories} */}
-      </div>
-    );
-    // });
-
-    // console.log("hfsdhfsdhfhjdsfhd", DisplayDataa);
-  }
 
   return (
     <div>
@@ -464,21 +471,9 @@ function Categorylist(props) {
               data={getData(current, pageSize)}
               columns={columns}
               custom_table_css="table_lead_list"
+              expandable
+              expandIconColumnIndex={1}
             />
-            <ul>
-              {DisplayDataa &&
-                DisplayDataa.flatMap((item, index) => {
-                  return (
-                    <>
-                      <li style={{ listStyle: "none" }} key={item.category_id}>
-                        {item.category_name}
-                        {/* {DisplayCategoriesData(item)} */}
-                      </li>
-                    </>
-                  );
-                })}
-              {/* {DisplayCategoriesData(DisplayDataa)} */}
-            </ul>
           </div>
           <div className="d-flex py-2 justify-content-center">
             {/* <MyPagination

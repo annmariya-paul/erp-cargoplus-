@@ -1,3 +1,5 @@
+@use "../styles/variables.scss";
+
 .sidebarWrapper {
   width: 220px;
   transition: 850ms;
@@ -6,6 +8,10 @@
 .contentWrapper {
   width: calc(100% - 220px);
   transition: 850ms;
+}
+.menu_icon{
+  color:variables.$primary !important;
+  font-size: 22px;
 }
 
 /* @media screen and (min-width: 950px) {

@@ -365,7 +365,12 @@ function BrandsList() {
                   bordered={false}
                   className=" page_size_style"
                   value={pageSize}
-                  onChange={(e) => setPageSize(e)}
+                  onChange={(e) => {
+                    // console.log("hfcjd" , e, )
+                    setPageSize(e)
+                    setCurrent(1 )
+                  }}
+                  
                 >
                   {/* <Select.Option value="5">5 | pages</Select.Option> */}
                   <Select.Option value="25">

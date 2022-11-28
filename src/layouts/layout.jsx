@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import "./layout.scss";
+import { AiOutlineMenu } from "react-icons/ai";
 import Sidebar from "../components/Sidebar/sidebar";
 import { Outlet } from "react-router-dom";
 
@@ -9,10 +11,7 @@ export default function Layout({ children }) {
       <div className="container-fluid screen_orientation">
         <div className="d-flex">
           <div className={` ${showMenu ? "d-none" : "menu-bars"}`}>
-            <i
-              className="bi bimenu bi-list"
-              onClick={() => setShowMenu(true)}
-            />
+            <AiOutlineMenu className="menu_icon" onClick={() => setShowMenu(true)} />
           </div>
           <div
             className={` ${

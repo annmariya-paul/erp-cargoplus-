@@ -825,7 +825,11 @@ function Opportunitylist(props) {
                 bordered={false}
                 className=" page_size_style"
                 value={numOfItems}
-                onChange={(e) => setNumOfItems(e)}
+                onChange={(e) => { 
+                  setNumOfItems(e)
+                  setCurrent(1)
+                }
+              }
               >
                 {/* <Select.Option value="5">5 | pages</Select.Option> */}
                 <Select.Option value="25">

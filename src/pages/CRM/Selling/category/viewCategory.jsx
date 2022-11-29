@@ -29,6 +29,8 @@ import { ROUTES } from "../../../../routes";
 import { CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { date } from "yup/lib/locale";
+import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
+import { Table } from "antd";
 
 function Categorylist(props) {
   const [pageSize, setPageSize] = useState("25");
@@ -39,7 +41,13 @@ function Categorylist(props) {
   const [modalShow, setModalShow] = useState();
   const [showViewModal, setShowViewModal] = useState(false);
   const [dataCategory, setDataCategory] = useState();
+  const [DisplayDataa, setDisplayDataa] = useState();
+  const [displayChild, setDisplayChild] = useState();
+  const [displayName, setDisplayname] = useState({
+    name: "",
+  });
   console.log("dataCategory", dataCategory);
+  console.log("dataa of name", displayName);
   // const [showEditModal, setShowEditModal] = useState(false);
   const [State, setState] = useState("null");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -72,6 +80,27 @@ function Categorylist(props) {
     }
   };
 
+  const structureTreeData = (categories) => {
+    let treeStructure = [];
+    if (categories && Array.isArray(categories) && categories.length > 0) {
+      categories.forEach((category, categoryIndex) => {
+        // if (category?.other_crm_v1_categories?.length > 0) {
+        let ch = structureTreeData(category?.other_crm_v1_categories);
+        treeStructure.push({
+          key: category?.category_id,
+          category_name: category?.category_name,
+          category_parent_id: category?.category_parent_id,
+          category_code: category?.category_code,
+          category_description: category?.category_description,
+          children: ch,
+        });
+        // }
+      });
+    }
+    return treeStructure;
+    // console.log("Tree structure : ", treeStructure);
+  };
+
   const [CategoryList, setCategoryList] = useState();
   const getAllCategory = async () => {
     PublicFetch.get(`${CRM_BASE_URL_SELLING}/category`)
@@ -88,6 +117,11 @@ function Categorylist(props) {
           //   }
           //   );
           // }
+          setDisplayDataa(res.data.data);
+          DisplayCategories(res.data.data);
+          let d = structureTreeData(res.data.data);
+          console.log("structre tree", d);
+          setCategoryList(d);
           const traverseTree = (treeData) => {
             console.log("shfsa", treeData);
             let categories = [];
@@ -125,7 +159,10 @@ function Categorylist(props) {
                 length--;
               }
             }
-            setCategoryList(categories);
+
+            setDisplayname(categories);
+
+            // setCategoryList(categories);
             setDataCategory(categories);
             return categories;
           };
@@ -159,14 +196,7 @@ function Categorylist(props) {
               category_name: Categoryname,
               category_description: item?.category_description,
             });
-            // temp.push({
-            //   category_name: ,
-            //   category_code: tmpArr_id,
-            //   category_description: tmpArry,
-            // });
           });
-          // setCategoryList(res?.data?.data);
-          // setCategoryList(temp);
         } else {
           console.log("Failed to load data!");
         }
@@ -249,6 +279,15 @@ function Categorylist(props) {
     trigger,
   } = useForm();
 
+  const getDescendantValues = (record) => {
+    const values = [];
+    (function recurse(record) {
+      values.push(record.category_name.toString().toLowerCase());
+      record.children.forEach(recurse);
+    })(record);
+    return values;
+  };
+
   const columns = [
     {
       title: "ACTIONS",
@@ -257,7 +296,7 @@ function Categorylist(props) {
       width: "14%",
       render: (data, index) => {
         return (
-          <div className="actions">
+          <div className="actions ">
             <div className="actionEdit" onClick={() => setShowViewModal(true)}>
               <FaEdit />
             </div>
@@ -273,21 +312,24 @@ function Categorylist(props) {
       title: "CATEGORY NAME",
       dataIndex: "category_name",
       key: "category_name",
-      filteredValue: [searchType],
+      filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.lead_type)
+        console.log("hai how are", record.children);
+        return String(record.category_name || record.children[record])
           .toLowerCase()
           .includes(value.toLowerCase());
       },
       align: "center",
     },
+    // Table.EXPAND_COLUMN,
     {
       title: "CODE",
       dataIndex: "category_code",
       key: "category_code",
       filteredValue: [searchType],
       onFilter: (value, record) => {
-        return String(record.lead_type)
+        console.log("dfhasasswww12", record);
+        return String(record.category_code)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
@@ -300,7 +342,7 @@ function Categorylist(props) {
       width: "23%",
       filteredValue: [searchStatus],
       onFilter: (value, record) => {
-        return String(record.lead_status)
+        return String(record.category_parent_id)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
@@ -314,6 +356,23 @@ function Categorylist(props) {
       align: "center",
     },
   ];
+  console.log("going well", DisplayDataa);
+  const DisplayCategories = (data) => {
+    // console.log("dispalying data type", data);
+    data?.map((item, index) => {
+      // console.log("data type", item);
+      if (item?.other_crm_v1_categories) {
+        // setDisplayDataa(item);
+        return (
+          <li key={item.category_id} title={item.category_name}>
+            {DisplayCategories(item?.other_crm_v1_categories)}
+          </li>
+        );
+      }
+      return <li key={item.category_id} title={item.category_name}></li>;
+    });
+  };
+  console.log("bdfrwe1121212121cfbsdhvbg", DisplayDataa);
 
   return (
     <div>
@@ -323,110 +382,8 @@ function Categorylist(props) {
             <div className="col">
               <h5 className="lead_text">Category</h5>
             </div>
-            <div className="col-auto" style={{ marginBottom: 12 }}>
-              <Link to={ROUTES.CATEGORY}>
-                <Button btnType="add">Add Category</Button>
-              </Link>
-              <Modal
-                width={700}
-                title="Edit Category"
-                open={isModalOpen}
-                onOk={handleOk}
-                onCancel={handleCancel}
-              >
-                <div className="container-fluid p-3">
-                  <Form.Group className="mb-2" controlId="Category_name">
-                    <div className="row">
-                      <div className="col-5">
-                        <Form.Label>Category Name</Form.Label>
-                      </div>
-                      <div className="col-1">:</div>
-                      <div className="col-6 justify-content-start">
-                        <Form.Control
-                          type="text"
-                          name="Cat_name"
-                          placeholder="Electronics"
-                        />
-                      </div>
-                    </div>
-                  </Form.Group>
-                  <Form.Group className="mb-2" controlId="Category_code">
-                    <div className="row">
-                      <div className="col-5">
-                        <Form.Label>Category Code</Form.Label>
-                      </div>
-                      <div className="col-1">:</div>
-                      <div className="col-6 justify-content-start">
-                        <Form.Control
-                          type="text"
-                          name="Cat_code"
-                          placeholder="C006"
-                        />
-                      </div>
-                    </div>
-                  </Form.Group>
-                  <Form.Group className="mb-2" controlId="Category_description">
-                    <div className="row" style={{ marginTop: 10 }}>
-                      <div className="col-5">
-                        <Form.Label>Description</Form.Label>
-                      </div>
-                      <div className="col-1">:</div>
-                      <div className="col-6 justify-content-start">
-                        <Form.Control
-                          as="textarea"
-                          rows={7}
-                          name="Cat_description"
-                          placeholder=" Aenean commodo ligula eget dolor. Aenean massa. Cum sociis"
-                        />
-                      </div>
-                    </div>
-                  </Form.Group>
-                  <div>
-                    <Form.Group className="mb-2" controlId="Category_code">
-                      <div className="row">
-                        <div className="col-5">
-                          <Form.Label>category Image</Form.Label>
-                        </div>
-                        <div className="col-1">:</div>
-                        <div className="col-6 justify-content-start">
-                          <FileUpload
-                            className={`${errors.attachments && "invalid"}`}
-                            {...register("attachments")}
-                            onKeyUp={() => {
-                              trigger("attachments");
-                            }}
-                          />
-                        </div>
-                      </div>
-                    </Form.Group>
-                    <div className="row">
-                      <div className="col-5">
-                        <p className="form-group">Parent Category</p>
-                      </div>
-                      <div className="col-1">:</div>
-                      <div className="col-6 justify-content-start">
-                        <div className="trdata">
-                          <TreeSelect
-                            className="tree"
-                            name="tree"
-                            style={{ width: "100%" }}
-                            value={setState.value}
-                            dropdownStyle={{
-                              maxHeight: 400,
-                              overflow: "auto",
-                            }}
-                            treeData={treeData}
-                            placeholder="Please select"
-                            treeDefaultExpandAll
-                            onChange={onChange}
-                            onSelect={onSelect}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </Modal>
+            <div className="col-auto" style={{}}>
+              {/* <Leadlist_Icons /> */}
             </div>
           </div>
           <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
@@ -514,16 +471,23 @@ function Categorylist(props) {
                 </Select.Option>
               </Select>
             </div>
+            <div className="col-9 d-flex justify-content-end" style={{}}>
+              <Link to={ROUTES.CATEGORY}>
+                <Button btnType="add">Add Category</Button>
+              </Link>
+            </div>
           </div>
           <div className="datatable">
             <TableData
               data={getData(current, pageSize)}
               columns={columns}
               custom_table_css="table_lead_list"
+              expandable
+              expandIconColumnIndex={1}
             />
           </div>
           <div className="d-flex py-2 justify-content-center">
-            <MyPagination
+            {/* <MyPagination
               total={CategoryList?.length}
               current={current}
               showSizeChanger={true}
@@ -532,7 +496,7 @@ function Categorylist(props) {
                 setCurrent(current);
                 setPageSize(pageSize);
               }}
-            />
+            /> */}
           </div>
         </div>
       </div>
@@ -608,6 +572,102 @@ function Categorylist(props) {
           </div>
         }
       />
+      <Modal
+        width={700}
+        title="Edit Category"
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <div className="container-fluid p-3">
+          <Form.Group className="mb-2" controlId="Category_name">
+            <div className="row">
+              <div className="col-5">
+                <Form.Label>Category Name</Form.Label>
+              </div>
+              <div className="col-1">:</div>
+              <div className="col-6 justify-content-start">
+                <Form.Control
+                  type="text"
+                  name="Cat_name"
+                  placeholder="Electronics"
+                />
+              </div>
+            </div>
+          </Form.Group>
+          <Form.Group className="mb-2" controlId="Category_code">
+            <div className="row">
+              <div className="col-5">
+                <Form.Label>Category Code</Form.Label>
+              </div>
+              <div className="col-1">:</div>
+              <div className="col-6 justify-content-start">
+                <Form.Control type="text" name="Cat_code" placeholder="C006" />
+              </div>
+            </div>
+          </Form.Group>
+          <Form.Group className="mb-2" controlId="Category_description">
+            <div className="row" style={{ marginTop: 10 }}>
+              <div className="col-5">
+                <Form.Label>Description</Form.Label>
+              </div>
+              <div className="col-1">:</div>
+              <div className="col-6 justify-content-start">
+                <Form.Control
+                  as="textarea"
+                  rows={7}
+                  name="Cat_description"
+                  placeholder=" Aenean commodo ligula eget dolor. Aenean massa. Cum sociis"
+                />
+              </div>
+            </div>
+          </Form.Group>
+          <div>
+            <Form.Group className="mb-2" controlId="Category_code">
+              <div className="row">
+                <div className="col-5">
+                  <Form.Label>category Image</Form.Label>
+                </div>
+                <div className="col-1">:</div>
+                <div className="col-6 justify-content-start">
+                  <FileUpload
+                    className={`${errors.attachments && "invalid"}`}
+                    {...register("attachments")}
+                    onKeyUp={() => {
+                      trigger("attachments");
+                    }}
+                  />
+                </div>
+              </div>
+            </Form.Group>
+            <div className="row">
+              <div className="col-5">
+                <p className="form-group">Parent Category</p>
+              </div>
+              <div className="col-1">:</div>
+              <div className="col-6 justify-content-start">
+                <div className="trdata">
+                  <TreeSelect
+                    className="tree"
+                    name="tree"
+                    style={{ width: "100%" }}
+                    value={setState.value}
+                    dropdownStyle={{
+                      maxHeight: 400,
+                      overflow: "auto",
+                    }}
+                    treeData={treeData}
+                    placeholder="Please select"
+                    treeDefaultExpandAll
+                    onChange={onChange}
+                    onSelect={onSelect}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Modal>
       <Custom_model
         centered
         size={`sm`}

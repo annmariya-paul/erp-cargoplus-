@@ -21,7 +21,25 @@ function Category() {
     setToggleState(index);
   };
   const [TreeData, setTreeData] = useState();
-
+  const [categoryTree, setCategoryTree] = useState([]);
+  const getCategoryChildren = (categoryId) => {};
+  const structureTreeData = (categories) => {
+    let treeStructure = [];
+    if (categories && Array.isArray(categories) && categories.length > 0) {
+      categories.forEach((category, categoryIndex) => {
+        // if (category?.other_crm_v1_categories?.length > 0) {
+        let ch = structureTreeData(category?.other_crm_v1_categories);
+        treeStructure.push({
+          value: category?.category_id,
+          title: category?.category_name,
+          children: ch,
+        });
+        // }
+      });
+    }
+    return treeStructure;
+    // console.log("Tree structure : ", treeStructure);
+  };
   const getCategorydata = () => {
     PublicFetch.get(`${CRM_BASE_URL_SELLING}/category`)
       .then((res) => {
@@ -29,6 +47,9 @@ function Category() {
         if (res.data.success) {
           setTreeData(res.data.data);
           // getTreeData(res.data.data);
+          let d = structureTreeData(res.data.data);
+          console.log("Structured Tree : ", d);
+          setCategoryTree(d);
           console.log("all data", res.data.data);
         }
       })
@@ -280,13 +301,13 @@ function Category() {
                     //   key: item?.category_id,
                     //   children: item?.other_crm_v1_categories,
                     // }))}
-                    // treeData={}
+                    treeData={categoryTree}
                     placeholder="Please select"
-                    treeDefaultExpandAll
+                    // treeDefaultExpandAll
                     onChange={onChange}
                     onSelect={onSelect}
                   >
-                    {getTreeData(TreeData)}
+                    {/* {getTreeData(TreeData)} */}
                   </TreeSelect>
                 </div>
                 <div className=" col-sm-5 pt-3">

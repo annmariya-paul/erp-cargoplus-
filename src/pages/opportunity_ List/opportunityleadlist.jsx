@@ -528,7 +528,7 @@ function OpportunityLeadlist(props) {
             <div className="col">
               <h5 className="lead_text">Opportunities of {id} </h5>
             </div>
-            <Leadlist_Icons />
+            {/* <Leadlist_Icons /> */}
           </div>
           <div className="row pb-2" style={{ backgroundColor: "#f4f4f7" }}>
             <div className="col-4">
@@ -805,7 +805,7 @@ function OpportunityLeadlist(props) {
             <div className="row px-1">
               <div className="col-sm-4 pt-2">
                 <Form.Group className="mb-2" controlId="lead_type">
-                  <Form.Label>Type</Form.Label>
+                  <Form.Label>Typeeeeeeeeeeeeeeeeeeee</Form.Label>
                   <Form.Select
                     aria-label="lead_type"
                     name="lead_type"

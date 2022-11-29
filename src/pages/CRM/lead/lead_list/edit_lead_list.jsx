@@ -24,6 +24,7 @@ import TextArea from "../../../../components/ InputType TextArea/TextArea";
 import SelectBox from "../../../../components/Select Box/SelectBox";
 // import ErrorMsg from "../../components/errormessage";
 import Custom_model from "../../../../components/custom_modal/custom_model";
+import Select from "rc-select";
 
 function LeadEdit() {
   // const history=useHistory();
@@ -48,7 +49,7 @@ function LeadEdit() {
   const [leadStatus, setLeadStatus] = useState("");
   const [leadId, setLeadId] = useState();
 
-  const [addForm] = Form.useForm();
+  const [editForm] = Form.useForm();
   const [error, setError] = useState(false);
   const toggleTab = (index) => {
     setToggleState(index);
@@ -82,6 +83,16 @@ function LeadEdit() {
           setLeadDescription(res?.data?.data?.lead_description);
           setLeadAttachment(res?.data?.data?.attachments);
           setLeadStatus(res?.data?.data?.lead_status);
+          editForm.setFieldsValue({
+            leadType: res?.data?.data?.lead_type,
+            leadName: res?.data?.data?.lead_customer_name,
+            leadUsertype: res?.data?.data?.lead_user_type,
+            leadSource: res?.data?.data?.lead_source,
+            leadOrganization: res?.data?.data?.lead_organization,
+            leadDescription: res?.data?.data?.lead_description,
+            leadAttachment: res?.data?.data?.attachments,
+            leadStatus: res?.data?.data?.lead_status,
+          });
         } else {
           console.log("FAILED T LOAD DATA");
         }
@@ -97,49 +108,7 @@ function LeadEdit() {
 
   console.log("grt all data", oneLeadData);
 
-  const Submit = (event) => {
-    // const form = event.currentTarget;
-    // event.preventDefault();
-    // event.stopPropagation();
-    // setFormSubmitted(true);
-    // const formData = new FormData();
-    // formData.append("lead_type", leadType);
-    // formData.append("lead_customer_name", leadName);
-    // formData.append("lead_user_type", leadUsertype);
-    // formData.append("lead_organization", leadOrganization);
-    // formData.append("lead_source", leadSource);
-    // formData.append("lead_description", leadDescription);
-    // formData.append("attachments", leadAttachment);
-    // formData.append("lead_status", leadStatus);
-    //  console.log(data);
-    // PublicFetch.post(`${CRM_BASE_URL}/lead/basic`, formData, {
-    //   "Content-Type": "Multipart/form-Data",
-    // })
-    //   .then(function (response) {
-    //     console.log("hello", response);
-    //     if (response.data.success) {
-    //       console.log("hello", response.data.data);
-    //       setLeadType();
-    //       setLeadName();
-    //       setLeadUsertype();
-    //       setLeadOrganization();
-    //       setLeadSource();
-    //       setLeadAttachment();
-    //       setLeadDescription();
-    //       setLeadStatus();
-    //       setModalShow(true);
-    //       close_modal(modalShow, 1000);
-    //       setModalContact(false);
-    //       toggleTab(2);
-    //       setLeadId(response?.data?.data?.lead_id);
-    //     } else {
-    //       console.log("Failed while adding data");
-    //     }
-    //   })
-    //   .catch(function (error) {
-    //     console.log(error);
-    //   });
-  };
+ 
 
   const updateUser = (event) => {
     setFormSubmitted(true);
@@ -245,7 +214,7 @@ function LeadEdit() {
                           to={`${ROUTES.OPPORTUNITY_LEAD}/${id}`}
                           className="nav-link"
                         >
-                          <Button onClick={Submit} btnType="add_borderless">
+                          <Button btnType="add_borderless">
                             <BsPlusCircleFill style={{ fontSize: "16px" }} />{" "}
                             View Opportunity
                           </Button>
@@ -256,7 +225,7 @@ function LeadEdit() {
                 </div>
 
                 <Form
-                  form={addForm}
+                  form={editForm}
                   onFinish={(values) => {
                     console.log("values iss", values);
                     updateUser();
@@ -279,10 +248,10 @@ function LeadEdit() {
                       >
                         <SelectBox
                           value={leadType}
-                          onChange={(e) => setLeadType(e.target.value)}
+                          onChange={(e) => setLeadType(e)}
                         >
-                          <option>Lead</option>
-                          <option>Customer</option>
+                          <Select.Option value="L">Lead</Select.Option>
+                          <Select.Option value="C">Customer</Select.Option>
                         </SelectBox>
                       </Form.Item>
                     </div>
@@ -309,117 +278,148 @@ function LeadEdit() {
                         ]}
                       >
                         <InputType
-                          value={leadName}
+                          // value={leadName}
                           onChange={(e) => setLeadName(e.target.value)}
                         />
                       </Form.Item>
-                      {/* <Form.Group
-                        className="mb-2"
-                        controlId="lead_customer_name"
-                      >
-                        <Form.Label>Name</Form.Label>
-                        <Form.Control
-                          type="text"
-                          name="lead_customer_name"
-                          required
-                          value={leadName}
-                          onChange={(e) => setLeadName(e.target.value)}
-                        />
-
-                      </Form.Group> */}
                     </div>
                     <div className="col-sm-4 pt-2">
-                      {/* <Form.Group className="mb-2" controlId="lead_user_type">
-                        <Form.Label>User Type</Form.Label>
-                        <Form.Select
-                          aria-label="lead_user_type"
-                          name="lead_user_type"
+                      <label>User Type</label>
+                      <Form.Item
+                        // name="leadUsertype"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please select a Type",
+                          },
+                        ]}
+                      >
+                        <SelectBox
                           value={leadUsertype}
                           onChange={(e) => setLeadUsertype(e.target.value)}
                         >
-                          <option value="O" selected>
-                            Organisation
-                          </option>
-                          <option value="I">Indivdual</option>
-                        </Form.Select>
-                      </Form.Group> */}
+                          <Select.Option value="O">Organisation</Select.Option>
+                          <Select.Option value="I">Indivdual</Select.Option>
+                        </SelectBox>
+                      </Form.Item>
                     </div>
                     <div className="col-sm-4 pt-2">
-                      {/* <Form.Group
-                        className="mb-2"
-                        controlId="lead_organization"
+                      <label>Organization</label>
+                      <Form.Item
+                        name="leadOrganization"
+                        rules={[
+                          {
+                            required: true,
+                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                            message: "Please enter a Valid Name",
+                          },
+                          {
+                            whitespace: true,
+                          },
+                          {
+                            min: 2,
+                            message: "Name must be atleast 2 characters",
+                          },
+                          {
+                            max: 100,
+                          },
+                        ]}
                       >
-                        <Form.Label>Organisation</Form.Label>
-                        <Form.Control
-                          type="text"
-                          name="lead_organization"
-                          value={leadOrganization}
+                        <InputType
+                          // value={leadOrganization}
                           onChange={(e) => setLeadOrganization(e.target.value)}
                         />
-                      </Form.Group> */}
+                      </Form.Item>
                     </div>
                     <div className="col-sm-4 pt-2">
-                      {/* <Form.Group className="mb-2" controlId="lead_source">
-                        <Form.Label>Source</Form.Label>
-                        <Form.Select
-                          aria-label="lead_source"
-                          name="lead_source"
-                          value={leadSource}
-                          onChange={(e) => setLeadSource(e.target.value)}
+                      <label>Source</label>
+                      <Form.Item
+                        name="leadSource"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please select a Type",
+                          },
+                        ]}
+                      >
+                        <SelectBox
+                          // value={leadSource}
+                          onChange={(e) => setLeadSource(e)}
                         >
-                          <option value="reference">Reference</option>
-                          <option value="direct visit">Direct Visit</option>
-                          <option value="online registration" selected>
+                          <Select.Option value="reference">Reference</Select.Option>
+                          <Select.Option value="direct visit">Direct Visit</Select.Option>
+                          <Select.Option value="online registration" selected>
                             Online Registration
-                          </option>
-                        </Form.Select>
-                      </Form.Group> */}
+                          </Select.Option>
+                        </SelectBox>
+                      </Form.Item>
                     </div>
                     <div className="col-12 mt-3">
-                      <FileUpload
-                        value={leadAttachment}
-                        onChange={(e) => setLeadAttachment(e.target.files[0])}
-                      />
+                      <Form.Item name="leadAttachment">
+                        <FileUpload
+                          value={leadAttachment}
+                          onChange={(e) => setLeadAttachment(e.target.files[0])}
+                        />
+                      </Form.Item>
                     </div>
                     <div className="col-sm-8 pt-3">
-                      {/* <Form.Group className="mb-2" controlId="lead_description">
-                        <Form.Label>Description</Form.Label>
-                        <Form.Control
-                          as="textarea"
-                          rows={3}
-                          value={leadDescription}
+                      <label>Description</label>
+                      <Form.Item
+                        name="leadDescription"
+                        rules={[
+                          {
+                            required: true,
+
+                            message: "Please enter a Valid address",
+                          },
+                          {
+                            whitespace: true,
+                          },
+                          {
+                            min: 2,
+                            message: "Address name must be 2 characters",
+                          },
+                          {
+                            max: 500,
+                          },
+                        ]}
+                      >
+                        <TextArea
+                          // value={leadDescription}
                           onChange={(e) => setLeadDescription(e.target.value)}
                         />
-                      </Form.Group> */}
+                      </Form.Item>
                     </div>
                     <div className="col-sm-4 pt-3">
-                      <div className="row">
-                        <div className="col-12">
-                          {/* <Form.Group className="mb-2" controlId="lead_status">
-                            <Form.Label>Lead Status</Form.Label>
-                            <Form.Select
-                              aria-label="lead_status"
-                              name="lead_status"
-                              value={leadStatus}
-                              onChange={(e) => setLeadStatus(e.target.value)}
-                            >
-                              <option value="LE">Lead</option>
-                              <option value="OP">Opportunity</option>
-                              <option value="QU">Quotation</option>
-                              <option value="IN" selected>
-                                Interested
-                              </option>
-                              <option value="CO">Converted</option>
-                              <option value="LO">Lost</option>
-                              <option value="DN">DND</option>
-                            </Form.Select>
-                          </Form.Group> */}
-                        </div>
-                      </div>
+                      <label>Lead Status</label>
+                      <Form.Item
+                        name="leadStatus"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please select a Type",
+                          },
+                        ]}
+                      >
+                        <SelectBox
+                          // value={leadStatus}
+                          onChange={(e) => setLeadStatus(e)}
+                        >
+                          <Select.Option value="1">Lead</Select.Option>
+                          <Select.Option value="2">Opportunity</Select.Option>
+                          <Select.Option value="3">Quotation</Select.Option>
+                          <Select.Option value="4" selected>
+                            Interested
+                          </Select.Option>
+                          <Select.Option value="5">Converted</Select.Option>
+                          <Select.Option value="6">Lost</Select.Option>
+                          <Select.Option value="7">DND</Select.Option>
+                        </SelectBox>
+                      </Form.Item>
                     </div>
 
                     <div className="col pt-3">
-                      <Button type="submit" onClick={updateUser} btnType="save">
+                      <Button type="submit" btnType="save">
                         Update
                       </Button>
                     </div>
@@ -451,7 +451,7 @@ function LeadEdit() {
                     />
                   </div>
                   <div className="col mt-4">
-                    <Button onClick={Submit} btnType="save">
+                    <Button btnType="save">
                       Save
                     </Button>
                   </div>
@@ -467,10 +467,6 @@ function LeadEdit() {
                     <Button btnType="add" onClick={() => setModalAddress(true)}>
                       Add <AiOutlinePlus />
                     </Button>
-                    {/* <Edit_Address
-                      show={modalAddress}
-                      onHide={() => setModalAddress(false)}
-                    /> */}
                   </div>
                   <div className="col-12 mt-2">
                     <Edit_Address
@@ -480,7 +476,7 @@ function LeadEdit() {
                     />
                   </div>
                   <div className="col mt-4">
-                    <Button onClick={Submit} btnType="save">
+                    <Button btnType="save">
                       Save
                     </Button>
                   </div>

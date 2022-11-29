@@ -34,7 +34,7 @@ function Edit_Address(props) {
   const [editForm] = Form.useForm();
 
   var phoneNo = `+${phone}`
-  var editPhoneNo = `+${editPhone}`
+  var editPhoneNo = `${editPhone}`
 
   const [oneLeadData, setOneLeadData] = useState();
   const [LeadId, setLeadId] = useState();
@@ -101,7 +101,15 @@ function Edit_Address(props) {
     setEditPin(i.address_pin);
     setEditPhone(i.address_contact);
     getAddresses();
+    editForm.setFieldsValue({
+      addressId:i.address_id,
+      editTitle: i.address_title,
+      editAddressData: i.address_content,
+      editPin: i.address_pin,
+      editPhone: i.address_contact,
+    });
     setEditAddressModel(true);
+    
   };
 
   // {function to edit address - Ann mariya(25-11-22)}
@@ -385,7 +393,7 @@ function Edit_Address(props) {
                 <div className="px-3">
                   <label>Title</label>
                   <Form.Item
-                    // name="title"
+                    name="editTitle"
                     rules={[
                       {
                         required: true,
@@ -411,7 +419,7 @@ function Edit_Address(props) {
                   </Form.Item>
                   <label>Address</label>
                   <Form.Item
-                    // name="address"
+                    name="editAddressData"
                     rules={[
                       {
                         required: true,
@@ -437,7 +445,7 @@ function Edit_Address(props) {
                   </Form.Item>
                   <label>PIN</label>
                   <Form.Item
-                    // name="pin"
+                    name="editPin"
                     rules={[
                       {
                         required: true,
@@ -456,6 +464,7 @@ function Edit_Address(props) {
                     Mobile
                   </label>
                   <Form.Item
+                    name="editPhone"
                     rules={[
                       {
                         pattern: new RegExp(

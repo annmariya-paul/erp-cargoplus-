@@ -2,44 +2,20 @@ import "./table.scss";
 import TableData from "../../../../components/table/table_data";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Form } from "react-bootstrap";
 import Button from "../../../../components/button/button";
 import Custom_model from "../../../../components/custom_modal/custom_model";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { CRM_BASE_URL } from "../../../../api/bootapi";
-import { message } from "antd";
+import { Form, message } from "antd";
+import InputType from "../../../../components/Input Type textbox/InputType";
+import PhoneInput from "react-phone-input-2";
 import PhoneNumber from "../../../../components/phone_number/phonenumber";
-import { useFormik } from "formik";
-import * as yup from "yup";
+
 import Lead from "../lead";
-
-const phoneRegExp =
-  /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/i;
-
-const validationSchema = yup.object({
-  contact_person_name: yup
-    .string()
-    .min(2, "Please Enter Name of minimum 2 Letter")
-    .max(100, "Name is exceeded")
-    .required("Name is Required"),
-  contact_email: yup
-    .string()
-    .email("Please Enter valid Email Address")
-    .required("Email Address is Required"),
-  contact_phone_1: yup
-    .string()
-    .max(14, "plase enter valid number")
-    .min(10, "please enter valid number of minimum 10")
-    .required("Phone Number is Required"),
-  contact_phone_2: yup.number().min(10, "Please enter Valid Mobile Number"),
-  contact_designation: yup
-    .string()
-    .min(2, "Please Enter valid Designation of minimum length of 2")
-    .required("Please enter Valid Designation"),
-});
 
 function ContactTable(props) {
   const [contactTable, setContactTable] = useState();
+  const [contactLeadId, setContactLeadId] = useState();
   const [phone, setPhone] = useState();
   const [isSubmit, setIsSubmit] = useState(false);
   const [mobile, setMobile] = useState();
@@ -55,39 +31,63 @@ function ContactTable(props) {
   const [validated, setValidated] = useState(false);
   const [validateErr, setValidateErr] = useState(false);
   const [showError, setShowError] = useState(false);
+  const [addForm] = Form.useForm();
 
-  const getoneleads = async () => {
-    try {
-      const onelead = await PublicFetch.get(
-        `${CRM_BASE_URL}/lead/${props.lead}`
-      );
-      console.log("getoneleaddds isss", onelead);
-    } catch (err) {
-      console.log("error while getting all leads: ", err);
-    }
+  // const getoneleads = async () => {
+  //   try {
+  //     const onelead = await PublicFetch.get(
+  //       `${CRM_BASE_URL}/lead/${props.lead}`
+  //     );
+  //     console.log("getoneleaddds isss", onelead);
+  //   } catch (err) {
+  //     console.log("error while getting all leads: ", err);
+  //   }
+  // };
+
+  const [oneLeadData, setOneLeadData] = useState();
+  const [LeadId, setLeadId] = useState();
+  // {funtion to fetch each Lead data - Ann mariya (22/11/22) }
+  console.log("hai halo", props.lead);
+  const GetLeadData = () => {
+    PublicFetch.get(`${CRM_BASE_URL}/lead/${props.lead}`)
+      .then((res) => {
+        if (res?.data?.success) {
+          console.log("Unique Lead Id", res?.data?.data);
+          setOneLeadData(res?.data?.data);
+          setLeadId(res?.data?.data?.lead_id);
+        } else {
+          console.log("FAILED TO LOAD DATA");
+        }
+      })
+      .catch((err) => {
+        console.log("Error while getting data", err);
+      });
   };
-
   // # funtion getcontacttable to fetch contacts to contact table - Noufal
   const getcontacttable = () => {
     PublicFetch.get(`${CRM_BASE_URL}/contact`)
       .then((res) => {
         console.log("fjehfer", res);
         if (res.data.success) {
-// let array = [];
-// res?.data?.data?.contact_lead_id.forEach((item, index) => {
-//   setContactLeadId(item.contact_lead_id);
-//   if (item.contact_lead_id === getoneleads) {
-//     {
-//       array.push({
-//         contact_person_name: item?.contact_person_name,
-//         contact_email: item?.contact_email,
-//       });
-//       setContactTable(array);
-//     }
-//   }
-// });
+          let array = [];
+          res?.data?.data?.forEach((item, index) => {
+            setContactLeadId(item?.contact_lead_id);
+            if (LeadId === item?.contact_lead_id) {
+              {
+                array.push({
+                  // contact_id: item?.contact_id,
+                  contact_person_name: item?.contact_person_name,
+                  contact_email: item?.contact_email,
+                  contact_phone_1: item?.contact_phone_1,
+                  contact_phone_2: item?.contact_phone_2,
+                  contact_designation: item?.contact_designation,
+                });
+                setContactTable(array);
+              }
+            }
+          });
 
-          setContactTable(res.data.data);
+          // setContactTable(res.data.data);
         } else {
           console.log("Failed to fetch data");
         }
@@ -99,8 +99,8 @@ function ContactTable(props) {
 
   useEffect(() => {
     getcontacttable();
-    getoneleads();
-  }, []);
+    GetLeadData();
+  }, [LeadId]);
 
   const columns = [
     {
@@ -136,41 +136,36 @@ function ContactTable(props) {
   ];
 
   // # function AddContact to add contacts - Noufal
-  const onSubmit = (values) => {
-    console.log("all values from formik", values);
-    PublicFetch.post(`${CRM_BASE_URL}/contact`, values)
-
+  const AddContact = () => {
+    PublicFetch.post(`${CRM_BASE_URL}/contact`, {
+      contact_lead_id: parseInt(props.lead),
+      contact_person_name: ContactName,
+      contact_email: email,
+      contact_phone_1: phone,
+      contact_phone_2: mobile,
+      contact_designation: designation,
+    })
       .then((res) => {
-        console.log("contactdata,", res);
-
+        console.log("contact data,", res);
         if (res.data.success) {
-          // getAllContact();
           getcontacttable();
-          formik.resetForm();
-
-          setShowSuccessModal(true);
-
-          props.onHide();
+          setContactName();
+          setEmail();
+          setPhone();
+          setMobile();
+          setDesignation();
           setModalShow(false);
-          reset();
-          close_modal(showSuccessMOdal, 1000);
+          setShowSuccessModal(true);
+          close_modal(showSuccessMOdal, 1200);
+          props.onHide();
         } else {
-          console.log("Cannot Get Data while fetching data");
-          // validateForm();
+          console.log("Cannot Get Data while fetching");
         }
       })
       .catch((err) => {
         console.log("error while adding data", err);
       });
   };
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-    trigger,
-  } = useForm();
 
   const close_modal = (mShow, time) => {
     if (!mShow) {
@@ -179,36 +174,6 @@ function ContactTable(props) {
       }, time);
     }
   };
-
-  // Function for add adding data to data base formik is used
-
-  const formik = useFormik({
-    initialValues: {
-      // contact_lead_id: props.lead,
-      contact_person_name: "",
-      contact_email: "",
-      contact_phone_1: "",
-      contact_phone_2: "",
-      contact_designation: "",
-    },
-    validateOnBlur: true,
-    onSubmit,
-    validationSchema: validationSchema,
-  });
-
-  console.log("errors:::", formik.errors);
-  console.log(
-    "phone:::",
-    // formik?.values?.contact_lead_id,
-    formik?.values?.contact_phone_1,
-    formik.values.contact_phone_2,
-    formik.values.contact_person_name,
-    formik.values.contact_email,
-    formik.values.contact_designation
-  );
-  console.log("phone:::", formik.values.contact_phone_2);
-  console.log("phone:::iiiii", formik.values);
-  // console.log("leadid iss",);
 
   return (
     <div>
@@ -220,169 +185,159 @@ function ContactTable(props) {
         />
       </div>
       <Custom_model
-        Adding_contents
+        bodyStyle={{ height: 620, overflowY: "auto" }}
         show={modalShow}
         onHide={() => setModalShow(false)}
-        header="Add Contacts"
+        View_list
         footer={false}
         {...props}
-      >
-        <Form onSubmit={formik.handleSubmit}>
-          <div className="row">
-            <div className="px-5">
-              <Form.Group className="mb-3" controlId="addName">
-                <Form.Label>Name</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Name"
-                  id="contact_person_name"
-                  name="contact_person_name"
-                  className={formik.touched ? "" : "invalid"}
-                  value={formik.values.contact_person_name}
-                  // onChange={(e) => setContactName(e.target.value)}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                {/* <Form.Control.Feedback type="invalid">
-                  Please provide a valid Name.
-                </Form.Control.Feedback> */}
-                <p style={{ color: "red", fontSize: "10px" }}>
-                  {formik.touched.contact_person_name &&
-                  formik.errors.contact_person_name
-                    ? formik.errors.contact_person_name
-                    : ""}
-                </p>
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="email">
-                <Form.Label>Email address</Form.Label>
-                <Form.Control
-                  type="email"
-                  placeholder="Enter email"
-                  required
-                  id="contact_email"
-                  name="contact_email"
-                  className={`form-control ${errors.email && "invalid"}`}
-                  value={formik.values.contact_email}
-                  // onChange={(e) => setEmail(e.target.value)}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                <p style={{ color: "red", fontSize: "10px" }}>
-                  {formik.touched.contact_email && formik.errors.contact_email
-                    ? formik.errors.contact_email
-                    : ""}
-                </p>
-                {/* {showError && (
-                  <label style={{ color: "red" }}>
-                    Please enter a valid email address.
-                  </label>
-                )}
-                <Form.Control.Feedback type="invalid">
-                  Please provide a valid Email.
-                </Form.Control.Feedback> */}
-              </Form.Group>
-
-              <div className="row mb-3">
-                <label for="phone" className="form-label">
-                  Phone
-                </label>
-                <PhoneNumber
-                  defaultCountry={"IN"}
-                  value={formik.values.contact_phone_1}
-                  id="contact_phone_1"
-                  name="contact_phone_1"
-                  // onChange={(value) => setPhone(value)}
-                  onChange={(e) => formik.setFieldValue("contact_phone_1", e)}
-                  onBlur={formik.handleBlur("contact_phone_1")}
-                />
-               
-                <p style={{ color: "red", fontSize: "10px" }}>
-                  {formik?.touched?.contact_phone_1 &&
-                  formik?.errors?.contact_phone_1
-                    ? formik?.errors?.contact_phone_1
-                    : ""}
-                </p>
-              </div>
-              <div className="row mb-3">
-                <label for="phone" className="form-label">
-                  Mobile
-                </label>
-
-                <PhoneNumber
-                  defaultCountry={"IN"}
-                  value={formik.values.contact_phone_2}
-                  id="contact_phone_2"
-                  name="contact_phone_2"
-                  // onChange={(value) => setMobile(value)}
-                  onChange={(e) => formik.setFieldValue("contact_phone_2", e)}
-                  onBlur={formik.handleBlur("contact_phone_2")}
-                />
-                <p style={{ color: "red", fontSize: "10px" }}>
-                  {formik.touched.contact_phone_2 &&
-                  formik.errors.contact_phone_2
-                    ? formik.errors.contact_phone_2
-                    : ""}
-                </p>
-              </div>
-              <Form.Group className="mb-1" controlId="designation">
-                <Form.Label>Designation/Department</Form.Label>
-                <Form.Control
-                  type="text"
-                  required
-                  id="contact_designation"
-                  name="contact_designation"
-                  className={`${errors.designation && "invalid"}`}
-                  // {...register("designation", {
-                  //   required: "Please enter a Designation eg:Manager",
-                  //   minLength: {
-                  //     value: 3,
-                  //     message: "Minimum Required length is 3",
-                  //   },
-                  //   maxLength: {
-                  //     value: 100,
-                  //   },
-                  //   pattern: {
-                  //     value: /^[a-zA-Z0-9 ]*$/,
-                  //     message: "Only letters and numbers are allowed!",
-                  //   },
-                  // })}
-                  onKeyUp={() => {
-                    trigger("designation");
-                  }}
-                  value={formik.values.contact_designation}
-                  // onChange={(e) => setDesignation(e.target.value)}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                <p style={{ color: "red", fontSize: "10px" }}>
-                  {formik.touched.contact_designation &&
-                  formik.errors.contact_designation
-                    ? formik.errors.contact_designation
-                    : ""}
-                </p>
-                {/* {errors.designation && (
-                  <small className="text-danger">
-                    {errors.designation.message}
-                  </small>
-                )} */}
-                {/* <Form.Control.Feedback type="invalid">
-                  Please provide a valid Designation/Department eg:Manager.
-                </Form.Control.Feedback> */}
-              </Form.Group>
+        list_content={
+          <>
+            <div className="row ">
+              <h5 className="lead_text">Add Contact</h5>
             </div>
-            <div className="d-flex justify-content-center mt-3">
-              <Form.Group>
-                <Button
-                  disabled={!formik.isValid || !formik.dirty}
-                  btnType="save"
-                >
-                  Save
-                </Button>
-              </Form.Group>
-            </div>
-          </div>
-        </Form>
-      </Custom_model>
+            <Form
+              form={addForm}
+              onFinish={(values) => {
+                console.log("values iss", values);
+                AddContact();
+              }}
+              onFinishFailed={(error) => {
+                console.log(error);
+              }}
+            >
+              <div className="row mt-3">
+                <div className="px-3">
+                  <label>Name</label>
+                  <Form.Item
+                    name="ContactName"
+                    rules={[
+                      {
+                        required: true,
+                        pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                        message: "Please enter a Valid Name",
+                      },
+                      {
+                        whitespace: true,
+                      },
+                      {
+                        min: 2,
+                        message: "Name must be atleast 2 characters",
+                      },
+                      {
+                        max: 100,
+                      },
+                    ]}
+                  >
+                    <InputType
+                      value={ContactName}
+                      onChange={(e) => setContactName(e.target.value)}
+                    />
+                  </Form.Item>
+
+                  <label>Email</label>
+                  <Form.Item
+                    name="email"
+                    rules={[
+                      {
+                        required: true,
+                        pattern: new RegExp(
+                          "^[A-Za-z0-9_!#$%&'*+/=?`{|}~^.-]+@[A-Za-z0-9.-]+$"
+                        ),
+                        message: "Please enter a Valid Email",
+                      },
+                    ]}
+                  >
+                    <InputType
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                  </Form.Item>
+
+                  <label>Phone Primary</label>
+                  <Form.Item
+                    className=" mt-1"
+                    name="phone"
+                    rules={[
+                      {
+                        required: true,
+                        pattern: new RegExp(
+                          "^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-s./0-9]*$"
+                        ),
+                        message: "Please enter a Valid Phone number",
+                      },
+                    ]}
+                  >
+                    {/* <PhoneNumber
+                      defaultCountry={"IN"}
+                      value={phone}
+                      id="contact_phone_1"
+                      name="contact_phone_1"
+                      onChange={(value) => setPhone(value)}
+                    /> */}
+                    <PhoneInput
+                      country={"in"}
+                      enableSearch={true}
+                      countryCodeEditable={false}
+                      value={phone}
+                      onChange={(value) => setPhone(value)}
+                    />
+                  </Form.Item>
+
+                  <label className="mb-2">Phone Secondary</label>
+                  <Form.Item name="mobile" 
+                  className="mt-1">
+                    {/* <PhoneNumber
+                      defaultCountry={"IN"}
+                      value={mobile}
+                      id="contact_phone_2"
+                      name="contact_phone_2"
+                      onChange={(value) => setMobile(value)}
+                    /> */}
+                    <PhoneInput
+                      country={"in"}
+                      enableSearch={true}
+                      value={mobile}
+                      countryCodeEditable={false}
+                      onChange={(value) => setMobile(value)}
+                    />
+                  </Form.Item>
+
+                  <label>Designation</label>
+                  <Form.Item
+                    name="designation"
+                    rules={[
+                      {
+                        required: true,
+                        pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                        message: "Please enter a Valid Designation",
+                      },
+                      {
+                        whitespace: true,
+                      },
+                      {
+                        min: 2,
+                        message: "Designation must be atleast 2 characters",
+                      },
+                      {
+                        max: 100,
+                      },
+                    ]}
+                  >
+                    <InputType
+                      value={designation}
+                      onChange={(e) => setDesignation(e.target.value)}
+                    />
+                  </Form.Item>
+                </div>
+                <div className="d-flex justify-content-center mt-3">
+                  <Button btnType="save">Save</Button>
+                </div>
+              </div>
+            </Form>
+          </>
+        }
+      ></Custom_model>
       <Custom_model
         centered
         size={`sm`}

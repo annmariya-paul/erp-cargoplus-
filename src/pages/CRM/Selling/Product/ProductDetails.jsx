@@ -120,6 +120,7 @@ function ProductDetails() {
     PublicFetch.get(`${CRM_BASE_URL_SELLING}/product/${id}`)
       .then((res) => {
         if (res?.data?.success) {
+          console.log("product details isss",res.data.data)
           setAllPrList(res.data.data);
           setPrName(res?.data?.data?.product_name);
           setPrcode(res?.data?.data?.product_code);

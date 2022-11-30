@@ -11,6 +11,7 @@ import { CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { Form } from "antd";
 import Button from "../../../../components/button/button";
+import { TreeSelect } from "antd";
 
 import ErrorMsg from "../../../../components/error/ErrorMessage";
 import FileUpload from "../../../../components/fileupload/fileUploader";
@@ -57,7 +58,17 @@ export default function ProductEditModal({ show, prid, onHide }) {
   const newValues = (checkedValues) => {
     console.log("checked = ", checkedValues);
   };
+  const [toggleState, setToggleState] = useState(1);
+  const [State, setState] = useState("null");
+  const [treeLine, setTreeLine] = useState(true);
+  const [showLeafIcon, setShowLeafIcon] = useState(false);
+  const [unitTable, setunitTable] = useState("");
+  const toggleTab = (index) => {
+    setToggleState(index);
+  };
+  const [TreeData, setTreeData] = useState();
 
+  const [categoryTree, setCategoryTree] = useState([]);
   const [allprList, setAllPrList] = useState(); //state for all products
 
   // Start API call for get one product
@@ -93,7 +104,7 @@ export default function ProductEditModal({ show, prid, onHide }) {
     console.log("Entered two GetAllProductDatatwo ");
     PublicFetch.get(`${CRM_BASE_URL_SELLING}/product/${prid}`)
       .then((res) => {
-        console.log("response>>>>>>", res);
+        console.log(" product iss", res);
         if (res?.data?.success) {
           setAllPrList(res.data.data);
           setPrName(res?.data?.data?.product_name);
@@ -162,9 +173,51 @@ export default function ProductEditModal({ show, prid, onHide }) {
     }
   };
 
+
+  const structureTreeData = (categories) => {
+    let treeStructure = [];
+    if (categories && Array.isArray(categories) && categories.length > 0) {
+      categories.forEach((category, categoryIndex) => {
+        // if (category?.other_crm_v1_categories?.length > 0) {
+        let ch = structureTreeData(category?.other_crm_v1_categories);
+        treeStructure.push({
+          value: category?.category_id,
+          title: category?.category_name,
+          children: ch,
+        });
+        // }
+      });
+    }
+    return treeStructure;
+    // console.log("Tree structure : ", treeStructure);
+  };
+
+  const getCategorydata = () => {
+    PublicFetch.get(`${CRM_BASE_URL_SELLING}/category`)
+      .then((res) => {
+        console.log("response Data", res);
+        if (res.data.success) {
+          setTreeData(res.data.data);
+          // getTreeData(res.data.data);
+          let d = structureTreeData(res.data.data);
+          console.log("Structured Tree : ", d);
+          setCategoryTree(d);
+          console.log("all data", res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
   useEffect(() => {
     getallattributes();
+    getCategorydata();
   }, []);
+
+
+
+
 
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
@@ -183,6 +236,62 @@ export default function ProductEditModal({ show, prid, onHide }) {
       reader.onload = () => resolve(reader.result);
       reader.onerror = (error) => reject(error);
     });
+
+    const onChangetree = (value) => {
+      // console.log("Change", getPath(value));
+      // setState({ value });
+      console.log("Change", value);
+      // setState(parseInt(value));
+       setPrCategory(parseInt(value))
+    };
+  
+  
+    // const onSelect = (value) => {
+    //   console.log("Select:", getPath(value));
+    // };
+  
+    const onSelect = (value) => {
+      console.log("Select the category :", value);
+    };
+  
+    const close_modal = (mShow, time) => {
+      if (!mShow) {
+        setTimeout(() => {
+          setSuccessPopup(false);
+          GetAllProductData()
+          // navigate(ROUTES.PRODUCT );
+        }, time);
+      }
+    };
+    
+    const OnSubmitedit = () => {
+      const formData = new FormData();
+      formData.append("product_name",prname);
+      formData.append("product_code",prcode);
+      formData.append("product_category_id",prcategory );
+      formData.append("product_brand_id", prbrand);
+      formData.append("product_unit_id", prunit);
+      formData.append("product_pic", primage);
+      formData.append("product_attributes", prattributes);
+      formData.append("product_description",setProductDescription );
+  
+       PublicFetch.patch(`${CRM_BASE_URL_SELLING}/product/${id}`, formData, {
+        "Content-Type": "Multipart/form-Data",
+      })
+        .then((res) => {
+          console.log("data is successfully saved", res.data.success);
+          if (res.data.data) {
+            setSuccessPopup(true);
+            addForm.resetFields();
+            close_modal(successPopup, 1000);
+          
+          }
+        })
+        .catch((err) => {
+          console.log("error", err);
+          setError(true);
+        });
+    };
 
   return (
     <>
@@ -229,6 +338,7 @@ export default function ProductEditModal({ show, prid, onHide }) {
                   // setDescription(value.description);
                   // setBrand(value.brand);
                   // OnSubmit();
+                  OnSubmitedit()
                 }}
                 onFinishFailed={(error) => {
                   console.log(error);
@@ -290,7 +400,7 @@ export default function ProductEditModal({ show, prid, onHide }) {
                   <div className="col-4 ">
                     <p>Category</p>
                     <div>
-                      <Select
+                      {/* <Select
                         style={{
                           backgroundColor: "whitesmoke",
                           borderRadius: "5px",
@@ -299,7 +409,38 @@ export default function ProductEditModal({ show, prid, onHide }) {
                         className="w-100 "
                       >
                         <Select.Option>Watch</Select.Option>
-                      </Select>
+                      </Select> */}
+                              <TreeSelect
+                        className="tree"
+                        name="tree"
+                        style={{ width: "100%" }}
+                        // value={category}
+                        // value={State}
+                        value={prcategory }
+                        dropdownStyle={{
+                          maxHeight: 400,
+                          overflow: "auto",
+                        }}
+                        // treeData={treeData}
+                        treeData={categoryTree}
+                        // treeData={treeData.map((d, i) => {
+                        //   console.log("values....", d);
+
+                        //   return {
+                        //     title: d.title,
+                        //     value: d.value,
+                        //     match: d.match,
+                        //     key: d.key,
+                        //     children: d.children,
+                        //   };
+                        // })}
+                     
+                        treeDefaultExpandAll
+                        onChange={onChangetree}
+                        onSelect={onSelect}
+                        
+                      />
+                    
                     </div>
                   </div>
                   <div className="col-6 mt-2">
@@ -368,29 +509,36 @@ export default function ProductEditModal({ show, prid, onHide }) {
                         style={{
                           backgroundColor: "whitesmoke",
                           borderRadius: "5px",
-                          height: "160px",
+                          height: "200px",
                           overflow: "scroll",
                         }}
                         // className="card border-0 px-4 py-2"
                       >
                         <Checkbox.Group onChange={newValues}>
-                          <Row>
-                            <Col>
+                          <div className="row p-2">
+                           
+                         
+                          {/* <Row>
+                            <Col> */}
                               {attributes &&
                                 attributes.length > 0 &&
                                 attributes.map((item, index) => {
                                   return (
-                                    <Checkbox value={item?.attribute_id}>
+                                    <div className="col-xl-6 col-lg-6 col-12 py-1">
+                                     <Checkbox value={item?.attribute_id}>
                                       {item?.attribute_name}
                                     </Checkbox>
+                                    </div>
+                                    
                                   );
                                   // <>
                                   // <label htmlFor={item?.attribute_id}>{item?.attribute_name}</label>
                                   // <Checkbox id={item?.attribute_id} />
                                   // </>
                                 })}
-                            </Col>
-                          </Row>
+                                 </div>
+                            {/* </Col>
+                          </Row> */}
                         </Checkbox.Group>
                         {/* <label style={{ color: "gray" }} className="my-2 ">
                         <Checkbox className="me-2" />
@@ -459,10 +607,10 @@ export default function ProductEditModal({ show, prid, onHide }) {
                 <div className="col-12 d-flex justify-content-center pt-2">
                   <Button
                     btnType="save"
-                    onClick={() => {
-                      setSuccessPopup(true);
-                      setError(true);
-                    }}
+                    // onClick={() => {
+                    //   setSuccessPopup(true);
+                    //   setError(true);
+                    // }}
                   >
                     Save
                   </Button>
@@ -473,12 +621,18 @@ export default function ProductEditModal({ show, prid, onHide }) {
           {error ? <ErrorMsg code="500" /> : ""}
         </div>
       </CustomModel>
-      <CustomModel
+      {/* <CustomModel
         size={`sm`}
         success
         // show={modalShow}
         // onHide={() => setModalShow(false)}
         footer={false}
+      /> */}
+       <CustomModel
+        size={"sm"}
+        show={successPopup}
+        onHide={() => setSuccessPopup(false)}
+        success
       />
     </>
   );

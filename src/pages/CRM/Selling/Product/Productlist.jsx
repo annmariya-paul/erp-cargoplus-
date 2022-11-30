@@ -177,7 +177,7 @@ function Productlist() {
     },
     {
       title: "IMAGE",
-      dataIndex: { logo },
+      dataIndex: "product_pic",
       key: "IMAGE",
       width: "23%",
       // filteredValue: [searchStatus],
@@ -189,7 +189,11 @@ function Productlist() {
 
       align: "center",
       render: (theImageURL, records) => (
-        <img alt={logo} src={logo} height="20px" width={"20px"} />
+        <img
+          src={`${process.env.REACT_APP_BASE_URL}/${theImageURL}`}
+          height="20px"
+          width={"20px"}
+        />
       ),
     },
     {

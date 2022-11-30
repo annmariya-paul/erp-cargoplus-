@@ -46,6 +46,9 @@ function Categorylist(props) {
   const [displayName, setDisplayname] = useState({
     name: "",
   });
+  const [nameSearch, setNamesearch] = useState();
+  const [ViewingData, setViewingDAta] = useState();
+  const [categoryId, setCategory] = useState();
   console.log("dataCategory", dataCategory);
   console.log("dataa of name", displayName);
   // const [showEditModal, setShowEditModal] = useState(false);
@@ -297,7 +300,10 @@ function Categorylist(props) {
       render: (data, index) => {
         return (
           <div className="actions ">
-            <div className="actionEdit" onClick={() => setShowViewModal(true)}>
+            <div
+              className="actionEdit"
+              onClick={() => handleViewCategory(index)}
+            >
               <FaEdit />
             </div>
             <div className="actionDel">
@@ -315,7 +321,8 @@ function Categorylist(props) {
       filteredValue: [searchedText],
       onFilter: (value, record) => {
         console.log("hai how are", record.children);
-        return String(record.category_name || record.children[record])
+
+        return String(record.category_name || nameSearch)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
@@ -356,6 +363,8 @@ function Categorylist(props) {
       align: "center",
     },
   ];
+
+  // console.log("namesss2123", nameSearch);
   console.log("going well", DisplayDataa);
   const DisplayCategories = (data) => {
     // console.log("dispalying data type", data);
@@ -373,6 +382,28 @@ function Categorylist(props) {
     });
   };
   console.log("bdfrwe1121212121cfbsdhvbg", DisplayDataa);
+
+  //  function to view category Data     :::by Noufal  -30/11/2022
+  const handleViewCategory = (e) => {
+    console.log("data by click", e);
+    if (e) {
+      setViewingDAta({
+        id: e.key,
+        name: e.category_name,
+        code: e.category_code,
+        parentcategory: e.category_parent_id,
+        description: e.category_description,
+      });
+      setCategory(e.key);
+      setShowViewModal(true);
+    }
+  };
+
+  // function to get single catgeory data   // by noufal
+  const handleEditCategoryPhase1 = (e) => {};
+
+  console.log("jdfjdfdj", ViewingData);
+  console.log("hai !!!", categoryId);
 
   return (
     <div>
@@ -535,7 +566,7 @@ function Categorylist(props) {
               </div>
               <div className="col-1">:</div>
               <div className="col-6 justify-content-start">
-                <p className="modal_view_p_sub">Electronics</p>
+                <p className="modal_view_p_sub">{ViewingData?.name}</p>
               </div>
             </div>
             <div className="row">
@@ -544,7 +575,7 @@ function Categorylist(props) {
               </div>
               <div className="col-1">:</div>
               <div className="col-6 justify-content-start">
-                <p className="modal_view_p_sub">C006</p>
+                <p className="modal_view_p_sub">{ViewingData?.code}</p>
               </div>
             </div>
             <div className="row">
@@ -553,7 +584,9 @@ function Categorylist(props) {
               </div>
               <div className="col-1">:</div>
               <div className="col-6 justify-content-start">
-                <p className="modal_view_p_sub">EZX</p>
+                <p className="modal_view_p_sub">
+                  {ViewingData?.parentcategory}
+                </p>
               </div>
             </div>
             <div className="row">
@@ -562,11 +595,7 @@ function Categorylist(props) {
               </div>
               <div className="col-1">:</div>
               <div className="col-6 justify-content-start">
-                <p className="modal_view_p_sub">
-                  Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-                  Aenean commodo ligula eget dolor. Aenean massa. Cum sociis
-                  natoque penatibus et magnis dis parturient montes, nascetur
-                </p>
+                <p className="modal_view_p_sub">{ViewingData?.description}</p>
               </div>
             </div>
           </div>

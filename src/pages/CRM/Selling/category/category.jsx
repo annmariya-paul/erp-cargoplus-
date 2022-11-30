@@ -1,21 +1,72 @@
 import React, { useEffect, useState } from "react";
 import "./category.css";
 import { TreeSelect } from "antd";
-import { Form } from "react-bootstrap";
+import { Form, Input } from "antd";
 import Button from "../../../../components/button/button";
 import { useForm } from "react-hook-form";
 import "antd/dist/antd.css";
 import FileUpload from "../../../../components/fileupload/fileUploader";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
+import TextArea from "../../../../components/ InputType TextArea/TextArea";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../../../../routes";
+import InputType from "../../../../components/Input Type textbox/InputType";
+
+const getBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
 
 function Category() {
+  const [addForm] = Form.useForm();
+  const navigate = useNavigate();
+  const [successPopup, setSuccessPopup] = useState(false);
   const { TreeNode } = TreeSelect;
   const [toggleState, setToggleState] = useState(1);
   const [modalShow, setModalShow] = React.useState(false);
   const [error, setError] = useState(false);
   const [State, setState] = useState("null");
   const [treeLine, setTreeLine] = useState(true);
+  const [name, setName] = useState();
+  const [file, setFile] = useState(null);
+  const [img, setImg] = useState([]);
+  const [description, setDescription] = useState();
+  const [code, setCode] = useState();
+  const [category, setCategory] = useState();
+  const [previewVisible, setPreviewVisible] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+  const [previewTitle, setPreviewTitle] = useState("");
+  const [parentcategory,setParentcategory]=useState(null);
+  // const [parent,setParent]=useState(null);
+  console.log("set image", img);
+
+  const close_modal = (mShow, time) => {
+    if (!mShow) {
+      setTimeout(() => {
+        setSuccessPopup(false);
+        navigate(ROUTES.CATEGORY);
+      }, time);
+    }
+  };
+
+  const handleCancel = () => {
+    navigate(ROUTES.CATEGORY);
+  };
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setPreviewImage(file.url || file.preview);
+    setPreviewVisible(true);
+    setPreviewTitle(
+      file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
+    );
+  };
+
   const [showLeafIcon, setShowLeafIcon] = useState(false);
   const toggleTab = (index) => {
     setToggleState(index);
@@ -121,6 +172,7 @@ function Category() {
   const onChange = (value) => {
     console.log("Change", value);
     setState({ value });
+    setCategory(value.target.value)
   };
 
   const onSelect = (value) => {
@@ -135,25 +187,59 @@ function Category() {
     trigger,
   } = useForm();
 
-  const close_modal = (mShow, time) => {
-    if (!mShow) {
-      setTimeout(() => {
-        setModalShow(false);
-      }, time);
-    }
+  // const close_modal = (mShow, time) => {
+  //   if (!mShow) {
+  //     setTimeout(() => {
+  //       setModalShow(false);
+  //     }, time);
+  //   }
+  // };
+
+  // const Submit = (data) => {
+  //   console.log(data);
+  //   if (data) {
+  //     localStorage.setItem("Form", JSON.stringify(data));
+  //     setModalShow(true);
+  //     close_modal(modalShow, 1000);
+  //     reset();
+  //   } else {
+  //     setError(true);
+  //   }
+  // };
+  const OnSubmit = () => {
+    const formData = new FormData();
+
+    formData.append("category_name", name);
+    formData.append("category_code", code);
+    formData.append("category_pic", img);
+    formData.append("category_description", description);
+    
+      
+      formData.append("category_parent_id",parentcategory );
+    
+    
+    
+    // formData.append("brand_name", brand);
+
+    PublicFetch.post(`${CRM_BASE_URL_SELLING}/category`, formData, {
+      "Content-Type": "Multipart/form-Data",
+    })
+      .then((res) => {
+        console.log("success", res);
+        if (res.data.data) {
+          setSuccessPopup(true);
+          addForm.resetFields();
+          close_modal(successPopup, 1000);
+        }
+      })
+      .catch((err) => {
+        console.log("error", err);
+        setError(true);
+      });
   };
 
-  const Submit = (data) => {
-    console.log(data);
-    if (data) {
-      localStorage.setItem("Form", JSON.stringify(data));
-      setModalShow(true);
-      close_modal(modalShow, 1000);
-      reset();
-    } else {
-      setError(true);
-    }
-  };
+  // console.log("data", description);
+
   // const renderTreeNodes = (data) => {
   //   TreeData.map((item) => {
   //     if (item.children) {
@@ -213,10 +299,23 @@ function Category() {
       <div className="container-fluid">
         <div className="row justify-content-md-center">
           <div className="content-tabs" style={{ maxHeight: "1000px" }}>
-            <Form onSubmit={handleSubmit(Submit)}>
+            {/* <Form onSubmit={handleSubmit(Submit)}> */}
+            <Form
+              name="addForm"
+              form={addForm}
+              onFinish={(value) => {
+                console.log("values111333", value);
+                // setDescription(value.description);
+                // setBrand(value.brand);
+                OnSubmit();
+              }}
+              onFinishFailed={(error) => {
+                console.log(error);
+              }}
+            >
               <div className="row px-4 pt-4">
                 <div className="col-sm-4 pt-3">
-                  <Form.Group className="mb-2" controlId="Cname">
+                  {/* <Form.Group className="mb-2" controlId="Cname">
                     <Form.Label>Category Name</Form.Label>
                     <Form.Control
                       type="text"
@@ -246,10 +345,32 @@ function Category() {
                         {errors.Cname.message}
                       </small>
                     )}
-                  </Form.Group>
+                  </Form.Group> */}
+                  <p>Name</p>
+                  <Form.Item
+                    name="category_name"
+                    rules={[
+                      {
+                        required: true,
+                        pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+
+                        message: "Please enter a Valid Brand Name",
+                      },
+
+                      {
+                        whitespace: true,
+                      },
+                      {
+                        min: 3,
+                      },
+                    ]}
+                    onChange={(e) => setName(e.target.value)}
+                  >
+                    <InputType />
+                  </Form.Item>
                 </div>
                 <div className="col-sm-4 pt-3">
-                  <Form.Group className="mb-2" controlId="category_code">
+                  {/* <Form.Group className="mb-2" controlId="category_code">
                     <Form.Label>Code</Form.Label>
                     <Form.Control
                       type="text"
@@ -279,21 +400,48 @@ function Category() {
                         {errors.category_code.message}
                       </small>
                     )}
-                  </Form.Group>
+                  </Form.Group> */}
+                  <p>category_code</p>
+                  <Form.Item
+                    name="category_code"
+                    rules={[
+                      {
+                        required: true,
+                        pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+
+                        message: "Please enter a Valid category_code",
+                      },
+
+                      {
+                        whitespace: true,
+                      },
+                      {
+                        min: 3,
+                      },
+                    ]}
+                    onChange={(e) => setCode(e.target.value)}
+                  >
+                    <InputType />
+                  </Form.Item>
                 </div>
                 <div className="col-sm-4 pt-3">
                   <label for="tree" className="form-label">
                     Parent Category
                   </label>
+                  <Form.Item
+                    name="category_parent_id"
+                  >
                   <TreeSelect
                     className="tree"
-                    name="tree"
+                   
                     style={{ width: "100%" }}
                     value={setState.value}
                     dropdownStyle={{
                       maxHeight: 400,
                       overflow: "auto",
                     }}
+                    onChange={(value) => setParentcategory(value)}
+
                     // treeData={TreeData?.map((item, index) => ({
                     //   title: item?.category_name,
                     //   value: item?.category_id,
@@ -304,14 +452,15 @@ function Category() {
                     treeData={categoryTree}
                     placeholder="Please select"
                     // treeDefaultExpandAll
-                    onChange={onChange}
+                    // onChange={onChange}
                     onSelect={onSelect}
                   >
                     {/* {getTreeData(TreeData)} */}
                   </TreeSelect>
+                  </Form.Item>
                 </div>
                 <div className=" col-sm-5 pt-3">
-                  <Form.Group className="mb-2" controlId="cat_description">
+                  {/* <Form.Group className="mb-2" controlId="cat_description">
                     <Form.Label>Description</Form.Label>
                     <Form.Control
                       as="textarea"
@@ -327,11 +476,33 @@ function Category() {
                         {errors.cat_description.message}
                       </small>
                     )}
-                  </Form.Group>
+                  </Form.Group> */}
+                  <p>Description</p>
+                  <Form.Item
+                    name="category_description"
+                    rules={[
+                      {
+                        required: true,
+                        pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+
+                        message: "Please enter a Valid Brand Name",
+                      },
+
+                      {
+                        whitespace: true,
+                      },
+                      {
+                        min: 3,
+                      },
+                    ]}
+                    onChange={(e) => setDescription(e.target.value)}
+                  >
+                    <InputType />
+                  </Form.Item>
                 </div>
                 <div className="row ">
                   <div className="col-12 ">
-                    <Form.Group className="mb-2" controlId="cat_img">
+                    {/* <Form.Group className="mb-2" controlId="cat_img">
                       <Form.Label>category Image</Form.Label>
 
                       <FileUpload
@@ -341,11 +512,45 @@ function Category() {
                           trigger("attachments");
                         }}
                       />
-                    </Form.Group>
+                    </Form.Group> */}
+                    <p>Display Picture</p>
+                    <Form.Item
+                      name="category_pic"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please select an image file",
+                        },
+                      ]}
+                    >
+                      <FileUpload
+                        multiple
+                        listType="picture"
+                        accept=".png,.jpg,.jpeg"
+                        onPreview={handlePreview}
+                        beforeUpload={false}
+                        onChange={(file) => {
+                          console.log("Before upload", file.file);
+                          console.log(
+                            "Before upload file size",
+                            file.file.size
+                          );
+
+                          if (file.file.size > 1000 && file.file.size < 50000) {
+                            setImg(file.file.originFileObj);
+                            console.log(
+                              "image grater than 1 kb and less than 50 kb"
+                            );
+                          } else {
+                            console.log("hgrtryyryr");
+                          }
+                        }}
+                      />
+                    </Form.Item>
                   </div>
                 </div>
                 <div className="d-flex mt-3">
-                  <Button className="savebtn" onClick={Submit} btnType="save">
+                  <Button className="savebtn" btnType="save">
                     Save
                   </Button>
                 </div>{" "}

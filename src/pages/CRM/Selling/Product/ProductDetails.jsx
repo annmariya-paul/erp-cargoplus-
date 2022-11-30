@@ -25,6 +25,7 @@ import Item from "antd/lib/list/Item";
 import SelectBox from "../../../../components/Select Box/SelectBox";
 function ProductDetails() {
   const { id } = useParams();
+  console.log("iddddd",id);
   const [toggleState, setToggleState] = useState(1);
   const [modalOpportunity, setModalOpportunity] = useState(false);
   const [pageSize, setPageSize] = useState("25"); // page size
@@ -38,6 +39,9 @@ function ProductDetails() {
   const [prname, setPrName] = useState();
   const [newvalue, setNewvalue] = useState();
   const [brand, setBrand] = useState();
+
+  const [varients, setVarients] = useState([]);
+  console.log("Varrrrrrrients",varients);
  
   const [unit, setUnit] = useState("");
   const [attributes, setAttributes] = useState();
@@ -155,6 +159,21 @@ function ProductDetails() {
     getallbrand();
   }, []);
 
+  const getallvarients = async () => {
+    try {
+      const allvarients= await PublicFetch.get(`${CRM_BASE_URL_SELLING}/variant?startIndex=0&noOfItems=40`);
+      console.log("vvvvvvvvvvvvvv", allvarients?.data?.data?.variants);
+      setVarients(allvarients?.data?.data?.variants);
+      // setbrandName()
+    } catch (err) {
+      console.log("error while getting the brands: ", err);
+    }
+  };
+
+  useEffect(() => {
+    getallvarients();
+  }, []);
+
   const getallunits = async () => {
     try {
       const allunits = await PublicFetch.get(`${CRM_BASE_URL_SELLING}/unit`);
@@ -188,6 +207,32 @@ function ProductDetails() {
   useEffect(() => {
     getallattributes();
   }, []);
+
+  // const getallvarients = () => {
+  //   console.log("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDd");
+  //   PublicFetch.get(`${CRM_BASE_URL_SELLING}/variant?startIndex=0&noOfItems=40`)
+  //     .then((res) => {
+  //       if (res?.data?.success) {
+  //         console.log("All product varients success::: ", res?.data?.data);
+  //         setVarients(res?.data?.data.varients);
+  //         // let samplearry = [];
+  //         // res?.data?.data?.leads.forEach((item, index) => {
+  //         //   samplearry.push(item.opportunity_id);
+  //         // });
+  //         // console.log("pushedd ", samplearry);
+
+  //         // setOppurtunityid(samplearry);
+  //       } else {
+  //         console.log("Failed to load data !");
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log("Errror while getting data", err);
+  //     });
+  // };
+  // useEffect(() => {
+  //   getallvarients();
+  // }, []);
 
   //End
   const data = [
@@ -234,7 +279,7 @@ function ProductDetails() {
     {
       title: "ACTION",
       dataIndex: "action",
-      key: "key",
+      key: "ACTION",
       width: "14%",
       render: (data, index) => {
         return (
@@ -262,7 +307,7 @@ function ProductDetails() {
     {
       title: "IMAGE",
       dataIndex: { logo },
-      key: "key",
+      key: "IMAGE",
       width: "15%",
 
       align: "center",
@@ -272,8 +317,8 @@ function ProductDetails() {
     },
     {
       title: "NAME",
-      dataIndex: "lead_type",
-      key: "key",
+      dataIndex: "variant_name",
+      key: "NAME",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
         return String(record.lead_type)
@@ -286,8 +331,8 @@ function ProductDetails() {
 
     {
       title: "CODE",
-      dataIndex: "lead_organization",
-      key: "key",
+      dataIndex: "variant_code",
+      key: "CODE",
       //   width: "23%",
       align: "center",
       filteredValue: [searchType],
@@ -299,8 +344,8 @@ function ProductDetails() {
     },
     {
       title: "UNIT",
-      dataIndex: "action",
-      key: "key",
+      dataIndex: "variant_unit",
+      key: "UNIT",
       width: "14%",
       align: "center",
       filteredValue: [searchStatus],
@@ -312,15 +357,15 @@ function ProductDetails() {
     },
     {
       title: "QUANTITY",
-      dataIndex: "lead_status",
-      key: "key",
+      dataIndex: "variant_quantity",
+      key: "QUANTITY",
 
       align: "center",
     },
     {
       title: "TAX RATE",
-      dataIndex: "taxrate",
-      key: "key",
+      dataIndex: "variant_taxrate",
+      key: "TAX RATE",
       //   width: "23%",
       align: "center",
     },
@@ -555,7 +600,7 @@ function ProductDetails() {
                       <div className="col">
                         <h5 className="lead_text"></h5>
                       </div>
-                      <Leadlist_Icons />
+                      {/* <Leadlist_Icons /> */}
                     </div>
                     <div
                       className="row py-1"
@@ -704,7 +749,7 @@ function ProductDetails() {
                           //   onClick={() => setShowAddOpportunity(true)}
                           className=""
                         >
-                          <Link to={ROUTES.PRODUCTVARIENTS}>
+                          <Link to={`${ROUTES.PRODUCTVARIENTS}/${id}`}>
                             <span
                               style={{
                                 color: "#0891d1",
@@ -718,8 +763,8 @@ function ProductDetails() {
                     </div>
                     <div className="datatable">
                       <TableData
-                        data={getData(current, pageSize)}
-                        // data={allLeadList}
+                        // data={getData(current, pageSize)}
+                        data={varients}
                         //   data={data}
                         columns={columns}
                         custom_table_css="table_lead_list"

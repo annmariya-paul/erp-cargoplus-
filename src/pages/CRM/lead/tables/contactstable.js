@@ -16,40 +16,25 @@ import Lead from "../lead";
 function ContactTable(props) {
   const [contactTable, setContactTable] = useState();
   const [contactLeadId, setContactLeadId] = useState();
+  const [ContactName, setContactName] = useState();
+  const [email, setEmail] = useState();
   const [phone, setPhone] = useState();
-  const [isSubmit, setIsSubmit] = useState(false);
   const [mobile, setMobile] = useState();
+  const [designation, setDesignation] = useState();
+  const [serialNo, setserialNo] = useState(1);
   const [modalShow, setModalShow] = useState(true);
   const [showSuccessMOdal, setShowSuccessModal] = useState(false);
   const [show, setShow] = useState(false);
-  const [count, setCount] = useState(0);
-  const [ContactName, setContactName] = useState();
-  const [email, setEmail] = useState();
-  // const [phoneno, setPhoneno] = useState();
-  const [AllContact, setAllcontact] = useState({});
-  const [designation, setDesignation] = useState();
-  const [validated, setValidated] = useState(false);
-  const [validateErr, setValidateErr] = useState(false);
   const [showError, setShowError] = useState(false);
   const [addForm] = Form.useForm();
 
-  // const getoneleads = async () => {
-  //   try {
-  //     const onelead = await PublicFetch.get(
-  //       `${CRM_BASE_URL}/lead/${props.lead}`
-  //     );
-  //     console.log("getoneleaddds isss", onelead);
-  //   } catch (err) {
-  //     console.log("error while getting all leads: ", err);
-  //   }
-  // };
 
   const [oneLeadData, setOneLeadData] = useState();
   const [LeadId, setLeadId] = useState();
   // {funtion to fetch each Lead data - Ann mariya (22/11/22) }
-  console.log("hai halo", props.lead);
+  console.log("hai halo", props.leadscontid);
   const GetLeadData = () => {
-    PublicFetch.get(`${CRM_BASE_URL}/lead/${props.lead}`)
+    PublicFetch.get(`${CRM_BASE_URL}/lead/${props.leadscontid}`)
       .then((res) => {
         if (res?.data?.success) {
           console.log("Unique Lead Id", res?.data?.data);
@@ -63,19 +48,20 @@ function ContactTable(props) {
         console.log("Error while getting data", err);
       });
   };
+
   // # funtion getcontacttable to fetch contacts to contact table - Noufal
   const getcontacttable = () => {
     PublicFetch.get(`${CRM_BASE_URL}/contact`)
       .then((res) => {
-        console.log("fjehfer", res);
+        console.log("all contacts data", res);
         if (res.data.success) {
+          // # array to set contacts of corresponding Lead Id - Ann Mariya
           let array = [];
           res?.data?.data?.forEach((item, index) => {
             setContactLeadId(item?.contact_lead_id);
             if (LeadId === item?.contact_lead_id) {
               {
                 array.push({
-                  // contact_id: item?.contact_id,
                   contact_person_name: item?.contact_person_name,
                   contact_email: item?.contact_email,
                   contact_phone_1: item?.contact_phone_1,
@@ -104,9 +90,10 @@ function ContactTable(props) {
 
   const columns = [
     {
-      title: "#",
-      dataIndex: "contact_id",
-      key: "contact_id",
+      title: "No.",
+      key: "index",
+      render: (value, item, index) => serialNo + index,
+      align: "center",
     },
     {
       title: "NAME",
@@ -138,7 +125,7 @@ function ContactTable(props) {
   // # function AddContact to add contacts - Noufal
   const AddContact = () => {
     PublicFetch.post(`${CRM_BASE_URL}/contact`, {
-      contact_lead_id: parseInt(props.lead),
+      contact_lead_id: parseInt(props.leadscontid),
       contact_person_name: ContactName,
       contact_email: email,
       contact_phone_1: phone,
@@ -214,11 +201,12 @@ function ContactTable(props) {
                     rules={[
                       {
                         required: true,
-                        pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                        pattern: new RegExp("^[A-Za-z0-9]+$"),
                         message: "Please enter a Valid Name",
                       },
                       {
-                        whitespace: true,
+                        whitespace: false,
+                        message: "no whit space",
                       },
                       {
                         min: 2,
@@ -285,8 +273,7 @@ function ContactTable(props) {
                   </Form.Item>
 
                   <label className="mb-2">Phone Secondary</label>
-                  <Form.Item name="mobile" 
-                  className="mt-1">
+                  <Form.Item name="mobile" className="mt-1">
                     {/* <PhoneNumber
                       defaultCountry={"IN"}
                       value={mobile}

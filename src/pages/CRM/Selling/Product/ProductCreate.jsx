@@ -13,6 +13,8 @@ import InputType from "../../../../components/Input Type textbox/InputType";
 import SelectBox from "../../../../components/Select Box/SelectBox";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
+import { ROUTES } from "../../../../routes";
+import "./product.scss"
 function ProductCreate() {
   const [successPopup, setSuccessPopup] = useState(false);
   const [error, setError] = useState(false);
@@ -28,6 +30,8 @@ function ProductCreate() {
   const toggleTab = (index) => {
     setToggleState(index);
   };
+  const [TreeData, setTreeData] = useState();
+  const [categoryTree, setCategoryTree] = useState([]);
 
   const [brands, setBrands] = useState();
   const [name, setName] = useState();
@@ -45,9 +49,12 @@ function ProductCreate() {
   const [previewTitle, setPreviewTitle] = useState("");
   console.log("set image", img);
   const [allunit, setAllunit] = useState();
-
+  const [brandid,setBrandid]= useState()
+  const [productattribute,setProductAttribute ]= useState([])
+  
   const newValues = (checkedValues) => {
     console.log("checked = ", checkedValues);
+    setProductAttribute(checkedValues)
   };
 
   const treeData = [
@@ -109,18 +116,25 @@ function ProductCreate() {
     return path;
   }
   const onChangetree = (value) => {
-    console.log("Change", getPath(value));
-    setState({ value });
+    // console.log("Change", getPath(value));
+    // setState({ value });
+    console.log("Change", value);
+    setState(parseInt(value));
   };
 
+  // const onSelect = (value) => {
+  //   console.log("Select:", getPath(value));
+  // };
+
   const onSelect = (value) => {
-    console.log("Select:", getPath(value));
+    console.log("Select the category :", value);
   };
 
   const getallbrand = async () => {
     try {
       const allbrands = await PublicFetch.get(`${CRM_BASE_URL_SELLING}/brand`);
       console.log("all brands are", allbrands.data.data);
+      // console.log ("all brands id areee",allbrands.data.data)
       setBrands(allbrands.data.data);
     } catch (err) {
       console.log("error while getting the brands: ", err);
@@ -160,25 +174,76 @@ function ProductCreate() {
     }
   };
 
-  useEffect(() => {
-    getallattributes();
-  }, []);
 
-  const getallcategories = async () => {
-    try {
-      const allcategories = await PublicFetch.get(
-        `${CRM_BASE_URL_SELLING}/category`
-      );
-      console.log("getting all category", allcategories.data.data);
-      setCategory(allcategories.data.data);
-    } catch (err) {
-      console.log("error to fetching  allcategories", err);
+
+  const structureTreeData = (categories) => {
+    let treeStructure = [];
+    if (categories && Array.isArray(categories) && categories.length > 0) {
+      categories.forEach((category, categoryIndex) => {
+        // if (category?.other_crm_v1_categories?.length > 0) {
+        let ch = structureTreeData(category?.other_crm_v1_categories);
+        treeStructure.push({
+          value: category?.category_id,
+          title: category?.category_name,
+          children: ch,
+        });
+        // }
+      });
+    }
+    return treeStructure;
+    // console.log("Tree structure : ", treeStructure);
+  };
+
+
+  const close_modal = (mShow, time) => {
+    if (!mShow) {
+      setTimeout(() => {
+        setSuccessPopup(false);
+        navigate(ROUTES.PRODUCT );
+      }, time);
     }
   };
 
+  const getCategorydata = () => {
+    PublicFetch.get(`${CRM_BASE_URL_SELLING}/category`)
+      .then((res) => {
+        console.log("response Data", res);
+        if (res.data.success) {
+          setTreeData(res.data.data);
+          // getTreeData(res.data.data);
+          let d = structureTreeData(res.data.data);
+          console.log("Structured Tree : ", d);
+          setCategoryTree(d);
+          console.log("all data", res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+
+
   useEffect(() => {
-    getallcategories();
+    getallattributes();
+    getCategorydata()
   }, []);
+
+  // const getallcategories = async () => {
+  //   try {
+  //     const allcategories = await PublicFetch.get(
+  //       `${CRM_BASE_URL_SELLING}/category`
+  //     );
+  //     console.log("getting all category", allcategories.data.data);
+  //     setCategory(allcategories.data.data);
+  //   } catch (err) {
+  //     console.log("error to fetching  allcategories", err);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   getallcategories();
+  // }, []);
 
   const getBase64 = (file) =>
     new Promise((resolve, reject) => {
@@ -199,28 +264,34 @@ function ProductCreate() {
   };
 
   const OnSubmit = () => {
-    // const formData = new FormData();
-    // formData.append("brand_pic", img);
-    // formData.append("brand_description", description);
-    // formData.append("brand_name", brand);
-    // PublicFetch.post(`${CRM_BASE_URL_SELLING}/brand`, formData, {
-    //   "Content-Type": "Multipart/form-Data",
-    // })
-    //   .then((res) => {
-    //     console.log("success", res);
-    //     if (res.data.data) {
-    //       setSuccessPopup(true);
-    //       addForm.resetFields();
-    //       close_modal(successPopup, 1000);
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     console.log("error", err);
-    //     setError(true);
-    //   });
+    const formData = new FormData();
+    formData.append("product_name",name);
+    formData.append("product_code",code);
+    formData.append("product_category_id",State );
+    formData.append("product_brand_id", brand);
+    formData.append("product_unit_id", unit);
+    formData.append("product_pic", img);
+    formData.append("product_attributes", productattribute);
+    formData.append("product_description", description);
+
+     PublicFetch.post(`${CRM_BASE_URL_SELLING}/product`, formData, {
+      "Content-Type": "Multipart/form-Data",
+    })
+      .then((res) => {
+        console.log("data is successfully saved", res.data.success);
+        if (res.data.data) {
+          setSuccessPopup(true);
+          addForm.resetFields();
+          close_modal(successPopup, 1000);
+        }
+      })
+      .catch((err) => {
+        console.log("error", err);
+        setError(true);
+      });
   };
 
-  console.log("data", brand, description);
+  console.log("data in catt", State);
 
   return (
     <div>
@@ -241,8 +312,6 @@ function ProductCreate() {
               form={addForm}
               onFinish={(value) => {
                 console.log("values111333", value);
-                // setDescription(value.description);
-                // setBrand(value.brand);
                 OnSubmit();
               }}
               onFinishFailed={(error) => {
@@ -277,9 +346,9 @@ function ProductCreate() {
                             "Product Name is too big please enter valid name",
                         },
                       ]}
-                      onChange={(e) => setName(e.target.value)}
+                      
                     >
-                      <InputType />
+                      <InputType  onChange={(e) => setName(e.target.value)}/>
                     </Form.Item>
                   </div>
                 </div>
@@ -336,7 +405,6 @@ function ProductCreate() {
                       rules={[
                         {
                           required: true,
-
                           message: "Please Select a Category",
                         },
                       ]}
@@ -345,28 +413,30 @@ function ProductCreate() {
                         className="tree"
                         name="tree"
                         style={{ width: "100%" }}
-                        value={category}
+                        // value={category}
+                        // value={ setState.value}
                         dropdownStyle={{
                           maxHeight: 400,
                           overflow: "auto",
                         }}
                         // treeData={treeData}
+                        treeData={categoryTree}
+                        // treeData={treeData.map((d, i) => {
+                        //   console.log("values....", d);
 
-                        treeData={treeData.map((d, i) => {
-                          console.log("values....", d);
-
-                          return {
-                            title: d.title,
-                            value: d.value,
-                            match: d.match,
-                            key: d.key,
-                            children: d.children,
-                          };
-                        })}
+                        //   return {
+                        //     title: d.title,
+                        //     value: d.value,
+                        //     match: d.match,
+                        //     key: d.key,
+                        //     children: d.children,
+                        //   };
+                        // })}
                         placeholder="Please select"
                         treeDefaultExpandAll
-                        // onChange={onChangetree}
-                        // onSelect={onSelect}
+                        onChange={onChangetree}
+                        onSelect={onSelect}
+                        
                       />
                       {/* <TreeSelect
   treeCheckable={true}
@@ -420,7 +490,9 @@ function ProductCreate() {
                       <SelectBox
                         placeholder={"--Please Select--"}
                         value={brand}
-                        onChange={(e) => setBrand(parseInt(e))}
+                        onChange={(e) =>{ 
+                          console.log("select the brandss",e )
+                          setBrand(parseInt(e))}}
                       >
                         {brands &&
                           brands.length > 0 &&
@@ -463,7 +535,9 @@ function ProductCreate() {
                       <SelectBox
                         placeholder={"--Please Select--"}
                         value={allunit}
-                        onChange={(e) => setUnit(parseInt(e))}
+                        onChange={(e) => {
+                         console.log("selected unit iss",e ) 
+                        setUnit(parseInt(e))}}
                       >
                         {allunit &&
                           allunit.length > 0 &&
@@ -481,7 +555,7 @@ function ProductCreate() {
                     </Form.Item>
                   </div>
                 </div>
-                <div className="col-6 mt-2">
+                <div className="col-6 mt-2 px-4">
                   <p>Attributes</p>
 
                   {/* <Form.Item
@@ -528,8 +602,28 @@ function ProductCreate() {
                     //   }
                     // }
                   >
-                    <Row>
-                      <Col span={8}>
+                    <div className="row p-2 attributes__height">
+                    {attributes &&
+                          attributes.length > 0 &&
+                          attributes.map((item, index) => {
+                            return (
+                              <div className="col-lg-4 col-xl-4 col-12 py-1">
+                              <Checkbox value={item?.attribute_id}>
+                                {item?.attribute_name}
+                              </Checkbox>
+                              </div>
+                              
+                            );
+                            // <>
+                            // <label htmlFor={item?.attribute_id}>{item?.attribute_name}</label>
+                            // <Checkbox id={item?.attribute_id} />
+                            // </>
+                          })}
+                     
+                      
+                    </div>
+                    {/* <Row>
+                      <Col span={20}>
                         {attributes &&
                           attributes.length > 0 &&
                           attributes.map((item, index) => {
@@ -544,7 +638,7 @@ function ProductCreate() {
                             // </>
                           })}
                       </Col>
-                    </Row>
+                    </Row> */}
                   </Checkbox.Group>
 
                   <div
@@ -589,6 +683,7 @@ function ProductCreate() {
 
                         if (file.file.size > 2000 && file.file.size < 50000) {
                           setImg(file.file.originFileObj);
+                          console.log("selet imggg",file.file.originFileObj )
                           console.log(
                             "image grater than 2 kb and less than 50 kb"
                           );
@@ -633,10 +728,6 @@ function ProductCreate() {
                 </div>
                 <div className="col-12 d-flex justify-content-center pt-5">
                   <Button
-                    onClick={() => {
-                      setSuccessPopup(true);
-                      setError(true);
-                    }}
                     className="save_button"
                   >
                     Save
@@ -647,14 +738,16 @@ function ProductCreate() {
           </div>
         </div>
       </div>
-      {error ? <ErrorMsg code={"500"} /> : ""}
+
 
       <CustomModel
         size={"sm"}
-        success
-        // show={successPopup}
+        show={successPopup}
         onHide={() => setSuccessPopup(false)}
+        success
       />
+      {error ? <ErrorMsg code={"500"} /> : ""}
+
     </div>
   );
 }

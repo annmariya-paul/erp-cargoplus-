@@ -383,6 +383,7 @@ function Categorylist(props) {
   };
   console.log("bdfrwe1121212121cfbsdhvbg", DisplayDataa);
 
+  //  function to view category Data     :::by Noufal  -30/11/2022
   const handleViewCategory = (e) => {
     console.log("data by click", e);
     if (e) {
@@ -397,6 +398,9 @@ function Categorylist(props) {
       setShowViewModal(true);
     }
   };
+
+  // function to get single catgeory data   // by noufal
+  const handleEditCategoryPhase1 = (e) => {};
 
   console.log("jdfjdfdj", ViewingData);
   console.log("hai !!!", categoryId);

@@ -4,7 +4,7 @@ import React, { Children } from "react";
 function SelectBox({ className, value, onChange, onClick, children ,placeholder, options}) {
   return (
     <div>
-      <div>
+      <div className="mt-2">
         <Select
           style={{
             backgroundColor: "whitesmoke",

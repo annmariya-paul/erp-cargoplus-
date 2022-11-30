@@ -33,6 +33,8 @@ const ROUTES = {
 
 
   PRODUCTVARIENTS: "/product_varients",
+  PRODUCTVARIENTS_ID: "/product_varients/:id",
+  
   SERVICES: "/services",
   SERVICECREATE: "/create_service",
   BRANCHES:"/branches",

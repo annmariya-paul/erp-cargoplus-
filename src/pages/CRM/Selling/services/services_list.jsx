@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Input, Select, Pagination, Checkbox } from "antd";
 import {
   FaFileExcel,
@@ -23,6 +23,8 @@ import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon
 import CustomModel from "../../../../components/custom_modal/custom_model";
 import FileUpload from "../../../../components/fileupload/fileUploader";
 import ErrorMsg from "../../../../components/error/ErrorMessage";
+import PublicFetch from "../../../../utils/PublicFetch";
+import { CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
 
 function Services() {
   const [pageSize, setPageSize] = useState("25"); // page size
@@ -34,10 +36,44 @@ function Services() {
   const [serviceView, setServiceView] = useState(false);
   const [successPopup, setSuccessPopup] = useState(false);
   const [error, setError] = useState(false);
+  const [noofitems,setNoofItems]=useState("25");
+  const [allservices,setAllservices]= useState()
+  const [totalCount,setTotalcount]= useState()
 
   const getData = (current, pageSize) => {
     return data.slice((current - 1) * pageSize, current * pageSize);
   };
+
+  const pageofIndex = noofitems * (current - 1) - 1 + 1;
+
+  // const pagesizecount = Math.ceil(totalCount / noofitems);
+  // console.log("page number isss", pagesizecount);
+
+  const getAllservices=()=>{
+    PublicFetch.get
+    (`${CRM_BASE_URL_SELLING}/service?startIndex=${pageofIndex}&noOfItems=${noofitems}`
+    )
+    .then((res)=>{
+      console.log("all services is ",res.data.data)
+      if (res?.data?.success) {
+        console.log("All services dataa", res?.data?.data);
+        setAllservices(res?.data?.data.services);
+        setTotalcount(res?.data?.data?.totalCount);
+        // setCurrentcount(res?.data?.data?.currentCount);
+      } else {
+        console.log("FAILED T LOAD DATA");
+      }
+    })
+    .catch((err) => {
+      console.log("Errror while getting data", err);
+    });
+  }
+
+
+  useEffect(() => {
+   getAllservices()
+  }, [noofitems, pageofIndex]);
+
 
   const data = [
     {
@@ -100,7 +136,7 @@ function Services() {
     },
     {
       title: "IMAGE",
-      dataIndex: { logo },
+      dataIndex:"service_pic",
       key: "key",
       width: "23%",
       // filteredValue: [searchStatus],
@@ -112,16 +148,20 @@ function Services() {
 
       align: "center",
       render: (theImageURL, records) => (
-        <img alt={logo} src={logo} height="20px" width={"20px"} />
+        <img
+          src={`${process.env.REACT_APP_BASE_URL}/${theImageURL}`}
+          height="20px"
+          width={"20px"}
+        />
       ),
     },
     {
       title: "NAME",
-      dataIndex: "name",
+      dataIndex: "service_name",
       key: "key",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.lead_type)
+        return String(record.service_name)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
@@ -131,7 +171,7 @@ function Services() {
 
     {
       title: "CODE",
-      dataIndex: "code",
+      dataIndex: "service_code",
       key: "key",
       //   width: "23%",
       align: "center",
@@ -142,7 +182,7 @@ function Services() {
     },
     {
       title: "CATEGORY",
-      dataIndex: "category",
+      dataIndex: "service_category_id",
       key: "key",
       width: "14%",
       align: "center",
@@ -155,7 +195,7 @@ function Services() {
     },
     {
       title: "TAX RATE",
-      dataIndex: "tax_rate",
+      dataIndex: "service_taxrate",
       key: "key",
 
       align: "center",
@@ -264,8 +304,14 @@ function Services() {
                 // defaultValue={"25"}
                 bordered={false}
                 className=" page_size_style"
-                value={pageSize}
-                onChange={(e) => setPageSize(e)}
+                value={noofitems}
+                // onChange={(e) => setNoofItems(e)}
+                onChange={(e, current) => {
+                  console.log("On page size selected : ", e);
+                  console.log("nfjnjfv", current)
+                  setNoofItems(e)
+                  setCurrent(1)
+                }}
               >
                 {/* <Select.Option value="5">5 | pages</Select.Option> */}
                 <Select.Option value="25">
@@ -319,8 +365,8 @@ function Services() {
           </div>
           <div className="datatable">
             <TableData
-              data={getData(current, pageSize)}
-              // data={allLeadList}
+              // data={getData(current, pageSize)}
+              data={allservices}
               //   data={data}
               columns={columns}
               custom_table_css="table_lead_list"
@@ -328,13 +374,21 @@ function Services() {
           </div>
           <div className="d-flex py-2 justify-content-center">
             <MyPagination
-              total={data.length}
+              total={parseInt(totalCount)}
+              // current={current}
+              // showSizeChanger={true}
+              // pageSize={pageSize}
+              // onChange={(current, pageSize) => {
+              //   setCurrent(current);
+              //   setPageSize(pageSize);
+              // }}
               current={current}
-              showSizeChanger={true}
-              pageSize={pageSize}
-              onChange={(current, pageSize) => {
+              pageSize={noofitems}
+              // defaultPageSize={noofItems}
+              showSizeChanger={false}
+              onChange={(current,pageSize) => {
+                console.log("page index isss", pageSize);
                 setCurrent(current);
-                setPageSize(pageSize);
               }}
             />
           </div>

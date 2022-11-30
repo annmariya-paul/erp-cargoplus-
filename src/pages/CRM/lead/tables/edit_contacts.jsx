@@ -255,6 +255,9 @@ function EditContact(props) {
         {...props}
         list_content={
           <>
+            <div className="row">
+              <h5 className="lead_text">Add Contact</h5>
+            </div>
             <Form
               form={addForm}
               onFinish={(values) => {
@@ -265,10 +268,6 @@ function EditContact(props) {
                 console.log(error);
               }}
             >
-              <div className="row">
-                <h5 className="lead_text">Add Contact</h5>
-              </div>
-
               <div className="row mt-3">
                 <div className="px-3">
                   <label>Name</label>

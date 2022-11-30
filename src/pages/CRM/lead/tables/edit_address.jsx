@@ -431,7 +431,7 @@ function Edit_Address(props) {
                       },
                       {
                         min: 2,
-                        message: "Address name must be 2 characters",
+                        message: "Address name must be atleast 2 characters",
                       },
                       {
                         max: 500,

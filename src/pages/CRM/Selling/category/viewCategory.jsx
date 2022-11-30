@@ -30,6 +30,7 @@ import { CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { date } from "yup/lib/locale";
 import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
+import { Table } from "antd";
 
 function Categorylist(props) {
   const [pageSize, setPageSize] = useState("25");
@@ -45,6 +46,9 @@ function Categorylist(props) {
   const [displayName, setDisplayname] = useState({
     name: "",
   });
+  const [nameSearch, setNamesearch] = useState();
+  const [ViewingData, setViewingDAta] = useState();
+  const [categoryId, setCategory] = useState();
   console.log("dataCategory", dataCategory);
   console.log("dataa of name", displayName);
   // const [showEditModal, setShowEditModal] = useState(false);
@@ -78,6 +82,7 @@ function Categorylist(props) {
       }, time);
     }
   };
+
   const structureTreeData = (categories) => {
     let treeStructure = [];
     if (categories && Array.isArray(categories) && categories.length > 0) {
@@ -98,6 +103,7 @@ function Categorylist(props) {
     return treeStructure;
     // console.log("Tree structure : ", treeStructure);
   };
+
   const [CategoryList, setCategoryList] = useState();
   const getAllCategory = async () => {
     PublicFetch.get(`${CRM_BASE_URL_SELLING}/category`)
@@ -116,11 +122,10 @@ function Categorylist(props) {
           // }
           setDisplayDataa(res.data.data);
           DisplayCategories(res.data.data);
-
           let d = structureTreeData(res.data.data);
           console.log("structre tree", d);
           setCategoryList(d);
-                    const traverseTree = (treeData) => {
+          const traverseTree = (treeData) => {
             console.log("shfsa", treeData);
             let categories = [];
             if (!treeData || treeData.length <= 0) {
@@ -294,8 +299,11 @@ function Categorylist(props) {
       width: "14%",
       render: (data, index) => {
         return (
-          <div className="actions">
-            <div className="actionEdit" onClick={() => setShowViewModal(true)}>
+          <div className="actions ">
+            <div
+              className="actionEdit"
+              onClick={() => handleViewCategory(index)}
+            >
               <FaEdit />
             </div>
             <div className="actionDel">
@@ -313,12 +321,14 @@ function Categorylist(props) {
       filteredValue: [searchedText],
       onFilter: (value, record) => {
         console.log("hai how are", record.children);
-        return String(record.category_name || record.children[record])
+
+        return String(record.category_name || nameSearch)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
       align: "center",
     },
+    // Table.EXPAND_COLUMN,
     {
       title: "CODE",
       dataIndex: "category_code",
@@ -353,6 +363,8 @@ function Categorylist(props) {
       align: "center",
     },
   ];
+
+  // console.log("namesss2123", nameSearch);
   console.log("going well", DisplayDataa);
   const DisplayCategories = (data) => {
     // console.log("dispalying data type", data);
@@ -371,24 +383,27 @@ function Categorylist(props) {
   };
   console.log("bdfrwe1121212121cfbsdhvbg", DisplayDataa);
 
-  function DisplayCategoriesData(DisplayDataa) {
-    console.log("bdfrwecfbsdhvbg", DisplayDataa);
-    // const nestedCategories = DisplayDataa.map((item, index) => {
-    //   console.log("jfgdsd", item);
-    //   (item.other_crm_v1_categories || []).map((data) => {
-    //     return <li key={data.category_id}>{data.category_name}</li>;
-    //   });
-    return (
-      <div>
-        <div></div>
-        noufal rahman
-        {/* {nestedCategories} */}
-      </div>
-    );
-    // });
+  //  function to view category Data     :::by Noufal  -30/11/2022
+  const handleViewCategory = (e) => {
+    console.log("data by click", e);
+    if (e) {
+      setViewingDAta({
+        id: e.key,
+        name: e.category_name,
+        code: e.category_code,
+        parentcategory: e.category_parent_id,
+        description: e.category_description,
+      });
+      setCategory(e.key);
+      setShowViewModal(true);
+    }
+  };
 
-    // console.log("hfsdhfsdhfhjdsfhd", DisplayDataa);
-  }
+  // function to get single catgeory data   // by noufal
+  const handleEditCategoryPhase1 = (e) => {};
+
+  console.log("jdfjdfdj", ViewingData);
+  console.log("hai !!!", categoryId);
 
   return (
     <div>
@@ -494,25 +509,13 @@ function Categorylist(props) {
             </div>
           </div>
           <div className="datatable">
-            {/* <TableData
+            <TableData
               data={getData(current, pageSize)}
               columns={columns}
               custom_table_css="table_lead_list"
-            /> */}
-            <ul>
-              {DisplayDataa &&
-                DisplayDataa.flatMap((item, index) => {
-                  return (
-                    <>
-                      <li style={{ listStyle: "none" }} key={item.category_id}>
-                        {item.category_name}
-                        {/* {DisplayCategoriesData(item)} */}
-                      </li>
-                    </>
-                  );
-                })}
-              {/* {DisplayCategoriesData(DisplayDataa)} */}
-            </ul>
+              expandable
+              expandIconColumnIndex={1}
+            />
           </div>
           <div className="d-flex py-2 justify-content-center">
             {/* <MyPagination
@@ -563,7 +566,7 @@ function Categorylist(props) {
               </div>
               <div className="col-1">:</div>
               <div className="col-6 justify-content-start">
-                <p className="modal_view_p_sub">Electronics</p>
+                <p className="modal_view_p_sub">{ViewingData?.name}</p>
               </div>
             </div>
             <div className="row">
@@ -572,7 +575,7 @@ function Categorylist(props) {
               </div>
               <div className="col-1">:</div>
               <div className="col-6 justify-content-start">
-                <p className="modal_view_p_sub">C006</p>
+                <p className="modal_view_p_sub">{ViewingData?.code}</p>
               </div>
             </div>
             <div className="row">
@@ -581,7 +584,9 @@ function Categorylist(props) {
               </div>
               <div className="col-1">:</div>
               <div className="col-6 justify-content-start">
-                <p className="modal_view_p_sub">EZX</p>
+                <p className="modal_view_p_sub">
+                  {ViewingData?.parentcategory}
+                </p>
               </div>
             </div>
             <div className="row">
@@ -590,11 +595,7 @@ function Categorylist(props) {
               </div>
               <div className="col-1">:</div>
               <div className="col-6 justify-content-start">
-                <p className="modal_view_p_sub">
-                  Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-                  Aenean commodo ligula eget dolor. Aenean massa. Cum sociis
-                  natoque penatibus et magnis dis parturient montes, nascetur
-                </p>
+                <p className="modal_view_p_sub">{ViewingData?.description}</p>
               </div>
             </div>
           </div>

@@ -25,11 +25,15 @@ function EditContact(props) {
   const [modalShow, setModalShow] = useState(true);
   const [showSuccessMOdal, setShowSuccessModal] = useState(false);
   const [serialNo, setserialNo] = useState(1);
+  const [editcontacts,setEditContacts] = useState({
+  editName:"",
+  editEmail:"",
+  editPhone:"",
+  editMobile:"",
+  editDesignation:"",
+  });
   const [addForm] = Form.useForm();
   const [editForm] = Form.useForm();
-
-  var phoneNo = `+${phone}`
-  var mobileNo = `+${mobile}`
 
   const [oneLeadData, setOneLeadData] = useState();
   const [LeadId, setLeadId] = useState();
@@ -92,22 +96,31 @@ function EditContact(props) {
   const handleEditedclick = (i) => {
     console.log("edit in list...", i);
     setContactId(i.contact_id);
-    setContactName(i.contact_person_name);
-    setEmail(i.contact_email);
-    setPhone(i.contact_phone_1);
-    setMobile(i.contact_phone_2);
-    setDesignation(i.contact_designation);
+    setEditContacts({
+      editName: i.contact_person_name,
+      editEmail: i.contact_email,
+      editPhone: i.contact_phone_1,
+      editMobile: i.contact_phone_2,
+      editDesignation: i.contact_designation,
+    });
+    editForm.setFieldsValue({
+      editName: i.contact_person_name,
+      editEmail: i.contact_email,
+      editPhone: i.contact_phone_1,
+      editMobile: i.contact_phone_2,
+      editDesignation: i.contact_designation,
+    });
     setEditContactModel(true);
   };
   // {function to edit contact - Ann mariya(24-11-22)}
   const EditContact = () => {
     PublicFetch.patch(`${CRM_BASE_URL}/contact/${contactId}`, {
       contact_lead_id: parseInt(props.leadid),
-      contact_person_name: contactName,
-      contact_email: email,
-      contact_phone_1: phoneNo,
-      contact_phone_2: mobileNo,
-      contact_designation: designation,
+      contact_person_name: editcontacts.editName,
+      contact_email: editcontacts.editEmail,
+      contact_phone_1: editcontacts.editPhone,
+      contact_phone_2: editcontacts.editMobile,
+      contact_designation: editcontacts.editDesignation,
     })
       .then((res) => {
         console.log("contact data,", res);
@@ -137,8 +150,8 @@ function EditContact(props) {
       contact_lead_id: parseInt(props.leadid),
       contact_person_name: contactName,
       contact_email: email,
-      contact_phone_1: phoneNo,
-      contact_phone_2: mobileNo,
+      contact_phone_1: phone,
+      contact_phone_2: mobile,
       contact_designation: designation,
     })
       .then((res) => {
@@ -321,7 +334,7 @@ function EditContact(props) {
                       country={"in"}
                       enableSearch={true}
                       countryCodeEditable={false}
-                      value={phoneNo}
+                      value={phone}
                       onChange={(value) => setPhone(value)}
                     />
                   </Form.Item>
@@ -331,7 +344,7 @@ function EditContact(props) {
                     <PhoneInput
                       country={"in"}
                       enableSearch={true}
-                      value={mobileNo}
+                      value={mobile}
                       // countryCodeEditable={false}
                       onChange={(value) => setMobile(value)}
                     />
@@ -393,14 +406,14 @@ function EditContact(props) {
               }}
             >
               <div className="row">
-                <h5 className="lead_text">Add Contact</h5>
+                <h5 className="lead_text">Edit Contact</h5>
               </div>
 
               <div className="row mt-3">
                 <div className="px-3">
                   <label>Name</label>
                   <Form.Item
-                    // name="title"
+                    name="editName"
                     rules={[
                       {
                         required: true,
@@ -420,14 +433,19 @@ function EditContact(props) {
                     ]}
                   >
                     <InputType
-                      value={contactName}
-                      onChange={(e) => setContactName(e.target.value)}
+                      onChange={(e) =>
+                        setEditContacts({
+                          ...editcontacts,
+                          editName: e.target.value,
+                        })
+                      }
+                      value={editcontacts.editName}
                     />
                   </Form.Item>
 
                   <label>Email</label>
                   <Form.Item
-                    // name="email"
+                    name="editEmail"
                     rules={[
                       {
                         required: true,
@@ -439,14 +457,19 @@ function EditContact(props) {
                     ]}
                   >
                     <InputType
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      onChange={(e) =>
+                        setEditContacts({
+                          ...editcontacts,
+                          editEmail: e.target.value,
+                        })
+                      }
+                      value={editcontacts.editEmail}
                     />
                   </Form.Item>
 
                   <label>Phone Primary</label>
                   <Form.Item
-                    // name="phone"
+                    name="editPhone"
                     rules={[
                       {
                         required: true,
@@ -461,25 +484,35 @@ function EditContact(props) {
                       country={"in"}
                       enableSearch={true}
                       countryCodeEditable={false}
-                      value={phoneNo}
-                      onChange={(value) => setPhone(value)}
+                      onChange={(value) =>
+                        setEditContacts({
+                          ...editcontacts,
+                          editPhone: value,
+                        })
+                      }
+                      value={editcontacts.editPhone}
                     />
                   </Form.Item>
 
                   <label>Phone Secondary</label>
-                  <Form.Item>
+                  <Form.Item name="editMobile">
                     <PhoneInput
                       country={"in"}
                       enableSearch={true}
-                      value={mobileNo}
                       // countryCodeEditable={false}
-                      onChange={(value) => setMobile(value)}
+                      onChange={(value) =>
+                        setEditContacts({
+                          ...editcontacts,
+                          editMobile: value,
+                        })
+                      }
+                      value={editcontacts.editMobile}
                     />
                   </Form.Item>
 
                   <label>Designation</label>
                   <Form.Item
-                    // name="designation"
+                    // name="editDesignation"
                     rules={[
                       {
                         required: true,
@@ -499,8 +532,13 @@ function EditContact(props) {
                     ]}
                   >
                     <InputType
-                      value={designation}
-                      onChange={(e) => setDesignation(e.target.value)}
+                      onChange={(e) =>
+                        setEditContacts({
+                          ...editcontacts,
+                          editDesignation: e.target.value,
+                        })
+                      }
+                      value={editcontacts.editDesignation}
                     />
                   </Form.Item>
                 </div>

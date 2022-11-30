@@ -42,7 +42,11 @@ function Categorylist(props) {
   const [dataCategory, setDataCategory] = useState();
   const [DisplayDataa, setDisplayDataa] = useState();
   const [displayChild, setDisplayChild] = useState();
+  const [displayName, setDisplayname] = useState({
+    name: "",
+  });
   console.log("dataCategory", dataCategory);
+  console.log("dataa of name", displayName);
   // const [showEditModal, setShowEditModal] = useState(false);
   const [State, setState] = useState("null");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -153,6 +157,9 @@ function Categorylist(props) {
                 length--;
               }
             }
+
+            setDisplayname(categories);
+
             // setCategoryList(categories);
             setDataCategory(categories);
             return categories;
@@ -187,14 +194,7 @@ function Categorylist(props) {
               category_name: Categoryname,
               category_description: item?.category_description,
             });
-            // temp.push({
-            //   category_name: ,
-            //   category_code: tmpArr_id,
-            //   category_description: tmpArry,
-            // });
           });
-          // setCategoryList(res?.data?.data);
-          // setCategoryList(temp);
         } else {
           console.log("Failed to load data!");
         }
@@ -277,6 +277,15 @@ function Categorylist(props) {
     trigger,
   } = useForm();
 
+  const getDescendantValues = (record) => {
+    const values = [];
+    (function recurse(record) {
+      values.push(record.category_name.toString().toLowerCase());
+      record.children.forEach(recurse);
+    })(record);
+    return values;
+  };
+
   const columns = [
     {
       title: "ACTIONS",
@@ -301,9 +310,10 @@ function Categorylist(props) {
       title: "CATEGORY NAME",
       dataIndex: "category_name",
       key: "category_name",
-      filteredValue: [searchType],
+      filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.lead_type)
+        console.log("hai how are", record.children);
+        return String(record.category_name || record.children[record])
           .toLowerCase()
           .includes(value.toLowerCase());
       },
@@ -315,7 +325,8 @@ function Categorylist(props) {
       key: "category_code",
       filteredValue: [searchType],
       onFilter: (value, record) => {
-        return String(record.lead_type)
+        console.log("dfhasasswww12", record);
+        return String(record.category_code)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
@@ -328,7 +339,7 @@ function Categorylist(props) {
       width: "23%",
       filteredValue: [searchStatus],
       onFilter: (value, record) => {
-        return String(record.lead_status)
+        return String(record.category_parent_id)
           .toLowerCase()
           .includes(value.toLowerCase());
       },

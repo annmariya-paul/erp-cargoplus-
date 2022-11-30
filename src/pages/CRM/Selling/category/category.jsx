@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import CustomModel from "../../../../components/custom_modal/custom_model";
+import ErrorMsg from "../../../../ErrorMessages/errormessages";
 import "./category.css";
 import { TreeSelect } from "antd";
 import { Form, Input } from "antd";
@@ -48,7 +50,7 @@ function Category() {
     if (!mShow) {
       setTimeout(() => {
         setSuccessPopup(false);
-        navigate(ROUTES.CATEGORY);
+        navigate(ROUTES.CATEGORY_LIST);
       }, time);
     }
   };
@@ -214,8 +216,11 @@ function Category() {
     formData.append("category_pic", img);
     formData.append("category_description", description);
     
+    if(parentcategory)
+      {
+        formData.append("category_parent_id",parentcategory );
+      }
       
-      formData.append("category_parent_id",parentcategory );
     
     
     
@@ -559,7 +564,15 @@ function Category() {
           </div>
         </div>
       </div>
+      <CustomModel
+        size={"sm"}
+        success
+        show={successPopup}
+        onHide={() => setSuccessPopup(false)}
+      />
+      {error ? <ErrorMsg code="500" /> : ""}
     </>
+    
   );
 }
 

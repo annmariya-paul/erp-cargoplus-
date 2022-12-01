@@ -299,12 +299,15 @@ function Categorylist(props) {
       width: "14%",
       render: (data, index) => {
         return (
-          <div className="actions ">
+          <div className=" d-flex justify-content-center align-items-center gap-3">
+            <div className="actionEdit">
+              <FaEdit />
+            </div>
             <div
               className="actionEdit"
               onClick={() => handleViewCategory(index)}
             >
-              <FaEdit />
+              <MdPageview />
             </div>
             <div className="actionDel">
               <FaTrash />
@@ -400,7 +403,9 @@ function Categorylist(props) {
   };
 
   // function to get single catgeory data   // by noufal
-  const handleEditCategoryPhase1 = (e) => {};
+  const handleEditCategoryPhase1 = (e) => {
+    console.log("Edit data", e);
+  };
 
   console.log("jdfjdfdj", ViewingData);
   console.log("hai !!!", categoryId);
@@ -471,7 +476,10 @@ function Categorylist(props) {
                 bordered={false}
                 className="page_size_style"
                 value={pageSize}
-                onChange={(e) => setPageSize(e)}
+                onChange={(e) => {
+                  setCurrent(1);
+                  setPageSize(e);
+                }}
               >
                 <Select.Option value="25">
                   Show
@@ -518,7 +526,7 @@ function Categorylist(props) {
             />
           </div>
           <div className="d-flex py-2 justify-content-center">
-            {/* <MyPagination
+            <MyPagination
               total={CategoryList?.length}
               current={current}
               showSizeChanger={true}
@@ -527,7 +535,7 @@ function Categorylist(props) {
                 setCurrent(current);
                 setPageSize(pageSize);
               }}
-            /> */}
+            />
           </div>
         </div>
       </div>

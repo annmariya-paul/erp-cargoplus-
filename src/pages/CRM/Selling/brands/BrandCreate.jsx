@@ -113,8 +113,6 @@ function BrandCreate() {
               form={addForm}
               onFinish={(value) => {
                 console.log("values111333", value);
-                // setDescription(value.description);
-                // setBrand(value.brand);
                 OnSubmit();
               }}
               onFinishFailed={(error) => {
@@ -123,73 +121,62 @@ function BrandCreate() {
             >
               <div className="row my-5">
                 <div className="col-4">
-                  <p>Name</p>
+                  <label>Name</label>
                   <div>
-                    {/* <input type="text" className="input_type_style w-100" /> */}
                     <Form.Item
-                      name="brand"
-                      
+                      name="brandName"
                       rules={[
                         {
                           required: true,
                           pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-
                           message: "Please enter a Valid Brand Name",
                         },
-
                         {
-                          whitespace: true,
+                          min: 2,
+                          message: "Name must be at least 2 characters",
                         },
                         {
-                          min: 3,
+                          max: 100,
+                          message: "Name cannot be longer than 100 characters",
                         },
                       ]}
                       onChange={(e) => setBrand(e.target.value)}
                     >
-                      <InputType />
+                      <InputType
+                        value={brand}
+                        onChange={(e) => setBrand(e.target.value)}
+                      />
                     </Form.Item>
                   </div>
                 </div>
                 <div className="col-8">
-                  <p>Description</p>
+                  <label>Description</label>
                   <div>
                     {/* <textarea className="input_type_style w-100" /> */}
                     <Form.Item
                       name="description"
                       rules={[
                         {
-                          required: true,
-
-                          message: "Please enter Valid Description",
-                        },
-
-                        {
-                          whitespace: true,
-                        },
-                        {
                           min: 2,
+                          message: "Description must be at least 2 characters",
                         },
                         {
                           max: 500,
+                          message:
+                            "Description cannot be longer than 500 characters",
                         },
                       ]}
-                      onChange={(e) => setDescription(e.target.value)}
                     >
-                      <TextArea />
+                      <TextArea
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                      />
                     </Form.Item>
                   </div>
                 </div>
                 <div className="col-4">
-                  <p>Display Picture</p>
-                  <Form.Item
-                    name="new"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please select an image file",
-                      },
-                    ]}
-                  >
+                  <label>Display Picture</label>
+                  <Form.Item name="new">
                     <FileUpload
                       multiple
                       listType="picture"
@@ -200,10 +187,10 @@ function BrandCreate() {
                         console.log("Before upload", file.file);
                         console.log("Before upload file size", file.file.size);
 
-                        if (file.file.size > 1000 && file.file.size < 50000) {
+                        if (file.file.size > 1000 && file.file.size < 500000) {
                           setImg(file.file.originFileObj);
                           console.log(
-                            "image grater than 1 kb and less than 50 kb"
+                            "Image must be greater than 1 kb and less than 500 kb"
                           );
                         } else {
                           console.log("hgrtryyryr");
@@ -248,10 +235,13 @@ function BrandCreate() {
                 </div>
 
                 <div className="col-12 d-flex justify-content-center  gap-2 py-5">
-                  <Button onClick={() => {}} className="save_button">
-                    Save
-                  </Button>
-                  <Button  btnType="cancel"  onClick={() => {handleCancel()}} >
+                  <Button className="save_button">Save</Button>
+                  <Button
+                    btnType="cancel"
+                    onClick={() => {
+                      handleCancel();
+                    }}
+                  >
                     cancel
                   </Button>
                 </div>

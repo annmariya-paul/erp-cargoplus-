@@ -34,7 +34,7 @@ function Lead({}) {
   const [modalContact, setModalContact] = useState(false);
   const [modalAddress, setModalAddress] = useState(false);
   const [modalOpportunity, setModalOpportunity] = useState(false);
-  const [leadType, setLeadType] = useState("L");
+  const [leadType, setLeadType] = useState("");
 
   const [leadName, setLeadName] = useState();
   const [leadUsertype, setLeadUsertype] = useState("O");
@@ -279,11 +279,10 @@ function Lead({}) {
                     <div className="col-sm-4 pt-2">
                       <label>User Type</label>
                       <Form.Item
-                        name="leadUsertype"
+                        // name="leadUsertype"
                         rules={[
                           {
                             required: true,
-                            message: "Please select a User Type",
                           },
                         ]}
                       >
@@ -325,11 +324,10 @@ function Lead({}) {
                     <div className="col-sm-4 pt-2">
                       <label>Source</label>
                       <Form.Item
-                        name={leadSource}
+                        // name={leadSource}
                         rules={[
                           {
                             required: true,
-                            message: "Please select a Source",
                           },
                         ]}
                       >
@@ -372,7 +370,7 @@ function Lead({}) {
                               ) {
                                 setLeadimg(file.file.originFileObj);
                                 console.log(
-                                  "image grater than 1 kb and less than 50 kb"
+                                  "image greater than 1 kb and less than 50 kb"
                                 );
                               } else {
                                 console.log("hgrtryyryr");
@@ -389,7 +387,7 @@ function Lead({}) {
                         rules={[
                           {
                             min: 5,
-                            message: "Description have must be 5 characters",
+                            message: "Description must be atleast 5 characters",
                           },
                         ]}
                       >
@@ -404,11 +402,10 @@ function Lead({}) {
                         <div className="col-12">
                           <label>Lead Status</label>
                           <Form.Item
-                            name="leadStatus"
+                            // name="leadStatus"
                             rules={[
                               {
                                 required: true,
-                                message: "Please select a Status",
                               },
                             ]}
                           >

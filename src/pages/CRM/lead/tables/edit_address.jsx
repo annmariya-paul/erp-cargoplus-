@@ -33,9 +33,6 @@ function Edit_Address(props) {
   const [addForm] = Form.useForm();
   const [editForm] = Form.useForm();
 
-  var phoneNo = `+${phone}`
-  var editPhoneNo = `${editPhone}`
-
   const [oneLeadData, setOneLeadData] = useState();
   const [LeadId, setLeadId] = useState();
   // {funtion to fetch each Lead data - Ann mariya (22/11/22) }
@@ -61,7 +58,7 @@ function Edit_Address(props) {
       if (allAddress.data.success) {
         setValue(allAddress.data.data);
         console.log("hello data", allAddress.data.data);
-        // {array to set addresses for corresponding lead id}
+        // {array to set addresses of corresponding lead id}
         let array = [];
         allAddress?.data?.data?.forEach((item, index) => {
           setAddressLeadId(item?.address_lead_id);
@@ -102,14 +99,13 @@ function Edit_Address(props) {
     setEditPhone(i.address_contact);
     getAddresses();
     editForm.setFieldsValue({
-      addressId:i.address_id,
+      addressId: i.address_id,
       editTitle: i.address_title,
       editAddressData: i.address_content,
       editPin: i.address_pin,
       editPhone: i.address_contact,
     });
     setEditAddressModel(true);
-    
   };
 
   // {function to edit address - Ann mariya(25-11-22)}
@@ -119,7 +115,7 @@ function Edit_Address(props) {
       address_title: editTitle,
       address_content: editAddressData,
       address_pin: editPin,
-      address_contact: editPhoneNo,
+      address_contact: editPhone,
     })
       .then(function (response) {
         console.log("address data", response);
@@ -149,7 +145,7 @@ function Edit_Address(props) {
       address_title: title,
       address_content: address_data,
       address_pin: pincode,
-      address_contact: phoneNo,
+      address_contact: phone,
     })
       .then(function (response) {
         console.log("address data", response);
@@ -289,6 +285,7 @@ function Edit_Address(props) {
 
                   <label>Address</label>
                   <Form.Item
+                    className="mt-2"
                     name="address"
                     rules={[
                       {
@@ -331,9 +328,7 @@ function Edit_Address(props) {
                     />
                   </Form.Item>
 
-                  <label for="phone" className="form-label">
-                    Mobile
-                  </label>
+                  <label>Mobile</label>
                   <Form.Item
                     name="phone"
                     rules={[
@@ -355,7 +350,7 @@ function Edit_Address(props) {
                       // disableSearchIcon={true}
                       country={"in"}
                       countryCodeEditable={true}
-                      value={phoneNo}
+                      value={phone}
                       onChange={(value) => setPhone(value)}
                     />
                   </Form.Item>
@@ -431,7 +426,7 @@ function Edit_Address(props) {
                       },
                       {
                         min: 2,
-                        message: "Address name must be 2 characters",
+                        message: "Address name must be atleast 2 characters",
                       },
                       {
                         max: 500,
@@ -482,7 +477,7 @@ function Edit_Address(props) {
                       country={"in"}
                       enableSearch={true}
                       countryCodeEditable={false}
-                      value={editPhoneNo}
+                      value={editPhone}
                       onChange={(value) => setEditPhone(value)}
                     />
                   </Form.Item>

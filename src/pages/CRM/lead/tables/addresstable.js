@@ -4,32 +4,70 @@ import TableData from "../../../../components/table/table_data";
 import { CRM_BASE_URL } from "../../../../api/bootapi";
 import PublicFetch from "../../../../utils/PublicFetch";
 import PhoneNumber from "../../../../components/phone_number/phonenumber";
-import { message } from "antd";
+import { Form, message } from "antd";
 import { isPossiblePhoneNumber } from "react-phone-number-input";
-import { Form } from "react-bootstrap";
-
-import { FormGroup } from "react-bootstrap";
+import InputType from "../../../../components/Input Type textbox/InputType";
+import TextArea from "../../../../components/ InputType TextArea/TextArea";
 import Button from "../../../../components/button/button";
 import { useForm } from "react-hook-form";
-// import "react-phone-number-input/style.css";
+import PhoneInput from "react-phone-input-2";
 import Custom_model from "../../../../components/custom_modal/custom_model";
 
 function AddressTable(props) {
   const [value, setValue] = useState();
-
   const [modalShow, setModalShow] = useState(false);
-  const [modelshowAdd, setModalshowAdd] = useState(true);
-  const [title, setTitle] = useState();
-  const [address_data, setAddress_data] = useState();
-  const [pincode, setPincode] = useState();
-  const [phone, setPhone] = useState();
+  const [modelshowAdd, setModalshowAdd] = useState(false);
+  const [title, setTitle] = useState("");
+  const [address_data, setAddress_data] = useState("");
+  const [pincode, setPincode] = useState("");
+  const [phone, setPhone] = useState("");
+  const [addressTable, setAddressTable] = useState();
+  const [addressLeadId, setAddressLeadId] = useState();
+  const [serialNo, setserialNo] = useState(1);
+  const [addForm] = Form.useForm();
 
+  const [oneLeadData, setOneLeadData] = useState();
+  const [LeadId, setLeadId] = useState();
+  // {funtion to fetch each Lead data - Ann mariya }
+  const GetLeadData = () => {
+    PublicFetch.get(`${CRM_BASE_URL}/lead/${props.lead}`)
+      .then((res) => {
+        if (res?.data?.success) {
+          console.log("Unique Lead Id", res?.data?.data);
+          setOneLeadData(res?.data?.data);
+          setLeadId(res?.data?.data?.lead_id);
+        } else {
+          console.log("FAILED TO LOAD DATA");
+        }
+      })
+      .catch((err) => {
+        console.log("Error while getting data", err);
+      });
+  };
+
+  // # funtion getcontacttable to fetch addresses - Noufal
   const getAllAddress = async () => {
     try {
       const allAddress = await PublicFetch.get(`${CRM_BASE_URL}/address`);
       if (allAddress.data.success) {
         setValue(allAddress.data.data);
-        console.log("hello data", allAddress.data.data);
+        console.log("all address data", allAddress.data.data);
+        // {array to show addresses of corresponding lead id in table - Ann mariya}
+        let array = [];
+        allAddress?.data?.data?.forEach((item, index) => {
+          setAddressLeadId(item?.address_lead_id);
+          if (LeadId === item?.address_lead_id) {
+            {
+              array.push({
+                address_title: item?.address_title,
+                address_content: item?.address_content,
+                address_pin: item?.address_pin,
+                address_contact: item?.address_contact,
+              });
+              setAddressTable(array);
+            }
+          }
+        });
       } else {
         message.error("fetch data error");
       }
@@ -41,13 +79,55 @@ function AddressTable(props) {
 
   useEffect(() => {
     getAllAddress();
-  }, []);
+    GetLeadData();
+  }, [LeadId]);
+  // { funtion to add address in lead edit - Ann mariya }
+  const AddAddress = (data) => {
+    PublicFetch.post(`${CRM_BASE_URL}/address`, {
+      address_lead_id: parseInt(props.lead),
+      address_title: title,
+      address_content: address_data,
+      address_pin: pincode,
+      address_contact: phone,
+    })
+      .then(function (response) {
+        console.log("hello", response);
+        if (response.data.success) {
+          getAllAddress();
+          setAddress_data();
+          setPhone();
+          setPincode();
+          setTitle();
+          setModalshowAdd(false);
+          setModalShow(true);
+          close_modal(modalShow, 1200);
+          props.onHide();
+        } else {
+          message.error("fetch data error");
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+  // useEffect(() => {
+  //   AddAddress();
+  // }, []);
+
+  const close_modal = (mShow, time) => {
+    if (!mShow) {
+      setTimeout(() => {
+        setModalShow(false);
+      }, time);
+    }
+  };
 
   const columns = [
     {
-      title: "No",
-      dataIndex: "address_id",
-      key: "address_id",
+      title: "No.",
+      key: "index",
+      render: (value, item, index) => serialNo + index,
+      align: "center",
     },
     {
       title: "TITLE",
@@ -70,181 +150,144 @@ function AddressTable(props) {
       key: "address_contact",
     },
   ];
-
-  const submit = (data) => {
-    PublicFetch.post(`${CRM_BASE_URL}/lead/${props.lead}/address`, {
-      address_title: title,
-      address_content: address_data,
-      address_pin: pincode,
-      address_contact: phone,
-    })
-      .then(function (response) {
-        console.log("hello", response);
-        if (response.data.success) {
-          getAllAddress();
-          setAddress_data();
-          setPhone();
-          setPincode();
-          setTitle();
-          setModalshowAdd(false);
-          setModalShow(true);
-          close_modal(modalShow, 1200);
-          props.onHide();
-          reset();
-        } else {
-          message.error("fetch data error");
-        }
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
-  // useEffect(() => {
-  //   submit();
-  // }, []);
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-    trigger,
-  } = useForm();
-
-  const close_modal = (mShow, time) => {
-    if (!mShow) {
-      setTimeout(() => {
-        setModalShow(false);
-      }, time);
-    }
-  };
   return (
     <div>
       <div className="datatable">
         <TableData
-          data={value}
+          data={addressTable}
           columns={columns}
           custom_table_css="addresstable"
         />
       </div>
       <Custom_model
-        Adding_contents
+        bodyStyle={{ height: 620, overflowY: "auto" }}
         show={modelshowAdd}
         onHide={() => setModalshowAdd(false)}
-        header="Add Address"
-        footer={[
-          <Button onClick={submit} btnType="save">
-            Save
-          </Button>,
-        ]}
+        footer={false}
         {...props}
-      >
-        <Form onSubmit={handleSubmit(submit)}>
-          <div className="px-5">
-            <Form.Group className="mb-3" controlId="address_title">
-              <Form.Label>Title</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Name"
-                value={title}
-                // className={`${errors.address_title && "invalid"}`}
-                // {...register("address_title", {
-                //   required: "Please enter a valid Title",
-                //   minLength: {
-                //     value: 3,
-                //     message: "Minimum Required length is 3",
-                //   },
-                //   maxLength: {
-                //     value: 100,
-                //   },
-                // })}
-                onChange={(e) => setTitle(e.target.value)}
-                // onKeyUp={() => {
-                //   trigger("address_title");
-                // }}
-              />
-              {errors.address_title && (
-                <small className="text-danger">
-                  {errors.address_title.message}
-                </small>
-              )}
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="address_content">
-              <Form.Label>Address</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={3}
-                // className={`${errors.address_content && "invalid"}`}
-                // {...register("address_content", {
-                //   required: "Please enter a valid Address",
-                //   minLength: {
-                //     value: 6,
-                //     message: "Minimum Required length is 6",
-                //   },
-                //   maxLength: {
-                //     value: 500,
-                //   },
-                // })}
-                value={address_data}
-                // onKeyUp={() => {
-                //   trigger("address_content");
-                // }}
-                onChange={(e) => setAddress_data(e.target.value)}
-              />
-              {errors.address_content && (
-                <small className="text-danger">
-                  {errors.address_content.message}
-                </small>
-              )}
-            </Form.Group>
-            <Form.Group className="mb-1" controlId="address_pin">
-              <Form.Label>PIN</Form.Label>
-              <Form.Control
-                type="text"
-                // className={`form-control ${errors.address_pin && "invalid"}`}
-                // {...register("address_pin", {
-                //   required: "Please enter valid PIN eg:345 678",
-                //   pattern: {
-                //     value: /^[A-Z0-9- ]{2,10}$/i,
-                //     message: "Please enter valid PIN eg:345 678",
-                //   },
-                // })}
-                // onKeyUp={() => {
-                //   trigger("address_pin");
-                // }}
-                value={pincode}
-                onChange={(e) => setPincode(e.target.value)}
-              />
-              {/* {errors.address_pin && (
-                <small className="text-danger">
-                  {errors.address_pin.message}
-                </small>
-              )} */}
-            </Form.Group>
-            <FormGroup>
-              <div className="Phno row mb-3">
-                <label for="phone" className="form-label">
-                  Mobile
-                </label>
-                <PhoneNumber
-                  defaultCountry="IN"
-                  value={phone}
-                  onChange={(value) => setPhone(value)}
-                />
-                {phone ? (
-                  <small style={{ color: "red" }}>
-                    {phone && isPossiblePhoneNumber(phone)
-                      ? " "
-                      : "Enter a valid Phone Number"}
-                  </small>
-                ) : (
-                  ""
-                )}
+        View_list
+        list_content={
+          <>
+            <Form
+              form={addForm}
+              onFinish={(values) => {
+                console.log("values iss", values);
+                AddAddress();
+              }}
+              onFinishFailed={(error) => {
+                console.log(error);
+              }}
+            >
+              <div className="row">
+                <h5 className="lead_text">Add Address</h5>
               </div>
-            </FormGroup>
-          </div>
-        </Form>
-      </Custom_model>
+              <div className="row mt-3">
+                <div className="px-3">
+                  <label>Title</label>
+                  <Form.Item
+                    name="title"
+                    rules={[
+                      {
+                        required: true,
+                        pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                        message: "Please enter a Valid title",
+                      },
+                      {
+                        min: 2,
+                        message: "Title must be atleast 2 characters",
+                      },
+                      {
+                        max: 100,
+                      },
+                    ]}
+                  >
+                    <InputType
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                    />
+                  </Form.Item>
+
+                  <label>Address</label>
+                  <Form.Item
+                    className="mt-2"
+                    name="address"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please enter a Valid address",
+                      },
+                      {
+                        whitespace: true,
+                      },
+                      {
+                        min: 2,
+                        message: "Address must be atleast 2 characters",
+                      },
+                      {
+                        max: 500,
+                      },
+                    ]}
+                  >
+                    <TextArea
+                      value={address_data}
+                      onChange={(e) => setAddress_data(e.target.value)}
+                    />
+                  </Form.Item>
+
+                  <label>PIN</label>
+                  <Form.Item
+                    value={pincode}
+                    name="pin"
+                    rules={[
+                      {
+                        required: true,
+                        pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                        message: "Please enter a Valid PIN",
+                      },
+                    ]}
+                  >
+                    <InputType
+                      value={pincode}
+                      onChange={(e) => setPincode(e.target.value)}
+                    />
+                  </Form.Item>
+
+                  <label>Mobile</label>
+                  <Form.Item
+                    name="phone"
+                    rules={[
+                      {
+                        required: true,
+                        pattern: new RegExp(
+                          "^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-s./0-9]*$"
+                        ),
+                        message: "Please enter a valid phone number",
+                      },
+                      {
+                        min: 7,
+                        message: "Please enter valid address",
+                      },
+                    ]}
+                  >
+                    <PhoneInput
+                      enableSearch={true}
+                      // disableSearchIcon={true}
+                      country={"in"}
+                      countryCodeEditable={true}
+                      value={phone}
+                      onChange={(value) => setPhone(value)}
+                    />
+                  </Form.Item>
+                </div>
+                <div className="d-flex justify-content-center mt-3">
+                  <Button btnType="save">Save</Button>
+                </div>
+              </div>
+            </Form>
+          </>
+        }
+      />
+
       <Custom_model
         centered
         size={`sm`}

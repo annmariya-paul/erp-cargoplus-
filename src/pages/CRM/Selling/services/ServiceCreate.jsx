@@ -1,16 +1,26 @@
 import { Checkbox, Select } from "antd";
+import "../../../../components/Input Type textbox/InputType.scss";
 import React, { useState } from "react";
 import Button from "../../../../components/button/button";
 import CustomModel from "../../../../components/custom_modal/custom_model";
 import ErrorMsg from "../../../../components/error/ErrorMessage";
 import FileUpload from "../../../../components/fileupload/fileUploader";
-
-
-
+import InputType from "../../../../components/Input Type textbox/InputType";
+import SelectBox from "../../../../components/Select Box/SelectBox";
+import TextArea from "../../../../components/ InputType TextArea/TextArea";
+import { Form, message,InputNumber } from "antd";
 
 function ServiceCreate() {
   const [successPopup, setSuccessPopup] = useState(false);
   const [error, setError] = useState(false);
+  const [serviceName, setServiceName] = useState("");
+  const [code, setCode] = useState("");
+  const [category, setCategory] = useState();
+  const [HSN, setHSN] = useState();
+  const [taxRate, setTaxRate] = useState();
+  const [displayPicture, setDisplayPicture] = useState();
+  const [description, setDescription] = useState();
+  const [addform] = Form.useForm();
   return (
     <div>
       <div className="container-fluid mt-3">
@@ -27,128 +37,162 @@ function ServiceCreate() {
             </div>
             <div className="row my-5">
               <div className="col-4">
-                <p>Name</p>
-                <div>
-                  <input type="text" className="input_type_style w-100" />
-                </div>
+                <label>Name</label>
+                <Form.Item
+                  name="serviceName"
+                  rules={[
+                    {
+                      required: true,
+                      pattern: new RegExp("[^0-9a-z]"),
+                      message: "Please enter a Valid Name",
+                    },
+                    {
+                      whitespace: true,
+                    },
+                    {
+                      min: 2,
+                      message: "Designation must be atleast 2 characters",
+                    },
+                    {
+                      max: 100,
+                    },
+                  ]}
+                >
+                  <InputType
+                    value={serviceName}
+                    onChange={(e) => setServiceName(e.target.value)}
+                  />
+                </Form.Item>
               </div>
               <div className="col-4">
-                <p>Code</p>
-                <div>
-                  <input type={"text"} className="input_type_style w-100" />
-                </div>
+                <label>Code</label>
+                <Form.Item
+                  name="code"
+                  rules={[
+                    {
+                      required: true,
+                      pattern: new RegExp("[^0-9a-z]"),
+                      message: "Please enter a Valid Code",
+                    },
+                    {
+                      min: 2,
+                      message: "Code must be atleast 2 characters",
+                    },
+                    {
+                      max: 20,
+                    },
+                  ]}
+                >
+                  <InputType
+                    value={code}
+                    onChange={(e) => setCode(e.target.value)}
+                  />
+                </Form.Item>
               </div>
               <div className="col-4 ">
-                <p>Category</p>
-                <div>
-                  <Select
-                    style={{
-                      backgroundColor: "whitesmoke",
-                      borderRadius: "5px",
-                    }}
-                    bordered={false}
-                    className="w-100 "
-                  >
-                    <Select.Option>Watch</Select.Option>
-                  </Select>
-                </div>
-              </div>
-              <div className="col-6 mt-2">
-                <p>HSN</p>
-                <div>
-                  <Select
-                    style={{
-                      backgroundColor: "whitesmoke",
-                      borderRadius: "5px",
-                    }}
-                    bordered={false}
-                    className="w-100 "
-                  >
-                    <Select.Option>Watch</Select.Option>
-                  </Select>
-                </div>
-              </div>
-              <div className="col-6 mt-2">
-                <p>Tax Rate</p>
-                <div>
-                  {/* <Select
-                    style={{
-                      backgroundColor: "whitesmoke",
-                      borderRadius: "5px",
-                    }}
-                    bordered={false}
-                    className="w-100 "
-                  >
-                    <Select.Option>Watch</Select.Option>
-                  </Select> */}
-                   <div>
-                  <input type="number" className="input_type_style w-100" />
-                </div>
-                </div>
-              </div>
-              {/* <div className="col-6 mt-2">
-                <p>Attributes</p>
-                <div
-                  style={{
-                    backgroundColor: "whitesmoke",
-                    borderRadius: "5px",
-                  }}
+                <label>Category</label>
+                <Form.Item
+                  name="category"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please select a category",
+                    },
+                  ]}
                 >
-                  <div
+                  <SelectBox value={category} onChange={(e) => setCategory(e)}>
+                    <Select.Option>Watch</Select.Option>
+                  </SelectBox>
+                </Form.Item>
+              </div>
+              <div className="col-6 mt-2">
+                <label className="mb-2">HSN</label>
+                <Form.Item
+                  name="HSN"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please select a category",
+                    },
+                  ]}
+                >
+                  <SelectBox value={HSN} onChange={(e) => setHSN(e)}>
+                    <Select.Option>Watch</Select.Option>
+                  </SelectBox>
+                </Form.Item>
+              </div>
+              <div className="col-6 mt-2">
+                <label className="mb-3">Tax Rate</label>
+                <Form.Item
+                  name="taxRate"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter a Valid Tax Rate",
+                    },
+                  ]}
+                >
+                  <InputNumber
                     style={{
+                      border: "0",
                       backgroundColor: "whitesmoke",
-                      borderRadius: "5px",
-                      height: "160px",
-                      overflow: "scroll",
+                      width: "100%",
+                      paddingBlock: "2px",
+                      boxShadow: "none",
                     }}
-                    className="card border-0 px-4 py-2"
-                  >
-                    <label style={{ color: "gray" }} className="my-2 ">
-                      <Checkbox className="me-2" />
-                      color
-                    </label>
-                    <label style={{ color: "gray" }} className="my-2">
-                      <Checkbox className="me-2" />
-                      warrenty
-                    </label>
-                    <label style={{ color: "gray" }} className="my-2">
-                      <Checkbox className="me-2" />
-                      Size
-                    </label>
-                    <label style={{ color: "gray" }} className="my-2">
-                      <Checkbox className="me-2" />
-                      weight
-                    </label>
-                    <label style={{ color: "gray" }} className="my-2">
-                      <Checkbox className="me-2" />
-                      weight
-                    </label>
-                    <label style={{ color: "gray" }} className="my-2">
-                      <Checkbox className="me-2" />
-                      weight
-                    </label>
-                  </div>
-                </div>
-              </div> */}
+                    value={taxRate}
+                    // formatter={(value) =>
+                    //   ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    // }
+                    // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                    onChange={(e) => setTaxRate(e)}
+                  />
+                </Form.Item>
+              </div>
 
               <div className="col-12 mt-2 d-flex  justify-content-center ">
                 <div className="text-center">
-                <p>Display Picture</p>
-                <FileUpload />
-              </div>
+                  <Form.Item name="displayPicture">
+                    <label>Display Picture</label>
+                    <FileUpload
+                      value={displayPicture}
+                      onChange={(e) => setDisplayPicture(e)}
+                    />
+                  </Form.Item>
+                </div>
               </div>
               <div className="col-6 mt-2">
-                <p>Description</p>
+                <label>Address</label>
+                <Form.Item
+                  name="description"
+                  rules={[
+                    {
+                      whitespace: true,
+                    },
+                    {
+                      min: 2,
+                      message: "Description must be atleast 2 characters",
+                    },
+                    {
+                      max: 500,
+                    },
+                  ]}
+                >
+                  <TextArea
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                  />
+                </Form.Item>
+                {/* <p>Description</p>
                 <div>
                   <textarea
                     style={{ height: "100px" }}
                     className="input_type_style w-100"
                   />
-                </div>
+                </div> */}
               </div>
               <div className="col-12 d-flex justify-content-center pt-5 gap-3 ">
-                
-                <Button 
+                <Button
                   onClick={() => {
                     setSuccessPopup(true);
                     setError(true);
@@ -156,7 +200,7 @@ function ServiceCreate() {
                   className="save_button"
                 >
                   Save
-                </Button>{' '}
+                </Button>{" "}
                 {/* <Button
                   onClick={() => {
                     setSuccessPopup(true);
@@ -166,15 +210,15 @@ function ServiceCreate() {
                 >
                  Clear
                 </Button> */}
-
-                <Button as="input" type="reset" value="Reset" > Clear
-                </Button> 
-                </div>
-              
-               </div>
+                <Button as="input" type="reset" value="Reset">
+                  {" "}
+                  Clear
+                </Button>
+              </div>
             </div>
           </div>
-         </div>
+        </div>
+      </div>
       {error ? <ErrorMsg code={"500"} /> : ""}
 
       <CustomModel

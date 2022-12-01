@@ -46,7 +46,7 @@ export default function ProductEditModal({ show, prid, onHide }) {
   const [prbrand, setPrBrand] = useState();
   const [prunit, setPrUnit] = useState();
   const [prattributes, setPrAttributes] = useState();
-  const [setProductDescription, setPrDescription] = useState();
+  const [prDescription, setPrDescription] = useState();
   const [primage, setPrImage] = useState();
   //  const [newvalue, setNewvalue] = useState();
   const [img, setImg] = useState([]);
@@ -273,7 +273,7 @@ export default function ProductEditModal({ show, prid, onHide }) {
       formData.append("product_unit_id", prunit);
       formData.append("product_pic", primage);
       formData.append("product_attributes", prattributes);
-      formData.append("product_description",setProductDescription );
+      formData.append("product_description",prDescription );
   
        PublicFetch.patch(`${CRM_BASE_URL_SELLING}/product/${id}`, formData, {
         "Content-Type": "Multipart/form-Data",
@@ -595,9 +595,9 @@ export default function ProductEditModal({ show, prid, onHide }) {
                     <div>
                       <textarea
                         style={{ height: "100px" }}
-                        value={setProductDescription}
+                        value={prDescription}
                         onChange={(e) => {
-                          setProductDescription(e.target.value);
+                          setPrDescription(e.target.value);
                         }}
                         className="input_type_style w-100"
                       />

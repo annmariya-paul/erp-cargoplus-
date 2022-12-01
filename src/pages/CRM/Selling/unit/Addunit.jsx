@@ -76,117 +76,124 @@ catch(err) {
           <div className="row py-3 ">
             <h5 className="lead_text">Basic Info</h5>
           </div>
-           <Form
-              //  onFinish={onFinish}
-              onFinish={(value)=>{
-                console.log("the formvaluess iss",value)
-                submitaddunit()
-              }}
-            onFinishFailed={(error) => {
-            console.log(error);
+          <Form
+            form={addForm}
+            onFinish={(value) => {
+              console.log("the formvaluess iss", value);
+              submitaddunit();
             }}
-            >
-          <div className="row ">
-            <div className="col-xl-5 col-lg-5 col-12">
-              <label>Name</label>
-              <div>
-              <Form.Item
-                      name="unitname"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+            onFinishFailed={(error) => {
+              console.log(error);
+            }}
+          >
+            <div className="row ">
+              <div className="col-xl-5 col-lg-5 col-12">
+                <label>Name</label>
+                <div>
+                  <Form.Item
+                    name="unitname"
+                    rules={[
+                      {
+                        required: true,
+                        pattern: new RegExp("^[A-Za-z0-9 ]+$"),
 
-                          message: "Please enter a Valid Unit Name",
-                        },
-
-                        {
-                          whitespace: true,
-                        },
-                        {
-                          min: 3,
-                        },
-                      ]}
-                    >
-                      <InputType value={unitName}  onChange={(e)=>setUnitName(e.target.value) } />
-                    </Form.Item>
-               
+                        message: "Please enter a Valid Unit Name",
+                      },
+                      {
+                        whitespace: true,
+                      },
+                      {
+                        min: 2,
+                        message: "Name must be at least 2 characters",
+                      },
+                      {
+                        max: 100,
+                        message: "Name cannot be longer than 100 characters",
+                      },
+                    ]}
+                  >
+                    <InputType
+                      value={unitName}
+                      onChange={(e) => setUnitName(e.target.value)}
+                    />
+                  </Form.Item>
+                </div>
+              </div>
+              <div className="col-xl-5 col-lg-5 col-12">
+                <label>Code</label>
+                <div>
+                  <Form.Item
+                    name="unitcode"
+                    rules={[
+                      {
+                        required: true,
+                        pattern: new RegExp("^[A-Za-z0-9]+$"),
+                        message: "Please enter a Valid Unit code",
+                      },
+                      {
+                        min: 2,
+                        message: "code must be at least 2 characters",
+                      },
+                      {
+                        max: 100,
+                        message:
+                          "Unit code cannot be longer than 100 characters",
+                      },
+                    ]}
+                  >
+                    <InputType
+                      value={unitCode}
+                      onChange={(e) => setUnitCode(e.target.value)}
+                    />
+                  </Form.Item>
+                </div>
               </div>
             </div>
-            <div className="col-xl-5 col-lg-5 col-12">
-              <label>Code</label>
+            <div className="col-xl-5 col-lg-5 col-12 py-5">
+              <label className="fw_label">Description</label>
               <div>
-               
                 <Form.Item
-                      name="unitcode"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-
-                          message: "Please enter a Valid Unit code",
-                        },
-
-                        {
-                          whitespace: true,
-                        },
-                        {
-                          min: 2,
-                        },
-                      ]}
-                    >
-                      <InputType value={unitCode} onChange={(e)=>setUnitCode(e.target.value) } />
-                    </Form.Item>
+                  name="unitdescription"
+                  rules={[
+                    {
+                      min: 2,
+                      message: "Description must be at least 2 characters",
+                    },
+                    {
+                      max: 500,
+                      message:
+                        "Description cannot be longer than 500 characters",
+                    },
+                  ]}
+                >
+                  <TextArea
+                    value={unitDescription}
+                    onChange={(e) => setUnitDescription(e.target.value)}
+                  />
+                </Form.Item>
               </div>
             </div>
-          </div>
-          <div className="col-xl-5 col-lg-5 col-12 py-5">
-            <label className="fw_label">Description</label>
-            <div>
-            <Form.Item
-                      name="unitdescription"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
 
-                          message: "Please enter a Valid Unit Name",
-                        },
-
-                        {
-                          whitespace: true,
-                        },
-                        {
-                          min: 3,
-                        },
-                      ]}
-                    >
-                       <TextArea  value={unitDescription}
-                        onChange={(e)=>setUnitDescription(e.target.value)} />
-                    </Form.Item>
-              {/* <textarea className="input_style " /> */}
-              
+            <div className="row d-flex justify-content-center  my-2">
+              <div className="col-xl-1 col-lg-1 col-12 d-flex justify-content-center">
+                <Button btnType="save" className="">
+                  Save
+                </Button>
+              </div>
+              <div className="col-xl-1 col-lg-1 col-12  justify-content-center">
+                <Button
+                  btnType="cancel"
+                  onClick={() => {
+                    handleCancel();
+                  }}
+                  className=""
+                >
+                  Cancel
+                </Button>
+              </div>
             </div>
-          </div>
-
-          
-          <div className="row d-flex justify-content-center  my-2">
-            <div className="col-xl-1 col-lg-1 col-12 d-flex justify-content-center">
-              <Button btnType="save" className=""  >
-                Save
-              </Button>
-            </div>
-            <div className="col-xl-1 col-lg-1 col-12  justify-content-center">
-              <Button btnType="cancel"onClick={()=>{handleCancel()}}  className=""  >
-                Cancel
-              </Button>
-            </div>
-          </div>
           </Form>
-
         </div>
-
-        
       </div>
 
       <Custom_model />

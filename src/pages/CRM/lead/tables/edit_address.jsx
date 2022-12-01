@@ -1,12 +1,12 @@
 import "./table.scss";
 import React, { useState, useEffect } from "react";
-import PhoneInput from "react-phone-input-2";
+// import PhoneInput from "react-phone-input-2";
 import TableData from "../../../../components/table/table_data";
 import { CRM_BASE_URL } from "../../../../api/bootapi";
 import PublicFetch from "../../../../utils/PublicFetch";
+import Phone_Input from "../../../../components/PhoneInput/phoneInput";
 import PhoneNumber from "../../../../components/phone_number/phonenumber";
 import { Form, message } from "antd";
-import { isPossiblePhoneNumber } from "react-phone-number-input";
 import InputType from "../../../../components/Input Type textbox/InputType";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
 import { FaEdit, FaTrash } from "react-icons/fa";
@@ -233,7 +233,7 @@ function Edit_Address(props) {
         />
       </div>
       <Custom_model
-        bodyStyle={{ height: 620, overflowY: "auto" }}
+        bodyStyle={{ height: 570, overflowY: "auto" }}
         show={modelshowAdd}
         onHide={() => setModalshowAdd(false)}
         footer={false}
@@ -330,26 +330,22 @@ function Edit_Address(props) {
 
                   <label>Mobile</label>
                   <Form.Item
-                    name="phone"
-                    rules={[
-                      {
-                        required: true,
-                        pattern: new RegExp(
-                          "^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-s./0-9]*$"
-                        ),
-                        message: "Please enter a valid phone number",
-                      },
-                      {
-                        min: 7,
-                        message: "Please enter valid address",
-                      },
-                    ]}
+                    // name="phone"
+                    // rules={[
+                    //   {
+                    //     required:true,
+                    //     pattern: new RegExp(
+                    //       "^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-s./0-9]*$"
+                    //     ),
+                    //     message: "Please enter a Valid Phone",
+                    //   },
+                    //   {
+                    //     min: 6,
+                    //     message: "Please enter valid address",
+                    //   },
+                    // ]}
                   >
-                    <PhoneInput
-                      enableSearch={true}
-                      // disableSearchIcon={true}
-                      country={"in"}
-                      countryCodeEditable={true}
+                    <Phone_Input
                       value={phone}
                       onChange={(value) => setPhone(value)}
                     />
@@ -364,7 +360,7 @@ function Edit_Address(props) {
         }
       />
       <Custom_model
-        bodyStyle={{ height: 620, overflowY: "auto" }}
+        bodyStyle={{ height: 570, overflowY: "auto" }}
         show={editAddressModal}
         onHide={() => setEditAddressModel(false)}
         View_list
@@ -473,10 +469,7 @@ function Edit_Address(props) {
                       },
                     ]}
                   >
-                    <PhoneInput
-                      country={"in"}
-                      enableSearch={true}
-                      countryCodeEditable={false}
+                    <Phone_Input
                       value={editPhone}
                       onChange={(value) => setEditPhone(value)}
                     />

@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
 import "../../../CRM/lead/lead_list/leadlist.scss";
-import { Input, Select, Pagination ,Checkbox} from "antd";
+import { Input, Select, Checkbox, Form, message, Popconfirm } from "antd";
 import { FaEdit } from "react-icons/fa";
 import { FiEdit } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
 import { RiFileSearchFill } from "react-icons/ri";
 import TableData from "../../../../components/table/table_data";
 import MyPagination from "../../../../components/Pagination/MyPagination";
+import InputType from "../../../../components/Input Type textbox/InputType";
+import TextArea from "../../../../components/ InputType TextArea/TextArea";
 import Custom_model from "../../../../components/custom_modal/custom_model";
 import Button from "../../../../components/button/button";
 import "./viewunit.scss";
@@ -15,8 +17,8 @@ import { Link } from "react-router-dom";
 import { ROUTES } from "../../../../routes";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
-import { message, Popconfirm } from 'antd';
-// import { ROUTES } from "../../../routes";
+import { useForm } from "react-hook-form";
+
 function Unitlist() {
   const [pageSize, setPageSize] = useState("25"); // page size
   const [current, setCurrent] = useState(1);
@@ -27,13 +29,13 @@ function Unitlist() {
   const [editShow, setEditShow] = useState(false);
   const [viewUnitModal, setViewUnitModal] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
- const [allunit,setAllunit]=useState([])
- const[unitTable,setunitTable]=useState("")
-const [unitName,setUnitName]= useState("")
-const [unitcode,setUnitCode]=useState("")
-const [unitDescription,setUnitDescription]= useState("")
-const[unitid,setUnitid]=useState()
-
+ const [allunit,setAllunit]=useState([]);
+ const[unitTable,setunitTable]=useState("");
+const [unitName,setUnitName]= useState("");
+const [unitcode,setUnitCode]=useState("");
+const [unitDescription,setUnitDescription]= useState("");
+const[unitid,setUnitid]=useState();
+const [editForm]= Form.useForm();
 
  const getData = (current, pageSize) => {
   return unitTable?.slice((current - 1) * pageSize, current * pageSize);
@@ -87,8 +89,13 @@ setUnitid(item?.unit_id)
 setUnitName(item?.unit_name)
 setUnitCode(item?.unit_code)
 setUnitDescription(item?.unit_description)
-  // getoneunit(id)
-
+ editForm.setFieldsValue({
+   unitid: item.unit_id,
+   unitName: item.unit_name,
+   unitcode: item.unit_code,
+   unitDescription: item.unit_description,
+ });
+ setEditShow(true);
 }
 
 const updateClick=async (id)=>{
@@ -104,6 +111,8 @@ const updating= await PublicFetch.patch(
    console.log("successfully updating ")
    setViewUnitModal(false)
    getallunits()
+   setEditShow(false);
+   setSaveSuccess(true)
   //  setSaveSuccess(true)
   }
 }
@@ -127,19 +136,6 @@ catch(err) {
 // }
 
 
-// const getoneunit = async(id)=>{
-//   try{
-//  const oneunit =await PublicFetch.get(
-//   `${CRM_BASE_URL_SELLING}/unit/${id}`
-//  )
-//   }
-//   catch(err) {
-//     console.log("error to getting all units",err)
-//   }
-// }
-
-
-// function to get allunits
 
 const getallunits=async ()=>{
 try{
@@ -317,13 +313,12 @@ console.log("filtered columns::",filteredColumns);
         <div className=" d-flex justify-content-between">
           <h6 className="lead_text">UNITS</h6>
           <div>
-          <Leadlist_Icons 
+            <Leadlist_Icons
               datas={allunit}
               columns={filteredColumns}
               items={data12}
               xlheading={UnitHeads}
               filename="data.csv"
-            
               chechboxes={
                 <Checkbox.Group onChange={onChange} value={selectedColumns}>
                   {columnsKeys.map((column) => (
@@ -334,7 +329,8 @@ console.log("filtered columns::",filteredColumns);
                     </li>
                   ))}
                 </Checkbox.Group>
-              } />
+              }
+            />
           </div>
         </div>
 
@@ -353,7 +349,7 @@ console.log("filtered columns::",filteredColumns);
             />
           </div>
           <div className="col-4">
-          <Input.Search
+            <Input.Search
               placeholder="Search by code"
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
@@ -464,9 +460,10 @@ console.log("filtered columns::",filteredColumns);
                     <span
                       className="d-flex align-items-center justify-content-between gap-1  p-1 button_span"
                       style={{ fontSize: "14px" }}
-                      onClick={() => 
+                      onClick={() =>
                         // handleEditclick(viewUnit)
-                        handleEditonViewpage(viewUnit)}
+                        handleEditonViewpage(viewUnit)
+                      }
                     >
                       Edit
                       <FiEdit />
@@ -510,53 +507,111 @@ console.log("filtered columns::",filteredColumns);
           list_content={
             <div className="container-fluid px-4 my-4 ">
               <h6 className="lead_text">Edits Units and Measurements</h6>
+              <Form
+                form={editForm}
+                onFinish={(value) => {
+                  console.log("the formvaluess iss", value);
+                  updateClick();
+                }}
+                onFinishFailed={(error) => {
+                  console.log(error);
+                }}
+              >
+                <div className="row">
+                  <div className="col-12">
+                    <label>Name</label>
+                    <Form.Item
+                      name="unitName"
+                      rules={[
+                        {
+                          required: true,
+                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
 
-              <div className="row">
-                <div className="col-12">
-                  <label>Name</label>
-                  <div>
-                    <input
-                      type="text"
-                      className="input_style"
-                      value={ unitName }
-                      onChange={(e)=>setUnitName(e.target.value) }
-                      rules={{ required: true, message: "Please enter name" }}
-                    />
-                  </div>
-                </div>
-                <div className="col-12 py-2">
-                  <label>Code</label>
-                  <div>
-                    <input type="text" className="input_style"
-                    value={unitcode}
-                    onChange={(e)=>setUnitCode(e.target.value) }
-                    />
-                  </div>
-                </div>
-                <div className="col-12 py-2">
-                  <label>Description</label>
-                  <div>
-                    <textarea className="input_style " 
-                    value={unitDescription }
-                    onChange={(e)=>setUnitDescription(e.target.value)}
-                    />
-                  </div>
-                </div>
-                <div className="row d-flex justify-content-center">
-                  <div className="col-xl-2 col-lg-2 col-12 justify-content-center">
-                    <Button
-                      btnType="save"
-                      onClick={(id) => {
-                        updateClick()
-                        setEditShow(false);
-                        setSaveSuccess(true);
-                      }}
+                          message: "Please enter a Valid Unit Name",
+                        },
+                        {
+                          whitespace: true,
+                        },
+                        {
+                          min: 2,
+                          message: "Name must be at least 2 characters",
+                        },
+                        {
+                          max: 100,
+                          message: "Name cannot be longer than 100 characters",
+                        },
+                      ]}
                     >
-                      Save
-                    </Button>
+                      <InputType
+                        value={unitName}
+                        onChange={(e) => setUnitName(e.target.value)}
+                      />
+                    </Form.Item>
+                  </div>
+                  <div className="col-12 py-2">
+                    <label>Code</label>
+                    <Form.Item
+                      name="unitcode"
+                      rules={[
+                        {
+                          required: true,
+                          pattern: new RegExp("^[A-Za-z0-9]+$"),
+                          message: "Please enter a Valid Unit code",
+                        },
+                        {
+                          min: 2,
+                          message: "code must be at least 2 characters",
+                        },
+                        {
+                          max: 100,
+                          message:
+                            "Unit code cannot be longer than 100 characters",
+                        },
+                      ]}
+                    >
+                      <InputType
+                        value={unitcode}
+                        onChange={(e) => setUnitCode(e.target.value)}
+                      />
+                    </Form.Item>
+                  </div>
+                  <div className="col-12 py-2">
+                    <label>Description</label>
+                    <Form.Item
+                      name="unitDescription"
+                      rules={[
+                        {
+                          min: 2,
+                          message: "Description must be at least 2 characters",
+                        },
+                        {
+                          max: 500,
+                          message:
+                            "Description cannot be longer than 500 characters",
+                        },
+                      ]}
+                    >
+                      <TextArea
+                        value={unitDescription}
+                        onChange={(e) => setUnitDescription(e.target.value)}
+                      />
+                    </Form.Item>
+                  </div>
+                  <div className="row d-flex justify-content-center">
+                    <div className="col-xl-2 col-lg-2 col-12 justify-content-center">
+                      <Button
+                        btnType="save"
+                        // onClick={(id) => {
+                        //   updateClick();
+                        //   setEditShow(false);
+                        // }}
+                      >
+                        Save
+                      </Button>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </Form>
             </div>
           }
         />

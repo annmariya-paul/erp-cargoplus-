@@ -160,7 +160,7 @@ function AddressTable(props) {
         />
       </div>
       <Custom_model
-        bodyStyle={{ height: 620, overflowY: "auto" }}
+        bodyStyle={{ height: 570, overflowY: "auto" }}
         show={modelshowAdd}
         onHide={() => setModalshowAdd(false)}
         footer={false}
@@ -252,7 +252,7 @@ function AddressTable(props) {
                     />
                   </Form.Item>
 
-                  <label>Mobile</label>
+                  <label>Contact</label>
                   <Form.Item
                     name="phone"
                     rules={[
@@ -263,20 +263,23 @@ function AddressTable(props) {
                         ),
                         message: "Please enter a valid phone number",
                       },
-                      {
-                        min: 7,
-                        message: "Please enter valid address",
-                      },
                     ]}
                   >
-                    <PhoneInput
+                    <PhoneNumber
+                      defaultCountry={"IN"}
+                      value={phone}
+                      id="contact_phone_1"
+                      name="contact_phone_1"
+                      onChange={(value) => setPhone(value)}
+                    />
+                    {/* <PhoneInput
                       enableSearch={true}
                       // disableSearchIcon={true}
                       country={"in"}
                       countryCodeEditable={true}
                       value={phone}
                       onChange={(value) => setPhone(value)}
-                    />
+                    /> */}
                   </Form.Item>
                 </div>
                 <div className="d-flex justify-content-center mt-3">

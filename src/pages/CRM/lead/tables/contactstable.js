@@ -16,11 +16,11 @@ import Lead from "../lead";
 function ContactTable(props) {
   const [contactTable, setContactTable] = useState();
   const [contactLeadId, setContactLeadId] = useState();
-  const [ContactName, setContactName] = useState();
-  const [email, setEmail] = useState();
-  const [phone, setPhone] = useState();
-  const [mobile, setMobile] = useState();
-  const [designation, setDesignation] = useState();
+  const [ContactName, setContactName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [mobile, setMobile] = useState("");
+  const [designation, setDesignation] = useState("");
   const [serialNo, setserialNo] = useState(1);
   const [modalShow, setModalShow] = useState(true);
   const [showSuccessMOdal, setShowSuccessModal] = useState(false);
@@ -172,7 +172,7 @@ function ContactTable(props) {
         />
       </div>
       <Custom_model
-        bodyStyle={{ height: 620, overflowY: "auto" }}
+        bodyStyle={{ height: 570, overflowY: "auto" }}
         show={modalShow}
         onHide={() => setModalShow(false)}
         View_list
@@ -244,50 +244,63 @@ function ContactTable(props) {
 
                   <label>Phone Primary</label>
                   <Form.Item
-                    className=" mt-1"
+                    // className="mt-1"
                     name="phone"
                     rules={[
                       {
                         required: true,
-                        pattern: new RegExp(
-                          "^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-s./0-9]*$"
-                        ),
-                        message: "Please enter a Valid Phone number",
+                        // pattern: new RegExp(
+                        //   "^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-s./0-9]*$"
+                        // ),
+                        message: "Please enter a valid phone number",
                       },
                     ]}
                   >
-                    {/* <PhoneNumber
+                    <PhoneNumber
                       defaultCountry={"IN"}
                       value={phone}
                       id="contact_phone_1"
                       name="contact_phone_1"
                       onChange={(value) => setPhone(value)}
-                    /> */}
-                    <PhoneInput
-                      country={"in"}
+                    />
+                    {/* <PhoneInput
                       enableSearch={true}
-                      countryCodeEditable={false}
+                      // disableSearchIcon={true}
+                      country={"in"}
+                      countryCodeEditable={true}
                       value={phone}
                       onChange={(value) => setPhone(value)}
-                    />
+                    /> */}
                   </Form.Item>
 
                   <label className="mb-2">Phone Secondary</label>
-                  <Form.Item name="mobile" className="mt-1">
-                    {/* <PhoneNumber
+                  <Form.Item
+                    name="mobile"
+                    className="mt-1"
+                    // rules={[
+                    //   {
+                    //     pattern: new RegExp(
+                    //       "^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-s./0-9]*$"
+                    //     ),
+                    //     message: "Please enter a valid phone number",
+                    //   },
+                    // ]}
+                  >
+                    <PhoneNumber
                       defaultCountry={"IN"}
                       value={mobile}
                       id="contact_phone_2"
                       name="contact_phone_2"
                       onChange={(value) => setMobile(value)}
-                    /> */}
-                    <PhoneInput
-                      country={"in"}
-                      enableSearch={true}
-                      value={mobile}
-                      countryCodeEditable={false}
-                      onChange={(value) => setMobile(value)}
                     />
+                    {/* <PhoneInput
+                      enableSearch={true}
+                      // disableSearchIcon={true}
+                      country={"in"}
+                      countryCodeEditable={true}
+                      value={mobile}
+                      onChange={(value) => setMobile(value)}
+                    /> */}
                   </Form.Item>
 
                   <label>Designation</label>
@@ -324,7 +337,7 @@ function ContactTable(props) {
             </Form>
           </>
         }
-      ></Custom_model>
+      />
       <Custom_model
         centered
         size={`sm`}

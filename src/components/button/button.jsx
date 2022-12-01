@@ -1,3 +1,4 @@
+import { type } from "@testing-library/user-event/dist/type";
 import React from "react";
 import "./button.scss";
 
@@ -7,6 +8,7 @@ const Button = React.forwardRef((props, ref) => {
     children,
     onClick,
     className,
+    type,
     prependIcon = null,
     appendIcon = null,
     ...rest
@@ -30,8 +32,8 @@ const Button = React.forwardRef((props, ref) => {
   if (appendIcon) {
     classNames += "append-icon";
   }
-  if(btnType=== "cancel" ){
-    classNames += "btn_cancel"
+  if (btnType === "cancel") {
+    classNames += "btn_cancel";
   }
   return (
     <button
@@ -39,6 +41,7 @@ const Button = React.forwardRef((props, ref) => {
       onClick={onClick}
       className={`px-3 ${classNames} ${className}`}
       {...rest}
+      type={type}
     >
       {prependIcon ? (
         <span ref={ref} className="cif__btn-prepend-icon-wrapper">

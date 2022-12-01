@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 // import "../../../CRM/lead/lead_list/leadlist.scss";
-import { Modal } from "antd";
+import { Modal, Form } from "antd";
 import {
   FaFileExcel,
   FaFileCsv,
@@ -11,8 +11,8 @@ import {
 } from "react-icons/fa";
 import { TreeSelect } from "antd";
 import FileUpload from "../../../../components/fileupload/fileUploader";
-import { FormGroup } from "react-bootstrap";
-import { Form } from "react-bootstrap";
+// import { FormGroup } from "react-bootstrap";
+// import { Form } from "react-bootstrap";
 import { FiEdit } from "react-icons/fi";
 import Custom_model from "../../../../components/custom_modal/custom_model";
 import { useForm } from "react-hook-form";
@@ -31,14 +31,20 @@ import PublicFetch from "../../../../utils/PublicFetch";
 import { date } from "yup/lib/locale";
 import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
 import { Table } from "antd";
+import InputType from "../../../../components/Input Type textbox/InputType";
+import TextArea from "../../../../components/ InputType TextArea/TextArea";
+import { EnvironmentFilled } from "@ant-design/icons";
 
 function Categorylist(props) {
+  const addForm = Form.useForm();
+
   const [pageSize, setPageSize] = useState("25");
   const [current, setCurrent] = useState(1);
   const [searchedText, setSearchedText] = useState("");
   const [searchType, setSearchType] = useState("");
   const [searchStatus, setSearchStatus] = useState("");
-  const [modalShow, setModalShow] = useState();
+  const [modalShow, setModalShow] = useState(false);
+  const [SuccessPopup, setSuccessPopup] = useState(false);
   const [showViewModal, setShowViewModal] = useState(false);
   const [dataCategory, setDataCategory] = useState();
   const [DisplayDataa, setDisplayDataa] = useState();
@@ -49,42 +55,43 @@ function Categorylist(props) {
   const [nameSearch, setNamesearch] = useState();
   const [ViewingData, setViewingDAta] = useState();
   const [categoryId, setCategory] = useState();
+  const [OldData, setOldData] = useState();
+  const [c_code, setCcode] = useState();
+  const [cName, setCname] = useState();
+  const [cPic, setCpic] = useState();
+  const [cDescription, setCdescription] = useState();
+  const [cParent, setCparent] = useState();
+
   console.log("dataCategory", dataCategory);
   console.log("dataa of name", displayName);
   // const [showEditModal, setShowEditModal] = useState(false);
   const [State, setState] = useState("null");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-  const handleOk = () => {
-    setIsModalOpen(false);
-    submit();
-  };
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
+  // const showModal = () => {
+  //   setIsModalOpen(true);
+  // };
+  // const handleOk = () => {
+  //   setIsModalOpen(false);
+  //   submit();
+  // };
+  // const handleCancel = () => {
+  //   setIsModalOpen(false);
+  // };
   const getData = (current, pageSize) => {
     return CategoryList?.slice((current - 1) * pageSize, current * pageSize);
   };
-  const submit = (data) => {
-    console.log(data);
-    localStorage.setItem("Form", JSON.stringify(data));
-    setModalShow(true);
-    close_modal(modalShow, 1200);
-    props.onHide();
-    reset();
-  };
-  const close_modal = (mShow, time) => {
-    if (!mShow) {
-      setTimeout(() => {
-        setModalShow(false);
-      }, time);
-    }
-  };
+  // const submit = (data) => {
+  //   console.log(data);
+  //   localStorage.setItem("Form", JSON.stringify(data));
+  //   setModalShow(true);
+  //   close_modal(modalShow, 1200);
+  //   props.onHide();
+  //   reset();
+  // };
 
   const structureTreeData = (categories) => {
     let treeStructure = [];
+
     if (categories && Array.isArray(categories) && categories.length > 0) {
       categories.forEach((category, categoryIndex) => {
         // if (category?.other_crm_v1_categories?.length > 0) {
@@ -95,8 +102,10 @@ function Categorylist(props) {
           category_parent_id: category?.category_parent_id,
           category_code: category?.category_code,
           category_description: category?.category_description,
+          category_pic: category?.category_pic,
           children: ch,
         });
+
         // }
       });
     }
@@ -104,7 +113,23 @@ function Categorylist(props) {
     // console.log("Tree structure : ", treeStructure);
   };
 
+  const structureTreeData2 = (categories) => {
+    let TreeStructure2 = [];
+    if (categories && Array.isArray(categories) && categories.length > 0) {
+      categories.forEach((category, catgeoryIndex) => {
+        let ch = structureTreeData2(category?.other_crm_v1_categories);
+        TreeStructure2.push({
+          value: category?.category_id,
+          title: category?.category_name,
+          children: ch,
+        });
+      });
+    }
+    return TreeStructure2;
+  };
+
   const [CategoryList, setCategoryList] = useState();
+  const [CategoryTree, setCatgeoryTree] = useState();
   const getAllCategory = async () => {
     PublicFetch.get(`${CRM_BASE_URL_SELLING}/category`)
       .then((res) => {
@@ -125,6 +150,9 @@ function Categorylist(props) {
           let d = structureTreeData(res.data.data);
           console.log("structre tree", d);
           setCategoryList(d);
+          let v = structureTreeData2(res.data.data);
+          setCatgeoryTree(v);
+          console.log("happy", v);
           const traverseTree = (treeData) => {
             console.log("shfsa", treeData);
             let categories = [];
@@ -243,37 +271,24 @@ function Categorylist(props) {
     },
   ];
 
-  const valueMap = {};
-  function loops(list, parent) {
-    return (list || []).map(({ children, value }) => {
-      const node = (valueMap[value] = {
-        parent,
-        value,
-      });
-      node.children = loops(children, node);
-      return node;
-    });
-  }
-
-  loops(treeData);
-
-  function getPath(value) {
-    const path = [];
-    let current = valueMap[value];
-    while (current) {
-      path.unshift(current.value);
-      current = current.parent;
-    }
-    return path;
-  }
   const onChange = (value) => {
-    console.log("Change", getPath(value));
-    setState({ value });
+    console.log("Change", value);
+    setCparent(value);
+    setOldData({ ...OldData, cparent: value });
   };
 
   const onSelect = (value) => {
-    console.log("Select:", getPath(value));
+    console.log("Select:", value);
   };
+
+  const close_modal = (mShow, time) => {
+    if (!mShow) {
+      setTimeout(() => {
+        setSuccessPopup(false);
+      }, time);
+    }
+  };
+
   const {
     register,
     handleSubmit,
@@ -300,7 +315,10 @@ function Categorylist(props) {
       render: (data, index) => {
         return (
           <div className=" d-flex justify-content-center align-items-center gap-3">
-            <div className="actionEdit">
+            <div
+              className="actionEdit"
+              onClick={() => handleEditCategoryPhase1(index)}
+            >
               <FaEdit />
             </div>
             <div
@@ -390,25 +408,92 @@ function Categorylist(props) {
   const handleViewCategory = (e) => {
     console.log("data by click", e);
     if (e) {
+      setCcode(e.category_code);
+      setCname(e.category_name);
+      setCdescription(e.category_description);
       setViewingDAta({
-        id: e.key,
-        name: e.category_name,
-        code: e.category_code,
-        parentcategory: e.category_parent_id,
-        description: e.category_description,
+        key: e.key,
+        category_name: e.category_name,
+        category_code: e.category_code,
+        category_parent_id: e.category_parent_id,
+        category_description: e.category_description,
+        category_pic: e.category_pic,
       });
       setCategory(e.key);
       setShowViewModal(true);
     }
   };
 
+  console.log("old data", OldData);
   // function to get single catgeory data   // by noufal
   const handleEditCategoryPhase1 = (e) => {
     console.log("Edit data", e);
+
+    if (e) {
+      setIsModalOpen(true);
+      setShowViewModal(false);
+      setCcode(e.category_code);
+      setCdescription(e.category_description);
+      setCname(e.category_name);
+
+      setOldData({
+        key: e.key,
+        cname: e.category_name,
+        ccode: e.category_code,
+        cdescription: e.category_description,
+        cpic: e.category_pic,
+        cparent: e.category_parent_id,
+      });
+
+      addForm.setFieldsValue({
+        key: e.key,
+        category_name: e.category_name,
+        category_code: e.category_code,
+        category_parent_id: e.category_parent_id,
+        category_description: e.category_description,
+        category_pic: e.category_pic,
+      });
+    }
+  };
+
+  const handleEditUpdation = (e) => {
+    console.log("Event", e);
+
+    const formData = new FormData();
+    formData.append("category_code", c_code);
+    formData.append("category_name", cName);
+    if (cPic) {
+      formData.append("category_pic", cPic);
+    }
+
+    formData.append("category_description", cDescription);
+    if (cParent) {
+      formData.append("category_parent_id", cParent);
+    }
+
+    PublicFetch.patch(`${CRM_BASE_URL_SELLING}/category/${e}`, formData, {
+      "Content-Type": "Multipart/form-Data",
+    })
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          console.log("success", res.data.data);
+          getAllCategory();
+          setIsModalOpen(false);
+          setShowViewModal(false);
+          setSuccessPopup(true);
+          close_modal(SuccessPopup, 1200);
+          addForm.resetFields();
+        }
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
   };
 
   console.log("jdfjdfdj", ViewingData);
   console.log("hai !!!", categoryId);
+  console.log("ghsdfhashsdf", addForm);
 
   return (
     <div>
@@ -553,8 +638,7 @@ function Categorylist(props) {
               <div className="">
                 <Button
                   onClick={() => {
-                    showModal(true);
-                    setShowViewModal(false);
+                    handleEditCategoryPhase1(ViewingData);
                   }}
                   btnType="add_borderless"
                 >
@@ -574,7 +658,7 @@ function Categorylist(props) {
               </div>
               <div className="col-1">:</div>
               <div className="col-6 justify-content-start">
-                <p className="modal_view_p_sub">{ViewingData?.name}</p>
+                <p className="modal_view_p_sub">{ViewingData?.category_name}</p>
               </div>
             </div>
             <div className="row">
@@ -583,7 +667,7 @@ function Categorylist(props) {
               </div>
               <div className="col-1">:</div>
               <div className="col-6 justify-content-start">
-                <p className="modal_view_p_sub">{ViewingData?.code}</p>
+                <p className="modal_view_p_sub">{ViewingData?.category_code}</p>
               </div>
             </div>
             <div className="row">
@@ -593,7 +677,7 @@ function Categorylist(props) {
               <div className="col-1">:</div>
               <div className="col-6 justify-content-start">
                 <p className="modal_view_p_sub">
-                  {ViewingData?.parentcategory}
+                  {ViewingData?.category_parent_id}
                 </p>
               </div>
             </div>
@@ -603,114 +687,216 @@ function Categorylist(props) {
               </div>
               <div className="col-1">:</div>
               <div className="col-6 justify-content-start">
-                <p className="modal_view_p_sub">{ViewingData?.description}</p>
+                <p className="modal_view_p_sub">
+                  {ViewingData?.category_description}
+                </p>
               </div>
             </div>
           </div>
         }
       />
-      <Modal
+      <CustomModel
         width={700}
         title="Edit Category"
-        open={isModalOpen}
-        onOk={handleOk}
-        onCancel={handleCancel}
+        show={isModalOpen}
+        onHide={() => setIsModalOpen(false)}
+        footer={false}
+        Adding_contents
       >
         <div className="container-fluid p-3">
-          <Form.Group className="mb-2" controlId="Category_name">
+          <Form
+            onFinish={(value) => {
+              console.log("halo", value);
+              handleEditUpdation(OldData?.key);
+            }}
+            // form={addForm}
+          >
             <div className="row">
               <div className="col-5">
-                <Form.Label>Category Name</Form.Label>
+                <label>Category Name</label>
               </div>
               <div className="col-1">:</div>
               <div className="col-6 justify-content-start">
-                <Form.Control
-                  type="text"
-                  name="Cat_name"
-                  placeholder="Electronics"
-                />
+                <Form.Item
+                  // name="category_name"
+                  rules={[
+                    {
+                      required: true,
+                      pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+
+                      message: "Please enter a Valid Brand Name",
+                    },
+
+                    {
+                      whitespace: true,
+                    },
+                    {
+                      min: 3,
+                      message: " Name Required Minimum 3 Charater",
+                    },
+                  ]}
+                >
+                  <InputType
+                    value={cName}
+                    onChange={(e) => setCname(e.target.value)}
+                  />
+                </Form.Item>
               </div>
             </div>
-          </Form.Group>
-          <Form.Group className="mb-2" controlId="Category_code">
+
             <div className="row">
               <div className="col-5">
-                <Form.Label>Category Code</Form.Label>
+                <label>Category Code</label>
               </div>
               <div className="col-1">:</div>
               <div className="col-6 justify-content-start">
-                <Form.Control type="text" name="Cat_code" placeholder="C006" />
+                <Form.Item
+                  // name="category_code"
+                  rules={[
+                    {
+                      required: true,
+                      pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+
+                      message: "Please enter a Valid Category Name",
+                    },
+
+                    {
+                      whitespace: true,
+                    },
+                    {
+                      min: 3,
+                      message: " Name Required Minimum 3 Charater",
+                    },
+                  ]}
+                >
+                  <InputType
+                    value={c_code}
+                    onChange={(e) => setCcode(e.target.value)}
+                  />
+                </Form.Item>
               </div>
             </div>
-          </Form.Group>
-          <Form.Group className="mb-2" controlId="Category_description">
+
             <div className="row" style={{ marginTop: 10 }}>
               <div className="col-5">
-                <Form.Label>Description</Form.Label>
+                <label>Description</label>
               </div>
               <div className="col-1">:</div>
               <div className="col-6 justify-content-start">
-                <Form.Control
-                  as="textarea"
-                  rows={7}
-                  name="Cat_description"
-                  placeholder=" Aenean commodo ligula eget dolor. Aenean massa. Cum sociis"
-                />
+                <Form.Item
+                  // name="category_description"
+                  rules={[
+                    {
+                      required: true,
+                      pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+
+                      message: "Please enter a Valid Category Description",
+                    },
+
+                    {
+                      whitespace: true,
+                    },
+                    {
+                      min: 3,
+                      message: "Code Required Minimum 3 Charater",
+                    },
+                  ]}
+                >
+                  <TextArea
+                    value={cDescription}
+                    onChange={(e) => setCdescription(e.target.value)}
+                  />
+                </Form.Item>
               </div>
             </div>
-          </Form.Group>
-          <div>
-            <Form.Group className="mb-2" controlId="Category_code">
+
+            <div>
               <div className="row">
                 <div className="col-5">
-                  <Form.Label>category Image</Form.Label>
+                  <label>category Image</label>
                 </div>
                 <div className="col-1">:</div>
                 <div className="col-6 justify-content-start">
-                  <FileUpload
-                    className={`${errors.attachments && "invalid"}`}
-                    {...register("attachments")}
-                    onKeyUp={() => {
-                      trigger("attachments");
-                    }}
-                  />
+                  <Form.Item>
+                    <FileUpload
+                      className={`${errors.attachments && "invalid"}`}
+                      {...register("attachments")}
+                      onKeyUp={() => {
+                        trigger("attachments");
+                      }}
+                      accept=".jpg,.png,.jpeg"
+                      onChange={(file) => setCpic(file?.file?.originFileObj)}
+                    />
+                  </Form.Item>
+                  <div className="pb-3">
+                    <img
+                      src={`${process.env.REACT_APP_BASE_URL}/${OldData?.cpic}`}
+                      alt=""
+                      height="40px"
+                      width={"40px"}
+                    />
+                  </div>
                 </div>
               </div>
-            </Form.Group>
-            <div className="row">
-              <div className="col-5">
-                <p className="form-group">Parent Category</p>
+
+              <div className="row">
+                <div className="col-5">
+                  <p className="form-group">Parent Category</p>
+                </div>
+                <div className="col-1">:</div>
+                <div className="col-6 justify-content-start">
+                  <div className="trdata">
+                    <Form.Item>
+                      <TreeSelect
+                        className="tree"
+                        name="tree"
+                        style={{ width: "100%" }}
+                        value={OldData?.cparent}
+                        dropdownStyle={{
+                          maxHeight: 400,
+                          overflow: "auto",
+                        }}
+                        treeData={CategoryTree}
+                        placeholder="Please select"
+                        treeDefaultExpandAll
+                        onChange={(e) => onChange(e)}
+                        onSelect={onSelect}
+                      />
+                    </Form.Item>
+                  </div>
+                </div>
               </div>
-              <div className="col-1">:</div>
-              <div className="col-6 justify-content-start">
-                <div className="trdata">
-                  <TreeSelect
-                    className="tree"
-                    name="tree"
-                    style={{ width: "100%" }}
-                    value={setState.value}
-                    dropdownStyle={{
-                      maxHeight: 400,
-                      overflow: "auto",
+
+              <div className="row mt-3">
+                <div className="col-12 d-flex justify-content-center gap-2">
+                  <Button
+                    style={{ backgroundColor: "white" }}
+                    className="p-1 shadow-sm"
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    style={{
+                      backgroundColor: "#0092ce",
+                      color: "white",
+                      borderRadius: "5px",
                     }}
-                    treeData={treeData}
-                    placeholder="Please select"
-                    treeDefaultExpandAll
-                    onChange={onChange}
-                    onSelect={onSelect}
-                  />
+                    type="submit"
+                  >
+                    Save
+                  </Button>
                 </div>
               </div>
             </div>
-          </div>
+          </Form>
         </div>
-      </Modal>
-      <Custom_model
+      </CustomModel>
+      <CustomModel
         centered
         size={`sm`}
         success
-        show={modalShow}
-        onHide={() => setModalShow(false)}
+        show={SuccessPopup}
+        onHide={() => setSuccessPopup(false)}
       />
     </div>
   );

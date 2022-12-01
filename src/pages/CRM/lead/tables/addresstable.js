@@ -45,7 +45,7 @@ function AddressTable(props) {
       });
   };
 
-  // # funtion getcontacttable to fetch addresses - Noufal 
+  // # funtion getcontacttable to fetch addresses - Noufal
   const getAllAddress = async () => {
     try {
       const allAddress = await PublicFetch.get(`${CRM_BASE_URL}/address`);
@@ -81,7 +81,7 @@ function AddressTable(props) {
     getAllAddress();
     GetLeadData();
   }, [LeadId]);
-
+  // { funtion to add address in lead edit - Ann mariya }
   const AddAddress = (data) => {
     PublicFetch.post(`${CRM_BASE_URL}/address`, {
       address_lead_id: parseInt(props.lead),

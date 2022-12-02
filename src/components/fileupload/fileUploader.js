@@ -13,6 +13,7 @@ export default function FileUpload({
   onChange,
   onClick,
   accept,
+  height,
 }) {
   // const [files, setFiles] = useState([]);
   // const { register, handleSubmit } = useForm();
@@ -65,6 +66,7 @@ export default function FileUpload({
         multiple={multiple}
         listType={listType}
         accept={accept}
+        height={height}
         onChange={onChange}
         onClick={onClick}
       >

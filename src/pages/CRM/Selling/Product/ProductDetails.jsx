@@ -4,8 +4,11 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { BsPlusCircleFill } from "react-icons/bs";
 import { Checkbox, Col, Row } from "antd";
+import InputType from "../../../../components/Input Type textbox/InputType";
 import { FaEdit } from "react-icons/fa";
+import TextArea from "../../../../components/ InputType TextArea/TextArea";
 import { FiEdit } from "react-icons/fi";
+
 import { MdDelete, MdPageview } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
@@ -13,7 +16,8 @@ import PublicFetch from "../../../../utils/PublicFetch";
 import { Form } from "antd";
 import ProductEditModal from "../../Selling/Product/ProductEditModal";
 import Button from "../../../../components/button/button";
-import CustomModel from "../../../../components/custom_modal/custom_model";
+import Custom_model from "../../../../components/custom_modal/custom_model";
+// import Custom_model from "../../../../components/custom_modal/custom_model";
 import ErrorMsg from "../../../../components/error/ErrorMessage";
 import FileUpload from "../../../../components/fileupload/fileUploader";
 import logo from "../../../../components/img/logo192.png";
@@ -39,6 +43,20 @@ function ProductDetails() {
   const [prname, setPrName] = useState();
   const [newvalue, setNewvalue] = useState();
   const [brand, setBrand] = useState();
+  const [varname, setvarname] = useState();
+  console.log("varname",varname);
+
+  const [varcode, setvarcode] = useState();
+  console.log("varcode",varcode);
+  const [varpic, setvarpic] = useState();
+  const [ImageUpload, setImageUpload] = useState();
+
+  // const [unit, setUnit] = useState("");
+  const [varquantity, setvarquantity] = useState();
+  const [varminprice, setvarminprice] = useState();
+  const [varmaxprice, setvarmaxprice] = useState();
+  const [vartaxrate, setvartaxrate] = useState();
+  const [vardescription, setvardescription] = useState();
 
   const [varients, setVarients] = useState([]);
   console.log("Varrrrrrrients",varients);
@@ -63,6 +81,7 @@ function ProductDetails() {
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
+  const [BrandViewpopup, setBrandViewPopup] = useState(false);
   console.log("set image", img);
   const getBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -111,8 +130,60 @@ function ProductDetails() {
   // useEffect(() => {
   //   getallattributes();
   // }, []);
-
+  const [varientImg,setvarientInput]=useState();
+  const [BrandEditPopup, setBrandEditPopup] = useState(false);
+  const [singleVariant, setSingleVariant] = useState();
   const [allprList, setAllPrList] = useState();//state for all products
+ const [varID,setvarID]=useState();
+ console.log("varID ",varID);
+
+  const handleUpdate = (e) => {
+    console.log("edit data", e);
+    const formData = new FormData();
+    formData.append("variant_name", varname);
+    // formData.append("variant_id", varID);
+    formData.append("variant_product_id", varproid);
+    // formData.append("variant_name", varname);
+   
+    if (ImageUpload && ImageUpload !== 0) 
+      // if(ImageUpload)
+      {
+        formData.append("variant_pic", ImageUpload);
+      }
+     
+    
+    
+    formData.append("variant_code", varcode);
+    formData.append("variant_unit", unit);
+    formData.append("variant_quantity", varquantity);
+    formData.append("variant_price_min", varminprice);
+    formData.append("variant_price_max", varmaxprice);
+    formData.append("variant_taxrate", vartaxrate);
+    formData.append("variant_description", vardescription);
+   
+
+    
+
+    PublicFetch.patch(`${CRM_BASE_URL_SELLING}/variant/${varID}`, formData, {
+      "Content-Type": "Multipart/form-Data",
+    })
+      .then((res) => {
+        console.log("success", res);
+        if (res.data.success) {
+          console.log("successDataa", res.data.data);
+          getallvarients();
+          setSuccessPopup(true);
+          close_modal(successPopup, 1000);
+          setBrandEditPopup(false);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+        setError(true);
+      });
+  };
+
+
 
 // Start API call for get one product
   const GetAllProductData = () => {
@@ -120,7 +191,6 @@ function ProductDetails() {
     PublicFetch.get(`${CRM_BASE_URL_SELLING}/product/${id}`)
       .then((res) => {
         if (res?.data?.success) {
-          console.log("product details isss",res.data.data)
           setAllPrList(res.data.data);
           setPrName(res?.data?.data?.product_name);
           setPrcode(res?.data?.data?.product_code);
@@ -209,6 +279,23 @@ function ProductDetails() {
     getallattributes();
   }, []);
 
+
+  const handleViewData = (e) => {
+    console.log("view data", e);
+    setvarID(e.variant_id);
+    setvarProid(e.variant_product_id);
+    setvarname(e.variant_name);
+    setvarcode(e.variant_code);
+    setvarientInput(e.variant_pic);
+    setUnit(e.variant_unit);
+    setvarquantity(e.variant_quantity); 
+    setvarminprice(e.variant_price_min);
+    setvarmaxprice(e.variant_price_max);
+    setvartaxrate(e.variant_taxrate);
+    setvardescription(e.variant_description);
+   
+    setBrandViewPopup(true);
+  };
   // const getallvarients = () => {
   //   console.log("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDd");
   //   PublicFetch.get(`${CRM_BASE_URL_SELLING}/variant?startIndex=0&noOfItems=40`)
@@ -273,6 +360,75 @@ function ProductDetails() {
   const newValues = (checkedValues) => {
     console.log("checked = ", checkedValues);
   };
+  const close_modal = (mShow, time) => {
+    if (!mShow) {
+      setTimeout(() => {
+        setSuccessPopup(false);
+      }, time);
+    }
+  };
+  const [editForm] = Form.useForm();
+  const [varproid,setvarProid]=useState();
+
+  const handleEditPhase1 = (e) => {
+    console.log("editPhase1", e);
+
+    PublicFetch.get(`${CRM_BASE_URL_SELLING}/variant/${e}`)
+      .then((res) => {
+        console.log("single variant value", res);
+        if (res.data.success) {
+          setSingleVariant(res.data.data);
+          setvarProid(res.data.data.variant_product_id)
+          setvarname(res.data.data.variant_name);
+          setvarcode(res.data.data.variant_code);
+          setImageInput(res.data.data.variant_pic);
+          setUnit(res.data.data.variant_unit);
+          setvarquantity(res.data.data.variant_quantity); 
+          setvarminprice(res.data.data.variant_price_min);
+          setvarmaxprice(res.data.data.variant_price_max);
+          setvartaxrate(res.data.data.variant_taxrate);
+          setvardescription(res.data.data.variant_description);
+          setBrandEditPopup(true);
+          setBrandViewPopup(false);
+        }
+      })
+      .catch((err) => {
+        console.log("error formed", err);
+      });
+  };
+  const [ImageInput, setImageInput] = useState();
+
+  const handleEditPhase2 = (e) => {
+    console.log("editPhase2", e);
+    // setvarID(e.variant_id)
+    setvarID(e.variant_id);
+    setvarProid(e.variant_product_id);
+    setvarname(e.variant_name);
+    setvarcode(e.variant_code);
+    setImageInput(e.variant_pic);
+    setUnit(e.variant_unit);
+    setvarquantity(e.variant_quantity); 
+    setvarminprice(e.variant_price_min);
+    setvarmaxprice(e.variant_price_max);
+    setvartaxrate(e.variant_taxrate);
+    setvardescription(e.variant_description);
+    // editForm.setFieldsValue({
+    //   varID:e.variant_id,
+    //   varproid:e.variant_product_id,
+    //   varname:e.variant_name,
+    //   varcode:e.variant_code,
+    //   ImageInput:e.variant_pic,
+    //   unit:e.variant_unit,
+    //   varquantity:e.variant_quantity, 
+    //   varminprice:e.variant_price_min,
+    //   varmaxprice:e.variant_price_max,
+    //   vartaxrate:e.variant_taxrate,
+    //   vardescription:e.variant_description,
+   
+    // });
+
+    setBrandEditPopup(true);
+  };
 
   // {columns is product listing table componenet }
 
@@ -283,16 +439,17 @@ function ProductDetails() {
       key: "ACTION",
       width: "14%",
       render: (data, index) => {
+        console.log("indexxx",index);
         return (
           <div className="d-flex justify-content-center align-items-center gap-3">
             <div
-              
+          onClick={() => handleEditPhase2(index)}
               className="actionEdit m-0 p-0"
             >
               <FaEdit />
             </div>
             <div
-              
+               onClick={() => handleViewData(index)}
               className="actionView m-0 p-0"
             >
               <MdPageview />
@@ -427,6 +584,7 @@ function ProductDetails() {
                       show={modalOpportunity}
                       onHide={() => setModalOpportunity(false)}
                       style="width:1250px"
+                      
                     />
                   </div>
                   <div className="row my-3">
@@ -757,6 +915,7 @@ function ProductDetails() {
                               }}
                             >
                               <BsPlusCircleFill fontSize={18} /> Add
+                              
                             </span>
                           </Link>
                         </Button>
@@ -791,8 +950,415 @@ function ProductDetails() {
           </div>
         </div>
       </div>
+      <Custom_model
+        destroyOnClose={true}
+        bodyStyle={{ height: 550, overflowY: "auto" }}
+        width={800}
+            show={BrandViewpopup}
+            onHide={() => setBrandViewPopup(false)}
+            View_list
+            list_content={
+              <>
+                <div className="container-fluid px-4 my-4">
+                  <div className="d-flex justify-content-between">
+                    <h5 className="lead_text">Product Variants</h5>
+                    <div className="">
+                      <Button
+                        style={{ backgroundColor: "white", color: "#0092ce" }}
+                      >
+                        <span
+                          className="d-flex align-items-center justify-content-between gap-1  p-1 button_span"
+                          style={{ fontSize: "13px" }}
+                          onClick={() => {
+                            handleEditPhase1(varID);
+                          }}
+                        >
+                          Edit <FiEdit fontSize={"12px"} />
+                        </span>
+                      </Button>
+                    </div>
+                  </div>
+                  <div className="row my-3">
+                    <div className="col-12 d-flex justify-content-center ">
+                      <img
+                        src={`${process.env.REACT_APP_BASE_URL}/${varientImg}`}
+                        // alt={logo}
+                        style={{ height: "70px", width: "70px" }}
+                      />
+                    </div>
+                    <div className="">
+                      <div className="row mt-4">
+                        <div className="col-5">
+                          <p
+                            style={{ color: "#000" }}
+                            className="modal_view_p_style"
+                          >
+                            Name
+                          </p>
+                        </div>
+                        <div className="col-1">:</div>
+                        <div className="col-6 justify-content-start">
+                          <p className="modal_view_p_sub">{varname}</p>
+                        </div>
+                      </div>
+                      <div className="row mt-4">
+                        <div className="col-5">
+                          <p
+                            style={{ color: "#000" }}
+                            className="modal_view_p_style"
+                          >
+                            Code
+                          </p>
+                        </div>
+                        <div className="col-1">:</div>
+                        <div className="col-6 justify-content-start">
+                          <p className="modal_view_p_sub">{varcode}</p>
+                        </div>
+                      </div>
+                      <div className="row mt-4">
+                        <div className="col-5">
+                          <p
+                            style={{ color: "#000" }}
+                            className="modal_view_p_style"
+                          >
+                            Unit
+                          </p>
+                        </div>
+                        <div className="col-1">:</div>
+                        <div className="col-6 justify-content-start">
+                          <p className="modal_view_p_sub">{unit}</p>
+                        </div>
+                      </div>
+                      <div className="row mt-4">
+                        <div className="col-5">
+                          <p
+                            style={{ color: "#000" }}
+                            className="modal_view_p_style"
+                          >
+                            Quantity
+                          </p>
+                        </div>
+                        <div className="col-1">:</div>
+                        <div className="col-6 justify-content-start">
+                          <p className="modal_view_p_sub">{varquantity}</p>
+                        </div>
+                      </div>
+                      <div className="row mt-4">
+                        <div className="col-5">
+                          <p
+                            style={{ color: "#000" }}
+                            className="modal_view_p_style"
+                          >
+                            MinPrice
+                          </p>
+                        </div>
+                        <div className="col-1">:</div>
+                        <div className="col-6 justify-content-start">
+                          <p className="modal_view_p_sub">{varminprice}</p>
+                        </div>
+                      </div>
+                      <div className="row mt-4">
+                        <div className="col-5">
+                          <p
+                            style={{ color: "#000" }}
+                            className="modal_view_p_style"
+                          >
+                            Max Price
+                          </p>
+                        </div>
+                        <div className="col-1">:</div>
+                        <div className="col-6 justify-content-start">
+                          <p className="modal_view_p_sub">{varmaxprice}</p>
+                        </div>
+                      </div>
+                      <div className="row mt-4">
+                        <div className="col-5">
+                          <p
+                            style={{ color: "#000" }}
+                            className="modal_view_p_style"
+                          >
+                            Tax Rate
+                          </p>
+                        </div>
+                        <div className="col-1">:</div>
+                        <div className="col-6 justify-content-start">
+                          <p className="modal_view_p_sub">{vartaxrate}</p>
+                        </div>
+                      </div>
+                   
+                    
+                      <div className="row mt-4">
+                        <div className="col-5">
+                          <p
+                            style={{ color: "#000" }}
+                            className="modal_view_p_style"
+                          >
+                            Description
+                          </p>
+                        </div>
+                        <div className="col-1">:</div>
+                        <div className="col-6 justify-content-start">
+                          <p className="modal_view_p_sub">{vardescription}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </>
+            }
+          />
+      <Custom_model
+      bodyStyle={{ height: 550, overflowY: "auto" }}
+        width={800}
+        show={BrandEditPopup}
+        onHide={() => setBrandEditPopup(false)}
+        View_list
+        list_content={
+          <div> 
+            {/* <Form
+          form={editForm}
+          onFinish={(values) => {
+            console.log("values iss", values);
+          
+          }}
+          onFinishFailed={(error) => {
+            console.log(error);
+          }}
+        > */}
+            <div className="container-fluid px-4 my-3">
+              <div>
+                <h5 className="lead_text">Edit Product Variants</h5>
+              </div>
+              <div className="row my-3 ">
+                {/* <Form onFinish={handleUpdate}> */}
+                <div className="col-4">
+                  <p>Name</p>
+
+                 
+                    {/* <Form.Item
+                      name="varname"
+                      type="text"
+                     
+                      rules={[
+                        {
+                          required: true,
+                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+
+                          message: "Please enter a Valid Varient Name",
+                        },
+
+                        {
+                          whitespace: true,
+                        },
+                        {
+                          min: 2,
+                        },
+                        {
+                          max:100,
+                        },
+                      ]}
+                     > */}
+                     <InputType
+                     type="text"
+                  
+                      value={varname} 
+                      onChange={(e) => {
+                        console.log("eeeeeeee",e.target.value);
+                        setvarname(e.target.value);
+                      }}/>
+                      {/* </Form.Item> */}
+                
+                      
+                </div>
+                
+                <div className="col-4">
+                  <p>Variant Code</p>
+                  {/* <Form.Item
+      set                name="BrandName"
+                      rules={{ required: true, message: "Please enter name" }}
+                    > */}
+                  <InputType
+                    type="text"
+                    // rules={{ required: true, message: "Please enter name" }}
+                    className="input_type_style w-100"
+                    value={varcode}
+                    onChange={(e) => {
+                      setvarcode(e.target.value);
+                    }}
+                  />
+                  {/* </Form.Item> */}
+                </div>
+                <div className="col-4">
+                  <p>Quantity</p>
+                  {/* <Form.Item
+      set                name="BrandName"
+                      rules={{ required: true, message: "Please enter name" }}
+                    > */}
+                  <InputType
+                    type="text"
+                    // rules={{ required: true, message: "Please enter name" }}
+                    className="input_type_style w-100"
+                    value={varquantity}
+                    onChange={(e) => {
+                      setvarquantity(e.target.value);
+                    }}
+                  />
+                  {/* </Form.Item> */}
+                </div>
+                <div className="col-4">
+                  <p>Minimum Price</p>
+                  {/* <Form.Item
+      set                name="BrandName"
+                      rules={{ required: true, message: "Please enter name" }}
+                    > */}
+                  <InputType
+                    type="text"
+                    // rules={{ required: true, message: "Please enter name" }}
+                    className="input_type_style w-100"
+                    value={varminprice}
+                    onChange={(e) => {
+                      setvarminprice(e.target.value);
+                    }}
+                  />
+                  {/* </Form.Item> */}
+                </div>
+                <div className="col-4">
+                  <p>Maximum Price</p>
+                  {/* <Form.Item
+      set                name="BrandName"
+                      rules={{ required: true, message: "Please enter name" }}
+                    > */}
+                  <InputType
+                    type="text"
+                    // rules={{ required: true, message: "Please enter name" }}
+                    className="input_type_style w-100"
+                    value={varmaxprice}
+                    onChange={(e) => {
+                      setvarmaxprice(e.target.value);
+                    }}
+                  />
+                  {/* </Form.Item> */}
+                </div>
+                <div className="col-4">
+                  <p>Unit</p>
+                  {/* <Form.Item name="description"> */}
+                                            
+                  <SelectBox
+                        placeholder={"--Please Select--"}
+                        value={unit}
+                        onChange={(e) => {
+                        
+                        setUnit(parseInt(e))}}
+                      >
+                        {allunit &&
+                          allunit.length > 0 &&
+                          allunit.map((item, index) => {
+                            return (
+                              <Select.Option
+                                key={item.unit_id}
+                                value={item.unit_id}
+                              >
+                                {item.unit_name}
+                              </Select.Option>
+                            );
+                          })}
+                      </SelectBox>
+
+                 
+                  {/* </Form.Item> */}
+                </div>
+                <div className="col-4">
+                       
+                  <p>Tax Rate</p>
+                  {/* <Form.Item
+      set                name="BrandName"
+                      rules={{ required: true, message: "Please enter name" }}
+                    > */}
+                  <InputType
+                    type="text"
+                    // rules={{ required: true, message: "Please enter name" }}
+                    className="input_type_style w-100"
+                    value={vartaxrate}
+                    onChange={(e) => {
+                      setvartaxrate(e.target.value);
+                    }}
+                  />
+                  {/* </Form.Item> */}
+                </div>
+                <div className="col-8">
+                  <p>Description</p>
+                  {/* <Form.Item name="description"> */}
+                  <TextArea
+                    value={vardescription}
+                    className="input_type_style w-100"
+                    onChange={(e) => {
+                      setvardescription(e.target.value);
+                    }}
+                  />
+                  {/* </Form.Item> */}
+                </div>
+                <div className="col-12">
+                <p>Display Picture</p>
+
+                  {/* <Form.Item name="image"> */}
+                  <FileUpload
+                    multiple
+                    height={150}
+                    listType="picture"
+                    accept=".png,.jpg,.jpeg"
+                    beforeUpload={false}
+                    onChange={(file) => {
+                      console.log("Before upload", file.file);
+                      console.log("Before upload file size", file.file.size);
+
+                      if (file.file.size > 1000 && file.file.size < 50000) {
+                        setImageUpload(file.file.originFileObj);
+                        console.log(
+                          "image grater than 1 kb and less than 50 kb"
+                        );
+                      } else {
+                        console.log("hgrtryyryr");
+                      }
+                    }}
+                  />
+                  {/* </Form.Item> */}
+                  <img
+                    src={`${process.env.REACT_APP_BASE_URL}/${ImageInput}`}
+                    height="40px"
+                    width={"40px"}
+                  />
+                </div>
+              
+                <div className="col-12 d-flex justify-content-center mt-5">
+                  <Button
+                    onClick={() => {
+                      // setSuccessPopup(true);
+                      // setBrandEditPopup(false);
+
+                      handleUpdate();
+                    }}
+                    className="save_button"
+                  >
+                    Save
+                  </Button>
+                </div>
+                {/* </Form> */}
+              </div>
+              {error ? (
+                <div className="">
+                  <ErrorMsg code={"400"} />
+                </div>
+              ) : (
+                ""
+              )}
+            </div>
+            {/* </Form> */}
+          </div>
+        }
+      />
     
-      <CustomModel
+      <Custom_model
+      
         size={"sm"}
         // show={successPopup}
         onHide={() => setSuccessPopup(false)}

@@ -1,4 +1,5 @@
 import { Form,Select } from "antd";
+import ProductVariantsEditModal from "./ProductVariantsEditModal";
 
 import React, { useState,useEffect } from "react";
 import { FaEdit } from "react-icons/fa";
@@ -42,7 +43,7 @@ function Varients() {
   const [prunit, setPrUnit] = useState();
   console.log("product unit id in state is ",prunit);
   const [allunit, setAllunit] = useState();
-
+  const [modalOpportunity, setModalOpportunity] = useState(false);
   
   const getBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -51,6 +52,38 @@ function Varients() {
     reader.onload = () => resolve(reader.result);
     reader.onerror = (error) => reject(error);
   });
+ 
+  const [prattributes, setPrAttributes] = useState([]);
+  console.log("attributes by api call ",prattributes);
+
+  // Start API call for get one product
+  const GetAllProductData = () => {
+    // console.log("Entered");
+    PublicFetch.get(`${CRM_BASE_URL_SELLING}/product/${id}`)
+      .then((res) => {
+        if (res?.data?.success) {
+          // setAllPrList(res.data.data);
+          // setPrName(res?.data?.data?.product_name);
+          // setPrcode(res?.data?.data?.product_code);
+          // setPrCategory(res?.data?.data?.product_category_id);
+          // setPrBrand(res?.data?.data?.product_brand_id);
+          // setPrUnit(res?.data?.data?.product_unit_id);
+          setPrAttributes(res?.data?.data?.product_attributes);
+          // setPrDescription(res?.data?.data?.product_description);
+
+          // setPrImage(res?.data?.data?.product_pic);
+        } else {
+          console.log("FAILED T LOAD DATA");
+        }
+      })
+      .catch((err) => {
+        console.log("Errror while getting data", err);
+      });
+  };
+
+  useEffect(() => {
+    GetAllProductData();
+  }, []);
 
   const toggleTab = (index) => {
     setToggleState(index);
@@ -152,14 +185,14 @@ function Varients() {
               <FaEdit />
             </div>
             <Link to={ROUTES.PRODUCTDETAIL}>
-              <div
+              {/* <div
                 // onClick={() => setProductView(true)}
                 className="actionView m-0 p-0"
               >
                 <MdPageview />
-              </div>
+              </div> */}
             </Link>
-            <div>
+            <div className="actionView m-0 p-0">
               <MdDelete />
             </div>
           </div>
@@ -182,7 +215,7 @@ function Varients() {
       align: "center",
     },
   ];
-
+  const [attribute, setAttribute] = useState("");
   const data = [
     {
       action: "action",
@@ -610,11 +643,58 @@ function Varients() {
                       <div className="col-6">
                         <label>Attributes</label>
                         <div>
+                    {/* <Select
+                    style={{
+                      backgroundColor: "whitesmoke",
+                      borderRadius: "5px",
+                    }}
+                    bordered={false}
+                    className="w-100 "
+                  >
+                    <Select.Option>Watch</Select.Option>
+                  </Select> */}
+                    {/* <Form.Item
+                      name="unit"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please Select a unit",
+                        },
+                      ]}
+                    > */}
+                      <SelectBox
+                        placeholder={"--Please Select--"}
+                        // value={prattributes}
+                        // onChange={(e) => {
+                        //  console.log("selected attribute iss",e ) 
+                        //  setAttribute(parseInt(e))}}
+                      >
+                           <Select.Option
+                               
+                              >
+                                {attribute}
+                              </Select.Option>
+                        {/* {prattributes &&
+                          prattributes.length > 0 &&
+                         prattributes.map((item, index) => {
+                            return (
+                              <Select.Option
+                                key={item.product_attributes}
+                                value={item.product_attributes}
+                              >
+                                {item.product_attributes}
+                              </Select.Option>
+                            );
+                          })} */}
+                      </SelectBox>
+                    {/* </Form.Item> */}
+                  </div>
+                        {/* <div>
                           <SelectBox>
                             <Select.Option>color</Select.Option>
                             <Select.Option>Weight</Select.Option>
                           </SelectBox>
-                        </div>
+                        </div> */}
                       </div>
                       <div className="col-6">
                         <label>Attributes value</label>
@@ -645,6 +725,13 @@ function Varients() {
           </div>
         </div>
       </div>
+      <ProductVariantsEditModal
+        show={modalOpportunity}
+        onHide={() => setModalOpportunity(false)}
+        style="width:1250px"
+        // prid={productid}
+      />
+       {/* {modal for success popups} */}
       <CustomModel
         size={"sm"}
         success

@@ -30,6 +30,7 @@ function Custom_model({
         bodyStyle={bodyStyle}
         size={size}
         onClick={onClick}
+        // destroyOnClose={true}
         // onHide={onHide}
         onCancel={onHide}
         closable={closable}

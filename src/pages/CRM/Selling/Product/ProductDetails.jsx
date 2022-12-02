@@ -49,7 +49,7 @@ function ProductDetails() {
   const [varcode, setvarcode] = useState();
   console.log("varcode",varcode);
   const [varpic, setvarpic] = useState();
-  const [ImageUpload, setImageUpload] = useState();
+  const [ImageUpload,setImageUpload] = useState();
 
   // const [unit, setUnit] = useState("");
   const [varquantity, setvarquantity] = useState();
@@ -134,6 +134,7 @@ function ProductDetails() {
   const [BrandEditPopup, setBrandEditPopup] = useState(false);
   const [singleVariant, setSingleVariant] = useState();
   const [allprList, setAllPrList] = useState();//state for all products
+  const [attributes11,setAttributes11] = useState()
  const [varID,setvarID]=useState();
  console.log("varID ",varID);
 
@@ -145,9 +146,8 @@ function ProductDetails() {
     formData.append("variant_product_id", varproid);
     // formData.append("variant_name", varname);
    
-    if (ImageUpload && ImageUpload !== 0) 
-      // if(ImageUpload)
-      {
+    if(ImageUpload) 
+     {
         formData.append("variant_pic", ImageUpload);
       }
      
@@ -183,6 +183,10 @@ function ProductDetails() {
       });
   };
 
+const [brands11,setBands11]=useState();
+const [category11,setCategory11]=useState();
+const [unit11,setUnit11]=useState();
+
 
 
 // Start API call for get one product
@@ -191,6 +195,7 @@ function ProductDetails() {
     PublicFetch.get(`${CRM_BASE_URL_SELLING}/product/${id}`)
       .then((res) => {
         if (res?.data?.success) {
+          console.log("test message",res?.data?.data);
           setAllPrList(res.data.data);
           setPrName(res?.data?.data?.product_name);
           setPrcode(res?.data?.data?.product_code);
@@ -201,6 +206,15 @@ function ProductDetails() {
           setPrDescription(res?.data?.data?.product_description);
 
           setPrImage(res?.data?.data?.product_pic);
+
+          
+            setAttributes11(res.data.data.crm_v1_attributes)
+            setBands11(res.data.data.crm_v1_brands)
+            setCategory11(res.data.data.crm_v1_categories)
+            setUnit11(res.data.data.crm_v1_units)
+
+      
+
         } else {
           console.log("FAILED T LOAD DATA");
         }
@@ -464,13 +478,15 @@ function ProductDetails() {
     },
     {
       title: "IMAGE",
-      dataIndex: { logo },
+      dataIndex: "variant_pic",
       key: "IMAGE",
       width: "15%",
 
       align: "center",
       render: (theImageURL, records) => (
-        <img alt={logo} src={logo} height="20px" width={"20px"} />
+        <img alt={logo} 
+        src={`${process.env.REACT_APP_BASE_URL}/${theImageURL}`}
+        height="20px" width={"20px"} />
       ),
     },
     {
@@ -528,6 +544,8 @@ function ProductDetails() {
       align: "center",
     },
   ];
+
+  console.log("hai all", attributes11)
   return (
     <div>
       <div className="container">
@@ -590,8 +608,8 @@ function ProductDetails() {
                   <div className="row my-3">
                     <div className="col-12 d-flex justify-content-center ">
                       <img
-                        src={logo}
-                        alt={logo}
+                       src={`${process.env.REACT_APP_BASE_URL}/${primage}`}
+                        // alt={logo}
                         style={{
                           height: "70px",
                           width: "70px",
@@ -649,7 +667,7 @@ function ProductDetails() {
                         <div className="col-1">:</div>
                         <div className="col-6 justify-content-start">
                           <p className="modal_view_p_sub">
-                            {allprList?.product_category_id}
+                          {category11?.category_name}
                           </p>
                         </div>
                       </div>
@@ -667,7 +685,7 @@ function ProductDetails() {
                         <div className="col-1">:</div>
                         <div className="col-6 justify-content-start">
                           <p className="modal_view_p_sub">
-                            {allprList?.product_brand_id}
+                            {brands11?.brand_name}
                           </p>
                         </div>
                       </div>
@@ -685,7 +703,7 @@ function ProductDetails() {
                         <div className="col-1">:</div>
                         <div className="col-6 justify-content-start">
                           <p className="modal_view_p_sub">
-                            {allprList?.product_unit_id}
+                            {unit11?.unit_name}
                           </p>
                         </div>
                       </div>
@@ -702,9 +720,15 @@ function ProductDetails() {
                         </div>
                         <div className="col-1">:</div>
                         <div className="col-6 justify-content-start">
-                          <p className="modal_view_p_sub">
-                            {allprList?.product_attributes}
-                          </p>
+                        {/* <div className="d-flex justify-content-start align-items-center gap-3"> */}
+                          
+                            {attributes11 && attributes11?.map((item,index)=> {
+                              return(
+                                <p className="modal_view_p_sub" key={item.attribute_id}>{item?.attribute_name}</p>
+                                
+                              )
+                            })}
+                            {/* </div> */}
                           {/* <p className="modal_view_p_sub">{newvalue}</p> */}
                         </div>
                       </div>

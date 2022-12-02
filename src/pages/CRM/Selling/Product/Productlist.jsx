@@ -98,17 +98,18 @@ function Productlist() {
  
 
   const getallproduct = () => {
-    PublicFetch.get(`${CRM_BASE_URL_SELLING}/product?startIndex=0&noOfItems=10`)
+    PublicFetch.get(`${CRM_BASE_URL_SELLING}/product?startIndex=0&noOfItems=100`)
       .then((res) => {
         if (res?.data?.success) {
           console.log("All products success::: ", res?.data?.data.products);
           setProducts(res?.data?.data.products);
+          
           // let samplearry = [];
           // res?.data?.data?.leads.forEach((item, index) => {
           //   samplearry.push(item.opportunity_id);
           // });
           // console.log("pushedd ", samplearry);
-
+            
           // setOppurtunityid(samplearry);
         } else {
           console.log("Failed to load data !");

@@ -674,7 +674,7 @@ function ProductCreate() {
                     <FileUpload
                       multiple
                       listType="picture"
-                      accept=".png,.jpeg"
+                      accept=".png,.jpeg,.jpg"
                       onPreview={handlePreview}
                       beforeUpload={false}
                       onChange={(file) => {

@@ -12,7 +12,7 @@ import { FaTrash } from "react-icons/fa";
 import { AiFillPrinter } from "react-icons/ai";
 import { MdFileCopy, MdPageview } from "react-icons/md";
 import Button from "../../../../components/button/button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../../routes";
 import TableData from "../../../../components/table/table_data";
 import MyPagination from "../../../../components/Pagination/MyPagination";
@@ -25,6 +25,10 @@ import FileUpload from "../../../../components/fileupload/fileUploader";
 import ErrorMsg from "../../../../components/error/ErrorMessage";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
+import InputType from "../../../../components/Input Type textbox/InputType";
+import { TreeSelect } from "antd";
+import TextArea from "../../../../components/ InputType TextArea/TextArea";
+
 
 function Services() {
   const [pageSize, setPageSize] = useState("25"); // page size
@@ -39,6 +43,63 @@ function Services() {
   const [noofitems,setNoofItems]=useState("25");
   const [allservices,setAllservices]= useState()
   const [totalCount,setTotalcount]= useState()
+  const [serviceName,setserviceName]= useState()
+  const [serviceCode,setServiceCode]= useState()
+  const [serviceHsn, setServiceHsn] = useState()
+  const [servicetaxrate,setServicetaxrate]= useState()
+  const [servicedescription,setServicedescription]= useState()
+  const [serviceCategory,setServicecategory]= useState()
+  const [serviceImg,setServiceImg]= useState([])
+
+  const [serviceid, setserviceid]= useState()
+  const [ImageUpload, setImageUpload] = useState();
+  const [toggleState, setToggleState] = useState(1);
+  const [State, setState] = useState("null");
+  const [treeLine, setTreeLine] = useState(true);
+  const toggleTab = (index) => {
+    setToggleState(index);
+  };
+  const [TreeData, setTreeData] = useState();
+  const [categoryTree, setCategoryTree] = useState([]);
+  const [img, setImg] = useState([]);
+  console.log("set image", img);
+  const [previewVisible, setPreviewVisible] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+  const [previewTitle, setPreviewTitle] = useState("");
+  console.log("set image", img);
+
+  const navigate = useNavigate();
+
+  const getBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+
+  const [viewservices,setViewservices] = useState({
+    id:"",
+    servicename:"",
+    servicecode:"",
+    servicecategory:"",
+    servicehsn:"",
+    servicetaxrate:"",
+    servicedescription:"",
+    serviceimage:""
+  })
+ 
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setPreviewImage(file.url || file.preview);
+    setPreviewVisible(true);
+    setPreviewTitle(
+      file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
+    );
+  };
+ 
 
   const getData = (current, pageSize) => {
     return data.slice((current - 1) * pageSize, current * pageSize);
@@ -74,6 +135,147 @@ function Services() {
    getAllservices()
   }, [noofitems, pageofIndex]);
 
+
+  const handleViewClick=(item)=>{
+    console.log("view the services",item)
+ setViewservices({
+  ...viewservices,
+  id:item.service_id,
+  servicename:item.service_name,
+  servicecode:item.service_code,
+  servicecategory:item.service_category_id,
+  servicehsn:item.service_hsn,
+  servicedescription:item.service_description,
+  servicetaxrate:item.service_taxrate,
+  serviceimage:item.service_pic
+ })
+    setServiceView(true)
+  }
+// editing from table
+
+  const handleEditclick =(i)=>{
+   console.log("edited list iss",i)
+   setserviceid(i.service_id)
+  setserviceName(i.service_name)
+  setServiceCode(i.service_code)
+  setServiceHsn(i.service_hsn)
+  setServicetaxrate(i.service_taxrate)
+  setServicedescription(i.service_description)
+  setServicecategory(i.service_category_id)
+  setServiceImg(i.service_pic)
+   setShowServiceEditModal(true)
+  }
+
+  const handleEditfromview =(item)=>{
+console.log("edit iss", item)
+setserviceid(item.id)
+setserviceName(item.servicename)
+setServiceCode(item.servicecode)
+setServiceHsn(item.servicehsn)
+setServicetaxrate(item.servicetaxrate)
+setServicedescription(item.servicedescription)
+setServicecategory(item.servicecategory)
+setServiceImg(item.serviceimage)
+
+setShowServiceEditModal(true);
+setServiceView(false);
+  }
+
+  const onChangetree = (value) => {
+    console.log("Change", value);
+    // setState(parseInt(value));
+     setServicecategory(parseInt(value))
+  };
+
+  const onSelect = (value) => {
+    console.log("Select the category :", value);
+  };
+
+  const structureTreeData = (categories) => {
+    let treeStructure = [];
+    if (categories && Array.isArray(categories) && categories.length > 0) {
+      categories.forEach((category, categoryIndex) => {
+        // if (category?.other_crm_v1_categories?.length > 0) {
+        let ch = structureTreeData(category?.other_crm_v1_categories);
+        treeStructure.push({
+          value: category?.category_id,
+          title: category?.category_name,
+          children: ch,
+        });
+        // }
+      });
+    }
+    return treeStructure;
+    // console.log("Tree structure : ", treeStructure);
+  };
+
+  const getCategorydata = () => {
+    PublicFetch.get(`${CRM_BASE_URL_SELLING}/category`)
+      .then((res) => {
+        console.log("response Data", res);
+        if (res.data.success) {
+          setTreeData(res.data.data);
+          // getTreeData(res.data.data);
+          let d = structureTreeData(res.data.data);
+          console.log("Structured Tree : ", d);
+          setCategoryTree(d);
+          console.log("all data", res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+  useEffect(() => {
+    getCategorydata();
+  }, []);
+
+  const close_modal = (mShow, time) => {
+    if (!mShow) {
+      setTimeout(() => {
+        setSuccessPopup(false);
+      
+      }, time);
+    }
+  };
+  
+
+
+  const handleUpdate = () => {
+    // console.log("edit data", e);
+    const formData = new FormData();
+
+    formData.append("service_name", serviceName);
+    formData.append("service_code", serviceCode);
+    formData.append("service_category_id", serviceCategory);
+    formData.append("service_hsn", serviceHsn);
+    // if (serviceImg && serviceImg !== 0) {
+    //   formData.append("service_pic", serviceImg);
+    // }
+    formData.append("service_pic", img);
+    formData.append("service_taxrate", servicetaxrate);
+    formData.append("service_description", servicedescription);
+
+    PublicFetch.patch(`${CRM_BASE_URL_SELLING}/service/${serviceid}`, formData, {
+      "Content-Type": "Multipart/form-Data",
+    })
+      .then((res) => {
+        console.log("data edited successfully", res);
+        if (res.data.success) {
+          console.log("successDataa", res.data.data);
+          setShowServiceEditModal(false)
+          setSuccessPopup(true);
+          getAllservices()
+          close_modal(successPopup, 1000);
+          // setBrandEditPopup(false);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+        setError(true);
+      });
+  };
 
   const data = [
     {
@@ -111,14 +313,14 @@ function Services() {
         return (
           <div className="d-flex justify-content-center align-items-center gap-4">
             <div
-              onClick={() => setShowServiceEditModal(true)}
+              onClick={() => handleEditclick(index) }
               className="actionEdit m-0 p-0"
             >
               <FaEdit />
             </div>
             <Link to={ROUTES.SERVICEDETAILS}>
               <div
-                onClick={() => setServiceView(true)}
+                onClick={() => handleViewClick(index)}
                 className="actionView m-0 p-0"
               >
                 <MdPageview />
@@ -400,13 +602,16 @@ function Services() {
           show={showServiceEditModal}
           onHide={() => setShowServiceEditModal(false)}
           header="Edit Service"
-          size={`xl`}
+          // size={`xl`}
+          width={800}
           footer={[
             <Button
               onClick={() => {
-                setSuccessPopup(true);
-                setError(true);
+                handleUpdate()
+                // setSuccessPopup(true);
+                // setError(true);
               }}
+            
               btnType="save"
             >
               Save
@@ -426,79 +631,118 @@ function Services() {
           <div className="container">
             <div style={{ borderRadius: "8px" }} className="card border-0  ">
               <div className="container ">
-                <div className="my-3 d-none">
+                <div className="my-1 d-none">
                   <h5 className="lead_text">Basic Info</h5>
                 </div>
                 <div className="row ">
                   <div className="col-4">
-                    <p>Name</p>
+                    <label>Name</label>
                     <div>
-                      <input type="text" className="input_type_style w-100" />
+                      {/* <input type="text" className="input_type_style w-100" /> */}
+                      <InputType  value={serviceName} 
+                      onChange={(e)=>{setserviceName(e.target.value)}} />
                     </div>
                   </div>
                   <div className="col-4">
-                    <p>Code</p>
+                    <label>Code</label>
                     <div>
-                      <input type={"text"} className="input_type_style w-100" />
+                    <InputType 
+                    value={serviceCode}
+                    onChange={(e)=>{ setServiceCode(e.target.value)}}
+                    />
                     </div>
                   </div>
                   <div className="col-4 ">
-                    <p>Category</p>
-                    <div>
-                      <Select
-                        style={{
-                          backgroundColor: "whitesmoke",
-                          borderRadius: "5px",
+                    <label className="py-1">Category</label>
+                   
+                    <TreeSelect
+                        className="tree"
+                        name="tree"
+                        style={{ width: "100%" }}
+                        // value={category}
+                        // value={State}
+                        value={serviceCategory}
+                        dropdownStyle={{
+                          maxHeight: 400,
+                          overflow: "auto",
                         }}
-                        bordered={false}
-                        className="w-100 "
-                      >
-                        <Select.Option>Watch</Select.Option>
-                      </Select>
-                    </div>
+                      
+                        treeData={categoryTree}
+                        treeDefaultExpandAll
+                        onChange={onChangetree}
+                        onSelect={onSelect}
+                        
+                      />
+                   
                   </div>
                     <div className="col-6 ">
-                    <p>HSN</p>
+                    <label>HSN</label>
                     <div>
-                      <Select
-                        style={{
-                          backgroundColor: "whitesmoke",
-                          borderRadius: "5px",
-                        }}
-                        bordered={false}
-                        className="w-100 "
-                      >
-                        <Select.Option>Watch</Select.Option>
-                      </Select>
+                    <InputType 
+                     value={serviceHsn}
+                     onChange={(e)=>{ setServiceHsn(e.target.value)}}
+                    />
                     </div>
                   </div>
-                  <div className="col-6 mt-2">
-                    <p>Tax Rate</p>
+                  <div className="col-6 ">
+                    <label>Tax Rate</label>
                     <div>
-                    <div>
-                      <input type={"text"} className="input_type_style w-100" />
-                    </div>
+                    <InputType 
+                     value={servicetaxrate }
+                     onChange={(e)=>{ setServicetaxrate(e.target.value)}}
+                    />
                     </div>
                   </div>
                  
                
                   <div className="col-6 mt-2">
                     <p>Display Picture</p>
-                    <FileUpload />
+                    {/* <FileUpload /> */}
+                    <FileUpload
+                    multiple
+                    listType="picture"
+                    // accept=".png,.jpg,.jpeg"
+                    accept=".png,.jpeg"
+                    onPreview={handlePreview}
+                    beforeUpload={false}
+                    onChange={(file) => {
+                      console.log("Before upload", file.file);
+                      console.log("Before upload file size", file.file.size);
+
+                      if (file.file.size > 1000 && file.file.size < 50000) {
+                        setImg(file.file.originFileObj);
+                        console.log(
+                          "image grater than 1 kb and less than 50 kb"
+                        );
+                      } else {
+                        console.log("hgrtryyryr");
+                      }
+                    }}
+                  />
+                  {/* </Form.Item> */}
+                  <img
+                    src={`${process.env.REACT_APP_BASE_URL}/${serviceImg}`}
+                    height="40px"
+                    width={"40px"}
+                  />
                   </div>
                   <div className="col-6 mt-2">
                     <p>Description</p>
                     <div>
-                      <textarea
+                      {/* <textarea
                         style={{ height: "100px" }}
                         className="input_type_style w-100"
+                      /> */}
+                      <TextArea 
+                      value={ servicedescription}
+                      onChange={(e)=>{setServicedescription(e.target.value)}}
                       />
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            {error ? <ErrorMsg code="500" /> : ""}
+            {/* {error ? <ErrorMsg code="500" /> : ""} */}
           </div>
         </CustomModel> 
         {/* {Modal for viewing service details} */}
@@ -525,8 +769,8 @@ function Services() {
                         className="d-flex align-items-center justify-content-between gap-1  p-1 button_span"
                         style={{ fontSize: "13px" }}
                         onClick={() => {
-                          setShowServiceEditModal(true);
-                          setServiceView(false);
+                          handleEditfromview(viewservices)
+                         
                         }}
                       >
                         Edit <FiEdit fontSize={"12px"} />
@@ -538,14 +782,19 @@ function Services() {
                 </div>
                 <div className="row my-3">
                   <div className="col-12 d-flex justify-content-center ">
-                    <img
+                  <img
+                  src={`${process.env.REACT_APP_BASE_URL}/${viewservices.serviceimage }`}
+                  height={"120px"}
+                  width={"120px"}
+                   />
+                    {/* <img
                       src={logo}
                       alt={logo}
                       style={{
                         height: "70px",
                         width: "70px",
                       }}
-                    />
+                    /> */}
                   </div>
                   <div className="">
                     <div className="row mt-4">
@@ -559,7 +808,7 @@ function Services() {
                       </div>
                       <div className="col-1">:</div>
                       <div className="col-6 justify-content-start">
-                        <p className="modal_view_p_sub">Polishing</p>
+                        <p className="modal_view_p_sub">{viewservices.servicename} </p>
                       </div>
                     </div>
                     <div className="row mt-2">
@@ -573,7 +822,7 @@ function Services() {
                       </div>
                       <div className="col-1">:</div>
                       <div className="col-6 justify-content-start">
-                        <p className="modal_view_p_sub">HJKGF23456</p>
+                        <p className="modal_view_p_sub">{viewservices.servicecode}</p>
                       </div>
                     </div>
                     <div className="row mt-2">
@@ -587,7 +836,7 @@ function Services() {
                       </div>
                       <div className="col-1">:</div>
                       <div className="col-6 justify-content-start">
-                        <p className="modal_view_p_sub">Tyre Polish</p>
+                        <p className="modal_view_p_sub">{viewservices.servicecategory} </p>
                       </div>
                     </div>
                     
@@ -602,7 +851,7 @@ function Services() {
                       </div>
                       <div className="col-1">:</div>
                       <div className="col-6 justify-content-start">
-                        <p className="modal_view_p_sub">Watch</p>
+                        <p className="modal_view_p_sub">{viewservices.servicehsn}</p>
                       </div>
                     </div>
                     <div className="row mt-2">
@@ -616,7 +865,7 @@ function Services() {
                       </div>
                       <div className="col-1">:</div>
                       <div className="col-6 justify-content-start">
-                        <p className="modal_view_p_sub">5%</p>
+                        <p className="modal_view_p_sub">{viewservices.servicetaxrate} %</p>
                       </div>
                     </div>
                     <div className="row mt-2">
@@ -630,7 +879,7 @@ function Services() {
                       </div>
                       <div className="col-1">:</div>
                       <div className="col-6 justify-content-start">
-                        <p className="modal_view_p_sub">Lorem ipsum, dolor sit amet consectetur adipisicing elit.</p>
+                        <p className="modal_view_p_sub">{viewservices.servicedescription} </p>
                       </div>
                     </div>
                   

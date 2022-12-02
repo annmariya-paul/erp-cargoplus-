@@ -1,12 +1,12 @@
 import "./table.scss";
 import React, { useState, useEffect } from "react";
-import PhoneInput from "react-phone-input-2";
+// import PhoneInput from "react-phone-input-2";
 import TableData from "../../../../components/table/table_data";
 import { CRM_BASE_URL } from "../../../../api/bootapi";
 import PublicFetch from "../../../../utils/PublicFetch";
+import Phone_Input from "../../../../components/PhoneInput/phoneInput";
 import PhoneNumber from "../../../../components/phone_number/phonenumber";
 import { Form, message } from "antd";
-import { isPossiblePhoneNumber } from "react-phone-number-input";
 import InputType from "../../../../components/Input Type textbox/InputType";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
 import { FaEdit, FaTrash } from "react-icons/fa";
@@ -33,9 +33,6 @@ function Edit_Address(props) {
   const [addForm] = Form.useForm();
   const [editForm] = Form.useForm();
 
-  var phoneNo = `+${phone}`
-  var editPhoneNo = `${editPhone}`
-
   const [oneLeadData, setOneLeadData] = useState();
   const [LeadId, setLeadId] = useState();
   // {funtion to fetch each Lead data - Ann mariya (22/11/22) }
@@ -61,7 +58,7 @@ function Edit_Address(props) {
       if (allAddress.data.success) {
         setValue(allAddress.data.data);
         console.log("hello data", allAddress.data.data);
-        // {array to set addresses for corresponding lead id}
+        // {array to set addresses of corresponding lead id}
         let array = [];
         allAddress?.data?.data?.forEach((item, index) => {
           setAddressLeadId(item?.address_lead_id);
@@ -102,14 +99,13 @@ function Edit_Address(props) {
     setEditPhone(i.address_contact);
     getAddresses();
     editForm.setFieldsValue({
-      addressId:i.address_id,
+      addressId: i.address_id,
       editTitle: i.address_title,
       editAddressData: i.address_content,
       editPin: i.address_pin,
       editPhone: i.address_contact,
     });
     setEditAddressModel(true);
-    
   };
 
   // {function to edit address - Ann mariya(25-11-22)}
@@ -119,7 +115,7 @@ function Edit_Address(props) {
       address_title: editTitle,
       address_content: editAddressData,
       address_pin: editPin,
-      address_contact: editPhoneNo,
+      address_contact: editPhone,
     })
       .then(function (response) {
         console.log("address data", response);
@@ -149,7 +145,7 @@ function Edit_Address(props) {
       address_title: title,
       address_content: address_data,
       address_pin: pincode,
-      address_contact: phoneNo,
+      address_contact: phone,
     })
       .then(function (response) {
         console.log("address data", response);
@@ -237,7 +233,7 @@ function Edit_Address(props) {
         />
       </div>
       <Custom_model
-        bodyStyle={{ height: 620, overflowY: "auto" }}
+        bodyStyle={{ height: 570, overflowY: "auto" }}
         show={modelshowAdd}
         onHide={() => setModalshowAdd(false)}
         footer={false}
@@ -289,6 +285,7 @@ function Edit_Address(props) {
 
                   <label>Address</label>
                   <Form.Item
+                    className="mt-2"
                     name="address"
                     rules={[
                       {
@@ -331,31 +328,25 @@ function Edit_Address(props) {
                     />
                   </Form.Item>
 
-                  <label for="phone" className="form-label">
-                    Mobile
-                  </label>
+                  <label>Mobile</label>
                   <Form.Item
-                    name="phone"
-                    rules={[
-                      {
-                        required: true,
-                        pattern: new RegExp(
-                          "^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-s./0-9]*$"
-                        ),
-                        message: "Please enter a valid phone number",
-                      },
-                      {
-                        min: 7,
-                        message: "Please enter valid address",
-                      },
-                    ]}
+                    // name="phone"
+                    // rules={[
+                    //   {
+                    //     required:true,
+                    //     pattern: new RegExp(
+                    //       "^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-s./0-9]*$"
+                    //     ),
+                    //     message: "Please enter a Valid Phone",
+                    //   },
+                    //   {
+                    //     min: 6,
+                    //     message: "Please enter valid address",
+                    //   },
+                    // ]}
                   >
-                    <PhoneInput
-                      enableSearch={true}
-                      // disableSearchIcon={true}
-                      country={"in"}
-                      countryCodeEditable={true}
-                      value={phoneNo}
+                    <Phone_Input
+                      value={phone}
                       onChange={(value) => setPhone(value)}
                     />
                   </Form.Item>
@@ -369,7 +360,7 @@ function Edit_Address(props) {
         }
       />
       <Custom_model
-        bodyStyle={{ height: 620, overflowY: "auto" }}
+        bodyStyle={{ height: 570, overflowY: "auto" }}
         show={editAddressModal}
         onHide={() => setEditAddressModel(false)}
         View_list
@@ -478,11 +469,8 @@ function Edit_Address(props) {
                       },
                     ]}
                   >
-                    <PhoneInput
-                      country={"in"}
-                      enableSearch={true}
-                      countryCodeEditable={false}
-                      value={editPhoneNo}
+                    <Phone_Input
+                      value={editPhone}
                       onChange={(value) => setEditPhone(value)}
                     />
                   </Form.Item>

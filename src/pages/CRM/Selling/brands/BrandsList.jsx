@@ -9,7 +9,7 @@ import {
 import { FiEdit } from "react-icons/fi";
 import { AiFillPrinter } from "react-icons/ai";
 import { MdFileCopy, MdPageview } from "react-icons/md";
-import { Input, Select, Pagination, Form } from "antd";
+import { Input, Select, message, Checkbox, Form } from "antd";
 
 import "../../lead/lead_list/leadlist.scss";
 
@@ -23,7 +23,6 @@ import "../../../opportunity_ List/opportunitylist.scss";
 // import { Form } from "react-bootstrap";
 
 import { Link } from "react-router-dom";
-import { message, Checkbox } from "antd";
 
 import logo from "../../../../components/img/logo192.png";
 import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
@@ -31,7 +30,7 @@ import Button from "../../../../components/button/button";
 import { ROUTES } from "../../../../routes";
 import TableData from "../../../../components/table/table_data";
 import MyPagination from "../../../../components/Pagination/MyPagination";
-import CustomModel from "../../../../components/custom_modal/custom_model";
+import Custom_model from "../../../../components/custom_modal/custom_model";
 import FileUpload from "../../../../components/fileupload/fileUploader";
 import ErrorMsg from "../../../../components/error/ErrorMessage";
 import PublicFetch from "../../../../utils/PublicFetch";
@@ -60,6 +59,7 @@ function BrandsList() {
   const [DescriptionInput, setDescriptionInput] = useState();
   const [ImageInput, setImageInput] = useState();
   const [ImageUpload, setImageUpload] = useState();
+  const [editForm] = Form.useForm();
 
   const getData = (current, pageSize) => {
     return brands?.slice((current - 1) * pageSize, current * pageSize);
@@ -133,6 +133,12 @@ function BrandsList() {
     setDescriptionInput(e.brand_description);
     setImageInput(e.brand_pic);
     setBrand_id(e.brand_id);
+    editForm.setFieldsValue({
+      brand_id:e.brand_id,
+      NameInput: e.brand_name,
+      DescriptionInput: e.brand_description,
+      ImageInput: e.brand_pic,
+    });
     setBrandEditPopup(true);
   };
 
@@ -175,33 +181,6 @@ function BrandsList() {
   );
 
  
-
-  const data = [
-    {
-      lead_type: "Sales",
-      lead_customer_name: "Customer",
-      lead_organization: "HJKGF23456",
-      action: "Refefence",
-      lead_status: "Database",
-      key: "1",
-    },
-    {
-      lead_type: "Maintenance",
-      lead_customer_name: "Lead",
-      lead_organization: "HJGHRF34356",
-      action: "Direct Visit",
-      lead_status: "Database",
-      key: "2",
-    },
-    {
-      lead_type: "Support",
-      lead_customer_name: "Customer",
-      lead_organization: "GHFVY56447",
-      action: "Online Registration",
-      lead_status: "Database",
-      key: "3",
-    },
-  ];
   // {columns is brand listing table componenet }
 
   const columns = [
@@ -329,24 +308,24 @@ function BrandsList() {
               <div className="col">
                 <h5 className="lead_text">Brands</h5>
               </div>
-              <Leadlist_Icons 
-              datas={brands}
-              columns={filteredColumns}
-              items={data12}
-              xlheading={BrandHeads}
-              filename="data.csv"
-            
-              chechboxes={
-                <Checkbox.Group onChange={onChange} value={selectedColumns}>
-                  {columnsKeys.map((column) => (
-                    <li>
-                      <Checkbox value={column} key={column}>
-                        {column}
-                      </Checkbox>
-                    </li>
-                  ))}
-                </Checkbox.Group>
-              } />
+              <Leadlist_Icons
+                datas={brands}
+                columns={filteredColumns}
+                items={data12}
+                xlheading={BrandHeads}
+                filename="data.csv"
+                chechboxes={
+                  <Checkbox.Group onChange={onChange} value={selectedColumns}>
+                    {columnsKeys.map((column) => (
+                      <li>
+                        <Checkbox value={column} key={column}>
+                          {column}
+                        </Checkbox>
+                      </li>
+                    ))}
+                  </Checkbox.Group>
+                }
+              />
             </div>
             <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
               <div className="col-4">
@@ -421,10 +400,9 @@ function BrandsList() {
                   value={pageSize}
                   onChange={(e) => {
                     // console.log("hfcjd" , e, )
-                    setPageSize(e)
-                    setCurrent(1 )
+                    setPageSize(e);
+                    setCurrent(1);
                   }}
-                  
                 >
                   {/* <Select.Option value="5">5 | pages</Select.Option> */}
                   <Select.Option value="25">
@@ -503,7 +481,8 @@ function BrandsList() {
 
           {/*  {/* {View model of Brands  section Two    }  */}
 
-          <CustomModel
+          <Custom_model
+            bodyStyle={{ height: 620, overflowY: "auto" }}
             show={BrandViewpopup}
             onHide={() => setBrandViewPopup(false)}
             View_list
@@ -574,7 +553,8 @@ function BrandsList() {
         </div>
       </div>
       {/* { edit brand modal } */}
-      <CustomModel
+      <Custom_model
+        bodyStyle={{ height: 550, overflowY: "auto" }}
         size={"xl"}
         show={BrandEditPopup}
         onHide={() => setBrandEditPopup(false)}
@@ -586,78 +566,108 @@ function BrandsList() {
                 <h5 className="lead_text">Edit Brand</h5>
               </div>
               <div className="row my-3 ">
-                {/* <Form onFinish={handleUpdate}> */}
-                <div className="col-6">
-                  <p>Name</p>
-                  {/* <Form.Item
-                      name="BrandName"
-                      rules={{ required: true, message: "Please enter name" }}
-                    > */}
-                  <InputType
-                    type="text"
-                    // rules={{ required: true, message: "Please enter name" }}
-                    className="input_type_style w-100"
-                    value={NameInput}
-                    onChange={(e) => {
-                      setNameInput(e.target.value);
-                    }}
-                  />
-                  {/* </Form.Item> */}
-                </div>
-                <div className="col-6 my-2">
-                  <p>Description</p>
-                  {/* <Form.Item name="description"> */}
-                  <TextArea
-                    value={DescriptionInput}
-                    className="input_type_style w-100"
-                    onChange={(e) => {
-                      setDescriptionInput(e.target.value);
-                    }}
-                  />
-                  {/* </Form.Item> */}
-                </div>
-                <div className="col-12 my-3">
-                  {/* <Form.Item name="image"> */}
-                  <FileUpload
-                    multiple
-                    listType="picture"
-                    accept=".png,.jpg,.jpeg"
-                    beforeUpload={false}
-                    onChange={(file) => {
-                      console.log("Before upload", file.file);
-                      console.log("Before upload file size", file.file.size);
+                <Form
+                  form={editForm}
+                  onFinish={(values) => {
+                    console.log("values iss", values);
+                    handleUpdate();
+                  }}
+                  onFinishFailed={(error) => {
+                    console.log(error);
+                  }}
+                >
+                  <div className="col-6">
+                    <label>Name</label>
+                    <Form.Item
+                      name="NameInput"
+                      rules={[
+                        {
+                          required: true,
+                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                          message: "Please enter a Valid Brand Name",
+                        },
+                        {
+                          min: 2,
+                          message: "Name must be at least 2 characters",
+                        },
+                        {
+                          max: 100,
+                          message: "Name cannot be longer than 100 characters",
+                        },
+                      ]}
+                    >
+                      <InputType
+                        className="input_type_style w-100"
+                        value={NameInput}
+                        onChange={(e) => {
+                          setNameInput(e.target.value);
+                        }}
+                      />
+                    </Form.Item>
+                  </div>
+                  <div className="col-6 my-2">
+                    <label>Description</label>
+                    <Form.Item
+                      name="DescriptionInput"
+                      rules={[
+                        {
+                          min: 5,
+                          message: "Description must be at least 5 characters",
+                        },
+                        {
+                          max: 500,
+                          message:
+                            "Description cannot be longer than 500 characters",
+                        },
+                      ]}
+                    >
+                      <TextArea
+                        value={DescriptionInput}
+                        className="input_type_style w-100"
+                        onChange={(e) => {
+                          setDescriptionInput(e.target.value);
+                        }}
+                      />
+                    </Form.Item>
+                  </div>
+                  <div className="col-12 my-3">
+                    <Form.Item name="ImageUpload">
+                      <FileUpload
+                        multiple
+                        listType="picture"
+                        accept=".png,.jpg,.jpeg"
+                        beforeUpload={false}
+                        onChange={(file) => {
+                          console.log("Before upload", file.file);
+                          console.log(
+                            "Before upload file size",
+                            file.file.size
+                          );
 
-                      if (file.file.size > 1000 && file.file.size < 50000) {
-                        setImageUpload(file.file.originFileObj);
-                        console.log(
-                          "image grater than 1 kb and less than 50 kb"
-                        );
-                      } else {
-                        console.log("hgrtryyryr");
-                      }
-                    }}
-                  />
-                  {/* </Form.Item> */}
-                  <img
-                    src={`${process.env.REACT_APP_BASE_URL}/${ImageInput}`}
-                    height="40px"
-                    width={"40px"}
-                  />
-                </div>
-                <div className="col-12 d-flex justify-content-center mt-5">
-                  <Button
-                    onClick={() => {
-                      // setSuccessPopup(true);
-                      // setBrandEditPopup(false);
-
-                      handleUpdate();
-                    }}
-                    className="save_button"
-                  >
-                    Save
-                  </Button>
-                </div>
-                {/* </Form> */}
+                          if (
+                            file.file.size > 1000 &&
+                            file.file.size < 500000
+                          ) {
+                            setImageUpload(file.file.originFileObj);
+                            console.log(
+                              "Image must be greater than 1 kb and less than 500 kb"
+                            );
+                          } else {
+                            console.log("hgrtryyryr");
+                          }
+                        }}
+                      />
+                    </Form.Item>
+                    <img
+                      src={`${process.env.REACT_APP_BASE_URL}/${ImageInput}`}
+                      height="40px"
+                      width={"40px"}
+                    />
+                  </div>
+                  <div className="col-12 d-flex justify-content-center mt-5">
+                    <Button className="save_button">Save</Button>
+                  </div>
+                </Form>
               </div>
               {error ? (
                 <div className="">
@@ -671,7 +681,7 @@ function BrandsList() {
         }
       />
       {/* {success popups} */}
-      <CustomModel
+      <Custom_model
         size={"sm"}
         show={successPopup}
         onHide={() => setSuccessPopup(false)}

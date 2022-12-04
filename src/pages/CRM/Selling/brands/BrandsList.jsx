@@ -49,7 +49,7 @@ function BrandsList() {
   const [successPopup, setSuccessPopup] = useState(false);
   const [error, setError] = useState(false);
   const [brands, setBrands] = useState([]);
-  console.log("ddddddddd",brands);
+  console.log("ddddddddd", brands);
   const [brandName, setBrandName] = useState();
   const [BrandImg, setBrandImg] = useState();
   const [brand_id, setBrand_id] = useState();
@@ -92,7 +92,6 @@ function BrandsList() {
     item.brand_pic,
     item.brand_name,
     item.brand_description,
-    
   ]);
   // console.log("sssssssss",data12);
 
@@ -118,8 +117,8 @@ function BrandsList() {
           setDescriptionInput(res.data.data.brand_description);
           setBrand_id(res.data.data.brand_id);
           setImageInput(res.data.data.brand_pic);
-          setBrandEditPopup(true);
           setBrandViewPopup(false);
+          handleEditPhase2(res.data.data);
         }
       })
       .catch((err) => {
@@ -134,7 +133,7 @@ function BrandsList() {
     setImageInput(e.brand_pic);
     setBrand_id(e.brand_id);
     editForm.setFieldsValue({
-      brand_id:e.brand_id,
+      brand_id: e.brand_id,
       NameInput: e.brand_name,
       DescriptionInput: e.brand_description,
       ImageInput: e.brand_pic,
@@ -180,7 +179,6 @@ function BrandsList() {
     DescriptionInput
   );
 
- 
   // {columns is brand listing table componenet }
 
   const columns = [
@@ -274,29 +272,21 @@ function BrandsList() {
     // },
   ];
 
+  //for show or hide colums start--Shahida
+  const columnsKeys = columns.map((column) => column.key);
 
-   //for show or hide colums start--Shahida
-   const columnsKeys = columns.map((column) => column.key);
+  const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
+  const filteredColumns = columns.filter((column) =>
+    selectedColumns.includes(column.key)
+  );
+  console.log("filtered columns::", filteredColumns);
+  const onChange = (checkedValues) => {
+    setSelectedColumns(checkedValues);
+  };
 
-   const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
-   const filteredColumns = columns.filter((column) =>
-     selectedColumns.includes(column.key)
-   );
- console.log("filtered columns::",filteredColumns);
-   const onChange = (checkedValues) => {
-     setSelectedColumns(checkedValues);
-   };
-
-   const BrandHeads = 
-  [
-    [
-      "brand_id",
-      "brand_name",
-      "brand_pic",
-      "brand_description",
-
-    ],
-  ]
+  const BrandHeads = [
+    ["brand_id", "brand_name", "brand_pic", "brand_description"],
+  ];
   return (
     <div>
       <div>
@@ -493,26 +483,25 @@ function BrandsList() {
                     <h5 className="lead_text">Brands</h5>
                     <div className="">
                       <Button
-                        style={{ backgroundColor: "white", color: "#0092ce" }}
+                        btnType="add_borderless"
+                        className="edit_button"
+                        onClick={() => {
+                          handleEditPhase1(brand_id);
+                        }}
                       >
-                        <span
-                          className="d-flex align-items-center justify-content-between gap-1  p-1 button_span"
-                          style={{ fontSize: "13px" }}
-                          onClick={() => {
-                            handleEditPhase1(brand_id);
-                          }}
-                        >
-                          Edit <FiEdit fontSize={"12px"} />
-                        </span>
+                        Edit
+                        <FiEdit
+                          style={{ marginBottom: "4px", marginInline: "3px" }}
+                        />
                       </Button>
                     </div>
                   </div>
-                  <div className="row my-3">
+                  <div className="row my-4">
                     <div className="col-12 d-flex justify-content-center ">
                       <img
                         src={`${process.env.REACT_APP_BASE_URL}/${BrandImg}`}
                         // alt={logo}
-                        style={{ height: "70px", width: "70px" }}
+                        style={{ height: "100px", width: "100px" }}
                       />
                     </div>
                     <div className="">

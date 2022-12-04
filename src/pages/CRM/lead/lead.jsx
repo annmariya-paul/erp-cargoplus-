@@ -363,7 +363,6 @@ function Lead({}) {
                                 "Before upload file size",
                                 file.file.size
                               );
-
                               if (
                                 file.file.size > 1000 &&
                                 file.file.size < 50000

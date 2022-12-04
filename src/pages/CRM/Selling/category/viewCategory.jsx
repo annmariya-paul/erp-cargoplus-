@@ -61,34 +61,18 @@ function Categorylist(props) {
   const [cPic, setCpic] = useState();
   const [cDescription, setCdescription] = useState();
   const [cParent, setCparent] = useState();
+  const [imageSize,setImageSize] = useState(false);
 
   console.log("dataCategory", dataCategory);
   console.log("dataa of name", displayName);
   // const [showEditModal, setShowEditModal] = useState(false);
   const [State, setState] = useState("null");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // const showModal = () => {
-  //   setIsModalOpen(true);
-  // };
-  // const handleOk = () => {
-  //   setIsModalOpen(false);
-  //   submit();
-  // };
-  // const handleCancel = () => {
-  //   setIsModalOpen(false);
-  // };
+  
   const getData = (current, pageSize) => {
     return CategoryList?.slice((current - 1) * pageSize, current * pageSize);
   };
-  // const submit = (data) => {
-  //   console.log(data);
-  //   localStorage.setItem("Form", JSON.stringify(data));
-  //   setModalShow(true);
-  //   close_modal(modalShow, 1200);
-  //   props.onHide();
-  //   reset();
-  // };
-
+ 
   const structureTreeData = (categories) => {
     let treeStructure = [];
 
@@ -134,7 +118,7 @@ function Categorylist(props) {
     PublicFetch.get(`${CRM_BASE_URL_SELLING}/category`)
       .then((res) => {
         if (res?.data?.success) {
-          console.log("All category data", res?.data?.data);
+          console.log("All category data", res?.data);
           // // let temp = [];
           // if (
           //   res?.data?.data.other_crm_v1_categories &&
@@ -804,9 +788,27 @@ function Categorylist(props) {
                     <label>category Image</label>
                     <Form.Item>
                       <FileUpload
+                        beforeUpload={false}
                         accept=".jpg,.png,.jpeg"
-                        onChange={(file) => setCpic(file?.file?.originFileObj)}
+                        onChange={(file) => {
+                          if (file.file.size > 1000 && file.file.size < 500000) {
+                            setCpic(file?.file?.originFileObj);
+                            setImageSize(false);
+                          } else {
+                            setImageSize(true);
+                            console.log(
+                              "upload image size between 1 kb and  500 kb"
+                            );
+                          }
+                        }}
                       />
+                      {imageSize ? (
+                        <p style={{ color: "red" }}>
+                          Upload Image size between 1 kb and 500 kb
+                        </p>
+                      ) : (
+                        ""
+                      )}
                     </Form.Item>
                     <div className="pb-3">
                       <img

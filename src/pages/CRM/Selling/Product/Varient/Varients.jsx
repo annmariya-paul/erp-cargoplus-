@@ -1,11 +1,11 @@
-import { Form,Select } from "antd";
+import { Form, Select } from "antd";
 import ProductVariantsEditModal from "./ProductVariantsEditModal";
 
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete, MdPageview } from "react-icons/md";
 import { Link } from "react-router-dom";
-import { useNavigate,useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import TextArea from "../../../../../components/ InputType TextArea/TextArea";
 import Button from "../../../../../components/button/button";
 import CustomModel from "../../../../../components/custom_modal/custom_model";
@@ -15,17 +15,19 @@ import InputType from "../../../../../components/Input Type textbox/InputType";
 import SelectBox from "../../../../../components/Select Box/SelectBox";
 import TableData from "../../../../../components/table/table_data";
 import { ROUTES } from "../../../../../routes";
-import {CRM_BASE_URL_SELLING} from "../../../../../api/bootapi";
+import { CRM_BASE_URL_SELLING } from "../../../../../api/bootapi";
 import PublicFetch from "../../../../../utils/PublicFetch";
 function Varients() {
   const { id } = useParams();
-  console.log("iddddd",id);
+  console.log("iddddd", id);
   const [addForm] = Form.useForm();
+  const [attForm] = Form.useForm();
+  const [editForm] = Form.useForm();
   const navigate = useNavigate();
   const [toggleState, setToggleState] = useState(1);
   const [successPopup, setSuccessPopup] = useState(false);
   const [error, setError] = useState(false);
-  const[varientattr,setVarientAttr]=useState([]);
+  const [varientattr, setVarientAttr] = useState([]);
   const [varname, setvarname] = useState();
   const [varcode, setvarcode] = useState();
   const [varpic, setvarpic] = useState();
@@ -39,22 +41,27 @@ function Varients() {
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
   const [prid, setPrid] = useState(id);
-  console.log("product id in state is ",prid);
+  console.log("product id in state is ", prid);
   const [prunit, setPrUnit] = useState();
-  console.log("product unit id in state is ",prunit);
+  console.log("product unit id in state is ", prunit);
   const [allunit, setAllunit] = useState();
   const [modalOpportunity, setModalOpportunity] = useState(false);
-  
+  const [ClicktoOpen, setClicktoOpen] = useState(true);
+  const [varientId, setVarientId] = useState();
+
+  console.log("varient id", varientId);
+
   const getBase64 = (file) =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = (error) => reject(error);
-  });
- 
-  const [prattributes, setPrAttributes] = useState([]);
-  console.log("attributes by api call ",prattributes);
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+
+  const [prattributes, setPrAttributes] = useState();
+
+  console.log("attributes by api call ", prattributes);
 
   // Start API call for get one product
   const GetAllProductData = () => {
@@ -62,13 +69,15 @@ function Varients() {
     PublicFetch.get(`${CRM_BASE_URL_SELLING}/product/${id}`)
       .then((res) => {
         if (res?.data?.success) {
+          console.log("product details", res.data.data);
           // setAllPrList(res.data.data);
           // setPrName(res?.data?.data?.product_name);
           // setPrcode(res?.data?.data?.product_code);
           // setPrCategory(res?.data?.data?.product_category_id);
           // setPrBrand(res?.data?.data?.product_brand_id);
           // setPrUnit(res?.data?.data?.product_unit_id);
-          setPrAttributes(res?.data?.data?.product_attributes);
+
+          setPrAttributes(res?.data?.data?.crm_v1_attributes);
           // setPrDescription(res?.data?.data?.product_description);
 
           // setPrImage(res?.data?.data?.product_pic);
@@ -83,27 +92,41 @@ function Varients() {
 
   useEffect(() => {
     GetAllProductData();
-  }, []);
+  }, [id]);
 
   const toggleTab = (index) => {
     setToggleState(index);
   };
 
-  
   const close_modal = (mShow, time) => {
     if (!mShow) {
       setTimeout(() => {
         setSuccessPopup(false);
-        navigate(`${ROUTES.PRODUCTDETAIL}/${id}`, { state:  toggleState === 2 });
+        toggleTab(2);
+        // navigate(`${ROUTES.PRODUCTDETAIL}/${id}`, { state: toggleState === 2 });
       }, time);
     }
   };
+
+  const close_modal1 = (mShow, time) => {
+    if (!mShow) {
+      setTimeout(() => {
+        setSuccessPopup(false);
+        // toggleTab(2);
+        // navigate(`${ROUTES.PRODUCTDETAIL}/${id}`, { state: toggleState === 2 });
+      }, time);
+    }
+  };
+
   const getvarientAttr = async () => {
     try {
       const allvarientAttr = await PublicFetch.get(
         `${CRM_BASE_URL_SELLING}/variantAttr`
       );
-      console.log("getting all varient  attributes dattta", allvarientAttr.data.data);
+      console.log(
+        "getting all varient  attributes dattta",
+        allvarientAttr.data.data
+      );
       setVarientAttr(allvarientAttr.data.data);
     } catch (err) {
       console.log("error to fetching  attributes", err);
@@ -113,8 +136,6 @@ function Varients() {
   useEffect(() => {
     getvarientAttr();
   }, []);
-
-
 
   const getallunits = async () => {
     try {
@@ -140,10 +161,10 @@ function Varients() {
     formData.append("variant_code", varcode);
     formData.append("variant_product_id", prid);
     formData.append("variant_unit", unit);
-   
+
     formData.append("variant_pic", varpic);
     formData.append("variant_quantity", varquantity);
-    formData.append("variant_price_min",varminprice);
+    formData.append("variant_price_min", varminprice);
     formData.append("variant_price_max", varmaxprice);
     formData.append("variant_taxrate", vartaxrate);
     formData.append("variant_description", vardescription);
@@ -154,9 +175,15 @@ function Varients() {
       .then((res) => {
         console.log("success", res);
         if (res.data.data) {
+          setVarientId(res.data.data.variant_id);
           setSuccessPopup(true);
           addForm.resetFields();
           close_modal(successPopup, 1000);
+
+          // res?.data?.data.variants.forEach((item, index) => {
+
+          // });
+          console.log("data 11222", res.data.data);
         }
       })
       .catch((err) => {
@@ -164,10 +191,6 @@ function Varients() {
         setError(true);
       });
   };
-
-
-
-
 
   const columns = [
     {
@@ -179,7 +202,7 @@ function Varients() {
         return (
           <div className="d-flex justify-content-center align-items-center gap-3">
             <div
-              // onClick={() => setShowProductEditModal(true)}
+              onClick={() => handleEditClick(index)}
               className="actionEdit m-0 p-0"
             >
               <FaEdit />
@@ -235,6 +258,38 @@ function Varients() {
     );
   };
 
+  const AddVarientAttribute = (data) => {
+    console.log("hey all", data);
+    PublicFetch.post(`${CRM_BASE_URL_SELLING}/variantAttr`, {
+      variant_attr_variant_id: varientId,
+      variant_attr_attribute_id: data?.attribute,
+      variant_attr_value: data?.value,
+    })
+      .then((res) => {
+        console.log("Response", res);
+        if (res.data.success) {
+          setSuccessPopup(true);
+          close_modal1(successPopup, 1200);
+          console.log("success", res.data.data);
+          attForm.resetFields();
+          getvarientAttr();
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+  const handleEditClick = (data) => {
+    console.log("dataa again", data);
+
+    editForm.setFieldValue({
+      Editattribute: data.variant_attr_attribute_id,
+      Editvalue: data.variant_attr_value,
+    });
+    setClicktoOpen(false);
+  };
+
   return (
     <div>
       <div className="container-fluid">
@@ -281,23 +336,23 @@ function Varients() {
                       <h5 className="lead_text">Add Variant Details</h5>
                     </div>
                     <div className="row">
-                    <Form
-              name="addForm"
-              form={addForm}
-              onFinish={(value) => {
-                console.log("values111333", value);
-                // setDescription(value.description);
-                // setBrand(value.brand);
-                OnSubmit();
-              }}
-              onFinishFailed={(error) => {
-                console.log(error);
-              }}
-            >
-              <div className="row my-5">
-                      <div className="col-4 ">
-                        <p>Name</p>
-                        {/* <div>
+                      <Form
+                        name="addForm"
+                        form={addForm}
+                        onFinish={(value) => {
+                          console.log("values111333", value);
+                          // setDescription(value.description);
+                          // setBrand(value.brand);
+                          OnSubmit();
+                        }}
+                        onFinishFailed={(error) => {
+                          console.log(error);
+                        }}
+                      >
+                        <div className="row my-5">
+                          <div className="col-4 ">
+                            <p>Name</p>
+                            {/* <div>
                           <InputType
                             rules={{
                               required: true,
@@ -306,36 +361,34 @@ function Varients() {
                             }}
                           />
                         </div> */}
-                          <Form.Item
-                      name="varientname"
-                      
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                            <Form.Item
+                              name="varientname"
+                              rules={[
+                                {
+                                  required: true,
+                                  pattern: new RegExp("^[A-Za-z0-9 ]+$"),
 
-                          message: "Please enter a Valid Varient Name",
-                        },
+                                  message: "Please enter a Valid Varient Name",
+                                },
 
-                        {
-                          whitespace: true,
-                        },
-                        {
-                          min: 2,
-                        },
-                        {
-                          max:100,
-                        },
-                      ]}
-                      onChange={(e) => setvarname(e.target.value)}
-                    >
-                      <InputType />
-                    </Form.Item>
-
-                      </div>
-                      <div className="col-4 ">
-                        <p>Variant Code</p>
-                        {/* <div>
+                                {
+                                  whitespace: true,
+                                },
+                                {
+                                  min: 2,
+                                },
+                                {
+                                  max: 100,
+                                },
+                              ]}
+                              onChange={(e) => setvarname(e.target.value)}
+                            >
+                              <InputType />
+                            </Form.Item>
+                          </div>
+                          <div className="col-4 ">
+                            <p>Variant Code</p>
+                            {/* <div>
                           <InputType
                             rules={{
                               required: true,
@@ -344,26 +397,25 @@ function Varients() {
                             }}
                           />
                         </div> */}
-                         <Form.Item
-                      name="varcode"
-                      rules={[
-                        {
-                          required: true,
+                            <Form.Item
+                              name="varcode"
+                              rules={[
+                                {
+                                  required: true,
 
-                          message: "Please enter Valid Varient Code",
-                        },
+                                  message: "Please enter Valid Varient Code",
+                                },
 
-                        {
-                          whitespace: true,
-                        },
-                       
-                      ]}
-                      onChange={(e) => setvarcode(e.target.value)}
-                    >
-                      <InputType />
-                    </Form.Item>
-                      </div>
-                      {/* <div className="col-4 mt-3">
+                                {
+                                  whitespace: true,
+                                },
+                              ]}
+                              onChange={(e) => setvarcode(e.target.value)}
+                            >
+                              <InputType />
+                            </Form.Item>
+                          </div>
+                          {/* <div className="col-4 mt-3">
                         <label>Variant Code</label>
                         <div>
                           <SelectBox>
@@ -371,10 +423,10 @@ function Varients() {
                           </SelectBox>
                         </div>
                       </div> */}
-                      <div className="col-4 ">
-                        <p>Quantity</p>
-                        <div>
-                          {/* <InputType
+                          <div className="col-4 ">
+                            <p>Quantity</p>
+                            <div>
+                              {/* <InputType
                             rules={{
                               required: true,
                               message:
@@ -382,251 +434,253 @@ function Varients() {
                             }}
                           /> */}
                               <Form.Item
-                      name="varqty"
-                      rules={[
-                        {
-                          required: true,
+                                name="varqty"
+                                rules={[
+                                  {
+                                    required: true,
 
-                          message: "Please enter  Varient Quantity",
-                        },
+                                    message: "Please enter  Varient Quantity",
+                                  },
 
-                        {
-                          whitespace: true,
-                        },
-                        {
-                          min: 2,
-                        },
-                        {
-                          max: 500,
-                        },
-                      ]}
-                      onChange={(e) => setvarquantity(e.target.value)}
-                    >
-                      <InputType />
-                    </Form.Item>
-
-                        </div>
-                      </div>
-                      <div className="col-6">
-                  <p >Unit</p>
-                  <div>
-                   
-                    <Form.Item
-                      name="unit"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please Select a unit",
-                        },
-                      ]}
-                    >
-                      <SelectBox
-                        placeholder={"--Please Select--"}
-                        value={allunit}
-                        onChange={(e) => {
-                         console.log("selected unit iss",e ) 
-                        setUnit(parseInt(e))}}
-                      >
-                        {allunit &&
-                          allunit.length > 0 &&
-                          allunit.map((item, index) => {
-                            return (
-                              <Select.Option
-                                key={item.unit_id}
-                                value={item.unit_id}
+                                  {
+                                    whitespace: true,
+                                  },
+                                  {
+                                    min: 2,
+                                  },
+                                  {
+                                    max: 500,
+                                  },
+                                ]}
+                                onChange={(e) => setvarquantity(e.target.value)}
                               >
-                                {item.unit_name}
-                              </Select.Option>
-                            );
-                          })}
-                      </SelectBox>
-                    </Form.Item>
-                  </div>
-                </div>
-                      <div className="col-6 mt-2">
-                        <label>Tax Rate</label>
-                        <div>
-                          {/* <InputType
+                                <InputType />
+                              </Form.Item>
+                            </div>
+                          </div>
+                          <div className="col-6">
+                            <p>Unit</p>
+                            <div>
+                              <Form.Item
+                                name="unit"
+                                rules={[
+                                  {
+                                    required: true,
+                                    message: "Please Select a unit",
+                                  },
+                                ]}
+                              >
+                                <SelectBox
+                                  placeholder={"--Please Select--"}
+                                  value={allunit}
+                                  onChange={(e) => {
+                                    console.log("selected unit iss", e);
+                                    setUnit(parseInt(e));
+                                  }}
+                                >
+                                  {allunit &&
+                                    allunit.length > 0 &&
+                                    allunit.map((item, index) => {
+                                      return (
+                                        <Select.Option
+                                          key={item.unit_id}
+                                          value={item.unit_id}
+                                        >
+                                          {item.unit_name}
+                                        </Select.Option>
+                                      );
+                                    })}
+                                </SelectBox>
+                              </Form.Item>
+                            </div>
+                          </div>
+                          <div className="col-6 mt-2">
+                            <label>Tax Rate</label>
+                            <div>
+                              {/* <InputType
                             rules={{
                               required: true,
                               message: "",
                             }}
                           /> */}
                               <Form.Item
-                      name="vartaxrate"
-                      rules={[
-                        {
-                          required: true,
+                                name="vartaxrate"
+                                rules={[
+                                  {
+                                    required: true,
 
-                          message: "Please enter  Varient Tax Rate",
-                        },
+                                    message: "Please enter  Varient Tax Rate",
+                                  },
 
-                        {
-                          whitespace: true,
-                        },
-                        {
-                          min: 2,
-                        },
-                        {
-                          max: 500,
-                        },
-                      ]}
-                      onChange={(e) => setvartaxrate(e.target.value)}
-                    >
-                      <InputType />
-                    </Form.Item>
-                        </div>
-                      </div>
-                     
-                      <div className="col-6">
-                        <p>Minimum Price</p>
-                        <div>
-                          {/* <InputType
+                                  {
+                                    whitespace: true,
+                                  },
+                                  {
+                                    min: 2,
+                                  },
+                                  {
+                                    max: 500,
+                                  },
+                                ]}
+                                onChange={(e) => setvartaxrate(e.target.value)}
+                              >
+                                <InputType />
+                              </Form.Item>
+                            </div>
+                          </div>
+
+                          <div className="col-6">
+                            <p>Minimum Price</p>
+                            <div>
+                              {/* <InputType
                             rules={{
                               required: true,
                               message: "Please Enter Minimum price",
                             }}
                           /> */}
-                            <Form.Item
-                      name="varminprice"
-                      
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                              <Form.Item
+                                name="varminprice"
+                                rules={[
+                                  {
+                                    required: true,
+                                    pattern: new RegExp("^[A-Za-z0-9 ]+$"),
 
-                          message: "Please enter a Valid Brand Name",
-                        },
+                                    message: "Please enter a Valid Brand Name",
+                                  },
 
-                        {
-                          whitespace: true,
-                        },
-                        {
-                          min: 3,
-                        },
-                      ]}
-                      onChange={(e) => setvarminprice(e.target.value)}
-                    >
-                      <InputType />
-                    </Form.Item>
-                          
-                        </div>
-                      </div>
-                      <div className="col-6">
-                        <p>Maximum Price</p>
-                        <div>
-                          {/* <InputType
+                                  {
+                                    whitespace: true,
+                                  },
+                                  {
+                                    min: 3,
+                                  },
+                                ]}
+                                onChange={(e) => setvarminprice(e.target.value)}
+                              >
+                                <InputType />
+                              </Form.Item>
+                            </div>
+                          </div>
+                          <div className="col-6">
+                            <p>Maximum Price</p>
+                            <div>
+                              {/* <InputType
                             rules={{
                               required: true,
                               message: "Please Enter Maximum Price",
                             }}
                           /> */}
-                            <Form.Item
-                      name="varmaxprice"
-                      
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                              <Form.Item
+                                name="varmaxprice"
+                                rules={[
+                                  {
+                                    required: true,
+                                    pattern: new RegExp("^[A-Za-z0-9 ]+$"),
 
-                          message: "Please enter Maximum Price",
-                        },
+                                    message: "Please enter Maximum Price",
+                                  },
 
-                        {
-                          whitespace: true,
-                        },
-                        {
-                          min: 3,
-                        },
-                      ]}
-                      onChange={(e) => setvarmaxprice(e.target.value)}
-                    >
-                      <InputType />
-                    </Form.Item>
-                        </div>
-                      </div>
-                      <div className="col-4 d-flex justify-content-center ">
-                        <div>
-                          {/* <label className="my-1">Display Picture</label>
+                                  {
+                                    whitespace: true,
+                                  },
+                                  {
+                                    min: 3,
+                                  },
+                                ]}
+                                onChange={(e) => setvarmaxprice(e.target.value)}
+                              >
+                                <InputType />
+                              </Form.Item>
+                            </div>
+                          </div>
+                          <div className="col-4 d-flex justify-content-center ">
+                            <div>
+                              {/* <label className="my-1">Display Picture</label>
                           <FileUpload /> */}
-                          <p>Display Picture</p>
-                  <Form.Item
-                    name="new"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please select an image file",
-                      },
-                    ]}
-                  >
-                    <FileUpload
-                      multiple
-                      listType="picture"
-                      accept=".png,.jpg,.jpeg"
-                      onPreview={handlePreview}
-                      beforeUpload={false}
-                      onChange={(file) => {
-                        console.log("Before upload", file.file);
-                        console.log("Before upload file size", file.file.size);
+                              <p>Display Picture</p>
+                              <Form.Item
+                                name="new"
+                                rules={[
+                                  {
+                                    required: true,
+                                    message: "Please select an image file",
+                                  },
+                                ]}
+                              >
+                                <FileUpload
+                                  multiple
+                                  listType="picture"
+                                  accept=".png,.jpg,.jpeg"
+                                  onPreview={handlePreview}
+                                  beforeUpload={false}
+                                  onChange={(file) => {
+                                    console.log("Before upload", file.file);
+                                    console.log(
+                                      "Before upload file size",
+                                      file.file.size
+                                    );
 
-                        if (file.file.size > 1000 && file.file.size < 50000) {
-                          setvarpic(file.file.originFileObj);
-                          console.log(
-                            "image grater than 1 kb and less than 50 kb"
-                          );
-                        } else {
-                          console.log("hgrtryyryr");
-                        }
-                      }}
-                    />
-                    </Form.Item>
+                                    if (
+                                      file.file.size > 1000 &&
+                                      file.file.size < 50000
+                                    ) {
+                                      setvarpic(file?.file?.originFileObj);
+                                      console.log(
+                                        "image grater than 1 kb and less than 50 kb"
+                                      );
+                                    } else {
+                                      console.log("hgrtryyryr");
+                                    }
+                                  }}
+                                />
+                              </Form.Item>
+                            </div>
+                          </div>
+                          <div className="col-8">
+                            <p>Description</p>
+                            <div>
+                              <Form.Item
+                                name="description"
+                                rules={[
+                                  {
+                                    required: true,
+
+                                    message: "Please enter Valid Description",
+                                  },
+
+                                  {
+                                    whitespace: true,
+                                  },
+                                  {
+                                    min: 2,
+                                  },
+                                  {
+                                    max: 500,
+                                  },
+                                ]}
+                                onChange={(e) =>
+                                  setvardescription(e.target.value)
+                                }
+                              >
+                                <TextArea />
+                              </Form.Item>
+                            </div>
+                          </div>
+                          <div className="col-12 d-flex justify-content-center mt-4">
+                            {/* <label>Tax Rate</label> */}
+                            <div>
+                              <Button
+                                // onClick={() => {
+                                //   setSuccessPopup(true);
+                                //   setError(true);
+                                // }}
+                                btnType="save"
+                              >
+                                save
+                              </Button>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                      <div className="col-8">
-                        <p>Description</p>
-                        <div>
-                        <Form.Item
-                      name="description"
-                      rules={[
-                        {
-                          required: true,
-
-                          message: "Please enter Valid Description",
-                        },
-
-                        {
-                          whitespace: true,
-                        },
-                        {
-                          min: 2,
-                        },
-                        {
-                          max: 500,
-                        },
-                      ]}
-                      onChange={(e) => setvardescription(e.target.value)}
-                    >
-                      <TextArea />
-                    </Form.Item>
-
-                          
-                        </div>
-                      </div>
-                      <div className="col-12 d-flex justify-content-center mt-4">
-                        {/* <label>Tax Rate</label> */}
-                        <div>
-                          <Button
-                            // onClick={() => {
-                            //   setSuccessPopup(true);
-                            //   setError(true);
-                            // }}
-                            btnType="save"
-                          >
-                            save
-                          </Button>
-                        </div>
-                      </div>
-                      </div>
                       </Form>
                     </div>
                   </div>
@@ -640,79 +694,117 @@ function Varients() {
                 >
                   <div className="container">
                     <div className="row mt-5">
-                      <div className="col-6">
-                        <label>Attributes</label>
-                        <div>
-                    {/* <Select
-                    style={{
-                      backgroundColor: "whitesmoke",
-                      borderRadius: "5px",
-                    }}
-                    bordered={false}
-                    className="w-100 "
-                  >
-                    <Select.Option>Watch</Select.Option>
-                  </Select> */}
-                    {/* <Form.Item
-                      name="unit"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please Select a unit",
-                        },
-                      ]}
-                    > */}
-                      <SelectBox
-                        placeholder={"--Please Select--"}
-                        // value={prattributes}
-                        // onChange={(e) => {
-                        //  console.log("selected attribute iss",e ) 
-                        //  setAttribute(parseInt(e))}}
-                      >
-                           <Select.Option
-                               
-                              >
-                                {attribute}
-                              </Select.Option>
-                        {/* {prattributes &&
-                          prattributes.length > 0 &&
-                         prattributes.map((item, index) => {
-                            return (
-                              <Select.Option
-                                key={item.product_attributes}
-                                value={item.product_attributes}
-                              >
-                                {item.product_attributes}
-                              </Select.Option>
-                            );
-                          })} */}
-                      </SelectBox>
-                    {/* </Form.Item> */}
-                  </div>
-                        {/* <div>
-                          <SelectBox>
-                            <Select.Option>color</Select.Option>
-                            <Select.Option>Weight</Select.Option>
-                          </SelectBox>
-                        </div> */}
-                      </div>
-                      <div className="col-6">
-                        <label>Attributes value</label>
-                        <div>
-                          <InputType />
-                        </div>
-                      </div>
-                      <div className="col-12 d-flex justify-content-center mt-5">
-                        {/* <label>Tax Rate</label> */}
-                        <div>
-                          <Button
-                           
-                            btnType="save"
-                          >
-                            save
-                          </Button>
-                        </div>
-                      </div>
+                      {ClicktoOpen ? (
+                        <Form
+                          form={attForm}
+                          onFinish={(value) => {
+                            AddVarientAttribute(value);
+                            console.log("hai this is test", value);
+                          }}
+                        >
+                          <div className="row">
+                            <div className="col-6">
+                              <label>Attributes</label>
+                              <div>
+                                <Form.Item name="attribute">
+                                  <SelectBox
+                                    placeholder={"--Please Select--"}
+                                    onChange={(e) => {
+                                      console.log("selected attribute iss", e);
+                                      setAttribute(e);
+                                    }}
+                                  >
+                                    {/* <Select.Option>{attribute}</Select.Option> */}
+                                    {prattributes &&
+                                      prattributes.length > 0 &&
+                                      prattributes?.map((item, index) => {
+                                        return (
+                                          <Select.Option
+                                            key={item.attribute_id}
+                                            value={item.attribute_id}
+                                          >
+                                            {item.attribute_name}
+                                          </Select.Option>
+                                        );
+                                      })}
+                                  </SelectBox>
+                                </Form.Item>
+                              </div>
+                            </div>
+                            <div className="col-6">
+                              <label>Attributes value</label>
+                              <div>
+                                <Form.Item name="value">
+                                  <InputType />
+                                </Form.Item>
+                              </div>
+                            </div>
+                            <div className="col-12 d-flex justify-content-center mt-5">
+                              {/* <label>Tax Rate</label> */}
+                              <div>
+                                <Button btnType="save" type="submit">
+                                  save
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+                        </Form>
+                      ) : (
+                        <Form
+                          form={editForm}
+                          onFinish={(value) => {
+                            console.log("edit value", value);
+                          }}
+                        >
+                          <div className="row">
+                            <div className="col-6">
+                              <label>Attributes1123</label>
+
+                              <div>
+                                <Form.Item name="Editattribute">
+                                  <SelectBox
+                                    placeholder={"--Please Select--"}
+                                    onChange={(e) => {
+                                      console.log("selected attribute iss", e);
+                                      setAttribute(e);
+                                    }}
+                                  >
+                                    {/* <Select.Option>{attribute}</Select.Option> */}
+                                    {prattributes &&
+                                      prattributes.length > 0 &&
+                                      prattributes?.map((item, index) => {
+                                        return (
+                                          <Select.Option
+                                            key={item.attribute_id}
+                                            value={item.attribute_id}
+                                          >
+                                            {item.attribute_name}
+                                          </Select.Option>
+                                        );
+                                      })}
+                                  </SelectBox>
+                                </Form.Item>
+                              </div>
+                            </div>
+                            <div className="col-6">
+                              <label>Attributes value</label>
+                              <div>
+                                <Form.Item name="Editvalue">
+                                  <InputType />
+                                </Form.Item>
+                              </div>
+                            </div>
+                            <div className="col-12 d-flex justify-content-center mt-5">
+                              {/* <label>Tax Rate</label> */}
+                              <div>
+                                <Button btnType="save" type="submit">
+                                  save
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+                        </Form>
+                      )}
                       <div className="col-12 mt-3">
                         <TableData columns={columns} data={varientattr} />
                       </div>
@@ -731,7 +823,7 @@ function Varients() {
         style="width:1250px"
         // prid={productid}
       />
-       {/* {modal for success popups} */}
+      {/* {modal for success popups} */}
       <CustomModel
         size={"sm"}
         success

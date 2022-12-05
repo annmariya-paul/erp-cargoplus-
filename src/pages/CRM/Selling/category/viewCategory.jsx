@@ -36,7 +36,7 @@ import TextArea from "../../../../components/ InputType TextArea/TextArea";
 import { EnvironmentFilled } from "@ant-design/icons";
 
 function Categorylist(props) {
-  const addForm = Form.useForm();
+  const [editForm] = Form.useForm();
 
   const [pageSize, setPageSize] = useState("25");
   const [current, setCurrent] = useState(1);
@@ -61,34 +61,18 @@ function Categorylist(props) {
   const [cPic, setCpic] = useState();
   const [cDescription, setCdescription] = useState();
   const [cParent, setCparent] = useState();
+  const [imageSize,setImageSize] = useState(false);
 
   console.log("dataCategory", dataCategory);
   console.log("dataa of name", displayName);
   // const [showEditModal, setShowEditModal] = useState(false);
   const [State, setState] = useState("null");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // const showModal = () => {
-  //   setIsModalOpen(true);
-  // };
-  // const handleOk = () => {
-  //   setIsModalOpen(false);
-  //   submit();
-  // };
-  // const handleCancel = () => {
-  //   setIsModalOpen(false);
-  // };
+  
   const getData = (current, pageSize) => {
     return CategoryList?.slice((current - 1) * pageSize, current * pageSize);
   };
-  // const submit = (data) => {
-  //   console.log(data);
-  //   localStorage.setItem("Form", JSON.stringify(data));
-  //   setModalShow(true);
-  //   close_modal(modalShow, 1200);
-  //   props.onHide();
-  //   reset();
-  // };
-
+ 
   const structureTreeData = (categories) => {
     let treeStructure = [];
 
@@ -134,7 +118,7 @@ function Categorylist(props) {
     PublicFetch.get(`${CRM_BASE_URL_SELLING}/category`)
       .then((res) => {
         if (res?.data?.success) {
-          console.log("All category data", res?.data?.data);
+          console.log("All category data", res?.data);
           // // let temp = [];
           // if (
           //   res?.data?.data.other_crm_v1_categories &&
@@ -240,36 +224,36 @@ function Categorylist(props) {
     getAllCategory();
   }, []);
 
-  const treeData = [
-    {
-      title: "Parent Node-1",
-      value: "Parent-1",
+  // const treeData = [
+  //   {
+  //     title: "Parent Node-1",
+  //     value: "Parent-1",
 
-      children: [
-        {
-          title: "01 Node1",
-          value: "0-0-1",
+  //     children: [
+  //       {
+  //         title: "01 Node1",
+  //         value: "0-0-1",
 
-          children: [
-            {
-              title: "Child Node1.1",
-              value: "0-0-1-1",
-            },
-          ],
-        },
-        {
-          title: "Child Node2",
-          value: "0-0-2",
-          key: "0-0-2",
-        },
-      ],
-    },
-    {
-      title: "Parent Node2",
-      value: "0-1",
-      key: "0-1",
-    },
-  ];
+  //         children: [
+  //           {
+  //             title: "Child Node1.1",
+  //             value: "0-0-1-1",
+  //           },
+  //         ],
+  //       },
+  //       {
+  //         title: "Child Node2",
+  //         value: "0-0-2",
+  //         key: "0-0-2",
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     title: "Parent Node2",
+  //     value: "0-1",
+  //     key: "0-1",
+  //   },
+  // ];
 
   const onChange = (value) => {
     console.log("Change", value);
@@ -288,14 +272,6 @@ function Categorylist(props) {
       }, time);
     }
   };
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-    trigger,
-  } = useForm();
 
   const getDescendantValues = (record) => {
     const values = [];
@@ -435,7 +411,6 @@ function Categorylist(props) {
       setCcode(e.category_code);
       setCdescription(e.category_description);
       setCname(e.category_name);
-
       setOldData({
         key: e.key,
         cname: e.category_name,
@@ -444,16 +419,15 @@ function Categorylist(props) {
         cpic: e.category_pic,
         cparent: e.category_parent_id,
       });
-
-      addForm.setFieldsValue({
-        key: e.key,
-        category_name: e.category_name,
-        category_code: e.category_code,
-        category_parent_id: e.category_parent_id,
-        category_description: e.category_description,
-        category_pic: e.category_pic,
-      });
     }
+    editForm.setFieldsValue({
+      key: e.key,
+      category_name: e.category_name,
+      category_code: e.category_code,
+      category_parent_id: e.category_parent_id,
+      category_description: e.category_description,
+      category_pic: e.category_pic,
+    });
   };
 
   const handleEditUpdation = (e) => {
@@ -483,7 +457,7 @@ function Categorylist(props) {
           setShowViewModal(false);
           setSuccessPopup(true);
           close_modal(SuccessPopup, 1200);
-          addForm.resetFields();
+          editForm.resetFields();
         }
       })
       .catch((err) => {
@@ -493,7 +467,7 @@ function Categorylist(props) {
 
   console.log("jdfjdfdj", ViewingData);
   console.log("hai !!!", categoryId);
-  console.log("ghsdfhashsdf", addForm);
+  console.log("ghsdfhashsdf", editForm);
 
   return (
     <div>
@@ -696,201 +670,182 @@ function Categorylist(props) {
         }
       />
       <CustomModel
+        bodyStyle={{ height: 620, overflowY: "auto" }}
         width={700}
-        title="Edit Category"
         show={isModalOpen}
         onHide={() => setIsModalOpen(false)}
-        footer={false}
-        Adding_contents
-      >
-        <div className="container-fluid p-3">
-          <Form
-            onFinish={(value) => {
-              console.log("halo", value);
-              handleEditUpdation(OldData?.key);
-            }}
-            // form={addForm}
-          >
-            <div className="row">
-              <div className="col-5">
-                <label>Category Name</label>
-              </div>
-              <div className="col-1">:</div>
-              <div className="col-6 justify-content-start">
-                <Form.Item
-                  // name="category_name"
-                  rules={[
-                    {
-                      required: true,
-                      pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-
-                      message: "Please enter a Valid Brand Name",
-                    },
-
-                    {
-                      whitespace: true,
-                    },
-                    {
-                      min: 3,
-                      message: " Name Required Minimum 3 Charater",
-                    },
-                  ]}
-                >
-                  <InputType
-                    value={cName}
-                    onChange={(e) => setCname(e.target.value)}
-                  />
-                </Form.Item>
-              </div>
+        View_list
+        list_content={
+          <>
+            <div className="px-2">
+              <h5 className="lead_text">Edit Category</h5>
             </div>
-
-            <div className="row">
-              <div className="col-5">
-                <label>Category Code</label>
-              </div>
-              <div className="col-1">:</div>
-              <div className="col-6 justify-content-start">
-                <Form.Item
-                  // name="category_code"
-                  rules={[
-                    {
-                      required: true,
-                      pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-
-                      message: "Please enter a Valid Category Name",
-                    },
-
-                    {
-                      whitespace: true,
-                    },
-                    {
-                      min: 3,
-                      message: " Name Required Minimum 3 Charater",
-                    },
-                  ]}
-                >
-                  <InputType
-                    value={c_code}
-                    onChange={(e) => setCcode(e.target.value)}
-                  />
-                </Form.Item>
-              </div>
-            </div>
-
-            <div className="row" style={{ marginTop: 10 }}>
-              <div className="col-5">
-                <label>Description</label>
-              </div>
-              <div className="col-1">:</div>
-              <div className="col-6 justify-content-start">
-                <Form.Item
-                  // name="category_description"
-                  rules={[
-                    {
-                      required: true,
-                      pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-
-                      message: "Please enter a Valid Category Description",
-                    },
-
-                    {
-                      whitespace: true,
-                    },
-                    {
-                      min: 3,
-                      message: "Code Required Minimum 3 Charater",
-                    },
-                  ]}
-                >
-                  <TextArea
-                    value={cDescription}
-                    onChange={(e) => setCdescription(e.target.value)}
-                  />
-                </Form.Item>
-              </div>
-            </div>
-
-            <div>
-              <div className="row">
-                <div className="col-5">
-                  <label>category Image</label>
-                </div>
-                <div className="col-1">:</div>
-                <div className="col-6 justify-content-start">
-                  <Form.Item>
-                    <FileUpload
-                      className={`${errors.attachments && "invalid"}`}
-                      {...register("attachments")}
-                      onKeyUp={() => {
-                        trigger("attachments");
-                      }}
-                      accept=".jpg,.png,.jpeg"
-                      onChange={(file) => setCpic(file?.file?.originFileObj)}
-                    />
-                  </Form.Item>
-                  <div className="pb-3">
-                    <img
-                      src={`${process.env.REACT_APP_BASE_URL}/${OldData?.cpic}`}
-                      alt=""
-                      height="40px"
-                      width={"40px"}
-                    />
+            <div className="container-fluid px-2 my-3">
+              <Form
+                form={editForm}
+                onFinish={(values) => {
+                  console.log("halo", values);
+                  handleEditUpdation(OldData?.key);
+                }}
+                onFinishFailed={(error) => {
+                  console.log(error);
+                }}
+              >
+                <div className="row">
+                  <div className="col-6">
+                    <label>Category Name</label>
+                    <Form.Item
+                      name="category_name"
+                      rules={[
+                        {
+                          required: true,
+                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                          message: "Please enter a Valid Category Name",
+                        },
+                        {
+                          min: 2,
+                          message: "Name must be at least 2 characters",
+                        },
+                        {
+                          max: 100,
+                          message: "Name cannot be longer than 100 characters",
+                        },
+                      ]}
+                    >
+                      <InputType onChange={(e) => setCname(e.target.value)} />
+                    </Form.Item>
                   </div>
-                </div>
-              </div>
 
-              <div className="row">
-                <div className="col-5">
-                  <p className="form-group">Parent Category</p>
-                </div>
-                <div className="col-1">:</div>
-                <div className="col-6 justify-content-start">
-                  <div className="trdata">
-                    <Form.Item>
-                      <TreeSelect
-                        className="tree"
-                        name="tree"
-                        style={{ width: "100%" }}
-                        value={OldData?.cparent}
-                        dropdownStyle={{
-                          maxHeight: 400,
-                          overflow: "auto",
-                        }}
-                        treeData={CategoryTree}
-                        placeholder="Please select"
-                        treeDefaultExpandAll
-                        onChange={(e) => onChange(e)}
-                        onSelect={onSelect}
+                  <div className="col-6">
+                    <label>Category Code</label>
+                    <Form.Item
+                      name="category_code"
+                      rules={[
+                        {
+                          required: true,
+                          pattern: new RegExp("^[A-Za-z0-9]+$"),
+                          message: "Please enter a Valid Category code",
+                        },
+                        {
+                          min: 2,
+                          message: "Code must be at least 2 characters",
+                        },
+                        {
+                          max: 100,
+                          message: "Code cannot be longer than 100 characters",
+                        },
+                      ]}
+                    >
+                      <InputType onChange={(e) => setCcode(e.target.value)} />
+                    </Form.Item>
+                  </div>
+                  <div className="col-6">
+                    <label>Parent Category</label>
+                    <div className="trdata">
+                      <Form.Item>
+                        <TreeSelect
+                          className="tree"
+                          name="tree"
+                          style={{ width: "100%" }}
+                          value={OldData?.cparent}
+                          dropdownStyle={{
+                            maxHeight: 400,
+                            overflow: "auto",
+                          }}
+                          treeData={CategoryTree}
+                          placeholder="Please select"
+                          treeDefaultExpandAll
+                          onChange={(e) => onChange(e)}
+                          onSelect={onSelect}
+                        />
+                      </Form.Item>
+                    </div>
+                  </div>
+
+                  <div className="col-6">
+                    <label>Description</label>
+                    <Form.Item
+                      name="category_description"
+                      rules={[
+                        {
+                          min: 5,
+                          message: "Description must be at least 5 characters",
+                        },
+                        {
+                          max: 500,
+                          message:
+                            "Description cannot be longer than 500 characters",
+                        },
+                      ]}
+                    >
+                      <TextArea
+                        onChange={(e) => setCdescription(e.target.value)}
                       />
                     </Form.Item>
                   </div>
-                </div>
-              </div>
 
-              <div className="row mt-3">
-                <div className="col-12 d-flex justify-content-center gap-2">
-                  <Button
-                    style={{ backgroundColor: "white" }}
-                    className="p-1 shadow-sm"
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    style={{
-                      backgroundColor: "#0092ce",
-                      color: "white",
-                      borderRadius: "5px",
-                    }}
-                    type="submit"
-                  >
-                    Save
-                  </Button>
+                  <div className="col">
+                    <label>category Image</label>
+                    <Form.Item>
+                      <FileUpload
+                        beforeUpload={false}
+                        accept=".jpg,.png,.jpeg"
+                        onChange={(file) => {
+                          if (file.file.size > 1000 && file.file.size < 500000) {
+                            setCpic(file?.file?.originFileObj);
+                            setImageSize(false);
+                          } else {
+                            setImageSize(true);
+                            console.log(
+                              "upload image size between 1 kb and  500 kb"
+                            );
+                          }
+                        }}
+                      />
+                      {imageSize ? (
+                        <p style={{ color: "red" }}>
+                          Upload Image size between 1 kb and 500 kb
+                        </p>
+                      ) : (
+                        ""
+                      )}
+                    </Form.Item>
+                    <div className="pb-3">
+                      <img
+                        src={`${process.env.REACT_APP_BASE_URL}/${OldData?.cpic}`}
+                        alt=""
+                        height="40px"
+                        width={"40px"}
+                      />
+                    </div>
+
+                    <div className="row mt-3">
+                      <div className="col-12 d-flex justify-content-center gap-2">
+                        <Button
+                          style={{ backgroundColor: "white" }}
+                          className="p-1 shadow-sm"
+                        >
+                          Cancel
+                        </Button>
+                        <Button
+                          style={{
+                            backgroundColor: "#0092ce",
+                            color: "white",
+                            borderRadius: "5px",
+                          }}
+                          type="submit"
+                        >
+                          Save
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              </Form>
             </div>
-          </Form>
-        </div>
-      </CustomModel>
+          </>
+        }
+      />
       <CustomModel
         centered
         size={`sm`}

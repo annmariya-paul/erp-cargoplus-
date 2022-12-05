@@ -98,17 +98,40 @@ function Productlist() {
  
 
   const getallproduct = () => {
-    PublicFetch.get(`${CRM_BASE_URL_SELLING}/product?startIndex=0&noOfItems=10`)
+    PublicFetch.get(`${CRM_BASE_URL_SELLING}/product?startIndex=0&noOfItems=100`)
       .then((res) => {
         if (res?.data?.success) {
           console.log("All products success::: ", res?.data?.data.products);
-          setProducts(res?.data?.data.products);
+          let tempArr = [];
+          let arr2 = []
+          res?.data?.data?.products.forEach((item,index)=> {
+            console.log("gdghhh",item.crm_v1_categories);
+
+            // item?.crm_v1_categories?.forEach((itm,indx)=>{
+            //   arr2.push(itm?.category_name)
+            // for (let i=0; i<item?.crm_v1_categories.length; i++){
+            //   console.log("jefjjjehdfhe");
+            //   arr2.push(item?.category_name)
+            // }
+            tempArr.push({
+              product_id:item?.product_id,
+              product_name: item?.product_name,
+              catgeory_name:item.crm_v1_categories?.category_name,
+              product_code:item?.product_code,
+              product_pic:item?.product_pic,
+
+            })
+          })
+
+console.log("hellooooo",tempArr);
+          setProducts(tempArr);
+          
           // let samplearry = [];
           // res?.data?.data?.leads.forEach((item, index) => {
           //   samplearry.push(item.opportunity_id);
           // });
           // console.log("pushedd ", samplearry);
-
+            
           // setOppurtunityid(samplearry);
         } else {
           console.log("Failed to load data !");
@@ -225,7 +248,7 @@ function Productlist() {
     },
     {
       title: "CATEGORY",
-      dataIndex: "product_category_id",
+      dataIndex: "catgeory_name",
       key: "CATEGORY",
       width: "14%",
       align: "center",

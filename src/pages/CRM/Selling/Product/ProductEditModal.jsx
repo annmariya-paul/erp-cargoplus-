@@ -27,8 +27,9 @@ import CustomModel from "../../../../components/custom_modal/custom_model";
 export default function ProductEditModal({ show, prid, onHide }) {
   const { id } = useParams();
   console.log("ID is in productDetails", id);
-  console.log("ID is in prid", prid);
+  console.log("ID is in  propss  prid", prid);
   const [form] = Form.useForm();
+
   //  const [showProductEditModal, setShowProductEditModal] = useState(false);
   const [successPopup, setSuccessPopup] = useState(false);
   const [error, setError] = useState(false);
@@ -275,7 +276,7 @@ export default function ProductEditModal({ show, prid, onHide }) {
       formData.append("product_attributes", prattributes);
       formData.append("product_description",prDescription );
   
-       PublicFetch.patch(`${CRM_BASE_URL_SELLING}/product/${id}`, formData, {
+       PublicFetch.patch(`${CRM_BASE_URL_SELLING}/product/${prid}`, formData, {
         "Content-Type": "Multipart/form-Data",
       })
         .then((res) => {
@@ -284,6 +285,7 @@ export default function ProductEditModal({ show, prid, onHide }) {
             setSuccessPopup(true);
             addForm.resetFields();
             close_modal(successPopup, 1000);
+            onHide()
           
           }
         })
@@ -589,6 +591,11 @@ export default function ProductEditModal({ show, prid, onHide }) {
                         }
                       }}
                     />
+                     <img
+                        src={`${process.env.REACT_APP_BASE_URL}/${primage}`}
+                        height="40px"
+                        width={"40px"}
+                      />
                   </div>
                   <div className="col-6 mt-2">
                     <p>Description</p>

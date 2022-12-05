@@ -584,7 +584,7 @@ function ProductDetails() {
                       show={modalOpportunity}
                       onHide={() => setModalOpportunity(false)}
                       style="width:1250px"
-                      
+                      prid={id}
                     />
                   </div>
                   <div className="row my-3">

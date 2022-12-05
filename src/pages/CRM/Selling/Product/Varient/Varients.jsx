@@ -48,6 +48,8 @@ function Varients() {
   const [modalOpportunity, setModalOpportunity] = useState(false);
   const [ClicktoOpen, setClicktoOpen] = useState(true);
   const [varientId, setVarientId] = useState();
+  const [attributes, setAttributes] = useState();
+  const [attributeValue, setAttributeValues] = useState();
 
   console.log("varient id", varientId);
 
@@ -282,13 +284,17 @@ function Varients() {
 
   const handleEditClick = (data) => {
     console.log("dataa again", data);
-
+    setAttributes(data?.variant_attr_attribute_id);
+    setAttributeValues(data?.variant_attr_value);
     editForm.setFieldValue({
+      Editattribute_id: data?.variant_attr_id,
       Editattribute: data.variant_attr_attribute_id,
       Editvalue: data.variant_attr_value,
     });
     setClicktoOpen(false);
   };
+
+  console.log("happy", attributes, attributeValue);
 
   return (
     <div>
@@ -758,11 +764,12 @@ function Varients() {
                         >
                           <div className="row">
                             <div className="col-6">
-                              <label>Attributes1123</label>
+                              <label>Edit Attributes</label>
 
                               <div>
                                 <Form.Item name="Editattribute">
                                   <SelectBox
+                                    value={attributes}
                                     placeholder={"--Please Select--"}
                                     onChange={(e) => {
                                       console.log("selected attribute iss", e);
@@ -787,10 +794,15 @@ function Varients() {
                               </div>
                             </div>
                             <div className="col-6">
-                              <label>Attributes value</label>
+                              <label>Edit Attributes value</label>
                               <div>
                                 <Form.Item name="Editvalue">
-                                  <InputType />
+                                  <InputType
+                                    value={attributeValue}
+                                    onChange={(e) =>
+                                      setAttributeValues(e.target.value)
+                                    }
+                                  />
                                 </Form.Item>
                               </div>
                             </div>

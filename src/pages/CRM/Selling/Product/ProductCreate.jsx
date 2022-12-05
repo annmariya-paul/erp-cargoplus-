@@ -21,8 +21,6 @@ function ProductCreate() {
   const [addForm] = Form.useForm();
   const navigate = useNavigate();
   const [toggleState, setToggleState] = useState(1);
-  const [modalShow, setModalShow] = React.useState(false);
-  const [value, setValue] = useState([]);
   const [State, setState] = useState("null");
   const [treeLine, setTreeLine] = useState(true);
   const [showLeafIcon, setShowLeafIcon] = useState(false);
@@ -116,15 +114,12 @@ function ProductCreate() {
     return path;
   }
   const onChangetree = (value) => {
-    // console.log("Change", getPath(value));
-    // setState({ value });
+   
     console.log("Change", value);
     setState(parseInt(value));
   };
 
-  // const onSelect = (value) => {
-  //   console.log("Select:", getPath(value));
-  // };
+ 
 
   const onSelect = (value) => {
     console.log("Select the category :", value);
@@ -134,7 +129,7 @@ function ProductCreate() {
     try {
       const allbrands = await PublicFetch.get(`${CRM_BASE_URL_SELLING}/brand`);
       console.log("all brands are", allbrands.data.data);
-      // console.log ("all brands id areee",allbrands.data.data)
+    
       setBrands(allbrands.data.data);
     } catch (err) {
       console.log("error while getting the brands: ", err);
@@ -143,24 +138,22 @@ function ProductCreate() {
 
   useEffect(() => {
     getallbrand();
+    getallunits();
   }, []);
 
+  //API for getall units
   const getallunits = async () => {
     try {
       const allunits = await PublicFetch.get(`${CRM_BASE_URL_SELLING}/unit`);
-      console.log("all units are ::", allunits?.data?.data);
-
-      // if(allunits?.data.success){}
+     
       setAllunit(allunits?.data?.data);
-      // setunitTable(allunits?.data?.data)
+     
     } catch (err) {
       console.log("error to getting all units", err);
     }
   };
 
-  useEffect(() => {
-    getallunits();
-  }, []);
+  
 
   const getallattributes = async () => {
     try {
@@ -175,7 +168,7 @@ function ProductCreate() {
   };
 
 
-
+//category displays in tree structure
   const structureTreeData = (categories) => {
     let treeStructure = [];
     if (categories && Array.isArray(categories) && categories.length > 0) {
@@ -204,6 +197,7 @@ function ProductCreate() {
     }
   };
 
+  //API for get all category
   const getCategorydata = () => {
     PublicFetch.get(`${CRM_BASE_URL_SELLING}/category`)
       .then((res) => {
@@ -229,21 +223,6 @@ function ProductCreate() {
     getCategorydata()
   }, []);
 
-  // const getallcategories = async () => {
-  //   try {
-  //     const allcategories = await PublicFetch.get(
-  //       `${CRM_BASE_URL_SELLING}/category`
-  //     );
-  //     console.log("getting all category", allcategories.data.data);
-  //     setCategory(allcategories.data.data);
-  //   } catch (err) {
-  //     console.log("error to fetching  allcategories", err);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   getallcategories();
-  // }, []);
 
   const getBase64 = (file) =>
     new Promise((resolve, reject) => {
@@ -390,16 +369,7 @@ function ProductCreate() {
                 <div className="col-4 ">
                   <p>Category</p>
                   <div>
-                    {/* <Select
-                    style={{
-                      backgroundColor: "whitesmoke",
-                      borderRadius: "5px",
-                    }}
-                    bordered={false}
-                    className="w-100 "
-                  >
-                    <Select.Option>Watch</Select.Option>
-                  </Select> */}
+                   
                     <Form.Item
                       name="category"
                       rules={[
@@ -413,71 +383,28 @@ function ProductCreate() {
                         className="tree"
                         name="tree"
                         style={{ width: "100%" }}
-                        // value={category}
-                        // value={ setState.value}
+                        
                         dropdownStyle={{
                           maxHeight: 400,
                           overflow: "auto",
                         }}
-                        // treeData={treeData}
+                       
                         treeData={categoryTree}
-                        // treeData={treeData.map((d, i) => {
-                        //   console.log("values....", d);
-
-                        //   return {
-                        //     title: d.title,
-                        //     value: d.value,
-                        //     match: d.match,
-                        //     key: d.key,
-                        //     children: d.children,
-                        //   };
-                        // })}
+                        
                         placeholder="Please select"
                         treeDefaultExpandAll
                         onChange={onChangetree}
                         onSelect={onSelect}
                         
                       />
-                      {/* <TreeSelect
-  treeCheckable={true}
-  value={this.state.value}
-  className="treeSelect"
-  virtual={false}
-  style={{ width: 300 }}
-
-  maxTagCount={20}
-  allowClear
-  showSearch
-  // value={value}
-  closeMenuOnSelect={false}
-  placeholder="Please select SGC's"
-  // allowClear
-  multiple
-  treeData={treeData.map((d,i )  => ({
-    title: d.title,
-    value:  d.value,
-    match: d.match,
-    key: d.key,
-    children: d.children                     
-  }))}
-  onChange={onChange}>
-</TreeSelect> */}
+                     
                     </Form.Item>
                   </div>
                 </div>
                 <div className="col-6 mt-2">
                   <p>Brand</p>
                   <div>
-                    {/* <Select
-                    style={{
-                      backgroundColor: "whitesmoke",
-                      borderRadius: "5px",
-                    }}
-                    bordered={false}
-                    className="w-100 "
-                  >
-                    <Select.Option>Watch</Select.Option>
-                  </Select> */}
+                    
                     <Form.Item
                       name="brand"
                       rules={[
@@ -513,16 +440,7 @@ function ProductCreate() {
                 <div className="col-6 mt-2">
                   <p>Unit</p>
                   <div>
-                    {/* <Select
-                    style={{
-                      backgroundColor: "whitesmoke",
-                      borderRadius: "5px",
-                    }}
-                    bordered={false}
-                    className="w-100 "
-                  >
-                    <Select.Option>Watch</Select.Option>
-                  </Select> */}
+                   
                     <Form.Item
                       name="unit"
                       rules={[
@@ -614,50 +532,22 @@ function ProductCreate() {
                               </div>
                               
                             );
-                            // <>
-                            // <label htmlFor={item?.attribute_id}>{item?.attribute_name}</label>
-                            // <Checkbox id={item?.attribute_id} />
-                            // </>
+                            
                           })}
                      
                       
                     </div>
-                    {/* <Row>
-                      <Col span={20}>
-                        {attributes &&
-                          attributes.length > 0 &&
-                          attributes.map((item, index) => {
-                            return (
-                              <Checkbox value={item?.attribute_id}>
-                                {item?.attribute_name}
-                              </Checkbox>
-                            );
-                            // <>
-                            // <label htmlFor={item?.attribute_id}>{item?.attribute_name}</label>
-                            // <Checkbox id={item?.attribute_id} />
-                            // </>
-                          })}
-                      </Col>
-                    </Row> */}
+                  
                   </Checkbox.Group>
 
                   <div
-                  // style={{
-                  //   backgroundColor: "whitesmoke",
-                  //   borderRadius: "5px",
-                  // }}
+                  
                   >
                     <div
-                    // style={{
-                    //   backgroundColor: "whitesmoke",
-                    //   borderRadius: "5px",
-                    //   height: "160px",
-                    //   overflow: "scroll",
-                    // }}
-                    // className="card border-0 px-4 py-2"
+                    
                     ></div>
                   </div>
-                  {/* </Form.Item> */}
+                
                 </div>
 
                 <div className="col-6 mt-2">
@@ -674,7 +564,7 @@ function ProductCreate() {
                     <FileUpload
                       multiple
                       listType="picture"
-                      accept=".png,.jpeg"
+                      accept=".png,.jpeg,.jpg"
                       onPreview={handlePreview}
                       beforeUpload={false}
                       onChange={(file) => {
@@ -697,10 +587,7 @@ function ProductCreate() {
                 <div className="col-6 mt-2">
                   <p>Description</p>
                   <div>
-                    {/* <textarea
-                    style={{ height: "100px" }}
-                    className="input_type_style w-100"
-                  /> */}
+                    
                     <Form.Item
                       name="description"
                       rules={[

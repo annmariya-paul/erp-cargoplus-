@@ -8,7 +8,7 @@ import FileUpload from "../../../../components/fileupload/fileUploader";
 import InputType from "../../../../components/Input Type textbox/InputType";
 import SelectBox from "../../../../components/Select Box/SelectBox";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
-import { Form, message,InputNumber } from "antd";
+import { Form, message, InputNumber } from "antd";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
 import { TreeSelect } from "antd";
@@ -39,15 +39,16 @@ function ServiceCreate() {
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
+  const [imageSize,setImageSize]= useState();
   const [addform] = Form.useForm();
   const navigate = useNavigate();
   const getBase64 = (file) =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = (error) => reject(error);
-  });
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
 
   const close_modal = (mShow, time) => {
     if (!mShow) {
@@ -102,7 +103,6 @@ function ServiceCreate() {
       });
   };
 
- 
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj);
@@ -114,63 +114,60 @@ function ServiceCreate() {
     );
   };
 
-
   useEffect(() => {
-    getCategorydata()
+    getCategorydata();
   }, []);
 
+  // const createservice=async()=>{
 
-// const createservice=async()=>{
+  //   const formData = new FormData();
+  //     formData.append("service_name", serviceName);
+  //     formData.append("service_code", servicecode );
+  //     formData.append("service_category_id", category);
+  //     formData.append("service_hsn", Hsn);
+  //     formData.append("service_pic",displayPicture);
+  //     formData.append("service_taxrate",taxRate);
+  //     formData.append("service_description",description );
 
-//   const formData = new FormData();
-//     formData.append("service_name", serviceName);
-//     formData.append("service_code", servicecode );
-//     formData.append("service_category_id", category);
-//     formData.append("service_hsn", Hsn);
-//     formData.append("service_pic",displayPicture);
-//     formData.append("service_taxrate",taxRate);
-//     formData.append("service_description",description );
-    
-// try{
-// const service= await PublicFetch.post(
-//   `${CRM_BASE_URL_SELLING}/service`, {
-//  formData,
-//  "Content-Type": "Multipart/form-Data",
-//   })
-//   console.log("service created succesfully ", service)
-// }
-// catch(err){
-//   console.log("err to add the services",err)
-//   }
-// }
+  // try{
+  // const service= await PublicFetch.post(
+  //   `${CRM_BASE_URL_SELLING}/service`, {
+  //  formData,
+  //  "Content-Type": "Multipart/form-Data",
+  //   })
+  //   console.log("service created succesfully ", service)
+  // }
+  // catch(err){
+  //   console.log("err to add the services",err)
+  //   }
+  // }
 
-const OnSubmit = () => {
-  const formData = new FormData();
-  formData.append("service_name", serviceName);
-    formData.append("service_code", servicecode );
+  const OnSubmit = () => {
+    const formData = new FormData();
+    formData.append("service_name", serviceName);
+    formData.append("service_code", servicecode);
     formData.append("service_category_id", State);
     formData.append("service_hsn", Hsn);
-    formData.append("service_pic",img);
-    formData.append("service_taxrate",taxRate);
-    formData.append("service_description",description );
+    formData.append("service_pic", img);
+    formData.append("service_taxrate", taxRate);
+    formData.append("service_description", description);
 
-   PublicFetch.post(`${CRM_BASE_URL_SELLING}/service`, formData, {
-    "Content-Type": "Multipart/form-Data",
-  })
-    .then((res) => {
-      console.log("servicedata is successfully saved", res.data.success);
-      if (res.data.data) {
-        setSuccessPopup(true);
-        addform.resetFields();
-        close_modal(successPopup, 1000);
-      }
+    PublicFetch.post(`${CRM_BASE_URL_SELLING}/service`, formData, {
+      "Content-Type": "Multipart/form-Data",
     })
-    .catch((err) => {
-      console.log("error", err);
-      setError(true);
-    });
-};
-
+      .then((res) => {
+        console.log("servicedata is successfully saved", res.data.success);
+        if (res.data.data) {
+          setSuccessPopup(true);
+          addform.resetFields();
+          close_modal(successPopup, 1000);
+        }
+      })
+      .catch((err) => {
+        console.log("error", err);
+        setError(true);
+      });
+  };
 
   return (
     <div>
@@ -192,244 +189,206 @@ const OnSubmit = () => {
               form={addform}
               onFinish={(value) => {
                 console.log("values111333", value);
-                OnSubmit()
+                OnSubmit();
               }}
               onFinishFailed={(error) => {
                 console.log(error);
               }}
             >
-            <div className="row my-5">
-              <div className="col-4">
-                <label>Name</label>
-                <Form.Item
-                  name="servicename"
-                  rules={[
-                    {
-                      required: true,
-                      pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                      // pattern: new RegExp("[^0-9a-z]"),
-                      message: "Please enter a Valid Name",
-                    },
-                    {
-                      whitespace: true,
-                    },
-                    {
-                      min: 2,
-                      message: "servicename must be atleast 2 characters",
-                    },
-                    {
-                      max: 100,
-                    },
-                  ]}
-                >
-                  <InputType
-                    value={serviceName}
-                    onChange={(e) => setServiceName(e.target.value)}
-                  />
-                </Form.Item>
-              </div>
-              <div className="col-4">
-                <label>Code</label>
-                <Form.Item
-                  name="code"
-                  rules={[
-                    {
-                      required: true,
-                      // pattern: new RegExp("[^0-9a-z]"),
-                      pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                      message: "Please enter a Valid Code",
-                    },
-                    {
-                      min: 2,
-                      message: "Code must be atleast 2 characters",
-                    },
-                    {
-                      max: 20,
-                    },
-                  ]}
-                >
-                  <InputType
-                    value={servicecode}
-                    onChange={(e) => setServicecode(e.target.value)}
-                  />
-                </Form.Item>
-              </div>
-              <div className="col-4 ">
-                <label>Category</label>
-                <Form.Item
-                  name="category"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please select a category",
-                    },
-                  ]}
-                >
-                    <TreeSelect
-                        className="tree"
-                        name="tree"
-                        style={{ width: "100%" }}
-                        // value={category}
-                        // value={ setState.value}
-                        dropdownStyle={{
-                          maxHeight: 400,
-                          overflow: "auto",
-                        }}
-                        treeData={categoryTree}
-                        placeholder="Please select"
-                        treeDefaultExpandAll
-                        onChange={onChangetree}
-                        onSelect={onSelect}
-                        
-                      />
-                   {/* <InputType
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
-                  /> */}
-                </Form.Item>
-              </div>
-              <div className="col-6 mt-2">
-                <label className="mb-2">HSN</label>
-                <Form.Item
-                  name="HSN"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please select a category",
-                    },
-                  ]}
-                >
-                   <InputType
-                    value={Hsn}
-                    onChange={(e) => setHsn(e.target.value)}
-                  />
-                </Form.Item>
-              </div>
-              <div className="col-6 mt-2">
-                <label className="mb-3">Tax Rate</label>
-                <Form.Item
-                  name="taxRate"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please enter a Valid Tax Rate",
-                    },
-                  ]}
-                >
-                  <InputNumber
-                    style={{
-                      border: "0",
-                      backgroundColor: "whitesmoke",
-                      width: "100%",
-                      paddingBlock: "2px",
-                      boxShadow: "none",
-                    }}
-                    value={taxRate}
-                    // formatter={(value) =>
-                    //   ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                    // }
-                    // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                    onChange={(e) => setTaxRate(e)}
-                  />
-                </Form.Item>
-              </div>
-
-              <div className="col-12 mt-2 d-flex  justify-content-center ">
-                <div className="text-center">
-                <label>Display Picture</label>
-                  <Form.Item 
-                   name="new"
-                   rules={[
-                     {
-                       required: true,
-                       message: "Please select an image file",
-                     },
-                   ]}
+              <div className="row my-5">
+                <div className="col-4">
+                  <label>Name</label>
+                  <Form.Item
+                    name="servicename"
+                    rules={[
+                      {
+                        required: true,
+                        pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                        message: "Please enter a Valid Service Name",
+                      },
+                      {
+                        min: 2,
+                        message: "Name must be at least 2 characters",
+                      },
+                      {
+                        max: 100,
+                        message: "Name cannot be longer than 100 characters",
+                      },
+                    ]}
                   >
-                   
-                    {/* <FileUpload
-                      value={displayPicture}
-                      onChange={(e) => setDisplayPicture(e)}
-                    /> */}
-                     <FileUpload
-                      multiple
-                      listType="picture"
-                      accept=".png,.jpeg"
-                      onPreview={handlePreview}
-                      beforeUpload={false}
-                      onChange={(file) => {
-                        console.log("Before upload", file.file);
-                        console.log("Before upload file size", file.file.size);
-
-                        if (file.file.size > 2000 && file.file.size < 50000) {
-                          setImg(file.file.originFileObj);
-                          console.log("selet imggg",file.file.originFileObj )
-                          console.log(
-                            "image grater than 2 kb and less than 50 kb"
-                          );
-                        } else {
-                          console.log("Error in image upload");
-                        }
-                      }}
+                    <InputType
+                      value={serviceName}
+                      onChange={(e) => setServiceName(e.target.value)}
                     />
                   </Form.Item>
                 </div>
+                <div className="col-4">
+                  <label>Code</label>
+                  <Form.Item
+                    name="code"
+                    rules={[
+                      {
+                        required: true,
+                        pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                        message: "Please enter a Valid Code",
+                      },
+                      {
+                        min: 2,
+                        message: "Code must be at least 2 characters",
+                      },
+                      {
+                        max: 20,
+                        message: "Code cannot be longer than 20 characters",
+                      },
+                    ]}
+                  >
+                    <InputType
+                      value={servicecode}
+                      onChange={(e) => setServicecode(e.target.value)}
+                    />
+                  </Form.Item>
+                </div>
+                <div className="col-4">
+                  <label>Category</label>
+                  <Form.Item
+                    className="mt-2"
+                    name="category"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please select a category",
+                      },
+                    ]}
+                  >
+                    <TreeSelect
+                      className="tree"
+                      name="tree"
+                      style={{ width: "100%" }}
+                      // value={category}
+                      // value={ setState.value}
+                      dropdownStyle={{
+                        maxHeight: 400,
+                        overflow: "auto",
+                      }}
+                      treeData={categoryTree}
+                      placeholder="Please select"
+                      treeDefaultExpandAll
+                      onChange={onChangetree}
+                      onSelect={onSelect}
+                    />
+                  </Form.Item>
+                </div>
+                <div className="col-6 mt-2">
+                  <label>HSN</label>
+                  <Form.Item name="HSN">
+                    <InputType
+                      value={Hsn}
+                      onChange={(e) => setHsn(e.target.value)}
+                    />
+                  </Form.Item>
+                </div>
+                <div className="col-6 mt-2">
+                  <label className="mb-2">Tax Rate</label>
+                  <Form.Item
+                    name="taxRate"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please enter a Valid Tax Rate",
+                      },
+                      {
+                        pattern: new RegExp("^[0-9]+$"),
+                        message: "Please enter zero or Postive integers",
+                      },
+                    ]}
+                  >
+                    <InputNumber
+                      style={{
+                        border: "0",
+                        backgroundColor: "whitesmoke",
+                        width: "100%",
+                        paddingBlock: "2px",
+                        boxShadow: "none",
+                      }}
+                      value={taxRate}
+                      onChange={(e) => setTaxRate(e)}
+                    />
+                  </Form.Item>
+                </div>
+
+                <div className="col-12 mt-2 d-flex justify-content-center ">
+                  <div className="text-center">
+                    <label>Display Picture</label>
+                    <Form.Item name="new">
+                      <FileUpload
+                        multiple
+                        listType="picture"
+                        accept=".png,.jpeg"
+                        onPreview={handlePreview}
+                        beforeUpload={false}
+                        onChange={(file) => {
+                          console.log(
+                            "Before upload file size",
+                            file.file.size
+                          );
+                          if (
+                            file.file.size > 2000 &&
+                            file.file.size < 500000
+                          ) {
+                            setImg(file.file.originFileObj);
+                            setImageSize(false);
+                            console.log(
+                              "select imaggg",
+                              file.file.originFileObj
+                            );
+                            console.log(
+                              "image is greater than 2 kb and less than 500 kb"
+                            );
+                          } else {
+                            setImageSize(true);
+                            console.log("Error in image upload");
+                          }
+                        }}
+                      />
+                      {imageSize ? (
+                        <p style={{ color: "red" }}>
+                          Upload Image size between 1 kb and 500 kb
+                        </p>
+                      ) : (
+                        ""
+                      )}
+                    </Form.Item>
+                  </div>
+                </div>
+                <div className="col-6 mt-2">
+                  <label>Description</label>
+                  <Form.Item
+                    name="description"
+                    rules={[
+                      {
+                        min: 2,
+                        message: "Description must be at least 2 characters",
+                      },
+                      {
+                        max: 500,
+                        message:
+                          "Description cannot be longer than 500 characters",
+                      },
+                    ]}
+                  >
+                    <TextArea
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                    />
+                  </Form.Item>
+                </div>
+                <div className="col-12 d-flex justify-content-center pt-5 gap-3 ">
+                  <Button className="save_button">Save</Button>{" "}
+                  <Button as="input" type="reset" value="Reset">
+                    Clear
+                  </Button>
+                </div>
               </div>
-              <div className="col-6 mt-2">
-                <label>Address</label>
-                <Form.Item
-                  name="description"
-                  rules={[
-                    {
-                      whitespace: true,
-                    },
-                    {
-                      min: 2,
-                      message: "Description must be atleast 2 characters",
-                    },
-                    {
-                      max: 500,
-                    },
-                  ]}
-                >
-                  <TextArea
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                  />
-                </Form.Item>
-                {/* <p>Description</p>
-                <div>
-                  <textarea
-                    style={{ height: "100px" }}
-                    className="input_type_style w-100"
-                  />
-                </div> */}
-              </div>
-              <div className="col-12 d-flex justify-content-center pt-5 gap-3 ">
-                <Button
-                  // onClick={() => {
-                  //   setSuccessPopup(true);
-                  //   setError(true);
-                  // }}
-                  className="save_button"
-                >
-                  Save
-                </Button>{" "}
-                {/* <Button
-                  onClick={() => {
-                    setSuccessPopup(true);
-                    setError(true);
-                  }}
-                  className="clear_button"
-                >
-                 Clear
-                </Button> */}
-                <Button as="input" type="reset" value="Reset">
-                  {" "}
-                  Clear
-                </Button>
-              </div>
-            </div>
             </Form>
           </div>
         </div>

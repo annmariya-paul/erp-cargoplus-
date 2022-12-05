@@ -43,6 +43,7 @@ function Category() {
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
   const [parentcategory,setParentcategory]=useState(null);
+  const [imageSize,setImageSize]= useState(false);
   // const [parent,setParent]=useState(null);
   console.log("set image", img);
 
@@ -304,14 +305,11 @@ function Category() {
       <div className="container-fluid">
         <div className="row justify-content-md-center">
           <div className="content-tabs" style={{ maxHeight: "1000px" }}>
-            {/* <Form onSubmit={handleSubmit(Submit)}> */}
             <Form
               name="addForm"
               form={addForm}
               onFinish={(value) => {
                 console.log("values111333", value);
-                // setDescription(value.description);
-                // setBrand(value.brand);
                 OnSubmit();
               }}
               onFinishFailed={(error) => {
@@ -320,53 +318,22 @@ function Category() {
             >
               <div className="row px-4 pt-4">
                 <div className="col-sm-4 pt-3">
-                  {/* <Form.Group className="mb-2" controlId="Cname">
-                    <Form.Label>Category Name</Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="Cname"
-                      placeholder="Category Name"
-                      className={`${errors.Cname && "invalid"}`}
-                      {...register("Cname", {
-                        required: "Please enter a valid Category Name",
-                        minLength: {
-                          value: 3,
-                          message: "Minimum Required length is 3",
-                        },
-                        maxLength: {
-                          value: 100,
-                        },
-                        pattern: {
-                          value: /^[a-zA-Z0-9 ]*$/,
-                          message: "Only letters and numbers are allowed!",
-                        },
-                      })}
-                      onKeyUp={() => {
-                        trigger("Cname");
-                      }}
-                    />
-                    {errors.Cname && (
-                      <small className="text-danger">
-                        {errors.Cname.message}
-                      </small>
-                    )}
-                  </Form.Group> */}
-                  <p>Name</p>
+                  <label>Name</label>
                   <Form.Item
                     name="category_name"
                     rules={[
                       {
                         required: true,
                         pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-
-                        message: "Please enter a Valid Brand Name",
-                      },
-
-                      {
-                        whitespace: true,
+                        message: "Please enter a Valid Category Name",
                       },
                       {
-                        min: 3,
+                        min: 2,
+                        message: "Name must be at least 2 characters",
+                      },
+                      {
+                        max: 100,
+                        message: "Name cannot be longer than 100 characters",
                       },
                     ]}
                     onChange={(e) => setName(e.target.value)}
@@ -375,53 +342,22 @@ function Category() {
                   </Form.Item>
                 </div>
                 <div className="col-sm-4 pt-3">
-                  {/* <Form.Group className="mb-2" controlId="category_code">
-                    <Form.Label>Code</Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="category_code"
-                      placeholder="Category Code"
-                      className={`${errors.category_code && "invalid"}`}
-                      {...register("category_code", {
-                        required: "Please enter a valid Category code",
-                        minLength: {
-                          value: 3,
-                          message: "Minimum Required length is 3",
-                        },
-                        maxLength: {
-                          value: 100,
-                        },
-                        pattern: {
-                          value: /^[a-zA-Z0-9 ]*$/,
-                          message: "Only letters and numbers are allowed!",
-                        },
-                      })}
-                      onKeyUp={() => {
-                        trigger("category_code");
-                      }}
-                    />
-                    {errors.category_code && (
-                      <small className="text-danger">
-                        {errors.category_code.message}
-                      </small>
-                    )}
-                  </Form.Group> */}
-                  <p>category_code</p>
+                  <label>category_code</label>
                   <Form.Item
                     name="category_code"
                     rules={[
                       {
                         required: true,
-                        pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-
-                        message: "Please enter a Valid category_code",
-                      },
-
-                      {
-                        whitespace: true,
+                        pattern: new RegExp("^[A-Za-z0-9]+$"),
+                        message: "Please enter a Valid Category code",
                       },
                       {
-                        min: 3,
+                        min: 2,
+                        message: "Code must be at least 2 characters",
+                      },
+                      {
+                        max: 100,
+                        message: "Code cannot be longer than 100 characters",
                       },
                     ]}
                     onChange={(e) => setCode(e.target.value)}
@@ -433,101 +369,57 @@ function Category() {
                   <label for="tree" className="form-label">
                     Parent Category
                   </label>
-                  <Form.Item
-                    name="category_parent_id"
-                  >
-                  <TreeSelect
-                    className="tree"
-                   
-                    style={{ width: "100%" }}
-                    value={setState.value}
-                    dropdownStyle={{
-                      maxHeight: 400,
-                      overflow: "auto",
-                    }}
-                    onChange={(value) => setParentcategory(value)}
-
-                    // treeData={TreeData?.map((item, index) => ({
-                    //   title: item?.category_name,
-                    //   value: item?.category_id,
-                    //   match: item?.category_id,
-                    //   key: item?.category_id,
-                    //   children: item?.other_crm_v1_categories,
-                    // }))}
-                    treeData={categoryTree}
-                    placeholder="Please select"
-                    // treeDefaultExpandAll
-                    // onChange={onChange}
-                    onSelect={onSelect}
-                  >
-                    {/* {getTreeData(TreeData)} */}
-                  </TreeSelect>
+                  <Form.Item name="category_parent_id">
+                    <TreeSelect
+                      className="tree"
+                      style={{ width: "100%" }}
+                      value={setState.value}
+                      dropdownStyle={{
+                        maxHeight: 400,
+                        overflow: "auto",
+                      }}
+                      onChange={(value) => setParentcategory(value)}
+                      // treeData={TreeData?.map((item, index) => ({
+                      //   title: item?.category_name,
+                      //   value: item?.category_id,
+                      //   match: item?.category_id,
+                      //   key: item?.category_id,
+                      //   children: item?.other_crm_v1_categories,
+                      // }))}
+                      treeData={categoryTree}
+                      placeholder="Please select"
+                      // treeDefaultExpandAll
+                      // onChange={onChange}
+                      onSelect={onSelect}
+                    >
+                      {/* {getTreeData(TreeData)} */}
+                    </TreeSelect>
                   </Form.Item>
                 </div>
                 <div className=" col-sm-5 pt-3">
-                  {/* <Form.Group className="mb-2" controlId="cat_description">
-                    <Form.Label>Description</Form.Label>
-                    <Form.Control
-                      as="textarea"
-                      rows={3}
-                      className={`${errors.cat_description && "invalid"}`}
-                      {...register("cat_description")}
-                      onKeyUp={() => {
-                        trigger("cat_description");
-                      }}
-                    />
-                    {errors.cat_description && (
-                      <small className="text-danger">
-                        {errors.cat_description.message}
-                      </small>
-                    )}
-                  </Form.Group> */}
-                  <p>Description</p>
+                  <label>Description</label>
                   <Form.Item
                     name="category_description"
                     rules={[
                       {
-                        required: true,
-                        pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-
-                        message: "Please enter a Valid Brand Name",
-                      },
-
-                      {
-                        whitespace: true,
+                        min: 5,
+                        message: "Description must be at least 5 characters",
                       },
                       {
-                        min: 3,
+                        max: 500,
+                        message:
+                          "Description cannot be longer than 500 characters",
                       },
                     ]}
                     onChange={(e) => setDescription(e.target.value)}
                   >
-                    <InputType />
+                    <TextArea />
                   </Form.Item>
                 </div>
                 <div className="row ">
                   <div className="col-12 ">
-                    {/* <Form.Group className="mb-2" controlId="cat_img">
-                      <Form.Label>category Image</Form.Label>
-
-                      <FileUpload
-                        className={`${errors.attachments && "invalid"}`}
-                        {...register("attachments")}
-                        onKeyUp={() => {
-                          trigger("attachments");
-                        }}
-                      />
-                    </Form.Group> */}
-                    <p>Display Picture</p>
-                    <Form.Item
-                      name="category_pic"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please select an image file",
-                        },
-                      ]}
-                    >
+                    <label>Display Picture</label>
+                    <Form.Item name="category_pic">
                       <FileUpload
                         multiple
                         listType="picture"
@@ -541,24 +433,33 @@ function Category() {
                             file.file.size
                           );
 
-                          if (file.file.size > 1000 && file.file.size < 50000) {
+                          if (file.file.size > 1000 && file.file.size < 500000) {
                             setImg(file.file.originFileObj);
-                            console.log(
-                              "image grater than 1 kb and less than 50 kb"
-                            );
+                            console.log("Allowed image size");
+                            setImageSize(false);
                           } else {
-                            console.log("hgrtryyryr");
+                            setImageSize(true);
+                            console.log(
+                              "upload image size between 1 kb and  500 kb"
+                            );
                           }
                         }}
                       />
+                      {imageSize ? (
+                        <p style={{ color: "red" }}>
+                          Upload Image size between 1 kb and 500 kb
+                        </p>
+                      ) : (
+                        ""
+                      )}
                     </Form.Item>
                   </div>
                 </div>
-                <div className="d-flex mt-3">
+                <div className="d-flex mb-3">
                   <Button className="savebtn" btnType="save">
                     Save
                   </Button>
-                </div>{" "}
+                </div>
               </div>
             </Form>
           </div>
@@ -572,7 +473,6 @@ function Category() {
       />
       {error ? <ErrorMsg code="500" /> : ""}
     </>
-    
   );
 }
 

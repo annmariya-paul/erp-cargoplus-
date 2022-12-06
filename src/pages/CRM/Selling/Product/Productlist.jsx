@@ -90,22 +90,22 @@ function Productlist() {
     if (e) {
       setProductID(e.product_id);
       setModalOpportunity(true);
-     
     }
   };
 
   // {columns is product listing table componenet }
- 
 
   const getallproduct = () => {
-    PublicFetch.get(`${CRM_BASE_URL_SELLING}/product?startIndex=0&noOfItems=100`)
+    PublicFetch.get(
+      `${CRM_BASE_URL_SELLING}/product?startIndex=0&noOfItems=100`
+    )
       .then((res) => {
         if (res?.data?.success) {
           console.log("All products success::: ", res?.data?.data.products);
           let tempArr = [];
-          let arr2 = []
-          res?.data?.data?.products.forEach((item,index)=> {
-            console.log("gdghhh",item.crm_v1_categories);
+          let arr2 = [];
+          res?.data?.data?.products.forEach((item, index) => {
+            console.log("gdghhh", item.crm_v1_categories);
 
             // item?.crm_v1_categories?.forEach((itm,indx)=>{
             //   arr2.push(itm?.category_name)
@@ -114,24 +114,23 @@ function Productlist() {
             //   arr2.push(item?.category_name)
             // }
             tempArr.push({
-              product_id:item?.product_id,
+              product_id: item?.product_id,
               product_name: item?.product_name,
-              catgeory_name:item.crm_v1_categories?.category_name,
-              product_code:item?.product_code,
-              product_pic:item?.product_pic,
+              catgeory_name: item.crm_v1_categories?.category_name,
+              product_code: item?.product_code,
+              product_pic: item?.product_pic,
+            });
+          });
 
-            })
-          })
-
-console.log("hellooooo",tempArr);
+          console.log("hellooooo", tempArr);
           setProducts(tempArr);
-          
+
           // let samplearry = [];
           // res?.data?.data?.leads.forEach((item, index) => {
           //   samplearry.push(item.opportunity_id);
           // });
           // console.log("pushedd ", samplearry);
-            
+
           // setOppurtunityid(samplearry);
         } else {
           console.log("Failed to load data !");
@@ -145,20 +144,17 @@ console.log("hellooooo",tempArr);
     getallproduct();
   }, []);
 
-
   const data12 = products?.map((item) => [
     item.action,
     item.product_pic,
     item.product_name,
     item.product_code,
     item.product_category_id,
-    
   ]);
   // const getData = (current, pageSize) => {
   //   return products?.slice((current - 1) * pageSize, current * pageSize);
   // };
 
-  
   const columns = [
     {
       title: "ACTION",
@@ -178,18 +174,11 @@ console.log("hellooooo",tempArr);
               }}
               className="actionEdit m-0 p-0"
             >
-            
-
               <FiEdit fontSize={"12px"} />
-
-            
             </div>
 
             <Link to={`${ROUTES.PRODUCTDETAIL}/${index.product_id}`}>
-              <div
-                
-                className="actionView m-0 p-0"
-              >
+              <div className="actionView m-0 p-0">
                 <MdPageview />
               </div>
             </Link>
@@ -268,8 +257,7 @@ console.log("hellooooo",tempArr);
     // },
   ];
 
-  const ProductHeads = 
-  [
+  const ProductHeads = [
     [
       "product_id",
       "product_name",
@@ -280,17 +268,16 @@ console.log("hellooooo",tempArr);
       "product_pic",
       "product_attributes",
       "product_description",
-
     ],
-  ]
-  //for show or hide colums start-- shahida 
+  ];
+  //for show or hide colums start-- shahida
   const columnsKeys = columns.map((column) => column.key);
 
   const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
   const filteredColumns = columns.filter((column) =>
     selectedColumns.includes(column.key)
   );
-console.log("filtered columns::",filteredColumns);
+  console.log("filtered columns::", filteredColumns);
   const onChange = (checkedValues) => {
     setSelectedColumns(checkedValues);
   };
@@ -304,13 +291,12 @@ console.log("filtered columns::",filteredColumns);
               <h5 className="lead_text">Products</h5>
             </div>
             {/* <Leadlist_Icons /> */}
-            <Leadlist_Icons 
+            <Leadlist_Icons
               datas={products}
               columns={filteredColumns}
               items={data12}
               xlheading={ProductHeads}
               filename="data.csv"
-            
               chechboxes={
                 <Checkbox.Group onChange={onChange} value={selectedColumns}>
                   {columnsKeys.map((column) => (
@@ -321,8 +307,8 @@ console.log("filtered columns::",filteredColumns);
                     </li>
                   ))}
                 </Checkbox.Group>
-              } />
-
+              }
+            />
           </div>
           <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
             <div className="col-4">

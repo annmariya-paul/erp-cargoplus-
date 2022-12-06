@@ -161,12 +161,12 @@ function Services() {
     setServicedescription(i.service_description);
     setServicecategory(i.service_category_id);
     setServiceImg(i.service_pic);
-    editForm.setFieldValue({
-      serviceid: i.service_id,
-      serviceName: i.service_name,
+    editForm.setFieldsValue({
+      // serviceid: i.service_id,
+      service_name: i.service_name,
       serviceCode: i.service_code,
       serviceHsn: i.service_hsn,
-      servicetaxrate: i.service_taxrate,
+      taxRate: i.service_taxrate,
       servicedescription: i.service_description,
       serviceCategory: i.service_category_id,
     });
@@ -662,7 +662,7 @@ function Services() {
                     <div className="col-4">
                       <label>Name</label>
                       <Form.Item
-                        name="serviceName"
+                        name="service_name"
                         rules={[
                           {
                             required: true,

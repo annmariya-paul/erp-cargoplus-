@@ -48,6 +48,12 @@ function Varients() {
   const [modalOpportunity, setModalOpportunity] = useState(false);
   const [ClicktoOpen, setClicktoOpen] = useState(true);
   const [varientId, setVarientId] = useState();
+  const [attributes, setAttributes] = useState();
+  const [attributeValue, setAttributeValues] = useState();
+  const [ModelForedit, setModalForEdit] = useState(false);
+  const [varientAttribute_id, setVarientAttribute_id] = useState();
+  const [Editattribute112, setEditattribute112] = useState(false);
+  const [varientattrVArient_id, setVArientAttrVarient_id] = useState();
 
   console.log("varient id", varientId);
 
@@ -78,6 +84,9 @@ function Varients() {
           // setPrUnit(res?.data?.data?.product_unit_id);
 
           setPrAttributes(res?.data?.data?.crm_v1_attributes);
+          if (id.includes(res.data.data.product_id)) {
+            console.log("gfgfdgg", res.data.data);
+          }
           // setPrDescription(res?.data?.data?.product_description);
 
           // setPrImage(res?.data?.data?.product_pic);
@@ -127,7 +136,27 @@ function Varients() {
         "getting all varient  attributes dattta",
         allvarientAttr.data.data
       );
-      setVarientAttr(allvarientAttr.data.data);
+      let temp = [];
+
+      allvarientAttr.data.data.forEach((item, index) => {
+        console.log("All varient data", item);
+        console.log("Varient Id : ", item.variant_attr_variant_id);
+        if (varientId === item.variant_attr_variant_id) {
+          // setVarientAttr(allvarientAttr.data.data);
+          temp.push({
+            variant_attr_attribute_id: item.variant_attr_attribute_id,
+            variant_attr_id: item.variant_attr_id,
+            variant_attr_status: item.variant_attr_status,
+            variant_attr_value: item.variant_attr_value,
+            variant_attr_variant_id: item.variant_attr_variant_id,
+          });
+        }
+        console.log("hfvhhhhf345", temp);
+        setVarientAttr(temp);
+        // if (varientId.includes(allvarientAttr.data.data)) {
+        //   setVarientAttr(allvarientAttr.data.data);
+        // }
+      });
     } catch (err) {
       console.log("error to fetching  attributes", err);
     }
@@ -282,13 +311,52 @@ function Varients() {
 
   const handleEditClick = (data) => {
     console.log("dataa again", data);
-
-    editForm.setFieldValue({
-      Editattribute: data.variant_attr_attribute_id,
-      Editvalue: data.variant_attr_value,
-    });
-    setClicktoOpen(false);
+    if (data) {
+      setAttributes(data?.variant_attr_attribute_id);
+      setAttributeValues(data?.variant_attr_value);
+      setVarientAttribute_id(data?.variant_attr_id);
+      setVArientAttrVarient_id(data?.variant_attr_variant_id);
+      editForm.setFieldsValue({
+        Editattribute_id: data?.variant_attr_id,
+        Editattribute: data.variant_attr_attribute_id,
+        Editvalue: data.variant_attr_value,
+      });
+      // setClicktoOpen(false);
+      setModalForEdit(true);
+      // setEditattribute112(true);
+    }
   };
+
+  const UpdateAttribute = (value) => {
+    console.log("hai how are u", value);
+    const UpdatedData = {
+      variant_attr_variant_id: varientattrVArient_id,
+      variant_attr_attribute_id: attributes,
+      variant_attr_value: attributeValue,
+    };
+
+    PublicFetch.patch(
+      `${CRM_BASE_URL_SELLING}/variantAttr/${varientAttribute_id}`,
+      UpdatedData
+    )
+      .then((res) => {
+        console.log("Response", res);
+        if (res.data.success) {
+          setSuccessPopup(true);
+          close_modal1(successPopup, 1200);
+          getvarientAttr();
+          editForm.resetFields();
+          setEditattribute112(false);
+          setClicktoOpen(true);
+          setModalForEdit(false);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+  console.log("happy", attributes, attributeValue, varientattrVArient_id);
 
   return (
     <div>
@@ -706,7 +774,26 @@ function Varients() {
                             <div className="col-6">
                               <label>Attributes</label>
                               <div>
-                                <Form.Item name="attribute">
+                                <Form.Item
+                                  name="attribute"
+                                  rules={[
+                                    {
+                                      required: true,
+                                      message:
+                                        "Please Select a Valid Attribute Name",
+                                    },
+                                    // {
+                                    //   min: 2,
+                                    //   message:
+                                    //     "Name must be at least 2 characters",
+                                    // },
+                                    // {
+                                    //   max: 100,
+                                    //   message:
+                                    //     "Name cannot be longer than 100 characters",
+                                    // },
+                                  ]}
+                                >
                                   <SelectBox
                                     placeholder={"--Please Select--"}
                                     onChange={(e) => {
@@ -734,7 +821,26 @@ function Varients() {
                             <div className="col-6">
                               <label>Attributes value</label>
                               <div>
-                                <Form.Item name="value">
+                                <Form.Item
+                                  name="value"
+                                  rules={[
+                                    {
+                                      required: true,
+                                      message:
+                                        "Please enter a Valid Attribute value",
+                                    },
+                                    // {
+                                    //   min: 2,
+                                    //   message:
+                                    //     "Name must be at least 2 characters",
+                                    // },
+                                    // {
+                                    //   max: 100,
+                                    //   message:
+                                    //     "Name cannot be longer than 100 characters",
+                                    // },
+                                  ]}
+                                >
                                   <InputType />
                                 </Form.Item>
                               </div>
@@ -750,61 +856,9 @@ function Varients() {
                           </div>
                         </Form>
                       ) : (
-                        <Form
-                          form={editForm}
-                          onFinish={(value) => {
-                            console.log("edit value", value);
-                          }}
-                        >
-                          <div className="row">
-                            <div className="col-6">
-                              <label>Attributes1123</label>
-
-                              <div>
-                                <Form.Item name="Editattribute">
-                                  <SelectBox
-                                    placeholder={"--Please Select--"}
-                                    onChange={(e) => {
-                                      console.log("selected attribute iss", e);
-                                      setAttribute(e);
-                                    }}
-                                  >
-                                    {/* <Select.Option>{attribute}</Select.Option> */}
-                                    {prattributes &&
-                                      prattributes.length > 0 &&
-                                      prattributes?.map((item, index) => {
-                                        return (
-                                          <Select.Option
-                                            key={item.attribute_id}
-                                            value={item.attribute_id}
-                                          >
-                                            {item.attribute_name}
-                                          </Select.Option>
-                                        );
-                                      })}
-                                  </SelectBox>
-                                </Form.Item>
-                              </div>
-                            </div>
-                            <div className="col-6">
-                              <label>Attributes value</label>
-                              <div>
-                                <Form.Item name="Editvalue">
-                                  <InputType />
-                                </Form.Item>
-                              </div>
-                            </div>
-                            <div className="col-12 d-flex justify-content-center mt-5">
-                              {/* <label>Tax Rate</label> */}
-                              <div>
-                                <Button btnType="save" type="submit">
-                                  save
-                                </Button>
-                              </div>
-                            </div>
-                          </div>
-                        </Form>
+                        ""
                       )}
+
                       <div className="col-12 mt-3">
                         <TableData columns={columns} data={varientattr} />
                       </div>
@@ -817,6 +871,108 @@ function Varients() {
           </div>
         </div>
       </div>
+      <CustomModel
+        show={ModelForedit}
+        onHide={() => setModalForEdit(false)}
+        Adding_contents
+      >
+        <div>
+          <Form
+            form={editForm}
+            onFinish={(value) => {
+              console.log("edit value", value);
+              UpdateAttribute(value);
+            }}
+          >
+            <div className="row pt-5">
+              <div className="">
+                <h4>Edit Attribute</h4>
+              </div>
+              <div className="col-6">
+                <label>Edit Attributes</label>
+
+                <div>
+                  <Form.Item
+                    name="Editattribute"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please Select a Valid Attribute Name",
+                      },
+                      // {
+                      //   min: 2,
+                      //   message: "Name must be at least 2 characters",
+                      // },
+                      // {
+                      //   max: 100,
+                      //   message: "Name cannot be longer than 100 characters",
+                      // },
+                    ]}
+                  >
+                    <SelectBox
+                      value={attributes}
+                      placeholder={"--Please Select--"}
+                      onChange={(e) => {
+                        console.log("selected attribute iss", e);
+                        setAttributes(e);
+                      }}
+                    >
+                      {/* <Select.Option>{attribute}</Select.Option> */}
+                      {prattributes &&
+                        prattributes.length > 0 &&
+                        prattributes?.map((item, index) => {
+                          return (
+                            <Select.Option
+                              key={item.attribute_id}
+                              value={item.attribute_id}
+                            >
+                              {item.attribute_name}
+                            </Select.Option>
+                          );
+                        })}
+                    </SelectBox>
+                  </Form.Item>
+                </div>
+              </div>
+              <div className="col-6">
+                <label>Edit Attributes value</label>
+                <div>
+                  <Form.Item
+                    name="Editvalue"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please enter a Valid Attribute value",
+                      },
+                      // {
+                      //   min: 2,
+                      //   message: "Name must be at least 2 characters",
+                      // },
+                      // {
+                      //   max: 100,
+                      //   message: "Name cannot be longer than 100 characters",
+                      // },
+                    ]}
+                  >
+                    <InputType
+                      value={attributeValue}
+                      onChange={(e) => setAttributeValues(e.target.value)}
+                    />
+                  </Form.Item>
+                </div>
+              </div>
+              <div className="col-12 d-flex justify-content-center mt-5">
+                {/* <label>Tax Rate</label> */}
+                <div>
+                  <Button btnType="save" type="submit">
+                    save
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </Form>
+        </div>
+      </CustomModel>
       <ProductVariantsEditModal
         show={modalOpportunity}
         onHide={() => setModalOpportunity(false)}

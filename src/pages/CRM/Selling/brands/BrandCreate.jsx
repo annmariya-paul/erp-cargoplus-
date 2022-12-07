@@ -54,9 +54,9 @@ function BrandCreate() {
     }
   };
 
-  const handleCancel=()=>{
-    navigate(ROUTES.BRANDS)
-  }
+  const handleCancel = () => {
+    navigate(ROUTES.BRANDS);
+  };
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj);

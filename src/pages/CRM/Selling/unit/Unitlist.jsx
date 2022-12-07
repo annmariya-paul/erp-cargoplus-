@@ -78,8 +78,15 @@ const handleEditonViewpage=(e)=>{
   setUnitName(e.unitname)
   setUnitCode(e.unitcode)
   setUnitDescription(e.unitdescription)
-  setEditShow(true);
+ 
   setViewUnitModal(false);
+  editForm.setFieldsValue({
+    // unitid: e.unit_id,
+    unit_name: e.unitname,
+    unit_code: e.unitcode,
+    unit_description: e.unitdescription,
+  });
+  setEditShow(true);
 }
 // function to editunits
 
@@ -90,7 +97,7 @@ setUnitName(item?.unit_name)
 setUnitCode(item?.unit_code)
 setUnitDescription(item?.unit_description)
  editForm.setFieldsValue({
-   unitid: item.unit_id,
+  //  unitid: item.unit_id,
    unitName: item.unit_name,
    unitcode: item.unit_code,
    unitDescription: item.unit_description,
@@ -448,8 +455,10 @@ console.log("filtered columns::",filteredColumns);
           onHide={() => {
             setViewUnitModal(false);
           }}
-          Adding_contents
-          children={
+          View_list
+         
+         
+          list_content={
             <div className="">
               <div className="d-flex justify-content-between my-1">
                 <div className="mt-3">
@@ -458,7 +467,7 @@ console.log("filtered columns::",filteredColumns);
                 <div className="">
                   <Button btnType="add_borderless">
                     <span
-                      className="d-flex align-items-center justify-content-between gap-1  p-1 button_span"
+                      className="d-flex align-items-center justify-content-between gap-1  p-2 button_span"
                       style={{ fontSize: "14px" }}
                       onClick={() =>
                         // handleEditclick(viewUnit)
@@ -521,7 +530,7 @@ console.log("filtered columns::",filteredColumns);
                   <div className="col-12">
                     <label>Name</label>
                     <Form.Item
-                      name="unitName"
+                      name="unit_name"
                       rules={[
                         {
                           required: true,
@@ -551,7 +560,7 @@ console.log("filtered columns::",filteredColumns);
                   <div className="col-12 py-2">
                     <label>Code</label>
                     <Form.Item
-                      name="unitcode"
+                      name="unit_code"
                       rules={[
                         {
                           required: true,
@@ -578,7 +587,7 @@ console.log("filtered columns::",filteredColumns);
                   <div className="col-12 py-2">
                     <label>Description</label>
                     <Form.Item
-                      name="unitDescription"
+                      name="unit_description"
                       rules={[
                         {
                           min: 2,

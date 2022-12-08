@@ -20,7 +20,7 @@ import { ROUTES } from "../../routes";
 import "../CRM/lead/lead_list/leadlist.scss";
 import TableData from "../../components/table/table_data";
 import MyPagination from "../../components/Pagination/MyPagination";
-import Custom_model from "../../components/custom_modal/custom_model";
+import CustomModel from "../../components/custom_modal/custom_model";
 import Button from "../../components/button/button";
 
 import "./opportunitylist.scss";
@@ -52,7 +52,7 @@ import { Toaster, toast } from "react-hot-toast"; // copy to clip board
 function Opportunitylist(props) {
   const { id } = useParams();
   console.log("ID is ...", id);
-
+  const [EditForm] = Form.useForm();
   const [numOfItems, setNumOfItems] = useState("25");
   const [pageSize, setPageSize] = useState(0); // page size
   const [current, setCurrent] = useState(1); // current page
@@ -153,18 +153,16 @@ function Opportunitylist(props) {
     opportunitystatus: "",
   });
 
-  
   // { function to get all opportunity data - Ann mariya(27/10/22)}
 
   const [OpportunityList, setOpportunityList] = useState([]);
-  const [totalCount,setTotalcount] =useState()
+  const [totalCount, setTotalcount] = useState();
   // const [oppurtunityid, setOppurtunityid] = useState();
 
-
   const pageofIndex = numOfItems * (current - 1) - 1 + 1;
-  
-  const pagesizecount = Math.ceil(totalCount/numOfItems)
-  console.log("page number isss", pagesizecount)
+
+  const pagesizecount = Math.ceil(totalCount / numOfItems);
+  console.log("page number isss", pagesizecount);
 
   const GetOpportunityData = () => {
     PublicFetch.get(
@@ -174,8 +172,8 @@ function Opportunitylist(props) {
         if (res?.data?.success) {
           console.log("All opportunity data", res?.data?.data);
           setOpportunityList(res?.data?.data?.leads);
-          setTotalcount(res?.data?.data?.totalCount)
-          console.log("totalcount iss",res?.data?.data?.totalCount)
+          setTotalcount(res?.data?.data?.totalCount);
+          console.log("totalcount iss", res?.data?.data?.totalCount);
           // let samplearry = [];
           // res?.data?.data?.leads.forEach((item, index) => {
           //   samplearry.push(item.opportunity_id);
@@ -192,11 +190,10 @@ function Opportunitylist(props) {
       });
   };
 
-
   useEffect(() => {
     GetOpportunityData();
     // getAllContact();
-  }, [numOfItems, pageofIndex, pagesizecount ]);
+  }, [numOfItems, pageofIndex, pagesizecount]);
 
   // get one oppurtunity
   const [oneoppurtunity, setOneoppurtunity] = useState();
@@ -227,6 +224,20 @@ function Opportunitylist(props) {
       setOppurtunitylead(oneoppurtunities.data?.data?.opportunity_lead_id);
       setOppurtunityparty(oneoppurtunities.data?.data?.opportunity_party);
       // setOppurtunityparty()
+      editForm.setFieldsValue({
+        opportunity_type: oneoppurtunities.data?.data?.opportunity_type,
+        opportunity_from: oneoppurtunities.data?.data?.opportunity_from,
+        opportunity_party: oneoppurtunities.data?.data?.opportunity_party,
+        opportunity_source: oneoppurtunities.data?.data?.opportunity_source,
+        opportunity_validity: oneoppurtunities.data?.data?.opportunity_validity,
+        opportunity_amount: oneoppurtunities.data?.data?.opportunity_amount,
+        opportunity_description:
+          oneoppurtunities.data?.data?.opportunity_description,
+        opportunity_probability:
+          oneoppurtunities.data?.data?.opportunity_probability,
+        opportunity_status: oneoppurtunities.data?.data?.opportunity_status,
+        opportunity_lead_id: oneoppurtunities.data?.data?.opportunity_lead_id,
+      });
     } catch (err) {
       console.log("error while getting all leads: ", err);
     }
@@ -245,7 +256,6 @@ function Opportunitylist(props) {
       console.log("error while getting all leads: ", err);
     }
   };
-
 
   // {timeout set for success popups }
   // console.log("bjfnj", oneoppurtunity);
@@ -325,6 +335,18 @@ function Opportunitylist(props) {
     setOppurtunitylead(i.opportunity_lead_id);
     getAllContact();
     setShowEditModal(true);
+    editForm.setFieldsValue({
+      opportunity_type: i.opportunity_type,
+      opportunity_from: i.opportunity_from,
+      opportunity_party: i.opportunity_party,
+      opportunity_source: i.opportunity_source,
+      opportunity_validity: i.opportunity_validity,
+      opportunity_amount: i.opportunity_amount,
+      opportunity_description: i.opportunity_description,
+      opportunity_probability: i.opportunity_probability,
+      opportunity_status: i.opportunity_status,
+      opportunity_lead_id: i.opportunity_lead_id,
+    });
   };
 
   //for xlsx download
@@ -416,7 +438,6 @@ function Opportunitylist(props) {
 
       console.log("editdataaa", editoppurtunity);
       if (editoppurtunity.data.success) {
-       
         setShowEditModal(false);
         GetOpportunityData();
       }
@@ -549,8 +570,7 @@ function Opportunitylist(props) {
   const onChange = (checkedValues) => {
     setSelectedColumns(checkedValues);
   };
-  const OppHeads = 
-  [
+  const OppHeads = [
     [
       "opportunity_id",
       "opportunity_type",
@@ -560,15 +580,15 @@ function Opportunitylist(props) {
       "opportunity_status",
       "opportunity_amount",
     ],
-  ]
+  ];
   //end
   const progress = [
     {
       title: "SLNo:",
       dataIndex: "slno",
-      key:  "slno",
+      key: "slno",
       align: "center",
-      render:( value,item,indx)=> (count )+indx
+      render: (value, item, indx) => count + indx,
     },
     {
       title: "RESPONSE",
@@ -668,13 +688,12 @@ function Opportunitylist(props) {
                 Generate XLS Report
               </button> */}
             </div>
-            
+
             <Leadlist_Icons
               datas={OpportunityList}
               columns={columns}
               items={data12}
               xlheading={OppHeads}
-              
               filename="data.csv"
               chechboxes={
                 <Checkbox.Group onChange={onChange} value={selectedColumns}>
@@ -687,8 +706,6 @@ function Opportunitylist(props) {
                   ))}
                 </Checkbox.Group>
               }
-              
-              
             />
             {/* //show or hide columns */}
             {/* <Checkbox.Group onChange={onChange} value={selectedColumns}>
@@ -825,11 +842,10 @@ function Opportunitylist(props) {
                 bordered={false}
                 className=" page_size_style"
                 value={numOfItems}
-                onChange={(e) => { 
-                  setNumOfItems(e)
-                  setCurrent(1)
-                }
-              }
+                onChange={(e) => {
+                  setNumOfItems(e);
+                  setCurrent(1);
+                }}
               >
                 {/* <Select.Option value="5">5 | pages</Select.Option> */}
                 <Select.Option value="25">
@@ -886,9 +902,7 @@ function Opportunitylist(props) {
               pageSize={numOfItems}
               onChange={(current, pageSize) => {
                 setCurrent(current);
-               
               }}
-            
             />
           </div>
           {/* {"mcncncncncncncnc"} */}
@@ -896,7 +910,7 @@ function Opportunitylist(props) {
 
         {/*  {/* {View model of opportunity  section Two    }  */}
       </div>
-      <Custom_model
+      <CustomModel
         show={showViewModal}
         onHide={() => setShowViewModal(false)}
         View_list
@@ -1019,7 +1033,7 @@ function Opportunitylist(props) {
 
       {/* {Adding Opportunity Modal in Opportunity page} */}
 
-      <Custom_model
+      <CustomModel
         Adding_contents
         show={showAddOpportunity}
         onHide={() => setShowAddOpportunity(false)}
@@ -1027,6 +1041,7 @@ function Opportunitylist(props) {
         size={`xl`}
         // footer={[<Button btnType="save">Save</Button>]}
         {...props}
+        footer={false}
       >
         <Form
         // onSubmit={handleSubmit(submit)}
@@ -1314,10 +1329,10 @@ function Opportunitylist(props) {
             </div>
           </div>
         </Form>
-      </Custom_model>
+      </CustomModel>
 
       {/* Edit opportunity modal   section THREE */}
-      <Custom_model
+      <CustomModel
         Adding_contents
         width={1000}
         show={ShowEditModal}
@@ -1329,7 +1344,7 @@ function Opportunitylist(props) {
         //   <Button
         //     btnType="save"
         //     onClick={() => {
-       
+
         //       updatedOppurtunity();
         //     }}
         //   >
@@ -1339,17 +1354,6 @@ function Opportunitylist(props) {
         // {...props}
 
         centered
-        footer={[
-          <Button
-            btnType="save"
-            onClick={() => {
-              // updateOppurtunity();
-              // updatedOppurtunity();
-            }}
-          >
-            Save
-          </Button>,
-        ]}
         {...props}
 
         // Form={editformData}
@@ -1371,7 +1375,15 @@ function Opportunitylist(props) {
             <div className="row px-1">
               <div className="col-sm-4 pt-2">
                 <label>Lead Type</label>
-                <Form.Item>
+                <Form.Item
+                  name={"opportunity_type"}
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please select a Type",
+                    },
+                  ]}
+                >
                   <SelectBox
                     value={oppurtunitytype}
                     onChange={(e) => {
@@ -1393,8 +1405,13 @@ function Opportunitylist(props) {
                 {/* <Form.Label>From</Form.Label> */}
                 <label>Lead From</label>
                 <Form.Item
-                // aria-label="lead_customer_from"
-                // name="lead_customer_from"
+                  name="opportunity_from"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please select a From",
+                    },
+                  ]}
                 >
                   <SelectBox
                     value={oppurtunityfrom}
@@ -1415,11 +1432,13 @@ function Opportunitylist(props) {
                 > */}
                 <label>Generated/Converted by</label>
                 <Form.Item
-                // type="text"
-                // name="lead_customer_generated"
-                // placeholder="User ID"
-                // value={viewoppurtunity?.convertedby}
-                // className={`${errors.lead_customer_generated && "invalid"}`}
+                  name={"opportunity_lead_id"}
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please Enter a Lead Id",
+                    },
+                  ]}
                 >
                   <InputType value={oppurtunitylead} />
                 </Form.Item>
@@ -1432,8 +1451,13 @@ function Opportunitylist(props) {
                 <label>Source</label>
 
                 <Form.Item
-                // aria-label="lead_customer_from"
-                // name="lead_customer_from"
+                  name="opportunity_source"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please select a Source",
+                    },
+                  ]}
                 >
                   <SelectBox
                     value={oppurtunitysource}
@@ -1455,7 +1479,15 @@ function Opportunitylist(props) {
 
               <div className="col-sm-4 pt-2">
                 <label>Party</label>
-                <Form.Item>
+                <Form.Item
+                  name={"opportunity_party"}
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please select a Valid Party",
+                    },
+                  ]}
+                >
                   <SelectBox
                     value={oppurtunityparty}
                     onChange={(e) => {
@@ -1495,12 +1527,21 @@ function Opportunitylist(props) {
                 /> */}
                 {/* <Form.Group className="mb-2" controlId="lead_valid_up_to"> */}
                 <label>Valid Up to</label>
-                <Form.Item>
-                  <div className="form-control">
+                <div className="">
+                  <Form.Item
+                    // name={"opportunity_validity"}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please select a Valid Date",
+                      },
+                    ]}
+                  >
                     <input
                       type="date"
                       name="lead_validity"
-                      style={{ borderWidth: 0 }}
+                      className="p-2 mt-2"
+                      style={{ borderWidth: 0, borderRadius: "5px" }}
                       // defaultValue={todaydate}
                       value={moment(oppurtunityvalidity).format("YYYY-MM-DD")}
                       onChange={(event) => {
@@ -1508,8 +1549,8 @@ function Opportunitylist(props) {
                         setOppurtunityvalidity(event.target.value);
                       }}
                     />
-                  </div>
-                </Form.Item>
+                  </Form.Item>
+                </div>
                 {/* </Form.Group> */}
               </div>
 
@@ -1517,19 +1558,16 @@ function Opportunitylist(props) {
                 {/* <Form.Group className="mb-2" controlId="lead_details"> */}
                 <label>Details</label>
                 <Form.Item
-                  rules={
-                    [
-                      // {
-                      //   required: true,
-                      // },
-                      // {
-                      //   min:3
-                      // },
-                      // {
-                      //   max:100
-                      // }
-                    ]
-                  }
+                  name={"opportunity_description"}
+                  rules={[
+                    {
+                      min: 3,
+                      message: "Please enter above 3 character",
+                    },
+                    {
+                      max: 100,
+                    },
+                  ]}
                 >
                   {/* as="textarea"
                     name="lead_details"
@@ -1557,11 +1595,13 @@ function Opportunitylist(props) {
 
                 <label>Expecting Amount</label>
                 <Form.Item
-                // type="text"
-                // name="lead_customer_generated"
-                // placeholder="User ID"
-                // value={viewoppurtunity?.convertedby}
-                // className={`${errors.lead_customer_generated && "invalid"}`}
+                  name={"opportunity_amount"}
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter Amount",
+                    },
+                  ]}
                 >
                   <InputType
                     value={oppurtunityamount}
@@ -1576,9 +1616,13 @@ function Opportunitylist(props) {
                 {/* <Form.Group className="mb-2" controlId="lead_probability"> */}
                 <label>Probability of conversion</label>
                 <Form.Item
-                // aria-label="lead_probability"
-                // name="lead_probability"
-                // className={`${errors.lead_probability && "invalid"}`}
+                  name={"opportunity_probability"}
+                  rules={[
+                    {
+                      required: true,
+                      message: "please select valid Name",
+                    },
+                  ]}
                 >
                   <SelectBox
                     value={oppurtunityprobability}
@@ -1598,41 +1642,52 @@ function Opportunitylist(props) {
                 {/* <Form.Group className="mb-2" controlId="lead_status"> */}
                 <label>Status</label>
                 <Form.Item
-                // aria-label="lead_status"
-                // name="lead_status"/
+                  name={"opportunity_status"}
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please select a Status",
+                    },
+                  ]}
                 >
                   <SelectBox
                     value={oppurtunitystatus}
                     onChange={(e) => setOppurtunitystatus(e)}
                   >
-                    <Select.Option value="1">quotation</Select.Option>
-                    <Select.Option value="2">interested</Select.Option>
-                    <Select.Option value="3">converted</Select.Option>
-                    <Select.Option value="4">lost</Select.Option>
-                    <Select.Option value="5">DND</Select.Option>
+                    <Select.Option value={1}>Quotation</Select.Option>
+                    <Select.Option value={2}>Interested</Select.Option>
+                    <Select.Option value={3}>Converted</Select.Option>
+                    <Select.Option value={4}>Lost</Select.Option>
+                    <Select.Option value={5}>DND</Select.Option>
                   </SelectBox>
                 </Form.Item>
                 {/* </Form.Group> */}
               </div>
               <div className="col-12 d-flex justify-content-center my-2">
-                <Button onClick={()=>{  updatedOppurtunity() }}  btnType="save">
+                <Button
+                  onClick={() => {
+                    // updatedOppurtunity();
+                  }}
+                  btnType="save"
+                  type="submit"
+                >
                   Save
                 </Button>
               </div>
             </div>
           </div>
         </Form>
-      </Custom_model>
+      </CustomModel>
 
       {/* {Success successPopup Modal } */}
-      <Custom_model
+      <CustomModel
         size={"sm"}
         show={successPopup}
         onHide={() => setSuccessPopup(false)}
         success
       />
       {/* ADD OPPORTUNITY PROGRESS MODAL    SECTION FOUR */}
-      <Custom_model
+      <CustomModel
         show={showProgressModal}
         onHide={() => setShowProgresssModal(false)}
         View_list

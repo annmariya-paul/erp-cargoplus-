@@ -10,13 +10,16 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 import { MdPageview } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
 import { AiOutlineClose } from "react-icons/ai";
-import { Form } from "react-bootstrap";
+// import { Form } from "react-bootstrap";
 import TableData from "../../../../components/table/table_data";
 import MyPagination from "../../../../components/Pagination/MyPagination";
 import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
 import Button from "../../../../components/button/button";
 import Custom_model from "../../../../components/custom_modal/custom_model";
 import { ROUTES } from "../../../../routes";
+import InputType from "../../../../components/Input Type textbox/InputType";
+import TextArea from "../../../../components/ InputType TextArea/TextArea";
+import { Form } from "antd";
 
 // { List all attibutes, view and edit an attribute - Ann mariya }
 export default function Attribute(props) {
@@ -31,6 +34,7 @@ export default function Attribute(props) {
   const [attributeId,setAttributeId] =useState()
   const [searcheddesText, setSearcheddesText] = useState("");
 
+  const [addForm]=Form.useForm()
   const [viewattributes,setViewAttributes]=useState({
     id:"",
     attributename:"",
@@ -63,6 +67,11 @@ const handleviewtoedit=(i)=>{
 setAttributeId(i.id)
 setAttributeName(i.attributename)
 setAttributeDescription(i.attributedescription)
+addForm.setFieldsValue({
+  // unitid: e.unit_id,
+  attribute: i.attributename,
+  description: i.attributedescription,
+});
   setShowModalEdit(true);
 }
 
@@ -73,6 +82,11 @@ console.log("editing id iss",e)
 setAttributeId(e.attribute_id)
 setAttributeName(e.attribute_name)
 setAttributeDescription(e.attribute_description)
+addForm.setFieldsValue({
+  // unitid: e.unit_id,
+  attribute: e.attribute_name,
+  description: e.attribute_description,
+});
 setShowModalEdit(true)
 }
 
@@ -381,7 +395,84 @@ getallattributes()
                   <h5 className="lead_text">Attribute</h5>
                 </div>
               </div>
-              <div className="row px-2 my-3">
+               
+              <Form  
+        form={addForm}
+         onFinish={(values)=>{
+          console.log("values iss",values)
+          handleupdate()
+         }}
+         onFinishFailed={(error) => {
+          console.log(error);
+        }} >
+          <div className="row py-1">
+            <div className="col-sm-6 pt-3">
+                <label>Name</label>
+                <Form.Item
+                      name="attribute"
+                      rules={[
+                        {
+                          required: true,
+                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                          message: "Please enter a Valid attributename",
+                        },
+
+                        {
+                          whitespace: true,
+                        },
+                        {
+                          min: 3,
+                          message: "attribute name must be 3 characters",
+                        },
+                        {
+                          max:100
+                        }
+                      ]}
+                    >
+                    
+                      <InputType value={ attributeName } 
+                      onChange={(e)=> setAttributeName(e.target.value)}  placeholder="Name"/>
+                    </Form.Item>
+                  </div>
+                  <div className="col-sm-6 pt-3">
+                  <label>Description</label>
+                  <Form.Item
+                      name="description"
+                      rules={[
+                        // {
+                        //   required: true,
+                        //   pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+
+                        //   message: "Please enter valid description",
+                        // },
+
+                        {
+                          whitespace: true,
+                        },
+                        {
+                          min: 2,
+                        },
+                        {
+                          max:500,
+                        },
+                      ]}
+                    >
+                      <TextArea value={attributedescription}
+                    onChange={(e) =>  setAttributeDescription (e.target.value)}/>
+                    </Form.Item>
+            </div>
+          </div>
+          <div className="row justify-content-center mt-5">
+            <div className="col-1">
+              <Button btnType="save"  >Save</Button>
+              
+            </div>
+           
+          </div>
+         
+        </Form>
+
+              {/* <div className="row px-2 my-3">
                 <Form.Group className="mb-3" controlId="attribute_name">
                   <Form.Label>Name</Form.Label>
                   <Form.Control type="text" value={ attributeName } onChange={(e)=> setAttributeName(e.target.value)}  placeholder="Name" />
@@ -402,7 +493,7 @@ getallattributes()
                 <div className="col-4">
                   <Button btnType="save" onClick={()=>handleupdate()} > Save </Button>
                 </div>
-              </div>
+              </div> */}
             </div>
           }
         />

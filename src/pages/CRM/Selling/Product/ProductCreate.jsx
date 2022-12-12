@@ -41,7 +41,7 @@ function ProductCreate() {
   const [description, setDescription] = useState("");
   const [file, setFile] = useState(null);
   const [img, setImg] = useState([]);
-  const [imageSize,setImageSize] = useState(false);
+  const [imageSize, setImageSize] = useState(false);
   console.log("set image", img);
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
@@ -50,6 +50,7 @@ function ProductCreate() {
   const [allunit, setAllunit] = useState();
   const [brandid, setBrandid] = useState();
   const [productattribute, setProductAttribute] = useState([]);
+  const [Errormsg, setErrormsg] = useState();
 
   const newValues = (checkedValues) => {
     console.log("checked = ", checkedValues);
@@ -248,10 +249,12 @@ function ProductCreate() {
     })
       .then((res) => {
         console.log("data is successfully saved", res.data.success);
-        if (res.data.data) {
+        if (res.data.success) {
           setSuccessPopup(true);
           addForm.resetFields();
           close_modal(successPopup, 1000);
+        } else {
+          setErrormsg(res.data.data);
         }
       })
       .catch((err) => {
@@ -309,8 +312,18 @@ function ProductCreate() {
                       },
                     ]}
                   >
-                    <InputType onChange={(e) => setName(e.target.value)} />
+                    <InputType
+                      onChange={(e) => {
+                        setName(e.target.value);
+                        setErrormsg("");
+                      }}
+                    />
                   </Form.Item>
+                  {Errormsg ? (
+                    <label style={{ color: "red" }}> {Errormsg}</label>
+                  ) : (
+                    ""
+                  )}
                 </div>
                 <div className="col-4">
                   <label>Code</label>
@@ -486,42 +499,44 @@ function ProductCreate() {
                         if (file.file.size > 2000 && file.file.size < 500000) {
                           setImg(file.file.originFileObj);
                           console.log("selet imggg", file.file.originFileObj);
-                         setImageSize(false);
+                          setImageSize(false);
                         } else {
                           setImageSize(true);
-                          console.log("Error in upload, upload image size between 1 kb and  500 kb");
+                          console.log(
+                            "Error in upload, upload image size between 1 kb and  500 kb"
+                          );
                         }
                       }}
                     />
-                     {imageSize ? (
-                        <p style={{ color: "red" }}>
-                          Upload Image size between 1 kb and 500 kb
-                        </p>
-                      ) : (
-                        ""
-                      )}
+                    {imageSize ? (
+                      <p style={{ color: "red" }}>
+                        Upload Image size between 1 kb and 500 kb
+                      </p>
+                    ) : (
+                      ""
+                    )}
                   </Form.Item>
                 </div>
                 <div className="col-6 mt-2">
                   <label>Description</label>
-                    <Form.Item
-                      className="mt-2"
-                      name="description"
-                      rules={[
-                        {
-                          min: 2,
-                          message: "Description must be at least 2 characters",
-                        },
-                        {
-                          max: 500,
-                          message:
-                            "Description cannot be longer than 500 characters",
-                        },
-                      ]}
-                      onChange={(e) => setDescription(e.target.value)}
-                    >
-                      <TextArea />
-                    </Form.Item>
+                  <Form.Item
+                    className="mt-2"
+                    name="description"
+                    rules={[
+                      {
+                        min: 2,
+                        message: "Description must be at least 2 characters",
+                      },
+                      {
+                        max: 500,
+                        message:
+                          "Description cannot be longer than 500 characters",
+                      },
+                    ]}
+                    onChange={(e) => setDescription(e.target.value)}
+                  >
+                    <TextArea />
+                  </Form.Item>
                 </div>
                 <div className="col-12 d-flex justify-content-center pt-2">
                   <Button className="save_button">Save</Button>

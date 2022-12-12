@@ -38,6 +38,9 @@ function BrandCreate() {
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
+
+  const [BrandError, setBrandError] = useState();
+  const [imgSizeError, setImgSizeError] = useState(false);
   console.log("set image", img);
 
   // const onImageChange = (e) => {
@@ -80,10 +83,13 @@ function BrandCreate() {
     })
       .then((res) => {
         console.log("success", res);
-        if (res.data.data) {
+        if (res.data.success) {
           setSuccessPopup(true);
           addForm.resetFields();
           close_modal(successPopup, 1000);
+        } else {
+          console.log("", res.data.data);
+          setBrandError(res.data.data);
         }
       })
       .catch((err) => {
@@ -144,9 +150,19 @@ function BrandCreate() {
                     >
                       <InputType
                         value={brand}
-                        onChange={(e) => setBrand(e.target.value)}
+                        onChange={(e) => {
+                          setBrand(e.target.value);
+                          setBrandError("");
+                        }}
                       />
                     </Form.Item>
+                    {BrandError !== 0 ? (
+                      <div>
+                        <label style={{ color: "red" }}>{BrandError}</label>
+                      </div>
+                    ) : (
+                      ""
+                    )}
                   </div>
                 </div>
                 <div className="col-8">
@@ -189,49 +205,26 @@ function BrandCreate() {
 
                         if (file.file.size > 1000 && file.file.size < 500000) {
                           setImg(file.file.originFileObj);
+                          setImgSizeError(false);
                           console.log(
                             "Image must be greater than 1 kb and less than 500 kb"
                           );
                         } else {
-                          console.log("hgrtryyryr");
+                          console.log("failed beacuse of large size");
+                          setImgSizeError(true);
                         }
                       }}
                     />
-                    {/* <Dragger
-                      multiple
-                      listType="picture"
-                      accept=".png,.jpg,.jpeg"
-                      onChange={(file) => {
-                        console.log("Before upload", file.file);
-                        console.log("Before upload file size", file.file.size);
-
-                        if (file.file.size >10 && file.file.size <50) {
-                        setImg(file)
-                        console.log("image grater than 1 kb and less than 50 kb");
-                        
-                          }
-                         
-                              else {
-                            console.log("hgrtryyryr");
-                           
-                            console.log("Set image error",img)
-                          }
-                      
-                          
-                        }
-                      }
-                    >
-                      <p className="ant-upload-drag-icon">
-                        <InboxOutlined />
-                      </p>
-                      <p className="ant-upload-text">
-                        Click or drag file to this area to upload
-                      </p>
-                      <p className="ant-upload-hint">
-                        Support for a single or bulk upload.
-                      </p>
-                    </Dragger> */}
                   </Form.Item>
+                  {imgSizeError ? (
+                    <div>
+                      <label style={{ color: "red" }}>
+                        Please Select Image Size under 500kb
+                      </label>
+                    </div>
+                  ) : (
+                    ""
+                  )}
                 </div>
 
                 <div className="col-12 d-flex justify-content-center  gap-2 py-5">

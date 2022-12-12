@@ -55,6 +55,9 @@ function Productlist() {
   // const getData = (current, pageSize) => {
   //   return products?.slice((current - 1) * pageSize, current * pageSize);
   // };
+  
+  const [totalCount, setTotalcount] = useState();
+  
   const [viewproduct, setViewproduct] = useState({
     product_id: "",
     product_name: "",
@@ -94,13 +97,20 @@ function Productlist() {
   };
 
   // {columns is product listing table componenet }
+  const pageofIndex = numOfItems * (current - 1) - 1 + 1;
+
+  const pagesizecount = Math.ceil(totalCount / numOfItems);
+  console.log("page number isss", pagesizecount);
 
   const getallproduct = () => {
     PublicFetch.get(
-      `${CRM_BASE_URL_SELLING}/product?startIndex=0&noOfItems=100`
+      `${CRM_BASE_URL_SELLING}/product?startIndex=${pageofIndex}&noOfItems=${numOfItems}`
     )
       .then((res) => {
+        console.log("the prrr",res.data)
+        setTotalcount(res.data.data.totalCount)
         if (res?.data?.success) {
+      
           console.log("All products success::: ", res?.data?.data.products);
           let tempArr = [];
           let arr2 = [];
@@ -380,8 +390,16 @@ function Productlist() {
                 // defaultValue={"25"}
                 bordered={false}
                 className=" page_size_style"
-                value={pageSize}
-                onChange={(e) => setPageSize(e)}
+                // value={pageSize}
+                // onChange={(e) => setPageSize(e)}
+                value={numOfItems}
+             
+                onChange={(e, current) => {
+                  console.log("On page size selected : ", e);
+                  console.log("nfjnjfv", current);
+                  setNumOfItems(e);
+                  setCurrent(1);
+                }}
               >
                 {/* <Select.Option value="5">5 | pages</Select.Option> */}
                 <Select.Option value="25">
@@ -443,16 +461,22 @@ function Productlist() {
             />
           </div>
           <div className="d-flex py-2 justify-content-center">
-            {/* <MyPagination
-              total={data.length}
+            <MyPagination
+              // total={data.length}
+              // current={current}
+              // showSizeChanger={true}
+              // pageSize={pageSize}
+              // onChange={(current, pageSize) => {
+              //   setCurrent(current);
+              //   setPageSize(pageSize);
+              // }}
+              total={parseInt(totalCount)}
               current={current}
-              showSizeChanger={true}
-              pageSize={pageSize}
+              pageSize={numOfItems}
               onChange={(current, pageSize) => {
                 setCurrent(current);
-                setPageSize(pageSize);
               }}
-            /> */}
+            />
           </div>
           {/* {"mcncncncncncncnc"}  {product listing ends } */}
         </div>

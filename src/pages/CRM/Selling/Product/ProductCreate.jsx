@@ -14,7 +14,7 @@ import SelectBox from "../../../../components/Select Box/SelectBox";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
 import { ROUTES } from "../../../../routes";
-import "./product.scss"
+import "./product.scss";
 function ProductCreate() {
   const [successPopup, setSuccessPopup] = useState(false);
   const [error, setError] = useState(false);
@@ -38,21 +38,22 @@ function ProductCreate() {
   const [brand, setBrand] = useState();
   const [unit, setUnit] = useState("");
   const [attributes, setAttributes] = useState();
-  const [description, setDescription] = useState();
+  const [description, setDescription] = useState("");
   const [file, setFile] = useState(null);
   const [img, setImg] = useState([]);
+  const [imageSize,setImageSize] = useState(false);
   console.log("set image", img);
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
   console.log("set image", img);
   const [allunit, setAllunit] = useState();
-  const [brandid,setBrandid]= useState()
-  const [productattribute,setProductAttribute ]= useState([])
-  
+  const [brandid, setBrandid] = useState();
+  const [productattribute, setProductAttribute] = useState([]);
+
   const newValues = (checkedValues) => {
     console.log("checked = ", checkedValues);
-    setProductAttribute(checkedValues)
+    setProductAttribute(checkedValues);
   };
 
   const treeData = [
@@ -114,12 +115,9 @@ function ProductCreate() {
     return path;
   }
   const onChangetree = (value) => {
-   
     console.log("Change", value);
     setState(parseInt(value));
   };
-
- 
 
   const onSelect = (value) => {
     console.log("Select the category :", value);
@@ -129,7 +127,7 @@ function ProductCreate() {
     try {
       const allbrands = await PublicFetch.get(`${CRM_BASE_URL_SELLING}/brand`);
       console.log("all brands are", allbrands.data.data);
-    
+
       setBrands(allbrands.data.data);
     } catch (err) {
       console.log("error while getting the brands: ", err);
@@ -145,15 +143,12 @@ function ProductCreate() {
   const getallunits = async () => {
     try {
       const allunits = await PublicFetch.get(`${CRM_BASE_URL_SELLING}/unit`);
-     
+
       setAllunit(allunits?.data?.data);
-     
     } catch (err) {
       console.log("error to getting all units", err);
     }
   };
-
-  
 
   const getallattributes = async () => {
     try {
@@ -167,8 +162,7 @@ function ProductCreate() {
     }
   };
 
-
-//category displays in tree structure
+  //category displays in tree structure
   const structureTreeData = (categories) => {
     let treeStructure = [];
     if (categories && Array.isArray(categories) && categories.length > 0) {
@@ -187,12 +181,11 @@ function ProductCreate() {
     // console.log("Tree structure : ", treeStructure);
   };
 
-
   const close_modal = (mShow, time) => {
     if (!mShow) {
       setTimeout(() => {
         setSuccessPopup(false);
-        navigate(ROUTES.PRODUCT );
+        navigate(ROUTES.PRODUCT);
       }, time);
     }
   };
@@ -216,13 +209,10 @@ function ProductCreate() {
       });
   };
 
-
-
   useEffect(() => {
     getallattributes();
-    getCategorydata()
+    getCategorydata();
   }, []);
-
 
   const getBase64 = (file) =>
     new Promise((resolve, reject) => {
@@ -244,16 +234,16 @@ function ProductCreate() {
 
   const OnSubmit = () => {
     const formData = new FormData();
-    formData.append("product_name",name);
-    formData.append("product_code",code);
-    formData.append("product_category_id",State );
+    formData.append("product_name", name);
+    formData.append("product_code", code);
+    formData.append("product_category_id", State);
     formData.append("product_brand_id", brand);
     formData.append("product_unit_id", unit);
     formData.append("product_pic", img);
     formData.append("product_attributes", productattribute);
     formData.append("product_description", description);
 
-     PublicFetch.post(`${CRM_BASE_URL_SELLING}/product`, formData, {
+    PublicFetch.post(`${CRM_BASE_URL_SELLING}/product`, formData, {
       "Content-Type": "Multipart/form-Data",
     })
       .then((res) => {
@@ -274,9 +264,9 @@ function ProductCreate() {
 
   return (
     <div>
-      <div className="container-fluid mt-3">
+      <div className="container-fluid">
         <div>
-          <h4 className="lead_text">Products</h4>
+          <h5 className="lead_text">Products</h5>
         </div>
         <div
           style={{ borderRadius: "8px" }}
@@ -284,7 +274,7 @@ function ProductCreate() {
         >
           <div className="container my-3">
             <div className="my-3">
-              <h5 className="lead_text">Basic Info</h5>
+              <h6 className="lead_text">Basic Info</h6>
             </div>
             <Form
               name="addForm"
@@ -297,270 +287,192 @@ function ProductCreate() {
                 console.log(error);
               }}
             >
-              <div className="row my-5">
+              <div className="row my-2">
                 <div className="col-4">
-                  <p>Name</p>
-                  <div>
-                    {/* <input type="text" className="input_type_style w-100" /> */}
-                    <Form.Item
-                      name="name"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-
-                          message: "Please enter a Valid Product Name",
-                        },
-
-                        {
-                          whitespace: true,
-                        },
-                        {
-                          min: 2,
-                          message: "Product Name must be atleast 2 characters",
-                        },
-                        {
-                          max: 100,
-                          message:
-                            "Product Name is too big please enter valid name",
-                        },
-                      ]}
-                      
-                    >
-                      <InputType  onChange={(e) => setName(e.target.value)}/>
-                    </Form.Item>
-                  </div>
+                  <label>Name</label>
+                  <Form.Item
+                    name="name"
+                    rules={[
+                      {
+                        required: true,
+                        pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                        message: "Please enter a Valid Product Name",
+                      },
+                      {
+                        min: 2,
+                        message: "Product Name must be at least 2 characters",
+                      },
+                      {
+                        max: 100,
+                        message:
+                          "Product Name cannot be longer than 100 characters",
+                      },
+                    ]}
+                  >
+                    <InputType onChange={(e) => setName(e.target.value)} />
+                  </Form.Item>
                 </div>
                 <div className="col-4">
-                  <p>Code</p>
-                  <div>
-                    {/* <input type={"text"} className="input_type_style w-100" /> */}
-
-                    <Form.Item
-                      name="code"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-
-                          message: "Please enter a Valid Product Code",
-                        },
-
-                        {
-                          whitespace: true,
-                        },
-
-                        {
-                          min: 2,
-                          message: "Product Code must be atleast 2 characters",
-                        },
-                        {
-                          max: 20,
-                          message:
-                            "Product Code is too big please enter valid name",
-                        },
-                      ]}
-                      onChange={(e) => setCode(e.target.value)}
-                    >
-                      <InputType />
-                    </Form.Item>
-                  </div>
+                  <label>Code</label>
+                  <Form.Item
+                    name="code"
+                    rules={[
+                      {
+                        required: true,
+                        pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                        message: "Please enter a Valid Product Code",
+                      },
+                      {
+                        min: 2,
+                        message: "Product Code must be at least 2 characters",
+                      },
+                      {
+                        max: 20,
+                        message:
+                          "Product Code cannot be longer than 20 characters",
+                      },
+                    ]}
+                    onChange={(e) => setCode(e.target.value)}
+                  >
+                    <InputType />
+                  </Form.Item>
                 </div>
-                <div className="col-4 ">
-                  <p>Category</p>
-                  <div>
-                   
-                    <Form.Item
-                      name="category"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please Select a Category",
-                        },
-                      ]}
-                    >
-                      <TreeSelect
-                        className="tree"
-                        name="tree"
-                        style={{ width: "100%" }}
-                        
-                        dropdownStyle={{
-                          maxHeight: 400,
-                          overflow: "auto",
-                        }}
-                       
-                        treeData={categoryTree}
-                        
-                        placeholder="Please select"
-                        treeDefaultExpandAll
-                        onChange={onChangetree}
-                        onSelect={onSelect}
-                        
-                      />
-                     
-                    </Form.Item>
-                  </div>
+                <div className="col-4">
+                  <label>Category</label>
+                  <Form.Item
+                    className="mt-2"
+                    name="category"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please Select a Category",
+                      },
+                    ]}
+                  >
+                    <TreeSelect
+                      className="tree"
+                      name="tree"
+                      style={{ width: "100%" }}
+                      dropdownStyle={{
+                        maxHeight: 400,
+                        overflow: "auto",
+                      }}
+                      treeData={categoryTree}
+                      placeholder="Please select"
+                      treeDefaultExpandAll
+                      onChange={onChangetree}
+                      onSelect={onSelect}
+                    />
+                  </Form.Item>
                 </div>
                 <div className="col-6 mt-2">
-                  <p>Brand</p>
-                  <div>
-                    
-                    <Form.Item
-                      name="brand"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please Select a Brand",
-                        },
-                      ]}
+                  <label>Brand</label>
+                  <Form.Item
+                    name="brand"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please Select a Brand",
+                      },
+                    ]}
+                  >
+                    <SelectBox
+                      placeholder={"--Please Select--"}
+                      value={brand}
+                      onChange={(e) => {
+                        console.log("select the brandss", e);
+                        setBrand(parseInt(e));
+                      }}
                     >
-                      <SelectBox
-                        placeholder={"--Please Select--"}
-                        value={brand}
-                        onChange={(e) =>{ 
-                          console.log("select the brandss",e )
-                          setBrand(parseInt(e))}}
-                      >
-                        {brands &&
-                          brands.length > 0 &&
-                          brands.map((item, index) => {
-                            return (
-                              <Select.Option
-                                key={item.brand_id}
-                                value={item.brand_id}
-                              >
-                                {item.brand_name}
-                              </Select.Option>
-                            );
-                          })}
-                      </SelectBox>
-                    </Form.Item>
-                  </div>
+                      {brands &&
+                        brands.length > 0 &&
+                        brands.map((item, index) => {
+                          return (
+                            <Select.Option
+                              key={item.brand_id}
+                              value={item.brand_id}
+                            >
+                              {item.brand_name}
+                            </Select.Option>
+                          );
+                        })}
+                    </SelectBox>
+                  </Form.Item>
                 </div>
                 <div className="col-6 mt-2">
-                  <p>Unit</p>
-                  <div>
-                   
-                    <Form.Item
-                      name="unit"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please Select a unit",
-                        },
-                      ]}
+                  <label>Unit</label>
+                  <Form.Item
+                    name="unit"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please Select a unit",
+                      },
+                    ]}
+                  >
+                    <SelectBox
+                      placeholder={"--Please Select--"}
+                      value={allunit}
+                      onChange={(e) => {
+                        console.log("selected unit iss", e);
+                        setUnit(parseInt(e));
+                      }}
                     >
-                      <SelectBox
-                        placeholder={"--Please Select--"}
-                        value={allunit}
-                        onChange={(e) => {
-                         console.log("selected unit iss",e ) 
-                        setUnit(parseInt(e))}}
-                      >
-                        {allunit &&
-                          allunit.length > 0 &&
-                          allunit.map((item, index) => {
-                            return (
-                              <Select.Option
-                                key={item.unit_id}
-                                value={item.unit_id}
-                              >
-                                {item.unit_name}
-                              </Select.Option>
-                            );
-                          })}
-                      </SelectBox>
-                    </Form.Item>
-                  </div>
+                      {allunit &&
+                        allunit.length > 0 &&
+                        allunit.map((item, index) => {
+                          return (
+                            <Select.Option
+                              key={item.unit_id}
+                              value={item.unit_id}
+                            >
+                              {item.unit_name}
+                            </Select.Option>
+                          );
+                        })}
+                    </SelectBox>
+                  </Form.Item>
                 </div>
-                <div className="col-6 mt-2 px-4">
-                  <p>Attributes</p>
 
-                  {/* <Form.Item
+                <div className="col-6 mt-2">
+                  <label>Attributes</label>
+                  <Form.Item
                     name="attribute"
                     rules={[
                       {
                         required: true,
-                    
-
-                        message: "Please Select Attributes ",
+                        message: "Please Select Attributes",
                       },
-                    ]}> */}
-
-                  {/*                    
-                    <Checkbox.Group
-                      style={{
-                        width: "100%",
-                      }}
-                      onChange={(e) => setAttributes(parseInt(e))}
-                    >
-                     
-                             
-                        
-                      <Row>
-                        <Col span={8}>
-                        {attributes &&
-                            attributes.length > 0 &&
-                            attributes.map((item, index) => {
-                              return(
-                                <Checkbox value={item?.attribute_id}>{item?.attribute_name}</Checkbox>
-                              )
-                          // <>
-                          // <label htmlFor={item?.attribute_id}>{item?.attribute_name}</label>
-                          // <Checkbox id={item?.attribute_id} />
-                          // </>    
-                            })}
-                        </Col>
-                      </Row>
-                    </Checkbox.Group> */}
-                  <Checkbox.Group
-                    onChange={newValues}
-                    //    onChange={(e) => {setAttributes(parseInt(e.target.checked))
-                    //   console.log(e.target.checked)
-                    //   }
-                    // }
+                    ]}
                   >
-                    <div className="row p-2 attributes__height">
-                    {attributes &&
+                    <Checkbox.Group
+                      className="mt-2 px-3"
+                      onChange={newValues}
+                      //    onChange={(e) => {setAttributes(parseInt(e.target.checked))
+                      //   console.log(e.target.checked)
+                      //   }
+                      // }
+                    >
+                      <div className="row p-2 attributes__height">
+                        {attributes &&
                           attributes.length > 0 &&
                           attributes.map((item, index) => {
                             return (
                               <div className="col-lg-4 col-xl-4 col-12 py-1">
-                              <Checkbox value={item?.attribute_id}>
-                                {item?.attribute_name}
-                              </Checkbox>
+                                <Checkbox value={item?.attribute_id}>
+                                  {item?.attribute_name}
+                                </Checkbox>
                               </div>
-                              
                             );
-                            
                           })}
-                     
-                      
-                    </div>
-                  
-                  </Checkbox.Group>
-
-                  <div
-                  
-                  >
-                    <div
-                    
-                    ></div>
-                  </div>
-                
+                      </div>
+                    </Checkbox.Group>
+                  </Form.Item>
                 </div>
 
                 <div className="col-6 mt-2">
-                  <p>Display Picture</p>
-                  <Form.Item
-                    name="new"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please select an image file",
-                      },
-                    ]}
-                  >
+                  <label>Display Picture</label>
+                  <Form.Item className="mt-2" name="new">
                     <FileUpload
                       multiple
                       listType="picture"
@@ -571,61 +483,54 @@ function ProductCreate() {
                         console.log("Before upload", file.file);
                         console.log("Before upload file size", file.file.size);
 
-                        if (file.file.size > 2000 && file.file.size < 50000) {
+                        if (file.file.size > 2000 && file.file.size < 500000) {
                           setImg(file.file.originFileObj);
-                          console.log("selet imggg",file.file.originFileObj )
-                          console.log(
-                            "image grater than 2 kb and less than 50 kb"
-                          );
+                          console.log("selet imggg", file.file.originFileObj);
+                         setImageSize(false);
                         } else {
-                          console.log("Error in image upload");
+                          setImageSize(true);
+                          console.log("Error in upload, upload image size between 1 kb and  500 kb");
                         }
                       }}
                     />
+                     {imageSize ? (
+                        <p style={{ color: "red" }}>
+                          Upload Image size between 1 kb and 500 kb
+                        </p>
+                      ) : (
+                        ""
+                      )}
                   </Form.Item>
                 </div>
                 <div className="col-6 mt-2">
-                  <p>Description</p>
-                  <div>
-                    
+                  <label>Description</label>
                     <Form.Item
+                      className="mt-2"
                       name="description"
                       rules={[
                         {
-                          required: true,
-
-                          message: "Please enter Valid Description",
-                        },
-
-                        {
-                          whitespace: true,
-                        },
-                        {
                           min: 2,
+                          message: "Description must be at least 2 characters",
                         },
                         {
                           max: 500,
+                          message:
+                            "Description cannot be longer than 500 characters",
                         },
                       ]}
                       onChange={(e) => setDescription(e.target.value)}
                     >
                       <TextArea />
                     </Form.Item>
-                  </div>
                 </div>
-                <div className="col-12 d-flex justify-content-center pt-5">
-                  <Button
-                    className="save_button"
-                  >
-                    Save
-                  </Button>
+                <div className="col-12 d-flex justify-content-center pt-2">
+                  <Button className="save_button">Save</Button>
                 </div>
               </div>
             </Form>
           </div>
         </div>
       </div>
-
 
       <CustomModel
         size={"sm"}
@@ -634,7 +539,6 @@ function ProductCreate() {
         success
       />
       {error ? <ErrorMsg code={"500"} /> : ""}
-
     </div>
   );
 }

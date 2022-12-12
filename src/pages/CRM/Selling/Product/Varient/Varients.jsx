@@ -41,6 +41,7 @@ function Varients() {
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
   const [prid, setPrid] = useState(id);
+  const [imageSize,setImageSize]= useState(false);
   console.log("product id in state is ", prid);
   const [prunit, setPrUnit] = useState();
   console.log("product unit id in state is ", prunit);
@@ -138,6 +139,7 @@ function Varients() {
       );
       let temp = [];
 
+
       allvarientAttr.data.data.forEach((item, index) => {
         console.log("All varient data", item);
         console.log("Varient Id : ", item.variant_attr_variant_id);
@@ -146,6 +148,7 @@ function Varients() {
           temp.push({
             variant_attr_attribute_id: item.variant_attr_attribute_id,
             variant_attr_id: item.variant_attr_id,
+            variant_attr_attribute_name:item.crm_v1_attributes.attribute_name,
             variant_attr_status: item.variant_attr_status,
             variant_attr_value: item.variant_attr_value,
             variant_attr_variant_id: item.variant_attr_variant_id,
@@ -254,7 +257,7 @@ function Varients() {
     },
     {
       title: "ATTRIBUTE NAME",
-      dataIndex: "variant_attr_attribute_id",
+      dataIndex: "variant_attr_attribute_name",
       width: "14%",
       key: "ATTRIBUTE NAME",
       align: "center",
@@ -411,11 +414,11 @@ function Varients() {
                       }}
                     >
                       <div className="row">
-                        <div>
+                        {/* <div>
                           <h6 className="lead_text mb-3">
                             Add Variant Details
                           </h6>
-                        </div>
+                        </div> */}
                         <div className="col-4">
                           <label>Name</label>
                           <Form.Item
@@ -501,8 +504,11 @@ function Varients() {
                             rules={[
                               {
                                 required: true,
-                                pattern: new RegExp("^[-+]?[0-9]+.[0-9]+$"),
-                                message: "Please enter the Varient Quantity",
+                                pattern: new RegExp(
+                                  "^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)$"
+                                ),
+                                message:
+                                  "Please enter a valid Varient Quantity",
                               },
                             ]}
                             onChange={(e) => setvarquantity(e.target.value)}
@@ -517,7 +523,7 @@ function Varients() {
                             rules={[
                               {
                                 required: true,
-                                // pattern: new RegExp("^\+?(0|[1-9]\d*)$"),
+                                pattern: new RegExp("^([1-9]+0|[1-9])[0-9]*$"),
                                 message: "Please enter  Varient Tax Rate",
                               },
                             ]}
@@ -535,16 +541,10 @@ function Varients() {
                               rules={[
                                 {
                                   required: true,
-                                  pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-
+                                  pattern: new RegExp(
+                                    "^([1-9]+0|[1-9])[0-9]*$"
+                                  ),
                                   message: "Please enter a Valid Brand Name",
-                                },
-
-                                {
-                                  whitespace: true,
-                                },
-                                {
-                                  min: 3,
                                 },
                               ]}
                               onChange={(e) => setvarminprice(e.target.value)}
@@ -555,51 +555,25 @@ function Varients() {
                         </div>
                         <div className="col-6">
                           <label>Price Maximum</label>
-                          <div>
-                            {/* <InputType
-                            rules={{
-                              required: true,
-                              message: "Please Enter Maximum Price",
-                            }}
-                          /> */}
-                            <Form.Item
-                              name="varmaxprice"
-                              rules={[
-                                {
-                                  required: true,
-                                  pattern: new RegExp("^[A-Za-z0-9 ]+$"),
 
-                                  message: "Please enter Maximum Price",
-                                },
-
-                                {
-                                  whitespace: true,
-                                },
-                                {
-                                  min: 3,
-                                },
-                              ]}
-                              onChange={(e) => setvarmaxprice(e.target.value)}
-                            >
-                              <InputType />
-                            </Form.Item>
-                          </div>
+                          <Form.Item
+                            name="varmaxprice"
+                            rules={[
+                              {
+                                required: true,
+                                pattern: new RegExp("^([1-9]+0|[1-9])[0-9]*$"),
+                                message: "Please enter Maximum Price",
+                              },
+                            ]}
+                            onChange={(e) => setvarmaxprice(e.target.value)}
+                          >
+                            <InputType />
+                          </Form.Item>
                         </div>
                         <div className="col-4 d-flex justify-content-center ">
                           <div>
-                            {/* <label className="my-1">Display Picture</label>
-                          <FileUpload /> */}
                             <label>Display Picture</label>
-                            <Form.Item
-                              className="mt-2"
-                              name="new"
-                              rules={[
-                                {
-                                  required: true,
-                                  message: "Please select an image file",
-                                },
-                              ]}
-                            >
+                            <Form.Item className="mt-2" name="new">
                               <FileUpload
                                 multiple
                                 listType="picture"
@@ -614,18 +588,29 @@ function Varients() {
                                   );
 
                                   if (
-                                    file.file.size > 1000 &&
-                                    file.file.size < 50000
+                                    file.file.size > 2000 &&
+                                    file.file.size < 500000
                                   ) {
                                     setvarpic(file?.file?.originFileObj);
                                     console.log(
-                                      "image grater than 1 kb and less than 50 kb"
+                                      "Uploaded image size is in between 2 and 500 kb"
                                     );
+                                    setImageSize(false);
                                   } else {
-                                    console.log("hgrtryyryr");
+                                    setImageSize(true);
+                                    console.log(
+                                      "Error: Image size must be greater than 2 kb and less than 500 kb"
+                                    );
                                   }
                                 }}
                               />
+                              {imageSize ? (
+                                <p style={{ color: "red" }}>
+                                  Upload Image size between 1 kb and 500 kb
+                                </p>
+                              ) : (
+                                ""
+                              )}
                             </Form.Item>
                           </div>
                         </div>
@@ -637,19 +622,14 @@ function Varients() {
                               name="description"
                               rules={[
                                 {
-                                  required: true,
-
-                                  message: "Please enter Valid Description",
-                                },
-
-                                {
-                                  whitespace: true,
-                                },
-                                {
                                   min: 2,
+                                  message:
+                                    "Description must be at least 2 characters",
                                 },
                                 {
                                   max: 500,
+                                  message:
+                                    "Description cannot be longer than 500 characters",
                                 },
                               ]}
                               onChange={(e) =>
@@ -697,18 +677,8 @@ function Varients() {
                                     {
                                       required: true,
                                       message:
-                                        "Please Select a Valid Attribute Name",
+                                        "Please Select a valid Attribute",
                                     },
-                                    // {
-                                    //   min: 2,
-                                    //   message:
-                                    //     "Name must be at least 2 characters",
-                                    // },
-                                    // {
-                                    //   max: 100,
-                                    //   message:
-                                    //     "Name cannot be longer than 100 characters",
-                                    // },
                                   ]}
                                 >
                                   <SelectBox
@@ -736,7 +706,7 @@ function Varients() {
                               </div>
                             </div>
                             <div className="col-6">
-                              <label>Attributes value</label>
+                              <label>Attribute Value</label>
                               <div>
                                 <Form.Item
                                   name="value"
@@ -746,16 +716,6 @@ function Varients() {
                                       message:
                                         "Please enter a Valid Attribute value",
                                     },
-                                    // {
-                                    //   min: 2,
-                                    //   message:
-                                    //     "Name must be at least 2 characters",
-                                    // },
-                                    // {
-                                    //   max: 100,
-                                    //   message:
-                                    //     "Name cannot be longer than 100 characters",
-                                    // },
                                   ]}
                                 >
                                   <InputType />
@@ -763,7 +723,6 @@ function Varients() {
                               </div>
                             </div>
                             <div className="col-12 d-flex justify-content-center mt-5">
-                              {/* <label>Tax Rate</label> */}
                               <div>
                                 <Button btnType="save" type="submit">
                                   save
@@ -789,6 +748,7 @@ function Varients() {
         </div>
       </div>
       <CustomModel
+        bodyStyle={{ height: 620, overflowY: "auto" }}
         show={ModelForedit}
         onHide={() => setModalForEdit(false)}
         Adding_contents
@@ -801,29 +761,20 @@ function Varients() {
               UpdateAttribute(value);
             }}
           >
-            <div className="row pt-5">
-              <div className="">
-                <h4>Edit Attribute</h4>
+           
+              <div>
+                <h5 className="lead_text">Edit Attribute</h5>
               </div>
-              <div className="col-6">
-                <label>Edit Attributes</label>
-
-                <div>
+             
+                <div className="col mt-5">
+                  <label>Attributes</label>
                   <Form.Item
                     name="Editattribute"
                     rules={[
                       {
                         required: true,
-                        message: "Please Select a Valid Attribute Name",
+                        message: "Please Select a Valid Attribute",
                       },
-                      // {
-                      //   min: 2,
-                      //   message: "Name must be at least 2 characters",
-                      // },
-                      // {
-                      //   max: 100,
-                      //   message: "Name cannot be longer than 100 characters",
-                      // },
                     ]}
                   >
                     <SelectBox
@@ -850,34 +801,25 @@ function Varients() {
                     </SelectBox>
                   </Form.Item>
                 </div>
-              </div>
-              <div className="col-6">
-                <label>Edit Attributes value</label>
-                <div>
-                  <Form.Item
-                    name="Editvalue"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please enter a Valid Attribute value",
-                      },
-                      // {
-                      //   min: 2,
-                      //   message: "Name must be at least 2 characters",
-                      // },
-                      // {
-                      //   max: 100,
-                      //   message: "Name cannot be longer than 100 characters",
-                      // },
-                    ]}
-                  >
-                    <InputType
-                      value={attributeValue}
-                      onChange={(e) => setAttributeValues(e.target.value)}
-                    />
-                  </Form.Item>
+                <div className="col mt-5">
+                  <label>Attributes value</label>
+                  <div>
+                    <Form.Item
+                      name="Editvalue"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please enter a Valid Attribute value",
+                        },
+                      ]}
+                    >
+                      <InputType
+                        value={attributeValue}
+                        onChange={(e) => setAttributeValues(e.target.value)}
+                      />
+                    </Form.Item>
+                  </div>
                 </div>
-              </div>
               <div className="col-12 d-flex justify-content-center mt-5">
                 {/* <label>Tax Rate</label> */}
                 <div>
@@ -886,7 +828,6 @@ function Varients() {
                   </Button>
                 </div>
               </div>
-            </div>
           </Form>
         </div>
       </CustomModel>

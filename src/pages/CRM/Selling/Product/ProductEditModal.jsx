@@ -49,8 +49,9 @@ export default function ProductEditModal({ show, prid, onHide }) {
   const [prbrand, setPrBrand] = useState();
   const [prunit, setPrUnit] = useState();
   const [prattributes, setPrAttributes] = useState();
-  const [prDescription, setPrDescription] = useState();
+  const [prDescription, setPrDescription] = useState("");
   const [primage, setPrImage] = useState();
+  const [imageSize, setImageSize] = useState(false);
   //  const [newvalue, setNewvalue] = useState();
   const [img, setImg] = useState([]);
   console.log("set image", img);
@@ -80,7 +81,7 @@ export default function ProductEditModal({ show, prid, onHide }) {
     PublicFetch.get(`${CRM_BASE_URL_SELLING}/product/${id}`)
       .then((res) => {
         if (res?.data?.success) {
-          console.log("gethbhs",res?.data?.success)
+          console.log("gethbhs", res?.data?.success);
           setAllPrList(res.data.data);
           setPrName(res?.data?.data?.product_name);
           setPrcode(res?.data?.data?.product_code);
@@ -89,7 +90,6 @@ export default function ProductEditModal({ show, prid, onHide }) {
           setPrUnit(res?.data?.data?.product_unit_id);
           setPrAttributes(res?.data?.data?.product_attributes);
           setPrDescription(res?.data?.data?.product_description);
-
           setPrImage(res?.data?.data?.product_pic);
         } else {
           console.log("FAILED T LOAD DATA");
@@ -122,15 +122,13 @@ export default function ProductEditModal({ show, prid, onHide }) {
           editForm.setFieldsValue({
             productname: res?.data?.data?.product_name,
             productcode: res?.data?.data?.product_code,
-            productcategory:res?.data?.data?.product_category_id,
-            productbrand:res?.data?.data?.product_brand_id,
-            productunit:res?.data?.data?.product_unit_id,
-            productattributes:res?.data?.data?.product_attributes,
-            productdescription:res?.data?.data?.product_description,
-            productimg:res?.data?.data?.product_pic
-            
+            productcategory: res?.data?.data?.product_category_id,
+            productbrand: res?.data?.data?.product_brand_id,
+            productunit: res?.data?.data?.product_unit_id,
+            productattributes: res?.data?.data?.product_attributes,
+            productdescription: res?.data?.data?.product_description,
+            productimg: res?.data?.data?.product_pic,
           });
-          
         } else {
           console.log("FAILED T LOAD DATA");
         }
@@ -188,7 +186,6 @@ export default function ProductEditModal({ show, prid, onHide }) {
     }
   };
 
-
   const structureTreeData = (categories) => {
     let treeStructure = [];
     if (categories && Array.isArray(categories) && categories.length > 0) {
@@ -230,10 +227,6 @@ export default function ProductEditModal({ show, prid, onHide }) {
     getCategorydata();
   }, []);
 
-
-
-
-
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj);
@@ -252,100 +245,83 @@ export default function ProductEditModal({ show, prid, onHide }) {
       reader.onerror = (error) => reject(error);
     });
 
-    const onChangetree = (value) => {
-      // console.log("Change", getPath(value));
-      // setState({ value });
-      console.log("Change", value);
-      // setState(parseInt(value));
-       setPrCategory(parseInt(value))
-    };
-  
-  
-    // const onSelect = (value) => {
-    //   console.log("Select:", getPath(value));
-    // };
-  
-    const onSelect = (value) => {
-      console.log("Select the category :", value);
-    };
-  
-    const close_modal = (mShow, time) => {
-      if (!mShow) {
-        setTimeout(() => {
-          setSuccessPopup(false);
-          GetAllProductData()
-          // navigate(ROUTES.PRODUCT );
-        }, time);
-      }
-    };
-    
-    const OnSubmitedit = () => {
-      const formData = new FormData();
-      formData.append("product_name",prname);
-      formData.append("product_code",prcode);
-      formData.append("product_category_id",prcategory );
-      formData.append("product_brand_id", prbrand);
-      formData.append("product_unit_id", prunit);
-      formData.append("product_pic", primage);
-      formData.append("product_attributes", prattributes);
-      formData.append("product_description",prDescription );
-  
-       PublicFetch.patch(`${CRM_BASE_URL_SELLING}/product/${prid}`, formData, {
+  const onChangetree = (value) => {
+    // console.log("Change", getPath(value));
+    // setState({ value });
+    console.log("Change", value);
+    // setState(parseInt(value));
+    setPrCategory(parseInt(value));
+  };
+
+  // const onSelect = (value) => {
+  //   console.log("Select:", getPath(value));
+  // };
+
+  const onSelect = (value) => {
+    console.log("Select the category :", value);
+  };
+
+  const close_modal = (mShow, time) => {
+    if (!mShow) {
+      setTimeout(() => {
+        setSuccessPopup(false);
+        GetAllProductData();
+        // navigate(ROUTES.PRODUCT );
+      }, time);
+    }
+  };
+
+  const OnSubmitedit = () => {
+    const formData = new FormData();
+    formData.append("product_name", prname);
+    formData.append("product_code", prcode);
+    formData.append("product_category_id", prcategory);
+    formData.append("product_brand_id", prbrand);
+    formData.append("product_unit_id", prunit);
+    if (img) {
+      formData.append("product_pic", img);
+    }
+    formData.append("product_attributes", prattributes);
+    formData.append("product_description", prDescription);
+
+    PublicFetch.patch(
+      `${CRM_BASE_URL_SELLING}/product/${parseInt(prid)}`,
+      formData,
+      {
         "Content-Type": "Multipart/form-Data",
+      }
+    )
+      .then((res) => {
+        console.log("data is successfully saved", res.data.success);
+        if (res.data.data) {
+          GetAllProductData();
+          GetAllProductDatatwo ();
+          setSuccessPopup(true);
+          editForm.resetFields();
+          close_modal(successPopup, 1200);
+          onHide();  
+        }
       })
-        .then((res) => {
-          console.log("data is successfully saved", res.data.success);
-          if (res.data.data) {
-            setSuccessPopup(true);
-            editForm.resetFields();
-            close_modal(successPopup, 1000);
-            onHide()
-          
-          }
-        })
-        .catch((err) => {
-          console.log("error", err);
-          setError(true);
-        });
-    };
+      .catch((err) => {
+        console.log("error", err);
+        setError(true);
+      });
+  };
 
   return (
     <>
       <CustomModel
+        bodyStyle={{ height: 620, overflowY: "auto" }}
         Adding_contents
         show={show}
         onHide={onHide}
         header="Edit Product"
         size={`xl`}
         width={"800px"}
-        // footer={[
-        //   <Button
-        //     onClick={() => {
-        //       setSuccessPopup(true);
-        //       setError(true);
-        //     }}
-        //     btnType="save"
-        //   >
-        //     Save
-        //   </Button>,
-        //   // <Button
-        //   //   onClick={() => {
-        //   //     setShowProductEditModal(false);
-        //   //   }}
-        //   //   className="cancel_button p-2"
-        //   // >
-        //   //   cancel
-        //   // </Button>,
-        //   ,
-        // ]}
-        // {...props}
       >
-        <div className="container">
-          <div style={{ borderRadius: "8px" }} className="card border-0  ">
+        <div className="container-fluid">
+          <div style={{ borderRadius: "8px" }} className="card border-0 ">
             <div className="container ">
-              <div className="my-3 d-none">
-                <h5 className="lead_text">Basic Info</h5>
-              </div>
               <Form
                 name="editForm"
                 form={editForm}
@@ -354,17 +330,16 @@ export default function ProductEditModal({ show, prid, onHide }) {
                   // setDescription(value.description);
                   // setBrand(value.brand);
                   // OnSubmit();
-                  OnSubmitedit()
+                  OnSubmitedit();
                 }}
                 onFinishFailed={(error) => {
                   console.log(error);
                 }}
               >
-                <div className="row ">
+                <div className="row mt-2">
                   <div className="col-4">
                     <label>Name</label>
-                    <div>
-                      <Form.Item
+                    <Form.Item
                       name="productname"
                       rules={[
                         {
@@ -372,42 +347,27 @@ export default function ProductEditModal({ show, prid, onHide }) {
                           pattern: new RegExp("^[A-Za-z0-9 ]+$"),
                           message: "Please enter a Valid Product Name",
                         },
-
-                        {
-                          whitespace: true,
-                        },
                         {
                           min: 2,
-                          message: "Product Name must be atleast 2 characters",
+                          message: "Product Name must be at least 2 characters",
                         },
                         {
                           max: 100,
                           message:
-                            "Product Name is too big please enter valid name",
+                            "Product Name cannot be longer than 100 characters",
                         },
                       ]}
-                   
-                      // onChange={(e) => setPrName(e.target.value)}
                     >
-                    
-                    <InputType value={prname}  onChange={(e) => {
-                          setPrName(e.target.value);
-                        }}/>
-
-                      {/* <input
-                        type="text"
+                      <InputType
                         value={prname}
                         onChange={(e) => {
                           setPrName(e.target.value);
                         }}
-                        className="input_type_style w-100"
-                      /> */}
-                      </Form.Item>
-                    </div>
+                      />
+                    </Form.Item>
                   </div>
                   <div className="col-4">
                     <label>Code</label>
-                    <div>
                     <Form.Item
                       name="productcode"
                       rules={[
@@ -416,91 +376,69 @@ export default function ProductEditModal({ show, prid, onHide }) {
                           pattern: new RegExp("^[A-Za-z0-9 ]+$"),
                           message: "Please enter a Valid Product code",
                         },
-
-                        {
-                          whitespace: true,
-                        },
                         {
                           min: 2,
-                          message: "Product Name must be atleast 2 characters",
+                          message: "Product Name must be at least 2 characters",
                         },
                         {
                           max: 20,
                           message:
-                            "Product Name is too big please enter valid code",
+                            "Product Code cannot be longer than 20 characters",
                         },
                       ]}
-                   
-                    
                     >
-                      <InputType  value={prcode}
+                      <InputType
+                        value={prcode}
                         onChange={(e) => {
                           setPrcode(e.target.value);
-                        }}/>
-                      </Form.Item>
-
-                     
-                    </div>
-                  </div>
-                  <div className="col-4 ">
-                    <label className="py-1">Category</label>
-                    <div>
-
-                    <Form.Item
-                      name="productcategory"
-                      // rules={[
-                      //   {
-                      //     required: true,
-                      //     // message: "Please enter a Valid Product category",
-                      //   },
-
-                      //   {
-                      //     whitespace: true,
-                      //   },
-                      // ]}
-                    >
-                         <TreeSelect
-                        className="tree"
-                        name="tree"
-                        style={{ width: "100%" }}
-                        // value={category}
-                        // value={State}
-                        value={prcategory }
-                        dropdownStyle={{
-                          maxHeight: 400,
-                          overflow: "auto",
                         }}
-                        // treeData={treeData}
-                        treeData={categoryTree}
-                     
-                        treeDefaultExpandAll
-                        onChange={onChangetree}
-                        onSelect={onSelect}
-                        
                       />
+                    </Form.Item>
+                  </div>
+                  <div className="col-4">
+                    <label>Category</label>
+                    <div>
+                      <Form.Item
+                        className="mt-2"
+                        name="productcategory"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please Select a Category",
+                          },
+                        ]}
+                      >
+                        <TreeSelect
+                          className="tree"
+                          name="tree"
+                          style={{ width: "100%" }}
+                          // value={category}
+                          value={prcategory}
+                          dropdownStyle={{
+                            maxHeight: 400,
+                            overflow: "auto",
+                          }}
+                          // treeData={treeData}
+                          treeData={categoryTree}
+                          treeDefaultExpandAll
+                          onChange={onChangetree}
+                          onSelect={onSelect}
+                        />
                       </Form.Item>
-                      
-                           
-                    
                     </div>
                   </div>
-                  <div className="col-6 mt-2">
+                  <div className="col-6">
                     <label>Brand</label>
-                    <div>
                     <Form.Item
                       name="productbrand"
-                      // rules={[
-                      //   {
-                      //     required: true,
-                      //     // message: "Please enter a Valid Product category",
-                      //   },
-
-                      //   // {
-                      //   //   whitespace: true,
-                      //   // },
-                      // ]}
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please Select a Brand",
+                        },
+                      ]}
                     >
-                         <SelectBox
+                      <SelectBox
                         value={prbrand}
                         onChange={(e) => setPrBrand(parseInt(e))}
                       >
@@ -517,36 +455,18 @@ export default function ProductEditModal({ show, prid, onHide }) {
                             );
                           })}
                       </SelectBox>
-                      </Form.Item>
-                      {/* <Select
-                      style={{
-                        backgroundColor: "whitesmoke",
-                        borderRadius: "5px",
-                      }}
-                      bordered={false}
-                      className="w-100 "
-                    >
-                      <Select.Option>Watch</Select.Option>
-                    </Select> */}
-                   
-                    </div>
+                    </Form.Item>
                   </div>
-                  <div className="col-6 mt-2">
+                  <div className="col-6">
                     <label>Unit</label>
-
-                    <div>
                     <Form.Item
                       name="productunit"
-                      // rules={[
-                      //   {
-                      //     required: true,
-                      //     // message: "Please enter a Valid Product category",
-                      //   },
-
-                      //   {
-                      //     whitespace: true,
-                      //   },
-                      // ]}
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please Select a unit",
+                        },
+                      ]}
                     >
                       <SelectBox
                         value={prunit}
@@ -565,20 +485,16 @@ export default function ProductEditModal({ show, prid, onHide }) {
                             );
                           })}
                       </SelectBox>
-                      </Form.Item>
-
-                      
-                    </div>
+                    </Form.Item>
                   </div>
-                  <div className="col-6 mt-2">
-                    <label>Attributes</label>
+                  <div className="col-6">
+                    <label className="mb-2">Attributes</label>
                     <div
                       style={{
                         backgroundColor: "whitesmoke",
                         borderRadius: "5px",
                       }}
                     >
-                      
                       <div
                         style={{
                           backgroundColor: "whitesmoke",
@@ -588,113 +504,107 @@ export default function ProductEditModal({ show, prid, onHide }) {
                         }}
                         // className="card border-0 px-4 py-2"
                       >
-                            <Form.Item
-                      name="productattributes"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please enter a Valid Product category",
-                        },
-
-                        {
-                          whitespace: true,
-                        },
-                      ]}
-                    >
-                     
-                        <Checkbox.Group onChange={newValues}>
-                          <div className="row p-2">
-                           
-                         
+                        <Form.Item
+                          name="productattributes"
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please Select Attributes",
+                            },
+                          ]}
+                        >
+                          <Checkbox.Group className="px-3" onChange={newValues}>
+                            <div className="row p-2">
                               {attributes &&
                                 attributes.length > 0 &&
                                 attributes.map((item, index) => {
                                   return (
                                     <div className="col-xl-6 col-lg-6 col-12 py-1">
-                                     <Checkbox value={item?.attribute_id}  >
-                                      {item?.attribute_name}
-                                    </Checkbox>
+                                      <Checkbox value={item?.attribute_id}>
+                                        {item?.attribute_name}
+                                      </Checkbox>
                                     </div>
-                                    
                                   );
-                                  
                                 })}
-                                 </div>
-                            
-                        </Checkbox.Group>
+                            </div>
+                          </Checkbox.Group>
                         </Form.Item>
-                       
                       </div>
                     </div>
-
                   </div>
-                  <div className="col-6 mt-2">
-                    <p>Display Picture</p>
+                  <div className="col-6">
+                    <label className="mb-2">Display Picture</label>
 
-                    <Form.Item
-                      name="productimg"
-                    >
-                     
-                    <FileUpload
-                      multiple
-                      listType="picture"
-                      accept=".png,.jpeg"
-                      onPreview={handlePreview}
-                      beforeUpload={false}
-                      onChange={(file) => {
-                        console.log("Before upload", file.file);
-                        console.log("Before upload file size", file.file.size);
-
-                        if (file.file.size > 2000 && file.file.size < 50000) {
-                          setImg(file.file.originFileObj);
+                    <Form.Item name="productimg">
+                      <FileUpload
+                        multiple
+                        listType="picture"
+                        accept=".png,.jpeg"
+                        onPreview={handlePreview}
+                        beforeUpload={false}
+                        onChange={(file) => {
+                          console.log("Before upload", file.file);
                           console.log(
-                            "image grater than 2 kb and less than 50 kb"
+                            "Before upload file size",
+                            file.file.size
                           );
-                        } else {
-                          console.log("Error in image upload");
-                        }
-                      }}
-                    />
-                     </Form.Item>
-                     <img
-                        src={`${process.env.REACT_APP_BASE_URL}/${primage}`}
-                        height="40px"
-                        width={"40px"}
+
+                          if (
+                            file.file.size > 2000 &&
+                            file.file.size < 500000
+                          ) {
+                            setImg(file.file.originFileObj);
+
+                            setImageSize(false);
+                          } else {
+                            setImageSize(true);
+                            console.log(
+                              "Error in image upload, upload image size between 1 kb and  500 kb"
+                            );
+                          }
+                        }}
                       />
+                      {imageSize ? (
+                        <p style={{ color: "red" }}>
+                          Upload Image size between 1 kb and 500 kb
+                        </p>
+                      ) : (
+                        ""
+                      )}
+                    </Form.Item>
+                    <img
+                      src={`${process.env.REACT_APP_BASE_URL}/${primage}`}
+                      height="40px"
+                      width={"40px"}
+                    />
                   </div>
-                  <div className="col-6 mt-2">
-                    <p>Description</p>
-                    <div>
+                  <div className="col-6">
+                    <label>Description</label>
                     <Form.Item
                       name="productdescription"
+                      rules={[
+                        {
+                          min: 2,
+                          message: "Description must be at least 2 characters",
+                        },
+                        {
+                          max: 500,
+                          message:
+                            "Description cannot be longer than 500 characters",
+                        },
+                      ]}
                     >
-                      <TextArea   value={prDescription}
-                        onChange={(e) => {
-                          setPrDescription(e.target.value);
-                        }}/>
-
-                      </Form.Item>
-                      {/* <textarea
-                        style={{ height: "100px" }}
+                      <TextArea
                         value={prDescription}
                         onChange={(e) => {
                           setPrDescription(e.target.value);
                         }}
-                        className="input_type_style w-100"
-                      /> */}
-                    </div>
+                      />
+                    </Form.Item>
                   </div>
                 </div>
-                <div className="col-12 d-flex justify-content-center pt-2">
-                  <Button
-                    btnType="save"
-                    // onClick={() => {
-                    //   setSuccessPopup(true);
-                    //   setError(true);
-                    // }}
-                  >
-                    Save
-                  </Button>
+                <div className="col-12 d-flex justify-content-center">
+                  <Button btnType="save">Save</Button>
                 </div>
               </Form>
             </div>
@@ -702,14 +612,8 @@ export default function ProductEditModal({ show, prid, onHide }) {
           {error ? <ErrorMsg code="500" /> : ""}
         </div>
       </CustomModel>
-      {/* <CustomModel
-        size={`sm`}
-        success
-        // show={modalShow}
-        // onHide={() => setModalShow(false)}
-        footer={false}
-      /> */}
-       <CustomModel
+
+      <CustomModel
         size={"sm"}
         show={successPopup}
         onHide={() => setSuccessPopup(false)}

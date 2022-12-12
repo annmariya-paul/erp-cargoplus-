@@ -402,16 +402,18 @@ const close_modal = (mShow, time) => {
                 <div className="container-fluid">
                   <div className=" d-flex justify-content-end">
                     <h5 className="lead_text d-none">Products</h5>
-                    <Button onClick={() => setModalOpportunity(true)}>
+                    <Button
+                      btnType="add_borderless"
+                      className="edit_button"
+                      onClick={() => setModalOpportunity(true)}
+                    >
                       Edit <FiEdit fontSize={"12px"} />
                     </Button>
                     <ProductEditModal
                       show={modalOpportunity}
                       onHide={() => setModalOpportunity(false)}
                       style="width:1250px"
-
                       prid={id}
-
                     />
                   </div>
                   <div className="row my-3">
@@ -420,8 +422,8 @@ const close_modal = (mShow, time) => {
                         src={`${process.env.REACT_APP_BASE_URL}/${primage}`}
                         // alt={logo}
                         style={{
-                          height: "70px",
-                          width: "70px",
+                          height: "100px",
+                          width: "100px",
                         }}
                       />
                     </div>
@@ -529,7 +531,7 @@ const close_modal = (mShow, time) => {
                         </div>
                         <div className="col-1">:</div>
                         <div className="col-6 justify-content-start">
-                        {attributes11 &&
+                          {attributes11 &&
                             attributes11?.map((item, index) => {
                               return (
                                 <p
@@ -540,7 +542,6 @@ const close_modal = (mShow, time) => {
                                 </p>
                               );
                             })}
-                        
                         </div>
                       </div>
                       <div className="row mt-2">
@@ -671,7 +672,7 @@ const close_modal = (mShow, time) => {
                           value={pageSize}
                           onChange={(e) => setPageSize(e)}
                         >
-                      <Select.Option value="25">
+                          <Select.Option value="25">
                             Show{" "}
                             <span
                               style={{
@@ -738,7 +739,6 @@ const close_modal = (mShow, time) => {
                           style={{
                             backgroundColor: "white",
                           }}
-                          
                           className=""
                         >
                           <Link to={`${ROUTES.PRODUCTVARIENTS}/${id}`}>
@@ -755,8 +755,8 @@ const close_modal = (mShow, time) => {
                     </div>
                     <div className="datatable">
                       <TableData
-                       data={varients}
-                       columns={columns}
+                        data={varients}
+                        columns={columns}
                         custom_table_css="table_lead_list"
                       />
                     </div>
@@ -772,7 +772,7 @@ const close_modal = (mShow, time) => {
                         }}
                       />
                     </div>
-                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -811,7 +811,7 @@ const close_modal = (mShow, time) => {
                 <div className="col-12 d-flex justify-content-center ">
                   <img
                     src={`${process.env.REACT_APP_BASE_URL}/${varientImg}`}
-                  style={{ height: "70px", width: "70px" }}
+                    style={{ height: "70px", width: "70px" }}
                   />
                 </div>
                 <div className="">
@@ -942,26 +942,25 @@ const close_modal = (mShow, time) => {
         View_list
         list_content={
           <div>
-           <div className="container-fluid px-4 my-3">
+            <div className="container-fluid px-4 my-3">
               <div>
                 <h5 className="lead_text">Edit Product Variants</h5>
               </div>
               <div className="row my-3 ">
-              <div className="col-4">
+                <div className="col-4">
                   <p>Name</p>
-                   <InputType
+                  <InputType
                     type="text"
                     value={varname}
                     onChange={(e) => {
                       setvarname(e.target.value);
                     }}
                   />
-                
                 </div>
 
                 <div className="col-4">
                   <p>Variant Code</p>
-                 
+
                   <InputType
                     type="text"
                     className="input_type_style w-100"
@@ -970,53 +969,45 @@ const close_modal = (mShow, time) => {
                       setvarcode(e.target.value);
                     }}
                   />
-                 
                 </div>
                 <div className="col-4">
                   <p>Quantity</p>
-                 
+
                   <InputType
                     type="text"
-                  
                     className="input_type_style w-100"
                     value={varquantity}
                     onChange={(e) => {
                       setvarquantity(e.target.value);
                     }}
                   />
-               
                 </div>
                 <div className="col-4">
                   <p>Minimum Price</p>
-                
+
                   <InputType
                     type="text"
-                 
                     className="input_type_style w-100"
                     value={varminprice}
                     onChange={(e) => {
                       setvarminprice(e.target.value);
                     }}
                   />
-               
                 </div>
                 <div className="col-4">
                   <p>Maximum Price</p>
-                
+
                   <InputType
                     type="text"
-                  
                     className="input_type_style w-100"
                     value={varmaxprice}
                     onChange={(e) => {
                       setvarmaxprice(e.target.value);
                     }}
                   />
-                
                 </div>
                 <div className="col-4">
                   <p>Unit</p>
-                
 
                   <SelectBox
                     placeholder={"--Please Select--"}
@@ -1038,26 +1029,22 @@ const close_modal = (mShow, time) => {
                         );
                       })}
                   </SelectBox>
-
-                
                 </div>
                 <div className="col-4">
                   <p>Tax Rate</p>
-                 
+
                   <InputType
                     type="text"
-                    
                     className="input_type_style w-100"
                     value={vartaxrate}
                     onChange={(e) => {
                       setvartaxrate(e.target.value);
                     }}
                   />
-                
                 </div>
                 <div className="col-8">
                   <p>Description</p>
-                
+
                   <TextArea
                     value={vardescription}
                     className="input_type_style w-100"
@@ -1102,7 +1089,6 @@ const close_modal = (mShow, time) => {
                 <div className="col-12 d-flex justify-content-center mt-5">
                   <Button
                     onClick={() => {
-                    
                       handleUpdate();
                     }}
                     className="save_button"
@@ -1110,7 +1096,6 @@ const close_modal = (mShow, time) => {
                     Save
                   </Button>
                 </div>
-             
               </div>
               {error ? (
                 <div className="">
@@ -1120,15 +1105,11 @@ const close_modal = (mShow, time) => {
                 ""
               )}
             </div>
-        </div>
+          </div>
         }
       />
 
-      <Custom_model
-        size={"sm"}
-        onHide={() => setSuccessPopup(false)}
-        success
-      />
+      <Custom_model size={"sm"} onHide={() => setSuccessPopup(false)} success />
     </div>
   );
 }

@@ -601,9 +601,6 @@ function ProductDetails() {
                 <div>
                   <div>
                     <div className="row flex-wrap">
-                      <div className="col">
-                        <h5 className="lead_text"></h5>
-                      </div>
                       {/* <Leadlist_Icons /> */}
                     </div>
                     <div

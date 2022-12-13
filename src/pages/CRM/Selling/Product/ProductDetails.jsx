@@ -70,16 +70,16 @@ function ProductDetails() {
   const [editForm] = Form.useForm();
   const [varproid, setvarProid] = useState();
 
-const toggleTab = (index) => {
+  const toggleTab = (index) => {
     setToggleState(index);
   };
-//update product variants--shahida 1.12.22
- const handleUpdate = (e) => {
+  //update product variants--shahida 1.12.22
+  const handleUpdate = (e) => {
     console.log("edit data", e);
     const formData = new FormData();
     formData.append("variant_name", varname);
     formData.append("variant_product_id", varproid);
-   if (ImageUpload) {
+    if (ImageUpload) {
       formData.append("variant_pic", ImageUpload);
     }
     formData.append("variant_code", varcode);
@@ -101,6 +101,16 @@ const toggleTab = (index) => {
           setSuccessPopup(true);
           close_modal(successPopup, 1000);
           setBrandEditPopup(false);
+          setvarname("");
+          setvarProid("");
+          setImageUpload("");
+          setvarcode("");
+          setUnit11("");
+          setvarquantity("");
+          setvarminprice("");
+          setvarmaxprice("");
+          setvartaxrate("");
+          setvardescription("");
         }
       })
       .catch((err) => {
@@ -108,9 +118,9 @@ const toggleTab = (index) => {
         setError(true);
       });
   };
-// API call for get one product
+  // API call for get one product
   const GetAllProductData = () => {
-   PublicFetch.get(`${CRM_BASE_URL_SELLING}/product/${id}`)
+    PublicFetch.get(`${CRM_BASE_URL_SELLING}/product/${id}`)
       .then((res) => {
         if (res?.data?.success) {
           console.log("test message", res?.data?.data);
@@ -143,7 +153,7 @@ const toggleTab = (index) => {
     getallunits();
     getallattributes();
   }, []);
-// API call for get all brands
+  // API call for get all brands
   const getallbrand = async () => {
     try {
       const allbrands = await PublicFetch.get(`${CRM_BASE_URL_SELLING}/brand`);
@@ -153,30 +163,30 @@ const toggleTab = (index) => {
       console.log("error while getting the brands: ", err);
     }
   };
-// API call for get all varients
- const getallvarients = async () => {
+  // API call for get all varients
+  const getallvarients = async () => {
     try {
       const allvarients = await PublicFetch.get(
         `${CRM_BASE_URL_SELLING}/variant?startIndex=0&noOfItems=40`
       );
-    setVarients(allvarients?.data?.data?.variants);
-  } catch (err) {
+      setVarients(allvarients?.data?.data?.variants);
+    } catch (err) {
       console.log("error while getting the brands: ", err);
     }
   };
 
   // API call for get all units
 
-const getallunits = async () => {
+  const getallunits = async () => {
     try {
       const allunits = await PublicFetch.get(`${CRM_BASE_URL_SELLING}/unit`);
       setAllunit(allunits?.data?.data);
-     } catch (err) {
+    } catch (err) {
       console.log("error to getting all units", err);
     }
   };
   // API call for get all attributes
- const getallattributes = async () => {
+  const getallattributes = async () => {
     try {
       const allattributes = await PublicFetch.get(
         `${CRM_BASE_URL_SELLING}/attribute`
@@ -186,7 +196,7 @@ const getallunits = async () => {
       console.log("error to fetching  attributes", err);
     }
   };
-//view single product variant 
+  //view single product variant
   const handleViewData = (e) => {
     console.log("view data", e);
     setvarID(e.variant_id);
@@ -202,21 +212,20 @@ const getallunits = async () => {
     setvardescription(e.variant_description);
     setBrandViewPopup(true);
   };
- 
-  
+
   const data = [];
-const close_modal = (mShow, time) => {
+  const close_modal = (mShow, time) => {
     if (!mShow) {
       setTimeout(() => {
         setSuccessPopup(false);
       }, time);
     }
   };
- //edit product variant from view modal
+  //edit product variant from view modal
   const handleEditPhase1 = (e) => {
-   PublicFetch.get(`${CRM_BASE_URL_SELLING}/variant/${e}`)
+    PublicFetch.get(`${CRM_BASE_URL_SELLING}/variant/${e}`)
       .then((res) => {
-       if (res.data.success) {
+        if (res.data.success) {
           setSingleVariant(res.data.data);
           setvarProid(res.data.data.variant_product_id);
           setvarname(res.data.data.variant_name);
@@ -238,8 +247,8 @@ const close_modal = (mShow, time) => {
   };
   const [ImageInput, setImageInput] = useState();
 
-  //Edit product varient from table 
-   const handleEditPhase2 = (e) => {
+  //Edit product varient from table
+  const handleEditPhase2 = (e) => {
     console.log("editPhase2", e);
     // setvarID(e.variant_id)
     setvarID(e.variant_id);

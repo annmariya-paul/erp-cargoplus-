@@ -60,6 +60,7 @@ function BrandsList() {
   const [ImageInput, setImageInput] = useState();
   const [ImageUpload, setImageUpload] = useState();
   const [editForm] = Form.useForm();
+  const [Errormsg, setErrormsg] = useState();
 
   const getData = (current, pageSize) => {
     return brands?.slice((current - 1) * pageSize, current * pageSize);
@@ -162,6 +163,8 @@ function BrandsList() {
           setSuccessPopup(true);
           close_modal(successPopup, 1000);
           setBrandEditPopup(false);
+        } else {
+          setErrormsg(res.data.data);
         }
       })
       .catch((err) => {
@@ -590,9 +593,15 @@ function BrandsList() {
                         value={NameInput}
                         onChange={(e) => {
                           setNameInput(e.target.value);
+                          setErrormsg("");
                         }}
                       />
                     </Form.Item>
+                    {Errormsg ? (
+                      <label style={{ color: "red" }}>{Errormsg}</label>
+                    ) : (
+                      ""
+                    )}
                   </div>
                   <div className="col-6 my-2">
                     <label>Description</label>

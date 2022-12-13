@@ -535,27 +535,23 @@ function Varients() {
 
                         <div className="col-6">
                           <label>Price Minimum</label>
-                          <div>
-                            <Form.Item
-                              name="varminprice"
-                              rules={[
-                                {
-                                  required: true,
-                                  pattern: new RegExp(
-                                    "^([1-9]+0|[1-9])[0-9]*$"
-                                  ),
-                                  message: "Please enter a Valid Brand Name",
-                                },
-                              ]}
-                              onChange={(e) => setvarminprice(e.target.value)}
-                            >
-                              <InputType />
-                            </Form.Item>
-                          </div>
+                          <Form.Item
+                            name="varminprice"
+                            rules={[
+                              {
+                                required: true,
+                                pattern: new RegExp("^([1-9]+0|[1-9])[0-9]*$"),
+                                message: "Please enter Minimum Price",
+                              },
+                            ]}
+                            onChange={(e) => setvarminprice(e.target.value)}
+                          >
+                            <InputType />
+                          </Form.Item>
                         </div>
+
                         <div className="col-6">
                           <label>Price Maximum</label>
-
                           <Form.Item
                             name="varmaxprice"
                             rules={[
@@ -570,6 +566,7 @@ function Varients() {
                             <InputType />
                           </Form.Item>
                         </div>
+
                         <div className="col-4 d-flex justify-content-center ">
                           <div>
                             <label>Display Picture</label>
@@ -761,73 +758,72 @@ function Varients() {
               UpdateAttribute(value);
             }}
           >
-           
+            <div>
+              <h5 className="lead_text">Edit Attribute</h5>
+            </div>
+
+            <div className="col mt-5">
+              <label>Attributes</label>
+              <Form.Item
+                name="Editattribute"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please Select a Valid Attribute",
+                  },
+                ]}
+              >
+                <SelectBox
+                  value={attributes}
+                  placeholder={"--Please Select--"}
+                  onChange={(e) => {
+                    console.log("selected attribute iss", e);
+                    setAttributes(e);
+                  }}
+                >
+                  {/* <Select.Option>{attribute}</Select.Option> */}
+                  {prattributes &&
+                    prattributes.length > 0 &&
+                    prattributes?.map((item, index) => {
+                      return (
+                        <Select.Option
+                          key={item.attribute_id}
+                          value={item.attribute_id}
+                        >
+                          {item.attribute_name}
+                        </Select.Option>
+                      );
+                    })}
+                </SelectBox>
+              </Form.Item>
+            </div>
+            <div className="col mt-5">
+              <label>Attributes value</label>
               <div>
-                <h5 className="lead_text">Edit Attribute</h5>
+                <Form.Item
+                  name="Editvalue"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter a Valid Attribute value",
+                    },
+                  ]}
+                >
+                  <InputType
+                    value={attributeValue}
+                    onChange={(e) => setAttributeValues(e.target.value)}
+                  />
+                </Form.Item>
               </div>
-             
-                <div className="col mt-5">
-                  <label>Attributes</label>
-                  <Form.Item
-                    name="Editattribute"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please Select a Valid Attribute",
-                      },
-                    ]}
-                  >
-                    <SelectBox
-                      value={attributes}
-                      placeholder={"--Please Select--"}
-                      onChange={(e) => {
-                        console.log("selected attribute iss", e);
-                        setAttributes(e);
-                      }}
-                    >
-                      {/* <Select.Option>{attribute}</Select.Option> */}
-                      {prattributes &&
-                        prattributes.length > 0 &&
-                        prattributes?.map((item, index) => {
-                          return (
-                            <Select.Option
-                              key={item.attribute_id}
-                              value={item.attribute_id}
-                            >
-                              {item.attribute_name}
-                            </Select.Option>
-                          );
-                        })}
-                    </SelectBox>
-                  </Form.Item>
-                </div>
-                <div className="col mt-5">
-                  <label>Attributes value</label>
-                  <div>
-                    <Form.Item
-                      name="Editvalue"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please enter a Valid Attribute value",
-                        },
-                      ]}
-                    >
-                      <InputType
-                        value={attributeValue}
-                        onChange={(e) => setAttributeValues(e.target.value)}
-                      />
-                    </Form.Item>
-                  </div>
-                </div>
-              <div className="col-12 d-flex justify-content-center mt-5">
-                {/* <label>Tax Rate</label> */}
-                <div>
-                  <Button btnType="save" type="submit">
-                    save
-                  </Button>
-                </div>
+            </div>
+            <div className="col-12 d-flex justify-content-center mt-5">
+              {/* <label>Tax Rate</label> */}
+              <div>
+                <Button btnType="save" type="submit">
+                  save
+                </Button>
               </div>
+            </div>
           </Form>
         </div>
       </CustomModel>

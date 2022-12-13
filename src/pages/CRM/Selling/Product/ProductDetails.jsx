@@ -73,6 +73,14 @@ function ProductDetails() {
   const toggleTab = (index) => {
     setToggleState(index);
   };
+   const data = [];
+  const close_modal = (mShow, time) => {
+    if (!mShow) {
+      setTimeout(() => {
+        setSuccessPopup(false);
+      }, time);
+    }
+  };
   //update product variants--shahida 1.12.22
   const handleUpdate = (e) => {
     console.log("edit data", e);
@@ -97,9 +105,8 @@ function ProductDetails() {
         console.log("success", res);
         if (res.data.success) {
           console.log("successDataa", res.data.data);
-          getallvarients();
-          setSuccessPopup(true);
-          close_modal(successPopup, 1000);
+          getallvarients();   
+          close_modal(successPopup, 1200);
           setBrandEditPopup(false);
           setvarname("");
           setvarProid("");
@@ -111,6 +118,7 @@ function ProductDetails() {
           setvarmaxprice("");
           setvartaxrate("");
           setvardescription("");
+          setSuccessPopup(true);
         }
       })
       .catch((err) => {
@@ -170,6 +178,7 @@ function ProductDetails() {
         `${CRM_BASE_URL_SELLING}/variant?startIndex=0&noOfItems=40`
       );
       setVarients(allvarients?.data?.data?.variants);
+
     } catch (err) {
       console.log("error while getting the brands: ", err);
     }
@@ -213,14 +222,6 @@ function ProductDetails() {
     setBrandViewPopup(true);
   };
 
-  const data = [];
-  const close_modal = (mShow, time) => {
-    if (!mShow) {
-      setTimeout(() => {
-        setSuccessPopup(false);
-      }, time);
-    }
-  };
   //edit product variant from view modal
   const handleEditPhase1 = (e) => {
     PublicFetch.get(`${CRM_BASE_URL_SELLING}/variant/${e}`)
@@ -239,6 +240,7 @@ function ProductDetails() {
           setvardescription(res.data.data.variant_description);
           setBrandEditPopup(true);
           setBrandViewPopup(false);
+          handleEditPhase2(res.data.data);
         }
       })
       .catch((err) => {
@@ -262,6 +264,19 @@ function ProductDetails() {
     setvarmaxprice(e.variant_price_max);
     setvartaxrate(e.variant_taxrate);
     setvardescription(e.variant_description);
+    editForm.setFieldsValue({
+      varID: e.variant_id,
+      varproid: e.variant_product_id,
+      varname: e.variant_name,
+      varcode: e.variant_code,
+      ImageInput: e.variant_pic,
+      unit:e.variant_unit,
+      varquantity:e.variant_quantity,
+      varminprice:e.variant_price_min,
+      varmaxprice:e.variant_price_max,
+      vartaxrate:e.variant_taxrate,
+      vardescription:e.variant_description,
+    });
     setBrandEditPopup(true);
   };
 
@@ -419,6 +434,7 @@ function ProductDetails() {
                       Edit <FiEdit fontSize={"12px"} />
                     </Button>
                     <ProductEditModal
+                      bodyStyle={{ height: 620, overflowY: "auto" }}
                       show={modalOpportunity}
                       onHide={() => setModalOpportunity(false)}
                       style="width:1250px"
@@ -787,8 +803,8 @@ function ProductDetails() {
       </div>
       <Custom_model
         destroyOnClose={true}
-        bodyStyle={{ height: 550, overflowY: "auto" }}
-        width={800}
+        bodyStyle={{ height: 610, overflowY: "auto" }}
+        width={700}
         show={BrandViewpopup}
         onHide={() => setBrandViewPopup(false)}
         View_list
@@ -799,25 +815,24 @@ function ProductDetails() {
                 <h5 className="lead_text">Product Variants</h5>
                 <div className="">
                   <Button
-                    style={{ backgroundColor: "white", color: "#0092ce" }}
+                    btnType="add_borderless"
+                    className="edit_button"
+                    onClick={() => {
+                      handleEditPhase1(varID);
+                    }}
                   >
-                    <span
-                      className="d-flex align-items-center justify-content-between gap-1  p-1 button_span"
-                      style={{ fontSize: "13px" }}
-                      onClick={() => {
-                        handleEditPhase1(varID);
-                      }}
-                    >
-                      Edit <FiEdit fontSize={"12px"} />
-                    </span>
+                    Edit
+                    <FiEdit
+                      style={{ marginBottom: "4px", marginInline: "3px" }}
+                    />
                   </Button>
                 </div>
               </div>
-              <div className="row my-3">
+              <div className="row my-2">
                 <div className="col-12 d-flex justify-content-center ">
                   <img
                     src={`${process.env.REACT_APP_BASE_URL}/${varientImg}`}
-                    style={{ height: "70px", width: "70px" }}
+                    style={{ height: "90px", width: "90px" }}
                   />
                 </div>
                 <div className="">
@@ -835,7 +850,7 @@ function ProductDetails() {
                       <p className="modal_view_p_sub">{varname}</p>
                     </div>
                   </div>
-                  <div className="row mt-4">
+                  <div className="row mt-2">
                     <div className="col-5">
                       <p
                         style={{ color: "#000" }}
@@ -849,7 +864,7 @@ function ProductDetails() {
                       <p className="modal_view_p_sub">{varcode}</p>
                     </div>
                   </div>
-                  <div className="row mt-4">
+                  <div className="row mt-2">
                     <div className="col-5">
                       <p
                         style={{ color: "#000" }}
@@ -863,7 +878,7 @@ function ProductDetails() {
                       <p className="modal_view_p_sub">{unit}</p>
                     </div>
                   </div>
-                  <div className="row mt-4">
+                  <div className="row mt-2">
                     <div className="col-5">
                       <p
                         style={{ color: "#000" }}
@@ -877,7 +892,7 @@ function ProductDetails() {
                       <p className="modal_view_p_sub">{varquantity}</p>
                     </div>
                   </div>
-                  <div className="row mt-4">
+                  <div className="row mt-2">
                     <div className="col-5">
                       <p
                         style={{ color: "#000" }}
@@ -891,7 +906,7 @@ function ProductDetails() {
                       <p className="modal_view_p_sub">{varminprice}</p>
                     </div>
                   </div>
-                  <div className="row mt-4">
+                  <div className="row mt-2">
                     <div className="col-5">
                       <p
                         style={{ color: "#000" }}
@@ -905,7 +920,7 @@ function ProductDetails() {
                       <p className="modal_view_p_sub">{varmaxprice}</p>
                     </div>
                   </div>
-                  <div className="row mt-4">
+                  <div className="row mt-2">
                     <div className="col-5">
                       <p
                         style={{ color: "#000" }}
@@ -920,7 +935,7 @@ function ProductDetails() {
                     </div>
                   </div>
 
-                  <div className="row mt-4">
+                  <div className="row mt-2">
                     <div className="col-5">
                       <p
                         style={{ color: "#000" }}
@@ -948,161 +963,273 @@ function ProductDetails() {
         View_list
         list_content={
           <div>
-            <div className="container-fluid px-4 my-3">
+            <div className="container-fluid px-4">
               <div>
                 <h5 className="lead_text">Edit Product Variants</h5>
               </div>
-              <div className="row my-3 ">
-                <div className="col-4">
-                  <p>Name</p>
-                  <InputType
-                    type="text"
-                    value={varname}
-                    onChange={(e) => {
-                      setvarname(e.target.value);
-                    }}
-                  />
+              <Form
+                name="editForm"
+                form={editForm}
+                onFinish={(value) => {
+                  console.log("valuess in edit varients", value);
+                  handleUpdate();
+                }}
+                onFinishFailed={(error) => {
+                  console.log(error);
+                }}
+              >
+                <div className="row my-4 ">
+                  <div className="col-4">
+                    <label>Name</label>
+                    <Form.Item
+                      name="varname"
+                      rules={[
+                        {
+                          required: true,
+                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                          message: "Please enter a Valid Varient Name",
+                        },
+                        {
+                          min: 2,
+                          message: "Varient Name must be at least 2 characters",
+                        },
+                        {
+                          max: 100,
+                          message:
+                            "Varient Name cannot be longer than 100 characters",
+                        },
+                      ]}
+                    >
+                      <InputType
+                        type="text"
+                        value={varname}
+                        onChange={(e) => {
+                          setvarname(e.target.value);
+                        }}
+                      />
+                    </Form.Item>
+                  </div>
+
+                  <div className="col-4">
+                    <label>Variant Code</label>
+                    <Form.Item
+                      name="varcode"
+                      rules={[
+                        {
+                          required: true,
+                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                          message: "Please enter a Valid Varient code",
+                        },
+                      ]}
+                    >
+                      <InputType
+                        type="text"
+                        className="input_type_style w-100"
+                        value={varcode}
+                        onChange={(e) => {
+                          setvarcode(e.target.value);
+                        }}
+                      />
+                    </Form.Item>
+                  </div>
+
+                  <div className="col-4">
+                    <label>Unit</label>
+                    <Form.Item
+                      name="unit"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please Select a Unit",
+                        },
+                      ]}
+                    >
+                      <SelectBox
+                        placeholder={"--Please Select--"}
+                        value={unit}
+                        onChange={(e) => {
+                          setUnit(parseInt(e));
+                        }}
+                      >
+                        {allunit &&
+                          allunit.length > 0 &&
+                          allunit.map((item, index) => {
+                            return (
+                              <Select.Option
+                                key={item.unit_id}
+                                value={item.unit_id}
+                              >
+                                {item.unit_name}
+                              </Select.Option>
+                            );
+                          })}
+                      </SelectBox>
+                    </Form.Item>
+                  </div>
+
+                  <div className="col-4">
+                    <label>Quantity</label>
+                    <Form.Item
+                      name="varquantity"
+                      rules={[
+                        {
+                          required: true,
+                          pattern: new RegExp(
+                            "^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)$"
+                          ),
+                          message: "Please enter a valid Quantity",
+                        },
+                      ]}
+                    >
+                      <InputType
+                        type="text"
+                        className="input_type_style w-100"
+                        value={varquantity}
+                        onChange={(e) => {
+                          setvarquantity(e.target.value);
+                        }}
+                      />
+                    </Form.Item>
+                  </div>
+
+                  <div className="col-4">
+                    <label>Tax Rate</label>
+                    <Form.Item
+                      name="vartaxrate"
+                      rules={[
+                        {
+                          required: true,
+                          pattern: new RegExp("^([1-9]+0|[1-9])[0-9]*$"),
+                          message: "Please enter a valid Tax Rate",
+                        },
+                      ]}
+                    >
+                      <InputType
+                        type="text"
+                        className="input_type_style w-100"
+                        value={vartaxrate}
+                        onChange={(e) => {
+                          setvartaxrate(e.target.value);
+                        }}
+                      />
+                    </Form.Item>
+                  </div>
+
+                  <div className="col-4">
+                    <label>Price Minimum</label>
+                    <Form.Item
+                      name="varminprice"
+                      rules={[
+                        {
+                          required: true,
+                          pattern: new RegExp("^([1-9]+0|[1-9])[0-9]*$"),
+                          message: "Please enter Minimum Price",
+                        },
+                      ]}
+                    >
+                      <InputType
+                        type="text"
+                        className="input_type_style w-100"
+                        value={varminprice}
+                        onChange={(e) => {
+                          setvarminprice(e.target.value);
+                        }}
+                      />
+                    </Form.Item>
+                  </div>
+                  <div className="col-4">
+                    <label>Price Maximum</label>
+                    <Form.Item
+                      name="varmaxprice"
+                      rules={[
+                        {
+                          required: true,
+                          pattern: new RegExp("^([1-9]+0|[1-9])[0-9]*$"),
+                          message: "Please enter Maximum Price",
+                        },
+                      ]}
+                    >
+                      <InputType
+                        type="text"
+                        className="input_type_style w-100"
+                        value={varmaxprice}
+                        onChange={(e) => {
+                          setvarmaxprice(e.target.value);
+                        }}
+                      />
+                    </Form.Item>
+                  </div>
+                  <div className="col-8">
+                    <label>Description</label>
+                    <Form.Item
+                      className="mt-2"
+                      name="description"
+                      rules={[
+                        {
+                          min: 2,
+                          message: "Description must be at least 2 characters",
+                        },
+                        {
+                          max: 500,
+                          message:
+                            "Description cannot be longer than 500 characters",
+                        },
+                      ]}
+                    >
+                      <TextArea
+                        value={vardescription}
+                        className="input_type_style w-100"
+                        onChange={(e) => {
+                          setvardescription(e.target.value);
+                        }}
+                      />
+                    </Form.Item>
+                  </div>
+
+                  <div className="col-12">
+                    <p>Display Picture</p>
+
+                    {/* <Form.Item name="image"> */}
+                    <FileUpload
+                      multiple
+                      height={150}
+                      listType="picture"
+                      accept=".png,.jpg,.jpeg"
+                      beforeUpload={false}
+                      onChange={(file) => {
+                        console.log("Before upload", file.file);
+                        console.log("Before upload file size", file.file.size);
+
+                        if (file.file.size > 1000 && file.file.size < 50000) {
+                          setImageUpload(file.file.originFileObj);
+                          console.log(
+                            "image grater than 1 kb and less than 50 kb"
+                          );
+                        } else {
+                          console.log("hgrtryyryr");
+                        }
+                      }}
+                    />
+                    {/* </Form.Item> */}
+                    <img
+                      src={`${process.env.REACT_APP_BASE_URL}/${ImageInput}`}
+                      height="40px"
+                      width={"40px"}
+                    />
+                  </div>
+
+                  <div className="col-12 d-flex justify-content-center mt-5">
+                    <Button
+                      onClick={() => {
+                        handleUpdate();
+                      }}
+                      className="save_button"
+                    >
+                      Save
+                    </Button>
+                  </div>
                 </div>
-
-                <div className="col-4">
-                  <p>Variant Code</p>
-
-                  <InputType
-                    type="text"
-                    className="input_type_style w-100"
-                    value={varcode}
-                    onChange={(e) => {
-                      setvarcode(e.target.value);
-                    }}
-                  />
-                </div>
-                <div className="col-4">
-                  <p>Quantity</p>
-
-                  <InputType
-                    type="text"
-                    className="input_type_style w-100"
-                    value={varquantity}
-                    onChange={(e) => {
-                      setvarquantity(e.target.value);
-                    }}
-                  />
-                </div>
-                <div className="col-4">
-                  <p>Minimum Price</p>
-
-                  <InputType
-                    type="text"
-                    className="input_type_style w-100"
-                    value={varminprice}
-                    onChange={(e) => {
-                      setvarminprice(e.target.value);
-                    }}
-                  />
-                </div>
-                <div className="col-4">
-                  <p>Maximum Price</p>
-
-                  <InputType
-                    type="text"
-                    className="input_type_style w-100"
-                    value={varmaxprice}
-                    onChange={(e) => {
-                      setvarmaxprice(e.target.value);
-                    }}
-                  />
-                </div>
-                <div className="col-4">
-                  <p>Unit</p>
-
-                  <SelectBox
-                    placeholder={"--Please Select--"}
-                    value={unit}
-                    onChange={(e) => {
-                      setUnit(parseInt(e));
-                    }}
-                  >
-                    {allunit &&
-                      allunit.length > 0 &&
-                      allunit.map((item, index) => {
-                        return (
-                          <Select.Option
-                            key={item.unit_id}
-                            value={item.unit_id}
-                          >
-                            {item.unit_name}
-                          </Select.Option>
-                        );
-                      })}
-                  </SelectBox>
-                </div>
-                <div className="col-4">
-                  <p>Tax Rate</p>
-
-                  <InputType
-                    type="text"
-                    className="input_type_style w-100"
-                    value={vartaxrate}
-                    onChange={(e) => {
-                      setvartaxrate(e.target.value);
-                    }}
-                  />
-                </div>
-                <div className="col-8">
-                  <p>Description</p>
-
-                  <TextArea
-                    value={vardescription}
-                    className="input_type_style w-100"
-                    onChange={(e) => {
-                      setvardescription(e.target.value);
-                    }}
-                  />
-                  {/* </Form.Item> */}
-                </div>
-                <div className="col-12">
-                  <p>Display Picture</p>
-
-                  {/* <Form.Item name="image"> */}
-                  <FileUpload
-                    multiple
-                    height={150}
-                    listType="picture"
-                    accept=".png,.jpg,.jpeg"
-                    beforeUpload={false}
-                    onChange={(file) => {
-                      console.log("Before upload", file.file);
-                      console.log("Before upload file size", file.file.size);
-
-                      if (file.file.size > 1000 && file.file.size < 50000) {
-                        setImageUpload(file.file.originFileObj);
-                        console.log(
-                          "image grater than 1 kb and less than 50 kb"
-                        );
-                      } else {
-                        console.log("hgrtryyryr");
-                      }
-                    }}
-                  />
-                  {/* </Form.Item> */}
-                  <img
-                    src={`${process.env.REACT_APP_BASE_URL}/${ImageInput}`}
-                    height="40px"
-                    width={"40px"}
-                  />
-                </div>
-
-                <div className="col-12 d-flex justify-content-center mt-5">
-                  <Button
-                    onClick={() => {
-                      handleUpdate();
-                    }}
-                    className="save_button"
-                  >
-                    Save
-                  </Button>
-                </div>
-              </div>
+              </Form>
               {error ? (
                 <div className="">
                   <ErrorMsg code={"400"} />
@@ -1115,7 +1242,7 @@ function ProductDetails() {
         }
       />
 
-      <Custom_model size={"sm"} onHide={() => setSuccessPopup(false)} success />
+      <Custom_model size={"sm"} show={successPopup} onHide={() => setSuccessPopup(false)} success />
     </div>
   );
 }

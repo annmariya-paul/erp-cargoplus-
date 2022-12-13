@@ -215,13 +215,6 @@ function BrandsList() {
       dataIndex: "brand_pic",
       key: "IMAGE",
       width: "23%",
-      // filteredValue: [searchStatus],
-      // onFilter: (value, record) => {
-      //   return String(record.lead_status)
-      //     .toLowerCase()
-      //     .includes(value.toLowerCase());
-      // },
-
       align: "center",
       render: (theImageURL, records) => (
         // console.log("image url", theImageURL);
@@ -253,26 +246,7 @@ function BrandsList() {
       //   width: "23%",
       align: "center",
     },
-    // {
-    //   title: "SOURCE",
-    //   dataIndex: "action",
-    //   key: "key",
-    //   width: "14%",
-    //   align: "center",
-    //   filteredValue: [searchedText],
-    //   onFilter: (value, record) => {
-    //     return String(record.lead_customer_name)
-    //       .toLowerCase()
-    //       .includes(value.toLowerCase());
-    //   },
-    // },
-    // {
-    //   title: "PARTY",
-    //   dataIndex: "lead_status",
-    //   key: "key",
-
-    //   align: "center",
-    // },
+    
   ];
 
   //for show or hide colums start--Shahida

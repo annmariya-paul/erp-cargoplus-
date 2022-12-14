@@ -583,7 +583,6 @@ function Varients() {
                                     "Before upload file size",
                                     file.file.size
                                   );
-
                                   if (
                                     file.file.size > 2000 &&
                                     file.file.size < 500000

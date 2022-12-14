@@ -69,6 +69,8 @@ function ProductDetails() {
   const [unit11, setUnit11] = useState();
   const [editForm] = Form.useForm();
   const [varproid, setvarProid] = useState();
+  const [varientArray,setVarientsArray] = useState();
+  const[imageSize,setImageSize] = useState(false);
 
   const toggleTab = (index) => {
     setToggleState(index);
@@ -178,6 +180,30 @@ function ProductDetails() {
         `${CRM_BASE_URL_SELLING}/variant?startIndex=0&noOfItems=40`
       );
       setVarients(allvarients?.data?.data?.variants);
+      let array = [];
+      allvarients?.data?.data?.variants.forEach((item,index)=>{
+        let tempArr = [];
+        if(item.variant_pic !== null){
+          tempArr.push(item.variant_pic);
+          } else {
+            tempArr.push("")
+          }
+          array.push({
+            variant_id: item?.variant_id,
+            variant_product_id: item?.variant_product_id,
+            variant_name: item?.variant_name,
+            variant_code: item?.variant_code,
+            variant_unit: item?.variant_unit,
+            variant_quantity: item?.variant_quantity,
+            variant_price_min: item?.variant_price_min,
+            variant_price_max: item?.variant_price_max,
+            variant_taxrate: item?.variant_taxrate,
+            variant_description: item?.variant_description,
+            variant_pic: tempArr,
+          });
+      });
+                setVarientsArray(array);
+
 
     } catch (err) {
       console.log("error while getting the brands: ", err);
@@ -777,7 +803,7 @@ function ProductDetails() {
                     </div>
                     <div className="datatable">
                       <TableData
-                        data={varients}
+                        data={varientArray}
                         columns={columns}
                         custom_table_css="table_lead_list"
                       />
@@ -955,6 +981,8 @@ function ProductDetails() {
           </>
         }
       />
+
+      {/* # validation - Ann mariya (13/12/22) */}
       <Custom_model
         bodyStyle={{ height: 550, overflowY: "auto" }}
         width={800}
@@ -1187,30 +1215,43 @@ function ProductDetails() {
                   </div>
 
                   <div className="col-12">
-                    <p>Display Picture</p>
-
-                    {/* <Form.Item name="image"> */}
-                    <FileUpload
-                      multiple
-                      height={150}
-                      listType="picture"
-                      accept=".png,.jpg,.jpeg"
-                      beforeUpload={false}
-                      onChange={(file) => {
-                        console.log("Before upload", file.file);
-                        console.log("Before upload file size", file.file.size);
-
-                        if (file.file.size > 1000 && file.file.size < 50000) {
-                          setImageUpload(file.file.originFileObj);
+                    <label>Display Picture</label>
+                    <Form.Item name="ImageUpload">
+                      <FileUpload
+                        multiple
+                        height={150}
+                        listType="picture"
+                        accept=".png,.jpg,.jpeg"
+                        beforeUpload={false}
+                        onChange={(file) => {
+                          console.log("Before upload", file.file);
                           console.log(
-                            "image grater than 1 kb and less than 50 kb"
+                            "Before upload file size",
+                            file.file.size
                           );
-                        } else {
-                          console.log("hgrtryyryr");
-                        }
-                      }}
-                    />
-                    {/* </Form.Item> */}
+
+                          if (
+                            file.file.size > 2000 &&
+                            file.file.size < 500000
+                          ) {
+                            setImageUpload(file.file.originFileObj);
+                            setImageSize(false);
+                          } else {
+                            setImageSize(true);
+                            console.log(
+                              "Error in image upload, upload image size between 2 kb and  500 kb"
+                            );
+                          }
+                        }}
+                      />
+                      {imageSize ? (
+                        <p style={{ color: "red" }}>
+                          Upload Image size between 2 kb and 500 kb
+                        </p>
+                      ) : (
+                        ""
+                      )}
+                    </Form.Item>
                     <img
                       src={`${process.env.REACT_APP_BASE_URL}/${ImageInput}`}
                       height="40px"
@@ -1242,7 +1283,12 @@ function ProductDetails() {
         }
       />
 
-      <Custom_model size={"sm"} show={successPopup} onHide={() => setSuccessPopup(false)} success />
+      <Custom_model
+        size={"sm"}
+        show={successPopup}
+        onHide={() => setSuccessPopup(false)}
+        success
+      />
     </div>
   );
 }

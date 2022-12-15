@@ -91,16 +91,16 @@ const handleEditonViewpage=(e)=>{
 // function to editunits
 
 const handleEditclick=(item)=>{
-  console.log("edittjf",item)
+  console.log("editt valuesss",item)
 setUnitid(item?.unit_id)  
 setUnitName(item?.unit_name)
 setUnitCode(item?.unit_code)
 setUnitDescription(item?.unit_description)
  editForm.setFieldsValue({
   //  unitid: item.unit_id,
-   unitName: item.unit_name,
-   unitcode: item.unit_code,
-   unitDescription: item.unit_description,
+  unit_name: item.unit_name,
+  unit_code: item.unit_code,
+  unit_description: item.unit_description,
  });
  setEditShow(true);
 }

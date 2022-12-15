@@ -60,6 +60,7 @@ function BrandsList() {
   const [ImageInput, setImageInput] = useState();
   const [ImageUpload, setImageUpload] = useState();
   const [editForm] = Form.useForm();
+  const [Errormsg, setErrormsg] = useState();
 
   const getData = (current, pageSize) => {
     return brands?.slice((current - 1) * pageSize, current * pageSize);
@@ -162,6 +163,8 @@ function BrandsList() {
           setSuccessPopup(true);
           close_modal(successPopup, 1000);
           setBrandEditPopup(false);
+        } else {
+          setErrormsg(res.data.data);
         }
       })
       .catch((err) => {
@@ -212,13 +215,6 @@ function BrandsList() {
       dataIndex: "brand_pic",
       key: "IMAGE",
       width: "23%",
-      // filteredValue: [searchStatus],
-      // onFilter: (value, record) => {
-      //   return String(record.lead_status)
-      //     .toLowerCase()
-      //     .includes(value.toLowerCase());
-      // },
-
       align: "center",
       render: (theImageURL, records) => (
         // console.log("image url", theImageURL);
@@ -250,26 +246,7 @@ function BrandsList() {
       //   width: "23%",
       align: "center",
     },
-    // {
-    //   title: "SOURCE",
-    //   dataIndex: "action",
-    //   key: "key",
-    //   width: "14%",
-    //   align: "center",
-    //   filteredValue: [searchedText],
-    //   onFilter: (value, record) => {
-    //     return String(record.lead_customer_name)
-    //       .toLowerCase()
-    //       .includes(value.toLowerCase());
-    //   },
-    // },
-    // {
-    //   title: "PARTY",
-    //   dataIndex: "lead_status",
-    //   key: "key",
-
-    //   align: "center",
-    // },
+    
   ];
 
   //for show or hide colums start--Shahida
@@ -590,9 +567,15 @@ function BrandsList() {
                         value={NameInput}
                         onChange={(e) => {
                           setNameInput(e.target.value);
+                          setErrormsg("");
                         }}
                       />
                     </Form.Item>
+                    {Errormsg ? (
+                      <label style={{ color: "red" }}>{Errormsg}</label>
+                    ) : (
+                      ""
+                    )}
                   </div>
                   <div className="col-6 my-2">
                     <label>Description</label>

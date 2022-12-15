@@ -53,7 +53,6 @@ export default function LeadReport() {
             setAllLeadList(item.lead_status);
 
             var date1 = moment(item.lead_created_at).format("MM-DD-YYYY");
-//  console.log("fggfg", date1);
             if (item.lead_status === 5) {
               {
                 arrA.push({
@@ -68,14 +67,8 @@ export default function LeadReport() {
                 setConvertedTable(arrA);
               }
             }
-           
-                       
+             
             if (item.lead_status === 1  ) {
-              //  const newDate = new Date();
-              //  const currentdate = newDate.filter(date1)
-              //  const Format = moment(newDate).format("MM-DD-YYYY");
-              // if(currentdate){
-              // console.log("current date iss",currentdate)
               arrB.push({
                 lead_customer_name: item?.lead_customer_name,
                 lead_id: item?.lead_id,
@@ -87,10 +80,6 @@ export default function LeadReport() {
                 lead_created_date:item?.lead_created_at,
               });
               setGeneratedTable(arrB);
-              
-              
-            // } 
-        
             }
             
           });
@@ -112,10 +101,6 @@ console.log("generated data isss ", generatedTable )
     // GetAllLeadData();
     Searchbydate()
   }, [numOfItems, pageSize]);
-
-  // console.log("lllllllll", format);
-
-  //  console.log("ffffffffffff", selectdate);
   // { function to search data by date - Ann mariya (04/11/22)}
   const Searchbydate = () => {
     let selectdate = moment(selectedDate).format("MM-DD-YYYY");

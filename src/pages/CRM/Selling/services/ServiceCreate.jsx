@@ -168,6 +168,11 @@ function ServiceCreate() {
         setError(true);
       });
   };
+ const handleCancel=()=>{
+  navigate(ROUTES.SERVICES)
+ }
+
+
 
   return (
     <div>
@@ -384,8 +389,10 @@ function ServiceCreate() {
                 </div>
                 <div className="col-12 d-flex justify-content-center pt-5 gap-3 ">
                   <Button className="save_button">Save</Button>{" "}
-                  <Button as="input" type="reset" value="Reset">
-                    Clear
+                  <Button as="input" type="reset" value="Reset" onClick={()=>{
+                    handleCancel()
+                  }} >
+                    Cancel
                   </Button>
                 </div>
               </div>

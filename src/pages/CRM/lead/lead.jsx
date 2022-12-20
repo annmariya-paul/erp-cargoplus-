@@ -35,10 +35,10 @@ function Lead({}) {
   const [modalAddress, setModalAddress] = useState(false);
   const [modalOpportunity, setModalOpportunity] = useState(false);
   const [leadType, setLeadType] = useState("");
-
+  const [FileSizeError,setFileSizeError] = useState(false);
   const [leadName, setLeadName] = useState();
   const [leadUsertype, setLeadUsertype] = useState("O");
-  const [leadOrganization, setLeadOrganization] = useState();
+  const [leadOrganization, setLeadOrganization] = useState("");
   const [leadSource, setLeadSource] = useState("online registration");
   const [leadDescription, setLeadDescription] = useState();
   const [leadAttachment, setLeadAttachment] = useState();
@@ -365,17 +365,28 @@ function Lead({}) {
                               );
                               if (
                                 file.file.size > 1000 &&
-                                file.file.size < 50000
+                                file.file.size < 500000
                               ) {
                                 setLeadimg(file.file.originFileObj);
+                                setFileSizeError(false);
                                 console.log(
-                                  "image greater than 1 kb and less than 50 kb"
+                                  "file greater than 1 kb and less than 500 kb"
                                 );
                               } else {
+                                setFileSizeError(true);
                                 console.log("hgrtryyryr");
                               }
                             }}
                           />
+                          {FileSizeError ? (
+                            <div>
+                              <label style={{ color: "red" }}>
+                               File size must be between 1kb and 500kb
+                              </label>
+                            </div>
+                          ) : (
+                            ""
+                          )}
                         </Form.Item>
                       </div>
                     </div>

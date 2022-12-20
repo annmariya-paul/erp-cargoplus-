@@ -741,7 +741,15 @@ function Services() {
                     </div>
                     <div className="col-6 ">
                       <label>HSN</label>
-                      <Form.Item name="serviceHsn">
+                      <Form.Item
+                        name="serviceHsn"
+                        rules={[
+                          {
+                            pattern: new RegExp("^[0-9]+$"),
+                            message: "Please enter a Valid Code",
+                          },
+                        ]}
+                      >
                         <InputType
                           value={serviceHsn}
                           onChange={(e) => {
@@ -753,7 +761,7 @@ function Services() {
                     <div className="col-6 ">
                       <label>Tax Rate</label>
                       <Form.Item
-                      className="mt-2"
+                        className="mt-2"
                         name="taxRate"
                         rules={[
                           {

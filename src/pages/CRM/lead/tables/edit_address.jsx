@@ -21,7 +21,7 @@ function Edit_Address(props) {
   const [title, setTitle] = useState();
   const [address_data, setAddress_data] = useState();
   const [pincode, setPincode] = useState();
-  const [phone, setPhone] = useState();
+  const [addphone, setPhone] = useState("");
   const [editTitle, setEditTitle] = useState("");
   const [editAddressData, setEditAddressData] = useState("");
   const [editPin, setEditPin] = useState("");
@@ -145,7 +145,7 @@ function Edit_Address(props) {
       address_title: title,
       address_content: address_data,
       address_pin: pincode,
-      address_contact: phone,
+      address_contact: addphone,
     })
       .then(function (response) {
         console.log("address data", response);
@@ -157,6 +157,7 @@ function Edit_Address(props) {
           setTitle();
           setModalshowAdd(false);
           setModalShow(true);
+           addForm.resetFields();
           close_modal(modalShow, 1200);
           props.onHide();
         } else {
@@ -330,25 +331,31 @@ function Edit_Address(props) {
 
                   <label>Mobile</label>
                   <Form.Item
-                    // name="phone"
-                    // rules={[
-                    //   {
-                    //     required:true,
-                    //     pattern: new RegExp(
-                    //       "^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-s./0-9]*$"
-                    //     ),
-                    //     message: "Please enter a Valid Phone",
-                    //   },
-                    //   {
-                    //     min: 6,
-                    //     message: "Please enter valid address",
-                    //   },
-                    // ]}
+                    name="addphone"
+                    rules={[
+                      {
+                        pattern: new RegExp(
+                          "^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-s./0-9]*$"
+                        ),
+                        message: "Please enter a Valid Phone",
+                      },
+                      {
+                        min: 6,
+                        message: "Please enter valid address",
+                      },
+                    ]}
                   >
-                    <Phone_Input
-                      value={phone}
+                    <PhoneNumber
+                      defaultCountry={"IN"}
+                      value={addphone}
+                      id="contact_phone_1"
+                      name="contact_phone_1"
                       onChange={(value) => setPhone(value)}
                     />
+                    {/* <Phone_Input
+                      value={addphone}
+                      onChange={(value) => setPhone(value)}
+                    /> */}
                   </Form.Item>
                 </div>
                 <div className="d-flex justify-content-center mt-3">

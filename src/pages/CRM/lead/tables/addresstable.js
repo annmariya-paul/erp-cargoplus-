@@ -221,7 +221,7 @@ function AddressTable(props) {
                       },
                       {
                         min: 2,
-                        message: "Address must be atleast 2 characters",
+                        message: "Address must be at least 2 characters",
                       },
                       {
                         max: 500,
@@ -258,9 +258,9 @@ function AddressTable(props) {
                     rules={[
                       {
                         required: true,
-                        pattern: new RegExp(
-                          "^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-s./0-9]*$"
-                        ),
+                        // pattern: new RegExp(
+                        //   "^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-s./0-9]*$"
+                        // ),
                         message: "Please enter a valid phone number",
                       },
                     ]}
@@ -274,7 +274,6 @@ function AddressTable(props) {
                     />
                     {/* <PhoneInput
                       enableSearch={true}
-                      // disableSearchIcon={true}
                       country={"in"}
                       countryCodeEditable={true}
                       value={phone}

@@ -201,16 +201,12 @@ function ContactTable(props) {
                     rules={[
                       {
                         required: true,
-                        pattern: new RegExp("^[A-Za-z0-9]+$"),
+                        pattern: new RegExp("^[A-Za-z0-9 ]+$"),
                         message: "Please enter a Valid Name",
                       },
                       {
-                        whitespace: false,
-                        message: "no whit space",
-                      },
-                      {
                         min: 2,
-                        message: "Name must be atleast 2 characters",
+                        message: "Name must be at least 2 characters",
                       },
                       {
                         max: 100,
@@ -317,7 +313,7 @@ function ContactTable(props) {
                       },
                       {
                         min: 2,
-                        message: "Designation must be atleast 2 characters",
+                        message: "Designation must be at least 2 characters",
                       },
                       {
                         max: 100,

@@ -347,7 +347,6 @@ function ProductDetails() {
       align: "center",
       render: (theImageURL, records) => (
         <img
-          alt={logo}
           src={`${process.env.REACT_APP_BASE_URL}/${theImageURL}`}
           height="20px"
           width={"20px"}

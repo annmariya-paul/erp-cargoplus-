@@ -105,6 +105,14 @@ setUnitDescription(item?.unit_description)
  setEditShow(true);
 }
 
+ const close_modal = (mShow, time) => {
+   if (!mShow) {
+     setTimeout(() => {
+       setSaveSuccess(false);
+     }, time);
+   }
+ };
+
 const updateClick=async (id)=>{
 try{
 const updating= await PublicFetch.patch(
@@ -120,7 +128,7 @@ const updating= await PublicFetch.patch(
    getallunits()
    setEditShow(false);
    setSaveSuccess(true)
-  //  setSaveSuccess(true)
+   close_modal(saveSuccess, 1200);
   }
 }
 catch(err) {

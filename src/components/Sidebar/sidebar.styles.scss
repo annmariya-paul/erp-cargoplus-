@@ -20,6 +20,7 @@
   background-color: variables.$primary;
   width: 220px;
   height: 100vh;
+  overflow-y: scroll;
   display: flex;
   justify-content: center;
   position: fixed;

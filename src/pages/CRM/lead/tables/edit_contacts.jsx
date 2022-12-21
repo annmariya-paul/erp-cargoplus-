@@ -158,11 +158,11 @@ function EditContact(props) {
         console.log("contact data,", res);
         if (res.data.success) {
           getContacts();
-          setContactName();
-          setEmail();
-          setPhone();
-          setMobile();
-          setDesignation();
+          setContactName("");
+          setEmail("");
+          setPhone("");
+          setMobile("");
+          setDesignation("");
           setModalShow(false);
           setShowSuccessModal(true);
           close_modal(showSuccessMOdal, 1200);

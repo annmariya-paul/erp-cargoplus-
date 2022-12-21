@@ -1,25 +1,30 @@
 .dashed {
-  border:1px rgb(143, 143, 143);
-  border-style:  dashed;
+  border: 1px rgb(143, 143, 143);
+  border-style: dashed;
   padding-inline: em;
   display: flex;
   flex-direction: column;
   align-items: center;
   // padding: 2px;
- 
 }
-.bi5{
-    font-size:55px;
-    color:#9fd0ea;
-  }
+.bi5 {
+  font-size: 55px;
+  color: #9fd0ea;
+}
+.dropzone-content {
+  text-align: center;
+  cursor: pointer;
+  color:#a7a9ac;
+}
 
-input[type="file"]
-{
+.filetype_text {
+  color: #9fd0ea;
+}
+
+input[type="file"] {
   display: none;
 }
 
-.imgwid{
-   width: auto;
+.imgwid {
+  width: auto;
 }
-
-

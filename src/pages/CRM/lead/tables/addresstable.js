@@ -94,10 +94,12 @@ function AddressTable(props) {
         console.log("hello", response);
         if (response.data.success) {
           getAllAddress();
-          setAddress_data();
-          setPhone();
-          setPincode();
-          setTitle();
+          // setAddressTable();
+          setAddress_data("");
+          setPhone("");
+          setPincode("");
+          setTitle("");
+          addForm.resetFields();
           setModalshowAdd(false);
           setModalShow(true);
           close_modal(modalShow, 1200);
@@ -110,9 +112,7 @@ function AddressTable(props) {
         console.log(error);
       });
   };
-  // useEffect(() => {
-  //   AddAddress();
-  // }, []);
+  
 
   const close_modal = (mShow, time) => {
     if (!mShow) {

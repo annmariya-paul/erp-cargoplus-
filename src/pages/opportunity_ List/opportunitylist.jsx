@@ -52,6 +52,7 @@ import { Toaster, toast } from "react-hot-toast"; // copy to clip board
 function Opportunitylist(props) {
   const { id } = useParams();
   console.log("ID is ...", id);
+  const today = new Date();
   const [EditForm] = Form.useForm();
   const [numOfItems, setNumOfItems] = useState("25");
   const [pageSize, setPageSize] = useState(0); // page size
@@ -85,7 +86,7 @@ function Opportunitylist(props) {
   const [progressDetails, setProgressDetails] = useState("");
   const [progressUpdatenextDate, setProgressUpdatenextDate] = useState();
   const [progressUpdatestatus, setProgressUpdatestatus] = useState(5);
-
+  const [isDate, setIsDate] = useState();
   //view progress
   const [tableprogress, setTableprogress] = useState("");
   const [count, setcount] = useState(0);
@@ -440,6 +441,8 @@ function Opportunitylist(props) {
       if (editoppurtunity.data.success) {
         setShowEditModal(false);
         GetOpportunityData();
+        setSuccessPopup(true);
+        close_modal(successPopup, 1200);
       }
     } catch (err) {
       console.log("error while getting all leads: ", err);
@@ -665,6 +668,15 @@ function Opportunitylist(props) {
     item.opportunity_party,
   ]);
   console.log("oppurtunity amt iss", oppurtunityamount);
+
+  const disableDate = () => {
+    var dd, mm, yyyy;
+    dd = today.getDate() + 1;
+    mm = today.getMonth() + 1;
+    yyyy = today.getFullYear();
+    return yyyy + "-" + mm + "-" + dd;
+  };
+
   return (
     <div>
       <div className="container-fluid lead_list  my-3 py-3">
@@ -1364,7 +1376,7 @@ function Opportunitylist(props) {
             console.log("values111333", value);
             // setDescription(value.description);
             // setBrand(value.brand);
-            // updatedOppurtunity();
+            updatedOppurtunity();
           }}
           // onSubmit={handleSubmit(submit)}
           onFinishFailed={(error) => {
@@ -1543,13 +1555,21 @@ function Opportunitylist(props) {
                       className="p-2 mt-2"
                       style={{ borderWidth: 0, borderRadius: "5px" }}
                       // defaultValue={todaydate}
+                      // disabled={(d) => !d || d.isBefore(today)}
                       value={moment(oppurtunityvalidity).format("YYYY-MM-DD")}
                       onChange={(event) => {
                         console.log("selected datae : ", event.target.value);
                         setOppurtunityvalidity(event.target.value);
+                        setIsDate(event);
                       }}
+                      min={disableDate()}
                     />
                   </Form.Item>
+                  {oppurtunityvalidity ? (
+                    <></>
+                  ) : (
+                    <lable style={{ color: "red" }}>Please enter Date</lable>
+                  )}
                 </div>
                 {/* </Form.Group> */}
               </div>

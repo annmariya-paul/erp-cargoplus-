@@ -55,9 +55,9 @@ function Productlist() {
   // const getData = (current, pageSize) => {
   //   return products?.slice((current - 1) * pageSize, current * pageSize);
   // };
-  
+
   const [totalCount, setTotalcount] = useState();
-  
+
   const [viewproduct, setViewproduct] = useState({
     product_id: "",
     product_name: "",
@@ -107,10 +107,9 @@ function Productlist() {
       `${CRM_BASE_URL_SELLING}/product?startIndex=${pageofIndex}&noOfItems=${numOfItems}`
     )
       .then((res) => {
-        console.log("the prrr",res.data)
-        setTotalcount(res.data.data.totalCount)
+        console.log("the prrr", res.data);
+        setTotalcount(res.data.data.totalCount);
         if (res?.data?.success) {
-      
           console.log("All products success::: ", res?.data?.data.products);
           let tempArr = [];
           let arr2 = [];
@@ -393,7 +392,6 @@ function Productlist() {
                 // value={pageSize}
                 // onChange={(e) => setPageSize(e)}
                 value={numOfItems}
-             
                 onChange={(e, current) => {
                   console.log("On page size selected : ", e);
                   console.log("nfjnjfv", current);
@@ -809,6 +807,7 @@ function Productlist() {
         onHide={() => setModalOpportunity(false)}
         style="width:1250px"
         prid={productid}
+        fun_call={() => getallproduct()}
       />
 
       {/* {modal for success popups} */}

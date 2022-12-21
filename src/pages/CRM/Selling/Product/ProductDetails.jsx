@@ -177,7 +177,7 @@ function ProductDetails() {
   const getallvarients = async () => {
     try {
       const allvarients = await PublicFetch.get(
-        `${CRM_BASE_URL_SELLING}/variant?startIndex=0&noOfItems=100`
+        `${CRM_BASE_URL_SELLING}/variant?startIndex=0&noOfItems=40`
       );
       setVarients(allvarients?.data?.data?.variants);
       let array = [];
@@ -350,7 +350,6 @@ function ProductDetails() {
           src={`${process.env.REACT_APP_BASE_URL}/${theImageURL}`}
           height="20px"
           width={"20px"}
-          alt
         />
       ),
     },
@@ -465,7 +464,6 @@ function ProductDetails() {
                       onHide={() => setModalOpportunity(false)}
                       style="width:1250px"
                       prid={id}
-                      fun_call={() => GetAllProductData()}
                     />
                   </div>
                   <div className="row my-3">

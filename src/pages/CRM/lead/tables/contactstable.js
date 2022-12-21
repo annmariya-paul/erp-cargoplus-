@@ -11,7 +11,6 @@ import InputType from "../../../../components/Input Type textbox/InputType";
 import PhoneInput from "react-phone-input-2";
 import PhoneNumber from "../../../../components/phone_number/phonenumber";
 
-import Lead from "../lead";
 
 function ContactTable(props) {
   const [contactTable, setContactTable] = useState();
@@ -86,6 +85,7 @@ function ContactTable(props) {
   useEffect(() => {
     getcontacttable();
     GetLeadData();
+    // AddContact();
   }, [LeadId]);
 
   const columns = [
@@ -136,11 +136,13 @@ function ContactTable(props) {
         console.log("contact data,", res);
         if (res.data.success) {
           getcontacttable();
-          setContactName();
-          setEmail();
-          setPhone();
-          setMobile();
-          setDesignation();
+          // setContactTable();
+          setContactName("");
+          setEmail("");
+          setPhone("");
+          setMobile("");
+          setDesignation("");
+          addForm.resetFields();
           setModalShow(false);
           setShowSuccessModal(true);
           close_modal(showSuccessMOdal, 1200);
@@ -327,7 +329,7 @@ function ContactTable(props) {
                   </Form.Item>
                 </div>
                 <div className="d-flex justify-content-center mt-3">
-                  <Button btnType="save">Save</Button>
+                  <Button btnType="save">Next</Button>
                 </div>
               </div>
             </Form>

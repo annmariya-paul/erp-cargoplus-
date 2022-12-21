@@ -352,6 +352,7 @@ function Lead({}) {
                         <Form.Item name="new">
                           <FileUpload
                             multiple
+                            filetype={"Accept only pdf and docs"}
                             listType="picture"
                             accept=".pdf,.docs,"
                             onPreview={handlePreview}
@@ -381,7 +382,7 @@ function Lead({}) {
                           {FileSizeError ? (
                             <div>
                               <label style={{ color: "red" }}>
-                               File size must be between 1kb and 500kb
+                                File size must be between 1kb and 500kb
                               </label>
                             </div>
                           ) : (

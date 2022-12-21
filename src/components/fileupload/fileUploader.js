@@ -14,6 +14,7 @@ export default function FileUpload({
   onClick,
   accept,
   height,
+  filetype,
 }) {
   // const [files, setFiles] = useState([]);
   // const { register, handleSubmit } = useForm();
@@ -79,14 +80,12 @@ export default function FileUpload({
                       <p className="ant-upload-hint">
                         Support for a single or bulk upload.
                       </p> */}
-        <p
-          className="dropzone-content "
-          style={{ textAlign: "center", cursor: "pointer" }}
-        >
+        <p className="dropzone-content">
           <i className="bi5 bi-file-earmark-arrow-up-fill" />
           <br />
           Drop Your Files
         </p>
+        <small className="filetype_text">{filetype}</small>
       </Dragger>
       {/* <div className="row ">
         <div className=" w-100 ">

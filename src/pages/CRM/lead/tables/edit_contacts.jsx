@@ -184,6 +184,8 @@ function EditContact(props) {
     }
   };
 
+  console.log(editcontacts.editPhone);
+  console.log(editcontacts.editMobile);
   const columns = [
     {
       title: "No.",
@@ -329,24 +331,38 @@ function EditContact(props) {
                       },
                     ]}
                   >
-                    <PhoneInput
+                    <PhoneNumber
+                      defaultCountry={"IN"}
+                      id="contact_phone_1"
+                      name="contact_phone_1"
+                      value={phone}
+                      onChange={(value) => setPhone(value)}
+                    />
+                    {/* <PhoneInput
                       country={"in"}
                       enableSearch={true}
                       countryCodeEditable={false}
                       value={phone}
                       onChange={(value) => setPhone(value)}
-                    />
+                    /> */}
                   </Form.Item>
 
                   <label>Phone Secondary</label>
                   <Form.Item name="mobile">
-                    <PhoneInput
+                    <PhoneNumber
+                      defaultCountry={"IN"}
+                      id="contact_phone_1"
+                      name="contact_phone_1"
+                      value={mobile}
+                      onChange={(value) => setMobile(value)}
+                    />
+                    {/* <PhoneInput
                       country={"in"}
                       enableSearch={true}
                       value={mobile}
                       // countryCodeEditable={false}
                       onChange={(value) => setMobile(value)}
-                    />
+                    /> */}
                   </Form.Item>
 
                   <label>Designation</label>
@@ -479,34 +495,58 @@ function EditContact(props) {
                       },
                     ]}
                   >
-                    <PhoneInput
-                      country={"in"}
-                      enableSearch={true}
-                      countryCodeEditable={false}
+                    <PhoneNumber
+                      defaultCountry={"IN"}
+                      id="contact_phone_1"
+                      name="contact_phone_1"
+                      value={editcontacts.editPhone}
                       onChange={(value) =>
                         setEditContacts({
                           ...editcontacts,
                           editPhone: value,
                         })
                       }
-                      value={editcontacts.editPhone}
                     />
+                    {/* <PhoneInput
+                      country={"in"}
+                      enableSearch={true}
+                      countryCodeEditable={false}
+                      value={editcontacts.editPhone}
+                      onChange={(value) =>
+                        setEditContacts({
+                          ...editcontacts,
+                          editPhone: value,
+                        })
+                      }
+                    /> */}
                   </Form.Item>
 
                   <label>Phone Secondary</label>
                   <Form.Item name="editMobile">
-                    <PhoneInput
-                      country={"in"}
-                      enableSearch={true}
-                      // countryCodeEditable={false}
+                    <PhoneNumber
+                      defaultCountry={"IN"}
+                      id="contact_phone_1"
+                      name="contact_phone_1"
+                      value={editcontacts.editMobile}
                       onChange={(value) =>
                         setEditContacts({
                           ...editcontacts,
                           editMobile: value,
                         })
                       }
-                      value={editcontacts.editMobile}
                     />
+                    {/* <PhoneInput
+                      country={"in"}
+                      enableSearch={true}
+                      countryCodeEditable={false}
+                      value={editcontacts.editMobile}
+                      onChange={(value) =>
+                        setEditContacts({
+                          ...editcontacts,
+                          editMobile: value,
+                        })
+                      }
+                    /> */}
                   </Form.Item>
 
                   <label>Designation</label>

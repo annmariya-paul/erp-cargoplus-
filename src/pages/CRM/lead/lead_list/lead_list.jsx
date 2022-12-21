@@ -82,7 +82,7 @@ export default function LeadList() {
     )
       .then((res) => {
         if (res?.data?.success) {
-          console.log("All lead data", res?.data?.data);
+          console.log("All lead data",res?.data?.data);
           setAllLeadList(res?.data?.data?.leads);
           setTotalcount(res?.data?.data?.totalCount);
           setCurrentcount(res?.data?.data?.currentCount);

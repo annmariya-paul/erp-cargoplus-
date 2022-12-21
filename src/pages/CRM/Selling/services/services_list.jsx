@@ -183,14 +183,14 @@ function Services() {
     setServicedescription(item.servicedescription);
     setServicecategory(item.servicecategory);
     setServiceImg(item.serviceimage);
-    editForm.setFieldValue({
-      serviceid: item.service_id,
-      serviceName: item.service_name,
-      serviceCode: item.service_code,
-      serviceHsn: item.service_hsn,
-      servicetaxrate: item.service_taxrate,
-      servicedescription: item.service_description,
-      serviceCategory: item.service_category_id,
+    editForm.setFieldsValue({
+      // serviceid: item.service_id,
+      service_name: item.servicename,
+      serviceCode: item.servicecode,
+      serviceHsn: item.servicehsn,
+      taxRate: item.servicetaxrate,
+      servicedescription: item.servicedescription,
+      serviceCategory: item.servicecategory,
     });
     setShowServiceEditModal(true);
     setServiceView(false);
@@ -741,7 +741,15 @@ function Services() {
                     </div>
                     <div className="col-6 ">
                       <label>HSN</label>
-                      <Form.Item name="serviceHsn">
+                      <Form.Item
+                        name="serviceHsn"
+                        rules={[
+                          {
+                            pattern: new RegExp("^[0-9]+$"),
+                            message: "Please enter a Valid Code",
+                          },
+                        ]}
+                      >
                         <InputType
                           value={serviceHsn}
                           onChange={(e) => {
@@ -753,7 +761,7 @@ function Services() {
                     <div className="col-6 ">
                       <label>Tax Rate</label>
                       <Form.Item
-                      className="mt-2"
+                        className="mt-2"
                         name="taxRate"
                         rules={[
                           {

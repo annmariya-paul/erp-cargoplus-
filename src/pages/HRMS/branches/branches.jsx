@@ -4,44 +4,63 @@ import InputType from "../../../components/Input Type textbox/InputType";
 import ErrorMsg from "../../../components/error/ErrorMessage";
 import Custom_model from "../../../components/custom_modal/custom_model";
 import { Link } from "react-router-dom";
+import CustomModel from "../../../components/custom_modal/custom_model";
 import { Form, Input, Select } from "antd";
 import { FaEdit } from "react-icons/fa";
 import TableData from "../../../components/table/table_data";
 import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
 import { ROUTES } from "../../../routes";
-
+import { CRM_BASE_URL_HRMS } from "../../../api/bootapi";
+import PublicFetch from "../../../utils/PublicFetch";
 // { Add and list Branches - Ann mariya - 16/11/22 }
 export default function Branches(props) {
+  const [addForm] = Form.useForm();
   const [error, setError] = useState(false);
-  const [addForm, setAddForm] = useState();
+  const [successPopup, setSuccessPopup] = useState(false);
+  // const [addForm, setAddForm] = useState();
   const [searchedText, setSearchedText] = useState("");
   const [successModal, setSuccessModal] = useState(false);
   const [modalAddBranch, setModalAddBranch] = useState(false);
   const [branchName, setBranchName] = useState();
   const [branchCode, setBranchCode] = useState();
   const [pageSize, setPageSize] = useState("25");
-
+  const [branches,setBranches]=useState();
   const close_modal = (mShow, time) => {
     if (!mShow) {
       setTimeout(() => {
-        setSuccessModal(false);
+        setSuccessPopup(false);
       }, time);
     }
   };
- 
-  const Submit = (data) => {
-    console.log(data);
-    if (data) {
-      localStorage.setItem("addForm", JSON.stringify(data));
-      setSuccessModal(true);
-      close_modal(successModal, 1000);
-    } else {
-      setError(true);
+  //API for branches -- shahida 12.12.22
+  const getallbranches= async () => {
+    try {
+      const allbranches = await PublicFetch.get(`${CRM_BASE_URL_HRMS}/branch`);
+      console.log("all branches are", allbranches.data.data);
+      setBranches(allbranches.data.data);
+    } catch (err) {
+      console.log("error while getting the brands: ", err);
     }
   };
+
   useEffect(() => {
-    Submit();
+    getallbranches();
   }, []);
+
+  
+  // const Submit = (data) => {
+  //   console.log(data);
+  //   if (data) {
+  //     localStorage.setItem("addForm", JSON.stringify(data));
+  //     setSuccessModal(true);
+  //     close_modal(successModal, 1000);
+  //   } else {
+  //     setError(true);
+  //   }
+  // };
+  // useEffect(() => {
+  //   Submit();
+  // }, []);
 
   const columns = [
     {
@@ -101,7 +120,61 @@ export default function Branches(props) {
       branch_code: "PQR",
       key: "3",
     },
-  ];
+  ];  
+  const [saveSuccess, setSaveSuccess] =useState(false)
+  const [BranchError, setBranchError] = useState();
+  
+  const [branchcode, setBranchcode] = useState();
+  console.log("abcccccccc",branchcode);
+  const [branchname, setBranchname] = useState();
+
+
+  const createBranches =async()=>{
+    try{
+    const addbranches = await PublicFetch.post(
+    `${CRM_BASE_URL_HRMS}/branch`,{
+      branch_name:branchname,
+      branch_code:branchcode
+    })
+    console.log("branch added successfully",addbranches)
+    if(addbranches.data.success){
+      setSuccessPopup(true);
+      addForm.resetFields();
+      close_modal(successPopup,1000 )
+    }
+    }
+    catch(err){
+    console.log("err to add the branches",err)
+    }
+  
+    }
+
+  // const OnSubmit = () => {
+  //   const formData = new FormData();
+
+  //   formData.append("branch_name", branchname);
+  //   formData.append("branch_code", branchcode);
+  
+
+  //   PublicFetch.post(`${CRM_BASE_URL_HRMS}/branch`)
+  //     .then((res) => {
+  //       console.log("successssss", res);
+  //       if (res.data.success) {
+  //         setSuccessPopup(true);
+  //         addForm.resetFields();
+  //         close_modal(successPopup, 1000);
+  //       } else {
+  //         console.log("", res.data.data);
+  //         setBranchError(res.data.data);
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log("error", err);
+  //       setError(true);
+  //     });
+  // };
+
+  console.log("data", branchname, branchcode);
   return (
     <>
       <div className="container-fluid container2 pt-3">
@@ -160,14 +233,14 @@ export default function Branches(props) {
         <div className="datatable">
           <TableData
             // data={getData(numofItemsTo, pageofIndex)}
-            data={data}
+            data={branches}
             columns={columns}
             custom_table_css="table_lead_list"
           />
         </div>
       </div>
 
-      <Custom_model
+      <CustomModel
         show={modalAddBranch}
         onHide={() => setModalAddBranch(false)}
         header="Add Branch"
@@ -180,11 +253,10 @@ export default function Branches(props) {
               <h5 className="lead_text">Add Branch</h5>
             </div>
             <Form
-              name="addForm"
-              form={addForm}
+           form={addForm}
               onFinish={(data) => {
                 console.log("valuezzzzzzz", data);
-                Submit();
+                createBranches();
               }}
               onFinishFailed={(error) => {
                 console.log(error);
@@ -192,7 +264,8 @@ export default function Branches(props) {
             >
               <div className="row py-4">
                 <div className="col-12 pt-1">
-                  <label htmlfor="branchname">Branch Name</label>
+                  <label>Branch Name</label>
+                  <div>
                   <Form.Item
                     name="branchname"
                     rules={[
@@ -201,9 +274,7 @@ export default function Branches(props) {
                         pattern: new RegExp("^[A-Za-z ]+$"),
                         message: "Please enter a Valid Branch Name",
                       },
-                      {
-                        whitespace: true,
-                      },
+                      
                       {
                         min: 3,
                         message: "Branch Name must be atleast 3 characters",
@@ -214,14 +285,22 @@ export default function Branches(props) {
                           "Branch Name cannot be longer than 100 characters",
                       },
                     ]}
-                    onChange={(e) => setBranchName(e.target.value)}
+                    onChange={(e) => setBranchname(e.target.value)}
                   >
-                    <InputType />
+                    <InputType 
+                    value={branchname}
+                    onChange={(e) => {
+                      setBranchname(e.target.value);
+                      setBranchError("");
+                    }}
+                    
+                    />
                   </Form.Item>
+                </div>
                 </div>
 
                 <div className="col-12 pt-1">
-                  <label htmlfor="branchcode">Branch Code</label>
+                  <label>Branch Code</label>
                   <Form.Item
                     name="branchcode"
                     rules={[
@@ -240,9 +319,12 @@ export default function Branches(props) {
                           "Branch code cannot be longer than 15 characters",
                       },
                     ]}
-                    onChange={(e) => setBranchCode(e.target.value)}
+                    onChange={(e) => setBranchcode(e.target.value)}
                   >
-                    <InputType />
+                    <InputType 
+                     value={branchCode}
+                     onChange={(e) => setBranchcode(e.target.value)}
+                     />
                   </Form.Item>
                 </div>
               </div>
@@ -257,12 +339,12 @@ export default function Branches(props) {
       >
         <Custom_model
           size={"sm"}
-          show={successModal}
-          onHide={() => setSuccessModal(false)}
+          show={successPopup}
+          onHide={() => setSuccessPopup(false)}
           success
         />
-      </Custom_model>
-      {/* {error? <ErrorMsg code={"500"} /> : " "} */}
+      </CustomModel>
+      {error? <ErrorMsg code={"500"} /> : " "}
     </>
   );
 }

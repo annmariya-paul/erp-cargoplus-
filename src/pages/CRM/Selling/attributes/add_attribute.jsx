@@ -47,8 +47,6 @@ export default function Add_Attribute() {
     }
   };
 
-
-
   // function to create attributes
 
   const createAttributes =async()=>{

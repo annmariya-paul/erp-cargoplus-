@@ -402,8 +402,8 @@ function Category() {
                     name="category_description"
                     rules={[
                       {
-                        min: 5,
-                        message: "Description must be at least 5 characters",
+                        min: 2,
+                        message: "Description must be at least 2 characters",
                       },
                       {
                         max: 500,

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { BsPlusCircleFill } from "react-icons/bs";
 import { Checkbox, Col, Row } from "antd";
 import { Input, Select } from "antd";
@@ -26,7 +26,7 @@ import CustomModel from "../../../../components/custom_modal/custom_model";
 import InputType from "../../../../components/Input Type textbox/InputType";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
 
-export default function ProductEditModal({ show, prid, onHide }) {
+export default function ProductEditModal({ show, prid, onHide, fun_call }) {
   const { id } = useParams();
   console.log("ID is in productDetails", id);
   console.log("ID is in  propss  prid", prid);
@@ -295,11 +295,12 @@ export default function ProductEditModal({ show, prid, onHide }) {
         console.log("data is successfully saved", res.data.success);
         if (res.data.data) {
           GetAllProductData();
-          GetAllProductDatatwo ();
+          GetAllProductDatatwo();
           setSuccessPopup(true);
           editForm.resetFields();
           close_modal(successPopup, 1200);
-          onHide();  
+          onHide();
+          fun_call();
         }
       })
       .catch((err) => {

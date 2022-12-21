@@ -14,6 +14,8 @@ import { CRM_BASE_URL_HRMS } from "../../../api/bootapi";
 import PublicFetch from "../../../utils/PublicFetch";
 // { Add and list Branches - Ann mariya - 16/11/22 }
 export default function Branches(props) {
+  const [branch_id, setBranch_id] = useState();
+  console.log("branch id in state",branch_id);
   const [addForm] = Form.useForm();
   const [error, setError] = useState(false);
   const [successPopup, setSuccessPopup] = useState(false);
@@ -25,6 +27,11 @@ export default function Branches(props) {
   const [branchCode, setBranchCode] = useState();
   const [pageSize, setPageSize] = useState("25");
   const [branches,setBranches]=useState();
+  const [Errormsg, setErrormsg] = useState();
+  const [NameInput, setNameInput] = useState();
+  const [CodeInput, setCodeInput] = useState();
+  const [BranchEditPopup, setBranchEditPopup] = useState(false);
+  const [editForm] = Form.useForm();
   const close_modal = (mShow, time) => {
     if (!mShow) {
       setTimeout(() => {
@@ -38,6 +45,8 @@ export default function Branches(props) {
       const allbranches = await PublicFetch.get(`${CRM_BASE_URL_HRMS}/branch`);
       console.log("all branches are", allbranches.data.data);
       setBranches(allbranches.data.data);
+      setBranch_id(allbranches.data.branch_id);
+      console.log("branch id",branch_id);
     } catch (err) {
       console.log("error while getting the brands: ", err);
     }
@@ -47,20 +56,51 @@ export default function Branches(props) {
     getallbranches();
   }, []);
 
+
+  const BranchEdit = (e) => {
+    console.log("Branch edit", e);
+    setNameInput(e.branch_name);
+    setCodeInput(e.branch_code);
+    // setImageInput(e.brand_pic);
+    setBranch_id(e.branch_id);
+    editForm.setFieldsValue({
+      branch_id: e.branch_id,
+      NameInput: e.branch_name,
+   CodeInput: e.branch_code,
+      // ImageInput: e.brand_pic,
+    });
+    setBranchEditPopup(true);
+  };
+
+  const handleUpdate = (e) => {
+    console.log("edit data", e);
+    const formData = new FormData();
+
   
-  // const Submit = (data) => {
-  //   console.log(data);
-  //   if (data) {
-  //     localStorage.setItem("addForm", JSON.stringify(data));
-  //     setSuccessModal(true);
-  //     close_modal(successModal, 1000);
-  //   } else {
-  //     setError(true);
-  //   }
-  // };
-  // useEffect(() => {
-  //   Submit();
-  // }, []);
+    let data = {
+      branch_name : NameInput,
+      branch_code : CodeInput,
+    }
+
+    PublicFetch.patch(`${CRM_BASE_URL_HRMS}/branch/${branch_id}`, data )
+      .then((res) => {
+        console.log("success", res);
+        if (res.data.success) {
+          console.log("successDataa", res.data.data);
+          getallbranches();
+          setSuccessPopup(true);
+          close_modal(successPopup, 1000);
+          setBranchEditPopup(false);
+        } else {
+          setErrormsg(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+        setError(true);
+      });
+  };
+
 
   const columns = [
     {
@@ -69,12 +109,13 @@ export default function Branches(props) {
       key: "key",
       width: "30%",
       render: (data, index) => {
+        console.log("index is :",index);
         return (
           <div className="d-flex justify-content-center align-items-center gap-2">
             <div className="m-0">
               <div
                 className="editIcon m-0"
-                onClick={() => setModalAddBranch(true)}
+                onClick={() =>BranchEdit(index)}
               >
                 <FaEdit />
               </div>
@@ -241,6 +282,7 @@ export default function Branches(props) {
       </div>
 
       <CustomModel
+      
         show={modalAddBranch}
         onHide={() => setModalAddBranch(false)}
         header="Add Branch"
@@ -306,7 +348,7 @@ export default function Branches(props) {
                     rules={[
                       {
                         required: true,
-                        pattern: new RegExp("^[A-Za-z]+$"),
+                        pattern: new RegExp("^[A-Za-z0-9]+$"),
                         message: "Please enter a Valid Branch Code",
                       },
                       {
@@ -344,6 +386,120 @@ export default function Branches(props) {
           success
         />
       </CustomModel>
+      <Custom_model
+         show={BranchEditPopup}
+        onHide={() => setBranchEditPopup(false)}
+        View_list
+        list_content={
+          <div>
+            <div className="container-fluid px-4 my-3">
+              <div>
+                <h5 className="lead_text">Edit Branch</h5>
+              </div>
+              <div className="row my-3 ">
+                <Form
+                  form={editForm}
+                  onFinish={(values) => {
+                    console.log("values iss", values);
+                   handleUpdate();
+                  }}
+                  onFinishFailed={(error) => {
+                    console.log(error);
+                  }}
+                >
+                  <div className="col-6">
+                    <label>Name</label>
+                    <Form.Item
+                      name="NameInput"
+                      rules={[
+                        {
+                          required: true,
+                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                          message: "Please enter a Valid Branch Name",
+                        },
+                        {
+                          min: 2,
+                          message: "Name must be at least 2 characters",
+                        },
+                        {
+                          max: 100,
+                          message: "Name cannot be longer than 100 characters",
+                        },
+                      ]}
+                    >
+                      <InputType
+                        className="input_type_style w-100"
+                        value={NameInput}
+                        onChange={(e) => {
+                          setNameInput(e.target.value);
+                          setErrormsg("");
+                        }}
+                      />
+                    </Form.Item>
+                    {Errormsg ? (
+                      <label style={{ color: "red" }}>{Errormsg}</label>
+                    ) : (
+                      ""
+                    )}
+                  </div>
+                  <div className="col-6">
+                    <label>Code</label>
+                    <Form.Item
+                      name="CodeInput"
+                      rules={[
+                        {
+                          required: true,
+                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                          message: "Please enter a Valid Branch Name",
+                        },
+                        {
+                          min: 2,
+                          message: "Name must be at least 2 characters",
+                        },
+                        {
+                          max: 100,
+                          message: "Name cannot be longer than 100 characters",
+                        },
+                      ]}
+                    >
+                      <InputType
+                        className="input_type_style w-100"
+                        value={CodeInput}
+                        onChange={(e) => {
+                          setCodeInput(e.target.value);
+                          setErrormsg("");
+                        }}
+                      />
+                    </Form.Item>
+                    {Errormsg ? (
+                      <label style={{ color: "red" }}>{Errormsg}</label>
+                    ) : (
+                      ""
+                    )}
+                  </div>
+                 
+                  <div className="col-12 d-flex justify-content-center mt-5">
+                    <Button className="save_button">Save</Button>
+                  </div>
+                </Form>
+              </div>
+              {error ? (
+                <div className="">
+                  <ErrorMsg code={"400"} />
+                </div>
+              ) : (
+                ""
+              )}
+            </div>
+          </div>
+        }
+      />
+          <CustomModel
+        size={"sm"}
+        show={successPopup}
+        onHide={() => setSuccessPopup(false)}
+        success
+      />
       {error? <ErrorMsg code={"500"} /> : " "}
     </>
   );

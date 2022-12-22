@@ -10,7 +10,7 @@ import Button from "../../../../components/button/button";
 import Custom_model from "../../../../components/custom_modal/custom_model";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { CRM_BASE_URL } from "../../../../api/bootapi";
-import PhoneNumber from "../../../../components/phone_number/phonenumber";
+import Phone_Input from "../../../../components/PhoneInput/phoneInput";
 
 function EditContact(props) {
   const [contactTable, setContactTable] = useState();
@@ -324,45 +324,23 @@ function EditContact(props) {
                     rules={[
                       {
                         required: true,
-                        pattern: new RegExp(
-                          "^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-s./0-9]*$"
-                        ),
                         message: "Please enter a Valid Phone number",
                       },
                     ]}
                   >
-                    <PhoneNumber
-                      defaultCountry={"IN"}
-                      id="contact_phone_1"
-                      name="contact_phone_1"
-                      value={phone}
-                      onChange={(value) => setPhone(value)}
-                    />
-                    {/* <PhoneInput
-                      country={"in"}
-                      enableSearch={true}
+                    <Phone_Input
                       countryCodeEditable={false}
                       value={phone}
                       onChange={(value) => setPhone(value)}
-                    /> */}
+                    />
                   </Form.Item>
 
                   <label>Phone Secondary</label>
                   <Form.Item name="mobile">
-                    <PhoneNumber
-                      defaultCountry={"IN"}
-                      id="contact_phone_1"
-                      name="contact_phone_1"
+                    <Phone_Input
                       value={mobile}
                       onChange={(value) => setMobile(value)}
                     />
-                    {/* <PhoneInput
-                      country={"in"}
-                      enableSearch={true}
-                      value={mobile}
-                      // countryCodeEditable={false}
-                      onChange={(value) => setMobile(value)}
-                    /> */}
                   </Form.Item>
 
                   <label>Designation</label>
@@ -440,10 +418,11 @@ function EditContact(props) {
                       },
                       {
                         min: 2,
-                        message: "Name must be atleast 2 characters",
+                        message: "Name must be at least 2 characters",
                       },
                       {
                         max: 100,
+                        message: "Name cannot be longer than 100 characters",
                       },
                     ]}
                   >
@@ -488,28 +467,11 @@ function EditContact(props) {
                     rules={[
                       {
                         required: true,
-                        pattern: new RegExp(
-                          "^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-s./0-9]*$"
-                        ),
                         message: "Please enter a Valid Phone number",
                       },
                     ]}
                   >
-                    <PhoneNumber
-                      defaultCountry={"IN"}
-                      id="contact_phone_1"
-                      name="contact_phone_1"
-                      value={editcontacts.editPhone}
-                      onChange={(value) =>
-                        setEditContacts({
-                          ...editcontacts,
-                          editPhone: value,
-                        })
-                      }
-                    />
-                    {/* <PhoneInput
-                      country={"in"}
-                      enableSearch={true}
+                    <Phone_Input
                       countryCodeEditable={false}
                       value={editcontacts.editPhone}
                       onChange={(value) =>
@@ -518,15 +480,12 @@ function EditContact(props) {
                           editPhone: value,
                         })
                       }
-                    /> */}
+                    />
                   </Form.Item>
 
                   <label>Phone Secondary</label>
                   <Form.Item name="editMobile">
-                    <PhoneNumber
-                      defaultCountry={"IN"}
-                      id="contact_phone_1"
-                      name="contact_phone_1"
+                    <Phone_Input
                       value={editcontacts.editMobile}
                       onChange={(value) =>
                         setEditContacts({
@@ -535,23 +494,11 @@ function EditContact(props) {
                         })
                       }
                     />
-                    {/* <PhoneInput
-                      country={"in"}
-                      enableSearch={true}
-                      countryCodeEditable={false}
-                      value={editcontacts.editMobile}
-                      onChange={(value) =>
-                        setEditContacts({
-                          ...editcontacts,
-                          editMobile: value,
-                        })
-                      }
-                    /> */}
                   </Form.Item>
 
                   <label>Designation</label>
                   <Form.Item
-                    // name="editDesignation"
+                    name="editDesignation"
                     rules={[
                       {
                         required: true,
@@ -563,10 +510,12 @@ function EditContact(props) {
                       },
                       {
                         min: 2,
-                        message: "Designation must be atleast 2 characters",
+                        message: "Designation must be at least 2 characters",
                       },
                       {
                         max: 100,
+                        message:
+                          "Designationcannot be longer than 100 characters",
                       },
                     ]}
                   >

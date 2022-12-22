@@ -112,7 +112,6 @@ function AddressTable(props) {
         console.log(error);
       });
   };
-  
 
   const close_modal = (mShow, time) => {
     if (!mShow) {

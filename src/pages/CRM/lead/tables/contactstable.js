@@ -11,7 +11,6 @@ import InputType from "../../../../components/Input Type textbox/InputType";
 import PhoneInput from "react-phone-input-2";
 import PhoneNumber from "../../../../components/phone_number/phonenumber";
 
-
 function ContactTable(props) {
   const [contactTable, setContactTable] = useState();
   const [contactLeadId, setContactLeadId] = useState();
@@ -26,7 +25,6 @@ function ContactTable(props) {
   const [show, setShow] = useState(false);
   const [showError, setShowError] = useState(false);
   const [addForm] = Form.useForm();
-
 
   const [oneLeadData, setOneLeadData] = useState();
   const [LeadId, setLeadId] = useState();
@@ -53,22 +51,22 @@ function ContactTable(props) {
     PublicFetch.get(`${CRM_BASE_URL}/contact`)
       .then((res) => {
         console.log("all contacts data", res);
-        if (res.data.success) {
+        if (res?.data?.success) {
           // # array to set contacts of corresponding Lead Id - Ann Mariya
           let array = [];
           res?.data?.data?.forEach((item, index) => {
             setContactLeadId(item?.contact_lead_id);
-            if (LeadId === item?.contact_lead_id) {
-              {
-                array.push({
-                  contact_person_name: item?.contact_person_name,
-                  contact_email: item?.contact_email,
-                  contact_phone_1: item?.contact_phone_1,
-                  contact_phone_2: item?.contact_phone_2,
-                  contact_designation: item?.contact_designation,
-                });
-                setContactTable(array);
-              }
+            console.log("Lead Id : ", LeadId);
+            if (props.leadscontid === item?.contact_lead_id) {
+              console.log("Insie if");
+              array.push({
+                contact_person_name: item?.contact_person_name,
+                contact_email: item?.contact_email,
+                contact_phone_1: item?.contact_phone_1,
+                contact_phone_2: item?.contact_phone_2,
+                contact_designation: item?.contact_designation,
+              });
+              setContactTable([...array]);
             }
           });
 
@@ -134,7 +132,7 @@ function ContactTable(props) {
     })
       .then((res) => {
         console.log("contact data,", res);
-        if (res.data.success) {
+        if (res?.data?.success) {
           getcontacttable();
           // setContactTable();
           setContactName("");

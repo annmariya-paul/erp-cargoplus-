@@ -40,7 +40,7 @@ function Lead({}) {
   const [leadUsertype, setLeadUsertype] = useState("O");
   const [leadOrganization, setLeadOrganization] = useState("");
   const [leadSource, setLeadSource] = useState("online registration");
-  const [leadDescription, setLeadDescription] = useState();
+  const [leadDescription, setLeadDescription] = useState("");
   const [leadAttachment, setLeadAttachment] = useState();
   const [leadStatus, setLeadStatus] = useState("4");
   const [leadId, setLeadId] = useState();

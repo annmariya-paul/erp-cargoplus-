@@ -5,7 +5,6 @@ import TableData from "../../../../components/table/table_data";
 import { CRM_BASE_URL } from "../../../../api/bootapi";
 import PublicFetch from "../../../../utils/PublicFetch";
 import Phone_Input from "../../../../components/PhoneInput/phoneInput";
-import PhoneNumber from "../../../../components/phone_number/phonenumber";
 import { Form, message } from "antd";
 import InputType from "../../../../components/Input Type textbox/InputType";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
@@ -332,30 +331,17 @@ function Edit_Address(props) {
                   <label>Mobile</label>
                   <Form.Item
                     name="addphone"
-                    rules={[
-                      {
-                        pattern: new RegExp(
-                          "^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-s./0-9]*$"
-                        ),
-                        message: "Please enter a Valid Phone",
-                      },
+                    rules={[          
                       {
                         min: 6,
                         message: "Please enter valid address",
                       },
                     ]}
                   >
-                    <PhoneNumber
-                      defaultCountry={"IN"}
+                    <Phone_Input
                       value={addphone}
-                      id="contact_phone_1"
-                      name="contact_phone_1"
                       onChange={(value) => setPhone(value)}
                     />
-                    {/* <Phone_Input
-                      value={addphone}
-                      onChange={(value) => setPhone(value)}
-                    /> */}
                   </Form.Item>
                 </div>
                 <div className="d-flex justify-content-center mt-3">

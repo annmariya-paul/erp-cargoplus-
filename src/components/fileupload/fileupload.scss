@@ -1,3 +1,4 @@
+$fileupload:#9ccde8;
 .dashed {
   border: 1px rgb(143, 143, 143);
   border-style: dashed;
@@ -9,16 +10,16 @@
 }
 .bi5 {
   font-size: 55px;
-  color: #9fd0ea;
+  color: $fileupload;
 }
 .dropzone-content {
   text-align: center;
   cursor: pointer;
-  color:#a7a9ac;
+  color:#737576;
 }
 
 .filetype_text {
-  color: #9fd0ea;
+  color: $fileupload;
 }
 
 input[type="file"] {

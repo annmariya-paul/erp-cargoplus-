@@ -42,8 +42,8 @@ function Category() {
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
-  const [parentcategory,setParentcategory]=useState(null);
-  const [imageSize,setImageSize]= useState(false);
+  const [parentcategory, setParentcategory] = useState(null);
+  const [imageSize, setImageSize] = useState(false);
   // const [parent,setParent]=useState(null);
   console.log("set image", img);
 
@@ -173,13 +173,13 @@ function Category() {
     return path;
   }
   const onChange = (value) => {
-    console.log("Change", value);
+    // console.log("Change", value);
     setState({ value });
-    setCategory(value.target.value)
+    setCategory(value.target.value);
   };
 
   const onSelect = (value) => {
-    console.log("Select:", value);
+    // console.log("Select:", value);
   };
 
   const {
@@ -214,17 +214,16 @@ function Category() {
 
     formData.append("category_name", name);
     formData.append("category_code", code);
-    formData.append("category_pic", img);
+    if (img) {
+      formData.append("category_pic", img);
+    }
+
     formData.append("category_description", description);
-    
-    if(parentcategory)
-      {
-        formData.append("category_parent_id",parentcategory );
-      }
-      
-    
-    
-    
+
+    if (parentcategory) {
+      formData.append("category_parent_id", parentcategory);
+    }
+
     // formData.append("brand_name", brand);
 
     PublicFetch.post(`${CRM_BASE_URL_SELLING}/category`, formData, {
@@ -268,10 +267,10 @@ function Category() {
   const getTreeData = (data) => {
     // console.log("hai buddies", data);
     data?.map((item, index) => {
-      console.log("happy birthday", item);
+      // console.log("happy birthday", item);
 
       if (item?.other_crm_v1_categories) {
-        console.log("hai halo");
+        // console.log("hai halo");
         return (
           <>
             <div className="">Nothing</div>
@@ -287,7 +286,7 @@ function Category() {
           </>
         );
       } else {
-        console.log("bei bei");
+        // console.log("bei bei");
         return (
           <TreeNode
             key={item?.category_id}
@@ -433,7 +432,10 @@ function Category() {
                             file.file.size
                           );
 
-                          if (file.file.size > 1000 && file.file.size < 500000) {
+                          if (
+                            file.file.size > 1000 &&
+                            file.file.size < 500000
+                          ) {
                             setImg(file.file.originFileObj);
                             console.log("Allowed image size");
                             setImageSize(false);

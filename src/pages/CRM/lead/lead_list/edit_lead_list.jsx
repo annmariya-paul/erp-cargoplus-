@@ -108,8 +108,6 @@ function LeadEdit() {
 
   console.log("grt all data", oneLeadData);
 
- 
-
   const updateUser = (event) => {
     setFormSubmitted(true);
     const formData = new FormData();
@@ -118,8 +116,13 @@ function LeadEdit() {
     formData.append("lead_user_type", leadUsertype);
     formData.append("lead_organization", leadOrganization);
     formData.append("lead_source", leadSource);
-    formData.append("lead_description", leadDescription);
-    formData.append("attachments", leadAttachment);
+    if (leadDescription) {
+      formData.append("lead_description", leadDescription);
+    }
+    if (leadAttachment) {
+      formData.append("attachments", leadAttachment);
+    }
+
     formData.append("lead_status", leadStatus);
 
     PublicFetch.patch(`${CRM_BASE_URL}/lead/${id}`, formData, {
@@ -345,8 +348,12 @@ function LeadEdit() {
                           // value={leadSource}
                           onChange={(e) => setLeadSource(e)}
                         >
-                          <Select.Option value="reference">Reference</Select.Option>
-                          <Select.Option value="direct visit">Direct Visit</Select.Option>
+                          <Select.Option value="reference">
+                            Reference
+                          </Select.Option>
+                          <Select.Option value="direct visit">
+                            Direct Visit
+                          </Select.Option>
                           <Select.Option value="online registration" selected>
                             Online Registration
                           </Select.Option>
@@ -376,7 +383,8 @@ function LeadEdit() {
                           },
                           {
                             min: 2,
-                            message: "Address name must be at least 2 characters",
+                            message:
+                              "Address name must be at least 2 characters",
                           },
                           {
                             max: 500,
@@ -450,9 +458,7 @@ function LeadEdit() {
                     />
                   </div>
                   <div className="col mt-4">
-                    <Button btnType="save">
-                      Save
-                    </Button>
+                    <Button btnType="save">Save</Button>
                   </div>
                 </div>
               </div>
@@ -475,9 +481,7 @@ function LeadEdit() {
                     />
                   </div>
                   <div className="col mt-4">
-                    <Button btnType="save">
-                      Save
-                    </Button>
+                    <Button btnType="save">Save</Button>
                   </div>
                 </div>
               </div>

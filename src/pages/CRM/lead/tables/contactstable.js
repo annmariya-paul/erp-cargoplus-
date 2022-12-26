@@ -6,10 +6,10 @@ import Button from "../../../../components/button/button";
 import Custom_model from "../../../../components/custom_modal/custom_model";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { CRM_BASE_URL } from "../../../../api/bootapi";
-import { Form, message } from "antd";
+import { Form,message } from "antd";
 import InputType from "../../../../components/Input Type textbox/InputType";
-import PhoneInput from "react-phone-input-2";
 import PhoneNumber from "../../../../components/phone_number/phonenumber";
+import Phone_Input from "../../../../components/PhoneInput/phoneInput";
 
 function ContactTable(props) {
   const [contactTable, setContactTable] = useState();
@@ -172,7 +172,7 @@ function ContactTable(props) {
         />
       </div>
       <Custom_model
-        bodyStyle={{ height: 570, overflowY: "auto" }}
+        bodyStyle={{ height: 580, overflowY: "auto" }}
         show={modalShow}
         onHide={() => setModalShow(false)}
         View_list
@@ -193,7 +193,7 @@ function ContactTable(props) {
                 console.log(error);
               }}
             >
-              <div className="row mt-3">
+              <div className="row pt-3">
                 <div className="px-3">
                   <label>Name</label>
                   <Form.Item
@@ -210,6 +210,7 @@ function ContactTable(props) {
                       },
                       {
                         max: 100,
+                        message: "Name cannot be langer than 100 characters",
                       },
                     ]}
                   >
@@ -240,63 +241,42 @@ function ContactTable(props) {
 
                   <label>Phone Primary</label>
                   <Form.Item
-                    // className="mt-1"
                     name="phone"
+                    className="mt-1"
                     rules={[
                       {
                         required: true,
-                        // pattern: new RegExp(
-                        //   "^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-s./0-9]*$"
-                        // ),
                         message: "Please enter a valid phone number",
                       },
                     ]}
                   >
-                    <PhoneNumber
+                    {/* <PhoneNumber
                       defaultCountry={"IN"}
                       value={phone}
                       id="contact_phone_1"
                       name="contact_phone_1"
                       onChange={(value) => setPhone(value)}
-                    />
-                    {/* <PhoneInput
-                      enableSearch={true}
-                      // disableSearchIcon={true}
-                      country={"in"}
-                      countryCodeEditable={true}
+                    /> */}
+                    <Phone_Input
+                      countryCodeEditable={false}
                       value={phone}
                       onChange={(value) => setPhone(value)}
-                    /> */}
+                    />
                   </Form.Item>
 
-                  <label className="mb-2">Phone Secondary</label>
-                  <Form.Item
-                    name="mobile"
-                    className="mt-1"
-                    // rules={[
-                    //   {
-                    //     pattern: new RegExp(
-                    //       "^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-s./0-9]*$"
-                    //     ),
-                    //     message: "Please enter a valid phone number",
-                    //   },
-                    // ]}
-                  >
-                    <PhoneNumber
+                  <label>Phone Secondary</label>
+                  <Form.Item name="mobile" className="mt-1">
+                    {/* <PhoneNumber
                       defaultCountry={"IN"}
                       value={mobile}
                       id="contact_phone_2"
                       name="contact_phone_2"
                       onChange={(value) => setMobile(value)}
-                    />
-                    {/* <PhoneInput
-                      enableSearch={true}
-                      // disableSearchIcon={true}
-                      country={"in"}
-                      countryCodeEditable={true}
+                    /> */}
+                    <Phone_Input
                       value={mobile}
                       onChange={(value) => setMobile(value)}
-                    /> */}
+                    />
                   </Form.Item>
 
                   <label>Designation</label>
@@ -317,6 +297,8 @@ function ContactTable(props) {
                       },
                       {
                         max: 100,
+                        message:
+                          "Designation cannot be longer than 100 characters",
                       },
                     ]}
                   >

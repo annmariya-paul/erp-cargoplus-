@@ -48,6 +48,10 @@ function LeadEdit() {
   const [leadAttachment, setLeadAttachment] = useState("");
   const [leadStatus, setLeadStatus] = useState("");
   const [leadId, setLeadId] = useState();
+  const [previewVisible, setPreviewVisible] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+  const [previewTitle, setPreviewTitle] = useState("");
+  const [FileSizeError, setFileSizeError] = useState(false);
 
   const [editForm] = Form.useForm();
   const [error, setError] = useState(false);
@@ -60,6 +64,24 @@ function LeadEdit() {
     navigate("/lead_list");
   };
 
+  const getBase64 = (file) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setPreviewImage(file.url || file.preview);
+    setPreviewVisible(true);
+    setPreviewTitle(
+      file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
+    );
+  };
   const close_modal = (mShow, time) => {
     if (!mShow) {
       setTimeout(() => {
@@ -362,10 +384,46 @@ function LeadEdit() {
                     </div>
                     <div className="col-12 mt-3">
                       <Form.Item name="leadAttachment">
-                        <FileUpload
+                        {/* <FileUpload
                           value={leadAttachment}
                           onChange={(e) => setLeadAttachment(e.target.files[0])}
+                        /> */}
+                        <FileUpload
+                          multiple
+                          filetype={"Accept only pdf and docs"}
+                          listType="picture"
+                          accept=".pdf,.docs,"
+                          onPreview={handlePreview}
+                          onChange={(file) => {
+                            console.log("Before upload", file.file);
+                            console.log(
+                              "Before upload file size",
+                              file.file.size
+                            );
+                            if (
+                              file.file.size > 1000 &&
+                              file.file.size < 500000
+                            ) {
+                              setLeadAttachment(file.file.originFileObj);
+                              setFileSizeError(false);
+                              console.log(
+                                "file greater than 1 kb and less than 500 kb"
+                              );
+                            } else {
+                              setFileSizeError(true);
+                              console.log("hgrtryyryr");
+                            }
+                          }}
                         />
+                        {FileSizeError ? (
+                          <div>
+                            <label style={{ color: "red" }}>
+                              File size must be between 1kb and 500kb
+                            </label>
+                          </div>
+                        ) : (
+                          ""
+                        )}
                       </Form.Item>
                     </div>
                     <div className="col-sm-8 pt-3">
@@ -374,20 +432,14 @@ function LeadEdit() {
                         name="leadDescription"
                         rules={[
                           {
-                            required: true,
-
-                            message: "Please enter a Valid address",
-                          },
-                          {
-                            whitespace: true,
-                          },
-                          {
                             min: 2,
                             message:
-                              "Address name must be at least 2 characters",
+                              "Description must be at least 2 characters",
                           },
                           {
                             max: 500,
+                            message:
+                              "Description cannot be longer than 500 characters",
                           },
                         ]}
                       >

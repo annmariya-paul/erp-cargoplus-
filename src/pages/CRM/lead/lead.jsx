@@ -40,7 +40,7 @@ function Lead({}) {
   const [leadUsertype, setLeadUsertype] = useState("O");
   const [leadOrganization, setLeadOrganization] = useState("");
   const [leadSource, setLeadSource] = useState("online registration");
-  const [leadDescription, setLeadDescription] = useState();
+  const [leadDescription, setLeadDescription] = useState("");
   const [leadAttachment, setLeadAttachment] = useState();
   const [leadStatus, setLeadStatus] = useState("4");
   const [leadId, setLeadId] = useState();
@@ -398,7 +398,13 @@ function Lead({}) {
                         rules={[
                           {
                             min: 5,
-                            message: "Description must be atleast 5 characters",
+                            message:
+                              "Description must be at least 5 characters",
+                          },
+                          {
+                            max: 500,
+                            message:
+                              "Description cannot be longer than 500 characters",
                           },
                         ]}
                       >

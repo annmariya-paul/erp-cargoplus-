@@ -121,10 +121,10 @@ function OpportunityLeadlist(props) {
   // const [oppurtunityid, setOppurtunityid] = useState();
 
   const GetOpportunityData = () => {
-    PublicFetch.get(`${CRM_BASE_URL}/opportunity/${id}`)
+    PublicFetch.get(`${CRM_BASE_URL}/report/relational/lead/${id}`)
       .then((res) => {
         if (res?.data?.success) {
-          //   console.log("All opportunity data", res?.data?.data);
+          console.log("All opportunity data", res?.data?.data);
           //   setNewOpportunityList(res?.data?.data);
           let samplearry = [];
           samplearry.push({
@@ -139,7 +139,8 @@ function OpportunityLeadlist(props) {
           // });
           // console.log("pushedd ", samplearry);
 
-          setNewOpportunityList(samplearry);
+          // setNewOpportunityList(samplearry);
+          setNewOpportunityList(res?.data?.data?.crm_v1_opportunities);
         } else {
           console.log("Failed to load data !");
         }
@@ -155,7 +156,7 @@ function OpportunityLeadlist(props) {
   const getoneoppurtunity = async () => {
     try {
       const oneoppurtunities = await PublicFetch.get(
-        `${CRM_BASE_URL}/opportunity/${viewoppurtunity.id}`
+        `${CRM_BASE_URL}/report/relational/lead/${viewoppurtunity.id}`
       );
       console.log("one oppurtunitiesss::: ", oneoppurtunities.data.data);
 

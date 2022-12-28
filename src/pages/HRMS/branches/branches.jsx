@@ -15,7 +15,7 @@ import PublicFetch from "../../../utils/PublicFetch";
 // { Add and list Branches - Ann mariya - 16/11/22 }
 export default function Branches(props) {
   const [branch_id, setBranch_id] = useState();
-  console.log("branch id in state",branch_id);
+  console.log("branch id in state", branch_id);
   const [addForm] = Form.useForm();
   const [error, setError] = useState(false);
   const [successPopup, setSuccessPopup] = useState(false);
@@ -26,7 +26,7 @@ export default function Branches(props) {
   const [branchName, setBranchName] = useState();
   const [branchCode, setBranchCode] = useState();
   const [pageSize, setPageSize] = useState("25");
-  const [branches,setBranches]=useState();
+  const [branches, setBranches] = useState();
   const [Errormsg, setErrormsg] = useState();
   const [NameInput, setNameInput] = useState();
   const [CodeInput, setCodeInput] = useState();
@@ -40,13 +40,13 @@ export default function Branches(props) {
     }
   };
   //API for branches -- shahida 12.12.22
-  const getallbranches= async () => {
+  const getallbranches = async () => {
     try {
       const allbranches = await PublicFetch.get(`${CRM_BASE_URL_HRMS}/branch`);
       console.log("all branches are", allbranches.data.data);
       setBranches(allbranches.data.data);
       setBranch_id(allbranches.data.branch_id);
-      console.log("branch id",branch_id);
+      console.log("branch id", branch_id);
     } catch (err) {
       console.log("error while getting the brands: ", err);
     }
@@ -55,7 +55,6 @@ export default function Branches(props) {
   useEffect(() => {
     getallbranches();
   }, []);
-
 
   const BranchEdit = (e) => {
     console.log("Branch edit", e);
@@ -66,7 +65,7 @@ export default function Branches(props) {
     editForm.setFieldsValue({
       branch_id: e.branch_id,
       NameInput: e.branch_name,
-   CodeInput: e.branch_code,
+      CodeInput: e.branch_code,
       // ImageInput: e.brand_pic,
     });
     setBranchEditPopup(true);
@@ -76,13 +75,12 @@ export default function Branches(props) {
     console.log("edit data", e);
     const formData = new FormData();
 
-  
     let data = {
-      branch_name : NameInput,
-      branch_code : CodeInput,
-    }
+      branch_name: NameInput,
+      branch_code: CodeInput,
+    };
 
-    PublicFetch.patch(`${CRM_BASE_URL_HRMS}/branch/${branch_id}`, data )
+    PublicFetch.patch(`${CRM_BASE_URL_HRMS}/branch/${branch_id}`, data)
       .then((res) => {
         console.log("success", res);
         if (res.data.success) {
@@ -101,7 +99,6 @@ export default function Branches(props) {
       });
   };
 
-
   const columns = [
     {
       title: "ACTION",
@@ -109,14 +106,11 @@ export default function Branches(props) {
       key: "key",
       width: "30%",
       render: (data, index) => {
-        console.log("index is :",index);
+        console.log("index is :", index);
         return (
           <div className="d-flex justify-content-center align-items-center gap-2">
             <div className="m-0">
-              <div
-                className="editIcon m-0"
-                onClick={() =>BranchEdit(index)}
-              >
+              <div className="editIcon m-0" onClick={() => BranchEdit(index)}>
                 <FaEdit />
               </div>
             </div>
@@ -161,41 +155,41 @@ export default function Branches(props) {
       branch_code: "PQR",
       key: "3",
     },
-  ];  
-  const [saveSuccess, setSaveSuccess] =useState(false)
+  ];
+  const [saveSuccess, setSaveSuccess] = useState(false);
   const [BranchError, setBranchError] = useState();
-  
+
   const [branchcode, setBranchcode] = useState();
-  console.log("abcccccccc",branchcode);
+  console.log("abcccccccc", branchcode);
   const [branchname, setBranchname] = useState();
 
-
-  const createBranches =async()=>{
-    try{
-    const addbranches = await PublicFetch.post(
-    `${CRM_BASE_URL_HRMS}/branch`,{
-      branch_name:branchname,
-      branch_code:branchcode
-    })
-    console.log("branch added successfully",addbranches)
-    if(addbranches.data.success){
-      setSuccessPopup(true);
-      addForm.resetFields();
-      close_modal(successPopup,1000 )
+  const createBranches = async () => {
+    try {
+      const addbranches = await PublicFetch.post(
+        `${CRM_BASE_URL_HRMS}/branch`,
+        {
+          branch_name: branchname,
+          branch_code: branchcode,
+        }
+      );
+      console.log("branch added successfully", addbranches);
+      if (addbranches.data.success) {
+        setSuccessPopup(true);
+        addForm.resetFields();
+        close_modal(successPopup, 1000);
+        setModalAddBranch(false);
+        getallbranches();
+      }
+    } catch (err) {
+      console.log("err to add the branches", err);
     }
-    }
-    catch(err){
-    console.log("err to add the branches",err)
-    }
-  
-    }
+  };
 
   // const OnSubmit = () => {
   //   const formData = new FormData();
 
   //   formData.append("branch_name", branchname);
   //   formData.append("branch_code", branchcode);
-  
 
   //   PublicFetch.post(`${CRM_BASE_URL_HRMS}/branch`)
   //     .then((res) => {
@@ -282,7 +276,6 @@ export default function Branches(props) {
       </div>
 
       <CustomModel
-      
         show={modalAddBranch}
         onHide={() => setModalAddBranch(false)}
         header="Add Branch"
@@ -295,7 +288,7 @@ export default function Branches(props) {
               <h5 className="lead_text">Add Branch</h5>
             </div>
             <Form
-           form={addForm}
+              form={addForm}
               onFinish={(data) => {
                 console.log("valuezzzzzzz", data);
                 createBranches();
@@ -308,37 +301,36 @@ export default function Branches(props) {
                 <div className="col-12 pt-1">
                   <label>Branch Name</label>
                   <div>
-                  <Form.Item
-                    name="branchname"
-                    rules={[
-                      {
-                        required: true,
-                        pattern: new RegExp("^[A-Za-z ]+$"),
-                        message: "Please enter a Valid Branch Name",
-                      },
-                      
-                      {
-                        min: 3,
-                        message: "Branch Name must be atleast 3 characters",
-                      },
-                      {
-                        max: 100,
-                        message:
-                          "Branch Name cannot be longer than 100 characters",
-                      },
-                    ]}
-                    onChange={(e) => setBranchname(e.target.value)}
-                  >
-                    <InputType 
-                    value={branchname}
-                    onChange={(e) => {
-                      setBranchname(e.target.value);
-                      setBranchError("");
-                    }}
-                    
-                    />
-                  </Form.Item>
-                </div>
+                    <Form.Item
+                      name="branchname"
+                      rules={[
+                        {
+                          required: true,
+                          pattern: new RegExp("^[A-Za-z ]+$"),
+                          message: "Please enter a Valid Branch Name",
+                        },
+
+                        {
+                          min: 3,
+                          message: "Branch Name must be atleast 3 characters",
+                        },
+                        {
+                          max: 100,
+                          message:
+                            "Branch Name cannot be longer than 100 characters",
+                        },
+                      ]}
+                      onChange={(e) => setBranchname(e.target.value)}
+                    >
+                      <InputType
+                        value={branchname}
+                        onChange={(e) => {
+                          setBranchname(e.target.value);
+                          setBranchError("");
+                        }}
+                      />
+                    </Form.Item>
+                  </div>
                 </div>
 
                 <div className="col-12 pt-1">
@@ -363,10 +355,10 @@ export default function Branches(props) {
                     ]}
                     onChange={(e) => setBranchcode(e.target.value)}
                   >
-                    <InputType 
-                     value={branchCode}
-                     onChange={(e) => setBranchcode(e.target.value)}
-                     />
+                    <InputType
+                      value={branchCode}
+                      onChange={(e) => setBranchcode(e.target.value)}
+                    />
                   </Form.Item>
                 </div>
               </div>
@@ -387,7 +379,7 @@ export default function Branches(props) {
         />
       </CustomModel>
       <Custom_model
-         show={BranchEditPopup}
+        show={BranchEditPopup}
         onHide={() => setBranchEditPopup(false)}
         View_list
         list_content={
@@ -401,7 +393,7 @@ export default function Branches(props) {
                   form={editForm}
                   onFinish={(values) => {
                     console.log("values iss", values);
-                   handleUpdate();
+                    handleUpdate();
                   }}
                   onFinishFailed={(error) => {
                     console.log(error);
@@ -477,7 +469,7 @@ export default function Branches(props) {
                       ""
                     )}
                   </div>
-                 
+
                   <div className="col-12 d-flex justify-content-center mt-5">
                     <Button className="save_button">Save</Button>
                   </div>
@@ -494,13 +486,13 @@ export default function Branches(props) {
           </div>
         }
       />
-          <CustomModel
+      <CustomModel
         size={"sm"}
         show={successPopup}
         onHide={() => setSuccessPopup(false)}
         success
       />
-      {error? <ErrorMsg code={"500"} /> : " "}
+      {error ? <ErrorMsg code={"500"} /> : " "}
     </>
   );
 }

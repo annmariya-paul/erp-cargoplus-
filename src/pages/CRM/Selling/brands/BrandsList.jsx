@@ -147,7 +147,7 @@ function BrandsList() {
     const formData = new FormData();
 
     formData.append("brand_name", NameInput);
-    if (ImageUpload && ImageUpload !== 0) {
+    if (ImageUpload) {
       formData.append("brand_pic", ImageUpload);
     }
     formData.append("brand_description", DescriptionInput);
@@ -246,7 +246,6 @@ function BrandsList() {
       //   width: "23%",
       align: "center",
     },
-    
   ];
 
   //for show or hide colums start--Shahida

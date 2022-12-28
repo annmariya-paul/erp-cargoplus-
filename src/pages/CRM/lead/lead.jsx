@@ -263,7 +263,7 @@ function Lead({}) {
                           },
                           {
                             min: 2,
-                            message: "Name must be atleast 2 charaters",
+                            message: "Name must be at least 2 charaters",
                           },
                           {
                             max: 100,

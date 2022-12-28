@@ -331,7 +331,7 @@ function Edit_Address(props) {
                   <label>Mobile</label>
                   <Form.Item
                     name="addphone"
-                    rules={[          
+                    rules={[
                       {
                         min: 6,
                         message: "Please enter valid address",
@@ -389,10 +389,11 @@ function Edit_Address(props) {
                       },
                       {
                         min: 2,
-                        message: "Title must be atleast 2 characters",
+                        message: "Title must be at least 2 characters",
                       },
                       {
                         max: 100,
+                        message: "Title cannot be longer than 100 characters",
                       },
                     ]}
                   >
@@ -407,7 +408,6 @@ function Edit_Address(props) {
                     rules={[
                       {
                         required: true,
-
                         message: "Please enter a Valid address",
                       },
                       {
@@ -415,10 +415,11 @@ function Edit_Address(props) {
                       },
                       {
                         min: 2,
-                        message: "Address name must be atleast 2 characters",
+                        message: "Address name must be at least 2 characters",
                       },
                       {
                         max: 500,
+                        message: "Address cannot be longer than 500 characters",
                       },
                     ]}
                   >
@@ -447,21 +448,7 @@ function Edit_Address(props) {
                   <label for="phone" className="form-label">
                     Mobile
                   </label>
-                  <Form.Item
-                    name="editPhone"
-                    rules={[
-                      {
-                        pattern: new RegExp(
-                          "^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-s./0-9]*$"
-                        ),
-                        message: "Please enter a Valid Phone",
-                      },
-                      {
-                        min: 6,
-                        message: "Please enter valid address",
-                      },
-                    ]}
-                  >
+                  <Form.Item name="editPhone">
                     <Phone_Input
                       value={editPhone}
                       onChange={(value) => setEditPhone(value)}

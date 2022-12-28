@@ -118,6 +118,7 @@ const exportPDF = () => {
 
 const handleExport = () => {
   var wb = XLSX.utils.book_new();
+  
   var ws = XLSX.utils.json_to_sheet(datas);
   XLSX.utils.book_append_sheet(wb, ws, "Reports");
   XLSX.utils.sheet_add_aoa(

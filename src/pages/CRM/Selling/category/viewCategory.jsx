@@ -61,18 +61,18 @@ function Categorylist(props) {
   const [cPic, setCpic] = useState();
   const [cDescription, setCdescription] = useState();
   const [cParent, setCparent] = useState();
-  const [imageSize,setImageSize] = useState(false);
+  const [imageSize, setImageSize] = useState(false);
 
-  console.log("dataCategory", dataCategory);
-  console.log("dataa of name", displayName);
+  // console.log("dataCategory", dataCategory);
+  // console.log("dataa of name", displayName);
   // const [showEditModal, setShowEditModal] = useState(false);
   const [State, setState] = useState("null");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
+
   const getData = (current, pageSize) => {
     return CategoryList?.slice((current - 1) * pageSize, current * pageSize);
   };
- 
+
   const structureTreeData = (categories) => {
     let treeStructure = [];
 
@@ -136,9 +136,9 @@ function Categorylist(props) {
           setCategoryList(d);
           let v = structureTreeData2(res.data.data);
           setCatgeoryTree(v);
-          console.log("happy", v);
+          // console.log("happy", v);
           const traverseTree = (treeData) => {
-            console.log("shfsa", treeData);
+            // console.log("shfsa", treeData);
             let categories = [];
             if (!treeData || treeData.length <= 0) {
               return;
@@ -181,7 +181,7 @@ function Categorylist(props) {
             setDataCategory(categories);
             return categories;
           };
-          console.log("daaa", traverseTree(res.data.data));
+          // console.log("daaa", traverseTree(res.data.data));
           let temp = [];
           res?.data?.data.forEach((item, index) => {
             // let tempArr = [];
@@ -317,7 +317,7 @@ function Categorylist(props) {
       key: "category_name",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        console.log("hai how are", record.children);
+        // console.log("hai how are", record.children);
 
         return String(record.category_name || nameSearch)
           .toLowerCase()
@@ -362,7 +362,7 @@ function Categorylist(props) {
   ];
 
   // console.log("namesss2123", nameSearch);
-  console.log("going well", DisplayDataa);
+  // console.log("going well", DisplayDataa);
   const DisplayCategories = (data) => {
     // console.log("dispalying data type", data);
     data?.map((item, index) => {
@@ -378,7 +378,7 @@ function Categorylist(props) {
       return <li key={item.category_id} title={item.category_name}></li>;
     });
   };
-  console.log("bdfrwe1121212121cfbsdhvbg", DisplayDataa);
+  // console.log("bdfrwe1121212121cfbsdhvbg", DisplayDataa);
 
   //  function to view category Data     :::by Noufal  -30/11/2022
   const handleViewCategory = (e) => {
@@ -465,9 +465,9 @@ function Categorylist(props) {
       });
   };
 
-  console.log("jdfjdfdj", ViewingData);
-  console.log("hai !!!", categoryId);
-  console.log("ghsdfhashsdf", editForm);
+  // console.log("jdfjdfdj", ViewingData);
+  // console.log("hai !!!", categoryId);
+  // console.log("ghsdfhashsdf", editForm);
 
   return (
     <div>
@@ -791,7 +791,10 @@ function Categorylist(props) {
                         beforeUpload={false}
                         accept=".jpg,.png,.jpeg"
                         onChange={(file) => {
-                          if (file.file.size > 1000 && file.file.size < 500000) {
+                          if (
+                            file.file.size > 1000 &&
+                            file.file.size < 500000
+                          ) {
                             setCpic(file?.file?.originFileObj);
                             setImageSize(false);
                           } else {

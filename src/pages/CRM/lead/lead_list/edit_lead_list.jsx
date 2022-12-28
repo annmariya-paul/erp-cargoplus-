@@ -51,7 +51,7 @@ function LeadEdit() {
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
-  const [FileSizeError,setFileSizeError]= useState(false)
+  const [FileSizeError, setFileSizeError] = useState(false);
 
   const [editForm] = Form.useForm();
   const [error, setError] = useState(false);
@@ -72,16 +72,16 @@ function LeadEdit() {
       reader.onerror = (error) => reject(error);
     });
 
-   const handlePreview = async (file) => {
-     if (!file.url && !file.preview) {
-       file.preview = await getBase64(file.originFileObj);
-     }
-     setPreviewImage(file.url || file.preview);
-     setPreviewVisible(true);
-     setPreviewTitle(
-       file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
-     );
-   };
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setPreviewImage(file.url || file.preview);
+    setPreviewVisible(true);
+    setPreviewTitle(
+      file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
+    );
+  };
   const close_modal = (mShow, time) => {
     if (!mShow) {
       setTimeout(() => {
@@ -130,8 +130,6 @@ function LeadEdit() {
 
   console.log("grt all data", oneLeadData);
 
- 
-
   const updateUser = (event) => {
     setFormSubmitted(true);
     const formData = new FormData();
@@ -140,8 +138,13 @@ function LeadEdit() {
     formData.append("lead_user_type", leadUsertype);
     formData.append("lead_organization", leadOrganization);
     formData.append("lead_source", leadSource);
-    formData.append("lead_description", leadDescription);
-    formData.append("attachments", leadAttachment);
+    if (leadDescription) {
+      formData.append("lead_description", leadDescription);
+    }
+    if (leadAttachment) {
+      formData.append("attachments", leadAttachment);
+    }
+
     formData.append("lead_status", leadStatus);
 
     PublicFetch.patch(`${CRM_BASE_URL}/lead/${id}`, formData, {

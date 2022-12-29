@@ -10,6 +10,8 @@ import ErrorMsg from "../../../components/error/ErrorMessage";
 import Custom_model from "../../../components/custom_modal/custom_model";
 import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
 import { ROUTES } from "../../../routes";
+import { CRM_BASE_URL_HRMS } from "../../../api/bootapi";
+import PublicFetch from "../../../utils/PublicFetch";
 
 // { Add and list Designation - Ann mariya - 15/11/22 }
 export default function Designation(){
@@ -20,28 +22,126 @@ export default function Designation(){
     const [designationList,setDesignationList] = useState();
     const [searchedText,setSearchedText] = useState("");
     const [pageSize,setPageSize] = useState("25");
+    const [desigtiondata,setdesigtiondata] =useState("");
+    const [current, setCurrent] = useState(1);
+    const [saveSuccess, setSaveSuccess] = useState(false);
+    const [designationname,setDesignationname] = useState("")
+    const [designationcode,setDesignationcode] = useState("")
+    const [editShow, setEditShow] = useState(false);
+    const [editdesignationname,seteditdesignationname]= useState("")
+    const [editdesignationcode,seteditdesignationcode]= useState("")
+    const [desigid,setdesigid]= useState()
+    const [editForm]= Form.useForm();
 
-     const close_modal = (mShow, time) => {
-       if (!mShow) {
-         setTimeout(() => {
-           setSuccessModal(false);
-         }, time);
-       }
-     };
+    const getData = (current, pageSize) => {
+      return desigtiondata?.slice((current - 1) * pageSize, current * pageSize);
+    };  
+
+
+    const close_modal = (mShow, time) => {
+      if (!mShow) {
+        setTimeout(() => {
+          setSaveSuccess(false);
+          getalldesignation()
+          // navigate(ROUTES.UNIT_LIST)
+        }, time);
+      }
+    };
+
+
+    const handleEditclick=(item)=>{
+      console.log("editt valuesss",item)
+      seteditdesignationname(item?.designation_name)
+      seteditdesignationcode(item?.designation_code)
+      setdesigid(item?.designation_id)
+     editForm.setFieldsValue({
+      //  unitid: item.unit_id,
+      desig_name: item.designation_name,
+      desig_code: item.designation_code,
+     });
+     setEditShow(true);
+    }
 
      useEffect(() => {
-       Submit();
+      getalldesignation()
+      //  Submit();
      }, []);
-     const Submit = (data) => {
-       console.log(data);
-       if (data) {
-         localStorage.setItem("Form", JSON.stringify(data));
-         setSuccessModal(true);
-         close_modal(successModal, 1000);
-       } else {
-         setError(true);
+
+     const getalldesignation=async ()=>{
+      try{
+      const  alldesigntion =await PublicFetch.get(
+        `${CRM_BASE_URL_HRMS}/designation`)
+        console.log("all designation are ::",alldesigntion?.data?.data)
+        setdesigtiondata(alldesigntion?.data?.data);
+
+        // setAllunit(allunits?.data?.data)
+        // setunitTable(allunits?.data?.data)
+      }
+      catch(err) {
+      console.log("error to getting all units",err)
+      }
+      
+      }
+
+      const updateClick=async (id)=>{
+        try{
+        const updating= await PublicFetch.patch(
+          `${CRM_BASE_URL_HRMS}/designation/${desigid}`,{
+            designation_name:editdesignationname,
+            designation_code:editdesignationcode,
+           
+          })
+          console.log("editedd data is",updating)
+          if(updating.data.success){
+           console.log("successfully updating ")
+          //  setViewUnitModal(false)
+          getalldesignation()
+           setEditShow(false);
+           setSaveSuccess(true)
+           close_modal(saveSuccess, 1200);
+          }
+        }
+        catch(err) {
+              console.log("error to getting all units",err)
+            }
+        }
+
+
+    //  const Submit = (data) => {
+    //    console.log(data);
+    //    if (data) {
+    //      localStorage.setItem("Form", JSON.stringify(data));
+    //      setSuccessModal(true);
+    //      close_modal(successModal, 1000);
+    //    } else {
+    //      setError(true);
+    //    }
+    //  };
+
+    
+
+    const submitaddunit=async()=>{
+      try{
+      const adddesigntion= await PublicFetch.post(
+        `${CRM_BASE_URL_HRMS}/designation`,{
+          designation_name:designationname,
+          designation_code: designationcode,
+        })
+       console.log("unit data is added ",adddesigntion)
+       if(adddesigntion.data.success){
+        setSaveSuccess(true)
+        close_modal(saveSuccess,1000)
+       
        }
-     };
+      //  else{
+      //    <ErrorMsg code={"500"} />
+      //  }
+      }
+      catch(err) {
+       console.log("err to add the unit",err)
+      }
+      
+      }
 
       const columns = [
         {
@@ -56,7 +156,7 @@ export default function Designation(){
                 <div className="m-0">
                   <div
                     className="editIcon m-0"
-                    //   onClick={() => handleEditclick(index)}
+                      onClick={() => handleEditclick(index)}
                   >
                     <FaEdit />
                   </div>
@@ -105,7 +205,8 @@ return (
             form={addForm}
             onFinish={(value) => {
               console.log("valuezzzzzzz", value);
-              Submit();
+              // Submit()
+              submitaddunit()
             }}
             onFinishFailed={(error) => {
               console.log(error);
@@ -125,12 +226,32 @@ return (
                         message: "Please enter a valid Designation Name",
                       },
                     ]}
-                    onChange={(e) => setDesignation(e.target.value)}
+                    onChange={(e) => setDesignationname(e.target.value)}
                   >
                     <InputType />
                   </Form.Item>
                 </div>
               </div>
+
+              <div className="row ms-0 py-1">
+                <div className="col-12 ">
+                  <label htmlfor="designation">Designation Code</label>
+                  <Form.Item
+                    name="Designation code"
+                    rules={[
+                      {
+                        required: true,
+                        // pattern: new RegExp("^[A-Za-z]+$"),
+                        message: "Please enter a valid Designation Name",
+                      },
+                    ]}
+                    onChange={(e) => setDesignationcode(e.target.value)}
+                  >
+                    <InputType />
+                  </Form.Item>
+                </div>
+              </div>
+
             </div>
             <div className="row justify-content-center">
               <div className="col-auto">
@@ -146,6 +267,7 @@ return (
           />
         </div>
       </div>
+
     </div>
 
     <div className="container-fluid container2 pt-3">
@@ -199,11 +321,119 @@ return (
       <div className="datatable">
         <TableData
           // data={getData(numofItemsTo, pageofIndex)}
-          data={data}
+          data={getData(current, pageSize)}
+          // data={data}
           columns={columns}
           custom_table_css="table_lead_list"
         />
       </div>
+
+      <Custom_model
+          size={"sm"}
+          show={editShow}
+          onHide={() => {
+            setEditShow(false);
+          }}
+          View_list
+          list_content={
+            <div className="container-fluid px-4 my-4 ">
+              <h6 className="lead_text">Edit Designation</h6>
+              <Form
+                form={editForm}
+                onFinish={(value) => {
+                  console.log("the formvaluess iss", value);
+                  updateClick()
+                  // updateClick();
+                }}
+                onFinishFailed={(error) => {
+                  console.log(error);
+                }}
+              >
+                <div className="row">
+                  <div className="col-12">
+                    <label>Name</label>
+                    <Form.Item
+                      name="desig_name"
+                      rules={[
+                        {
+                          required: true,
+                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+
+                          message: "Please enter a Valid Unit Name",
+                        },
+                        {
+                          whitespace: true,
+                        },
+                        {
+                          min: 2,
+                          message: "Name must be at least 2 characters",
+                        },
+                        {
+                          max: 100,
+                          message: "Name cannot be longer than 100 characters",
+                        },
+                      ]}
+                    >
+                      <InputType
+                        value={editdesignationname}
+                        onChange={(e) => seteditdesignationname(e.target.value)}
+                      />
+                    </Form.Item>
+                  </div>
+                  <div className="col-12 py-2">
+                    <label>Code</label>
+                    <Form.Item
+                      name="desig_code"
+                      rules={[
+                        {
+                          required: true,
+                          pattern: new RegExp("^[A-Za-z0-9]+$"),
+                          message: "Please enter a Valid Unit code",
+                        },
+                        {
+                          min: 2,
+                          message: "code must be at least 2 characters",
+                        },
+                        {
+                          max: 100,
+                          message:
+                            "Unit code cannot be longer than 100 characters",
+                        },
+                      ]}
+                    >
+                      <InputType
+                        value={editdesignationcode}
+                        onChange={(e) => seteditdesignationcode(e.target.value)}
+                      />
+                    </Form.Item>
+                  </div>
+                  <div className="row d-flex justify-content-center">
+                    <div className="col-xl-2 col-lg-2 col-12 justify-content-center">
+                      <Button
+                        btnType="save"
+                        // onClick={(id) => {
+                        //   updateClick();
+                        //   setEditShow(false);
+                        // }}
+                      >
+                        Save
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </Form>
+            </div>
+          }
+        />
+
+
+
+      <Custom_model
+      size={"sm"}
+      show={saveSuccess}
+      onHide={() => setSaveSuccess(false)}
+      success
+    />
     </div>
   </>
 );

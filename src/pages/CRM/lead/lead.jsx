@@ -261,10 +261,11 @@ function Lead({}) {
                           },
                           {
                             min: 2,
-                            message: "Name must be atleast 2 charaters",
+                            message: "Name must be at least 2 charaters",
                           },
                           {
                             max: 100,
+                            message: "Name cannot be longer than 100 charaters",
                           },
                         ]}
                       >
@@ -304,7 +305,7 @@ function Lead({}) {
                           },
                           {
                             min: 2,
-                            message: "organisation has atleast 2 characters",
+                            message: "organisation has at least 2 characters",
                           },
                           {
                             max: 100,

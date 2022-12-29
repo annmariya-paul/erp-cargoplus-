@@ -42,6 +42,8 @@ import EmploymentType from "./pages/HRMS/employment_type/employment_type";
 import OpportunityLeadlist from "./pages/opportunity_ List/opportunityleadlist";
 import Permission from "./pages/HRMS/permissions/Permission";
 import Roles_and_Screen from "./pages/HRMS/Roles and screen/roles_and_screen";
+import Employees from "./pages/HRMS/employees/employees";
+import CreateEmployee from "./pages/HRMS/employees/CreateEmployee";
 // import Lead from "./pages/lead/lead";
 
 function App() {
@@ -98,6 +100,8 @@ function App() {
             <Route path={ROUTES.EMPLOYMENT_TYPE} element={<EmploymentType />} />
             <Route path={ROUTES.PERMISSIONS} element={<Permission />} />
             <Route path={ROUTES.ROLES_SCREEN} element={<Roles_and_Screen />} />
+            <Route path={ROUTES.EMPLOYEES} element={<Employees />} />
+            <Route path={ROUTES.CREATEEMPLOYEE} element={<CreateEmployee />} />
           </Route>
         </Routes>
       </BrowserRouter>

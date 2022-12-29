@@ -10,9 +10,12 @@ import MyPagination from "../../../components/Pagination/MyPagination";
 import TableData from "../../../components/table/table_data";
 import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
 import { ROUTES } from "../../../routes";
+import PublicFetch from "../../../utils/PublicFetch";
+import { CRM_BASE_URL_HRMS } from "../../../api/bootapi";
 
 // { Add and list Departments - Ann mariya - 16/11/22 }
 export default function Departments(props) {
+  const [editForm] = Form.useForm();
   const [error, setError] = useState(false);
   const [addForm, setAddForm] = useState();
   const [successModal, setSuccessModal] = useState(false);
@@ -22,6 +25,9 @@ export default function Departments(props) {
   const [deptCode, setDeptCode] = useState();
   const [pageSize, setPageSize] = useState("25");
   const [current, setCurrent] = useState("");
+  const [alldepartmentdata, setAllDepartmentData] = useState();
+  const [showEditModal, setShowEditModal] = useState();
+  const [department_id, setDepartment_id] = useState();
 
   const close_modal = (mShow, time) => {
     if (!mShow) {
@@ -45,6 +51,74 @@ export default function Departments(props) {
     }
   };
 
+  const createDepartment = (data) => {
+    PublicFetch.post(`${CRM_BASE_URL_HRMS}/departments`, data)
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          console.log("success ", res.data.success);
+          setSuccessModal(true);
+          close_modal(successModal, 1000);
+          setModalAddDept(false);
+          getAllDepartments();
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+        setError(true);
+      });
+  };
+
+  const getAllDepartments = () => {
+    PublicFetch.get(`${CRM_BASE_URL_HRMS}/departments`)
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          setAllDepartmentData(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+  useEffect(() => {
+    getAllDepartments();
+  }, []);
+
+  const handleEditClick = (data) => {
+    console.log("hsfdhs", data);
+    if (data) {
+      editForm.setFieldsValue({
+        dept_code: data.department_code,
+        dept_name: data.department_name,
+      });
+      setShowEditModal(true);
+      setDepartment_id(data.department_id);
+    }
+  };
+
+  const UpdateDepartment = (data) => {
+    console.log("updating data", data);
+    PublicFetch.patch(`${CRM_BASE_URL_HRMS}/departments/${department_id}`, {
+      department_name: data?.dept_name,
+      department_code: data?.dept_code,
+    })
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          console.log("success", res.data.data);
+          setSuccessModal(true);
+          close_modal(successModal, 1000);
+          setShowEditModal(false);
+          getAllDepartments();
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
   const getData = (current, pageSize) => {
     return data?.slice((current - 1) * pageSize, current * pageSize);
   };
@@ -60,7 +134,7 @@ export default function Departments(props) {
             <div className="m-0">
               <div
                 className="editIcon m-0"
-                onClick={() => setModalAddDept(true)}
+                onClick={() => handleEditClick(index)}
               >
                 <FaEdit />
               </div>
@@ -72,8 +146,8 @@ export default function Departments(props) {
     },
     {
       title: "DEPARTMENT NAME",
-      dataIndex: "dept_name",
-      key: "dept_name",
+      dataIndex: "department_name",
+      key: "department_name",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
         return String(record.dept_name)
@@ -84,8 +158,8 @@ export default function Departments(props) {
     },
     {
       title: "DEPARTMENT CODE",
-      dataIndex: "dept_code",
-      key: "dept_code",
+      dataIndex: "department_code",
+      key: "department_code",
       align: "center",
     },
   ];
@@ -166,7 +240,7 @@ export default function Departments(props) {
         <div className="datatable">
           <TableData
             // data={getData(current, pageSize)}
-            data={data}
+            data={alldepartmentdata}
             columns={columns}
             custom_table_css="table_lead_list"
           />
@@ -194,9 +268,7 @@ export default function Departments(props) {
         list_content={
           <>
             <div className="row">
-              <h5 className="lead_text">
-                Add Department
-              </h5>
+              <h5 className="lead_text">Add Department</h5>
             </div>
             <Form
               name="addForm"
@@ -204,6 +276,93 @@ export default function Departments(props) {
               onFinish={(value) => {
                 console.log("valuezzzzzzz", value);
                 Submit();
+                createDepartment(value);
+              }}
+              onFinishFailed={(error) => {
+                console.log(error);
+              }}
+            >
+              <div className="row py-4">
+                <div className="col-12 pt-1">
+                  <label htmlfor="dept_name">Department Name</label>
+                  <Form.Item
+                    name="department_name"
+                    rules={[
+                      {
+                        required: true,
+                        pattern: new RegExp("^[A-Za-z ]+$"),
+                        message: "Please enter a Valid Department Name",
+                      },
+                      {
+                        whitespace: true,
+                      },
+                      {
+                        min: 3,
+                        message: "Department Name must be atleast 3 characters",
+                      },
+                      {
+                        max: 100,
+                        message:
+                          "Department Name cannot be longer than 100 characters",
+                      },
+                    ]}
+                    onChange={(e) => setDeptName(e.target.value)}
+                  >
+                    <InputType />
+                  </Form.Item>
+                </div>
+
+                <div className="col-12 pt-3">
+                  <label htmlfor="dept_code">Department Code</label>
+                  <Form.Item
+                    name="department_code"
+                    rules={[
+                      {
+                        required: true,
+                        pattern: new RegExp("^[A-Za-z ]+$"),
+                        message: "Please enter a Valid Department code",
+                      },
+                      {
+                        min: 3,
+                        message: "Department code must be atleast 3 characters",
+                      },
+                      {
+                        max: 15,
+                        message:
+                          "Department code cannot be longer than 15 characters",
+                      },
+                    ]}
+                    onChange={(e) => setDeptCode(e.target.value)}
+                  >
+                    <InputType />
+                  </Form.Item>
+                </div>
+              </div>
+              <div className="row justify-content-center">
+                <div className="col-auto">
+                  <Button btnType="save">Save</Button>
+                </div>
+              </div>
+            </Form>
+          </>
+        }
+      ></Custom_model>
+      <Custom_model
+        show={showEditModal}
+        onHide={() => setShowEditModal(false)}
+        View_list
+        list_content={
+          <>
+            <div className="row">
+              <h5 className="lead_text">Edit Department</h5>
+            </div>
+            <Form
+              name="editForm"
+              form={editForm}
+              onFinish={(value) => {
+                console.log("valuezzzzzzz", value);
+                Submit();
+                UpdateDepartment(value);
               }}
               onFinishFailed={(error) => {
                 console.log(error);
@@ -274,6 +433,7 @@ export default function Departments(props) {
           </>
         }
       ></Custom_model>
+      <Custom_model show={successModal} success />
     </>
   );
 }

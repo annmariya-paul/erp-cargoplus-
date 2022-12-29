@@ -69,13 +69,13 @@ function ProductDetails() {
   const [unit11, setUnit11] = useState();
   const [editForm] = Form.useForm();
   const [varproid, setvarProid] = useState();
-  const [varientArray,setVarientsArray] = useState();
-  const[imageSize,setImageSize] = useState(false);
+  const [varientArray, setVarientsArray] = useState();
+  const [imageSize, setImageSize] = useState(false);
 
   const toggleTab = (index) => {
     setToggleState(index);
   };
-   const data = [];
+  const data = [];
   const close_modal = (mShow, time) => {
     if (!mShow) {
       setTimeout(() => {
@@ -107,7 +107,7 @@ function ProductDetails() {
         console.log("success", res);
         if (res.data.success) {
           console.log("successDataa", res.data.data);
-          getallvarients();   
+          getallvarients();
           close_modal(successPopup, 1200);
           setBrandEditPopup(false);
           setvarname("");
@@ -180,31 +180,30 @@ function ProductDetails() {
         `${CRM_BASE_URL_SELLING}/variant?startIndex=0&noOfItems=40`
       );
       setVarients(allvarients?.data?.data?.variants);
+      console.log("All varient dataa, ", allvarients.data.data);
       let array = [];
-      allvarients?.data?.data?.variants.forEach((item,index)=>{
+      allvarients?.data?.data?.variants.forEach((item, index) => {
         let tempArr = [];
-        if(item.variant_pic !== null){
+        if (item.variant_pic !== null) {
           tempArr.push(item.variant_pic);
-          } else {
-            tempArr.push("")
-          }
-          array.push({
-            variant_id: item?.variant_id,
-            variant_product_id: item?.variant_product_id,
-            variant_name: item?.variant_name,
-            variant_code: item?.variant_code,
-            variant_unit: item?.variant_unit,
-            variant_quantity: item?.variant_quantity,
-            variant_price_min: item?.variant_price_min,
-            variant_price_max: item?.variant_price_max,
-            variant_taxrate: item?.variant_taxrate,
-            variant_description: item?.variant_description,
-            variant_pic: tempArr,
-          });
+        } else {
+          tempArr.push("");
+        }
+        array.push({
+          variant_id: item?.variant_id,
+          variant_product_id: item?.variant_product_id,
+          variant_name: item?.variant_name,
+          variant_code: item?.variant_code,
+          variant_unit: item?.variant_unit,
+          variant_quantity: item?.variant_quantity,
+          variant_price_min: item?.variant_price_min,
+          variant_price_max: item?.variant_price_max,
+          variant_taxrate: item?.variant_taxrate,
+          variant_description: item?.variant_description,
+          variant_pic: tempArr,
+        });
       });
-                setVarientsArray(array);
-
-
+      setVarientsArray(array);
     } catch (err) {
       console.log("error while getting the brands: ", err);
     }
@@ -296,12 +295,12 @@ function ProductDetails() {
       varname: e.variant_name,
       varcode: e.variant_code,
       ImageInput: e.variant_pic,
-      unit:e.variant_unit,
-      varquantity:e.variant_quantity,
-      varminprice:e.variant_price_min,
-      varmaxprice:e.variant_price_max,
-      vartaxrate:e.variant_taxrate,
-      vardescription:e.variant_description,
+      unit: e.variant_unit,
+      varquantity: e.variant_quantity,
+      varminprice: e.variant_price_min,
+      varmaxprice: e.variant_price_max,
+      vartaxrate: e.variant_taxrate,
+      vardescription: e.variant_description,
     });
     setBrandEditPopup(true);
   };

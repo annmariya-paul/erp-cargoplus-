@@ -1,7 +1,15 @@
 import { Select } from "antd";
 import React, { Children } from "react";
 
-function SelectBox({ className, value, onChange, onClick, children ,placeholder, options}) {
+function SelectBox({
+  className,
+  value,
+  onChange,
+  onClick,
+  children,
+  placeholder,
+  options,
+}) {
   return (
     <div>
       <div className="mt-2">

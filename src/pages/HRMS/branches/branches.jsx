@@ -77,7 +77,7 @@ export default function Branches(props) {
     const formData = new FormData();
 
   
-    let data = {
+    let data = { 
       branch_name : NameInput,
       branch_code : CodeInput,
     }
@@ -180,8 +180,10 @@ export default function Branches(props) {
     console.log("branch added successfully",addbranches)
     if(addbranches.data.success){
       setSuccessPopup(true);
+      getallbranches();
       addForm.resetFields();
-      close_modal(successPopup,1000 )
+      setModalAddBranch(false);
+      close_modal(successPopup,1000 );
     }
     }
     catch(err){

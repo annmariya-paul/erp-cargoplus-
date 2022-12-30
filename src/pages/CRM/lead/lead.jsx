@@ -35,19 +35,19 @@ function Lead({}) {
   const [modalAddress, setModalAddress] = useState(false);
   const [modalOpportunity, setModalOpportunity] = useState(false);
   const [leadType, setLeadType] = useState("");
-  const [FileSizeError,setFileSizeError] = useState(false);
+  const [FileSizeError, setFileSizeError] = useState(false);
   const [leadName, setLeadName] = useState();
   const [leadUsertype, setLeadUsertype] = useState("O");
   const [leadOrganization, setLeadOrganization] = useState("");
   const [leadSource, setLeadSource] = useState("online registration");
-  const [leadDescription, setLeadDescription] = useState();
+  const [leadDescription, setLeadDescription] = useState("");
   const [leadAttachment, setLeadAttachment] = useState();
   const [leadStatus, setLeadStatus] = useState("4");
   const [leadId, setLeadId] = useState();
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
-  const [leadimg, setLeadimg]= useState([])
+  const [leadimg, setLeadimg] = useState([]);
   const [addForm] = Form.useForm();
 
   const [error, setError] = useState(false);
@@ -55,15 +55,13 @@ function Lead({}) {
     setToggleState(index);
   };
 
-
   const getBase64 = (file) =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = (error) => reject(error);
-  });
-
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
 
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
@@ -75,7 +73,6 @@ function Lead({}) {
       file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
     );
   };
-
 
   const close_modal = (mShow, time) => {
     if (!mShow) {
@@ -93,7 +90,9 @@ function Lead({}) {
     formData.append("lead_user_type", leadUsertype);
     formData.append("lead_organization", leadOrganization);
     formData.append("lead_source", leadSource);
-    formData.append("lead_description", leadDescription);
+    if (leadDescription) {
+      formData.append("lead_description", leadDescription);
+    }
     formData.append("attachments", leadimg);
     formData.append("lead_status", leadStatus);
     //  console.log(data);
@@ -127,17 +126,16 @@ function Lead({}) {
     // }
   };
 
-   const options=[
+  const options = [
     {
-      value: 'L',
-      label: 'Lead',
+      value: "L",
+      label: "Lead",
     },
     {
-      value: 'c',
-      label: 'Customer',
-    }
-   ]
-
+      value: "c",
+      label: "Customer",
+    },
+  ];
 
   console.log("lead id::", leadId);
 
@@ -263,10 +261,11 @@ function Lead({}) {
                           },
                           {
                             min: 2,
-                            message: "Name must be atleast 2 charaters",
+                            message: "Name must be at least 2 charaters",
                           },
                           {
                             max: 100,
+                            message: "Name cannot be longer than 100 charaters",
                           },
                         ]}
                       >
@@ -306,7 +305,7 @@ function Lead({}) {
                           },
                           {
                             min: 2,
-                            message: "organisation has atleast 2 characters",
+                            message: "organisation has at least 2 characters",
                           },
                           {
                             max: 100,
@@ -398,7 +397,13 @@ function Lead({}) {
                         rules={[
                           {
                             min: 5,
-                            message: "Description must be atleast 5 characters",
+                            message:
+                              "Description must be at least 5 characters",
+                          },
+                          {
+                            max: 500,
+                            message:
+                              "Description cannot be longer than 500 characters",
                           },
                         ]}
                       >

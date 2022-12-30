@@ -25,6 +25,7 @@ import SelectBox from "../../../../components/Select Box/SelectBox";
 import CustomModel from "../../../../components/custom_modal/custom_model";
 import InputType from "../../../../components/Input Type textbox/InputType";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
+import { set } from "react-hook-form";
 
 export default function ProductEditModal({ show, prid, onHide, fun_call }) {
   const { id } = useParams();
@@ -48,24 +49,47 @@ export default function ProductEditModal({ show, prid, onHide, fun_call }) {
   const [prcategory, setPrCategory] = useState();
   const [prbrand, setPrBrand] = useState();
   const [prunit, setPrUnit] = useState();
-  const [prattributes, setPrAttributes] = useState();
+
+  const [prattributes, setPrAttributes] = useState({});
   const [prDescription, setPrDescription] = useState("");
   const [primage, setPrImage] = useState();
   const [imageSize, setImageSize] = useState(false);
   //  const [newvalue, setNewvalue] = useState();
   const [img, setImg] = useState([]);
   console.log("set image", img);
+  
+  const [prattribtearray,setprattribtearray]= useState()
+
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
   console.log("set image", img);
+  // console.log("State : ", typeof prattributes)
   const newValues = (checkedValues) => {
-    console.log("checked = ", checkedValues);
+    console.log("checked iss= ", checkedValues);
+    setprattribtearray((prevState)=>{
+      // console.log("njen", prevState)
+     return ([
+     ...prevState,
+     setprattribtearray(prevState , checkedValues)
+    // setPrAttributes(checkedValues)
+     ])
+    })
+
   };
+
+  // const handleChange = useCallback(({ target: { name, checked } }) => {
+  //   setCheckbox(prevState => {
+  //     return new Map(prevState).set(name, checked);
+  //   });
+  // }, []);
+  
+
   const [toggleState, setToggleState] = useState(1);
   const [State, setState] = useState("null");
   const [treeLine, setTreeLine] = useState(true);
   const [showLeafIcon, setShowLeafIcon] = useState(false);
+  const [prev,setprev] = useState()
   const [unitTable, setunitTable] = useState("");
   const toggleTab = (index) => {
     setToggleState(index);
@@ -88,7 +112,12 @@ export default function ProductEditModal({ show, prid, onHide, fun_call }) {
           setPrCategory(res?.data?.data?.product_category_id);
           setPrBrand(res?.data?.data?.product_brand_id);
           setPrUnit(res?.data?.data?.product_unit_id);
+
+
+          console.log("prattributess aree",res?.data?.data?.product_attributes )
           setPrAttributes(res?.data?.data?.product_attributes);
+
+          setprev(res?.data?.data?.product_attributes)
           setPrDescription(res?.data?.data?.product_description);
           setPrImage(res?.data?.data?.product_pic);
         } else {
@@ -110,13 +139,37 @@ export default function ProductEditModal({ show, prid, onHide, fun_call }) {
       .then((res) => {
         if (res?.data?.success) {
           setAllPrList(res.data.data);
-          console.log(" product iss", res?.data?.data?.product_name);
+          console.log(" product iss", res?.data?.data);
           setPrName(res?.data?.data?.product_name);
           setPrcode(res?.data?.data?.product_code);
           setPrCategory(res?.data?.data?.product_category_id);
           setPrBrand(res?.data?.data?.product_brand_id);
           setPrUnit(res?.data?.data?.product_unit_id);
+
+          console.log("pro attributess aree",res?.data?.data?.product_attributes)
+          let temparray = []
+   let temp2 = res?.data?.data?.product_attributes.split("");
+          let Arr = temp2.filter((item, index) => {
+            let data = parseInt(item);
+            
+            
+            console.log("data", data);
+            if (!isNaN(data)) {
+              console.log("datataa", data);
+              
+              temparray.push(data)
+              console.log("jncjdcnjd",temparray)
+              setprattribtearray(temparray)
+              return data;
+           
+            }
+           
+          });
+
+
+          
           setPrAttributes(res?.data?.data?.product_attributes);
+          setprev(res?.data?.data?.product_attributes)
           setPrDescription(res?.data?.data?.product_description);
           setPrImage(res?.data?.data?.product_pic);
           editForm.setFieldsValue({
@@ -128,7 +181,7 @@ export default function ProductEditModal({ show, prid, onHide, fun_call }) {
             productattributes: res?.data?.data?.product_attributes,
             productdescription: res?.data?.data?.product_description,
             productimg: res?.data?.data?.product_pic,
-          });
+          })
         } else {
           console.log("FAILED T LOAD DATA");
         }
@@ -141,6 +194,9 @@ export default function ProductEditModal({ show, prid, onHide, fun_call }) {
   useEffect(() => {
     GetAllProductDatatwo();
   }, [prid]);
+
+  console.log("previous", prev);
+  console.log("prevvaluess are",prattribtearray )
 
   const getallbrand = async () => {
     try {
@@ -514,7 +570,10 @@ export default function ProductEditModal({ show, prid, onHide, fun_call }) {
                             },
                           ]}
                         >
-                          <Checkbox.Group className="px-3" onChange={newValues}>
+                          <Checkbox.Group className="px-3"
+                          checked={prattribtearray}
+                          // value={prattributes}
+                          onChange={newValues}>
                             <div className="row p-2">
                               {attributes &&
                                 attributes.length > 0 &&

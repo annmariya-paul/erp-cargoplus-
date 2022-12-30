@@ -91,87 +91,91 @@ export default function Add_Attribute() {
           </div>
         </div>
 
-        <Form  
-        form={addForm}
-         onFinish={(values)=>{
-          console.log("values iss",values)
-          createAttributes()
-         }}
-         onFinishFailed={(error) => {
-          console.log(error);
-        }} >
+        <Form
+          form={addForm}
+          onFinish={(values) => {
+            console.log("values iss", values);
+            createAttributes();
+          }}
+          onFinishFailed={(error) => {
+            console.log(error);
+          }}
+        >
           <div className="row py-1">
             <div className="col-sm-6 pt-3">
-                <label>Name</label>
-                <Form.Item
-                      name="attribute"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid attributename",
-                        },
+              <label>Name</label>
+              <Form.Item
+                name="attribute"
+                rules={[
+                  {
+                    required: true,
+                    pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                    message: "Please enter a Valid attribute name",
+                  },
 
-                        {
-                          whitespace: true,
-                        },
-                        {
-                          min: 3,
-                          message: "attribute name must be 3 characters",
-                        },
-                        {
-                          max:100
-                        }
-                      ]}
-                    >
-                      <InputType value={attributeName} onChange={(e)=>setAttributeName(e.target.value) } />
-                    </Form.Item>
-                  </div>
-                  <div className="col-sm-6 pt-3">
-                  <label>Description</label>
-                  <Form.Item
-                      name="description"
-                      rules={[
-                        // {
-                        //   required: true,
-                        //   pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-
-                        //   message: "Please enter valid description",
-                        // },
-
-                        {
-                          whitespace: true,
-                        },
-                        {
-                          min: 2,
-                        },
-                        {
-                          max:500,
-                        },
-                      ]}
-                    >
-                      <TextArea value={attributeDescription} 
-                      onChange={(e)=>setAttributeDescription(e.target.value)} />
-                    </Form.Item>
+                  {
+                    whitespace: true,
+                  },
+                  {
+                    min: 2,
+                    message: "Attribute name must be at least 2 characters",
+                  },
+                  {
+                    max: 100,
+                    message:
+                      "Attribute name cannot be longer than 100 characters",
+                  },
+                ]}
+              >
+                <InputType
+                  value={attributeName}
+                  onChange={(e) => setAttributeName(e.target.value)}
+                />
+              </Form.Item>
+            </div>
+            <div className="col-sm-6 pt-3">
+              <label>Description</label>
+              <Form.Item
+                name="description"
+                rules={[
+                  {
+                    whitespace: true,
+                  },
+                  {
+                    min: 2,
+                    message: "Description must be at least 2 characters",
+                  },
+                  {
+                    max: 500,
+                    message: "Description cannot be longer than 500 characters",
+                  },
+                ]}
+              >
+                <TextArea
+                  value={attributeDescription}
+                  onChange={(e) => setAttributeDescription(e.target.value)}
+                />
+              </Form.Item>
             </div>
           </div>
           <div className="row justify-content-center mt-5">
             <div className="col-1">
-              <Button btnType="save"  >Save</Button>
-              
+              <Button btnType="save">Save</Button>
             </div>
             <div className="col-1">
-            <Button btnType="cancel" onClick={()=>handleCancel()}  >Cancel</Button>
+              <Button btnType="cancel" onClick={() => handleCancel()}>
+                Cancel
+              </Button>
             </div>
           </div>
         </Form>
 
         <Custom_model
-        size={"sm"}
-        show={saveSuccess}
-        onHide={() => setSaveSuccess(false)}
-        success
-      />
+          size={"sm"}
+          show={saveSuccess}
+          onHide={() => setSaveSuccess(false)}
+          success
+        />
       </div>
     </>
   );

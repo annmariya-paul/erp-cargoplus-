@@ -19,8 +19,6 @@ import Categorylist from "./pages/CRM/Selling/category/viewCategory";
 
 import LeadEdit from "./pages/CRM/lead/lead_list/edit_lead_list";
 
-
-
 import OpportunityReport from "./pages/opportunityReport/OpportunityReport";
 
 // import Viewunit from "./pages/unit/ViewUnit";
@@ -42,6 +40,10 @@ import Addunit from "./pages/CRM/Selling/unit/Addunit";
 import Designation from "./pages/HRMS/designation/designation";
 import EmploymentType from "./pages/HRMS/employment_type/employment_type";
 import OpportunityLeadlist from "./pages/opportunity_ List/opportunityleadlist";
+import Permission from "./pages/HRMS/permissions/Permission";
+import Roles_and_Screen from "./pages/HRMS/Roles and screen/roles_and_screen";
+import Employees from "./pages/HRMS/employees/employees";
+import CreateEmployee from "./pages/HRMS/employees/CreateEmployee";
 // import Lead from "./pages/lead/lead";
 
 function App() {
@@ -59,7 +61,10 @@ function App() {
             <Route path={ROUTES.CATEGORY} element={<Category />} />
             <Route path={ROUTES.TEST_PAGE} element={<TestPage />} />
             <Route path={ROUTES.OPPORTUNITY} element={<Opportunitylist />} />
-            <Route path={ROUTES.OPPORTUNITY_LEAD_ID} element={<OpportunityLeadlist />} />
+            <Route
+              path={ROUTES.OPPORTUNITY_LEAD_ID}
+              element={<OpportunityLeadlist />}
+            />
             <Route path={ROUTES.CATEGORY_LIST} element={<Categorylist />} />
             <Route path={ROUTES.LEAD_REPORT} element={<LeadReport />} />
             <Route path={ROUTES.LEAD_EDIT_ID} element={<LeadEdit />} />
@@ -76,20 +81,27 @@ function App() {
             {/* <Route path={ROUTES.UNIT_LIST} element={<Unitlist />} /> */}
             {/* <Route path={ROUTES.ADD_UNIT} element={<Addunit />} /> */}
 
-            <Route path={ROUTES.UNIT_LIST} element={<Unitlist/>}/>
-            <Route path={ROUTES.ADD_UNIT} element={<Addunit/>}/>
+            <Route path={ROUTES.UNIT_LIST} element={<Unitlist />} />
+            <Route path={ROUTES.ADD_UNIT} element={<Addunit />} />
 
             <Route path={ROUTES.BRANDCREATE} element={<BrandCreate />} />
             <Route path={ROUTES.PRODUCT} element={<Productlist />} />
             <Route path={ROUTES.PRODUCTCREATE} element={<ProductCreate />} />
-            <Route path={ROUTES.PRODUCTDETAIL_ID} element={<ProductDetails />} />
+            <Route
+              path={ROUTES.PRODUCTDETAIL_ID}
+              element={<ProductDetails />}
+            />
             <Route path={ROUTES.PRODUCTVARIENTS_ID} element={<Varients />} />
             <Route path={ROUTES.SERVICES} element={<Services />} />
             <Route path={ROUTES.SERVICECREATE} element={<ServiceCreate />} />
             <Route path={ROUTES.BRANCHES} element={<Branches />} />
             <Route path={ROUTES.DEPARTMENTS} element={<Departments />} />
-            <Route path={ROUTES.DESIGNATION} element={<Designation/>}/>
-            <Route path={ROUTES.EMPLOYMENT_TYPE} element={<EmploymentType/>}/>
+            <Route path={ROUTES.DESIGNATION} element={<Designation />} />
+            <Route path={ROUTES.EMPLOYMENT_TYPE} element={<EmploymentType />} />
+            <Route path={ROUTES.PERMISSIONS} element={<Permission />} />
+            <Route path={ROUTES.ROLES_SCREEN} element={<Roles_and_Screen />} />
+            <Route path={ROUTES.EMPLOYEES} element={<Employees />} />
+            <Route path={ROUTES.CREATEEMPLOYEE} element={<CreateEmployee />} />
           </Route>
         </Routes>
       </BrowserRouter>

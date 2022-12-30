@@ -5,12 +5,11 @@ import { CRM_BASE_URL } from "../../../../api/bootapi";
 import PublicFetch from "../../../../utils/PublicFetch";
 import PhoneNumber from "../../../../components/phone_number/phonenumber";
 import { Form, message } from "antd";
-import { isPossiblePhoneNumber } from "react-phone-number-input";
 import InputType from "../../../../components/Input Type textbox/InputType";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
 import Button from "../../../../components/button/button";
 import { useForm } from "react-hook-form";
-import PhoneInput from "react-phone-input-2";
+import Phone_Input from "../../../../components/PhoneInput/phoneInput";
 import Custom_model from "../../../../components/custom_modal/custom_model";
 
 function AddressTable(props) {
@@ -56,8 +55,8 @@ function AddressTable(props) {
         let array = [];
         allAddress?.data?.data?.forEach((item, index) => {
           setAddressLeadId(item?.address_lead_id);
-          if (LeadId === item?.address_lead_id) {
-            {
+          if (props.lead === item?.address_lead_id) {
+            
               array.push({
                 address_title: item?.address_title,
                 address_content: item?.address_content,
@@ -65,7 +64,7 @@ function AddressTable(props) {
                 address_contact: item?.address_contact,
               });
               setAddressTable(array);
-            }
+            
           }
         });
       } else {
@@ -112,7 +111,6 @@ function AddressTable(props) {
         console.log(error);
       });
   };
-  
 
   const close_modal = (mShow, time) => {
     if (!mShow) {
@@ -198,6 +196,7 @@ function AddressTable(props) {
                       },
                       {
                         max: 100,
+                        message: "Title cannot be longer than 100 characters",
                       },
                     ]}
                   >
@@ -225,6 +224,7 @@ function AddressTable(props) {
                       },
                       {
                         max: 500,
+                        message: "Address cannot be longer than 500 characters",
                       },
                     ]}
                   >
@@ -265,20 +265,17 @@ function AddressTable(props) {
                       },
                     ]}
                   >
-                    <PhoneNumber
+                    {/* <PhoneNumber
                       defaultCountry={"IN"}
                       value={phone}
                       id="contact_phone_1"
                       name="contact_phone_1"
                       onChange={(value) => setPhone(value)}
-                    />
-                    {/* <PhoneInput
-                      enableSearch={true}
-                      country={"in"}
-                      countryCodeEditable={true}
+                    /> */}
+                    <Phone_Input
                       value={phone}
                       onChange={(value) => setPhone(value)}
-                    /> */}
+                    />
                   </Form.Item>
                 </div>
                 <div className="d-flex justify-content-center mt-3">

@@ -5,7 +5,6 @@ import TableData from "../../../../components/table/table_data";
 import { CRM_BASE_URL } from "../../../../api/bootapi";
 import PublicFetch from "../../../../utils/PublicFetch";
 import Phone_Input from "../../../../components/PhoneInput/phoneInput";
-import PhoneNumber from "../../../../components/phone_number/phonenumber";
 import { Form, message } from "antd";
 import InputType from "../../../../components/Input Type textbox/InputType";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
@@ -334,28 +333,15 @@ function Edit_Address(props) {
                     name="addphone"
                     rules={[
                       {
-                        pattern: new RegExp(
-                          "^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-s./0-9]*$"
-                        ),
-                        message: "Please enter a Valid Phone",
-                      },
-                      {
                         min: 6,
                         message: "Please enter valid address",
                       },
                     ]}
                   >
-                    <PhoneNumber
-                      defaultCountry={"IN"}
+                    <Phone_Input
                       value={addphone}
-                      id="contact_phone_1"
-                      name="contact_phone_1"
                       onChange={(value) => setPhone(value)}
                     />
-                    {/* <Phone_Input
-                      value={addphone}
-                      onChange={(value) => setPhone(value)}
-                    /> */}
                   </Form.Item>
                 </div>
                 <div className="d-flex justify-content-center mt-3">
@@ -403,10 +389,11 @@ function Edit_Address(props) {
                       },
                       {
                         min: 2,
-                        message: "Title must be atleast 2 characters",
+                        message: "Title must be at least 2 characters",
                       },
                       {
                         max: 100,
+                        message: "Title cannot be longer than 100 characters",
                       },
                     ]}
                   >
@@ -421,7 +408,6 @@ function Edit_Address(props) {
                     rules={[
                       {
                         required: true,
-
                         message: "Please enter a Valid address",
                       },
                       {
@@ -429,10 +415,11 @@ function Edit_Address(props) {
                       },
                       {
                         min: 2,
-                        message: "Address name must be atleast 2 characters",
+                        message: "Address name must be at least 2 characters",
                       },
                       {
                         max: 500,
+                        message: "Address cannot be longer than 500 characters",
                       },
                     ]}
                   >
@@ -461,21 +448,7 @@ function Edit_Address(props) {
                   <label for="phone" className="form-label">
                     Mobile
                   </label>
-                  <Form.Item
-                    name="editPhone"
-                    rules={[
-                      {
-                        pattern: new RegExp(
-                          "^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-s./0-9]*$"
-                        ),
-                        message: "Please enter a Valid Phone",
-                      },
-                      {
-                        min: 6,
-                        message: "Please enter valid address",
-                      },
-                    ]}
-                  >
+                  <Form.Item name="editPhone">
                     <Phone_Input
                       value={editPhone}
                       onChange={(value) => setEditPhone(value)}

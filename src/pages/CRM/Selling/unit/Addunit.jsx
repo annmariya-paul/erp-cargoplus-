@@ -54,7 +54,7 @@ const addunit= await PublicFetch.post(
   })
  console.log("unit data is added ",addunit)
  if(addunit.data.success){
-  // setSaveSuccess(true)
+  setSaveSuccess(true)
   close_modal(saveSuccess,1000)
  
  }

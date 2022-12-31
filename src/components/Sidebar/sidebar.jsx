@@ -13,7 +13,6 @@ import { ROUTES } from "../../routes";
 import { NavLink } from "react-router-dom";
 import { FiSettings } from "react-icons/fi";
 
-
 export default function Sidebar({ showSidebar }) {
   // const [sidebar, setSidebar] = useState(true);
   // const showSidebar = () => setSidebar(!sidebar);
@@ -124,6 +123,17 @@ export default function Sidebar({ showSidebar }) {
                     >
                       <RiTeamFill className="sidebar_icons ms-4" />
                       Employment Type
+                    </NavLink>
+                  </li>
+                  <li className="nav-text ">
+                    <NavLink
+                      className={({ isActive }) =>
+                        isActive ? "active-link" : "link"
+                      }
+                      to={ROUTES.EMPLOYEES}
+                    >
+                      <RiTeamFill className="sidebar_icons ms-4" />
+                      Employees
                     </NavLink>
                   </li>
                 </>

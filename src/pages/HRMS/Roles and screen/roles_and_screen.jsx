@@ -78,9 +78,9 @@ function Roles_and_Screen() {
           <div className="">
             <h2></h2>
           </div>
-          <div className="row py-3">
+          <div className="row py-5">
             <div className="col-12">
-              <h5>Roles</h5>
+              <h5 style={{ color: "#0891d1" }}>Roles</h5>
             </div>
             {isEditOn ? (
               <div className="col-6 mt-2">
@@ -112,9 +112,9 @@ function Roles_and_Screen() {
               </div>
             </div>
           </div>
-          <div className="row py-3">
+          <div className="row py-5">
             <div className="col-12">
-              <h5>Screens</h5>
+              <h5 style={{ color: "#0891d1" }}>Screens / Objects</h5>
             </div>
             {isEditTwo ? (
               <div className="col-6 mt-2">

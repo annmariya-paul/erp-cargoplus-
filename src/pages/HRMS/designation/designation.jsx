@@ -222,7 +222,7 @@ return (
                     rules={[
                       {
                         required: true,
-                        pattern: new RegExp("^[A-Za-z]+$"),
+                        pattern: new RegExp("^[A-Za-z ]+$"),
                         message: "Please enter a valid Designation Name",
                       },
                     ]}

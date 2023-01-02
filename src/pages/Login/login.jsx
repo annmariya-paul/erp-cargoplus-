@@ -80,6 +80,7 @@ import { useNavigate } from "react-router-dom";
 
 function Login () {
     const [addForm]= Form.useForm();
+    const [error403,setError403]=useState(false);
     const [username,setUsername] = useState("");
     console.log("username",username);
     const [password,setPassword] = useState("");
@@ -93,60 +94,32 @@ function Login () {
             user_password:password,
           })
          console.log("login data is added ",logeduser)
-         if(logeduser.data.success){
-        
+        //  if(logeduser.data.success){
+          if(logeduser.request.status==201){
+        console.log("console of success ",logeduser.request.status);
         navigate("/dashboard")
         // alert("success");
         
          
          }
-        //  else{
-        //   //  <ErrorMsg code={"500"} />
-        //   alert("Login failed");
-        //  }
+        
         }
         catch(err) {
-         console.log("err to login user",err)
+          console.log("newwww",err.response.request.status);
+          if(err.response.request.status==403){
+            setError403(true);
+            console.log("Invalid Username and password ");
+          }else if(err.response.request.status==500){
+            console.log("Something went wrong",err);
+            alert("Login failed");
+          }
+       
         }
         
         }
 
 return (
-    // <Form
-    //   name="basic"
-    // //   labelCol={{ span: 8 }}
-    // //   wrapperCol={{ span: 16 }}
-    //   initialValues={{ remember: true }}
-    // //   onFinish={onFinish}
-    // //   onFinishFailed={onFinishFailed}
-    //   autoComplete="off"
-    // >
-    //   <Form.Item
-    //     label="Username"
-    //     name="username"
-    //     rules={[{ required: true, message: 'Please input your username!' }]}
-    //   >
-    //     <Input />
-    //   </Form.Item>
-
-    //   <Form.Item
-    //     label="Password"
-    //     name="password"
-    //     rules={[{ required: true, message: 'Please input your password!' }]}
-    //   >
-    //     <Input.Password />
-    //   </Form.Item>
-
-    //   <Form.Item name="remember" valuePropName="checked" wrapperCol={{ offset: 8, span: 16 }}>
-    //     <Checkbox>Remember me</Checkbox>
-    //   </Form.Item>
-
-    //   <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-    //     <Button type="primary" htmlType="submit">
-    //       Submit
-    //     </Button>
-    //   </Form.Item>
-    // </Form>
+  
     <div className="container mb-4 d-flex justify-content-center">
     <div className="container1 ">
       <div className="row mx-2">
@@ -170,16 +143,20 @@ return (
                 <label >User Name</label>
                 <Form.Item
                   name="user_name"
-                //   rules={[
-                //     {
-                //       required: true,
-                //       pattern: new RegExp("^[A-Za-z]+$"),
-                //       message: "Please enter a valid User Name",
-                //     },
-                //   ]}
-                  onChange={(e) => setUsername(e.target.value)}
+                  rules={[
+                    {
+                      required: true,
+                      pattern: new RegExp("^[A-Za-z]+$"),
+                      message: "Please enter a valid User Name",
+                    },
+                  ]}
+                  onChange={(e) => 
+                    {
+                      setError403(false);
+                      setUsername(e.target.value)}}
                 >
-                  <InputType />
+                  <Input style={{ backgroundColor: "#f4f4f7" }}
+         />
                 </Form.Item>
               </div>
             </div>
@@ -188,27 +165,36 @@ return (
               <div className="col-12 ">
                 <label >Password</label>
                 <Form.Item
-                  name="user_password"
-                //   rules={[
-                //     {
-                //       required: true,
-                //       // pattern: new RegExp("^[A-Za-z]+$"),
-                //       message: "Please enter a valid password",
-                //     },
-                //   ]}
-                  onChange={(e) => setPassword(e.target.value)}
+                  name="user_password" 
+                  
+                  rules={[
+                    {
+                      required: true,
+                      // pattern: new RegExp("^[A-Za-z]+$"),
+                      message: "Please enter a valid password",
+                    },
+                  ]}
+                  onChange={(e) => {setPassword(e.target.value);
+                  setError403(false);}
+                  }
                 >
-                  <InputType />
+                  {/* <InputType type="password" /> */}
+                  <Input type="password"  style={{ backgroundColor: "#f4f4f7" }}
+         />
                 </Form.Item>
               </div>
             </div>
-
+            {
+              error403 ? (<div><p style={{textAlign:"center",color:"red"}}>Login Failed ... Please check Username and password </p></div>):""
+            }
           </div>
           <div className="row justify-content-center">
             <div className="col-auto">
               <Button btnType="add" >Login</Button>
             </div>
+           
           </div>
+         
         </Form>
         {/* <Custom_model
           size={"sm"}

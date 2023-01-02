@@ -1,74 +1,4 @@
-// import React from 'react';
-// import ReactDOM from 'react-dom';
-// import 'antd/dist/antd.css';
-// import './index.css';
-// import { Form, Icon, Input, Button, Checkbox } from 'antd';
 
-// class NormalLoginForm extends React.PureComponent {
-//   handleSubmit = (e) => {
-//     e.preventDefault();
-//     this.props.form.validateFields((err, values) => {
-//       if (!err) {
-//         console.log('Received values of form: ', values);
-//       }
-//     });
-//   };
-
-//   render() {
-//     const { getFieldDecorator } = this.props.form;
-//     return (
-//       <Form onSubmit={this.handleSubmit} className="login-form">
-//         <Form.Item>
-//           {getFieldDecorator('username', {
-//             rules: [{ required: true, message: 'Please input your username!' }],
-//           })(
-//             <Input
-//               prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-//               placeholder="Username"
-//             />
-//           )}
-//         </Form.Item>
-//         <Form.Item>
-//           {getFieldDecorator('password', {
-//             rules: [{ required: true, message: 'Please input your Password!' }],
-//           })(
-//             <Input
-//               prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
-//               type="password"
-//               placeholder="Password"
-//             />
-//           )}
-//         </Form.Item>
-//         <Form.Item>
-//           {getFieldDecorator('remember', {
-//             valuePropName: 'checked',
-//             initialValue: true,
-//           })(<Checkbox>Remember me</Checkbox>)}
-//           <a className="login-form-forgot" href="">
-//             Forgot password
-//           </a>
-//           <Button
-//             type="primary"
-//             htmlType="submit"
-//             className="login-form-button"
-//           >
-//             Log in
-//           </Button>
-//           Or <a href="">register now!</a>
-//         </Form.Item>
-//       </Form>
-//     );
-//   }
-// }
-
-// const WrappedNormalLoginForm = Form.create({ name: 'normal_login' })(
-//   NormalLoginForm
-// );
-
-// ReactDOM.render(
-//   <WrappedNormalLoginForm />,
-//   document.getElementById('container')
-// );
 import React,{ useState } from "react";
 import "../Login/login.scss";
 import { Checkbox, Form, Input } from 'antd';
@@ -139,7 +69,7 @@ return (
            
             <div className="row ms-0 py-1">
               <div className="col-12 pt-3">
-                <h4>LOGIN</h4>
+                <h3>LOGIN</h3>
                 <label >User Name</label>
                 <Form.Item
                   name="user_name"
@@ -156,6 +86,7 @@ return (
                       setUsername(e.target.value)}}
                 >
                   <Input style={{ backgroundColor: "#f4f4f7" }}
+                  autocomplete="off"
          />
                 </Form.Item>
               </div>
@@ -196,12 +127,7 @@ return (
           </div>
          
         </Form>
-        {/* <Custom_model
-          size={"sm"}
-          show={successModal}
-          onHide={() => setSuccessModal(false)}
-          success
-        /> */}
+       
       </div>
     </div>
 

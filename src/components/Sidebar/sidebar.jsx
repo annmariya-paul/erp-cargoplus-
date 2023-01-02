@@ -403,10 +403,21 @@ export default function Sidebar({ showSidebar }) {
                       className={({ isActive }) =>
                         isActive ? "active-link" : "link"
                       }
-                      to={"#"}
+                      to={ROUTES.ASSIGN_OPPORTUNITIES}
                     >
                       <RiTeamFill className="sidebar_icons ms-4" />
                       Opportunity assigns
+                    </NavLink>
+                  </li>
+                  <li className="nav-text ">
+                    <NavLink
+                      className={({ isActive }) =>
+                        isActive ? "active-link" : "link"
+                      }
+                      to={ROUTES.TRACK_ASSIGNMENTS}
+                    >
+                      <RiTeamFill className="sidebar_icons ms-4" />
+                      Track Assignments
                     </NavLink>
                   </li>
                 </>

@@ -44,6 +44,8 @@ import Permission from "./pages/HRMS/permissions/Permission";
 import Roles_and_Screen from "./pages/HRMS/Roles and screen/roles_and_screen";
 import Employees from "./pages/HRMS/employees/employees";
 import CreateEmployee from "./pages/HRMS/employees/CreateEmployee";
+import Assign_opportunity from "./pages/FMS/Opportunity_assigns/AssignOpportunity/assign_opportunity";
+import Track_assignments from "./pages/FMS/Opportunity_assigns/Track_assignments/track_opportunity_assigns";
 // import Lead from "./pages/lead/lead";
 
 function App() {
@@ -103,6 +105,9 @@ function App() {
             <Route path={ROUTES.ROLES_SCREEN} element={<Roles_and_Screen />} />
             <Route path={ROUTES.EMPLOYEES} element={<Employees />} />
             <Route path={ROUTES.CREATEEMPLOYEE} element={<CreateEmployee />} />
+            <Route path={ROUTES.TRACK_ASSIGNMENTS} element={<Track_assignments />} />
+            
+            <Route path={ROUTES.ASSIGN_OPPORTUNITIES} element={<Assign_opportunity />} />
           </Route>
         </Routes>
       </BrowserRouter>

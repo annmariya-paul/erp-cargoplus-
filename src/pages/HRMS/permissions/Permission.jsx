@@ -1,11 +1,71 @@
 import { Checkbox, Form, Select } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../../../components/button/button";
 import SelectBox from "../../../components/Select Box/SelectBox";
+import PublicFetch from "../../../utils/PublicFetch";
 import "./permissions.scss";
 
 function Permission() {
   const [module1Click, setModule1Click] = useState(true);
+  const [allRoleData, seAllRoleData] = useState();
+
+  const getRoles = () => {
+    PublicFetch.get(`${process.env.REACT_APP_BASE_URL}/permissions/roles`)
+      .then((res) => {
+        console.log("Response", res);
+        if (res.data.success) {
+          seAllRoleData(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+  useEffect(() => {
+    getRoles();
+  }, []);
+
+  const arrayofcheckbox = [
+    {
+      id: 1,
+      value: "create",
+    },
+    {
+      id: 2,
+      value: "update",
+    },
+    {
+      id: 3,
+      value: "read",
+    },
+    {
+      id: 4,
+      value: "delete",
+    },
+  ];
+
+  const [isCheckAll, setIsCheckAll] = useState(false);
+  const [isCheck, setIsCheck] = useState([]);
+  const [list, setList] = useState(arrayofcheckbox);
+
+  console.log("dd", list);
+
+  const handleSelectAll = (e) => {
+    setIsCheckAll(!isCheckAll);
+    setIsCheck(list.map((li) => li.id));
+    if (isCheckAll) {
+      setIsCheck([]);
+    }
+  };
+
+  const handleClick = (e) => {
+    const { id, checked } = e.target;
+    setIsCheck([...isCheck, id]);
+    if (!checked) {
+      setIsCheck(isCheck.filter((item) => item !== id));
+    }
+  };
 
   return (
     <div>
@@ -21,7 +81,15 @@ function Permission() {
                   <label>Roles</label>
                   <div className="">
                     <SelectBox>
-                      <Select.Option>Manger</Select.Option>
+                      {allRoleData &&
+                        allRoleData.length > 0 &&
+                        allRoleData.map((item, index) => {
+                          return (
+                            <Select.Option key={item.id} value={item.id}>
+                              {item.name}
+                            </Select.Option>
+                          );
+                        })}
                     </SelectBox>
                   </div>
                 </div>
@@ -64,160 +132,57 @@ function Permission() {
                       <div className="row">
                         <div className="col-6 ">
                           <div className="ms-5 d-flex justify-content-center gap-2">
-                            <Checkbox></Checkbox>
+                            <Checkbox
+                              // indeterminate={}
+                              onChange={handleSelectAll}
+                              checked={isCheckAll}
+                            ></Checkbox>
                             <p>Branches</p>
                           </div>
                         </div>
                         <div className="col-6 ps-4">
                           <div className="row">
+                            {arrayofcheckbox.map((item, index) => {
+                              return (
+                                <div className="col-3">
+                                  <div className="">
+                                    <Checkbox
+                                      id={item.id}
+                                      value={item.value}
+                                      onChange={(value) => {
+                                        console.log(
+                                          "jsfdjdas",
+                                          value.target.value
+                                        );
+                                        // onChange(value);
+                                        handleClick(value);
+                                      }}
+                                      checked={isCheck.includes(item.id)}
+                                    />
+                                  </div>
+                                </div>
+                              );
+                            })}
+
+                            {/* <div className="col-3">
+                              <div className="">
+                                <Checkbox />
+                              </div>
+                            </div>
                             <div className="col-3">
                               <div className="">
                                 <Checkbox />
                               </div>
                             </div>
                             <div className="col-3">
-                              <Checkbox />
-                            </div>
-                            <div className="col-3">
-                              <Checkbox />
-                            </div>
-                            <div className="col-3">
-                              <Checkbox />
-                            </div>
+                              <div className="">
+                                <Checkbox />
+                              </div>
+                            </div> */}
                           </div>
                         </div>
                       </div>
                       {/* {single screen/object   ends} */}
-                      <div className="row">
-                        <div className="col-6 ">
-                          <div className="ms-5 d-flex justify-content-center gap-2">
-                            <Checkbox></Checkbox>
-                            <p>Branches</p>
-                          </div>
-                        </div>
-                        <div className="col-6 ps-4">
-                          <div className="row">
-                            <div className="col-3">
-                              <div className="">
-                                <Checkbox />
-                              </div>
-                            </div>
-                            <div className="col-3">
-                              <Checkbox />
-                            </div>
-                            <div className="col-3">
-                              <Checkbox />
-                            </div>
-                            <div className="col-3">
-                              <Checkbox />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="row">
-                        <div className="col-6 ">
-                          <div className="ms-5 d-flex justify-content-center gap-2">
-                            <Checkbox></Checkbox>
-                            <p>Branches</p>
-                          </div>
-                        </div>
-                        <div className="col-6 ps-4">
-                          <div className="row">
-                            <div className="col-3">
-                              <div className="">
-                                <Checkbox />
-                              </div>
-                            </div>
-                            <div className="col-3">
-                              <Checkbox />
-                            </div>
-                            <div className="col-3">
-                              <Checkbox />
-                            </div>
-                            <div className="col-3">
-                              <Checkbox />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="row">
-                        <div className="col-6 ">
-                          <div className="ms-5 d-flex justify-content-center gap-2">
-                            <Checkbox></Checkbox>
-                            <p>Branches</p>
-                          </div>
-                        </div>
-                        <div className="col-6 ps-4">
-                          <div className="row">
-                            <div className="col-3">
-                              <div className="">
-                                <Checkbox />
-                              </div>
-                            </div>
-                            <div className="col-3">
-                              <Checkbox />
-                            </div>
-                            <div className="col-3">
-                              <Checkbox />
-                            </div>
-                            <div className="col-3">
-                              <Checkbox />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="row">
-                        <div className="col-6 ">
-                          <div className="ms-5 d-flex justify-content-center gap-2">
-                            <Checkbox></Checkbox>
-                            <p>Branches</p>
-                          </div>
-                        </div>
-                        <div className="col-6 ps-4">
-                          <div className="row">
-                            <div className="col-3">
-                              <div className="">
-                                <Checkbox />
-                              </div>
-                            </div>
-                            <div className="col-3">
-                              <Checkbox />
-                            </div>
-                            <div className="col-3">
-                              <Checkbox />
-                            </div>
-                            <div className="col-3">
-                              <Checkbox />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="row">
-                        <div className="col-6 ">
-                          <div className="ms-5 d-flex justify-content-center gap-2">
-                            <Checkbox></Checkbox>
-                            <p>Branches</p>
-                          </div>
-                        </div>
-                        <div className="col-6 ps-4">
-                          <div className="row">
-                            <div className="col-3">
-                              <div className="">
-                                <Checkbox />
-                              </div>
-                            </div>
-                            <div className="col-3">
-                              <Checkbox />
-                            </div>
-                            <div className="col-3">
-                              <Checkbox />
-                            </div>
-                            <div className="col-3">
-                              <Checkbox />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
                     </div>
                   ) : (
                     ""

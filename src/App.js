@@ -32,7 +32,7 @@ import ProductDetails from "./pages/CRM/Selling/Product/ProductDetails";
 import Varients from "./pages/CRM/Selling/Product/Varient/Varients";
 import Services from "./pages/CRM/Selling/services/services_list";
 import ServiceCreate from "./pages/CRM/Selling/services/ServiceCreate";
-
+import Login from "./pages/Login/login";
 import Branches from "./pages/HRMS/branches/branches";
 import Departments from "./pages/HRMS/departments/departments";
 import Unitlist from "./pages/CRM/Selling/unit/Unitlist";
@@ -51,6 +51,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
+        <Route path={ROUTES.LOGIN} element={<Login />} />
           <Route path={ROUTES.SIDEBAR} element={<Sidebar />} />
           <Route path={ROUTES.Layout} element={<Layout />}>
             <Route path={ROUTES.DASHBOARD} element={<Dashboard />} />
@@ -68,7 +69,7 @@ function App() {
             <Route path={ROUTES.CATEGORY_LIST} element={<Categorylist />} />
             <Route path={ROUTES.LEAD_REPORT} element={<LeadReport />} />
             <Route path={ROUTES.LEAD_EDIT_ID} element={<LeadEdit />} />
-
+            
             <Route path={ROUTES.BRANDS} element={<BrandsList />} />
             <Route path={ROUTES.ATTRIBUTES} element={<Attribute />} />
             <Route path={ROUTES.ADD_ATTRIBUTES} element={<Add_Attribute />} />

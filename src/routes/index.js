@@ -1,7 +1,8 @@
 const ROUTES = {
+  LOGIN:"/",
   LAYOUT: "/layout",
   SIDEBAR: "/sidebar",
-  DASHBOARD: "/",
+  DASHBOARD: "/dashboard",
   LEAD: "/lead",
   LEADLIST: "/lead_list",
   CATEGORY: "/category",

@@ -38,6 +38,8 @@ const ROUTES = {
   SERVICES: "/services",
   SERVICECREATE: "/create_service",
   BRANCHES: "/branches",
+  TRACK_ASSIGNMENTS:"/track_assignments",
+  ASSIGN_OPPORTUNITIES:"/assign_opportunity",
   DEPARTMENTS: "/departments",
   DESIGNATION: "/designation",
   EMPLOYMENT_TYPE: "/employment_type",

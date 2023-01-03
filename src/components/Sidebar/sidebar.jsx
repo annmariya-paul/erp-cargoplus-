@@ -21,6 +21,7 @@ export default function Sidebar({ showSidebar }) {
   const [CRMopen, setCRMopen] = useState(false);
   const [CRMReport, setCRMReport] = useState(false);
   const [CRMselling, setCRMselling] = useState(false);
+  const [FMSOpen, setFMSOpen] = useState(false);
   const location = useLocation();
 
   const { pathname } = location;
@@ -141,10 +142,28 @@ export default function Sidebar({ showSidebar }) {
                       className={({ isActive }) =>
                         isActive ? "active-link" : "link"
                       }
+
                       to={ROUTES.EMPLOYEEGRADE}
                     >
                       <RiTeamFill className="sidebar_icons ms-4" />
                       Employee grade
+
+                      to={ROUTES.ROLES_SCREEN}
+                    >
+                      <RiTeamFill className="sidebar_icons ms-4" />
+                      Roles
+                    </NavLink>
+                  </li>
+                  <li className="nav-text ">
+                    <NavLink
+                      className={({ isActive }) =>
+                        isActive ? "active-link" : "link"
+                      }
+                      to={ROUTES.PERMISSIONS}
+                    >
+                      <RiTeamFill className="sidebar_icons ms-4" />
+                      Assign Permissions
+
                     </NavLink>
                   </li>
                 </>
@@ -360,6 +379,54 @@ export default function Sidebar({ showSidebar }) {
                   ) : (
                     ""
                   )}
+                </>
+              ) : (
+                ""
+              )}
+
+              <li
+                className={
+                  FMSOpen
+                    ? "nav-text  items_hrms open"
+                    : "nav-text  items_hrms "
+                }
+              >
+                <Link
+                  className={FMSOpen ? "active-link_main" : "link"}
+                  // to="/"
+                  onClick={() => setFMSOpen(!FMSOpen)}
+                >
+                  <RiTeamFill className="sidebar_icons" />
+                  FMS
+                  <div className="d-flex justify-content-end ms-5 ps-5">
+                    <AiOutlineCaretDown className="toggle_btn " />
+                  </div>
+                </Link>
+              </li>
+              {FMSOpen ? (
+                <>
+                  <li className="nav-text">
+                    <NavLink
+                      className={({ isActive }) =>
+                        isActive ? "active-link" : "link"
+                      }
+                      to={ROUTES.ASSIGN_OPPORTUNITIES}
+                    >
+                      <RiTeamFill className="sidebar_icons ms-4" />
+                      Opportunity assigns
+                    </NavLink>
+                  </li>
+                  <li className="nav-text ">
+                    <NavLink
+                      className={({ isActive }) =>
+                        isActive ? "active-link" : "link"
+                      }
+                      to={ROUTES.TRACK_ASSIGNMENTS}
+                    >
+                      <RiTeamFill className="sidebar_icons ms-4" />
+                      Track Assignments
+                    </NavLink>
+                  </li>
                 </>
               ) : (
                 ""

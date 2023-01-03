@@ -357,14 +357,10 @@ return (
                       rules={[
                         {
                           required: true,
-                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-
-                          message: "Please enter a Valid Unit Name",
+                        pattern: new RegExp("^[A-Za-z]+$"),
+                          message: "Please enter a Valid Designation Name",
                         },
-                        {
-                          whitespace: true,
-                        },
-                        {
+                       {
                           min: 2,
                           message: "Name must be at least 2 characters",
                         },

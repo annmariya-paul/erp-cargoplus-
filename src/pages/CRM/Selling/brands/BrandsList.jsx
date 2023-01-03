@@ -161,7 +161,7 @@ function BrandsList() {
           console.log("successDataa", res.data.data);
           getallbrand();
           setSuccessPopup(true);
-          close_modal(successPopup, 1000);
+          close_modal(successPopup, 100000);
           setBrandEditPopup(false);
         } else {
           setErrormsg(res.data.data);
@@ -533,9 +533,11 @@ function BrandsList() {
               <div className="row my-3 ">
                 <Form
                   form={editForm}
+                 
                   onFinish={(values) => {
                     console.log("values iss", values);
                     handleUpdate();
+                   
                   }}
                   onFinishFailed={(error) => {
                     console.log(error);

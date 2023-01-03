@@ -78,7 +78,7 @@ export default function Designation(){
         // setunitTable(allunits?.data?.data)
       }
       catch(err) {
-      console.log("error to getting all units",err)
+      console.log("error to getting all designation",err)
       }
       
       }
@@ -198,7 +198,7 @@ export default function Designation(){
 return (
   <>
     <div className="container mb-4 d-flex justify-content-center">
-      <div className="container1 ">
+      <div className="containerdesig ">
         <div className="row mx-2">
           <Form
             name="addForm"

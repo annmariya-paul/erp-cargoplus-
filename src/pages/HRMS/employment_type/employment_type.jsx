@@ -10,38 +10,129 @@ import ErrorMsg from "../../../components/error/ErrorMessage";
 import Custom_model from "../../../components/custom_modal/custom_model";
 import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
 import { ROUTES } from "../../../routes";
+import { CRM_BASE_URL_HRMS } from "../../../api/bootapi";
+import PublicFetch from "../../../utils/PublicFetch";
 
 // { Add and list Employment Type - Ann mariya - 16/11/22 }
 export default function EmploymentType(){
     const [error, setError] = useState(false);
-    const [addForm, setAddForm] = useState();
+    // const [addForm, setAddForm] = useState();
     const [successModal, setSuccessModal] = useState(false);
     const [employmentType, setEmploymentType] = useState();
     const [employmentTypeList, setEmploymentTypeList] = useState();
     const [searchedText, setSearchedText] = useState("");
     const [pageSize, setPageSize] = useState("25");
+    const [editShow, setEditShow] = useState(false);
+    const [saveSuccess, setSaveSuccess] = useState(false);
+    const [addemploytypename,setaddemploytypename]= useState("")
+
+    const [emptypedata,setemptypedata]= useState("")
+    const [editemptypename, seteditemptypename]= useState("")
+    const [current, setCurrent] = useState(1);
+    const [emptypeid,setemptypeid] = useState()
+    const [addForm]= Form.useForm();
+    const [editForm]=Form.useForm();
+
+    const getData = (current, pageSize) => {
+      return emptypedata?.slice((current - 1) * pageSize, current * pageSize);
+    };  
+
 
     const close_modal = (mShow, time) => {
       if (!mShow) {
         setTimeout(() => {
-          setSuccessModal(false);
+          setSaveSuccess(false);
         }, time);
       }
     };
 
+    const handleEditclick=(item)=>{
+      console.log("editt valuesss",item)
+      seteditemptypename(item?.employment_type_name)
+      setemptypeid(item?.employment_type_id)
+     editForm.setFieldsValue({
+      emptype_name: item?.employment_type_name,
+     });
+     setEditShow(true);
+    }
+
+const getallemptype= async()=>{
+try{
+const allemptype= await PublicFetch.get(
+  `${CRM_BASE_URL_HRMS}/employment-types`)
+  console.log("all emptypess are ::",allemptype?.data?.data)
+  setemptypedata(allemptype?.data?.data)
+  // setdesigtiondata(alldesigntion?.data?.data);
+}
+catch(err) {
+  console.log("error to getting all designation",err)
+  }
+
+}
+
+
+const submitemptype=async()=>{
+  try{
+  const addemptype= await PublicFetch.post(
+    `${CRM_BASE_URL_HRMS}/employment-types`,{
+      employment_type_name:addemploytypename,
+      
+    })
+   console.log(" data is added  successfully",addemptype)
+   if(addemptype.data.success){
+    setSaveSuccess(true)
+    getallemptype()
+    addForm.resetFields()
+    close_modal(saveSuccess,1000)
+   
+   }
+  //  else{
+  //    <ErrorMsg code={"500"} />
+  //  }
+  }
+  catch(err) {
+   console.log("err to add the unit",err)
+  }
+  
+  }
+
+  const updateClick=async (id)=>{
+    try{
+    const updating= await PublicFetch.patch(
+      `${CRM_BASE_URL_HRMS}/employment-types/${emptypeid}`,{
+        employment_type_name:editemptypename,
+      })
+      console.log("editedd data is",updating)
+      // if(updating.data.success){
+      //  console.log("successfully updating ")
+      // //  setViewUnitModal(false)
+      // getalldesignation()
+      //  setEditShow(false);
+      //  setSaveSuccess(true)
+      //  close_modal(saveSuccess, 1200);
+      // }
+    }
+    catch(err) {
+          console.log("error to getting all units",err)
+        }
+    }
+
+
     useEffect(() => {
-      Submit();
+      getallemptype()
+    
+      // Submit();
     }, []);
-    const Submit = (data) => {
-      console.log(data);
-      if (data) {
-        localStorage.setItem("Form", JSON.stringify(data));
-        setSuccessModal(true);
-        close_modal(successModal, 1000);
-      } else {
-        setError(true);
-      }
-    };
+    // const Submit = (data) => {
+    //   console.log(data);
+    //   if (data) {
+    //     localStorage.setItem("Form", JSON.stringify(data));
+    //     setSuccessModal(true);
+    //     close_modal(successModal, 1000);
+    //   } else {
+    //     setError(true);
+    //   }
+    // };
 
     const columns = [
       {
@@ -56,6 +147,9 @@ export default function EmploymentType(){
               <div className="m-0">
                 <div
                   className="editIcon m-0"
+                  onClick={()=>{
+                    handleEditclick(index)
+                  }}
                 //   onClick={() => }
                 >
                   <FaEdit />
@@ -68,11 +162,11 @@ export default function EmploymentType(){
       },
       {
         title: "EMPLOYMENT TYPE NAME",
-        dataIndex: "emp_type_name",
-        key: "emp_type_name",
+        dataIndex: "employment_type_name",
+        key: "employment_type_name",
         filteredValue: [searchedText],
         onFilter: (value, record) => {
-          return String(record.emp_type_name)
+          return String(record.employment_type_name)
             .toLowerCase()
             .includes(value.toLowerCase());
         },
@@ -99,14 +193,14 @@ export default function EmploymentType(){
     return (
       <>
         <div className="container mb-4 d-flex justify-content-center">
-          <div className="container1 ">
+          <div className="containerdesig ">
             <div className="row mx-2">
               <Form
                 name="addForm"
                 form={addForm}
                 onFinish={(value) => {
                   console.log("valuezzzzzzz", value);
-                  Submit();
+                  submitemptype()
                 }}
                 onFinishFailed={(error) => {
                   console.log(error);
@@ -137,7 +231,7 @@ export default function EmploymentType(){
                               "Branch Name cannot be longer than 100 characters",
                           },
                         ]}
-                        onChange={(e) => setEmploymentType(e.target.value)}
+                        onChange={(e) => setaddemploytypename(e.target.value)}
                       >
                         <InputType />
                       </Form.Item>
@@ -150,12 +244,13 @@ export default function EmploymentType(){
                   </div>
                 </div>
               </Form>
-              <Custom_model
-                size={"sm"}
-                show={successModal}
-                onHide={() => setSuccessModal(false)}
-                success
-              />
+              
+      <Custom_model
+      size={"sm"}
+      show={saveSuccess}
+      onHide={() => setSaveSuccess(false)}
+      success
+    />
             </div>
           </div>
         </div>
@@ -211,11 +306,85 @@ export default function EmploymentType(){
           <div className="datatable">
             <TableData
               // data={getData(numofItemsTo, pageofIndex)}
-              data={data}
+              // data={data}
+              data={getData(current, pageSize)}
               columns={columns}
               custom_table_css="table_lead_list"
             />
           </div>
+
+          <Custom_model
+          size={"sm"}
+          show={editShow}
+          onHide={() => {
+            setEditShow(false);
+          }}
+          View_list
+          list_content={
+            <div className="container-fluid px-4 my-4 ">
+              <h6 className="lead_text">Edit Designation</h6>
+              <Form
+                form={editForm}
+                onFinish={(value) => {
+                  console.log("the formvaluess iss", value);
+                  // updateClick()
+                }}
+                onFinishFailed={(error) => {
+                  console.log(error);
+                }}
+              >
+                <div className="row">
+                  <div className="col-12">
+                    <label>Name</label>
+                    <Form.Item
+                      name="emptype_name"
+                      rules={[
+                        {
+                          required: true,
+                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+
+                          message: "Please enter a emloyeeptype Name",
+                        },
+                        {
+                          whitespace: true,
+                        },
+                        {
+                          min: 2,
+                          message: "Name must be at least 2 characters",
+                        },
+                        {
+                          max: 100,
+                          message: "Name cannot be longer than 100 characters",
+                        },
+                      ]}
+                    >
+                      <InputType
+                      value={editemptypename}
+                        // value={editdesignationname}
+                        // onChange={(e) => seteditdesignationname(e.target.value)}
+                      />
+                    </Form.Item>
+                  </div>
+                
+                  <div className="row d-flex justify-content-center">
+                    <div className="col-xl-2 col-lg-2 col-12 justify-content-center">
+                      <Button
+                        btnType="save"
+                        // onClick={(id) => {
+                        //   updateClick();
+                        //   setEditShow(false);
+                        // }}
+                      >
+                        Save
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </Form>
+            </div>
+          }
+        />
+
         </div>
       </>
     );

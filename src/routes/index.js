@@ -47,6 +47,7 @@ const ROUTES = {
   ROLES_SCREEN: "/roles_and_screens",
   EMPLOYEES: "/employees",
   CREATEEMPLOYEE: "/createemployee",
+  EMPLOYEEGRADE:"/employeegrade"
 };
 
 module.exports = { ROUTES };

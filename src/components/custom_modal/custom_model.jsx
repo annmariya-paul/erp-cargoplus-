@@ -59,7 +59,7 @@ function Custom_model({
                 style={{ fontSize: "100px" }}
               />
               <h4 className="success_msg">Save Success !</h4>
-              <p style={{ textAlign: "center" }}>Your Data was Saved</p>
+              <p style={{textAlign: "center" }}>Your Data was Saved</p>
             </div>
           </div>
         )}

@@ -136,6 +136,17 @@ export default function Sidebar({ showSidebar }) {
                       Employees
                     </NavLink>
                   </li>
+                  <li className="nav-text ">
+                    <NavLink
+                      className={({ isActive }) =>
+                        isActive ? "active-link" : "link"
+                      }
+                      to={ROUTES.EMPLOYEEGRADE}
+                    >
+                      <RiTeamFill className="sidebar_icons ms-4" />
+                      Employee grade
+                    </NavLink>
+                  </li>
                 </>
               ) : (
                 ""

@@ -1,5 +1,5 @@
 const ROUTES = {
-  LOGIN:"/",
+  LOGIN: "/",
   LAYOUT: "/layout",
   SIDEBAR: "/sidebar",
   DASHBOARD: "/dashboard",
@@ -39,6 +39,8 @@ const ROUTES = {
   SERVICECREATE: "/create_service",
   BRANCHES: "/branches",
 
+  // TRACK_ASSIGNMENTS: "/track_assignments",
+  // ASSIGN_OPPORTUNITIES: "/assign_opportunity",
   DEPARTMENTS: "/departments",
   DESIGNATION: "/designation",
   EMPLOYMENT_TYPE: "/employment_type",
@@ -51,7 +53,8 @@ const ROUTES = {
   // { FMS }
   TRACK_ASSIGNMENTS:"/track_assignments",
   ASSIGN_OPPORTUNITIES:"/assign_opportunity",
-  UPDATE_OPPORTUNITY_ASSIGNMENT:"/update_oppo_assignment"
+  UPDATE_OPPORTUNITY_ASSIGNMENT:"/update_oppo_assignment",
+  CREATEAGENT: "/create_agent",
 };
 
 module.exports = { ROUTES };

@@ -52,6 +52,7 @@ import Employeegrade from "./pages/HRMS/employeegrade/employeegrade";
 import Assign_opportunity from "./pages/FMS/Opportunity_assigns/AssignOpportunity/assign_opportunity";
 import Track_assignments from "./pages/FMS/Opportunity_assigns/Track_assignments/track_opportunity_assigns";
 import UpdateAssignOppurtunity from "./pages/FMS/Opportunity_assigns/update_oppo_assignment/update_oppo_assignment";
+import CreateAgent from "./pages/FMS/Agent mangement/CreateAgent";
 // import Lead from "./pages/lead/lead";
 
 function App() {
@@ -118,6 +119,7 @@ function App() {
               path={ROUTES.TRACK_ASSIGNMENTS}
               element={<Track_assignments />}
             />
+
             <Route
               path={ROUTES.ASSIGN_OPPORTUNITIES}
               element={<Assign_opportunity />}
@@ -126,6 +128,7 @@ function App() {
               path={ROUTES.UPDATE_OPPORTUNITY_ASSIGNMENT}
               element={<UpdateAssignOppurtunity />}
             />
+            <Route path={ROUTES.CREATEAGENT} element={<CreateAgent />} />
           </Route>
         </Routes>
       </BrowserRouter>

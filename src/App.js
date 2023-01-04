@@ -44,6 +44,8 @@ import Permission from "./pages/HRMS/permissions/Permission";
 import Roles_and_Screen from "./pages/HRMS/Roles and screen/roles_and_screen";
 import Employees from "./pages/HRMS/employees/employees";
 import CreateEmployee from "./pages/HRMS/employees/CreateEmployee";
+
+import Employeegrade from "./pages/HRMS/employeegrade/employeegrade";
 import Assign_opportunity from "./pages/FMS/Opportunity_assigns/AssignOpportunity/assign_opportunity";
 import Track_assignments from "./pages/FMS/Opportunity_assigns/Track_assignments/track_opportunity_assigns";
 import CreateAgent from "./pages/FMS/Agent mangement/CreateAgent";
@@ -106,6 +108,7 @@ function App() {
             <Route path={ROUTES.ROLES_SCREEN} element={<Roles_and_Screen />} />
             <Route path={ROUTES.EMPLOYEES} element={<Employees />} />
             <Route path={ROUTES.CREATEEMPLOYEE} element={<CreateEmployee />} />
+<<<<<<< HEAD
             <Route
               path={ROUTES.TRACK_ASSIGNMENTS}
               element={<Track_assignments />}
@@ -116,6 +119,15 @@ function App() {
               element={<Assign_opportunity />}
             />
             <Route path={ROUTES.CREATEAGENT} element={<CreateAgent />} />
+=======
+
+            <Route path={ROUTES.EMPLOYEEGRADE} element={<Employeegrade/>}/>
+
+            <Route path={ROUTES.TRACK_ASSIGNMENTS} element={<Track_assignments />} />
+            
+            <Route path={ROUTES.ASSIGN_OPPORTUNITIES} element={<Assign_opportunity />} />
+
+>>>>>>> aa64f73f1984cb9b895b9b878c3f9ffaa64a4934
           </Route>
         </Routes>
       </BrowserRouter>

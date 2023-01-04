@@ -47,7 +47,11 @@ const ROUTES = {
   ROLES_SCREEN: "/roles_and_screens",
   EMPLOYEES: "/employees",
   CREATEEMPLOYEE: "/createemployee",
+<<<<<<< HEAD
   CREATEAGENT: "/create_agent",
+=======
+  EMPLOYEEGRADE:"/employeegrade"
+>>>>>>> aa64f73f1984cb9b895b9b878c3f9ffaa64a4934
 };
 
 module.exports = { ROUTES };

@@ -142,6 +142,12 @@ export default function Sidebar({ showSidebar }) {
                       className={({ isActive }) =>
                         isActive ? "active-link" : "link"
                       }
+
+                      to={ROUTES.EMPLOYEEGRADE}
+                    >
+                      <RiTeamFill className="sidebar_icons ms-4" />
+                      Employee grade
+
                       to={ROUTES.ROLES_SCREEN}
                     >
                       <RiTeamFill className="sidebar_icons ms-4" />
@@ -157,6 +163,7 @@ export default function Sidebar({ showSidebar }) {
                     >
                       <RiTeamFill className="sidebar_icons ms-4" />
                       Assign Permissions
+
                     </NavLink>
                   </li>
                 </>

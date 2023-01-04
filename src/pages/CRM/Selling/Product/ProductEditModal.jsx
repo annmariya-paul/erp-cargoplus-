@@ -63,27 +63,29 @@ export default function ProductEditModal({ show, prid, onHide, fun_call }) {
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
+  console.log("Attibutes : ", attributes)
   console.log("set image", img);
   // console.log("State : ", typeof prattributes)
   const newValues = (checkedValues) => {
-    console.log("checked iss= ", checkedValues);
-    setprattribtearray((prevState)=>{
-      // console.log("njen", prevState)
-     return ([
-     ...prevState,
-     setprattribtearray(prevState , checkedValues)
-    // setPrAttributes(checkedValues)
-     ])
-    })
+    console.log("checked iss= ", prattribtearray);
+    // setprattribtearray(checkedValues)
+    // setprattribtearray((prevState)=>{
+    //   // console.log("njen", prevState)
+    //  return ([
+    //  ...prevState,
+    //  setprattribtearray(prevState , checkedValues)
+    // // setPrAttributes(checkedValues)
+    //  ])
+    // })
+    // setprattribtearray((prev)=> [...prev, ...checkedValues])
 
   };
 
-  // const handleChange = useCallback(({ target: { name, checked } }) => {
-  //   setCheckbox(prevState => {
-  //     return new Map(prevState).set(name, checked);
-  //   });
-  // }, []);
-  
+ 
+  // const onChange = (e) => {
+  //   console.log('checked = ', e.target.checked);
+  //   setChecked(e.target.checked);
+  // };
 
   const [toggleState, setToggleState] = useState(1);
   const [State, setState] = useState("null");
@@ -98,6 +100,11 @@ export default function ProductEditModal({ show, prid, onHide, fun_call }) {
 
   const [categoryTree, setCategoryTree] = useState([]);
   const [allprList, setAllPrList] = useState(); //state for all products
+
+
+// getting one edit product data
+
+
 
   // Start API call for get one product
   const GetAllProductData = () => {
@@ -116,6 +123,7 @@ export default function ProductEditModal({ show, prid, onHide, fun_call }) {
 
           console.log("prattributess aree",res?.data?.data?.product_attributes )
           setPrAttributes(res?.data?.data?.product_attributes);
+          // setPrAttributes(attributes)
 
           setprev(res?.data?.data?.product_attributes)
           setPrDescription(res?.data?.data?.product_description);
@@ -167,9 +175,10 @@ export default function ProductEditModal({ show, prid, onHide, fun_call }) {
           });
 
 
-          
+          // setPrAttributes([attributes])
           setPrAttributes(res?.data?.data?.product_attributes);
           setprev(res?.data?.data?.product_attributes)
+
           setPrDescription(res?.data?.data?.product_description);
           setPrImage(res?.data?.data?.product_pic);
           editForm.setFieldsValue({
@@ -178,7 +187,9 @@ export default function ProductEditModal({ show, prid, onHide, fun_call }) {
             productcategory: res?.data?.data?.product_category_id,
             productbrand: res?.data?.data?.product_brand_id,
             productunit: res?.data?.data?.product_unit_id,
-            productattributes: res?.data?.data?.product_attributes,
+
+            productattributes:res?.data?.data?.product_attributes,
+
             productdescription: res?.data?.data?.product_description,
             productimg: res?.data?.data?.product_pic,
           })
@@ -190,6 +201,8 @@ export default function ProductEditModal({ show, prid, onHide, fun_call }) {
         console.log("Errror while getting data", err);
       });
   };
+
+console.log("attributee aryy",attributes)
 
   useEffect(() => {
     GetAllProductDatatwo();
@@ -236,7 +249,15 @@ export default function ProductEditModal({ show, prid, onHide, fun_call }) {
         `${CRM_BASE_URL_SELLING}/attribute`
       );
       console.log("getting all attributes", allattributes.data.data);
-      setAttributes(allattributes.data.data);
+      // setAttributes(allattributes.data.data);
+      let tmp = [] 
+      allattributes.data.data.forEach((item, index) => {
+        tmp.push({
+          label: item?.attribute_name,
+          value: item?.attribute_id,
+        })
+      })
+      setAttributes(tmp);
     } catch (err) {
       console.log("error to fetching  attributes", err);
     }
@@ -337,9 +358,12 @@ export default function ProductEditModal({ show, prid, onHide, fun_call }) {
     if (img) {
       formData.append("product_pic", img);
     }
-    formData.append("product_attributes", prattributes);
+    formData.append("product_attributes", prattribtearray);
     formData.append("product_description", prDescription);
 
+  
+
+  if(prid) {
     PublicFetch.patch(
       `${CRM_BASE_URL_SELLING}/product/${parseInt(prid)}`,
       formData,
@@ -347,22 +371,48 @@ export default function ProductEditModal({ show, prid, onHide, fun_call }) {
         "Content-Type": "Multipart/form-Data",
       }
     )
-      .then((res) => {
-        console.log("data is successfully saved", res.data.success);
-        if (res.data.data) {
-          GetAllProductData();
-          GetAllProductDatatwo();
-          setSuccessPopup(true);
-          editForm.resetFields();
-          close_modal(successPopup, 1200);
-          onHide();
-          fun_call();
-        }
-      })
-      .catch((err) => {
-        console.log("error", err);
-        setError(true);
-      });
+    .then((res) => {
+      console.log("data is successfully saved", res.data.success);
+      if (res.data.data) {
+        GetAllProductData();
+        // GetAllProductDatatwo();
+        setSuccessPopup(true);
+        editForm.resetFields();
+        close_modal(successPopup, 1200);
+        onHide();
+        fun_call();
+      }
+    })
+    .catch((err) => {
+      console.log("error", err);
+      setError(true);
+    });
+  }
+  else if(id) {
+    PublicFetch.patch(
+      `${CRM_BASE_URL_SELLING}/product/${parseInt(id)}`,
+      formData,
+      {
+        "Content-Type": "Multipart/form-Data",
+      }
+    )
+    .then((res) => {
+      console.log("data is successfully saved", res.data.success);
+      if (res.data.data) {
+        GetAllProductData();
+        // GetAllProductDatatwo();
+        setSuccessPopup(true);
+        editForm.resetFields();
+        close_modal(successPopup, 1200);
+        onHide();
+        fun_call();
+      }
+    })
+    .catch((err) => {
+      console.log("error", err);
+      setError(true);
+    });
+  }
   };
 
   return (
@@ -570,7 +620,7 @@ export default function ProductEditModal({ show, prid, onHide, fun_call }) {
                             },
                           ]}
                         >
-                          <Checkbox.Group className="px-3"
+                          {/* <Checkbox.Group className="px-3"
                           checked={prattribtearray}
                           // value={prattributes}
                           onChange={newValues}>
@@ -587,6 +637,12 @@ export default function ProductEditModal({ show, prid, onHide, fun_call }) {
                                   );
                                 })}
                             </div>
+                          </Checkbox.Group> */}
+                          <Checkbox.Group className="px-3"
+                          options={attributes}
+                          // defaultValue={prattributes}
+                          defaultValue={['color']}
+                          onChange={newValues}>
                           </Checkbox.Group>
                         </Form.Item>
                       </div>

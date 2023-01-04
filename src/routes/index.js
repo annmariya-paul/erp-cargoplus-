@@ -1,5 +1,5 @@
 const ROUTES = {
-  LOGIN:"/",
+  LOGIN: "/",
   LAYOUT: "/layout",
   SIDEBAR: "/sidebar",
   DASHBOARD: "/dashboard",
@@ -38,8 +38,8 @@ const ROUTES = {
   SERVICES: "/services",
   SERVICECREATE: "/create_service",
   BRANCHES: "/branches",
-  TRACK_ASSIGNMENTS:"/track_assignments",
-  ASSIGN_OPPORTUNITIES:"/assign_opportunity",
+  TRACK_ASSIGNMENTS: "/track_assignments",
+  ASSIGN_OPPORTUNITIES: "/assign_opportunity",
   DEPARTMENTS: "/departments",
   DESIGNATION: "/designation",
   EMPLOYMENT_TYPE: "/employment_type",
@@ -47,6 +47,11 @@ const ROUTES = {
   ROLES_SCREEN: "/roles_and_screens",
   EMPLOYEES: "/employees",
   CREATEEMPLOYEE: "/createemployee",
+<<<<<<< HEAD
+  CREATEAGENT: "/create_agent",
+=======
+  EMPLOYEEGRADE:"/employeegrade"
+>>>>>>> aa64f73f1984cb9b895b9b878c3f9ffaa64a4934
 };
 
 module.exports = { ROUTES };

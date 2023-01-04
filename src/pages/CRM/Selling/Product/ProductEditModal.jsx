@@ -50,7 +50,7 @@ export default function ProductEditModal({ show, prid, onHide, fun_call }) {
   const [prbrand, setPrBrand] = useState();
   const [prunit, setPrUnit] = useState();
 
-  const [prattributes, setPrAttributes] = useState({});
+  const [prattributes, setPrAttributes] = useState();
   const [prDescription, setPrDescription] = useState("");
   const [primage, setPrImage] = useState();
   const [imageSize, setImageSize] = useState(false);
@@ -58,7 +58,7 @@ export default function ProductEditModal({ show, prid, onHide, fun_call }) {
   const [img, setImg] = useState([]);
   console.log("set image", img);
   
-  const [prattribtearray,setprattribtearray]= useState()
+  const [prattribtearray,setprattribtearray]= useState([])
 
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
@@ -67,8 +67,9 @@ export default function ProductEditModal({ show, prid, onHide, fun_call }) {
   console.log("set image", img);
   // console.log("State : ", typeof prattributes)
   const newValues = (checkedValues) => {
-    console.log("checked iss= ", prattribtearray);
-    // setprattribtearray(checkedValues)
+
+    console.log("checked iss= ", checkedValues);
+    setprattribtearray(checkedValues.target.value)
     // setprattribtearray((prevState)=>{
     //   // console.log("njen", prevState)
     //  return ([
@@ -140,7 +141,10 @@ export default function ProductEditModal({ show, prid, onHide, fun_call }) {
   useEffect(() => {
     GetAllProductData();
   }, [id]);
+
   console.log("RRRRRRRRRRrr", prid);
+  
+  // { function to get each product data}
   const GetAllProductDatatwo = () => {
     console.log("Entered two GetAllProductDatatwo ");
     PublicFetch.get(`${CRM_BASE_URL_SELLING}/product/${prid}`)
@@ -154,30 +158,40 @@ export default function ProductEditModal({ show, prid, onHide, fun_call }) {
           setPrBrand(res?.data?.data?.product_brand_id);
           setPrUnit(res?.data?.data?.product_unit_id);
 
-          console.log("pro attributess aree",res?.data?.data?.product_attributes)
-          let temparray = []
-   let temp2 = res?.data?.data?.product_attributes.split("");
-          let Arr = temp2.filter((item, index) => {
-            let data = parseInt(item);
-            
-            
-            console.log("data", data);
-            if (!isNaN(data)) {
-              console.log("datataa", data);
-              
-              temparray.push(data)
-              console.log("jncjdcnjd",temparray)
-              setprattribtearray(temparray)
-              return data;
-           
-            }
-           
-          });
+          console.log(
+            "pro attributess aree",
+            res?.data?.data?.product_attributes
+          );
+          let prarray = [];
+         res?.data?.data?.crm_v1_attributes.forEach((item, index) => {
+           prarray.push({
+             label: item?.attribute_name,
+             value: item?.attribute_id,
+           });
+           console.log("atrribute value:...",prarray);
+         });
+         setprattribtearray(prarray);
 
+          //         let temparray = []
+          //  let temp2 = res?.data?.data?.product_attributes.split("");
+          //         let Arr = temp2.filter((item, index) => {
+          //           let data = parseInt(item);
+
+          //           console.log("data", data);
+          //           if (!isNaN(data)) {
+          //             console.log("datataa", data);
+          //             temparray.push(data)
+          //             console.log("jncjdcnjd",temparray)
+          //             setprattribtearray(temparray)
+          //             return data;
+
+          //           }
+
+          //         });
 
           // setPrAttributes([attributes])
           setPrAttributes(res?.data?.data?.product_attributes);
-          setprev(res?.data?.data?.product_attributes)
+          setprev(res?.data?.data?.product_attributes);
 
           setPrDescription(res?.data?.data?.product_description);
           setPrImage(res?.data?.data?.product_pic);
@@ -188,11 +202,11 @@ export default function ProductEditModal({ show, prid, onHide, fun_call }) {
             productbrand: res?.data?.data?.product_brand_id,
             productunit: res?.data?.data?.product_unit_id,
 
-            productattributes:res?.data?.data?.product_attributes,
+            productattributes: res?.data?.data?.product_attributes,
 
             productdescription: res?.data?.data?.product_description,
             productimg: res?.data?.data?.product_pic,
-          })
+          });
         } else {
           console.log("FAILED T LOAD DATA");
         }

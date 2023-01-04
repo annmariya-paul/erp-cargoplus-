@@ -104,7 +104,7 @@ function Permission() {
                   <label>Roles</label>
                   <div className="">
                     <Form.Item name="role_id">
-                      <SelectBox>
+                      <SelectBox >
                         {allRoleData &&
                           allRoleData.length > 0 &&
                           allRoleData.map((item, index) => {
@@ -166,6 +166,7 @@ function Permission() {
                                     <Form.Item name="object_id">
                                       <Checkbox.Group>
                                         <Checkbox
+                                        name={item.name}
                                           // indeterminate={}
                                           value={item.id}
                                           onChange={(e) => {
@@ -194,7 +195,7 @@ function Permission() {
                                           <div className="col-3">
                                             <div className="">
                                               <Form.Item name="permissions">
-                                                <Checkbox
+                                                <Checkbox name={item.name}
                                                   id={item.id}
                                                   value={item1?.value}
                                                   onChange={(value) => {

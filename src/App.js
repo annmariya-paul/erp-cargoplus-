@@ -48,6 +48,7 @@ import CreateEmployee from "./pages/HRMS/employees/CreateEmployee";
 import Employeegrade from "./pages/HRMS/employeegrade/employeegrade";
 import Assign_opportunity from "./pages/FMS/Opportunity_assigns/AssignOpportunity/assign_opportunity";
 import Track_assignments from "./pages/FMS/Opportunity_assigns/Track_assignments/track_opportunity_assigns";
+import CreateAgent from "./pages/FMS/Agent mangement/CreateAgent";
 // import Lead from "./pages/lead/lead";
 
 function App() {
@@ -55,7 +56,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-        <Route path={ROUTES.LOGIN} element={<Login />} />
+          <Route path={ROUTES.LOGIN} element={<Login />} />
           <Route path={ROUTES.SIDEBAR} element={<Sidebar />} />
           <Route path={ROUTES.Layout} element={<Layout />}>
             <Route path={ROUTES.DASHBOARD} element={<Dashboard />} />
@@ -73,7 +74,7 @@ function App() {
             <Route path={ROUTES.CATEGORY_LIST} element={<Categorylist />} />
             <Route path={ROUTES.LEAD_REPORT} element={<LeadReport />} />
             <Route path={ROUTES.LEAD_EDIT_ID} element={<LeadEdit />} />
-            
+
             <Route path={ROUTES.BRANDS} element={<BrandsList />} />
             <Route path={ROUTES.ATTRIBUTES} element={<Attribute />} />
             <Route path={ROUTES.ADD_ATTRIBUTES} element={<Add_Attribute />} />
@@ -107,6 +108,18 @@ function App() {
             <Route path={ROUTES.ROLES_SCREEN} element={<Roles_and_Screen />} />
             <Route path={ROUTES.EMPLOYEES} element={<Employees />} />
             <Route path={ROUTES.CREATEEMPLOYEE} element={<CreateEmployee />} />
+<<<<<<< HEAD
+            <Route
+              path={ROUTES.TRACK_ASSIGNMENTS}
+              element={<Track_assignments />}
+            />
+
+            <Route
+              path={ROUTES.ASSIGN_OPPORTUNITIES}
+              element={<Assign_opportunity />}
+            />
+            <Route path={ROUTES.CREATEAGENT} element={<CreateAgent />} />
+=======
 
             <Route path={ROUTES.EMPLOYEEGRADE} element={<Employeegrade/>}/>
 
@@ -114,6 +127,7 @@ function App() {
             
             <Route path={ROUTES.ASSIGN_OPPORTUNITIES} element={<Assign_opportunity />} />
 
+>>>>>>> aa64f73f1984cb9b895b9b878c3f9ffaa64a4934
           </Route>
         </Routes>
       </BrowserRouter>

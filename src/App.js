@@ -108,7 +108,6 @@ function App() {
             <Route path={ROUTES.ROLES_SCREEN} element={<Roles_and_Screen />} />
             <Route path={ROUTES.EMPLOYEES} element={<Employees />} />
             <Route path={ROUTES.CREATEEMPLOYEE} element={<CreateEmployee />} />
-<<<<<<< HEAD
             <Route
               path={ROUTES.TRACK_ASSIGNMENTS}
               element={<Track_assignments />}
@@ -119,15 +118,6 @@ function App() {
               element={<Assign_opportunity />}
             />
             <Route path={ROUTES.CREATEAGENT} element={<CreateAgent />} />
-=======
-
-            <Route path={ROUTES.EMPLOYEEGRADE} element={<Employeegrade/>}/>
-
-            <Route path={ROUTES.TRACK_ASSIGNMENTS} element={<Track_assignments />} />
-            
-            <Route path={ROUTES.ASSIGN_OPPORTUNITIES} element={<Assign_opportunity />} />
-
->>>>>>> aa64f73f1984cb9b895b9b878c3f9ffaa64a4934
           </Route>
         </Routes>
       </BrowserRouter>

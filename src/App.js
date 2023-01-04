@@ -32,11 +32,13 @@ import ProductDetails from "./pages/CRM/Selling/Product/ProductDetails";
 import Varients from "./pages/CRM/Selling/Product/Varient/Varients";
 import Services from "./pages/CRM/Selling/services/services_list";
 import ServiceCreate from "./pages/CRM/Selling/services/ServiceCreate";
-import Login from "./pages/Login/login";
-import Branches from "./pages/HRMS/branches/branches";
-import Departments from "./pages/HRMS/departments/departments";
 import Unitlist from "./pages/CRM/Selling/unit/Unitlist";
 import Addunit from "./pages/CRM/Selling/unit/Addunit";
+import Login from "./pages/Login/login";
+
+// {HRMS}
+import Branches from "./pages/HRMS/branches/branches";
+import Departments from "./pages/HRMS/departments/departments";
 import Designation from "./pages/HRMS/designation/designation";
 import EmploymentType from "./pages/HRMS/employment_type/employment_type";
 import OpportunityLeadlist from "./pages/opportunity_ List/opportunityleadlist";
@@ -44,10 +46,12 @@ import Permission from "./pages/HRMS/permissions/Permission";
 import Roles_and_Screen from "./pages/HRMS/Roles and screen/roles_and_screen";
 import Employees from "./pages/HRMS/employees/employees";
 import CreateEmployee from "./pages/HRMS/employees/CreateEmployee";
-
 import Employeegrade from "./pages/HRMS/employeegrade/employeegrade";
+
+// {FMS}
 import Assign_opportunity from "./pages/FMS/Opportunity_assigns/AssignOpportunity/assign_opportunity";
 import Track_assignments from "./pages/FMS/Opportunity_assigns/Track_assignments/track_opportunity_assigns";
+import UpdateAssignOppurtunity from "./pages/FMS/Opportunity_assigns/update_oppo_assignment/update_oppo_assignment";
 // import Lead from "./pages/lead/lead";
 
 function App() {
@@ -55,7 +59,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-        <Route path={ROUTES.LOGIN} element={<Login />} />
+          <Route path={ROUTES.LOGIN} element={<Login />} />
           <Route path={ROUTES.SIDEBAR} element={<Sidebar />} />
           <Route path={ROUTES.Layout} element={<Layout />}>
             <Route path={ROUTES.DASHBOARD} element={<Dashboard />} />
@@ -73,7 +77,7 @@ function App() {
             <Route path={ROUTES.CATEGORY_LIST} element={<Categorylist />} />
             <Route path={ROUTES.LEAD_REPORT} element={<LeadReport />} />
             <Route path={ROUTES.LEAD_EDIT_ID} element={<LeadEdit />} />
-            
+
             <Route path={ROUTES.BRANDS} element={<BrandsList />} />
             <Route path={ROUTES.ATTRIBUTES} element={<Attribute />} />
             <Route path={ROUTES.ADD_ATTRIBUTES} element={<Add_Attribute />} />
@@ -107,13 +111,21 @@ function App() {
             <Route path={ROUTES.ROLES_SCREEN} element={<Roles_and_Screen />} />
             <Route path={ROUTES.EMPLOYEES} element={<Employees />} />
             <Route path={ROUTES.CREATEEMPLOYEE} element={<CreateEmployee />} />
+            <Route path={ROUTES.EMPLOYEEGRADE} element={<Employeegrade />} />
 
-            <Route path={ROUTES.EMPLOYEEGRADE} element={<Employeegrade/>}/>
-
-            <Route path={ROUTES.TRACK_ASSIGNMENTS} element={<Track_assignments />} />
-            
-            <Route path={ROUTES.ASSIGN_OPPORTUNITIES} element={<Assign_opportunity />} />
-
+            {/* {FMS} */}
+            <Route
+              path={ROUTES.TRACK_ASSIGNMENTS}
+              element={<Track_assignments />}
+            />
+            <Route
+              path={ROUTES.ASSIGN_OPPORTUNITIES}
+              element={<Assign_opportunity />}
+            />
+            <Route
+              path={ROUTES.UPDATE_OPPORTUNITY_ASSIGNMENT}
+              element={<UpdateAssignOppurtunity />}
+            />
           </Route>
         </Routes>
       </BrowserRouter>

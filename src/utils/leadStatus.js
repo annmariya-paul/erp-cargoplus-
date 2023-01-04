@@ -35,4 +35,8 @@ const LeadStatus = [
     value: "7",
   },
 ];
-module.exports = { LeadStatus };
+const LeadType = [
+  { id: "1", name: "Lead", value: "L" },
+  { id: "2", name: "Customer", value: "C" },
+];
+module.exports = { LeadType, LeadStatus };

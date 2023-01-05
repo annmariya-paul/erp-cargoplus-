@@ -53,6 +53,7 @@ import Assign_opportunity from "./pages/FMS/Opportunity_assigns/AssignOpportunit
 import Track_assignments from "./pages/FMS/Opportunity_assigns/Track_assignments/track_opportunity_assigns";
 import UpdateAssignOppurtunity from "./pages/FMS/Opportunity_assigns/update_oppo_assignment/update_oppo_assignment";
 import CreateAgent from "./pages/FMS/Agent mangement/CreateAgent";
+import SelectCountry from "./pages/CRM/General/CountrySelect";
 import Frightlist from "./pages/FMS/Quotations/Fright_types/fright_types";
 import Quotations from "./pages/FMS/Quotations/create quotation/quotation_list";
 // import Lead from "./pages/lead/lead";
@@ -66,6 +67,7 @@ function App() {
           <Route path={ROUTES.SIDEBAR} element={<Sidebar />} />
           <Route path={ROUTES.Layout} element={<Layout />}>
             <Route path={ROUTES.DASHBOARD} element={<Dashboard />} />
+            <Route path={ROUTES.COUNTRYSELECT} element={<SelectCountry />} />
             <Route path={ROUTES.LEAD} element={<Lead />} />
             <Route path={ROUTES.LEADLIST} element={<LeadList />} />
             <Route path={ROUTES.LEAD} element={<Lead />} />

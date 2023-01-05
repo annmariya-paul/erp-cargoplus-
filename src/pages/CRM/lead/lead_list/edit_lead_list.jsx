@@ -291,14 +291,13 @@ function LeadEdit() {
                             message: "Please enter a Valid Name",
                           },
                           {
-                            whitespace: true,
-                          },
-                          {
                             min: 2,
                             message: "Name must be at least 2 characters",
                           },
                           {
                             max: 100,
+                            message:
+                              "Name cannot be longer than 100 characters",
                           },
                         ]}
                       >
@@ -321,10 +320,10 @@ function LeadEdit() {
                       >
                         <SelectBox
                           value={leadUsertype}
-                          onChange={(e) => setLeadUsertype(e.target.value)}
+                          onChange={(e) => setLeadUsertype(e)}
                         >
                           <Select.Option value="O">Organisation</Select.Option>
-                          <Select.Option value="I">Indivdual</Select.Option>
+                          <Select.Option value="I">Individual</Select.Option>
                         </SelectBox>
                       </Form.Item>
                     </div>
@@ -335,17 +334,20 @@ function LeadEdit() {
                         rules={[
                           {
                             pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                            message: "Please enter a Valid Name",
+                            message: "Please enter a Valid Organization",
                           },
                           {
                             whitespace: true,
                           },
                           {
                             min: 2,
-                            message: "Name must be at least 2 characters",
+                            message:
+                              "Organization must be at least 2 characters",
                           },
                           {
                             max: 100,
+                            message:
+                              "Organization cannot be longer than 100 characters",
                           },
                         ]}
                       >
@@ -376,7 +378,7 @@ function LeadEdit() {
                           <Select.Option value="direct visit">
                             Direct Visit
                           </Select.Option>
-                          <Select.Option value="online registration" selected>
+                          <Select.Option value="online registration">
                             Online Registration
                           </Select.Option>
                         </SelectBox>
@@ -464,15 +466,13 @@ function LeadEdit() {
                           // value={leadStatus}
                           onChange={(e) => setLeadStatus(e)}
                         >
-                          <Select.Option value="1">Lead</Select.Option>
-                          <Select.Option value="2">Opportunity</Select.Option>
-                          <Select.Option value="3">Quotation</Select.Option>
-                          <Select.Option value="4" selected>
-                            Interested
-                          </Select.Option>
-                          <Select.Option value="5">Converted</Select.Option>
-                          <Select.Option value="6">Lost</Select.Option>
-                          <Select.Option value="7">DND</Select.Option>
+                          <Select.Option value={1}>Lead</Select.Option>
+                          <Select.Option value={2}>Opportunity</Select.Option>
+                          <Select.Option value={3}>Quotation</Select.Option>
+                          <Select.Option value={4}>Interested</Select.Option>
+                          <Select.Option value={5}>Converted</Select.Option>
+                          <Select.Option value={6}>Lost</Select.Option>
+                          <Select.Option value={7}>DND</Select.Option>
                         </SelectBox>
                       </Form.Item>
                     </div>

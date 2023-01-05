@@ -49,6 +49,7 @@ const ROUTES = {
   CREATEEMPLOYEE: "/createemployee",
   EMPLOYEEGRADE: "/employeegrade",
   CREATEAGENT: "/create_agent",
+  FRIGHTLIST:"/fright_list",
 };
 
 module.exports = { ROUTES };

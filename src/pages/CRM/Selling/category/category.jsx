@@ -25,6 +25,7 @@ const getBase64 = (file) =>
 
 function Category() {
   const [addForm] = Form.useForm();
+ const [error403,setError403]=useState(false);
   const navigate = useNavigate();
   const [successPopup, setSuccessPopup] = useState(false);
   const { TreeNode } = TreeSelect;
@@ -231,14 +232,18 @@ function Category() {
     })
       .then((res) => {
         console.log("success", res);
-        if (res.data.data) {
+        if (res.data.success) {
           setSuccessPopup(true);
           addForm.resetFields();
           close_modal(successPopup, 1000);
+        }else if(res.data.success===false){
+          //  setError403(true);
+          //   console.log("Category Code has been taken ");
+          alert(res.data.data);
         }
       })
       .catch((err) => {
-        console.log("error", err);
+        console.log("error", err.data.data);
         setError(true);
       });
   };
@@ -359,7 +364,13 @@ function Category() {
                         message: "Code cannot be longer than 100 characters",
                       },
                     ]}
-                    onChange={(e) => setCode(e.target.value)}
+                    onChange={(e) =>{
+                   setCode(e.target.value)
+                   setError403(false);
+
+                    }
+                       
+                      }
                   >
                     <InputType />
                   </Form.Item>
@@ -442,26 +453,30 @@ function Category() {
                           } else {
                             setImageSize(true);
                             console.log(
-                              "upload image size between 1 kb and  500 kb"
+                              "image size between 1 kb and  500 kb"
                             );
                           }
                         }}
                       />
                       {imageSize ? (
                         <p style={{ color: "red" }}>
-                          Upload Image size between 1 kb and 500 kb
+                         Please Upload an image  between 1 kb and 500 kb
                         </p>
                       ) : (
                         ""
                       )}
                     </Form.Item>
                   </div>
+                   {/* {
+              error403 ? (<div><p style={{textAlign:"center",color:"red"}}>Category Code has been taken </p></div>):""
+            } */}
                 </div>
                 <div className="d-flex mb-3">
                   <Button className="savebtn" btnType="save">
                     Save
                   </Button>
                 </div>
+                
               </div>
             </Form>
           </div>

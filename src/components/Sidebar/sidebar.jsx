@@ -21,6 +21,7 @@ export default function Sidebar({ showSidebar }) {
   const [CRMopen, setCRMopen] = useState(false);
   const [CRMReport, setCRMReport] = useState(false);
   const [CRMselling, setCRMselling] = useState(false);
+  const [CRMgeneral,setCRMgeneral]=useState(false);
   const [FMSOpen, setFMSOpen] = useState(false);
   const [FMSOppopen, setFMSOppopen] = useState(false);
   const [FMSAgentopen,setFMSAgentopen]=useState(false);
@@ -386,6 +387,42 @@ export default function Sidebar({ showSidebar }) {
                   ) : (
                     ""
                   )}
+                  <li
+                    className={
+                      CRMgeneral
+                        ? "nav-text  items_hrms open"
+                        : "nav-text  items_hrms "
+                    }
+                  >
+                    <Link
+                      className={CRMgeneral ? "active-link" : "link"}
+                      // to="/"
+                      onClick={() => setCRMgeneral(!CRMgeneral)}
+                    >
+                      <RiTeamFill className="sidebar_icons ms-3" />
+                      General
+                      <div className="d-flex justify-content-end ms-5 ps-5">
+                        <AiOutlineCaretDown className="toggle_btn " />
+                      </div>
+                    </Link>
+                  </li>
+                  {CRMgeneral ? (
+                    <>
+                      <li className="nav-text">
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.COUNTRYSELECT}
+                        >
+                          <MdEventNote className="sidebar_icons ms-4" />
+                          Countries
+                        </NavLink>
+                      </li>
+                    </>
+                  ) : (
+                    ""
+                  )}
                 </>
               ) : (
                 ""
@@ -438,7 +475,7 @@ export default function Sidebar({ showSidebar }) {
               ) : (
                 ""
               )} */}
-               {FMSOpen ? (
+              {FMSOpen ? (
                 <>
                   <li
                     className={
@@ -483,8 +520,6 @@ export default function Sidebar({ showSidebar }) {
                           Track Assignments
                         </NavLink>
                       </li>
-                     
-                    
                     </>
                   ) : (
                     ""
@@ -521,16 +556,11 @@ export default function Sidebar({ showSidebar }) {
                           Create Agent
                         </NavLink>
                       </li>
-                    
-                   
-                  
-                  
                     </>
-                    
                   ) : (
                     ""
                   )}
- <li
+                  <li
                     className={
                       FMSQuotationsopen
                         ? "nav-text  items_hrms open"
@@ -562,25 +592,14 @@ export default function Sidebar({ showSidebar }) {
                           Fright types
                         </NavLink>
                       </li>
-                    
-                   
-                  
-                  
                     </>
-                    
                   ) : (
                     ""
                   )}
-
-                   
                 </>
-                
-                
               ) : (
                 ""
               )}
-              
-
             </ul>
           </nav>
         </div>

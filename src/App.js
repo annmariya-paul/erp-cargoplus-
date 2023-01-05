@@ -54,6 +54,7 @@ import Track_assignments from "./pages/FMS/Opportunity_assigns/Track_assignments
 import UpdateAssignOppurtunity from "./pages/FMS/Opportunity_assigns/update_oppo_assignment/update_oppo_assignment";
 import CreateAgent from "./pages/FMS/Agent mangement/CreateAgent";
 import Frightlist from "./pages/FMS/Quotations/Fright_types/fright_types";
+import Quotations from "./pages/FMS/Quotations/create quotation/quotation_list";
 // import Lead from "./pages/lead/lead";
 
 function App() {
@@ -133,6 +134,10 @@ function App() {
             <Route
               path={ROUTES.FRIGHTLIST}
               element={<Frightlist />}
+            />
+            <Route
+              path={ROUTES.QUATATIONS}
+              element={<Quotations />}
             />
           </Route>
         </Routes>

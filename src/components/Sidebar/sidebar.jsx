@@ -596,7 +596,25 @@ export default function Sidebar({ showSidebar }) {
                   ) : (
                     ""
                   )}
+                   {FMSQuotationsopen ? (
+                    <>
+                      <li className="nav-text">
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.QUATATIONS}
+                        >
+                          <BsBookmarkFill className="sidebar_icons ms-4" />
+                          Quatations List
+                        </NavLink>
+                      </li>
+                    </>
+                  ) : (
+                    ""
+                  )}
                 </>
+                
               ) : (
                 ""
               )}

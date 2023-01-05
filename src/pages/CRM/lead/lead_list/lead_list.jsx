@@ -8,7 +8,11 @@ import {
   FaBookOpen,
   FaEdit,
 } from "react-icons/fa";
-import { LeadType, LeadStatus } from "../../../../utils/leadStatus";
+import {
+  LeadType,
+  LeadStatus,
+  LeadOrganization,
+} from "../../../../utils/leadStatus";
 import { MdFileCopy, MdPageview } from "react-icons/md";
 import { AiFillPrinter } from "react-icons/ai";
 import { Input, Select, Pagination, Checkbox } from "antd";
@@ -34,7 +38,7 @@ export default function LeadList() {
   const [modalViewLead, setModalViewLead] = useState(false);
   const [ldStatus, setLdStatus] = useState(LeadStatus);
   const [ldType, setLdType] = useState(LeadType);
-  const [statusArray, setStatusArray] = useState();
+  const [ldUserType, setLdUserType] = useState(LeadOrganization);
   const [allLeadList, setAllLeadList] = useState([]);
 
   const [currentcount, setCurrentcount] = useState();
@@ -92,21 +96,29 @@ export default function LeadList() {
           res?.data?.data?.leads?.forEach((item, index) => {
             ldStatus.forEach((i, index) => {
               ldType.forEach((t, index) => {
-                var leadStat = parseInt(i.value);
-                if (
-                  leadStat === item.lead_status &&
-                  t.value === item.lead_type
-                ) {
-                  {
-                    array.push({
-                      lead_type: t?.name,
-                      lead_customer_name: item?.lead_customer_name,
-                      lead_organization: item?.lead_organization,
-                      lead_status_name: i?.name,
-                    });
-                    setAllLeadList(array);
+                ldUserType.forEach((usrtyp, index) => {
+                  var leadStat = parseInt(i.value);
+                  if (
+                    leadStat === item.lead_status &&
+                    t.value === item.lead_type &&
+                    usrtyp.value === item.lead_user_type
+                  ) {
+                    {
+                      array.push({
+                        lead_id: item?.lead_id,
+                        lead_type: t?.name,
+                        lead_customer_name: item?.lead_customer_name,
+                        lead_user_type: usrtyp?.name,
+                        lead_organization: item?.lead_organization,
+                        lead_source: item?.lead_source,
+                        lead_description: item?.lead_description,
+                        attachments: item?.attachments,
+                        lead_status: i?.name,
+                      });
+                      setAllLeadList(array);
+                    }
                   }
-                }
+                });
               });
             });
           });
@@ -227,7 +239,7 @@ export default function LeadList() {
     },
     {
       title: "STATUS",
-      dataIndex: "lead_status_name",
+      dataIndex: "lead_status",
       key: "STATUS",
       filteredValue: [searchStatus],
       onFilter: (value, record) => {

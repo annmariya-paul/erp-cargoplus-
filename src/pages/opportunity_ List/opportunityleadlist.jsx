@@ -1273,19 +1273,14 @@ function OpportunityLeadlist(props) {
                 {/* <Form.Group className="mb-2" controlId="lead_details"> */}
                 <label>Details</label>
                 <Form.Item
-                  rules={
-                    [
-                      // {
-                      //   required: true,
-                      // },
-                      // {
-                      //   min:3
-                      // },
-                      // {
-                      //   max:100
-                      // }
-                    ]
-                  }
+                  className="mt-2"
+                  name="lead_details"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter valid details",
+                    },
+                  ]}
                 >
                   {/* as="textarea"
                     name="lead_details"
@@ -1426,7 +1421,6 @@ function OpportunityLeadlist(props) {
                   <textarea
                     type="text"
                     className="input_type_style w-100"
-                    // />
                     value={progressDetails}
                     onChange={(e) => setProgressDetails(e.target.value)}
                   />

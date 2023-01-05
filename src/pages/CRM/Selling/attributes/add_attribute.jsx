@@ -60,6 +60,8 @@ export default function Add_Attribute() {
   if(addattributes.data.success){
     setSaveSuccess(true)
     close_modal(saveSuccess,1000 )
+  }else if(addattributes.data.success===false){
+    alert(addattributes.data.data);
   }
   }
   catch(err){

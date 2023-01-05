@@ -100,7 +100,7 @@ export default function Quotations(props) {
       align: "center",
     },
     {
-      title: "Date",
+      title: "DATE",
       dataIndex: "date",
       key: "date",
       align: "center",

@@ -161,7 +161,7 @@ function BrandsList() {
           console.log("successDataa", res.data.data);
           getallbrand();
           setSuccessPopup(true);
-          close_modal(successPopup, 100000);
+          close_modal(successPopup, 1000);
           setBrandEditPopup(false);
         } else {
           setErrormsg(res.data.data);

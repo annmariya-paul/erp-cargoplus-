@@ -22,6 +22,9 @@ export default function Sidebar({ showSidebar }) {
   const [CRMReport, setCRMReport] = useState(false);
   const [CRMselling, setCRMselling] = useState(false);
   const [FMSOpen, setFMSOpen] = useState(false);
+  const [FMSOppopen, setFMSOppopen] = useState(false);
+  const [FMSAgentopen,setFMSAgentopen]=useState(false);
+  const[FMSQuotationsopen,setFMSQuotationsopen]=useState(false);
   const location = useLocation();
 
   const { pathname } = location;
@@ -407,7 +410,7 @@ export default function Sidebar({ showSidebar }) {
                   </div>
                 </Link>
               </li>
-              {FMSOpen ? (
+              {/* {FMSOpen ? (
                 <>
                   <li className="nav-text">
                     <NavLink
@@ -434,7 +437,150 @@ export default function Sidebar({ showSidebar }) {
                 </>
               ) : (
                 ""
+              )} */}
+               {FMSOpen ? (
+                <>
+                  <li
+                    className={
+                      FMSOppopen
+                        ? "nav-text  items_hrms open"
+                        : "nav-text  items_hrms "
+                    }
+                  >
+                    <Link
+                      className={FMSOppopen ? "active-link" : "link"}
+                      // to="/"
+                      onClick={() => setFMSOppopen(!FMSOppopen)}
+                    >
+                      <RiTeamFill className="sidebar_icons ms-3 " />
+                      Opportunity
+                      <div className="d-flex justify-content-end sale_crm_sliderbar_margin_style">
+                        <AiOutlineCaretDown className="toggle_btn  " />
+                      </div>
+                    </Link>
+                  </li>
+                  {FMSOppopen ? (
+                    <>
+                      <li className="nav-text ">
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.ASSIGN_OPPORTUNITIES}
+                        >
+                          <RiTeamFill className="sidebar_icons ms-4" />
+                          Opportunity assigns
+                        </NavLink>
+                      </li>
+                      <li className="nav-text">
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.TRACK_ASSIGNMENTS}
+                        >
+                          <BsFillXDiamondFill className="sidebar_icons ms-4" />
+                          Track Assignments
+                        </NavLink>
+                      </li>
+                     
+                    
+                    </>
+                  ) : (
+                    ""
+                  )}
+                  <li
+                    className={
+                      FMSAgentopen
+                        ? "nav-text  items_hrms open"
+                        : "nav-text  items_hrms "
+                    }
+                  >
+                    <Link
+                      className={FMSAgentopen ? "active-link" : "link"}
+                      // to="/"
+                      onClick={() => setFMSAgentopen(!FMSAgentopen)}
+                    >
+                      <RiTeamFill className="sidebar_icons ms-3" />
+                      Agent
+                      <div className="d-flex justify-content-end ms-5 ps-5">
+                        <AiOutlineCaretDown className="toggle_btn " />
+                      </div>
+                    </Link>
+                  </li>
+                  {FMSAgentopen ? (
+                    <>
+                      <li className="nav-text">
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.CREATEAGENT}
+                        >
+                          <BsBookmarkFill className="sidebar_icons ms-4" />
+                          Create Agent
+                        </NavLink>
+                      </li>
+                    
+                   
+                  
+                  
+                    </>
+                    
+                  ) : (
+                    ""
+                  )}
+ <li
+                    className={
+                      FMSQuotationsopen
+                        ? "nav-text  items_hrms open"
+                        : "nav-text  items_hrms "
+                    }
+                  >
+                    <Link
+                      className={FMSQuotationsopen ? "active-link" : "link"}
+                      // to="/"
+                      onClick={() => setFMSQuotationsopen(!FMSQuotationsopen)}
+                    >
+                      <RiTeamFill className="sidebar_icons ms-3" />
+                      Quotations
+                      <div className="d-flex justify-content-end ms-3 ps-5">
+                        <AiOutlineCaretDown className="toggle_btn " />
+                      </div>
+                    </Link>
+                  </li>
+                  {FMSQuotationsopen ? (
+                    <>
+                      <li className="nav-text">
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.FRIGHTLIST}
+                        >
+                          <BsBookmarkFill className="sidebar_icons ms-4" />
+                          Fright types
+                        </NavLink>
+                      </li>
+                    
+                   
+                  
+                  
+                    </>
+                    
+                  ) : (
+                    ""
+                  )}
+
+                   
+                </>
+                
+                
+              ) : (
+                ""
               )}
+              
+
             </ul>
           </nav>
         </div>

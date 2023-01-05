@@ -54,6 +54,7 @@ import Track_assignments from "./pages/FMS/Opportunity_assigns/Track_assignments
 import UpdateAssignOppurtunity from "./pages/FMS/Opportunity_assigns/update_oppo_assignment/update_oppo_assignment";
 import CreateAgent from "./pages/FMS/Agent mangement/CreateAgent";
 import SelectCountry from "./pages/CRM/General/CountrySelect";
+import Frightlist from "./pages/FMS/Quotations/Fright_types/fright_types";
 // import Lead from "./pages/lead/lead";
 
 function App() {
@@ -131,6 +132,10 @@ function App() {
               element={<UpdateAssignOppurtunity />}
             />
             <Route path={ROUTES.CREATEAGENT} element={<CreateAgent />} />
+            <Route
+              path={ROUTES.FRIGHTLIST}
+              element={<Frightlist />}
+            />
           </Route>
         </Routes>
       </BrowserRouter>

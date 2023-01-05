@@ -57,6 +57,7 @@ const ROUTES = {
   ASSIGN_OPPORTUNITIES:"/assign_opportunity",
   UPDATE_OPPORTUNITY_ASSIGNMENT:"/update_oppo_assignment",
   CREATEAGENT: "/create_agent",
+  FRIGHTLIST:"/fright_list",
 };
 
 module.exports = { ROUTES };

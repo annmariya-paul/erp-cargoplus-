@@ -82,7 +82,7 @@ export default function Frightlist(props) {
               className="viewIcon m-0"
               onClick={() => handleViewClick(index) }
             >
-              <MdPageview />
+              <MdPageview   style={{marginLeft:15,marginRight:15}}/>
             </div>
             <div className="deleteIcon m-0">
               <FaTrash />

@@ -297,7 +297,12 @@ function OpportunityLeadlist(props) {
     setOppurtunitylead(i.opportunity_lead_id);
     getAllContact();
 
+    editForm.setFieldsValue({
+
+    })
+
     setShowEditModal(true);
+
   };
 
   const handleEditclick = (e) => {
@@ -324,7 +329,7 @@ function OpportunityLeadlist(props) {
 
     try {
       const editoppurtunity = await PublicFetch.patch(
-        `${CRM_BASE_URL}/opportunity/basic/${oppurtunityid}`,
+        `${CRM_BASE_URL}/opportunity/${oppurtunityid}`,
         UpdatedFormdata
       );
 
@@ -1111,6 +1116,7 @@ function OpportunityLeadlist(props) {
         // Form={editformData}
       >
         <Form
+         name="editForm"
           form={editForm}
           onFinish={(value) => {
             console.log("values111333", value);
@@ -1127,7 +1133,15 @@ function OpportunityLeadlist(props) {
             <div className="row px-1">
               <div className="col-sm-4 pt-2">
                 <label>Lead Type</label>
-                <Form.Item>
+                <Form.Item
+                    name={"opportunity_type"}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please select a Type",
+                      },
+                    ]}
+                >
                   <SelectBox
                     value={oppurtunitytype}
                     onChange={(e) => {
@@ -1149,6 +1163,13 @@ function OpportunityLeadlist(props) {
                 {/* <Form.Label>From</Form.Label> */}
                 <label>Lead From</label>
                 <Form.Item
+                name={"opportunity_from"}
+                rules={[
+                  {
+                    required: true,
+                    message: "Please select a Type",
+                  },
+                ]}
                 // aria-label="lead_customer_from"
                 // name="lead_customer_from"
                 >
@@ -1188,6 +1209,13 @@ function OpportunityLeadlist(props) {
                 <label>Source</label>
 
                 <Form.Item
+                name={"opportunity_source"}
+                rules={[
+                  {
+                    required: true,
+                    message: "Please select a Type",
+                  },
+                ]}
                 // aria-label="lead_customer_from"
                 // name="lead_customer_from"
                 >

@@ -73,7 +73,7 @@ export default function EmploymentType() {
       const addemptype = await PublicFetch.post(
         `${CRM_BASE_URL_HRMS}/employment-types`,
         {
-          employment_type_name: addemploytypename,
+          employment_type_name: addemploytypename.trim(" ")
         }
       );
       console.log(" data is added  successfully", addemptype);
@@ -83,9 +83,10 @@ export default function EmploymentType() {
         addForm.resetFields();
         close_modal(saveSuccess, 1000);
       }
-      //  else{
-      //    <ErrorMsg code={"500"} />
-      //  }
+       else if(addemptype.data.success===false) {
+        alert(addemptype.data.data)
+        //  <ErrorMsg code={"500"} />
+       }
     } catch (err) {
       console.log("err to add the unit", err);
     }

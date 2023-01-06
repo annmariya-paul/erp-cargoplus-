@@ -59,6 +59,7 @@ const ROUTES = {
   CREATEAGENT: "/create_agent",
   FRIGHTLIST:"/fright_list",
   QUATATIONS:"/quatations_list",
+  ADD_QUOTATION:"/add_quotation",
   EDIT_QUOTATION:"/edit_quotation",
 };
 

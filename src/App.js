@@ -56,6 +56,7 @@ import CreateAgent from "./pages/FMS/Agent mangement/CreateAgent";
 import SelectCountry from "./pages/CRM/General/CountrySelect";
 import Frightlist from "./pages/FMS/Quotations/Fright_types/fright_types";
 import Quotations from "./pages/FMS/Quotations/create quotation/quotation_list";
+import Add_Quotation from "./pages/FMS/Quotations/create quotation/add_quotation";
 // import Lead from "./pages/lead/lead";
 
 function App() {
@@ -140,6 +141,10 @@ function App() {
             <Route
               path={ROUTES.QUATATIONS}
               element={<Quotations />}
+            />
+             <Route
+              path={ROUTES.ADD_QUOTATION}
+              element={<Add_Quotation />}
             />
           </Route>
         </Routes>

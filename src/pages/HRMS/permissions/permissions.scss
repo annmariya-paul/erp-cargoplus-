@@ -3,3 +3,10 @@
   color: white;
   border-radius: 5px;
 }
+.toggle_btn {
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+.open .toggle_btn {
+  transform: rotate(180deg);
+}

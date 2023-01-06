@@ -216,9 +216,12 @@ export default function Quotations(props) {
             </Select>
           </div>
           <div className="col-9 d-flex justify-content-end">
-            <Button btnType="add" onClick={() => setModalAddFright(true)}>
-              Add Quotations
-            </Button>
+          <div className="col mb-2 px-4">
+            <Link to={ROUTES.ADD_QUOTATION} style={{ color: "white" }}>
+              <Button btnType="add">Add Quotations</Button>
+            </Link>
+          </div>
+           
           </div>
         </div>
         <div className="datatable">

@@ -4,6 +4,7 @@ import Button from "../../../components/button/button";
 import SelectBox from "../../../components/Select Box/SelectBox";
 import PublicFetch from "../../../utils/PublicFetch";
 import "./permissions.scss";
+import { AiFillCaretDown } from "react-icons/ai";
 
 function Permission() {
   const [module1Click, setModule1Click] = useState(true);
@@ -104,7 +105,7 @@ function Permission() {
                   <label>Roles</label>
                   <div className="">
                     <Form.Item name="role_id">
-                      <SelectBox >
+                      <SelectBox>
                         {allRoleData &&
                           allRoleData.length > 0 &&
                           allRoleData.map((item, index) => {
@@ -141,15 +142,16 @@ function Permission() {
                 </div>
                 <div className="row">
                   <div className="col-6">
-                    {/* <div className="d-flex justify-content-center">
-                    <Checkbox></Checkbox>
-                    <button
-                      onClick={() => setModule1Click(!module1Click)}
-                      className="ms-3 btn-toggle"
-                    >
-                      Hrms
-                    </button>
-                  </div> */}
+                    <div className="d-flex justify-content-center">
+                      <Checkbox></Checkbox>
+                      <button
+                        style={{ backgroundColor: "white" }}
+                        onClick={() => setModule1Click(!module1Click)}
+                        className="ms-3 btn-toggle"
+                      >
+                        Hrms <AiFillCaretDown className="toggle_btn" />
+                      </button>
+                    </div>
                   </div>
                   {module1Click ? (
                     <>
@@ -157,16 +159,17 @@ function Permission() {
                         AllObjects.length > 0 &&
                         AllObjects.map((item, index) => {
                           return (
-                            <div className="col-12 my-3">
+                            <div className="col-12 my-3" key={item.id}>
                               {/* {single screen/object  starts} */}
 
                               <div className="row">
-                                <div className="col-6 ">
-                                  <div className=" d-flex justify-content-center gap-2">
+                                <div className="col-3"></div>
+                                <div className="col-3 ">
+                                  <div className=" d-flex justify-content-start gap-2">
                                     <Form.Item name="object_id">
                                       <Checkbox.Group>
                                         <Checkbox
-                                        name={item.name}
+                                          name={item.name}
                                           // indeterminate={}
                                           value={item.id}
                                           onChange={(e) => {
@@ -195,8 +198,8 @@ function Permission() {
                                           <div className="col-3">
                                             <div className="">
                                               <Form.Item name="permissions">
-                                                <Checkbox name={item.name}
-                                                  id={item.id}
+                                                <Checkbox
+                                                  key={item1.id}
                                                   value={item1?.value}
                                                   onChange={(value) => {
                                                     console.log(
@@ -207,7 +210,9 @@ function Permission() {
                                                     // onChange(value);
                                                     // handleClick(value);
                                                   }}
-                                                  checked={branch}
+                                                  checked={item.id.includes(
+                                                    item1.id
+                                                  )}
                                                 />
                                               </Form.Item>
                                             </div>

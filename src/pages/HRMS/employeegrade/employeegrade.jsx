@@ -241,7 +241,7 @@ function Employeegrade(){
                 </div>
               </div>
             </Form>
-            
+
             <Custom_model
               size={"sm"}
               show={saveSuccess}
@@ -316,7 +316,7 @@ function Employeegrade(){
             custom_table_css="table_lead_list"
           />
         </div>
-{/* 
+
         <Custom_model
         size={"sm"}
         show={editShow}
@@ -383,7 +383,7 @@ function Employeegrade(){
             </Form>
           </div>
         }
-      /> */}
+      />
 
       </div>
     </>

@@ -16,7 +16,8 @@ import PublicFetch from "../../../utils/PublicFetch";
 // { Add and list Designation - Ann mariya - 15/11/22 }
 export default function Designation(){
     const [error, setError] = useState(false);
-    const [addForm, setAddForm] = useState();
+    
+    const [addForm] = Form.useForm();
     const [successModal, setSuccessModal] = useState(false);
     const [designation,setDesignation] = useState();
     const [designationList,setDesignationList] = useState();
@@ -87,7 +88,7 @@ export default function Designation(){
         try{
         const updating= await PublicFetch.patch(
           `${CRM_BASE_URL_HRMS}/designation/${desigid}`,{
-            designation_name:editdesignationname,
+            designation_name:editdesignationname.trim(" "),
             designation_code:editdesignationcode,
            
           })
@@ -99,6 +100,8 @@ export default function Designation(){
            setEditShow(false);
            setSaveSuccess(true)
            close_modal(saveSuccess, 1200);
+          }else if(updating.data.success===false){
+            alert(updating.data.data);
           }
         }
         catch(err) {
@@ -124,18 +127,20 @@ export default function Designation(){
       try{
       const adddesigntion= await PublicFetch.post(
         `${CRM_BASE_URL_HRMS}/designation`,{
-          designation_name:designationname,
+          designation_name:designationname.trim(" "),
           designation_code: designationcode,
         })
        console.log("unit data is added ",adddesigntion)
        if(adddesigntion.data.success){
-        setSaveSuccess(true)
+        setSaveSuccess(true);
+        addForm.resetFields();
         close_modal(saveSuccess,1000)
        
        }
-      //  else{
-      //    <ErrorMsg code={"500"} />
-      //  }
+       else if(adddesigntion.data.success===false){
+        alert(adddesigntion.data.data);
+        //  <ErrorMsg code={"500"} />
+       }
       }
       catch(err) {
        console.log("err to add the unit",err)

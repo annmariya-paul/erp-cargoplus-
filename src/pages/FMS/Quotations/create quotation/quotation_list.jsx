@@ -4,7 +4,7 @@ import Button from "../../../../components/button/button";
 import InputType from "../../../../components/Input Type textbox/InputType";
 import ErrorMsg from "../../../../components/error/ErrorMessage";
 import Custom_model from "../../../../components/custom_modal/custom_model";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import { MdPageview } from "react-icons/md";
 import { Form,Input,Select,DatePicker} from "antd";
 import TableData from "../../../../components/table/table_data";
@@ -20,7 +20,7 @@ import { CRM_BASE_URL_HRMS } from "../../../../api/bootapi";
 
 export default function Quotations(props) {
 
- 
+  const navigate = useNavigate();
   const [addForm] = Form.useForm();
   const [error, setError] = useState(false);
   const [successPopup, setSuccessPopup] = useState(false);
@@ -49,10 +49,6 @@ export default function Quotations(props) {
   console.log(date);
   const today = new Date().toISOString().split("T")[0];
   
- 
- 
-
- 
 
 
   const columns = [
@@ -65,23 +61,23 @@ export default function Quotations(props) {
         console.log("index is :",index);
         return (
           <div className="d-flex justify-content-center align-items-center gap-2">
-           
-              <div
-                className="editIcon m-0"
-                // onClick={() =>FrightEdit(index)}
-              >
-                <FaEdit />
-              </div>
-              <div
-              className="viewIcon m-0"
-            //   onClick={() => handleViewClick(index) }
+            <div
+              className="editIcon m-0"
+              onClick={() => {
+                navigate(`/edit_quotation`);
+              }}
             >
-              <MdPageview   style={{marginLeft:15,marginRight:15}}/>
+              <FaEdit />
+            </div>
+            <div
+              className="viewIcon m-0"
+                onClick={() => {navigate(`/view_quotation`)}}
+            >
+              <MdPageview style={{ marginLeft: 15, marginRight: 15 }} />
             </div>
             <div className="deleteIcon m-0">
               <FaTrash />
             </div>
-            
           </div>
         );
       },
@@ -220,9 +216,12 @@ export default function Quotations(props) {
             </Select>
           </div>
           <div className="col-9 d-flex justify-content-end">
-            <Button btnType="add" onClick={() => setModalAddFright(true)}>
-              Add Quotations
-            </Button>
+          <div className="col mb-2 px-4">
+            <Link to={ROUTES.ADD_QUOTATION} style={{ color: "white" }}>
+              <Button btnType="add">Add Quotations</Button>
+            </Link>
+          </div>
+           
           </div>
         </div>
         <div className="datatable">

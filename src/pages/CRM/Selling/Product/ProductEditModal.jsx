@@ -364,7 +364,7 @@ console.log("attributee aryy",attributes)
 
   const OnSubmitedit = () => {
     const formData = new FormData();
-    formData.append("product_name", prname);
+    formData.append("product_name", prname.trim(" "));
     formData.append("product_code", prcode);
     formData.append("product_category_id", prcategory);
     formData.append("product_brand_id", prbrand);

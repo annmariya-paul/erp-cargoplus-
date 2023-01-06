@@ -25,13 +25,17 @@ function Employeegrade(){
     
     const [employeegradedata,setemployeegradedata]= useState("")
     const[employeegradename, setemployeegradename ]= useState("")
+    const [editempgradename,seteditempgradename]=useState("")
+    const [editempgradeid,seteditempgradeid]=useState()
+    const [saveSuccess, setSaveSuccess] = useState(false);
     const [addForm]= Form.useForm()
+    const [editForm]=Form.useForm()
 
 
     const close_modal = (mShow, time) => {
         if (!mShow) {
           setTimeout(() => {
-            setSuccessModal(false);
+            setSaveSuccess(false);
           }, time);
         }
       };
@@ -39,6 +43,7 @@ function Employeegrade(){
       const getData = (current, pageSize) => {
         return employeegradedata?.slice((current - 1) * pageSize, current * pageSize);
       };  
+
 
 
       
@@ -73,8 +78,8 @@ function Employeegrade(){
               getallempgrade() 
               setSuccessModal(true)
               addForm.resetFields()
-              // setSaveSuccess(true)
-              close_modal(successModal,1000)
+              setSaveSuccess(true)
+              close_modal(saveSuccess,1000)
              
              }
 
@@ -87,6 +92,38 @@ function Employeegrade(){
             }
             
             }
+
+            const updateClick = async (id) => {
+              try {
+                const updating = await PublicFetch.patch(
+                  `${CRM_BASE_URL_HRMS}/employee-grades/${editempgradeid}`,
+                  {
+                    employee_grade_name: editempgradename,
+                  }
+                );
+                console.log("editedd data is", updating);
+                if(updating.data.success){
+                 console.log("successfully updating ")
+                //  setViewUnitModal(false)
+                getallempgrade()
+                 setEditShow(false);
+                 setSaveSuccess(true)
+                 close_modal(saveSuccess, 1200);
+                }
+              } catch (err) {
+                console.log("error to getting all units", err);
+              }
+            };
+
+            const handleEditclick = (item) => {
+              console.log("editt valuesss", item);
+              seteditempgradename(item?.employee_grade_name);
+              seteditempgradeid(item?.employee_grade_id);
+              editForm.setFieldsValue({
+                Employment_grade_name: item?.employee_grade_name
+              });
+              setEditShow(true);
+            };
 
 
         const columns = [
@@ -102,9 +139,9 @@ function Employeegrade(){
                     <div className="m-0">
                       <div
                         className="editIcon m-0"
-                        // onClick={()=>{
-                        //   handleEditclick(index)
-                        // }}
+                        onClick={()=>{
+                          handleEditclick(index)
+                        }}
                       //   onClick={() => }
                       >
                         <FaEdit />
@@ -204,12 +241,20 @@ function Employeegrade(){
                 </div>
               </div>
             </Form>
+            
             <Custom_model
+              size={"sm"}
+              show={saveSuccess}
+              onHide={() => setSaveSuccess(false)}
+              success
+            />
+
+            {/* <Custom_model
               size={"sm"}
               show={successModal}
               onHide={() => setSuccessModal(false)}
               success
-            />
+            /> */}
           </div>
         </div>
       </div>
@@ -283,10 +328,10 @@ function Employeegrade(){
           <div className="container-fluid px-4 my-4 ">
             <h6 className="lead_text">Edit Employment Type</h6>
             <Form
-              // form={editForm}
+              form={editForm}
               onFinish={(value) => {
                 console.log("the formvaluess iss", value);
-                // updateClick()
+                updateClick()
                 // updateClick();
               }}
               onFinishFailed={(error) => {
@@ -297,7 +342,7 @@ function Employeegrade(){
                 <div className="col-12">
                   <label>Name</label>
                   <Form.Item
-                    name="Employment_type_name"
+                    name="Employment_grade_name"
                     rules={[
                       {
                         required: true,
@@ -318,6 +363,8 @@ function Employeegrade(){
                     ]}
                   >
                     <InputType
+                    value={editempgradename}
+                    onChange={(e) => seteditempgradename(e.target.value)}
                     //   value={editemptypename }
                     //   onChange={(e) => setEditemptypename(e.target.value)}
                     />

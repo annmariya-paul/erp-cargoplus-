@@ -5,7 +5,6 @@ import {
   FaEdit,
   FaTrash,
 } from "react-icons/fa";
-import TextArea from "../../../components/ InputType TextArea/TextArea";
 import Button from "../../../components/button/button";
 import SelectBox from "../../../components/Select Box/SelectBox";
 import TableData from "../../../components/table/table_data";

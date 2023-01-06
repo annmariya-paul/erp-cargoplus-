@@ -9,7 +9,7 @@ import Dashboard from "./pages/dashboard/dashboard";
 import Category from "./pages/CRM/Selling/category/category";
 import TestPage from "./pages/testpage";
 import LeadReport from "./pages/CRM/lead/leadReport/leadReport";
-import Opportunitylist from "./pages/opportunity_ List/opportunitylist";
+import Opportunitylist from "./pages/CRM/lead/opportunity_ List/opportunitylist";
 import Categorylist from "./pages/CRM/Selling/category/viewCategory";
 
 // import BrandsList from "./pages/CRM/lead/brands/BrandsList";
@@ -41,7 +41,7 @@ import Branches from "./pages/HRMS/branches/branches";
 import Departments from "./pages/HRMS/departments/departments";
 import Designation from "./pages/HRMS/designation/designation";
 import EmploymentType from "./pages/HRMS/employment_type/employment_type";
-import OpportunityLeadlist from "./pages/opportunity_ List/opportunityleadlist";
+import OpportunityLeadlist from "./pages/CRM/lead/opportunity_ List/opportunityleadlist";
 import Permission from "./pages/HRMS/permissions/Permission";
 import Roles_and_Screen from "./pages/HRMS/Roles and screen/roles_and_screen";
 import Employees from "./pages/HRMS/employees/employees";
@@ -56,6 +56,7 @@ import CreateAgent from "./pages/FMS/Agent mangement/CreateAgent";
 import SelectCountry from "./pages/CRM/General/CountrySelect";
 import Frightlist from "./pages/FMS/Quotations/Fright_types/fright_types";
 import Quotations from "./pages/FMS/Quotations/create quotation/quotation_list";
+import EditQuotation from "./pages/FMS/Quotations/create quotation/edit_quotation";
 // import Lead from "./pages/lead/lead";
 
 function App() {
@@ -133,14 +134,9 @@ function App() {
               element={<UpdateAssignOppurtunity />}
             />
             <Route path={ROUTES.CREATEAGENT} element={<CreateAgent />} />
-            <Route
-              path={ROUTES.FRIGHTLIST}
-              element={<Frightlist />}
-            />
-            <Route
-              path={ROUTES.QUATATIONS}
-              element={<Quotations />}
-            />
+            <Route path={ROUTES.FRIGHTLIST} element={<Frightlist />} />
+            <Route path={ROUTES.QUATATIONS} element={<Quotations />} />
+            <Route path={ROUTES.EDIT_QUOTATION} element={<EditQuotation />} />
           </Route>
         </Routes>
       </BrowserRouter>

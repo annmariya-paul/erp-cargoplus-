@@ -18,6 +18,8 @@ function CreateEmployee() {
   const [alldespartment, setAllDepartment] = useState();
   const [allemptype, setAllEmpType] = useState();
   const [allempgrade, setAllEmpGrade] = useState();
+  const [uniqueCode, setuniqueCode] = useState(false);
+  const [employeeCode, setEmployeeCode] = useState();
 
   const close_modal = (mShow, time) => {
     if (!mShow) {
@@ -121,6 +123,27 @@ function CreateEmployee() {
       });
   };
 
+  const checkemployeeCodeis = (data) => {
+    PublicFetch.get(
+      `${process.env.REACT_APP_BASE_URL}/misc?type=employeecode&value=${employeeCode}`
+    )
+      .then((res) => {
+        console.log("Response", res);
+        if (res.data.success) {
+          console.log("Success", res.data.data);
+          if (res.data.data.exist) {
+            console.log("hai guys");
+            setuniqueCode(true);
+          } else {
+            setuniqueCode(false);
+          }
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
   return (
     <div>
       <div className="container p-3">
@@ -173,8 +196,21 @@ function CreateEmployee() {
                               },
                             ]}
                           >
-                            <InputType />
+                            <InputType
+                              onChange={(e) => {
+                                setEmployeeCode(e.target.value);
+                                setuniqueCode(false);
+                              }}
+                              onBlur={(e) => {
+                                checkemployeeCodeis();
+                              }}
+                            />
                           </Form.Item>
+                          {uniqueCode ? (
+                            <label style={{ color: "red" }} className="my-2">
+                              Employee Code is Unique
+                            </label>
+                          ) : null}
                         </div>
                       </div>
                       <div className="col-6">

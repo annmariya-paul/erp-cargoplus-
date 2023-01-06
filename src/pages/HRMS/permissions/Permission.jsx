@@ -143,7 +143,11 @@ function Permission() {
                 <div className="row">
                   <div className="col-6">
                     <div className="d-flex justify-content-center">
-                      <Checkbox></Checkbox>
+                      <Checkbox
+                        onChange={() => {
+                          setBranch(!branch);
+                        }}
+                      ></Checkbox>
                       <button
                         style={{ backgroundColor: "white" }}
                         onClick={() => setModule1Click(!module1Click)}
@@ -178,9 +182,8 @@ function Permission() {
                                               "datat",
                                               e.target.value
                                             );
-                                            setBranch(!branch);
                                           }}
-                                          // checked={isCheckAll}
+                                          checked={branch}
                                         >
                                           {item.name}
                                         </Checkbox>
@@ -209,10 +212,9 @@ function Permission() {
 
                                                     // onChange(value);
                                                     // handleClick(value);
+                                                    setBranch(!branch);
                                                   }}
-                                                  checked={item.id.includes(
-                                                    item1.id
-                                                  )}
+                                                  checked={branch}
                                                 />
                                               </Form.Item>
                                             </div>

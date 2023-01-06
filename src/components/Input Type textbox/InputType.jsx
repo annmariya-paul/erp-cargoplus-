@@ -2,7 +2,15 @@ import { Input } from "antd";
 import React from "react";
 import "./InputType.scss";
 
-function InputType({ className, value, onChange, onClick, rule, minLength }) {
+function InputType({
+  className,
+  value,
+  onChange,
+  onClick,
+  rule,
+  minLength,
+  onBlur,
+}) {
   return (
     <div>
       <div>
@@ -13,6 +21,7 @@ function InputType({ className, value, onChange, onClick, rule, minLength }) {
           value={value}
           rule={rule}
           minLength={minLength}
+          onBlur={onBlur}
           style={{ backgroundColor: "#f4f4f7" }}
           className={`input_type_style w-100 my-2 pb-2 ${className}`}
           type="text"

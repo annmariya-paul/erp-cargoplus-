@@ -244,6 +244,7 @@ function Employees() {
         if (res.data.success) {
           console.log("Success for updating employee", res.data.data);
           setSuccessModal(true);
+          getAllEmployee();
           close_modal(successModal, 1200);
           setModalAddDept(false);
         }

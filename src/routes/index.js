@@ -18,7 +18,7 @@ const ROUTES = {
   OPPORTUNITY_LEAD: "/opportunity_lead",
 
   LEAD_EDIT_ID: "/edit_lead_list/:id",
-
+  COUNTRYSELECT:"/CountrySelect",
   BRANDS: "/brands",
   ATTRIBUTES: "/attributes",
   ADD_ATTRIBUTES: "/add_attribute",
@@ -37,9 +37,12 @@ const ROUTES = {
 
   SERVICES: "/services",
   SERVICECREATE: "/create_service",
+  
+
   BRANCHES: "/branches",
-  TRACK_ASSIGNMENTS: "/track_assignments",
-  ASSIGN_OPPORTUNITIES: "/assign_opportunity",
+
+  // TRACK_ASSIGNMENTS: "/track_assignments",
+  // ASSIGN_OPPORTUNITIES: "/assign_opportunity",
   DEPARTMENTS: "/departments",
   DESIGNATION: "/designation",
   EMPLOYMENT_TYPE: "/employment_type",
@@ -47,8 +50,15 @@ const ROUTES = {
   ROLES_SCREEN: "/roles_and_screens",
   EMPLOYEES: "/employees",
   CREATEEMPLOYEE: "/createemployee",
-  EMPLOYEEGRADE: "/employeegrade",
+  EMPLOYEEGRADE:"/employeegrade",
+
+  // { FMS }
+  TRACK_ASSIGNMENTS:"/track_assignments",
+  ASSIGN_OPPORTUNITIES:"/assign_opportunity",
+  UPDATE_OPPORTUNITY_ASSIGNMENT:"/update_oppo_assignment",
   CREATEAGENT: "/create_agent",
+  FRIGHTLIST:"/fright_list",
+  QUATATIONS:"/quatations_list",
 };
 
 module.exports = { ROUTES };

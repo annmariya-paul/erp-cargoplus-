@@ -193,7 +193,7 @@ export default function AddOpportunity(props) {
                 <h5 className="lead_text">Add Opportunity</h5>
                 <div className="row px-1">
                   <div className="col-sm-4 pt-2">
-                    <p>Type</p>
+                    <label>Type</label>
                     <Form.Item
                       name="lead_type"
                       rules={[
@@ -218,7 +218,7 @@ export default function AddOpportunity(props) {
                   </div>
 
                   <div className="col-sm-4 pt-2">
-                    <p>From</p>
+                    <label>From</label>
                     <Form.Item
                       name="lead_customer_from"
                       rules={[
@@ -240,8 +240,16 @@ export default function AddOpportunity(props) {
                   </div>
 
                   <div className="col-sm-4 pt-2">
-                    <p>Generated/Converted by</p>
-                    <Form.Item name="lead_customer_generated">
+                    <label>Generated/Converted by</label>
+                    <Form.Item
+                      name="lead_customer_generated"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please select an option",
+                        },
+                      ]}
+                    >
                       <SelectBox
                         placeholder={"--Please Select--"}
                         value={oppId}
@@ -252,7 +260,7 @@ export default function AddOpportunity(props) {
                   </div>
 
                   <div className="col-sm-4 pt-2">
-                    <p>Source</p>
+                    <label>Source</label>
                     <Form.Item
                       name="lead_source"
                       rules={[
@@ -281,7 +289,7 @@ export default function AddOpportunity(props) {
                   </div>
 
                   <div className="col-sm-4 pt-2">
-                    <p>Party</p>
+                    <label>Party</label>
                     <Form.Item
                       name="lead_party"
                       rules={[
@@ -315,16 +323,8 @@ export default function AddOpportunity(props) {
                   </div>
 
                   <div className="col-sm-4 pt-2">
-                    <p>Valid Up to</p>
-                    <Form.Item
-                      name="lead_valid_up_to"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please select a date",
-                        },
-                      ]}
-                    >
+                    <label>Valid Up to</label>
+                    <Form.Item className="mt-2" name="lead_valid_up_to">
                       {/* <SelectBox placeholder={"--Please Select--"} value={oppId}>
                     <Select.Option value="oppId">{oppId}</Select.Option>
                   </SelectBox> */}
@@ -341,13 +341,14 @@ export default function AddOpportunity(props) {
                   </div>
 
                   <div className="col-sm-4 pt-2">
-                    <p>Details</p>
+                    <label>Details</label>
                     <Form.Item
+                      className="mt-2"
                       name="lead_details"
                       rules={[
                         {
                           required: true,
-                          message: "Please enter a value",
+                          message: "Please enter valid details",
                         },
                       ]}
                     >
@@ -359,15 +360,14 @@ export default function AddOpportunity(props) {
                   </div>
 
                   <div className="col-sm-4 pt-2">
-                    <p>Expecting Amount</p>
+                    <label>Expecting Amount</label>
                     <Form.Item
                       name="lead_expecting_amt"
                       // type="number"
                       rules={[
                         {
-                          required: true,
                           pattern: new RegExp("^[0-9.]+$"),
-                          message: "Please enter valid amount",
+                          message: "Please enter a valid amount",
                         },
                       ]}
                     >
@@ -383,7 +383,7 @@ export default function AddOpportunity(props) {
                   </div>
 
                   <div className="col-sm-4 pt-2">
-                    <p>Probability of conversion</p>
+                    <label>Probability of conversion</label>
                     <Form.Item
                       name="lead_probability"
                       rules={[
@@ -405,7 +405,7 @@ export default function AddOpportunity(props) {
                     </Form.Item>
                   </div>
                   <div className="col-sm-4 pt-2">
-                    <p>Status</p>
+                    <label>Status</label>
                     <Form.Item
                       name="lead_status"
                       rules={[

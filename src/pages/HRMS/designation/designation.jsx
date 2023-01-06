@@ -267,7 +267,6 @@ return (
           />
         </div>
       </div>
-
     </div>
 
     <div className="container-fluid container2 pt-3">

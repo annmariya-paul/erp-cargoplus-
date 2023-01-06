@@ -458,6 +458,8 @@ function Categorylist(props) {
           setSuccessPopup(true);
           close_modal(SuccessPopup, 1200);
           editForm.resetFields();
+        }else if(res.data.success===false){
+          alert(res.data.data)
         }
       })
       .catch((err) => {

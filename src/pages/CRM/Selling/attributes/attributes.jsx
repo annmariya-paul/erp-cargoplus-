@@ -101,6 +101,8 @@ console.log("successfully updated ",updated)
 if(updated.data.success){
   setShowModalEdit(false)
   getallattributes()
+}else if(updated.data.success===false){
+  alert(updated.data.data);
 }
   }
   catch(err) {
@@ -420,8 +422,8 @@ getallattributes()
                           whitespace: true,
                         },
                         {
-                          min: 3,
-                          message: "attribute name must be 3 characters",
+                          min: 2,
+                          message: "attribute name must be 2 characters",
                         },
                         {
                           max:100

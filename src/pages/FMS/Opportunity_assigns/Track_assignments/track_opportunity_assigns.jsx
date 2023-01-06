@@ -240,7 +240,7 @@ const cancel = (e) => {
           <div className="d-flex justify-content-center align-items-center gap-2">
             <div className="m-0">
               <Link
-                to={`${ROUTES.TRACK_ASSIGNMENTS}/${index._id}`}
+                to={`${ROUTES.UPDATE_OPPORTUNITY_ASSIGNMENT}`}
                 className="editcolor"
               >
                 <FaEdit />

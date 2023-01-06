@@ -8,14 +8,18 @@ import {
   FaBookOpen,
   FaEdit,
 } from "react-icons/fa";
-
+import {
+  LeadType,
+  LeadStatus,
+  LeadOrganization,
+} from "../../../../utils/leadStatus";
 import { MdFileCopy, MdPageview } from "react-icons/md";
 import { AiFillPrinter } from "react-icons/ai";
-import { Input, Select, Pagination,Checkbox } from "antd";
+import { Input, Select, Pagination, Checkbox } from "antd";
 import "antd/dist/antd.css";
 import Button from "../../../../components/button/button";
 import TableData from "../../../../components/table/table_data";
-import { LeadStatus } from "../../../../utils/leadStatus";
+// import { LeadStatuss } from "../../../../utils/leadStatus";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { CRM_BASE_URL } from "../../../../api/bootapi";
 import Custom_model from "../../../../components/custom_modal/custom_model";
@@ -32,7 +36,9 @@ export default function LeadList() {
   const [pageIndex, setPageIndex] = useState(0);
   const [current, setCurrent] = useState(1);
   const [modalViewLead, setModalViewLead] = useState(false);
-
+  const [ldStatus, setLdStatus] = useState(LeadStatus);
+  const [ldType, setLdType] = useState(LeadType);
+  const [ldUserType, setLdUserType] = useState(LeadOrganization);
   const [allLeadList, setAllLeadList] = useState([]);
 
   const [currentcount, setCurrentcount] = useState();
@@ -82,10 +88,40 @@ export default function LeadList() {
     )
       .then((res) => {
         if (res?.data?.success) {
-          console.log("All lead data",res?.data?.data);
-          setAllLeadList(res?.data?.data?.leads);
+          console.log("All lead data", res?.data?.data);
+          // setAllLeadList(res?.data?.data?.leads);
           setTotalcount(res?.data?.data?.totalCount);
           setCurrentcount(res?.data?.data?.currentCount);
+          let array = [];
+          res?.data?.data?.leads?.forEach((item, index) => {
+            ldStatus.forEach((i, index) => {
+              ldType.forEach((t, index) => {
+                ldUserType.forEach((usrtyp, index) => {
+                  var leadStat = parseInt(i.value);
+                  if (
+                    leadStat === item.lead_status &&
+                    t.value === item.lead_type &&
+                    usrtyp.value === item.lead_user_type
+                  ) {
+                    {
+                      array.push({
+                        lead_id: item?.lead_id,
+                        lead_type: t?.name,
+                        lead_customer_name: item?.lead_customer_name,
+                        lead_user_type: usrtyp?.name,
+                        lead_organization: item?.lead_organization,
+                        lead_source: item?.lead_source,
+                        lead_description: item?.lead_description,
+                        attachments: item?.attachments,
+                        lead_status: i?.name,
+                      });
+                      setAllLeadList(array);
+                    }
+                  }
+                });
+              });
+            });
+          });
         } else {
           console.log("FAILED T LOAD DATA");
         }
@@ -94,9 +130,6 @@ export default function LeadList() {
         console.log("Errror while getting data", err);
       });
   };
-
-  // console.log("total count data", totalCount);
-  // console.log("page&&&& index", pageIndex);
 
   useEffect(() => {
     GetAllLeadData();
@@ -339,15 +372,13 @@ export default function LeadList() {
                 bordered={false}
                 className="page_size_style"
                 value={noofItems}
-              // onChange={handleLastNameChange}
+                // onChange={handleLastNameChange}
                 onChange={(event, current) => {
                   console.log("On page size selected : ", event);
-                  console.log("nfjnjfv", current)
-                  setNoofItems(event)
-                  setCurrent(1)
+                  console.log("nfjnjfv", current);
+                  setNoofItems(event);
+                  setCurrent(1);
                 }}
-            
-            
               >
                 {/* <Select.Option value="5">5 | pages</Select.Option> */}
                 {/* <Select.Option value="10">
@@ -414,7 +445,7 @@ export default function LeadList() {
               pageSize={noofItems}
               // defaultPageSize={noofItems}
               showSizeChanger={false}
-              onChange={(current,pageSize) => {
+              onChange={(current, pageSize) => {
                 console.log("page index isss", pageSize);
                 setCurrent(current);
                 // setPageSize(pageSize);

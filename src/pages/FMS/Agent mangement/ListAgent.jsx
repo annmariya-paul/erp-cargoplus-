@@ -4,19 +4,119 @@ import { Input, Select } from "antd";
 import TableData from "../../../components/table/table_data";
 import MyPagination from "../../../components/Pagination/MyPagination";
 import Custom_model from "../../../components/custom_modal/custom_model";
+import Button from "../../../components/button/button";
+import { useState } from "react";
+import { ROUTES } from "../../../routes";
+import { Form } from "antd";
+import InputType from "../../../components/Input Type textbox/InputType";
+import { Link } from "react-router-dom";
 
 function ListAgent(){
+  const [searchedText, setSearchedText] = useState("");
+  const [pageSize, setPageSize] = useState("25");
+  const [current, setCurrent] = useState(1);
+  const [addForm]=Form.useForm()
+
+  const getData = (current, pageSize) => {
+    return data?.slice((current - 1) * pageSize, current * pageSize);
+  };
 
 
+  const data = [
+    {
+      key: "1",
+      attribute_name: "color",
+      attribute_description: "this is a test",
+    },
+    {
+      key: "2",
+      attribute_name: "size",
+      attribute_description: "this is a test description",
+    },
+  ];
+
+  const columns = [
+    {
+      title: "ACTION",
+      dataIndex: "action",
+      align: "left",
+      key: "ACTION",
+      width: "14%",
+      render: (data, index) => {
+        return (
+          <div className="d-flex justify-content-center align-items-center gap-3">
+            <div
+              className="editIcon m-0"
+              // onClick={() =>
+              //   handleEditclick(index)}
+            >
+              {/* <FaEdit /> */}
+            </div>
+            <div
+              className="viewIcon m-0"
+              // onClick={() => handleViewClick(index) }
+            >
+              {/* <MdPageview /> */}
+            </div>
+            <div className="deleteIcon m-0">
+              {/* <FaTrash /> */}
+            </div>
+          </div>
+        );
+      },
+    
+    },
+    {
+      title: "Oppurtunity Name",
+      dataIndex: "attribute_name",
+      key: "NAME",
+      width: "25%",
+      filteredValue: [searchedText],
+      onFilter: (value, record) => {
+        console.log("valuesss in", record )
+        return String(record.attribute_name) 
+          .toLowerCase()
+          .includes(value.toLowerCase()) || String(record.attribute_description)
+          .toLowerCase()
+          .includes(value.toLowerCase())
+      },
+      align: "left",
+    },
+    {
+      title: "Country",
+      dataIndex: "attribute_name",
+      key: "NAME",
+      width: "25%",
+      filteredValue: [searchedText],
+      onFilter: (value, record) => {
+        console.log("valuesss in", record )
+        return String(record.attribute_name) 
+          .toLowerCase()
+          .includes(value.toLowerCase()) || String(record.attribute_description)
+          .toLowerCase()
+          .includes(value.toLowerCase())
+      },
+      align: "left",
+    },
+    {
+    
+      title: "Employee Code",
+      dataIndex: "attribute_description",
+      width:"30%",
+      key: "DESCRIPTION",
+     
+      align: "left",
+    },
+  ];
     
 return(
     <>
      <div className="container-fluid attribute_list pt-3">
         <div className="row flex-wrap">
           <div className="col">
-            <h5 className="lead_text">Attributes</h5>
+            <h5 className="lead_text">List Agent</h5>
           </div>
-          <Leadlist_Icons
+          {/* <Leadlist_Icons
               datas={attributes}
               columns={filteredColumns}
               items={data12}
@@ -33,7 +133,8 @@ return(
                     </li>
                   ))}
                 </Checkbox.Group>
-              } />
+              }
+               /> */}
         </div>
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
@@ -86,8 +187,10 @@ return(
 
         <div className="datatable">
           <TableData
-            data={getData(current, pageSize)}
-            columns={filteredColumns}
+            // data={getData(current, pageSize)}
+            data={data}
+            columns={columns}
+            // columns={filteredColumns}
             custom_table_css="attribute_table"
           />
         </div>
@@ -95,7 +198,7 @@ return(
           
           
 
-          <MyPagination
+          {/* <MyPagination
             total={attributes?.length}
             current={current}
             showSizeChanger={true}
@@ -104,18 +207,18 @@ return(
               setCurrent(current);
               setPageSize(pageSize);
             }}
-          />
+          /> */}
         </div>
 
 
         
         <Custom_model
           size={"sm"}
-          show={showModalEdit}
-          onHide={() => setShowModalEdit(false)}
+          // show={showModalEdit}
+          // onHide={() => setShowModalEdit(false)}
           // header="Attributes"
           footer={false}
-          {...props}
+          // {...props}
           View_list
           list_content={
             <div className="container-fluid p-4">
@@ -129,7 +232,7 @@ return(
         form={addForm}
          onFinish={(values)=>{
           console.log("values iss",values)
-          handleupdate()
+          // handleupdate()
          }}
          onFinishFailed={(error) => {
           console.log(error);
@@ -157,9 +260,8 @@ return(
                         }
                       ]}
                     >
-                    
-                      <InputType value={ attributeName } 
-                      onChange={(e)=> setAttributeName(e.target.value)}  placeholder="Name"/>
+                  <InputType/>
+                      
                     </Form.Item>
                   </div>
                   <div className="col-sm-6 pt-3">
@@ -185,8 +287,7 @@ return(
                         },
                       ]}
                     >
-                      <TextArea value={attributedescription}
-                    onChange={(e) =>  setAttributeDescription (e.target.value)}/>
+                     
                     </Form.Item>
             </div>
           </div>

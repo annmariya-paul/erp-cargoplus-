@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
-import PublicFetch from "../../utils/PublicFetch";
-import { CRM_BASE_URL } from "../../api/bootapi";
+import PublicFetch from "../../../../utils/PublicFetch";
+import { CRM_BASE_URL } from "../../../../api/bootapi";
 import Dropdown from "react-bootstrap/Dropdown";
 
 import {
@@ -16,26 +16,26 @@ import { FiEdit } from "react-icons/fi";
 import { AiFillPrinter } from "react-icons/ai";
 import { MdFileCopy, MdPageview } from "react-icons/md";
 import { Input, Select, Pagination } from "antd";
-import { ROUTES } from "../../routes";
-import "../CRM/lead/lead_list/leadlist.scss";
-import TableData from "../../components/table/table_data";
-import MyPagination from "../../components/Pagination/MyPagination";
-import CustomModel from "../../components/custom_modal/custom_model";
-import Button from "../../components/button/button";
+import { ROUTES } from "../../../../routes";
+import "../../../CRM//lead/lead_list/leadlist.scss";
+import TableData from "../../../../components/table/table_data";
+import MyPagination from "../../../../components/Pagination/MyPagination";
+import CustomModel from "../../../../components/custom_modal/custom_model";
+import Button from "../../../../components/button/button";
 
 import "./opportunitylist.scss";
 import { BsPlusCircleFill } from "react-icons/bs";
 import { Link, Route } from "react-router-dom";
-import OpportunityEdit from "../CRM/lead/modals/OpportunityEdit";
+import OpportunityEdit from "../modals/OpportunityEdit";
 import { useForm } from "react-hook-form";
 // import { Form } from "react-bootstrap";
-import Leadlist_Icons from "../../components/lead_list_icon/lead_list_icon";
+import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
 import moment from "moment";
 import { DatePicker } from "antd";
 import { Form } from "antd";
-import SelectBox from "../../components/Select Box/SelectBox";
-import InputType from "../../components/Input Type textbox/InputType";
-import TextArea from "../../components/ InputType TextArea/TextArea";
+import SelectBox from "../../../../components/Select Box/SelectBox";
+import InputType from "../../../../components/Input Type textbox/InputType";
+import TextArea from "../../../../components/ InputType TextArea/TextArea";
 // const editformData = new FormData();
 import { CSVLink } from "react-csv";
 import jsPDF from "jspdf";

@@ -15,7 +15,7 @@ import "../../lead/lead_list/leadlist.scss";
 
 // import CustomModel from "../../components/custom_modal/custom_model";
 
-import "../../../opportunity_ List/opportunitylist.scss";
+import "../../../../pages/CRM/lead/opportunity_ List/opportunitylist.scss";
 // import { BsPlusCircleFill } from "react-icons/bs";
 
 // import { Route } from "react-router-dom";

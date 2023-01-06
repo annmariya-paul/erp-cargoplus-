@@ -175,7 +175,7 @@ export default function Quotations(props) {
       <div className="container-fluid container2 pt-3">
         <div className="row flex-wrap">
           <div className="col">
-            <h5 className="lead_text">Quatations</h5>
+            <h5 className="lead_text">Quotations</h5>
           </div>
           {/* <Leadlist_Icons /> */}
         </div>
@@ -221,7 +221,7 @@ export default function Quotations(props) {
           </div>
           <div className="col-9 d-flex justify-content-end">
             <Button btnType="add" onClick={() => setModalAddFright(true)}>
-              Add Quatations
+              Add Quotations
             </Button>
           </div>
         </div>

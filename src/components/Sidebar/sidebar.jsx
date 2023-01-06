@@ -606,7 +606,7 @@ export default function Sidebar({ showSidebar }) {
                           to={ROUTES.QUATATIONS}
                         >
                           <BsBookmarkFill className="sidebar_icons ms-4" />
-                          Quatations List
+                          Quotations List
                         </NavLink>
                       </li>
                     </>

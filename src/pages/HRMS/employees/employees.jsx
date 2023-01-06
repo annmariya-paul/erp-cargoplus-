@@ -131,7 +131,21 @@ function Employees() {
         console.log("Response", res);
         if (res.data.success) {
           console.log("Success of employee", res.data.data);
-          setAllEmployees(res.data.data);
+          // setAllEmployees(res.data.data);
+          //  let arr=[];
+          // res?.data?.data?.forEach((item,index)=>{
+          //   allbranches.forEach((br,index)=>{
+          //   var brnchname = parseInt(br.branch_id)
+           
+          //   if (brnchname === item.employee_branch) {
+          //     arr.push({
+          //       employee_id: item?.employee_id,
+          //       employee_branch: br?.branch_name,
+          //     });
+          //     setAllEmployees(arr);
+          //   }
+          // });
+          //  })
         }
       })
       .catch((err) => {

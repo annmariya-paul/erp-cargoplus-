@@ -50,7 +50,7 @@ function Services() {
   const [servicedescription, setServicedescription] = useState();
   const [serviceCategory, setServicecategory] = useState();
   const [serviceImg, setServiceImg] = useState([]);
-  const [imageSize,setImageSize]= useState(false);
+  const [imageSize, setImageSize] = useState(false);
 
   const [serviceid, setserviceid] = useState();
   const [ImageUpload, setImageUpload] = useState();

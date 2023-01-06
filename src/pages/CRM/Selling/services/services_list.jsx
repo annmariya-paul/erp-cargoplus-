@@ -258,7 +258,7 @@ function Services() {
     // console.log("edit data", e);
     const formData = new FormData();
 
-    formData.append("service_name", serviceName);
+    formData.append("service_name", serviceName.trim(" "));
     formData.append("service_code", serviceCode);
     formData.append("service_category_id", serviceCategory);
     formData.append("service_hsn", serviceHsn);
@@ -669,6 +669,7 @@ function Services() {
                             pattern: new RegExp("^[A-Za-z0-9 ]+$"),
                             message: "Please enter a Valid Name",
                           },
+                          {whitespace:true},
                           {
                             min: 2,
                             message: "Name must be at least 2 characters",

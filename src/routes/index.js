@@ -61,6 +61,7 @@ const ROUTES = {
   QUATATIONS:"/quatations_list",
   ADD_QUOTATION:"/add_quotation",
   EDIT_QUOTATION:"/edit_quotation",
+  VIEW_QUOTATION:"/view_quotation",
 };
 
 module.exports = { ROUTES };

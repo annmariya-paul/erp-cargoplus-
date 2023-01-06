@@ -339,10 +339,10 @@ getallattributes()
           list_content={
             <div className="container-fluid p-3">
               <div className="row">
-                <div className="col-10">
+                <div className="col-9">
                   <h5 className="lead_text">Attribute</h5>
                 </div>
-                <div className="col-2">
+                <div className="col-3 d-flex justify-content-end">
                   <Button
                     btnType="add_borderless"
                     className="edit_button"

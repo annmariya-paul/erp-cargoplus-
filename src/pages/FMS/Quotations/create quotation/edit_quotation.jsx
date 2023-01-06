@@ -26,7 +26,7 @@ export default function EditQuotation() {
         >
           <div className="row py-1">
             <div className="col-sm-4 pt-2">
-              <label>Fright type </label>
+              <label>Freight type</label>
               <Form.Item
                 name="FreightType"
                 rules={[
@@ -43,7 +43,7 @@ export default function EditQuotation() {
             </div>
 
             <div className="col-sm-4 pt-2">
-              <label>Chargable weight </label>
+              <label>Chargable weight</label>
               <Form.Item
                 name="chargableWeight"
                 rules={[
@@ -52,15 +52,6 @@ export default function EditQuotation() {
                     pattern: new RegExp("^[0-9]+$"),
                     message: "Please enter a Valid Chargable weight ",
                   },
-                  //   {
-                  //     min: 2,
-                  //     message: "Attribute name must be at least 2 characters",
-                  //   },
-                  //   {
-                  //     max: 100,
-                  //     message:
-                  //       "Attribute name cannot be longer than 100 characters",
-                  //   },
                 ]}
               >
                 <InputType

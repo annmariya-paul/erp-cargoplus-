@@ -1,7 +1,7 @@
 import { Form, Input } from "antd";
 import React, { useState } from "react";
 import "../../lead/lead.styles.scss";
-import "../../../opportunity_ List/opportunitylist.scss";
+import "../../../../pages/CRM/lead/opportunity_ List/opportunitylist.scss";
 import FileUpload from "../../../../components/fileupload/fileUploader";
 import Button from "../../../../components/button/button";
 import CustomModel from "../../../../components/custom_modal/custom_model";

@@ -60,6 +60,7 @@ const ROUTES = {
   FRIGHTLIST:"/fright_list",
   QUATATIONS:"/quatations_list",
   ADD_QUOTATION:"/add_quotation",
+  EDIT_QUOTATION:"/edit_quotation",
 };
 
 module.exports = { ROUTES };

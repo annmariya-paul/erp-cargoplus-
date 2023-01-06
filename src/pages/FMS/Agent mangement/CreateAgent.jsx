@@ -26,7 +26,7 @@ function CreateAgent() {
               <div className="container">
                 <div className="row">
                   <div className="col-12">
-                    <h4>Create An Agent</h4>
+                    <h4 className="">Create An Agent</h4>
                     <div className="container-fluid">
                       <Form>
                         <div className="row">

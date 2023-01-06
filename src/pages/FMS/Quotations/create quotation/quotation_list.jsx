@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Button from "../../../../components/button/button";
+
 import InputType from "../../../../components/Input Type textbox/InputType";
 import ErrorMsg from "../../../../components/error/ErrorMessage";
 import Custom_model from "../../../../components/custom_modal/custom_model";
@@ -17,7 +18,7 @@ import CustomModel from "../../../../components/custom_modal/custom_model";
 import { CRM_BASE_URL_HRMS } from "../../../../api/bootapi";
 
 
-export default function Frightlist(props) {
+export default function Quotations(props) {
 
  
   const [addForm] = Form.useForm();
@@ -34,7 +35,7 @@ export default function Frightlist(props) {
   const [NameInput, setNameInput] = useState();
   const [CodeInput, setCodeInput] = useState();
    const [showViewModal, setShowViewModal] = useState(false);
-  const [FrightEditPopup, setFrightEditPopup] = useState(false);
+ 
   const [editForm] = Form.useForm();
   const close_modal = (mShow, time) => {
     if (!mShow) {
@@ -49,16 +50,9 @@ export default function Frightlist(props) {
   const today = new Date().toISOString().split("T")[0];
   
  
- const handleViewClick=(item)=>{
-    setShowViewModal(true)
- }
+ 
 
-  const FrightEdit = (e) => {
-   
-   
-    setFrightEditPopup(true);
-  };
-
+ 
 
 
   const columns = [
@@ -74,13 +68,13 @@ export default function Frightlist(props) {
            
               <div
                 className="editIcon m-0"
-                onClick={() =>FrightEdit(index)}
+                // onClick={() =>FrightEdit(index)}
               >
                 <FaEdit />
               </div>
               <div
               className="viewIcon m-0"
-              onClick={() => handleViewClick(index) }
+            //   onClick={() => handleViewClick(index) }
             >
               <MdPageview   style={{marginLeft:15,marginRight:15}}/>
             </div>
@@ -94,63 +88,83 @@ export default function Frightlist(props) {
       align: "center",
     },
     {
-      title: "FRIGHT TYPE NAME",
-      dataIndex: "fright_name",
-      key: "fright_name",
+      title: "LEAD / CUSTOMER NAME",
+      dataIndex: "lead_name",
+      key: "lead_name",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.fright_name)
+        return String(record.lead_name)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
       align: "center",
     },
     {
-      title: "Date",
+      title: "DATE",
       dataIndex: "date",
       key: "date",
       align: "center",
     },
+    {
+        title: "COUNTRY ORIGIN",
+        dataIndex: "c_origin",
+        key: "c_origin",
+        align: "center",
+      },
+      {
+        title: "COUNTRY DESTINATION",
+        dataIndex: "c_destination",
+        key: "c_destination",
+        align: "center",
+      },
+      {
+        title: "PRICE QUOTED",
+        dataIndex: "price",
+        key: "price",
+        align: "center",
+      },
+      {
+        title: "FRIGHT TYPE",
+        dataIndex: "fright_type",
+        key: "fright_type",
+        align: "center",
+      },
+
   ];
 
   const data = [
     {
-       fright_name: "Fright X",
-       date: "2-1-23",
+        lead_name: "test",
+       date: "4-1-23",
+       c_origin:"sss",
+       c_destination:"xyz",
+       price:1000,
+       fright_type:"new",
+
        key: "1",
     },
     {
-        fright_name: "Fright y",
-        date: "12-1-23",
-        key: "2",
+        lead_name: "www",
+       date: "2-1-23",
+       c_origin:"abc",
+       c_destination:"xyz",
+       price:2000,
+       fright_type:"new",
+
+       key: "2",
     },
-    {
-        fright_name: "Fright z",
-        date: "22-1-23",
-        key: "3",
-    },
-  ];  
-  const [saveSuccess, setSaveSuccess] =useState(false)
-  const [frightError, setFrightError] = useState();
-   const [viewfright,setViewfright]=useState({
-    id:"",
-    frightname:"",
-    date:"",
-  
-  })
- 
-  const [frightname, setFrightname] = useState();
-
-
-
-  
-
-
-
-const handleviewtoedit=(i)=>{
    
-  FrightEditPopup(true);
-}
+  ];  
+
+
+
+
+
+  
+
+
+
+
 
 
   
@@ -161,7 +175,7 @@ const handleviewtoedit=(i)=>{
       <div className="container-fluid container2 pt-3">
         <div className="row flex-wrap">
           <div className="col">
-            <h5 className="lead_text">Fright types</h5>
+            <h5 className="lead_text">Quotations</h5>
           </div>
           {/* <Leadlist_Icons /> */}
         </div>
@@ -207,7 +221,7 @@ const handleviewtoedit=(i)=>{
           </div>
           <div className="col-9 d-flex justify-content-end">
             <Button btnType="add" onClick={() => setModalAddFright(true)}>
-              Add Fright types
+              Add Quotations
             </Button>
           </div>
         </div>
@@ -224,7 +238,7 @@ const handleviewtoedit=(i)=>{
 
 
 
-      <CustomModel
+      {/* <CustomModel
       
         show={modalAddFright}
         onHide={() => setModalAddFright(false)}
@@ -324,10 +338,10 @@ const handleviewtoedit=(i)=>{
           onHide={() => setSuccessPopup(false)}
           success
         />
-      </CustomModel>
+      </CustomModel> */}
 
 
-       <Custom_model
+       {/* <Custom_model
           show={showViewModal}
           onHide={() => setShowViewModal(false)}
           View_list
@@ -342,9 +356,9 @@ const handleviewtoedit=(i)=>{
                     btnType="add_borderless"
                     className="edit_button"
                     onClick={() => {
-                    setFrightEditPopup(true);
+                    // setFrightEditPopup(true);
                       // setShowModalEdit(true);
-                      setShowViewModal(false);
+                    //   setShowViewModal(false);
                     }}
                   >
                     Edit
@@ -376,8 +390,8 @@ const handleviewtoedit=(i)=>{
               </div>
             </div>
           }
-        />
-      <Custom_model
+        /> */}
+      {/* <Custom_model
          show={FrightEditPopup}
         onHide={() => setFrightEditPopup(false)}
         View_list
@@ -478,7 +492,7 @@ const handleviewtoedit=(i)=>{
             </div>
           </div>
         }
-      />
+      /> */}
           <CustomModel
         size={"sm"}
         show={successPopup}

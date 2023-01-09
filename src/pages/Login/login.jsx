@@ -16,33 +16,34 @@ function Login () {
     const [password,setPassword] = useState("");
     console.log("password",password);
     const navigate=useNavigate();
-    const Submit = async()=>{
+    const Submit = ()=>{
         console.log("Entered");
         try{
-        const logeduser= await PublicFetch.post(`${process.env.REACT_APP_BASE_URL}/auth/login`,{
+        const logeduser=  PublicFetch.post(`${process.env.REACT_APP_BASE_URL}/auth/login`,{
             user_name:username,
             user_password:password,
-          })
-         console.log("login data is added ",logeduser)
+          }).then((res)=>{localStorage.setItem("user",JSON.stringify(res.data.data))
+          navigate("/dashboard")
+        })
         //  if(logeduser.data.success){
-          if(logeduser.request.status==201){
-        console.log("console of success ",logeduser.request.status);
-        navigate("/dashboard")
+          // if(logeduser.request.status==201){
+        // console.log("console of success ",logeduser.request.status);
+       
         // alert("success");
         
          
-         }
+        //  }
         
         }
         catch(err) {
-          console.log("newwww",err.response.request.status);
-          if(err.response.request.status==403){
-            setError403(true);
-            console.log("Invalid Username and password ");
-          }else if(err.response.request.status==500){
-            console.log("Something went wrong",err);
-            alert("Login failed");
-          }
+          // console.log("newwww",err.response.request.status);
+          // if(err.response.request.status==403){
+          //   setError403(true);
+          //   console.log("Invalid Username and password ");
+          // }else if(err.response.request.status==500){
+          //   console.log("Something went wrong",err);
+          //   alert("Login failed");
+          // }
        
         }
         
@@ -121,7 +122,7 @@ return (
           </div>
           <div className="row justify-content-center">
             <div className="col-auto">
-              <Button btnType="add" >Login</Button>
+              <Button btnType="add" htmlType="submit" >Login</Button>
             </div>
            
           </div>

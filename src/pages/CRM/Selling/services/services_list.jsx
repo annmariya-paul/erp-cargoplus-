@@ -68,6 +68,8 @@ function Services() {
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
   console.log("set image", img);
+  const [services, setServices] = useState([]);
+  console.log("Servicesss are :::", services);
 
   const navigate = useNavigate();
 
@@ -117,7 +119,21 @@ function Services() {
       .then((res) => {
         console.log("all services is ", res.data.data);
         if (res?.data?.success) {
-          console.log("All services dataa", res?.data?.data);
+          console.log("All services dataawww", res?.data?.data?.services);
+          let tempArr = [];
+          res?.data?.data?.services.forEach((item, index) => {
+          tempArr.push({
+            service_id:item?.service_id,
+            service_name: item?.service_name,
+            service_category_id: item?.crm_v1_categories?.category_code,
+            service_code: item?.service_code,
+            service_pic: item?.service_pic,
+            service_taxrate:item?.service_taxrate,
+          });
+        });
+          console.log("hellooooqqqqq", tempArr);
+          setServices(tempArr);
+
           setAllservices(res?.data?.data.services);
           setTotalcount(res?.data?.data?.totalCount);
           // setCurrentcount(res?.data?.data?.currentCount);
@@ -584,7 +600,7 @@ function Services() {
           <div className="datatable">
             <TableData
               // data={getData(current, pageSize)}
-              data={allservices}
+              data={services}
               //   data={data}
               columns={columns}
               custom_table_css="table_lead_list"

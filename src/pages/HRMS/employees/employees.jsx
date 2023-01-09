@@ -23,18 +23,20 @@ function Employees() {
   const [deptCode, setDeptCode] = useState();
   const [pageSize, setPageSize] = useState("25");
   const [current, setCurrent] = useState("");
-  const [allEmployees, setAllEmployees] = useState();
+  const [allEmployees, setAllEmployees] = useState([]);
   // const [successModal, setSuccessModal] = useState();
   const [allbranches, setAllBranches] = useState();
   const [alldesgination, setAllDesignation] = useState();
+  console.log("dsgsssssss", alldesgination);
   const [alldespartment, setAllDepartment] = useState();
   const [allemptype, setAllEmpType] = useState();
   const [allempgrade, setAllEmpGrade] = useState();
+  console.log("empgrdddd", allempgrade);
   const [emp_id, setEmp_Id] = useState();
-
-  const getData = (current, pageSize) => {
-    return data?.slice((current - 1) * pageSize, current * pageSize);
-  };
+  console.log("allEmp", allEmployees);
+  // const getData = (current, pageSize) => {
+  //   return data?.slice((current - 1) * pageSize, current * pageSize);
+  // };
   const columns = [
     {
       title: "ACTION",
@@ -107,54 +109,23 @@ function Employees() {
     },
   ];
 
-  const data = [
-    {
-      employee_name: "Dept test",
-      dept_code: "DEPTAA",
-      key: "1",
-    },
-    {
-      employee_name: "Dept sample",
-      dept_code: "DEPTBB",
-      key: "2",
-    },
-    {
-      employee_name: "Technical",
-      dept_code: "DEPTCC",
-      key: "3",
-    },
-  ];
-
-  const getAllEmployee = () => {
-    PublicFetch.get(`${CRM_BASE_URL_HRMS}/employees`)
-      .then((res) => {
-        console.log("Response", res);
-        if (res.data.success) {
-          console.log("Success of employee", res.data.data);
-          // setAllEmployees(res.data.data);
-           let arr=[];
-          res?.data?.data?.forEach((item,index)=>{
-            allbranches.forEach((br,index)=>{
-
-            var brnchname = parseInt(br.branch_id)
-           
-            if (brnchname === item.employee_branch) {
-              arr.push({
-                employee_id: item?.employee_id,
-                employee_name:item?.employee_name,
-                employee_code:item?.employee_code,
-                employee_branch: br?.branch_name,
-              });
-              setAllEmployees(arr);
-            }
-          });
-           })
-        }
-      })
-      .catch((err) => {
-        console.log("Error", err);
-      });
-  };
+  // const data = [
+  //   {
+  //     employee_name: "Dept test",
+  //     dept_code: "DEPTAA",
+  //     key: "1",
+  //   },
+  //   {
+  //     employee_name: "Dept sample",
+  //     dept_code: "DEPTBB",
+  //     key: "2",
+  //   },
+  //   {
+  //     employee_name: "Technical",
+  //     dept_code: "DEPTCC",
+  //     key: "3",
+  //   },
+  // ];
 
   const getbranches = () => {
     PublicFetch.get(`${CRM_BASE_URL_HRMS}/branch`)
@@ -226,6 +197,52 @@ function Employees() {
       });
   };
 
+  const getAllEmployee = () => {
+    PublicFetch.get(`${CRM_BASE_URL_HRMS}/employees`)
+      .then((res) => {
+        console.log("Response", res);
+        if (res.data.success) {
+          console.log("Success of employee", res.data.data);
+          setAllEmployees(res.data.data);
+          // let arr = [];
+          // res?.data?.data?.forEach((item, index) => {
+          //   console.log("item", item);
+          //   allbranches.forEach((br, index) => {
+          //     alldespartment.forEach((dept, index) => {
+          //       allempgrade.forEach((grd, index) => {
+          //         allemptype.forEach((type, index) => {
+          //           // var brnchname = parseInt(br.branch_id);
+
+          //           if (
+          //             br.branch_id === item.employee_branch &&
+          //             dept.department_id === item.employee_department &&
+          //             grd.employee_grade_id === item.employee_grade &&
+          //             type.employment_type_id === item.employee_type
+          //           ) {
+          //             {
+          //               arr.push({
+          //                 employee_id: item?.employee_id,
+          //                 employee_name: item?.employee_name,
+          //                 employee_code: item?.employee_code,
+          //                 employee_branch: br?.branch_name,
+          //                 employee_department: dept?.department_name,
+          //                 employee_grade: grd?.employee_grade_name,
+          //                 employee_type: type?.employment_type_name,
+          //               });
+          //               setAllEmployees(arr);
+          //             }
+          //           }
+          //         });
+          //       });
+          //     });
+          //   });
+          // });
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
   useEffect(() => {
     getAllEmployee();
     getDepartment();
@@ -345,7 +362,7 @@ function Employees() {
         </div>
         <div className="d-flex py-2 justify-content-center">
           <MyPagination
-            total={data.length}
+            // total={data.length}
             current={current}
             showSizeChanger={true}
             pageSize={pageSize}

@@ -1719,57 +1719,87 @@ function Opportunitylist(props) {
                   <h5 className="opportunity_heading">Add Progress</h5>
                 </div>
               </div>
-              <div className="row p-3">
-                <div className="col-6 my-1">
-                  <label className="my-1">Response</label>
-                  {/* <input type="text" className="input_type_style w-100 "  */}
-                  <input
-                    type="text"
-                    className="input_type_style w-100 "
-                    value={progressResponse}
-                    onChange={(e) => setProgressResponse(e.target.value)}
-                  />
+              <Form>
+                <div className="row p-3">
+                  <div className="col-6 my-1">
+                    <label className="my-1">Response</label>
+                    {/* <input type="text" className="input_type_style w-100 "  */}
+                    <Form.Item
+                      name="opportunity_response"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Resonse Is Required",
+                        },
+                      ]}
+                    >
+                      <SelectBox onChange={(e) => setProgressResponse(e)}>
+                        <Select.Option value="interested">
+                          Interested
+                        </Select.Option>
+                        <Select.Option value="positive">Positive</Select.Option>
+                        <Select.Option value="busy">Busy</Select.Option>
+                        <Select.Option value="callback">Callback</Select.Option>
+                        <Select.Option value="rejected">Rejected</Select.Option>
+                      </SelectBox>
+                    </Form.Item>
+                  </div>
+                  <div className="col-6 my-1">
+                    <label className="my-1">Next Contact Date</label>
+                    <Form.Item name="opportunity_nextcontactdate">
+                      <input
+                        type="date"
+                        className="mt-2 p-2 input_type_style w-100"
+                        // />
+                        value={progressUpdatenextDate}
+                        onChange={(e) =>
+                          setProgressUpdatenextDate(e.target.value)
+                        }
+                      />
+                    </Form.Item>
+                  </div>
+                  <div className="col-12 my-1">
+                    <label className="my-1">Details</label>
+                    <Form.Item
+                      name="opportunuty_details"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Details Is Required",
+                        },
+                      ]}
+                    >
+                      <textarea
+                        type="text"
+                        className="input_type_style w-100"
+                        // />
+                        value={progressDetails}
+                        onChange={(e) => setProgressDetails(e.target.value)}
+                      />
+                    </Form.Item>
+                  </div>
                 </div>
-                <div className="col-6 my-1">
-                  <label className="my-1">Next Contact Date</label>
-                  <input
-                    type="date"
-                    className="input_type_style w-100"
-                    // />
-                    value={progressUpdatenextDate}
-                    onChange={(e) => setProgressUpdatenextDate(e.target.value)}
-                  />
+                <div className="row my-3">
+                  <div className="col-12 d-flex justify-content-center align-items-center gap-3">
+                    {/* <Button className="save_button" >Save</Button> */}
+                    <Button
+                      type="submit"
+                      className="save_button"
+                      onClick={() => {
+                        addOppurtunityProgress();
+                      }}
+                    >
+                      Save
+                    </Button>
+                    <Button
+                      className="cancel_button"
+                      onClick={() => setShowProgresssModal(false)}
+                    >
+                      cancel
+                    </Button>
+                  </div>
                 </div>
-                <div className="col-12 my-1">
-                  <label className="my-1">Details</label>
-                  <textarea
-                    type="text"
-                    className="input_type_style w-100"
-                    // />
-                    value={progressDetails}
-                    onChange={(e) => setProgressDetails(e.target.value)}
-                  />
-                </div>
-              </div>
-              <div className="row my-3">
-                <div className="col-12 d-flex justify-content-center align-items-center gap-3">
-                  {/* <Button className="save_button" >Save</Button> */}
-                  <Button
-                    className="save_button"
-                    onClick={() => {
-                      addOppurtunityProgress();
-                    }}
-                  >
-                    Save
-                  </Button>
-                  <Button
-                    className="cancel_button"
-                    onClick={() => setShowProgresssModal(false)}
-                  >
-                    cancel
-                  </Button>
-                </div>
-              </div>
+              </Form>
             </div>
           </div>
         }

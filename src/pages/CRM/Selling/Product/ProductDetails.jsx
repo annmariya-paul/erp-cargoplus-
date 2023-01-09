@@ -194,7 +194,7 @@ function ProductDetails() {
           variant_product_id: item?.variant_product_id,
           variant_name: item?.variant_name,
           variant_code: item?.variant_code,
-          variant_unit: item?.variant_unit,
+          variant_unit: item?.crm_v1_units.unit_name,
           variant_quantity: item?.variant_quantity,
           variant_price_min: item?.variant_price_min,
           variant_price_max: item?.variant_price_max,

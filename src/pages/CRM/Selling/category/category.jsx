@@ -37,7 +37,7 @@ function Category() {
   const [name, setName] = useState();
   const [file, setFile] = useState(null);
   const [img, setImg] = useState([]);
-  const [description, setDescription] = useState();
+  const [description, setDescription] = useState("");
   const [code, setCode] = useState();
   const [category, setCategory] = useState();
   const [previewVisible, setPreviewVisible] = useState(false);

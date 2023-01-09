@@ -127,7 +127,7 @@ export default function Designation(){
       try{
       const adddesigntion= await PublicFetch.post(
         `${CRM_BASE_URL_HRMS}/designation`,{
-          designation_name:designationname.trim(" "),
+          designation_name:designationname,
           designation_code: designationcode,
         })
        console.log("unit data is added ",adddesigntion)
@@ -137,10 +137,10 @@ export default function Designation(){
         close_modal(saveSuccess,1000)
        
        }
-       else if(adddesigntion.data.success===false){
-        alert(adddesigntion.data.data);
-        //  <ErrorMsg code={"500"} />
-       }
+      //  else if(adddesigntion.data.success===false){
+      //   alert(adddesigntion.data.data);
+      //   //  <ErrorMsg code={"500"} />
+      //  }
       }
       catch(err) {
        console.log("err to add the unit",err)

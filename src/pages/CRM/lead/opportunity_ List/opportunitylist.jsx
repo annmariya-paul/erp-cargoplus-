@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { CRM_BASE_URL } from "../../../../api/bootapi";
 import Dropdown from "react-bootstrap/Dropdown";
-
+import { Oppor_Status, Prob_conversion } from "../../../../utils/SelectOptions";
 import {
   FaFileExcel,
   FaFileCsv,
@@ -177,12 +177,16 @@ function Opportunitylist(props) {
           let tempArr = [];
           res?.data?.data?.leads.forEach((item, index) => {
           tempArr.push({
-            opportunity_id:item?.opportunity_id,
+            opportunity_id: item?.opportunity_id,
             opportunity_type: item?.opportunity_type,
             opportunity_party: item?.crm_v1_contacts?.contact_person_name,
             opportunity_from: item?.opportunity_from,
             opportunity_created_by: item?.opportunity_created_by,
-            opportunity_source:item?.opportunity_source,
+            opportunity_source: item?.opportunity_source,
+            opportunity_probability: item?.opportunity_probability,
+            opportunity_description: item?.opportunity_description,
+            opportunity_amount:item?.opportunity_amount,
+            opportunity_status: item?.opportunity_status,
           });
         });
         console.log("hellooooqqqqq", tempArr);

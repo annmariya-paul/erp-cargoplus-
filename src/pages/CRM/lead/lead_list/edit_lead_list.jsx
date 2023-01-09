@@ -16,7 +16,7 @@ import Edit_Address from "../tables/edit_address";
 import AddressTable from "../tables/contactstable";
 import AddOpportunity from "../modals/addopportunity";
 import PublicFetch from "../../../../utils/PublicFetch";
-import { LeadStatus } from "../../../../utils/leadStatus";
+import { LeadStatus } from "../../../../utils/SelectOptions";
 import { CRM_BASE_URL } from "../../../../api/bootapi";
 import Countrystate from "../location/countryselect";
 import InputType from "../../../../components/Input Type textbox/InputType";

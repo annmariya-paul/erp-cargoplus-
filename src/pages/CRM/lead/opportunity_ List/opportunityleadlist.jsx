@@ -71,6 +71,7 @@ function OpportunityLeadlist(props) {
   const [progressDetails, setProgressDetails] = useState("");
   const [progressUpdatenextDate, setProgressUpdatenextDate] = useState();
   const [progressUpdatestatus, setProgressUpdatestatus] = useState(5);
+  const [opportunity_Id, setOpportunity_Id] = useState();
 
   //view progress
   const [tableprogress, setTableprogress] = useState("");
@@ -79,7 +80,7 @@ function OpportunityLeadlist(props) {
 
   // view oppurtunity
   const [viewoppurtunity, setviewoppurtunity] = useState({
-    id: "",
+    opportunity_id: "",
     opportunity_type: "",
     opportunity_from: "",
     convertedby: "",
@@ -247,31 +248,30 @@ function OpportunityLeadlist(props) {
     console.log("view oppurtunity issss:", item);
     setviewoppurtunity({
       ...viewoppurtunity,
-      id: item.opportunity_id,
+      opportunity_id: item.opportunity_id,
       opportunity_type: item.opportunity_type,
       opportunity_from: item.opportunity_from,
       convertedby: item.opportunity_created_by,
       opportunity_source: item.opportunity_source,
       opportunity_party: item.opportunity_party,
-      opportunity_validity: moment(item.opportunity_validity).format(
-        "DD/MM/YYYY"
-      ),
+      opportunity_validity: item.opportunity_validity,
       opportunity_description: item.opportunity_description,
       opportunity_amount: item.opportunity_amount,
       opportunity_probability: item.opportunity_probability,
       opportunity_status: item.opportunity_status,
-      opportunity_leadid: item.opportunity_lead_id,
+      opportunity_lead_id: item.opportunity_lead_id,
     });
-    getOppurtunityProgress(item);
+    // getOppurtunityProgress(item);
+    setOpportunity_Id(item?.opportunity_id);
 
     setShowViewModal(true);
   };
   // function to view progress
 
-  const getOppurtunityProgress = async (viewoppurtunity) => {
+  const getOppurtunityProgress = async () => {
     try {
       const opportunityprogress = await PublicFetch.get(
-        `${CRM_BASE_URL}/opportunity/${viewoppurtunity.opportunity_id}/progress`
+        `${CRM_BASE_URL}/opportunity/${opportunity_Id}/progress`
       );
       console.log("progresss iss", opportunityprogress.data.data);
       setoppurtunityviewprogress(opportunityprogress.data.data);
@@ -281,9 +281,12 @@ function OpportunityLeadlist(props) {
     }
   };
 
+  useEffect(() => {
+    getOppurtunityProgress();
+  }, [opportunity_Id]);
+
   const handleEditedclick = (i) => {
     console.log("edittingg in list::: ", i);
-
     setOppurtunityid(i.opportunity_id);
     setoppurtunitytype(i.opportunity_type);
     setOppurtunityfrom(i.opportunity_from);
@@ -298,19 +301,28 @@ function OpportunityLeadlist(props) {
     getAllContact();
 
     editForm.setFieldsValue({
-
-    })
+      opportunity_id: i.opportunity_id,
+      opportunity_type: i.opportunity_type,
+      opportunity_from: i.opportunity_from,
+      opportunity_party: i.opportunity_party,
+      opportunity_source: i.opportunity_source,
+      opportunity_validity: i.opportunity_validity,
+      opportunity_amount: i.opportunity_amount,
+      opportunity_description: i.opportunity_description,
+      opportunity_probability: i.opportunity_probability,
+      opportunity_status: i.opportunity_status,
+      opportunity_lead_id: i.opportunity_lead_id,
+    });
 
     setShowEditModal(true);
-
   };
 
-  const handleEditclick = (e) => {
-    // console.log("edit data is ::", item);
-    getoneoppurtunity(e);
-    getAllContact();
-    setShowEditModal(true);
-  };
+  // const handleEditclick = (e) => {
+  //   // console.log("edit data is ::", item);
+  //   getoneoppurtunity(e);
+  //   getAllContact();
+  //   setShowEditModal(true);
+  // };
 
   const updatedOppurtunity = async (updatedData) => {
     const UpdatedFormdata = {
@@ -337,6 +349,8 @@ function OpportunityLeadlist(props) {
       if (editoppurtunity.data.success) {
         GetOpportunityData();
         setShowEditModal(false);
+        setSuccessPopup(true);
+        close_modal(successPopup, 1200);
       }
     } catch (err) {
       console.log("error while getting all leads: ", err);
@@ -349,13 +363,22 @@ function OpportunityLeadlist(props) {
 
   // function to add oppurtunityprogress
 
+  const close_modal_for_progress = (mShow, time) => {
+    if (!mShow) {
+      setTimeout(() => {
+        setSuccessPopup(false);
+        setShowViewModal(true);
+      }, time);
+    }
+  };
+
   const addOppurtunityProgress = async () => {
     try {
       const opportunityprogress = await PublicFetch.post(
-        `${CRM_BASE_URL}/opportunity/${viewoppurtunity.id}/progress`,
+        `${CRM_BASE_URL}/opportunity/${viewoppurtunity.opportunity_id}/progress`,
         {
           opportunity_progress_response: progressResponse,
-          opportunity_progress_details: progressResponse,
+          opportunity_progress_details: progressDetails,
           opportunity_update_next_date_contact: progressUpdatenextDate,
           opportunity_update_status: progressUpdatestatus,
         }
@@ -363,9 +386,15 @@ function OpportunityLeadlist(props) {
 
       console.log("progresss iss", opportunityprogress.data.success);
       if (opportunityprogress.data.success) {
+        getOppurtunityProgress();
         setoppurtunityviewprogress();
         setShowProgresssModal(false);
         setSuccessPopup(true);
+        close_modal_for_progress(successPopup, 1200);
+        setProgressDetails("");
+        setProgressResponse("");
+        setProgressUpdatenextDate("");
+        // setProgressUpdatestatus("");
       }
     } catch (err) {
       console.log("error while getting oppurtunity progress: ", err);
@@ -690,7 +719,7 @@ function OpportunityLeadlist(props) {
                     onClick={() => {
                       // setShowEditModal(true);
                       // handleEditclick(viewoppurtunity?.id);
-                      handleEditclick(viewoppurtunity);
+                      handleEditedclick(viewoppurtunity);
                       console.log("edit :::", viewoppurtunity);
                       setShowViewModal(false);
                     }}
@@ -733,7 +762,11 @@ function OpportunityLeadlist(props) {
                   <tr>
                     <td>Valid up to</td>
                     <td>:</td>
-                    <td>{viewoppurtunity.opportunity_validity}</td>
+                    <td>
+                      {moment(viewoppurtunity.opportunity_validity).format(
+                        "DD/MM/YYYY"
+                      )}
+                    </td>
                   </tr>
                   <tr>
                     <td>details</td>
@@ -769,7 +802,7 @@ function OpportunityLeadlist(props) {
                     className="d-flex align-items-center justify-content-between gap-1  p-1 "
                     style={{ fontSize: "14px" }}
                     onClick={() => {
-                      handleAddclick(viewoppurtunity.id);
+                      handleAddclick(viewoppurtunity?.opportunity_id);
                       console.log("id is inn", viewoppurtunity);
                       setShowProgresssModal(true);
                       setShowViewModal(false);
@@ -1101,22 +1134,22 @@ function OpportunityLeadlist(props) {
         header="Edit Opportunity"
         // size={`xl`}
         centered
-        footer={[
-          <Button
-            btnType="save"
-            onClick={() => {
-              // updateOppurtunity();
-              // updatedOppurtunity();
-            }}
-          >
-            Save
-          </Button>,
-        ]}
+        // footer={[
+        //   <Button
+        //     btnType="save"
+        //     onClick={() => {
+        //       // updateOppurtunity();
+        //       // updatedOppurtunity();
+        //     }}
+        //   >
+        //     Save
+        //   </Button>,
+        // ]}
         {...props}
         // Form={editformData}
       >
         <Form
-         name="editForm"
+          name="editForm"
           form={editForm}
           onFinish={(value) => {
             console.log("values111333", value);
@@ -1134,13 +1167,13 @@ function OpportunityLeadlist(props) {
               <div className="col-sm-4 pt-2">
                 <label>Lead Type</label>
                 <Form.Item
-                    name={"opportunity_type"}
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please select a Type",
-                      },
-                    ]}
+                  name={"opportunity_type"}
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please select a Type",
+                    },
+                  ]}
                 >
                   <SelectBox
                     value={oppurtunitytype}
@@ -1163,15 +1196,15 @@ function OpportunityLeadlist(props) {
                 {/* <Form.Label>From</Form.Label> */}
                 <label>Lead From</label>
                 <Form.Item
-                name={"opportunity_from"}
-                rules={[
-                  {
-                    required: true,
-                    message: "Please select a Type",
-                  },
-                ]}
-                // aria-label="lead_customer_from"
-                // name="lead_customer_from"
+                  name={"opportunity_from"}
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please select a Type",
+                    },
+                  ]}
+                  // aria-label="lead_customer_from"
+                  // name="lead_customer_from"
                 >
                   <SelectBox
                     value={oppurtunityfrom}
@@ -1191,13 +1224,7 @@ function OpportunityLeadlist(props) {
                   controlId="lead_customer_generated"
                 > */}
                 <label>Generated/Converted by</label>
-                <Form.Item
-                // type="text"
-                // name="lead_customer_generated"
-                // placeholder="User ID"
-                // value={viewoppurtunity?.convertedby}
-                // className={`${errors.lead_customer_generated && "invalid"}`}
-                >
+                <Form.Item name="opportunity_lead_id">
                   <InputType value={oppurtunitylead} />
                 </Form.Item>
 
@@ -1209,15 +1236,15 @@ function OpportunityLeadlist(props) {
                 <label>Source</label>
 
                 <Form.Item
-                name={"opportunity_source"}
-                rules={[
-                  {
-                    required: true,
-                    message: "Please select a Type",
-                  },
-                ]}
-                // aria-label="lead_customer_from"
-                // name="lead_customer_from"
+                  name={"opportunity_source"}
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please select a Type",
+                    },
+                  ]}
+                  // aria-label="lead_customer_from"
+                  // name="lead_customer_from"
                 >
                   <SelectBox
                     value={oppurtunitysource}
@@ -1239,11 +1266,14 @@ function OpportunityLeadlist(props) {
 
               <div className="col-sm-4 pt-2">
                 <label>Party</label>
-                <Form.Item>
+                <Form.Item
+                  name="opportunity_party"
+                  rules={[{ required: true, message: "Party is Required" }]}
+                >
                   <SelectBox
                     value={oppurtunityparty}
                     onChange={(e) => {
-                      setOppurtunityparty(parseInt(e.target.value));
+                      setOppurtunityparty(parseInt(e));
                     }}
                     // value={item?.contact_person_name}
 
@@ -1279,21 +1309,22 @@ function OpportunityLeadlist(props) {
                 /> */}
                 {/* <Form.Group className="mb-2" controlId="lead_valid_up_to"> */}
                 <label>Valid Up to</label>
-                <Form.Item>
-                  <div className="form-control">
-                    <input
-                      type="date"
-                      name="lead_validity"
-                      style={{ borderWidth: 0 }}
-                      // defaultValue={todaydate}
-                      value={moment(oppurtunityvalidity).format("YYYY-MM-DD")}
-                      onChange={(event) => {
-                        console.log("selected datae : ", event.target.value);
-                        setOppurtunityvalidity(event.target.value);
-                      }}
-                    />
-                  </div>
+
+                <Form.Item name="opportunity_valid" rules={[{}]}>
+                  <input
+                    type="date"
+                    name="lead_validity"
+                    style={{ borderWidth: 0, borderRadius: "5px" }}
+                    // defaultValue={todaydate}
+                    className="p-2 mt-2"
+                    value={moment(oppurtunityvalidity).format("YYYY-MM-DD")}
+                    onChange={(event) => {
+                      console.log("selected datae : ", event.target.value);
+                      setOppurtunityvalidity(event.target.value);
+                    }}
+                  />
                 </Form.Item>
+
                 {/* </Form.Group> */}
               </div>
 
@@ -1302,7 +1333,7 @@ function OpportunityLeadlist(props) {
                 <label>Details</label>
                 <Form.Item
                   className="mt-2"
-                  name="lead_details"
+                  name="opportunity_description"
                   rules={[
                     {
                       required: true,
@@ -1336,11 +1367,13 @@ function OpportunityLeadlist(props) {
 
                 <label>Expecting Amount</label>
                 <Form.Item
-                // type="text"
-                // name="lead_customer_generated"
-                // placeholder="User ID"
-                // value={viewoppurtunity?.convertedby}
-                // className={`${errors.lead_customer_generated && "invalid"}`}
+                  name="opportunity_amount"
+                  rules={[
+                    {
+                      pattern: new RegExp("^([0-9]+([.][0-9]*)?|[.][0-9]+)$"),
+                      message: "Amount must be positive Number",
+                    },
+                  ]}
                 >
                   <InputType
                     value={oppurtunityamount}
@@ -1355,9 +1388,10 @@ function OpportunityLeadlist(props) {
                 {/* <Form.Group className="mb-2" controlId="lead_probability"> */}
                 <label>Probability of conversion</label>
                 <Form.Item
-                // aria-label="lead_probability"
-                // name="lead_probability"
-                // className={`${errors.lead_probability && "invalid"}`}
+                  name="opportunity_probability"
+                  rules={[
+                    { required: true, message: "Probability is Required" },
+                  ]}
                 >
                   <SelectBox
                     value={oppurtunityprobability}
@@ -1377,8 +1411,13 @@ function OpportunityLeadlist(props) {
                 {/* <Form.Group className="mb-2" controlId="lead_status"> */}
                 <label>Status</label>
                 <Form.Item
-                // aria-label="lead_status"
-                // name="lead_status"/
+                  name="opportunity_status"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Status is Required",
+                    },
+                  ]}
                 >
                   <SelectBox
                     value={oppurtunitystatus}
@@ -1393,11 +1432,11 @@ function OpportunityLeadlist(props) {
                 </Form.Item>
                 {/* </Form.Group> */}
               </div>
-              {/* <div className="col-12 d-flex justify-content-center my-2">
-                <Button onClick={submit} btnType="save">
+              <div className="col-12 d-flex justify-content-center my-2">
+                <Button type="submit" btnType="save">
                   Save
                 </Button>
-              </div> */}
+              </div>
             </div>
           </div>
         </Form>
@@ -1423,56 +1462,87 @@ function OpportunityLeadlist(props) {
                   <h5 className="opportunity_heading">Add Progress</h5>
                 </div>
               </div>
-              <div className="row p-3">
-                <div className="col-6 my-1">
-                  <label className="my-1">Response</label>
-                  {/* <input type="text" className="input_type_style w-100 "  */}
-                  <input
-                    type="text"
-                    className="input_type_style w-100 "
-                    value={progressResponse}
-                    onChange={(e) => setProgressResponse(e.target.value)}
-                  />
+              <Form>
+                <div className="row p-3">
+                  <div className="col-6 my-1">
+                    <label className="my-1">Response</label>
+                    {/* <input type="text" className="input_type_style w-100 "  */}
+                    <Form.Item
+                      name="progress_response"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Response is Required",
+                        },
+                      ]}
+                    >
+                      <SelectBox onChange={(e) => setProgressResponse(e)}>
+                        <Select.Option value="interested">
+                          Interested
+                        </Select.Option>
+                        <Select.Option value="positive">Positive</Select.Option>
+                        <Select.Option value="busy">Busy</Select.Option>
+                        <Select.Option value="callback">Callback</Select.Option>
+                        <Select.Option value="rejected">Rejected</Select.Option>
+                      </SelectBox>
+                    </Form.Item>
+                  </div>
+                  <div className="col-6 my-1">
+                    <label className="my-1">Next Contact Date</label>
+                    <Form.Item
+                      name="progress_next_date"
+                      rules={[
+                        { required: true, message: "Date should not be empty" },
+                      ]}
+                    >
+                      <input
+                        type="date"
+                        className=" mt-2 p-2 input_type_style w-100"
+                        // />
+                        value={progressUpdatenextDate}
+                        onChange={(e) =>
+                          setProgressUpdatenextDate(e.target.value)
+                        }
+                      />
+                    </Form.Item>
+                  </div>
+                  <div className="col-12 my-1">
+                    <label className="my-1">Details</label>
+                    <Form.Item
+                      name="response_details"
+                      rules={[
+                        { required: true, message: "Details is Required" },
+                      ]}
+                    >
+                      <textarea
+                        type="text"
+                        className="input_type_style w-100"
+                        value={progressDetails}
+                        onChange={(e) => setProgressDetails(e.target.value)}
+                      />
+                    </Form.Item>
+                  </div>
                 </div>
-                <div className="col-6 my-1">
-                  <label className="my-1">Next Contact Date</label>
-                  <input
-                    type="date"
-                    className="input_type_style w-100"
-                    // />
-                    value={progressUpdatenextDate}
-                    onChange={(e) => setProgressUpdatenextDate(e.target.value)}
-                  />
+                <div className="row my-3">
+                  <div className="col-12 d-flex justify-content-center align-items-center gap-3">
+                    {/* <Button className="save_button" >Save</Button> */}
+                    <Button
+                      className="save_button"
+                      onClick={() => {
+                        addOppurtunityProgress();
+                      }}
+                    >
+                      Save
+                    </Button>
+                    <Button
+                      className="cancel_button"
+                      onClick={() => setShowProgresssModal(false)}
+                    >
+                      cancel
+                    </Button>
+                  </div>
                 </div>
-                <div className="col-12 my-1">
-                  <label className="my-1">Details</label>
-                  <textarea
-                    type="text"
-                    className="input_type_style w-100"
-                    value={progressDetails}
-                    onChange={(e) => setProgressDetails(e.target.value)}
-                  />
-                </div>
-              </div>
-              <div className="row my-3">
-                <div className="col-12 d-flex justify-content-center align-items-center gap-3">
-                  {/* <Button className="save_button" >Save</Button> */}
-                  <Button
-                    className="save_button"
-                    onClick={() => {
-                      addOppurtunityProgress();
-                    }}
-                  >
-                    Save
-                  </Button>
-                  <Button
-                    className="cancel_button"
-                    onClick={() => setShowProgresssModal(false)}
-                  >
-                    cancel
-                  </Button>
-                </div>
-              </div>
+              </Form>
             </div>
           </div>
         }

@@ -127,21 +127,34 @@ function OpportunityLeadlist(props) {
         if (res?.data?.success) {
           console.log("All opportunity data", res?.data?.data);
           //   setNewOpportunityList(res?.data?.data);
+          
           let samplearry = [];
-          samplearry.push({
-            opportunity_type: res?.data?.data?.opportunity_type,
-            opportunity_from: res?.data?.data?.opportunity_from,
-            opportunity_created_by: res?.data?.data?.opportunity_created_by,
-            opportunity_source: res?.data?.data?.opportunity_source,
-            opportunity_party: res?.data?.data?.opportunity_party,
+          res?.data?.data?.crm_v1_contacts.forEach((item,index)=>{
+            res?.data?.data?.crm_v1_opportunities.forEach((oppo,index)=>{
+ samplearry.push({
+   opportunity_type: oppo?.opportunity_type,
+   opportunity_from: oppo?.opportunity_from,
+   opportunity_created_by: oppo?.opportunity_created_by,
+   opportunity_source: oppo?.opportunity_source,
+   opportunity_probability:oppo?.opportunity_probability,
+   opportunity_description:oppo?.opportunity_description,
+   opportunity_status:oppo?.opportunity_status,
+   opportunity_amount:oppo?.opportunity_amount,
+   opportunity_party: item?.contact_person_name,
+
+ });
+ setNewOpportunityList(samplearry);
+            });
+
           });
+         
           // res?.data?.data?.leads.forEach((item, index) => {
           //   samplearry.push(item.opportunity_id);
           // });
           // console.log("pushedd ", samplearry);
 
           // setNewOpportunityList(samplearry);
-          setNewOpportunityList(res?.data?.data?.crm_v1_opportunities);
+         
         } else {
           console.log("Failed to load data !");
         }
@@ -1423,11 +1436,11 @@ function OpportunityLeadlist(props) {
                     value={oppurtunitystatus}
                     onChange={(e) => setOppurtunitystatus(e)}
                   >
-                    <Select.Option value="1">quotation</Select.Option>
-                    <Select.Option value="2">interested</Select.Option>
-                    <Select.Option value="3">converted</Select.Option>
-                    <Select.Option value="4">lost</Select.Option>
-                    <Select.Option value="5">DND</Select.Option>
+                    <Select.Option value={1}>quotation</Select.Option>
+                    <Select.Option value={2}>interested</Select.Option>
+                    <Select.Option value={3}>converted</Select.Option>
+                    <Select.Option value={4}>lost</Select.Option>
+                    <Select.Option value={5}>DND</Select.Option>
                   </SelectBox>
                 </Form.Item>
                 {/* </Form.Group> */}

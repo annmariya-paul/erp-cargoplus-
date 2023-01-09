@@ -33,7 +33,7 @@ function BrandCreate() {
   const [error, setError] = useState(false);
   const [file, setFile] = useState(null);
   const [img, setImg] = useState([]);
-  const [description, setDescription] = useState();
+  const [description, setDescription] = useState("");
   const [brand, setBrand] = useState();
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState("");

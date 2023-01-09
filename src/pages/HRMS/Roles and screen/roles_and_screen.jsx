@@ -16,6 +16,7 @@ function Roles_and_Screen() {
   const [successModal, setSuccessModal] = useState(false);
   const [getallRoles, setGetAllRoles] = useState();
   const [role_id, setRole_id] = useState();
+  const [serialNo, setserialNo] = useState(1);
 
   const close_modal = (mShow, time) => {
     if (!mShow) {
@@ -98,9 +99,10 @@ function Roles_and_Screen() {
 
   const Rolecolumns = [
     {
-      title: "Slno",
-      dataIndex: "slno",
-      key: "key",
+      title: "No.",
+      key: "index",
+      render: (value, item, index) => serialNo + index,
+      align: "center",
     },
     {
       title: "Name",

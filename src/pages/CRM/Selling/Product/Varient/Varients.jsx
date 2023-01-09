@@ -176,6 +176,7 @@ function Varients() {
 
       // if(allunits?.data.success){}
       setAllunit(allunits?.data?.data);
+      
       // setunitTable(allunits?.data?.data)
     } catch (err) {
       console.log("error to getting all units", err);

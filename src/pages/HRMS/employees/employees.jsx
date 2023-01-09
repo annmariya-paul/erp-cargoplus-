@@ -109,93 +109,6 @@ function Employees() {
     },
   ];
 
-  // const data = [
-  //   {
-  //     employee_name: "Dept test",
-  //     dept_code: "DEPTAA",
-  //     key: "1",
-  //   },
-  //   {
-  //     employee_name: "Dept sample",
-  //     dept_code: "DEPTBB",
-  //     key: "2",
-  //   },
-  //   {
-  //     employee_name: "Technical",
-  //     dept_code: "DEPTCC",
-  //     key: "3",
-  //   },
-  // ];
-
-  const getbranches = () => {
-    PublicFetch.get(`${CRM_BASE_URL_HRMS}/branch`)
-      .then((res) => {
-        console.log("response", res);
-        if (res.data.success) {
-          console.log("success of branches", res.data.data);
-          setAllBranches(res.data.data);
-        }
-      })
-      .catch((err) => {
-        console.log("Error", err);
-      });
-  };
-
-  const getDesignation = () => {
-    PublicFetch.get(`${CRM_BASE_URL_HRMS}/designation`)
-      .then((res) => {
-        console.log("Response");
-        if (res.data.success) {
-          console.log("success of desgination", res.data.data);
-          setAllDesignation(res.data.data);
-        }
-      })
-      .catch((err) => {
-        console.log("Error", err);
-      });
-  };
-
-  const getDepartment = () => {
-    PublicFetch.get(`${CRM_BASE_URL_HRMS}/departments`)
-      .then((res) => {
-        console.log("Response", res);
-        if (res.data.success) {
-          console.log("Success of deapartment ", res.data.data);
-          setAllDepartment(res.data.data);
-        }
-      })
-      .catch((err) => {
-        console.log("Error", err);
-      });
-  };
-
-  const getemployeetype = () => {
-    PublicFetch.get(`${CRM_BASE_URL_HRMS}/employment-types`)
-      .then((res) => {
-        console.log("Response", res);
-        if (res.data.success) {
-          console.log("success of employee type", res.data.data);
-          setAllEmpType(res.data.data);
-        }
-      })
-      .catch((err) => {
-        console.log("Error", err);
-      });
-  };
-
-  const getemployeegrade = () => {
-    PublicFetch.get(`${CRM_BASE_URL_HRMS}/employee-grades`)
-      .then((res) => {
-        console.log("Response", res);
-        if (res.data.success) {
-          console.log("Success of grade", res.data.data);
-          setAllEmpGrade(res.data.data);
-        }
-      })
-      .catch((err) => {
-        console.log("Error", err);
-      });
-  };
 
   const getAllEmployee = () => {
     PublicFetch.get(`${CRM_BASE_URL_HRMS}/employees`)
@@ -203,40 +116,22 @@ function Employees() {
         console.log("Response", res);
         if (res.data.success) {
           console.log("Success of employee", res.data.data);
-          setAllEmployees(res.data.data);
-          // let arr = [];
-          // res?.data?.data?.forEach((item, index) => {
-          //   console.log("item", item);
-          //   allbranches.forEach((br, index) => {
-          //     alldespartment.forEach((dept, index) => {
-          //       allempgrade.forEach((grd, index) => {
-          //         allemptype.forEach((type, index) => {
-          //           // var brnchname = parseInt(br.branch_id);
-
-          //           if (
-          //             br.branch_id === item.employee_branch &&
-          //             dept.department_id === item.employee_department &&
-          //             grd.employee_grade_id === item.employee_grade &&
-          //             type.employment_type_id === item.employee_type
-          //           ) {
-          //             {
-          //               arr.push({
-          //                 employee_id: item?.employee_id,
-          //                 employee_name: item?.employee_name,
-          //                 employee_code: item?.employee_code,
-          //                 employee_branch: br?.branch_name,
-          //                 employee_department: dept?.department_name,
-          //                 employee_grade: grd?.employee_grade_name,
-          //                 employee_type: type?.employment_type_name,
-          //               });
-          //               setAllEmployees(arr);
-          //             }
-          //           }
-          //         });
-          //       });
-          //     });
-          //   });
-          // });
+          let array = [];
+          res.data.data.forEach((item, index) => {
+            array.push({
+              employee_id: item.employee_id,
+              employee_name: item.employee_name,
+              employee_code: item.employee_code,
+              employee_department: item.hrms_v1_departments.department_name,
+              employee_branch:item.hrms_v1_branches.branch_name,
+              employee_grade: item.hrms_v1_employee_grades.employee_grade_name,
+              employee_type: item.hrms_v1_employment_types.employment_type_name,
+              employee_designation: item.hrms_v1_designations.designation_name,
+            });
+          });
+          setAllEmployees(array);
+          console.log("array data ::", array);
+          
         }
       })
       .catch((err) => {
@@ -245,11 +140,6 @@ function Employees() {
   };
   useEffect(() => {
     getAllEmployee();
-    getDepartment();
-    getDesignation();
-    getbranches();
-    getemployeegrade();
-    getemployeetype();
   }, []);
 
   const handleEditClick = (data) => {

@@ -80,7 +80,8 @@ function Opportunitylist(props) {
   const [oppurtunitystatus, setOppurtunitystatus] = useState("");
   const [oppurtunityviewprogress, setoppurtunityviewprogress] = useState();
   const [oppurtunityid, setOppurtunityid] = useState();
-
+  const [oppnew, setOppnew] = useState([]);
+  console.log("Opportunities are :::", oppnew);
   const [contact, setContact] = useState([]);
   const [progressResponse, setProgressResponse] = useState("");
   const [progressDetails, setProgressDetails] = useState("");
@@ -171,7 +172,21 @@ function Opportunitylist(props) {
     )
       .then((res) => {
         if (res?.data?.success) {
-          console.log("All opportunity data", res?.data?.data);
+          console.log("All opportunity dataqqq", res?.data?.data.leads);
+          
+          let tempArr = [];
+          res?.data?.data?.leads.forEach((item, index) => {
+          tempArr.push({
+            opportunity_id:item?.opportunity_id,
+            opportunity_type: item?.opportunity_type,
+            opportunity_party: item?.crm_v1_contacts?.contact_person_name,
+            opportunity_from: item?.opportunity_from,
+            opportunity_created_by: item?.opportunity_created_by,
+            opportunity_source:item?.opportunity_source,
+          });
+        });
+        console.log("hellooooqqqqq", tempArr);
+        setOppnew(tempArr);
           setOpportunityList(res?.data?.data?.leads);
           setTotalcount(res?.data?.data?.totalCount);
           console.log("totalcount iss", res?.data?.data?.totalCount);
@@ -249,7 +264,7 @@ function Opportunitylist(props) {
       const allNames = await PublicFetch.get(`${CRM_BASE_URL}/contact`);
       if (allNames.data.success) {
         setContact(allNames.data.data);
-        console.log("all contact data names ::::", allNames.data.data);
+        console.log("all contact data names :::: of oppor", allNames.data.data);
       }
 
       console.log("All leads res : ", allNames);
@@ -900,7 +915,7 @@ function Opportunitylist(props) {
           </div>
           <div className="datatable">
             <TableData
-              data={OpportunityList}
+              data={oppnew}
               // data={allLeadList}
               // data={OpportunityList}
               columns={filteredColumns}

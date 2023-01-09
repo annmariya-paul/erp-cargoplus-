@@ -3,7 +3,7 @@ import "../../pages/CRM/lead/leadReport/leadReport.styles.scss";
 import Button from "../../components/button/button";
 import TableData from "../../components/table/table_data";
 import Leadlist_Icons from "../../components/lead_list_icon/lead_list_icon";
-import { LeadStatus } from "../../utils/leadStatus";
+import { LeadStatus } from "../../utils/SelectOptions";
 import { Input, Select, DatePicker } from "antd";
 import "antd/dist/antd.css";
 import moment from "moment";

@@ -12,14 +12,13 @@ import {
   LeadType,
   LeadStatus,
   LeadOrganization,
-} from "../../../../utils/leadStatus";
+} from "../../../../utils/SelectOptions";
 import { MdFileCopy, MdPageview } from "react-icons/md";
 import { AiFillPrinter } from "react-icons/ai";
 import { Input, Select, Pagination, Checkbox } from "antd";
 import "antd/dist/antd.css";
 import Button from "../../../../components/button/button";
 import TableData from "../../../../components/table/table_data";
-// import { LeadStatuss } from "../../../../utils/leadStatus";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { CRM_BASE_URL } from "../../../../api/bootapi";
 import Custom_model from "../../../../components/custom_modal/custom_model";

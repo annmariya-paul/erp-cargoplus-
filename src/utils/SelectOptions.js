@@ -43,4 +43,17 @@ const LeadOrganization = [
   { id: "1", name: "Individual", value: "I" },
   { id: "2", name: "Organisation", value: "O" },
 ];
-module.exports = { LeadType, LeadStatus, LeadOrganization };
+
+const Oppor_Status = [
+  { id: "1", name: "Quotation", value: "1" },
+  { id: "2", name: "Interesrted", value: "2" },
+  { id: "3", name: "Converted", value: "3" },
+  { id: "4", name: "Lost", value: "4" },
+  { id: "5", name: "DND", value: "5" },
+];
+const Prob_conversion = [
+  { id: "1", name: "Low", value: "1" },
+  { id: "2", name: "Medium", value: "2" },
+  { id: "3", name: "High", value: "3" },
+];
+module.exports = { LeadType, LeadStatus, LeadOrganization, Oppor_Status, Prob_conversion };

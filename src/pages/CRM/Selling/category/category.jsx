@@ -25,7 +25,7 @@ const getBase64 = (file) =>
 
 function Category() {
   const [addForm] = Form.useForm();
- const [error403,setError403]=useState(false);
+  const [error403, setError403] = useState(false);
   const navigate = useNavigate();
   const [successPopup, setSuccessPopup] = useState(false);
   const { TreeNode } = TreeSelect;
@@ -37,7 +37,7 @@ function Category() {
   const [name, setName] = useState();
   const [file, setFile] = useState(null);
   const [img, setImg] = useState([]);
-  const [description, setDescription] = useState();
+  const [description, setDescription] = useState("");
   const [code, setCode] = useState();
   const [category, setCategory] = useState();
   const [previewVisible, setPreviewVisible] = useState(false);
@@ -45,6 +45,7 @@ function Category() {
   const [previewTitle, setPreviewTitle] = useState("");
   const [parentcategory, setParentcategory] = useState(null);
   const [imageSize, setImageSize] = useState(false);
+  const [uniqueCode, setuniqueCode] = useState(false);
   // const [parent,setParent]=useState(null);
   console.log("set image", img);
 
@@ -236,7 +237,7 @@ function Category() {
           setSuccessPopup(true);
           addForm.resetFields();
           close_modal(successPopup, 1000);
-        }else if(res.data.success===false){
+        } else if (res.data.success === false) {
           //  setError403(true);
           //   console.log("Category Code has been taken ");
           alert(res.data.data);
@@ -304,6 +305,27 @@ function Category() {
     });
   };
 
+  const checkCategoryCodeis = (data) => {
+    PublicFetch.get(
+      `${process.env.REACT_APP_BASE_URL}/misc?type=categorycode&value=${code}`
+    )
+      .then((res) => {
+        console.log("Response 1123", res);
+        if (res.data.success) {
+          console.log("Success", res.data.data);
+          if (res.data.data.exist) {
+            console.log("hai guys");
+            setuniqueCode(true);
+          } else {
+            setuniqueCode(false);
+          }
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
   return (
     <>
       <div className="container-fluid">
@@ -364,16 +386,23 @@ function Category() {
                         message: "Code cannot be longer than 100 characters",
                       },
                     ]}
-                    onChange={(e) =>{
-                   setCode(e.target.value)
-                   setError403(false);
-
-                    }
-                       
-                      }
+                    onChange={(e) => {
+                      setCode(e.target.value);
+                      setError403(false);
+                      setuniqueCode(false);
+                    }}
                   >
-                    <InputType />
+                    <InputType
+                      onBlur={() => {
+                        checkCategoryCodeis();
+                      }}
+                    />
                   </Form.Item>
+                  {uniqueCode ? (
+                    <label style={{ color: "red" }} className="mb-2">
+                      Employee Code is Unique
+                    </label>
+                  ) : null}
                 </div>
                 <div className="col-sm-4 pt-3">
                   <label for="tree" className="form-label">
@@ -452,22 +481,20 @@ function Category() {
                             setImageSize(false);
                           } else {
                             setImageSize(true);
-                            console.log(
-                              "image size between 1 kb and  500 kb"
-                            );
+                            console.log("image size between 1 kb and  500 kb");
                           }
                         }}
                       />
                       {imageSize ? (
                         <p style={{ color: "red" }}>
-                         Please Upload an image  between 1 kb and 500 kb
+                          Please Upload an image between 1 kb and 500 kb
                         </p>
                       ) : (
                         ""
                       )}
                     </Form.Item>
                   </div>
-                   {/* {
+                  {/* {
               error403 ? (<div><p style={{textAlign:"center",color:"red"}}>Category Code has been taken </p></div>):""
             } */}
                 </div>
@@ -476,7 +503,6 @@ function Category() {
                     Save
                   </Button>
                 </div>
-                
               </div>
             </Form>
           </div>

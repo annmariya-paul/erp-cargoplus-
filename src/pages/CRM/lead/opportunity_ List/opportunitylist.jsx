@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { CRM_BASE_URL } from "../../../../api/bootapi";
 import Dropdown from "react-bootstrap/Dropdown";
-
+import { Oppor_Status, Prob_conversion } from "../../../../utils/SelectOptions";
 import {
   FaFileExcel,
   FaFileCsv,
@@ -80,7 +80,8 @@ function Opportunitylist(props) {
   const [oppurtunitystatus, setOppurtunitystatus] = useState("");
   const [oppurtunityviewprogress, setoppurtunityviewprogress] = useState();
   const [oppurtunityid, setOppurtunityid] = useState();
-
+  const [oppnew, setOppnew] = useState([]);
+  console.log("Opportunities are :::", oppnew);
   const [contact, setContact] = useState([]);
   const [progressResponse, setProgressResponse] = useState("");
   const [progressDetails, setProgressDetails] = useState("");
@@ -171,7 +172,25 @@ function Opportunitylist(props) {
     )
       .then((res) => {
         if (res?.data?.success) {
-          console.log("All opportunity data", res?.data?.data);
+          console.log("All opportunity dataqqq", res?.data?.data.leads);
+          
+          let tempArr = [];
+          res?.data?.data?.leads.forEach((item, index) => {
+          tempArr.push({
+            opportunity_id: item?.opportunity_id,
+            opportunity_type: item?.opportunity_type,
+            opportunity_party: item?.crm_v1_contacts?.contact_person_name,
+            opportunity_from: item?.opportunity_from,
+            opportunity_created_by: item?.opportunity_created_by,
+            opportunity_source: item?.opportunity_source,
+            opportunity_probability: item?.opportunity_probability,
+            opportunity_description: item?.opportunity_description,
+            opportunity_amount:item?.opportunity_amount,
+            opportunity_status: item?.opportunity_status,
+          });
+        });
+        console.log("hellooooqqqqq", tempArr);
+        setOppnew(tempArr);
           setOpportunityList(res?.data?.data?.leads);
           setTotalcount(res?.data?.data?.totalCount);
           console.log("totalcount iss", res?.data?.data?.totalCount);
@@ -249,7 +268,7 @@ function Opportunitylist(props) {
       const allNames = await PublicFetch.get(`${CRM_BASE_URL}/contact`);
       if (allNames.data.success) {
         setContact(allNames.data.data);
-        console.log("all contact data names ::::", allNames.data.data);
+        console.log("all contact data names :::: of oppor", allNames.data.data);
       }
 
       console.log("All leads res : ", allNames);
@@ -900,7 +919,7 @@ function Opportunitylist(props) {
           </div>
           <div className="datatable">
             <TableData
-              data={OpportunityList}
+              data={oppnew}
               // data={allLeadList}
               // data={OpportunityList}
               columns={filteredColumns}
@@ -1719,57 +1738,87 @@ function Opportunitylist(props) {
                   <h5 className="opportunity_heading">Add Progress</h5>
                 </div>
               </div>
-              <div className="row p-3">
-                <div className="col-6 my-1">
-                  <label className="my-1">Response</label>
-                  {/* <input type="text" className="input_type_style w-100 "  */}
-                  <input
-                    type="text"
-                    className="input_type_style w-100 "
-                    value={progressResponse}
-                    onChange={(e) => setProgressResponse(e.target.value)}
-                  />
+              <Form>
+                <div className="row p-3">
+                  <div className="col-6 my-1">
+                    <label className="my-1">Response</label>
+                    {/* <input type="text" className="input_type_style w-100 "  */}
+                    <Form.Item
+                      name="opportunity_response"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Resonse Is Required",
+                        },
+                      ]}
+                    >
+                      <SelectBox onChange={(e) => setProgressResponse(e)}>
+                        <Select.Option value="interested">
+                          Interested
+                        </Select.Option>
+                        <Select.Option value="positive">Positive</Select.Option>
+                        <Select.Option value="busy">Busy</Select.Option>
+                        <Select.Option value="callback">Callback</Select.Option>
+                        <Select.Option value="rejected">Rejected</Select.Option>
+                      </SelectBox>
+                    </Form.Item>
+                  </div>
+                  <div className="col-6 my-1">
+                    <label className="my-1">Next Contact Date</label>
+                    <Form.Item name="opportunity_nextcontactdate">
+                      <input
+                        type="date"
+                        className="mt-2 p-2 input_type_style w-100"
+                        // />
+                        value={progressUpdatenextDate}
+                        onChange={(e) =>
+                          setProgressUpdatenextDate(e.target.value)
+                        }
+                      />
+                    </Form.Item>
+                  </div>
+                  <div className="col-12 my-1">
+                    <label className="my-1">Details</label>
+                    <Form.Item
+                      name="opportunuty_details"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Details Is Required",
+                        },
+                      ]}
+                    >
+                      <textarea
+                        type="text"
+                        className="input_type_style w-100"
+                        // />
+                        value={progressDetails}
+                        onChange={(e) => setProgressDetails(e.target.value)}
+                      />
+                    </Form.Item>
+                  </div>
                 </div>
-                <div className="col-6 my-1">
-                  <label className="my-1">Next Contact Date</label>
-                  <input
-                    type="date"
-                    className="input_type_style w-100"
-                    // />
-                    value={progressUpdatenextDate}
-                    onChange={(e) => setProgressUpdatenextDate(e.target.value)}
-                  />
+                <div className="row my-3">
+                  <div className="col-12 d-flex justify-content-center align-items-center gap-3">
+                    {/* <Button className="save_button" >Save</Button> */}
+                    <Button
+                      type="submit"
+                      className="save_button"
+                      onClick={() => {
+                        addOppurtunityProgress();
+                      }}
+                    >
+                      Save
+                    </Button>
+                    <Button
+                      className="cancel_button"
+                      onClick={() => setShowProgresssModal(false)}
+                    >
+                      cancel
+                    </Button>
+                  </div>
                 </div>
-                <div className="col-12 my-1">
-                  <label className="my-1">Details</label>
-                  <textarea
-                    type="text"
-                    className="input_type_style w-100"
-                    // />
-                    value={progressDetails}
-                    onChange={(e) => setProgressDetails(e.target.value)}
-                  />
-                </div>
-              </div>
-              <div className="row my-3">
-                <div className="col-12 d-flex justify-content-center align-items-center gap-3">
-                  {/* <Button className="save_button" >Save</Button> */}
-                  <Button
-                    className="save_button"
-                    onClick={() => {
-                      addOppurtunityProgress();
-                    }}
-                  >
-                    Save
-                  </Button>
-                  <Button
-                    className="cancel_button"
-                    onClick={() => setShowProgresssModal(false)}
-                  >
-                    cancel
-                  </Button>
-                </div>
-              </div>
+              </Form>
             </div>
           </div>
         }

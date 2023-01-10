@@ -15,7 +15,7 @@ import AddAddress from "./modals/addaddress";
 import AddContact from "./modals/addcontact";
 import AddOpportunity from "./modals/addopportunity";
 import PublicFetch from "../../../utils/PublicFetch";
-import { LeadStatus } from "../../../utils/leadStatus";
+import { LeadStatus } from "../../../utils/SelectOptions";
 import { CRM_BASE_URL } from "../../../api/bootapi";
 // import ErrorMsg from "../../components/errormessage";
 import Countrystate from "./location/countryselect";

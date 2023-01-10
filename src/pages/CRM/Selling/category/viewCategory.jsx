@@ -62,6 +62,8 @@ function Categorylist(props) {
   const [cDescription, setCdescription] = useState();
   const [cParent, setCparent] = useState();
   const [imageSize, setImageSize] = useState(false);
+  const [uniqueCode, setuniqueCode] = useState(false);
+  const [categoryCode, setCategoryCode] = useState();
 
   // console.log("dataCategory", dataCategory);
   // console.log("dataa of name", displayName);
@@ -397,6 +399,7 @@ function Categorylist(props) {
       });
       setCategory(e.key);
       setShowViewModal(true);
+      setCategoryCode(e.category_code);
     }
   };
 
@@ -419,6 +422,7 @@ function Categorylist(props) {
         cpic: e.category_pic,
         cparent: e.category_parent_id,
       });
+      setCategoryCode(e.category_code);
     }
     editForm.setFieldsValue({
       key: e.key,
@@ -458,13 +462,36 @@ function Categorylist(props) {
           setSuccessPopup(true);
           close_modal(SuccessPopup, 1200);
           editForm.resetFields();
-        }else if(res.data.success===false){
-          alert(res.data.data)
+        } else if (res.data.success === false) {
+          alert(res.data.data);
         }
       })
       .catch((err) => {
         console.log("error", err);
       });
+  };
+
+  const checkCategoryCodeis = (data) => {
+    if (categoryCode !== c_code) {
+      PublicFetch.get(
+        `${process.env.REACT_APP_BASE_URL}/misc?type=categorycode&value=${c_code}`
+      )
+        .then((res) => {
+          console.log("Response 1123", res);
+          if (res.data.success) {
+            console.log("Success", res.data.data);
+            if (res.data.data.exist) {
+              console.log("hai guys");
+              setuniqueCode(true);
+            } else {
+              setuniqueCode(false);
+            }
+          }
+        })
+        .catch((err) => {
+          console.log("Error", err);
+        });
+    }
   };
 
   // console.log("jdfjdfdj", ViewingData);
@@ -738,8 +765,21 @@ function Categorylist(props) {
                         },
                       ]}
                     >
-                      <InputType onChange={(e) => setCcode(e.target.value)} />
+                      <InputType
+                        onChange={(e) => {
+                          setCcode(e.target.value);
+                          setuniqueCode(false);
+                        }}
+                        onBlur={() => {
+                          checkCategoryCodeis();
+                        }}
+                      />
                     </Form.Item>
+                    {uniqueCode ? (
+                      <label style={{ color: "red" }} className="mb-2">
+                        Employee Code is Unique
+                      </label>
+                    ) : null}
                   </div>
                   <div className="col-6">
                     <label>Parent Category</label>

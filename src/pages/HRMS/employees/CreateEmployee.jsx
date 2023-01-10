@@ -9,6 +9,7 @@ import { CRM_BASE_URL_HRMS } from "./../../../api/bootapi";
 import Custom_model from "../../../components/custom_modal/custom_model";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../routes";
+import { UniqueErrorMsg } from "../../../ErrorMessages/UniqueErrorMessage";
 
 function CreateEmployee() {
   const navigate = useNavigate();
@@ -19,6 +20,7 @@ function CreateEmployee() {
   const [allemptype, setAllEmpType] = useState();
   const [allempgrade, setAllEmpGrade] = useState();
   const [uniqueCode, setuniqueCode] = useState(false);
+  const [uniqueErrMsg,setUniqueErrMsg]=useState(UniqueErrorMsg);
   const [employeeCode, setEmployeeCode] = useState();
 
   const close_modal = (mShow, time) => {
@@ -208,7 +210,7 @@ function CreateEmployee() {
                           </Form.Item>
                           {uniqueCode ? (
                             <label style={{ color: "red" }} className="my-2">
-                              Employee Code is Unique
+                              {uniqueErrMsg.UniqueErrName}
                             </label>
                           ) : null}
                         </div>

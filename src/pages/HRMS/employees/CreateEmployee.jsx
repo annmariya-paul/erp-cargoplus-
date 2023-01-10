@@ -210,7 +210,7 @@ function CreateEmployee() {
                           </Form.Item>
                           {uniqueCode ? (
                             <label style={{ color: "red" }} className="my-2">
-                              {uniqueErrMsg.UniqueErrName}
+                            Employee code  {uniqueErrMsg.UniqueErrName}
                             </label>
                           ) : null}
                         </div>

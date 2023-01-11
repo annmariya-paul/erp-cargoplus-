@@ -503,7 +503,7 @@ export default function Sidebar({ showSidebar }) {
                           className={({ isActive }) =>
                             isActive ? "active-link" : "link"
                           }
-                          to={ROUTES.ASSIGN_OPPORTUNITIES}
+                          to={ROUTES.ENQUIRIES}
                         >
                           <RiTeamFill className="sidebar_icons ms-4" />
                           Opportunity assigns

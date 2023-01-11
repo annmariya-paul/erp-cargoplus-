@@ -473,26 +473,29 @@ function Categorylist(props) {
   };
 
   const checkCategoryCodeis = (data) => {
-    if (categoryCode !== c_code) {
-      PublicFetch.get(
-        `${process.env.REACT_APP_BASE_URL}/misc?type=categorycode&value=${c_code}`
-      )
-        .then((res) => {
-          console.log("Response 1123", res);
-          if (res.data.success) {
-            console.log("Success", res.data.data);
-            if (res.data.data.exist) {
-              console.log("hai guys");
-              setuniqueCode(true);
-            } else {
-              setuniqueCode(false);
+    
+      if (categoryCode !== c_code) {
+        PublicFetch.get(
+          `${process.env.REACT_APP_BASE_URL}/misc?type=categorycode&value=${c_code}`
+        )
+          .then((res) => {
+            console.log("Response 1123", res);
+            if (res.data.success) {
+              console.log("Success", res.data.data);
+              if (res.data.data.exist) {
+                console.log("hai guys");
+                setuniqueCode(true);
+              } else {
+                setuniqueCode(false);
+              }
             }
-          }
-        })
-        .catch((err) => {
-          console.log("Error", err);
-        });
-    }
+          })
+          .catch((err) => {
+            console.log("Error", err);
+          });
+      }
+   
+    
   };
 
   // console.log("jdfjdfdj", ViewingData);

@@ -34,6 +34,7 @@ import { Table } from "antd";
 import InputType from "../../../../components/Input Type textbox/InputType";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
 import { EnvironmentFilled } from "@ant-design/icons";
+import { UniqueErrorMsg } from "../../../../ErrorMessages/UniqueErrorMessage";
 
 function Categorylist(props) {
   const [editForm] = Form.useForm();
@@ -777,7 +778,7 @@ function Categorylist(props) {
                     </Form.Item>
                     {uniqueCode ? (
                       <label style={{ color: "red" }} className="mb-2">
-                        Employee Code is Unique
+                        Employee Code {UniqueErrorMsg.UniqueErrName}
                       </label>
                     ) : null}
                   </div>

@@ -290,12 +290,17 @@ function Permission() {
 
   const handleSubmit = async () => {
     try {
+      let i = 0;
       for (const rolePermission of rolePermissions) {
         rolePermission.roleid = selectedRole;
         const res = await PublicFetch.post(
           `${process.env.REACT_APP_BASE_URL}/permissions`,
           rolePermission
         );
+        i += 1;
+        if (i >= rolePermissions.length) {
+          message.success("Permissions Assigned");
+        }
       }
     } catch (err) {
       console.log("Error while adding permission : ", err);

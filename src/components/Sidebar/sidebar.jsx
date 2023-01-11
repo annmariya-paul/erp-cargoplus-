@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./sidebar.styles.scss";
 import { Link, useLocation } from "react-router-dom";
 import {
@@ -12,6 +12,7 @@ import { MdEventNote } from "react-icons/md";
 import { ROUTES } from "../../routes";
 import { NavLink } from "react-router-dom";
 import { FiSettings } from "react-icons/fi";
+import { checkPermission } from "../../utils/check_permission";
 
 export default function Sidebar({ showSidebar }) {
   // const [sidebar, setSidebar] = useState(true);
@@ -21,15 +22,27 @@ export default function Sidebar({ showSidebar }) {
   const [CRMopen, setCRMopen] = useState(false);
   const [CRMReport, setCRMReport] = useState(false);
   const [CRMselling, setCRMselling] = useState(false);
-  const [CRMgeneral,setCRMgeneral]=useState(false);
+  const [CRMgeneral, setCRMgeneral] = useState(false);
   const [FMSOpen, setFMSOpen] = useState(false);
   const [FMSOppopen, setFMSOppopen] = useState(false);
-  const [FMSAgentopen,setFMSAgentopen]=useState(false);
-  const[FMSSettingsopen,setFMSSettingsopen]=useState(false);
+
+  const [FMSAgentopen, setFMSAgentopen] = useState(false);
+  const [FMSQuotationsopen, setFMSQuotationsopen] = useState(false);
+  const [permissions, setPermissions] = useState(null);
+
+  const [FMSSettingsopen, setFMSSettingsopen] = useState(false);
+
   const location = useLocation();
 
   const { pathname } = location;
-
+  useEffect(() => {
+    let p = localStorage.getItem("userPermissions");
+    if (p) {
+      setPermissions(JSON.parse(p));
+    }
+    // console.log("has permission : ", checkPermission("designation"));
+  }, []);
+  console.log("Permissions : ", permissions);
   const splitLocation = pathname.split("/");
   return (
     <>
@@ -86,94 +99,110 @@ export default function Sidebar({ showSidebar }) {
               </li>
               {HRMSopen ? (
                 <>
-                  <li className="nav-text ">
-                    <NavLink
-                      className={({ isActive }) =>
-                        isActive ? "active-link" : "link"
-                      }
-                      to={ROUTES.BRANCHES}
-                    >
-                      <RiTeamFill className="sidebar_icons ms-4" />
-                      Branches
-                    </NavLink>
-                  </li>
-                  <li className="nav-text ">
-                    <NavLink
-                      className={({ isActive }) =>
-                        isActive ? "active-link" : "link"
-                      }
-                      to={ROUTES.DEPARTMENTS}
-                    >
-                      <RiTeamFill className="sidebar_icons ms-4" />
-                      Departments
-                    </NavLink>
-                  </li>
-                  <li className="nav-text ">
-                    <NavLink
-                      className={({ isActive }) =>
-                        isActive ? "active-link" : "link"
-                      }
-                      to={ROUTES.DESIGNATION}
-                    >
-                      <RiTeamFill className="sidebar_icons ms-4" />
-                      Designation
-                    </NavLink>
-                  </li>
-                  <li className="nav-text ">
-                    <NavLink
-                      className={({ isActive }) =>
-                        isActive ? "active-link" : "link"
-                      }
-                      to={ROUTES.EMPLOYMENT_TYPE}
-                    >
-                      <RiTeamFill className="sidebar_icons ms-4" />
-                      Employment Type
-                    </NavLink>
-                  </li>
-                  <li className="nav-text ">
-                    <NavLink
-                      className={({ isActive }) =>
-                        isActive ? "active-link" : "link"
-                      }
-                      to={ROUTES.EMPLOYEES}
-                    >
-                      <RiTeamFill className="sidebar_icons ms-4" />
-                      Employees
-                    </NavLink>
-                  </li>
-                  <li className="nav-text ">
-                    <NavLink
-                      className={({ isActive }) =>
-                        isActive ? "active-link" : "link"
-                      }
-                      to={ROUTES.EMPLOYEEGRADE}
-                    >
-                      <RiTeamFill className="sidebar_icons ms-4" />
-                      Employee grade
-                    </NavLink>
-                  </li>
-                  <li className="nav-text ">
-                    <NavLink
-                      className={({ isActive }) =>
-                        isActive ? "active-link" : "link"
-                      }
-                      to={ROUTES.ROLES_SCREEN}
-                    >
-                      <RiTeamFill className="sidebar_icons ms-4" />
-                      Roles
-                    </NavLink>
-                  </li>
-                  <li className="nav-text ">
-                    <NavLink
-                      className={({ isActive }) =>
-                        isActive ? "active-link" : "link"
-                      }
-                      to={ROUTES.PERMISSIONS}
-                    >
-                      <RiTeamFill className="sidebar_icons ms-4" />
-                      Assign Permissions
-                    </NavLink>
-                  </li>
+                  {checkPermission("branch") && (
+                    <li className="nav-text ">
+                      <NavLink
+                        className={({ isActive }) =>
+                          isActive ? "active-link" : "link"
+                        }
+                        to={ROUTES.BRANCHES}
+                      >
+                        <RiTeamFill className="sidebar_icons ms-4" />
+                        Branches
+                      </NavLink>
+                    </li>
+                  )}
+                  {checkPermission("department") && (
+                    <li className="nav-text ">
+                      <NavLink
+                        className={({ isActive }) =>
+                          isActive ? "active-link" : "link"
+                        }
+                        to={ROUTES.DEPARTMENTS}
+                      >
+                        <RiTeamFill className="sidebar_icons ms-4" />
+                        Departments
+                      </NavLink>
+                    </li>
+                  )}
+                  {checkPermission("designation") && (
+                    <li className="nav-text ">
+                      <NavLink
+                        className={({ isActive }) =>
+                          isActive ? "active-link" : "link"
+                        }
+                        to={ROUTES.DESIGNATION}
+                      >
+                        <RiTeamFill className="sidebar_icons ms-4" />
+                        Designation
+                      </NavLink>
+                    </li>
+                  )}
+                  {checkPermission("employment type") && (
+                    <li className="nav-text ">
+                      <NavLink
+                        className={({ isActive }) =>
+                          isActive ? "active-link" : "link"
+                        }
+                        to={ROUTES.EMPLOYMENT_TYPE}
+                      >
+                        <RiTeamFill className="sidebar_icons ms-4" />
+                        Employment Type
+                      </NavLink>
+                    </li>
+                  )}
+                  {checkPermission("employee") && (
+                    <li className="nav-text ">
+                      <NavLink
+                        className={({ isActive }) =>
+                          isActive ? "active-link" : "link"
+                        }
+                        to={ROUTES.EMPLOYEES}
+                      >
+                        <RiTeamFill className="sidebar_icons ms-4" />
+                        Employees
+                      </NavLink>
+                    </li>
+                  )}
+                  {checkPermission("employee grade") && (
+                    <li className="nav-text ">
+                      <NavLink
+                        className={({ isActive }) =>
+                          isActive ? "active-link" : "link"
+                        }
+                        to={ROUTES.EMPLOYEEGRADE}
+                      >
+                        <RiTeamFill className="sidebar_icons ms-4" />
+                        Employee grade
+                      </NavLink>
+                    </li>
+                  )}
+                  {checkPermission("roles") && (
+                    <li className="nav-text ">
+                      <NavLink
+                        className={({ isActive }) =>
+                          isActive ? "active-link" : "link"
+                        }
+                        to={ROUTES.ROLES_SCREEN}
+                      >
+                        <RiTeamFill className="sidebar_icons ms-4" />
+                        Roles
+                      </NavLink>
+                    </li>
+                  )}
+                  {checkPermission("assign permission") && (
+                    <li className="nav-text ">
+                      <NavLink
+                        className={({ isActive }) =>
+                          isActive ? "active-link" : "link"
+                        }
+                        to={ROUTES.PERMISSIONS}
+                      >
+                        <RiTeamFill className="sidebar_icons ms-4" />
+                        Assign Permissions
+                      </NavLink>
+                    </li>
+                  )}
                 </>
               ) : (
                 ""
@@ -596,29 +625,24 @@ export default function Sidebar({ showSidebar }) {
                   ) : (
                     ""
                   )}
-                    {FMSOpen ? (
-                <>
-                 
-                  <li className="nav-text " style={{marginLeft:"-61px"}}>
-                    <NavLink
-                      className={({ isActive }) =>
-                        isActive ? "active-link" : "link"
-                      }
-                      to={ROUTES.QUATATIONS}
-                    >
-                      <RiTeamFill className="sidebar_icons ms-4"  />
-                      Quotations 
-                    </NavLink>
-                  </li>
-                 
-                  
-                 
-                  
-                </>
-              ) : (
-                ""
-              )}
-                   {/* {FMSQuotationsopen ? (
+                  {FMSOpen ? (
+                    <>
+                      <li className="nav-text " style={{ marginLeft: "-61px" }}>
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.QUATATIONS}
+                        >
+                          <RiTeamFill className="sidebar_icons ms-4" />
+                          Quotations
+                        </NavLink>
+                      </li>
+                    </>
+                  ) : (
+                    ""
+                  )}
+                  {/* {FMSQuotationsopen ? (
                     <>
                       <li className="nav-text">
                         <NavLink
@@ -635,9 +659,7 @@ export default function Sidebar({ showSidebar }) {
                   ) : (
                     ""
                   )} */}
-                  
                 </>
-                
               ) : (
                 ""
               )}

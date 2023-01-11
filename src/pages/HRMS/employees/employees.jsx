@@ -37,6 +37,8 @@ function Employees() {
   // const getData = (current, pageSize) => {
   //   return data?.slice((current - 1) * pageSize, current * pageSize);
   // };
+
+  
   const columns = [
     {
       title: "ACTION",

@@ -12,6 +12,7 @@ import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
 import { ROUTES } from "../../../routes";
 import PublicFetch from "../../../utils/PublicFetch";
 import { CRM_BASE_URL_HRMS } from "../../../api/bootapi";
+import { UniqueErrorMsg } from "../../../ErrorMessages/UniqueErrorMessage";
 
 // { Add and list Departments - Ann mariya - 16/11/22 }
 export default function Departments(props) {
@@ -28,6 +29,8 @@ export default function Departments(props) {
   const [alldepartmentdata, setAllDepartmentData] = useState();
   const [showEditModal, setShowEditModal] = useState();
   const [department_id, setDepartment_id] = useState();
+  const [uniqueCode, setuniqueCode] = useState(false);
+  const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
 
   const close_modal = (mShow, time) => {
     if (!mShow) {
@@ -112,6 +115,48 @@ export default function Departments(props) {
           close_modal(successModal, 1000);
           setShowEditModal(false);
           getAllDepartments();
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+   const checkDeptNameis = (data) => {
+     PublicFetch.get(
+       `${process.env.REACT_APP_BASE_URL}/misc?type=departmentname&value=${deptName}`
+     )
+       .then((res) => {
+         console.log("Response", res);
+         if (res.data.success) {
+           console.log("Success", res.data.data);
+           if (res.data.data.exist) {
+             console.log("hai guys");
+             setuniqueCode(true);
+           } else {
+             setuniqueCode(false);
+           }
+         }
+       })
+       .catch((err) => {
+         console.log("Error", err);
+       });
+   };
+
+  const checkDeptCodeis = (data) => {
+    PublicFetch.get(
+      `${process.env.REACT_APP_BASE_URL}/misc?type=departmentcode&value=${deptCode}`
+    )
+      .then((res) => {
+        console.log("Response", res);
+        if (res.data.success) {
+          console.log("Success", res.data.data);
+          if (res.data.data.exist) {
+            console.log("hai guys");
+            setuniqueCode(true);
+          } else {
+            setuniqueCode(false);
+          }
         }
       })
       .catch((err) => {
@@ -306,10 +351,22 @@ export default function Departments(props) {
                           "Department Name cannot be longer than 100 characters",
                       },
                     ]}
-                    onChange={(e) => setDeptName(e.target.value)}
                   >
-                    <InputType />
+                    <InputType
+                      onChange={(e) => {
+                        setDeptName(e.target.value);
+                        setuniqueCode(false);
+                      }}
+                      onBlur={(e) => {
+                        checkDeptNameis();
+                      }}
+                    />
                   </Form.Item>
+                  {uniqueCode ? (
+                    <p style={{ color: "red", marginTop: "-24px" }}>
+                      Department Name {uniqueErrMsg.UniqueErrName}
+                    </p>
+                  ) : null}
                 </div>
 
                 <div className="col-12 pt-3">
@@ -332,10 +389,22 @@ export default function Departments(props) {
                           "Department code cannot be longer than 15 characters",
                       },
                     ]}
-                    onChange={(e) => setDeptCode(e.target.value)}
                   >
-                    <InputType />
+                    <InputType
+                      onChange={(e) => {
+                        setDeptCode(e.target.value);
+                        setuniqueCode(false);
+                      }}
+                      onBlur={(e) => {
+                        checkDeptCodeis();
+                      }}
+                    />
                   </Form.Item>
+                  {uniqueCode ? (
+                    <p style={{ color: "red", marginTop: "-24px" }}>
+                      Department code {uniqueErrMsg.UniqueErrName}
+                    </p>
+                  ) : null}
                 </div>
               </div>
               <div className="row justify-content-center">

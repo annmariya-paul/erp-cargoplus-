@@ -12,6 +12,7 @@ import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
 import { ROUTES } from "../../../routes";
 import { CRM_BASE_URL_HRMS } from "../../../api/bootapi";
 import PublicFetch from "../../../utils/PublicFetch";
+import { UniqueErrorMsg } from "../../../ErrorMessages/UniqueErrorMessage";
 // { Add and list Branches - Ann mariya - 16/11/22 }
 export default function Branches(props) {
   const [branch_id, setBranch_id] = useState();
@@ -31,6 +32,10 @@ export default function Branches(props) {
   const [NameInput, setNameInput] = useState();
   const [CodeInput, setCodeInput] = useState();
   const [BranchEditPopup, setBranchEditPopup] = useState(false);
+ const [uniqueCode, setUniqueCode] = useState(false);
+ const [uniqueName,setUniqueName] =useState(false);
+ const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
+
   const [editForm] = Form.useForm();
   const close_modal = (mShow, time) => {
     if (!mShow) {
@@ -162,6 +167,7 @@ export default function Branches(props) {
       key: "3",
     },
   ];  
+
   const [saveSuccess, setSaveSuccess] =useState(false)
   const [BranchError, setBranchError] = useState();
   
@@ -183,7 +189,7 @@ export default function Branches(props) {
       getallbranches();
       addForm.resetFields();
       setModalAddBranch(false);
-      close_modal(successPopup,1000 );
+      close_modal(successPopup,1000);
     }
     }
     catch(err){
@@ -192,6 +198,46 @@ export default function Branches(props) {
   
     }
 
+
+    const checkBranchNameis = (data) => {
+      PublicFetch.get(
+        `${process.env.REACT_APP_BASE_URL}/misc?type=branchname&value=${branchname}`
+      )
+        .then((res) => {
+          console.log("Response", res);
+          if (res.data.success) {
+            console.log("Success", res.data.data);
+            if (res.data.data.exist) {
+              setUniqueName(true);
+            } else {
+              setUniqueName(false);
+            }
+          }
+        })
+        .catch((err) => {
+          console.log("Error", err);
+        });
+    };
+
+    const checkBranchCodeis = (data) => {
+      PublicFetch.get(
+        `${process.env.REACT_APP_BASE_URL}/misc?type=branchcode&value=${branchcode}`
+      )
+        .then((res) => {
+          console.log("Response", res);
+          if (res.data.success) {
+            console.log("Success", res.data.data);
+            if (res.data.data.exist) {
+              setUniqueCode(true);
+            } else {
+              setUniqueCode(false);
+            }
+          }
+        })
+        .catch((err) => {
+          console.log("Error", err);
+        });
+    };
   // const OnSubmit = () => {
   //   const formData = new FormData();
 
@@ -284,7 +330,6 @@ export default function Branches(props) {
       </div>
 
       <CustomModel
-      
         show={modalAddBranch}
         onHide={() => setModalAddBranch(false)}
         header="Add Branch"
@@ -297,7 +342,7 @@ export default function Branches(props) {
               <h5 className="lead_text">Add Branch</h5>
             </div>
             <Form
-           form={addForm}
+              form={addForm}
               onFinish={(data) => {
                 console.log("valuezzzzzzz", data);
                 createBranches();
@@ -310,37 +355,45 @@ export default function Branches(props) {
                 <div className="col-12 pt-1">
                   <label>Branch Name</label>
                   <div>
-                  <Form.Item
-                    name="branchname"
-                    rules={[
-                      {
-                        required: true,
-                        pattern: new RegExp("^[A-Za-z ]+$"),
-                        message: "Please enter a Valid Branch Name",
-                      },
-                      
-                      {
-                        min: 3,
-                        message: "Branch Name must be atleast 3 characters",
-                      },
-                      {
-                        max: 100,
-                        message:
-                          "Branch Name cannot be longer than 100 characters",
-                      },
-                    ]}
-                    onChange={(e) => setBranchname(e.target.value)}
-                  >
-                    <InputType 
-                    value={branchname}
-                    onChange={(e) => {
-                      setBranchname(e.target.value);
-                      setBranchError("");
-                    }}
-                    
-                    />
-                  </Form.Item>
-                </div>
+                    <Form.Item
+                      name="branchname"
+                      rules={[
+                        {
+                          required: true,
+                          pattern: new RegExp("^[A-Za-z ]+$"),
+                          message: "Please enter a Valid Branch Name",
+                        },
+
+                        {
+                          min: 3,
+                          message: "Branch Name must be atleast 3 characters",
+                        },
+                        {
+                          max: 100,
+                          message:
+                            "Branch Name cannot be longer than 100 characters",
+                        },
+                      ]}
+                     
+                    >
+                      <InputType
+                        value={branchname}
+                        onChange={(e) => {
+                          setBranchname(e.target.value);
+                          setBranchError("");
+                          setUniqueName(false);
+                        }}
+                        onBlur={(e) => {
+                          checkBranchNameis();
+                        }}
+                      />
+                    </Form.Item>
+                    {uniqueName ? (
+                      <p style={{ color: "red", marginTop: "-24px" }}>
+                        Branch Name {uniqueErrMsg.UniqueErrName}
+                      </p>
+                    ) : null}
+                  </div>
                 </div>
 
                 <div className="col-12 pt-1">
@@ -363,13 +416,24 @@ export default function Branches(props) {
                           "Branch code cannot be longer than 15 characters",
                       },
                     ]}
-                    onChange={(e) => setBranchcode(e.target.value)}
+                    // onChange={(e) => setBranchcode(e.target.value)}
                   >
-                    <InputType 
-                     value={branchCode}
-                     onChange={(e) => setBranchcode(e.target.value)}
-                     />
+                    <InputType
+                      value={branchCode}
+                      onChange={(e) => {
+                        setBranchcode(e.target.value);
+                        setUniqueCode(false);
+                      }}
+                      onBlur={(e) => {
+                        checkBranchCodeis();
+                      }}
+                    />
                   </Form.Item>
+                  {uniqueCode ? (
+                    <p style={{ color: "red", marginTop: "-24px" }}>
+                      Branch code {uniqueErrMsg.UniqueErrName}
+                    </p>
+                  ) : null}
                 </div>
               </div>
               <div className="row justify-content-center ">
@@ -389,7 +453,7 @@ export default function Branches(props) {
         />
       </CustomModel>
       <Custom_model
-         show={BranchEditPopup}
+        show={BranchEditPopup}
         onHide={() => setBranchEditPopup(false)}
         View_list
         list_content={
@@ -403,7 +467,7 @@ export default function Branches(props) {
                   form={editForm}
                   onFinish={(values) => {
                     console.log("values iss", values);
-                   handleUpdate();
+                    handleUpdate();
                   }}
                   onFinishFailed={(error) => {
                     console.log(error);
@@ -479,7 +543,7 @@ export default function Branches(props) {
                       ""
                     )}
                   </div>
-                 
+
                   <div className="col-12 d-flex justify-content-center mt-5">
                     <Button className="save_button">Save</Button>
                   </div>
@@ -496,13 +560,13 @@ export default function Branches(props) {
           </div>
         }
       />
-          <CustomModel
+      <CustomModel
         size={"sm"}
         show={successPopup}
         onHide={() => setSuccessPopup(false)}
         success
       />
-      {error? <ErrorMsg code={"500"} /> : " "}
+      {error ? <ErrorMsg code={"500"} /> : " "}
     </>
   );
 }

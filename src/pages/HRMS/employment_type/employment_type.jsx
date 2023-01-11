@@ -275,19 +275,21 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
                       ]}
                       onChange={(e) => setaddemploytypename(e.target.value)}
                     >
-                      <InputType   onChange={(e) => {
-                                setEmployeeType(e.target.value);
-                                setuniqueCode(false);
-                              }}
-                              onBlur={(e) => {
-                                checkemployeeCodeis();
-                              }}/>
+                      <InputType
+                        onChange={(e) => {
+                          setEmployeeType(e.target.value);
+                          setuniqueCode(false);
+                        }}
+                        onBlur={(e) => {
+                          checkemployeeCodeis();
+                        }}
+                      />
                     </Form.Item>
-                     {uniqueCode ? (
-                            <p style={{ color: "red",marginTop:"-24px" }}>
-                            Employement Type  {uniqueErrMsg.UniqueErrName}
-                            </p>
-                          ) : null}
+                    {uniqueCode ? (
+                      <p style={{ color: "red", marginTop: "-24px" }}>
+                        Employment Type {uniqueErrMsg.UniqueErrName}
+                      </p>
+                    ) : null}
                   </div>
                 </div>
               </div>
@@ -374,83 +376,74 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
           }}
           View_list
           list_content={
-            <div className="container-fluid px-4 my-4 ">
-              <h6 className="lead_text">Edit Employment Type</h6>
-              <Form
-                form={editForm}
-                onFinish={(value) => {
-                  console.log("the formvaluess iss", value);
-                  updateClick();
-                }}
-                onFinishFailed={(error) => {
-                  console.log(error);
-                }}
-              >
-                <div className="row">
-                  <div className="col-12">
-                    <label>Name</label>
-                    <Form.Item
-                      name="emptype_name"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+            <>
+              <h6 className="lead_text mb-2">Edit Employment Type</h6>
+              <div className="container-fluid px-4 my-4 ">
+                <Form
+                  form={editForm}
+                  onFinish={(value) => {
+                    console.log("the formvaluess iss", value);
+                    updateClick();
+                  }}
+                  onFinishFailed={(error) => {
+                    console.log(error);
+                  }}
+                >
+                  <div className="row">
+                    <div className="col-12">
+                      <label>Name</label>
+                      <Form.Item
+                        name="emptype_name"
+                        rules={[
+                          {
+                            required: true,
+                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
 
-                          message: "Please enter a Employee type Name",
-                        },
-                        {
-                          whitespace: true,
-                        },
-                        {
-                          min: 2,
-                          message: "Name must be at least 2 characters",
-                        },
-                        {
-                          max: 100,
-                          message: "Name cannot be longer than 100 characters",
-                        },
-                      ]}
-                    >
-                      <InputType
-                        // value={editemptypename}
-                        // onChange={(e) => seteditemptypename(e.target.value)}
-                        value={employeeTName}
-                        onChange={(e) => {
-    
-                          setEmployeeTName(e.target.value)
-                          setuniqueCode(false);}
-                        }
-                        onBlur={() => {
-                          checkeditNameis();
-                        }}
-                     
-                     />
-                    </Form.Item>
-                    {uniqueeditCode ? (
-                      <label style={{ color: "red" }} className="mb-2">
-                         Employement  Type {uniqueErrMsg.UniqueErrName}
-                      </label>
-                    ) : null}
-
-
-                  </div>
-
-                  <div className="row d-flex justify-content-center">
-                    <div className="col-xl-2 col-lg-2 col-12 justify-content-center">
-                      <Button
-                        btnType="save"
-                        // onClick={(id) => {
-                        //   updateClick();
-                        //   setEditShow(false);
-                        // }}
+                            message: "Please enter a Employee type Name",
+                          },
+                          {
+                            whitespace: true,
+                          },
+                          {
+                            min: 2,
+                            message: "Name must be at least 2 characters",
+                          },
+                          {
+                            max: 100,
+                            message:
+                              "Name cannot be longer than 100 characters",
+                          },
+                        ]}
                       >
-                        Save
-                      </Button>
+                        <InputType
+                          // value={editemptypename}
+                          // onChange={(e) => seteditemptypename(e.target.value)}
+                          value={employeeTName}
+                          onChange={(e) => {
+                            setEmployeeTName(e.target.value);
+                            setuniqueeditCode(false);
+                          }}
+                          onBlur={() => {
+                            checkeditNameis();
+                          }}
+                        />
+                      </Form.Item>
+                      {uniqueeditCode ? (
+                        <p style={{ color: "red", marginTop: "-24px" }}>
+                          Employment Type Name {uniqueErrMsg.UniqueErrName}
+                        </p>
+                      ) : null}
+                    </div>
+
+                    <div className="row d-flex justify-content-center">
+                      <div className="col-xl-2 col-lg-2 col-12 justify-content-center">
+                        <Button btnType="save">Save</Button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Form>
-            </div>
+                </Form>
+              </div>
+            </>
           }
         />
       </div>

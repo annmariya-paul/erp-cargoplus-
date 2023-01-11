@@ -13,26 +13,29 @@ import {ROUTES} from "../../../../routes";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { FiEdit } from "react-icons/fi";
 import CustomModel from "../../../../components/custom_modal/custom_model";
-
-import { CRM_BASE_URL_HRMS } from "../../../../api/bootapi";
+import {CRM_BASE_URL_FMS} from "../../../../api/bootapi";
+import { UniqueErrorMsg } from "../../../../ErrorMessages/UniqueErrorMessage";
 
 
 export default function Frightlist(props) {
-
+  const [uniqueCode, setuniqueCode] = useState(false);
+  const [frightType, setFrightType] = useState();
+  const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
  
   const [addForm] = Form.useForm();
   const [error, setError] = useState(false);
   const [successPopup, setSuccessPopup] = useState(false);
-  // const [addForm, setAddForm] = useState();
+
   const [searchedText, setSearchedText] = useState("");
   const [successModal, setSuccessModal] = useState(false);
   const [modalAddFright, setModalAddFright] = useState(false);
 
   const [pageSize, setPageSize] = useState("25");
+
  
   const [Errormsg, setErrormsg] = useState();
   const [NameInput, setNameInput] = useState();
-  const [CodeInput, setCodeInput] = useState();
+
    const [showViewModal, setShowViewModal] = useState(false);
   const [FrightEditPopup, setFrightEditPopup] = useState(false);
   const [editForm] = Form.useForm();
@@ -43,21 +46,101 @@ export default function Frightlist(props) {
       }, time);
     }
   };
+
+  const checkemployeeCodeis = (data) => {
+    PublicFetch.get(
+      `${process.env.REACT_APP_BASE_URL}/misc?type=freighttypename&value=${frightType}`
+    )
+      .then((res) => {
+        console.log("Response", res);
+        if (res.data.success) {
+          console.log("Success", res.data.data);
+          if (res.data.data.exist) {
+            console.log("data exist");
+            setuniqueCode(true);
+          } else {
+            setuniqueCode(false);
+          }
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+  const [fright_id, setFright_id] = useState();
+  console.log("fright id in state",fright_id);
+
+  const [frights,setFrights]=useState();
+  const [frighttypename,setFrighttypename]=useState();
   
-  const [date, setDate] = useState();
-  console.log(date);
-  const today = new Date().toISOString().split("T")[0];
+
+  const createFrights =async()=>{
+    try{
+    const addfrights = await PublicFetch.post(
+    `${CRM_BASE_URL_FMS}/freightTypes`,{
+      freight_type_name:frighttypename,
+     })
+    console.log("fright added successfully",addfrights)
+    if(addfrights.data.success){
+      setSuccessPopup(true);
+      getallfright();
+      addForm.resetFields();
+      setModalAddFright(false);
+      close_modal(successPopup,1000 );
+    }
+    }
+    catch(err){ 
+    console.log("err to add the frights",err)
+    }
   
- 
+    }
+  //API for get all frieght types --shahida 11.1.23
+  const getallfright= async () => {
+    try {
+      const allfright = await PublicFetch.get(`${CRM_BASE_URL_FMS}/freightTypes`);
+      console.log("all frights are", allfright.data.data);
+      setFrights(allfright.data.data);
+      // setFright_id(allfright.data.data.freight_type_id);
+      // console.log("fright id",allfright.data.data);
+      
+      
+//       let arr=[];
+//       allfright?.data?.data?.forEach((item,index)=>{
+   
+// let selectdate = moment(selectedDate).format("MM-DD-YYYY");
+//         var frightdate=moment(allfright.data.data.freight_type_created_at).format("MM-DD-YYYY");
+//         arr.push({
+//           freight_type_id:item?.freight_type_id,
+//           freight_type_created_at:item?.selectdate,
+//           freight_type_name:item?.freight_type_name,
+//         })
+//         setFrights(arr);
+//       });
+    } catch (err) {
+      console.log("error while getting the frights: ", err);
+    }
+  };
+
+  useEffect(() => {
+    getallfright();
+  }, []);
+  const [viewfrights,setViewFrights]=useState({
+    id:"",
+    frightviewname:""
+  })
+
  const handleViewClick=(item)=>{
+  console.log("view all frights",item)
+  setViewFrights({
+    ...viewfrights,
+  id:item.freight_type_id,
+  frightviewname:item.freight_type_name
+  })
+
+
     setShowViewModal(true)
  }
 
-  const FrightEdit = (e) => {
-   
-   
-    setFrightEditPopup(true);
-  };
 
 
 
@@ -74,7 +157,7 @@ export default function Frightlist(props) {
            
               <div
                 className="editIcon m-0"
-                onClick={() =>FrightEdit(index)}
+                onClick={() =>frightEdit(index)}
               >
                 <FaEdit />
               </div>
@@ -95,8 +178,8 @@ export default function Frightlist(props) {
     },
     {
       title: "FRIGHT TYPE NAME",
-      dataIndex: "fright_name",
-      key: "fright_name",
+      dataIndex: "freight_type_name",
+      key: "freight_type_name",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
         return String(record.fright_name)
@@ -105,12 +188,12 @@ export default function Frightlist(props) {
       },
       align: "center",
     },
-    {
-      title: "Date",
-      dataIndex: "date",
-      key: "date",
-      align: "center",
-    },
+    // {
+    //   title: "Date",
+    //   dataIndex: "freight_type_created_at",
+    //   key: "freight_type_created_at",
+    //   align: "center",
+    // },
   ];
 
   const data = [
@@ -135,22 +218,73 @@ export default function Frightlist(props) {
    const [viewfright,setViewfright]=useState({
     id:"",
     frightname:"",
-    date:"",
+    
   
   })
  
+  const handleUpdate = (e) => {
+    console.log("edit data", e);
+    const formData = new FormData();
+
+  
+    let data = { 
+      freight_type_name : NameInput,
+     
+    }
+
+    PublicFetch.patch(`${CRM_BASE_URL_FMS}/freightTypes/${fright_id}`, data )
+      .then((res) => {
+        console.log("success", res);
+        if (res.data.success) {
+          console.log("successDataa", res.data.data);
+          getallfright();
+          setSuccessPopup(true);
+          close_modal(successPopup, 1000);
+          setFrightEditPopup(false);
+        } else {
+          setErrormsg(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+        setError(true);
+      });
+  };
+  const [frightId,setFrightId] =useState()
+
+  const handleviewtoedit=(i)=>{
+    console.log("editing data iss",i)
+    setFright_id(i.id)
+  setFrightname(i.frightviewname)
+
+  addForm.setFieldsValue({
+    // unitid: e.unit_id,
+    fright: i.frightviewname,
+   
+  });
+  setFrightEditPopup(true);
+  }
+
   const [frightname, setFrightname] = useState();
 
-
+  const frightEdit = (e) => {
+    console.log("Fright edit", e);
+    setNameInput(e.freight_type_name);
+   
+    // setImageInput(e.brand_pic);
+    setFright_id(e.freight_type_id);
+    editForm.setFieldsValue({
+      fright_id: e.freight_type_id,
+      NameInput: e.freight_type_name,
+  
+    });
+    setFrightEditPopup(true);
+  };
 
   
 
 
 
-const handleviewtoedit=(i)=>{
-   
-  FrightEditPopup(true);
-}
 
 
   
@@ -215,7 +349,7 @@ const handleviewtoedit=(i)=>{
           <TableData
             // data={getData(numofItemsTo, pageofIndex)}
            
-            data={data}
+            data={frights}
             columns={columns}
             custom_table_css="table_lead_list"
           />
@@ -241,7 +375,7 @@ const handleviewtoedit=(i)=>{
            form={addForm}
               onFinish={(data) => {
                 console.log("valuezzzzzzz", data);
-                
+                createFrights();
               }}
               onFinishFailed={(error) => {
                 console.log(error);
@@ -252,7 +386,7 @@ const handleviewtoedit=(i)=>{
                   <label>Fright Type Name</label>
                   <div>
                   <Form.Item
-                    name="Frightname"
+                    name="freightname"
                     rules={[
                       {
                         required: true,
@@ -270,21 +404,34 @@ const handleviewtoedit=(i)=>{
                           " Name cannot be longer than 100 characters",
                       },
                     ]}
-                    
+                    onChange={(e) => setFrighttypename(e.target.value)}
                   >
                     <InputType 
                     value={frightname}
                     onChange={(e) => {
-                     
-                      setFrightError("");
+                      setFrightType(e.target.value);
+                      setuniqueCode(false);
                     }}
+                    onBlur={(e) => {
+                      checkemployeeCodeis();
+                    }}
+                    // onChange={(e) => {
+                      // setFrighttypename(e.target.value)
+
+                      // setFrightError("");
+                    // }}
                     
                     />
                   </Form.Item>
+                  {uniqueCode ? (
+                            <p style={{ color: "red",marginTop:"-24px" }}>
+                            Fright Type Name {uniqueErrMsg.UniqueErrName}
+                            </p>
+                          ) : null}
                 </div>
                 </div>
 
-                <div className="col-12 pt-1">
+                {/* <div className="col-12 pt-1">
                   <label>Date</label>
                   <Form.Item
                     name="date"
@@ -307,7 +454,7 @@ const handleviewtoedit=(i)=>{
                       />
                     
                   </Form.Item>
-                </div>
+                </div> */}
               </div>
               <div className="row justify-content-center ">
                 <div className="col-auto">
@@ -342,7 +489,7 @@ const handleviewtoedit=(i)=>{
                     btnType="add_borderless"
                     className="edit_button"
                     onClick={() => {
-                    setFrightEditPopup(true);
+                      handleviewtoedit(viewfrights);
                       // setShowModalEdit(true);
                       setShowViewModal(false);
                     }}
@@ -360,20 +507,10 @@ const handleviewtoedit=(i)=>{
                 </div>
                 <div className="col-1">:</div>
                 <div className="col-6 justify-content-start">
-                  <p className="modal-view-data">Fright X</p>
+                  <p className="modal-view-data">{viewfrights.frightviewname}</p>
                 </div>
               </div>
-              <div className="row my-4">
-                <div className="col-4">
-                  <p>Date</p>
-                </div>
-                <div className="col-1">:</div>
-                <div className="col-7 justify-content-start">
-                  <p className="modal-view-data">
-                  12-1-23
-                  </p>
-                </div>
-              </div>
+             
             </div>
           }
         />
@@ -392,7 +529,7 @@ const handleviewtoedit=(i)=>{
                   form={editForm}
                   onFinish={(values) => {
                     console.log("values iss", values);
-                //    handleUpdate();
+                   handleUpdate();
                   }}
                   onFinishFailed={(error) => {
                     console.log(error);
@@ -420,7 +557,7 @@ const handleviewtoedit=(i)=>{
                     >
                       <InputType
                         className="input_type_style w-100"
-                        value={NameInput}
+                        value={frightname}
                         onChange={(e) => {
                           setNameInput(e.target.value);
                           setErrormsg("");
@@ -433,7 +570,7 @@ const handleviewtoedit=(i)=>{
                       ""
                     )}
                   </div>
-                  <div className="col-6">
+                  {/* <div className="col-6">
                     <label>Date</label>
                     <Form.Item
                     name="date"
@@ -461,7 +598,7 @@ const handleviewtoedit=(i)=>{
                     ) : (
                       ""
                     )}
-                  </div>
+                  </div> */}
                  
                   <div className="col-12 d-flex justify-content-center mt-5">
                     <Button className="save_button">Save</Button>

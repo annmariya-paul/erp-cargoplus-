@@ -12,179 +12,220 @@ import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
 import { ROUTES } from "../../../routes";
 import PublicFetch from "../../../utils/PublicFetch";
 import { CRM_BASE_URL_HRMS } from "../../../api/bootapi";
+import { UniqueErrorMsg } from "../../../ErrorMessages/UniqueErrorMessage";
+import CheckUnique from "../../../check Unique/CheckUnique";
+function Employeegrade() {
+  // const [addForm, setAddForm] = useState();
+  const [searchedText, setSearchedText] = useState("");
+  const [successModal, setSuccessModal] = useState(false);
+  const [pageSize, setPageSize] = useState("25");
+  const [current, setCurrent] = useState(1);
+  const [editShow, setEditShow] = useState(false);
+  const [newName, setNewName] = useState();
+  const [uniqueeditCode, setuniqueeditCode] = useState(false);
+  const [employeegradedata, setemployeegradedata] = useState("");
+  const [employeegradename, setemployeegradename] = useState("");
+  const [editempgradename, seteditempgradename] = useState("");
+  console.log("editname", editempgradename);
+  const [editempgradeid, seteditempgradeid] = useState();
+  const [saveSuccess, setSaveSuccess] = useState(false);
+  const [addForm] = Form.useForm();
+  const [editForm] = Form.useForm();
+  const [uniqueCode, setuniqueCode] = useState(false);
+  const [employeeGrade, setEmployeeGrade] = useState();
+  const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
 
+  const close_modal = (mShow, time) => {
+    if (!mShow) {
+      setTimeout(() => {
+        setSaveSuccess(false);
+      }, time);
+    }
+  };
 
+  const getData = (current, pageSize) => {
+    return employeegradedata?.slice(
+      (current - 1) * pageSize,
+      current * pageSize
+    );
+  };
 
-function Employeegrade(){
-    // const [addForm, setAddForm] = useState();
-    const [searchedText, setSearchedText] = useState("");
-    const [successModal, setSuccessModal] = useState(false);
-    const [pageSize, setPageSize] = useState("25");
-    const [current, setCurrent] = useState(1);
-    const [editShow,setEditShow]= useState(false)
-    
-    const [employeegradedata,setemployeegradedata]= useState("")
-    const[employeegradename, setemployeegradename ]= useState("")
-    const [editempgradename,seteditempgradename]=useState("")
-    const [editempgradeid,seteditempgradeid]=useState()
-    const [saveSuccess, setSaveSuccess] = useState(false);
-    const [addForm]= Form.useForm()
-    const [editForm]=Form.useForm()
+  // const checkemployeeCodeis = (data) => {
+  //   PublicFetch.get(
+  //     `${process.env.REACT_APP_BASE_URL}/misc?type=employmentgradename&value=${employeeGrade}`
+  //   )
+  //     .then((res) => {
+  //       console.log("Response", res);
+  //       if (res.data.success) {
+  //         console.log("Success", res.data.data);
+  //         if (res.data.data.exist) {
+  //           console.log("data exist");
+  //           setuniqueCode(true);
+  //         } else {
+  //           setuniqueCode(false);
+  //         }
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log("Error", err);
+  //     });
+  // };
 
+  const getallempgrade = async () => {
+    try {
+      const allemptype = await PublicFetch.get(
+        `${CRM_BASE_URL_HRMS}/employee-grades`
+      );
+      console.log("all empolymntgrades are ::", allemptype?.data?.data);
+      //   setEmploymentType(allemptype?.data?.data)
+      setemployeegradedata(allemptype?.data?.data);
+    } catch (err) {
+      console.log("error to getting all employmntgrade", err);
+    }
+  };
 
-    const close_modal = (mShow, time) => {
-        if (!mShow) {
-          setTimeout(() => {
-            setSaveSuccess(false);
-          }, time);
-        }
-      };
-  
-      const getData = (current, pageSize) => {
-        return employeegradedata?.slice((current - 1) * pageSize, current * pageSize);
-      };  
+  useEffect(() => {
+    getallempgrade();
+  }, []);
 
-
-
-      
-
-    const getallempgrade=async ()=>{
-        try{
-        const  allemptype =await PublicFetch.get(
-          `${CRM_BASE_URL_HRMS}/employee-grades`)
-          console.log("all empolymntgrades are ::",allemptype?.data?.data)
-        //   setEmploymentType(allemptype?.data?.data)
-        setemployeegradedata(allemptype?.data?.data)
-        }
-        catch(err) {
-        console.log("error to getting all employmntgrade",err)
-        }
-        }
-
-        useEffect(() => {
-            getallempgrade()
-           
-          }, []); 
-
-
-          const submitaddemp=async()=>{
-            try{
-            const addemployegrade = await PublicFetch.post(
-              `${CRM_BASE_URL_HRMS}/employee-grades`,{
-                employee_grade_name:employeegradename,
-              })
-             console.log("employegrade data is added ",addemployegrade)
-             if(addemployegrade.data.success){
-              getallempgrade() 
-              setSuccessModal(true)
-              addForm.resetFields()
-              setSaveSuccess(true)
-              close_modal(saveSuccess,1000)
-             
-             }
-
-            //  else{
-            //    <ErrorMsg code={"500"} />
-            //  }
+  const checkeditNameis = (data) => {
+    if (newName !== employeeGrade) {
+      PublicFetch.get(
+        `${process.env.REACT_APP_BASE_URL}/misc?type=employmentgradename&value=${employeeGrade}`
+      )
+        .then((res) => {
+          console.log("Response 1123", res);
+          if (res.data.success) {
+            console.log("Success", res.data.data);
+            if (res.data.data.exist) {
+              console.log("hai guys");
+              setuniqueeditCode(true);
+            } else {
+              setuniqueeditCode(false);
             }
-            catch(err) {
-             console.log("err to add the unit",err)
-            }
-            
-            }
+          }
+        })
+        .catch((err) => {
+          console.log("Error", err);
+        });
+    }
+  };
+  const submitaddemp = async () => {
+    try {
+      const addemployegrade = await PublicFetch.post(
+        `${CRM_BASE_URL_HRMS}/employee-grades`,
+        {
+          employee_grade_name: employeeGrade,
+        }
+      );
+      console.log("employegrade data is added ", addemployegrade);
+      if (addemployegrade.data.success) {
+        getallempgrade();
+        setSuccessModal(true);
+        addForm.resetFields();
+        setSaveSuccess(true);
+        close_modal(saveSuccess, 1000);
+      }
 
-            const updateClick = async (id) => {
-              try {
-                const updating = await PublicFetch.patch(
-                  `${CRM_BASE_URL_HRMS}/employee-grades/${editempgradeid}`,
-                  {
-                    employee_grade_name: editempgradename,
-                  }
-                );
-                console.log("editedd data is", updating);
-                if(updating.data.success){
-                 console.log("successfully updating ")
-                //  setViewUnitModal(false)
-                getallempgrade()
-                 setEditShow(false);
-                 setSaveSuccess(true)
-                 close_modal(saveSuccess, 1200);
-                }
-              } catch (err) {
-                console.log("error to getting all units", err);
-              }
-            };
+      //  else{
+      //    <ErrorMsg code={"500"} />
+      //  }
+    } catch (err) {
+      console.log("err to add the unit", err);
+    }
+  };
 
-            const handleEditclick = (item) => {
-              console.log("editt valuesss", item);
-              seteditempgradename(item?.employee_grade_name);
-              seteditempgradeid(item?.employee_grade_id);
-              editForm.setFieldsValue({
-                Employment_grade_name: item?.employee_grade_name
-              });
-              setEditShow(true);
-            };
+  const updateClick = async (id) => {
+    try {
+      const updating = await PublicFetch.patch(
+        `${CRM_BASE_URL_HRMS}/employee-grades/${editempgradeid}`,
+        {
+          employee_grade_name: employeeGrade,
+        }
+      );
+      console.log("editedd data is", updating);
+      if (updating.data.success) {
+        console.log("successfully updating ");
+        //  setViewUnitModal(false)
+        getallempgrade();
+        setEditShow(false);
+        setSaveSuccess(true);
+        close_modal(saveSuccess, 1200);
+      }
+    } catch (err) {
+      console.log("error to getting all units", err);
+    }
+  };
 
+  const handleEditclick = (item) => {
+    console.log("editt valuesss", item);
+    seteditempgradename(item?.employee_grade_name);
+    seteditempgradeid(item?.employee_grade_id);
+    setNewName(item?.employee_grade_name);
+    editForm.setFieldsValue({
+      Employment_grade_name: item?.employee_grade_name,
+    });
+    setEditShow(true);
+  };
 
-        const columns = [
-            {
-              title: "ACTION",
-              dataIndex: "action",
-              key: "key",
-              width: "30%",
-      
-              render: (data, index) => {
-                return (
-                  <div className="d-flex justify-content-center align-items-center gap-2">
-                    <div className="m-0">
-                      <div
-                        className="editIcon m-0"
-                        onClick={()=>{
-                          handleEditclick(index)
-                        }}
-                      //   onClick={() => }
-                      >
-                        <FaEdit />
-                      </div>
-                    </div>
-                  </div>
-                );
-              },
-              align: "center",
-            },
-            {
-              title: "EMPLOYMENT TYPE NAME",
-              dataIndex: "employee_grade_name",
-              key: "employee_grade_name",
-              filteredValue: [searchedText],
-              onFilter: (value, record) => {
-                return String(record.employee_grade_name)
-                  .toLowerCase()
-                  .includes(value.toLowerCase());
-              },
-              align: "center",
-            },
-          ];
+  const columns = [
+    {
+      title: "ACTION",
+      dataIndex: "action",
+      key: "key",
+      width: "30%",
 
-          // const data = [
-          //   {
-          //     emp_type_name: "Full-time",
-          //     key: "1",
-          //   },
-          //   {
-          //     emp_type_name: "Part-time",
-          //     key: "2",
-          //   },
-          //   {
-          //     emp_type_name: "Temporary",
-          //     key: "3",
-          //   },
-          // ];
-      
+      render: (data, index) => {
+        return (
+          <div className="d-flex justify-content-center align-items-center gap-2">
+            <div className="m-0">
+              <div
+                className="editIcon m-0"
+                onClick={() => {
+                  handleEditclick(index);
+                }}
+                //   onClick={() => }
+              >
+                <FaEdit />
+              </div>
+            </div>
+          </div>
+        );
+      },
+      align: "center",
+    },
+    {
+      title: "EMPLOYMENT GRADE NAME",
+      dataIndex: "employee_grade_name",
+      key: "employee_grade_name",
+      filteredValue: [searchedText],
+      onFilter: (value, record) => {
+        return String(record.employee_grade_name)
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      },
+      align: "center",
+    },
+  ];
 
-    return(
-<>
-        <div className="container mb-4 d-flex justify-content-center">
+  // const data = [
+  //   {
+  //     emp_type_name: "Full-time",
+  //     key: "1",
+  //   },
+  //   {
+  //     emp_type_name: "Part-time",
+  //     key: "2",
+  //   },
+  //   {
+  //     emp_type_name: "Temporary",
+  //     key: "3",
+  //   },
+  // ];
+
+  return (
+    <>
+      <div className="container mb-4 d-flex justify-content-center">
         <div className="containerdesig ">
           <div className="row mx-2">
             <Form
@@ -192,7 +233,7 @@ function Employeegrade(){
               form={addForm}
               onFinish={(value) => {
                 console.log("valuezzzzzzz", value);
-                submitaddemp()
+                submitaddemp();
                 // submitaddemp()
                 // Submit();
               }}
@@ -203,41 +244,55 @@ function Employeegrade(){
               <div className="row flex-wrap pt-1">
                 <div className="row ms-0 py-1">
                   <div className="col-12 pt-3">
-                    <label htmlfor="emp_type_name">
-                      Employment grade Name
-                    </label>
+                    <label htmlfor="emp_type_name">Employment grade Name</label>
                     <Form.Item
                       name="Employment_type_name"
                       rules={[
                         {
                           required: true,
-                          pattern: new RegExp("^[A-Za-z]+$"),
-                          message:
-                            "Please enter a valid Employment Type Name",
+                          pattern: new RegExp("^[A-Za-z ]+$"),
+                          message: "Please enter a valid Employment Type Name",
                         },
                         {
                           min: 2,
-                          message: "Branch Name must be atleast 2 characters",
+                          message: "Name must be at least 2 characters",
                         },
                         {
                           max: 100,
-                          message:
-                            "Branch Name cannot be longer than 100 characters",
+                          message: "Name cannot be longer than 100 characters",
                         },
                       ]}
-                      
                     >
                       <InputType
-                      onChange={(e)=> setemployeegradename(e.target.value)}
-                    //   onChange={(e) => setEmptypename(e.target.value)}
+                        onChange={(e) => {
+                          setEmployeeGrade(e.target.value);
+                          setuniqueCode(false);
+                        }}
+                        // onBlur={(e) => {
+                          // checkemployeeCodeis();
+                        // }}
+                        onBlur={ async () => {
+                          // checkAttributeNameis();
+                          let a = await CheckUnique({type:"employmentgradename",value:employeeGrade})
+                          console.log("hai how are u", a)
+                          setuniqueCode(a)
+                        }}
+                        //   onChange={(e) => setEmptypename(e.target.value)}
                       />
                     </Form.Item>
+                    {uniqueCode ? (
+                      <p style={{ color: "red", marginTop: "-24px" }}>
+                        Employement Grade Name {uniqueErrMsg.UniqueErrName}
+                      </p>
+                    ) : null}
                   </div>
                 </div>
               </div>
               <div className="row justify-content-center">
                 <div className="col-auto">
-                  <Button btnType="save">Save</Button>
+                  <Button type="submit" className="p-2 save_button_style">
+                    Save
+                  </Button>
                 </div>
               </div>
             </Form>
@@ -318,77 +373,83 @@ function Employeegrade(){
         </div>
 
         <Custom_model
-        size={"sm"}
-        show={editShow}
-        onHide={() => {
-          setEditShow(false);
-        }}
-        View_list
-        list_content={
-          <div className="container-fluid px-4 my-4 ">
-            <h6 className="lead_text">Edit Employment Type</h6>
-            <Form
-              form={editForm}
-              onFinish={(value) => {
-                console.log("the formvaluess iss", value);
-                updateClick()
-                // updateClick();
-              }}
-              onFinishFailed={(error) => {
-                console.log(error);
-              }}
-            >
-              <div className="row">
-                <div className="col-12">
-                  <label>Name</label>
-                  <Form.Item
-                    name="Employment_grade_name"
-                    rules={[
-                      {
-                        required: true,
-                        pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                        message: "Please enter a valid employement type",
-                      },
-                      {
-                        whitespace: true,
-                      },
-                      {
-                        min: 2,
-                        message: "Name must be at least 2 characters",
-                      },
-                      {
-                        max: 100,
-                        message: "Name cannot be longer than 100 characters",
-                      },
-                    ]}
-                  >
-                    <InputType
-                    value={editempgradename}
-                    onChange={(e) => seteditempgradename(e.target.value)}
-                    //   value={editemptypename }
-                    //   onChange={(e) => setEditemptypename(e.target.value)}
-                    />
-                  </Form.Item>
-                </div>
-                <div className="row d-flex justify-content-center">
-                  <div className="col-xl-2 col-lg-2 col-12 justify-content-center">
-                    <Button
-                      btnType="save"
-                    >
-                      Save
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </Form>
-          </div>
-        }
-      />
+          size={"sm"}
+          show={editShow}
+          onHide={() => {
+            setEditShow(false);
+          }}
+          View_list
+          list_content={
+            <>
+              <h6 className="lead_text">Edit Employment Grade</h6>
+              <div className="container-fluid px-2 my-4 ">
+                <Form
+                  form={editForm}
+                  onFinish={(value) => {
+                    console.log("the formvaluess iss", value);
+                    updateClick();
+                    // updateClick();
+                  }}
+                  onFinishFailed={(error) => {
+                    console.log(error);
+                  }}
+                >
+                  <div className="row">
+                    <div className="col-12">
+                      <label>Name</label>
+                      <Form.Item
+                        name="Employment_grade_name"
+                        rules={[
+                          {
+                            required: true,
+                            pattern: new RegExp("^[A-Za-z ]+$"),
+                            message:
+                              "Please enter a valid Employment Grade Name",
+                          },
+                          {
+                            min: 2,
+                            message: "Name must be at least 2 characters",
+                          },
+                          {
+                            max: 100,
+                            message:
+                              "Name cannot be longer than 100 characters",
+                          },
+                        ]}
+                      >
+                        <InputType
+                          value={employeeGrade}
+                          onChange={(e) => {
+                            setEmployeeGrade(e.target.value);
+                            setuniqueeditCode(false);
 
+                          }}
+                          onBlur={() => {
+                            checkeditNameis();
+                          }}
+                          //   value={editemptypename }
+                          //   onChange={(e) => setEditemptypename(e.target.value)}
+                        />
+                      </Form.Item>
+                      {uniqueeditCode ? (
+                        <p style={{ color: "red", marginTop:"-24px" }} className="mb-2">
+                          Employment Grade Name {uniqueErrMsg.UniqueErrName}
+                        </p>
+                      ) : null}
+                    </div>
+                    <div className="row d-flex justify-content-center">
+                      <div className="col-xl-2 col-lg-2 col-12 justify-content-center">
+                        <Button btnType="save">Save</Button>
+                      </div>
+                    </div>
+                  </div>
+                </Form>
+              </div>
+            </>
+          }
+        />
       </div>
     </>
-  
-
-    )
+  );
 }
-export default Employeegrade
+export default Employeegrade;

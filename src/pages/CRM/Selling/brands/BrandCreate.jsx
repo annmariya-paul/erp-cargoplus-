@@ -17,6 +17,7 @@ import { CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
 import logo from "../../../../components/img/logo192.png";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../../routes";
+import { UniqueErrorMsg } from "../../../../ErrorMessages/UniqueErrorMessage";
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -38,6 +39,7 @@ function BrandCreate() {
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
+  const [uniqueCode, setuniqueCode] = useState();
 
   const [BrandError, setBrandError] = useState();
   const [imgSizeError, setImgSizeError] = useState(false);
@@ -98,6 +100,27 @@ function BrandCreate() {
       });
   };
 
+  const checkBrandNameis = (data) => {
+    PublicFetch.get(
+      `${process.env.REACT_APP_BASE_URL}/misc?type=brandname&value=${brand}`
+    )
+      .then((res) => {
+        console.log("Response 1123", res);
+        if (res.data.success) {
+          console.log("Success", res.data.data);
+          if (res.data.data.exist) {
+            console.log("hai guys");
+            setuniqueCode(true);
+          } else {
+            setuniqueCode(false);
+          }
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
   console.log("data", brand, description);
 
   return (
@@ -153,12 +176,18 @@ function BrandCreate() {
                         onChange={(e) => {
                           setBrand(e.target.value);
                           setBrandError("");
+                          setuniqueCode(false);
+                        }}
+                        onBlur={() => {
+                          checkBrandNameis();
                         }}
                       />
                     </Form.Item>
-                    {BrandError !== 0 ? (
+                    {uniqueCode ? (
                       <div>
-                        <label style={{ color: "red" }}>{BrandError}</label>
+                        <label style={{ color: "red" }}>
+                          Brand Name {UniqueErrorMsg.UniqueErrName}
+                        </label>
                       </div>
                     ) : (
                       ""

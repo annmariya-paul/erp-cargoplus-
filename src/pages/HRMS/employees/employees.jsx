@@ -37,6 +37,8 @@ function Employees() {
   // const getData = (current, pageSize) => {
   //   return data?.slice((current - 1) * pageSize, current * pageSize);
   // };
+
+  
   const columns = [
     {
       title: "ACTION",
@@ -264,6 +266,7 @@ function Employees() {
         </div>
       </div>
       <CustomModel
+        width={650}
         show={modalAddDept}
         onHide={() => setModalAddDept(false)}
         View_list
@@ -272,7 +275,7 @@ function Employees() {
             <h5 style={{ color: "#0891d1" }}>Edit Employee</h5>
             <div className="row">
               <div className="col-12 my-3">
-                <div className="card p-4 border-0 shadow-sm">
+                <div className="px-2">
                   <Form
                     form={addForm}
                     onFinish={(value) => {

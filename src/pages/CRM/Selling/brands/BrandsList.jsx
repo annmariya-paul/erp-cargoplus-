@@ -37,6 +37,7 @@ import PublicFetch from "../../../../utils/PublicFetch";
 import { CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
 import InputType from "../../../../components/Input Type textbox/InputType";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
+import { UniqueErrorMsg } from "../../../../ErrorMessages/UniqueErrorMessage";
 
 function BrandsList() {
   const [pageSize, setPageSize] = useState("25"); // page size
@@ -61,6 +62,8 @@ function BrandsList() {
   const [ImageUpload, setImageUpload] = useState();
   const [editForm] = Form.useForm();
   const [Errormsg, setErrormsg] = useState();
+  const [uniqueCode, setuniqueCode] = useState(false);
+  const [brand_name, setBrand_name] = useState();
 
   const getData = (current, pageSize) => {
     return brands?.slice((current - 1) * pageSize, current * pageSize);
@@ -133,6 +136,7 @@ function BrandsList() {
     setDescriptionInput(e.brand_description);
     setImageInput(e.brand_pic);
     setBrand_id(e.brand_id);
+    setBrand_name(e.brand_name);
     editForm.setFieldsValue({
       brand_id: e.brand_id,
       NameInput: e.brand_name,
@@ -263,6 +267,30 @@ function BrandsList() {
   const BrandHeads = [
     ["brand_id", "brand_name", "brand_pic", "brand_description"],
   ];
+
+  const checkBrandNameis = (data) => {
+    if (brand_name !== NameInput) {
+      PublicFetch.get(
+        `${process.env.REACT_APP_BASE_URL}/misc?type=brandname&value=${NameInput}`
+      )
+        .then((res) => {
+          console.log("Response 1123", res);
+          if (res.data.success) {
+            console.log("Success", res.data.data);
+            if (res.data.data.exist) {
+              console.log("hai guys");
+              setuniqueCode(true);
+            } else {
+              setuniqueCode(false);
+            }
+          }
+        })
+        .catch((err) => {
+          console.log("Error", err);
+        });
+    }
+  };
+
   return (
     <div>
       <div>
@@ -533,11 +561,9 @@ function BrandsList() {
               <div className="row my-3 ">
                 <Form
                   form={editForm}
-                 
                   onFinish={(values) => {
                     console.log("values iss", values);
                     handleUpdate();
-                   
                   }}
                   onFinishFailed={(error) => {
                     console.log(error);
@@ -569,11 +595,17 @@ function BrandsList() {
                         onChange={(e) => {
                           setNameInput(e.target.value);
                           setErrormsg("");
+                          setuniqueCode(false);
+                        }}
+                        onBlur={() => {
+                          checkBrandNameis();
                         }}
                       />
                     </Form.Item>
-                    {Errormsg ? (
-                      <label style={{ color: "red" }}>{Errormsg}</label>
+                    {uniqueCode ? (
+                      <label style={{ color: "red" }}>
+                        Brand Name {UniqueErrorMsg.UniqueErrName}
+                      </label>
                     ) : (
                       ""
                     )}

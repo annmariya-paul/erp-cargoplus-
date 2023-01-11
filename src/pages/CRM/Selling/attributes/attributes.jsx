@@ -28,107 +28,106 @@ export default function Attribute(props) {
   const [searchedText, setSearchedText] = useState("");
   const [pageSize, setPageSize] = useState("25");
   const [current, setCurrent] = useState(1);
-  const [attributes,setAttributes]=useState([])
-  const [attributeName,setAttributeName]=useState("")
-  const [attributedescription,setAttributeDescription]=useState("")
-  const [attributeId,setAttributeId] =useState()
+  const [attributes, setAttributes] = useState([]);
+  const [attributeName, setAttributeName] = useState("");
+  const [attributedescription, setAttributeDescription] = useState("");
+  const [attributeId, setAttributeId] = useState();
   const [searcheddesText, setSearcheddesText] = useState("");
+  const [uniqueCode, setuniqueCode] = useState(false);
+  const [attriName, setAttriName] = useState();
 
-  const [addForm]=Form.useForm()
-  const [viewattributes,setViewAttributes]=useState({
-    id:"",
-    attributename:"",
-    attributedescription:"",
-    attriutestatus:""
-  })
+  const [addForm] = Form.useForm();
+  const [viewattributes, setViewAttributes] = useState({
+    id: "",
+    attributename: "",
+    attributedescription: "",
+    attriutestatus: "",
+  });
 
   const getData = (current, pageSize) => {
     return attributes?.slice((current - 1) * pageSize, current * pageSize);
   };
 
-// function to viewattributes unnimaya 11/11/22
-const handleViewClick=(item)=>{
-  console.log("view all attributes",item)
-  setViewAttributes({
-    ...viewattributes,
-  id:item.attribute_id,
-  attributename:item.attribute_name,
-  attributedescription:item.attribute_description,
-  attriutestatus:item.attribute_status
-  })
+  // function to viewattributes unnimaya 11/11/22
+  const handleViewClick = (item) => {
+    console.log("view all attributes", item);
+    setViewAttributes({
+      ...viewattributes,
+      id: item.attribute_id,
+      attributename: item.attribute_name,
+      attributedescription: item.attribute_description,
+      attriutestatus: item.attribute_status,
+    });
 
-  setShowViewModal(true)
-}
+    setShowViewModal(true);
+  };
 
-// function to edit attributes unnimaya 
+  // function to edit attributes unnimaya
 
-const handleviewtoedit=(i)=>{
-  console.log("editing data iss",i)
-setAttributeId(i.id)
-setAttributeName(i.attributename)
-setAttributeDescription(i.attributedescription)
-addForm.setFieldsValue({
-  // unitid: e.unit_id,
-  attribute: i.attributename,
-  description: i.attributedescription,
-});
-  setShowModalEdit(true);
-}
+  const handleviewtoedit = (i) => {
+    console.log("editing data iss", i);
+    setAttributeId(i.id);
+    setAttributeName(i.attributename);
+    setAttributeDescription(i.attributedescription);
+    addForm.setFieldsValue({
+      // unitid: e.unit_id,
+      attribute: i.attributename,
+      description: i.attributedescription,
+    });
+    setShowModalEdit(true);
+  };
 
+  const handleEditclick = (e) => {
+    console.log("editing id iss", e);
+    setAttributeId(e.attribute_id);
+    setAttributeName(e.attribute_name);
+    setAttributeDescription(e.attribute_description);
+    setAttriName(e.attribute_name);
+    addForm.setFieldsValue({
+      // unitid: e.unit_id,
+      attribute: e.attribute_name,
+      description: e.attribute_description,
+    });
+    setShowModalEdit(true);
+  };
 
+  const handleupdate = async () => {
+    try {
+      const updated = await PublicFetch.patch(
+        `${CRM_BASE_URL_SELLING}/attribute/${attributeId}`,
+        {
+          attribute_name: attributeName,
+          attribute_description: attributedescription,
+        }
+      );
+      console.log("successfully updated ", updated);
+      if (updated.data.success) {
+        setShowModalEdit(false);
+        getallattributes();
+      } else if (updated.data.success === false) {
+        alert(updated.data.data);
+      }
+    } catch (err) {
+      console.log("error to update attributes");
+    }
+  };
 
-const handleEditclick=(e)=>{
-console.log("editing id iss",e)
-setAttributeId(e.attribute_id)
-setAttributeName(e.attribute_name)
-setAttributeDescription(e.attribute_description)
-addForm.setFieldsValue({
-  // unitid: e.unit_id,
-  attribute: e.attribute_name,
-  description: e.attribute_description,
-});
-setShowModalEdit(true)
-}
+  // function to getting attributes  unnimaya 11/11/22
+  const getallattributes = async () => {
+    try {
+      const allattributes = await PublicFetch.get(
+        `${CRM_BASE_URL_SELLING}/attribute`
+      );
+      console.log("getting all attributes", allattributes.data.data);
+      setAttributes(allattributes.data.data);
+    } catch (err) {
+      console.log("error to fetching  attributes", err);
+    }
+  };
 
-const handleupdate =async()=>{
-  try{
-const updated = await PublicFetch.patch(
-  `${CRM_BASE_URL_SELLING}/attribute/${attributeId}`,{
-    attribute_name:attributeName,
-    attribute_description:attributedescription
-  })
-console.log("successfully updated ",updated)
-if(updated.data.success){
-  setShowModalEdit(false)
-  getallattributes()
-}else if(updated.data.success===false){
-  alert(updated.data.data);
-}
-  }
-  catch(err) {
- console.log("error to update attributes")
-  }
-}
-
-
-// function to getting attributes  unnimaya 11/11/22
-const getallattributes= async()=>{
-try{
-  const allattributes = await PublicFetch.get(
-    `${CRM_BASE_URL_SELLING}/attribute`
-  )
-  console.log("getting all attributes",allattributes.data.data)
-  setAttributes(allattributes.data.data)
-}
-catch(err) {
-console.log("error to fetching  attributes",err)
-}
-}
-
-
-useEffect(()=>{
-getallattributes()
-},[])
+  useEffect(() => {
+    getallattributes();
+  }, []);
 
   const data = [
     {
@@ -155,14 +154,13 @@ getallattributes()
           <div className="d-flex justify-content-center align-items-center gap-3">
             <div
               className="editIcon m-0"
-              onClick={() =>
-                handleEditclick(index)}
+              onClick={() => handleEditclick(index)}
             >
               <FaEdit />
             </div>
             <div
               className="viewIcon m-0"
-              onClick={() => handleViewClick(index) }
+              onClick={() => handleViewClick(index)}
             >
               <MdPageview />
             </div>
@@ -172,7 +170,6 @@ getallattributes()
           </div>
         );
       },
-    
     },
     {
       title: "NAME",
@@ -181,58 +178,73 @@ getallattributes()
       width: "25%",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        console.log("valuesss in", record )
-        return String(record.attribute_name) 
-          .toLowerCase()
-          .includes(value.toLowerCase()) || String(record.attribute_description)
-          .toLowerCase()
-          .includes(value.toLowerCase())
+        console.log("valuesss in", record);
+        return (
+          String(record.attribute_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.attribute_description)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
       },
       align: "left",
     },
     {
-    
       title: "DESCRIPTION",
       dataIndex: "attribute_description",
-      width:"30%",
+      width: "30%",
       key: "DESCRIPTION",
-     
+
       align: "left",
     },
   ];
 
+  //for show or hide colums start--Shahida 25.11.22
+  const columnsKeys = columns.map((column) => column.key);
 
-  
-   //for show or hide colums start--Shahida 25.11.22
-   const columnsKeys = columns.map((column) => column.key);
+  const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
+  const filteredColumns = columns.filter((column) =>
+    selectedColumns.includes(column.key)
+  );
+  console.log("filtered columns::", filteredColumns);
+  const onChange = (checkedValues) => {
+    setSelectedColumns(checkedValues);
+  };
 
-   const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
-   const filteredColumns = columns.filter((column) =>
-     selectedColumns.includes(column.key)
-   );
- console.log("filtered columns::",filteredColumns);
-   const onChange = (checkedValues) => {
-     setSelectedColumns(checkedValues);
-   };
-
-   const data12 = attributes?.map((item) => [
+  const data12 = attributes?.map((item) => [
     item.action,
     item.attribute_name,
     item.attribute_description,
-    
-    
   ]);
 
-  const AttributeHeads = 
-  [
-    [
-      "attribute_id",
-      "attribute_name",
-      "attribute_description",
-     
+  const AttributeHeads = [
+    ["attribute_id", "attribute_name", "attribute_description"],
+  ];
 
-    ],
-  ]
+  const checkAttributeNameis = (data) => {
+    if (attriName !== attributeName) {
+      PublicFetch.get(
+        `${process.env.REACT_APP_BASE_URL}/misc?type=attributename&value=${attributeName}`
+      )
+        .then((res) => {
+          console.log("Response 1123", res);
+          if (res.data.success) {
+            console.log("Success", res.data.data);
+            if (res.data.data.exist) {
+              console.log("hai guys");
+              setuniqueCode(true);
+            } else {
+              setuniqueCode(false);
+            }
+          }
+        })
+        .catch((err) => {
+          console.log("Error", err);
+        });
+    }
+  };
+
   return (
     <>
       <div className="container-fluid attribute_list pt-3">
@@ -240,24 +252,24 @@ getallattributes()
           <div className="col">
             <h5 className="lead_text">Attributes</h5>
           </div>
-          <Leadlist_Icons 
-              datas={attributes}
-              columns={filteredColumns}
-              items={data12}
-              xlheading={AttributeHeads}
-              filename="data.csv"
-            
-              chechboxes={
-                <Checkbox.Group onChange={onChange} value={selectedColumns}>
-                  {columnsKeys.map((column) => (
-                    <li>
-                      <Checkbox value={column} key={column}>
-                        {column}
-                      </Checkbox>
-                    </li>
-                  ))}
-                </Checkbox.Group>
-              } />
+          <Leadlist_Icons
+            datas={attributes}
+            columns={filteredColumns}
+            items={data12}
+            xlheading={AttributeHeads}
+            filename="data.csv"
+            chechboxes={
+              <Checkbox.Group onChange={onChange} value={selectedColumns}>
+                {columnsKeys.map((column) => (
+                  <li>
+                    <Checkbox value={column} key={column}>
+                      {column}
+                    </Checkbox>
+                  </li>
+                ))}
+              </Checkbox.Group>
+            }
+          />
         </div>
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
@@ -267,11 +279,9 @@ getallattributes()
               value={searchedText}
               onChange={(e) => {
                 setSearchedText(e.target.value ? [e.target.value] : []);
-                
               }}
               onSearch={(value) => {
                 setSearchedText(value);
-                
               }}
             />
           </div>
@@ -316,9 +326,6 @@ getallattributes()
           />
         </div>
         <div className="d-flex py-2 justify-content-center">
-          
-          
-
           <MyPagination
             total={attributes?.length}
             current={current}
@@ -330,7 +337,6 @@ getallattributes()
             }}
           />
         </div>
-
 
         <Custom_model
           show={showViewModal}
@@ -347,13 +353,13 @@ getallattributes()
                     btnType="add_borderless"
                     className="edit_button"
                     onClick={() => {
-                      handleviewtoedit(viewattributes)
+                      handleviewtoedit(viewattributes);
                       // setShowModalEdit(true);
                       setShowViewModal(false);
                     }}
                   >
                     Edit
-                    <FiEdit 
+                    <FiEdit
                       style={{ marginBottom: "4px", marginInline: "3px" }}
                     />
                   </Button>
@@ -365,7 +371,9 @@ getallattributes()
                 </div>
                 <div className="col-1">:</div>
                 <div className="col-6 justify-content-start">
-                  <p className="modal-view-data">{viewattributes.attributename}</p>
+                  <p className="modal-view-data">
+                    {viewattributes.attributename}
+                  </p>
                 </div>
               </div>
               <div className="row my-4">
@@ -375,7 +383,7 @@ getallattributes()
                 <div className="col-1">:</div>
                 <div className="col-7 justify-content-start">
                   <p className="modal-view-data">
-                   {viewattributes.attributedescription}
+                    {viewattributes.attributedescription}
                   </p>
                 </div>
               </div>
@@ -397,20 +405,21 @@ getallattributes()
                   <h5 className="lead_text">Attribute</h5>
                 </div>
               </div>
-               
-              <Form  
-        form={addForm}
-         onFinish={(values)=>{
-          console.log("values iss",values)
-          handleupdate()
-         }}
-         onFinishFailed={(error) => {
-          console.log(error);
-        }} >
-          <div className="row py-1">
-            <div className="col-sm-6 pt-3">
-                <label>Name</label>
-                <Form.Item
+
+              <Form
+                form={addForm}
+                onFinish={(values) => {
+                  console.log("values iss", values);
+                  handleupdate();
+                }}
+                onFinishFailed={(error) => {
+                  console.log(error);
+                }}
+              >
+                <div className="row py-1">
+                  <div className="col-sm-6 pt-3">
+                    <label>Name</label>
+                    <Form.Item
                       name="attribute"
                       rules={[
                         {
@@ -426,18 +435,20 @@ getallattributes()
                           message: "attribute name must be 2 characters",
                         },
                         {
-                          max:100
-                        }
+                          max: 100,
+                        },
                       ]}
                     >
-                    
-                      <InputType value={ attributeName } 
-                      onChange={(e)=> setAttributeName(e.target.value)}  placeholder="Name"/>
+                      <InputType
+                        value={attributeName}
+                        onChange={(e) => setAttributeName(e.target.value)}
+                        placeholder="Name"
+                      />
                     </Form.Item>
                   </div>
                   <div className="col-sm-6 pt-3">
-                  <label>Description</label>
-                  <Form.Item
+                    <label>Description</label>
+                    <Form.Item
                       name="description"
                       rules={[
                         // {
@@ -454,24 +465,25 @@ getallattributes()
                           min: 2,
                         },
                         {
-                          max:500,
+                          max: 500,
                         },
                       ]}
                     >
-                      <TextArea value={attributedescription}
-                    onChange={(e) =>  setAttributeDescription (e.target.value)}/>
+                      <TextArea
+                        value={attributedescription}
+                        onChange={(e) =>
+                          setAttributeDescription(e.target.value)
+                        }
+                      />
                     </Form.Item>
-            </div>
-          </div>
-          <div className="row justify-content-center mt-5">
-            <div className="col-1">
-              <Button btnType="save"  >Save</Button>
-              
-            </div>
-           
-          </div>
-         
-        </Form>
+                  </div>
+                </div>
+                <div className="row justify-content-center mt-5">
+                  <div className="col-1">
+                    <Button btnType="save">Save</Button>
+                  </div>
+                </div>
+              </Form>
 
               {/* <div className="row px-2 my-3">
                 <Form.Group className="mb-3" controlId="attribute_name">

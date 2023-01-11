@@ -14,6 +14,7 @@ import TextArea from "../../../../components/ InputType TextArea/TextArea";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../../routes";
 import InputType from "../../../../components/Input Type textbox/InputType";
+import { UniqueErrorMsg } from "../../../../ErrorMessages/UniqueErrorMessage";
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -399,8 +400,8 @@ function Category() {
                     />
                   </Form.Item>
                   {uniqueCode ? (
-                    <label style={{ color: "red" }} className="mb-2">
-                      Employee Code is Unique
+                    <label style={{ color: "red" }} className=" mb-2">
+                      Employee Code {UniqueErrorMsg.UniqueErrName}
                     </label>
                   ) : null}
                 </div>

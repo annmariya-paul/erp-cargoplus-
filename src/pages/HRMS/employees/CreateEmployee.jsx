@@ -59,7 +59,7 @@ function CreateEmployee() {
         console.log("Error", err);
       });
   };
-
+  
   const getDepartment = () => {
     PublicFetch.get(`${CRM_BASE_URL_HRMS}/departments`)
       .then((res) => {

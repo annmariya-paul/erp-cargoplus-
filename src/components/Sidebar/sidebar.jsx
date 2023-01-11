@@ -585,6 +585,18 @@ export default function Sidebar({ showSidebar }) {
                           Create Agent
                         </NavLink>
                       </li>
+
+                      <li className="nav-text">
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.LISTAGENT}
+                        >
+                          <BsBookmarkFill className="sidebar_icons ms-4" />
+                          List Agent
+                        </NavLink>
+                      </li>
                     </>
                   ) : (
                     ""

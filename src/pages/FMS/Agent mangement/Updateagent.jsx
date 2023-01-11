@@ -4,27 +4,27 @@ import TextArea from "../../../components/ InputType TextArea/TextArea";
 import Button from "../../../components/button/button";
 import SelectBox from "../../../components/Select Box/SelectBox";
 import { getData, getNameList } from "country-list";
+import {  useNavigate, useParams } from "react-router-dom";
 import PublicFetch from "../../../utils/PublicFetch";
 import { CRM_BASE_URL_HRMS } from "../../../api/bootapi";
-import { useNavigate } from "react-router-dom";
-import { ROUTES } from "../../../routes";
 import Custom_model from "../../../components/custom_modal/custom_model";
+import { ROUTES } from "../../../routes";
+// import { useNavigate } from "react-router-dom";
 
-
-function CreateAgent() {
+function UpdateAgent() {
   const [countryis, setCountryis] = useState();
-  const options = useMemo(() => getData(), []);
+  const [editempname,setEditempname]= useState("")
+  const [editcountrynme,seteditcountrynme]= useState("")
+  const [editcommision,seteditcommision]= useState("")
   const [allempname,setAllempname]=useState()
-  const [empname,setEmpname]=useState()
-  const [empcommision,setempcommision]=useState("")
-  const [countryname,setcountryname]=useState()
+  const [editempid,seteditempid]= useState()
   const [saveSuccess, setSaveSuccess] = useState(false);
-  const [addForm]=Form.useForm()
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    setCountryis(e);
-  };
+  const options = useMemo(() => getData(), []);
+  const {id} = useParams();
+  const [addForm]=Form.useForm();
+ 
 
   const close_modal = (mShow, time) => {
     if (!mShow) {
@@ -35,68 +35,71 @@ function CreateAgent() {
     }
   };
 
+  const handleChange = (e) => {
+    seteditcountrynme(e);
+    // setCountryis(e);
+  };
+
   const getAllEmployee = () => {
     PublicFetch.get(`${CRM_BASE_URL_HRMS}/employees`)
       .then((res) => {
         console.log("all employeessss", res);
         setAllempname(res.data.data)
 
-        // if (res.data.success) {
-        //   console.log("Success of employee", res.data.data);
-        //   let array = [];
-        //   res.data.data.forEach((item, index) => {
-        //     array.push({
-        //       employee_id: item.employee_id,
-        //       employee_name: item.employee_name,
-        //       employee_code: item.employee_code,
-        //       employee_department: item.hrms_v1_departments.department_name,
-        //       employee_branch:item.hrms_v1_branches.branch_name,
-        //       employee_grade: item.hrms_v1_employee_grades.employee_grade_name,
-        //       employee_type: item.hrms_v1_employment_types.employment_type_name,
-        //       employee_designation: item.hrms_v1_designations.designation_name,
-        //     });
-        //   });
-        //   setAllEmployees(array);
-        //   console.log("array data ::", array);
-          
-        // }
       })
       .catch((err) => {
         console.log("Error", err);
       });
   };
 
- 
-  useEffect(()=>{
-    getAllEmployee()
-  },[])
-
-  const submitaddagent=async()=>{
+  const getoneagent = async () => {
     try{
-    const addagent= await PublicFetch.post(
-      `${process.env.REACT_APP_BASE_URL}/agents`,{
-        agent_emp_id:empname,
-        agent_country:countryis,
-        agent_commission_details:empcommision
-        
+      const  oneagent =await PublicFetch.get(
+        `${process.env.REACT_APP_BASE_URL}/agents/${id}`)
+        console.log("one agentss are ::",oneagent?.data?.data)
+        console.log("emp agent is ::",oneagent?.data?.data.hrms_v1_employee.employee_name)
+    
+        seteditempid(oneagent?.data?.data.agent_id)
+        setEditempname(oneagent?.data?.data?.hrms_v1_employee.employee_name)
+         seteditcountrynme(oneagent?.data?.data.agent_country)
+         seteditcommision(oneagent?.data?.data.agent_commission_details)
+        // setAgentdata(allagent?.data?.data)
+       
+      }
+      catch(err) {
+      console.log("error to getting all units",err)
+      }
+  };
+
+  const updateClick=async (id)=>{
+    try{
+    const updating= await PublicFetch.patch(
+      `${process.env.REACT_APP_BASE_URL}/agents/${editempid}`,{
+        agent_emp_id:editempname,
+        agent_country:editcountrynme,
+        agent_commission_details:editcommision
       })
-     console.log(" agent data is added ",addagent)
-     if(addagent.data.success){
-      setSaveSuccess(true)
-      close_modal(saveSuccess,1000)
-     
-     }
-    //  else{
-    //    <ErrorMsg code={"500"} />
-    //  }
+      console.log("editedd data is",updating)
+      if(updating.data.success){
+       console.log("successfully updating ")
+      //  getallunits()
+      //  setEditShow(false);
+       setSaveSuccess(true)
+       close_modal(saveSuccess, 1200);
+      }
     }
     catch(err) {
-     console.log("err to add the unit",err)
-    }
-    
+          console.log("error to getting all units",err)
+        }
     }
 
+  useEffect(()=>{
+    getAllEmployee()
+    getoneagent()
+  },[])
 
+  console.log("nameee",allempname)
+  console.log("countty nmee", editcountrynme);
   console.log("country", options);
   return (
     <div>
@@ -110,66 +113,71 @@ function CreateAgent() {
               <div className="container">
                 <div className="row">
                   <div className="col-12">
-                    <h4 className="">Create An Agent</h4>
+                    <h4 className="">Update An Agent</h4>
                     <div className="container-fluid">
                       <Form
-                      form={addForm}
-                      onFinish={(value) => {
-                        console.log("the formvaluess iss", value);
-                        submitaddagent()
-                        // submitaddunit();
-                      }}
-                      onFinishFailed={(error) => {
-                        console.log(error);
-                      }}
+                         form={addForm}
+                         onFinish={(value) => {
+                           console.log("the formvaluess iss", value);
+                           updateClick()
+                         }}
+                         onFinishFailed={(error) => {
+                           console.log(error);
+                         }}
                       >
                         <div className="row">
                           <div className="col-6">
                             <div className="">
                               <label>Employee Id</label>
-                              <Form.Item
-                            name="employee_branch"
+                            <Form.Item
                             rules={[
                               {
                                 required: true,
-                                message: "Employee branch is Required",
+                                message: "empname is Required",
                               },
                             ]}
                           >
                             <SelectBox
-                            value={allempname}
+                            value={editempname}
                             onChange={(e) => {
-                              console.log("selected unit iss", e);
-                              setEmpname(e);
+                              console.log("sdf", e)
+                              setEditempname(parseInt(e));
                             }}
+                            // onChange={(e) => {
+                            //   console.log("selected unit iss", e);
+                            //   // setEmpname(e);
+                            // }}
                             >
                               {allempname &&
                                 allempname.length > 0 &&
                                 allempname.map((item, index) => {
-                                  if(item.employee_type == "1")
-                                  return (
-                                    <Select.Option
-                                      key={item.employee_id}
-                                      value={item.employee_id}
-                                    >
-                                 {item.employee_name}
-                                      {/* {item.employee_type == "2" ?item.employee_name :"" } */}
-                                    </Select.Option>
-                                  );
+                                  if(item.employee_type == "1"){
+                                    return (
+                                      <Select.Option
+                                        key={item.employee_id}
+                                        value={item.employee_id}
+                                      >
+                                   {item.employee_name}
+                                        {/* {item.employee_type == "2" ?item.employee_name :"" } */}
+                                      </Select.Option>
+                                    )
+                                  }
+                              
                                 })}
                             </SelectBox>
                           </Form.Item>
-                              {/* <SelectBox>
-                                <Select.Option>Manger</Select.Option>
-                              </SelectBox> */}
                             </div>
                           </div>
                           <div className="col-6">
                             <div className="">
                               <label>Country</label>
-                              <Form.Item>
+                              <Form.Item
+                              >
                                 <SelectBox
-                                  value={countryis}
+                                
+                                value={editcountrynme}
+                                  // value={Afghanistan}
+                                  // value={countryis}
                                   onChange={handleChange}
                                 >
                                   {options.map((item, index) => {
@@ -189,10 +197,14 @@ function CreateAgent() {
                           <div className="col-6">
                             <div className="">
                               <label>Commission</label>
-                              <Form.Item>
-                                <TextArea  
-                                value={empcommision}
-                                onChange={(e)=>setempcommision(e.target.value)}
+                              <Form.Item
+                             
+                              >
+                                <TextArea 
+                                value={editcommision}
+                                onChange={(e)=>{
+                                  seteditcommision(e.target.value)
+                                }}
                                 />
                               </Form.Item>
                             </div>
@@ -209,7 +221,7 @@ function CreateAgent() {
                           </div>
                         </div>
                       </Form>
-                  
+ 
                       <Custom_model
                       size={"sm"}
                       show={saveSuccess}
@@ -229,4 +241,4 @@ function CreateAgent() {
   );
 }
 
-export default CreateAgent;
+export default UpdateAgent;

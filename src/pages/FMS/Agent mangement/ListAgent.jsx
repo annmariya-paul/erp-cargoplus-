@@ -5,22 +5,48 @@ import TableData from "../../../components/table/table_data";
 import MyPagination from "../../../components/Pagination/MyPagination";
 import Custom_model from "../../../components/custom_modal/custom_model";
 import Button from "../../../components/button/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ROUTES } from "../../../routes";
 import { Form } from "antd";
 import InputType from "../../../components/Input Type textbox/InputType";
 import { Link } from "react-router-dom";
+import { FaEdit } from "react-icons/fa";
+import { FiEdit } from "react-icons/fi";
+import { MdDelete } from "react-icons/md";
+import { RiFileSearchFill } from "react-icons/ri";
+import PublicFetch from "../../../utils/PublicFetch";
 
 function ListAgent(){
   const [searchedText, setSearchedText] = useState("");
   const [pageSize, setPageSize] = useState("25");
   const [current, setCurrent] = useState(1);
+  const [agentdata,setAgentdata]= useState("")
+
   const [addForm]=Form.useForm()
 
   const getData = (current, pageSize) => {
-    return data?.slice((current - 1) * pageSize, current * pageSize);
+    return agentdata?.slice((current - 1) * pageSize, current * pageSize);
   };
 
+
+  const getagents = async () => {
+    try{
+      const  allagent =await PublicFetch.get(
+        `${process.env.REACT_APP_BASE_URL}/agents`)
+        console.log("all agentss are ::",allagent?.data?.data)
+      
+        setAgentdata(allagent?.data?.data)
+       
+      }
+      catch(err) {
+      console.log("error to getting all units",err)
+      }
+  };
+
+
+  useEffect(()=>{
+    getagents()
+  },[])
 
   const data = [
     {
@@ -46,45 +72,56 @@ function ListAgent(){
         return (
           <div className="d-flex justify-content-center align-items-center gap-3">
             <div
-              className="editIcon m-0"
+               className="actioneditdelete"
+              // className="editIcon m-0"
               // onClick={() =>
               //   handleEditclick(index)}
             >
+               <Link to={`${ROUTES.UPDATEAGENT}/${index.agent_id}`}>
+              <div className="actioneditdelete">
+              <FaEdit />
+              </div>
+            </Link>
               {/* <FaEdit /> */}
             </div>
             <div
-              className="viewIcon m-0"
+               className="actioneditdelete"
+              // className="viewIcon m-0"
               // onClick={() => handleViewClick(index) }
             >
-              {/* <MdPageview /> */}
+              <MdDelete />
+            {/* <RiFileSearchFill /> */}
             </div>
-            <div className="deleteIcon m-0">
-              {/* <FaTrash /> */}
+            <div 
+            // className="deleteIcon m-0"
+            className="actioneditdelete"
+            >
+              {/* <MdDelete /> */}
             </div>
           </div>
         );
       },
     
     },
-    {
-      title: "Oppurtunity Name",
-      dataIndex: "attribute_name",
-      key: "NAME",
-      width: "25%",
-      filteredValue: [searchedText],
-      onFilter: (value, record) => {
-        console.log("valuesss in", record )
-        return String(record.attribute_name) 
-          .toLowerCase()
-          .includes(value.toLowerCase()) || String(record.attribute_description)
-          .toLowerCase()
-          .includes(value.toLowerCase())
-      },
-      align: "left",
-    },
+    // {
+    //   title: "Oppurtunity Name",
+    //   dataIndex: "attribute_name",
+    //   key: "NAME",
+    //   width: "25%",
+    //   filteredValue: [searchedText],
+    //   onFilter: (value, record) => {
+    //     console.log("valuesss in", record )
+    //     return String(record.attribute_name) 
+    //       .toLowerCase()
+    //       .includes(value.toLowerCase()) || String(record.attribute_description)
+    //       .toLowerCase()
+    //       .includes(value.toLowerCase())
+    //   },
+    //   align: "left",
+    // },
     {
       title: "Country",
-      dataIndex: "attribute_name",
+      dataIndex: "agent_country",
       key: "NAME",
       width: "25%",
       filteredValue: [searchedText],
@@ -101,7 +138,7 @@ function ListAgent(){
     {
     
       title: "Employee Code",
-      dataIndex: "attribute_description",
+      dataIndex: "agent_emp_id",
       width:"30%",
       key: "DESCRIPTION",
      
@@ -116,6 +153,7 @@ return(
           <div className="col">
             <h5 className="lead_text">List Agent</h5>
           </div>
+        
           {/* <Leadlist_Icons
               datas={attributes}
               columns={filteredColumns}
@@ -180,15 +218,15 @@ return(
           </div>
           <div className="col mb-2 px-4">
             <Link to={ROUTES.ADD_ATTRIBUTES} style={{ color: "white" }}>
-              <Button btnType="add">Add Attribute</Button>
+              {/* <Button btnType="add">Add Agent</Button> */}
             </Link>
           </div>
         </div>
 
         <div className="datatable">
           <TableData
-            // data={getData(current, pageSize)}
-            data={data}
+            data={getData(current, pageSize)}
+            // data={data}
             columns={columns}
             // columns={filteredColumns}
             custom_table_css="attribute_table"

@@ -59,6 +59,8 @@ import Quotations from "./pages/FMS/Quotations/create quotation/quotation_list";
 import Add_Quotation from "./pages/FMS/Quotations/create quotation/add_quotation";
 import EditQuotation from "./pages/FMS/Quotations/create quotation/edit_quotation";
 import ViewQuotation from "./pages/FMS/Quotations/create quotation/view_quotation";
+import ListAgent from "./pages/FMS/Agent mangement/ListAgent";
+import UpdateAgent from "./pages/FMS/Agent mangement/Updateagent";
 // import Lead from "./pages/lead/lead";
 
 function App() {
@@ -126,7 +128,14 @@ function App() {
               path={ROUTES.TRACK_ASSIGNMENTS}
               element={<Track_assignments />}
             />
+            <Route  path={ROUTES.LISTAGENT}
+              element={<ListAgent />} />
 
+            {/* <Route  path={ROUTES.UPDATEAGENT}
+              element={<UpdateAgent />} />   */}
+
+ <Route  path={ROUTES.UPDATEAGENT_ID}
+              element={<UpdateAgent />} /> 
             <Route
               path={ROUTES.ASSIGN_OPPORTUNITIES}
               element={<Assign_opportunity />}

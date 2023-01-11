@@ -11,17 +11,18 @@ import TextArea from "../../../../components/ InputType TextArea/TextArea";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../../routes";
 import Custom_model from "../../../../components/custom_modal/custom_model";
-
+import { UniqueErrorMsg } from "../../../../ErrorMessages/UniqueErrorMessage";
+import CheckUnique from "../../../../check Unique/CheckUnique";
 
 export default function Add_Attribute() {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [error, setError] = useState(false);
-  const [saveSuccess, setSaveSuccess] =useState(false)
+  const [saveSuccess, setSaveSuccess] = useState(false);
   const [attributeName, setAttributeName] = useState("");
   const [attributeDescription, setAttributeDescription] = useState("");
-  
-  
-  const [addForm]=Form.useForm()
+  const [uniqueCode, setuniqueCode] = useState(false);
+
+  const [addForm] = Form.useForm();
   const navigate = useNavigate();
 
   // useEffect(() => {
@@ -42,44 +43,65 @@ export default function Add_Attribute() {
     if (!mShow) {
       setTimeout(() => {
         setSaveSuccess(false);
-        navigate(ROUTES.ATTRIBUTES)
+        navigate(ROUTES.ATTRIBUTES);
       }, time);
     }
   };
 
   // function to create attributes
 
-  const createAttributes =async()=>{
-  try{
-  const addattributes = await PublicFetch.post(
-  `${CRM_BASE_URL_SELLING}/attribute`,{
-    attribute_name:attributeName,
-    attribute_description:attributeDescription
-  })
-  console.log("attributes added successfully",addattributes)
-  if(addattributes.data.success){
-    setSaveSuccess(true)
-    close_modal(saveSuccess,1000 )
-  }else if(addattributes.data.success===false){
-    alert(addattributes.data.data);
-  }
-  }
-  catch(err){
-  console.log("err to add the attributes",err)
-  }
-
-  }
+  const createAttributes = async () => {
+    try {
+      const addattributes = await PublicFetch.post(
+        `${CRM_BASE_URL_SELLING}/attribute`,
+        {
+          attribute_name: attributeName,
+          attribute_description: attributeDescription,
+        }
+      );
+      console.log("attributes added successfully", addattributes);
+      if (addattributes.data.success) {
+        setSaveSuccess(true);
+        close_modal(saveSuccess, 1000);
+      } else if (addattributes.data.success === false) {
+        alert(addattributes.data.data);
+      }
+    } catch (err) {
+      console.log("err to add the attributes", err);
+    }
+  };
 
   const onFinish = (values) => {
-    console.log('Success:', values);
+    console.log("Success:", values);
   };
   const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
+    console.log("Failed:", errorInfo);
   };
 
-  const handleCancel=()=>{
-    navigate(ROUTES.ATTRIBUTES)
-  }
+  const handleCancel = () => {
+    navigate(ROUTES.ATTRIBUTES);
+  };
+
+  const checkAttributeNameis = (data) => {
+    PublicFetch.get(
+      `${process.env.REACT_APP_BASE_URL}/misc?type=attributename&value=${attributeName}`
+    )
+      .then((res) => {
+        console.log("Response 1123", res);
+        if (res.data.success) {
+          console.log("Success", res.data.data);
+          if (res.data.data.exist) {
+            console.log("hai guys");
+            setuniqueCode(true);
+          } else {
+            setuniqueCode(false);
+          }
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
 
   return (
     <>
@@ -131,9 +153,24 @@ export default function Add_Attribute() {
               >
                 <InputType
                   value={attributeName}
-                  onChange={(e) => setAttributeName(e.target.value)}
+                  onChange={(e) => {
+                    setAttributeName(e.target.value);
+                    setuniqueCode(false);
+                  }}
+                  onBlur={() => {
+                    checkAttributeNameis();
+                  }}
                 />
               </Form.Item>
+              {uniqueCode ? (
+                <div>
+                  <label style={{ color: "red" }}>
+                    Attribute Name {UniqueErrorMsg.UniqueErrName}
+                  </label>
+                </div>
+              ) : (
+                ""
+              )}
             </div>
             <div className="col-sm-6 pt-3">
               <label>Description</label>

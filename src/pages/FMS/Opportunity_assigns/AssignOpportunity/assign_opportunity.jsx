@@ -6,7 +6,7 @@ import PublicFetch from "../../../../utils/PublicFetch";
 import "./assign_opportunity.scss";
 import CustomModel from "../../../../components/custom_modal/custom_model";
 import { useParams } from "react-router-dom";
-import { CRM_BASE_URL_HRMS } from "../../../../api/bootapi";
+import { CRM_BASE_URL_HRMS ,CRM_BASE_URL_FMS} from "../../../../api/bootapi";
 
 function Assign_opportunity() {
   const opp_id = useParams();
@@ -50,7 +50,7 @@ function Assign_opportunity() {
   };
 
   const createAssignOpp = ()=> {
-    PublicFetch.post(``)
+    PublicFetch.post(`${CRM_BASE_URL_FMS}`)
   }
 
   useEffect(() => {

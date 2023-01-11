@@ -25,7 +25,7 @@ export default function Sidebar({ showSidebar }) {
   const [FMSOpen, setFMSOpen] = useState(false);
   const [FMSOppopen, setFMSOppopen] = useState(false);
   const [FMSAgentopen,setFMSAgentopen]=useState(false);
-  const[FMSQuotationsopen,setFMSQuotationsopen]=useState(false);
+  const[FMSSettingsopen,setFMSSettingsopen]=useState(false);
   const location = useLocation();
 
   const { pathname } = location;
@@ -562,24 +562,24 @@ export default function Sidebar({ showSidebar }) {
                   )}
                   <li
                     className={
-                      FMSQuotationsopen
+                      FMSSettingsopen
                         ? "nav-text  items_hrms open"
                         : "nav-text  items_hrms "
                     }
                   >
                     <Link
-                      className={FMSQuotationsopen ? "active-link" : "link"}
+                      className={FMSSettingsopen ? "active-link" : "link"}
                       // to="/"
-                      onClick={() => setFMSQuotationsopen(!FMSQuotationsopen)}
+                      onClick={() => setFMSSettingsopen(!FMSSettingsopen)}
                     >
                       <RiTeamFill className="sidebar_icons ms-3" />
-                      Quotations
+                      Settings
                       <div className="d-flex justify-content-end ms-3 ps-5">
                         <AiOutlineCaretDown className="toggle_btn " />
                       </div>
                     </Link>
                   </li>
-                  {FMSQuotationsopen ? (
+                  {FMSSettingsopen ? (
                     <>
                       <li className="nav-text">
                         <NavLink
@@ -596,7 +596,29 @@ export default function Sidebar({ showSidebar }) {
                   ) : (
                     ""
                   )}
-                   {FMSQuotationsopen ? (
+                    {FMSOpen ? (
+                <>
+                 
+                  <li className="nav-text " style={{marginLeft:"-61px"}}>
+                    <NavLink
+                      className={({ isActive }) =>
+                        isActive ? "active-link" : "link"
+                      }
+                      to={ROUTES.QUATATIONS}
+                    >
+                      <RiTeamFill className="sidebar_icons ms-4"  />
+                      Quotations List
+                    </NavLink>
+                  </li>
+                 
+                  
+                 
+                  
+                </>
+              ) : (
+                ""
+              )}
+                   {/* {FMSQuotationsopen ? (
                     <>
                       <li className="nav-text">
                         <NavLink
@@ -612,7 +634,8 @@ export default function Sidebar({ showSidebar }) {
                     </>
                   ) : (
                     ""
-                  )}
+                  )} */}
+                  
                 </>
                 
               ) : (

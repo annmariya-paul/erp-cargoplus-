@@ -13,7 +13,7 @@ import { ROUTES } from "../../../routes";
 import { CRM_BASE_URL_HRMS } from "../../../api/bootapi";
 import PublicFetch from "../../../utils/PublicFetch";
 import { UniqueErrorMsg } from "../../../ErrorMessages/UniqueErrorMessage";
-
+import CheckUnique from "../../../check Unique/CheckUnique";
 // { Add and list Employment Type - Ann mariya - 16/11/22 }
 export default function EmploymentType() {
   const [error, setError] = useState(false);
@@ -34,26 +34,26 @@ export default function EmploymentType() {
   const [addForm] = Form.useForm();
   const [editForm] = Form.useForm();
   const [employeeTName, setEmployeeTName] = useState();
-  const checkemployeeCodeis = (data) => {
-    PublicFetch.get(
-      `${process.env.REACT_APP_BASE_URL}/misc?type=employmenttypename&value=${employeeType}`
-    )
-      .then((res) => {
-        console.log("Response", res);
-        if (res.data.success) {
-          console.log("Success", res.data.data);
-          if (res.data.data.exist) {
-            console.log("data exist");
-            setuniqueCode(true);
-          } else {
-            setuniqueCode(false);
-          }
-        }
-      })
-      .catch((err) => {
-        console.log("Error", err);
-      });
-  };
+  // const checkemployeeCodeis = (data) => {
+  //   PublicFetch.get(
+  //     `${process.env.REACT_APP_BASE_URL}/misc?type=employmenttypename&value=${employeeType}`
+  //   )
+  //     .then((res) => {
+  //       console.log("Response", res);
+  //       if (res.data.success) {
+  //         console.log("Success", res.data.data);
+  //         if (res.data.data.exist) {
+  //           console.log("data exist");
+  //           setuniqueCode(true);
+  //         } else {
+  //           setuniqueCode(false);
+  //         }
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log("Error", err);
+  //     });
+  // };
 const [uniqueCode, setuniqueCode] = useState(false);
 const [uniqueeditCode, setuniqueeditCode] = useState(false);
   const [employeeType, setEmployeeType] = useState();
@@ -280,8 +280,15 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
                           setEmployeeType(e.target.value);
                           setuniqueCode(false);
                         }}
-                        onBlur={(e) => {
-                          checkemployeeCodeis();
+                      // }/misc?type=employmenttypename&value=${employeeType}`
+                        // onBlur={(e) => {
+                        //   checkemployeeCodeis();
+                        // }}
+                        onBlur={ async () => {
+                          // checkAttributeNameis();
+                          let a = await CheckUnique({type:"employmenttypename",value:employeeType})
+                          console.log("hai how are u", a)
+                          setuniqueCode(a)
                         }}
                       />
                     </Form.Item>

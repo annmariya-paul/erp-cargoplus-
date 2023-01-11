@@ -12,6 +12,7 @@ import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
 import { ROUTES } from "../../../routes";
 import { CRM_BASE_URL_HRMS } from "../../../api/bootapi";
 import PublicFetch from "../../../utils/PublicFetch";
+import { UniqueErrorMsg } from "../../../ErrorMessages/UniqueErrorMessage";
 
 // { Add and list Designation - Ann mariya - 15/11/22 }
 export default function Designation(){
@@ -32,6 +33,13 @@ export default function Designation(){
     const [editdesignationname,seteditdesignationname]= useState("")
     const [editdesignationcode,seteditdesignationcode]= useState("")
     const [desigid,setdesigid]= useState()
+    const [uniqueName,setUniqueName]= useState(false);
+    const [uniqueCode, setUniqueCode] = useState(false);
+    const [uniqueEditName, setUniqueEditName] = useState(false);
+    const [uniqueEditCode, setUniqueEditCode] = useState(false);
+    const [editUniqueName, setEditUniqueName] = useState();
+    const [editUniqueCode, setEditUniqueCode] = useState();
+    const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
     const [editForm]= Form.useForm();
 
     const getData = (current, pageSize) => {
@@ -55,6 +63,8 @@ export default function Designation(){
       seteditdesignationname(item?.designation_name)
       seteditdesignationcode(item?.designation_code)
       setdesigid(item?.designation_id)
+      setEditUniqueName(item?.designation_name);
+      setEditUniqueCode(item?.designation_code);
      editForm.setFieldsValue({
       //  unitid: item.unit_id,
       desig_name: item.designation_name,
@@ -148,12 +158,97 @@ export default function Designation(){
       
       }
 
+const checkDesignationNameis = (data) => {
+  PublicFetch.get(
+    `${process.env.REACT_APP_BASE_URL}/misc?type=designationname&value=${designationname}`
+  )
+    .then((res) => {
+      console.log("Response", res);
+      if (res.data.success) {
+        console.log("Success", res.data.data);
+        if (res.data.data.exist) {
+          console.log("hai guys");
+          setUniqueName(true);
+        } else {
+          setUniqueName(false);
+        }
+      }
+    })
+    .catch((err) => {
+      console.log("Error", err);
+    });
+};
+
+const checkEditDesgNameis = (data) => {
+  if (editUniqueName !== editdesignationname) {
+    PublicFetch.get(
+      `${process.env.REACT_APP_BASE_URL}/misc?type=designationname&value=${editdesignationname}`
+    )
+      .then((res) => {
+        console.log("Response", res);
+        if (res.data.success) {
+          console.log("Success", res.data.data);
+          if (res.data.data.exist) {
+            setUniqueEditName(true);
+          } else {
+            setUniqueEditName(false);
+          }
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  }
+};
+
+const checkDesignationCodeis = (data) => {
+  PublicFetch.get(
+    `${process.env.REACT_APP_BASE_URL}/misc?type=designationcode&value=${designationcode}`
+  )
+    .then((res) => {
+      console.log("Response", res);
+      if (res.data.success) {
+        console.log("Success", res.data.data);
+        if (res.data.data.exist) {
+          setUniqueCode(true);
+        } else {
+          setUniqueCode(false);
+        }
+      }
+    })
+    .catch((err) => {
+      console.log("Error", err);
+    });
+};
+
+ const checkEditDesgCodeis = (data) => {
+   if (editUniqueCode !== editdesignationcode) {
+     PublicFetch.get(
+       `${process.env.REACT_APP_BASE_URL}/misc?type=designationcode&value=${editdesignationcode}`
+     )
+       .then((res) => {
+         console.log("Response", res);
+         if (res.data.success) {
+           console.log("Success", res.data.data);
+           if (res.data.data.exist) {
+             setUniqueEditCode(true);
+           } else {
+             setUniqueEditCode(false);
+           }
+         }
+       })
+       .catch((err) => {
+         console.log("Error", err);
+       });
+   }
+ };
+
       const columns = [
         {
           title: "ACTION",
           dataIndex: "action",
           key: "key",
-          width: "30%",
+          width: "40%",
 
           render: (data, index) => {
             return (
@@ -161,7 +256,7 @@ export default function Designation(){
                 <div className="m-0">
                   <div
                     className="editIcon m-0"
-                      onClick={() => handleEditclick(index)}
+                    onClick={() => handleEditclick(index)}
                   >
                     <FaEdit />
                   </div>
@@ -175,13 +270,19 @@ export default function Designation(){
           title: "DESIGNATION NAME",
           dataIndex: "designation_name",
           key: "designation_name",
-          width: "70%",
+          width: "25%",
           filteredValue: [searchedText],
           onFilter: (value, record) => {
             return String(record.designation_name)
               .toLowerCase()
               .includes(value.toLowerCase());
           },
+          // align: "center",
+        },
+        {
+          title: "DESIGNATION CODE",
+          dataIndex: "designation_code",
+          key: "designation_code",
           align: "center",
         },
       ];
@@ -211,14 +312,13 @@ return (
             onFinish={(value) => {
               console.log("valuezzzzzzz", value);
               // Submit()
-              submitaddunit()
+              submitaddunit();
             }}
             onFinishFailed={(error) => {
               console.log(error);
             }}
           >
             <div className="row flex-wrap pt-1">
-             
               <div className="row ms-0 py-1">
                 <div className="col-12 pt-3">
                   <label htmlfor="designation">Designation Name</label>
@@ -231,10 +331,24 @@ return (
                         message: "Please enter a valid Designation Name",
                       },
                     ]}
-                    onChange={(e) => setDesignationname(e.target.value)}
+                    // onChange={(e) => setDesignationname(e.target.value)}
                   >
-                    <InputType />
+                    <InputType
+                      value={designationname}
+                      onChange={(e) => {
+                        setDesignationname(e.target.value);
+                        setUniqueName(false);
+                      }}
+                      onBlur={(e) => {
+                        checkDesignationNameis();
+                      }}
+                    />
                   </Form.Item>
+                  {uniqueName ? (
+                    <p style={{ color: "red", marginTop: "-24px" }}>
+                      Designation Name {uniqueErrMsg.UniqueErrName}
+                    </p>
+                  ) : null}
                 </div>
               </div>
 
@@ -250,13 +364,24 @@ return (
                         message: "Please enter a valid Designation Name",
                       },
                     ]}
-                    onChange={(e) => setDesignationcode(e.target.value)}
                   >
-                    <InputType />
+                    <InputType
+                      onChange={(e) => {
+                        setDesignationcode(e.target.value);
+                        setUniqueCode(false);
+                      }}
+                      onBlur={(e) => {
+                        checkDesignationCodeis();
+                      }}
+                    />
                   </Form.Item>
+                  {uniqueCode ? (
+                    <p style={{ color: "red", marginTop: "-24px" }}>
+                      Designation Name {uniqueErrMsg.UniqueErrName}
+                    </p>
+                  ) : null}
                 </div>
               </div>
-
             </div>
             <div className="row justify-content-center">
               <div className="col-auto">
@@ -333,107 +458,127 @@ return (
       </div>
 
       <Custom_model
-          size={"sm"}
-          show={editShow}
-          onHide={() => {
-            setEditShow(false);
-          }}
-          View_list
-          list_content={
-            <div className="container-fluid px-4 my-4 ">
-              <h6 className="lead_text">Edit Designation</h6>
-              <Form
-                form={editForm}
-                onFinish={(value) => {
-                  console.log("the formvaluess iss", value);
-                  updateClick()
-                  // updateClick();
-                }}
-                onFinishFailed={(error) => {
-                  console.log(error);
-                }}
-              >
-                <div className="row">
-                  <div className="col-12">
-                    <label>Name</label>
-                    <Form.Item
-                      name="desig_name"
-                      rules={[
-                        {
-                          required: true,
+        size={"sm"}
+        show={editShow}
+        onHide={() => {
+          setEditShow(false);
+        }}
+        View_list
+        list_content={
+          <div className="container-fluid px-4 my-4 ">
+            <h6 className="lead_text">Edit Designation</h6>
+            <Form
+              form={editForm}
+              onFinish={(value) => {
+                console.log("the formvaluess iss", value);
+                updateClick();
+                // updateClick();
+              }}
+              onFinishFailed={(error) => {
+                console.log(error);
+              }}
+            >
+              <div className="row">
+                <div className="col-12">
+                  <label>Name</label>
+                  <Form.Item
+                    name="desig_name"
+                    rules={[
+                      {
+                        required: true,
                         pattern: new RegExp("^[A-Za-z]+$"),
-                          message: "Please enter a Valid Designation Name",
-                        },
-                       {
-                          min: 2,
-                          message: "Name must be at least 2 characters",
-                        },
-                        {
-                          max: 100,
-                          message: "Name cannot be longer than 100 characters",
-                        },
-                      ]}
+                        message: "Please enter a Valid Designation Name",
+                      },
+                      {
+                        min: 2,
+                        message: "Name must be at least 2 characters",
+                      },
+                      {
+                        max: 100,
+                        message: "Name cannot be longer than 100 characters",
+                      },
+                    ]}
+                  >
+                    <InputType
+                      value={editdesignationname}
+                      onChange={(e) => {
+                        seteditdesignationname(e.target.value);
+                        setUniqueEditName(false);
+                      }}
+                      onBlur={(e) => {
+                        checkEditDesgNameis();
+                      }}
+                    />
+                  </Form.Item>
+                  {uniqueEditName ? (
+                    <p style={{ color: "red", marginTop: "-24px" }}>
+                      Designation Name {uniqueErrMsg.UniqueErrName}
+                    </p>
+                  ) : null}
+                </div>
+                <div className="col-12 py-2">
+                  <label>Code</label>
+                  <Form.Item
+                    name="desig_code"
+                    rules={[
+                      {
+                        required: true,
+                        pattern: new RegExp("^[A-Za-z0-9]+$"),
+                        message: "Please enter a Valid Unit code",
+                      },
+                      {
+                        min: 2,
+                        message: "code must be at least 2 characters",
+                      },
+                      {
+                        max: 100,
+                        message:
+                          "Unit code cannot be longer than 100 characters",
+                      },
+                    ]}
+                  >
+                    <InputType
+                      value={editdesignationcode}
+                      onChange={(e) => {
+                        seteditdesignationcode(e.target.value);
+                        setUniqueEditCode(false);
+                      }}
+                      onBlur={(e) => {
+                        checkEditDesgCodeis();
+                      }}
+                    />
+                  </Form.Item>
+                  {uniqueEditCode ? (
+                    <p style={{ color: "red", marginTop: "-24px" }}>
+                      Designation code {uniqueErrMsg.UniqueErrName}
+                    </p>
+                  ) : null}
+                </div>
+                <div className="row d-flex justify-content-center">
+                  <div className="col-xl-2 col-lg-2 col-12 justify-content-center">
+                    <Button
+                      btnType="save"
+                      // onClick={(id) => {
+                      //   updateClick();
+                      //   setEditShow(false);
+                      // }}
                     >
-                      <InputType
-                        value={editdesignationname}
-                        onChange={(e) => seteditdesignationname(e.target.value)}
-                      />
-                    </Form.Item>
-                  </div>
-                  <div className="col-12 py-2">
-                    <label>Code</label>
-                    <Form.Item
-                      name="desig_code"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z0-9]+$"),
-                          message: "Please enter a Valid Unit code",
-                        },
-                        {
-                          min: 2,
-                          message: "code must be at least 2 characters",
-                        },
-                        {
-                          max: 100,
-                          message:
-                            "Unit code cannot be longer than 100 characters",
-                        },
-                      ]}
-                    >
-                      <InputType
-                        value={editdesignationcode}
-                        onChange={(e) => seteditdesignationcode(e.target.value)}
-                      />
-                    </Form.Item>
-                  </div>
-                  <div className="row d-flex justify-content-center">
-                    <div className="col-xl-2 col-lg-2 col-12 justify-content-center">
-                      <Button
-                        btnType="save"
-                        // onClick={(id) => {
-                        //   updateClick();
-                        //   setEditShow(false);
-                        // }}
-                      >
-                        Save
-                      </Button>
-                    </div>
+                      Save
+                    </Button>
                   </div>
                 </div>
-              </Form>
-            </div>
-          }
-        />
-
-
+              </div>
+            </Form>
+          </div>
+        }
+      />
 
       <Custom_model
-      size={"sm"}
-      show={saveSuccess}
-      onHide={() => setSaveSuccess(false)}
-      success
-    />
+        size={"sm"}
+        show={saveSuccess}
+        onHide={() => setSaveSuccess(false)}
+        success
+      />
     </div>
   </>
 );

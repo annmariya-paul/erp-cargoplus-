@@ -369,13 +369,17 @@ function Permission() {
                           setBranch(!branch);
                         }}
                       ></Checkbox> */}
-                      <button
+
+
+                      {/* <button
                         style={{ backgroundColor: "white" }}
                         onClick={() => setModule1Click(!module1Click)}
                         className="ms-3 btn-toggle"
                       >
                         HRMS <AiFillCaretDown className="toggle_btn" />
-                      </button>
+                      </button> */}
+
+                      
                     </div>
                   </div>
                   {module1Click ? (

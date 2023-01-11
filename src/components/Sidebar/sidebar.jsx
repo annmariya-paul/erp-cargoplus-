@@ -607,7 +607,7 @@ export default function Sidebar({ showSidebar }) {
                       to={ROUTES.QUATATIONS}
                     >
                       <RiTeamFill className="sidebar_icons ms-4"  />
-                      Quotations List
+                      Quotations 
                     </NavLink>
                   </li>
                  

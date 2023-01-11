@@ -23,13 +23,16 @@ export default function Departments(props) {
   const [modalAddDept, setModalAddDept] = useState(false);
   const [searchedText, setSearchedText] = useState("");
   const [deptName, setDeptName] = useState();
+  const [UniqueDeptName, setUniqueDeptName] = useState();
   const [deptCode, setDeptCode] = useState();
+  const [editDeptCode, setEditDeptCode] = useState();
   const [pageSize, setPageSize] = useState("25");
   const [current, setCurrent] = useState("");
   const [alldepartmentdata, setAllDepartmentData] = useState();
   const [showEditModal, setShowEditModal] = useState();
   const [department_id, setDepartment_id] = useState();
-  const [uniqueCode, setuniqueCode] = useState(false);
+  const [uniqueName, setUniqueName] = useState(false);
+  const [uniqueCode, setUniqueCode] = useState(false);
   const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
 
   const close_modal = (mShow, time) => {
@@ -132,9 +135,9 @@ export default function Departments(props) {
            console.log("Success", res.data.data);
            if (res.data.data.exist) {
              console.log("hai guys");
-             setuniqueCode(true);
+             setUniqueName(true);
            } else {
-             setuniqueCode(false);
+             setUniqueName(false);
            }
          }
        })
@@ -153,9 +156,9 @@ export default function Departments(props) {
           console.log("Success", res.data.data);
           if (res.data.data.exist) {
             console.log("hai guys");
-            setuniqueCode(true);
+            setUniqueCode(true);
           } else {
-            setuniqueCode(false);
+            setUniqueCode(false);
           }
         }
       })
@@ -353,16 +356,17 @@ export default function Departments(props) {
                     ]}
                   >
                     <InputType
+                    value={deptName}
                       onChange={(e) => {
                         setDeptName(e.target.value);
-                        setuniqueCode(false);
+                        setUniqueName(false);
                       }}
                       onBlur={(e) => {
                         checkDeptNameis();
                       }}
                     />
                   </Form.Item>
-                  {uniqueCode ? (
+                  {uniqueName ? (
                     <p style={{ color: "red", marginTop: "-24px" }}>
                       Department Name {uniqueErrMsg.UniqueErrName}
                     </p>
@@ -393,7 +397,7 @@ export default function Departments(props) {
                     <InputType
                       onChange={(e) => {
                         setDeptCode(e.target.value);
-                        setuniqueCode(false);
+                        setUniqueCode(false);
                       }}
                       onBlur={(e) => {
                         checkDeptCodeis();

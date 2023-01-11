@@ -35,6 +35,7 @@ export default function Branches(props) {
  const [uniqueCode, setUniqueCode] = useState(false);
  const [uniqueName,setUniqueName] =useState(false);
  const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
+ const [editUniqueName,setEditUniqueName] =useState();
 
   const [editForm] = Form.useForm();
   const close_modal = (mShow, time) => {
@@ -219,6 +220,28 @@ export default function Branches(props) {
         });
     };
 
+    const checkEditBranchNameis = (data) => {
+      if (editUniqueName !== branchname) {
+        PublicFetch.get(
+          `${process.env.REACT_APP_BASE_URL}/misc?type=branchname&value=${branchname}`
+        )
+          .then((res) => {
+            console.log("Response", res);
+            if (res.data.success) {
+              console.log("Success", res.data.data);
+              if (res.data.data.exist) {
+                setUniqueName(true);
+              } else {
+                setUniqueName(false);
+              }
+            }
+          })
+          .catch((err) => {
+            console.log("Error", err);
+          });
+      }
+    };
+
     const checkBranchCodeis = (data) => {
       PublicFetch.get(
         `${process.env.REACT_APP_BASE_URL}/misc?type=branchcode&value=${branchcode}`
@@ -237,7 +260,8 @@ export default function Branches(props) {
         .catch((err) => {
           console.log("Error", err);
         });
-    };
+      };
+    
   // const OnSubmit = () => {
   //   const formData = new FormData();
 
@@ -374,7 +398,6 @@ export default function Branches(props) {
                             "Branch Name cannot be longer than 100 characters",
                         },
                       ]}
-                     
                     >
                       <InputType
                         value={branchname}
@@ -499,8 +522,14 @@ export default function Branches(props) {
                         onChange={(e) => {
                           setNameInput(e.target.value);
                           setErrormsg("");
+                          setUniqueName(false);
                         }}
+                         onBlur=
+                      {(e) => {
+                        checkEditBranchNameis();
+                      }}
                       />
+                     
                     </Form.Item>
                     {Errormsg ? (
                       <label style={{ color: "red" }}>{Errormsg}</label>

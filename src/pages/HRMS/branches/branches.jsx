@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import "./branches.scss";
 import Button from "../../../components/button/button";
 import InputType from "../../../components/Input Type textbox/InputType";
 import ErrorMsg from "../../../components/error/ErrorMessage";
@@ -34,8 +35,11 @@ export default function Branches(props) {
   const [BranchEditPopup, setBranchEditPopup] = useState(false);
  const [uniqueCode, setUniqueCode] = useState(false);
  const [uniqueName,setUniqueName] =useState(false);
+ const [uniqueEditName, setUniqueEditName] = useState(false);
+ const [uniqueEditCode, setUniqueEditCode] = useState(false);
  const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
  const [editUniqueName,setEditUniqueName] =useState();
+ const [editUniqueCode,setEditUniqueCode]= useState();
 
   const [editForm] = Form.useForm();
   const close_modal = (mShow, time) => {
@@ -69,6 +73,8 @@ export default function Branches(props) {
     setCodeInput(e.branch_code);
     // setImageInput(e.brand_pic);
     setBranch_id(e.branch_id);
+    setEditUniqueName(e?.branch_name);
+    setEditUniqueCode(e?.branch_code);
     editForm.setFieldsValue({
       branch_id: e.branch_id,
       NameInput: e.branch_name,
@@ -221,18 +227,18 @@ export default function Branches(props) {
     };
 
     const checkEditBranchNameis = (data) => {
-      if (editUniqueName !== branchname) {
+      if (editUniqueName !== NameInput) {
         PublicFetch.get(
-          `${process.env.REACT_APP_BASE_URL}/misc?type=branchname&value=${branchname}`
+          `${process.env.REACT_APP_BASE_URL}/misc?type=branchname&value=${NameInput}`
         )
           .then((res) => {
             console.log("Response", res);
             if (res.data.success) {
               console.log("Success", res.data.data);
               if (res.data.data.exist) {
-                setUniqueName(true);
+                setUniqueEditName(true);
               } else {
-                setUniqueName(false);
+                setUniqueEditName(false);
               }
             }
           })
@@ -261,6 +267,29 @@ export default function Branches(props) {
           console.log("Error", err);
         });
       };
+
+       const checkEditBranchCodeis = (data) => {
+         if (editUniqueCode !== CodeInput) {
+           PublicFetch.get(
+             `${process.env.REACT_APP_BASE_URL}/misc?type=branchcode&value=${CodeInput}`
+           )
+             .then((res) => {
+               console.log("Response", res);
+               if (res.data.success) {
+                 console.log("Success", res.data.data);
+                 if (res.data.data.exist) {
+                   setUniqueEditCode(true);
+                 } else {
+                   setUniqueEditCode(false);
+                 }
+               }
+             })
+             .catch((err) => {
+               console.log("Error", err);
+             });
+         }
+       };
+
     
   // const OnSubmit = () => {
   //   const formData = new FormData();
@@ -290,7 +319,7 @@ export default function Branches(props) {
   console.log("data", branchname, branchcode);
   return (
     <>
-      <div className="container-fluid container2 pt-3">
+      <div className="container-fluid container_hrms pt-3">
         <div className="row flex-wrap">
           <div className="col">
             <h5 className="lead_text">Branches</h5>
@@ -496,7 +525,7 @@ export default function Branches(props) {
                     console.log(error);
                   }}
                 >
-                  <div className="col-6">
+                  <div className="col-12">
                     <label>Name</label>
                     <Form.Item
                       name="NameInput"
@@ -517,27 +546,31 @@ export default function Branches(props) {
                       ]}
                     >
                       <InputType
-                        className="input_type_style w-100"
                         value={NameInput}
                         onChange={(e) => {
                           setNameInput(e.target.value);
                           setErrormsg("");
-                          setUniqueName(false);
+                          setUniqueEditName(false);
                         }}
-                         onBlur=
-                      {(e) => {
-                        checkEditBranchNameis();
-                      }}
+                        onBlur={(e) => {
+                          checkEditBranchNameis();
+                        }}
                       />
-                     
-                    </Form.Item>
-                    {Errormsg ? (
-                      <label style={{ color: "red" }}>{Errormsg}</label>
+                    </Form.Item>{" "}
+                    {uniqueEditName ? (
+                      <p style={{ color: "red", marginTop: "-24px" }}>
+                        Branch Name {uniqueErrMsg.UniqueErrName}
+                      </p>
+                    ) : null}
+                    {/* {Errormsg ? (
+                      <label style={{ color: "red", marginTop: "-24px" }}>
+                        {Errormsg}
+                      </label>
                     ) : (
                       ""
-                    )}
+                    )} */}
                   </div>
-                  <div className="col-6">
+                  <div className="col-12">
                     <label>Code</label>
                     <Form.Item
                       name="CodeInput"
@@ -557,20 +590,28 @@ export default function Branches(props) {
                         },
                       ]}
                     >
-                      <InputType
-                        className="input_type_style w-100"
+                      <InputType 
                         value={CodeInput}
                         onChange={(e) => {
                           setCodeInput(e.target.value);
                           setErrormsg("");
+                          setUniqueEditCode(false);
+                        }}
+                        onBlur={(e) => {
+                          checkEditBranchCodeis();
                         }}
                       />
                     </Form.Item>
-                    {Errormsg ? (
+                    {uniqueEditCode ? (
+                      <p style={{ color: "red", marginTop: "-24px" }}>
+                        Branch code {uniqueErrMsg.UniqueErrName}
+                      </p>
+                    ) : null}
+                    {/* {Errormsg ? (
                       <label style={{ color: "red" }}>{Errormsg}</label>
                     ) : (
                       ""
-                    )}
+                    )} */}
                   </div>
 
                   <div className="col-12 d-flex justify-content-center mt-5">

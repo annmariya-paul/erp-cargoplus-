@@ -34,7 +34,11 @@ export default function Designation(){
     const [editdesignationcode,seteditdesignationcode]= useState("")
     const [desigid,setdesigid]= useState()
     const [uniqueName,setUniqueName]= useState(false);
-    const [uniqueCode, setuniqueCode] = useState(false);
+    const [uniqueCode, setUniqueCode] = useState(false);
+    const [uniqueEditName, setUniqueEditName] = useState(false);
+    const [uniqueEditCode, setUniqueEditCode] = useState(false);
+    const [editUniqueName, setEditUniqueName] = useState();
+    const [editUniqueCode, setEditUniqueCode] = useState();
     const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
     const [editForm]= Form.useForm();
 
@@ -59,6 +63,8 @@ export default function Designation(){
       seteditdesignationname(item?.designation_name)
       seteditdesignationcode(item?.designation_code)
       setdesigid(item?.designation_id)
+      setEditUniqueName(item?.designation_name);
+      setEditUniqueCode(item?.designation_code);
      editForm.setFieldsValue({
       //  unitid: item.unit_id,
       desig_name: item.designation_name,
@@ -173,18 +179,40 @@ const checkDesignationNameis = (data) => {
     });
 };
 
+const checkEditDesgNameis = (data) => {
+  if (editUniqueName !== editdesignationname) {
+    PublicFetch.get(
+      `${process.env.REACT_APP_BASE_URL}/misc?type=designationname&value=${editdesignationname}`
+    )
+      .then((res) => {
+        console.log("Response", res);
+        if (res.data.success) {
+          console.log("Success", res.data.data);
+          if (res.data.data.exist) {
+            setUniqueEditName(true);
+          } else {
+            setUniqueEditName(false);
+          }
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  }
+};
+
 const checkDesignationCodeis = (data) => {
   PublicFetch.get(
-    `${process.env.REACT_APP_BASE_URL}/misc?type=designationname&value=${designationcode}`
+    `${process.env.REACT_APP_BASE_URL}/misc?type=designationcode&value=${designationcode}`
   )
     .then((res) => {
       console.log("Response", res);
       if (res.data.success) {
         console.log("Success", res.data.data);
         if (res.data.data.exist) {
-          setuniqueCode(true);
+          setUniqueCode(true);
         } else {
-          setuniqueCode(false);
+          setUniqueCode(false);
         }
       }
     })
@@ -193,12 +221,34 @@ const checkDesignationCodeis = (data) => {
     });
 };
 
+ const checkEditDesgCodeis = (data) => {
+   if (editUniqueCode !== editdesignationcode) {
+     PublicFetch.get(
+       `${process.env.REACT_APP_BASE_URL}/misc?type=designationcode&value=${editdesignationcode}`
+     )
+       .then((res) => {
+         console.log("Response", res);
+         if (res.data.success) {
+           console.log("Success", res.data.data);
+           if (res.data.data.exist) {
+             setUniqueEditCode(true);
+           } else {
+             setUniqueEditCode(false);
+           }
+         }
+       })
+       .catch((err) => {
+         console.log("Error", err);
+       });
+   }
+ };
+
       const columns = [
         {
           title: "ACTION",
           dataIndex: "action",
           key: "key",
-          width: "30%",
+          width: "40%",
 
           render: (data, index) => {
             return (
@@ -206,7 +256,7 @@ const checkDesignationCodeis = (data) => {
                 <div className="m-0">
                   <div
                     className="editIcon m-0"
-                      onClick={() => handleEditclick(index)}
+                    onClick={() => handleEditclick(index)}
                   >
                     <FaEdit />
                   </div>
@@ -220,13 +270,19 @@ const checkDesignationCodeis = (data) => {
           title: "DESIGNATION NAME",
           dataIndex: "designation_name",
           key: "designation_name",
-          width: "70%",
+          width: "25%",
           filteredValue: [searchedText],
           onFilter: (value, record) => {
             return String(record.designation_name)
               .toLowerCase()
               .includes(value.toLowerCase());
           },
+          // align: "center",
+        },
+        {
+          title: "DESIGNATION CODE",
+          dataIndex: "designation_code",
+          key: "designation_code",
           align: "center",
         },
       ];
@@ -309,14 +365,13 @@ return (
                       },
                     ]}
                   >
-
                     <InputType
                       onChange={(e) => {
                         setDesignationcode(e.target.value);
-                        setuniqueCode(false);
+                        setUniqueCode(false);
                       }}
                       onBlur={(e) => {
-                        checkDesignationNameis();
+                        checkDesignationCodeis();
                       }}
                     />
                   </Form.Item>
@@ -325,7 +380,6 @@ return (
                       Designation Name {uniqueErrMsg.UniqueErrName}
                     </p>
                   ) : null}
-                  
                 </div>
               </div>
             </div>
@@ -447,9 +501,20 @@ return (
                   >
                     <InputType
                       value={editdesignationname}
-                      onChange={(e) => seteditdesignationname(e.target.value)}
+                      onChange={(e) => {
+                        seteditdesignationname(e.target.value);
+                        setUniqueEditName(false);
+                      }}
+                      onBlur={(e) => {
+                        checkEditDesgNameis();
+                      }}
                     />
                   </Form.Item>
+                  {uniqueEditName ? (
+                    <p style={{ color: "red", marginTop: "-24px" }}>
+                      Designation Name {uniqueErrMsg.UniqueErrName}
+                    </p>
+                  ) : null}
                 </div>
                 <div className="col-12 py-2">
                   <label>Code</label>
@@ -474,9 +539,20 @@ return (
                   >
                     <InputType
                       value={editdesignationcode}
-                      onChange={(e) => seteditdesignationcode(e.target.value)}
+                      onChange={(e) => {
+                        seteditdesignationcode(e.target.value);
+                        setUniqueEditCode(false);
+                      }}
+                      onBlur={(e) => {
+                        checkEditDesgCodeis();
+                      }}
                     />
                   </Form.Item>
+                  {uniqueEditCode ? (
+                    <p style={{ color: "red", marginTop: "-24px" }}>
+                      Designation code {uniqueErrMsg.UniqueErrName}
+                    </p>
+                  ) : null}
                 </div>
                 <div className="row d-flex justify-content-center">
                   <div className="col-xl-2 col-lg-2 col-12 justify-content-center">

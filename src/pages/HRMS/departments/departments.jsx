@@ -23,17 +23,19 @@ export default function Departments(props) {
   const [modalAddDept, setModalAddDept] = useState(false);
   const [searchedText, setSearchedText] = useState("");
   const [deptName, setDeptName] = useState();
-  const [UniqueDeptName, setUniqueDeptName] = useState();
   const [deptCode, setDeptCode] = useState();
-  const [editDeptCode, setEditDeptCode] = useState();
   const [pageSize, setPageSize] = useState("25");
   const [current, setCurrent] = useState("");
   const [alldepartmentdata, setAllDepartmentData] = useState();
   const [showEditModal, setShowEditModal] = useState();
   const [department_id, setDepartment_id] = useState();
   const [uniqueName, setUniqueName] = useState(false);
+  const [uniqueEditName, setUniqueEditName] = useState(false);
   const [uniqueCode, setUniqueCode] = useState(false);
+  const [uniqueEditCode,setUniqueEditCode] = useState(false);
   const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
+  const [editUniqueName, setEditUniqueName] = useState();
+  const [editUniqueCode, setEditUniqueCode] = useState();
 
   const close_modal = (mShow, time) => {
     if (!mShow) {
@@ -99,6 +101,8 @@ export default function Departments(props) {
         dept_code: data.department_code,
         dept_name: data.department_name,
       });
+      setEditUniqueName(data?.department_name);
+      setEditUniqueCode(data?.department_code);
       setShowEditModal(true);
       setDepartment_id(data.department_id);
     }
@@ -146,6 +150,28 @@ export default function Departments(props) {
        });
    };
 
+    const checkEditDeptNameis = (data) => {
+      if (editUniqueName !== deptName) {
+        PublicFetch.get(
+          `${process.env.REACT_APP_BASE_URL}/misc?type=departmentname&value=${deptName}`
+        )
+          .then((res) => {
+            console.log("Response", res);
+            if (res.data.success) {
+              console.log("Success", res.data.data);
+              if (res.data.data.exist) {
+                setUniqueEditName(true);
+              } else {
+                setUniqueEditName(false);
+              }
+            }
+          })
+          .catch((err) => {
+            console.log("Error", err);
+          });
+      }
+    };
+
   const checkDeptCodeis = (data) => {
     PublicFetch.get(
       `${process.env.REACT_APP_BASE_URL}/misc?type=departmentcode&value=${deptCode}`
@@ -165,6 +191,28 @@ export default function Departments(props) {
       .catch((err) => {
         console.log("Error", err);
       });
+  };
+
+  const checkEditDeptCodeis = (data) => {
+    if (editUniqueCode !== deptCode) {
+      PublicFetch.get(
+        `${process.env.REACT_APP_BASE_URL}/misc?type=departmentcode&value=${deptCode}`
+      )
+        .then((res) => {
+          console.log("Response", res);
+          if (res.data.success) {
+            console.log("Success", res.data.data);
+            if (res.data.data.exist) {
+              setUniqueEditCode(true);
+            } else {
+              setUniqueEditCode(false);
+            }
+          }
+        })
+        .catch((err) => {
+          console.log("Error", err);
+        });
+    }
   };
 
   const getData = (current, pageSize) => {
@@ -232,7 +280,7 @@ export default function Departments(props) {
 
   return (
     <>
-      <div className="container-fluid container2 pt-3">
+      <div className="container-fluid container_hrms pt-3">
         <div className="row flex-wrap">
           <div className="col">
             <h5 className="lead_text">Departments</h5>
@@ -346,7 +394,8 @@ export default function Departments(props) {
                       },
                       {
                         min: 3,
-                        message: "Department Name must be atleast 3 characters",
+                        message:
+                          "Department Name must be at least 3 characters",
                       },
                       {
                         max: 100,
@@ -356,7 +405,7 @@ export default function Departments(props) {
                     ]}
                   >
                     <InputType
-                    value={deptName}
+                      value={deptName}
                       onChange={(e) => {
                         setDeptName(e.target.value);
                         setUniqueName(false);
@@ -385,7 +434,8 @@ export default function Departments(props) {
                       },
                       {
                         min: 3,
-                        message: "Department code must be atleast 3 characters",
+                        message:
+                          "Department code must be at least 3 characters",
                       },
                       {
                         max: 15,
@@ -457,7 +507,8 @@ export default function Departments(props) {
                       },
                       {
                         min: 3,
-                        message: "Department Name must be atleast 3 characters",
+                        message:
+                          "Department Name must be at least 3 characters",
                       },
                       {
                         max: 100,
@@ -465,10 +516,22 @@ export default function Departments(props) {
                           "Department Name cannot be longer than 100 characters",
                       },
                     ]}
-                    onChange={(e) => setDeptName(e.target.value)}
                   >
-                    <InputType />
+                    <InputType
+                      onChange={(e) => {
+                        setDeptName(e.target.value);
+                        setUniqueEditName(false);
+                      }}
+                      onBlur={(e) => {
+                        checkEditDeptNameis();
+                      }}
+                    />
                   </Form.Item>
+                  {uniqueEditName ? (
+                    <p style={{ color: "red", marginTop: "-24px" }}>
+                      Department Name {uniqueErrMsg.UniqueErrName}
+                    </p>
+                  ) : null}
                 </div>
 
                 <div className="col-12 pt-3">
@@ -483,7 +546,8 @@ export default function Departments(props) {
                       },
                       {
                         min: 3,
-                        message: "Department code must be atleast 3 characters",
+                        message:
+                          "Department code must be at least 3 characters",
                       },
                       {
                         max: 15,
@@ -491,10 +555,22 @@ export default function Departments(props) {
                           "Department code cannot be longer than 15 characters",
                       },
                     ]}
-                    onChange={(e) => setDeptCode(e.target.value)}
                   >
-                    <InputType />
+                    <InputType
+                      onChange={(e) => {
+                        setDeptCode(e.target.value);
+                        setUniqueEditCode(false);
+                      }}
+                      onBlur={(e) => {
+                        checkEditDeptCodeis();
+                      }}
+                    />
                   </Form.Item>
+                  {uniqueEditCode ? (
+                    <p style={{ color: "red", marginTop: "-24px" }}>
+                      Department code {uniqueErrMsg.UniqueErrName}
+                    </p>
+                  ) : null}
                 </div>
               </div>
               <div className="row justify-content-center">

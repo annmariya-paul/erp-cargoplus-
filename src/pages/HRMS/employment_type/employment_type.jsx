@@ -12,7 +12,8 @@ import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
 import { ROUTES } from "../../../routes";
 import { CRM_BASE_URL_HRMS } from "../../../api/bootapi";
 import PublicFetch from "../../../utils/PublicFetch";
-
+import { UniqueErrorMsg } from "../../../ErrorMessages/UniqueErrorMessage";
+import CheckUnique from "../../../check Unique/CheckUnique";
 // { Add and list Employment Type - Ann mariya - 16/11/22 }
 export default function EmploymentType() {
   const [error, setError] = useState(false);
@@ -32,6 +33,31 @@ export default function EmploymentType() {
   const [emptypeid, setemptypeid] = useState();
   const [addForm] = Form.useForm();
   const [editForm] = Form.useForm();
+  const [employeeTName, setEmployeeTName] = useState();
+  // const checkemployeeCodeis = (data) => {
+  //   PublicFetch.get(
+  //     `${process.env.REACT_APP_BASE_URL}/misc?type=employmenttypename&value=${employeeType}`
+  //   )
+  //     .then((res) => {
+  //       console.log("Response", res);
+  //       if (res.data.success) {
+  //         console.log("Success", res.data.data);
+  //         if (res.data.data.exist) {
+  //           console.log("data exist");
+  //           setuniqueCode(true);
+  //         } else {
+  //           setuniqueCode(false);
+  //         }
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log("Error", err);
+  //     });
+  // };
+const [uniqueCode, setuniqueCode] = useState(false);
+const [uniqueeditCode, setuniqueeditCode] = useState(false);
+  const [employeeType, setEmployeeType] = useState();
+  const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
 
   const getData = (current, pageSize) => {
     return emptypedata?.slice((current - 1) * pageSize, current * pageSize);
@@ -48,6 +74,7 @@ export default function EmploymentType() {
   const handleEditclick = (item) => {
     console.log("editt valuesss", item);
     seteditemptypename(item?.employment_type_name);
+    setNewName(item?.employment_type_name);
     setemptypeid(item?.employment_type_id);
     editForm.setFieldsValue({
       emptype_name: item?.employment_type_name,
@@ -83,10 +110,10 @@ export default function EmploymentType() {
         addForm.resetFields();
         close_modal(saveSuccess, 1000);
       }
-       else if(addemptype.data.success===false) {
-        alert(addemptype.data.data)
-        //  <ErrorMsg code={"500"} />
-       }
+      //  else if(addemptype.data.success===false) {
+      //   alert(addemptype.data.data)
+      //   //  <ErrorMsg code={"500"} />
+      //  }
     } catch (err) {
       console.log("err to add the unit", err);
     }
@@ -97,7 +124,7 @@ export default function EmploymentType() {
       const updating = await PublicFetch.patch(
         `${CRM_BASE_URL_HRMS}/employment-types/${emptypeid}`,
         {
-          employment_type_name: editemptypename,
+          employment_type_name: employeeTName,
         }
       );
       console.log("editedd data is", updating);
@@ -169,7 +196,30 @@ export default function EmploymentType() {
       align: "center",
     },
   ];
+  const [newName,setNewName]=useState();
 
+  const checkeditNameis = (data) => {
+    if (newName !== employeeTName) {
+      PublicFetch.get(
+        `${process.env.REACT_APP_BASE_URL}/misc?type=employmenttypename&value=${employeeTName}`
+      )
+        .then((res) => {
+          console.log("Response 1123", res);
+          if (res.data.success) {
+            console.log("Success", res.data.data);
+            if (res.data.data.exist) {
+              console.log("hai guys");
+             setuniqueeditCode(true);
+            } else {
+              setuniqueeditCode(false);
+            }
+          }
+        })
+        .catch((err) => {
+          console.log("Error", err);
+        });
+    }
+  };
   const data = [
     {
       emp_type_name: "Full-time",
@@ -225,8 +275,28 @@ export default function EmploymentType() {
                       ]}
                       onChange={(e) => setaddemploytypename(e.target.value)}
                     >
-                      <InputType />
+                      <InputType
+                        onChange={(e) => {
+                          setEmployeeType(e.target.value);
+                          setuniqueCode(false);
+                        }}
+                      // }/misc?type=employmenttypename&value=${employeeType}`
+                        // onBlur={(e) => {
+                        //   checkemployeeCodeis();
+                        // }}
+                        onBlur={ async () => {
+                          // checkAttributeNameis();
+                          let a = await CheckUnique({type:"employmenttypename",value:employeeType})
+                          console.log("hai how are u", a)
+                          setuniqueCode(a)
+                        }}
+                      />
                     </Form.Item>
+                    {uniqueCode ? (
+                      <p style={{ color: "red", marginTop: "-24px" }}>
+                        Employment Type {uniqueErrMsg.UniqueErrName}
+                      </p>
+                    ) : null}
                   </div>
                 </div>
               </div>
@@ -313,66 +383,74 @@ export default function EmploymentType() {
           }}
           View_list
           list_content={
-            <div className="container-fluid px-4 my-4 ">
-              <h6 className="lead_text">Edit Designation</h6>
-              <Form
-                form={editForm}
-                onFinish={(value) => {
-                  console.log("the formvaluess iss", value);
-                  updateClick();
-                }}
-                onFinishFailed={(error) => {
-                  console.log(error);
-                }}
-              >
-                <div className="row">
-                  <div className="col-12">
-                    <label>Name</label>
-                    <Form.Item
-                      name="emptype_name"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+            <>
+              <h6 className="lead_text mb-2">Edit Employment Type</h6>
+              <div className="container-fluid px-4 my-4 ">
+                <Form
+                  form={editForm}
+                  onFinish={(value) => {
+                    console.log("the formvaluess iss", value);
+                    updateClick();
+                  }}
+                  onFinishFailed={(error) => {
+                    console.log(error);
+                  }}
+                >
+                  <div className="row">
+                    <div className="col-12">
+                      <label>Name</label>
+                      <Form.Item
+                        name="emptype_name"
+                        rules={[
+                          {
+                            required: true,
+                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
 
-                          message: "Please enter a Employee type Name",
-                        },
-                        {
-                          whitespace: true,
-                        },
-                        {
-                          min: 2,
-                          message: "Name must be at least 2 characters",
-                        },
-                        {
-                          max: 100,
-                          message: "Name cannot be longer than 100 characters",
-                        },
-                      ]}
-                    >
-                      <InputType
-                        value={editemptypename}
-                        onChange={(e) => seteditemptypename(e.target.value)}
-                      />
-                    </Form.Item>
-                  </div>
-
-                  <div className="row d-flex justify-content-center">
-                    <div className="col-xl-2 col-lg-2 col-12 justify-content-center">
-                      <Button
-                        btnType="save"
-                        // onClick={(id) => {
-                        //   updateClick();
-                        //   setEditShow(false);
-                        // }}
+                            message: "Please enter a Employee type Name",
+                          },
+                          {
+                            whitespace: true,
+                          },
+                          {
+                            min: 2,
+                            message: "Name must be at least 2 characters",
+                          },
+                          {
+                            max: 100,
+                            message:
+                              "Name cannot be longer than 100 characters",
+                          },
+                        ]}
                       >
-                        Save
-                      </Button>
+                        <InputType
+                          // value={editemptypename}
+                          // onChange={(e) => seteditemptypename(e.target.value)}
+                          value={employeeTName}
+                          onChange={(e) => {
+                            setEmployeeTName(e.target.value);
+                            setuniqueeditCode(false);
+                          }}
+                          onBlur={() => {
+                            checkeditNameis();
+                          }}
+                        />
+                      </Form.Item>
+                      {uniqueeditCode ? (
+                        <p style={{ color: "red", marginTop: "-24px" }}>
+                          Employment Type Name {uniqueErrMsg.UniqueErrName}
+                        </p>
+                      ) : null}
+                    </div>
+
+                    <div className="row d-flex justify-content-center">
+                      <div className="col-xl-2 col-lg-2 col-12 justify-content-center">
+                        <Button btnType="save">Save</Button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Form>
-            </div>
+                </Form>
+              </div>
+            </>
           }
         />
       </div>

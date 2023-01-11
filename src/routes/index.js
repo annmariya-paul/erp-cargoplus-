@@ -55,6 +55,7 @@ const ROUTES = {
   // { FMS }
   TRACK_ASSIGNMENTS:"/track_assignments",
   ASSIGN_OPPORTUNITIES:"/assign_opportunity",
+  ASSIGN_OPPORTUNITIES_ID:"/assign_opportunity/:id",
   UPDATE_OPPORTUNITY_ASSIGNMENT:"/update_oppo_assignment",
   CREATEAGENT: "/create_agent",
   LISTAGENT:"/list_agent",
@@ -65,6 +66,7 @@ const ROUTES = {
   ADD_QUOTATION:"/add_quotation",
   EDIT_QUOTATION:"/edit_quotation",
   VIEW_QUOTATION:"/view_quotation",
+  ENQUIRIES:"/enquiries",
 };
 
 module.exports = { ROUTES };

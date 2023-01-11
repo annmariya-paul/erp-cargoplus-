@@ -290,12 +290,17 @@ function Permission() {
 
   const handleSubmit = async () => {
     try {
+      let i = 0;
       for (const rolePermission of rolePermissions) {
         rolePermission.roleid = selectedRole;
         const res = await PublicFetch.post(
           `${process.env.REACT_APP_BASE_URL}/permissions`,
           rolePermission
         );
+        i += 1;
+        if (i >= rolePermissions.length) {
+          message.success("Permissions Assigned");
+        }
       }
     } catch (err) {
       console.log("Error while adding permission : ", err);
@@ -369,13 +374,17 @@ function Permission() {
                           setBranch(!branch);
                         }}
                       ></Checkbox> */}
-                      <button
+
+
+                      {/* <button
                         style={{ backgroundColor: "white" }}
                         onClick={() => setModule1Click(!module1Click)}
                         className="ms-3 btn-toggle"
                       >
                         HRMS <AiFillCaretDown className="toggle_btn" />
-                      </button>
+                      </button> */}
+
+                      
                     </div>
                   </div>
                   {module1Click ? (

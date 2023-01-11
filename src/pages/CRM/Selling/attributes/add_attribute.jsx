@@ -20,7 +20,7 @@ export default function Add_Attribute() {
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [attributeName, setAttributeName] = useState("");
   const [attributeDescription, setAttributeDescription] = useState("");
-  const [uniqueCode, setuniqueCode] = useState(false);
+  const [uniqueCode, setuniqueCode] = useState();
 
   const [addForm] = Form.useForm();
   const navigate = useNavigate();
@@ -82,26 +82,26 @@ export default function Add_Attribute() {
     navigate(ROUTES.ATTRIBUTES);
   };
 
-  const checkAttributeNameis = (data) => {
-    PublicFetch.get(
-      `${process.env.REACT_APP_BASE_URL}/misc?type=attributename&value=${attributeName}`
-    )
-      .then((res) => {
-        console.log("Response 1123", res);
-        if (res.data.success) {
-          console.log("Success", res.data.data);
-          if (res.data.data.exist) {
-            console.log("hai guys");
-            setuniqueCode(true);
-          } else {
-            setuniqueCode(false);
-          }
-        }
-      })
-      .catch((err) => {
-        console.log("Error", err);
-      });
-  };
+  // const checkAttributeNameis = (data) => {
+  //   PublicFetch.get(
+  //     `${process.env.REACT_APP_BASE_URL}/misc?type=attributename&value=${attributeName}`
+  //   )
+  //     .then((res) => {
+  //       console.log("Response 1123", res);
+  //       if (res.data.success) {
+  //         console.log("Success", res.data.data);
+  //         if (res.data.data.exist) {
+  //           console.log("hai guys");
+  //           setuniqueCode(true);
+  //         } else {
+  //           setuniqueCode(false);
+  //         }
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log("Error", err);
+  //     });
+  // };
 
   return (
     <>
@@ -157,8 +157,11 @@ export default function Add_Attribute() {
                     setAttributeName(e.target.value);
                     setuniqueCode(false);
                   }}
-                  onBlur={() => {
-                    checkAttributeNameis();
+                  onBlur={ async () => {
+                    // checkAttributeNameis();
+                    let a = await CheckUnique({type:"attributename",value:attributeName})
+                    console.log("hai how are u", a)
+                    setuniqueCode(a)
                   }}
                 />
               </Form.Item>

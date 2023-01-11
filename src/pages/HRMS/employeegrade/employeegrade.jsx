@@ -12,7 +12,7 @@ import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
 import { ROUTES } from "../../../routes";
 import PublicFetch from "../../../utils/PublicFetch";
 import { CRM_BASE_URL_HRMS } from "../../../api/bootapi";
-
+import { UniqueErrorMsg } from "../../../ErrorMessages/UniqueErrorMessage";
 
 
 function Employeegrade(){
@@ -22,15 +22,19 @@ function Employeegrade(){
     const [pageSize, setPageSize] = useState("25");
     const [current, setCurrent] = useState(1);
     const [editShow,setEditShow]= useState(false)
-    
+    const [newName,setNewName]=useState();
+    const [uniqueeditCode, setuniqueeditCode] = useState(false);
     const [employeegradedata,setemployeegradedata]= useState("")
     const[employeegradename, setemployeegradename ]= useState("")
-    const [editempgradename,seteditempgradename]=useState("")
+    const [editempgradename,seteditempgradename]=useState("");
+    console.log("editname",editempgradename);
     const [editempgradeid,seteditempgradeid]=useState()
     const [saveSuccess, setSaveSuccess] = useState(false);
     const [addForm]= Form.useForm()
     const [editForm]=Form.useForm()
-
+    const [uniqueCode, setuniqueCode] = useState(false);
+  const [employeeGrade, setEmployeeGrade] = useState();
+  const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
 
     const close_modal = (mShow, time) => {
         if (!mShow) {
@@ -45,7 +49,26 @@ function Employeegrade(){
       };  
 
 
-
+      const checkemployeeCodeis = (data) => {
+        PublicFetch.get(
+          `${process.env.REACT_APP_BASE_URL}/misc?type=employmentgradename&value=${employeeGrade}`
+        )
+          .then((res) => {
+            console.log("Response", res);
+            if (res.data.success) {
+              console.log("Success", res.data.data);
+              if (res.data.data.exist) {
+                console.log("data exist");
+                setuniqueCode(true);
+              } else {
+                setuniqueCode(false);
+              }
+            }
+          })
+          .catch((err) => {
+            console.log("Error", err);
+          });
+      };
       
 
     const getallempgrade=async ()=>{
@@ -66,12 +89,34 @@ function Employeegrade(){
            
           }, []); 
 
-
+         
+  const checkeditNameis = (data) => {
+    if (newName !== employeeGrade) {
+      PublicFetch.get(
+        `${process.env.REACT_APP_BASE_URL}/misc?type=employmentgradename&value=${employeeGrade}`
+      )
+        .then((res) => {
+          console.log("Response 1123", res);
+          if (res.data.success) {
+            console.log("Success", res.data.data);
+            if (res.data.data.exist) {
+              console.log("hai guys");
+              setuniqueeditCode(true);
+            } else {
+              setuniqueeditCode(false);
+            }
+          }
+        })
+        .catch((err) => {
+          console.log("Error", err);
+        });
+    }
+  };
           const submitaddemp=async()=>{
             try{
             const addemployegrade = await PublicFetch.post(
               `${CRM_BASE_URL_HRMS}/employee-grades`,{
-                employee_grade_name:employeegradename,
+                employee_grade_name:employeeGrade,
               })
              console.log("employegrade data is added ",addemployegrade)
              if(addemployegrade.data.success){
@@ -98,7 +143,7 @@ function Employeegrade(){
                 const updating = await PublicFetch.patch(
                   `${CRM_BASE_URL_HRMS}/employee-grades/${editempgradeid}`,
                   {
-                    employee_grade_name: editempgradename,
+                    employee_grade_name: employeeGrade,
                   }
                 );
                 console.log("editedd data is", updating);
@@ -119,6 +164,7 @@ function Employeegrade(){
               console.log("editt valuesss", item);
               seteditempgradename(item?.employee_grade_name);
               seteditempgradeid(item?.employee_grade_id);
+              setNewName(item?.employee_grade_name)
               editForm.setFieldsValue({
                 Employment_grade_name: item?.employee_grade_name
               });
@@ -228,16 +274,28 @@ function Employeegrade(){
                       
                     >
                       <InputType
-                      onChange={(e)=> setemployeegradename(e.target.value)}
+                       onChange={(e) => {
+                        setEmployeeGrade(e.target.value);
+                        setuniqueCode(false);
+                      }}
+                      onBlur={(e) => {
+                        checkemployeeCodeis();
+                      }}
                     //   onChange={(e) => setEmptypename(e.target.value)}
                       />
                     </Form.Item>
+                     {uniqueCode ? (
+                            <p style={{ color: "red",marginTop:"-24px" }}>
+                            Employement Grade Name {uniqueErrMsg.UniqueErrName}
+                            </p>
+                          ) : null}
                   </div>
                 </div>
               </div>
               <div className="row justify-content-center">
                 <div className="col-auto">
-                  <Button btnType="save">Save</Button>
+                  <Button  type="submit"
+                            className="p-2 save_button_style">Save</Button>
                 </div>
               </div>
             </Form>
@@ -326,7 +384,7 @@ function Employeegrade(){
         View_list
         list_content={
           <div className="container-fluid px-4 my-4 ">
-            <h6 className="lead_text">Edit Employment Type</h6>
+            <h6 className="lead_text">Edit Employment Grade</h6>
             <Form
               form={editForm}
               onFinish={(value) => {
@@ -362,13 +420,26 @@ function Employeegrade(){
                       },
                     ]}
                   >
+                   
                     <InputType
-                    value={editempgradename}
-                    onChange={(e) => seteditempgradename(e.target.value)}
+                    value={employeeGrade}
+                    onChange={(e) => {
+
+                      setEmployeeGrade(e.target.value)
+                      setuniqueCode(false);}
+                    }
+                    onBlur={() => {
+                      checkeditNameis();
+                    }}
                     //   value={editemptypename }
                     //   onChange={(e) => setEditemptypename(e.target.value)}
                     />
                   </Form.Item>
+                  {uniqueeditCode ? (
+                      <label style={{ color: "red" }} className="mb-2">
+                         Employement Grade Name {uniqueErrMsg.UniqueErrName}
+                      </label>
+                    ) : null}
                 </div>
                 <div className="row d-flex justify-content-center">
                   <div className="col-xl-2 col-lg-2 col-12 justify-content-center">

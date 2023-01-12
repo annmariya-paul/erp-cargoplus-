@@ -437,14 +437,14 @@ function Enquiries() {
                   />
                 </div>
                 <div className="d-flex py-2 justify-content-center">
-                  {/* <MyPagination
-              // total={parseInt(totalCount)}
-              // current={current}
-              // pageSize={numOfItems}
+                  <MyPagination
+              total={parseInt(totalCount)}
+              current={current}
+              pageSize={numOfItems}
               onChange={(current, pageSize) => {
-                // setCurrent(current);
+                setCurrent(current);
               }}
-            /> */}
+            />
                 </div>
                 {/* {"mcncncncncncncnc"} */}
               </div>

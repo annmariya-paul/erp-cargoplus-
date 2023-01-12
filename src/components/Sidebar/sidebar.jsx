@@ -251,6 +251,7 @@ export default function Sidebar({ showSidebar }) {
                   </li>
                   {Saleopen ? (
                     <>
+                    {checkPermission("lead") && (
                       <li className="nav-text ">
                         <NavLink
                           className={({ isActive }) =>
@@ -262,7 +263,9 @@ export default function Sidebar({ showSidebar }) {
                           Lead
                         </NavLink>
                       </li>
-                      <li className="nav-text">
+                    )}
+                      {checkPermission("opportunity") && (
+                        <li className="nav-text">
                         <NavLink
                           className={({ isActive }) =>
                             isActive ? "active-link" : "link"
@@ -273,6 +276,8 @@ export default function Sidebar({ showSidebar }) {
                           Opportunity
                         </NavLink>
                       </li>
+                      )}
+                      
                       <li
                         className={
                           CRMReport
@@ -295,7 +300,8 @@ export default function Sidebar({ showSidebar }) {
                       {CRMReport ? (
                         <>
                           {" "}
-                          <li className="nav-text">
+                          {checkPermission("leadreport") && (
+                             <li className="nav-text">
                             <NavLink
                               className={({ isActive }) =>
                                 isActive ? "active-link" : "link"
@@ -306,7 +312,9 @@ export default function Sidebar({ showSidebar }) {
                               Lead Report
                             </NavLink>
                           </li>
-                          <li className="nav-text">
+                          )}
+                          {checkPermission("opportunityreport") && (
+                            <li className="nav-text">
                             <NavLink
                               className={({ isActive }) =>
                                 isActive ? "active-link" : "link"
@@ -317,6 +325,7 @@ export default function Sidebar({ showSidebar }) {
                               Opportunity Report
                             </NavLink>
                           </li>
+                          )}
                         </>
                       ) : (
                         ""
@@ -346,7 +355,8 @@ export default function Sidebar({ showSidebar }) {
                   </li>
                   {CRMselling ? (
                     <>
-                      <li className="nav-text">
+                    {checkPermission("category") && (
+                       <li className="nav-text">
                         <NavLink
                           className={({ isActive }) =>
                             isActive ? "active-link" : "link"
@@ -357,6 +367,8 @@ export default function Sidebar({ showSidebar }) {
                           Category
                         </NavLink>
                       </li>
+                    )}
+                    {checkPermission("brand") && (
                       <li className="nav-text">
                         <NavLink
                           className={({ isActive }) =>
@@ -368,7 +380,10 @@ export default function Sidebar({ showSidebar }) {
                           Brands
                         </NavLink>
                       </li>
-                      <li className="nav-text">
+                    )}
+                     
+                      {checkPermission("attrbute") && (
+                        <li className="nav-text">
                         <NavLink
                           className={({ isActive }) =>
                             isActive ? "active-link" : "link"
@@ -379,7 +394,9 @@ export default function Sidebar({ showSidebar }) {
                           Attributes
                         </NavLink>
                       </li>
-                      <li className="nav-text">
+                      )}
+                      {checkPermission("product") && (
+                        <li className="nav-text">
                         <NavLink
                           className={({ isActive }) =>
                             isActive ? "active-link" : "link"
@@ -390,7 +407,9 @@ export default function Sidebar({ showSidebar }) {
                           Products
                         </NavLink>
                       </li>
-                      <li className="nav-text">
+                      )}
+                      {checkPermission("service") && (
+                        <li className="nav-text">
                         <NavLink
                           className={({ isActive }) =>
                             isActive ? "active-link" : "link"
@@ -401,7 +420,9 @@ export default function Sidebar({ showSidebar }) {
                           Services
                         </NavLink>
                       </li>
-                      <li className="nav-text">
+                      )}
+                      {checkPermission("unit and measures") && (
+                         <li className="nav-text">
                         <NavLink
                           className={({ isActive }) =>
                             isActive ? "active-link" : "link"
@@ -412,6 +433,8 @@ export default function Sidebar({ showSidebar }) {
                           Units and Measures
                         </NavLink>
                       </li>
+                      )}
+                     
                     </>
                   ) : (
                     ""
@@ -437,6 +460,7 @@ export default function Sidebar({ showSidebar }) {
                   </li>
                   {CRMgeneral ? (
                     <>
+                    {checkPermission("country")}
                       <li className="nav-text">
                         <NavLink
                           className={({ isActive }) =>
@@ -527,6 +551,7 @@ export default function Sidebar({ showSidebar }) {
                   </li>
                   {FMSOppopen ? (
                     <>
+                    {checkPermission("opportunity assign") && (
                       <li className="nav-text ">
                         <NavLink
                           className={({ isActive }) =>
@@ -538,7 +563,10 @@ export default function Sidebar({ showSidebar }) {
                           Opportunity assigns
                         </NavLink>
                       </li>
-                      <li className="nav-text">
+                    )}
+                      
+                      {checkPermission("track assignment") && (
+                        <li className="nav-text">
                         <NavLink
                           className={({ isActive }) =>
                             isActive ? "active-link" : "link"
@@ -549,6 +577,8 @@ export default function Sidebar({ showSidebar }) {
                           Track Assignments
                         </NavLink>
                       </li>
+                      )}
+                      
                     </>
                   ) : (
                     ""

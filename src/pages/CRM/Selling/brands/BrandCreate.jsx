@@ -18,6 +18,7 @@ import logo from "../../../../components/img/logo192.png";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../../routes";
 import { UniqueErrorMsg } from "../../../../ErrorMessages/UniqueErrorMessage";
+import CheckUnique from "../../../../check Unique/CheckUnique";
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -100,26 +101,7 @@ function BrandCreate() {
       });
   };
 
-  const checkBrandNameis = (data) => {
-    PublicFetch.get(
-      `${process.env.REACT_APP_BASE_URL}/misc?type=brandname&value=${brand}`
-    )
-      .then((res) => {
-        console.log("Response 1123", res);
-        if (res.data.success) {
-          console.log("Success", res.data.data);
-          if (res.data.data.exist) {
-            console.log("hai guys");
-            setuniqueCode(true);
-          } else {
-            setuniqueCode(false);
-          }
-        }
-      })
-      .catch((err) => {
-        console.log("Error", err);
-      });
-  };
+
 
   console.log("data", brand, description);
 
@@ -178,8 +160,10 @@ function BrandCreate() {
                           setBrandError("");
                           setuniqueCode(false);
                         }}
-                        onBlur={() => {
-                          checkBrandNameis();
+                        onBlur={async() => {
+                          
+                          let a = await CheckUnique({type:"brandname",value:brand})
+                          setuniqueCode(a)
                         }}
                       />
                     </Form.Item>

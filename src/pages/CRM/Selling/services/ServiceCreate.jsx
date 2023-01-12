@@ -14,6 +14,8 @@ import { CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
 import { TreeSelect } from "antd";
 import { Navigate, useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../../routes";
+import CheckUnique from "../../../../check Unique/CheckUnique";
+import { UniqueErrorMsg } from "../../../../ErrorMessages/UniqueErrorMessage";
 
 function ServiceCreate() {
   const [successPopup, setSuccessPopup] = useState(false);
@@ -40,6 +42,10 @@ function ServiceCreate() {
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
   const [imageSize,setImageSize]= useState();
+  const [uniqueCode, setuniqueCode] = useState();
+  const [uniqueserCode, setuniqueserCode] = useState();
+  const [uniqueHsnCode,setuniqueHsnCode]= useState();
+
   const [addform] = Form.useForm();
   const navigate = useNavigate();
   const getBase64 = (file) =>
@@ -118,29 +124,6 @@ function ServiceCreate() {
     getCategorydata();
   }, []);
 
-  // const createservice=async()=>{
-
-  //   const formData = new FormData();
-  //     formData.append("service_name", serviceName);
-  //     formData.append("service_code", servicecode );
-  //     formData.append("service_category_id", category);
-  //     formData.append("service_hsn", Hsn);
-  //     formData.append("service_pic",displayPicture);
-  //     formData.append("service_taxrate",taxRate);
-  //     formData.append("service_description",description );
-
-  // try{
-  // const service= await PublicFetch.post(
-  //   `${CRM_BASE_URL_SELLING}/service`, {
-  //  formData,
-  //  "Content-Type": "Multipart/form-Data",
-  //   })
-  //   console.log("service created succesfully ", service)
-  // }
-  // catch(err){
-  //   console.log("err to add the services",err)
-  //   }
-  // }
 
   const OnSubmit = () => {
     const formData = new FormData();
@@ -223,9 +206,28 @@ function ServiceCreate() {
                   >
                     <InputType
                       value={serviceName}
-                      onChange={(e) => setServiceName(e.target.value)}
+                      onChange={(e) => {
+                      setServiceName(e.target.value)
+                      setuniqueCode(false);
+                    }}
+                      onBlur={ async () => {
+                        // checkAttributeNameis();
+                        let a = await CheckUnique({type:"servicename",value:serviceName})
+                        console.log("hai how are u", a)
+                        setuniqueCode(a)
+                      }}
                     />
                   </Form.Item>
+                  {uniqueCode ? (
+                <div>
+                  <label style={{ color: "red" }}>
+                    Service Name {UniqueErrorMsg.UniqueErrName}
+                  </label>
+                </div>
+              ) : (
+                ""
+              )}
+
                 </div>
                 <div className="col-4">
                   <label>Code</label>
@@ -249,9 +251,27 @@ function ServiceCreate() {
                   >
                     <InputType
                       value={servicecode}
-                      onChange={(e) => setServicecode(e.target.value)}
+                      onChange={(e) => {
+                      setServicecode(e.target.value)
+                     setuniqueserCode(false)
+                    }}
+                      onBlur={ async () => {
+                        // checkAttributeNameis();
+                        let a = await CheckUnique({type:"servicecode",value:servicecode})
+                        console.log("hai how are u", a)
+                       setuniqueserCode(a)
+                      }}
                     />
                   </Form.Item>
+                  {uniqueserCode ? (
+                <div>
+                  <label style={{ color: "red" }}>
+                    Service Code {UniqueErrorMsg.UniqueErrName}
+                  </label>
+                </div>
+              ) : (
+                ""
+              )}
                 </div>
                 <div className="col-4">
                   <label>Category</label>
@@ -296,9 +316,27 @@ function ServiceCreate() {
                   >
                     <InputType
                       value={Hsn}
-                      onChange={(e) => setHsn(e.target.value)}
+                      onChange={(e) => {
+                      setHsn(e.target.value)
+                      setuniqueHsnCode(false)
+                      }}
+                      onBlur={ async () => {
+                        // checkAttributeNameis();
+                        let a = await CheckUnique({type:"servicehsn",value:Hsn})
+                        console.log("hai how are u", a)
+                      setuniqueHsnCode(a)
+                      }}
                     />
                   </Form.Item>
+                  {uniqueHsnCode ? (
+                <div>
+                  <label style={{ color: "red" }}>
+                    Service Hsn {UniqueErrorMsg.UniqueErrName}
+                  </label>
+                </div>
+              ) : (
+                ""
+              )}
                 </div>
                 <div className="col-6 mt-2">
                   <label className="mb-2">Tax Rate</label>

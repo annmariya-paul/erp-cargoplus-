@@ -618,8 +618,8 @@ export default function Sidebar({ showSidebar }) {
                       </li>
                     )}
                      
-                    {checkPermission("create agent") && (
-                       <li className="nav-text">
+                    {checkPermission("create agent")}
+                      <li className="nav-text">
                         <NavLink
                           className={({ isActive }) =>
                             isActive ? "active-link" : "link"
@@ -630,8 +630,6 @@ export default function Sidebar({ showSidebar }) {
                           List Agent
                         </NavLink>
                       </li>
-                    )}
-                     
                     </>
                   ) : (
                     ""
@@ -674,7 +672,6 @@ export default function Sidebar({ showSidebar }) {
                   )}
                   {FMSOpen ? (
                     <>
-                    
                       <li className="nav-text " style={{ marginLeft: "-61px" }}>
                         <NavLink
                           className={({ isActive }) =>

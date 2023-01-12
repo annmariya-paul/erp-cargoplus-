@@ -638,6 +638,27 @@ export default function Sidebar({ showSidebar }) {
                   ) : (
                     ""
                   )}
+
+          {FMSOpen ? (
+                    <>
+                    {checkPermission("Quotation") && (
+                       <li className="nav-text " style={{ marginLeft: "-61px" }}>
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.QUATATIONS}
+                        >
+                          <RiTeamFill className="sidebar_icons ms-4" />
+                          Quotation
+                        </NavLink>
+                      </li>
+                    )}
+                     
+                    </>
+                  ) : (
+                    ""
+                  )}
                   <li
                     className={
                       FMSSettingsopen
@@ -677,18 +698,18 @@ export default function Sidebar({ showSidebar }) {
                   ) : (
                     ""
                   )}
-                  {FMSOpen ? (
+                    {FMSSettingsopen ? (
                     <>
-                    {checkPermission("quotation") && (
-                       <li className="nav-text " style={{ marginLeft: "-61px" }}>
+                    {checkPermission("Carrier") && (
+                       <li className="nav-text">
                         <NavLink
                           className={({ isActive }) =>
                             isActive ? "active-link" : "link"
                           }
-                          to={ROUTES.QUATATIONS}
+                          to={ROUTES.CARRIER}
                         >
-                          <RiTeamFill className="sidebar_icons ms-4" />
-                          Quotations
+                          <BsBookmarkFill className="sidebar_icons ms-4" />
+                         Carrier
                         </NavLink>
                       </li>
                     )}
@@ -697,6 +718,27 @@ export default function Sidebar({ showSidebar }) {
                   ) : (
                     ""
                   )}
+                    {FMSSettingsopen ? (
+                    <>
+                    {checkPermission("Mode") && (
+                       <li className="nav-text">
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.MODE}
+                        >
+                          <BsBookmarkFill className="sidebar_icons ms-4" />
+                          Mode
+                        </NavLink>
+                      </li>
+                    )}
+                     
+                    </>
+                  ) : (
+                    ""
+                  )}
+               
                   {/* {FMSQuotationsopen ? (
                     <>
                       <li className="nav-text">

@@ -604,7 +604,8 @@ export default function Sidebar({ showSidebar }) {
                   </li>
                   {FMSAgentopen ? (
                     <>
-                      <li className="nav-text">
+                    {checkPermission("create agent") && (
+                       <li className="nav-text">
                         <NavLink
                           className={({ isActive }) =>
                             isActive ? "active-link" : "link"
@@ -615,8 +616,10 @@ export default function Sidebar({ showSidebar }) {
                           Create Agent
                         </NavLink>
                       </li>
-
-                      <li className="nav-text">
+                    )}
+                     
+                    {checkPermission("create agent") && (
+                       <li className="nav-text">
                         <NavLink
                           className={({ isActive }) =>
                             isActive ? "active-link" : "link"
@@ -627,23 +630,8 @@ export default function Sidebar({ showSidebar }) {
                           List Agent
                         </NavLink>
                       </li>
-                    </>
-                  ) : (
-                    ""
-                  )}
-                   {FMSOpen ? (
-                    <>
-                      <li className="nav-text " style={{ marginLeft: "-61px" }}>
-                        <NavLink
-                          className={({ isActive }) =>
-                            isActive ? "active-link" : "link"
-                          }
-                          to={ROUTES.QUATATIONS}
-                        >
-                          <RiTeamFill className="sidebar_icons ms-4" />
-                          Quotations
-                        </NavLink>
-                      </li>
+                    )}
+                     
                     </>
                   ) : (
                     ""
@@ -684,41 +672,24 @@ export default function Sidebar({ showSidebar }) {
                   ) : (
                     ""
                   )}
-                    {FMSSettingsopen ? (
+                  {FMSOpen ? (
                     <>
-                      <li className="nav-text">
+                    
+                      <li className="nav-text " style={{ marginLeft: "-61px" }}>
                         <NavLink
                           className={({ isActive }) =>
                             isActive ? "active-link" : "link"
                           }
-                          to={ROUTES.CARRIER}
+                          to={ROUTES.QUATATIONS}
                         >
-                          <BsBookmarkFill className="sidebar_icons ms-4" />
-                          Carrier
+                          <RiTeamFill className="sidebar_icons ms-4" />
+                          Quotations
                         </NavLink>
                       </li>
                     </>
                   ) : (
                     ""
                   )}
-                     {FMSSettingsopen ? (
-                    <>
-                      <li className="nav-text">
-                        <NavLink
-                          className={({ isActive }) =>
-                            isActive ? "active-link" : "link"
-                          }
-                          to={ROUTES.MODE}
-                        >
-                          <BsBookmarkFill className="sidebar_icons ms-4" />
-                          Mode
-                        </NavLink>
-                      </li>
-                    </>
-                  ) : (
-                    ""
-                  )}
-                 
                   {/* {FMSQuotationsopen ? (
                     <>
                       <li className="nav-text">

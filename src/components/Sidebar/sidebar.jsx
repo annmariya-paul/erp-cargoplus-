@@ -460,7 +460,7 @@ export default function Sidebar({ showSidebar }) {
                   </li>
                   {CRMgeneral ? (
                     <>
-                    {checkPermission("country")}
+                    {checkPermission("country") && (
                       <li className="nav-text">
                         <NavLink
                           className={({ isActive }) =>
@@ -472,6 +472,8 @@ export default function Sidebar({ showSidebar }) {
                           Countries
                         </NavLink>
                       </li>
+                    )}
+                      
                     </>
                   ) : (
                     ""
@@ -618,8 +620,8 @@ export default function Sidebar({ showSidebar }) {
                       </li>
                     )}
                      
-                    {checkPermission("create agent")}
-                      <li className="nav-text">
+                    {checkPermission("create agent") && (
+                       <li className="nav-text">
                         <NavLink
                           className={({ isActive }) =>
                             isActive ? "active-link" : "link"
@@ -630,6 +632,8 @@ export default function Sidebar({ showSidebar }) {
                           List Agent
                         </NavLink>
                       </li>
+                    )}
+                     
                     </>
                   ) : (
                     ""
@@ -655,7 +659,8 @@ export default function Sidebar({ showSidebar }) {
                   </li>
                   {FMSSettingsopen ? (
                     <>
-                      <li className="nav-text">
+                    {checkPermission("freight type") && (
+                       <li className="nav-text">
                         <NavLink
                           className={({ isActive }) =>
                             isActive ? "active-link" : "link"
@@ -666,13 +671,16 @@ export default function Sidebar({ showSidebar }) {
                           Fright types
                         </NavLink>
                       </li>
+                    )}
+                     
                     </>
                   ) : (
                     ""
                   )}
                   {FMSOpen ? (
                     <>
-                      <li className="nav-text " style={{ marginLeft: "-61px" }}>
+                    {checkPermission("quotation") && (
+                       <li className="nav-text " style={{ marginLeft: "-61px" }}>
                         <NavLink
                           className={({ isActive }) =>
                             isActive ? "active-link" : "link"
@@ -683,6 +691,8 @@ export default function Sidebar({ showSidebar }) {
                           Quotations
                         </NavLink>
                       </li>
+                    )}
+                     
                     </>
                   ) : (
                     ""

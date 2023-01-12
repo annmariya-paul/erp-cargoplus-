@@ -18,9 +18,11 @@ function Addunit() {
   const[unitName,setUnitName]=useState("")
   const[unitCode,setUnitCode]=useState("")
   const[unitDescription,setUnitDescription]= useState("")
+  const [error403, setError403] = useState(false);
   const navigate = useNavigate();
   
   const [addForm]=Form.useForm()
+  const [uniqueCode, setuniqueCode] = useState(false);
 
   const close_modal = (mShow, time) => {
     if (!mShow) {
@@ -68,6 +70,30 @@ catch(err) {
 
 }
 
+
+const checkCategoryCodeis = (data) => {
+  PublicFetch.get(
+    `${process.env.REACT_APP_BASE_URL}/misc?type=unitname&value=${unitName}`
+  )
+    .then((res) => {
+      console.log("Response 1123", res);
+      if (res.data.success) {
+        console.log("Success", res.data.data);
+        if (res.data.data.exist) {
+          console.log("hai guys");
+          setuniqueCode(true);
+        } else {
+          setuniqueCode(false);
+        }
+      }
+    })
+    .catch((err) => {
+      console.log("Error", err);
+    });
+};
+
+
+
   return (
     <>
       <div className="container-fluid my-3">
@@ -114,7 +140,14 @@ catch(err) {
                   >
                     <InputType
                       value={unitName}
-                      onChange={(e) => setUnitName(e.target.value)}
+                      onChange={(e) => {
+                      setUnitName(e.target.value)
+                      setError403(false)
+                      setuniqueCode(false)
+                      }}
+                      onBlur={() => {
+                        checkCategoryCodeis();
+                      }}
                     />
                   </Form.Item>
                 </div>

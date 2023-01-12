@@ -13,7 +13,7 @@ import { ROUTES } from "../../../routes";
 import PublicFetch from "../../../utils/PublicFetch";
 import { CRM_BASE_URL_HRMS } from "../../../api/bootapi";
 import { UniqueErrorMsg } from "../../../ErrorMessages/UniqueErrorMessage";
-
+import CheckUnique from "../../../check Unique/CheckUnique";
 function Employeegrade() {
   // const [addForm, setAddForm] = useState();
   const [searchedText, setSearchedText] = useState("");
@@ -50,26 +50,26 @@ function Employeegrade() {
     );
   };
 
-  const checkemployeeCodeis = (data) => {
-    PublicFetch.get(
-      `${process.env.REACT_APP_BASE_URL}/misc?type=employmentgradename&value=${employeeGrade}`
-    )
-      .then((res) => {
-        console.log("Response", res);
-        if (res.data.success) {
-          console.log("Success", res.data.data);
-          if (res.data.data.exist) {
-            console.log("data exist");
-            setuniqueCode(true);
-          } else {
-            setuniqueCode(false);
-          }
-        }
-      })
-      .catch((err) => {
-        console.log("Error", err);
-      });
-  };
+  // const checkemployeeCodeis = (data) => {
+  //   PublicFetch.get(
+  //     `${process.env.REACT_APP_BASE_URL}/misc?type=employmentgradename&value=${employeeGrade}`
+  //   )
+  //     .then((res) => {
+  //       console.log("Response", res);
+  //       if (res.data.success) {
+  //         console.log("Success", res.data.data);
+  //         if (res.data.data.exist) {
+  //           console.log("data exist");
+  //           setuniqueCode(true);
+  //         } else {
+  //           setuniqueCode(false);
+  //         }
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log("Error", err);
+  //     });
+  // };
 
   const getallempgrade = async () => {
     try {
@@ -268,8 +268,14 @@ function Employeegrade() {
                           setEmployeeGrade(e.target.value);
                           setuniqueCode(false);
                         }}
-                        onBlur={(e) => {
-                          checkemployeeCodeis();
+                        // onBlur={(e) => {
+                          // checkemployeeCodeis();
+                        // }}
+                        onBlur={ async () => {
+                          // checkAttributeNameis();
+                          let a = await CheckUnique({type:"employmentgradename",value:employeeGrade})
+                          console.log("hai how are u", a)
+                          setuniqueCode(a)
                         }}
                         //   onChange={(e) => setEmptypename(e.target.value)}
                       />

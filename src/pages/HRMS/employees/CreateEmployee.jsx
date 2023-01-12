@@ -10,7 +10,7 @@ import Custom_model from "../../../components/custom_modal/custom_model";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../routes";
 import { UniqueErrorMsg } from "../../../ErrorMessages/UniqueErrorMessage";
-
+import CheckUnique from "../../../check Unique/CheckUnique";
 function CreateEmployee() {
   const navigate = useNavigate();
   const [successModal, setSuccessModal] = useState();
@@ -125,26 +125,26 @@ function CreateEmployee() {
       });
   };
 
-  const checkemployeeCodeis = (data) => {
-    PublicFetch.get(
-      `${process.env.REACT_APP_BASE_URL}/misc?type=employeecode&value=${employeeCode}`
-    )
-      .then((res) => {
-        console.log("Response", res);
-        if (res.data.success) {
-          console.log("Success", res.data.data);
-          if (res.data.data.exist) {
-            console.log("hai guys");
-            setuniqueCode(true);
-          } else {
-            setuniqueCode(false);
-          }
-        }
-      })
-      .catch((err) => {
-        console.log("Error", err);
-      });
-  };
+  // const checkemployeeCodeis = (data) => {
+  //   PublicFetch.get(
+  //     `${process.env.REACT_APP_BASE_URL}/misc?type=employeecode&value=${employeeCode}`
+  //   )
+  //     .then((res) => {
+  //       console.log("Response", res);
+  //       if (res.data.success) {
+  //         console.log("Success", res.data.data);
+  //         if (res.data.data.exist) {
+  //           console.log("hai guys");
+  //           setuniqueCode(true);
+  //         } else {
+  //           setuniqueCode(false);
+  //         }
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log("Error", err);
+  //     });
+  // };
 
   return (
     <div>
@@ -203,9 +203,17 @@ function CreateEmployee() {
                                 setEmployeeCode(e.target.value);
                                 setuniqueCode(false);
                               }}
-                              onBlur={(e) => {
-                                checkemployeeCodeis();
+                              // onBlur={(e) => {
+                              //   // checkemployeeCodeis();
+                              // }}
+                              // type=employeecode&value=${employeeCode}`
+                              onBlur={ async () => {
+                                // checkAttributeNameis();
+                                let a = await CheckUnique({type:"employeecode",value:employeeCode})
+                                console.log("hai how are u", a)
+                                setuniqueCode(a)
                               }}
+
                             />
                           </Form.Item>
                           {uniqueCode ? (

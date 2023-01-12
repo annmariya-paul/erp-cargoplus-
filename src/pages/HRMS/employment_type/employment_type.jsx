@@ -18,9 +18,7 @@ import CheckUnique from "../../../check Unique/CheckUnique";
 export default function EmploymentType() {
   const [error, setError] = useState(false);
   // const [addForm, setAddForm] = useState();
-  const [successModal, setSuccessModal] = useState(false);
-  const [employmentType, setEmploymentType] = useState();
-  const [employmentTypeList, setEmploymentTypeList] = useState();
+
   const [searchedText, setSearchedText] = useState("");
   const [pageSize, setPageSize] = useState("25");
   const [editShow, setEditShow] = useState(false);
@@ -172,6 +170,7 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
                 className="editIcon m-0"
                 onClick={() => {
                   handleEditclick(index);
+                   setuniqueeditCode(false);
                 }}
                 //   onClick={() => }
               >
@@ -198,42 +197,42 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
   ];
   const [newName,setNewName]=useState();
 
-  const checkeditNameis = (data) => {
-    if (newName !== employeeTName) {
-      PublicFetch.get(
-        `${process.env.REACT_APP_BASE_URL}/misc?type=employmenttypename&value=${employeeTName}`
-      )
-        .then((res) => {
-          console.log("Response 1123", res);
-          if (res.data.success) {
-            console.log("Success", res.data.data);
-            if (res.data.data.exist) {
-              console.log("hai guys");
-             setuniqueeditCode(true);
-            } else {
-              setuniqueeditCode(false);
-            }
-          }
-        })
-        .catch((err) => {
-          console.log("Error", err);
-        });
-    }
-  };
-  const data = [
-    {
-      emp_type_name: "Full-time",
-      key: "1",
-    },
-    {
-      emp_type_name: "Part-time",
-      key: "2",
-    },
-    {
-      emp_type_name: "Temporary",
-      key: "3",
-    },
-  ];
+  // const checkeditNameis = (data) => {
+  //   if (newName !== employeeTName) {
+  //     PublicFetch.get(
+  //       `${process.env.REACT_APP_BASE_URL}/misc?type=employmenttypename&value=${employeeTName}`
+  //     )
+  //       .then((res) => {
+  //         console.log("Response 1123", res);
+  //         if (res.data.success) {
+  //           console.log("Success", res.data.data);
+  //           if (res.data.data.exist) {
+  //             console.log("hai guys");
+  //            setuniqueeditCode(true);
+  //           } else {
+  //             setuniqueeditCode(false);
+  //           }
+  //         }
+  //       })
+  //       .catch((err) => {
+  //         console.log("Error", err);
+  //       });
+  //   }
+  // };
+  // const data = [
+  //   {
+  //     emp_type_name: "Full-time",
+  //     key: "1",
+  //   },
+  //   {
+  //     emp_type_name: "Part-time",
+  //     key: "2",
+  //   },
+  //   {
+  //     emp_type_name: "Temporary",
+  //     key: "3",
+  //   },
+  // ];
 
   return (
     <>
@@ -430,9 +429,20 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
                             setEmployeeTName(e.target.value);
                             setuniqueeditCode(false);
                           }}
-                          onBlur={() => {
-                            checkeditNameis();
+                          // onBlur={() => {
+                          //   checkeditNameis();
+                          //   if (newName !== employeeTName)
+                          // }}
+                          onBlur={ async () => {
+                           
+                            if (newName !== employeeTName){
+                              let a = await CheckUnique({type:"employmenttypename",value:employeeTName})
+                            
+                              setuniqueeditCode(a)
+                            }
+                         
                           }}
+
                         />
                       </Form.Item>
                       {uniqueeditCode ? (

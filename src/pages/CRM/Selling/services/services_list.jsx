@@ -47,8 +47,8 @@ function Services() {
   const [serviceCode, setServiceCode] = useState();
   const [serviceHsn, setServiceHsn] = useState();
   const [servicetaxrate, setServicetaxrate] = useState();
-  const [servicedescription, setServicedescription] = useState();
-  const [serviceCategory, setServicecategory] = useState();
+  const [servicedescription, setServicedescription] = useState("");
+  const [serviceCategory, setServicecategory] = useState("");
   const [serviceImg, setServiceImg] = useState([]);
   const [imageSize, setImageSize] = useState(false);
 

@@ -125,10 +125,12 @@ function Services() {
           tempArr.push({
             service_id:item?.service_id,
             service_name: item?.service_name,
-            service_category_id: item?.crm_v1_categories?.category_code,
+            service_category_id: item?.crm_v1_categories?.category_name,
             service_code: item?.service_code,
             service_pic: item?.service_pic,
+            service_hsn:item?.service_hsn,
             service_taxrate:item?.service_taxrate,
+            service_description:item?.service_description,
           });
         });
           console.log("hellooooqqqqq", tempArr);

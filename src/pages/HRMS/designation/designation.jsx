@@ -13,8 +13,9 @@ import { ROUTES } from "../../../routes";
 import { CRM_BASE_URL_HRMS } from "../../../api/bootapi";
 import PublicFetch from "../../../utils/PublicFetch";
 import { UniqueErrorMsg } from "../../../ErrorMessages/UniqueErrorMessage";
+import CheckUnique from "../../../check Unique/CheckUnique";
 
-// { Add and list Designation - Ann mariya - 15/11/22 }
+// { Add and list Designation - Ann - 15/11/22 }
 export default function Designation(){
     const [error, setError] = useState(false);
     
@@ -119,20 +120,7 @@ export default function Designation(){
             }
         }
 
-
-    //  const Submit = (data) => {
-    //    console.log(data);
-    //    if (data) {
-    //      localStorage.setItem("Form", JSON.stringify(data));
-    //      setSuccessModal(true);
-    //      close_modal(successModal, 1000);
-    //    } else {
-    //      setError(true);
-    //    }
-    //  };
-
     
-
     const submitaddunit=async()=>{
       try{
       const adddesigntion= await PublicFetch.post(
@@ -158,26 +146,6 @@ export default function Designation(){
       
       }
 
-const checkDesignationNameis = (data) => {
-  PublicFetch.get(
-    `${process.env.REACT_APP_BASE_URL}/misc?type=designationname&value=${designationname}`
-  )
-    .then((res) => {
-      console.log("Response", res);
-      if (res.data.success) {
-        console.log("Success", res.data.data);
-        if (res.data.data.exist) {
-          console.log("hai guys");
-          setUniqueName(true);
-        } else {
-          setUniqueName(false);
-        }
-      }
-    })
-    .catch((err) => {
-      console.log("Error", err);
-    });
-};
 
 const checkEditDesgNameis = (data) => {
   if (editUniqueName !== editdesignationname) {
@@ -201,25 +169,7 @@ const checkEditDesgNameis = (data) => {
   }
 };
 
-const checkDesignationCodeis = (data) => {
-  PublicFetch.get(
-    `${process.env.REACT_APP_BASE_URL}/misc?type=designationcode&value=${designationcode}`
-  )
-    .then((res) => {
-      console.log("Response", res);
-      if (res.data.success) {
-        console.log("Success", res.data.data);
-        if (res.data.data.exist) {
-          setUniqueCode(true);
-        } else {
-          setUniqueCode(false);
-        }
-      }
-    })
-    .catch((err) => {
-      console.log("Error", err);
-    });
-};
+
 
  const checkEditDesgCodeis = (data) => {
    if (editUniqueCode !== editdesignationcode) {
@@ -339,8 +289,12 @@ return (
                         setDesignationname(e.target.value);
                         setUniqueName(false);
                       }}
-                      onBlur={(e) => {
-                        checkDesignationNameis();
+                      onBlur={async () => {
+                        let n = await CheckUnique({
+                          type: "designationname",
+                          value: designationname,
+                        });
+                        setUniqueName(n);
                       }}
                     />
                   </Form.Item>
@@ -370,8 +324,12 @@ return (
                         setDesignationcode(e.target.value);
                         setUniqueCode(false);
                       }}
-                      onBlur={(e) => {
-                        checkDesignationCodeis();
+                      onBlur={async () => {
+                        let c = await CheckUnique({
+                          type: "designationcode",
+                          value: designationcode,
+                        });
+                        setUniqueCode(c);
                       }}
                     />
                   </Form.Item>

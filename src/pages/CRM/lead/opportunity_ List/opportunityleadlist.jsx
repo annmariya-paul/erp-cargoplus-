@@ -9,6 +9,7 @@ import {
   FaBookOpen,
   FaEdit,
 } from "react-icons/fa";
+import { Oppor_Status, Prob_conversion } from "../../../../utils/SelectOptions";
 import { message } from "antd";
 import { FiEdit } from "react-icons/fi";
 import { AiFillPrinter } from "react-icons/ai";
@@ -72,6 +73,8 @@ function OpportunityLeadlist(props) {
   const [progressUpdatenextDate, setProgressUpdatenextDate] = useState();
   const [progressUpdatestatus, setProgressUpdatestatus] = useState(5);
   const [opportunity_Id, setOpportunity_Id] = useState();
+  const [opporStatus, setOpporstatus] = useState(Oppor_Status);
+  const [probConversion,setProbConversion] = useState(Prob_conversion);
 
   //view progress
   const [tableprogress, setTableprogress] = useState("");
@@ -148,6 +151,29 @@ function OpportunityLeadlist(props) {
 
           });
          
+// #3#######
+      // res?.data?.data?.crm_v1_contacts.forEach((item, index) => {
+      //   res?.data?.data?.crm_v1_opportunities.forEach((oppo, index) => {
+      //     opporStatus.forEach((s, index) => {
+      //       var oppoStatus = parseInt(s.value);
+      //       if (oppoStatus === item.opportunity_status) {
+      //         samplearry.push({
+      //           opportunity_type: oppo?.opportunity_type,
+      //           opportunity_from: oppo?.opportunity_from,
+      //           opportunity_created_by: oppo?.opportunity_created_by,
+      //           opportunity_source: oppo?.opportunity_source,
+      //           opportunity_probability: oppo?.opportunity_probability,
+      //           opportunity_description: oppo?.opportunity_description,
+      //           opportunity_status: s?.name,
+      //           opportunity_amount: oppo?.opportunity_amount,
+      //           opportunity_party: item?.contact_person_name,
+      //         });
+      //         setNewOpportunityList(samplearry);
+      //       }
+      //     });
+      //   });
+      // });
+// ##########
           // res?.data?.data?.leads.forEach((item, index) => {
           //   samplearry.push(item.opportunity_id);
           // });

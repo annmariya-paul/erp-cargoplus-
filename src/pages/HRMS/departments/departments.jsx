@@ -13,6 +13,7 @@ import { ROUTES } from "../../../routes";
 import PublicFetch from "../../../utils/PublicFetch";
 import { CRM_BASE_URL_HRMS } from "../../../api/bootapi";
 import { UniqueErrorMsg } from "../../../ErrorMessages/UniqueErrorMessage";
+import CheckUnique from "../../../check Unique/CheckUnique";
 
 // { Add and list Departments - Ann mariya - 16/11/22 }
 export default function Departments(props) {
@@ -129,26 +130,6 @@ export default function Departments(props) {
       });
   };
 
-   const checkDeptNameis = (data) => {
-     PublicFetch.get(
-       `${process.env.REACT_APP_BASE_URL}/misc?type=departmentname&value=${deptName}`
-     )
-       .then((res) => {
-         console.log("Response", res);
-         if (res.data.success) {
-           console.log("Success", res.data.data);
-           if (res.data.data.exist) {
-             console.log("hai guys");
-             setUniqueName(true);
-           } else {
-             setUniqueName(false);
-           }
-         }
-       })
-       .catch((err) => {
-         console.log("Error", err);
-       });
-   };
 
     const checkEditDeptNameis = (data) => {
       if (editUniqueName !== deptName) {
@@ -172,26 +153,6 @@ export default function Departments(props) {
       }
     };
 
-  const checkDeptCodeis = (data) => {
-    PublicFetch.get(
-      `${process.env.REACT_APP_BASE_URL}/misc?type=departmentcode&value=${deptCode}`
-    )
-      .then((res) => {
-        console.log("Response", res);
-        if (res.data.success) {
-          console.log("Success", res.data.data);
-          if (res.data.data.exist) {
-            console.log("hai guys");
-            setUniqueCode(true);
-          } else {
-            setUniqueCode(false);
-          }
-        }
-      })
-      .catch((err) => {
-        console.log("Error", err);
-      });
-  };
 
   const checkEditDeptCodeis = (data) => {
     if (editUniqueCode !== deptCode) {
@@ -410,8 +371,12 @@ export default function Departments(props) {
                         setDeptName(e.target.value);
                         setUniqueName(false);
                       }}
-                      onBlur={(e) => {
-                        checkDeptNameis();
+                      onBlur={async () => {
+                        let n = await CheckUnique({
+                          type: "departmentname",
+                          value: deptName,
+                        });
+                        setUniqueName(n);
                       }}
                     />
                   </Form.Item>
@@ -449,8 +414,12 @@ export default function Departments(props) {
                         setDeptCode(e.target.value);
                         setUniqueCode(false);
                       }}
-                      onBlur={(e) => {
-                        checkDeptCodeis();
+                      onBlur={async () => {
+                        let c = await CheckUnique({
+                          type: "departmentcode",
+                          value: deptCode,
+                        });
+                        setUniqueCode(c);
                       }}
                     />
                   </Form.Item>

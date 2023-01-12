@@ -14,7 +14,8 @@ import { ROUTES } from "../../../routes";
 import { CRM_BASE_URL_HRMS } from "../../../api/bootapi";
 import PublicFetch from "../../../utils/PublicFetch";
 import { UniqueErrorMsg } from "../../../ErrorMessages/UniqueErrorMessage";
-// { Add and list Branches - Ann mariya - 16/11/22 }
+import CheckUnique from "../../../check Unique/CheckUnique";
+// { Add and list Branches - Ann - 16/11/22 }
 export default function Branches(props) {
   const [branch_id, setBranch_id] = useState();
   console.log("branch id in state",branch_id);
@@ -156,30 +157,12 @@ export default function Branches(props) {
       align: "center",
     },
   ];
-
-  const data = [
-    {
-      branch_name: "Branch X",
-      branch_code: "ABC",
-      key: "1",
-    },
-    {
-      branch_name: "Branch Y",
-      branch_code: "XYZ",
-      key: "2",
-    },
-    {
-      branch_name: "Branch C",
-      branch_code: "PQR",
-      key: "3",
-    },
-  ];  
+  
 
   const [saveSuccess, setSaveSuccess] =useState(false)
   const [BranchError, setBranchError] = useState();
   
   const [branchcode, setBranchcode] = useState();
-  console.log("abcccccccc",branchcode);
   const [branchname, setBranchname] = useState();
 
 
@@ -206,26 +189,6 @@ export default function Branches(props) {
     }
 
 
-    const checkBranchNameis = (data) => {
-      PublicFetch.get(
-        `${process.env.REACT_APP_BASE_URL}/misc?type=branchname&value=${branchname}`
-      )
-        .then((res) => {
-          console.log("Response", res);
-          if (res.data.success) {
-            console.log("Success", res.data.data);
-            if (res.data.data.exist) {
-              setUniqueName(true);
-            } else {
-              setUniqueName(false);
-            }
-          }
-        })
-        .catch((err) => {
-          console.log("Error", err);
-        });
-    };
-
     const checkEditBranchNameis = (data) => {
       if (editUniqueName !== NameInput) {
         PublicFetch.get(
@@ -248,25 +211,6 @@ export default function Branches(props) {
       }
     };
 
-    const checkBranchCodeis = (data) => {
-      PublicFetch.get(
-        `${process.env.REACT_APP_BASE_URL}/misc?type=branchcode&value=${branchcode}`
-      )
-        .then((res) => {
-          console.log("Response", res);
-          if (res.data.success) {
-            console.log("Success", res.data.data);
-            if (res.data.data.exist) {
-              setUniqueCode(true);
-            } else {
-              setUniqueCode(false);
-            }
-          }
-        })
-        .catch((err) => {
-          console.log("Error", err);
-        });
-      };
 
        const checkEditBranchCodeis = (data) => {
          if (editUniqueCode !== CodeInput) {
@@ -291,30 +235,6 @@ export default function Branches(props) {
        };
 
     
-  // const OnSubmit = () => {
-  //   const formData = new FormData();
-
-  //   formData.append("branch_name", branchname);
-  //   formData.append("branch_code", branchcode);
-  
-
-  //   PublicFetch.post(`${CRM_BASE_URL_HRMS}/branch`)
-  //     .then((res) => {
-  //       console.log("successssss", res);
-  //       if (res.data.success) {
-  //         setSuccessPopup(true);
-  //         addForm.resetFields();
-  //         close_modal(successPopup, 1000);
-  //       } else {
-  //         console.log("", res.data.data);
-  //         setBranchError(res.data.data);
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       console.log("error", err);
-  //       setError(true);
-  //     });
-  // };
 
   console.log("data", branchname, branchcode);
   return (
@@ -435,8 +355,12 @@ export default function Branches(props) {
                           setBranchError("");
                           setUniqueName(false);
                         }}
-                        onBlur={(e) => {
-                          checkBranchNameis();
+                        onBlur={async () => {
+                          let n = await CheckUnique({
+                            type: "branchname",
+                            value: branchname,
+                          });
+                          setUniqueName(n);
                         }}
                       />
                     </Form.Item>
@@ -468,16 +392,19 @@ export default function Branches(props) {
                           "Branch code cannot be longer than 15 characters",
                       },
                     ]}
-                    // onChange={(e) => setBranchcode(e.target.value)}
                   >
                     <InputType
-                      value={branchCode}
+                      value={branchcode}
                       onChange={(e) => {
                         setBranchcode(e.target.value);
                         setUniqueCode(false);
                       }}
-                      onBlur={(e) => {
-                        checkBranchCodeis();
+                      onBlur={async () => {
+                        let a = await CheckUnique({
+                          type: "branchcode",
+                          value: branchcode,
+                        });
+                        setUniqueCode(a);
                       }}
                     />
                   </Form.Item>
@@ -590,7 +517,7 @@ export default function Branches(props) {
                         },
                       ]}
                     >
-                      <InputType 
+                      <InputType
                         value={CodeInput}
                         onChange={(e) => {
                           setCodeInput(e.target.value);

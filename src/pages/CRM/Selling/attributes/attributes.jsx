@@ -20,6 +20,8 @@ import { ROUTES } from "../../../../routes";
 import InputType from "../../../../components/Input Type textbox/InputType";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
 import { Form } from "antd";
+import CheckUnique from "../../../../check Unique/CheckUnique";
+import { UniqueErrorMsg } from "../../../../ErrorMessages/UniqueErrorMessage";
 
 // { List all attibutes, view and edit an attribute - Ann mariya }
 export default function Attribute(props) {
@@ -75,6 +77,8 @@ export default function Attribute(props) {
       description: i.attributedescription,
     });
     setShowModalEdit(true);
+    setuniqueCode(false);
+
   };
 
   const handleEditclick = (e) => {
@@ -89,6 +93,8 @@ export default function Attribute(props) {
       description: e.attribute_description,
     });
     setShowModalEdit(true);
+    setuniqueCode(false);
+
   };
 
   const handleupdate = async () => {
@@ -104,9 +110,7 @@ export default function Attribute(props) {
       if (updated.data.success) {
         setShowModalEdit(false);
         getallattributes();
-      } else if (updated.data.success === false) {
-        alert(updated.data.data);
-      }
+      } 
     } catch (err) {
       console.log("error to update attributes");
     }
@@ -221,29 +225,6 @@ export default function Attribute(props) {
   const AttributeHeads = [
     ["attribute_id", "attribute_name", "attribute_description"],
   ];
-
-  const checkAttributeNameis = (data) => {
-    if (attriName !== attributeName) {
-      PublicFetch.get(
-        `${process.env.REACT_APP_BASE_URL}/misc?type=attributename&value=${attributeName}`
-      )
-        .then((res) => {
-          console.log("Response 1123", res);
-          if (res.data.success) {
-            console.log("Success", res.data.data);
-            if (res.data.data.exist) {
-              console.log("hai guys");
-              setuniqueCode(true);
-            } else {
-              setuniqueCode(false);
-            }
-          }
-        })
-        .catch((err) => {
-          console.log("Error", err);
-        });
-    }
-  };
 
   return (
     <>
@@ -443,8 +424,27 @@ export default function Attribute(props) {
                         value={attributeName}
                         onChange={(e) => setAttributeName(e.target.value)}
                         placeholder="Name"
+                        onBlur={async () => {
+                          if (attriName !== attributeName) {
+                            let a = await CheckUnique({
+                              type: "attributename",
+                              value: attributeName,
+                            });
+                            console.log("checking", a);
+                            setuniqueCode(a);
+                          }
+                        }}
                       />
                     </Form.Item>
+                    {uniqueCode ? (
+                      <div>
+                        <label style={{ color: "red" }}>
+                          Attribute Name {UniqueErrorMsg.UniqueErrName}
+                        </label>
+                      </div>
+                    ) : (
+                      ""
+                    )}
                   </div>
                   <div className="col-sm-6 pt-3">
                     <label>Description</label>

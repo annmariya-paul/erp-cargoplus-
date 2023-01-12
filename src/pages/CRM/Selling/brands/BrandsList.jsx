@@ -22,7 +22,7 @@ import "../../../../pages/CRM/lead/opportunity_ List/opportunitylist.scss";
 // import { useForm } from "react-hook-form";
 // import { Form } from "react-bootstrap";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import logo from "../../../../components/img/logo192.png";
 import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
@@ -38,8 +38,11 @@ import { CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
 import InputType from "../../../../components/Input Type textbox/InputType";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
 import { UniqueErrorMsg } from "../../../../ErrorMessages/UniqueErrorMessage";
+import CheckUnique from "../../../../check Unique/CheckUnique";
+import { type } from "@testing-library/user-event/dist/type";
 
 function BrandsList() {
+  const navigate = useNavigate();
   const [pageSize, setPageSize] = useState("25"); // page size
   const [current, setCurrent] = useState(1);
   const [searchedText, setSearchedText] = useState(""); // search by text input
@@ -123,6 +126,8 @@ function BrandsList() {
           setImageInput(res.data.data.brand_pic);
           setBrandViewPopup(false);
           handleEditPhase2(res.data.data);
+    setuniqueCode(false);
+
         }
       })
       .catch((err) => {
@@ -144,6 +149,7 @@ function BrandsList() {
       ImageInput: e.brand_pic,
     });
     setBrandEditPopup(true);
+    setuniqueCode(false);
   };
 
   const handleUpdate = (e) => {
@@ -268,28 +274,7 @@ function BrandsList() {
     ["brand_id", "brand_name", "brand_pic", "brand_description"],
   ];
 
-  const checkBrandNameis = (data) => {
-    if (brand_name !== NameInput) {
-      PublicFetch.get(
-        `${process.env.REACT_APP_BASE_URL}/misc?type=brandname&value=${NameInput}`
-      )
-        .then((res) => {
-          console.log("Response 1123", res);
-          if (res.data.success) {
-            console.log("Success", res.data.data);
-            if (res.data.data.exist) {
-              console.log("hai guys");
-              setuniqueCode(true);
-            } else {
-              setuniqueCode(false);
-            }
-          }
-        })
-        .catch((err) => {
-          console.log("Error", err);
-        });
-    }
-  };
+
 
   return (
     <div>
@@ -550,7 +535,9 @@ function BrandsList() {
         bodyStyle={{ height: 550, overflowY: "auto" }}
         size={"xl"}
         show={BrandEditPopup}
-        onHide={() => setBrandEditPopup(false)}
+        onHide={() => {
+          setBrandEditPopup(false);
+        }}
         View_list
         list_content={
           <div>
@@ -597,8 +584,15 @@ function BrandsList() {
                           setErrormsg("");
                           setuniqueCode(false);
                         }}
-                        onBlur={() => {
-                          checkBrandNameis();
+                        onBlur={async () => {
+                          
+                          if (NameInput !== brand_name) {
+                            let a = await CheckUnique({
+                              type: "brandname",
+                              value: NameInput,
+                            });
+                            setuniqueCode(a);
+                          }
                         }}
                       />
                     </Form.Item>

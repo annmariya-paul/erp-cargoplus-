@@ -15,6 +15,8 @@ import PublicFetch from "../../../../utils/PublicFetch";
 import { CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
 import { ROUTES } from "../../../../routes";
 import "./product.scss";
+import CheckUnique from "../../../../check Unique/CheckUnique";
+import { UniqueErrorMsg } from "../../../../ErrorMessages/UniqueErrorMessage";
 function ProductCreate() {
   const [successPopup, setSuccessPopup] = useState(false);
   const [error, setError] = useState(false);
@@ -51,6 +53,8 @@ function ProductCreate() {
   const [brandid, setBrandid] = useState();
   const [productattribute, setProductAttribute] = useState([]);
   const [Errormsg, setErrormsg] = useState();
+  const [uniqueCode,setuniqueCode]= useState(false)
+  const [uniqueCode2,setuniqueCode2] = useState(false)
 
   const newValues = (checkedValues) => {
     console.log("checked = ", checkedValues);
@@ -316,11 +320,16 @@ function ProductCreate() {
                       onChange={(e) => {
                         setName(e.target.value);
                         setErrormsg("");
+                        setuniqueCode(false)
+                      }}
+                      onBlur={async()=> {
+                        let a = await CheckUnique({type:"productname",value:name})
+                        setuniqueCode(a)
                       }}
                     />
                   </Form.Item>
-                  {Errormsg ? (
-                    <label style={{ color: "red" }}> {Errormsg}</label>
+                  {uniqueCode ? (
+                    <label style={{ color: "red" }}>Product Name {UniqueErrorMsg.UniqueErrName}</label>
                   ) : (
                     ""
                   )}
@@ -345,10 +354,18 @@ function ProductCreate() {
                           "Product Code cannot be longer than 20 characters",
                       },
                     ]}
-                    onChange={(e) => setCode(e.target.value)}
+                    onChange={(e) => {setCode(e.target.valu);setuniqueCode2(false)}}
                   >
-                    <InputType />
+                    <InputType onBlur={async()=>{
+                      let a = await CheckUnique({type:"productcode",value:code})
+                      setuniqueCode2(a)
+                    }}/>
                   </Form.Item>
+                  {uniqueCode2 ? (
+                    <label style={{ color: "red" }}>Product Code {UniqueErrorMsg.UniqueErrName}</label>
+                  ) : (
+                    ""
+                  )}
                 </div>
                 <div className="col-4">
                   <label>Category</label>

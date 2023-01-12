@@ -5,12 +5,14 @@ import Button from "../../../../components/button/button";
 import PublicFetch from "../../../../utils/PublicFetch";
 import "./assign_opportunity.scss";
 import CustomModel from "../../../../components/custom_modal/custom_model";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { CRM_BASE_URL_HRMS ,CRM_BASE_URL_FMS} from "../../../../api/bootapi";
+import { ROUTES } from "../../../../routes";
 
 function Assign_opportunity() {
   const opp_id = useParams();
   console.log("opportunity_id", opp_id);
+  const navigate = useNavigate()
   const [module1Click, setModule1Click] = useState(true);
   const [allRoleData, seAllRoleData] = useState();
   const [isCheckAll, setIsCheckAll] = useState(false);
@@ -49,8 +51,29 @@ function Assign_opportunity() {
       });
   };
 
-  const createAssignOpp = ()=> {
-    PublicFetch.post(`${CRM_BASE_URL_FMS}`)
+  const createAssignOpp = (data)=> {
+    PublicFetch.post(`${CRM_BASE_URL_FMS}/enquiry`,{
+      opportunity_assign_opportunity_id: parseInt(opp_id.id),
+      employee_ids: data.employee_ids,
+      opportunity_assign_agent_id: 1
+    }).then((res)=>{
+      console.log("Response", res);
+      if(res.data.success){
+        setSuccessPopup(true)
+        close_modal(successPopup,1200)
+      }
+    }).catch((err)=>{
+      console.log("Error", err);
+    })
+  }
+
+  const close_modal = (mShow,time) => {
+    if (!mShow) {
+      setTimeout(() => {
+        setSuccessPopup(false)
+        navigate(`${ROUTES.ENQUIRIES}`)
+      }, time);
+    }
   }
 
   useEffect(() => {
@@ -75,10 +98,11 @@ function Assign_opportunity() {
 
             <Form onFinish={(value)=> {
               console.log("Data to send",value)
+              createAssignOpp(value)
             }}>
               <div className="row">
                 <div className="col-12 py-3">
-                <Form.Item name="employee_ids">
+                <Form.Item name="employee_ids" rules={[{required:true,message:"Agents are Required"}]}>
                   <Checkbox.Group
                     style={{ width: "100%" }}
                     //   onChange={onChange}

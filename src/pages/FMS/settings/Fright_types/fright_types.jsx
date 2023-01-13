@@ -15,7 +15,7 @@ import { FiEdit } from "react-icons/fi";
 import CustomModel from "../../../../components/custom_modal/custom_model";
 import {CRM_BASE_URL_FMS} from "../../../../api/bootapi";
 import { UniqueErrorMsg } from "../../../../ErrorMessages/UniqueErrorMessage";
-
+import CheckUnique from "../../../../check Unique/CheckUnique";
 
 export default function Frightlist(props) {
   const [uniqueCode, setuniqueCode] = useState(false);
@@ -47,26 +47,26 @@ export default function Frightlist(props) {
     }
   };
 
-  const checkemployeeCodeis = (data) => {
-    PublicFetch.get(
-      `${process.env.REACT_APP_BASE_URL}/misc?type=freighttypename&value=${frightType}`
-    )
-      .then((res) => {
-        console.log("Response", res);
-        if (res.data.success) {
-          console.log("Success", res.data.data);
-          if (res.data.data.exist) {
-            console.log("data exist");
-            setuniqueCode(true);
-          } else {
-            setuniqueCode(false);
-          }
-        }
-      })
-      .catch((err) => {
-        console.log("Error", err);
-      });
-  };
+  // const checkemployeeCodeis = (data) => {
+  //   PublicFetch.get(
+  //     `${process.env.REACT_APP_BASE_URL}/misc?type=freighttypename&value=${frightType}`
+  //   )
+  //     .then((res) => {
+  //       console.log("Response", res);
+  //       if (res.data.success) {
+  //         console.log("Success", res.data.data);
+  //         if (res.data.data.exist) {
+  //           console.log("data exist");
+  //           setuniqueCode(true);
+  //         } else {
+  //           setuniqueCode(false);
+  //         }
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log("Error", err);
+  //     });
+  // };
   const [fright_id, setFright_id] = useState();
   console.log("fright id in state",fright_id);
 
@@ -142,7 +142,7 @@ export default function Frightlist(props) {
  }
 
 
-
+ const [uniqueeditCode, setuniqueeditCode] = useState(false);
 
   const columns = [
     {
@@ -157,7 +157,10 @@ export default function Frightlist(props) {
            
               <div
                 className="editIcon m-0"
-                onClick={() =>frightEdit(index)}
+                onClick={() =>
+                  {  frightEdit(index)  
+                    setuniqueeditCode(false);
+                      }}
               >
                 <FaEdit />
               </div>
@@ -213,6 +216,8 @@ export default function Frightlist(props) {
         key: "3",
     },
   ];  
+
+  const [newName, setNewName] = useState();
   const [saveSuccess, setSaveSuccess] =useState(false)
   const [frightError, setFrightError] = useState();
    const [viewfright,setViewfright]=useState({
@@ -228,7 +233,7 @@ export default function Frightlist(props) {
 
   
     let data = { 
-      freight_type_name : NameInput,
+      freight_type_name : NameInput.trim(""),
      
     }
 
@@ -270,7 +275,7 @@ export default function Frightlist(props) {
   const frightEdit = (e) => {
     console.log("Fright edit", e);
     setNameInput(e.freight_type_name);
-   
+    setNewName(e.freight_type_name);
     // setImageInput(e.brand_pic);
     setFright_id(e.freight_type_id);
     editForm.setFieldsValue({
@@ -340,7 +345,11 @@ export default function Frightlist(props) {
             </Select>
           </div>
           <div className="col-9 d-flex justify-content-end">
-            <Button btnType="add" onClick={() => setModalAddFright(true)}>
+            <Button btnType="add" onClick={() =>
+              {
+                setuniqueCode(false);
+                setModalAddFright(true);
+              } }>
               Add Fright types
             </Button>
           </div>
@@ -407,13 +416,20 @@ export default function Frightlist(props) {
                     onChange={(e) => setFrighttypename(e.target.value)}
                   >
                     <InputType 
-                    value={frightname}
+                    value={NameInput}
                     onChange={(e) => {
                       setFrightType(e.target.value);
                       setuniqueCode(false);
                     }}
-                    onBlur={(e) => {
-                      checkemployeeCodeis();
+                    // onBlur={(e) => {
+                    //   checkemployeeCodeis();
+                    // }}
+                    onBlur={ async () => {
+                      
+                      let a = await CheckUnique({type:"freighttypename",value:frightType})
+                      console.log("hai how are u", a)
+                      setuniqueCode(a);
+                      
                     }}
                     // onChange={(e) => {
                       // setFrighttypename(e.target.value)
@@ -557,18 +573,34 @@ export default function Frightlist(props) {
                     >
                       <InputType
                         className="input_type_style w-100"
-                        value={frightname}
+                        value={NameInput}
                         onChange={(e) => {
                           setNameInput(e.target.value);
                           setErrormsg("");
+                          setuniqueeditCode(false);
+                        }}
+                        onBlur={ async () => {
+                            
+                          if (newName !== NameInput){
+                            let a = await CheckUnique({type:"freighttypename",value:NameInput})
+                            console.log("hai how are u", a)
+                            setuniqueeditCode(a);
+                           
+                          }
+                          
                         }}
                       />
                     </Form.Item>
-                    {Errormsg ? (
+                    {/* {Errormsg ? (
                       <label style={{ color: "red" }}>{Errormsg}</label>
                     ) : (
                       ""
-                    )}
+                    )} */}
+                     {uniqueeditCode ? (
+                        <p style={{ color: "red", marginTop:"-24px" }} className="mb-2">
+                          Fright type Name {uniqueErrMsg.UniqueErrName}
+                        </p>
+                      ) : null}
                   </div>
                   {/* <div className="col-6">
                     <label>Date</label>

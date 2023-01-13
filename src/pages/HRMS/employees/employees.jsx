@@ -11,11 +11,14 @@ import { CRM_BASE_URL_HRMS } from "../../../api/bootapi";
 import CustomModel from "../../../components/custom_modal/custom_model";
 import InputType from "../../../components/Input Type textbox/InputType";
 import SelectBox from "../../../components/Select Box/SelectBox";
-
+import CheckUnique from "../../../check Unique/CheckUnique";
+import { UniqueErrorMsg } from "../../../ErrorMessages/UniqueErrorMessage";
 function Employees() {
   const [addForm] = Form.useForm();
   const [error, setError] = useState(false);
+  const [uniqueeditCode, setuniqueeditCode] = useState(false);
   // const [addForm, setAddForm] = useState();
+  const [NameInput, setNameInput] = useState();
   const [successModal, setSuccessModal] = useState(false);
   const [modalAddDept, setModalAddDept] = useState(false);
   const [searchedText, setSearchedText] = useState("");
@@ -58,7 +61,11 @@ function Employees() {
             <div className="m-0">
               <div
                 className="editIcon m-0"
-                onClick={() => handleEditClick(index)}
+                onClick={() => 
+                  {
+                    handleEditClick(index);
+                    setuniqueeditCode(false);
+                  }}
               >
                 <FaEdit />
               </div>
@@ -226,13 +233,14 @@ function Employees() {
   useEffect(() => {
     getAllEmployee();
   }, []);
-
+  const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
   const handleEditClick = (data) => {
     console.log("Edit data", data);
     setEmp_Id(data.employee_id);
     setEmployeeName(data.employee_name);
     setEmployeeBranch(data.employee_branch_id);
     setEmployeeCode(data.employee_code);
+    setNewName(data.employee_code);
     setEmployeeDept(data.employee_department_id);
     setEmployeeDesignation(data.employee_designation_id);
     setEmployeeGrade(data.employee_grade_id);
@@ -278,7 +286,7 @@ function Employees() {
         }
     }
   const [employeeName,setEmployeeName] = useState("");
-
+  const [newName, setNewName] = useState();
   // const updateEmployee = (data) => {
 
   //   PublicFetch.patch(`${CRM_BASE_URL_HRMS}/employees/${emp_id}`, data)
@@ -442,9 +450,31 @@ function Employees() {
                             >
                               <InputType 
                               value={employeeCode}
-                              onChange={(e) => setEmployeeCode(e.target.value)}
+                              onChange={(e) => 
+                              {
+                                setEmployeeCode(e.target.value)
+                                setuniqueeditCode(false);
+                              }
+                              }
+                 
+
+                              onBlur={ async () => {
+                            
+                                if (newName !== employeeCode){
+                                  let a = await CheckUnique({type:"employeecode",value:employeeCode})
+                                  console.log("hai how are u", a)
+                                  setuniqueeditCode(a);
+                                 
+                                }
+                                
+                              }}
                               />
                             </Form.Item>
+                            {uniqueeditCode ? (
+                        <p style={{ color: "red", marginTop:"-24px" }} className="mb-2">
+                         Employee Code {uniqueErrMsg.UniqueErrName}
+                        </p>
+                      ) : null}
                           </div>
                         </div>
                         <div className="col-6">

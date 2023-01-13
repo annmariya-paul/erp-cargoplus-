@@ -88,28 +88,28 @@ function Employeegrade() {
     getallempgrade();
   }, []);
 
-  const checkeditNameis = (data) => {
-    if (newName !== employeeGrade) {
-      PublicFetch.get(
-        `${process.env.REACT_APP_BASE_URL}/misc?type=employmentgradename&value=${employeeGrade}`
-      )
-        .then((res) => {
-          console.log("Response 1123", res);
-          if (res.data.success) {
-            console.log("Success", res.data.data);
-            if (res.data.data.exist) {
-              console.log("hai guys");
-              setuniqueeditCode(true);
-            } else {
-              setuniqueeditCode(false);
-            }
-          }
-        })
-        .catch((err) => {
-          console.log("Error", err);
-        });
-    }
-  };
+  // const checkeditNameis = (data) => {
+  //   if (newName !== employeeGrade) {
+  //     PublicFetch.get(
+  //       `${process.env.REACT_APP_BASE_URL}/misc?type=employmentgradename&value=${employeeGrade}`
+  //     )
+  //       .then((res) => {
+  //         console.log("Response 1123", res);
+  //         if (res.data.success) {
+  //           console.log("Success", res.data.data);
+  //           if (res.data.data.exist) {
+  //             console.log("hai guys");
+  //             setuniqueeditCode(true);
+  //           } else {
+  //             setuniqueeditCode(false);
+  //           }
+  //         }
+  //       })
+  //       .catch((err) => {
+  //         console.log("Error", err);
+  //       });
+  //   }
+  // };
   const submitaddemp = async () => {
     try {
       const addemployegrade = await PublicFetch.post(

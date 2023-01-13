@@ -19,8 +19,15 @@ function Employees() {
   const [successModal, setSuccessModal] = useState(false);
   const [modalAddDept, setModalAddDept] = useState(false);
   const [searchedText, setSearchedText] = useState("");
-  const [deptName, setDeptName] = useState();
-  const [deptCode, setDeptCode] = useState();
+  // setEmp_Id(data.employee_id);
+  const[employeeBranch,setEmployeeBranch] = useState("");
+  const[employeeCode,setEmployeeCode] = useState("");
+  const[employeeDept,setEmployeeDept] = useState("");
+  const[employeeDesignation,setEmployeeDesignation] = useState("");
+  const[employeeGrade,setEmployeeGrade] = useState("");
+  const[employeeType,setEmployeeType] = useState("");
+  // const [deptName, setDeptName] = useState();
+  // const [deptCode, setDeptCode] = useState();
   const [pageSize, setPageSize] = useState("25");
   const [current, setCurrent] = useState("");
   const [allEmployees, setAllEmployees] = useState([]);
@@ -33,7 +40,7 @@ function Employees() {
   const [allempgrade, setAllEmpGrade] = useState();
   console.log("empgrdddd", allempgrade);
   const [emp_id, setEmp_Id] = useState();
-  console.log("allEmp", allEmployees);
+  console.log("emppppid", emp_id);
   // const getData = (current, pageSize) => {
   //   return data?.slice((current - 1) * pageSize, current * pageSize);
   // };
@@ -110,8 +117,79 @@ function Employees() {
       align: "center",
     },
   ];
+  const getemployeegrade = () => {
+    PublicFetch.get(`${CRM_BASE_URL_HRMS}/employee-grades`)
+      .then((res) => {
+        console.log("Response", res);
+        if (res.data.success) {
+          console.log("Success of grade", res.data.data);
+          setAllEmpGrade(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+  const getDepartment = () => {
+    PublicFetch.get(`${CRM_BASE_URL_HRMS}/departments`)
+      .then((res) => {
+        console.log("Response", res);
+        if (res.data.success) {
+          console.log("Success of deapartment ", res.data.data);
+          setAllDepartment(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+  const getbranches = () => {
+    PublicFetch.get(`${CRM_BASE_URL_HRMS}/branch`)
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          console.log("success of branches", res.data.data);
+          setAllBranches(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
 
-
+  const getDesignation = () => {
+    PublicFetch.get(`${CRM_BASE_URL_HRMS}/designation`)
+      .then((res) => {
+        console.log("Response");
+        if (res.data.success) {
+          console.log("success of desgination", res.data.data);
+          setAllDesignation(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+  const getemployeetype = () => {
+    PublicFetch.get(`${CRM_BASE_URL_HRMS}/employment-types`)
+      .then((res) => {
+        console.log("Response", res);
+        if (res.data.success) {
+          console.log("success of employee type", res.data.data);
+          setAllEmpType(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+  useEffect(() => {
+    getbranches();
+    getDesignation();
+    getDepartment();
+    getemployeetype();
+    getemployeegrade();
+  }, []);
   const getAllEmployee = () => {
     PublicFetch.get(`${CRM_BASE_URL_HRMS}/employees`)
       .then((res) => {
@@ -124,15 +202,20 @@ function Employees() {
               employee_id: item.employee_id,
               employee_name: item.employee_name,
               employee_code: item.employee_code,
+              employee_department_id:item.hrms_v1_departments.department_id,
               employee_department: item.hrms_v1_departments.department_name,
+              employee_branch_id:item.hrms_v1_branches.branch_id,
               employee_branch:item.hrms_v1_branches.branch_name,
+              employee_grade_id: item.hrms_v1_employee_grades.employee_grade_id,
               employee_grade: item.hrms_v1_employee_grades.employee_grade_name,
               employee_type: item.hrms_v1_employment_types.employment_type_name,
+              employee_type_id: item.hrms_v1_employment_types.employment_type_id,
               employee_designation: item.hrms_v1_designations.designation_name,
+              employee_designation_id: item.hrms_v1_designations.designation_id,
             });
           });
           setAllEmployees(array);
-          console.log("array data ::", array);
+          console.log(" newww array data ::", array);
           
         }
       })
@@ -147,38 +230,72 @@ function Employees() {
   const handleEditClick = (data) => {
     console.log("Edit data", data);
     setEmp_Id(data.employee_id);
+    setEmployeeName(data.employee_name);
+    setEmployeeBranch(data.employee_branch_id);
+    setEmployeeCode(data.employee_code);
+    setEmployeeDept(data.employee_department_id);
+    setEmployeeDesignation(data.employee_designation_id);
+    setEmployeeGrade(data.employee_grade_id);
+    setEmployeeType(data.employee_type_id);
 
     if (data) {
       addForm.setFieldsValue({
         employee_id: data.employee_id,
         employee_name: data.employee_name,
-        employee_branch: data.employee_branch,
+        employee_branch: data.employee_branch_id,
         employee_code: data.employee_code,
-        employee_department: data.employee_department,
-        employee_designation: data.employee_designation,
-        employee_grade: data.employee_grade,
-        employee_type: data.employee_type,
+        employee_department: data.employee_department_id,
+        employee_designation: data.employee_designation_id,
+        employee_grade: data.employee_grade_id,
+        employee_type: data.employee_type_id,
       });
       setModalAddDept(true);
     }
   };
-
-  const updateEmployee = (data) => {
-    PublicFetch.patch(`${CRM_BASE_URL_HRMS}/employees/${emp_id}`, data)
-      .then((res) => {
-        console.log("Response", res);
-        if (res.data.success) {
-          console.log("Success for updating employee", res.data.data);
+  const updateEmployee=async (id)=>{
+    try{
+    const updating= await PublicFetch.patch(`${CRM_BASE_URL_HRMS}/employees/${emp_id}`,{
+        employee_name:employeeName,
+        employee_code:employeeCode,
+        employee_branch:employeeBranch,
+        employee_department:employeeDept,
+        employee_designation:employeeDesignation,
+        employee_grade:employeeGrade,
+        employee_type:employeeType,
+       
+      })
+      console.log("editedd data is",updating)
+      if(updating.data.success){
+        console.log("Success for updating employee", updating.data.data);
           setSuccessModal(true);
           getAllEmployee();
           close_modal(successModal, 1200);
           setModalAddDept(false);
+      }
+    }
+    catch(err) {
+          console.log("error to getting all emps",err)
         }
-      })
-      .catch((err) => {
-        console.log("Error", err);
-      });
-  };
+    }
+  const [employeeName,setEmployeeName] = useState("");
+
+  // const updateEmployee = (data) => {
+
+  //   PublicFetch.patch(`${CRM_BASE_URL_HRMS}/employees/${emp_id}`, data)
+  //     .then((res) => {
+  //       console.log("Response", res);
+  //       if (res.data.success) {
+  //         console.log("Success for updating employee", res.data.data);
+  //         setSuccessModal(true);
+  //         getAllEmployee();
+  //         close_modal(successModal, 1200);
+  //         setModalAddDept(false);
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log("Error", err);
+  //     });
+  // };
 
   const close_modal = (mShow, time) => {
     if (!mShow) {
@@ -280,7 +397,7 @@ function Employees() {
                     form={addForm}
                     onFinish={(value) => {
                       console.log("success of create", value);
-                      updateEmployee(value);
+                      updateEmployee();
                     }}
                   >
                     <div className="">
@@ -305,7 +422,9 @@ function Employees() {
                                 },
                               ]}
                             >
-                              <InputType />
+                              <InputType value={employeeName}
+                               onChange={(e) => setEmployeeName(e.target.value)}
+                                />
                             </Form.Item>
                           </div>
                         </div>
@@ -321,7 +440,10 @@ function Employees() {
                                 },
                               ]}
                             >
-                              <InputType />
+                              <InputType 
+                              value={employeeCode}
+                              onChange={(e) => setEmployeeCode(e.target.value)}
+                              />
                             </Form.Item>
                           </div>
                         </div>
@@ -337,7 +459,13 @@ function Employees() {
                                 },
                               ]}
                             >
-                              <SelectBox>
+                              <SelectBox 
+                               value={employeeBranch}
+                               onChange={(e) => {
+                                 setEmployeeBranch(e);
+                               }}
+                              
+                              >
                                 {allbranches &&
                                   allbranches.length > 0 &&
                                   allbranches.map((item, index) => {
@@ -366,7 +494,13 @@ function Employees() {
                                 },
                               ]}
                             >
-                              <SelectBox>
+                              <SelectBox 
+                               value={employeeDept}
+                               onChange={(e) => {
+                                 setEmployeeDept(e);
+                               }}
+                              
+                              >
                                 {alldespartment &&
                                   alldespartment.length > 0 &&
                                   alldespartment.map((item, index) => {
@@ -395,7 +529,13 @@ function Employees() {
                                 },
                               ]}
                             >
-                              <SelectBox>
+                              <SelectBox 
+                               value={employeeDesignation}
+                               onChange={(e) => {
+                                 setEmployeeDesignation(e);
+                               }}
+                              
+                              >
                                 {alldesgination &&
                                   alldesgination.length > 0 &&
                                   alldesgination.map((item, index) => {
@@ -424,7 +564,13 @@ function Employees() {
                                 },
                               ]}
                             >
-                              <SelectBox>
+                               <SelectBox 
+                               value={employeeType}
+                               onChange={(e) => {
+                                 setEmployeeType(e);
+                               }}
+                              
+                              >
                                 {allemptype &&
                                   allemptype.length > 0 &&
                                   allemptype.map((item, index) => {
@@ -453,7 +599,13 @@ function Employees() {
                                 },
                               ]}
                             >
-                              <SelectBox>
+                               <SelectBox 
+                               value={employeeGrade}
+                               onChange={(e) => {
+                                 setEmployeeGrade(e);
+                               }}
+                              
+                              >
                                 {allempgrade &&
                                   allempgrade.length > 0 &&
                                   allempgrade.map((item, index) => {

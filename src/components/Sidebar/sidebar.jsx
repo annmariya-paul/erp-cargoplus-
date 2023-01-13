@@ -641,7 +641,7 @@ export default function Sidebar({ showSidebar }) {
 
           {FMSOpen ? (
                     <>
-                    {checkPermission("Quotation") && (
+                    {checkPermission("quotation") && (
                        <li className="nav-text " style={{ marginLeft: "-61px" }}>
                         <NavLink
                           className={({ isActive }) =>
@@ -700,7 +700,7 @@ export default function Sidebar({ showSidebar }) {
                   )}
                     {FMSSettingsopen ? (
                     <>
-                    {checkPermission("Carrier") && (
+                    {checkPermission("carrier") && (
                        <li className="nav-text">
                         <NavLink
                           className={({ isActive }) =>
@@ -720,7 +720,7 @@ export default function Sidebar({ showSidebar }) {
                   )}
                     {FMSSettingsopen ? (
                     <>
-                    {checkPermission("Mode") && (
+                    {checkPermission("mode") && (
                        <li className="nav-text">
                         <NavLink
                           className={({ isActive }) =>

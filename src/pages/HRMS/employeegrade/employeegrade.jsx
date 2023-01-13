@@ -183,6 +183,7 @@ function Employeegrade() {
                 className="editIcon m-0"
                 onClick={() => {
                   handleEditclick(index);
+                  setuniqueeditCode(false);
                 }}
                 //   onClick={() => }
               >
@@ -268,16 +269,15 @@ function Employeegrade() {
                           setEmployeeGrade(e.target.value);
                           setuniqueCode(false);
                         }}
-                        // onBlur={(e) => {
-                          // checkemployeeCodeis();
-                        // }}
+                       
                         onBlur={ async () => {
-                          // checkAttributeNameis();
+                        
                           let a = await CheckUnique({type:"employmentgradename",value:employeeGrade})
                           console.log("hai how are u", a)
-                          setuniqueCode(a)
+                          setuniqueCode(a);
+                          
                         }}
-                        //   onChange={(e) => setEmptypename(e.target.value)}
+                      
                       />
                     </Form.Item>
                     {uniqueCode ? (
@@ -304,12 +304,7 @@ function Employeegrade() {
               success
             />
 
-            {/* <Custom_model
-              size={"sm"}
-              show={successModal}
-              onHide={() => setSuccessModal(false)}
-              success
-            /> */}
+          
           </div>
         </div>
       </div>
@@ -319,7 +314,7 @@ function Employeegrade() {
           <div className="col">
             <h5 className="lead_text">Employment Grade</h5>
           </div>
-          {/* <Leadlist_Icons /> */}
+      
         </div>
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
@@ -364,9 +359,8 @@ function Employeegrade() {
         </div>
         <div className="datatable">
           <TableData
-            // data={getData(numofItemsTo, pageofIndex)}
-            data={getData(current, pageSize)}
-            // data={data}
+           data={getData(current, pageSize)}
+
             columns={columns}
             custom_table_css="table_lead_list"
           />
@@ -388,7 +382,7 @@ function Employeegrade() {
                   onFinish={(value) => {
                     console.log("the formvaluess iss", value);
                     updateClick();
-                    // updateClick();
+                  
                   }}
                   onFinishFailed={(error) => {
                     console.log(error);
@@ -416,6 +410,7 @@ function Employeegrade() {
                               "Name cannot be longer than 100 characters",
                           },
                         ]}
+                       
                       >
                         <InputType
                           value={employeeGrade}
@@ -424,11 +419,19 @@ function Employeegrade() {
                             setuniqueeditCode(false);
 
                           }}
-                          onBlur={() => {
-                            checkeditNameis();
+                         
+
+                          onBlur={ async () => {
+                            
+                            if (newName !== employeeGrade){
+                              let a = await CheckUnique({type:"employmentgradename",value:employeeGrade})
+                              console.log("hai how are u", a)
+                              setuniqueeditCode(a);
+                             
+                            }
+                            
                           }}
-                          //   value={editemptypename }
-                          //   onChange={(e) => setEditemptypename(e.target.value)}
+                         
                         />
                       </Form.Item>
                       {uniqueeditCode ? (

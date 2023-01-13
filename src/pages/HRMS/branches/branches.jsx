@@ -339,7 +339,7 @@ export default function Branches(props) {
 
                         {
                           min: 3,
-                          message: "Branch Name must be atleast 3 characters",
+                          message: "Branch Name must be at least 3 characters",
                         },
                         {
                           max: 100,

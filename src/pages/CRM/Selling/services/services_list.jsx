@@ -127,8 +127,8 @@ function Services() {
           tempArr.push({
             service_id:item?.service_id,
             service_name: item?.service_name,
-            // service_category_id: item?.crm_v1_categories?.category_name,
-            service_category_id: item?.service_category_id,
+            service_category_id: item?.crm_v1_categories?.category_id,
+            service_category_name: item?.crm_v1_categories?.category_name,
             service_code: item?.service_code,
             service_pic: item?.service_pic,
             service_hsn:item?.service_hsn,
@@ -425,7 +425,7 @@ function Services() {
     },
     {
       title: "CATEGORY",
-      dataIndex: "service_category_id",
+      dataIndex: "service_category_name",
       key: "key",
       width: "14%",
       align: "center",

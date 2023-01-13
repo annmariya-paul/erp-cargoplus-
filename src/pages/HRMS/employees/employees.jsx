@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import Button from "../../../components/button/button";
 import MyPagination from "../../../components/Pagination/MyPagination";
 import TableData from "../../../components/table/table_data";
-import { ROUTES } from "../../../routes";
 import PublicFetch from "../../../utils/PublicFetch";
 import { CRM_BASE_URL_HRMS } from "../../../api/bootapi";
 import CustomModel from "../../../components/custom_modal/custom_model";
@@ -13,42 +12,34 @@ import InputType from "../../../components/Input Type textbox/InputType";
 import SelectBox from "../../../components/Select Box/SelectBox";
 import CheckUnique from "../../../check Unique/CheckUnique";
 import { UniqueErrorMsg } from "../../../ErrorMessages/UniqueErrorMessage";
+
 function Employees() {
-  const [addForm] = Form.useForm();
-  const [error, setError] = useState(false);
+  const [editForm] = Form.useForm();
   const [uniqueeditCode, setuniqueeditCode] = useState(false);
-  // const [addForm, setAddForm] = useState();
-  const [NameInput, setNameInput] = useState();
   const [successModal, setSuccessModal] = useState(false);
-  const [modalAddDept, setModalAddDept] = useState(false);
+  const [modalEditEmployee, setModalEditEmployee] = useState(false);
   const [searchedText, setSearchedText] = useState("");
-  // setEmp_Id(data.employee_id);
   const[employeeBranch,setEmployeeBranch] = useState("");
   const[employeeCode,setEmployeeCode] = useState("");
   const[employeeDept,setEmployeeDept] = useState("");
   const[employeeDesignation,setEmployeeDesignation] = useState("");
   const[employeeGrade,setEmployeeGrade] = useState("");
   const[employeeType,setEmployeeType] = useState("");
-  // const [deptName, setDeptName] = useState();
-  // const [deptCode, setDeptCode] = useState();
   const [pageSize, setPageSize] = useState("25");
   const [current, setCurrent] = useState("");
   const [allEmployees, setAllEmployees] = useState([]);
-  // const [successModal, setSuccessModal] = useState();
-  const [allbranches, setAllBranches] = useState();
+ const [allbranches, setAllBranches] = useState();
   const [alldesgination, setAllDesignation] = useState();
-  console.log("dsgsssssss", alldesgination);
-  const [alldespartment, setAllDepartment] = useState();
+ const [alldespartment, setAllDepartment] = useState();
   const [allemptype, setAllEmpType] = useState();
   const [allempgrade, setAllEmpGrade] = useState();
-  console.log("empgrdddd", allempgrade);
-  const [emp_id, setEmp_Id] = useState();
-  console.log("emppppid", emp_id);
-  // const getData = (current, pageSize) => {
-  //   return data?.slice((current - 1) * pageSize, current * pageSize);
-  // };
-
+ const [emp_id, setEmp_Id] = useState();
+ const [employeeName,setEmployeeName] = useState("");
+  const [newName, setNewName] = useState();
+ const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
   
+
+  //Columns
   const columns = [
     {
       title: "ACTION",
@@ -81,7 +72,7 @@ function Employees() {
       key: "employee_name",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.dept_name)
+        return String(record.employee_name)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
@@ -124,6 +115,8 @@ function Employees() {
       align: "center",
     },
   ];
+
+  //API for get all employee grade
   const getemployeegrade = () => {
     PublicFetch.get(`${CRM_BASE_URL_HRMS}/employee-grades`)
       .then((res) => {
@@ -137,6 +130,9 @@ function Employees() {
         console.log("Error", err);
       });
   };
+
+
+  //API call for Get all Department
   const getDepartment = () => {
     PublicFetch.get(`${CRM_BASE_URL_HRMS}/departments`)
       .then((res) => {
@@ -150,6 +146,8 @@ function Employees() {
         console.log("Error", err);
       });
   };
+
+  //API call for all Branches
   const getbranches = () => {
     PublicFetch.get(`${CRM_BASE_URL_HRMS}/branch`)
       .then((res) => {
@@ -164,6 +162,7 @@ function Employees() {
       });
   };
 
+  //API for get all Designation
   const getDesignation = () => {
     PublicFetch.get(`${CRM_BASE_URL_HRMS}/designation`)
       .then((res) => {
@@ -177,6 +176,8 @@ function Employees() {
         console.log("Error", err);
       });
   };
+
+  //API for get all EmployeeType
   const getemployeetype = () => {
     PublicFetch.get(`${CRM_BASE_URL_HRMS}/employment-types`)
       .then((res) => {
@@ -197,6 +198,8 @@ function Employees() {
     getemployeetype();
     getemployeegrade();
   }, []);
+
+//API call to get all employee
   const getAllEmployee = () => {
     PublicFetch.get(`${CRM_BASE_URL_HRMS}/employees`)
       .then((res) => {
@@ -233,7 +236,7 @@ function Employees() {
   useEffect(() => {
     getAllEmployee();
   }, []);
-  const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
+ 
   const handleEditClick = (data) => {
     console.log("Edit data", data);
     setEmp_Id(data.employee_id);
@@ -247,7 +250,7 @@ function Employees() {
     setEmployeeType(data.employee_type_id);
 
     if (data) {
-      addForm.setFieldsValue({
+      editForm.setFieldsValue({
         employee_id: data.employee_id,
         employee_name: data.employee_name,
         employee_branch: data.employee_branch_id,
@@ -257,13 +260,13 @@ function Employees() {
         employee_grade: data.employee_grade_id,
         employee_type: data.employee_type_id,
       });
-      setModalAddDept(true);
+      setModalEditEmployee(true);
     }
   };
   const updateEmployee=async (id)=>{
     try{
     const updating= await PublicFetch.patch(`${CRM_BASE_URL_HRMS}/employees/${emp_id}`,{
-        employee_name:employeeName,
+        employee_name:employeeName.trim(""),
         employee_code:employeeCode,
         employee_branch:employeeBranch,
         employee_department:employeeDept,
@@ -278,32 +281,15 @@ function Employees() {
           setSuccessModal(true);
           getAllEmployee();
           close_modal(successModal, 1200);
-          setModalAddDept(false);
+          setModalEditEmployee(false);
       }
     }
     catch(err) {
-          console.log("error to getting all emps",err)
+          console.log("error to getting all employees",err)
         }
     }
-  const [employeeName,setEmployeeName] = useState("");
-  const [newName, setNewName] = useState();
-  // const updateEmployee = (data) => {
-
-  //   PublicFetch.patch(`${CRM_BASE_URL_HRMS}/employees/${emp_id}`, data)
-  //     .then((res) => {
-  //       console.log("Response", res);
-  //       if (res.data.success) {
-  //         console.log("Success for updating employee", res.data.data);
-  //         setSuccessModal(true);
-  //         getAllEmployee();
-  //         close_modal(successModal, 1200);
-  //         setModalAddDept(false);
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       console.log("Error", err);
-  //     });
-  // };
+  
+ 
 
   const close_modal = (mShow, time) => {
     if (!mShow) {
@@ -371,7 +357,7 @@ function Employees() {
         </div>
         <div className="datatable">
           <TableData
-            // data={getData(current, pageSize)}
+           
             data={allEmployees}
             columns={columns}
             custom_table_css="table_lead_list"
@@ -379,7 +365,7 @@ function Employees() {
         </div>
         <div className="d-flex py-2 justify-content-center">
           <MyPagination
-            // total={data.length}
+           
             current={current}
             showSizeChanger={true}
             pageSize={pageSize}
@@ -392,8 +378,8 @@ function Employees() {
       </div>
       <CustomModel
         width={650}
-        show={modalAddDept}
-        onHide={() => setModalAddDept(false)}
+        show={modalEditEmployee}
+        onHide={() => setModalEditEmployee(false)}
         View_list
         list_content={
           <div className="">
@@ -402,7 +388,7 @@ function Employees() {
               <div className="col-12 my-3">
                 <div className="px-2">
                   <Form
-                    form={addForm}
+                    form={editForm}
                     onFinish={(value) => {
                       console.log("success of create", value);
                       updateEmployee();

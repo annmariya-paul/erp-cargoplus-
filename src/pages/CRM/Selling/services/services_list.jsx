@@ -47,8 +47,8 @@ function Services() {
   const [serviceCode, setServiceCode] = useState();
   const [serviceHsn, setServiceHsn] = useState();
   const [servicetaxrate, setServicetaxrate] = useState();
-  const [servicedescription, setServicedescription] = useState();
-  const [serviceCategory, setServicecategory] = useState();
+  const [servicedescription, setServicedescription] = useState("");
+  const [serviceCategory, setServicecategory] = useState("");
   const [serviceImg, setServiceImg] = useState([]);
   const [imageSize, setImageSize] = useState(false);
 
@@ -90,6 +90,8 @@ function Services() {
     servicetaxrate: "",
     servicedescription: "",
     serviceimage: "",
+    servicecat_id:"",
+    
   });
 
   const handlePreview = async (file) => {
@@ -132,6 +134,8 @@ function Services() {
             service_hsn:item?.service_hsn,
             service_taxrate:item?.service_taxrate,
             service_description:item?.service_description,
+            service_category_name:item?.crm_v1_categories?.category_name
+            
           });
         });
           console.log("hellooooqqqqq", tempArr);
@@ -216,7 +220,7 @@ function Services() {
   };
 
   const onChangetree = (value) => {
-    console.log("Change", value);
+    console.log("Change service catid", value);
     // setState(parseInt(value));
     setServicecategory(parseInt(value));
   };
@@ -313,6 +317,7 @@ function Services() {
       });
   };
 
+  console.log("serivicess catid",serviceCategory)
   const data = [
     {
       name: "Polishing",

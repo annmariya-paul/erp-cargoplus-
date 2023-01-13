@@ -33,7 +33,7 @@ export default function Departments(props) {
   const [uniqueName, setUniqueName] = useState(false);
   const [uniqueEditName, setUniqueEditName] = useState(false);
   const [uniqueCode, setUniqueCode] = useState(false);
-  const [uniqueEditCode,setUniqueEditCode] = useState(false);
+  const [uniqueEditCode, setUniqueEditCode] = useState(false);
   const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
   const [editUniqueName, setEditUniqueName] = useState();
   const [editUniqueCode, setEditUniqueCode] = useState();
@@ -130,29 +130,27 @@ export default function Departments(props) {
       });
   };
 
-
-    const checkEditDeptNameis = (data) => {
-      if (editUniqueName !== deptName) {
-        PublicFetch.get(
-          `${process.env.REACT_APP_BASE_URL}/misc?type=departmentname&value=${deptName}`
-        )
-          .then((res) => {
-            console.log("Response", res);
-            if (res.data.success) {
-              console.log("Success", res.data.data);
-              if (res.data.data.exist) {
-                setUniqueEditName(true);
-              } else {
-                setUniqueEditName(false);
-              }
+  const checkEditDeptNameis = (data) => {
+    if (editUniqueName !== deptName) {
+      PublicFetch.get(
+        `${process.env.REACT_APP_BASE_URL}/misc?type=departmentname&value=${deptName}`
+      )
+        .then((res) => {
+          console.log("Response", res);
+          if (res.data.success) {
+            console.log("Success", res.data.data);
+            if (res.data.data.exist) {
+              setUniqueEditName(true);
+            } else {
+              setUniqueEditName(false);
             }
-          })
-          .catch((err) => {
-            console.log("Error", err);
-          });
-      }
-    };
-
+          }
+        })
+        .catch((err) => {
+          console.log("Error", err);
+        });
+    }
+  };
 
   const checkEditDeptCodeis = (data) => {
     if (editUniqueCode !== deptCode) {
@@ -191,7 +189,11 @@ export default function Departments(props) {
             <div className="m-0">
               <div
                 className="editIcon m-0"
-                onClick={() => handleEditClick(index)}
+                onClick={() => {
+                  handleEditClick(index);
+                  uniqueEditName(false);
+                  uniqueEditCode(false);
+                }}
               >
                 <FaEdit />
               </div>
@@ -491,8 +493,12 @@ export default function Departments(props) {
                         setDeptName(e.target.value);
                         setUniqueEditName(false);
                       }}
-                      onBlur={(e) => {
-                        checkEditDeptNameis();
+                      onBlur={async () => {
+                        let n = await CheckUnique({
+                          type: "departmentname",
+                          value: deptName,
+                        });
+                        setUniqueEditName(n);
                       }}
                     />
                   </Form.Item>
@@ -530,8 +536,12 @@ export default function Departments(props) {
                         setDeptCode(e.target.value);
                         setUniqueEditCode(false);
                       }}
-                      onBlur={(e) => {
-                        checkEditDeptCodeis();
+                      onBlur={async () => {
+                        let c = await CheckUnique({
+                          type: "departmentcode",
+                          value: deptCode,
+                        });
+                        setUniqueEditCode(c);
                       }}
                     />
                   </Form.Item>

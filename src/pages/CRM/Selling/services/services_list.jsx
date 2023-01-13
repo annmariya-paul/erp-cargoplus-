@@ -90,6 +90,8 @@ function Services() {
     servicetaxrate: "",
     servicedescription: "",
     serviceimage: "",
+    servicecat_id:"",
+    
   });
 
   const handlePreview = async (file) => {
@@ -125,12 +127,15 @@ function Services() {
           tempArr.push({
             service_id:item?.service_id,
             service_name: item?.service_name,
-            service_category_id: item?.crm_v1_categories?.category_name,
+            // service_category_id: item?.crm_v1_categories?.category_name,
+            service_category_id: item?.service_category_id,
             service_code: item?.service_code,
             service_pic: item?.service_pic,
             service_hsn:item?.service_hsn,
             service_taxrate:item?.service_taxrate,
             service_description:item?.service_description,
+            service_category_name:item?.crm_v1_categories?.category_name
+            
           });
         });
           console.log("hellooooqqqqq", tempArr);
@@ -215,7 +220,7 @@ function Services() {
   };
 
   const onChangetree = (value) => {
-    console.log("Change", value);
+    console.log("Change service catid", value);
     // setState(parseInt(value));
     setServicecategory(parseInt(value));
   };
@@ -312,6 +317,7 @@ function Services() {
       });
   };
 
+  console.log("serivicess catid",serviceCategory)
   const data = [
     {
       name: "Polishing",

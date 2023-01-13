@@ -15,6 +15,9 @@ import PublicFetch from "../../../../utils/PublicFetch";
 import { CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
 import { ROUTES } from "../../../../routes";
 import "./product.scss";
+import { UniqueErrorMsg } from "../../../../ErrorMessages/UniqueErrorMessage";
+import CheckUnique from "../../../../check Unique/CheckUnique";
+
 function ProductCreate() {
   const [successPopup, setSuccessPopup] = useState(false);
   const [error, setError] = useState(false);
@@ -51,6 +54,8 @@ function ProductCreate() {
   const [brandid, setBrandid] = useState();
   const [productattribute, setProductAttribute] = useState([]);
   const [Errormsg, setErrormsg] = useState();
+  const [uniqueCode, setuniqueCode] = useState();
+  
 
   const newValues = (checkedValues) => {
     console.log("checked = ", checkedValues);
@@ -315,15 +320,25 @@ function ProductCreate() {
                     <InputType
                       onChange={(e) => {
                         setName(e.target.value);
-                        setErrormsg("");
+                        setuniqueCode()
+                      }}
+                      onBlur={ async () => {
+                        // checkAttributeNameis();
+                        let a = await CheckUnique({type:"productname",value:name})
+                        console.log("hai how are u", a)
+                        setuniqueCode(a)
                       }}
                     />
                   </Form.Item>
-                  {Errormsg ? (
-                    <label style={{ color: "red" }}> {Errormsg}</label>
-                  ) : (
-                    ""
-                  )}
+                  {uniqueCode ? (
+                <div>
+                  <label style={{ color: "red" }}>
+                    Product name {UniqueErrorMsg.UniqueErrName}
+                  </label>
+                </div>
+              ) : (
+                ""
+              )}
                 </div>
                 <div className="col-4">
                   <label>Code</label>

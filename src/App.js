@@ -65,6 +65,7 @@ import UpdateAgent from "./pages/FMS/Agent mangement/Updateagent";
 
 import Enquiries from "./pages/FMS/Opportunity_assigns/Enquiries/Enquiries";
 import Modelist from "./pages/FMS/settings/Mode/mode";
+import Consignee from "./pages/FMS/settings/Consignee/consignee";
 // import Lead from "./pages/lead/lead";
 
 function App() {
@@ -138,7 +139,7 @@ function App() {
             {/* <Route  path={ROUTES.UPDATEAGENT}
               element={<UpdateAgent />} />   */}
 
- <Route  path={ROUTES.UPDATEAGENT_ID}
+           <Route  path={ROUTES.UPDATEAGENT_ID}
               element={<UpdateAgent />} /> 
             <Route
               path={ROUTES.ASSIGN_OPPORTUNITIES_ID}
@@ -168,6 +169,7 @@ function App() {
             <Route path={ROUTES.EDIT_QUOTATION} element={<EditQuotation />} />
             <Route path={ROUTES.VIEW_QUOTATION} element={<ViewQuotation />} />
             <Route path={ROUTES.ENQUIRIES} element={<Enquiries />} />
+            <Route path={ROUTES.CONSIGNEE} element={<Consignee />} />
           </Route>
         </Routes>
       </BrowserRouter>

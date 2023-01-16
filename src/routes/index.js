@@ -69,6 +69,7 @@ const ROUTES = {
   EDIT_QUOTATION:"/edit_quotation",
   VIEW_QUOTATION:"/view_quotation",
   ENQUIRIES:"/enquiries",
+  CONSIGNEE:"/consignee"
 };
 
 module.exports = { ROUTES };

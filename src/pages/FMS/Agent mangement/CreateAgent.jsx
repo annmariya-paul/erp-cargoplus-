@@ -39,7 +39,19 @@ function CreateAgent() {
     PublicFetch.get(`${CRM_BASE_URL_HRMS}/employees`)
       .then((res) => {
         console.log("all employeessss", res);
-        setAllempname(res.data.data)
+        console.log("all emp types aree",res.data.data)
+        let arry=[]
+        res.data.data.map((item,indx)=>{
+          console.log("all jifvn",item)
+          console.log("all emp agentmap", item.hrms_v1_employment_types.employment_type_name)
+          arry.push({
+          emptype_name : item.hrms_v1_employment_types.employment_type_name,
+          emp_agent_name:item.employee_name,
+          emp_agent_id:item.employee_id
+        })
+        })
+        setAllempname(arry)
+        // setAllempname(res.data.data)
 
         // if (res.data.success) {
         //   console.log("Success of employee", res.data.data);
@@ -132,7 +144,7 @@ function CreateAgent() {
                             rules={[
                               {
                                 required: true,
-                                message: "Employee branch is Required",
+                                message: "Employee agent is Required",
                               },
                             ]}
                           >
@@ -142,20 +154,26 @@ function CreateAgent() {
                               console.log("selected unit iss", e);
                               setEmpname(e);
                             }}
+                            
+                            
                             >
                               {allempname &&
                                 allempname.length > 0 &&
                                 allempname.map((item, index) => {
-                                  if(item.employee_type == "1")
-                                  return (
-                                    <Select.Option
-                                      key={item.employee_id}
-                                      value={item.employee_id}
-                                    >
-                                 {item.employee_name}
-                                      {/* {item.employee_type == "2" ?item.employee_name :"" } */}
-                                    </Select.Option>
-                                  );
+                                  console.log("all emptypenamess",item)
+                                  if (item.emptype_name =="Agent")
+                                    return (
+                                      <Select.Option
+                                        key={item.emp_agent_id}
+                                        value={item.emp_agent_id}
+                                      >
+                                   {item.emp_agent_name}
+                                       
+                                      </Select.Option>
+                                    )
+                                
+                                 
+                                
                                 })}
                             </SelectBox>
                           </Form.Item>

@@ -45,7 +45,7 @@ export default function ProductEditModal({ show, prid, onHide, fun_call }) {
   const [allunit, setAllunit] = useState();
   const [brands, setBrands] = useState();
   const [editForm] = Form.useForm();
-  const [prcode, setPrcode] = useState();
+  const [prcode, setPrcode] = useState("");
   const [prcategory, setPrCategory] = useState();
   const [prbrand, setPrBrand] = useState();
   const [prunit, setPrUnit] = useState();
@@ -113,19 +113,6 @@ export default function ProductEditModal({ show, prid, onHide, fun_call }) {
           setprev(res?.data?.data?.product_attributes);
           setPrDescription(res?.data?.data?.product_description);
           setPrImage(res?.data?.data?.product_pic);
-
-          editForm.setFieldsValue({
-            productname: res?.data?.data?.product_name,
-            productcode: res?.data?.data?.product_code,
-            productcategory: res?.data?.data?.product_category_id,
-            productbrand: res?.data?.data?.product_brand_id,
-            productunit: res?.data?.data?.product_unit_id,
-
-            productattributes: res?.data?.data?.product_attributes,
-
-            productdescription: res?.data?.data?.product_description,
-            productimg: res?.data?.data?.product_pic,
-          });
         } else {
           console.log("FAILED T LOAD DATA");
         }
@@ -215,9 +202,9 @@ export default function ProductEditModal({ show, prid, onHide, fun_call }) {
 
   console.log("attributee aryy", attributes);
 
-  // useEffect(() => {
-  //   GetAllProductDatatwo();
-  // }, [prid]);
+  useEffect(() => {
+    GetAllProductDatatwo();
+  }, [prid]);
 
   console.log("previous", prev);
   console.log("prevvaluess are", prattribtearray);
@@ -369,17 +356,7 @@ export default function ProductEditModal({ show, prid, onHide, fun_call }) {
     if (img) {
       formData.append("product_pic", img);
     }
-    let tmp = [];
-    if (
-      prattributes &&
-      Array.isArray(prattributes) &&
-      prattributes?.length > 0
-    ) {
-      prattributes.forEach((item, index) => {
-        tmp.push(item.attribute_id);
-      });
-    }
-    formData.append("product_attributes", tmp);
+    formData.append("product_attributes", prattribtearray);
     formData.append("product_description", prDescription);
 
     if (prid) {

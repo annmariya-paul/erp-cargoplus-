@@ -1,21 +1,16 @@
 import React, { useEffect, useState } from "react";
-// import "../designation/designation.scss";
-import { Link } from "react-router-dom";
 import { Form, Input, Select } from "antd";
 import { FaEdit } from "react-icons/fa";
 import Button from "../../../components/button/button";
 import InputType from "../../../components/Input Type textbox/InputType";
 import TableData from "../../../components/table/table_data";
-import ErrorMsg from "../../../components/error/ErrorMessage";
 import Custom_model from "../../../components/custom_modal/custom_model";
-import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
-import { ROUTES } from "../../../routes";
 import PublicFetch from "../../../utils/PublicFetch";
 import { CRM_BASE_URL_HRMS } from "../../../api/bootapi";
 import { UniqueErrorMsg } from "../../../ErrorMessages/UniqueErrorMessage";
 import CheckUnique from "../../../check Unique/CheckUnique";
+
 function Employeegrade() {
-  // const [addForm, setAddForm] = useState();
   const [searchedText, setSearchedText] = useState("");
   const [successModal, setSuccessModal] = useState(false);
   const [pageSize, setPageSize] = useState("25");
@@ -24,9 +19,8 @@ function Employeegrade() {
   const [newName, setNewName] = useState();
   const [uniqueeditCode, setuniqueeditCode] = useState(false);
   const [employeegradedata, setemployeegradedata] = useState("");
-  const [employeegradename, setemployeegradename] = useState("");
   const [editempgradename, seteditempgradename] = useState("");
-  console.log("editname", editempgradename);
+
   const [editempgradeid, seteditempgradeid] = useState();
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [addForm] = Form.useForm();
@@ -50,26 +44,6 @@ function Employeegrade() {
     );
   };
 
-  // const checkemployeeCodeis = (data) => {
-  //   PublicFetch.get(
-  //     `${process.env.REACT_APP_BASE_URL}/misc?type=employmentgradename&value=${employeeGrade}`
-  //   )
-  //     .then((res) => {
-  //       console.log("Response", res);
-  //       if (res.data.success) {
-  //         console.log("Success", res.data.data);
-  //         if (res.data.data.exist) {
-  //           console.log("data exist");
-  //           setuniqueCode(true);
-  //         } else {
-  //           setuniqueCode(false);
-  //         }
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       console.log("Error", err);
-  //     });
-  // };
 
   const getallempgrade = async () => {
     try {
@@ -77,7 +51,7 @@ function Employeegrade() {
         `${CRM_BASE_URL_HRMS}/employee-grades`
       );
       console.log("all empolymntgrades are ::", allemptype?.data?.data);
-      //   setEmploymentType(allemptype?.data?.data)
+     
       setemployeegradedata(allemptype?.data?.data);
     } catch (err) {
       console.log("error to getting all employmntgrade", err);
@@ -88,28 +62,7 @@ function Employeegrade() {
     getallempgrade();
   }, []);
 
-  const checkeditNameis = (data) => {
-    if (newName !== employeeGrade) {
-      PublicFetch.get(
-        `${process.env.REACT_APP_BASE_URL}/misc?type=employmentgradename&value=${employeeGrade}`
-      )
-        .then((res) => {
-          console.log("Response 1123", res);
-          if (res.data.success) {
-            console.log("Success", res.data.data);
-            if (res.data.data.exist) {
-              console.log("hai guys");
-              setuniqueeditCode(true);
-            } else {
-              setuniqueeditCode(false);
-            }
-          }
-        })
-        .catch((err) => {
-          console.log("Error", err);
-        });
-    }
-  };
+ 
   const submitaddemp = async () => {
     try {
       const addemployegrade = await PublicFetch.post(
@@ -127,11 +80,8 @@ function Employeegrade() {
         close_modal(saveSuccess, 1000);
       }
 
-      //  else{
-      //    <ErrorMsg code={"500"} />
-      //  }
     } catch (err) {
-      console.log("err to add the unit", err);
+      console.log("err to add the employee Grade", err);
     }
   };
 
@@ -183,8 +133,11 @@ function Employeegrade() {
                 className="editIcon m-0"
                 onClick={() => {
                   handleEditclick(index);
+                  setuniqueeditCode(false);
+                  addForm.resetFields();
+                  setuniqueCode(false);
                 }}
-                //   onClick={() => }
+               
               >
                 <FaEdit />
               </div>
@@ -208,21 +161,7 @@ function Employeegrade() {
     },
   ];
 
-  // const data = [
-  //   {
-  //     emp_type_name: "Full-time",
-  //     key: "1",
-  //   },
-  //   {
-  //     emp_type_name: "Part-time",
-  //     key: "2",
-  //   },
-  //   {
-  //     emp_type_name: "Temporary",
-  //     key: "3",
-  //   },
-  // ];
-
+ 
   return (
     <>
       <div className="container mb-4 d-flex justify-content-center">
@@ -234,8 +173,7 @@ function Employeegrade() {
               onFinish={(value) => {
                 console.log("valuezzzzzzz", value);
                 submitaddemp();
-                // submitaddemp()
-                // Submit();
+               
               }}
               onFinishFailed={(error) => {
                 console.log(error);
@@ -246,7 +184,7 @@ function Employeegrade() {
                   <div className="col-12 pt-3">
                     <label htmlfor="emp_type_name">Employment grade Name</label>
                     <Form.Item
-                      name="Employment_type_name"
+                      name="Employment_grade_name"
                       rules={[
                         {
                           required: true,
@@ -268,16 +206,15 @@ function Employeegrade() {
                           setEmployeeGrade(e.target.value);
                           setuniqueCode(false);
                         }}
-                        // onBlur={(e) => {
-                          // checkemployeeCodeis();
-                        // }}
+                       
                         onBlur={ async () => {
-                          // checkAttributeNameis();
+                        
                           let a = await CheckUnique({type:"employmentgradename",value:employeeGrade})
                           console.log("hai how are u", a)
-                          setuniqueCode(a)
+                          setuniqueCode(a);
+                          
                         }}
-                        //   onChange={(e) => setEmptypename(e.target.value)}
+                      
                       />
                     </Form.Item>
                     {uniqueCode ? (
@@ -304,12 +241,7 @@ function Employeegrade() {
               success
             />
 
-            {/* <Custom_model
-              size={"sm"}
-              show={successModal}
-              onHide={() => setSuccessModal(false)}
-              success
-            /> */}
+          
           </div>
         </div>
       </div>
@@ -319,7 +251,7 @@ function Employeegrade() {
           <div className="col">
             <h5 className="lead_text">Employment Grade</h5>
           </div>
-          {/* <Leadlist_Icons /> */}
+      
         </div>
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
@@ -364,9 +296,8 @@ function Employeegrade() {
         </div>
         <div className="datatable">
           <TableData
-            // data={getData(numofItemsTo, pageofIndex)}
-            data={getData(current, pageSize)}
-            // data={data}
+           data={getData(current, pageSize)}
+
             columns={columns}
             custom_table_css="table_lead_list"
           />
@@ -388,7 +319,7 @@ function Employeegrade() {
                   onFinish={(value) => {
                     console.log("the formvaluess iss", value);
                     updateClick();
-                    // updateClick();
+                  
                   }}
                   onFinishFailed={(error) => {
                     console.log(error);
@@ -416,6 +347,7 @@ function Employeegrade() {
                               "Name cannot be longer than 100 characters",
                           },
                         ]}
+                       
                       >
                         <InputType
                           value={employeeGrade}
@@ -424,11 +356,19 @@ function Employeegrade() {
                             setuniqueeditCode(false);
 
                           }}
-                          onBlur={() => {
-                            checkeditNameis();
+                         
+
+                          onBlur={ async () => {
+                            
+                            if (newName !== employeeGrade){
+                              let a = await CheckUnique({type:"employmentgradename",value:employeeGrade})
+                              console.log("hai how are u", a)
+                              setuniqueeditCode(a);
+                             
+                            }
+                            
                           }}
-                          //   value={editemptypename }
-                          //   onChange={(e) => setEditemptypename(e.target.value)}
+                         
                         />
                       </Form.Item>
                       {uniqueeditCode ? (

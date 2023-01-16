@@ -11,6 +11,8 @@ import ErrorMsg from "../../../../components/error/ErrorMessage";
 import { ROUTES } from "../../../../routes";
 import { Link,  } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { UniqueErrorMsg } from "../../../../ErrorMessages/UniqueErrorMessage";
+import CheckUnique from "../../../../check Unique/CheckUnique";
 
 function Addunit() {
   const [error, setError] = useState(false);
@@ -22,7 +24,7 @@ function Addunit() {
   const navigate = useNavigate();
   
   const [addForm]=Form.useForm()
-  const [uniqueCode, setuniqueCode] = useState(false);
+  const [uniqueCode, setuniqueCode] = useState();
 
   const close_modal = (mShow, time) => {
     if (!mShow) {
@@ -70,27 +72,6 @@ catch(err) {
 
 }
 
-
-const checkCategoryCodeis = (data) => {
-  PublicFetch.get(
-    `${process.env.REACT_APP_BASE_URL}/misc?type=unitname&value=${unitName}`
-  )
-    .then((res) => {
-      console.log("Response 1123", res);
-      if (res.data.success) {
-        console.log("Success", res.data.data);
-        if (res.data.data.exist) {
-          console.log("hai guys");
-          setuniqueCode(true);
-        } else {
-          setuniqueCode(false);
-        }
-      }
-    })
-    .catch((err) => {
-      console.log("Error", err);
-    });
-};
 
 
 
@@ -142,14 +123,25 @@ const checkCategoryCodeis = (data) => {
                       value={unitName}
                       onChange={(e) => {
                       setUnitName(e.target.value)
-                      setError403(false)
                       setuniqueCode(false)
                       }}
-                      onBlur={() => {
-                        checkCategoryCodeis();
+                      onBlur={ async () => {
+                        // checkAttributeNameis();
+                        let a = await CheckUnique({type:"unitname",value:unitName})
+                        console.log("hai how are u", a)
+                        setuniqueCode(a)
                       }}
                     />
                   </Form.Item>
+                  {uniqueCode ? (
+                <div>
+                  <label style={{ color: "red" }}>
+                    unit Code {UniqueErrorMsg.UniqueErrName}
+                  </label>
+                </div>
+              ) : (
+                ""
+              )}
                 </div>
               </div>
               <div className="col-xl-5 col-lg-5 col-12">

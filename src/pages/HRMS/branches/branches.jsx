@@ -4,44 +4,44 @@ import Button from "../../../components/button/button";
 import InputType from "../../../components/Input Type textbox/InputType";
 import ErrorMsg from "../../../components/error/ErrorMessage";
 import Custom_model from "../../../components/custom_modal/custom_model";
-import { Link } from "react-router-dom";
 import CustomModel from "../../../components/custom_modal/custom_model";
 import { Form, Input, Select } from "antd";
 import { FaEdit } from "react-icons/fa";
 import TableData from "../../../components/table/table_data";
-import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
-import { ROUTES } from "../../../routes";
 import { CRM_BASE_URL_HRMS } from "../../../api/bootapi";
 import PublicFetch from "../../../utils/PublicFetch";
 import { UniqueErrorMsg } from "../../../ErrorMessages/UniqueErrorMessage";
-// { Add and list Branches - Ann mariya - 16/11/22 }
+import CheckUnique from "../../../check Unique/CheckUnique";
+
+// { Add and list Branches - Ann - 16/11/22 }
 export default function Branches(props) {
   const [branch_id, setBranch_id] = useState();
-  console.log("branch id in state",branch_id);
   const [addForm] = Form.useForm();
   const [error, setError] = useState(false);
   const [successPopup, setSuccessPopup] = useState(false);
-  // const [addForm, setAddForm] = useState();
-  const [searchedText, setSearchedText] = useState("");
-  const [successModal, setSuccessModal] = useState(false);
-  const [modalAddBranch, setModalAddBranch] = useState(false);
-  const [branchName, setBranchName] = useState();
-  const [branchCode, setBranchCode] = useState();
-  const [pageSize, setPageSize] = useState("25");
-  const [branches,setBranches]=useState();
+ const [searchedText, setSearchedText] = useState("");
+const [modalAddBranch, setModalAddBranch] = useState(false);
+const [pageSize, setPageSize] = useState("25");
+  const [branches, setBranches] = useState();
   const [Errormsg, setErrormsg] = useState();
   const [NameInput, setNameInput] = useState();
   const [CodeInput, setCodeInput] = useState();
   const [BranchEditPopup, setBranchEditPopup] = useState(false);
- const [uniqueCode, setUniqueCode] = useState(false);
- const [uniqueName,setUniqueName] =useState(false);
- const [uniqueEditName, setUniqueEditName] = useState(false);
- const [uniqueEditCode, setUniqueEditCode] = useState(false);
- const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
- const [editUniqueName,setEditUniqueName] =useState();
- const [editUniqueCode,setEditUniqueCode]= useState();
+  const [uniqueCode, setUniqueCode] = useState(false);
+  const [uniqueName, setUniqueName] = useState(false);
+  const [uniqueEditName, setUniqueEditName] = useState(false);
+  const [uniqueEditCode, setUniqueEditCode] = useState(false);
+  const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
+  const [editUniqueName, setEditUniqueName] = useState();
+  const [editUniqueCode, setEditUniqueCode] = useState();
+const [editForm] = Form.useForm();
+const [BranchError, setBranchError] = useState();
+const [branchcode, setBranchcode] = useState();
+const [branchname, setBranchname] = useState();
 
-  const [editForm] = Form.useForm();
+
+
+//close modal for  success pop up 
   const close_modal = (mShow, time) => {
     if (!mShow) {
       setTimeout(() => {
@@ -49,14 +49,15 @@ export default function Branches(props) {
       }, time);
     }
   };
+
   //API for branches -- shahida 12.12.22
-  const getallbranches= async () => {
+  const getallbranches = async () => {
     try {
       const allbranches = await PublicFetch.get(`${CRM_BASE_URL_HRMS}/branch`);
       console.log("all branches are", allbranches.data.data);
       setBranches(allbranches.data.data);
       setBranch_id(allbranches.data.branch_id);
-      console.log("branch id",branch_id);
+      console.log("branch id", branch_id);
     } catch (err) {
       console.log("error while getting the brands: ", err);
     }
@@ -67,38 +68,37 @@ export default function Branches(props) {
   }, []);
 
 
+ 
+
+//For Edit Branch
   const BranchEdit = (e) => {
     console.log("Branch edit", e);
     setNameInput(e.branch_name);
     setCodeInput(e.branch_code);
-    // setImageInput(e.brand_pic);
-    setBranch_id(e.branch_id);
+ setBranch_id(e.branch_id);
     setEditUniqueName(e?.branch_name);
     setEditUniqueCode(e?.branch_code);
     editForm.setFieldsValue({
       branch_id: e.branch_id,
       NameInput: e.branch_name,
-   CodeInput: e.branch_code,
-      // ImageInput: e.brand_pic,
-    });
+      CodeInput: e.branch_code,
+   });
     setBranchEditPopup(true);
   };
 
+  //API for Edit Branch Data
   const handleUpdate = (e) => {
     console.log("edit data", e);
     const formData = new FormData();
-
-  
-    let data = { 
-      branch_name : NameInput,
-      branch_code : CodeInput,
-    }
-
-    PublicFetch.patch(`${CRM_BASE_URL_HRMS}/branch/${branch_id}`, data )
+  let data = {
+      branch_name: NameInput,
+      branch_code: CodeInput,
+    };
+   PublicFetch.patch(`${CRM_BASE_URL_HRMS}/branch/${branch_id}`, data)
       .then((res) => {
-        console.log("success", res);
+        console.log("success branch edit", res);
         if (res.data.success) {
-          console.log("successDataa", res.data.data);
+          console.log("success Data of branch", res.data.data);
           getallbranches();
           setSuccessPopup(true);
           close_modal(successPopup, 1000);
@@ -114,6 +114,7 @@ export default function Branches(props) {
   };
 
 
+//columns
   const columns = [
     {
       title: "ACTION",
@@ -121,13 +122,17 @@ export default function Branches(props) {
       key: "key",
       width: "30%",
       render: (data, index) => {
-        console.log("index is :",index);
+        console.log("index is :", index);
         return (
           <div className="d-flex justify-content-center align-items-center gap-2">
             <div className="m-0">
               <div
                 className="editIcon m-0"
-                onClick={() =>BranchEdit(index)}
+                onClick={() => {
+                  BranchEdit(index);
+                  setUniqueEditName(false);
+                  setUniqueEditCode(false);
+                }}
               >
                 <FaEdit />
               </div>
@@ -157,163 +162,73 @@ export default function Branches(props) {
     },
   ];
 
-  const data = [
-    {
-      branch_name: "Branch X",
-      branch_code: "ABC",
-      key: "1",
-    },
-    {
-      branch_name: "Branch Y",
-      branch_code: "XYZ",
-      key: "2",
-    },
-    {
-      branch_name: "Branch C",
-      branch_code: "PQR",
-      key: "3",
-    },
-  ];  
-
-  const [saveSuccess, setSaveSuccess] =useState(false)
-  const [BranchError, setBranchError] = useState();
-  
-  const [branchcode, setBranchcode] = useState();
-  console.log("abcccccccc",branchcode);
-  const [branchname, setBranchname] = useState();
-
-
-  const createBranches =async()=>{
-    try{
-    const addbranches = await PublicFetch.post(
-    `${CRM_BASE_URL_HRMS}/branch`,{
-      branch_name:branchname,
-      branch_code:branchcode
-    })
-    console.log("branch added successfully",addbranches)
-    if(addbranches.data.success){
-      setSuccessPopup(true);
-      getallbranches();
-      addForm.resetFields();
-      setModalAddBranch(false);
-      close_modal(successPopup,1000);
-    }
-    }
-    catch(err){
-    console.log("err to add the branches",err)
-    }
-  
-    }
-
-
-    const checkBranchNameis = (data) => {
-      PublicFetch.get(
-        `${process.env.REACT_APP_BASE_URL}/misc?type=branchname&value=${branchname}`
-      )
-        .then((res) => {
-          console.log("Response", res);
-          if (res.data.success) {
-            console.log("Success", res.data.data);
-            if (res.data.data.exist) {
-              setUniqueName(true);
-            } else {
-              setUniqueName(false);
-            }
-          }
-        })
-        .catch((err) => {
-          console.log("Error", err);
-        });
-    };
-
-    const checkEditBranchNameis = (data) => {
-      if (editUniqueName !== NameInput) {
-        PublicFetch.get(
-          `${process.env.REACT_APP_BASE_URL}/misc?type=branchname&value=${NameInput}`
-        )
-          .then((res) => {
-            console.log("Response", res);
-            if (res.data.success) {
-              console.log("Success", res.data.data);
-              if (res.data.data.exist) {
-                setUniqueEditName(true);
-              } else {
-                setUniqueEditName(false);
-              }
-            }
-          })
-          .catch((err) => {
-            console.log("Error", err);
-          });
+ 
+//API for create Branches
+  const createBranches = async () => {
+    try {
+      const addbranches = await PublicFetch.post(
+        `${CRM_BASE_URL_HRMS}/branch`,
+        {
+          branch_name: branchname,
+          branch_code: branchcode,
+        }
+      );
+      console.log("branch added successfully", addbranches);
+      if (addbranches.data.success) {
+        setSuccessPopup(true);
+        getallbranches();
+        addForm.resetFields();
+        setModalAddBranch(false);
+        close_modal(successPopup, 1000);
       }
-    };
+    } catch (err) {
+      console.log("err to add the branches", err);
+    }
+  };
 
-    const checkBranchCodeis = (data) => {
-      PublicFetch.get(
-        `${process.env.REACT_APP_BASE_URL}/misc?type=branchcode&value=${branchcode}`
-      )
-        .then((res) => {
-          console.log("Response", res);
-          if (res.data.success) {
-            console.log("Success", res.data.data);
-            if (res.data.data.exist) {
-              setUniqueCode(true);
-            } else {
-              setUniqueCode(false);
-            }
-          }
-        })
-        .catch((err) => {
-          console.log("Error", err);
-        });
-      };
 
-       const checkEditBranchCodeis = (data) => {
-         if (editUniqueCode !== CodeInput) {
-           PublicFetch.get(
-             `${process.env.REACT_APP_BASE_URL}/misc?type=branchcode&value=${CodeInput}`
-           )
-             .then((res) => {
-               console.log("Response", res);
-               if (res.data.success) {
-                 console.log("Success", res.data.data);
-                 if (res.data.data.exist) {
-                   setUniqueEditCode(true);
-                 } else {
-                   setUniqueEditCode(false);
-                 }
-               }
-             })
-             .catch((err) => {
-               console.log("Error", err);
-             });
-         }
-       };
+  // const checkEditBranchNameis = (data) => {
+  //   if (editUniqueName !== NameInput) {
+  //     PublicFetch.get(
+  //       `${process.env.REACT_APP_BASE_URL}/misc?type=branchname&value=${NameInput}`
+  //     )
+  //       .then((res) => {
+  //         console.log("Response", res);
+  //         if (res.data.success) {
+  //           console.log("Success", res.data.data);
+  //           if (res.data.data.exist) {
+  //             setUniqueEditName(true);
+  //           } else {
+  //             setUniqueEditName(false);
+  //           }
+  //         }
+  //       })
+  //       .catch((err) => {
+  //         console.log("Error", err);
+  //       });
+  //   }
+  // };
 
-    
-  // const OnSubmit = () => {
-  //   const formData = new FormData();
-
-  //   formData.append("branch_name", branchname);
-  //   formData.append("branch_code", branchcode);
-  
-
-  //   PublicFetch.post(`${CRM_BASE_URL_HRMS}/branch`)
-  //     .then((res) => {
-  //       console.log("successssss", res);
-  //       if (res.data.success) {
-  //         setSuccessPopup(true);
-  //         addForm.resetFields();
-  //         close_modal(successPopup, 1000);
-  //       } else {
-  //         console.log("", res.data.data);
-  //         setBranchError(res.data.data);
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       console.log("error", err);
-  //       setError(true);
-  //     });
+  // const checkEditBranchCodeis = (data) => {
+  //   if (editUniqueCode !== CodeInput) {
+  //     PublicFetch.get(
+  //       `${process.env.REACT_APP_BASE_URL}/misc?type=branchcode&value=${CodeInput}`
+  //     )
+  //       .then((res) => {
+  //         console.log("Response", res);
+  //         if (res.data.success) {
+  //           console.log("Success", res.data.data);
+  //           if (res.data.data.exist) {
+  //             setUniqueEditCode(true);
+  //           } else {
+  //             setUniqueEditCode(false);
+  //           }
+  //         }
+  //       })
+  //       .catch((err) => {
+  //         console.log("Error", err);
+  //       });
+  //   }
   // };
 
   console.log("data", branchname, branchcode);
@@ -367,14 +282,22 @@ export default function Branches(props) {
             </Select>
           </div>
           <div className="col-9 d-flex justify-content-end">
-            <Button btnType="add" onClick={() => setModalAddBranch(true)}>
+            <Button btnType="add" onClick={() =>
+              {
+                setModalAddBranch(true);
+              setUniqueCode(false);
+              setUniqueName(false);
+              addForm.resetFields();
+              }
+              }
+             >
               Add Branch
             </Button>
           </div>
         </div>
         <div className="datatable">
           <TableData
-            // data={getData(numofItemsTo, pageofIndex)}
+           
             data={branches}
             columns={columns}
             custom_table_css="table_lead_list"
@@ -382,6 +305,7 @@ export default function Branches(props) {
         </div>
       </div>
 
+{/* Modal for add Branch */}
       <CustomModel
         show={modalAddBranch}
         onHide={() => setModalAddBranch(false)}
@@ -419,7 +343,7 @@ export default function Branches(props) {
 
                         {
                           min: 3,
-                          message: "Branch Name must be atleast 3 characters",
+                          message: "Branch Name must be at least 3 characters",
                         },
                         {
                           max: 100,
@@ -435,8 +359,12 @@ export default function Branches(props) {
                           setBranchError("");
                           setUniqueName(false);
                         }}
-                        onBlur={(e) => {
-                          checkBranchNameis();
+                        onBlur={async () => {
+                          let n = await CheckUnique({
+                            type: "branchname",
+                            value: branchname,
+                          });
+                          setUniqueName(n);
                         }}
                       />
                     </Form.Item>
@@ -468,16 +396,19 @@ export default function Branches(props) {
                           "Branch code cannot be longer than 15 characters",
                       },
                     ]}
-                    // onChange={(e) => setBranchcode(e.target.value)}
                   >
                     <InputType
-                      value={branchCode}
+                      value={branchcode}
                       onChange={(e) => {
                         setBranchcode(e.target.value);
                         setUniqueCode(false);
                       }}
-                      onBlur={(e) => {
-                        checkBranchCodeis();
+                      onBlur={async () => {
+                        let a = await CheckUnique({
+                          type: "branchcode",
+                          value: branchcode,
+                        });
+                        setUniqueCode(a);
                       }}
                     />
                   </Form.Item>
@@ -551,9 +482,17 @@ export default function Branches(props) {
                           setNameInput(e.target.value);
                           setErrormsg("");
                           setUniqueEditName(false);
+                          
                         }}
-                        onBlur={(e) => {
-                          checkEditBranchNameis();
+                       
+                        onBlur={ async () => {
+                         
+                          if (editUniqueName !== NameInput) {
+                            let a = await CheckUnique({type:"branchname",value:NameInput})
+                         
+                            setUniqueEditName(a);
+                          }
+                       
                         }}
                       />
                     </Form.Item>{" "}
@@ -562,13 +501,7 @@ export default function Branches(props) {
                         Branch Name {uniqueErrMsg.UniqueErrName}
                       </p>
                     ) : null}
-                    {/* {Errormsg ? (
-                      <label style={{ color: "red", marginTop: "-24px" }}>
-                        {Errormsg}
-                      </label>
-                    ) : (
-                      ""
-                    )} */}
+                   
                   </div>
                   <div className="col-12">
                     <label>Code</label>
@@ -590,15 +523,22 @@ export default function Branches(props) {
                         },
                       ]}
                     >
-                      <InputType 
+                      <InputType
                         value={CodeInput}
                         onChange={(e) => {
                           setCodeInput(e.target.value);
                           setErrormsg("");
                           setUniqueEditCode(false);
                         }}
-                        onBlur={(e) => {
-                          checkEditBranchCodeis();
+                       
+                        onBlur={ async () => {
+                         
+                           if(editUniqueCode !== CodeInput){
+                            let a = await CheckUnique({type:"branchcode",value:CodeInput})
+                            setUniqueEditCode(a);
+                           
+                          }
+                       
                         }}
                       />
                     </Form.Item>
@@ -607,11 +547,7 @@ export default function Branches(props) {
                         Branch code {uniqueErrMsg.UniqueErrName}
                       </p>
                     ) : null}
-                    {/* {Errormsg ? (
-                      <label style={{ color: "red" }}>{Errormsg}</label>
-                    ) : (
-                      ""
-                    )} */}
+                   
                   </div>
 
                   <div className="col-12 d-flex justify-content-center mt-5">
@@ -619,13 +555,7 @@ export default function Branches(props) {
                   </div>
                 </Form>
               </div>
-              {error ? (
-                <div className="">
-                  <ErrorMsg code={"400"} />
-                </div>
-              ) : (
-                ""
-              )}
+             
             </div>
           </div>
         }
@@ -636,7 +566,7 @@ export default function Branches(props) {
         onHide={() => setSuccessPopup(false)}
         success
       />
-      {error ? <ErrorMsg code={"500"} /> : " "}
+      {/* {error ? <ErrorMsg code={"500"} /> : " "} */}
     </>
   );
 }

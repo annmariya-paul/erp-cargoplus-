@@ -34,9 +34,15 @@ function ListAgent(){
       const  allagent =await PublicFetch.get(
         `${process.env.REACT_APP_BASE_URL}/agents`)
         console.log("all agentss are ::",allagent?.data?.data)
-      
-        setAgentdata(allagent?.data?.data)
-       
+         let array = [];
+       allagent?.data?.data?.forEach((item, index) => {
+         array.push({
+           agent_id: item.agent_id,
+           agent_country: item.agent_country,
+           agent_emp_id: item.hrms_v1_employee.employee_code,
+         });
+       });
+       setAgentdata(array);
       }
       catch(err) {
       console.log("error to getting all units",err)

@@ -62,11 +62,14 @@ const ROUTES = {
   UPDATEAGENT: "/update_agent",
   UPDATEAGENT_ID:"/update_agent/:id",
   FRIGHTLIST:"/fright_list",
+  CARRIER:"/carrier",
+  MODE:"/mode",
   QUATATIONS:"/quatations_list",
   ADD_QUOTATION:"/add_quotation",
   EDIT_QUOTATION:"/edit_quotation",
   VIEW_QUOTATION:"/view_quotation",
   ENQUIRIES:"/enquiries",
+  CONSIGNEE:"/consignee"
 };
 
 module.exports = { ROUTES };

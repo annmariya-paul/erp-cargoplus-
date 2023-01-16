@@ -1,59 +1,32 @@
 import React, { useEffect, useState } from "react";
 import "../designation/designation.scss";
-import { Link } from "react-router-dom";
 import { Form, Input, Select } from "antd";
 import { FaEdit } from "react-icons/fa";
 import Button from "../../../components/button/button";
 import InputType from "../../../components/Input Type textbox/InputType";
 import TableData from "../../../components/table/table_data";
-import ErrorMsg from "../../../components/error/ErrorMessage";
 import Custom_model from "../../../components/custom_modal/custom_model";
-import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
-import { ROUTES } from "../../../routes";
 import { CRM_BASE_URL_HRMS } from "../../../api/bootapi";
 import PublicFetch from "../../../utils/PublicFetch";
 import { UniqueErrorMsg } from "../../../ErrorMessages/UniqueErrorMessage";
 import CheckUnique from "../../../check Unique/CheckUnique";
+
 // { Add and list Employment Type - Ann mariya - 16/11/22 }
 export default function EmploymentType() {
   const [error, setError] = useState(false);
-  // const [addForm, setAddForm] = useState();
-  const [successModal, setSuccessModal] = useState(false);
-  const [employmentType, setEmploymentType] = useState();
-  const [employmentTypeList, setEmploymentTypeList] = useState();
-  const [searchedText, setSearchedText] = useState("");
+ const [searchedText, setSearchedText] = useState("");
   const [pageSize, setPageSize] = useState("25");
   const [editShow, setEditShow] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [addemploytypename, setaddemploytypename] = useState("");
-
   const [emptypedata, setemptypedata] = useState("");
   const [editemptypename, seteditemptypename] = useState("");
   const [current, setCurrent] = useState(1);
   const [emptypeid, setemptypeid] = useState();
+  const [newName,setNewName]=useState();
   const [addForm] = Form.useForm();
   const [editForm] = Form.useForm();
   const [employeeTName, setEmployeeTName] = useState();
-  // const checkemployeeCodeis = (data) => {
-  //   PublicFetch.get(
-  //     `${process.env.REACT_APP_BASE_URL}/misc?type=employmenttypename&value=${employeeType}`
-  //   )
-  //     .then((res) => {
-  //       console.log("Response", res);
-  //       if (res.data.success) {
-  //         console.log("Success", res.data.data);
-  //         if (res.data.data.exist) {
-  //           console.log("data exist");
-  //           setuniqueCode(true);
-  //         } else {
-  //           setuniqueCode(false);
-  //         }
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       console.log("Error", err);
-  //     });
-  // };
 const [uniqueCode, setuniqueCode] = useState(false);
 const [uniqueeditCode, setuniqueeditCode] = useState(false);
   const [employeeType, setEmployeeType] = useState();
@@ -89,9 +62,9 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
       );
       console.log("all emptypess are ::", allemptype?.data?.data);
       setemptypedata(allemptype?.data?.data);
-      // setdesigtiondata(alldesigntion?.data?.data);
+    
     } catch (err) {
-      console.log("error to getting all designation", err);
+      console.log("error to getting all Employee Type", err);
     }
   };
 
@@ -110,12 +83,9 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
         addForm.resetFields();
         close_modal(saveSuccess, 1000);
       }
-      //  else if(addemptype.data.success===false) {
-      //   alert(addemptype.data.data)
-      //   //  <ErrorMsg code={"500"} />
-      //  }
+     
     } catch (err) {
-      console.log("err to add the unit", err);
+      console.log("err to add the emp  Type", err);
     }
   };
 
@@ -124,38 +94,29 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
       const updating = await PublicFetch.patch(
         `${CRM_BASE_URL_HRMS}/employment-types/${emptypeid}`,
         {
-          employment_type_name: employeeTName,
+          employment_type_name: employeeTName.trim(""),
         }
       );
       console.log("editedd data is", updating);
       if(updating.data.success){
        console.log("successfully updating ")
-      //  setViewUnitModal(false)
+     
     getallemptype();
        setEditShow(false);
        setSaveSuccess(true)
        close_modal(saveSuccess, 1200);
       }
     } catch (err) {
-      console.log("error to getting all units", err);
+      console.log("error to getting all emp type", err);
     }
   };
 
   useEffect(() => {
     getallemptype();
 
-    // Submit();
+   
   }, []);
-  // const Submit = (data) => {
-  //   console.log(data);
-  //   if (data) {
-  //     localStorage.setItem("Form", JSON.stringify(data));
-  //     setSuccessModal(true);
-  //     close_modal(successModal, 1000);
-  //   } else {
-  //     setError(true);
-  //   }
-  // };
+ 
 
   const columns = [
     {
@@ -172,8 +133,11 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
                 className="editIcon m-0"
                 onClick={() => {
                   handleEditclick(index);
+                   setuniqueeditCode(false);
+                   addForm.resetFields();
+                   setuniqueCode(false);
                 }}
-                //   onClick={() => }
+               
               >
                 <FaEdit />
               </div>
@@ -196,44 +160,10 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
       align: "center",
     },
   ];
-  const [newName,setNewName]=useState();
+ 
 
-  const checkeditNameis = (data) => {
-    if (newName !== employeeTName) {
-      PublicFetch.get(
-        `${process.env.REACT_APP_BASE_URL}/misc?type=employmenttypename&value=${employeeTName}`
-      )
-        .then((res) => {
-          console.log("Response 1123", res);
-          if (res.data.success) {
-            console.log("Success", res.data.data);
-            if (res.data.data.exist) {
-              console.log("hai guys");
-             setuniqueeditCode(true);
-            } else {
-              setuniqueeditCode(false);
-            }
-          }
-        })
-        .catch((err) => {
-          console.log("Error", err);
-        });
-    }
-  };
-  const data = [
-    {
-      emp_type_name: "Full-time",
-      key: "1",
-    },
-    {
-      emp_type_name: "Part-time",
-      key: "2",
-    },
-    {
-      emp_type_name: "Temporary",
-      key: "3",
-    },
-  ];
+
+
 
   return (
     <>
@@ -244,7 +174,7 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
               name="addForm"
               form={addForm}
               onFinish={(value) => {
-                console.log("valuezzzzzzz", value);
+                console.log("values", value);
                 submitemptype();
               }}
               onFinishFailed={(error) => {
@@ -280,14 +210,11 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
                           setEmployeeType(e.target.value);
                           setuniqueCode(false);
                         }}
-                      // }/misc?type=employmenttypename&value=${employeeType}`
-                        // onBlur={(e) => {
-                        //   checkemployeeCodeis();
-                        // }}
+                     
                         onBlur={ async () => {
-                          // checkAttributeNameis();
+                        
                           let a = await CheckUnique({type:"employmenttypename",value:employeeType})
-                          console.log("hai how are u", a)
+                          
                           setuniqueCode(a)
                         }}
                       />
@@ -367,8 +294,7 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
         </div>
         <div className="datatable">
           <TableData
-            // data={getData(numofItemsTo, pageofIndex)}
-            // data={data}
+           
             data={getData(current, pageSize)}
             columns={columns}
             custom_table_css="table_lead_list"
@@ -423,16 +349,22 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
                         ]}
                       >
                         <InputType
-                          // value={editemptypename}
-                          // onChange={(e) => seteditemptypename(e.target.value)}
+                          
                           value={employeeTName}
                           onChange={(e) => {
                             setEmployeeTName(e.target.value);
                             setuniqueeditCode(false);
                           }}
-                          onBlur={() => {
-                            checkeditNameis();
+                         
+                          onBlur={ async () => {
+                           
+                            if (newName !== employeeTName){
+                              let a = await CheckUnique({type:"employmenttypename",value:employeeTName})
+                             setuniqueeditCode(a)
+                            }
+                         
                           }}
+
                         />
                       </Form.Item>
                       {uniqueeditCode ? (

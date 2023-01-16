@@ -54,17 +54,18 @@ import Track_assignments from "./pages/FMS/Opportunity_assigns/Track_assignments
 import UpdateAssignOppurtunity from "./pages/FMS/Opportunity_assigns/update_oppo_assignment/update_oppo_assignment";
 import CreateAgent from "./pages/FMS/Agent mangement/CreateAgent";
 import SelectCountry from "./pages/CRM/General/CountrySelect";
-import Frightlist from "./pages/FMS/Quotations/Fright_types/fright_types";
+import Frightlist from "./pages/FMS/settings/Fright_types/fright_types";
 import Quotations from "./pages/FMS/Quotations/create quotation/quotation_list";
 import Add_Quotation from "./pages/FMS/Quotations/create quotation/add_quotation";
 import EditQuotation from "./pages/FMS/Quotations/create quotation/edit_quotation";
 import ViewQuotation from "./pages/FMS/Quotations/create quotation/view_quotation";
-
+import Carrierlist from "./pages/FMS/settings/Carrier/carrier";
 import ListAgent from "./pages/FMS/Agent mangement/ListAgent";
 import UpdateAgent from "./pages/FMS/Agent mangement/Updateagent";
 
 import Enquiries from "./pages/FMS/Opportunity_assigns/Enquiries/Enquiries";
-
+import Modelist from "./pages/FMS/settings/Mode/mode";
+import Consignee from "./pages/FMS/settings/Consignee/consignee";
 // import Lead from "./pages/lead/lead";
 
 function App() {
@@ -138,7 +139,7 @@ function App() {
             {/* <Route  path={ROUTES.UPDATEAGENT}
               element={<UpdateAgent />} />   */}
 
- <Route  path={ROUTES.UPDATEAGENT_ID}
+           <Route  path={ROUTES.UPDATEAGENT_ID}
               element={<UpdateAgent />} /> 
             <Route
               path={ROUTES.ASSIGN_OPPORTUNITIES_ID}
@@ -149,10 +150,10 @@ function App() {
               element={<UpdateAssignOppurtunity />}
             />
             <Route path={ROUTES.CREATEAGENT} element={<CreateAgent />} />
-            <Route
+            {/* <Route
               path={ROUTES.FRIGHTLIST}
               element={<Frightlist />}
-            />
+            /> */}
             <Route
               path={ROUTES.QUATATIONS}
               element={<Quotations />}
@@ -162,10 +163,13 @@ function App() {
               element={<Add_Quotation />}
             />
             <Route path={ROUTES.FRIGHTLIST} element={<Frightlist />} />
+            <Route path={ROUTES.CARRIER} element={<Carrierlist />} />
+            <Route path={ROUTES.MODE} element={<Modelist />} />
             <Route path={ROUTES.QUATATIONS} element={<Quotations />} />
             <Route path={ROUTES.EDIT_QUOTATION} element={<EditQuotation />} />
             <Route path={ROUTES.VIEW_QUOTATION} element={<ViewQuotation />} />
             <Route path={ROUTES.ENQUIRIES} element={<Enquiries />} />
+            <Route path={ROUTES.CONSIGNEE} element={<Consignee />} />
           </Route>
         </Routes>
       </BrowserRouter>

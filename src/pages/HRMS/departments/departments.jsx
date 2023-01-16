@@ -98,16 +98,14 @@ export default function Departments(props) {
   const handleEditClick = (data) => {
     console.log("hsfdhs", data);
     if (data) {
-      editForm.setFieldsValue({
-        dept_code: data.department_code,
-        dept_name: data.department_name,
-      });
       setEditUniqueName(data?.department_name);
       setEditUniqueCode(data?.department_code);
       setShowEditModal(true);
       setDepartment_id(data.department_id);
-      uniqueEditName(false);
-      uniqueEditCode(false);
+       editForm.setFieldsValue({
+         dept_code: data.department_code,
+         dept_name: data.department_name,
+       });
     }
   };
 
@@ -132,49 +130,49 @@ export default function Departments(props) {
       });
   };
 
-  const checkEditDeptNameis = (data) => {
-    if (editUniqueName !== deptName) {
-      PublicFetch.get(
-        `${process.env.REACT_APP_BASE_URL}/misc?type=departmentname&value=${deptName}`
-      )
-        .then((res) => {
-          console.log("Response", res);
-          if (res.data.success) {
-            console.log("Success", res.data.data);
-            if (res.data.data.exist) {
-              setUniqueEditName(true);
-            } else {
-              setUniqueEditName(false);
-            }
-          }
-        })
-        .catch((err) => {
-          console.log("Error", err);
-        });
-    }
-  };
+  // const checkEditDeptNameis = (data) => {
+  //   if (editUniqueName !== deptName) {
+  //     PublicFetch.get(
+  //       `${process.env.REACT_APP_BASE_URL}/misc?type=departmentname&value=${deptName}`
+  //     )
+  //       .then((res) => {
+  //         console.log("Response", res);
+  //         if (res.data.success) {
+  //           console.log("Success", res.data.data);
+  //           if (res.data.data.exist) {
+  //             setUniqueEditName(true);
+  //           } else {
+  //             setUniqueEditName(false);
+  //           }
+  //         }
+  //       })
+  //       .catch((err) => {
+  //         console.log("Error", err);
+  //       });
+  //   }
+  // };
 
-  const checkEditDeptCodeis = (data) => {
-    if (editUniqueCode !== deptCode) {
-      PublicFetch.get(
-        `${process.env.REACT_APP_BASE_URL}/misc?type=departmentcode&value=${deptCode}`
-      )
-        .then((res) => {
-          console.log("Response", res);
-          if (res.data.success) {
-            console.log("Success", res.data.data);
-            if (res.data.data.exist) {
-              setUniqueEditCode(true);
-            } else {
-              setUniqueEditCode(false);
-            }
-          }
-        })
-        .catch((err) => {
-          console.log("Error", err);
-        });
-    }
-  };
+  // const checkEditDeptCodeis = (data) => {
+  //   if (editUniqueCode !== deptCode) {
+  //     PublicFetch.get(
+  //       `${process.env.REACT_APP_BASE_URL}/misc?type=departmentcode&value=${deptCode}`
+  //     )
+  //       .then((res) => {
+  //         console.log("Response", res);
+  //         if (res.data.success) {
+  //           console.log("Success", res.data.data);
+  //           if (res.data.data.exist) {
+  //             setUniqueEditCode(true);
+  //           } else {
+  //             setUniqueEditCode(false);
+  //           }
+  //         }
+  //       })
+  //       .catch((err) => {
+  //         console.log("Error", err);
+  //       });
+  //   }
+  // };
 
   const getData = (current, pageSize) => {
     return data?.slice((current - 1) * pageSize, current * pageSize);
@@ -193,7 +191,8 @@ export default function Departments(props) {
                 className="editIcon m-0"
                 onClick={() => {
                   handleEditClick(index);
-                  
+                  setUniqueEditName(false);
+                  setUniqueEditCode(false);
                 }}
               >
                 <FaEdit />

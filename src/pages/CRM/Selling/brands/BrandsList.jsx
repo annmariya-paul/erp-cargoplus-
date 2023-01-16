@@ -126,8 +126,7 @@ function BrandsList() {
           setImageInput(res.data.data.brand_pic);
           setBrandViewPopup(false);
           handleEditPhase2(res.data.data);
-    setuniqueCode(false);
-
+          setuniqueCode(false);
         }
       })
       .catch((err) => {
@@ -157,10 +156,13 @@ function BrandsList() {
     const formData = new FormData();
 
     formData.append("brand_name", NameInput);
+
     if (ImageUpload) {
       formData.append("brand_pic", ImageUpload);
     }
-    formData.append("brand_description", DescriptionInput);
+    if (DescriptionInput) {
+      formData.append("brand_description", DescriptionInput);
+    }
 
     PublicFetch.patch(`${CRM_BASE_URL_SELLING}/brand/${brand_id}`, formData, {
       "Content-Type": "Multipart/form-Data",
@@ -171,6 +173,7 @@ function BrandsList() {
           console.log("successDataa", res.data.data);
           getallbrand();
           setSuccessPopup(true);
+          setImageUpload(null);
           close_modal(successPopup, 1000);
           setBrandEditPopup(false);
         } else {
@@ -273,8 +276,6 @@ function BrandsList() {
   const BrandHeads = [
     ["brand_id", "brand_name", "brand_pic", "brand_description"],
   ];
-
-
 
   return (
     <div>
@@ -585,7 +586,6 @@ function BrandsList() {
                           setuniqueCode(false);
                         }}
                         onBlur={async () => {
-                          
                           if (NameInput !== brand_name) {
                             let a = await CheckUnique({
                               type: "brandname",

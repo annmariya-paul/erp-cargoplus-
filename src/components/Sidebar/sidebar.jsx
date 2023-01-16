@@ -606,7 +606,7 @@ export default function Sidebar({ showSidebar }) {
                   </li>
                   {FMSAgentopen ? (
                     <>
-                    {checkPermission("create agent") && (
+                    {/* {checkPermission("create agent") && (
                        <li className="nav-text">
                         <NavLink
                           className={({ isActive }) =>
@@ -618,7 +618,7 @@ export default function Sidebar({ showSidebar }) {
                           Create Agent
                         </NavLink>
                       </li>
-                    )}
+                    )} */}
                      
                     {checkPermission("create agent") && (
                        <li className="nav-text">

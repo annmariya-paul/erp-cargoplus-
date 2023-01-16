@@ -106,6 +106,8 @@ export default function Departments(props) {
       setEditUniqueCode(data?.department_code);
       setShowEditModal(true);
       setDepartment_id(data.department_id);
+      uniqueEditName(false);
+      uniqueEditCode(false);
     }
   };
 
@@ -191,8 +193,7 @@ export default function Departments(props) {
                 className="editIcon m-0"
                 onClick={() => {
                   handleEditClick(index);
-                  uniqueEditName(false);
-                  uniqueEditCode(false);
+                  
                 }}
               >
                 <FaEdit />
@@ -494,11 +495,13 @@ export default function Departments(props) {
                         setUniqueEditName(false);
                       }}
                       onBlur={async () => {
-                        let n = await CheckUnique({
-                          type: "departmentname",
-                          value: deptName,
-                        });
-                        setUniqueEditName(n);
+                        if (editUniqueName !== deptName) {
+                          let n = await CheckUnique({
+                            type: "departmentname",
+                            value: deptName,
+                          });
+                          setUniqueEditName(n);
+                        }
                       }}
                     />
                   </Form.Item>
@@ -537,11 +540,13 @@ export default function Departments(props) {
                         setUniqueEditCode(false);
                       }}
                       onBlur={async () => {
+                        if (editUniqueCode !== deptCode) {
                         let c = await CheckUnique({
                           type: "departmentcode",
                           value: deptCode,
                         });
                         setUniqueEditCode(c);
+                      }
                       }}
                     />
                   </Form.Item>

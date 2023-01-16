@@ -382,7 +382,7 @@ export default function Sidebar({ showSidebar }) {
                       </li>
                     )}
                      
-                      {checkPermission("attrbute") && (
+                      {checkPermission("attribute") && (
                         <li className="nav-text">
                         <NavLink
                           className={({ isActive }) =>

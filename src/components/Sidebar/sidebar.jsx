@@ -530,27 +530,6 @@ export default function Sidebar({ showSidebar }) {
               )} */}
               {FMSOpen ? (
                 <>
-                  <li
-                    className={
-                      FMSOppopen
-                        ? "nav-text  items_hrms open"
-                        : "nav-text  items_hrms "
-                    }
-                  >
-                    <Link
-                      className={FMSOppopen ? "active-link" : "link"}
-                      // to="/"
-                      onClick={() => setFMSOppopen(!FMSOppopen)}
-                    >
-                      <RiTeamFill className="sidebar_icons ms-3 " />
-                     Enquiry
-                      <div className="d-flex justify-content-end sale_crm_sliderbar_margin_style">
-                        <AiOutlineCaretDown className="toggle_btn  " />
-                      </div>
-                    </Link>
-                  </li>
-                  {FMSOppopen ? (
-                    <>
                       {checkPermission("opportunity assign") && (
                         <li className="nav-text ">
                           <NavLink
@@ -559,13 +538,14 @@ export default function Sidebar({ showSidebar }) {
                             }
                             to={ROUTES.ENQUIRIES}
                           >
-                            <RiTeamFill className="sidebar_icons ms-4" />
-                            Opportunity assigns
+                            <RiTeamFill className="sidebar_icons ms-3" />
+                            Enquiry
                           </NavLink>
                         </li>
                       )}
 
-                      {checkPermission("track assignment") && (
+{/* {track assignment link is commented and hidden in sidebar} */}
+                      {/* {checkPermission("track assignment") && (
                         <li className="nav-text">
                           <NavLink
                             className={({ isActive }) =>
@@ -577,59 +557,7 @@ export default function Sidebar({ showSidebar }) {
                             Track Assignments
                           </NavLink>
                         </li>
-                      )}
-                    </>
-                  ) : (
-                    ""
-                  )}
-                  <li
-                    className={
-                      FMSAgentopen
-                        ? "nav-text  items_hrms open"
-                        : "nav-text  items_hrms "
-                    }
-                  >
-                    <Link
-                      className={FMSAgentopen ? "active-link" : "link"}
-                      // to="/"
-                      onClick={() => setFMSAgentopen(!FMSAgentopen)}
-                    >
-                      <RiTeamFill className="sidebar_icons ms-3" />
-                      Agent
-                      <div className="d-flex justify-content-end ms-5 ps-5">
-                        <AiOutlineCaretDown className="toggle_btn " />
-                      </div>
-                    </Link>
-                  </li>
-                  {FMSAgentopen ? (
-                    <>
-                      {/* {checkPermission("create agent") && (
-                       <li className="nav-text">
-                        <NavLink
-                          className={({ isActive }) =>
-                            isActive ? "active-link" : "link"
-                          }
-                          to={ROUTES.CREATEAGENT}
-                        >
-                          <BsBookmarkFill className="sidebar_icons ms-4" />
-                          Create Agent
-                        </NavLink>
-                      </li>
-                    )} */}
-
-                      {checkPermission("create agent") && (
-                        <li className="nav-text">
-                          <NavLink
-                            className={({ isActive }) =>
-                              isActive ? "active-link" : "link"
-                            }
-                            to={ROUTES.LISTAGENT}
-                          >
-                            <BsBookmarkFill className="sidebar_icons ms-4" />
-                            List Agent
-                          </NavLink>
-                        </li>
-                      )}
+                      )} */}
                     </>
                   ) : (
                     ""
@@ -762,20 +690,20 @@ export default function Sidebar({ showSidebar }) {
                   )}
                   {FMSSettingsopen ? (
                     <>
-                    {checkPermission("terms of shipment") && (
-                       <li className="nav-text">
-                        <NavLink
-                          className={({ isActive }) =>
-                            isActive ? "active-link" : "link"
-                          }
-                          to={ROUTES.TERMS_OF_SHIPMENT}
-                        >
-                          <BsBookmarkFill className="sidebar_icons ms-4" />
-                          Terms Of Shipment
-                        </NavLink>
-                      </li>
-                    )}
-                     
+                      {checkPermission("terms of shipment") && (
+                        <li className="nav-text">
+                          <NavLink
+                            className={({ isActive }) =>
+                              isActive ? "active-link" : "link"
+                            }
+                            to={ROUTES.TERMS_OF_SHIPMENT}
+                          >
+                            <BsBookmarkFill className="sidebar_icons ms-4" />
+                            Terms Of Shipment
+                          </NavLink>
+                        </li>
+                      )}
+
                       {checkPermission("tax type") && (
                         <li className="nav-text">
                           <NavLink
@@ -793,8 +721,7 @@ export default function Sidebar({ showSidebar }) {
                   ) : (
                     ""
                   )}
-                  
-               
+
                   {FMSSettingsopen ? (
                     <>
                       {checkPermission("job tasks") && (
@@ -815,6 +742,25 @@ export default function Sidebar({ showSidebar }) {
                     ""
                   )}
 
+                  {FMSSettingsopen ? (
+                    <>
+                      {checkPermission("job tasks") && (
+                        <li className="nav-text">
+                          <NavLink
+                            className={({ isActive }) =>
+                              isActive ? "active-link" : "link"
+                            }
+                            to={ROUTES.LISTAGENT}
+                          >
+                            <BsBookmarkFill className="sidebar_icons ms-4" />
+                            Agents
+                          </NavLink>
+                        </li>
+                      )}
+                    </>
+                  ) : (
+                    ""
+                  )}
                   {/* {FMSQuotationsopen ? (
                     <>
                       <li className="nav-text">
@@ -832,12 +778,9 @@ export default function Sidebar({ showSidebar }) {
                   ) : (
                     ""
                   )} */}
-                </>
-                
-              ) : (
-                ""
-              )}
-                          <li
+               
+             
+              <li
                 className={
                   GeneralSettingsopen
                     ? "nav-text  items_hrms open"
@@ -846,12 +789,12 @@ export default function Sidebar({ showSidebar }) {
               >
                 <Link
                   className={GeneralSettingsopen ? "active-link_main" : "link"}
-                  style={{fontSize:16}}
+                  style={{ fontSize: 16 }}
                   // to="/"
                   onClick={() => setGeneralSettingsopen(!GeneralSettingsopen)}
                 >
                   <RiTeamFill className="sidebar_icons" />
-               General Settings
+                  General Settings
                   <div className="d-flex justify-content-end ms-5 ">
                     <AiOutlineCaretDown className="toggle_btn " />
                   </div>
@@ -868,11 +811,10 @@ export default function Sidebar({ showSidebar }) {
                         to={ROUTES.CURRENCY}
                       >
                         <RiTeamFill className="sidebar_icons ms-4" />
-                       Currency
+                        Currency
                       </NavLink>
                     </li>
                   )}
-                  
                 </>
               ) : (
                 ""

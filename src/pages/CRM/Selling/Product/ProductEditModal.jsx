@@ -45,7 +45,7 @@ export default function ProductEditModal({ show, prid, onHide, fun_call }) {
   const [allunit, setAllunit] = useState();
   const [brands, setBrands] = useState();
   const [editForm] = Form.useForm();
-  const [prcode, setPrcode] = useState();
+  const [prcode, setPrcode] = useState("");
   const [prcategory, setPrCategory] = useState();
   const [prbrand, setPrBrand] = useState();
   const [prunit, setPrUnit] = useState();
@@ -57,32 +57,20 @@ export default function ProductEditModal({ show, prid, onHide, fun_call }) {
   //  const [newvalue, setNewvalue] = useState();
   const [img, setImg] = useState([]);
   console.log("set image", img);
-  
-  const [prattribtearray,setprattribtearray]= useState([])
+
+  const [prattribtearray, setprattribtearray] = useState([]);
 
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
-  console.log("Attibutes : ", attributes)
+  console.log("Attibutes : ", attributes);
   console.log("set image", img);
   // console.log("State : ", typeof prattributes)
   const newValues = (checkedValues) => {
-
     console.log("checked iss= ", checkedValues);
-    setprattribtearray(checkedValues.target.value)
-    // setprattribtearray((prevState)=>{
-    //   // console.log("njen", prevState)
-    //  return ([
-    //  ...prevState,
-    //  setprattribtearray(prevState , checkedValues)
-    // // setPrAttributes(checkedValues)
-    //  ])
-    // })
-    // setprattribtearray((prev)=> [...prev, ...checkedValues])
-
+    setprattribtearray(checkedValues.target.value);
   };
 
- 
   // const onChange = (e) => {
   //   console.log('checked = ', e.target.checked);
   //   setChecked(e.target.checked);
@@ -92,7 +80,7 @@ export default function ProductEditModal({ show, prid, onHide, fun_call }) {
   const [State, setState] = useState("null");
   const [treeLine, setTreeLine] = useState(true);
   const [showLeafIcon, setShowLeafIcon] = useState(false);
-  const [prev,setprev] = useState()
+  const [prev, setprev] = useState();
   const [unitTable, setunitTable] = useState("");
   const toggleTab = (index) => {
     setToggleState(index);
@@ -102,18 +90,15 @@ export default function ProductEditModal({ show, prid, onHide, fun_call }) {
   const [categoryTree, setCategoryTree] = useState([]);
   const [allprList, setAllPrList] = useState(); //state for all products
 
-
-// getting one edit product data
-
-
+  // getting one edit product data
 
   // Start API call for get one product
   const GetAllProductData = () => {
-    // console.log("Entered");
-    PublicFetch.get(`${CRM_BASE_URL_SELLING}/product/${id}`)
+    console.log("Entered pro");
+    PublicFetch.get(`${CRM_BASE_URL_SELLING}/product/${prid}`)
       .then((res) => {
         if (res?.data?.success) {
-          console.log("gethbhs", res?.data?.success);
+          console.log("Entered Result came", res?.data);
           setAllPrList(res.data.data);
           setPrName(res?.data?.data?.product_name);
           setPrcode(res?.data?.data?.product_code);
@@ -121,14 +106,25 @@ export default function ProductEditModal({ show, prid, onHide, fun_call }) {
           setPrBrand(res?.data?.data?.product_brand_id);
           setPrUnit(res?.data?.data?.product_unit_id);
 
-
-          console.log("prattributess aree",res?.data?.data?.product_attributes )
-          setPrAttributes(res?.data?.data?.product_attributes);
+          console.log("prattributess aree", res?.data?.data);
+          setPrAttributes(res?.data?.data?.crm_v1_attributes);
           // setPrAttributes(attributes)
 
-          setprev(res?.data?.data?.product_attributes)
+          setprev(res?.data?.data?.product_attributes);
           setPrDescription(res?.data?.data?.product_description);
           setPrImage(res?.data?.data?.product_pic);
+           editForm.setFieldsValue({
+             productname: res?.data?.data?.product_name,
+             productcode: res?.data?.data?.product_code,
+             productcategory: res?.data?.data?.product_category_id,
+             productbrand: res?.data?.data?.product_brand_id,
+             productunit: res?.data?.data?.product_unit_id,
+
+             productattributes: res?.data?.data?.product_attributes,
+
+             productdescription: res?.data?.data?.product_description,
+             productimg: res?.data?.data?.product_pic,
+           });
         } else {
           console.log("FAILED T LOAD DATA");
         }
@@ -140,10 +136,10 @@ export default function ProductEditModal({ show, prid, onHide, fun_call }) {
 
   useEffect(() => {
     GetAllProductData();
-  }, [id]);
+  }, [id, prid, show]);
 
   console.log("RRRRRRRRRRrr", prid);
-  
+
   // { function to get each product data}
   const GetAllProductDatatwo = () => {
     console.log("Entered two GetAllProductDatatwo ");
@@ -163,14 +159,14 @@ export default function ProductEditModal({ show, prid, onHide, fun_call }) {
             res?.data?.data?.product_attributes
           );
           let prarray = [];
-         res?.data?.data?.crm_v1_attributes.forEach((item, index) => {
-           prarray.push({
-             label: item?.attribute_name,
-             value: item?.attribute_id,
-           });
-           console.log("atrribute value:...",prarray);
-         });
-         setprattribtearray(prarray);
+          res?.data?.data?.crm_v1_attributes.forEach((item, index) => {
+            prarray.push({
+              label: item?.attribute_name,
+              value: item?.attribute_id,
+            });
+            console.log("atrribute value:...", prarray);
+          });
+          setprattribtearray(prarray);
 
           //         let temparray = []
           //  let temp2 = res?.data?.data?.product_attributes.split("");
@@ -190,7 +186,7 @@ export default function ProductEditModal({ show, prid, onHide, fun_call }) {
           //         });
 
           // setPrAttributes([attributes])
-          setPrAttributes(res?.data?.data?.product_attributes);
+          setPrAttributes(res?.data?.data?.crm_v1_attributes);
           setprev(res?.data?.data?.product_attributes);
 
           setPrDescription(res?.data?.data?.product_description);
@@ -216,14 +212,14 @@ export default function ProductEditModal({ show, prid, onHide, fun_call }) {
       });
   };
 
-console.log("attributee aryy",attributes)
+  console.log("attributee aryy", attributes);
 
-  useEffect(() => {
-    GetAllProductDatatwo();
-  }, [prid]);
+  // useEffect(() => {
+  //   GetAllProductDatatwo();
+  // }, [prid]);
 
   console.log("previous", prev);
-  console.log("prevvaluess are",prattribtearray )
+  console.log("prevvaluess are", prattribtearray);
 
   const getallbrand = async () => {
     try {
@@ -264,13 +260,13 @@ console.log("attributee aryy",attributes)
       );
       console.log("getting all attributes", allattributes.data.data);
       // setAttributes(allattributes.data.data);
-      let tmp = [] 
+      let tmp = [];
       allattributes.data.data.forEach((item, index) => {
         tmp.push({
           label: item?.attribute_name,
           value: item?.attribute_id,
-        })
-      })
+        });
+      });
       setAttributes(tmp);
     } catch (err) {
       console.log("error to fetching  attributes", err);
@@ -375,58 +371,91 @@ console.log("attributee aryy",attributes)
     formData.append("product_attributes", prattribtearray);
     formData.append("product_description", prDescription);
 
-  
+    if (prid) {
+      PublicFetch.patch(
+        `${CRM_BASE_URL_SELLING}/product/${parseInt(prid)}`,
+        formData,
+        {
+          "Content-Type": "Multipart/form-Data",
+        }
+      )
+        .then((res) => {
+          console.log("data is successfully saved", res.data.success);
+          if (res.data.data) {
+            GetAllProductData();
+            // GetAllProductDatatwo();
+            setSuccessPopup(true);
+            editForm.resetFields();
+            close_modal(successPopup, 1200);
+            onHide();
+            fun_call();
+          }
+        })
+        .catch((err) => {
+          console.log("error", err);
+          setError(true);
+        });
+    } else if (id) {
+      PublicFetch.patch(
+        `${CRM_BASE_URL_SELLING}/product/${parseInt(id)}`,
+        formData,
+        {
+          "Content-Type": "Multipart/form-Data",
+        }
+      )
+        .then((res) => {
+          console.log("data is successfully saved", res.data.success);
+          if (res.data.data) {
+            GetAllProductData();
+            // GetAllProductDatatwo();
+            setSuccessPopup(true);
+            editForm.resetFields();
+            close_modal(successPopup, 1200);
+            onHide();
+            fun_call();
+          }
+        })
+        .catch((err) => {
+          console.log("error", err);
+          setError(true);
+        });
+    }
+  };
 
-  if(prid) {
-    PublicFetch.patch(
-      `${CRM_BASE_URL_SELLING}/product/${parseInt(prid)}`,
-      formData,
-      {
-        "Content-Type": "Multipart/form-Data",
+  const isAttributeChecked = (id) => {
+    console.log("Checking : ", prattributes);
+    console.log("Checking Id : ", id);
+    let isChecked = false;
+    if (
+      prattributes &&
+      Array.isArray(prattributes) &&
+      prattributes.length > 0
+    ) {
+      isChecked = prattributes.some((item, index) => {
+        console.log("Checking", item);
+        return item.attribute_id === id;
+      });
+    }
+    return isChecked;
+  };
+
+  const handleAttributeChange = (checked, value) => {
+    let tmp = prattributes;
+    if (checked) {
+      if (tmp) {
+        tmp.push({
+          attribute_id: value,
+        });
+      } else {
+        tmp = [{ attribute_id: value }];
       }
-    )
-    .then((res) => {
-      console.log("data is successfully saved", res.data.success);
-      if (res.data.data) {
-        GetAllProductData();
-        // GetAllProductDatatwo();
-        setSuccessPopup(true);
-        editForm.resetFields();
-        close_modal(successPopup, 1200);
-        onHide();
-        fun_call();
-      }
-    })
-    .catch((err) => {
-      console.log("error", err);
-      setError(true);
-    });
-  }
-  else if(id) {
-    PublicFetch.patch(
-      `${CRM_BASE_URL_SELLING}/product/${parseInt(id)}`,
-      formData,
-      {
-        "Content-Type": "Multipart/form-Data",
-      }
-    )
-    .then((res) => {
-      console.log("data is successfully saved", res.data.success);
-      if (res.data.data) {
-        GetAllProductData();
-        // GetAllProductDatatwo();
-        setSuccessPopup(true);
-        editForm.resetFields();
-        close_modal(successPopup, 1200);
-        onHide();
-        fun_call();
-      }
-    })
-    .catch((err) => {
-      console.log("error", err);
-      setError(true);
-    });
-  }
+      setPrAttributes([...tmp]);
+    } else {
+      tmp = prattributes.filter((item, index) => {
+        return item?.attribute_id !== value;
+      });
+      setPrAttributes([...tmp]);
+    }
   };
 
   return (
@@ -652,12 +681,37 @@ console.log("attributee aryy",attributes)
                                 })}
                             </div>
                           </Checkbox.Group> */}
-                          <Checkbox.Group className="px-3"
-                          options={attributes}
-                          // defaultValue={prattributes}
-                          defaultValue={['color']}
-                          onChange={newValues}>
-                          </Checkbox.Group>
+                          {/* <Checkbox.Group
+                            className="px-3"
+                            options={attributes}
+                            // defaultValue={prattributes}
+                            // defaultValue={[1]}
+                            // onChange={newValues}
+                          ></Checkbox.Group> */}
+                          <div className="d-flex flex-wrap gap-2">
+                            {attributes &&
+                              attributes?.length > 0 &&
+                              attributes.map((item, index) => {
+                                return (
+                                  <div>
+                                    <label htmlFor={item.value}>
+                                      {item.label}
+                                    </label>{" "}
+                                    <Checkbox
+                                      checked={isAttributeChecked(item?.value)}
+                                      id={item.value}
+                                      value={item.value}
+                                      onChange={(e) =>
+                                        handleAttributeChange(
+                                          e.target.checked,
+                                          item?.value
+                                        )
+                                      }
+                                    />{" "}
+                                  </div>
+                                );
+                              })}
+                          </div>
                         </Form.Item>
                       </div>
                     </div>

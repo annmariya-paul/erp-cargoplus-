@@ -25,7 +25,7 @@ export default function Sidebar({ showSidebar }) {
   const [CRMgeneral, setCRMgeneral] = useState(false);
   const [FMSOpen, setFMSOpen] = useState(false);
   const [FMSOppopen, setFMSOppopen] = useState(false);
-
+  const [GeneralSettingsopen, setGeneralSettingsopen] = useState(false);
   const [FMSAgentopen, setFMSAgentopen] = useState(false);
   const [FMSQuotationsopen, setFMSQuotationsopen] = useState(false);
   const [permissions, setPermissions] = useState(null);
@@ -251,33 +251,33 @@ export default function Sidebar({ showSidebar }) {
                   </li>
                   {Saleopen ? (
                     <>
-                    {checkPermission("lead") && (
-                      <li className="nav-text ">
-                        <NavLink
-                          className={({ isActive }) =>
-                            isActive ? "active-link" : "link"
-                          }
-                          to={ROUTES.LEADLIST}
-                        >
-                          <RiTeamFill className="sidebar_icons ms-4" />
-                          Lead
-                        </NavLink>
-                      </li>
-                    )}
+                      {checkPermission("lead") && (
+                        <li className="nav-text ">
+                          <NavLink
+                            className={({ isActive }) =>
+                              isActive ? "active-link" : "link"
+                            }
+                            to={ROUTES.LEADLIST}
+                          >
+                            <RiTeamFill className="sidebar_icons ms-4" />
+                            Lead
+                          </NavLink>
+                        </li>
+                      )}
                       {checkPermission("opportunity") && (
                         <li className="nav-text">
-                        <NavLink
-                          className={({ isActive }) =>
-                            isActive ? "active-link" : "link"
-                          }
-                          to={ROUTES.OPPORTUNITY}
-                        >
-                          <BsFillXDiamondFill className="sidebar_icons ms-4" />
-                          Opportunity
-                        </NavLink>
-                      </li>
+                          <NavLink
+                            className={({ isActive }) =>
+                              isActive ? "active-link" : "link"
+                            }
+                            to={ROUTES.OPPORTUNITY}
+                          >
+                            <BsFillXDiamondFill className="sidebar_icons ms-4" />
+                            Opportunity
+                          </NavLink>
+                        </li>
                       )}
-                      
+
                       <li
                         className={
                           CRMReport
@@ -301,30 +301,30 @@ export default function Sidebar({ showSidebar }) {
                         <>
                           {" "}
                           {checkPermission("leadreport") && (
-                             <li className="nav-text">
-                            <NavLink
-                              className={({ isActive }) =>
-                                isActive ? "active-link" : "link"
-                              }
-                              to="/leadReport"
-                            >
-                              <MdEventNote className="sidebar_icons ms-4" />
-                              Lead Report
-                            </NavLink>
-                          </li>
+                            <li className="nav-text">
+                              <NavLink
+                                className={({ isActive }) =>
+                                  isActive ? "active-link" : "link"
+                                }
+                                to="/leadReport"
+                              >
+                                <MdEventNote className="sidebar_icons ms-4" />
+                                Lead Report
+                              </NavLink>
+                            </li>
                           )}
                           {checkPermission("opportunityreport") && (
                             <li className="nav-text">
-                            <NavLink
-                              className={({ isActive }) =>
-                                isActive ? "active-link" : "link"
-                              }
-                              to={ROUTES.OPPORTUNITY_REPORT}
-                            >
-                              <MdEventNote className="sidebar_icons ms-4" />
-                              Opportunity Report
-                            </NavLink>
-                          </li>
+                              <NavLink
+                                className={({ isActive }) =>
+                                  isActive ? "active-link" : "link"
+                                }
+                                to={ROUTES.OPPORTUNITY_REPORT}
+                              >
+                                <MdEventNote className="sidebar_icons ms-4" />
+                                Opportunity Report
+                              </NavLink>
+                            </li>
                           )}
                         </>
                       ) : (
@@ -355,86 +355,85 @@ export default function Sidebar({ showSidebar }) {
                   </li>
                   {CRMselling ? (
                     <>
-                    {checkPermission("category") && (
-                       <li className="nav-text">
-                        <NavLink
-                          className={({ isActive }) =>
-                            isActive ? "active-link" : "link"
-                          }
-                          to={ROUTES.CATEGORY_LIST}
-                        >
-                          <BsBookmarkFill className="sidebar_icons ms-4" />
-                          Category
-                        </NavLink>
-                      </li>
-                    )}
-                    {checkPermission("brand") && (
-                      <li className="nav-text">
-                        <NavLink
-                          className={({ isActive }) =>
-                            isActive ? "active-link" : "link"
-                          }
-                          to={ROUTES.BRANDS}
-                        >
-                          <RiTeamFill className="sidebar_icons ms-4" />
-                          Brands
-                        </NavLink>
-                      </li>
-                    )}
-                     
-                      {checkPermission("attrbute") && (
+                      {checkPermission("category") && (
                         <li className="nav-text">
-                        <NavLink
-                          className={({ isActive }) =>
-                            isActive ? "active-link" : "link"
-                          }
-                          to={ROUTES.ATTRIBUTES}
-                        >
-                          <BsFillXDiamondFill className="sidebar_icons ms-4" />
-                          Attributes
-                        </NavLink>
-                      </li>
+                          <NavLink
+                            className={({ isActive }) =>
+                              isActive ? "active-link" : "link"
+                            }
+                            to={ROUTES.CATEGORY_LIST}
+                          >
+                            <BsBookmarkFill className="sidebar_icons ms-4" />
+                            Category
+                          </NavLink>
+                        </li>
+                      )}
+                      {checkPermission("brand") && (
+                        <li className="nav-text">
+                          <NavLink
+                            className={({ isActive }) =>
+                              isActive ? "active-link" : "link"
+                            }
+                            to={ROUTES.BRANDS}
+                          >
+                            <RiTeamFill className="sidebar_icons ms-4" />
+                            Brands
+                          </NavLink>
+                        </li>
+                      )}
+
+                      {checkPermission("attribute") && (
+                        <li className="nav-text">
+                          <NavLink
+                            className={({ isActive }) =>
+                              isActive ? "active-link" : "link"
+                            }
+                            to={ROUTES.ATTRIBUTES}
+                          >
+                            <BsFillXDiamondFill className="sidebar_icons ms-4" />
+                            Attributes
+                          </NavLink>
+                        </li>
                       )}
                       {checkPermission("product") && (
                         <li className="nav-text">
-                        <NavLink
-                          className={({ isActive }) =>
-                            isActive ? "active-link" : "link"
-                          }
-                          to={ROUTES.PRODUCT}
-                        >
-                          <RiTeamFill className="sidebar_icons ms-4" />
-                          Products
-                        </NavLink>
-                      </li>
+                          <NavLink
+                            className={({ isActive }) =>
+                              isActive ? "active-link" : "link"
+                            }
+                            to={ROUTES.PRODUCT}
+                          >
+                            <RiTeamFill className="sidebar_icons ms-4" />
+                            Products
+                          </NavLink>
+                        </li>
                       )}
                       {checkPermission("service") && (
                         <li className="nav-text">
-                        <NavLink
-                          className={({ isActive }) =>
-                            isActive ? "active-link" : "link"
-                          }
-                          to={ROUTES.SERVICES}
-                        >
-                          <FiSettings className="sidebar_icons ms-4" />
-                          Services
-                        </NavLink>
-                      </li>
+                          <NavLink
+                            className={({ isActive }) =>
+                              isActive ? "active-link" : "link"
+                            }
+                            to={ROUTES.SERVICES}
+                          >
+                            <FiSettings className="sidebar_icons ms-4" />
+                            Services
+                          </NavLink>
+                        </li>
                       )}
                       {checkPermission("unit and measures") && (
-                         <li className="nav-text">
-                        <NavLink
-                          className={({ isActive }) =>
-                            isActive ? "active-link" : "link"
-                          }
-                          to={ROUTES.UNIT_LIST}
-                        >
-                          <RiTeamFill className="sidebar_icons ms-4" />
-                          Units and Measures
-                        </NavLink>
-                      </li>
+                        <li className="nav-text">
+                          <NavLink
+                            className={({ isActive }) =>
+                              isActive ? "active-link" : "link"
+                            }
+                            to={ROUTES.UNIT_LIST}
+                          >
+                            <RiTeamFill className="sidebar_icons ms-4" />
+                            Units and Measures
+                          </NavLink>
+                        </li>
                       )}
-                     
                     </>
                   ) : (
                     ""
@@ -460,20 +459,19 @@ export default function Sidebar({ showSidebar }) {
                   </li>
                   {CRMgeneral ? (
                     <>
-                    {checkPermission("country") && (
-                      <li className="nav-text">
-                        <NavLink
-                          className={({ isActive }) =>
-                            isActive ? "active-link" : "link"
-                          }
-                          to={ROUTES.COUNTRYSELECT}
-                        >
-                          <MdEventNote className="sidebar_icons ms-4" />
-                          Countries
-                        </NavLink>
-                      </li>
-                    )}
-                      
+                      {checkPermission("country") && (
+                        <li className="nav-text">
+                          <NavLink
+                            className={({ isActive }) =>
+                              isActive ? "active-link" : "link"
+                            }
+                            to={ROUTES.COUNTRYSELECT}
+                          >
+                            <MdEventNote className="sidebar_icons ms-4" />
+                            Countries
+                          </NavLink>
+                        </li>
+                      )}
                     </>
                   ) : (
                     ""
@@ -545,7 +543,7 @@ export default function Sidebar({ showSidebar }) {
                       onClick={() => setFMSOppopen(!FMSOppopen)}
                     >
                       <RiTeamFill className="sidebar_icons ms-3 " />
-                      Opportunity
+                     Enquiry
                       <div className="d-flex justify-content-end sale_crm_sliderbar_margin_style">
                         <AiOutlineCaretDown className="toggle_btn  " />
                       </div>
@@ -553,34 +551,33 @@ export default function Sidebar({ showSidebar }) {
                   </li>
                   {FMSOppopen ? (
                     <>
-                    {checkPermission("opportunity assign") && (
-                      <li className="nav-text ">
-                        <NavLink
-                          className={({ isActive }) =>
-                            isActive ? "active-link" : "link"
-                          }
-                          to={ROUTES.ENQUIRIES}
-                        >
-                          <RiTeamFill className="sidebar_icons ms-4" />
-                          Opportunity assigns
-                        </NavLink>
-                      </li>
-                    )}
-                      
+                      {checkPermission("opportunity assign") && (
+                        <li className="nav-text ">
+                          <NavLink
+                            className={({ isActive }) =>
+                              isActive ? "active-link" : "link"
+                            }
+                            to={ROUTES.ENQUIRIES}
+                          >
+                            <RiTeamFill className="sidebar_icons ms-4" />
+                            Opportunity assigns
+                          </NavLink>
+                        </li>
+                      )}
+
                       {checkPermission("track assignment") && (
                         <li className="nav-text">
-                        <NavLink
-                          className={({ isActive }) =>
-                            isActive ? "active-link" : "link"
-                          }
-                          to={ROUTES.TRACK_ASSIGNMENTS}
-                        >
-                          <BsFillXDiamondFill className="sidebar_icons ms-4" />
-                          Track Assignments
-                        </NavLink>
-                      </li>
+                          <NavLink
+                            className={({ isActive }) =>
+                              isActive ? "active-link" : "link"
+                            }
+                            to={ROUTES.TRACK_ASSIGNMENTS}
+                          >
+                            <BsFillXDiamondFill className="sidebar_icons ms-4" />
+                            Track Assignments
+                          </NavLink>
+                        </li>
                       )}
-                      
                     </>
                   ) : (
                     ""
@@ -606,7 +603,7 @@ export default function Sidebar({ showSidebar }) {
                   </li>
                   {FMSAgentopen ? (
                     <>
-                    {checkPermission("create agent") && (
+                      {/* {checkPermission("create agent") && (
                        <li className="nav-text">
                         <NavLink
                           className={({ isActive }) =>
@@ -618,22 +615,44 @@ export default function Sidebar({ showSidebar }) {
                           Create Agent
                         </NavLink>
                       </li>
-                    )}
-                     
-                    {checkPermission("create agent") && (
-                       <li className="nav-text">
-                        <NavLink
-                          className={({ isActive }) =>
-                            isActive ? "active-link" : "link"
-                          }
-                          to={ROUTES.LISTAGENT}
+                    )} */}
+
+                      {checkPermission("create agent") && (
+                        <li className="nav-text">
+                          <NavLink
+                            className={({ isActive }) =>
+                              isActive ? "active-link" : "link"
+                            }
+                            to={ROUTES.LISTAGENT}
+                          >
+                            <BsBookmarkFill className="sidebar_icons ms-4" />
+                            List Agent
+                          </NavLink>
+                        </li>
+                      )}
+                    </>
+                  ) : (
+                    ""
+                  )}
+
+                  {FMSOpen ? (
+                    <>
+                      {checkPermission("quotation") && (
+                        <li
+                          className="nav-text "
+                          style={{ marginLeft: "-61px" }}
                         >
-                          <BsBookmarkFill className="sidebar_icons ms-4" />
-                          List Agent
-                        </NavLink>
-                      </li>
-                    )}
-                     
+                          <NavLink
+                            className={({ isActive }) =>
+                              isActive ? "active-link" : "link"
+                            }
+                            to={ROUTES.QUATATIONS}
+                          >
+                            <RiTeamFill className="sidebar_icons ms-4" />
+                            Quotation
+                          </NavLink>
+                        </li>
+                      )}
                     </>
                   ) : (
                     ""
@@ -659,44 +678,143 @@ export default function Sidebar({ showSidebar }) {
                   </li>
                   {FMSSettingsopen ? (
                     <>
-                    {checkPermission("freight type") && (
+                      {checkPermission("freight type") && (
+                        <li className="nav-text">
+                          <NavLink
+                            className={({ isActive }) =>
+                              isActive ? "active-link" : "link"
+                            }
+                            to={ROUTES.FRIGHTLIST}
+                          >
+                            <BsBookmarkFill className="sidebar_icons ms-4" />
+                            Freight types
+                          </NavLink>
+                        </li>
+                      )}
+                      {checkPermission("airport") && (
+                        <li className="nav-text">
+                          <NavLink
+                            className={({ isActive }) =>
+                              isActive ? "active-link" : "link"
+                            }
+                            to={ROUTES.AIRPORT}
+                          >
+                            <BsBookmarkFill className="sidebar_icons ms-4" />
+                            Airport
+                          </NavLink>
+                        </li>
+                      )}
+
+                      {checkPermission("seaport") && (
+                        <li className="nav-text">
+                          <NavLink
+                            className={({ isActive }) =>
+                              isActive ? "active-link" : "link"
+                            }
+                            to={ROUTES.SEAPORT}
+                          >
+                            <BsBookmarkFill className="sidebar_icons ms-4" />
+                            Seaport
+                          </NavLink>
+                        </li>
+                      )}
+                    </>
+                  ) : (
+                    ""
+                  )}
+                  {FMSSettingsopen ? (
+                    <>
+                      {checkPermission("carrier") && (
+                        <li className="nav-text">
+                          <NavLink
+                            className={({ isActive }) =>
+                              isActive ? "active-link" : "link"
+                            }
+                            to={ROUTES.CARRIER}
+                          >
+                            <BsBookmarkFill className="sidebar_icons ms-4" />
+                            Carrier
+                          </NavLink>
+                        </li>
+                      )}
+                    </>
+                  ) : (
+                    ""
+                  )}
+                  {FMSSettingsopen ? (
+                    <>
+                      {checkPermission("mode") && (
+                        <li className="nav-text">
+                          <NavLink
+                            className={({ isActive }) =>
+                              isActive ? "active-link" : "link"
+                            }
+                            to={ROUTES.MODE}
+                          >
+                            <BsBookmarkFill className="sidebar_icons ms-4" />
+                            Mode
+                          </NavLink>
+                        </li>
+                      )}
+                    </>
+                  ) : (
+                    ""
+                  )}
+                  {FMSSettingsopen ? (
+                    <>
+                    {checkPermission("terms of shipment") && (
                        <li className="nav-text">
                         <NavLink
                           className={({ isActive }) =>
                             isActive ? "active-link" : "link"
                           }
-                          to={ROUTES.FRIGHTLIST}
+                          to={ROUTES.TERMS_OF_SHIPMENT}
                         >
                           <BsBookmarkFill className="sidebar_icons ms-4" />
-                          Fright types
+                          Terms Of Shipment
                         </NavLink>
                       </li>
                     )}
                      
+                      {checkPermission("tax type") && (
+                        <li className="nav-text">
+                          <NavLink
+                            className={({ isActive }) =>
+                              isActive ? "active-link" : "link"
+                            }
+                            to={ROUTES.TAXTYPE}
+                          >
+                            <BsBookmarkFill className="sidebar_icons ms-4" />
+                            Tax Type
+                          </NavLink>
+                        </li>
+                      )}
                     </>
                   ) : (
                     ""
                   )}
-                  {FMSOpen ? (
+                  
+               
+                  {FMSSettingsopen ? (
                     <>
-                    {checkPermission("quotation") && (
-                       <li className="nav-text " style={{ marginLeft: "-61px" }}>
-                        <NavLink
-                          className={({ isActive }) =>
-                            isActive ? "active-link" : "link"
-                          }
-                          to={ROUTES.QUATATIONS}
-                        >
-                          <RiTeamFill className="sidebar_icons ms-4" />
-                          Quotations
-                        </NavLink>
-                      </li>
-                    )}
-                     
+                      {checkPermission("job tasks") && (
+                        <li className="nav-text">
+                          <NavLink
+                            className={({ isActive }) =>
+                              isActive ? "active-link" : "link"
+                            }
+                            to={ROUTES.JOBTASKS}
+                          >
+                            <BsBookmarkFill className="sidebar_icons ms-4" />
+                            Job Tasks
+                          </NavLink>
+                        </li>
+                      )}
                     </>
                   ) : (
                     ""
                   )}
+
                   {/* {FMSQuotationsopen ? (
                     <>
                       <li className="nav-text">
@@ -714,6 +832,47 @@ export default function Sidebar({ showSidebar }) {
                   ) : (
                     ""
                   )} */}
+                </>
+                
+              ) : (
+                ""
+              )}
+                          <li
+                className={
+                  GeneralSettingsopen
+                    ? "nav-text  items_hrms open"
+                    : "nav-text  items_hrms "
+                }
+              >
+                <Link
+                  className={GeneralSettingsopen ? "active-link_main" : "link"}
+                  style={{fontSize:16}}
+                  // to="/"
+                  onClick={() => setGeneralSettingsopen(!GeneralSettingsopen)}
+                >
+                  <RiTeamFill className="sidebar_icons" />
+               General Settings
+                  <div className="d-flex justify-content-end ms-5 ">
+                    <AiOutlineCaretDown className="toggle_btn " />
+                  </div>
+                </Link>
+              </li>
+              {GeneralSettingsopen ? (
+                <>
+                  {checkPermission("currency") && (
+                    <li className="nav-text ">
+                      <NavLink
+                        className={({ isActive }) =>
+                          isActive ? "active-link" : "link"
+                        }
+                        to={ROUTES.CURRENCY}
+                      >
+                        <RiTeamFill className="sidebar_icons ms-4" />
+                       Currency
+                      </NavLink>
+                    </li>
+                  )}
+                  
                 </>
               ) : (
                 ""

@@ -110,9 +110,7 @@ export default function Attribute(props) {
       if (updated.data.success) {
         setShowModalEdit(false);
         getallattributes();
-      } else if (updated.data.success === false) {
-        alert(updated.data.data);
-      }
+      } 
     } catch (err) {
       console.log("error to update attributes");
     }

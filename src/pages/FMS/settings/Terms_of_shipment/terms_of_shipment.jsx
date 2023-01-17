@@ -16,9 +16,10 @@ import { FiEdit } from "react-icons/fi";
 import CustomModel from "../../../../components/custom_modal/custom_model";
 import {CRM_BASE_URL_FMS} from "../../../../api/bootapi";
 import { UniqueErrorMsg } from "../../../../ErrorMessages/UniqueErrorMessage";
+import TextArea from "../../../../components/ InputType TextArea/TextArea";
 
 
-export default function Carrierlist(props) {
+export default function TermsOfShipment(props) {
 
  
   const [addForm] = Form.useForm();
@@ -27,18 +28,18 @@ export default function Carrierlist(props) {
 
   const [searchedText, setSearchedText] = useState("");
  
-  const [modalAddCarrier, setModalAddCarrier] = useState(false);
+  const [modalAddShipment, setModalAddShipment] = useState(false);
 
   const [pageSize, setPageSize] = useState("25");
-  const [codeInput, setCodeInput] = useState();
-  const [typeInput, setTypeInput] = useState();
+  const [descriptionInput, setDescriptionInput] = useState();
+  const [NameInput, setNameInput] = useState();
 
  
   const [Errormsg, setErrormsg] = useState();
-  const [NameInput, setNameInput] = useState();
+ 
 
    const [showViewModal, setShowViewModal] = useState(false);
-  const [CarrierEditPopup, setCarrierEditPopup] = useState(false);
+  const [ShipmentEditPopup, setShipmentEditPopup] = useState(false);
   const [editForm] = Form.useForm();
   const close_modal = (mShow, time) => {
     if (!mShow) {
@@ -59,37 +60,33 @@ export default function Carrierlist(props) {
  
  
 
-  const carrierEdit = (e) => {
-    console.log("carrier edit", e);
-    setNameInput(e.carrier_name);
-    setCodeInput(e.carrier_code);
-    setTypeInput(e.carrier_type);
+  const shipmentEdit = (e) => {
+    console.log("shipment edit", e);
+    setNameInput(e.shipment_name);
+   
    
 
-    // setCarrier_id(e.carrier_id);
+    
     editForm.setFieldsValue({
-      carrier_id: e.carrier_id,
-      NameInput: e.carrier_name,
-      codeInput:e.carrier_code,
-      typeInput:e.carrier_type,
+      shipment_id: e.shipment_id,
+      NameInput: e.shipment_name,
+    
   
     });
-    setCarrierEditPopup(true);
+    setShipmentEditPopup(true);
   };
-  const [viewcarriers,setViewCarriers]=useState({
+  const [viewshipments,setViewShipments]=useState({
     id:"",
-    carrierviewname:"",
-    carrierviewcode:"",
-    carrierviewtype:""
+    shipmentviewname:"",
+   
   })
   const handleViewClick=(item)=>{
-    console.log("view all carrier",item)
-    setViewCarriers({
-      ...viewcarriers,
-    id:item.carrier_id,
-    carrierviewname:item.carrier_name,
-    carrierviewcode:item.carrier_code,
-    carrierviewtype:item.carrier_type,
+    console.log("view all shipment",item)
+    setViewShipments({
+      ...viewshipments,
+    id:item.shipment_id,
+    shipmentviewname:item.shipment_name,
+   
     })
   
   
@@ -111,7 +108,7 @@ export default function Carrierlist(props) {
            
               <div
                 className="editIcon m-0"
-                onClick={() =>carrierEdit(index)}
+                onClick={() =>shipmentEdit(index)}
               >
                 <FaEdit />
               </div>
@@ -131,62 +128,49 @@ export default function Carrierlist(props) {
       align: "center",
     },
     {
-      title: "CARRIER NAME",
-      dataIndex: "carrier_name",
-      key: "carrier_name",
+      title: " NAME",
+      dataIndex: "shipment_name",
+      key: "shipment_name",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.carrier_name)
+        return String(record.shipment_name)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
       align: "center",
     },
     {
-      title: "CARRIER CODE",
-      dataIndex: "carrier_code",
-      key: "carrier_code",
+      title: "Descripton",
+      dataIndex: "shipment_description",
+      key: "shipment_description",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.carrier_code)
+        return String(record.shipment_description)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
       align: "center",
     },
-    {
-      title: "CARRIER TYPE",
-      dataIndex: "carrier_type",
-      key: "carrier_type",
-      filteredValue: [searchedText],
-      onFilter: (value, record) => {
-        return String(record.carrier_type)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
-      align: "center",
-    },
+   
     
   ];
 
   const data = [
     {
-       carrier_name: "Carrier X",
-       carrier_code:"3241",
-       carrier_type:"Airline",
+       shipment_name: "Test",
+       shipment_description:"Test data",
+      
       
        key: "1",
     },
     {
-        carrier_name: "Carrier y",
-        carrier_code:"3242",
-        carrier_type:"Shipper",
+        shipment_name: "Test one",
+        shipment_description:"Test data abc",
         key: "2",
     },
     {
-        carrier_name: "Carrier z",
-        carrier_code:"3243",
-        carrier_type:"Road",
+        shipment_name: "Abc",
+       shipment_description:"Test data new",
         key: "3",
     },
   ];  
@@ -197,21 +181,21 @@ export default function Carrierlist(props) {
 
 
 
-  const [carriername, setCarriername] = useState();
-  const [carrier_id, setCarrier_id] = useState();
+  const [shipmentname, setShipmentname] = useState();
+  const [shipment_id, setShipment_id] = useState();
  
 
   const handleviewtoedit=(i)=>{
     console.log("editing data iss",i)
-    setCarrier_id(i.id)
-  setCarriername(i.carrierviewname)
+    setShipment_id(i.id)
+  setShipmentname(i.shipmentviewname)
 
   addForm.setFieldsValue({
-    // unitid: e.unit_id,
-    carrier: i.carrierviewname,
+   
+    shipment: i.shipmentviewname,
    
   });
-  setCarrierEditPopup(true);
+  setShipmentEditPopup(true);
   }
 
 
@@ -226,7 +210,7 @@ export default function Carrierlist(props) {
       <div className="container-fluid container2 pt-3">
         <div className="row flex-wrap">
           <div className="col">
-            <h5 className="lead_text">Carriers</h5>
+            <h5 className="lead_text">Terms of Shipment</h5>
           </div>
           {/* <Leadlist_Icons /> */}
         </div>
@@ -271,8 +255,8 @@ export default function Carrierlist(props) {
             </Select>
           </div>
           <div className="col-9 d-flex justify-content-end">
-            <Button btnType="add" onClick={() => setModalAddCarrier(true)}>
-              Add Carrier types
+            <Button btnType="add" onClick={() => setModalAddShipment(true)}>
+              Add Shipment
             </Button>
           </div>
         </div>
@@ -291,16 +275,16 @@ export default function Carrierlist(props) {
 
       <CustomModel
       
-        show={modalAddCarrier}
-        onHide={() => setModalAddCarrier(false)}
-        header="Add Carrier"
+        show={modalAddShipment}
+        onHide={() => setModalAddShipment(false)}
+        header="Add Shipment"
         footer={false}
         // {...props}
         View_list
         list_content={
           <>
             <div className="row">
-              <h5 className="lead_text">Add Carrier</h5>
+              <h5 className="lead_text">Add Shipment</h5>
             </div>
             <Form
            form={addForm}
@@ -314,10 +298,10 @@ export default function Carrierlist(props) {
             >
               <div className="row py-4">
                 <div className="col-12 pt-1">
-                  <label>Carrier Name</label>
+                  <label> Name</label>
                   <div>
                   <Form.Item
-                    name="carriername"
+                    name="shipmentname"
                     rules={[
                       {
                         required: true,
@@ -344,15 +328,15 @@ export default function Carrierlist(props) {
                 </div>
                 </div>
                 <div className="col-12 pt-1">
-                  <label>Carrier Code</label>
+                  <label>Description</label>
                   <div>
                   <Form.Item
-                    name="carriercode"
+                    name="shipmentdescription"
                     rules={[
                       {
                         required: true,
-                        pattern: new RegExp("^[A-Za-z ]+$"),
-                        message: "Please enter a Valid  Code",
+                       
+                        message: "Please enter description",
                       },
                       
                       {
@@ -363,50 +347,14 @@ export default function Carrierlist(props) {
                     ]}
                    
                   >
-                    <InputType 
+                    <TextArea
                     />
                   </Form.Item>
                  
                  
                 </div>
                 </div>
-                <div className="col-12 pt-1">
-                  <label>Carrier Type</label>
-                  <div>
-                  <Form.Item
-                    name="carriertype"
-                    rules={[
-                      {
-                        required: true,
-                       
-                        message: "Please select a Valid Carrier Type",
-                      },
-                      
-                     
-                    ]}
-                   
-                  >
-                   <SelectBox>
-                             
-                                    <Select.Option  
-                                      value="Airline"
-                                     >
-                                      Airline
-                                    </Select.Option><Select.Option  
-                                      value="Shipper"
-                                     >
-                                     Shipper
-                                    </Select.Option><Select.Option  
-                                      value="Road"
-                                     >
-                                      Road
-                                    </Select.Option>
-                             
-                            </SelectBox>
-                  </Form.Item>
-                 
-                </div>
-                </div>
+              
               
               </div>
               <div className="row justify-content-center ">
@@ -435,14 +383,14 @@ export default function Carrierlist(props) {
             <div className="container-fluid p-3">
               <div className="row">
                 <div className="col-10">
-                  <h5 className="lead_text">Carrier</h5>
+                  <h5 className="lead_text">Terms Of Shipment</h5>
                 </div>
                 <div className="col-2">
                   <Button
                     btnType="add_borderless"
                     className="edit_button"
                     onClick={() => {
-                        handleviewtoedit(viewcarriers);
+                        handleviewtoedit(viewshipments);
                       // setShowModalEdit(true);
                       setShowViewModal(false);
                     }}
@@ -456,7 +404,7 @@ export default function Carrierlist(props) {
               </div>
               <div className="row mt-4">
                 <div className="col-4">
-                  <p> Carrier Name</p>
+                  <p> Name</p>
                 </div>
                 <div className="col-1">:</div>
                 <div className="col-6 justify-content-start">
@@ -465,35 +413,27 @@ export default function Carrierlist(props) {
               </div>
               <div className="row mt-4">
                 <div className="col-4">
-                  <p> Carrier Code</p>
+                  <p> Description</p>
                 </div>
                 <div className="col-1">:</div>
                 <div className="col-6 justify-content-start">
-                  <p className="modal-view-data">3342</p>
+                  <p className="modal-view-data">Test Data</p>
                 </div>
               </div>
-              <div className="row mt-4">
-                <div className="col-4">
-                  <p> Carrier Type</p>
-                </div>
-                <div className="col-1">:</div>
-                <div className="col-6 justify-content-start">
-                  <p className="modal-view-data">Airline</p>
-                </div>
-              </div>
+             
              
             </div>
           }
         />
       <Custom_model
-         show={CarrierEditPopup}
-        onHide={() => setCarrierEditPopup(false)}
+         show={ShipmentEditPopup}
+        onHide={() => setShipmentEditPopup(false)}
         View_list
         list_content={
           <div>
             <div className="container-fluid px-4 my-3">
               <div>
-                <h5 className="lead_text">Edit Carrier</h5>
+                <h5 className="lead_text">Edit Shipment</h5>
               </div>
               <div className="row my-3 ">
                 <Form
@@ -514,7 +454,7 @@ export default function Carrierlist(props) {
                         {
                           required: true,
                           pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid Fright type Name",
+                          message: "Please enter a Valid shipment Name",
                         },
                         {
                           min: 2,
@@ -534,7 +474,7 @@ export default function Carrierlist(props) {
                 
                   </div>
                   <div className="col-12 pt-1">
-                  <label>Carrier Code</label>
+                  <label>Description</label>
                   <div>
                   <Form.Item
                     name="codeInput"
@@ -553,50 +493,14 @@ export default function Carrierlist(props) {
                     ]}
                    
                   >
-                    <InputType 
+                    <TextArea
                     />
                   </Form.Item>
                  
                  
                 </div>
                 </div>
-                <div className="col-12 pt-1">
-                  <label>Carrier Type</label>
-                  <div>
-                  <Form.Item
-                    name="typeInput"
-                    rules={[
-                      {
-                        required: true,
-                       
-                        message: "Please select a Valid Carrier Type",
-                      },
-                      
-                     
-                    ]}
-                   
-                  >
-                   <SelectBox>
-                             
-                                    <Select.Option  
-                                      value="Airline"
-                                     >
-                                      Airline
-                                    </Select.Option><Select.Option  
-                                      value="Shipper"
-                                     >
-                                     Shipper
-                                    </Select.Option><Select.Option  
-                                      value="Road"
-                                     >
-                                      Road
-                                    </Select.Option>
-                             
-                            </SelectBox>
-                  </Form.Item>
-                 
-                </div>
-                </div>
+              
                 
                  
                   <div className="col-12 d-flex justify-content-center mt-5">

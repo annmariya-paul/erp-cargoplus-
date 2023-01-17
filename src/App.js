@@ -65,7 +65,17 @@ import UpdateAgent from "./pages/FMS/Agent mangement/Updateagent";
 
 import Enquiries from "./pages/FMS/Opportunity_assigns/Enquiries/Enquiries";
 import Modelist from "./pages/FMS/settings/Mode/mode";
+<<<<<<< HEAD
 import Assign_oppertunity_edit from "./pages/FMS/Opportunity_assigns/AssignOpportunity/assign_oppertunity_edit";
+=======
+import Consignee from "./pages/FMS/settings/Consignee/consignee";
+import TermsOfShipment from "./pages/FMS/settings/Terms_of_shipment/terms_of_shipment";
+import Currency from "./pages/General Settings/Currency/currency";
+import TaxType from "./pages/FMS/settings/Tax_type/tax_type";
+import JobTasks from "./pages/FMS/settings/Job_tasks/job_tasks";
+import Airport from "./pages/FMS/settings/Airport/airport";
+import Seaport from "./pages/FMS/settings/Seaport/seaport";
+>>>>>>> 098d737e44336abf894eeb4a24680594ac0f23aa
 // import Lead from "./pages/lead/lead";
 
 function App() {
@@ -133,14 +143,12 @@ function App() {
               path={ROUTES.TRACK_ASSIGNMENTS}
               element={<Track_assignments />}
             />
-            <Route  path={ROUTES.LISTAGENT}
-              element={<ListAgent />} />
+            <Route path={ROUTES.LISTAGENT} element={<ListAgent />} />
 
             {/* <Route  path={ROUTES.UPDATEAGENT}
               element={<UpdateAgent />} />   */}
 
- <Route  path={ROUTES.UPDATEAGENT_ID}
-              element={<UpdateAgent />} /> 
+            <Route path={ROUTES.UPDATEAGENT_ID} element={<UpdateAgent />} />
             <Route
               path={ROUTES.ASSIGN_OPPORTUNITIES_ID}
               element={<Assign_opportunity />}
@@ -154,14 +162,8 @@ function App() {
               path={ROUTES.FRIGHTLIST}
               element={<Frightlist />}
             /> */}
-            <Route
-              path={ROUTES.QUATATIONS}
-              element={<Quotations />}
-            />
-             <Route
-              path={ROUTES.ADD_QUOTATION}
-              element={<Add_Quotation />}
-            />
+            <Route path={ROUTES.QUATATIONS} element={<Quotations />} />
+            <Route path={ROUTES.ADD_QUOTATION} element={<Add_Quotation />} />
             <Route path={ROUTES.FRIGHTLIST} element={<Frightlist />} />
             <Route path={ROUTES.CARRIER} element={<Carrierlist />} />
             <Route path={ROUTES.MODE} element={<Modelist />} />
@@ -170,6 +172,17 @@ function App() {
             <Route path={ROUTES.VIEW_QUOTATION} element={<ViewQuotation />} />
             <Route path={ROUTES.ENQUIRIES} element={<Enquiries />} />
             <Route path={ROUTES.EDIT_ASSIGN_OPPORTUNITY_ID} element={<Assign_oppertunity_edit />} />
+            <Route path={ROUTES.CONSIGNEE} element={<Consignee />} />
+            <Route path={ROUTES.TERMS_OF_SHIPMENT} element={<TermsOfShipment />} />
+
+            {/* General settings */}
+            <Route path={ROUTES.CURRENCY} element={<Currency />} />
+
+
+            <Route path={ROUTES.TAXTYPE} element={<TaxType />} />
+            <Route path={ROUTES.JOBTASKS} element={<JobTasks />} />
+            <Route path={ROUTES.AIRPORT} element={<Airport/>}/>
+            <Route path={ROUTES.SEAPORT} element={<Seaport/>}/>
           </Route>
         </Routes>
       </BrowserRouter>

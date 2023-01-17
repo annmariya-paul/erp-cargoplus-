@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Button from "../../../../components/button/button";
 import InputType from "../../../../components/Input Type textbox/InputType";
+import SelectBox from "../../../../components/Select Box/SelectBox";
 import ErrorMsg from "../../../../components/error/ErrorMessage";
 import Custom_model from "../../../../components/custom_modal/custom_model";
 import { MdPageview } from "react-icons/md";
@@ -24,79 +25,79 @@ export default function JobTasks() {
   const [addForm] = Form.useForm();
   const [editForm] = Form.useForm();
 
-   const columns = [
-     {
-       title: "ACTION",
-       dataIndex: "action",
-       key: "key",
-       width: "30%",
-       render: (data, index) => {
-         console.log("index is :", index);
-         return (
-           <div className="d-flex justify-content-center align-items-center gap-2">
-             <div
-               className="editIcon m-0"
-               onClick={() => setModalEditJobTask(index)}
-             >
-               <FaEdit />
-             </div>
-             <div
-               className="viewIcon m-0"
-               onClick={() => setViewJobTaskModal(index)}
-             >
-               <MdPageview style={{ marginLeft: 15, marginRight: 15 }} />
-             </div>
-             <div className="deleteIcon m-0">
-               <FaTrash />
-             </div>
-           </div>
-         );
-       },
-       align: "center",
-     },
-     {
-       title: "JOB TASK NAME",
-       dataIndex: "jobtask_name",
-       key: "jobtask_name",
-       filteredValue: [searchedText],
-       onFilter: (value, record) => {
-         return String(record.jobtask_name)
-           .toLowerCase()
-           .includes(value.toLowerCase());
-       },
-       align: "center",
-     },
-     {
-       title: "TAX TYPE",
-       dataIndex: "tax_type",
-       key: "tax_type",
-       filteredValue: [searchedText],
-       onFilter: (value, record) => {
-         return String(record.tax_type)
-           .toLowerCase()
-           .includes(value.toLowerCase());
-       },
-       align: "center",
-     },
-   ];
+  const columns = [
+    {
+      title: "ACTION",
+      dataIndex: "action",
+      key: "key",
+      width: "30%",
+      render: (data, index) => {
+        console.log("index is :", index);
+        return (
+          <div className="d-flex justify-content-center align-items-center gap-2">
+            <div
+              className="editIcon m-0"
+              onClick={() => setModalEditJobTask(index)}
+            >
+              <FaEdit />
+            </div>
+            <div
+              className="viewIcon m-0"
+              onClick={() => setViewJobTaskModal(index)}
+            >
+              <MdPageview style={{ marginLeft: 15, marginRight: 15 }} />
+            </div>
+            <div className="deleteIcon m-0">
+              <FaTrash />
+            </div>
+          </div>
+        );
+      },
+      align: "center",
+    },
+    {
+      title: "JOB TASK NAME",
+      dataIndex: "jobtask_name",
+      key: "jobtask_name",
+      filteredValue: [searchedText],
+      onFilter: (value, record) => {
+        return String(record.jobtask_name)
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      },
+      align: "center",
+    },
+    {
+      title: "TAX TYPE",
+      dataIndex: "tax_type",
+      key: "tax_type",
+      filteredValue: [searchedText],
+      onFilter: (value, record) => {
+        return String(record.tax_type)
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      },
+      align: "center",
+    },
+  ];
 
-   const data = [
-     {
-       jobtask_name: "Payroll specialist",
-       tax_type: "Payroll Tax",
-       key: "1",
-     },
-     {
-       jobtask_name: "Sales Tax Analyst",
-       tax_type: "Sales Taxes",
-       key: "2",
-     },
-     {
-       jobtask_name: " Value-Added Tax Analyst",
-       tax_type: "Value-Added Tax",
-       key: "3",
-     },
-   ];
+  const data = [
+    {
+      jobtask_name: "Payroll specialist",
+      tax_type: "Payroll Tax",
+      key: "1",
+    },
+    {
+      jobtask_name: "Sales Tax Analyst",
+      tax_type: "Sales Taxes",
+      key: "2",
+    },
+    {
+      jobtask_name: " Value-Added Tax Analyst",
+      tax_type: "Value-Added Tax",
+      key: "3",
+    },
+  ];
   return (
     <>
       <div className="container-fluid container2 pt-3">
@@ -150,7 +151,7 @@ export default function JobTasks() {
           </div>
           <div className="col-9 d-flex justify-content-end">
             <Button btnType="add" onClick={() => setModalAddJobTask(true)}>
-              Add Tax Type
+              Add Job Tasks
             </Button>
           </div>
         </div>
@@ -163,7 +164,196 @@ export default function JobTasks() {
         </div>
       </div>
       {/* {add job tasks modal} */}
-
+      <CustomModel
+        show={modalAddJobTask}
+        onHide={() => setModalAddJobTask(false)}
+        footer={false}
+        View_list
+        list_content={
+          <>
+            <div className="row">
+              <h5 className="lead_text">Add Job Tasks</h5>
+            </div>
+            <Form
+              form={addForm}
+              onFinish={(data) => {
+                console.log("valuezzzzzzz", data);
+              }}
+              onFinishFailed={(error) => {
+                console.log(error);
+              }}
+            >
+              <div className="row py-4">
+                <div className="col-12 pt-1">
+                  <label>Job Task Name</label>
+                  <div>
+                    <Form.Item
+                      name="jobtask_name"
+                      rules={[
+                        {
+                          required: true,
+                          //   pattern: new RegExp("^[A-Za-z ]+$"),
+                          message: "Please enter a Valid Name",
+                        },
+                      ]}
+                    >
+                      <InputType />
+                    </Form.Item>
+                  </div>
+                </div>
+                <div className="col-12 pt-1">
+                  <label>Tax Type</label>
+                  <div>
+                    <Form.Item
+                      name="taxtype"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please select a Tax type",
+                        },
+                      ]}
+                    >
+                      <SelectBox>
+                        <Select.Option value="A">Payroll Tax</Select.Option>
+                        <Select.Option value="B">Sales Tax</Select.Option>
+                        <Select.Option value="C">Value-added Tax</Select.Option>
+                      </SelectBox>
+                    </Form.Item>
+                  </div>
+                </div>
+              </div>
+              <div className="row justify-content-center ">
+                <div className="col-auto">
+                  <Button btnType="save">Save</Button>
+                </div>
+              </div>
+            </Form>
+          </>
+        }
+      />
+      {/* {edit tax type modal} */}
+      <CustomModel
+        show={modalEditJobTask}
+        onHide={() => setModalEditJobTask(false)}
+        footer={false}
+        View_list
+        list_content={
+          <>
+            <div className="row">
+              <h5 className="lead_text">Edit Job Task</h5>
+            </div>
+            <Form
+              form={editForm}
+              onFinish={(data) => {
+                console.log("valuezzzzzzz", data);
+              }}
+              onFinishFailed={(error) => {
+                console.log(error);
+              }}
+            >
+              <div className="row py-4">
+                <div className="col-12 pt-1">
+                  <label>Job Task Name</label>
+                  <div>
+                    <Form.Item
+                      name="jobtask_name"
+                      rules={[
+                        {
+                          required: true,
+                          //   pattern: new RegExp("^[A-Za-z ]+$"),
+                          message: "Please enter a Valid Name",
+                        },
+                      ]}
+                    >
+                      <InputType />
+                    </Form.Item>
+                  </div>
+                </div>
+                <div className="col-12 pt-1">
+                  <label>Tax Type</label>
+                  <div>
+                    <Form.Item
+                      name="taxtype"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please select a Tax type",
+                        },
+                      ]}
+                    >
+                      <SelectBox>
+                        <Select.Option value="A">Payroll Tax</Select.Option>
+                        <Select.Option value="B">Sales Tax</Select.Option>
+                        <Select.Option value="C">Value-added Tax</Select.Option>
+                      </SelectBox>
+                    </Form.Item>
+                  </div>
+                </div>
+              </div>
+              <div className="row justify-content-center ">
+                <div className="col-auto">
+                  <Button btnType="save">Save</Button>
+                </div>
+              </div>
+            </Form>
+          </>
+        }
+      />
+      {/* {view tax type modal} */}
+      <Custom_model
+        show={ViewJobTaskModal}
+        onHide={() => setViewJobTaskModal(false)}
+        View_list
+        list_content={
+          <div className="container-fluid p-3">
+            <div className="row mb-5">
+              <div className="col-9">
+                <h5 className="lead_text">Tax Type</h5>
+              </div>
+              <div className="col-3">
+                <Button
+                  btnType="add_borderless"
+                  className="edit_button"
+                  onClick={() => {
+                    setModalEditJobTask(true);
+                    setViewJobTaskModal(false);
+                  }}
+                >
+                  Edit
+                  <FiEdit
+                    style={{ marginBottom: "4px", marginInline: "3px" }}
+                  />
+                </Button>
+              </div>
+            </div>
+            <div className="row mt-3">
+              <div className="col-4">
+                <p>Job Task Name</p>
+              </div>
+              <div className="col-1">:</div>
+              <div className="col-6 ">
+                <p className="modal-view-data">Sales tax Analyst</p>
+              </div>
+            </div>
+            <div className="row mt-3">
+              <div className="col-4">
+                <p>Tax Type</p>
+              </div>
+              <div className="col-1">:</div>
+              <div className="col-6 ">
+                <p className="modal-view-data">Sales Tax</p>
+              </div>
+            </div>
+          </div>
+        }
+      />
+      {/* { sucess popup modal} */}
+      <Custom_model
+        size={"sm"}
+        show={successPopup}
+        onHide={() => setSuccessPopup(false)}
+        success
+      />
     </>
   );
 }

@@ -3,7 +3,7 @@ import Button from "../../../../components/button/button";
 import InputType from "../../../../components/Input Type textbox/InputType";
 import ErrorMsg from "../../../../components/error/ErrorMessage";
 import Custom_model from "../../../../components/custom_modal/custom_model";
-import SelectBox from "../../../../components/Select Box/SelectBox";
+
 import {Link} from "react-router-dom";
 import { MdPageview } from "react-icons/md";
 import { Form,Input,Select,DatePicker} from "antd";
@@ -30,8 +30,6 @@ export default function Carrierlist(props) {
   const [modalAddCarrier, setModalAddCarrier] = useState(false);
 
   const [pageSize, setPageSize] = useState("25");
-  const [codeInput, setCodeInput] = useState();
-  const [typeInput, setTypeInput] = useState();
 
  
   const [Errormsg, setErrormsg] = useState();
@@ -62,34 +60,26 @@ export default function Carrierlist(props) {
   const carrierEdit = (e) => {
     console.log("carrier edit", e);
     setNameInput(e.carrier_name);
-    setCodeInput(e.carrier_code);
-    setTypeInput(e.carrier_type);
    
 
     // setCarrier_id(e.carrier_id);
     editForm.setFieldsValue({
       carrier_id: e.carrier_id,
       NameInput: e.carrier_name,
-      codeInput:e.carrier_code,
-      typeInput:e.carrier_type,
   
     });
     setCarrierEditPopup(true);
   };
   const [viewcarriers,setViewCarriers]=useState({
     id:"",
-    carrierviewname:"",
-    carrierviewcode:"",
-    carrierviewtype:""
+    carrierviewname:""
   })
   const handleViewClick=(item)=>{
     console.log("view all carrier",item)
     setViewCarriers({
       ...viewcarriers,
     id:item.carrier_id,
-    carrierviewname:item.carrier_name,
-    carrierviewcode:item.carrier_code,
-    carrierviewtype:item.carrier_type,
+    carrierviewname:item.carrier_name
     })
   
   
@@ -136,31 +126,7 @@ export default function Carrierlist(props) {
       key: "carrier_name",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.carrier_name)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
-      align: "center",
-    },
-    {
-      title: "CARRIER CODE",
-      dataIndex: "carrier_code",
-      key: "carrier_code",
-      filteredValue: [searchedText],
-      onFilter: (value, record) => {
-        return String(record.carrier_code)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
-      align: "center",
-    },
-    {
-      title: "CARRIER TYPE",
-      dataIndex: "carrier_type",
-      key: "carrier_type",
-      filteredValue: [searchedText],
-      onFilter: (value, record) => {
-        return String(record.carrier_type)
+        return String(record.fright_name)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
@@ -172,21 +138,17 @@ export default function Carrierlist(props) {
   const data = [
     {
        carrier_name: "Carrier X",
-       carrier_code:"3241",
-       carrier_type:"Airline",
       
        key: "1",
     },
     {
         carrier_name: "Carrier y",
-        carrier_code:"3242",
-        carrier_type:"Shipper",
+      
         key: "2",
     },
     {
         carrier_name: "Carrier z",
-        carrier_code:"3243",
-        carrier_type:"Road",
+     
         key: "3",
     },
   ];  
@@ -343,70 +305,7 @@ export default function Carrierlist(props) {
                  
                 </div>
                 </div>
-                <div className="col-12 pt-1">
-                  <label>Carrier Code</label>
-                  <div>
-                  <Form.Item
-                    name="carriercode"
-                    rules={[
-                      {
-                        required: true,
-                        pattern: new RegExp("^[A-Za-z ]+$"),
-                        message: "Please enter a Valid  Code",
-                      },
-                      
-                      {
-                        min: 3,
-                        message: "code must be atleast 3 characters",
-                      },
-                     
-                    ]}
-                   
-                  >
-                    <InputType 
-                    />
-                  </Form.Item>
-                 
-                 
-                </div>
-                </div>
-                <div className="col-12 pt-1">
-                  <label>Carrier Type</label>
-                  <div>
-                  <Form.Item
-                    name="carriertype"
-                    rules={[
-                      {
-                        required: true,
-                       
-                        message: "Please select a Valid Carrier Type",
-                      },
-                      
-                     
-                    ]}
-                   
-                  >
-                   <SelectBox>
-                             
-                                    <Select.Option  
-                                      value="Airline"
-                                     >
-                                      Airline
-                                    </Select.Option><Select.Option  
-                                      value="Shipper"
-                                     >
-                                     Shipper
-                                    </Select.Option><Select.Option  
-                                      value="Road"
-                                     >
-                                      Road
-                                    </Select.Option>
-                             
-                            </SelectBox>
-                  </Form.Item>
-                 
-                </div>
-                </div>
+
               
               </div>
               <div className="row justify-content-center ">
@@ -463,24 +362,6 @@ export default function Carrierlist(props) {
                   <p className="modal-view-data">ABC</p>
                 </div>
               </div>
-              <div className="row mt-4">
-                <div className="col-4">
-                  <p> Carrier Code</p>
-                </div>
-                <div className="col-1">:</div>
-                <div className="col-6 justify-content-start">
-                  <p className="modal-view-data">3342</p>
-                </div>
-              </div>
-              <div className="row mt-4">
-                <div className="col-4">
-                  <p> Carrier Type</p>
-                </div>
-                <div className="col-1">:</div>
-                <div className="col-6 justify-content-start">
-                  <p className="modal-view-data">Airline</p>
-                </div>
-              </div>
              
             </div>
           }
@@ -506,7 +387,7 @@ export default function Carrierlist(props) {
                     console.log(error);
                   }}
                 >
-                 <div className="col-12 pt-1">
+                  <div className="col-6">
                     <label>Name</label>
                     <Form.Item
                       name="NameInput"
@@ -531,72 +412,12 @@ export default function Carrierlist(props) {
                        
                       />
                     </Form.Item>
-                
+                    {Errormsg ? (
+                      <label style={{ color: "red" }}>{Errormsg}</label>
+                    ) : (
+                      ""
+                    )}
                   </div>
-                  <div className="col-12 pt-1">
-                  <label>Carrier Code</label>
-                  <div>
-                  <Form.Item
-                    name="codeInput"
-                    rules={[
-                      {
-                        required: true,
-                        pattern: new RegExp("^[A-Za-z ]+$"),
-                        message: "Please enter a Valid  Code",
-                      },
-                      
-                      {
-                        min: 3,
-                        message: "code must be atleast 3 characters",
-                      },
-                     
-                    ]}
-                   
-                  >
-                    <InputType 
-                    />
-                  </Form.Item>
-                 
-                 
-                </div>
-                </div>
-                <div className="col-12 pt-1">
-                  <label>Carrier Type</label>
-                  <div>
-                  <Form.Item
-                    name="typeInput"
-                    rules={[
-                      {
-                        required: true,
-                       
-                        message: "Please select a Valid Carrier Type",
-                      },
-                      
-                     
-                    ]}
-                   
-                  >
-                   <SelectBox>
-                             
-                                    <Select.Option  
-                                      value="Airline"
-                                     >
-                                      Airline
-                                    </Select.Option><Select.Option  
-                                      value="Shipper"
-                                     >
-                                     Shipper
-                                    </Select.Option><Select.Option  
-                                      value="Road"
-                                     >
-                                      Road
-                                    </Select.Option>
-                             
-                            </SelectBox>
-                  </Form.Item>
-                 
-                </div>
-                </div>
                 
                  
                   <div className="col-12 d-flex justify-content-center mt-5">

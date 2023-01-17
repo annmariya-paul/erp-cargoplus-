@@ -17,7 +17,8 @@ import { CRM_BASE_URL_FMS } from "../../../../api/bootapi";
 export default function TaxType() {
   const [searchedText, setSearchedText] = useState("");
   const [pageSize, setPageSize] = useState("25");
-  const [modalAddTaxtype,setModalAddTaxtype]=useState(false);
+  const [error, setError] = useState(false);
+  const [modalAddTaxtype, setModalAddTaxtype] = useState(false);
   const [modalEditTaxtype, setModalEditTaxtype] = useState(false);
   const [ViewTaxtypeModal, setViewTaxtypeModal] = useState(false);
   const [successPopup, setSuccessPopup] = useState(false);
@@ -36,7 +37,7 @@ export default function TaxType() {
           <div className="d-flex justify-content-center align-items-center gap-2">
             <div
               className="editIcon m-0"
-                onClick={() => setModalEditTaxtype(index)}
+              onClick={() => setModalEditTaxtype(index)}
             >
               <FaEdit />
             </div>
@@ -70,29 +71,29 @@ export default function TaxType() {
       title: "TAX PERCENTAGE",
       dataIndex: "tax_percentage",
       key: "tax_percentage",
-      filteredValue: [searchedText],
-      onFilter: (value, record) => {
-        return String(record.tax_percentage)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
+    //   filteredValue: [searchedText],
+    //   onFilter: (value, record) => {
+    //     return String(record.tax_percentage)
+    //       .toLowerCase()
+    //       .includes(value.toLowerCase());
+    //   },
       align: "center",
     },
   ];
 
   const data = [
     {
-      taxtype_name: "Direct Tax",
+      taxtype_name: "Payroll Tax",
       tax_percentage: "15",
       key: "1",
     },
     {
-      taxtype_name: "Indirect Tax",
+      taxtype_name: "Sales Tax",
       tax_percentage: "20",
       key: "2",
     },
     {
-      taxtype_name: "Income Tax",
+      taxtype_name: "Value-added Tax",
       tax_percentage: "07",
       key: "3",
     },
@@ -190,17 +191,8 @@ export default function TaxType() {
                       rules={[
                         {
                           required: true,
-                          pattern: new RegExp("^[A-Za-z ]+$"),
+                          //   pattern: new RegExp("^[A-Za-z ]+$"),
                           message: "Please enter a Valid Name",
-                        },
-
-                        {
-                          min: 3,
-                          message: "Name must be at least 3 characters",
-                        },
-                        {
-                          max: 100,
-                          message: " Name cannot be longer than 100 characters",
                         },
                       ]}
                     >
@@ -216,8 +208,11 @@ export default function TaxType() {
                       rules={[
                         {
                           required: true,
-                          pattern: new RegExp("^[A-Za-z ]+$"),
-                          message: "Please enter tax percetage",
+                          message: "Please enter a valid tax percentage",
+                        },
+                        {
+                          pattern: new RegExp("^[0-9]+$"),
+                          message: "Tax percentage must be numeric",
                         },
                       ]}
                     >
@@ -264,17 +259,8 @@ export default function TaxType() {
                       rules={[
                         {
                           required: true,
-                          pattern: new RegExp("^[A-Za-z ]+$"),
+                          //   pattern: new RegExp("^[A-Za-z ]+$"),
                           message: "Please enter a Valid Name",
-                        },
-
-                        {
-                          min: 3,
-                          message: "Name must be at least 3 characters",
-                        },
-                        {
-                          max: 100,
-                          message: " Name cannot be longer than 100 characters",
                         },
                       ]}
                     >
@@ -290,8 +276,11 @@ export default function TaxType() {
                       rules={[
                         {
                           required: true,
-                          pattern: new RegExp("^[A-Za-z ]+$"),
-                          message: "Please enter tax percetage",
+                          message: "Please entera valid tax percentage",
+                        },
+                        {
+                          pattern: new RegExp("^[0-9]+$"),
+                          message: "Tax percentage must be numeric",
                         },
                       ]}
                     >
@@ -317,7 +306,7 @@ export default function TaxType() {
         View_list
         list_content={
           <div className="container-fluid p-3">
-            <div className="row mb-5" >
+            <div className="row mb-5">
               <div className="col-9">
                 <h5 className="lead_text">Tax Type</h5>
               </div>

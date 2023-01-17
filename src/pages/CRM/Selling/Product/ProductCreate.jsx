@@ -63,7 +63,7 @@ function ProductCreate() {
   
 
   const [uniqueCode,setuniqueCode]= useState(false)
-  const [uniqueCode2,setuniqueCode2] = useState(false)
+  const [uniqueCode2,setuniqueCode2] = useState()
 
 
   const newValues = (checkedValues) => {
@@ -374,7 +374,9 @@ function ProductCreate() {
                           "Product Code cannot be longer than 20 characters",
                       },
                     ]}
-                    onChange={(e) => {setCode(e.target.valu);setuniqueCode2(false)}}
+                    onChange={(e) => {
+                      setCode(e.target.value)
+                      setuniqueCode2(false)}}
                   >
                     <InputType onBlur={async()=>{
                       let a = await CheckUnique({type:"productcode",value:code})
@@ -382,7 +384,8 @@ function ProductCreate() {
                     }}/>
                   </Form.Item>
                   {uniqueCode2 ? (
-                    <label style={{ color: "red" }}>Product Code {UniqueErrorMsg.UniqueErrName}</label>
+                    <label style={{ color: "red" }}>
+                      Product Code {UniqueErrorMsg.UniqueErrName}</label>
                   ) : (
                     ""
                   )}

@@ -223,8 +223,8 @@ return(
             </Select>
           </div>
           <div className="col mb-2 px-4">
-            <Link to={ROUTES.ADD_ATTRIBUTES} style={{ color: "white" }}>
-              {/* <Button btnType="add">Add Agent</Button> */}
+            <Link to={ROUTES.CREATEAGENT} style={{ color: "white" }}>
+              <Button btnType="add">Add Agent</Button>
             </Link>
           </div>
         </div>

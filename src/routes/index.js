@@ -73,6 +73,10 @@ const ROUTES = {
   TERMS_OF_SHIPMENT:"/terms_of_shipment",
   CURRENCY:"/currency",
 
+  TAXTYPE:"/tax_type",
+  JOBTASKS:"/job_tasks",
+  AIRPORT:"/airport",
+  SEAPORT:"/seaport",
 };
 
 module.exports = { ROUTES };

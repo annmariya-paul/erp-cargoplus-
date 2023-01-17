@@ -70,6 +70,8 @@ const ROUTES = {
   VIEW_QUOTATION:"/view_quotation",
   ENQUIRIES:"/enquiries",
   CONSIGNEE:"/consignee",
+  TAXTYPE:"/tax_type",
+  JOBTASKS:"/job_tasks",
   AIRPORT:"/airport",
   SEAPORT:"/seaport",
 };

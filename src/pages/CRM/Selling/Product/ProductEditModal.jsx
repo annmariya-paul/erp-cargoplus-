@@ -113,6 +113,18 @@ export default function ProductEditModal({ show, prid, onHide, fun_call }) {
           setprev(res?.data?.data?.product_attributes);
           setPrDescription(res?.data?.data?.product_description);
           setPrImage(res?.data?.data?.product_pic);
+           editForm.setFieldsValue({
+             productname: res?.data?.data?.product_name,
+             productcode: res?.data?.data?.product_code,
+             productcategory: res?.data?.data?.product_category_id,
+             productbrand: res?.data?.data?.product_brand_id,
+             productunit: res?.data?.data?.product_unit_id,
+
+             productattributes: res?.data?.data?.product_attributes,
+
+             productdescription: res?.data?.data?.product_description,
+             productimg: res?.data?.data?.product_pic,
+           });
         } else {
           console.log("FAILED T LOAD DATA");
         }
@@ -202,9 +214,9 @@ export default function ProductEditModal({ show, prid, onHide, fun_call }) {
 
   console.log("attributee aryy", attributes);
 
-  useEffect(() => {
-    GetAllProductDatatwo();
-  }, [prid]);
+  // useEffect(() => {
+  //   GetAllProductDatatwo();
+  // }, [prid]);
 
   console.log("previous", prev);
   console.log("prevvaluess are", prattribtearray);

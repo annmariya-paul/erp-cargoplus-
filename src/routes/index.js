@@ -70,6 +70,9 @@ const ROUTES = {
   VIEW_QUOTATION:"/view_quotation",
   ENQUIRIES:"/enquiries",
   CONSIGNEE:"/consignee",
+  TERMS_OF_SHIPMENT:"/terms_of_shipment",
+  CURRENCY:"/currency",
+
   TAXTYPE:"/tax_type",
   JOBTASKS:"/job_tasks",
   AIRPORT:"/airport",

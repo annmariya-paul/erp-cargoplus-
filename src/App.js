@@ -68,6 +68,8 @@ import Modelist from "./pages/FMS/settings/Mode/mode";
 import Consignee from "./pages/FMS/settings/Consignee/consignee";
 import TaxType from "./pages/FMS/settings/Tax_type/tax_type";
 import JobTasks from "./pages/FMS/settings/Job_tasks/job_tasks";
+import Airport from "./pages/FMS/settings/Airport/airport";
+import Seaport from "./pages/FMS/settings/Seaport/seaport";
 // import Lead from "./pages/lead/lead";
 
 function App() {
@@ -166,6 +168,8 @@ function App() {
             <Route path={ROUTES.CONSIGNEE} element={<Consignee />} />
             <Route path={ROUTES.TAXTYPE} element={<TaxType />} />
             <Route path={ROUTES.JOBTASKS} element={<JobTasks />} />
+            <Route path={ROUTES.AIRPORT} element={<Airport/>}/>
+            <Route path={ROUTES.SEAPORT} element={<Seaport/>}/>
           </Route>
         </Routes>
       </BrowserRouter>

@@ -72,6 +72,8 @@ const ROUTES = {
   CONSIGNEE:"/consignee",
   TAXTYPE:"/tax_type",
   JOBTASKS:"/job_tasks",
+  AIRPORT:"/airport",
+  SEAPORT:"/seaport",
 };
 
 module.exports = { ROUTES };

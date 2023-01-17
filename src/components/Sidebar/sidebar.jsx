@@ -693,6 +693,33 @@ export default function Sidebar({ showSidebar }) {
                         </NavLink>
                       </li>
                     )}
+                    {checkPermission("freight type") && (
+                       <li className="nav-text">
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.AIRPORT}
+                        >
+                          <BsBookmarkFill className="sidebar_icons ms-4" />
+                         Airport
+                        </NavLink>
+                      </li>
+                    )}
+
+                     {checkPermission("freight type") && (
+                       <li className="nav-text">
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.SEAPORT}
+                        >
+                          <BsBookmarkFill className="sidebar_icons ms-4" />
+                         Seaport
+                        </NavLink>
+                      </li>
+                    )}
                      
                     </>
                   ) : (

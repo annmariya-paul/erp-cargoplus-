@@ -301,7 +301,14 @@ export default function Currency(props) {
                 <div className="col-6 pt-1">
                   <label>Country</label>
                   <div>
-                    <Form.Item>
+                    <Form.Item
+                    name="countryInput"
+                     rules={[
+                        {
+                          required: true,
+                          message: "Please select ",
+                        },
+                      ]}>
                       <SelectBox value={countryis} onChange={handleChange}>
                         {options.map((item, index) => {
                           return (
@@ -327,10 +334,7 @@ export default function Currency(props) {
                           message: "Please enter a Valid  Name",
                         },
 
-                        {
-                          min: 3,
-                          message: "Name must be atleast 3 characters",
-                        },
+                       
                       ]}
                     >
                       <InputType />
@@ -345,6 +349,7 @@ export default function Currency(props) {
                       rules={[
                         {
                           required: true,
+                          message: "Coin is required",
                         },
                       ]}
                     >
@@ -360,6 +365,7 @@ export default function Currency(props) {
                       rules={[
                         {
                           required: true,
+                          message: "Code is required",
                         },
                       ]}
                     >
@@ -375,6 +381,7 @@ export default function Currency(props) {
                       rules={[
                         {
                           required: true,
+                          message: "Symbol is required",
                         },
                       ]}
                     >
@@ -495,17 +502,9 @@ export default function Currency(props) {
                           {
                             required: true,
                             pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                            message: "Please enter a Valid Fright type Name",
+                            message: "Please enter a Valid Currency Name",
                           },
-                          {
-                            min: 2,
-                            message: "Name must be at least 2 characters",
-                          },
-                          {
-                            max: 100,
-                            message:
-                              "Name cannot be longer than 100 characters",
-                          },
+                         
                         ]}
                       >
                         <InputType className="input_type_style w-100" />
@@ -516,6 +515,7 @@ export default function Currency(props) {
                       <label>Country</label>
                       <div>
                         <Form.Item
+                        name="country"
                           rules={[
                             {
                               required: true,
@@ -579,7 +579,7 @@ export default function Currency(props) {
                           rules={[
                             {
                               required: true,
-                              message: "Employee branch is Required",
+                              message: "Symbol is Required",
                             },
                           ]}
                         >

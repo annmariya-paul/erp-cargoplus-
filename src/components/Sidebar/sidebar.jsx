@@ -25,7 +25,7 @@ export default function Sidebar({ showSidebar }) {
   const [CRMgeneral, setCRMgeneral] = useState(false);
   const [FMSOpen, setFMSOpen] = useState(false);
   const [FMSOppopen, setFMSOppopen] = useState(false);
-
+  const [GeneralSettingsopen, setGeneralSettingsopen] = useState(false);
   const [FMSAgentopen, setFMSAgentopen] = useState(false);
   const [FMSQuotationsopen, setFMSQuotationsopen] = useState(false);
   const [permissions, setPermissions] = useState(null);
@@ -738,6 +738,27 @@ export default function Sidebar({ showSidebar }) {
                   ) : (
                     ""
                   )}
+                  {FMSSettingsopen ? (
+                    <>
+                    {checkPermission("terms of shipment") && (
+                       <li className="nav-text">
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.TERMS_OF_SHIPMENT}
+                        >
+                          <BsBookmarkFill className="sidebar_icons ms-4" />
+                          Terms Of Shipment
+                        </NavLink>
+                      </li>
+                    )}
+                     
+                    </>
+                  ) : (
+                    ""
+                  )}
+                  
                
                   {/* {FMSQuotationsopen ? (
                     <>
@@ -756,6 +777,47 @@ export default function Sidebar({ showSidebar }) {
                   ) : (
                     ""
                   )} */}
+                </>
+                
+              ) : (
+                ""
+              )}
+                          <li
+                className={
+                  GeneralSettingsopen
+                    ? "nav-text  items_hrms open"
+                    : "nav-text  items_hrms "
+                }
+              >
+                <Link
+                  className={GeneralSettingsopen ? "active-link_main" : "link"}
+                  style={{fontSize:16}}
+                  // to="/"
+                  onClick={() => setGeneralSettingsopen(!GeneralSettingsopen)}
+                >
+                  <RiTeamFill className="sidebar_icons" />
+               General Settings
+                  <div className="d-flex justify-content-end ms-5 ">
+                    <AiOutlineCaretDown className="toggle_btn " />
+                  </div>
+                </Link>
+              </li>
+              {GeneralSettingsopen ? (
+                <>
+                  {checkPermission("currency") && (
+                    <li className="nav-text ">
+                      <NavLink
+                        className={({ isActive }) =>
+                          isActive ? "active-link" : "link"
+                        }
+                        to={ROUTES.CURRENCY}
+                      >
+                        <RiTeamFill className="sidebar_icons ms-4" />
+                       Currency
+                      </NavLink>
+                    </li>
+                  )}
+                  
                 </>
               ) : (
                 ""

@@ -69,7 +69,9 @@ const ROUTES = {
   EDIT_QUOTATION:"/edit_quotation",
   VIEW_QUOTATION:"/view_quotation",
   ENQUIRIES:"/enquiries",
-  CONSIGNEE:"/consignee"
+  CONSIGNEE:"/consignee",
+  TAXTYPE:"/tax_type",
+  JOBTASKS:"/job_tasks",
 };
 
 module.exports = { ROUTES };

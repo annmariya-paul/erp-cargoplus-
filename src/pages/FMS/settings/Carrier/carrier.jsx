@@ -514,7 +514,7 @@ export default function Carrierlist(props) {
                         {
                           required: true,
                           pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid Fright type Name",
+                          message: "Please enter a Valid  Name",
                         },
                         {
                           min: 2,
@@ -541,14 +541,11 @@ export default function Carrierlist(props) {
                     rules={[
                       {
                         required: true,
-                        pattern: new RegExp("^[A-Za-z ]+$"),
+                        
                         message: "Please enter a Valid  Code",
                       },
                       
-                      {
-                        min: 3,
-                        message: "code must be atleast 3 characters",
-                      },
+                    
                      
                     ]}
                    

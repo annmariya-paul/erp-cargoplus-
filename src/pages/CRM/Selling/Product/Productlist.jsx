@@ -33,12 +33,13 @@ function Productlist() {
   const [current, setCurrent] = useState(1);
   const [searchedText, setSearchedText] = useState(""); // search by text input
   const [searchType, setSearchType] = useState(""); //search by type select box
-  const [searchStatus, setSearchStatus] = useState("");
+  const [searchCategory, setSearchCategory] = useState("");
   const [showProductEditModal, setShowProductEditModal] = useState(false);
   const [productView, setProductView] = useState(false);
   const [successPopup, setSuccessPopup] = useState(false);
   const [error, setError] = useState(false);
   const [products, setProducts] = useState([]);
+  console.log("prooooooo",products);
   console.log("products are :::", products);
   const [modalOpportunity, setModalOpportunity] = useState(false);
   const [productid, setProductID] = useState();
@@ -250,9 +251,9 @@ function Productlist() {
       key: "CATEGORY",
       width: "14%",
       align: "center",
-      filteredValue: [searchStatus],
+      filteredValue: [searchCategory],
       onFilter: (value, record) => {
-        return String(record.product_category_id)
+        return String(record.catgeory_name)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
@@ -334,25 +335,17 @@ function Productlist() {
               />
             </div>
             <div className="col-4 ">
-              <Select
-                allowClear
-                showSearch
-                style={{
-                  width: "100%",
-                  marginTop: "8px",
-                  borderRadius: "5px",
+              <Input.Search
+                placeholder="Search by Name"
+                style={{ margin: "5px", borderRadius: "5px" }}
+                value={searchType}
+                onChange={(e) => {
+                  setSearchType(e.target.value ? [e.target.value] : []);
                 }}
-                placeholder="Search by Code"
-                className="select_search"
-                optionFilterProp="children"
-                onChange={(event) => {
-                  setSearchType(event ? [event] : []);
+                onSearch={(value) => {
+                  setSearchType(value);
                 }}
-              >
-                <Select.Option value="sales">sales</Select.Option>
-                <Select.Option value="maintenance">Maintenance</Select.Option>
-                <Select.Option value="support">support</Select.Option>
-              </Select>
+              />
             </div>
             <div className="col-4 ">
               <Select
@@ -367,19 +360,19 @@ function Productlist() {
                 className="select_search"
                 optionFilterProp="children"
                 onChange={(event) => {
-                  setSearchStatus(event ? [event] : []);
+                  setSearchCategory(event ? [event] : []);
                 }}
               >
-                {/* {LeadStatus &&
-                  LeadStatus.map((item, index) => {
+                {products &&
+                  products.map((item, index) => {
                     return (
                       <Select.Option key={item.id} value={item.value}>
-                        {item.name}
+                        {item.catgeory_name}
                       </Select.Option>
                     );
-                  })} */}
-                <Select.Option value="Watch">watch</Select.Option>
-                <Select.Option value="cookware">cookware</Select.Option>
+                  })}
+                {/* <Select.Option value="Watch">watch</Select.Option>
+                <Select.Option value="cookware">cookware</Select.Option> */}
               </Select>
             </div>
           </div>

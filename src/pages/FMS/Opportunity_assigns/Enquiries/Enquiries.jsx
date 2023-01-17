@@ -133,21 +133,10 @@ function Enquiries() {
       key: "buttons",
       align: "center",
       render: (data, index) => {
+        console.log("table data",index);
         return (
           <div>
-            {data ? (
-              <div>
-                <Button
-                  onClick={() => {
-                    navigate(
-                      `${ROUTES.ASSIGN_OPPORTUNITIES}/${index.opportunity_id}`
-                    );
-                  }}
-                >
-                  Assign{" "}
-                </Button>
-              </div>
-            ) : (
+            {index.assigned_employee && index.assigned_employee.length > 0 ? (
               <div>
                 <Button
                   onClick={() => {
@@ -155,6 +144,19 @@ function Enquiries() {
                   }}
                 >
                   view{" "}
+                </Button>
+              </div>
+            ) : (
+              <div>
+               
+                 <Button
+                  onClick={() => {
+                    navigate(
+                      `${ROUTES.ASSIGN_OPPORTUNITIES}/${index.opportunity_id}`
+                    );
+                  }}
+                >
+                  Assign{" "}
                 </Button>
               </div>
             )}
@@ -222,6 +224,7 @@ function Enquiries() {
               opportunity_description: item?.opportunity_description,
               opportunity_amount: item?.opportunity_amount,
               opportunity_status: item?.opportunity_status,
+              assigned_employee: item?.assigned_employee
             });
           });
           console.log("hellooooqqqqq", tempArr);
@@ -249,7 +252,9 @@ function Enquiries() {
     GetOpportunityData();
   }, [pageofIndex, numOfItems]);
 
-  const handleEditedclick = () => {};
+  const handleEditedclick = (index) => {
+     navigate(`${ROUTES.EDIT_ASSIGN_OPPORTUNITY}/${index.opportunity_id}`)
+  };
   return (
     <div>
       <div className="container">

@@ -69,6 +69,8 @@ const ROUTES = {
   EDIT_QUOTATION:"/edit_quotation",
   VIEW_QUOTATION:"/view_quotation",
   ENQUIRIES:"/enquiries",
+  EDIT_ASSIGN_OPPORTUNITY:"/edit_assign_opportunity",
+  EDIT_ASSIGN_OPPORTUNITY_ID:"/edit_assign_opportunity/:id",
 };
 
 module.exports = { ROUTES };

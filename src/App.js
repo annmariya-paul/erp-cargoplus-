@@ -65,6 +65,7 @@ import UpdateAgent from "./pages/FMS/Agent mangement/Updateagent";
 
 import Enquiries from "./pages/FMS/Opportunity_assigns/Enquiries/Enquiries";
 import Modelist from "./pages/FMS/settings/Mode/mode";
+import Assign_oppertunity_edit from "./pages/FMS/Opportunity_assigns/AssignOpportunity/assign_oppertunity_edit";
 // import Lead from "./pages/lead/lead";
 
 function App() {
@@ -168,6 +169,7 @@ function App() {
             <Route path={ROUTES.EDIT_QUOTATION} element={<EditQuotation />} />
             <Route path={ROUTES.VIEW_QUOTATION} element={<ViewQuotation />} />
             <Route path={ROUTES.ENQUIRIES} element={<Enquiries />} />
+            <Route path={ROUTES.EDIT_ASSIGN_OPPORTUNITY_ID} element={<Assign_oppertunity_edit />} />
           </Route>
         </Routes>
       </BrowserRouter>

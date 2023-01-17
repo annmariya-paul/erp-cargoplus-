@@ -66,6 +66,8 @@ import UpdateAgent from "./pages/FMS/Agent mangement/Updateagent";
 import Enquiries from "./pages/FMS/Opportunity_assigns/Enquiries/Enquiries";
 import Modelist from "./pages/FMS/settings/Mode/mode";
 import Consignee from "./pages/FMS/settings/Consignee/consignee";
+import Airport from "./pages/FMS/settings/Airport/airport";
+import Seaport from "./pages/FMS/settings/Seaport/seaport";
 // import Lead from "./pages/lead/lead";
 
 function App() {
@@ -170,6 +172,8 @@ function App() {
             <Route path={ROUTES.VIEW_QUOTATION} element={<ViewQuotation />} />
             <Route path={ROUTES.ENQUIRIES} element={<Enquiries />} />
             <Route path={ROUTES.CONSIGNEE} element={<Consignee />} />
+            <Route path={ROUTES.AIRPORT} element={<Airport/>}/>
+            <Route path={ROUTES.SEAPORT} element={<Seaport/>}/>
           </Route>
         </Routes>
       </BrowserRouter>

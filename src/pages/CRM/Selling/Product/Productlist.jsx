@@ -39,8 +39,6 @@ function Productlist() {
   const [successPopup, setSuccessPopup] = useState(false);
   const [error, setError] = useState(false);
   const [products, setProducts] = useState([]);
-  console.log("prooooooo",products);
-  console.log("products are :::", products);
   const [modalOpportunity, setModalOpportunity] = useState(false);
   const [productid, setProductID] = useState();
   console.log("pr id from state", productid);
@@ -336,7 +334,7 @@ function Productlist() {
             </div>
             <div className="col-4 ">
               <Input.Search
-                placeholder="Search by Name"
+                placeholder="Search by Code"
                 style={{ margin: "5px", borderRadius: "5px" }}
                 value={searchType}
                 onChange={(e) => {

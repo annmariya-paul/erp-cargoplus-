@@ -71,12 +71,14 @@ const ROUTES = {
   ENQUIRIES:"/enquiries",
   CONSIGNEE:"/consignee",
   TERMS_OF_SHIPMENT:"/terms_of_shipment",
-  CURRENCY:"/currency",
-
   TAXTYPE:"/tax_type",
   JOBTASKS:"/job_tasks",
   AIRPORT:"/airport",
   SEAPORT:"/seaport",
+  
+  // general settings
+  CURRENCY:"/currency",
+  COMPANYINFO:"/company_info"
 };
 
 module.exports = { ROUTES };

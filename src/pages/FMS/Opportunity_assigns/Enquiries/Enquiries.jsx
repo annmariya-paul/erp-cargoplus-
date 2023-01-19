@@ -109,13 +109,13 @@ function Enquiries() {
       align: "left",
     },
 
-    {
-      title: "CONVERTED BY",
-      dataIndex: "opportunity_created_by",
-      key: "CONVERTED BY",
-      width: "17%",
-      align: "center",
-    },
+    // {
+    //   title: "CONVERTED BY",
+    //   dataIndex: "opportunity_created_by",
+    //   key: "CONVERTED BY",
+    //   width: "17%",
+    //   align: "center",
+    // },
     {
       title: "SOURCE",
       dataIndex: "opportunity_source",
@@ -138,11 +138,12 @@ function Enquiries() {
       title: " ",
       dataIndex: "buttons",
       key: "buttons",
-      align: "center",
+      // align: "center",
+      // display:"flex",
       render: (data, index) => {
         console.log("table data",index);
         return (
-          <div >
+          <div className="d-flex justify-content-center">
             {index.assigned_employee && index.assigned_employee.length > 0 ? (
               <div>
                 <Button

@@ -100,7 +100,9 @@ function Assign_oppertunity_edit() {
     }
   };
 
-  const updateAssignOpportunity = () => {
+  const updateAssignOpportunity = (value) => {
+    
+
     let temp = [];
     if (agnetData) {
       agnetData.forEach((item, index) => {
@@ -159,12 +161,8 @@ function Assign_oppertunity_edit() {
               name="editForm"
               form={editForm}
               onFinish={(value) => {
-                console.log("Data to send", value);
-                //   createAssignOpp(value)
-                if(value && value.length > 0){
-                updateAssignOpportunity(value);
-
-                }
+                console.log("Data to send", value.employee_ids);
+                updateAssignOpportunity(value); 
               }}
             >
               <div className="row">
@@ -191,8 +189,6 @@ function Assign_oppertunity_edit() {
                                       message: "Agents are Required",
                                     },
                                   ]}
-                                
-                                  
                                 >
                                   <Checkbox
                                     key={item.employee_id}
@@ -220,7 +216,7 @@ function Assign_oppertunity_edit() {
                 </div>
 
                 <div className="col-12 d-flex justify-content-center gap-2 pt-2">
-                  <Button className="save_button">Save</Button>
+                  <Button type="submit" className="save_button">Save</Button>
                   <Button className="cancel_button" onClick={()=>{
                     navigate(`${ROUTES.ENQUIRIES}`)
                   }}>cancel</Button>

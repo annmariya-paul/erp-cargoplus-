@@ -65,6 +65,7 @@ import UpdateAgent from "./pages/FMS/Agent mangement/Updateagent";
 
 import Enquiries from "./pages/FMS/Opportunity_assigns/Enquiries/Enquiries";
 import Modelist from "./pages/FMS/settings/Mode/mode";
+import Assign_oppertunity_edit from "./pages/FMS/Opportunity_assigns/AssignOpportunity/assign_oppertunity_edit";
 import Consignee from "./pages/FMS/settings/Consignee/consignee";
 import TermsOfShipment from "./pages/FMS/settings/Terms_of_shipment/terms_of_shipment";
 import Currency from "./pages/General Settings/Currency/currency";
@@ -168,6 +169,7 @@ function App() {
             <Route path={ROUTES.EDIT_QUOTATION} element={<EditQuotation />} />
             <Route path={ROUTES.VIEW_QUOTATION} element={<ViewQuotation />} />
             <Route path={ROUTES.ENQUIRIES} element={<Enquiries />} />
+            <Route path={ROUTES.EDIT_ASSIGN_OPPORTUNITY_ID} element={<Assign_oppertunity_edit />} />
             <Route path={ROUTES.CONSIGNEE} element={<Consignee />} />
             <Route path={ROUTES.TERMS_OF_SHIPMENT} element={<TermsOfShipment />} />
             <Route path={ROUTES.TAXTYPE} element={<TaxType />} />

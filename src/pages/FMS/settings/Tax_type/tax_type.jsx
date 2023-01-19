@@ -23,22 +23,26 @@ export default function TaxType() {
   const [modalEditTaxtype, setModalEditTaxtype] = useState(false);
   const [ViewTaxtypeModal, setViewTaxtypeModal] = useState(false);
   const [successPopup, setSuccessPopup] = useState(false);
-  const [taxTypeName,setTaxTypeName] = useState();
-  const [taxPercent,setTaxPercent] = useState();
-  const [taxDescription,setTaxDescription] = useState("");
-  
-  const [taxTypes,setTaxTypes] = useState();
+  const [taxtype_id, setTaxtype_id] = useState();
+  const [taxTypeName, setTaxTypeName] = useState();
+  const [taxPercent, setTaxPercent] = useState();
+  const [taxDescription, setTaxDescription] = useState("");
+  const [editName, setEditName] = useState();
+  const [taxEditPercent, setTaxEditPercent] = useState();
+  const [editDescription, setEditDescription] = useState("");
+
+  const [taxTypes, setTaxTypes] = useState();
   const [addForm] = Form.useForm();
   const [editForm] = Form.useForm();
 
-   const close_modal = (mShow, time) => {
-     if (!mShow) {
-       setTimeout(() => {
-         setSuccessPopup(false);
-       }, time);
-     }
-   };
-
+  const close_modal = (mShow, time) => {
+    if (!mShow) {
+      setTimeout(() => {
+        setSuccessPopup(false);
+      }, time);
+    }
+  };
+  // { function to get all tax types - Ann - 18/1/23}
   const getAllTaxTypes = async () => {
     try {
       const allTxTypes = await PublicFetch.get(
@@ -49,78 +53,103 @@ export default function TaxType() {
     } catch (err) {
       console.log("error while getting the tax types: ", err);
     }
-  }
+  };
 
-useEffect(() => {
-  getAllTaxTypes();
-}, []);
+  useEffect(() => {
+    getAllTaxTypes();
+  }, []);
 
-const createTaxTypes = async()=>{
- try {
-   const addtaxtypes = await PublicFetch.post(`${CRM_BASE_URL_FMS}/tax-types`, {
-     tax_type_name: taxTypeName,
-     tax_type_percentage: parseInt(taxPercent),
-     tax_type_description: taxDescription,
-   });
-   console.log("fright added successfully", addtaxtypes);
-   if (addtaxtypes.data.success) {
-     setSuccessPopup(true);
-     getAllTaxTypes();
-     addForm.resetFields();
-     setModalAddTaxtype(false);
-     close_modal(successPopup, 1000);
-   }
- } catch (err) {
-   console.log("err to add the frights", err);
- } 
-}
+  // { function to add a tax type - Ann - 19/1/23}
+  const createTaxTypes = async () => {
+    try {
+      const addtaxtypes = await PublicFetch.post(
+        `${CRM_BASE_URL_FMS}/tax-types`,
+        {
+          tax_type_name: taxTypeName.trim(" "),
+          tax_type_percentage: parseInt(taxPercent),
+          tax_type_description: taxDescription,
+        }
+      );
+      console.log("fright added successfully", addtaxtypes);
+      if (addtaxtypes.data.success) {
+        setSuccessPopup(true);
+        getAllTaxTypes();
+        addForm.resetFields();
+        setModalAddTaxtype(false);
+        close_modal(successPopup, 1000);
+      }
+    } catch (err) {
+      console.log("err to add the frights", err);
+    }
+  };
 
-  const TaxTypeEdit = (i)=>{
-    console.log("taxtypppe",i);
-    setTaxTypeName(i.tax_type_name);
-    setTaxPercent(i.tax_type_percentage);
-    setTaxDescription(i.tax_type_description);
-    editForm.setFieldValue({
-      taxtype_id: i.taxtype_id,
-      taxTypeName: i.tax_type_name,
-      taxPercent: i.tax_type_percentage,
-      taxDescription: i.tax_type_description,
+  // { function to display a taxtype in input to edit - Ann - 19/1/23}
+  const TaxTypeEdit = (i) => {
+    console.log("taxtypppe", i);
+    setTaxtype_id(i.tax_type_id);
+    setEditName(i.tax_type_name);
+    setTaxEditPercent(i.tax_type_percentage);
+    setEditDescription(i.tax_type_description);
+    editForm.setFieldsValue({
+      taxtype_id: i.tax_type_id,
+      editName: i.tax_type_name,
+      taxEditPercent: i.tax_type_percentage,
+      editDescription: i.tax_type_description,
     });
     setModalEditTaxtype(true);
-   }
-
-    const [viewTaxType, setViewTaxType] = useState({
-      id: "",
-      viewtaxname: "",
-      viewpercentage: "",
-      viewdescription: "",
+  };
+  // { function to view a tax type - Ann - 19/1/23}
+  const [viewTaxType, setViewTaxType] = useState({});
+  const handleViewClick = (item) => {
+    console.log("view tax types", item);
+    setViewTaxType({
+      ...viewTaxType,
+      tax_type_id: item.tax_type_id,
+      tax_type_name: item.tax_type_name,
+      tax_type_percentage: item.tax_type_percentage,
+      tax_type_description: item.tax_type_description,
     });
-    const handleViewClick = (item) => {
-      console.log("view all tax type", item);
-      setViewTaxType({
-        ...viewTaxType,
-        id: item.taxtype_id,
-        viewtaxname: item.tax_type_name,
-        viewpercentage: item.tax_type_percentage,
-        viewdescription: item.tax_type_description,
-      });
+    setViewTaxtypeModal(true);
+  };
 
-      setViewTaxtypeModal(true);
-    };
+  const handleviewtoedit = (i) => {
+    console.log("existing data is", i);
+    setTaxtype_id(i.tax_type_id);
+    setEditName(i.tax_type_name);
+    setTaxEditPercent(i.tax_type_percentage);
+    setEditDescription(i.tax_type_description);
+    editForm.setFieldsValue({
+      taxtype_id: i.tax_type_id,
+      editName: i.tax_type_name,
+      taxEditPercent: i.tax_type_percentage,
+      editDescription: i.tax_type_description,
+    });
+    setViewTaxtypeModal(false);
+    setModalEditTaxtype(true);
+  };
 
-      const [taxtypenamee, setTaxtypenamee] = useState();
-      const [taxtype_id, setTaxtype_id] = useState();
-
-      const handleviewtoedit = (i) => {
-        console.log("existing data is", i);
-        setTaxtype_id(i.id);
-        setTaxtypenamee(i.viewtaxname);
-
-        addForm.setFieldsValue({
-          taxtype: i.viewtaxname,
-        });
-        setModalEditTaxtype(true);
-      };
+  // { function to update a tax type - Ann - 19/1/23}
+  const taxTypeUpdate = async () => {
+    try {
+      const updated = await PublicFetch.patch(
+        `${CRM_BASE_URL_FMS}/tax-types/${taxtype_id}`,
+        {
+          tax_type_name: editName.trim(" "),
+          tax_type_percentage: parseInt(taxEditPercent),
+          tax_type_description: editDescription,
+        }
+      );
+      console.log("successfully updated ", updated);
+      if (updated.data.success) {
+        setModalEditTaxtype(false);
+        close_modal(successPopup, 1000);
+        getAllTaxTypes();
+        setSuccessPopup(true);
+      }
+    } catch (err) {
+      console.log("error to update tax types");
+    }
+  };
 
   const columns = [
     {
@@ -175,25 +204,6 @@ const createTaxTypes = async()=>{
     },
   ];
 
-  const data = [
-    {
-      tax_type_name: "Payroll Tax",
-      tax_type_percentage: "15",
-      tax_type_description: "Sample description",
-      key: "1",
-    },
-    {
-      tax_type_name: "Sales Tax",
-      tax_type_percentage: "20",
-      key: "2",
-    },
-    {
-      tax_type_name: "Value-added Tax",
-      tax_type_percentage: "07",
-      tax_type_description: "test desc",
-      key: "3",
-    },
-  ];
   return (
     <>
       <div className="container-fluid container2 pt-3">
@@ -257,7 +267,7 @@ const createTaxTypes = async()=>{
           />
         </div>
       </div>
-      {/* {add tax type modal} */}
+      {/* {add tax type modal - Ann} */}
       <CustomModel
         show={modalAddTaxtype}
         onHide={() => setModalAddTaxtype(false)}
@@ -316,7 +326,10 @@ const createTaxTypes = async()=>{
                         },
                       ]}
                     >
-                      <InputType value={taxPercent} onChange={(e) => setTaxPercent(e.target.value)} />
+                      <InputType
+                        value={taxPercent}
+                        onChange={(e) => setTaxPercent(e.target.value)}
+                      />
                     </Form.Item>
                   </div>
                 </div>
@@ -324,8 +337,8 @@ const createTaxTypes = async()=>{
                   <label>Description</label>
                   <Form.Item name="tax_type_description">
                     <TextArea
-                    value={taxDescription}
-                    onChange={(e) => setTaxDescription(e.target.value)}
+                      value={taxDescription}
+                      onChange={(e) => setTaxDescription(e.target.value)}
                     />
                   </Form.Item>
                 </div>
@@ -339,7 +352,7 @@ const createTaxTypes = async()=>{
           </>
         }
       />
-      {/* {edit tax type modal} */}
+      {/* {edit tax type modal - Ann} */}
       <CustomModel
         show={modalEditTaxtype}
         onHide={() => setModalEditTaxtype(false)}
@@ -354,6 +367,7 @@ const createTaxTypes = async()=>{
               form={editForm}
               onFinish={(data) => {
                 console.log("valuezzzzzzz", data);
+                taxTypeUpdate();
               }}
               onFinishFailed={(error) => {
                 console.log(error);
@@ -364,7 +378,7 @@ const createTaxTypes = async()=>{
                   <label>Tax Type Name</label>
                   <div>
                     <Form.Item
-                      // name="taxTypeName"
+                      name="editName"
                       rules={[
                         {
                           required: true,
@@ -373,7 +387,9 @@ const createTaxTypes = async()=>{
                         },
                       ]}
                     >
-                      <InputType value={taxTypeName} />
+                      <InputType
+                        onChange={(e) => setEditName(e.target.value)}
+                      />
                     </Form.Item>
                   </div>
                 </div>
@@ -381,7 +397,7 @@ const createTaxTypes = async()=>{
                   <label>Tax Percentage</label>
                   <div>
                     <Form.Item
-                      // name="taxPercent"
+                      name="taxEditPercent"
                       rules={[
                         {
                           required: true,
@@ -393,16 +409,17 @@ const createTaxTypes = async()=>{
                         },
                       ]}
                     >
-                      <InputType value={taxPercent} />
+                      <InputType
+                        onChange={(e) => setTaxEditPercent(e.target.value)}
+                      />
                     </Form.Item>
                   </div>
                 </div>
                 <div className="col-12 pt-1">
                   <label>Description</label>
-                  <Form.Item>
+                  <Form.Item name="editDescription">
                     <TextArea
-                    // value={leadDescription}
-                    // onChange={(e) => setLeadDescription(e.target.value)}
+                      onChange={(e) => setEditDescription(e.target.value)}
                     />
                   </Form.Item>
                 </div>
@@ -416,7 +433,7 @@ const createTaxTypes = async()=>{
           </>
         }
       />
-      {/* {view tax type modal} */}
+      {/* {view tax type modal - Ann} */}
 
       <Custom_model
         show={ViewTaxtypeModal}
@@ -434,7 +451,6 @@ const createTaxTypes = async()=>{
                   className="edit_button"
                   onClick={() => {
                     handleviewtoedit(viewTaxType);
-                    setViewTaxtypeModal(false);
                   }}
                 >
                   Edit
@@ -450,7 +466,7 @@ const createTaxTypes = async()=>{
               </div>
               <div className="col-1">:</div>
               <div className="col-6 ">
-                <p className="modal-view-data">{viewTaxType.viewtaxname}</p>
+                <p className="modal-view-data">{viewTaxType.tax_type_name}</p>
               </div>
             </div>
             <div className="row mt-3">
@@ -459,7 +475,9 @@ const createTaxTypes = async()=>{
               </div>
               <div className="col-1">:</div>
               <div className="col-6 ">
-                <p className="modal-view-data">{viewTaxType.viewpercentage}%</p>
+                <p className="modal-view-data">
+                  {viewTaxType.tax_type_percentage}%
+                </p>
               </div>
             </div>
             <div className="row mt-3">
@@ -468,13 +486,15 @@ const createTaxTypes = async()=>{
               </div>
               <div className="col-1">:</div>
               <div className="col-6 ">
-                <p className="modal-view-data">{viewTaxType.viewdescription}</p>
+                <p className="modal-view-data">
+                  {viewTaxType.tax_type_description}
+                </p>
               </div>
             </div>
           </div>
         }
       />
-      {/* { sucess popup modal} */}
+      {/* { success popup modal} */}
       <Custom_model
         size={"sm"}
         show={successPopup}

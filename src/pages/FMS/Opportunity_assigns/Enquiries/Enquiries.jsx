@@ -54,28 +54,35 @@ function Enquiries() {
   const [OpportunityList, setOpportunityList] = useState([]);
 
   const columns = [
-    {
-      title: "ACTION",
-      dataIndex: "action",
-      key: "ACTION",
-      width: "15%",
-      render: (data, index) => {
-        return (
-          <div className="d-flex justify-content-center gap-2">
-            <div className="editcolor">
-              <FaEdit onClick={() => handleEditedclick(index)} />
-            </div>
-            <div className="editcolor">
-              <MdPageview
-                // onClick={()=>viewprogressoppurtunity(index)}
-                onClick={() => {}}
-              />
-            </div>
-          </div>
-        );
-      },
-      align: "center",
-    },
+    // {
+    //   title: "ACTION",
+    //   dataIndex: "action",
+    //   key: "ACTION",
+    //   width: "15%",
+    //   render: (data, index) => {
+    //     return (
+    //       <div className="d-flex justify-content-center gap-2">
+    //         <div className="editcolor">
+    //           <FaEdit onClick={() => {
+    //             if (index.assigned_employee && index.assigned_employee.length > 0 ){
+    //               handleEditedclick(index)
+    //             }
+                  
+               
+                
+    //           }} />
+    //         </div>
+    //         {/* <div className="editcolor">
+    //           <MdPageview
+    //             // onClick={()=>viewprogressoppurtunity(index)}
+    //             onClick={() => {}}
+    //           />
+    //         </div> */}
+    //       </div>
+    //     );
+    //   },
+    //   align: "center",
+    // },
     {
       title: "TYPE",
       dataIndex: "opportunity_type",
@@ -135,12 +142,13 @@ function Enquiries() {
       render: (data, index) => {
         console.log("table data",index);
         return (
-          <div>
+          <div >
             {index.assigned_employee && index.assigned_employee.length > 0 ? (
               <div>
                 <Button
+                btnType="add"
                   onClick={() => {
-                    setShowViewModal(true);
+                    handleEditedclick(index);
                   }}
                 >
                   view{" "}
@@ -150,6 +158,7 @@ function Enquiries() {
               <div>
                
                  <Button
+                 btnType="add"
                   onClick={() => {
                     navigate(
                       `${ROUTES.ASSIGN_OPPORTUNITIES}/${index.opportunity_id}`
@@ -427,9 +436,9 @@ function Enquiries() {
                   </div>
                   <div className="col-xl-6 col-lg-6 col-md-6 col-sm-8 col-12"></div>
                   <div className="col-lg-3 col-lg-3 col-md-3 col-sm-12 col-12 d-flex justify-content-end">
-                    <Link to={ROUTES.LEADLIST}>
+                    {/* <Link to={ROUTES.LEADLIST}>
                       <Button btnType="add">Add Opportunity</Button>
-                    </Link>
+                    </Link> */}
                   </div>
                 </div>
                 <div className="datatable">

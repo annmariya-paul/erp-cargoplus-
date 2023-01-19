@@ -1,14 +1,16 @@
 import { Checkbox, Col, Form, Row } from "antd";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Button from "../../../../components/button/button";
 import CustomModel from "../../../../components/custom_modal/custom_model";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { CRM_BASE_URL_HRMS, CRM_BASE_URL_FMS } from "../../../../api/bootapi";
+import { ROUTES } from "../../../../routes";
 
 function Assign_oppertunity_edit() {
   const [editForm] = Form.useForm();
   const assign_opp_id = useParams();
+  const navigate = useNavigate();
 
   console.log("assign oppp id", parseInt(assign_opp_id.id));
 
@@ -77,7 +79,57 @@ function Assign_oppertunity_edit() {
   };
 
   const onHandleChange = (checked, emp_id) => {
+    let temp = agnetData;
     if (checked) {
+      if (temp) {
+        temp.push({
+          employee_id: emp_id,
+        });
+      } else {
+        temp = [{ employee_id: emp_id }];
+        editForm.setFieldsValue({employee_id: emp_id})
+      }
+      setAgentData([...temp]);
+      editForm.setFieldsValue([...temp])
+    } else {
+      temp = agnetData.filter((item, index) => {
+        return item?.employee_id !== emp_id;
+      });
+      setAgentData([...temp]);
+      editForm.setFieldsValue([...temp])
+    }
+  };
+
+  const updateAssignOpportunity = () => {
+    let temp = [];
+    if (agnetData) {
+      agnetData.forEach((item, index) => {
+        temp.push(item.employee_id);
+      });
+    }
+    PublicFetch.patch(`${CRM_BASE_URL_FMS}/enquiry/${opp_idd}`, {
+      opportunity_assign_opportunity_id: opp_idd,
+      employee_ids: temp,
+      opportunity_assign_agent_id: 1,
+    })
+      .then((res) => {
+        console.log("Response", res);
+        if (res.data.success) {
+          setSuccessPopup(true);
+          // getAssignOpportunity();
+          close_modal(successPopup, 1200);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+  const close_modal = (mShow, time) => {
+    if (!mShow) {
+      setTimeout(() => {
+        setSuccessPopup(false);
+        navigate(`${ROUTES.ENQUIRIES}`);
+      }, time);
     }
   };
 
@@ -85,6 +137,8 @@ function Assign_oppertunity_edit() {
     getAllEmployees();
     getAssignOpportunity();
   }, [opp_idd]);
+
+  console.log("ftaaysjd", agnetData);
 
   return (
     <div>
@@ -107,6 +161,10 @@ function Assign_oppertunity_edit() {
               onFinish={(value) => {
                 console.log("Data to send", value);
                 //   createAssignOpp(value)
+                if(value && value.length > 0){
+                updateAssignOpportunity(value);
+
+                }
               }}
             >
               <div className="row">
@@ -116,7 +174,7 @@ function Assign_oppertunity_edit() {
                       //   onChange={onChange}
                     > */}
                   <div className="row p-2 checkbox">
-                    <Row>
+                    <div className="row">
                       {allEmployees &&
                         allEmployees.map((item, index) => {
                           if (
@@ -124,7 +182,7 @@ function Assign_oppertunity_edit() {
                               ?.employment_type_name === "Agent"
                           ) {
                             return (
-                              <Col span={8}>
+                              <div className="col-xl-4 col-lg-4 col-sm-6">
                                 <Form.Item
                                   name="employee_ids"
                                   rules={[
@@ -133,10 +191,12 @@ function Assign_oppertunity_edit() {
                                       message: "Agents are Required",
                                     },
                                   ]}
+                                
+                                  
                                 >
                                   <Checkbox
-                                    // key={item.employee_id}
-                                    // value={item.employee_id}
+                                    key={item.employee_id}
+                                    value={item.employee_id}
                                     onChange={(e) => {
                                       console.log("value", e.target.value);
                                       onHandleChange(
@@ -149,18 +209,22 @@ function Assign_oppertunity_edit() {
                                     {item.employee_name}
                                   </Checkbox>
                                 </Form.Item>
-                              </Col>
+                              </div>
                             );
                           }
                         })}
-                    </Row>
+                    </div>
                   </div>
                   {/* </Checkbox.Group> */}
                   {/* </Form.Item> */}
                 </div>
 
-                <div className="col-12 d-flex justify-content-center pt-2">
+                <div className="col-12 d-flex justify-content-center gap-2 pt-2">
                   <Button className="save_button">Save</Button>
+                  <Button className="cancel_button" onClick={()=>{
+                    navigate(`${ROUTES.ENQUIRIES}`)
+                  }}>cancel</Button>
+
                 </div>
               </div>
             </Form>

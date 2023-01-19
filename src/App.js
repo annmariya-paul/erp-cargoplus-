@@ -65,9 +65,7 @@ import UpdateAgent from "./pages/FMS/Agent mangement/Updateagent";
 
 import Enquiries from "./pages/FMS/Opportunity_assigns/Enquiries/Enquiries";
 import Modelist from "./pages/FMS/settings/Mode/mode";
-<<<<<<< HEAD
 import Assign_oppertunity_edit from "./pages/FMS/Opportunity_assigns/AssignOpportunity/assign_oppertunity_edit";
-=======
 import Consignee from "./pages/FMS/settings/Consignee/consignee";
 import TermsOfShipment from "./pages/FMS/settings/Terms_of_shipment/terms_of_shipment";
 import Currency from "./pages/General Settings/Currency/currency";
@@ -75,7 +73,6 @@ import TaxType from "./pages/FMS/settings/Tax_type/tax_type";
 import JobTasks from "./pages/FMS/settings/Job_tasks/job_tasks";
 import Airport from "./pages/FMS/settings/Airport/airport";
 import Seaport from "./pages/FMS/settings/Seaport/seaport";
->>>>>>> 098d737e44336abf894eeb4a24680594ac0f23aa
 // import Lead from "./pages/lead/lead";
 
 function App() {

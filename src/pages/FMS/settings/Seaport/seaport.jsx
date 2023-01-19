@@ -13,6 +13,8 @@ import {ROUTES} from "../../../../routes";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { FiEdit } from "react-icons/fi";
 import CustomModel from "../../../../components/custom_modal/custom_model";
+import { CRM_BASE_URL_FMS } from "../../../../api/bootapi";
+import MyPagination from "../../../../components/Pagination/MyPagination";
 
 
 function Seaport (){
@@ -29,9 +31,145 @@ function Seaport (){
   
     const [showViewModal, setShowViewModal] = useState(false);
     const [FrightEditPopup, setFrightEditPopup] = useState(false);
+    const [current, setCurrent] = useState(1);
+    const [numOfItems, setNumOfItems] = useState("25");
+    const [allseaports,setallseaports]= useState();
+    const [saveSuccess, setSaveSuccess] = useState(false);
     const [editForm] = Form.useForm();
+    const [totalCount, setTotalcount] = useState();
+    const [seaportname,setseaportname]= useState();
+    const [seaportcode ,setseaportcode]= useState();
+
+    const [editseaportid,seteditseaportid]= useState();
+    const [editseaportname,seteditseaportname]= useState();
+    const [editseaportcode ,seteditseaportcode]= useState();
+    const pageofIndex = numOfItems * (current - 1) - 1 + 1;
+
+    const [viewseaport,setViewseaport]= useState({
+      id:"",
+      seaportname:"",
+      seaportcode:""
+  
+     })
+  
+    const close_modal = (mShow, time) => {
+      if (!mShow) {
+        setTimeout(() => {
+          setSaveSuccess(false);
+        
+        }, time);
+      }
+    }
+
+    const handleViewClick = (item) => {
+      console.log("view all seaports", item);
+      setViewseaport({
+        ...viewseaport,
+        id: item.seaport_id,
+        seaportname: item.seaport_name,
+        seaportcode: item.seaport_code,
+       
+      });
+  
+      setShowViewModal(true);
+    };
+  
+    const handleviewtoedit = (i) => {
+      console.log("editing data iss", i);
+      seteditseaportid(i.id);
+      seteditseaportname(i.seaportname);
+      seteditseaportcode(i.seaportname);
+      editForm.setFieldsValue({
+       
+        seaportname: i.seaportname,
+        seaportcode: i.seaportcode,
+      });
+      setFrightEditPopup(true);
+      // setuniqueCode(false);
+  
+    };
+
+    const handleEditclick = (e) => {
+      console.log("editing id iss", e);
+   seteditseaportid(e.seaport_id)
+   seteditseaportname(e.seaport_name)
+   seteditseaportcode(e.seaport_code)
+  
+      editForm.setFieldsValue({
+        // unitid: e.unit_id,
+        seaportname: e.seaport_name,
+        seaportcode: e.seaport_code,
+      });
+      setFrightEditPopup(true)
+    };
+  
+    const handleupdate = async () => {
+      try {
+        const updated = await PublicFetch.patch(
+          `${CRM_BASE_URL_FMS}/seaports/${editseaportid}`,
+          {
+            seaport_name: editseaportname,
+            seaport_code: editseaportcode,
+          }
+        );
+        console.log("successfully updated ", updated);
+        if (updated.data.success) {
+          setSaveSuccess(true);
+          setFrightEditPopup(false);
+          getallseaport();
+          close_modal(saveSuccess, 1000);
+        } 
+      } catch (err) {
+        console.log("error to update airport");
+      }
+    };
 
 
+
+    const createseaport = async () => {
+      try {
+        const addseaport = await PublicFetch.post(
+          `${CRM_BASE_URL_FMS}/seaports`,
+          {
+            seaport_name: seaportname,
+            seaport_code: seaportcode
+          }
+        );
+        console.log("airports added successfully", addseaport);
+        if (addseaport.data.success) {
+          setSaveSuccess(true);
+          setModalAddAirport(false);
+          getallseaport()
+       addForm.resetFields();
+         
+          close_modal(saveSuccess, 1000);
+        } 
+        // else if (addairport.data.success === false) {
+        //   alert(addairport.data.data);
+        // }
+      } catch (err) {
+        console.log("err to add the airports", err);
+      }
+    };
+
+
+
+
+    const getallseaport = async () => {
+      try {
+        const allseaports = await PublicFetch.get(
+          `${CRM_BASE_URL_FMS}/seaports?startIndex=${pageofIndex}&perPage=${numOfItems}`
+        );
+        console.log("getting all seaports", allseaports);
+        setallseaports(allseaports.data.data)
+      } catch (err) {
+        console.log("error to fetching  seaports", err);
+      }
+    };
+
+    useEffect(() => {
+      getallseaport();
+    }, []);
     const columns = [
         {
           title: "ACTION",
@@ -39,21 +177,25 @@ function Seaport (){
           key: "key",
           width: "30%",
           render: (data, index) => {
-            console.log("index is :",index);
+            // console.log("index is :",index);
             return (
               <div className="d-flex justify-content-center align-items-center gap-2">
                
                   <div
                     className="editIcon m-0"
                     onClick={() =>{  
-                        setFrightEditPopup(true)
+                      handleEditclick(index)
+                        // setFrightEditPopup(true)
                           }}
                   >
                     <FaEdit />
                   </div>
                   <div
                   className="viewIcon m-0"
-                  onClick={() => setShowViewModal(true) }
+                  onClick={() => {
+                      handleViewClick(index)
+                    // setShowViewModal(true)
+                  } }
                 >
                   <MdPageview   style={{marginLeft:15,marginRight:15}}/>
                 </div>
@@ -68,7 +210,7 @@ function Seaport (){
         },
         {
           title: "SEAPORT NAME",
-          dataIndex: "airport_name",
+          dataIndex: "seaport_name",
           key: "freight_type_name",
           filteredValue: [searchedText],
           onFilter: (value, record) => {
@@ -80,7 +222,7 @@ function Seaport (){
         },
         {
             title: "SEAPORT CODE",
-            dataIndex: "airport_code",
+            dataIndex: "seaport_code",
             key: "freight_type_name",
             filteredValue: [searchedText],
             onFilter: (value, record) => {
@@ -169,10 +311,21 @@ function Seaport (){
               <TableData
                 // data={getData(numofItemsTo, pageofIndex)}
                
-                data={data}
+                data={allseaports}
                 columns={columns}
                 custom_table_css="table_lead_list"
               />
+            </div>
+
+            <div className="d-flex py-2 justify-content-center">
+            <MyPagination
+              total={parseInt(totalCount)}
+              current={current}
+              pageSize={numOfItems}
+              onChange={(current, pageSize) => {
+                setCurrent(current);
+              }}
+            />
             </div>
           </div>
     
@@ -193,10 +346,10 @@ function Seaport (){
                 </div>
                 <Form
                form={addForm}
-                //   onFinish={(data) => {
-                //     console.log("valuezzzzzzz", data);
-                //     createFrights();
-                //   }}
+                  onFinish={(data) => {
+                    console.log("valuezzzzzzz", data);
+                    createseaport()
+                  }}
                   onFinishFailed={(error) => {
                     console.log(error);
                   }}
@@ -206,27 +359,21 @@ function Seaport (){
                       <label>SeaPort Name</label>
                       <div>
                       <Form.Item
-                        name="freightname"
+                        name="seaportname"
                         rules={[
                           {
                             required: true,
-                            pattern: new RegExp("^[A-Za-z ]+$"),
+                            // pattern: new RegExp("^[A-Za-z ]+$"),
                             message: "Please enter a Valid  Name",
                           },
                           
-                          {
-                            min: 3,
-                            message: "Name must be atleast 3 characters",
-                          },
-                          {
-                            max: 100,
-                            message:
-                              " Name cannot be longer than 100 characters",
-                          },
                         ]}
                       >
                         <InputType 
-                       
+                       value={seaportname}
+                       onChange={(e)=>{
+                        setseaportname(e.target.value)
+                       }}
                         />
                       </Form.Item>
                       
@@ -245,23 +392,17 @@ function Seaport (){
                         rules={[
                           {
                             required: true,
-                            pattern: new RegExp("^[A-Za-z ]+$"),
-                            message: "Please enter a Valid  Name",
+                            // pattern: new RegExp("^[A-Za-z ]+$"),
+                            message: "Please enter a Valid code",
                           },
                           
-                          {
-                            min: 3,
-                            message: "Name must be atleast 3 characters",
-                          },
-                          {
-                            max: 100,
-                            message:
-                              " Name cannot be longer than 100 characters",
-                          },
                         ]}
                       >
                         <InputType 
-                       
+                        value={seaportcode}
+                        onChange={(e)=>{
+                         setseaportcode(e.target.value)
+                        }}
                         />
                       </Form.Item>
                       
@@ -273,30 +414,7 @@ function Seaport (){
                     </div>
                     </div>
     
-                    {/* <div className="col-12 pt-1">
-                      <label>Date</label>
-                      <Form.Item
-                        name="date"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please select a date",
-                          },  
-                        ]}
-                       
-                      >
-                         <DatePicker
-                            style={{ borderWidth: 0 }}
-                            //  disabledDate={today}
-                            disabledDate={(d) => !d || d.isBefore(today)}
-                            onChange={(e) => {
-                              console.log("date mmm", e);
-                              setDate(e);
-                            }}
-                          />
-                        
-                      </Form.Item>
-                    </div> */}
+                 
                   </div>
                   <div className="row justify-content-center ">
                     <div className="col-auto">
@@ -309,8 +427,8 @@ function Seaport (){
           >
             <Custom_model
               size={"sm"}
-              show={successPopup}
-              onHide={() => setSuccessPopup(false)}
+              show={saveSuccess}
+              onHide={() => setSaveSuccess(false)}
               success
             />
           </CustomModel>
@@ -331,11 +449,12 @@ function Seaport (){
                         btnType="add_borderless"
                         className="edit_button"
                         onClick={() => {
+                          handleviewtoedit(viewseaport)
                         //   handleviewtoedit(viewfrights);
                           setFrightEditPopup(true)
                           setShowViewModal(false);
                         }}
-                      >
+                      >  
                         Edit
                         <FiEdit 
                           style={{ marginBottom: "4px", marginInline: "3px" }}
@@ -349,7 +468,7 @@ function Seaport (){
                     </div>
                     <div className="col-1">:</div>
                     <div className="col-6 justify-content-start">
-                      <p className="modal-view-data">test abc</p>
+                      <p className="modal-view-data">{viewseaport.seaportname} </p>
                     </div>
                   </div>
                   <div className="row mt-2">
@@ -358,7 +477,7 @@ function Seaport (){
                     </div>
                     <div className="col-1">:</div>
                     <div className="col-6 justify-content-start">
-                      <p className="modal-view-data">0786</p>
+                      <p className="modal-view-data">{viewseaport.seaportcode} </p>
                     </div>
                   </div>
                  
@@ -380,6 +499,7 @@ function Seaport (){
                       form={editForm}
                       onFinish={(values) => {
                         console.log("values iss", values);
+                        handleupdate()
                     //    handleUpdate();
                       }}
                       onFinishFailed={(error) => {
@@ -389,25 +509,22 @@ function Seaport (){
                       <div className="col-12">
                         <label>Name</label>
                         <Form.Item
-                          name="NameInput"
+                          name="seaportname"
                           rules={[
                             {
                               required: true,
-                              pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                              message: "Please enter a Valid Fright type Name",
+                              // pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                              message: "Please enter a Valid  Name",
                             },
-                            {
-                              min: 2,
-                              message: "Name must be at least 2 characters",
-                            },
-                            {
-                              max: 100,
-                              message: "Name cannot be longer than 100 characters",
-                            },
+                            
                           ]}
                         >
                           <InputType
                             className="input_type_style w-100"
+                            value={editseaportname}
+                            onChange={(e)=>{
+                              seteditseaportname(e.target.value)
+                            }}
                             // value={NameInput}
                             // onChange={(e) => {
                             //   setNameInput(e.target.value);
@@ -436,26 +553,22 @@ function Seaport (){
                       <div className="col-12">
                         <label>Code</label>
                         <Form.Item
-                          name="NameInput"
+                          name="seaportcode"
                           rules={[
                             {
                               required: true,
-                              pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                              // pattern: new RegExp("^[A-Za-z0-9 ]+$"),
                               message: "Please enter a Valid Fright type Name",
                             },
-                            {
-                              min: 2,
-                              message: "Name must be at least 2 characters",
-                            },
-                            {
-                              max: 100,
-                              message: "Name cannot be longer than 100 characters",
-                            },
+                           
                           ]}
                         >
                           <InputType
                             className="input_type_style w-100"
-                         
+                            value={editseaportcode}
+                            onChange={(e)=>{
+                              seteditseaportcode(e.target.value)
+                            }}
                           />
                         </Form.Item>
                         
@@ -482,10 +595,11 @@ function Seaport (){
               </div>
             }
           />
+        
               <CustomModel
             size={"sm"}
-            show={successPopup}
-            onHide={() => setSuccessPopup(false)}
+            show={saveSuccess}
+            onHide={() => setSaveSuccess(false)}
             success
           />
           {error? <ErrorMsg code={"500"} /> : " "}

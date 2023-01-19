@@ -14,6 +14,9 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 
 import { FiEdit } from "react-icons/fi";
 import CustomModel from "../../../components/custom_modal/custom_model";
+import {GENERAL_SETTING_BASE_URL} from "../../../api/bootapi"
+import PublicFetch from "../../../utils/PublicFetch";
+
 
 export default function Currency(props) {
   const [addForm] = Form.useForm();
@@ -31,10 +34,16 @@ export default function Currency(props) {
 
   const [Errormsg, setErrormsg] = useState();
   const [NameInput, setNameInput] = useState();
-
+  const [coinInput,setCoinInput] = useState()
+  
   const [showViewModal, setShowViewModal] = useState(false);
   const [CurrencyEditPopup, setCurrencyEditPopup] = useState(false);
-  const [editForm] = Form.useForm();
+  const [AllCurrency,setAllCurrency] = useState()
+    const [currencyname, setCurrencyname] = useState();
+  const [currency_id, setCurrency_id] = useState();
+  const [currency_ids, setCurrency_ids] = useState();
+
+  // const [editForm] = Form.useForm();
   const close_modal = (mShow, time) => {
     if (!mShow) {
       setTimeout(() => {
@@ -45,17 +54,20 @@ export default function Currency(props) {
 
   const currencyEdit = (e) => {
     console.log("currency edit", e);
+setCurrency_ids(e.currency_id)
     setNameInput(e.currency_name);
-    setCountryInput(e.country);
-    setCodeInput(e.code);
+    setCountryInput(e.currency_country);
+    setCodeInput(e.currency_code);
+    setCoinInput(e.currency_coin)
     setSymbolInput(e.symbol);
 
-    editForm.setFieldsValue({
+    addForm.setFieldsValue({
       currency_id: e.currency_id,
-      NameInput: e.currency_name,
-      CountryInput: e.country,
-      CodeInput: e.code,
-      SymbolInput: e.symbol,
+      currencyInput: e.currency_name,
+      country: e.currency_country,
+      code: e.currency_code,
+      symbol: e.currency_symbol,
+      coin: e.currency_coin
     });
     setCurrencyEditPopup(true);
   };
@@ -68,8 +80,13 @@ export default function Currency(props) {
     console.log("view all currency", item);
     setViewCurrencys({
       ...viewcurrencys,
-      id: item.currency_id,
-      currencyviewname: item.currency_name,
+      currency_id: item.currency_id,
+      currency_name: item.currency_name,
+      currency_country: item.currency_country,
+      currency_code: item.currency_code,
+      currency_symbol: item.currency_symbol,
+      currency_coin: item.currency_coin,
+
     });
 
     setShowViewModal(true);
@@ -104,11 +121,11 @@ export default function Currency(props) {
     },
     {
       title: "COUNTRY",
-      dataIndex: "country",
-      key: "country",
+      dataIndex: "currency_country",
+      key: "currency_country",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.country)
+        return String(record.currency_country)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
@@ -128,31 +145,31 @@ export default function Currency(props) {
     },
     {
       title: "COIN",
-      dataIndex: "coin",
-      key: "coin",
+      dataIndex: "currency_coin",
+      key: "currency_coin",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.coin).toLowerCase().includes(value.toLowerCase());
+        return String(record.currency_coin).toLowerCase().includes(value.toLowerCase());
       },
       align: "center",
     },
     {
       title: "CODE",
-      dataIndex: "code",
-      key: "code",
+      dataIndex: "currency_code",
+      key: "currency_code",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.code).toLowerCase().includes(value.toLowerCase());
+        return String(record.currency_code).toLowerCase().includes(value.toLowerCase());
       },
       align: "center",
     },
     {
       title: "SYMBOL",
-      dataIndex: "symbol",
-      key: "symbol",
+      dataIndex: "currency_symbol",
+      key: "currency_symbol",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.symbol)
+        return String(record.currency_symbol)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
@@ -160,45 +177,68 @@ export default function Currency(props) {
     },
   ];
 
-  const data = [
-    {
-      country: "India",
-      currency_name: "Rupees",
-      coin: "Data",
-      code: "2322",
-      symbol: "₹",
+ const AddCurrency = (data) => {
+  PublicFetch.post(`${GENERAL_SETTING_BASE_URL}/currency`, data).then((res)=> {
+    console.log("Response", res);
+    if (res.data.success) {
+      console.log("Success Data", res.data.data);
+      setSuccessPopup(true)
+      close_modal(successPopup,1200)
+      addForm.resetFields()
+      setModalAddCurrency(false)
+      getAllCurrency()
+    }
+  }).catch((err)=> {
+    console.log("Error", err);
+  })
+ }
 
-      key: "1",
-    },
-    {
-      country: "UK",
-      currency_name: "Pounds",
-      coin: "Data",
-      code: "2323",
-      symbol: "£",
-      key: "2",
-    },
-    {
-      country: "US",
-      currency_name: "Dollar",
-      coin: "Data",
-      code: "2325",
-      symbol: "$",
-      key: "3",
-    },
-  ];
 
-  const [currencyname, setCurrencyname] = useState();
-  const [currency_id, setCurrency_id] = useState();
+
+  const getAllCurrency = () => {
+    PublicFetch.get(`${GENERAL_SETTING_BASE_URL}/currency`).then((res)=> {
+      console.log("response", res);
+      if(res.data.success){
+        console.log("success data", res.data.data);
+        setAllCurrency(res.data.data)
+      }
+    }).catch((err)=> {
+      console.log("Error", err);
+    })
+  }
+
+  const updateCurrency = (data) => {
+    PublicFetch.patch(`${GENERAL_SETTING_BASE_URL}/currency/${currency_ids}`,{
+      currency_name: data.currencyInput,
+      currency_code: data.code,
+      currency_coin: data.coin,
+      currency_symbol: data.symbol,
+      currency_country: data.country
+    }).then((res)=> {
+      console.log("response", res);
+      if(res.data.success){
+        setSuccessPopup(true)
+        close_modal(successPopup,1200)
+        getAllCurrency()
+        setCurrencyEditPopup(false)
+      }
+    }).catch((err)=> {
+      console.log("Error", err);
+    })
+  }
 
   const handleviewtoedit = (i) => {
     console.log("editing data iss", i);
-    setCurrency_id(i.id);
-    setCurrencyname(i.currencyviewname);
-
+    setCurrency_id(i.currency_id);
+    setCurrencyname(i.currency_name);
+    setCurrency_ids(i.currency_id)
     addForm.setFieldsValue({
-      // unitid: e.unit_id,
-      currency: i.currencyviewname,
+      currency_id: i.currency_id,
+      currencyInput: i.currency_name,
+      country: i.currency_country,
+      code: i.currency_code,
+      symbol: i.currency_symbol,
+      coin: i.currency_coin
     });
     setCurrencyEditPopup(true);
   };
@@ -209,6 +249,11 @@ export default function Currency(props) {
   const handleChange = (e) => {
     setCountryis(e);
   };
+
+
+  useEffect(()=> {
+    getAllCurrency()
+  },[])
 
   return (
     <>
@@ -269,7 +314,7 @@ export default function Currency(props) {
           <TableData
             // data={getData(numofItemsTo, pageofIndex)}
 
-            data={data}
+            data={AllCurrency}
             columns={columns}
             custom_table_css="table_lead_list"
           />
@@ -292,6 +337,8 @@ export default function Currency(props) {
               form={addForm}
               onFinish={(data) => {
                 console.log("valuezzzzzzz", data);
+                AddCurrency(data)
+                
               }}
               onFinishFailed={(error) => {
                 console.log(error);
@@ -302,7 +349,7 @@ export default function Currency(props) {
                   <label>Country</label>
                   <div>
                     <Form.Item
-                    name="countryInput"
+                    name="currency_country"
                      rules={[
                         {
                           required: true,
@@ -326,7 +373,7 @@ export default function Currency(props) {
                   <label>Currency Name</label>
                   <div>
                     <Form.Item
-                      name="currencyname"
+                      name="currency_name"
                       rules={[
                         {
                           required: true,
@@ -345,7 +392,7 @@ export default function Currency(props) {
                   <label>Coin</label>
                   <div>
                     <Form.Item
-                      name="coin"
+                      name="currency_coin"
                       rules={[
                         {
                           required: true,
@@ -361,7 +408,7 @@ export default function Currency(props) {
                   <label>Code</label>
                   <div>
                     <Form.Item
-                      name="code"
+                      name="currency_code"
                       rules={[
                         {
                           required: true,
@@ -377,7 +424,7 @@ export default function Currency(props) {
                   <label>Symbol</label>
                   <div>
                     <Form.Item
-                      name="symbol"
+                      name="currency_symbol"
                       rules={[
                         {
                           required: true,
@@ -399,7 +446,7 @@ export default function Currency(props) {
           </>
         }
       >
-        <Custom_model
+        <CustomModel
           size={"sm"}
           show={successPopup}
           onHide={() => setSuccessPopup(false)}
@@ -407,7 +454,7 @@ export default function Currency(props) {
         />
       </CustomModel>
 
-      <Custom_model
+      <CustomModel
         show={showViewModal}
         onHide={() => setShowViewModal(false)}
         View_list
@@ -440,7 +487,7 @@ export default function Currency(props) {
               </div>
               <div className="col-1">:</div>
               <div className="col-6 justify-content-start">
-                <p className="modal-view-data">India</p>
+                <p className="modal-view-data">{viewcurrencys.country}</p>
               </div>
             </div>
             <div className="row mt-4">
@@ -449,7 +496,16 @@ export default function Currency(props) {
               </div>
               <div className="col-1">:</div>
               <div className="col-6 justify-content-start">
-                <p className="modal-view-data">Rupee</p>
+                <p className="modal-view-data">{viewcurrencys.currency_name}</p>
+              </div>
+            </div>
+             <div className="row mt-4">
+              <div className="col-4">
+                <p> Currency Coin</p>
+              </div>
+              <div className="col-1">:</div>
+              <div className="col-6 justify-content-start">
+                <p className="modal-view-data">{viewcurrencys.currency_coin}</p>
               </div>
             </div>
             <div className="row mt-4">
@@ -458,7 +514,7 @@ export default function Currency(props) {
               </div>
               <div className="col-1">:</div>
               <div className="col-6 justify-content-start">
-                <p className="modal-view-data">0908</p>
+                <p className="modal-view-data">{viewcurrencys.currency_code}</p>
               </div>
             </div>
             <div className="row mt-4">
@@ -467,13 +523,13 @@ export default function Currency(props) {
               </div>
               <div className="col-1">:</div>
               <div className="col-6 justify-content-start">
-                <p className="modal-view-data">$</p>
+                <p className="modal-view-data">{viewcurrencys.currency_symbol}</p>
               </div>
             </div>
           </div>
         }
       />
-      <Custom_model
+      <CustomModel
         show={CurrencyEditPopup}
         onHide={() => setCurrencyEditPopup(false)}
         View_list
@@ -485,9 +541,10 @@ export default function Currency(props) {
               </div>
               <div className="row my-3 ">
                 <Form
-                  form={editForm}
+                  form={addForm}
                   onFinish={(values) => {
                     console.log("values iss", values);
+                    updateCurrency(values)
                   }}
                   onFinishFailed={(error) => {
                     console.log(error);
@@ -497,7 +554,7 @@ export default function Currency(props) {
                     <div className="col-6 pt-1">
                       <label> Currency Name</label>
                       <Form.Item
-                        name="NameInput"
+                        name="currencyInput"
                         rules={[
                           {
                             required: true,

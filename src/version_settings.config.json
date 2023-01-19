@@ -1,11 +1,15 @@
 {
-   "app_version": 1,
-   "crm": {
-      "version": 1,
-      "version_name": "v1"
-   },
-   "leads": {
-      "version": 1,
-      "version_name": "v1"
-   }
+  "app_version": 1,
+  "crm": {
+    "version": 1,
+    "version_name": "v1"
+  },
+  "leads": {
+    "version": 1,
+    "version_name": "v1"
+  },
+  "general_settings": {
+    "version": 1,
+    "version_name": "v1"
+  }
 }

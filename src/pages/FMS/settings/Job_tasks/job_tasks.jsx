@@ -22,8 +22,9 @@ export default function JobTasks() {
   const [modalEditJobTask, setModalEditJobTask] = useState(false);
   const [ViewJobTaskModal, setViewJobTaskModal] = useState(false);
   const [successPopup, setSuccessPopup] = useState(false);
-  const [jobTask,setJobTask] = useState();
-  const [taxType,setTaxType] = useState();
+  const [alltaxTypes,setAllTaxTypes] = useState();
+  const [jobTask, setJobTask] = useState();
+  const [taxType, setTaxType] = useState();
   const [addForm] = Form.useForm();
   const [editForm] = Form.useForm();
 
@@ -34,6 +35,23 @@ export default function JobTasks() {
       }, time);
     }
   };
+
+  // { function to get all tax types - Ann - 18/1/23}
+  const getAllTaxTypes = async () => {
+    try {
+      const allTxTypes = await PublicFetch.get(
+        `${CRM_BASE_URL_FMS}/tax-types?startIndex=0&perPage=10`
+      );
+      console.log("all frights are", allTxTypes.data.data);
+      setAllTaxTypes(allTxTypes.data.data);
+    } catch (err) {
+      console.log("error while getting the tax types: ", err);
+    }
+  };
+
+  useEffect(() => {
+    getAllTaxTypes();
+  }, []);
 
   const JobTaskEdit = (i) => {
     console.log("taxtypppe", i);
@@ -263,10 +281,23 @@ export default function JobTasks() {
                         },
                       ]}
                     >
-                      <SelectBox>
-                        <Select.Option value="A">Payroll Tax</Select.Option>
-                        <Select.Option value="B">Sales Tax</Select.Option>
-                        <Select.Option value="C">Value-added Tax</Select.Option>
+                      <SelectBox
+                        placeholder={"--Please Select--"}
+                        onChange={(e) => {setTaxType(parseInt(e));
+                        }}
+                      >
+                        {alltaxTypes &&
+                          alltaxTypes.length > 0 &&
+                          alltaxTypes.map((i, index) => {
+                            return (
+                              <Select.Option
+                                key={i.tax_type_id}
+                                value={i.tax_type_id}
+                              >
+                                {i.tax_type_name}
+                              </Select.Option>
+                            );
+                          })}
                       </SelectBox>
                     </Form.Item>
                   </div>

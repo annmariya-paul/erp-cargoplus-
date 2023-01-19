@@ -530,22 +530,22 @@ export default function Sidebar({ showSidebar }) {
               )} */}
               {FMSOpen ? (
                 <>
-                      {checkPermission("opportunity assign") && (
-                        <li className="nav-text ">
-                          <NavLink
-                            className={({ isActive }) =>
-                              isActive ? "active-link" : "link"
-                            }
-                            to={ROUTES.ENQUIRIES}
-                          >
-                            <RiTeamFill className="sidebar_icons ms-3" />
-                            Enquiry
-                          </NavLink>
-                        </li>
-                      )}
+                  {checkPermission("opportunity assign") && (
+                    <li className="nav-text ">
+                      <NavLink
+                        className={({ isActive }) =>
+                          isActive ? "active-link" : "link"
+                        }
+                        to={ROUTES.ENQUIRIES}
+                      >
+                        <RiTeamFill className="sidebar_icons ms-3" />
+                        Enquiry
+                      </NavLink>
+                    </li>
+                  )}
 
-{/* {track assignment link is commented and hidden in sidebar} */}
-                      {/* {checkPermission("track assignment") && (
+                  {/* {track assignment link is commented and hidden in sidebar} */}
+                  {/* {checkPermission("track assignment") && (
                         <li className="nav-text">
                           <NavLink
                             className={({ isActive }) =>
@@ -558,33 +558,32 @@ export default function Sidebar({ showSidebar }) {
                           </NavLink>
                         </li>
                       )} */}
-                    </>
-                  ) : (
-                    ""
-                  )}
+                </>
+              ) : (
+                ""
+              )}
 
-                  {FMSOpen ? (
-                    <>
-                      {checkPermission("quotation") && (
-                        <li
-                          className="nav-text "
-                          style={{ marginLeft: "-61px" }}
-                        >
-                          <NavLink
-                            className={({ isActive }) =>
-                              isActive ? "active-link" : "link"
-                            }
-                            to={ROUTES.QUATATIONS}
-                          >
-                            <RiTeamFill className="sidebar_icons ms-4" />
-                            Quotation
-                          </NavLink>
-                        </li>
-                      )}
-                    </>
-                  ) : (
-                    ""
+              {FMSOpen ? (
+                <>
+                  {checkPermission("quotation") && (
+                    <li className="nav-text " style={{ marginLeft: "-61px" }}>
+                      <NavLink
+                        className={({ isActive }) =>
+                          isActive ? "active-link" : "link"
+                        }
+                        to={ROUTES.QUATATIONS}
+                      >
+                        <RiTeamFill className="sidebar_icons ms-4" />
+                        Quotation
+                      </NavLink>
+                    </li>
                   )}
+                </>
+              ) : (
+                ""
+              )}
+              {FMSOpen ? (
+                <>
                   <li
                     className={
                       FMSSettingsopen
@@ -778,8 +777,11 @@ export default function Sidebar({ showSidebar }) {
                   ) : (
                     ""
                   )} */}
-               
-             
+                </>
+              ) : (
+                ""
+              )}
+
               <li
                 className={
                   GeneralSettingsopen

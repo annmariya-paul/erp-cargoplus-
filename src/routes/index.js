@@ -69,14 +69,18 @@ const ROUTES = {
   EDIT_QUOTATION:"/edit_quotation",
   VIEW_QUOTATION:"/view_quotation",
   ENQUIRIES:"/enquiries",
+  EDIT_ASSIGN_OPPORTUNITY:"/edit_assign_opportunity",
+  EDIT_ASSIGN_OPPORTUNITY_ID:"/edit_assign_opportunity/:id",
   CONSIGNEE:"/consignee",
   TERMS_OF_SHIPMENT:"/terms_of_shipment",
-  CURRENCY:"/currency",
-
   TAXTYPE:"/tax_type",
   JOBTASKS:"/job_tasks",
   AIRPORT:"/airport",
   SEAPORT:"/seaport",
+  
+  // general settings
+  CURRENCY:"/currency",
+  COMPANYINFO:"/company_info"
 };
 
 module.exports = { ROUTES };

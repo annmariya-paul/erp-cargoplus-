@@ -22,8 +22,79 @@ export default function JobTasks() {
   const [modalEditJobTask, setModalEditJobTask] = useState(false);
   const [ViewJobTaskModal, setViewJobTaskModal] = useState(false);
   const [successPopup, setSuccessPopup] = useState(false);
+  const [alltaxTypes,setAllTaxTypes] = useState();
+  const [jobTask, setJobTask] = useState();
+  const [taxType, setTaxType] = useState();
   const [addForm] = Form.useForm();
   const [editForm] = Form.useForm();
+
+  const close_modal = (mShow, time) => {
+    if (!mShow) {
+      setTimeout(() => {
+        setSuccessPopup(false);
+      }, time);
+    }
+  };
+
+  // { function to get all tax types - Ann - 18/1/23}
+  const getAllTaxTypes = async () => {
+    try {
+      const allTxTypes = await PublicFetch.get(
+        `${CRM_BASE_URL_FMS}/tax-types?startIndex=0&perPage=10`
+      );
+      console.log("all frights are", allTxTypes.data.data);
+      setAllTaxTypes(allTxTypes.data.data);
+    } catch (err) {
+      console.log("error while getting the tax types: ", err);
+    }
+  };
+
+  useEffect(() => {
+    getAllTaxTypes();
+  }, []);
+
+  const JobTaskEdit = (i) => {
+    console.log("taxtypppe", i);
+    setJobTask(i.jobtask_name);
+    setTaxType(i.tax_type);
+    editForm.setFieldValue({
+      jobtask_id: i.jobtask_id,
+      taxType: i.jobtask_name,
+      taxPercent: i.tax_type,
+    });
+    setModalEditJobTask(true);
+  };
+
+  const [viewJobTasks, setViewJobTasks] = useState({
+    id: "",
+    viewjobtaskname: "",
+    viewtaxtypename: "",
+  });
+  const handleViewClick = (item) => {
+    console.log("view all tax type", item);
+    setViewJobTasks({
+      ...viewJobTasks,
+      id: item.jobtask_id,
+      viewjobtaskname: item.jobtask_name,
+      viewtaxtypename: item.tax_type,
+    });
+
+    setViewJobTaskModal(true);
+  };
+
+  const [jobTasksnamee, setJobTasknamee] = useState();
+  const [jobtask_id, setJobtask_id] = useState();
+
+  const handleviewtoedit = (i) => {
+    console.log("existing data is", i);
+    setJobtask_id(i.id);
+    setJobTasknamee(i.viewjobtaskname);
+
+    addForm.setFieldsValue({
+      jobtask: i.viewjobtaskname,
+    });
+    setModalEditJobTask(true);
+  };
 
   const columns = [
     {
@@ -35,15 +106,12 @@ export default function JobTasks() {
         console.log("index is :", index);
         return (
           <div className="d-flex justify-content-center align-items-center gap-2">
-            <div
-              className="editIcon m-0"
-              onClick={() => setModalEditJobTask(index)}
-            >
+            <div className="editIcon m-0" onClick={() => JobTaskEdit(index)}>
               <FaEdit />
             </div>
             <div
               className="viewIcon m-0"
-              onClick={() => setViewJobTaskModal(index)}
+              onClick={() => handleViewClick(index)}
             >
               <MdPageview style={{ marginLeft: 15, marginRight: 15 }} />
             </div>
@@ -213,10 +281,23 @@ export default function JobTasks() {
                         },
                       ]}
                     >
-                      <SelectBox>
-                        <Select.Option value="A">Payroll Tax</Select.Option>
-                        <Select.Option value="B">Sales Tax</Select.Option>
-                        <Select.Option value="C">Value-added Tax</Select.Option>
+                      <SelectBox
+                        placeholder={"--Please Select--"}
+                        onChange={(e) => {setTaxType(parseInt(e));
+                        }}
+                      >
+                        {alltaxTypes &&
+                          alltaxTypes.length > 0 &&
+                          alltaxTypes.map((i, index) => {
+                            return (
+                              <Select.Option
+                                key={i.tax_type_id}
+                                value={i.tax_type_id}
+                              >
+                                {i.tax_type_name}
+                              </Select.Option>
+                            );
+                          })}
                       </SelectBox>
                     </Form.Item>
                   </div>
@@ -256,7 +337,7 @@ export default function JobTasks() {
                   <label>Job Task Name</label>
                   <div>
                     <Form.Item
-                      name="jobtask_name"
+                      // name="jobTask"
                       rules={[
                         {
                           required: true,
@@ -265,7 +346,7 @@ export default function JobTasks() {
                         },
                       ]}
                     >
-                      <InputType />
+                      <InputType value={jobTask} />
                     </Form.Item>
                   </div>
                 </div>
@@ -273,7 +354,7 @@ export default function JobTasks() {
                   <label>Tax Type</label>
                   <div>
                     <Form.Item
-                      name="taxtype"
+                      name="taxType"
                       rules={[
                         {
                           required: true,
@@ -315,7 +396,7 @@ export default function JobTasks() {
                   btnType="add_borderless"
                   className="edit_button"
                   onClick={() => {
-                    setModalEditJobTask(true);
+                    handleviewtoedit(viewJobTasks);
                     setViewJobTaskModal(false);
                   }}
                 >
@@ -332,7 +413,9 @@ export default function JobTasks() {
               </div>
               <div className="col-1">:</div>
               <div className="col-6 ">
-                <p className="modal-view-data">Sales tax Analyst</p>
+                <p className="modal-view-data">
+                  {viewJobTasks.viewjobtaskname}
+                </p>
               </div>
             </div>
             <div className="row mt-3">
@@ -341,7 +424,9 @@ export default function JobTasks() {
               </div>
               <div className="col-1">:</div>
               <div className="col-6 ">
-                <p className="modal-view-data">Sales Tax</p>
+                <p className="modal-view-data">
+                  {viewJobTasks.viewtaxtypename}
+                </p>
               </div>
             </div>
           </div>

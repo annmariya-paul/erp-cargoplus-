@@ -92,6 +92,7 @@ function Permission() {
         `${process.env.REACT_APP_BASE_URL}/permissions/${id}`
       );
       if (res?.data?.success) {
+        console.log("all permissions",res.data.data);
         setRolePermissions(res?.data?.data);
       }
     } catch (err) {

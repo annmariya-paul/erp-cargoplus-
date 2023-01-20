@@ -65,6 +65,7 @@ import UpdateAgent from "./pages/FMS/Agent mangement/Updateagent";
 
 import Enquiries from "./pages/FMS/Opportunity_assigns/Enquiries/Enquiries";
 import Modelist from "./pages/FMS/settings/Mode/mode";
+import Assign_oppertunity_edit from "./pages/FMS/Opportunity_assigns/AssignOpportunity/assign_oppertunity_edit";
 import Consignee from "./pages/FMS/settings/Consignee/consignee";
 import TermsOfShipment from "./pages/FMS/settings/Terms_of_shipment/terms_of_shipment";
 import Currency from "./pages/General Settings/Currency/currency";
@@ -72,6 +73,7 @@ import TaxType from "./pages/FMS/settings/Tax_type/tax_type";
 import JobTasks from "./pages/FMS/settings/Job_tasks/job_tasks";
 import Airport from "./pages/FMS/settings/Airport/airport";
 import Seaport from "./pages/FMS/settings/Seaport/seaport";
+import Companyinfo from "./pages/General Settings/companyinfo/companyinfo";
 // import Lead from "./pages/lead/lead";
 
 function App() {
@@ -167,17 +169,19 @@ function App() {
             <Route path={ROUTES.EDIT_QUOTATION} element={<EditQuotation />} />
             <Route path={ROUTES.VIEW_QUOTATION} element={<ViewQuotation />} />
             <Route path={ROUTES.ENQUIRIES} element={<Enquiries />} />
+            <Route path={ROUTES.EDIT_ASSIGN_OPPORTUNITY_ID} element={<Assign_oppertunity_edit />} />
             <Route path={ROUTES.CONSIGNEE} element={<Consignee />} />
             <Route path={ROUTES.TERMS_OF_SHIPMENT} element={<TermsOfShipment />} />
-
-            {/* General settings */}
-            <Route path={ROUTES.CURRENCY} element={<Currency />} />
-
-
             <Route path={ROUTES.TAXTYPE} element={<TaxType />} />
             <Route path={ROUTES.JOBTASKS} element={<JobTasks />} />
             <Route path={ROUTES.AIRPORT} element={<Airport/>}/>
             <Route path={ROUTES.SEAPORT} element={<Seaport/>}/>
+
+             {/* General settings */}
+             
+             <Route path={ROUTES.CURRENCY} element={<Currency />} />
+             <Route path={ROUTES.COMPANYINFO} element={<Companyinfo/>}/>
+
           </Route>
         </Routes>
       </BrowserRouter>

@@ -10,3 +10,75 @@
   border-radius: 4px;
   box-shadow: 2px 2px 12px variables.$boxshadow;
 }
+.qtn_save{
+  // padding-inline: 20px!important;
+  margin-left: 4px;
+}
+tbody,  tfoot, th, thead, tr {
+  padding-block: 8px;
+  font-weight: 500;
+  position: sticky;
+  top: 0;
+  // text-align: center;
+  .hiddenid{
+    display: none;
+    visibility: hidden;
+
+  }
+  .tablewidth{
+     padding-block: 1px;
+  }
+ 
+}
+
+.tborder{
+  border: 1px solid rgb(212, 208, 208);
+  // padding-block: 1px;
+}
+.table_data tbody tr td{
+  padding-block: 0;
+  // width: 90px;
+  // overflow-x: scroll;
+}
+.qtable_data {
+  // height: 445px !important;
+  // overflow-y: auto !important;
+  thead {
+    z-index: 1;
+    background-color: rgb(240, 248, 254);
+    font-size: 0.8rem;
+    // padding: px;
+    position: sticky;
+    top: 0;
+  }
+  tbody {
+    tr {
+      border-color: rgb(237, 239, 240);
+      td {
+        // font-size: 0.8rem;
+        padding-inline: 5px;
+        margin-block: -5px;
+        
+
+      }
+    }
+  }
+}
+th {
+  text-align:center;
+}
+.text_right{
+  text-align: right;
+  padding-right: 10px;
+
+}
+.tablecontainer{
+  overflow-y: scroll;
+}
+
+@media (min-width: 800px) {
+  .selectwidth{
+    width: 450px!important;
+   
+  }
+}

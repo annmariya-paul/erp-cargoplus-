@@ -1,7 +1,18 @@
-.input_type_style {
+.input_number_style {
   border: 0;
   background-color: whitesmoke;
   padding: 5px;
   outline: none;
   border-radius: 3px;
+}
+.ant-input-number-input {
+
+  text-align: right;
+  padding-right: 17px;
+}
+.ant-input-number-handler {
+
+  display: none;
+  visibility: hidden;
+  // position: absolute;
 }

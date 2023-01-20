@@ -6,6 +6,7 @@ const Button = React.forwardRef((props, ref) => {
   const {
     btnType = "",
     children,
+    id,
     onClick,
     className,
     type,
@@ -38,6 +39,7 @@ const Button = React.forwardRef((props, ref) => {
   return (
     <button
       ref={ref}
+      id={id}
       onClick={onClick}
       className={`px-3 ${classNames} ${className}`}
       {...rest}

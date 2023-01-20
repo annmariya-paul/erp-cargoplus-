@@ -1,3 +1,4 @@
+import "../../settings/fms_setting.scss";
 import React, { useEffect, useState } from "react";
 import Button from "../../../../components/button/button";
 import InputType from "../../../../components/Input Type textbox/InputType";
@@ -14,10 +15,14 @@ import { FiEdit } from "react-icons/fi";
 import CustomModel from "../../../../components/custom_modal/custom_model";
 import { CRM_BASE_URL_FMS } from "../../../../api/bootapi";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
+import MyPagination from "../../../../components/Pagination/MyPagination";
 
 export default function TaxType() {
   const [searchedText, setSearchedText] = useState("");
   const [pageSize, setPageSize] = useState("25");
+  const [numOfItems, setNumOfItems] = useState("25");
+  const [current, setCurrent] = useState(1);
+  const [totalCount, setTotalcount] = useState();
   const [error, setError] = useState(false);
   const [modalAddTaxtype, setModalAddTaxtype] = useState(false);
   const [modalEditTaxtype, setModalEditTaxtype] = useState(false);
@@ -35,6 +40,8 @@ export default function TaxType() {
   const [addForm] = Form.useForm();
   const [editForm] = Form.useForm();
 
+  const pageofIndex = numOfItems * (current - 1) - 1 + 1;
+
   const close_modal = (mShow, time) => {
     if (!mShow) {
       setTimeout(() => {
@@ -46,7 +53,7 @@ export default function TaxType() {
   const getAllTaxTypes = async () => {
     try {
       const allTxTypes = await PublicFetch.get(
-        `${CRM_BASE_URL_FMS}/tax-types?startIndex=0&perPage=10`
+        `${CRM_BASE_URL_FMS}/tax-types?startIndex=${pageofIndex}&perPage=${numOfItems}`
       );
       console.log("all frights are", allTxTypes.data.data);
       setTaxTypes(allTxTypes.data.data);
@@ -206,7 +213,7 @@ export default function TaxType() {
 
   return (
     <>
-      <div className="container-fluid container2 pt-3">
+      <div className="container-fluid container_fms pt-3">
         <div className="row flex-wrap">
           <div className="col">
             <h5 className="lead_text">Tax Types</h5>
@@ -265,8 +272,19 @@ export default function TaxType() {
             columns={columns}
             custom_table_css="table_lead_list"
           />
+        </div>{" "}
+        <div className="d-flex mt-4 justify-content-center">
+          <MyPagination
+            total={parseInt(totalCount)}
+            current={current}
+            pageSize={numOfItems}
+            onChange={(current, pageSize) => {
+              setCurrent(current);
+            }}
+          />
         </div>
       </div>
+
       {/* {add tax type modal - Ann} */}
       <CustomModel
         show={modalAddTaxtype}
@@ -501,6 +519,7 @@ export default function TaxType() {
         onHide={() => setSuccessPopup(false)}
         success
       />
+      {error ? <ErrorMsg code={"500"} /> : " "}
     </>
   );
 }

@@ -12,6 +12,8 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 
 import { FiEdit } from "react-icons/fi";
 import CustomModel from "../../../../components/custom_modal/custom_model";
+import PublicFetch from "../../../../utils/PublicFetch";
+import { CRM_BASE_URL_FMS } from "../../../../api/bootapi";
 
 export default function Carrierlist(props) {
   const [addForm] = Form.useForm();
@@ -30,6 +32,12 @@ export default function Carrierlist(props) {
 
   const [showViewModal, setShowViewModal] = useState(false);
   const [CarrierEditPopup, setCarrierEditPopup] = useState(false);
+  const [carrierdata,setcarrierdata] = useState()
+  const [addcarriername,setAddcarriername] = useState()
+  const [addcarriercode,setAddcarriercode] = useState()
+  const [addcarriertype,setAddcarriertype] = useState()
+
+
   const [editForm] = Form.useForm();
   const close_modal = (mShow, time) => {
     if (!mShow) {
@@ -38,6 +46,52 @@ export default function Carrierlist(props) {
       }, time);
     }
   };
+
+  const getallcarrier = async () => {
+    try {
+      const allcarrier = await PublicFetch.get(
+        `${CRM_BASE_URL_FMS}/carrier`
+      );
+      console.log("getting all carrier", allcarrier);
+      setcarrierdata(allcarrier.data.data)
+      // setAllairports(allairports.data.data)
+      // setAttributes(allattributes.data.data);
+    } catch (err) {
+      console.log("error to fetching  airports", err);
+    }
+  };
+
+  useEffect(() => {
+    getallcarrier();
+  }, []);
+
+
+  // const createcarrier = async () => {
+  //   try {
+  //     const addcarrier = await PublicFetch.post(
+  //       `${CRM_BASE_URL_FMS}/carrier`,
+  //       {
+  //         carrier_name: addcarriername,
+  //         carrier_code: addcarriercode,
+  //         carrier_type:addcarriertype
+  //       }
+  //     );
+  //     console.log("airports added successfully", addcarrier);
+  //   //   if (addairport.data.success) {
+  //   //     setSaveSuccess(true);
+  //   //     getallairport()
+  //   //  addForm.resetFields();
+  //   //     setModalAddAirport(false);
+  //   //     close_modal(saveSuccess, 1000);
+  //   //   } 
+  //     // else if (addairport.data.success === false) {
+  //     //   alert(addairport.data.data);
+  //     // }
+  //   } catch (err) {
+  //     console.log("err to add the airports", err);
+  //   }
+  // };
+
 
   const carrierEdit = (e) => {
     console.log("carrier edit", e);
@@ -175,6 +229,9 @@ export default function Carrierlist(props) {
     setCarrierEditPopup(true);
   };
 
+
+
+
   return (
     <>
       <div className="container-fluid container2 pt-3">
@@ -234,11 +291,12 @@ export default function Carrierlist(props) {
           <TableData
             // data={getData(numofItemsTo, pageofIndex)}
 
-            data={data}
+            data={carrierdata}
             columns={columns}
             custom_table_css="table_lead_list"
           />
         </div>
+        
       </div>
 
       <CustomModel
@@ -383,7 +441,7 @@ export default function Carrierlist(props) {
               </div>
               <div className="col-1">:</div>
               <div className="col-6 justify-content-start">
-                <p className="modal-view-data">ABC</p>
+                <p className="modal-view-data">{viewcarriers.carrierviewname} </p>
               </div>
             </div>
             <div className="row mt-4">
@@ -392,7 +450,7 @@ export default function Carrierlist(props) {
               </div>
               <div className="col-1">:</div>
               <div className="col-6 justify-content-start">
-                <p className="modal-view-data">3342</p>
+                <p className="modal-view-data">{viewcarriers.carrierviewcode} </p>
               </div>
             </div>
             <div className="row mt-4">
@@ -401,7 +459,7 @@ export default function Carrierlist(props) {
               </div>
               <div className="col-1">:</div>
               <div className="col-6 justify-content-start">
-                <p className="modal-view-data">Airline</p>
+                <p className="modal-view-data">{viewcarriers.carrierviewtype} </p>
               </div>
             </div>
           </div>

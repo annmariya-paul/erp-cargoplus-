@@ -695,10 +695,10 @@ export default function Sidebar({ showSidebar }) {
                             className={({ isActive }) =>
                               isActive ? "active-link" : "link"
                             }
-                            to={ROUTES.TERMS_OF_SHIPMENT}
+                            to={ROUTES.TERMS_OF_PAYMENT}
                           >
                             <BsBookmarkFill className="sidebar_icons ms-4" />
-                            Terms Of Shipment
+                            Payment Terms
                           </NavLink>
                         </li>
                       )}

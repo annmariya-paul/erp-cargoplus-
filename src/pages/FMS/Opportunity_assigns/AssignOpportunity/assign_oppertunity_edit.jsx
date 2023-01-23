@@ -31,14 +31,17 @@ function Assign_oppertunity_edit() {
           console.log("success", res.data.data);
           setAssign_Opp_Data(res.data.data);
           let arr = [];
-          arr.push({
-            employee_branch: res.data.data.hrms_v1_employee.employee_branch,
-            employee_id: res.data.data.hrms_v1_employee.employee_id,
-            employee_name: res.data.data.hrms_v1_employee.employee_name,
+          res.data.data.forEach((item,index)=> {
+             arr.push({
+            employee_branch: item.hrms_v1_employee.employee_branch,
+            employee_id: item.hrms_v1_employee.employee_id,
+            employee_name:item.hrms_v1_employee.employee_name,
           });
           editForm.setFieldsValue({
-            employee_ids: res.data.data.hrms_v1_employee.employee_id,
+            employee_ids: item.hrms_v1_employee.employee_id,
           });
+          })
+         
 
           setAgentData(arr);
         }
@@ -109,7 +112,7 @@ function Assign_oppertunity_edit() {
         temp.push(item.employee_id);
       });
     }
-    PublicFetch.patch(`${CRM_BASE_URL_FMS}/enquiry/${opp_idd}`, {
+    PublicFetch.post(`${CRM_BASE_URL_FMS}/enquiry`, {
       opportunity_assign_opportunity_id: opp_idd,
       employee_ids: temp,
       opportunity_assign_agent_id: 1,

@@ -22,7 +22,7 @@ function Assign_opportunity() {
   const [successPopup, setSuccessPopup] = useState(false);
   const [agnetData, setAgentData] = useState();
   const [assign_opp_data, setAssign_Opp_Data] = useState();
-  const [errormsg,setErrormsg] = useState(false)
+  const [errormsg, setErrormsg] = useState(false);
   // const getRoles = () => {
   //   PublicFetch.get(`${process.env.REACT_APP_BASE_URL}/permissions/roles`)
   //     .then((res) => {
@@ -37,7 +37,7 @@ function Assign_opportunity() {
   // };
 
   const getAssignOpportunity = () => {
-    PublicFetch.get(`${CRM_BASE_URL_FMS}/enquiry/${opp_id.id}`)
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/enquiry/${opp_id?.id}`)
       .then((res) => {
         console.log("response", res);
         if (res.data.success) {
@@ -113,31 +113,30 @@ function Assign_opportunity() {
   const createAssignOpp = (data) => {
     console.log("form dataa", data);
     if (agnetData && agnetData.length > 0) {
-          let temp = [];
-    if (agnetData) {
-      agnetData.forEach((item, index) => {
-        temp.push(item.employee_id);
-      });
-    }
-    PublicFetch.post(`${CRM_BASE_URL_FMS}/enquiry`, {
-      opportunity_assign_opportunity_id: parseInt(opp_id.id),
-      employee_ids: temp,
-      opportunity_assign_agent_id: 1,
-    })
-      .then((res) => {
-        console.log("Response", res);
-        if (res.data.success) {
-          setSuccessPopup(true);
-          close_modal(successPopup, 1200);
-        }
+      let temp = [];
+      if (agnetData) {
+        agnetData.forEach((item, index) => {
+          temp.push(item.employee_id);
+        });
+      }
+      PublicFetch.post(`${CRM_BASE_URL_FMS}/enquiry`, {
+        opportunity_assign_opportunity_id: parseInt(opp_id?.id),
+        employee_ids: temp,
+        opportunity_assign_agent_id: 1,
       })
-      .catch((err) => {
-        console.log("Error", err);
-      });
+        .then((res) => {
+          console.log("Response", res);
+          if (res.data.success) {
+            setSuccessPopup(true);
+            close_modal(successPopup, 1200);
+          }
+        })
+        .catch((err) => {
+          console.log("Error", err);
+        });
     } else {
-setErrormsg(true)
+      setErrormsg(true);
     }
-
   };
 
   const close_modal = (mShow, time) => {
@@ -153,7 +152,7 @@ setErrormsg(true)
     // getRoles();
     getAllEmployees();
     getAssignOpportunity();
-  }, [opp_id.id]);
+  }, [opp_id?.id]);
 
   return (
     <div>
@@ -207,7 +206,7 @@ setErrormsg(true)
                                       e.target.checked,
                                       item.employee_id
                                     );
-                                    setErrormsg(false)
+                                    setErrormsg(false);
                                   }}
                                   checked={checkEmployee(item?.employee_id)}
                                 >
@@ -221,18 +220,27 @@ setErrormsg(true)
                     {/* </Row> */}
                     {errormsg ? (
                       <div>
-                        <label style={{color:"red"}}>Agent is Required</label>
+                        <label style={{ color: "red" }}>
+                          Agent is Required
+                        </label>
                       </div>
-                    ):""}
+                    ) : (
+                      ""
+                    )}
                   </div>
                   {/* </Checkbox.Group> */}
                 </div>
 
                 <div className="col-12 d-flex justify-content-center gap-2 pt-2">
                   <Button className="save_button">Save</Button>
-                  <Button className="cancel_button" onClick={()=>{
-                    navigate(`${ROUTES.ENQUIRIES}`)
-                  }}>cancel</Button>
+                  <Button
+                    className="cancel_button"
+                    onClick={() => {
+                      navigate(`${ROUTES.ENQUIRIES}`);
+                    }}
+                  >
+                    cancel
+                  </Button>
                 </div>
               </div>
             </Form>

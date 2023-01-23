@@ -154,7 +154,7 @@ function ListAgent(){
     
 return(
     <>
-     <div className="container-fluid attribute_list pt-3">
+     <div className="container-fluid container_fms pt-3">
         <div className="row flex-wrap">
           <div className="col">
             <h5 className="lead_text">List Agent</h5>

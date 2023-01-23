@@ -8,15 +8,93 @@ import SelectBox from "../../../components/Select Box/SelectBox";
 import FileUpload from "../../../components/fileupload/fileUploader";
 import { getData, getNameList } from "country-list";
 import Phone_Input from "../../../components/PhoneInput/phoneInput";
+import PublicFetch from "../../../utils/PublicFetch";
+import { CRM_BASE_URL_FMS, GENERAL_SETTING_BASE_URL } from "../../../api/bootapi";
 
 function Companyinfo(){
   const [countryis, setCountryis] = useState();
   const options = useMemo(() => getData(), []);
     const [saveSuccess, setSaveSuccess] = useState(false);
     const [addForm]=Form.useForm()
+    const [companyname,setCompanyname] = useState()
+    const [companyaddress,setCompanyaddress]=useState()
+    const [companyphone,setCompanyphone]= useState()
+    const [companyemail,setCompanyemail]= useState()
+    const [companycountry,setCompanycountry]= useState()
+    const [companylogo,setCompanylogo]= useState()
+    const [companywatermark,setcompanywatermark] =useState()
+    const [previewVisible, setPreviewVisible] = useState(false);
+    const [previewImage, setPreviewImage] = useState("");
+    const [previewTitle, setPreviewTitle] = useState("");
+    const [img, setImg] = useState([]);
+    const [imgSizeError, setImgSizeError] = useState(false);
+    console.log("set image", img);
 
     const handleChange = (e) => {
       setCountryis(e);
+    };
+    const getBase64 = (file) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+
+    // const handlePreview = async (file) => {
+    //   if (!file.url && !file.preview) {
+    //     file.preview = await getBase64(file.originFileObj);
+    //   }
+    //   setPreviewImage(file.url || file.preview);
+    //   setPreviewVisible(true);
+    //   setPreviewTitle(
+    //     file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
+    //   );
+    // };
+    const getallseaport = async () => {
+      try {
+        const allseaports = await PublicFetch.get(
+          `${GENERAL_SETTING_BASE_URL}/company`
+        );
+        console.log("getting all seaports", allseaports);
+        // setallseaports(allseaports.data.data)
+      } catch (err) {
+        console.log("error to fetching  seaports", err);
+      }
+    };
+
+    useEffect(() => {
+      getallseaport();
+    }, []);
+
+
+    const createcompanyinfo = () => {
+      const formData = new FormData();
+      formData.append("company_name", companyname);
+      formData.append("company_address", companyaddress);
+      formData.append("company_phone", companyphone);
+      formData.append("company_email", companyemail);
+      formData.append("company_country", countryis);
+      formData.append("company_logo", companylogo);
+      formData.append("company_watermark", companywatermark);
+    
+      PublicFetch.post(`${GENERAL_SETTING_BASE_URL}/company`, formData, {
+        "Content-Type": "Multipart/form-Data",
+      })
+        .then((res) => {
+          console.log("dataa is successfully saved", res.data.success);
+          // if (res.data.success) {
+          //   setSuccessPopup(true);
+          //   addForm.resetFields();
+          //   close_modal(successPopup, 1000);
+          // } else {
+          //   setErrormsg(res.data.data);
+          // }
+        })
+        .catch((err) => {
+          console.log("error", err);
+          // setError(true);
+        });
     };
   
     return (
@@ -34,6 +112,7 @@ function Companyinfo(){
                           form={addForm}
                           onFinish={(value) => {
                             console.log("the formvaluess iss", value);
+                            createcompanyinfo()
                             // submitaddunit();
                           }}
                           onFinishFailed={(error) => {
@@ -45,7 +124,7 @@ function Companyinfo(){
                                 <div className="">
                                   <label>Company Name</label>
                                   <Form.Item
-                                name="companyname"
+                                name="company_name"
                                 rules={[
                                   {
                                     required: true,
@@ -53,7 +132,12 @@ function Companyinfo(){
                                   },
                                 ]}
                               >
-                                <InputType/>
+                                <InputType
+                                value={companyname}
+                                onChange={(e)=>{
+                                  setCompanyname(e.target.value)
+                                }}
+                                />
                                 
                               </Form.Item>
                                 </div>
@@ -62,7 +146,7 @@ function Companyinfo(){
                                 <div className="">
                                   <label>Address</label>
                                   <Form.Item
-                                name="address"
+                                name="company_address"
                                 rules={[
                                   {
                                     required: true,
@@ -70,7 +154,12 @@ function Companyinfo(){
                                   },
                                 ]}
                               >
-                                <TextArea/>
+                                <TextArea 
+                                value={companyaddress}
+                                onChange={(e)=>{
+                                  setCompanyaddress(e.target.value)
+                                }}
+                                />
                                 
                               </Form.Item>
                                 </div>
@@ -82,7 +171,7 @@ function Companyinfo(){
                                 <div className="">
                                   <label>Email</label>
                                   <Form.Item
-                                name="companyemail"
+                                name="company_email"
                                 rules={[
                                   {
                                     required: true,
@@ -90,7 +179,12 @@ function Companyinfo(){
                                   },
                                 ]}
                               >
-                                <InputType/>
+                                <InputType  
+                                value={companyemail}
+                                onChange={(e)=>{
+                                  setCompanyemail(e.target.value)
+                                 }}
+                                />
                                 
                               </Form.Item>
                                 </div>
@@ -99,11 +193,20 @@ function Companyinfo(){
                                 <div>
                                   <label>Phone</label>
                                   <Form.Item
-                                  className="mt-2"
+                                  className=""
                               >
-                               <Phone_Input
-                               
-                               />
+                               {/* <Phone_Input
+                               value={companyphone}
+                               onChange={(e)=>{
+                                setCompanyphone(e)
+                               }}
+                               /> */}
+                                 <InputType  
+                                value={companyphone}
+                                onChange={(e)=>{
+                                 setCompanyphone(e.target.value)
+                                }}
+                                />
                                 
                               </Form.Item>
                                 </div>
@@ -113,7 +216,9 @@ function Companyinfo(){
                               <div className="col-xl-6 col-lg-6 col-12">
                                 <div className="">
                                   <label>Country</label>
-                                  <Form.Item>
+                                  <Form.Item
+                                  name="company_country"
+                                  >
                                 <SelectBox
                                   value={countryis}
                                   onChange={handleChange}
@@ -137,14 +242,16 @@ function Companyinfo(){
                                   <label>ZipCode</label>
                                   <Form.Item
                                 name="zipcode"
-                                rules={[
-                                  {
-                                    required: true,
-                                    message: "zipcode is Required",
-                                  },
-                                ]}
+                                // rules={[
+                                //   {
+                                //     required: true,
+                                //     message: "zipcode is Required",
+                                //   },
+                                // ]}
                               >
-                                <InputType/>
+                                <InputType 
+                                
+                                />
                                 
                               </Form.Item>
                                 </div>
@@ -154,13 +261,55 @@ function Companyinfo(){
                                <div className="col-xl-6 col-lg-6  col-12">
                                <div className="">
                                 <label>Logo</label>
-                                <FileUpload/>
+                                <FileUpload
+                      multiple
+                      listType="picture"
+                      accept=".docx,.jpg,.jpeg"
+                      // onPreview={handlePreview}
+                      beforeUpload={false}
+                      onChange={(file) => {
+                        console.log("Before upload", file.file);
+                        console.log("Before upload file size", file.file.size);
+
+                        if (file.file.size > 1000 && file.file.size < 500000) {
+                          setCompanylogo(file.file.originFileObj);
+                          setImgSizeError(false);
+                          console.log(
+                            "Image must be greater than 1 kb and less than 500 kb"
+                          );
+                        } else {
+                          console.log("failed beacuse of large size");
+                          setImgSizeError(true);
+                        }
+                      }}
+                    />
                                 </div>
                                </div>
                                <div className="col-xl-6 col-lg-6 col-12">
                               <div className="">
                               <label>Water Mark</label>
-                               <FileUpload/>
+                              <FileUpload
+                              multiple
+                              listType="picture"
+                              accept=".docx,.jpg,.jpeg"
+                              // onPreview={handlePreview}
+                              beforeUpload={false}
+                              onChange={(file) => {
+                              console.log("Before upload", file.file);
+                              console.log("Before upload file size", file.file.size);
+
+                        if (file.file.size > 1000 && file.file.size < 500000) {
+                          setcompanywatermark(file.file.originFileObj);
+                          setImgSizeError(false);
+                          console.log(
+                            "Image must be greater than 1 kb and less than 500 kb"
+                          );
+                        } else {
+                          console.log("failed beacuse of large size");
+                          setImgSizeError(true);
+                        }
+                      }}
+                    />
                               </div>
                                </div>
                               </div>

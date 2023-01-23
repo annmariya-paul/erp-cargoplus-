@@ -17,15 +17,15 @@ import CustomModel from "../../../../components/custom_modal/custom_model";
 import { CRM_BASE_URL_FMS } from "../../../../api/bootapi";
 import { UniqueErrorMsg } from "../../../../ErrorMessages/UniqueErrorMessage";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
-
-export default function TermsOfShipment(props) {
+//Payment terms page 
+export default function PaymentTerms(props) {
   const [addForm] = Form.useForm();
   const [error, setError] = useState(false);
   const [successPopup, setSuccessPopup] = useState(false);
 
   const [searchedText, setSearchedText] = useState("");
 
-  const [modalAddShipment, setModalAddShipment] = useState(false);
+  const [modalAddPayment, setModalAddPayment] = useState(false);
 
   const [pageSize, setPageSize] = useState("25");
   const [descriptionInput, setDescriptionInput] = useState();
@@ -34,7 +34,7 @@ export default function TermsOfShipment(props) {
   const [Errormsg, setErrormsg] = useState();
 
   const [showViewModal, setShowViewModal] = useState(false);
-  const [ShipmentEditPopup, setShipmentEditPopup] = useState(false);
+  const [PaymentEditPopup, setPaymentEditPopup] = useState(false);
   const [editForm] = Form.useForm();
   const close_modal = (mShow, time) => {
     if (!mShow) {
@@ -44,26 +44,26 @@ export default function TermsOfShipment(props) {
     }
   };
 
-  const shipmentEdit = (e) => {
-    console.log("shipment edit", e);
-    setNameInput(e.shipment_name);
+  const paymentEdit = (e) => {
+    console.log("payment edit", e);
+    setNameInput(e.payment_name);
 
     editForm.setFieldsValue({
-      shipment_id: e.shipment_id,
-      NameInput: e.shipment_name,
+      payment_id: e.payment_id,
+      NameInput: e.payment_name,
     });
-    setShipmentEditPopup(true);
+    setPaymentEditPopup(true);
   };
-  const [viewshipments, setViewShipments] = useState({
+  const [viewpayments, setViewPayments] = useState({
     id: "",
-    shipmentviewname: "",
+    paymentviewname: "",
   });
   const handleViewClick = (item) => {
-    console.log("view all shipment", item);
-    setViewShipments({
-      ...viewshipments,
-      id: item.shipment_id,
-      shipmentviewname: item.shipment_name,
+    console.log("view all payment", item);
+    setViewPayments({
+      ...viewpayments,
+      id: item.payment_id,
+      paymentviewname: item.payment_name,
     });
 
     setShowViewModal(true);
@@ -79,7 +79,7 @@ export default function TermsOfShipment(props) {
         console.log("index is :", index);
         return (
           <div className="d-flex justify-content-center align-items-center gap-2">
-            <div className="editIcon m-0" onClick={() => shipmentEdit(index)}>
+            <div className="editIcon m-0" onClick={() => paymentEdit(index)}>
               <FaEdit />
             </div>
             <div
@@ -98,11 +98,11 @@ export default function TermsOfShipment(props) {
     },
     {
       title: " NAME",
-      dataIndex: "shipment_name",
-      key: "shipment_name",
+      dataIndex: "payment_name",
+      key: "payment_name",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.shipment_name)
+        return String(record.payment_name)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
@@ -110,11 +110,11 @@ export default function TermsOfShipment(props) {
     },
     {
       title: "SHORT NAME",
-      dataIndex: "shipment_short_name",
-      key: "shipment_short_name",
+      dataIndex: "payment_short_name",
+      key: "payment_short_name",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.shipment_short_name)
+        return String(record.payment_short_name)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
@@ -122,11 +122,11 @@ export default function TermsOfShipment(props) {
     },
     {
       title: "Descripton",
-      dataIndex: "shipment_description",
-      key: "shipment_description",
+      dataIndex: "payment_description",
+      key: "payment_description",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.shipment_description)
+        return String(record.payment_description)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
@@ -136,38 +136,38 @@ export default function TermsOfShipment(props) {
 
   const data = [
     {
-      shipment_name: "Test",
-      shipment_short_name: "abc",
-      shipment_description: "Test data",
+      payment_name: "Test",
+      payment_short_name: "abc",
+      payment_description: "Test data",
 
       key: "1",
     },
     {
-      shipment_name: "Test one",
-      shipment_short_name: "QQ1",
-      shipment_description: "Test data abc",
+      payment_name: "Test one",
+      payment_short_name: "QQ1",
+      payment_description: "Test data abc",
       key: "2",
     },
     {
-      shipment_name: "Abc",
-      shipment_short_name: "sh1",
-      shipment_description: "Test data new",
+      payment_name: "Abc",
+      payment_short_name: "sh1",
+      payment_description: "Test data new",
       key: "3",
     },
   ];
 
-  const [shipmentname, setShipmentname] = useState();
-  const [shipment_id, setShipment_id] = useState();
+  const [paymentname, setPaymentname] = useState();
+  const [payment_id, setPayment_id] = useState();
 
   const handleviewtoedit = (i) => {
     console.log("editing data iss", i);
-    setShipment_id(i.id);
-    setShipmentname(i.shipmentviewname);
+    setPayment_id(i.id);
+    setPaymentname(i.paymentviewname);
 
     addForm.setFieldsValue({
-      shipment: i.shipmentviewname,
+      paymentment: i.paymentviewname,
     });
-    setShipmentEditPopup(true);
+    setPaymentEditPopup(true);
   };
 
   return (
@@ -175,7 +175,7 @@ export default function TermsOfShipment(props) {
       <div className="container-fluid container2 pt-3">
         <div className="row flex-wrap">
           <div className="col">
-            <h5 className="lead_text">Terms of Shipment</h5>
+            <h5 className="lead_text"> Payment Terms</h5>
           </div>
           {/* <Leadlist_Icons /> */}
         </div>
@@ -220,8 +220,8 @@ export default function TermsOfShipment(props) {
             </Select>
           </div>
           <div className="col-9 d-flex justify-content-end">
-            <Button btnType="add" onClick={() => setModalAddShipment(true)}>
-              Add Shipment
+            <Button btnType="add" onClick={() => setModalAddPayment(true)}>
+              Add Payment Terms
             </Button>
           </div>
         </div>
@@ -237,16 +237,16 @@ export default function TermsOfShipment(props) {
       </div>
 
       <CustomModel
-        show={modalAddShipment}
-        onHide={() => setModalAddShipment(false)}
-        header="Add Shipment"
+        show={modalAddPayment}
+        onHide={() => setModalAddPayment(false)}
+        header="Add Payment"
         footer={false}
         // {...props}
         View_list
         list_content={
           <>
             <div className="row">
-              <h5 className="lead_text">Add Shipment</h5>
+              <h5 className="lead_text">Add Payment</h5>
             </div>
             <Form
               form={addForm}
@@ -262,7 +262,7 @@ export default function TermsOfShipment(props) {
                   <label> Name</label>
                   <div>
                     <Form.Item
-                      name="shipmentname"
+                      name="paymentname"
                       rules={[
                         {
                           required: true,
@@ -279,7 +279,7 @@ export default function TermsOfShipment(props) {
                   <label>Short Name</label>
                   <div>
                     <Form.Item
-                      name="shipmentshortname"
+                      name="paymentshortname"
                       rules={[
                         {
                           required: true,
@@ -295,7 +295,7 @@ export default function TermsOfShipment(props) {
                 <div className="col-12 pt-1">
                   <label>Description</label>
                   <div>
-                    <Form.Item name="shipmentdescription">
+                    <Form.Item name="paymentdescription">
                       <TextArea />
                     </Form.Item>
                   </div>
@@ -326,14 +326,14 @@ export default function TermsOfShipment(props) {
           <div className="container-fluid p-3">
             <div className="row">
               <div className="col-10">
-                <h5 className="lead_text">Terms Of Shipment</h5>
+                <h5 className="lead_text"> Payment Terms</h5>
               </div>
               <div className="col-2">
                 <Button
                   btnType="add_borderless"
                   className="edit_button"
                   onClick={() => {
-                    handleviewtoedit(viewshipments);
+                    handleviewtoedit(viewpayments);
                     // setShowModalEdit(true);
                     setShowViewModal(false);
                   }}
@@ -376,14 +376,14 @@ export default function TermsOfShipment(props) {
         }
       />
       <Custom_model
-        show={ShipmentEditPopup}
-        onHide={() => setShipmentEditPopup(false)}
+        show={PaymentEditPopup}
+        onHide={() => setPaymentEditPopup(false)}
         View_list
         list_content={
           <div>
             <div className="container-fluid px-4 my-3">
               <div>
-                <h5 className="lead_text">Edit Shipment</h5>
+                <h5 className="lead_text">Edit Payment Terms</h5>
               </div>
               <div className="row my-3 ">
                 <Form
@@ -403,7 +403,7 @@ export default function TermsOfShipment(props) {
                         {
                           required: true,
                           pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid shipment Name",
+                          message: "Please enter a Valid payment Name",
                         },
                       ]}
                     >

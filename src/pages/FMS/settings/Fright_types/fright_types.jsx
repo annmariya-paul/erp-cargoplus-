@@ -474,15 +474,7 @@ export default function Frightlist(props) {
                   <div>
                   <Form.Item
                     name="freightprefix"
-                    rules={[
-                      {
-                        required: true,
-                        pattern: new RegExp("^[A-Za-z ]+$"),
-                        message: "Please enter a Valid Prefix",
-                      },
-                      
-                     
-                    ]}
+                   
                     onChange={(e) => setFrighttypeprefix(e.target.value)}
                   >
                     <InputType 

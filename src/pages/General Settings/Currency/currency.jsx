@@ -14,9 +14,8 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 
 import { FiEdit } from "react-icons/fi";
 import CustomModel from "../../../components/custom_modal/custom_model";
-import {GENERAL_SETTING_BASE_URL} from "../../../api/bootapi"
+import { GENERAL_SETTING_BASE_URL } from "../../../api/bootapi";
 import PublicFetch from "../../../utils/PublicFetch";
-
 
 export default function Currency(props) {
   const [addForm] = Form.useForm();
@@ -34,12 +33,12 @@ export default function Currency(props) {
 
   const [Errormsg, setErrormsg] = useState();
   const [NameInput, setNameInput] = useState();
-  const [coinInput,setCoinInput] = useState()
-  
+  const [coinInput, setCoinInput] = useState();
+
   const [showViewModal, setShowViewModal] = useState(false);
   const [CurrencyEditPopup, setCurrencyEditPopup] = useState(false);
-  const [AllCurrency,setAllCurrency] = useState()
-    const [currencyname, setCurrencyname] = useState();
+  const [AllCurrency, setAllCurrency] = useState();
+  const [currencyname, setCurrencyname] = useState();
   const [currency_id, setCurrency_id] = useState();
   const [currency_ids, setCurrency_ids] = useState();
 
@@ -54,11 +53,11 @@ export default function Currency(props) {
 
   const currencyEdit = (e) => {
     console.log("currency edit", e);
-setCurrency_ids(e.currency_id)
+    setCurrency_ids(e.currency_id);
     setNameInput(e.currency_name);
     setCountryInput(e.currency_country);
     setCodeInput(e.currency_code);
-    setCoinInput(e.currency_coin)
+    setCoinInput(e.currency_coin);
     setSymbolInput(e.symbol);
 
     addForm.setFieldsValue({
@@ -67,14 +66,18 @@ setCurrency_ids(e.currency_id)
       country: e.currency_country,
       code: e.currency_code,
       symbol: e.currency_symbol,
-      coin: e.currency_coin
+      coin: e.currency_coin,
     });
     setCurrencyEditPopup(true);
   };
   const [viewcurrencys, setViewCurrencys] = useState({
-    id: "",
-    currencyviewname: "",
-    currencyviewcountry: "",
+    currency_id: "",
+    currency_name: "",
+    currency_country: "",
+    currency_symbol:"",
+    currency_code:"",
+    currency_coin:"",
+    
   });
   const handleViewClick = (item) => {
     console.log("view all currency", item);
@@ -86,7 +89,6 @@ setCurrency_ids(e.currency_id)
       currency_code: item.currency_code,
       currency_symbol: item.currency_symbol,
       currency_coin: item.currency_coin,
-
     });
 
     setShowViewModal(true);
@@ -149,7 +151,9 @@ setCurrency_ids(e.currency_id)
       key: "currency_coin",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.currency_coin).toLowerCase().includes(value.toLowerCase());
+        return String(record.currency_coin)
+          .toLowerCase()
+          .includes(value.toLowerCase());
       },
       align: "center",
     },
@@ -159,7 +163,9 @@ setCurrency_ids(e.currency_id)
       key: "currency_code",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.currency_code).toLowerCase().includes(value.toLowerCase());
+        return String(record.currency_code)
+          .toLowerCase()
+          .includes(value.toLowerCase());
       },
       align: "center",
     },
@@ -177,68 +183,72 @@ setCurrency_ids(e.currency_id)
     },
   ];
 
- const AddCurrency = (data) => {
-  PublicFetch.post(`${GENERAL_SETTING_BASE_URL}/currency`, data).then((res)=> {
-    console.log("Response", res);
-    if (res.data.success) {
-      console.log("Success Data", res.data.data);
-      setSuccessPopup(true)
-      close_modal(successPopup,1200)
-      addForm.resetFields()
-      setModalAddCurrency(false)
-      getAllCurrency()
-    }
-  }).catch((err)=> {
-    console.log("Error", err);
-  })
- }
-
-
+  const AddCurrency = (data) => {
+    PublicFetch.post(`${GENERAL_SETTING_BASE_URL}/currency`, data)
+      .then((res) => {
+        console.log("Response", res);
+        if (res.data.success) {
+          console.log("Success Data", res.data.data);
+          setSuccessPopup(true);
+          close_modal(successPopup, 1200);
+          addForm.resetFields();
+          setModalAddCurrency(false);
+          getAllCurrency();
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
 
   const getAllCurrency = () => {
-    PublicFetch.get(`${GENERAL_SETTING_BASE_URL}/currency`).then((res)=> {
-      console.log("response", res);
-      if(res.data.success){
-        console.log("success data", res.data.data);
-        setAllCurrency(res.data.data)
-      }
-    }).catch((err)=> {
-      console.log("Error", err);
-    })
-  }
+    PublicFetch.get(`${GENERAL_SETTING_BASE_URL}/currency`)
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          console.log("success data", res.data.data);
+          setAllCurrency(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
 
   const updateCurrency = (data) => {
-    PublicFetch.patch(`${GENERAL_SETTING_BASE_URL}/currency/${currency_ids}`,{
+    PublicFetch.patch(`${GENERAL_SETTING_BASE_URL}/currency/${currency_ids}`, {
       currency_name: data.currencyInput,
       currency_code: data.code,
       currency_coin: data.coin,
       currency_symbol: data.symbol,
-      currency_country: data.country
-    }).then((res)=> {
-      console.log("response", res);
-      if(res.data.success){
-        setSuccessPopup(true)
-        close_modal(successPopup,1200)
-        getAllCurrency()
-        setCurrencyEditPopup(false)
-      }
-    }).catch((err)=> {
-      console.log("Error", err);
+      currency_country: data.country,
     })
-  }
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          setSuccessPopup(true);
+          close_modal(successPopup, 1200);
+          getAllCurrency();
+          setCurrencyEditPopup(false);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
 
   const handleviewtoedit = (i) => {
     console.log("editing data iss", i);
     setCurrency_id(i.currency_id);
     setCurrencyname(i.currency_name);
-    setCurrency_ids(i.currency_id)
+    setCurrency_ids(i.currency_id);
     addForm.setFieldsValue({
       currency_id: i.currency_id,
       currencyInput: i.currency_name,
       country: i.currency_country,
       code: i.currency_code,
       symbol: i.currency_symbol,
-      coin: i.currency_coin
+      coin: i.currency_coin,
     });
     setCurrencyEditPopup(true);
   };
@@ -250,10 +260,9 @@ setCurrency_ids(e.currency_id)
     setCountryis(e);
   };
 
-
-  useEffect(()=> {
-    getAllCurrency()
-  },[])
+  useEffect(() => {
+    getAllCurrency();
+  }, []);
 
   return (
     <>
@@ -337,8 +346,7 @@ setCurrency_ids(e.currency_id)
               form={addForm}
               onFinish={(data) => {
                 console.log("valuezzzzzzz", data);
-                AddCurrency(data)
-                
+                AddCurrency(data);
               }}
               onFinishFailed={(error) => {
                 console.log(error);
@@ -349,13 +357,14 @@ setCurrency_ids(e.currency_id)
                   <label>Country</label>
                   <div>
                     <Form.Item
-                    name="currency_country"
-                     rules={[
+                      name="currency_country"
+                      rules={[
                         {
                           required: true,
                           message: "Please select ",
                         },
-                      ]}>
+                      ]}
+                    >
                       <SelectBox value={countryis} onChange={handleChange}>
                         {options.map((item, index) => {
                           return (
@@ -380,8 +389,6 @@ setCurrency_ids(e.currency_id)
                           pattern: new RegExp("^[A-Za-z ]+$"),
                           message: "Please enter a Valid  Name",
                         },
-
-                       
                       ]}
                     >
                       <InputType />
@@ -487,7 +494,7 @@ setCurrency_ids(e.currency_id)
               </div>
               <div className="col-1">:</div>
               <div className="col-6 justify-content-start">
-                <p className="modal-view-data">{viewcurrencys.country}</p>
+                <p className="modal-view-data">{viewcurrencys.currency_country}</p>
               </div>
             </div>
             <div className="row mt-4">
@@ -499,7 +506,7 @@ setCurrency_ids(e.currency_id)
                 <p className="modal-view-data">{viewcurrencys.currency_name}</p>
               </div>
             </div>
-             <div className="row mt-4">
+            <div className="row mt-4">
               <div className="col-4">
                 <p> Currency Coin</p>
               </div>
@@ -523,7 +530,9 @@ setCurrency_ids(e.currency_id)
               </div>
               <div className="col-1">:</div>
               <div className="col-6 justify-content-start">
-                <p className="modal-view-data">{viewcurrencys.currency_symbol}</p>
+                <p className="modal-view-data">
+                  {viewcurrencys.currency_symbol}
+                </p>
               </div>
             </div>
           </div>
@@ -544,7 +553,7 @@ setCurrency_ids(e.currency_id)
                   form={addForm}
                   onFinish={(values) => {
                     console.log("values iss", values);
-                    updateCurrency(values)
+                    updateCurrency(values);
                   }}
                   onFinishFailed={(error) => {
                     console.log(error);
@@ -561,7 +570,6 @@ setCurrency_ids(e.currency_id)
                             pattern: new RegExp("^[A-Za-z0-9 ]+$"),
                             message: "Please enter a Valid Currency Name",
                           },
-                         
                         ]}
                       >
                         <InputType className="input_type_style w-100" />
@@ -572,7 +580,7 @@ setCurrency_ids(e.currency_id)
                       <label>Country</label>
                       <div>
                         <Form.Item
-                        name="country"
+                          name="country"
                           rules={[
                             {
                               required: true,

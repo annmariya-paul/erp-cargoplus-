@@ -67,9 +67,7 @@ function Enquiries() {
     //             if (index.assigned_employee && index.assigned_employee.length > 0 ){
     //               handleEditedclick(index)
     //             }
-                  
-               
-                
+
     //           }} />
     //         </div>
     //         {/* <div className="editcolor">
@@ -141,13 +139,13 @@ function Enquiries() {
       // align: "center",
       // display:"flex",
       render: (data, index) => {
-        console.log("table data",index);
+        console.log("table data", index);
         return (
           <div className="d-flex justify-content-center">
             {index.assigned_employee && index.assigned_employee.length > 0 ? (
               <div>
                 <Button
-                btnType="add"
+                  btnType="add"
                   onClick={() => {
                     handleEditedclick(index);
                   }}
@@ -157,9 +155,8 @@ function Enquiries() {
               </div>
             ) : (
               <div>
-               
-                 <Button
-                 btnType="add"
+                <Button
+                  btnType="add"
                   onClick={() => {
                     navigate(
                       `${ROUTES.ASSIGN_OPPORTUNITIES}/${index.opportunity_id}`
@@ -234,7 +231,7 @@ function Enquiries() {
               opportunity_description: item?.opportunity_description,
               opportunity_amount: item?.opportunity_amount,
               opportunity_status: item?.opportunity_status,
-              assigned_employee: item?.assigned_employee
+              assigned_employee: item?.assigned_employee,
             });
           });
           console.log("hellooooqqqqq", tempArr);
@@ -263,7 +260,7 @@ function Enquiries() {
   }, [pageofIndex, numOfItems]);
 
   const handleEditedclick = (index) => {
-     navigate(`${ROUTES.EDIT_ASSIGN_OPPORTUNITY}/${index.opportunity_id}`)
+    navigate(`${ROUTES.ASSIGN_OPPORTUNITIES}/${index.opportunity_id}`);
   };
   return (
     <div>
@@ -453,13 +450,13 @@ function Enquiries() {
                 </div>
                 <div className="d-flex py-2 justify-content-center">
                   <MyPagination
-              total={parseInt(totalCount)}
-              current={current}
-              pageSize={numOfItems}
-              onChange={(current, pageSize) => {
-                setCurrent(current);
-              }}
-            />
+                    total={parseInt(totalCount)}
+                    current={current}
+                    pageSize={numOfItems}
+                    onChange={(current, pageSize) => {
+                      setCurrent(current);
+                    }}
+                  />
                 </div>
                 {/* {"mcncncncncncncnc"} */}
               </div>
@@ -474,11 +471,11 @@ function Enquiries() {
         show={showViewModal}
         onHide={() => setShowViewModal(false)}
         View_list
-        list_content={<div className="container">
-          <div>
-            
+        list_content={
+          <div className="container">
+            <div></div>
           </div>
-        </div>}
+        }
       />
     </div>
   );

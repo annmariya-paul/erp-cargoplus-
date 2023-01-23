@@ -67,7 +67,8 @@ import Enquiries from "./pages/FMS/Opportunity_assigns/Enquiries/Enquiries";
 import Modelist from "./pages/FMS/settings/Mode/mode";
 import Assign_oppertunity_edit from "./pages/FMS/Opportunity_assigns/AssignOpportunity/assign_oppertunity_edit";
 import Consignee from "./pages/FMS/settings/Consignee/consignee";
-import TermsOfShipment from "./pages/FMS/settings/Terms_of_shipment/terms_of_shipment";
+
+import PaymentTerms from "./pages/FMS/settings/Payment Terms/payment_terms";
 import Currency from "./pages/General Settings/Currency/currency";
 import TaxType from "./pages/FMS/settings/Tax_type/tax_type";
 import JobTasks from "./pages/FMS/settings/Job_tasks/job_tasks";
@@ -171,7 +172,7 @@ function App() {
             <Route path={ROUTES.ENQUIRIES} element={<Enquiries />} />
             <Route path={ROUTES.EDIT_ASSIGN_OPPORTUNITY_ID} element={<Assign_oppertunity_edit />} />
             <Route path={ROUTES.CONSIGNEE} element={<Consignee />} />
-            <Route path={ROUTES.TERMS_OF_SHIPMENT} element={<TermsOfShipment />} />
+            <Route path={ROUTES.TERMS_OF_PAYMENT} element={<PaymentTerms />} />
             <Route path={ROUTES.TAXTYPE} element={<TaxType />} />
             <Route path={ROUTES.JOBTASKS} element={<JobTasks />} />
             <Route path={ROUTES.AIRPORT} element={<Airport/>}/>

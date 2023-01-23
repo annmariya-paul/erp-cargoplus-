@@ -180,7 +180,7 @@ export default function  SelectCountry(){
       <div className="container-fluid container2 mt-3">
         <div className="row flex-wrap">
           <div className="col">
-            <h5 className="lead_text my-2">Designation</h5>
+            <h5 className="lead_text my-2">Countries</h5>
           </div>
           {/* <Leadlist_Icons /> */}
         </div>

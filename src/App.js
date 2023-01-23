@@ -75,6 +75,7 @@ import JobTasks from "./pages/FMS/settings/Job_tasks/job_tasks";
 import Airport from "./pages/FMS/settings/Airport/airport";
 import Seaport from "./pages/FMS/settings/Seaport/seaport";
 import Companyinfo from "./pages/General Settings/companyinfo/companyinfo";
+import Locations from "./pages/FMS/settings/Locations/locations";
 // import Lead from "./pages/lead/lead";
 
 function App() {
@@ -177,6 +178,7 @@ function App() {
             <Route path={ROUTES.JOBTASKS} element={<JobTasks />} />
             <Route path={ROUTES.AIRPORT} element={<Airport/>}/>
             <Route path={ROUTES.SEAPORT} element={<Seaport/>}/>
+            <Route path={ROUTES.LOCATIONS} element={<Locations/>}/>
 
              {/* General settings */}
              

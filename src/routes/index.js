@@ -77,6 +77,7 @@ const ROUTES = {
   JOBTASKS:"/job_tasks",
   AIRPORT:"/airport",
   SEAPORT:"/seaport",
+  LOCATIONS:"/locations",
   
   // general settings
   CURRENCY:"/currency",

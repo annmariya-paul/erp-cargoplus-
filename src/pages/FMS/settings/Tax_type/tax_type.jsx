@@ -5,7 +5,7 @@ import InputType from "../../../../components/Input Type textbox/InputType";
 import ErrorMsg from "../../../../components/error/ErrorMessage";
 import Custom_model from "../../../../components/custom_modal/custom_model";
 import { MdPageview } from "react-icons/md";
-import { Form, Input, Select, DatePicker } from "antd";
+import { Form, Input, Select } from "antd";
 import TableData from "../../../../components/table/table_data";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";

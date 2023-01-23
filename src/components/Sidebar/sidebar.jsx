@@ -804,6 +804,21 @@ export default function Sidebar({ showSidebar }) {
               </li>
               {GeneralSettingsopen ? (
                 <>
+
+        {checkPermission("companyinfo") && (
+                    <li className="nav-text ">
+                      <NavLink
+                        className={({ isActive }) =>
+                          isActive ? "active-link" : "link"
+                        }
+                        to={ROUTES.COMPANYINFO}
+                      >
+                        <RiTeamFill className="sidebar_icons ms-4" />
+                       CompanyInfo
+                      </NavLink>
+                    </li>
+                  )}
+
                   {checkPermission("currency") && (
                     <li className="nav-text ">
                       <NavLink

@@ -20,9 +20,14 @@ function Companyinfo(){
     const [companyaddress,setCompanyaddress]=useState()
     const [companyphone,setCompanyphone]= useState()
     const [companyemail,setCompanyemail]= useState()
-    const [companycountry,setCompanycountry]= useState()
+    // const [companycountry,setCompanycountry]= useState()
+
+    const [companyzipcode,setcompanyzipcode]= useState()
     const [companylogo,setCompanylogo]= useState()
     const [companywatermark,setcompanywatermark] =useState()
+
+    const[cmpnydata,setcmpnydata]= useState("")
+    const[compnyid,setcmpnyid]=useState()
     const [previewVisible, setPreviewVisible] = useState(false);
     const [previewImage, setPreviewImage] = useState("");
     const [previewTitle, setPreviewTitle] = useState("");
@@ -51,12 +56,45 @@ function Companyinfo(){
     //     file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
     //   );
     // };
-    const getallseaport = async () => {
+    const getallcmpny = async () => {
       try {
-        const allseaports = await PublicFetch.get(
+        const allcmpny = await PublicFetch.get(
           `${GENERAL_SETTING_BASE_URL}/company`
         );
-        console.log("getting all seaports", allseaports);
+        // console.log("getting all cmpny", allcmpny);
+        console.log(" all cmpny", allcmpny.data.data);
+        setcmpnydata(allcmpny.data.data)
+
+        let arry=[]
+        allcmpny.data.data.forEach((i,indx)=>{
+         arry.push(i)     
+        })
+        console.log("all cmpny are" ,arry)
+        arry.map((itm,indx)=>{
+          console.log("all cmpny maped",itm)
+          setcmpnyid(itm.company_id)
+          setCompanyname(itm.company_name)
+          setCompanyaddress(itm.company_address)
+          setCompanyemail(itm.company_email)
+          setCompanyphone(itm.company_phone)
+          setCountryis(itm.company_country)
+          setcompanyzipcode(itm.company_zip_code)
+          setCompanylogo(itm.company_logo)
+          setcompanywatermark(itm.company_watermark)
+
+          addForm.setFieldsValue({
+            company_name: itm.company_name,
+            company_address:itm.company_address,
+            company_email:itm.company_email,
+            company_phone:itm.company_phone,
+            company_country:itm.company_country,
+            cmpny_zipcode:itm.company_zip_code,
+            cmpny_logo:itm.company_logo,
+            cmpny_watermark:itm.company_watermark,
+
+          });
+
+        })
         // setallseaports(allseaports.data.data)
       } catch (err) {
         console.log("error to fetching  seaports", err);
@@ -64,7 +102,7 @@ function Companyinfo(){
     };
 
     useEffect(() => {
-      getallseaport();
+      getallcmpny();
     }, []);
 
 
@@ -74,10 +112,35 @@ function Companyinfo(){
       formData.append("company_address", companyaddress);
       formData.append("company_phone", companyphone);
       formData.append("company_email", companyemail);
+      formData.append("company_zip_code",companyzipcode);
       formData.append("company_country", countryis);
       formData.append("company_logo", companylogo);
       formData.append("company_watermark", companywatermark);
     
+
+      if(cmpnydata){
+        PublicFetch.patch(`${GENERAL_SETTING_BASE_URL}/company/${parseInt(compnyid)}`, 
+        formData,
+         {
+          "Content-Type": "Multipart/form-Data",
+        })
+          .then((res) => {
+            console.log("dataa is successfully saved", res.data.success);
+            // if (res.data.success) {
+            //   setSuccessPopup(true);
+            //   addForm.resetFields();
+            //   close_modal(successPopup, 1000);
+            // } else {
+            //   setErrormsg(res.data.data);
+            // }
+          })
+          .catch((err) => {
+            console.log("error", err);
+            // setError(true);
+          });
+      }else{
+
+      
       PublicFetch.post(`${GENERAL_SETTING_BASE_URL}/company`, formData, {
         "Content-Type": "Multipart/form-Data",
       })
@@ -95,8 +158,10 @@ function Companyinfo(){
           console.log("error", err);
           // setError(true);
         });
+      }
     };
   
+    // console.log("njdndkj",compnyid)
     return (
         <div>
           <div className="">
@@ -193,7 +258,13 @@ function Companyinfo(){
                                 <div>
                                   <label>Phone</label>
                                   <Form.Item
-                                  className=""
+                                  name="company_phone"
+                                  rules={[
+                                    {
+                                      required: true,
+                                      message: "Email is Required",
+                                    },
+                                  ]}
                               >
                                {/* <Phone_Input
                                value={companyphone}
@@ -241,7 +312,7 @@ function Companyinfo(){
                                 <div className="">
                                   <label>ZipCode</label>
                                   <Form.Item
-                                name="zipcode"
+                                name="cmpny_zipcode"
                                 // rules={[
                                 //   {
                                 //     required: true,
@@ -250,7 +321,10 @@ function Companyinfo(){
                                 // ]}
                               >
                                 <InputType 
-                                
+                                value={companyzipcode}
+                                onChange={(e)=>{
+                                  setcompanyzipcode(e.target.value)
+                                }}
                                 />
                                 
                               </Form.Item>
@@ -261,6 +335,9 @@ function Companyinfo(){
                                <div className="col-xl-6 col-lg-6  col-12">
                                <div className="">
                                 <label>Logo</label>
+                                <Form.Item
+                                name="cmpny_logo"
+                                >
                                 <FileUpload
                       multiple
                       listType="picture"
@@ -283,11 +360,20 @@ function Companyinfo(){
                         }
                       }}
                     />
+                    </Form.Item>
+                    <img
+                      src={`${process.env.REACT_APP_BASE_URL}/${companylogo}`}
+                      height="40px"
+                      width={"40px"}
+                    />
                                 </div>
                                </div>
                                <div className="col-xl-6 col-lg-6 col-12">
                               <div className="">
                               <label>Water Mark</label>
+                              <Form.Item
+                              name="cmpny_watermark"
+                              >
                               <FileUpload
                               multiple
                               listType="picture"
@@ -309,6 +395,12 @@ function Companyinfo(){
                           setImgSizeError(true);
                         }
                       }}
+                    />
+                    </Form.Item>
+                    <img
+                      src={`${process.env.REACT_APP_BASE_URL}/${companywatermark}`}
+                      height="40px"
+                      width={"40px"}
                     />
                               </div>
                                </div>

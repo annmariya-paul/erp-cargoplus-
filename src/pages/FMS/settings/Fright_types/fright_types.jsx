@@ -323,14 +323,14 @@ export default function Frightlist(props) {
       <div className="container-fluid container2 pt-3">
         <div className="row flex-wrap">
           <div className="col">
-            <h5 className="lead_text">Fright types</h5>
+            <h5 className="lead_text">Freight types</h5>
           </div>
           {/* <Leadlist_Icons /> */}
         </div>
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
-              placeholder="Search by Fright type Name"
+              placeholder="Search by Freight type Name"
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
               onChange={(e) => {
@@ -373,7 +373,7 @@ export default function Frightlist(props) {
                 setuniqueCode(false);
                 setModalAddFright(true);
               } }>
-              Add Fright types
+              Add Freight types
             </Button>
           </div>
         </div>
@@ -401,7 +401,7 @@ export default function Frightlist(props) {
         list_content={
           <>
             <div className="row">
-              <h5 className="lead_text">Add Fright Type</h5>
+              <h5 className="lead_text">Add Freight Type</h5>
             </div>
             <Form
            form={addForm}
@@ -415,7 +415,7 @@ export default function Frightlist(props) {
             >
               <div className="row py-4">
                 <div className="col-12 pt-1">
-                  <label>Fright Type Name</label>
+                  <label>Freight Type Name</label>
                   <div>
                   <Form.Item
                     name="freightname"
@@ -423,7 +423,7 @@ export default function Frightlist(props) {
                       {
                         required: true,
                         pattern: new RegExp("^[A-Za-z ]+$"),
-                        message: "Please enter a Valid  Name",
+                        message: "Please enter a Valid Freight type Name",
                       },
                       
                       {
@@ -464,13 +464,13 @@ export default function Frightlist(props) {
                   </Form.Item>
                   {uniqueCode ? (
                             <p style={{ color: "red",marginTop:"-24px" }}>
-                            Fright Type Name {uniqueErrMsg.UniqueErrName}
+                            Freight Type Name {uniqueErrMsg.UniqueErrName}
                             </p>
                           ) : null}
                 </div>
                 </div>
                 <div className="col-12 pt-1">
-                  <label>Fright Type Prefix</label>
+                  <label>Freight Type Prefix</label>
                   <div>
                   <Form.Item
                     name="freightprefix"
@@ -559,10 +559,10 @@ export default function Frightlist(props) {
           list_content={
             <div className="container-fluid p-3">
               <div className="row">
-                <div className="col-10">
-                  <h5 className="lead_text">Fright Type</h5>
+                <div className="col-9">
+                  <h5 className="lead_text">Freight Type</h5>
                 </div>
-                <div className="col-2">
+                <div className="col-3">
                   <Button
                     btnType="add_borderless"
                     className="edit_button"
@@ -581,7 +581,7 @@ export default function Frightlist(props) {
               </div>
               <div className="row mt-4">
                 <div className="col-4">
-                  <p> Fright Name</p>
+                  <p> Freight Name</p>
                 </div>
                 <div className="col-1">:</div>
                 <div className="col-6 justify-content-start">
@@ -590,7 +590,7 @@ export default function Frightlist(props) {
               </div>
               <div className="row mt-4">
                 <div className="col-4">
-                  <p> Fright Prefix</p>
+                  <p> Freight Prefix</p>
                 </div>
                 <div className="col-1">:</div>
                 <div className="col-6 justify-content-start">
@@ -609,7 +609,7 @@ export default function Frightlist(props) {
           <div>
             <div className="container-fluid px-4 my-3">
               <div>
-                <h5 className="lead_text">Edit Fright Type</h5>
+                <h5 className="lead_text">Edit Freight Type</h5>
               </div>
               <div className="row my-3 ">
                 <Form
@@ -622,7 +622,7 @@ export default function Frightlist(props) {
                     console.log(error);
                   }}
                 >
-                  <div className="col-6">
+                  <div className="col-12">
                     <label>Name</label>
                     <Form.Item
                       name="NameInput"
@@ -630,7 +630,7 @@ export default function Frightlist(props) {
                         {
                           required: true,
                           pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid Fright type Name",
+                          message: "Please enter a Valid Freight type Name",
                         },
                         {
                           min: 2,
@@ -669,12 +669,12 @@ export default function Frightlist(props) {
                     )} */}
                      {uniqueeditCode ? (
                         <p style={{ color: "red", marginTop:"-24px" }} className="mb-2">
-                          Fright type Name {uniqueErrMsg.UniqueErrName}
+                          Freight type Name {uniqueErrMsg.UniqueErrName}
                         </p>
                       ) : null}
                   </div>
-                  <div className="col-6">
-                    <label>Fright Prefix</label>
+                  <div className="col-12">
+                    <label>Freight Prefix</label>
                     <Form.Item
                       name="PrefixInput"
                       

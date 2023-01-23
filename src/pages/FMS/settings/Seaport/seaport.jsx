@@ -248,76 +248,76 @@ function Seaport (){
       ];  
 
     return (
-        <>
-          <div className="container-fluid container2 pt-3">
-            <div className="row flex-wrap">
-              <div className="col">
-                <h5 className="lead_text">Seaport</h5>
-              </div>
-              {/* <Leadlist_Icons /> */}
+      <>
+        <div className="container-fluid container_fms pt-3">
+          <div className="row flex-wrap">
+            <div className="col">
+              <h5 className="lead_text">Seaports</h5>
             </div>
-            <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
-              <div className="col-4">
-                <Input.Search
-                  placeholder="Search by Airport Name"
-                  style={{ margin: "5px", borderRadius: "5px" }}
-                  value={searchedText}
-                  onChange={(e) => {
-                    setSearchedText(e.target.value ? [e.target.value] : []);
-                  }}
-                  onSearch={(value) => {
-                    setSearchedText(value);
-                  }}
-                />
-              </div>
-            </div>
-            <div className="row my-3">
-              <div className="col-3 px-3">
-                <Select
-                  bordered={false}
-                  className="page_size_style"
-                  value={pageSize}
-                  onChange={(e) => setPageSize(e)}
-                >
-                  <Select.Option value="25">
-                    Show
-                    <span className="vertical ms-1">|</span>
-                    <span className="sizes ms-1">25</span>
-                  </Select.Option>
-                  <Select.Option value="50">
-                    Show
-                    <span className="vertical ms-1">|</span>
-                    <span className="sizes ms-1"> 50</span>
-                  </Select.Option>
-                  <Select.Option value="100">
-                    Show
-                    <span className="vertical ms-1">|</span>
-                    <span className="sizes ms-1">100</span>
-                  </Select.Option>
-                </Select>
-              </div>
-              <div className="col-9 d-flex justify-content-end">
-                <Button btnType="add" 
-                onClick={() =>
-                  {
-                    setModalAddAirport(true);
-                  }}
-                  >
-                  Add Seaport
-                </Button>
-              </div>
-            </div>
-            <div className="datatable">
-              <TableData
-                // data={getData(numofItemsTo, pageofIndex)}
-               
-                data={allseaports}
-                columns={columns}
-                custom_table_css="table_lead_list"
+            {/* <Leadlist_Icons /> */}
+          </div>
+          <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
+            <div className="col-4">
+              <Input.Search
+                placeholder="Search by Airport Name"
+                style={{ margin: "5px", borderRadius: "5px" }}
+                value={searchedText}
+                onChange={(e) => {
+                  setSearchedText(e.target.value ? [e.target.value] : []);
+                }}
+                onSearch={(value) => {
+                  setSearchedText(value);
+                }}
               />
             </div>
+          </div>
+          <div className="row my-3">
+            <div className="col-3 px-3">
+              <Select
+                bordered={false}
+                className="page_size_style"
+                value={pageSize}
+                onChange={(e) => setPageSize(e)}
+              >
+                <Select.Option value="25">
+                  Show
+                  <span className="vertical ms-1">|</span>
+                  <span className="sizes ms-1">25</span>
+                </Select.Option>
+                <Select.Option value="50">
+                  Show
+                  <span className="vertical ms-1">|</span>
+                  <span className="sizes ms-1"> 50</span>
+                </Select.Option>
+                <Select.Option value="100">
+                  Show
+                  <span className="vertical ms-1">|</span>
+                  <span className="sizes ms-1">100</span>
+                </Select.Option>
+              </Select>
+            </div>
+            <div className="col-9 d-flex justify-content-end">
+              <Button
+                btnType="add"
+                onClick={() => {
+                  setModalAddAirport(true);
+                }}
+              >
+                Add Seaport
+              </Button>
+            </div>
+          </div>
+          <div className="datatable">
+            <TableData
+              // data={getData(numofItemsTo, pageofIndex)}
 
-            <div className="d-flex py-2 justify-content-center">
+              data={allseaports}
+              columns={columns}
+              custom_table_css="table_lead_list"
+            />
+          </div>
+
+          <div className="d-flex mt-4 justify-content-center">
             <MyPagination
               total={parseInt(totalCount)}
               current={current}
@@ -326,285 +326,274 @@ function Seaport (){
                 setCurrent(current);
               }}
             />
-            </div>
           </div>
-    
-    
-    
-          <CustomModel
-          
-            show={modalAddairport}
-            onHide={() => setModalAddAirport(false)}
-            header="Add Fright"
-            footer={false}
-            // {...props}
-            View_list
-            list_content={
-              <>
+        </div>
+
+        <CustomModel
+          show={modalAddairport}
+          onHide={() => setModalAddAirport(false)}
+          header="Add Fright"
+          footer={false}
+          // {...props}
+          View_list
+          list_content={
+            <>
+              <div className="row">
+                <h5 className="lead_text pb-3">Add Seaport</h5>
+              </div>
+              <Form
+                form={addForm}
+                onFinish={(data) => {
+                  console.log("valuezzzzzzz", data);
+                  createseaport();
+                }}
+                onFinishFailed={(error) => {
+                  console.log(error);
+                }}
+              >
                 <div className="row">
-                  <h5 className="lead_text">Add Seaport</h5>
-                </div>
-                <Form
-               form={addForm}
-                  onFinish={(data) => {
-                    console.log("valuezzzzzzz", data);
-                    createseaport()
-                  }}
-                  onFinishFailed={(error) => {
-                    console.log(error);
-                  }}
-                >
-                  <div className="row py-4">
-                    <div className="col-12 pt-1">
-                      <label>SeaPort Name</label>
-                      <div>
+                  <div className="col-12">
+                    <label>Seaport Name</label>
+                    <div>
                       <Form.Item
                         name="seaportname"
                         rules={[
                           {
                             required: true,
                             // pattern: new RegExp("^[A-Za-z ]+$"),
-                            message: "Please enter a Valid  Name",
+                            message: "Please enter a Valid Seaport Name",
                           },
-                          
                         ]}
                       >
-                        <InputType 
-                       value={seaportname}
-                       onChange={(e)=>{
-                        setseaportname(e.target.value)
-                       }}
+                        <InputType
+                          value={seaportname}
+                          onChange={(e) => {
+                            setseaportname(e.target.value);
+                          }}
                         />
                       </Form.Item>
-                      
+
                       {/* {uniqueCode ? (
                                 <p style={{ color: "red",marginTop:"-24px" }}>
                                 Fright Type Name {uniqueErrMsg.UniqueErrName}
                                 </p>
                               ) : null} */}
                     </div>
-                    </div>
-                    <div className="col-12 pt-1">
-                      <label>Seaport Code</label>
-                      <div>
+                  </div>
+                  <div className="col-12">
+                    <label>Seaport Code</label>
+                    <div>
                       <Form.Item
-                        name="freightcode"
+                        name="seaportcode"
                         rules={[
                           {
                             required: true,
                             // pattern: new RegExp("^[A-Za-z ]+$"),
                             message: "Please enter a Valid code",
                           },
-                          
                         ]}
                       >
-                        <InputType 
-                        value={seaportcode}
-                        onChange={(e)=>{
-                         setseaportcode(e.target.value)
-                        }}
+                        <InputType
+                          value={seaportcode}
+                          onChange={(e) => {
+                            setseaportcode(e.target.value);
+                          }}
                         />
                       </Form.Item>
-                      
+
                       {/* {uniqueCode ? (
                                 <p style={{ color: "red",marginTop:"-24px" }}>
                                 Fright Type Name {uniqueErrMsg.UniqueErrName}
                                 </p>
                               ) : null} */}
                     </div>
-                    </div>
-    
-                 
                   </div>
-                  <div className="row justify-content-center ">
-                    <div className="col-auto">
-                      <Button btnType="save">Save</Button>
-                    </div>
-                  </div>
-                </Form>
-              </>
-            }
-          >
-            <Custom_model
-              size={"sm"}
-              show={saveSuccess}
-              onHide={() => setSaveSuccess(false)}
-              success
-            />
-          </CustomModel>
-    
-    
-           <Custom_model
-              show={showViewModal}
-              onHide={() => setShowViewModal(false)}
-              View_list
-              list_content={
-                <div className="container-fluid p-3">
-                  <div className="row">
-                    <div className="col-9">
-                      <h5 className="lead_text">Seaport</h5>
-                    </div>
-                    <div className="col-3">
-                      <Button
-                        btnType="add_borderless"
-                        className="edit_button"
-                        onClick={() => {
-                          handleviewtoedit(viewseaport)
-                        //   handleviewtoedit(viewfrights);
-                          setFrightEditPopup(true)
-                          setShowViewModal(false);
-                        }}
-                      >  
-                        Edit
-                        <FiEdit 
-                          style={{ marginBottom: "4px", marginInline: "3px" }}
-                        />
-                      </Button>
-                    </div>
-                  </div>
-                  <div className="row mt-4">
-                    <div className="col-4">
-                      <p> Seaport Name</p>
-                    </div>
-                    <div className="col-1">:</div>
-                    <div className="col-6 justify-content-start">
-                      <p className="modal-view-data">{viewseaport.seaportname} </p>
-                    </div>
-                  </div>
-                  <div className="row mt-2">
-                    <div className="col-4">
-                      <p> Seaport Code</p>
-                    </div>
-                    <div className="col-1">:</div>
-                    <div className="col-6 justify-content-start">
-                      <p className="modal-view-data">{viewseaport.seaportcode} </p>
-                    </div>
-                  </div>
-                 
                 </div>
-              }
-            />
+                <div className="row justify-content-center">
+                  <div className="col-auto">
+                    <Button btnType="save">Save</Button>
+                  </div>
+                </div>
+              </Form>
+            </>
+          }
+        >
           <Custom_model
-             show={FrightEditPopup}
-            onHide={() => setFrightEditPopup(false)}
-            View_list
-            list_content={
+            size={"sm"}
+            show={saveSuccess}
+            onHide={() => setSaveSuccess(false)}
+            success
+          />
+        </CustomModel>
+
+        <Custom_model
+          show={showViewModal}
+          onHide={() => setShowViewModal(false)}
+          View_list
+          list_content={
+            <div className="container-fluid p-3">
+              <div className="row">
+                <div className="col-9">
+                  <h5 className="lead_text">Seaport</h5>
+                </div>
+                <div className="col-3">
+                  <Button
+                    btnType="add_borderless"
+                    className="edit_button"
+                    onClick={() => {
+                      handleviewtoedit(viewseaport);
+                      //   handleviewtoedit(viewfrights);
+                      setFrightEditPopup(true);
+                      setShowViewModal(false);
+                    }}
+                  >
+                    Edit
+                    <FiEdit
+                      style={{ marginBottom: "4px", marginInline: "3px" }}
+                    />
+                  </Button>
+                </div>
+              </div>
+              <div className="row mt-4">
+                <div className="col-4">
+                  <p> Seaport Name</p>
+                </div>
+                <div className="col-1">:</div>
+                <div className="col-6 justify-content-start">
+                  <p className="modal-view-data">{viewseaport.seaportname} </p>
+                </div>
+              </div>
+              <div className="row mt-2">
+                <div className="col-4">
+                  <p> Seaport Code</p>
+                </div>
+                <div className="col-1">:</div>
+                <div className="col-6 justify-content-start">
+                  <p className="modal-view-data">{viewseaport.seaportcode} </p>
+                </div>
+              </div>
+            </div>
+          }
+        />
+        <Custom_model
+          show={FrightEditPopup}
+          onHide={() => setFrightEditPopup(false)}
+          View_list
+          list_content={
+            <div>
               <div>
-                <div className="container-fluid px-4 my-3">
-                  <div>
-                    <h5 className="lead_text">Edit Seaport</h5>
-                  </div>
-                  <div className="row my-3 ">
-                    <Form
-                      form={editForm}
-                      onFinish={(values) => {
-                        console.log("values iss", values);
-                        handleupdate()
-                    //    handleUpdate();
-                      }}
-                      onFinishFailed={(error) => {
-                        console.log(error);
-                      }}
-                    >
-                      <div className="col-12">
-                        <label>Name</label>
-                        <Form.Item
-                          name="seaportname"
-                          rules={[
-                            {
-                              required: true,
-                              // pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                              message: "Please enter a Valid  Name",
-                            },
-                            
-                          ]}
-                        >
-                          <InputType
-                            className="input_type_style w-100"
-                            value={editseaportname}
-                            onChange={(e)=>{
-                              seteditseaportname(e.target.value)
-                            }}
-                            // value={NameInput}
-                            // onChange={(e) => {
-                            //   setNameInput(e.target.value);
-                            //   setErrormsg("");
-                            //   setuniqueeditCode(false);
-                            // }}
-                            // onBlur={ async () => {
-                                
-                            //   if (newName !== NameInput){
-                            //     let a = await CheckUnique({type:"freighttypename",value:NameInput})
-                            //     console.log("hai how are u", a)
-                            //     setuniqueeditCode(a);
-                               
-                            //   }
-                              
-                            // }}
-                          />
-                        </Form.Item>
-                        
-                         {/* {uniqueeditCode ? (
+                <h5 className="lead_text pb-3">Edit Seaport</h5>
+              </div>
+              <div className="container-fluid  my-3">
+                <div className="row my-3 ">
+                  <Form
+                    form={editForm}
+                    onFinish={(values) => {
+                      console.log("values iss", values);
+                      handleupdate();
+                      //    handleUpdate();
+                    }}
+                    onFinishFailed={(error) => {
+                      console.log(error);
+                    }}
+                  >
+                    <div className="col-12">
+                      <label>Seaport Name</label>
+                      <Form.Item
+                        name="seaportname"
+                        rules={[
+                          {
+                            required: true,
+                            // pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                            message: "Please enter a Valid Seaport Name",
+                          },
+                        ]}
+                      >
+                        <InputType
+                          className="input_type_style w-100"
+                          value={editseaportname}
+                          onChange={(e) => {
+                            seteditseaportname(e.target.value);
+                          }}
+                          // value={NameInput}
+                          // onChange={(e) => {
+                          //   setNameInput(e.target.value);
+                          //   setErrormsg("");
+                          //   setuniqueeditCode(false);
+                          // }}
+                          // onBlur={ async () => {
+
+                          //   if (newName !== NameInput){
+                          //     let a = await CheckUnique({type:"freighttypename",value:NameInput})
+                          //     console.log("hai how are u", a)
+                          //     setuniqueeditCode(a);
+
+                          //   }
+
+                          // }}
+                        />
+                      </Form.Item>
+
+                      {/* {uniqueeditCode ? (
                             <p style={{ color: "red", marginTop:"-24px" }} className="mb-2">
                               Fright type Name {uniqueErrMsg.UniqueErrName}
                             </p>
                           ) : null} */}
-                      </div>
-                      <div className="col-12">
-                        <label>Code</label>
-                        <Form.Item
-                          name="seaportcode"
-                          rules={[
-                            {
-                              required: true,
-                              // pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                              message: "Please enter a Valid Fright type Name",
-                            },
-                           
-                          ]}
-                        >
-                          <InputType
-                            className="input_type_style w-100"
-                            value={editseaportcode}
-                            onChange={(e)=>{
-                              seteditseaportcode(e.target.value)
-                            }}
-                          />
-                        </Form.Item>
-                        
-                         {/* {uniqueeditCode ? (
+                    </div>
+                    <div className="col-12">
+                      <label>Seaport Code</label>
+                      <Form.Item
+                        name="seaportcode"
+                        rules={[
+                          {
+                            required: true,
+                            // pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                            message: "Please enter a Valid Seaport Code",
+                          },
+                        ]}
+                      >
+                        <InputType
+                          className="input_type_style w-100"
+                          value={editseaportcode}
+                          onChange={(e) => {
+                            seteditseaportcode(e.target.value);
+                          }}
+                        />
+                      </Form.Item>
+
+                      {/* {uniqueeditCode ? (
                             <p style={{ color: "red", marginTop:"-24px" }} className="mb-2">
                               Fright type Name {uniqueErrMsg.UniqueErrName}
                             </p>
                           ) : null} */}
-                      </div>
-                     
-                      <div className="col-12 d-flex justify-content-center mt-5">
-                        <Button className="save_button">Save</Button>
-                      </div>
-                    </Form>
-                  </div>
-                  {/* {error ? (
+                    </div>
+
+                    <div className="col-12 d-flex justify-content-center">
+                      <Button className="save_button">Save</Button>
+                    </div>
+                  </Form>
+                </div>
+                {/* {error ? (
                     <div className="">
                       <ErrorMsg code={"400"} />
                     </div>
                   ) : (
                     ""
                   )} */}
-                </div>
               </div>
-            }
-          />
-        
-              <CustomModel
-            size={"sm"}
-            show={saveSuccess}
-            onHide={() => setSaveSuccess(false)}
-            success
-          />
-          {error? <ErrorMsg code={"500"} /> : " "}
-        </>
-      );
+            </div>
+          }
+        />
+
+        <CustomModel
+          size={"sm"}
+          show={saveSuccess}
+          onHide={() => setSaveSuccess(false)}
+          success
+        />
+        {error ? <ErrorMsg code={"500"} /> : " "}
+      </>
+    );
 
 }
 export default Seaport

@@ -35,6 +35,7 @@ export default function Frightlist(props) {
  
   const [Errormsg, setErrormsg] = useState();
   const [NameInput, setNameInput] = useState();
+  const [PrefixInput, setprefixInput] = useState();
 
    const [showViewModal, setShowViewModal] = useState(false);
   const [FrightEditPopup, setFrightEditPopup] = useState(false);
@@ -72,13 +73,14 @@ export default function Frightlist(props) {
 
   const [frights,setFrights]=useState();
   const [frighttypename,setFrighttypename]=useState();
-  
+  const [frighttypeprefix,setFrighttypeprefix]=useState();
 
   const createFrights =async()=>{
     try{
     const addfrights = await PublicFetch.post(
     `${CRM_BASE_URL_FMS}/freightTypes`,{
       freight_type_name:frighttypename,
+      freight_type_prefix:frighttypeprefix
      })
     console.log("fright added successfully",addfrights)
     if(addfrights.data.success){
@@ -126,7 +128,8 @@ export default function Frightlist(props) {
   }, []);
   const [viewfrights,setViewFrights]=useState({
     id:"",
-    frightviewname:""
+    frightviewname:"",
+    frightprefixviewname:""
   })
 
  const handleViewClick=(item)=>{
@@ -134,7 +137,8 @@ export default function Frightlist(props) {
   setViewFrights({
     ...viewfrights,
   id:item.freight_type_id,
-  frightviewname:item.freight_type_name
+  frightviewname:item.freight_type_name,
+  frightprefixviewname:item.freight_type_prefix,
   })
 
 
@@ -191,6 +195,18 @@ export default function Frightlist(props) {
       },
       align: "center",
     },
+    {
+      title: "FRIGHT TYPE PREFIX",
+      dataIndex: "freight_type_prefix",
+      key: "freight_type_prefix",
+      filteredValue: [searchedText],
+      onFilter: (value, record) => {
+        return String(record.freight_type_prefix)
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      },
+      align: "center",
+    },
     // {
     //   title: "Date",
     //   dataIndex: "freight_type_created_at",
@@ -199,23 +215,23 @@ export default function Frightlist(props) {
     // },
   ];
 
-  const data = [
-    {
-       fright_name: "Fright X",
-       date: "2-1-23",
-       key: "1",
-    },
-    {
-        fright_name: "Fright y",
-        date: "12-1-23",
-        key: "2",
-    },
-    {
-        fright_name: "Fright z",
-        date: "22-1-23",
-        key: "3",
-    },
-  ];  
+  // const data = [
+  //   {
+  //      fright_name: "Fright X",
+  //      date: "2-1-23",
+  //      key: "1",
+  //   },
+  //   {
+  //       fright_name: "Fright y",
+  //       date: "12-1-23",
+  //       key: "2",
+  //   },
+  //   {
+  //       fright_name: "Fright z",
+  //       date: "22-1-23",
+  //       key: "3",
+  //   },
+  // ];  
 
   const [newName, setNewName] = useState();
   const [saveSuccess, setSaveSuccess] =useState(false)
@@ -223,6 +239,7 @@ export default function Frightlist(props) {
    const [viewfright,setViewfright]=useState({
     id:"",
     frightname:"",
+    frightprefix:""
     
   
   })
@@ -234,6 +251,7 @@ export default function Frightlist(props) {
   
     let data = { 
       freight_type_name : NameInput.trim(""),
+      freight_type_prefix:PrefixInput
      
     }
 
@@ -261,26 +279,31 @@ export default function Frightlist(props) {
     console.log("editing data iss",i)
     setFright_id(i.id)
   setFrightname(i.frightviewname)
+  setFrightType(i.freight_type_prefix)
 
   addForm.setFieldsValue({
     // unitid: e.unit_id,
     fright: i.frightviewname,
+    frightprefix:i.frightprefixviewname,
    
   });
   setFrightEditPopup(true);
   }
 
   const [frightname, setFrightname] = useState();
+  const [frighttype, setFrighttype] = useState();
 
   const frightEdit = (e) => {
     console.log("Fright edit", e);
     setNameInput(e.freight_type_name);
     setNewName(e.freight_type_name);
+    setprefixInput(e.freight_type_prefix);
     // setImageInput(e.brand_pic);
     setFright_id(e.freight_type_id);
     editForm.setFieldsValue({
       fright_id: e.freight_type_id,
       NameInput: e.freight_type_name,
+      PrefixInput:e.freight_type_prefix
   
     });
     setFrightEditPopup(true);
@@ -300,14 +323,14 @@ export default function Frightlist(props) {
       <div className="container-fluid container2 pt-3">
         <div className="row flex-wrap">
           <div className="col">
-            <h5 className="lead_text">Fright types</h5>
+            <h5 className="lead_text">Freight types</h5>
           </div>
           {/* <Leadlist_Icons /> */}
         </div>
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
-              placeholder="Search by Fright type Name"
+              placeholder="Search by Freight type Name"
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
               onChange={(e) => {
@@ -350,7 +373,7 @@ export default function Frightlist(props) {
                 setuniqueCode(false);
                 setModalAddFright(true);
               } }>
-              Add Fright types
+              Add Freight types
             </Button>
           </div>
         </div>
@@ -378,7 +401,7 @@ export default function Frightlist(props) {
         list_content={
           <>
             <div className="row">
-              <h5 className="lead_text">Add Fright Type</h5>
+              <h5 className="lead_text">Add Freight Type</h5>
             </div>
             <Form
            form={addForm}
@@ -392,7 +415,7 @@ export default function Frightlist(props) {
             >
               <div className="row py-4">
                 <div className="col-12 pt-1">
-                  <label>Fright Type Name</label>
+                  <label>Freight Type Name</label>
                   <div>
                   <Form.Item
                     name="freightname"
@@ -400,7 +423,7 @@ export default function Frightlist(props) {
                       {
                         required: true,
                         pattern: new RegExp("^[A-Za-z ]+$"),
-                        message: "Please enter a Valid  Name",
+                        message: "Please enter a Valid Freight type Name",
                       },
                       
                       {
@@ -441,9 +464,48 @@ export default function Frightlist(props) {
                   </Form.Item>
                   {uniqueCode ? (
                             <p style={{ color: "red",marginTop:"-24px" }}>
-                            Fright Type Name {uniqueErrMsg.UniqueErrName}
+                            Freight Type Name {uniqueErrMsg.UniqueErrName}
                             </p>
                           ) : null}
+                </div>
+                </div>
+                <div className="col-12 pt-1">
+                  <label>Freight Type Prefix</label>
+                  <div>
+                  <Form.Item
+                    name="freightprefix"
+                   
+                    onChange={(e) => setFrighttypeprefix(e.target.value)}
+                  >
+                    <InputType 
+                    value={PrefixInput}
+                    onChange={(e) => {
+                      setprefixInput(e.target.value);
+                      // setuniqueCode(false);
+                    }}
+                    // onBlur={(e) => {
+                    //   checkemployeeCodeis();
+                    // }}
+                    // onBlur={ async () => {
+                      
+                    //   let a = await CheckUnique({type:"freighttypename",value:frightType})
+                    //   console.log("hai how are u", a)
+                    //   setuniqueCode(a);
+                      
+                    // }}
+                    // onChange={(e) => {
+                      // setFrighttypename(e.target.value)
+
+                      // setFrightError("");
+                    // }}
+                    
+                    />
+                  </Form.Item>
+                  {/* {uniqueCode ? (
+                            <p style={{ color: "red",marginTop:"-24px" }}>
+                            Fright Type Name {uniqueErrMsg.UniqueErrName}
+                            </p>
+                          ) : null} */}
                 </div>
                 </div>
 
@@ -497,10 +559,10 @@ export default function Frightlist(props) {
           list_content={
             <div className="container-fluid p-3">
               <div className="row">
-                <div className="col-10">
-                  <h5 className="lead_text">Fright Type</h5>
+                <div className="col-9">
+                  <h5 className="lead_text">Freight Type</h5>
                 </div>
-                <div className="col-2">
+                <div className="col-3">
                   <Button
                     btnType="add_borderless"
                     className="edit_button"
@@ -519,11 +581,20 @@ export default function Frightlist(props) {
               </div>
               <div className="row mt-4">
                 <div className="col-4">
-                  <p> Fright Name</p>
+                  <p> Freight Name</p>
                 </div>
                 <div className="col-1">:</div>
                 <div className="col-6 justify-content-start">
                   <p className="modal-view-data">{viewfrights.frightviewname}</p>
+                </div>
+              </div>
+              <div className="row mt-4">
+                <div className="col-4">
+                  <p> Freight Prefix</p>
+                </div>
+                <div className="col-1">:</div>
+                <div className="col-6 justify-content-start">
+                  <p className="modal-view-data">{viewfrights.frightprefixviewname}</p>
                 </div>
               </div>
              
@@ -538,7 +609,7 @@ export default function Frightlist(props) {
           <div>
             <div className="container-fluid px-4 my-3">
               <div>
-                <h5 className="lead_text">Edit Fright Type</h5>
+                <h5 className="lead_text">Edit Freight Type</h5>
               </div>
               <div className="row my-3 ">
                 <Form
@@ -551,7 +622,7 @@ export default function Frightlist(props) {
                     console.log(error);
                   }}
                 >
-                  <div className="col-6">
+                  <div className="col-12">
                     <label>Name</label>
                     <Form.Item
                       name="NameInput"
@@ -559,7 +630,7 @@ export default function Frightlist(props) {
                         {
                           required: true,
                           pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid Fright type Name",
+                          message: "Please enter a Valid Freight type Name",
                         },
                         {
                           min: 2,
@@ -598,10 +669,30 @@ export default function Frightlist(props) {
                     )} */}
                      {uniqueeditCode ? (
                         <p style={{ color: "red", marginTop:"-24px" }} className="mb-2">
-                          Fright type Name {uniqueErrMsg.UniqueErrName}
+                          Freight type Name {uniqueErrMsg.UniqueErrName}
                         </p>
                       ) : null}
                   </div>
+                  <div className="col-12">
+                    <label>Freight Prefix</label>
+                    <Form.Item
+                      name="PrefixInput"
+                      
+                    >
+                      <InputType
+                        className="input_type_style w-100"
+                        value={PrefixInput}
+                        onChange={(e) => {
+                          setprefixInput(e.target.value);
+                         
+                        }}
+                       
+                      />
+                    </Form.Item>
+                  
+                  </div>
+
+
                   {/* <div className="col-6">
                     <label>Date</label>
                     <Form.Item

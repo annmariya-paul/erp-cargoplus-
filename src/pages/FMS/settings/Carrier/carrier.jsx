@@ -14,6 +14,8 @@ import { FiEdit } from "react-icons/fi";
 import CustomModel from "../../../../components/custom_modal/custom_model";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { CRM_BASE_URL_FMS } from "../../../../api/bootapi";
+import CheckUnique from "../../../../check Unique/CheckUnique";
+import { UniqueErrorMsg } from "../../../../ErrorMessages/UniqueErrorMessage";
 
 export default function Carrierlist(props) {
   const [addForm] = Form.useForm();
@@ -25,10 +27,6 @@ export default function Carrierlist(props) {
   const [modalAddCarrier, setModalAddCarrier] = useState(false);
 
   const [pageSize, setPageSize] = useState("25");
-  const [codeInput, setCodeInput] = useState();
-  const [typeInput, setTypeInput] = useState();
-
-  const [NameInput, setNameInput] = useState();
 
   const [showViewModal, setShowViewModal] = useState(false);
   const [CarrierEditPopup, setCarrierEditPopup] = useState(false);
@@ -36,6 +34,12 @@ export default function Carrierlist(props) {
   const [addcarriername,setAddcarriername] = useState()
   const [addcarriercode,setAddcarriercode] = useState()
   const [addcarriertype,setAddcarriertype] = useState()
+
+  const [editcarriercode, setEditcarriercode] = useState();
+  const [editcarriertype, setEditcarriertype] = useState();
+  const [editcarriername, setEditcarriername] = useState();
+  const [editcarrierid,seteditcarrierid] =useState();
+  const [uniqueCode, setuniqueCode] = useState(false);
 
 
   const [editForm] = Form.useForm();
@@ -66,45 +70,68 @@ export default function Carrierlist(props) {
   }, []);
 
 
-  // const createcarrier = async () => {
-  //   try {
-  //     const addcarrier = await PublicFetch.post(
-  //       `${CRM_BASE_URL_FMS}/carrier`,
-  //       {
-  //         carrier_name: addcarriername,
-  //         carrier_code: addcarriercode,
-  //         carrier_type:addcarriertype
-  //       }
-  //     );
-  //     console.log("airports added successfully", addcarrier);
-  //   //   if (addairport.data.success) {
-  //   //     setSaveSuccess(true);
-  //   //     getallairport()
-  //   //  addForm.resetFields();
-  //   //     setModalAddAirport(false);
-  //   //     close_modal(saveSuccess, 1000);
-  //   //   } 
-  //     // else if (addairport.data.success === false) {
-  //     //   alert(addairport.data.data);
-  //     // }
-  //   } catch (err) {
-  //     console.log("err to add the airports", err);
-  //   }
-  // };
+  const createcarrier = async () => {
+    try {
+      const addcarrier = await PublicFetch.post(
+        `${CRM_BASE_URL_FMS}/carrier`,
+        {
+          carrier_name: addcarriername,
+          carrier_code: addcarriercode,
+          carrier_type: addcarriertype,
+        }
+      );
+      console.log("airports added successfully", addcarrier);
+      if (addcarrier.data.success) {
+        setSuccessPopup(true);
+        getallcarrier()
+     addForm.resetFields();
+        setModalAddCarrier(false);
+        close_modal(successPopup, 1000);
+      } 
+      else if (addcarrier.data.success === false) {
+        alert(addcarrier.data.data);
+      }
+    } catch (err) {
+      console.log("err to add the carrier", err);
+    }
+  };
+
+  const handleupdate = async () => {
+    try {
+      const updated = await PublicFetch.patch(
+        `${CRM_BASE_URL_FMS}/carrier/${editcarrierid}`,
+        {
+          carrier_name: editcarriername,
+          carrier_code: editcarriercode,
+          carrier_type: editcarriertype,
+        }
+      );
+      console.log("successfully updated ", updated);
+      if (updated.data.success) {
+        setSuccessPopup(true);
+        setCarrierEditPopup(false);
+        getallcarrier()
+        close_modal(successPopup, 1000);
+      } 
+    } catch (err) {
+      console.log("error to update carrier");
+    }
+  };
 
 
   const carrierEdit = (e) => {
     console.log("carrier edit", e);
-    setNameInput(e.carrier_name);
-    setCodeInput(e.carrier_code);
-    setTypeInput(e.carrier_type);
+    seteditcarrierid(e.carrier_id)
+    setEditcarriername(e.carrier_name);
+    setEditcarriercode(e.carrier_code);
+    setEditcarriertype(e.carrier_type);
 
     // setCarrier_id(e.carrier_id);
     editForm.setFieldsValue({
       carrier_id: e.carrier_id,
-      NameInput: e.carrier_name,
-      codeInput: e.carrier_code,
-      typeInput: e.carrier_type,
+      carriername: e.carrier_name,
+      carriercode: e.carrier_code,
+      carriertype: e.carrier_type,
     });
     setCarrierEditPopup(true);
   };
@@ -127,6 +154,23 @@ export default function Carrierlist(props) {
     setShowViewModal(true);
   };
 
+  const handleviewtoedit = (i) => {
+    console.log("editing data iss", i);
+    seteditcarrierid(i.id);
+    setEditcarriername(i.carrierviewname);
+    setEditcarriercode(i.carrierviewcode)
+    setEditcarriertype(i.carrierviewtype)
+
+    editForm.setFieldsValue({
+      // unitid: e.unit_id,
+      // carrier: i.carrierviewname,
+      carriername: i.carrierviewname,
+      carriercode: i.carrierviewcode,
+      carriertype: i.carrierviewtype,
+    });
+    setCarrierEditPopup(true);
+  };
+
   const columns = [
     {
       title: "ACTION",
@@ -134,7 +178,7 @@ export default function Carrierlist(props) {
       key: "key",
       width: "30%",
       render: (data, index) => {
-        console.log("index is :", index);
+        // console.log("index is :", index);
         return (
           <div className="d-flex justify-content-center align-items-center gap-2">
             <div className="editIcon m-0" onClick={() => carrierEdit(index)}>
@@ -217,17 +261,7 @@ export default function Carrierlist(props) {
   const [carriername, setCarriername] = useState();
   const [carrier_id, setCarrier_id] = useState();
 
-  const handleviewtoedit = (i) => {
-    console.log("editing data iss", i);
-    setCarrier_id(i.id);
-    setCarriername(i.carrierviewname);
 
-    addForm.setFieldsValue({
-      // unitid: e.unit_id,
-      carrier: i.carrierviewname,
-    });
-    setCarrierEditPopup(true);
-  };
 
 
 
@@ -315,9 +349,11 @@ export default function Carrierlist(props) {
               form={addForm}
               onFinish={(data) => {
                 console.log("valuezzzzzzz", data);
+                createcarrier()
               }}
               onFinishFailed={(error) => {
                 console.log(error);
+               
               }}
             >
               <div className="row py-4">
@@ -325,7 +361,7 @@ export default function Carrierlist(props) {
                   <label>Carrier Name</label>
                   <div>
                     <Form.Item
-                      name="carriername"
+                      name="carrier_name"
                       rules={[
                         {
                           required: true,
@@ -343,19 +379,27 @@ export default function Carrierlist(props) {
                         },
                       ]}
                     >
-                      <InputType />
+                      <InputType
+                      value={addcarriername}
+                      onChange={(e)=>{
+                        setAddcarriername(e.target.value)
+                       
+                      }}
+                    
+                      />
                     </Form.Item>
+              
                   </div>
                 </div>
                 <div className="col-12 pt-1">
                   <label>Carrier Code</label>
                   <div>
                     <Form.Item
-                      name="carriercode"
+                      name="carrier_code"
                       rules={[
                         {
                           required: true,
-                          pattern: new RegExp("^[A-Za-z ]+$"),
+                          // pattern: new RegExp("^[A-Za-z ]+$"),
                           message: "Please enter a Valid  Code",
                         },
 
@@ -365,15 +409,36 @@ export default function Carrierlist(props) {
                         },
                       ]}
                     >
-                      <InputType />
+                      <InputType 
+                      value={addcarriercode}
+                      onChange={(e)=>{
+                        setAddcarriercode(e.target.value)
+                        // setuniqueCode(false)
+                      }}
+                      // onBlur={ async () => {
+                      //   // checkAttributeNameis();
+                      //   let a = await CheckUnique({type:"Carriercode",value:addcarriercode})
+                      //   console.log("hai how are u", a)
+                      //   setuniqueCode(a)
+                      // }}
+                      />
                     </Form.Item>
+                    {uniqueCode ? (
+                <div>
+                  <label style={{ color: "red" }}>
+                   carrier Code {UniqueErrorMsg.UniqueErrName}
+                  </label>
+                </div>
+              ) : (
+                ""
+              )}
                   </div>
                 </div>
                 <div className="col-12 pt-1">
                   <label>Carrier Type</label>
                   <div>
                     <Form.Item
-                      name="carriertype"
+                      name="carrier_type"
                       rules={[
                         {
                           required: true,
@@ -382,7 +447,12 @@ export default function Carrierlist(props) {
                         },
                       ]}
                     >
-                      <SelectBox>
+                      <SelectBox
+                      value={addcarriertype}
+                      onChange={(e)=>{
+                        setAddcarriertype(e)
+                      }}
+                      >
                         <Select.Option value="Airline">Airline</Select.Option>
                         <Select.Option value="Shipper">Shipper</Select.Option>
                         <Select.Option value="Road">Road</Select.Option>
@@ -480,6 +550,7 @@ export default function Carrierlist(props) {
                   form={editForm}
                   onFinish={(values) => {
                     console.log("values iss", values);
+                    handleupdate()
                   }}
                   onFinishFailed={(error) => {
                     console.log(error);
@@ -488,7 +559,7 @@ export default function Carrierlist(props) {
                   <div className="col-12 pt-1">
                     <label>Name</label>
                     <Form.Item
-                      name="NameInput"
+                      name="carriername"
                       rules={[
                         {
                           required: true,
@@ -505,14 +576,19 @@ export default function Carrierlist(props) {
                         },
                       ]}
                     >
-                      <InputType className="input_type_style w-100" />
+                      <InputType className="input_type_style w-100"
+                      value={editcarriername}
+                      onChange={(e)=>{
+                        setEditcarriername(e.target.value)
+                      }}
+                      />
                     </Form.Item>
                   </div>
                   <div className="col-12 pt-1">
                     <label>Carrier Code</label>
                     <div>
                       <Form.Item
-                        name="codeInput"
+                        name="carriercode"
                         rules={[
                           {
                             required: true,
@@ -521,7 +597,12 @@ export default function Carrierlist(props) {
                           },
                         ]}
                       >
-                        <InputType />
+                        <InputType
+                        value={editcarriercode}
+                        onChange={(e)=>{
+                          setEditcarriercode(e.target.value)
+                        }}
+                        />
                       </Form.Item>
                     </div>
                   </div>
@@ -529,7 +610,7 @@ export default function Carrierlist(props) {
                     <label>Carrier Type</label>
                     <div>
                       <Form.Item
-                        name="typeInput"
+                        name="carriertype"
                         rules={[
                           {
                             required: true,
@@ -538,7 +619,12 @@ export default function Carrierlist(props) {
                           },
                         ]}
                       >
-                        <SelectBox>
+                        <SelectBox
+                        value={editcarriertype}
+                        onChange={(e)=>{
+                          setEditcarriertype(e)
+                        }}
+                        >
                           <Select.Option value="Airline">Airline</Select.Option>
                           <Select.Option value="Shipper">Shipper</Select.Option>
                           <Select.Option value="Road">Road</Select.Option>

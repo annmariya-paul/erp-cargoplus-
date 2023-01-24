@@ -41,6 +41,7 @@ export default function Currency(props) {
   const [currencyname, setCurrencyname] = useState();
   const [currency_id, setCurrency_id] = useState();
   const [currency_ids, setCurrency_ids] = useState();
+  const [country, setCountry] = useState();
 
   // const [editForm] = Form.useForm();
   const close_modal = (mShow, time) => {
@@ -74,10 +75,9 @@ export default function Currency(props) {
     currency_id: "",
     currency_name: "",
     currency_country: "",
-    currency_symbol:"",
-    currency_code:"",
-    currency_coin:"",
-    
+    currency_symbol: "",
+    currency_code: "",
+    currency_coin: "",
   });
   const handleViewClick = (item) => {
     console.log("view all currency", item);
@@ -123,11 +123,11 @@ export default function Currency(props) {
     },
     {
       title: "COUNTRY",
-      dataIndex: "currency_country",
-      key: "currency_country",
+      dataIndex: "country_name",
+      key: "country_name",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.currency_country)
+        return String(record.country_name)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
@@ -207,7 +207,20 @@ export default function Currency(props) {
         console.log("response", res);
         if (res.data.success) {
           console.log("success data", res.data.data);
-          setAllCurrency(res.data.data);
+          let temp = [];
+          res.data.data.forEach((item, index) => {
+            temp.push({
+              country_name: item.countries.country_name,
+              currency_code: item.currency_code,
+              currency_coin: item.currency_coin,
+              currency_country: item.currency_country,
+              currency_id: item.currency_id,
+              currency_name: item.currency_name,
+              currency_symbol: item.currency_symbol,
+              currency_status: item.currency_statuss,
+            });
+          });
+          setAllCurrency(temp);
         }
       })
       .catch((err) => {
@@ -260,8 +273,25 @@ export default function Currency(props) {
     setCountryis(e);
   };
 
+  const getAllCountries = () => {
+    PublicFetch.get(`${GENERAL_SETTING_BASE_URL}/country`)
+      .then((res) => {
+        console.log("Response", res);
+        if (res.data.success) {
+          console.log("Success", res.data.data);
+
+          setCountry(res.data.data);
+          // console.log("jefhw", temp);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
   useEffect(() => {
     getAllCurrency();
+    getAllCountries();
   }, []);
 
   return (
@@ -366,13 +396,18 @@ export default function Currency(props) {
                       ]}
                     >
                       <SelectBox value={countryis} onChange={handleChange}>
-                        {options.map((item, index) => {
-                          return (
-                            <Select.Option key={item.code} value={item.name}>
-                              {item.name}
-                            </Select.Option>
-                          );
-                        })}
+                        {country &&
+                          country.length > 0 &&
+                          country.map((item, index) => {
+                            return (
+                              <Select.Option
+                                key={item.country_id}
+                                value={item.country_id}
+                              >
+                                {item.country_name}
+                              </Select.Option>
+                            );
+                          })}
                       </SelectBox>
                     </Form.Item>
                   </div>
@@ -494,7 +529,9 @@ export default function Currency(props) {
               </div>
               <div className="col-1">:</div>
               <div className="col-6 justify-content-start">
-                <p className="modal-view-data">{viewcurrencys.currency_country}</p>
+                <p className="modal-view-data">
+                  {viewcurrencys.currency_country}
+                </p>
               </div>
             </div>
             <div className="row mt-4">
@@ -589,16 +626,18 @@ export default function Currency(props) {
                           ]}
                         >
                           <SelectBox value={countryis} onChange={handleChange}>
-                            {options.map((item, index) => {
-                              return (
-                                <Select.Option
-                                  key={item.code}
-                                  value={item.name}
-                                >
-                                  {item.name}
-                                </Select.Option>
-                              );
-                            })}
+                            {country &&
+                              country.length > 0 &&
+                              country.map((item, index) => {
+                                return (
+                                  <Select.Option
+                                    key={item.country_id}
+                                    value={item.country_id}
+                                  >
+                                    {item.country_name}
+                                  </Select.Option>
+                                );
+                              })}
                           </SelectBox>
                         </Form.Item>
                       </div>

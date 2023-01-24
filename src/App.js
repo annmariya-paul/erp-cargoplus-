@@ -53,7 +53,7 @@ import Assign_opportunity from "./pages/FMS/Opportunity_assigns/AssignOpportunit
 import Track_assignments from "./pages/FMS/Opportunity_assigns/Track_assignments/track_opportunity_assigns";
 import UpdateAssignOppurtunity from "./pages/FMS/Opportunity_assigns/update_oppo_assignment/update_oppo_assignment";
 import CreateAgent from "./pages/FMS/Agent mangement/CreateAgent";
-import SelectCountry from "./pages/CRM/General/CountrySelect";
+// import SelectCountry from "./pages/CRM/General/CountrySelect";
 import Frightlist from "./pages/FMS/settings/Fright_types/fright_types";
 import Quotations from "./pages/FMS/Quotations/create quotation/quotation_list";
 import Add_Quotation from "./pages/FMS/Quotations/create quotation/add_quotation";
@@ -77,6 +77,7 @@ import Airport from "./pages/FMS/settings/Airport/airport";
 import Seaport from "./pages/FMS/settings/Seaport/seaport";
 import Companyinfo from "./pages/General Settings/companyinfo/companyinfo";
 import Locations from "./pages/FMS/settings/Locations/locations";
+import SelectCountry from "./pages/General Settings/country/CountrySelect";
 // import Lead from "./pages/lead/lead";
 
 function App() {

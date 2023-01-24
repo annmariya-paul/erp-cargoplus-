@@ -142,11 +142,12 @@ function Enquiries() {
       render: (data, index) => {
         console.log("table data", index);
         return (
-          <div className="d-flex justify-content-center">
+          <div className="d-flex justify-content-center p-1">
             {index.assigned_employee && index.assigned_employee.length > 0 ? (
               <div>
                 <Button
-                  btnType="add"
+                  // btnType="add"
+                  style={{backgroundColor:"#0891d1",border: "none", color:"white", borderRadius:"5px", width:"80px"}}
                   onClick={() => {
                     handleEditedclick(index);
                   }}
@@ -159,6 +160,8 @@ function Enquiries() {
                 <Button
                   btnType="add"
                   className="me-1 assign_btn"
+                  // btnType="add"
+                   style={{backgroundColor:"#0891d1",border: "none", color:"white", borderRadius:"5px", width:"80px"}}
                   onClick={() => {
                     navigate(
                       `${ROUTES.ASSIGN_OPPORTUNITIES}/${index.opportunity_id}`
@@ -279,7 +282,7 @@ function Enquiries() {
   };
   return (
     <div>
-      <div className="container">
+      <div className="container-fluid">
         <div className="row">
           <div className="col-12">
             <div className="container-fluid lead_list  my-3 py-3">

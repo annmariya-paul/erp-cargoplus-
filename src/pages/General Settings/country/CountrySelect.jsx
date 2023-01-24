@@ -1,20 +1,18 @@
 import { Form, Select, Input } from "antd";
 import React, { useState, useEffect } from "react";
-import {
-  FaEdit,
-  FaTrash,
-} from "react-icons/fa";
+import { FaEdit, FaTrash } from "react-icons/fa";
 import { GENERAL_SETTING_BASE_URL } from "../../../api/bootapi";
 import PublicFetch from "../../../utils/PublicFetch";
 import Button from "../../../components/button/button";
 import TableData from "../../../components/table/table_data";
 import { countryList } from "../../../utils/countries";
-import Custom_model from "../../../components/custom_modal/custom_model";
+import CustomModel from "../../../components/custom_modal/custom_model";
+import SelectBox from "../../../components/Select Box/SelectBox";
 
-export default function  SelectCountry(){
+export default function SelectCountry() {
   const [addForm] = Form.useForm();
   const [searchedText, setSearchedText] = useState("");
-  const [countryName,setCountryName] = useState("");
+  const [countryName, setCountryName] = useState("");
   const [countries, setCountries] = useState("");
   const [successPopup, setSuccessPopup] = useState(false);
 
@@ -102,20 +100,6 @@ export default function  SelectCountry(){
     },
   ];
 
-  const data = [
-    {
-      countries: "India",
-      key: "1",
-    },
-    {
-      countries: "Australia",
-      key: "2",
-    },
-    {
-      countries: "USA",
-      key: "3",
-    },
-  ];
   return (
     <>
       <div className="container">
@@ -136,18 +120,27 @@ export default function  SelectCountry(){
             >
               <div className="row">
                 <div className="col-12">
-                  <label>Country</label>
-                  <Form.Item>
-                    <Select
+                  {/* <label>Country</label> */}
+                  <Form.Item
+                    name="country_name"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please Select country",
+                      },
+                    ]}
+                  >
+                    <SelectBox
                       allowClear
                       showSearch
-                      style={{
-                        width: "100%",
-                        marginTop: "8px",
-                        borderRadius: "5px",
-                      }}
+                      // style={{
+                      //   width: "100%",
+                      //   marginTop: "8px",
+                      //   borderRadius: "5px",
+                      //   backgroundColor
+                      // }}
                       placeholder="Select Country"
-                      className="select_search"
+                      // className="select_search"
                       optionFilterProp="children"
                       value={countryName}
                       onChange={(event) => {
@@ -163,7 +156,7 @@ export default function  SelectCountry(){
                             </Select.Option>
                           );
                         })}
-                    </Select>
+                    </SelectBox>
                   </Form.Item>
                 </div>
               </div>
@@ -235,6 +228,12 @@ export default function  SelectCountry(){
           />
         </div>
       </div>
+      <CustomModel
+        size={"sm"}
+        show={successPopup}
+        onHide={() => setSuccessPopup(false)}
+        success
+      />
     </>
   );
 }

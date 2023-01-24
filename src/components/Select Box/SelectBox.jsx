@@ -9,6 +9,9 @@ function SelectBox({
   children,
   placeholder,
   options,
+  showSearch,
+  allowClear,
+  optionFilterProp,
 }) {
   return (
     <div>
@@ -25,6 +28,9 @@ function SelectBox({
           value={value}
           placeholder={placeholder}
           options={options}
+          showSearch={showSearch}
+          allowClear={allowClear}
+          optionFilterProp={optionFilterProp}
         >
           {children}
         </Select>

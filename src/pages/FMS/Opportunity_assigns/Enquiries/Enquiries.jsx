@@ -85,14 +85,13 @@ function Enquiries() {
       title: "TYPE",
       dataIndex: "opportunity_type",
       key: "TYPE",
-
+      width: "15%",
       filteredValue: [searchType],
       onFilter: (value, record) => {
         return String(record.opportunity_type)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
-      align: "left",
     },
     {
       title: "FROM",
@@ -130,11 +129,13 @@ function Enquiries() {
       title: "PARTY",
       dataIndex: "opportunity_party",
       key: "PARTY",
-      align: "center",
+      width: "25%",
+      // align: "center",
     },
     {
       title: " ",
       dataIndex: "buttons",
+      width: "15%",
       key: "buttons",
       // align: "center",
       // display:"flex",
@@ -151,24 +152,39 @@ function Enquiries() {
                     handleEditedclick(index);
                   }}
                 >
-                  view{" "}
+                  view
                 </Button>
               </div>
             ) : (
               <div>
                 <Button
+                  btnType="add"
+                  className="me-1 assign_btn"
                   // btnType="add"
-                   style={{backgroundColor:"#0891d1",border: "none", color:"white", borderRadius:"5px", width:"80px"}}
+                  //  style={{backgroundColor:"#0891d1",border: "none", color:"white", borderRadius:"5px", width:"80px"}}
                   onClick={() => {
                     navigate(
                       `${ROUTES.ASSIGN_OPPORTUNITIES}/${index.opportunity_id}`
                     );
                   }}
                 >
-                  Assign{" "}
+                  Assign
                 </Button>
               </div>
             )}
+            <div>
+              <Button
+                btnType="add"
+                className="response_btn"
+                onClick={() => {
+                  navigate(
+                    `${ROUTES.AGENT_RESPONSE}`
+                  );
+                }}
+              >
+                Response
+              </Button>
+            </div>
           </div>
         );
       },

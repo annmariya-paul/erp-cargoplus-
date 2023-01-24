@@ -73,11 +73,10 @@ export default function Sidebar({ showSidebar }) {
                   <AiOutlineAppstore className="sidebar_icons" />
                   Dashboard
                 </NavLink>
-                {/* <Link to="/dashboard" className="nav-link">
-                  <AiOutlineAppstore className="sidebar_icons" />
-                  Dashboard
-                </Link> */}
               </li>
+
+              {/* ##########  HRMS  ######## */}
+
               <li
                 className={
                   HRMSopen
@@ -207,6 +206,8 @@ export default function Sidebar({ showSidebar }) {
               ) : (
                 ""
               )}
+
+              {/* ##########  CRM  ######## */}
 
               <li
                 className={
@@ -438,48 +439,12 @@ export default function Sidebar({ showSidebar }) {
                   ) : (
                     ""
                   )}
-                  <li
-                    className={
-                      CRMgeneral
-                        ? "nav-text  items_hrms open"
-                        : "nav-text  items_hrms "
-                    }
-                  >
-                    <Link
-                      className={CRMgeneral ? "active-link" : "link"}
-                      // to="/"
-                      onClick={() => setCRMgeneral(!CRMgeneral)}
-                    >
-                      <RiTeamFill className="sidebar_icons ms-3" />
-                      General
-                      <div className="d-flex justify-content-end ms-5 ps-5">
-                        <AiOutlineCaretDown className="toggle_btn " />
-                      </div>
-                    </Link>
-                  </li>
-                  {CRMgeneral ? (
-                    <>
-                      {checkPermission("country") && (
-                        <li className="nav-text">
-                          <NavLink
-                            className={({ isActive }) =>
-                              isActive ? "active-link" : "link"
-                            }
-                            to={ROUTES.COUNTRYSELECT}
-                          >
-                            <MdEventNote className="sidebar_icons ms-4" />
-                            Countries
-                          </NavLink>
-                        </li>
-                      )}
-                    </>
-                  ) : (
-                    ""
-                  )}
                 </>
               ) : (
                 ""
               )}
+
+              {/* ##########  FMS  ######## */}
 
               <li
                 className={
@@ -760,6 +725,26 @@ export default function Sidebar({ showSidebar }) {
                   ) : (
                     ""
                   )}
+
+                  {FMSSettingsopen ? (
+                    <>
+                      {checkPermission("job tasks") && (
+                        <li className="nav-text">
+                          <NavLink
+                            className={({ isActive }) =>
+                              isActive ? "active-link" : "link"
+                            }
+                            to={ROUTES.LOCATIONS}
+                          >
+                            <BsBookmarkFill className="sidebar_icons ms-4" />
+                            Location
+                          </NavLink>
+                        </li>
+                      )}
+                    </>
+                  ) : (
+                    ""
+                  )}
                   {/* {FMSQuotationsopen ? (
                     <>
                       <li className="nav-text">
@@ -804,8 +789,21 @@ export default function Sidebar({ showSidebar }) {
               </li>
               {GeneralSettingsopen ? (
                 <>
+                  {checkPermission("country") && (
+                    <li className="nav-text">
+                      <NavLink
+                        className={({ isActive }) =>
+                          isActive ? "active-link" : "link"
+                        }
+                        to={ROUTES.COUNTRYSELECT}
+                      >
+                        <MdEventNote className="sidebar_icons ms-4" />
+                        Countries
+                      </NavLink>
+                    </li>
+                  )}
 
-        {checkPermission("companyinfo") && (
+                  {checkPermission("companyinfo") && (
                     <li className="nav-text ">
                       <NavLink
                         className={({ isActive }) =>
@@ -814,7 +812,7 @@ export default function Sidebar({ showSidebar }) {
                         to={ROUTES.COMPANYINFO}
                       >
                         <RiTeamFill className="sidebar_icons ms-4" />
-                       CompanyInfo
+                        CompanyInfo
                       </NavLink>
                     </li>
                   )}

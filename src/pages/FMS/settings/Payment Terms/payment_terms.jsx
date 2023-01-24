@@ -17,7 +17,7 @@ import CustomModel from "../../../../components/custom_modal/custom_model";
 import { CRM_BASE_URL_FMS } from "../../../../api/bootapi";
 import { UniqueErrorMsg } from "../../../../ErrorMessages/UniqueErrorMessage";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
-//Payment terms page 
+//Payment terms page
 export default function PaymentTerms(props) {
   const [addForm] = Form.useForm();
   const [error, setError] = useState(false);
@@ -35,6 +35,7 @@ export default function PaymentTerms(props) {
 
   const [showViewModal, setShowViewModal] = useState(false);
   const [PaymentEditPopup, setPaymentEditPopup] = useState(false);
+  const [allPaymentTerms, setAllPaymentTerms] = useState();
   const [editForm] = Form.useForm();
   const close_modal = (mShow, time) => {
     if (!mShow) {
@@ -44,30 +45,12 @@ export default function PaymentTerms(props) {
     }
   };
 
-  const paymentEdit = (e) => {
-    console.log("payment edit", e);
-    setNameInput(e.payment_name);
-
-    editForm.setFieldsValue({
-      payment_id: e.payment_id,
-      NameInput: e.payment_name,
-    });
-    setPaymentEditPopup(true);
-  };
   const [viewpayments, setViewPayments] = useState({
-    id: "",
-    paymentviewname: "",
+    payment_term_id: "",
+    payment_term_name: "",
+    payment_term_shortname: "",
+    payment_term_description: "",
   });
-  const handleViewClick = (item) => {
-    console.log("view all payment", item);
-    setViewPayments({
-      ...viewpayments,
-      id: item.payment_id,
-      paymentviewname: item.payment_name,
-    });
-
-    setShowViewModal(true);
-  };
 
   const columns = [
     {
@@ -98,11 +81,11 @@ export default function PaymentTerms(props) {
     },
     {
       title: " NAME",
-      dataIndex: "payment_name",
-      key: "payment_name",
+      dataIndex: "payment_term_name",
+      key: "payment_term_name",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.payment_name)
+        return String(record.payment_term_name)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
@@ -110,11 +93,11 @@ export default function PaymentTerms(props) {
     },
     {
       title: "SHORT NAME",
-      dataIndex: "payment_short_name",
-      key: "payment_short_name",
+      dataIndex: "payment_term_shortname",
+      key: "payment_term_shortname",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.payment_short_name)
+        return String(record.payment_term_shortname)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
@@ -122,37 +105,15 @@ export default function PaymentTerms(props) {
     },
     {
       title: "Descripton",
-      dataIndex: "payment_description",
-      key: "payment_description",
+      dataIndex: "payment_term_description",
+      key: "payment_term_description",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.payment_description)
+        return String(record.payment_term_description)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
       align: "center",
-    },
-  ];
-
-  const data = [
-    {
-      payment_name: "Test",
-      payment_short_name: "abc",
-      payment_description: "Test data",
-
-      key: "1",
-    },
-    {
-      payment_name: "Test one",
-      payment_short_name: "QQ1",
-      payment_description: "Test data abc",
-      key: "2",
-    },
-    {
-      payment_name: "Abc",
-      payment_short_name: "sh1",
-      payment_description: "Test data new",
-      key: "3",
     },
   ];
 
@@ -161,7 +122,7 @@ export default function PaymentTerms(props) {
 
   const handleviewtoedit = (i) => {
     console.log("editing data iss", i);
-    setPayment_id(i.id);
+
     setPaymentname(i.paymentviewname);
 
     addForm.setFieldsValue({
@@ -169,6 +130,88 @@ export default function PaymentTerms(props) {
     });
     setPaymentEditPopup(true);
   };
+
+  const getallPaymentTerms = () => {
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/paymentTerms`)
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          console.log("successs", res.data.data);
+          setAllPaymentTerms(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+  const CreatePaymentTerms = (data) => {
+    PublicFetch.post(`${CRM_BASE_URL_FMS}/paymentTerms`, data)
+      .then((res) => {
+        console.log("Response", res);
+        if (res.data.success) {
+          console.log("success", res.data.data);
+          setSuccessPopup(true);
+          close_modal(successPopup, 1200);
+          addForm.resetFields();
+          setModalAddPayment(false);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+  const paymentEdit = (e) => {
+    console.log("payment edit", e);
+    setNameInput(e.payment_name);
+    setPayment_id(e.payment_term_id);
+    addForm.setFieldsValue({
+      payment_id: e.payment_term_id,
+      NameInput: e.payment_term_name,
+      ShortNameInput: e.payment_term_shortname,
+      description: e.payment_term_description,
+    });
+    setPaymentEditPopup(true);
+  };
+  const handleViewClick = (item) => {
+    console.log("view all payment", item);
+    setViewPayments({
+      ...viewpayments,
+      payment_term_id: item.payment_term_id,
+      payment_term_name: item.payment_term_name,
+      payment_term_shortname: item.payment_term_shortname,
+      payment_term_description: item.payment_term_description,
+    });
+
+    setShowViewModal(true);
+  };
+  console.log("jhwdwjh", payment_id);
+
+  const updatePaymentTerms = (data) => {
+    PublicFetch.patch(`${CRM_BASE_URL_FMS}/paymentTerms/${payment_id}`, {
+      payment_term_name: data.NameInput,
+      payment_term_shortname: data.ShortNameInput,
+      payment_term_description: data.description,
+    })
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          setSuccessPopup(true);
+          close_modal(successPopup, 1200);
+          setPaymentEditPopup(false);
+          addForm.resetFields();
+          getallPaymentTerms();
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+  useEffect(() => {
+    getallPaymentTerms();
+  }, []);
 
   return (
     <>
@@ -229,7 +272,7 @@ export default function PaymentTerms(props) {
           <TableData
             // data={getData(numofItemsTo, pageofIndex)}
 
-            data={data}
+            data={allPaymentTerms}
             columns={columns}
             custom_table_css="table_lead_list"
           />
@@ -252,6 +295,7 @@ export default function PaymentTerms(props) {
               form={addForm}
               onFinish={(data) => {
                 console.log("valuezzzzzzz", data);
+                CreatePaymentTerms(data);
               }}
               onFinishFailed={(error) => {
                 console.log(error);
@@ -262,7 +306,7 @@ export default function PaymentTerms(props) {
                   <label> Name</label>
                   <div>
                     <Form.Item
-                      name="paymentname"
+                      name="payment_term_name"
                       rules={[
                         {
                           required: true,
@@ -279,7 +323,7 @@ export default function PaymentTerms(props) {
                   <label>Short Name</label>
                   <div>
                     <Form.Item
-                      name="paymentshortname"
+                      name="payment_term_shortname"
                       rules={[
                         {
                           required: true,
@@ -295,7 +339,7 @@ export default function PaymentTerms(props) {
                 <div className="col-12 pt-1">
                   <label>Description</label>
                   <div>
-                    <Form.Item name="paymentdescription">
+                    <Form.Item name="payment_term_description">
                       <TextArea />
                     </Form.Item>
                   </div>
@@ -303,22 +347,23 @@ export default function PaymentTerms(props) {
               </div>
               <div className="row justify-content-center ">
                 <div className="col-auto">
-                  <Button btnType="save">Save</Button>
+                  <Button type="submit" btnType="save">
+                    Save
+                  </Button>
                 </div>
               </div>
             </Form>
           </>
         }
-      >
-        <Custom_model
-          size={"sm"}
-          show={successPopup}
-          onHide={() => setSuccessPopup(false)}
-          success
-        />
-      </CustomModel>
+      ></CustomModel>
+      <CustomModel
+        size={"sm"}
+        show={successPopup}
+        onHide={() => setSuccessPopup(false)}
+        success
+      />
 
-      <Custom_model
+      <CustomModel
         show={showViewModal}
         onHide={() => setShowViewModal(false)}
         View_list
@@ -333,7 +378,7 @@ export default function PaymentTerms(props) {
                   btnType="add_borderless"
                   className="edit_button"
                   onClick={() => {
-                    handleviewtoedit(viewpayments);
+                    paymentEdit(viewpayments);
                     // setShowModalEdit(true);
                     setShowViewModal(false);
                   }}
@@ -351,7 +396,9 @@ export default function PaymentTerms(props) {
               </div>
               <div className="col-1">:</div>
               <div className="col-6 justify-content-start">
-                <p className="modal-view-data">ABC</p>
+                <p className="modal-view-data">
+                  {viewpayments.payment_term_name}
+                </p>
               </div>
             </div>
             <div className="row mt-4">
@@ -360,7 +407,10 @@ export default function PaymentTerms(props) {
               </div>
               <div className="col-1">:</div>
               <div className="col-6 justify-content-start">
-                <p className="modal-view-data">Abc</p>
+                <p className="modal-view-data">
+                  {" "}
+                  {viewpayments.payment_term_shortname}{" "}
+                </p>
               </div>
             </div>
             <div className="row mt-4">
@@ -369,13 +419,16 @@ export default function PaymentTerms(props) {
               </div>
               <div className="col-1">:</div>
               <div className="col-6 justify-content-start">
-                <p className="modal-view-data">Test Data</p>
+                <p className="modal-view-data">
+                  {" "}
+                  {viewpayments.payment_term_description}{" "}
+                </p>
               </div>
             </div>
           </div>
         }
       />
-      <Custom_model
+      <CustomModel
         show={PaymentEditPopup}
         onHide={() => setPaymentEditPopup(false)}
         View_list
@@ -387,9 +440,10 @@ export default function PaymentTerms(props) {
               </div>
               <div className="row my-3 ">
                 <Form
-                  form={editForm}
+                  form={addForm}
                   onFinish={(values) => {
                     console.log("values iss", values);
+                    updatePaymentTerms(values);
                   }}
                   onFinishFailed={(error) => {
                     console.log(error);
@@ -428,7 +482,7 @@ export default function PaymentTerms(props) {
                   <div className="col-12 pt-1">
                     <label>Description</label>
                     <div>
-                      <Form.Item name="codeInput">
+                      <Form.Item name="description">
                         <TextArea />
                       </Form.Item>
                     </div>

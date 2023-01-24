@@ -85,14 +85,13 @@ function Enquiries() {
       title: "TYPE",
       dataIndex: "opportunity_type",
       key: "TYPE",
-
+      width: "15%",
       filteredValue: [searchType],
       onFilter: (value, record) => {
         return String(record.opportunity_type)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
-      align: "left",
     },
     {
       title: "FROM",
@@ -130,11 +129,13 @@ function Enquiries() {
       title: "PARTY",
       dataIndex: "opportunity_party",
       key: "PARTY",
-      align: "center",
+      width: "25%",
+      // align: "center",
     },
     {
       title: " ",
       dataIndex: "buttons",
+      width: "15%",
       key: "buttons",
       // align: "center",
       // display:"flex",
@@ -157,6 +158,7 @@ function Enquiries() {
               <div>
                 <Button
                   btnType="add"
+                  className="me-1 assign_btn"
                   onClick={() => {
                     navigate(
                       `${ROUTES.ASSIGN_OPPORTUNITIES}/${index.opportunity_id}`
@@ -167,6 +169,19 @@ function Enquiries() {
                 </Button>
               </div>
             )}
+            <div>
+              <Button
+                btnType="add"
+                className="response_btn"
+                onClick={() => {
+                  navigate(
+                    `${ROUTES.AGENT_RESPONSE}`
+                  );
+                }}
+              >
+                Response
+              </Button>
+            </div>
           </div>
         );
       },

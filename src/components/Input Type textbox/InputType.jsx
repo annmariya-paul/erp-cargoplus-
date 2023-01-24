@@ -12,8 +12,8 @@ function InputType({
   onBlur,
   onKeyDown,
   align,
-  controls
- 
+  controls,
+  disabled,
 }) {
   return (
     <div>
@@ -24,12 +24,13 @@ function InputType({
           onChange={onChange}
           value={value}
           rule={rule}
-        align={align}
-        controls={controls}
+          align={align}
+          controls={controls}
           minLength={minLength}
           onBlur={onBlur}
           onKeyDown={onKeyDown}
-          style={{ backgroundColor: "#f4f4f7"  }}
+          disabled={disabled}
+          style={{ backgroundColor: "#f4f4f7" }}
           className={`input_type_style w-100 my-2 pb-2 ${className}`}
           type="text"
         />

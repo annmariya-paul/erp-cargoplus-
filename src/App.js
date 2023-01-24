@@ -64,6 +64,7 @@ import ListAgent from "./pages/FMS/Agent mangement/ListAgent";
 import UpdateAgent from "./pages/FMS/Agent mangement/Updateagent";
 
 import Enquiries from "./pages/FMS/Opportunity_assigns/Enquiries/Enquiries";
+import Agent_Response from "./pages/FMS/Opportunity_assigns/Enquiries/agent_response";
 import Modelist from "./pages/FMS/settings/Mode/mode";
 import Assign_oppertunity_edit from "./pages/FMS/Opportunity_assigns/AssignOpportunity/assign_oppertunity_edit";
 import Consignee from "./pages/FMS/settings/Consignee/consignee";
@@ -171,20 +172,23 @@ function App() {
             <Route path={ROUTES.EDIT_QUOTATION} element={<EditQuotation />} />
             <Route path={ROUTES.VIEW_QUOTATION} element={<ViewQuotation />} />
             <Route path={ROUTES.ENQUIRIES} element={<Enquiries />} />
-            <Route path={ROUTES.EDIT_ASSIGN_OPPORTUNITY_ID} element={<Assign_oppertunity_edit />} />
+            <Route path={ROUTES.AGENT_RESPONSE} element={<Agent_Response />} />
+            <Route
+              path={ROUTES.EDIT_ASSIGN_OPPORTUNITY_ID}
+              element={<Assign_oppertunity_edit />}
+            />
             <Route path={ROUTES.CONSIGNEE} element={<Consignee />} />
             <Route path={ROUTES.TERMS_OF_PAYMENT} element={<PaymentTerms />} />
             <Route path={ROUTES.TAXTYPE} element={<TaxType />} />
             <Route path={ROUTES.JOBTASKS} element={<JobTasks />} />
-            <Route path={ROUTES.AIRPORT} element={<Airport/>}/>
-            <Route path={ROUTES.SEAPORT} element={<Seaport/>}/>
-            <Route path={ROUTES.LOCATIONS} element={<Locations/>}/>
+            <Route path={ROUTES.AIRPORT} element={<Airport />} />
+            <Route path={ROUTES.SEAPORT} element={<Seaport />} />
+            <Route path={ROUTES.LOCATIONS} element={<Locations />} />
 
-             {/* General settings */}
-             
-             <Route path={ROUTES.CURRENCY} element={<Currency />} />
-             <Route path={ROUTES.COMPANYINFO} element={<Companyinfo/>}/>
+            {/* General settings */}
 
+            <Route path={ROUTES.CURRENCY} element={<Currency />} />
+            <Route path={ROUTES.COMPANYINFO} element={<Companyinfo />} />
           </Route>
         </Routes>
       </BrowserRouter>

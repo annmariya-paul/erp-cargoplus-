@@ -13,12 +13,9 @@ import { ROUTES } from "../../../../routes";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { FiEdit } from "react-icons/fi";
 import CustomModel from "../../../../components/custom_modal/custom_model";
-import { CRM_BASE_URL_FMS } from "../../../../api/bootapi";
-import TextArea from "../../../../components/ InputType TextArea/TextArea";
+import { GENERAL_SETTING_BASE_URL } from "../../../../api/bootapi";
 import MyPagination from "../../../../components/Pagination/MyPagination";
 import SelectBox from "../../../../components/Select Box/SelectBox";
-// import countryList from "react-select-country-list";
-import { countryList } from "../../../../utils/countries";
 
 
 export default function Locations(){
@@ -43,7 +40,23 @@ export default function Locations(){
       }
     };
 
-    // { function to view a tax type - Ann - 19/1/23}
+     const getAllCountries = async () => {
+       try {
+         const allCountries = await PublicFetch.get(
+           `${GENERAL_SETTING_BASE_URL}/country`
+         );
+         console.log("countries are", allCountries.data.data);
+         setSelectCountry(allCountries.data.data);
+       } catch (err) {
+         console.log("error while getting the countries: ", err);
+       }
+     };
+
+     useEffect(() => {
+       getAllCountries();
+     }, []);
+
+    // { function to view a Location - Ann - 23/1/23}
   const [viewLocation, setViewLocation] = useState({});
   const handleViewClick = (item) => {
     console.log("view locations", item);
@@ -63,7 +76,7 @@ const columns = [
     title: "ACTION",
     dataIndex: "action",
     key: "key",
-    width: "20%",
+    width: "25%",
     render: (data, index) => {
       console.log("index is :", index);
       return (
@@ -107,20 +120,20 @@ const columns = [
         .toLowerCase()
         .includes(value.toLowerCase());
     },
-    align: "center",
+    // align: "center",
   },
-  {
-    title: "TYPE",
-    dataIndex: "location_type",
-    key: "location_type",
-    filteredValue: [searchbyType],
-    onFilter: (value, record) => {
-      return String(record.location_type)
-        .toLowerCase()
-        .includes(value.toLowerCase());
-    },
-    align: "center",
-  },
+  // {
+  //   title: "TYPE",
+  //   dataIndex: "location_type",
+  //   key: "location_type",
+  //   filteredValue: [searchbyType],
+  //   onFilter: (value, record) => {
+  //     return String(record.location_type)
+  //       .toLowerCase()
+  //       .includes(value.toLowerCase());
+  //   },
+  //   align: "center",
+  // },
 ];
 
 const data = [
@@ -174,7 +187,7 @@ const data = [
                 }}
               />
             </div>
-            <div className="col-4">
+            {/* <div className="col-4">
               <Select
                 allowClear
                 showSearch
@@ -190,7 +203,7 @@ const data = [
                 <Select.Option value="Seaport">Seaport</Select.Option>
                 <Select.Option value="City">City</Select.Option>
               </Select>
-            </div>
+            </div> */}
           </div>
           <div className="row my-3">
             <div className="col-3 px-3">
@@ -242,7 +255,7 @@ const data = [
           </div> */}
         </div>
 
-        {/* {add tax type modal - Ann} */}
+        {/* {add location modal - Ann} */}
         <CustomModel
           show={modalAddLocation}
           onHide={() => setModalAddLocation(false)}
@@ -339,11 +352,11 @@ const data = [
                       value={selectCountry}
                       onChange={(e) => setSelectCountry(e)}
                     >
-                      {countryList &&
-                        countryList.map((item, index) => {
+                      {selectCountry &&
+                        selectCountry.map((item, index) => {
                           return (
-                            <Select.Option key={item.id} value={item.code}>
-                              {item.name}
+                            <Select.Option key={item.country_id}>
+                              {item.country_name}
                             </Select.Option>
                           );
                         })}
@@ -361,7 +374,7 @@ const data = [
           }
         />
 
-        {/* {edit tax type modal - Ann} */}
+        {/* {edit location modal - Ann} */}
         <CustomModel
           show={modalEditLocation}
           onHide={() => setModalEditLocation(false)}
@@ -458,11 +471,11 @@ const data = [
                       value={selectCountry}
                       onChange={(e) => setSelectCountry(e)}
                     >
-                      {countryList &&
-                        countryList.map((item, index) => {
+                      {selectCountry &&
+                        selectCountry.map((item, index) => {
                           return (
-                            <Select.Option key={item.id} value={item.code}>
-                              {item.name}
+                            <Select.Option key={item.country_id}>
+                              {item.country_name}
                             </Select.Option>
                           );
                         })}
@@ -480,7 +493,7 @@ const data = [
           }
         />
 
-        {/* {view tax type modal - Ann} */}
+        {/* {view location modal - Ann} */}
         <Custom_model
           show={modalViewLocation}
           onHide={() => setmodalViewLocation(false)}

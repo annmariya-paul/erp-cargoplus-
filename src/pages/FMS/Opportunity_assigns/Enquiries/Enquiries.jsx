@@ -152,7 +152,7 @@ function Enquiries() {
                     handleEditedclick(index);
                   }}
                 >
-                  view{" "}
+                  view
                 </Button>
               </div>
             ) : (
@@ -161,14 +161,14 @@ function Enquiries() {
                   btnType="add"
                   className="me-1 assign_btn"
                   // btnType="add"
-                   style={{backgroundColor:"#0891d1",border: "none", color:"white", borderRadius:"5px", width:"80px"}}
+                  //  style={{backgroundColor:"#0891d1",border: "none", color:"white", borderRadius:"5px", width:"80px"}}
                   onClick={() => {
                     navigate(
                       `${ROUTES.ASSIGN_OPPORTUNITIES}/${index.opportunity_id}`
                     );
                   }}
                 >
-                  Assign{" "}
+                  Assign
                 </Button>
               </div>
             )}

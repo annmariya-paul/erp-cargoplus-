@@ -413,14 +413,14 @@ export default function Carrierlist(props) {
                       value={addcarriercode}
                       onChange={(e)=>{
                         setAddcarriercode(e.target.value)
-                        // setuniqueCode(false)
+                        setuniqueCode(false)
                       }}
-                      // onBlur={ async () => {
-                      //   // checkAttributeNameis();
-                      //   let a = await CheckUnique({type:"Carriercode",value:addcarriercode})
-                      //   console.log("hai how are u", a)
-                      //   setuniqueCode(a)
-                      // }}
+                      onBlur={ async () => {
+                        // checkAttributeNameis();
+                        let a = await CheckUnique({type:"carriercode",value:addcarriercode})
+                        console.log("hai how are u", a)
+                        setuniqueCode(a)
+                      }}
                       />
                     </Form.Item>
                     {uniqueCode ? (

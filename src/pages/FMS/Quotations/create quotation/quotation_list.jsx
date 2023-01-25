@@ -134,7 +134,7 @@ export default function Quotations(props) {
   const data = [
     {
       qno: "1",
-       date: "4-1-23",
+       date: "4-01-2023",
        validity:"test",
        consignee:"xyz",
        shipper:"new",
@@ -144,7 +144,7 @@ export default function Quotations(props) {
     },
     {
       qno: "2",
-      date: "22-1-23",
+      date: "22-01-2023",
       validity:"test",
       consignee:"xyz",
       shipper:"new",

@@ -317,7 +317,13 @@ export default function Add_Quotation(
                           },
                         ]}
                       >
-                        <SelectBox>
+                        <SelectBox
+                        allowClear
+                        showSearch
+                      
+                        optionFilterProp="children"
+                        
+                        >
                           <Select.Option value="A">Test</Select.Option>
                           <Select.Option value="B">Demo</Select.Option>
                         </SelectBox>
@@ -351,7 +357,13 @@ export default function Add_Quotation(
                           },
                         ]}
                       >
-                        <SelectBox>
+                        <SelectBox
+                        allowClear
+                        showSearch
+                      
+                        optionFilterProp="children"
+                        
+                        >
                           <Select.Option value="A">Test</Select.Option>
                           <Select.Option value="B">Demo</Select.Option>
                         </SelectBox>
@@ -369,7 +381,13 @@ export default function Add_Quotation(
                           },
                         ]}
                       >
-                        <SelectBox>
+                        <SelectBox
+                         allowClear
+                         showSearch
+                       
+                         optionFilterProp="children"
+                       
+                         >
                           <Select.Option value="A">Test</Select.Option>
                           <Select.Option value="B">Demo</Select.Option>
                         </SelectBox>
@@ -387,7 +405,12 @@ export default function Add_Quotation(
                           },
                         ]}
                       >
-                        <SelectBox>
+                        <SelectBox
+                        allowClear
+                        showSearch
+                      
+                        optionFilterProp="children"
+                        >
                           <Select.Option value="S">Ship</Select.Option>
                           <Select.Option value="A">Air</Select.Option>
                         </SelectBox>
@@ -405,7 +428,12 @@ export default function Add_Quotation(
                           },
                         ]}
                       >
-                        <SelectBox>
+                        <SelectBox
+                        allowClear
+                        showSearch
+                      
+                        optionFilterProp="children"
+                        >
                           <Select.Option value="S">Test</Select.Option>
                           <Select.Option value="A">Data</Select.Option>
                         </SelectBox>
@@ -423,7 +451,13 @@ export default function Add_Quotation(
                           },
                         ]}
                       >
-                        <SelectBox>
+                        <SelectBox
+                        
+                        allowClear
+                         showSearch
+                       
+                         optionFilterProp="children"
+                        >
                           <Select.Option value="A">Test</Select.Option>
                           <Select.Option value="B">Demo</Select.Option>
                         </SelectBox>
@@ -441,7 +475,13 @@ export default function Add_Quotation(
                           },
                         ]}
                       >
-                        <SelectBox>
+                        <SelectBox
+                        
+                        allowClear
+                         showSearch
+                       
+                         optionFilterProp="children"
+                        >
                           <Select.Option value="A">Test</Select.Option>
                           <Select.Option value="B">Demo</Select.Option>
                         </SelectBox>
@@ -458,7 +498,12 @@ export default function Add_Quotation(
                           },
                         ]}
                       >
-                        <SelectBox>
+                        <SelectBox
+                        allowClear
+                        showSearch
+                      
+                        optionFilterProp="children"
+                        >
                           <Select.Option value="A">Test</Select.Option>
                           <Select.Option value="B">Demo</Select.Option>
                         </SelectBox>
@@ -476,7 +521,14 @@ export default function Add_Quotation(
                           },
                         ]}
                       >
-                        <SelectBox>
+                        <SelectBox
+                        
+                        
+                        allowClear
+                         showSearch
+                       
+                         optionFilterProp="children"
+                        >
                           <Select.Option value="A">Test</Select.Option>
                           <Select.Option value="B">Demo</Select.Option>
                         </SelectBox>
@@ -494,7 +546,14 @@ export default function Add_Quotation(
                           },
                         ]}
                       >
-                        <SelectBox>
+                        <SelectBox
+                        allowClear
+                        showSearch
+                      
+                        optionFilterProp="children"
+                        
+                        
+                        >
                           <Select.Option value="A">Test</Select.Option>
                           <Select.Option value="B">Demo</Select.Option>
                         </SelectBox>
@@ -529,7 +588,14 @@ export default function Add_Quotation(
                           },
                         ]}
                       >
-                        <SelectBox>
+                        <SelectBox
+                        allowClear
+                        showSearch
+                      
+                        optionFilterProp="children"
+                        
+                        
+                        >
                           <Select.Option value="A">Test</Select.Option>
                           <Select.Option value="B">Demo</Select.Option>
                         </SelectBox>
@@ -598,7 +664,14 @@ export default function Add_Quotation(
                           },
                         ]}
                       >
-                        <SelectBox>
+                        <SelectBox
+                        allowClear
+                        showSearch
+                      
+                        optionFilterProp="children"
+                        
+                        
+                        >
                           <Select.Option value="A">Test</Select.Option>
                           <Select.Option value="B">Demo</Select.Option>
                         </SelectBox>
@@ -725,7 +798,7 @@ export default function Add_Quotation(
                                         {/* <tr key={row.id} className="tablewidth"> */}
                                         <td className="hiddenid">{row.id}</td>
                                         <td className="tborder" width="20%">
-                                          <Select
+                                          <SelectBox
                                            allowClear
                                            showSearch
                                           optionFilterProp="children"
@@ -733,7 +806,7 @@ export default function Add_Quotation(
                 onChange={(event) => {
                   setSearchType(event ? [event] : []);
                 }}
-                                          className=" select_search selectwidth mb-2">
+                                          className="selectwidth mb-2">
                                             <Select.Option value="Airline">
                                               FREIGHT CHARGES WITH EX WORK
                                             </Select.Option>
@@ -743,7 +816,7 @@ export default function Add_Quotation(
                                             <Select.Option value="Road">
                                               Road
                                             </Select.Option>
-                                          </Select>
+                                          </SelectBox>
                                         </td>
                                         <td className="tborder my-1 ">
                                     

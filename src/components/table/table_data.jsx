@@ -10,6 +10,9 @@ export default function TableData({
   custom_table_css,
   expandable,
   expandIconColumnIndex,
+  className,
+  style,
+  bordered
 }) {
   return (
     <>
@@ -20,6 +23,9 @@ export default function TableData({
           pagination={false}
           expandable={expandable}
           expandIconColumnIndex={expandIconColumnIndex}
+          className={className}
+          style={style}
+          bordered={bordered}
         />
       </div>
     </>

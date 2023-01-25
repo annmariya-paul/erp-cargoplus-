@@ -34,7 +34,7 @@ export default function Quotations(props) {
   const [Errormsg, setErrormsg] = useState();
   const [NameInput, setNameInput] = useState();
   const [CodeInput, setCodeInput] = useState();
-   const [showViewModal, setShowViewModal] = useState(false);
+  //  const [showViewModal, setShowViewModal] = useState(false);
  
   const [editForm] = Form.useForm();
   const close_modal = (mShow, time) => {
@@ -56,22 +56,25 @@ export default function Quotations(props) {
       title: "ACTION",
       dataIndex: "action",
       key: "key",
-      width: "30%",
+      width: "10%",
       render: (data, index) => {
         console.log("index is :",index);
         return (
-          <div className="d-flex justify-content-center align-items-center gap-2">
+          <div className="d-flex justify-content-center align-items-center gap-2 me-2">
             <div
-              className="editIcon m-0"
+              className="editIcon m-0 "
               onClick={() => {
                 navigate(`/edit_quotation`);
               }}
             >
-              <FaEdit />
+              <FaEdit style={{ marginLeft: 15}}/>
             </div>
             <div
               className="viewIcon m-0"
                 onClick={() => {navigate(`/view_quotation`)}}
+                // onClick={()=>{
+                //   setShowViewModal(true);
+                // }}
             >
               <MdPageview style={{ marginLeft: 15, marginRight: 15 }} />
             </div>
@@ -84,12 +87,12 @@ export default function Quotations(props) {
       align: "center",
     },
     {
-      title: "LEAD / CUSTOMER NAME",
-      dataIndex: "lead_name",
-      key: "lead_name",
+      title: "QUOTATION No",
+      dataIndex: "qno",
+      key: "qno",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.lead_name)
+        return String(record.qno)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
@@ -102,27 +105,27 @@ export default function Quotations(props) {
       align: "center",
     },
     {
-        title: "COUNTRY ORIGIN",
-        dataIndex: "c_origin",
-        key: "c_origin",
+        title: "VALIDITY",
+        dataIndex: "validity",
+        key: "validity",
         align: "center",
       },
       {
-        title: "COUNTRY DESTINATION",
-        dataIndex: "c_destination",
-        key: "c_destination",
+        title: "CONSIGNEE",
+        dataIndex: "consignee",
+        key: "consignee",
         align: "center",
       },
       {
-        title: "PRICE QUOTED",
-        dataIndex: "price",
-        key: "price",
+        title: "SHIPPER",
+        dataIndex: "shipper",
+        key: "shipper",
         align: "center",
       },
       {
-        title: "FRIGHT TYPE",
-        dataIndex: "fright_type",
-        key: "fright_type",
+        title: "STATUS",
+        dataIndex: "status",
+        key: "status",
         align: "center",
       },
 
@@ -130,22 +133,22 @@ export default function Quotations(props) {
 
   const data = [
     {
-        lead_name: "test",
+      qno: "1",
        date: "4-1-23",
-       c_origin:"sss",
-       c_destination:"xyz",
-       price:1000,
-       fright_type:"new",
+       validity:"test",
+       consignee:"xyz",
+       shipper:"new",
+       status:"data",
 
        key: "1",
     },
     {
-        lead_name: "www",
-       date: "2-1-23",
-       c_origin:"abc",
-       c_destination:"xyz",
-       price:2000,
-       fright_type:"new",
+      qno: "2",
+      date: "22-1-23",
+      validity:"test",
+      consignee:"xyz",
+      shipper:"new",
+      status:"data",
 
        key: "2",
     },
@@ -178,7 +181,7 @@ export default function Quotations(props) {
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
-              placeholder="Search by Fright type Name"
+              placeholder="Search by Quotation Number"
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
               onChange={(e) => {
@@ -234,264 +237,166 @@ export default function Quotations(props) {
           />
         </div>
       </div>
-
-
-
       {/* <CustomModel
-      
-        show={modalAddFright}
-        onHide={() => setModalAddFright(false)}
-        header="Add Fright"
-        footer={false}
-        // {...props}
+        show={showViewModal}
+        onHide={() => setShowViewModal(false)}
         View_list
         list_content={
-          <>
-            <div className="row">
-              <h5 className="lead_text">Add Fright Type</h5>
-            </div>
-            <Form
-           form={addForm}
-              onFinish={(data) => {
-                console.log("valuezzzzzzz", data);
-                
-              }}
-              onFinishFailed={(error) => {
-                console.log(error);
-              }}
-            >
-              <div className="row py-4">
-                <div className="col-12 pt-1">
-                  <label>Fright Type Name</label>
-                  <div>
-                  <Form.Item
-                    name="Frightname"
-                    rules={[
-                      {
-                        required: true,
-                        pattern: new RegExp("^[A-Za-z ]+$"),
-                        message: "Please enter a Valid  Name",
-                      },
-                      
-                      {
-                        min: 3,
-                        message: "Name must be atleast 3 characters",
-                      },
-                      {
-                        max: 100,
-                        message:
-                          " Name cannot be longer than 100 characters",
-                      },
-                    ]}
-                    
-                  >
-                    <InputType 
-                    value={frightname}
-                    onChange={(e) => {
-                     
-                      setFrightError("");
-                    }}
-                    
-                    />
-                  </Form.Item>
-                </div>
-                </div>
-
-                <div className="col-12 pt-1">
-                  <label>Date</label>
-                  <Form.Item
-                    name="date"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please select a date",
-                      },  
-                    ]}
-                   
-                  >
-                     <DatePicker
-                        style={{ borderWidth: 0 }}
-                        //  disabledDate={today}
-                        disabledDate={(d) => !d || d.isBefore(today)}
-                        onChange={(e) => {
-                          console.log("date mmm", e);
-                          setDate(e);
-                        }}
-                      />
-                    
-                  </Form.Item>
-                </div>
+          <div className="container-fluid p-3">
+            <div className="d-flex justify-content-between my-1">
+              <div className="mt-3">
+                <h5 className="opportunity_heading">Quotation</h5>
               </div>
-              <div className="row justify-content-center ">
-                <div className="col-auto">
-                  <Button btnType="save">Save</Button>
-                </div>
-              </div>
-            </Form>
-          </>
-        }
-      >
-        <Custom_model
-          size={"sm"}
-          show={successPopup}
-          onHide={() => setSuccessPopup(false)}
-          success
-        />
-      </CustomModel> */}
-
-
-       {/* <Custom_model
-          show={showViewModal}
-          onHide={() => setShowViewModal(false)}
-          View_list
-          list_content={
-            <div className="container-fluid p-3">
-              <div className="row">
-                <div className="col-10">
-                  <h5 className="lead_text">Fright Type</h5>
-                </div>
-                <div className="col-2">
-                  <Button
-                    btnType="add_borderless"
-                    className="edit_button"
+              <div className="">
+                <Button btnType="add_borderless">
+                  <span
+                    className="d-flex align-items-center justify-content-between gap-1  p-1 button_span"
+                    style={{ fontSize: "14px" }}
                     onClick={() => {
-                    // setFrightEditPopup(true);
-                      // setShowModalEdit(true);
-                    //   setShowViewModal(false);
+                    
+                      setShowViewModal(false);
                     }}
                   >
-                    Edit
-                    <FiEdit 
-                      style={{ marginBottom: "4px", marginInline: "3px" }}
-                    />
-                  </Button>
-                </div>
-              </div>
-              <div className="row mt-4">
-                <div className="col-4">
-                  <p> Fright Name</p>
-                </div>
-                <div className="col-1">:</div>
-                <div className="col-6 justify-content-start">
-                  <p className="modal-view-data">Fright X</p>
-                </div>
-              </div>
-              <div className="row my-4">
-                <div className="col-4">
-                  <p>Date</p>
-                </div>
-                <div className="col-1">:</div>
-                <div className="col-7 justify-content-start">
-                  <p className="modal-view-data">
-                  12-1-23
-                  </p>
-                </div>
+                    Edit <FiEdit />
+                  </span>
+                </Button>
               </div>
             </div>
-          }
-        /> */}
-      {/* <Custom_model
-         show={FrightEditPopup}
-        onHide={() => setFrightEditPopup(false)}
-        View_list
-        list_content={
-          <div>
-            <div className="container-fluid px-4 my-3">
-              <div>
-                <h5 className="lead_text">Edit Fright Type</h5>
-              </div>
-              <div className="row my-3 ">
-                <Form
-                  form={editForm}
-                  onFinish={(values) => {
-                    console.log("values iss", values);
-                //    handleUpdate();
-                  }}
-                  onFinishFailed={(error) => {
-                    console.log(error);
-                  }}
-                >
-                  <div className="col-6">
-                    <label>Name</label>
-                    <Form.Item
-                      name="NameInput"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid Fright type Name",
-                        },
-                        {
-                          min: 2,
-                          message: "Name must be at least 2 characters",
-                        },
-                        {
-                          max: 100,
-                          message: "Name cannot be longer than 100 characters",
-                        },
-                      ]}
-                    >
-                      <InputType
-                        className="input_type_style w-100"
-                        value={NameInput}
-                        onChange={(e) => {
-                          setNameInput(e.target.value);
-                          setErrormsg("");
-                        }}
-                      />
-                    </Form.Item>
-                    {Errormsg ? (
-                      <label style={{ color: "red" }}>{Errormsg}</label>
-                    ) : (
-                      ""
-                    )}
-                  </div>
-                  <div className="col-6">
-                    <label>Date</label>
-                    <Form.Item
-                    name="date"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please select a date",
-                      },  
-                    ]}
-                   
-                  >
-                     <DatePicker
-                        style={{ borderWidth: 0 }}
-                        //  disabledDate={today}
-                        disabledDate={(d) => !d || d.isBefore(today)}
-                        onChange={(e) => {
-                          console.log("date mmm", e);
-                          setDate(e);
-                        }}
-                      />
-                    
-                  </Form.Item>
-                    {Errormsg ? (
-                      <label style={{ color: "red" }}>{Errormsg}</label>
-                    ) : (
-                      ""
-                    )}
-                  </div>
-                 
-                  <div className="col-12 d-flex justify-content-center mt-5">
-                    <Button className="save_button">Save</Button>
-                  </div>
-                </Form>
-              </div>
-              {error ? (
-                <div className="">
-                  <ErrorMsg code={"400"} />
-                </div>
-              ) : (
-                ""
-              )}
+
+            <div>
+              <table className="table table-borderless">
+                <thead></thead>
+                <tbody>
+                  <tr>
+                    <td>Quotation No</td>
+                    <td>:</td>
+                    <td>001</td>
+                  </tr>
+                  <tr>
+                    <td>Date</td>
+                    <td>:</td>
+                    <td>22-1-2023</td>
+                  </tr>
+                  <tr>
+                    <td>Validity Date</td>
+                    <td>:</td>
+                    <td>22-1-2023</td>
+                  </tr>
+                  <tr>
+                    <td>Consignee</td>
+                    <td>:</td>
+                    <td>Test</td>
+                  </tr>
+                  <tr>
+                    <td>Shipper</td>
+                    <td>:</td>
+                    <td>Test</td>
+                  </tr>
+                  <tr>
+                    <td>Origin Agent</td>
+                    <td>:</td>
+                    <td>Data</td>
+                  </tr>
+                  <tr>
+                    <td>Destination Agent</td>
+                    <td>:</td>
+                    <td>Data</td>
+                  </tr>
+                  <tr>
+                    <td>Freight Type</td>
+                    <td>:</td>
+                    <td>New</td>
+                  </tr>
+                  <tr>
+                    <td>cargo Type</td>
+                    <td>:</td>
+                    <td>New</td>
+                  </tr>
+                  <tr>
+                    <td>Mode</td>
+                    <td>:</td>
+                    <td>Test</td>
+                  </tr>
+                  <tr>
+                    <td>Origin</td>
+                    <td>:</td>
+                    <td>Test</td>
+                  </tr>
+                  <tr>
+                    <td>Destination</td>
+                    <td>:</td>
+                    <td>Test</td>
+                  </tr>
+                  <tr>
+                    <td>Carrier</td>
+                    <td>:</td>
+                    <td>Test</td>
+                  </tr>
+                  <tr>
+                    <td>Terms</td>
+                    <td>:</td>
+                    <td>Test</td>
+                  </tr>
+                  <tr>
+                    <td>No of pieces</td>
+                    <td>:</td>
+                    <td>Test</td>
+                  </tr>
+                  <tr>
+                    <td>UOM</td>
+                    <td>:</td>
+                    <td>Test</td>
+                  </tr>
+                  <tr>
+                    <td>Gross wt</td>
+                    <td>:</td>
+                    <td>Test</td>
+                  </tr>
+                  <tr>
+                    <td>Chargeable wt</td>
+                    <td>:</td>
+                    <td>Test</td>
+                  </tr>
+                  <tr>
+                    <td>Currency </td>
+                    <td>:</td>
+                    <td>Test</td>
+                  </tr>
+                  <tr>
+                    <td>Exchange Rate </td>
+                    <td>:</td>
+                    <td>Test</td>
+                  </tr>
+                  <tr>
+                    <td>Chargeable wt</td>
+                    <td>:</td>
+                    <td>Test</td>
+                  </tr>
+                  <tr>
+                    <td>Attachments</td>
+                    <td>:</td>
+                    <td>Test</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
+
+            <div className="d-flex justify-content-between my-1">
+              
+              <div className="">
+              
+              </div>
+            </div>
+           
           </div>
         }
       /> */}
+
+
+     
+
+
+       
           <CustomModel
         size={"sm"}
         show={successPopup}

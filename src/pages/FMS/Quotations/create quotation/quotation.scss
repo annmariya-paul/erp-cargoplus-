@@ -83,3 +83,35 @@ th {
    
   }
 }
+.ant-collapse-header-text{
+  font-weight: 500;
+}
+.ant-table {
+  line-height: 2;
+}
+// @media print {
+//   :not(#printable-div) {
+//     display: none;
+//   }
+// }
+@media print {
+  @page {
+    size: A4;
+   
+    padding: 2cm;
+    width: 80%;
+    height: 80%;
+    transform: rotate(90deg);
+  }
+}
+@media print {
+  .sidebarWrapper {
+    display: none;
+  }
+}
+
+@media print {
+  .edit_button {
+    display: none;
+  }
+}

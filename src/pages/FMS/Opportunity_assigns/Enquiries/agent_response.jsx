@@ -15,6 +15,7 @@ import PublicFetch from "../../../../utils/PublicFetch";
 export default function Agent_Response() {
   const [addForm] = Form.useForm();
   const [modalAddResponse, setModalAddResponse] = useState(false);
+  const [modalEditResponse, setModalEditResponse] = useState(false);
 
   const columns = [
     {
@@ -27,13 +28,7 @@ export default function Agent_Response() {
         return (
           <div className="d-flex justify-content-center align-items-center gap-2">
             <div className="editIcon m-0">
-              <FaEdit />
-            </div>
-            <div
-              className="viewIcon m-0"
-              //   onClick={() => handleViewClick(index)}
-            >
-              <MdPageview style={{ marginLeft: 15, marginRight: 15 }} />
+              <FaEdit onClick={() => setModalEditResponse(true)} />
             </div>
             <div className="deleteIcon m-0">
               <FaTrash />
@@ -73,7 +68,6 @@ export default function Agent_Response() {
         <div className="row mt-2">
           <div className="col-6 d-flex">
             <div className="pe-2 pt-2" style={{ fontWeight: 500 }}>
-              {" "}
               Opportunity No :
             </div>
             <div className="col-4 mt-1">
@@ -146,7 +140,67 @@ export default function Agent_Response() {
                     </Form.Item>
                   </div>
                 </div>
-                
+
+                <div className="col-12 pt-1">
+                  <label>Response</label>
+                  <Form.Item name="agent_response">
+                    <TextArea
+                    //   value={taxDescription}
+                    //   onChange={(e) => setTaxDescription(e.target.value)}
+                    />
+                  </Form.Item>
+                </div>
+              </div>
+              <div className="row justify-content-center ">
+                <div className="col-auto">
+                  <Button btnType="save">Save</Button>
+                </div>
+              </div>
+            </Form>
+          </>
+        }
+      />
+      {/* {Edit Response modal - Ann - 24/1/23} */}
+      <Custom_model
+        show={modalEditResponse}
+        onHide={() => setModalEditResponse(false)}
+        footer={false}
+        View_list
+        list_content={
+          <>
+            <div className="row">
+              <h5 className="lead_text">Edit Response</h5>
+            </div>
+            <Form
+              form={addForm}
+              onFinish={(data) => {
+                console.log("valuezzzz", data);
+                // createTaxTypes();
+              }}
+              onFinishFailed={(error) => {
+                console.log(error);
+              }}
+            >
+              <div className="row py-4">
+                <div className="col-12 pt-1">
+                  <label>Agent Name</label>
+                  <div>
+                    <Form.Item
+                      name="agent_name"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please select a Valid Name",
+                        },
+                      ]}
+                    >
+                      <SelectBox>
+                        <Select.Option value="agentone">Agent 1</Select.Option>
+                      </SelectBox>
+                    </Form.Item>
+                  </div>
+                </div>
+
                 <div className="col-12 pt-1">
                   <label>Response</label>
                   <Form.Item name="agent_response">

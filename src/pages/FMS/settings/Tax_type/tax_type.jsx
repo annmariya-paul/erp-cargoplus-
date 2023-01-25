@@ -15,6 +15,8 @@ import { FiEdit } from "react-icons/fi";
 import { CRM_BASE_URL_FMS } from "../../../../api/bootapi";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
 import MyPagination from "../../../../components/Pagination/MyPagination";
+import CheckUnique from "../../../../check Unique/CheckUnique";
+import { UniqueErrorMsg } from "../../../../ErrorMessages/UniqueErrorMessage";
 
 export default function TaxType() {
   const [searchedText, setSearchedText] = useState("");
@@ -34,6 +36,10 @@ export default function TaxType() {
   const [editName, setEditName] = useState();
   const [taxEditPercent, setTaxEditPercent] = useState();
   const [editDescription, setEditDescription] = useState("");
+  const [uniqueName, setUniqueName] = useState(false);
+  const [uniqueEditName, setUniqueEditName] = useState(false);
+  const [editUniqueName, setEditUniqueName] = useState();
+  const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
 
   const [taxTypes, setTaxTypes] = useState();
   const [addForm] = Form.useForm();
@@ -96,6 +102,7 @@ export default function TaxType() {
     setEditName(i.tax_type_name);
     setTaxEditPercent(i.tax_type_percentage);
     setEditDescription(i.tax_type_description);
+    setEditUniqueName(i.tax_type_name);
     editForm.setFieldsValue({
       taxtype_id: i.tax_type_id,
       editName: i.tax_type_name,
@@ -167,7 +174,13 @@ export default function TaxType() {
         console.log("index is :", index);
         return (
           <div className="d-flex justify-content-center align-items-center gap-2">
-            <div className="editIcon m-0" onClick={() => TaxTypeEdit(index)}>
+            <div
+              className="editIcon m-0"
+              onClick={() => {
+                TaxTypeEdit(index);
+                setUniqueEditName(false);
+              }}
+            >
               <FaEdit />
             </div>
             <div
@@ -260,7 +273,14 @@ export default function TaxType() {
             </Select>
           </div>
           <div className="col-9 d-flex justify-content-end">
-            <Button btnType="add" onClick={() => setModalAddTaxtype(true)}>
+            <Button
+              btnType="add"
+              onClick={() => {
+                setModalAddTaxtype(true);
+                setUniqueName(false);
+                addForm.resetFields();
+              }}
+            >
               Add Tax Type
             </Button>
           </div>
@@ -315,16 +335,30 @@ export default function TaxType() {
                       rules={[
                         {
                           required: true,
-                          //   pattern: new RegExp("^[A-Za-z ]+$"),
                           message: "Please enter a Valid Name",
                         },
                       ]}
                     >
                       <InputType
                         value={taxTypeName}
-                        onChange={(e) => setTaxTypeName(e.target.value)}
+                        onChange={(e) => {
+                          setTaxTypeName(e.target.value);
+                          setUniqueName(false);
+                        }}
+                        onBlur={async () => {
+                          let n = await CheckUnique({
+                            type: "taxtypename",
+                            value: taxTypeName,
+                          });
+                          setUniqueName(n);
+                        }}
                       />
                     </Form.Item>
+                    {uniqueName ? (
+                      <p style={{ color: "red", marginTop: "-24px" }}>
+                        Tax type Name {uniqueErrMsg.UniqueErrName}
+                      </p>
+                    ) : null}
                   </div>
                 </div>
                 <div className="col-12 pt-1">
@@ -339,7 +373,8 @@ export default function TaxType() {
                         },
                         {
                           pattern: new RegExp("^[0-9]+$"),
-                          message: "Tax percentage must be numeric",
+                          message:
+                            "Percentage must be numeric and positive integer",
                         },
                       ]}
                     >
@@ -405,9 +440,26 @@ export default function TaxType() {
                       ]}
                     >
                       <InputType
-                        onChange={(e) => setEditName(e.target.value)}
+                        onChange={(e) => {
+                          setEditName(e.target.value);
+                          setUniqueEditName(false);
+                        }}
+                        onBlur={async () => {
+                          if (editUniqueName !== editName) {
+                            let a = await CheckUnique({
+                              type: "taxtypename",
+                              value: editName,
+                            });
+                            setUniqueEditName(a);
+                          }
+                        }}
                       />
                     </Form.Item>
+                    {uniqueEditName ? (
+                      <p style={{ color: "red", marginTop: "-24px" }}>
+                        Tax type Name {uniqueErrMsg.UniqueErrName}
+                      </p>
+                    ) : null}
                   </div>
                 </div>
                 <div className="col-12 pt-1">
@@ -418,11 +470,12 @@ export default function TaxType() {
                       rules={[
                         {
                           required: true,
-                          message: "Please entera valid tax percentage",
+                          message: "Please enter a valid tax percentage",
                         },
                         {
                           pattern: new RegExp("^[0-9]+$"),
-                          message: "Tax percentage must be numeric",
+                          message:
+                            "Percentage must be numeric and positive integer",
                         },
                       ]}
                     >

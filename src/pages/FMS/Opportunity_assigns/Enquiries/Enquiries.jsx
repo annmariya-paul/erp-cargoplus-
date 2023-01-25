@@ -1,5 +1,6 @@
 import { Checkbox, Select } from "antd";
 import React, { useEffect, useState } from "react";
+import moment from "moment";
 import { FaEdit } from "react-icons/fa";
 import { MdPageview } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
@@ -82,42 +83,43 @@ function Enquiries() {
     //   align: "center",
     // },
     {
-      title: "TYPE",
-      dataIndex: "opportunity_type",
-      key: "TYPE",
-      width: "15%",
-      filteredValue: [searchType],
-      onFilter: (value, record) => {
-        return String(record.opportunity_type)
-          .toLowerCase()
-          .includes(value.toLowerCase());
+      title: "ENQUIRY NO",
+      dataIndex: "opportunity_number",
+      key: "opportunity_number",
+      width: "12%",
+      // align: "center",
+    },
+    {
+      title: "DATE",
+      dataIndex: "opportunity_created_at",
+      key: "opportunity_created_at",
+      width: "10%",
+      render: (record) => {
+        return (
+          <div>
+            <p>{moment(record.opportunity_created_at).format("DD-MM-YYYY")}</p>
+          </div>
+        );
       },
     },
     {
-      title: "FROM",
-      dataIndex: "opportunity_from",
-      key: "FROM",
+      title: "LEAD",
+      dataIndex: "lead_customer_name",
+      key: "lead_customer_name",
+      width: "20%",
       filteredValue: [searchStatus],
       onFilter: (value, record) => {
         return String(record.opportunity_from)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
-      align: "left",
     },
 
-    // {
-    //   title: "CONVERTED BY",
-    //   dataIndex: "opportunity_created_by",
-    //   key: "CONVERTED BY",
-    //   width: "17%",
-    //   align: "center",
-    // },
     {
       title: "SOURCE",
       dataIndex: "opportunity_source",
       key: "SOURCE",
-      align: "left",
+      width: "17%",
       filteredValue: [searchSource],
       onFilter: (value, record) => {
         return String(record.opportunity_source)
@@ -126,18 +128,18 @@ function Enquiries() {
       },
     },
     {
-      title: "PARTY",
+      title: "CONTACT PERSON",
       dataIndex: "opportunity_party",
       key: "PARTY",
       width: "25%",
       // align: "center",
     },
     {
-      title: " ",
+      title: "ACTIONS",
       dataIndex: "buttons",
-      width: "15%",
+      width: "17%",
       key: "buttons",
-      // align: "center",
+      align: "center",
       // display:"flex",
       render: (data, index) => {
         console.log("table data", index);
@@ -147,7 +149,13 @@ function Enquiries() {
               <div>
                 <Button
                   // btnType="add"
-                  style={{backgroundColor:"#0891d1",border: "none", color:"white", borderRadius:"5px", width:"80px"}}
+                  style={{
+                    backgroundColor: "#0891d1",
+                    border: "none",
+                    color: "white",
+                    borderRadius: "5px",
+                    width: "80px",
+                  }}
                   onClick={() => {
                     handleEditedclick(index);
                   }}
@@ -177,9 +185,7 @@ function Enquiries() {
                 btnType="add"
                 className="response_btn"
                 onClick={() => {
-                  navigate(
-                    `${ROUTES.AGENT_RESPONSE}`
-                  );
+                  navigate(`${ROUTES.AGENT_RESPONSE}`);
                 }}
               >
                 Response
@@ -240,9 +246,12 @@ function Enquiries() {
           res?.data?.data?.leads.forEach((item, index) => {
             tempArr.push({
               opportunity_id: item?.opportunity_id,
+              opportunity_number: item?.opportunity_number,
               opportunity_type: item?.opportunity_type,
               opportunity_party: item?.crm_v1_contacts?.contact_person_name,
               opportunity_from: item?.opportunity_from,
+              lead_customer_name: item?.crm_v1_leads?.lead_customer_name,
+              opportunity_created_at: item?.opportunity_created_at,
               opportunity_created_by: item?.opportunity_created_by,
               opportunity_source: item?.opportunity_source,
               opportunity_probability: item?.opportunity_probability,

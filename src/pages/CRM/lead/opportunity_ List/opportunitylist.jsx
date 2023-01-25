@@ -69,6 +69,7 @@ function Opportunitylist(props) {
   const [oppId, setOppID] = useState(parseInt(id));
   console.log(oppId);
   const [oppurtunitylead, setOppurtunitylead] = useState("");
+  const [opportunityNum,setOpportunityNum] = useState("");
   const [oppurtunitytype, setoppurtunitytype] = useState();
   const [oppurtunityfrom, setOppurtunityfrom] = useState();
   const [oppurtunitysource, setOppurtunitysource] = useState();
@@ -127,6 +128,7 @@ function Opportunitylist(props) {
   // view oppurtunity
   const [viewoppurtunity, setviewoppurtunity] = useState({
     id: "",
+    opportunity_number: "",
     opportunity_type: "",
     opportunity_from: "",
     convertedby: "",
@@ -143,6 +145,7 @@ function Opportunitylist(props) {
   const [editOppurtunity, setEditOppurtunity] = useState({
     opportunity_id: "",
     opportunity_lead_id: oppId,
+    opportunity_number: "",
     opportunitytype: "",
     opportunityfrom: "",
     convertedby: "",
@@ -178,6 +181,7 @@ function Opportunitylist(props) {
           res?.data?.data?.leads.forEach((item, index) => {
           tempArr.push({
             opportunity_id: item?.opportunity_id,
+            opportunity_number: item?. opportunity_number,
             opportunity_type: item?.opportunity_type,
             opportunity_party: item?.crm_v1_contacts?.contact_person_name,
             opportunity_from: item?.opportunity_from,
@@ -229,6 +233,7 @@ function Opportunitylist(props) {
       // console.log("typeee:", oneoppurtunities.data?.data?.opportunity_type);
 
       setOppurtunityid(oneoppurtunities.data?.data?.opportunity_id);
+      setOpportunityNum(oneoppurtunities.data?.data?.opportunity_number);
       setoppurtunitytype(oneoppurtunities.data?.data?.opportunity_type);
       setOppurtunityfrom(oneoppurtunities.data?.data?.opportunity_from);
       setOppurtunitysource(oneoppurtunities.data?.data?.opportunity_source);
@@ -245,6 +250,7 @@ function Opportunitylist(props) {
       setOppurtunityparty(oneoppurtunities.data?.data?.opportunity_party);
       // setOppurtunityparty()
       editForm.setFieldsValue({
+        opportunity_number: oneoppurtunities.data?.data?.opportunity_number,
         opportunity_type: oneoppurtunities.data?.data?.opportunity_type,
         opportunity_from: oneoppurtunities.data?.data?.opportunity_from,
         opportunity_party: oneoppurtunities.data?.data?.opportunity_party,
@@ -306,6 +312,7 @@ function Opportunitylist(props) {
     setviewoppurtunity({
       ...viewoppurtunity,
       id: item.opportunity_id,
+      opportunity_number: item.opportunity_number,
       opportunity_type: item.opportunity_type,
       opportunity_from: item.opportunity_from,
       convertedby: item.opportunity_created_by,
@@ -343,6 +350,7 @@ function Opportunitylist(props) {
     console.log("edittingg in list::: ", i);
 
     setOppurtunityid(i.opportunity_id);
+    setOpportunityNum(i.opportunity_number);
     setoppurtunitytype(i.opportunity_type);
     setOppurtunityfrom(i.opportunity_from);
     setOppurtunityparty(i.opportunity_party);
@@ -356,6 +364,7 @@ function Opportunitylist(props) {
     getAllContact();
     setShowEditModal(true);
     editForm.setFieldsValue({
+      opportunity_number: i.opportunity_number,
       opportunity_type: i.opportunity_type,
       opportunity_from: i.opportunity_from,
       opportunity_party: i.opportunity_party,
@@ -439,6 +448,7 @@ function Opportunitylist(props) {
     const UpdatedFormdata = {
       // id: viewoppurtunity.id,
       opportunity_lead_id: oppurtunitylead,
+      opportunity_number: opportunityNum,
       opportunity_type: oppurtunitytype,
       opportunity_from: oppurtunityfrom,
       opportunity_source: oppurtunitysource,
@@ -975,6 +985,11 @@ function Opportunitylist(props) {
                 <thead></thead>
                 <tbody>
                   <tr>
+                    <td>Opportunity No.</td>
+                    <td>:</td>
+                    <td>{viewoppurtunity.opportunity_number}</td>
+                  </tr>
+                  <tr>
                     <td>Type</td>
                     <td>:</td>
                     <td>{viewoppurtunity.opportunity_type}</td>
@@ -1405,9 +1420,19 @@ function Opportunitylist(props) {
           <div className="px-5">
             <div className="row px-1">
               <div className="col-sm-4 pt-2">
+                <label>Opportunity No.</label>
+                <input
+                  value={opportunityNum}
+                  onChange={(e) => setOpportunityNum(e.target.value)}
+                  className="input_number_style mt-2"
+                  style={{width:"100%"}}
+                  readOnly
+                />
+              </div>
+              <div className="col-sm-4 pt-2">
                 <label>Lead Type</label>
                 <Form.Item
-                  name={"opportunity_type"}
+                  name="opportunity_type"
                   rules={[
                     {
                       required: true,

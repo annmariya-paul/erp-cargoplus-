@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 // import { Form } from "react-bootstrap";
-import { DatePicker, Form,  Select } from "antd";
+import { DatePicker, Form, Select } from "antd";
 import Button from "../../../../components/button/button";
 import { useForm } from "react-hook-form";
 import Custom_model from "../../../../components/custom_modal/custom_model";
@@ -55,31 +55,33 @@ export default function AddOpportunity(props) {
     setOppAmount(float.toFixed(2));
   };
 
+  const [oppoNumber, setOppoNumber] = useState();
   const [opptype, setOppType] = useState(null);
-  console.log(opptype);
+  // console.log(opptype);
   const [oppfrom, setOppFrom] = useState();
-  console.log(oppfrom);
+  // console.log(oppfrom);
   const [oppId, setOppID] = useState(parseInt(id));
-  console.log(oppId);
+  // console.log(oppId);
   const [oppsource, setOppSource] = useState();
-  console.log(oppsource);
+  // console.log(oppsource);
   const [oppparty, setOppParty] = useState();
-  console.log(oppparty);
+  // console.log(oppparty);
   // const [date, setDate] = useState(); //for date
 
   const [oppvalidity, setOppValidity] = useState();
   const [oppamount, setOppAmount] = useState();
-  console.log(typeof oppamount);
+  // console.log(typeof oppamount);
   const [oppprobability, setOppProbaility] = useState();
-  console.log(oppprobability);
+  // console.log(oppprobability);
   const [oppdescription, setOppDescription] = useState();
-  console.log(oppdescription);
+  // console.log(oppdescription);
   const [oppstatus, setOppStatus] = useState();
-  console.log(typeof oppstatus);
+  // console.log(typeof oppstatus);
 
   const oppdata = (data) => {
     console.log("ssss");
     PublicFetch.post(`${CRM_BASE_URL}/opportunity`, {
+      opportunity_number: oppoNumber,
       opportunity_type: opptype,
       opportunity_from: oppfrom,
       opportunity_lead_id: oppId,
@@ -94,6 +96,7 @@ export default function AddOpportunity(props) {
       .then(function (response) {
         console.log("post of opportuity", response);
         if (response.data.success) {
+          setOppoNumber();
           setOppType();
           setOppFrom();
           setOppSource();
@@ -192,6 +195,17 @@ export default function AddOpportunity(props) {
               <div className="px-5">
                 <h5 className="lead_text">Add Opportunity</h5>
                 <div className="row px-1">
+                  {/* <div className="col-sm-4 pt-2">
+                    <label>Opportunity No.</label>
+                    <Form.Item
+                      name="oppoNumber"
+                    >
+                      <InputType
+                        value={oppoNumber}
+                        onChange={(e) => setOppoNumber(e.target.value)}
+                      />
+                    </Form.Item>
+                  </div> */}
                   <div className="col-sm-4 pt-2">
                     <label>Type</label>
                     <Form.Item

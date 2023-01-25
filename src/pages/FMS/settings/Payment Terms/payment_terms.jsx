@@ -152,6 +152,7 @@ export default function PaymentTerms(props) {
         if (res.data.success) {
           console.log("success", res.data.data);
           setSuccessPopup(true);
+          getallPaymentTerms()
           close_modal(successPopup, 1200);
           addForm.resetFields();
           setModalAddPayment(false);

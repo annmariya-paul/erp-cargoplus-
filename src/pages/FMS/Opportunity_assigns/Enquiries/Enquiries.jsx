@@ -67,9 +67,7 @@ function Enquiries() {
     //             if (index.assigned_employee && index.assigned_employee.length > 0 ){
     //               handleEditedclick(index)
     //             }
-                  
-               
-                
+
     //           }} />
     //         </div>
     //         {/* <div className="editcolor">
@@ -87,14 +85,13 @@ function Enquiries() {
       title: "TYPE",
       dataIndex: "opportunity_type",
       key: "TYPE",
-
+      width: "15%",
       filteredValue: [searchType],
       onFilter: (value, record) => {
         return String(record.opportunity_type)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
-      align: "left",
     },
     {
       title: "FROM",
@@ -132,44 +129,62 @@ function Enquiries() {
       title: "PARTY",
       dataIndex: "opportunity_party",
       key: "PARTY",
-      align: "center",
+      width: "25%",
+      // align: "center",
     },
     {
       title: " ",
       dataIndex: "buttons",
+      width: "15%",
       key: "buttons",
       // align: "center",
       // display:"flex",
       render: (data, index) => {
-        console.log("table data",index);
+        console.log("table data", index);
         return (
-          <div className="d-flex justify-content-center">
+          <div className="d-flex justify-content-center p-1">
             {index.assigned_employee && index.assigned_employee.length > 0 ? (
               <div>
                 <Button
-                btnType="add"
+                  // btnType="add"
+                  style={{backgroundColor:"#0891d1",border: "none", color:"white", borderRadius:"5px", width:"80px"}}
                   onClick={() => {
                     handleEditedclick(index);
                   }}
                 >
-                  view{" "}
+                  view
                 </Button>
               </div>
             ) : (
               <div>
-               
-                 <Button
-                 btnType="add"
+                <Button
+                  btnType="add"
+                  className="me-1 assign_btn"
+                  // btnType="add"
+                  //  style={{backgroundColor:"#0891d1",border: "none", color:"white", borderRadius:"5px", width:"80px"}}
                   onClick={() => {
                     navigate(
                       `${ROUTES.ASSIGN_OPPORTUNITIES}/${index.opportunity_id}`
                     );
                   }}
                 >
-                  Assign{" "}
+                  Assign
                 </Button>
               </div>
             )}
+            <div>
+              <Button
+                btnType="add"
+                className="response_btn"
+                onClick={() => {
+                  navigate(
+                    `${ROUTES.AGENT_RESPONSE}`
+                  );
+                }}
+              >
+                Response
+              </Button>
+            </div>
           </div>
         );
       },
@@ -234,7 +249,7 @@ function Enquiries() {
               opportunity_description: item?.opportunity_description,
               opportunity_amount: item?.opportunity_amount,
               opportunity_status: item?.opportunity_status,
-              assigned_employee: item?.assigned_employee
+              assigned_employee: item?.assigned_employee,
             });
           });
           console.log("hellooooqqqqq", tempArr);
@@ -263,11 +278,11 @@ function Enquiries() {
   }, [pageofIndex, numOfItems]);
 
   const handleEditedclick = (index) => {
-     navigate(`${ROUTES.EDIT_ASSIGN_OPPORTUNITY}/${index.opportunity_id}`)
+    navigate(`${ROUTES.ASSIGN_OPPORTUNITIES}/${index.opportunity_id}`);
   };
   return (
     <div>
-      <div className="container">
+      <div className="container-fluid">
         <div className="row">
           <div className="col-12">
             <div className="container-fluid lead_list  my-3 py-3">
@@ -453,13 +468,13 @@ function Enquiries() {
                 </div>
                 <div className="d-flex py-2 justify-content-center">
                   <MyPagination
-              total={parseInt(totalCount)}
-              current={current}
-              pageSize={numOfItems}
-              onChange={(current, pageSize) => {
-                setCurrent(current);
-              }}
-            />
+                    total={parseInt(totalCount)}
+                    current={current}
+                    pageSize={numOfItems}
+                    onChange={(current, pageSize) => {
+                      setCurrent(current);
+                    }}
+                  />
                 </div>
                 {/* {"mcncncncncncncnc"} */}
               </div>
@@ -474,11 +489,11 @@ function Enquiries() {
         show={showViewModal}
         onHide={() => setShowViewModal(false)}
         View_list
-        list_content={<div className="container">
-          <div>
-            
+        list_content={
+          <div className="container">
+            <div></div>
           </div>
-        </div>}
+        }
       />
     </div>
   );

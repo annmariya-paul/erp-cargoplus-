@@ -168,7 +168,7 @@ export default function JobTasks() {
   ];
   return (
     <>
-      <div className="container-fluid container2 pt-3">
+      <div className="container-fluid container_fms pt-3">
         <div className="row flex-wrap">
           <div className="col">
             <h5 className="lead_text">Job Tasks</h5>

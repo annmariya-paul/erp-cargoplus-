@@ -5,14 +5,13 @@ import InputType from "../../../../components/Input Type textbox/InputType";
 import ErrorMsg from "../../../../components/error/ErrorMessage";
 import Custom_model from "../../../../components/custom_modal/custom_model";
 import { MdPageview } from "react-icons/md";
-import { Form, Input, Select, DatePicker } from "antd";
+import { Form, Input, Select } from "antd";
 import TableData from "../../../../components/table/table_data";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
 import { ROUTES } from "../../../../routes";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { FiEdit } from "react-icons/fi";
-import CustomModel from "../../../../components/custom_modal/custom_model";
 import { CRM_BASE_URL_FMS } from "../../../../api/bootapi";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
 import MyPagination from "../../../../components/Pagination/MyPagination";
@@ -286,7 +285,7 @@ export default function TaxType() {
       </div>
 
       {/* {add tax type modal - Ann} */}
-      <CustomModel
+      <Custom_model
         show={modalAddTaxtype}
         onHide={() => setModalAddTaxtype(false)}
         header="Add Tax Type"
@@ -371,7 +370,7 @@ export default function TaxType() {
         }
       />
       {/* {edit tax type modal - Ann} */}
-      <CustomModel
+      <Custom_model
         show={modalEditTaxtype}
         onHide={() => setModalEditTaxtype(false)}
         footer={false}

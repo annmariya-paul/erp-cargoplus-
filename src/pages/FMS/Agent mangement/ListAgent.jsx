@@ -16,43 +16,41 @@ import { MdDelete } from "react-icons/md";
 import { RiFileSearchFill } from "react-icons/ri";
 import PublicFetch from "../../../utils/PublicFetch";
 
-function ListAgent(){
+function ListAgent() {
   const [searchedText, setSearchedText] = useState("");
   const [pageSize, setPageSize] = useState("25");
   const [current, setCurrent] = useState(1);
-  const [agentdata,setAgentdata]= useState("")
+  const [agentdata, setAgentdata] = useState("");
 
-  const [addForm]=Form.useForm()
+  const [addForm] = Form.useForm();
 
   const getData = (current, pageSize) => {
     return agentdata?.slice((current - 1) * pageSize, current * pageSize);
   };
 
-
   const getagents = async () => {
-    try{
-      const  allagent =await PublicFetch.get(
-        `${process.env.REACT_APP_BASE_URL}/agents`)
-        console.log("all agentss are ::",allagent?.data?.data)
-         let array = [];
-       allagent?.data?.data?.forEach((item, index) => {
-         array.push({
-           agent_id: item.agent_id,
-           agent_country: item.agent_country,
-           agent_emp_id: item.hrms_v1_employee.employee_code,
-         });
-       });
-       setAgentdata(array);
-      }
-      catch(err) {
-      console.log("error to getting all units",err)
-      }
+    try {
+      const allagent = await PublicFetch.get(
+        `${process.env.REACT_APP_BASE_URL}/agents`
+      );
+      console.log("all agentss are ::", allagent?.data?.data);
+      let array = [];
+      allagent?.data?.data?.forEach((item, index) => {
+        array.push({
+          agent_id: item.agent_id,
+          agent_country: item.agent_country,
+          agent_emp_id: item.hrms_v1_employee.employee_code,
+        });
+      });
+      setAgentdata(array);
+    } catch (err) {
+      console.log("error to getting all units", err);
+    }
   };
 
-
-  useEffect(()=>{
-    getagents()
-  },[])
+  useEffect(() => {
+    getagents();
+  }, []);
 
   const data = [
     {
@@ -71,43 +69,42 @@ function ListAgent(){
     {
       title: "ACTION",
       dataIndex: "action",
-      align: "left",
+      align: "center",
       key: "ACTION",
       width: "14%",
       render: (data, index) => {
         return (
-          <div className="d-flex justify-content-center align-items-center gap-3">
+          <div className="d-flex justify-content-center align-items-center gap-2">
             <div
-               className="actioneditdelete"
+              className="actioneditdelete"
               // className="editIcon m-0"
               // onClick={() =>
               //   handleEditclick(index)}
             >
-               <Link to={`${ROUTES.UPDATEAGENT}/${index.agent_id}`}>
-              <div className="actioneditdelete">
-              <FaEdit />
-              </div>
-            </Link>
+              <Link to={`${ROUTES.UPDATEAGENT}/${index.agent_id}`}>
+                <div className="actioneditdelete">
+                  <FaEdit />
+                </div>
+              </Link>
               {/* <FaEdit /> */}
             </div>
             <div
-               className="actioneditdelete"
+              className="actioneditdelete "
               // className="viewIcon m-0"
               // onClick={() => handleViewClick(index) }
             >
               <MdDelete />
-            {/* <RiFileSearchFill /> */}
+              {/* <RiFileSearchFill /> */}
             </div>
-            <div 
-            // className="deleteIcon m-0"
-            className="actioneditdelete"
+            <div
+              // className="deleteIcon m-0"
+              className="actioneditdelete"
             >
               {/* <MdDelete /> */}
             </div>
           </div>
         );
       },
-    
     },
     // {
     //   title: "Oppurtunity Name",
@@ -117,7 +114,7 @@ function ListAgent(){
     //   filteredValue: [searchedText],
     //   onFilter: (value, record) => {
     //     console.log("valuesss in", record )
-    //     return String(record.attribute_name) 
+    //     return String(record.attribute_name)
     //       .toLowerCase()
     //       .includes(value.toLowerCase()) || String(record.attribute_description)
     //       .toLowerCase()
@@ -132,34 +129,36 @@ function ListAgent(){
       width: "25%",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        console.log("valuesss in", record )
-        return String(record.attribute_name) 
-          .toLowerCase()
-          .includes(value.toLowerCase()) || String(record.attribute_description)
-          .toLowerCase()
-          .includes(value.toLowerCase())
+        console.log("valuesss in", record);
+        return (
+          String(record.attribute_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.attribute_description)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
       },
       align: "left",
     },
     {
-    
       title: "Employee Code",
       dataIndex: "agent_emp_id",
-      width:"30%",
+      width: "30%",
       key: "DESCRIPTION",
-     
+
       align: "left",
     },
   ];
-    
-return(
+
+  return (
     <>
-     <div className="container-fluid attribute_list pt-3">
+      <div className="container-fluid container_fms pt-3">
         <div className="row flex-wrap">
           <div className="col">
             <h5 className="lead_text">List Agent</h5>
           </div>
-        
+
           {/* <Leadlist_Icons
               datas={attributes}
               columns={filteredColumns}
@@ -188,11 +187,9 @@ return(
               value={searchedText}
               onChange={(e) => {
                 setSearchedText(e.target.value ? [e.target.value] : []);
-                
               }}
               onSearch={(value) => {
                 setSearchedText(value);
-                
               }}
             />
           </div>
@@ -239,9 +236,6 @@ return(
           />
         </div>
         <div className="d-flex py-2 justify-content-center">
-          
-          
-
           {/* <MyPagination
             total={attributes?.length}
             current={current}
@@ -254,8 +248,6 @@ return(
           /> */}
         </div>
 
-
-        
         <Custom_model
           size={"sm"}
           // show={showModalEdit}
@@ -271,20 +263,21 @@ return(
                   <h5 className="lead_text">Attribute</h5>
                 </div>
               </div>
-               
-              <Form  
-        form={addForm}
-         onFinish={(values)=>{
-          console.log("values iss",values)
-          // handleupdate()
-         }}
-         onFinishFailed={(error) => {
-          console.log(error);
-        }} >
-          <div className="row py-1">
-            <div className="col-sm-6 pt-3">
-                <label>Name</label>
-                <Form.Item
+
+              <Form
+                form={addForm}
+                onFinish={(values) => {
+                  console.log("values iss", values);
+                  // handleupdate()
+                }}
+                onFinishFailed={(error) => {
+                  console.log(error);
+                }}
+              >
+                <div className="row py-1">
+                  <div className="col-sm-6 pt-3">
+                    <label>Name</label>
+                    <Form.Item
                       name="attribute"
                       rules={[
                         {
@@ -300,17 +293,16 @@ return(
                           message: "attribute name must be 3 characters",
                         },
                         {
-                          max:100
-                        }
+                          max: 100,
+                        },
                       ]}
                     >
-                  <InputType/>
-                      
+                      <InputType />
                     </Form.Item>
                   </div>
                   <div className="col-sm-6 pt-3">
-                  <label>Description</label>
-                  <Form.Item
+                    <label>Description</label>
+                    <Form.Item
                       name="description"
                       rules={[
                         // {
@@ -327,30 +319,23 @@ return(
                           min: 2,
                         },
                         {
-                          max:500,
+                          max: 500,
                         },
                       ]}
-                    >
-                     
-                    </Form.Item>
-            </div>
-          </div>
-          <div className="row justify-content-center mt-5">
-            <div className="col-1">
-              <Button btnType="save"  >Save</Button>
-              
-            </div>
-           
-          </div>
-         
-        </Form>
+                    ></Form.Item>
+                  </div>
+                </div>
+                <div className="row justify-content-center mt-5">
+                  <div className="col-1">
+                    <Button btnType="save">Save</Button>
+                  </div>
+                </div>
+              </Form>
             </div>
           }
         />
       </div>
-
     </>
-)
-
+  );
 }
-export default ListAgent
+export default ListAgent;

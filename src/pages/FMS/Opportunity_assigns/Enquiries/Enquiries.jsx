@@ -20,7 +20,7 @@ function Enquiries() {
   const [current, setCurrent] = useState(1); // current page
   const [searchSource, setSearchSource] = useState(""); // search by text input
   const [searchType, setSearchType] = useState(""); //search by type select box
-  const [searchStatus, setSearchStatus] = useState(""); //search by status select box
+  const [searchLead, setsearchLead] = useState(""); //search by status select box
   const [showViewModal, setShowViewModal] = useState(false); //oppertunity view modal
   const [ShowEditModal, setShowEditModal] = useState(false); //oppertunity edit modal
   const [showProgressModal, setShowProgresssModal] = useState(false); //Oppoertunity progress modal
@@ -107,7 +107,7 @@ function Enquiries() {
       dataIndex: "lead_customer_name",
       key: "lead_customer_name",
       width: "20%",
-      filteredValue: [searchStatus],
+      filteredValue: [searchLead],
       onFilter: (value, record) => {
         return String(record.opportunity_from)
           .toLowerCase()
@@ -407,7 +407,7 @@ function Enquiries() {
                       className="select_search"
                       optionFilterProp="children"
                       onChange={(event) => {
-                        setSearchStatus(event ? [event] : []);
+                        setsearchLead(event ? [event] : []);
                       }}
                     >
                       <Select.Option value="L">Lead</Select.Option>

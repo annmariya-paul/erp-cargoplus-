@@ -70,6 +70,7 @@ const ROUTES = {
   VIEW_QUOTATION:"/view_quotation",
   ENQUIRIES:"/enquiries",
   AGENT_RESPONSE:"/agent_response",
+  AGENT_RESPONSE_ID:"/agent_response/:id",
   EDIT_ASSIGN_OPPORTUNITY:"/edit_assign_opportunity",
   EDIT_ASSIGN_OPPORTUNITY_ID:"/edit_assign_opportunity/:id",
   CONSIGNEE:"/consignee",

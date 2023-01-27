@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./enquiries.scss";
+import { useParams } from "react-router-dom";
 import { Form, Input, Select } from "antd";
 import Button from "../../../../components/button/button";
 import SelectBox from "../../../../components/Select Box/SelectBox";
@@ -11,10 +12,84 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 import { MdPageview } from "react-icons/md";
 import { ROUTES } from "../../../../routes";
 import PublicFetch from "../../../../utils/PublicFetch";
+import { CRM_BASE_URL, CRM_BASE_URL_FMS } from "../../../../api/bootapi";
 
 export default function Agent_Response() {
+  const { id } = useParams();
   const [addForm] = Form.useForm();
   const [modalAddResponse, setModalAddResponse] = useState(false);
+  const [modalEditResponse, setModalEditResponse] = useState(false);
+  const [opportunityId, setOpportunityId] = useState();
+  const [opporNumber,setOpporNumber] = useState();
+  const [opporLead,setOpporLead] = useState();
+  const [assignOpporData,setAssignOpporData] = useState();
+  const [agentResponseId,setAgentResponseId] = useState();
+  const [agentResponse,setAgentResponse] = useState([]);
+  console.log("correspondinng responses", agentResponse);
+
+  const getOneOpportunity = () => {
+    PublicFetch.get(`${CRM_BASE_URL}/opportunity/${id}`)
+    .then((res) => {
+      console.log("single brand value", res);
+      if (res.data.success) {
+        setOpportunityId(res.data.data.opportunity_id);
+        setOpporNumber(res.data.data.opportunity_number);
+        setOpporLead(res.data.data.crm_v1_leads.lead_customer_name);
+      }
+    });
+  };
+
+  const getAssignOpportunity = () => {
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/enquiry/${id}`)
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          console.log("success", res.data.data);
+          setAssignOpporData(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+
+const getAgentResponses = () => {
+  PublicFetch.get(
+    `${CRM_BASE_URL_FMS}/enquiry-response`)
+    .then((res) => {
+      console.log("response", res);
+      if (res.data.success) {
+        console.log("success", res.data.data);
+        // setAgentResponse(res.data.data);
+        let arr=[];
+        res.data.data.forEach((item,index)=>{
+          setAgentResponseId(item?.enquiry_response_enquiry_id);
+          if (opportunityId === item?.enquiry_response_enquiry_id) {
+            {
+              arr.push({
+                enquiry_response_id: item.enquiry_response_id,
+                agent_name:item.enquiry_response_agent,
+                agent_response: item.enquiry_response_response,
+              });
+            }
+          }
+         setAgentResponse(arr);  
+        });
+       
+      }
+    })
+    .catch((err) => {
+      console.log("Error", err);
+    });
+};
+
+    useEffect(() => {
+      getAssignOpportunity();
+      getOneOpportunity();
+      getAgentResponses();
+    }, [opportunityId]);
+
 
   const columns = [
     {
@@ -27,13 +102,7 @@ export default function Agent_Response() {
         return (
           <div className="d-flex justify-content-center align-items-center gap-2">
             <div className="editIcon m-0">
-              <FaEdit />
-            </div>
-            <div
-              className="viewIcon m-0"
-              //   onClick={() => handleViewClick(index)}
-            >
-              <MdPageview style={{ marginLeft: 15, marginRight: 15 }} />
+              <FaEdit onClick={() => setModalEditResponse(true)} />
             </div>
             <div className="deleteIcon m-0">
               <FaTrash />
@@ -73,11 +142,10 @@ export default function Agent_Response() {
         <div className="row mt-2">
           <div className="col-6 d-flex">
             <div className="pe-2 pt-2" style={{ fontWeight: 500 }}>
-              {" "}
               Opportunity No :
             </div>
             <div className="col-4 mt-1">
-              <p className="input_number_style">ENQ - 00001</p>
+              <p className="input_number_style">{opporNumber}</p>
             </div>
           </div>
         </div>
@@ -87,7 +155,7 @@ export default function Agent_Response() {
               Lead :
             </div>
             <div className="col-4 mt-1">
-              <p className="input_number_style">Test Lead</p>
+              <p className="input_number_style">{opporLead}</p>
             </div>
           </div>
           <div className="col-6 d-flex justify-content-end">
@@ -100,7 +168,7 @@ export default function Agent_Response() {
         </div>
         <div className="datatable">
           <TableData
-            data={data}
+            data={agentResponse}
             columns={columns}
             custom_table_css="table_lead_list"
           />
@@ -141,12 +209,82 @@ export default function Agent_Response() {
                       ]}
                     >
                       <SelectBox>
+                        {assignOpporData &&
+                          assignOpporData.map((item, index) => {
+                            return (
+                              <Select.Option
+                                key={item.opportunity_assign_employee_id}
+                                value={item.opportunity_assign_employee_id}
+                              >
+                                {item.hrms_v1_employee.employee_name}
+                              </Select.Option>
+                            );
+                          })}
+                      </SelectBox>
+                    </Form.Item>
+                  </div>
+                </div>
+
+                <div className="col-12 pt-1">
+                  <label>Response</label>
+                  <Form.Item name="agent_response">
+                    <TextArea
+                    //   value={taxDescription}
+                    //   onChange={(e) => setTaxDescription(e.target.value)}
+                    />
+                  </Form.Item>
+                </div>
+              </div>
+              <div className="row justify-content-center ">
+                <div className="col-auto">
+                  <Button btnType="save">Save</Button>
+                </div>
+              </div>
+            </Form>
+          </>
+        }
+      />
+      {/* {Edit Response modal - Ann - 24/1/23} */}
+      <Custom_model
+        show={modalEditResponse}
+        onHide={() => setModalEditResponse(false)}
+        footer={false}
+        View_list
+        list_content={
+          <>
+            <div className="row">
+              <h5 className="lead_text">Edit Response</h5>
+            </div>
+            <Form
+              form={addForm}
+              onFinish={(data) => {
+                console.log("valuezzzz", data);
+                // createTaxTypes();
+              }}
+              onFinishFailed={(error) => {
+                console.log(error);
+              }}
+            >
+              <div className="row py-4">
+                <div className="col-12 pt-1">
+                  <label>Agent Name</label>
+                  <div>
+                    <Form.Item
+                      name="agent_name"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please select a Valid Name",
+                        },
+                      ]}
+                    >
+                      <SelectBox>
                         <Select.Option value="agentone">Agent 1</Select.Option>
                       </SelectBox>
                     </Form.Item>
                   </div>
                 </div>
-                
+
                 <div className="col-12 pt-1">
                   <label>Response</label>
                   <Form.Item name="agent_response">

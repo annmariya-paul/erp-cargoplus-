@@ -80,7 +80,7 @@ const data = [
 export default function ViewQuotation(){
   const printRef = useRef(null);
 
-  const handlePrint = () => {
+  const  handlePrint = () => {
     // window.print({printable: printRef.current, type: 'html'});
     window.print({printable: document.getElementById("myPrintableDiv"), type: 'html'});
     // window.print();

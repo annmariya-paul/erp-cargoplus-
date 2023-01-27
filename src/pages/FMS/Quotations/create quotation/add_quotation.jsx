@@ -1,36 +1,40 @@
 import React, { useState, useEffect, useCallback } from "react";
 import dayjs from "dayjs";
+import {AiFillDelete} from "react-icons/ai";
+import { DragOutlined } from "@ant-design/icons";
+import dragula from "dragula";
+import "dragula/dist/dragula.css";
 import TableData from "../../../../components/table/table_data";
-import { Link } from "react-router-dom";
-// import { Form } from "react-bootstrap";
-import { MdDragHandle } from "react-icons/md";
-import { Droppable, Draggable, DragDropContext } from "react-beautiful-dnd";
-import { AiOutlineDelete } from "react-icons/ai";
+import { FaTrash } from "react-icons/fa";
+
+import { CRM_BASE_URL_FMS } from "../../../../api/bootapi";
+
+import { GENERAL_SETTING_BASE_URL } from "../../../../api/bootapi";
+
 import FileUpload from "../../../../components/fileupload/fileUploader";
-import { Collapse, Form, Input } from "antd";
+import {Form} from "antd";
 import Button from "../../../../components/button/button";
 import PublicFetch from "../../../../utils/PublicFetch";
 import InputType from "../../../../components/Input Type textbox/InputType";
-import { CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
-import {Select} from "antd";
-import TextArea from "../../../../components/ InputType TextArea/TextArea";
+
+import { Select,Popconfirm } from "antd";
+
 import { useNavigate } from "react-router-dom";
-import { ROUTES } from "../../../../routes";
+
 import Custom_model from "../../../../components/custom_modal/custom_model";
 import SelectBox from "../../../../components/Select Box/SelectBox";
 
 import { DatePicker } from "antd";
 import "./quotation.scss";
-import { RightOutlined } from "@ant-design/icons";
+
 import Input_Number from "../../../../components/InputNumber/InputNumber";
 
 export default function Add_Quotation(
   custom_table_css,
-  expandable,
-  expandIconColumnIndex
+ 
 ) {
-  const [formSubmitted, setFormSubmitted] = useState(false);
-  const [error, setError] = useState(false);
+ 
+
   const [saveSuccess, setSaveSuccess] = useState(false);
   const today = new Date().toISOString().split("T")[0];
 
@@ -38,18 +42,18 @@ export default function Add_Quotation(
   console.log(date);
 
   const [addForm] = Form.useForm();
-  const navigate = useNavigate();
+  
   const dateFormatList = ["DD-MM-YYYY", "DD-MM-YY"];
   const [amount, setAmount] = useState(0);
 
   const handleChange = (value) => {
     setAmount(value);
   };
-  // const TableContainer = styled.div`overflow-y: scroll`;
-  const [searchType, setSearchType] = useState("");
-  const [rows, setRows] = useState([
+  const getIndexInParent = (el) => Array.from(el.parentNode.children).indexOf(el);
+  const [yourTableData, setYourTableData] = useState([
     {
-      id: 1,
+     
+      id: "",
       tasks: [],
       cost: "",
       taxtype: "",
@@ -57,165 +61,284 @@ export default function Add_Quotation(
       totalamount: "",
     },
   ]);
-  console.log("rows are :", rows);
-
-  const [taskList, setTasks] = useState(rows);
-  const handleKeyDown = useCallback(
-    (e, id) => {
-      if (e.keyCode === 13 || e.keyCode === 9) {
-        const newId = rows.length + 1;
-        setRows([
-          ...rows,
-          {
-            id: newId,
-            tasks: [],
-            cost: "",
-            taxtype: "",
-            taxamount: "",
-            totalamount: "",
-          },
-        ]);
-      }
-    },
-    [rows]
-  );
-  function handleDragEnd(e) {
-    console.log("event",e);
-    if (!e.destination) return;
-    let tempData = Array.from(rows);
-    let [source_data] = tempData.splice(e.source.index, 1);
-    tempData.splice(e.destination.index, 0, source_data);
-    setRows([...tempData]);
-    var updatedArr = tempData.map(function (item, index) {
-      return { id: item.key, orderNumber: index + 1 };
+  const handleReorder = (dragIndex, draggedIndex) => {
+    setYourTableData((oldState) => {
+      const newState = [...oldState];
+      const item = newState.splice(dragIndex, 1)[0];
+      newState.splice(draggedIndex, 0, item);
+      return newState;
     });
-  }
+  };
+  React.useEffect(() => {
+    let start;
+    let end;
+    const container = document.querySelector(".ant-table-tbody");
+    const drake = dragula([container], {
+      moves: (el) => {
+        start = getIndexInParent(el);
+        return true;
+      },
+    });
 
-  function handleDelete(id) {
-    const newRows = rows.filter((li) => li.id !== id);
-    setRows(newRows);
-  }
-  // const columns = [
+    drake.on("drop", (el) => {
+      end = getIndexInParent(el);
+      handleReorder(start,end);
+    });
+  }, []);
 
-  //   {
-  //     title: "TASKS",
-  //     dataIndex: "tasks",
-  //     key: "tasks",
+  
+ 
 
-  //     render: (data, index) => {
-  //       console.log("index is :",index);
-  //       return (
-  //         <div className="d-flex justify-content-center align-items-center ">
+  const [frighttype, setFrighttype] = useState();
+  const [currencydata, setCurrencydata] = useState();
+  const [carrierdata, setCarrierdata] = useState();
 
-  //               <SelectBox>
-  //               <Select.Option value="sales">sales</Select.Option>
-  //                       <Select.Option value="support">support</Select.Option>
-  //               </SelectBox>
+  const getallcarrier = async () => {
+    try {
+      const getcarrier = await PublicFetch.get(`${CRM_BASE_URL_FMS}/carrier`);
+      console.log("Getting all carrier : ", getcarrier.data.data);
+      setCarrierdata(getcarrier.data.data);
+    } catch (err) {
+      console.log("Error in getting carrier : ", err);
+    }
+  };
 
-  //         </div>
-  //       );
-  //     },
-  //     align: "center",
-  //   },
-  //   {
-  //     title: "COST",
-  //     dataIndex: "cost",
-  //     key: "cost",
-  //     render: (data, index) => {
-  //       console.log("index is :",index);
-  //       return (
-  //         <div className="d-flex justify-content-center align-items-center ">
+  const getallcurrency = async () => {
+    try {
+      const allcurrency = await PublicFetch.get(
+        `${GENERAL_SETTING_BASE_URL}/currency`
+      );
+      console.log("Getting all currency : ", allcurrency.data.data);
+      setCurrencydata(allcurrency.data.data);
+    } catch (err) {
+      console.log("Error in getting currency : ", err);
+    }
+  };
 
-  //              <InputType/>
+  const getallfrighttype = async () => {
+    try {
+      const allfrighttypes = await PublicFetch.get(
+        `${CRM_BASE_URL_FMS}/freightTypes`
+      );
+      console.log("Getting all frieght types : ", allfrighttypes.data.data);
+      setFrighttype(allfrighttypes.data.data);
+    } catch (err) {
+      console.log("Error in fetching fright types : ", err);
+    }
+  };
+  useEffect(() => {
+    getallfrighttype();
+    getallcurrency();
+    getallcarrier();
+  }, []);
 
-  //         </div>
-  //       );
-  //     },
+  
 
-  //     align: "center",
-  //   },
-  //   {
-  //     title: "TAX TYPE",
-  //     dataIndex: "taxtype",
-  //     key: "taxtype",
+ 
+  const handleDelete = (key) => {
+    const newData = yourTableData?.filter((item) => item?.key !== key);
+    setYourTableData(newData);
+  };
+  const columns = [
+    {
+      
+            title: "Action",
+            dataIndex: "action",
+            key: "action",
+            className: "drag-visible",
+            render: (data, index) => {
+             
+              return (
+                <div className="d-flex justify-content-center align-items-center gap-2">
+                 
 
-  //     render: (data, index) => {
-  //       console.log("index is :",index);
-  //       return (
-  //         <div className="d-flex justify-content-center align-items-center ">
 
-  //              <InputType/>
 
-  //         </div>
-  //       );
-  //     },
-  //     align: "center",
-  //   },
-  //   {
-  //     title: "TAX AMOUNT",
-  //     dataIndex: "taxamount",
-  //     key: "taxamount",
-  //     render: (data, index) => {
-  //       console.log("index is :",index);
-  //       return (
-  //         <div className="d-flex justify-content-center align-items-center ">
 
-  //              <InputType/>
 
-  //         </div>
-  //       );
-  //     },
+                  <div
+            
+              className="actionEdit m-0 p-0"
+            >
+              <DragOutlined className="draggable" type="swap" />
+            </div>
+           
+               
+                </div>
+              );
+            },
+      
+    },
+    {
+      title: '',
+      dataIndex: 'operation',
+       render: (_, record) =>
+      yourTableData.length >= 1 ? (
+          <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.key)}>
+         <div className="deleteIcon m-0">
+              <FaTrash />
+            </div>
+          </Popconfirm>
+        ) : null,
+    },
+    {
+      title: "TASKS",
+      dataIndex: "tasks",
+      key: "tasks",
+      width: "40%",
+     
 
-  //     align: "center",
-  //   },
-  //   {
-  //     title: "TOTAL AMOUNT",
-  //     dataIndex: "totalamount",
-  //     key: "totalamount",
-  //     render: (data, index) => {
-  //       console.log("index is :",index);
-  //       return (
-  //         <div className="d-flex justify-content-center align-items-center ">
+      render: (data, index) => {
+        console.log("index is :", index);
+        return (
+          <div className="d-flex justify-content-center align-items-center tborder ">
+            <SelectBox
+              allowClear
+              showSearch
+              optionFilterProp="children"
+             
+              className="selectwidth mb-2"
+            >
+              <Select.Option value="Airline">
+                FREIGHT CHARGES WITH EX WORK
+              </Select.Option>
+              <Select.Option value="Shipper">Shipper</Select.Option>
+              <Select.Option value="Road">Road</Select.Option>
+            </SelectBox>
+          </div>
+        );
+      },
+      align: "center",
+    },
+    {
+      title: "COST",
+      dataIndex: "cost",
+      key: "cost",
+     
+      render: (data, index) => {
+        console.log("index is :", index);
+        return (
+          <div className="d-flex justify-content-center align-items-center tborder ">
+            <Input_Number
+              className="text_right"
+              value={amount}
+              onChange={handleChange}
+              align="right"
+              step={0.01}
+              min={0}
+              precision={2}
+              controlls={false}
+            />
+          </div>
+        );
+      },
 
-  //              <InputType/>
+      align: "right",
+    },
+    {
+      title: "TAX TYPE",
+      dataIndex: "taxtype",
+      key: "taxtype",
+     
 
-  //         </div>
-  //       );
-  //     },
+      render: (data, index) => {
+        console.log("index is :", index);
+        return (
+          <div className="d-flex justify-content-center align-items-center tborder">
+            <Input_Number
+              className="text_right"
+              value={amount}
+              onChange={handleChange}
+              align="right"
+              step={0.01}
+              min={0}
+              precision={2}
+              controlls={false}
+            />
+          </div>
+        );
+      },
+      align: "right",
+    },
+    {
+      title: "TAX AMOUNT",
+      dataIndex: "taxamount",
+      key: "taxamount",
+     
+      render: (data, index) => {
+        console.log("index is :", index);
+        return (
+          <div className="d-flex justify-content-center align-items-center tborder ">
+            <Input_Number
+              className="text_right"
+              value={amount}
+              onChange={handleChange}
+              align="right"
+              step={0.01}
+              min={0}
+              precision={2}
+              controlls={false}
+            />
+          </div>
+        );
+      },
 
-  //     align: "center",
-  //   },
+      align: "right",
+    },
+    {
+      title: "TOTAL AMOUNT",
+      dataIndex: "totalamount",
+      key: "totalamount",
+     
+      onCell: (record) => ({
+        onKeyDown: (e) => handleKeyDown(e, record.key),
+      }),
+      render: (data, index) => {
+        console.log("index is :", index);
+        return (
+          <div className="d-flex justify-content-center align-items-center tborder ">
+            <Input_Number
+              className="text_right"
+              value={amount}
+              onChange={handleChange}
+              align="right"
+              step={0.01}
+              min={0}
+              precision={2}
+              controlls={false}
+            />
+          </div>
+        );
+      },
 
-  // ];
-  // const data = [
-  //   {
-  //      tasks: "ABC",
-  //      cost:"data",
-  //      taxtype:"abc",
-  //      taxamount:"xyz",
-  //      totalamount:"1000",
+      align: "right",
+    },
+   
+  ];
 
-  //      key: "1",
-  //   },
-  //   {
-  //     tasks: "Test",
-  //     cost:"1000",
-  //     taxtype:"abc",
-  //     taxamount:"xyz",
-  //     totalamount:"5000",
+  const handleKeyDown = (e, index) => {
+    if (e.keyCode === 13 || e.keyCode === 9) {
+    
+      const data = [...yourTableData];
 
-  //       key: "2",
-  //   },
-  //   {
-  //     tasks: "Demo",
-  //     cost:"data",
-  //     taxtype:"abc",
-  //     taxamount:"xyz",
-  //     totalamount:"1000",
+    
+      const newRow = {
+        key: data.length + 1,
+        tasks: [],
+        cost: "",
+        taxtype: "",
+        taxamount: "",
+        totalamount: "",
+      };
 
-  //       key: "3",
-  //   },
-  // ];
+      // Insert the new row in the appropriate position
+      data.splice(index + 1, 0, newRow);
+
+      // Update the table data
+      setYourTableData(data);
+    }
+  };
+ 
 
   return (
     <>
@@ -238,7 +361,7 @@ export default function Add_Quotation(
               }}
             >
               <div className="container mb-4">
-                {/* <div className="containerdesig "> */}
+              
                 <div className="row">
                   <div className="row ">
                     <div className="col-xl-3 col-sm-6 mt-2">
@@ -270,7 +393,7 @@ export default function Add_Quotation(
                       >
                         <DatePicker
                           style={{ borderWidth: 0, marginTop: 10 }}
-                          // defaultValue={today}
+                        
                           defaultValue={dayjs()}
                           format={dateFormatList}
                           disabledDate={(d) => !d || d.isBefore(today)}
@@ -295,8 +418,7 @@ export default function Add_Quotation(
                       >
                         <DatePicker
                           style={{ borderWidth: 0, marginTop: 10 }}
-                          // defaultValue={today}
-                          // defaultValue={dayjs()}
+                        
                           disabledDate={(d) => !d || d.isBefore(today)}
                           onChange={(e) => {
                             console.log("date mmm", e);
@@ -318,11 +440,9 @@ export default function Add_Quotation(
                         ]}
                       >
                         <SelectBox
-                        allowClear
-                        showSearch
-                      
-                        optionFilterProp="children"
-                        
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
                         >
                           <Select.Option value="A">Test</Select.Option>
                           <Select.Option value="B">Demo</Select.Option>
@@ -358,11 +478,9 @@ export default function Add_Quotation(
                         ]}
                       >
                         <SelectBox
-                        allowClear
-                        showSearch
-                      
-                        optionFilterProp="children"
-                        
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
                         >
                           <Select.Option value="A">Test</Select.Option>
                           <Select.Option value="B">Demo</Select.Option>
@@ -382,12 +500,10 @@ export default function Add_Quotation(
                         ]}
                       >
                         <SelectBox
-                         allowClear
-                         showSearch
-                       
-                         optionFilterProp="children"
-                       
-                         >
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
+                        >
                           <Select.Option value="A">Test</Select.Option>
                           <Select.Option value="B">Demo</Select.Option>
                         </SelectBox>
@@ -397,7 +513,7 @@ export default function Add_Quotation(
                     <div className="col-xl-3 col-sm-6 mt-2">
                       <label>Freight Type</label>
                       <Form.Item
-                        name=""
+                        name="freighttype"
                         rules={[
                           {
                             required: true,
@@ -406,13 +522,22 @@ export default function Add_Quotation(
                         ]}
                       >
                         <SelectBox
-                        allowClear
-                        showSearch
-                      
-                        optionFilterProp="children"
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
                         >
-                          <Select.Option value="S">Ship</Select.Option>
-                          <Select.Option value="A">Air</Select.Option>
+                          {frighttype &&
+                            frighttype.length > 0 &&
+                            frighttype.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  key={item.freight_type_id}
+                                  value={item.freight_type_id}
+                                >
+                                  {item.freight_type_name}
+                                </Select.Option>
+                              );
+                            })}
                         </SelectBox>
                       </Form.Item>
                     </div>
@@ -420,7 +545,7 @@ export default function Add_Quotation(
                     <div className="col-xl-3 col-sm-6 mt-2">
                       <label>Cargo Type</label>
                       <Form.Item
-                        name=""
+                        name="cargotype"
                         rules={[
                           {
                             required: true,
@@ -429,10 +554,9 @@ export default function Add_Quotation(
                         ]}
                       >
                         <SelectBox
-                        allowClear
-                        showSearch
-                      
-                        optionFilterProp="children"
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
                         >
                           <Select.Option value="S">Test</Select.Option>
                           <Select.Option value="A">Data</Select.Option>
@@ -443,7 +567,7 @@ export default function Add_Quotation(
                     <div className="col-xl-3 col-sm-6 mt-2">
                       <label>Mode</label>
                       <Form.Item
-                        name=""
+                        name="mode"
                         rules={[
                           {
                             required: true,
@@ -452,14 +576,13 @@ export default function Add_Quotation(
                         ]}
                       >
                         <SelectBox
-                        
-                        allowClear
-                         showSearch
-                       
-                         optionFilterProp="children"
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
                         >
-                          <Select.Option value="A">Test</Select.Option>
-                          <Select.Option value="B">Demo</Select.Option>
+                          <Select.Option value="S">Shipment</Select.Option>
+                          <Select.Option value="B">Cargo</Select.Option>
+                          <Select.Option value="C">Airline</Select.Option>
                         </SelectBox>
                       </Form.Item>
                     </div>
@@ -476,11 +599,9 @@ export default function Add_Quotation(
                         ]}
                       >
                         <SelectBox
-                        
-                        allowClear
-                         showSearch
-                       
-                         optionFilterProp="children"
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
                         >
                           <Select.Option value="A">Test</Select.Option>
                           <Select.Option value="B">Demo</Select.Option>
@@ -499,10 +620,9 @@ export default function Add_Quotation(
                         ]}
                       >
                         <SelectBox
-                        allowClear
-                        showSearch
-                      
-                        optionFilterProp="children"
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
                         >
                           <Select.Option value="A">Test</Select.Option>
                           <Select.Option value="B">Demo</Select.Option>
@@ -513,7 +633,7 @@ export default function Add_Quotation(
                     <div className="col-xl-3 col-sm-6 mt-2">
                       <label>Carrier</label>
                       <Form.Item
-                        name=""
+                        name="carrier"
                         rules={[
                           {
                             required: true,
@@ -522,15 +642,22 @@ export default function Add_Quotation(
                         ]}
                       >
                         <SelectBox
-                        
-                        
-                        allowClear
-                         showSearch
-                       
-                         optionFilterProp="children"
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
                         >
-                          <Select.Option value="A">Test</Select.Option>
-                          <Select.Option value="B">Demo</Select.Option>
+                          {carrierdata &&
+                            carrierdata.length > 0 &&
+                            carrierdata.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  value={item.carrier_id}
+                                  key={item.carrier_id}
+                                >
+                                  {item.carrier_name}
+                                </Select.Option>
+                              );
+                            })}
                         </SelectBox>
                       </Form.Item>
                     </div>
@@ -538,7 +665,7 @@ export default function Add_Quotation(
                     <div className="col-xl-3 col-sm-6 mt-2">
                       <label>Terms</label>
                       <Form.Item
-                        name=""
+                        name="terms"
                         rules={[
                           {
                             required: true,
@@ -547,12 +674,9 @@ export default function Add_Quotation(
                         ]}
                       >
                         <SelectBox
-                        allowClear
-                        showSearch
-                      
-                        optionFilterProp="children"
-                        
-                        
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
                         >
                           <Select.Option value="A">Test</Select.Option>
                           <Select.Option value="B">Demo</Select.Option>
@@ -579,7 +703,7 @@ export default function Add_Quotation(
                     <div className="col-xl-3 col-sm-6 mt-2">
                       <label>UOM</label>
                       <Form.Item
-                        name="npieces"
+                        name="uom"
                         rules={[
                           {
                             required: true,
@@ -589,12 +713,9 @@ export default function Add_Quotation(
                         ]}
                       >
                         <SelectBox
-                        allowClear
-                        showSearch
-                      
-                        optionFilterProp="children"
-                        
-                        
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
                         >
                           <Select.Option value="A">Test</Select.Option>
                           <Select.Option value="B">Demo</Select.Option>
@@ -655,7 +776,7 @@ export default function Add_Quotation(
                     <div className="col-xl-3 col-sm-6 mt-2">
                       <label>Currency</label>
                       <Form.Item
-                        name="npieces"
+                        name="currency"
                         rules={[
                           {
                             required: true,
@@ -665,15 +786,22 @@ export default function Add_Quotation(
                         ]}
                       >
                         <SelectBox
-                        allowClear
-                        showSearch
-                      
-                        optionFilterProp="children"
-                        
-                        
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
                         >
-                          <Select.Option value="A">Test</Select.Option>
-                          <Select.Option value="B">Demo</Select.Option>
+                          {currencydata &&
+                            currencydata.length > 0 &&
+                            currencydata.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  value={item.currency_id}
+                                  key={item.currency_id}
+                                >
+                                  {item.currency_name}
+                                </Select.Option>
+                              );
+                            })}
                         </SelectBox>
                       </Form.Item>
                     </div>
@@ -706,7 +834,7 @@ export default function Add_Quotation(
                 </div>
               </div>
               <div className="row justify-content-center">
-              <div className="col-6 ">
+                <div className="col-6 ">
                   <label>Add Attachments</label>
                   <Form.Item className="mt-2" name="new">
                     <FileUpload
@@ -731,17 +859,16 @@ export default function Add_Quotation(
                         }
                       }}
                     />
-                   
                   </Form.Item>
                 </div>
-                </div>
+              </div>
 
               <div className="row">
                 <div className="datatable">
                   <div
                     className={`row mt-2 mx-3 qtable_data ${custom_table_css}`}
                   >
-                    <div className="tablecontainer">
+                    {/* <div className="tablecontainer">
                     <DragDropContext onDragEnd={handleDragEnd}>
 
                       <table className="table tborder">
@@ -794,8 +921,7 @@ export default function Add_Quotation(
                                           </div>
                                         </td>
 
-                                        {/* {rows.map(row => ( */}
-                                        {/* <tr key={row.id} className="tablewidth"> */}
+                                       
                                         <td className="hiddenid">{row.id}</td>
                                         <td className="tborder" width="20%">
                                           <SelectBox
@@ -878,18 +1004,26 @@ export default function Add_Quotation(
                                 }
                                   
                                 )}
-                                {/* {provided.placeholder} */}
+                             
                               </tbody>
                             )}
                           </Droppable>
                       </table>
                       </DragDropContext>
 
-                    </div>
+                    </div> */}
+                    {/* tablenew */}
+                    <TableData
+                      data={yourTableData}
+                    
+                      columns={columns}
+                   
+                      // custom_table_css="table_lead_list"
+                    />
                   </div>
                 </div>
               </div>
-              <div className="d-flex justify-content-end mt-4 mx-3 ">
+              <div className="d-flex justify-content-end mt-4 mx-5">
                 <div className="col-lg-2 col-sm-4 col-xs-3 d-flex justify-content-end mt-3 me-2">
                   <p style={{ fontWeight: 500 }}>Grand Total</p>
                 </div>
@@ -918,8 +1052,6 @@ export default function Add_Quotation(
                     />
                   </Form.Item>
                 </div>
-
-
               </div>
               <div className="d-flex justify-content-center my-4">
                 <div className="col-lg-1 ">

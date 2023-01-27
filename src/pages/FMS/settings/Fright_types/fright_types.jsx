@@ -16,6 +16,7 @@ import CustomModel from "../../../../components/custom_modal/custom_model";
 import {CRM_BASE_URL_FMS} from "../../../../api/bootapi";
 import { UniqueErrorMsg } from "../../../../ErrorMessages/UniqueErrorMessage";
 import CheckUnique from "../../../../check Unique/CheckUnique";
+import MyPagination from "../../../../components/Pagination/MyPagination";
 
 export default function Frightlist(props) {
   const [uniqueCode, setuniqueCode] = useState(false);
@@ -31,6 +32,7 @@ export default function Frightlist(props) {
   const [modalAddFright, setModalAddFright] = useState(false);
 
   const [pageSize, setPageSize] = useState("25");
+  const [current, setCurrent] = useState(1);
 
  
   const [Errormsg, setErrormsg] = useState();
@@ -47,6 +49,12 @@ export default function Frightlist(props) {
       }, time);
     }
   };
+
+  const getData = (current, pageSize) => {
+    return frights?.slice((current - 1) * pageSize, current * pageSize);
+  };
+
+
 
   // const checkemployeeCodeis = (data) => {
   //   PublicFetch.get(
@@ -320,7 +328,7 @@ export default function Frightlist(props) {
   
   return (
     <>
-      <div className="container-fluid container2 pt-3">
+      <div className="container-fluid container_fms pt-3">
         <div className="row flex-wrap">
           <div className="col">
             <h5 className="lead_text">Freight types</h5>
@@ -379,13 +387,27 @@ export default function Frightlist(props) {
         </div>
         <div className="datatable">
           <TableData
-            // data={getData(numofItemsTo, pageofIndex)}
-           
-            data={frights}
+            data={getData(current, pageSize)}
+            // data={frights}
             columns={columns}
             custom_table_css="table_lead_list"
           />
         </div>
+        <div className="d-flex py-2 justify-content-center">
+          
+          <MyPagination
+          
+           total={parseInt(frights?.length)}
+            current={current}
+            showSizeChanger={true}
+            pageSize={pageSize}
+            onChange={(current, pageSize) => {
+              setCurrent(current);
+              setPageSize(pageSize);
+            }}
+          />
+        </div>
+
       </div>
 
 

@@ -173,7 +173,10 @@ function App() {
             <Route path={ROUTES.EDIT_QUOTATION} element={<EditQuotation />} />
             <Route path={ROUTES.VIEW_QUOTATION} element={<ViewQuotation />} />
             <Route path={ROUTES.ENQUIRIES} element={<Enquiries />} />
-            <Route path={ROUTES.AGENT_RESPONSE} element={<Agent_Response />} />
+            <Route
+              path={ROUTES.AGENT_RESPONSE_ID}
+              element={<Agent_Response />}
+            />
             <Route
               path={ROUTES.EDIT_ASSIGN_OPPORTUNITY_ID}
               element={<Assign_oppertunity_edit />}

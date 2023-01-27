@@ -97,7 +97,7 @@ function Enquiries() {
       render: (record) => {
         return (
           <div>
-            <p>{moment(record.opportunity_created_at).format("DD-MM-YYYY")}</p>
+            {moment(record.opportunity_created_at).format("DD-MM-YYYY")}
           </div>
         );
       },
@@ -148,19 +148,13 @@ function Enquiries() {
             {index.assigned_employee && index.assigned_employee.length > 0 ? (
               <div>
                 <Button
-                  // btnType="add"
-                  style={{
-                    backgroundColor: "#0891d1",
-                    border: "none",
-                    color: "white",
-                    borderRadius: "5px",
-                    width: "80px",
-                  }}
+                  btnType="add"
+                  className="me-1 view_btn"
                   onClick={() => {
                     handleEditedclick(index);
                   }}
                 >
-                  view
+                  View
                 </Button>
               </div>
             ) : (
@@ -168,8 +162,6 @@ function Enquiries() {
                 <Button
                   btnType="add"
                   className="me-1 assign_btn"
-                  // btnType="add"
-                  //  style={{backgroundColor:"#0891d1",border: "none", color:"white", borderRadius:"5px", width:"80px"}}
                   onClick={() => {
                     navigate(
                       `${ROUTES.ASSIGN_OPPORTUNITIES}/${index.opportunity_id}`
@@ -185,7 +177,7 @@ function Enquiries() {
                 btnType="add"
                 className="response_btn"
                 onClick={() => {
-                  navigate(`${ROUTES.AGENT_RESPONSE}`);
+                  navigate(`${ROUTES.AGENT_RESPONSE}/${index.opportunity_id}`);
                 }}
               >
                 Response

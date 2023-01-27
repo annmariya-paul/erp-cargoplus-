@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./enquiries.scss";
+import { useParams } from "react-router-dom";
 import { Form, Input, Select } from "antd";
 import Button from "../../../../components/button/button";
 import SelectBox from "../../../../components/Select Box/SelectBox";
@@ -11,11 +12,84 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 import { MdPageview } from "react-icons/md";
 import { ROUTES } from "../../../../routes";
 import PublicFetch from "../../../../utils/PublicFetch";
+import { CRM_BASE_URL, CRM_BASE_URL_FMS } from "../../../../api/bootapi";
 
 export default function Agent_Response() {
+  const { id } = useParams();
   const [addForm] = Form.useForm();
   const [modalAddResponse, setModalAddResponse] = useState(false);
   const [modalEditResponse, setModalEditResponse] = useState(false);
+  const [opportunityId, setOpportunityId] = useState();
+  const [opporNumber,setOpporNumber] = useState();
+  const [opporLead,setOpporLead] = useState();
+  const [assignOpporData,setAssignOpporData] = useState();
+  const [agentResponseId,setAgentResponseId] = useState();
+  const [agentResponse,setAgentResponse] = useState([]);
+  console.log("correspondinng responses", agentResponse);
+
+  const getOneOpportunity = () => {
+    PublicFetch.get(`${CRM_BASE_URL}/opportunity/${id}`)
+    .then((res) => {
+      console.log("single brand value", res);
+      if (res.data.success) {
+        setOpportunityId(res.data.data.opportunity_id);
+        setOpporNumber(res.data.data.opportunity_number);
+        setOpporLead(res.data.data.crm_v1_leads.lead_customer_name);
+      }
+    });
+  };
+
+  const getAssignOpportunity = () => {
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/enquiry/${id}`)
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          console.log("success", res.data.data);
+          setAssignOpporData(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+
+const getAgentResponses = () => {
+  PublicFetch.get(
+    `${CRM_BASE_URL_FMS}/enquiry-response`)
+    .then((res) => {
+      console.log("response", res);
+      if (res.data.success) {
+        console.log("success", res.data.data);
+        // setAgentResponse(res.data.data);
+        let arr=[];
+        res.data.data.forEach((item,index)=>{
+          setAgentResponseId(item?.enquiry_response_enquiry_id);
+          if (opportunityId === item?.enquiry_response_enquiry_id) {
+            {
+              arr.push({
+                enquiry_response_id: item.enquiry_response_id,
+                agent_name:item.enquiry_response_agent,
+                agent_response: item.enquiry_response_response,
+              });
+            }
+          }
+         setAgentResponse(arr);  
+        });
+       
+      }
+    })
+    .catch((err) => {
+      console.log("Error", err);
+    });
+};
+
+    useEffect(() => {
+      getAssignOpportunity();
+      getOneOpportunity();
+      getAgentResponses();
+    }, [opportunityId]);
+
 
   const columns = [
     {
@@ -71,7 +145,7 @@ export default function Agent_Response() {
               Opportunity No :
             </div>
             <div className="col-4 mt-1">
-              <p className="input_number_style">ENQ - 00001</p>
+              <p className="input_number_style">{opporNumber}</p>
             </div>
           </div>
         </div>
@@ -81,7 +155,7 @@ export default function Agent_Response() {
               Lead :
             </div>
             <div className="col-4 mt-1">
-              <p className="input_number_style">Test Lead</p>
+              <p className="input_number_style">{opporLead}</p>
             </div>
           </div>
           <div className="col-6 d-flex justify-content-end">
@@ -94,7 +168,7 @@ export default function Agent_Response() {
         </div>
         <div className="datatable">
           <TableData
-            data={data}
+            data={agentResponse}
             columns={columns}
             custom_table_css="table_lead_list"
           />
@@ -135,7 +209,17 @@ export default function Agent_Response() {
                       ]}
                     >
                       <SelectBox>
-                        <Select.Option value="agentone">Agent 1</Select.Option>
+                        {assignOpporData &&
+                          assignOpporData.map((item, index) => {
+                            return (
+                              <Select.Option
+                                key={item.opportunity_assign_employee_id}
+                                value={item.opportunity_assign_employee_id}
+                              >
+                                {item.hrms_v1_employee.employee_name}
+                              </Select.Option>
+                            );
+                          })}
                       </SelectBox>
                     </Form.Item>
                   </div>

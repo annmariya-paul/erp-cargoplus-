@@ -17,19 +17,29 @@ import { CRM_BASE_URL, CRM_BASE_URL_FMS } from "../../../../api/bootapi";
 export default function Agent_Response() {
   const { id } = useParams();
   const [addForm] = Form.useForm();
+  const [successPopup, setSuccessPopup] = useState(false);
   const [modalAddResponse, setModalAddResponse] = useState(false);
   const [modalEditResponse, setModalEditResponse] = useState(false);
   const [opportunityId, setOpportunityId] = useState();
-  const [opporNumber,setOpporNumber] = useState();
-  const [opporLead,setOpporLead] = useState();
-  const [assignOpporData,setAssignOpporData] = useState();
-  const [agentResponseId,setAgentResponseId] = useState();
-  const [agentResponse,setAgentResponse] = useState([]);
+  const [opporNumber, setOpporNumber] = useState();
+  const [opporLead, setOpporLead] = useState();
+  const [assignOpporData, setAssignOpporData] = useState();
+  const [agentResponseId, setAgentResponseId] = useState();
+  const [responseId,setResponseId] = useState();
+  const [agentResponse, setAgentResponse] = useState([]);
   console.log("correspondinng responses", agentResponse);
 
+  const close_modal = (mShow, time) => {
+    if (!mShow) {
+      setTimeout(() => {
+        setSuccessPopup(false);
+      }, time);
+    }
+  };
+
+  // {function to fetch one opportunity data - Ann - 27/1/23}
   const getOneOpportunity = () => {
-    PublicFetch.get(`${CRM_BASE_URL}/opportunity/${id}`)
-    .then((res) => {
+    PublicFetch.get(`${CRM_BASE_URL}/opportunity/${id}`).then((res) => {
       console.log("single brand value", res);
       if (res.data.success) {
         setOpportunityId(res.data.data.opportunity_id);
@@ -39,6 +49,7 @@ export default function Agent_Response() {
     });
   };
 
+  // {function to get assigned agents - Ann - 27/1/23}
   const getAssignOpportunity = () => {
     PublicFetch.get(`${CRM_BASE_URL_FMS}/enquiry/${id}`)
       .then((res) => {
@@ -53,43 +64,94 @@ export default function Agent_Response() {
       });
   };
 
-
-const getAgentResponses = () => {
-  PublicFetch.get(
-    `${CRM_BASE_URL_FMS}/enquiry-response`)
-    .then((res) => {
-      console.log("response", res);
-      if (res.data.success) {
-        console.log("success", res.data.data);
-        // setAgentResponse(res.data.data);
-        let arr=[];
-        res.data.data.forEach((item,index)=>{
-          setAgentResponseId(item?.enquiry_response_enquiry_id);
-          if (opportunityId === item?.enquiry_response_enquiry_id) {
-            {
-              arr.push({
-                enquiry_response_id: item.enquiry_response_id,
-                agent_name:item.enquiry_response_agent,
-                agent_response: item.enquiry_response_response,
-              });
+  // {function to get agents responses - Ann - 27/1/23}
+  const getAgentResponses = () => {
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/enquiry-response`)
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          console.log("success", res.data.data);
+          let arr = [];
+          res.data.data.forEach((item, index) => {
+            setAgentResponseId(item?.enquiry_response_enquiry_id);
+            if (opportunityId === item?.enquiry_response_enquiry_id) {
+              {
+                arr.push({
+                  enquiry_response_id: item.enquiry_response_id,
+                  agent_name: item.enquiry_response_agent,
+                  agent_response: item.enquiry_response_response,
+                });
+              }
             }
-          }
-         setAgentResponse(arr);  
-        });
-       
-      }
+            setAgentResponse(arr);
+          });
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+  useEffect(() => {
+    getAssignOpportunity();
+    getOneOpportunity();
+    getAgentResponses();
+  }, [opportunityId]);
+
+  // { API to add agent reponse - Ann - 27/1/23}
+  const addResponses = (data) => {
+    PublicFetch.post(`${CRM_BASE_URL_FMS}/enquiry-response`, {
+      enquiry_response_enquiry_id: parseInt(id),
+      enquiry_response_agent: data.enquiry_response_agent,
+      enquiry_response_response: data.enquiry_response_response,
     })
-    .catch((err) => {
-      console.log("Error", err);
+      .then((res) => {
+        console.log("Response", res);
+        if (res.data.success) {
+          console.log("Success agect response Data", res.data.data);
+          setSuccessPopup(true);
+          close_modal(successPopup, 1200);
+          addForm.resetFields();
+          setModalAddResponse(false);
+          getAgentResponses();
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+  // {function to repopulate data to edit - Ann - 25/1/23}
+  const ResponseEdit = (e) => {
+    console.log("eeeeeeeeeeeee",e);
+    setResponseId(e.enquiry_response_id);
+    addForm.setFieldsValue({
+      responseId: e.enquiry_response_id,
+      agentName: e.enquiry_response_agent,
+      enquiryResponse: e.enquiry_response_response,
     });
-};
+    setModalEditResponse(true);
+  };
 
-    useEffect(() => {
-      getAssignOpportunity();
-      getOneOpportunity();
-      getAgentResponses();
-    }, [opportunityId]);
-
+  const updateAgentResponse = (data) =>{
+    PublicFetch.patch(`${CRM_BASE_URL_FMS}/enquiry-response/${responseId}`, {
+      enquiry_response_enquiry_id: parseInt(id),
+      enquiry_response_agent: data.agentName,
+      enquiry_response_response: data.enquiryResponse,
+    })
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          setSuccessPopup(true);
+          close_modal(successPopup, 1200);
+          getAgentResponses();
+          setModalEditResponse(false);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  }
 
   const columns = [
     {
@@ -102,7 +164,7 @@ const getAgentResponses = () => {
         return (
           <div className="d-flex justify-content-center align-items-center gap-2">
             <div className="editIcon m-0">
-              <FaEdit onClick={() => setModalEditResponse(true)} />
+              <FaEdit onClick={() => ResponseEdit(index)} />
             </div>
             <div className="deleteIcon m-0">
               <FaTrash />
@@ -124,10 +186,6 @@ const getAgentResponses = () => {
       key: "agent_response",
       align: "center",
     },
-  ];
-  const data = [
-    { agent_name: "Agent one", agent_response: "This is a Test response" },
-    { agent_name: "Agent two", agent_response: "Agent Tested response" },
   ];
 
   return (
@@ -189,7 +247,7 @@ const getAgentResponses = () => {
               form={addForm}
               onFinish={(data) => {
                 console.log("valuezzzz", data);
-                // createTaxTypes();
+                addResponses(data);
               }}
               onFinishFailed={(error) => {
                 console.log(error);
@@ -200,7 +258,7 @@ const getAgentResponses = () => {
                   <label>Agent Name</label>
                   <div>
                     <Form.Item
-                      name="agent_name"
+                      name="enquiry_response_agent"
                       rules={[
                         {
                           required: true,
@@ -227,11 +285,16 @@ const getAgentResponses = () => {
 
                 <div className="col-12 pt-1">
                   <label>Response</label>
-                  <Form.Item name="agent_response">
-                    <TextArea
-                    //   value={taxDescription}
-                    //   onChange={(e) => setTaxDescription(e.target.value)}
-                    />
+                  <Form.Item
+                    name="enquiry_response_response"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please enter a valid Response",
+                      },
+                    ]}
+                  >
+                    <TextArea />
                   </Form.Item>
                 </div>
               </div>
@@ -259,7 +322,7 @@ const getAgentResponses = () => {
               form={addForm}
               onFinish={(data) => {
                 console.log("valuezzzz", data);
-                // createTaxTypes();
+                updateAgentResponse(data);
               }}
               onFinishFailed={(error) => {
                 console.log(error);
@@ -270,7 +333,7 @@ const getAgentResponses = () => {
                   <label>Agent Name</label>
                   <div>
                     <Form.Item
-                      name="agent_name"
+                      name="agentName"
                       rules={[
                         {
                           required: true,
@@ -279,7 +342,17 @@ const getAgentResponses = () => {
                       ]}
                     >
                       <SelectBox>
-                        <Select.Option value="agentone">Agent 1</Select.Option>
+                        {assignOpporData &&
+                          assignOpporData.map((item, index) => {
+                            return (
+                              <Select.Option
+                                key={item.opportunity_assign_employee_id}
+                                value={item.opportunity_assign_employee_id}
+                              >
+                                {item.hrms_v1_employee.employee_name}
+                              </Select.Option>
+                            );
+                          })}
                       </SelectBox>
                     </Form.Item>
                   </div>
@@ -287,11 +360,16 @@ const getAgentResponses = () => {
 
                 <div className="col-12 pt-1">
                   <label>Response</label>
-                  <Form.Item name="agent_response">
-                    <TextArea
-                    //   value={taxDescription}
-                    //   onChange={(e) => setTaxDescription(e.target.value)}
-                    />
+                  <Form.Item
+                    name="enquiryResponse"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please enter a valid Response",
+                      },
+                    ]}
+                  >
+                    <TextArea />
                   </Form.Item>
                 </div>
               </div>

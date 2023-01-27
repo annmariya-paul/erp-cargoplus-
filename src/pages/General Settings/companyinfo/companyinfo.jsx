@@ -26,8 +26,10 @@ function Companyinfo(){
     const [companylogo,setCompanylogo]= useState()
     const [companywatermark,setcompanywatermark] =useState()
 
-    const[cmpnydata,setcmpnydata]= useState("")
-    const[compnyid,setcmpnyid]=useState()
+
+    const [cmpnyupdate,setcmpnyupdate]= useState()
+
+    const [compnyid,setcmpnyid]=useState()
     const [previewVisible, setPreviewVisible] = useState(false);
     const [previewImage, setPreviewImage] = useState("");
     const [previewTitle, setPreviewTitle] = useState("");
@@ -35,8 +37,20 @@ function Companyinfo(){
     const [imgSizeError, setImgSizeError] = useState(false);
     console.log("set image", img);
 
+    const [getcmpnylogo,setgetcmpnylogo]= useState()
+    const [getcmpnywatermark,setgetcmpnywatermark]= useState()
+    const [successPopup, setSuccessPopup] = useState(false);
+
     const handleChange = (e) => {
       setCountryis(e);
+    };
+
+    const close_modal = (mShow, time) => {
+      if (!mShow) {
+        setTimeout(() => {
+          setSuccessPopup(false);
+        }, time);
+      }
     };
     const getBase64 = (file) =>
     new Promise((resolve, reject) => {
@@ -63,13 +77,15 @@ function Companyinfo(){
         );
         // console.log("getting all cmpny", allcmpny);
         console.log(" all cmpny", allcmpny.data.data);
-        setcmpnydata(allcmpny.data.data)
+        setcmpnyupdate(allcmpny.data.data)
 
         let arry=[]
         allcmpny.data.data.forEach((i,indx)=>{
          arry.push(i)     
         })
         console.log("all cmpny are" ,arry)
+        // setcmpnyupdate(arry)
+
         arry.map((itm,indx)=>{
           console.log("all cmpny maped",itm)
           setcmpnyid(itm.company_id)
@@ -79,8 +95,11 @@ function Companyinfo(){
           setCompanyphone(itm.company_phone)
           setCountryis(itm.company_country)
           setcompanyzipcode(itm.company_zip_code)
-          setCompanylogo(itm.company_logo)
-          setcompanywatermark(itm.company_watermark)
+
+          setgetcmpnylogo(itm.company_logo)
+          // setCompanylogo(itm.company_logo)
+          setgetcmpnywatermark(itm.company_watermark)
+          // setcompanywatermark(itm.company_watermark)
 
           addForm.setFieldsValue({
             company_name: itm.company_name,
@@ -97,7 +116,7 @@ function Companyinfo(){
         })
         // setallseaports(allseaports.data.data)
       } catch (err) {
-        console.log("error to fetching  seaports", err);
+        console.log("error to fetching  compnyinfo", err);
       }
     };
 
@@ -114,23 +133,32 @@ function Companyinfo(){
       formData.append("company_email", companyemail);
       formData.append("company_zip_code",companyzipcode);
       formData.append("company_country", countryis);
-      formData.append("company_logo", companylogo);
-      formData.append("company_watermark", companywatermark);
-    
+      // formData.append("company_logo", companylogo);
 
-      if(cmpnydata){
-        PublicFetch.patch(`${GENERAL_SETTING_BASE_URL}/company/${parseInt(compnyid)}`, 
-        formData,
-         {
+      if(companylogo){
+        formData.append("company_logo", companylogo);
+      }
+      if (companywatermark){
+        formData.append("company_watermark", companywatermark);
+      }
+
+      // formData.append("company_watermark", companywatermark);
+    
+      if(cmpnyupdate ){
+        PublicFetch.patch(`${GENERAL_SETTING_BASE_URL}/company`,formData,{
           "Content-Type": "Multipart/form-Data",
         })
           .then((res) => {
             console.log("dataa is successfully saved", res.data.success);
-            // if (res.data.success) {
-            //   setSuccessPopup(true);
-            //   addForm.resetFields();
-            //   close_modal(successPopup, 1000);
-            // } else {
+            if (res.data.success) {
+              setcompanywatermark(null)
+              setCompanylogo(null)
+              setSuccessPopup(true);
+              // addForm.resetFields();
+             getallcmpny()
+              close_modal(successPopup, 1000);
+            } 
+            // else {
             //   setErrormsg(res.data.data);
             // }
           })
@@ -161,7 +189,7 @@ function Companyinfo(){
       }
     };
   
-    // console.log("njdndkj",compnyid)
+    // console.log("data of cmpny",cmpnydata)
     return (
         <div>
           <div className="">
@@ -178,7 +206,6 @@ function Companyinfo(){
                           onFinish={(value) => {
                             console.log("the formvaluess iss", value);
                             createcompanyinfo()
-                            // submitaddunit();
                           }}
                           onFinishFailed={(error) => {
                             console.log(error);
@@ -362,7 +389,7 @@ function Companyinfo(){
                     />
                     </Form.Item>
                     <img
-                      src={`${process.env.REACT_APP_BASE_URL}/${companylogo}`}
+                      src={`${process.env.REACT_APP_BASE_URL}/${getcmpnylogo}`}
                       height="40px"
                       width={"40px"}
                     />
@@ -398,7 +425,7 @@ function Companyinfo(){
                     />
                     </Form.Item>
                     <img
-                      src={`${process.env.REACT_APP_BASE_URL}/${companywatermark}`}
+                      src={`${process.env.REACT_APP_BASE_URL}/${getcmpnywatermark}`}
                       height="40px"
                       width={"40px"}
                     />
@@ -423,8 +450,8 @@ function Companyinfo(){
                           
                           <Custom_model
                           size={"sm"}
-                          show={saveSuccess}
-                          onHide={() => setSaveSuccess(false)}
+                          show={successPopup}
+                          onHide={() => setSuccessPopup(false)}
                           success
                           />
     

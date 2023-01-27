@@ -17,6 +17,7 @@ import CustomModel from "../../../../components/custom_modal/custom_model";
 import { CRM_BASE_URL_FMS } from "../../../../api/bootapi";
 import { UniqueErrorMsg } from "../../../../ErrorMessages/UniqueErrorMessage";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
+import MyPagination from "../../../../components/Pagination/MyPagination";
 //Payment terms page
 export default function PaymentTerms(props) {
   const [addForm] = Form.useForm();
@@ -28,6 +29,9 @@ export default function PaymentTerms(props) {
   const [modalAddPayment, setModalAddPayment] = useState(false);
 
   const [pageSize, setPageSize] = useState("25");
+  const [current, setCurrent] = useState(1);
+
+
   const [descriptionInput, setDescriptionInput] = useState();
   const [NameInput, setNameInput] = useState();
 
@@ -119,6 +123,12 @@ export default function PaymentTerms(props) {
 
   const [paymentname, setPaymentname] = useState();
   const [payment_id, setPayment_id] = useState();
+
+  const getData = (current, pageSize) => {
+    return allPaymentTerms?.slice((current - 1) * pageSize, current * pageSize);
+  };
+
+
 
   const handleviewtoedit = (i) => {
     console.log("editing data iss", i);
@@ -216,7 +226,7 @@ export default function PaymentTerms(props) {
 
   return (
     <>
-      <div className="container-fluid container2 pt-3">
+      <div className="container-fluid container_fms pt-3">
         <div className="row flex-wrap">
           <div className="col">
             <h5 className="lead_text"> Payment Terms</h5>
@@ -224,7 +234,7 @@ export default function PaymentTerms(props) {
           {/* <Leadlist_Icons /> */}
         </div>
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
-          <div className="col-4">
+          <div className="col-5">
             <Input.Search
               placeholder="Search by Fright type Name"
               style={{ margin: "5px", borderRadius: "5px" }}
@@ -238,8 +248,8 @@ export default function PaymentTerms(props) {
             />
           </div>
         </div>
-        <div className="row my-3">
-          <div className="col-3 px-3">
+        <div className="row my-2">
+          <div className="col-4  ">
             <Select
               bordered={false}
               className="page_size_style"
@@ -263,19 +273,48 @@ export default function PaymentTerms(props) {
               </Select.Option>
             </Select>
           </div>
-          <div className="col-9 d-flex justify-content-end">
+          <div className="col-4 d-flex justify-content-center align-items-center">
+          <MyPagination
+           total={parseInt(allPaymentTerms?.length)}
+            current={current}
+            showSizeChanger={true}
+            pageSize={pageSize}
+            onChange={(current, pageSize) => {
+              setCurrent(current);
+              setPageSize(pageSize);
+            }}
+          />
+      </div>
+
+          <div className="col-4">
             <Button btnType="add" onClick={() => setModalAddPayment(true)}>
               Add Payment Terms
             </Button>
           </div>
+         
+             
+
         </div>
+
+   
         <div className="datatable">
           <TableData
-            // data={getData(numofItemsTo, pageofIndex)}
-
-            data={allPaymentTerms}
+            data={getData(current, pageSize)}
+            // data={allPaymentTerms}
             columns={columns}
             custom_table_css="table_lead_list"
+          />
+        </div>
+        <div className="py-5 d-flex  justify-content-center">
+          <MyPagination
+           total={parseInt(allPaymentTerms?.length)}
+            current={current}
+            showSizeChanger={true}
+            pageSize={pageSize}
+            onChange={(current, pageSize) => {
+              setCurrent(current);
+              setPageSize(pageSize);
+            }}
           />
         </div>
       </div>

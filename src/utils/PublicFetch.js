@@ -4,23 +4,25 @@ console.log("Public fetch base url : ", process.env.REACT_APP_BASE_URL);
 //   localStorage.setItem('userDetails',JSON.stringify(tokenDetails));
 // }
 
-const token=JSON.parse(localStorage.getItem("user"));
-console.log("Access",token?.accessToken);
+const token = JSON.parse(localStorage.getItem("user"));
+console.log("Access", token?.accessToken);
 const PublicFetch = axios.create({
   baseURL: process.env.REACT_APP_BASE_URL,
   headers: {
-    allowCredentials:true,
+    allowCredentials: true,
     // Authorization:"Bearer"+token.access_token,
     "Content-Type": "application/json",
   },
 });
 
-PublicFetch.interceptors.request.use(
-  function (config) {
-    config.headers.Authorization="Bearer"+ " " + token?.accessToken
-    return config
-  }
-);
+PublicFetch.interceptors.request.use(function (config) {
+  // config.headers.Authorization="Bearer"+ " " + token?.accessToken
+  config.headers.Authorization = `Bearer ${JSON.parse(
+    localStorage.getItem("UserToken", "userPermissions")
+  )}`;
+
+  return config;
+});
 
 // PublicFetch.interceptors.response.use(
 //   (response) => response,

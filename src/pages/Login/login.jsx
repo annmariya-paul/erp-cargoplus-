@@ -26,11 +26,13 @@ function Login() {
         }
       ).then((res) => {
         localStorage.setItem("user", JSON.stringify(res.data.data));
+        localStorage.setItem("UserToken", JSON.stringify(res.data.data.token));
         PublicFetch.get(
           `${process.env.REACT_APP_BASE_URL}/permissions/${res?.data?.data?.role}`
         ).then((res) => {
           if (res?.data?.success && res.data.data.length > 0) {
             let userPermissions = [];
+
             res.data.data.forEach((item, index) => {
               userPermissions.push({
                 module: item?.objects?.name,

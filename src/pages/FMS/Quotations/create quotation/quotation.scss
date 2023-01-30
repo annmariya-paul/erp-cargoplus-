@@ -94,21 +94,28 @@ th {
 //     display: none;
 //   }
 // }
-@media print {
-  @page {
-    size: A 4px;;
+// @media print {
+//   @page {
+//     size: A 4px;;
    
-    padding: 2cm;
-    width: 100%;
-    height: 100%;
-    transform: rotate(90deg);
-  }
-}
+//     padding: 2cm;
+//     width: 100%;
+//     height: 100%;
+//     transform: rotate(90deg);
+//   }
+// }
 @media print {
   .sidebarWrapper {
     display: none;
   }
 }
+
+@media print {
+  .view_quotation{
+    box-shadow: none;
+  }
+}
+
 
 @media print {
   .edit_button {
@@ -131,4 +138,23 @@ th {
   cursor: grabbing;
   cursor: -moz-grabbing;
   cursor: -webkit-grabbing;
+}
+
+
+.print-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50px;
+  /* other styles */
+}
+
+.print-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50px;
+  /* other styles */
 }

@@ -8,6 +8,7 @@ import TableData from "../../../components/table/table_data";
 import { countryList } from "../../../utils/countries";
 import CustomModel from "../../../components/custom_modal/custom_model";
 import SelectBox from "../../../components/Select Box/SelectBox";
+import MyPagination from "../../../components/Pagination/MyPagination";
 
 export default function SelectCountry() {
   const [addForm] = Form.useForm();
@@ -16,12 +17,19 @@ export default function SelectCountry() {
   const [countries, setCountries] = useState("");
   const [successPopup, setSuccessPopup] = useState(false);
 
+  const [pageSize, setPageSize] = useState("25");
+  const [current, setCurrent] = useState(1);
+
   const close_modal = (mShow, time) => {
     if (!mShow) {
       setTimeout(() => {
         setSuccessPopup(false);
       }, time);
     }
+  };
+
+  const getData = (current, pageSize) => {
+    return countries?.slice((current - 1) * pageSize, current * pageSize);
   };
 
   // { function to get all tax types - Ann - 18/1/23}
@@ -194,7 +202,7 @@ export default function SelectCountry() {
         </div>
         <div className="row my-3">
           <div className="col-3 px-3">
-            {/* <Select
+            <Select
             bordered={false}
             className="page_size_style"
             value={pageSize}
@@ -215,16 +223,30 @@ export default function SelectCountry() {
               <span className="vertical ms-1">|</span>
               <span className="sizes ms-1">100</span>
             </Select.Option>
-          </Select> */}
+          </Select>
           </div>
         </div>
         <div className="datatable">
           <TableData
-            // data={getData(numofItemsTo, pageofIndex)}
-            // data={getData}
-            data={countries}
+            data={getData(current, pageSize)}
+            // data={countries}
             columns={columns}
             custom_table_css="table_lead_list"
+          />
+        </div>
+        <div className="d-flex py-2 justify-content-center">
+          
+      
+          <MyPagination
+          
+           total={parseInt(countries?.length)}
+            current={current}
+            showSizeChanger={true}
+            pageSize={pageSize}
+            onChange={(current, pageSize) => {
+              setCurrent(current);
+              setPageSize(pageSize);
+            }}
           />
         </div>
       </div>

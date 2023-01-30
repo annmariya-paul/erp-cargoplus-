@@ -541,7 +541,7 @@ function Services() {
             </div>
           </div>
           <div className="row my-3">
-            <div className="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-12  px-3">
+            <div className="col-4  px-3">
               <Select
                 // defaultValue={"25"}
                 bordered={false}
@@ -587,8 +587,20 @@ function Services() {
                 </Select.Option>
               </Select>
             </div>
-            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-8 col-12"></div>
-            <div className="col-lg-3 col-lg-3 col-md-3 col-sm-12 col-12 d-flex justify-content-end">
+            <div className=" col-4 d-flex py-2 justify-content-center">
+            <MyPagination
+              total={parseInt(totalCount)}
+              current={current}
+              pageSize={noofitems}
+              // defaultPageSize={noofItems}
+              showSizeChanger={false}
+              onChange={(current, pageSize) => {
+                console.log("page index isss", pageSize);
+                setCurrent(current);
+              }}
+            />
+          </div>
+            <div className="col-4 d-flex justify-content-end">
               <Button
                 //   onClick={() => setShowAddOpportunity(true)}
                 className="add_opportunity"

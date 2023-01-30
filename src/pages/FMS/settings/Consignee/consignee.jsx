@@ -64,12 +64,14 @@ export default function Consignee(props) {
               <div
                 className="editIcon m-0"
                 // onClick={() =>frightEdit(index)}
+                onClick={()=>  setFrightEditPopup(true)}
               >
                 <FaEdit />
               </div>
               <div
               className="viewIcon m-0"
             //   onClick={() => handleViewClick(index) }
+            onClick={()=>{setShowViewModal(true)}}
             >
               <MdPageview   style={{marginLeft:15,marginRight:15}}/>
             </div>
@@ -107,12 +109,7 @@ export default function Consignee(props) {
         freight_type_name: "Fright X",
        key: "freight_type_name",
     },
-    // {
-    //     fright_name: "Fright y",
-    //     date: "12-1-23",
-    //     key: "2",
-    // },
-    
+   
   ];  
 
 
@@ -131,7 +128,7 @@ export default function Consignee(props) {
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
-              placeholder="Search by Fright type Name"
+              placeholder="Search by Consignee Name"
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
               onChange={(e) => {
@@ -270,16 +267,17 @@ export default function Consignee(props) {
           list_content={
             <div className="container-fluid p-3">
               <div className="row">
-                <div className="col-10">
-                  <h5 className="lead_text">Fright Type</h5>
+                <div className="col-9">
+                  <h5 className="lead_text">Consignee</h5>
                 </div>
-                <div className="col-2">
+                <div className="col-3">
                   <Button
                     btnType="add_borderless"
                     className="edit_button"
                     onClick={() => {
                     //   handleviewtoedit(viewfrights);
                       // setShowModalEdit(true);
+                      setFrightEditPopup(true)
                       setShowViewModal(false);
                     }}
                   >
@@ -292,7 +290,7 @@ export default function Consignee(props) {
               </div>
               <div className="row mt-4">
                 <div className="col-4">
-                  <p> Fright Name</p>
+                  <p> Consignee</p>
                 </div>
                 <div className="col-1">:</div>
                 <div className="col-6 justify-content-start">
@@ -311,7 +309,7 @@ export default function Consignee(props) {
           <div>
             <div className="container-fluid px-4 my-3">
               <div>
-                <h5 className="lead_text">Edit Fright Type</h5>
+                <h5 className="lead_text">Edit Consignee</h5>
               </div>
               <div className="row my-3 ">
                 <Form
@@ -324,7 +322,7 @@ export default function Consignee(props) {
                     console.log(error);
                   }}
                 >
-                  <div className="col-6">
+                  <div className="col-12">
                     <label>Name</label>
                     <Form.Item
                       name="NameInput"
@@ -332,7 +330,7 @@ export default function Consignee(props) {
                         {
                           required: true,
                           pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid Fright type Name",
+                          message: "Please enter a Valid  Name",
                         },
                         {
                           min: 2,

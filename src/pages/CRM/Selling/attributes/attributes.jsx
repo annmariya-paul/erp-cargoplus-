@@ -268,7 +268,7 @@ export default function Attribute(props) {
           </div>
         </div>
         <div className="row my-3">
-          <div className="col-3 px-3 ">
+          <div className="col-4 px-3 ">
             <Select
               bordered={false}
               className="page_size_style"
@@ -292,7 +292,20 @@ export default function Attribute(props) {
               </Select.Option>
             </Select>
           </div>
-          <div className="col mb-2 px-4">
+          <div className=" col-4 d-flex align-items-center justify-content-center">
+          <MyPagination
+            total={attributes?.length}
+            current={current}
+            showSizeChanger={true}
+            pageSize={pageSize}
+            onChange={(current, pageSize) => {
+              setCurrent(current);
+              setPageSize(pageSize);
+            }}
+          />
+        </div>
+
+          <div className="col-4 mb-2 px-4">
             <Link to={ROUTES.ADD_ATTRIBUTES} style={{ color: "white" }}>
               <Button btnType="add">Add Attribute</Button>
             </Link>

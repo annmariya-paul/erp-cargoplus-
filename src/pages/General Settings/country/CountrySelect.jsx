@@ -201,7 +201,7 @@ export default function SelectCountry() {
           </div>
         </div>
         <div className="row my-3">
-          <div className="col-3 px-3">
+          <div className="col-4 px-3">
             <Select
             bordered={false}
             className="page_size_style"
@@ -225,6 +225,22 @@ export default function SelectCountry() {
             </Select.Option>
           </Select>
           </div>
+          <div className=" col-4 d-flex align-items-center justify-content-center">
+          
+      
+          <MyPagination
+          
+           total={parseInt(countries?.length)}
+            current={current}
+            showSizeChanger={true}
+            pageSize={pageSize}
+            onChange={(current, pageSize) => {
+              setCurrent(current);
+              setPageSize(pageSize);
+            }}
+          />
+        </div>
+        <div className="col-4"></div>
         </div>
         <div className="datatable">
           <TableData

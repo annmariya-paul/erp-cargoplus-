@@ -80,18 +80,29 @@ const data = [
 export default function ViewQuotation(){
   const printRef = useRef(null);
 
-  const  handlePrint = () => {
-    // window.print({printable: printRef.current, type: 'html'});
-    window.print({printable: document.getElementById("myPrintableDiv"), type: 'html'});
-    // window.print();
+  // const  handlePrint = () => {
+  //   // window.print({printable: printRef.current, type: 'html'});
+  //   window.print({printable: document.getElementById("myPrintableDiv"), type: 'html'});
+  //   // window.print();
+  // }
+  function setPageSize() {
+    const page = document.querySelector('.print-page');
+    page.style.width = '210mm';
+    page.style.height = '297mm';
+    page.style.margin = '10mm';
   }
-
+  const handlePrint = () => {
+    setPageSize();
+    window.print();
+  }
 
     return (
       <>
-        <div className="container-fluid view_quotation print-preview p-3 px-4"   >
+        <div className="print-page container-fluid view_quotation  p-3 px-4"   >
+        <div className="print-header">Header</div>
           <div className="row" >
             <div className="col-6">
+            
               <h5 className="lead_text">View Quotation</h5>
                </div>
                <div className="col-6 d-flex justify-content-end mt-2">
@@ -126,7 +137,7 @@ export default function ViewQuotation(){
           
           
           </div>
-          <div className="row mt-3" ref={printRef} id="myPrintableDiv">
+          <div className=" row mt-3"  >
            
             <div className="col-6 d-flex">
               <div className="col-4">Quotation No</div>
@@ -352,7 +363,7 @@ export default function ViewQuotation(){
             
            
           </div>
-         
+          <div className="print-footer">Footer</div>
 
 
        

@@ -16,6 +16,7 @@ import PublicFetch from "../../../../utils/PublicFetch";
 import { CRM_BASE_URL_FMS } from "../../../../api/bootapi";
 import CheckUnique from "../../../../check Unique/CheckUnique";
 import { UniqueErrorMsg } from "../../../../ErrorMessages/UniqueErrorMessage";
+import MyPagination from "../../../../components/Pagination/MyPagination";
 
 export default function Carrierlist(props) {
   const [addForm] = Form.useForm();
@@ -26,7 +27,7 @@ export default function Carrierlist(props) {
 
   const [modalAddCarrier, setModalAddCarrier] = useState(false);
 
-  const [pageSize, setPageSize] = useState("25");
+
 
   const [showViewModal, setShowViewModal] = useState(false);
   const [CarrierEditPopup, setCarrierEditPopup] = useState(false);
@@ -40,6 +41,8 @@ export default function Carrierlist(props) {
   const [editcarriername, setEditcarriername] = useState();
   const [editcarrierid,seteditcarrierid] =useState();
   const [uniqueCode, setuniqueCode] = useState(false);
+  const [pageSize, setPageSize] = useState("25");
+  const [current, setCurrent] = useState(1);
 
 
   const [editForm] = Form.useForm();
@@ -50,6 +53,11 @@ export default function Carrierlist(props) {
       }, time);
     }
   };
+
+  const getData = (current, pageSize) => {
+    return carrierdata?.slice((current - 1) * pageSize, current * pageSize);
+  };
+
 
   const getallcarrier = async () => {
     try {
@@ -323,11 +331,23 @@ export default function Carrierlist(props) {
         </div>
         <div className="datatable">
           <TableData
-            // data={getData(numofItemsTo, pageofIndex)}
-
-            data={carrierdata}
+            data={getData(current, pageSize)}
+            // data={carrierdata}
             columns={columns}
             custom_table_css="table_lead_list"
+          />
+        </div>
+        <div className="d-flex py-2 justify-content-center">
+          
+          <MyPagination
+            total={parseInt(carrierdata?.length)}
+            current={current}
+            showSizeChanger={true}
+            pageSize={pageSize}
+            onChange={(current, pageSize) => {
+              setCurrent(current);
+              setPageSize(pageSize);
+            }}
           />
         </div>
         

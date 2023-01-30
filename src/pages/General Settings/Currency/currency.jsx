@@ -16,6 +16,7 @@ import { FiEdit } from "react-icons/fi";
 import CustomModel from "../../../components/custom_modal/custom_model";
 import { GENERAL_SETTING_BASE_URL } from "../../../api/bootapi";
 import PublicFetch from "../../../utils/PublicFetch";
+import MyPagination from "../../../components/Pagination/MyPagination";
 
 export default function Currency(props) {
   const [addForm] = Form.useForm();
@@ -27,6 +28,8 @@ export default function Currency(props) {
   const [modalAddCurrency, setModalAddCurrency] = useState(false);
 
   const [pageSize, setPageSize] = useState("25");
+  const [current, setCurrent] = useState(1);
+
   const [CodeInput, setCodeInput] = useState();
   const [CountryInput, setCountryInput] = useState();
   const [SymbolInput, setSymbolInput] = useState();
@@ -50,6 +53,10 @@ export default function Currency(props) {
         setSuccessPopup(false);
       }, time);
     }
+  };
+
+  const getData = (current, pageSize) => {
+    return AllCurrency?.slice((current - 1) * pageSize, current * pageSize);
   };
 
   const currencyEdit = (e) => {
@@ -351,11 +358,25 @@ export default function Currency(props) {
         </div>
         <div className="datatable">
           <TableData
-            // data={getData(numofItemsTo, pageofIndex)}
+            data={getData(current, pageSize)}
 
-            data={AllCurrency}
+            // data={AllCurrency}
             columns={columns}
             custom_table_css="table_lead_list"
+          />
+        </div>
+        <div className="d-flex py-2 justify-content-center">
+          
+         
+          <MyPagination
+           total={parseInt(AllCurrency?.length)}
+            current={current}
+            showSizeChanger={true}
+            pageSize={pageSize}
+            onChange={(current, pageSize) => {
+              setCurrent(current);
+              setPageSize(pageSize);
+            }}
           />
         </div>
       </div>

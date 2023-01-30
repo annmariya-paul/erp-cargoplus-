@@ -60,7 +60,7 @@ export default function TaxType() {
       const allTxTypes = await PublicFetch.get(
         `${CRM_BASE_URL_FMS}/tax-types?startIndex=${pageofIndex}&perPage=${numOfItems}`
       );
-      console.log("all frights are", allTxTypes.data.data);
+      console.log("all taxtype are", allTxTypes.data.data);
       setTaxTypes(allTxTypes.data.data);
     } catch (err) {
       console.log("error while getting the tax types: ", err);
@@ -248,7 +248,7 @@ export default function TaxType() {
           </div>
         </div>
         <div className="row my-3">
-          <div className="col-3 px-3">
+          <div className="col-4 px-3">
             <Select
               bordered={false}
               className="page_size_style"
@@ -272,7 +272,18 @@ export default function TaxType() {
               </Select.Option>
             </Select>
           </div>
-          <div className="col-9 d-flex justify-content-end">
+          <div className="col-4  d-flex align-items-center justify-content-center">
+          <MyPagination
+            total={parseInt(taxTypes?.length)}
+            current={current}
+            pageSize={numOfItems}
+            onChange={(current, pageSize) => {
+              setCurrent(current);
+            }}
+            
+          />
+        </div>
+          <div className="col-4 d-flex justify-content-end">
             <Button
               btnType="add"
               onClick={() => {
@@ -294,12 +305,13 @@ export default function TaxType() {
         </div>{" "}
         <div className="d-flex mt-4 justify-content-center">
           <MyPagination
-            total={parseInt(totalCount)}
+            total={parseInt(taxTypes?.length)}
             current={current}
             pageSize={numOfItems}
             onChange={(current, pageSize) => {
               setCurrent(current);
             }}
+            
           />
         </div>
       </div>

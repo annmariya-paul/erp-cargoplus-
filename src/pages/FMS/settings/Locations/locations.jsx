@@ -26,6 +26,8 @@ export default function Locations() {
   const [searchName, setSearchName] = useState("");
   const [searchbyType, setSearchbyType] = useState("");
   const [pageSize, setPageSize] = useState("25");
+  const [current, setCurrent] = useState(1);
+
   const [error, setError] = useState(false);
   const [modalAddLocation, setModalAddLocation] = useState(false);
   const [modalEditLocation, setModalEditLocation] = useState(false);
@@ -43,6 +45,11 @@ export default function Locations() {
       }, time);
     }
   };
+
+  const getData = (current, pageSize) => {
+    return allLocations?.slice((current - 1) * pageSize, current * pageSize);
+  };
+
   // { API to fetch countries- Ann - 23/1/23  }
   const getAllCountries = async () => {
     try {
@@ -305,21 +312,24 @@ export default function Locations() {
         </div>
         <div className="datatable">
           <TableData
-            data={allLocations}
+            data={getData(current, pageSize)}
+            // data={allLocations}
             columns={columns}
             custom_table_css="table_lead_list"
           />
         </div>
-        {/* <div className="d-flex mt-4 justify-content-center">
+        <div className="d-flex mt-4 justify-content-center">
             <MyPagination
-              total={parseInt(totalCount)}
+              total={parseInt(allLocations?.length)}
               current={current}
-              pageSize={numOfItems}
+              showSizeChanger={true}
+              pageSize={pageSize}
               onChange={(current, pageSize) => {
                 setCurrent(current);
+                setPageSize(pageSize);
               }}
             />
-          </div> */}
+          </div>
       </div>
 
       {/* {add location modal - Ann} */}

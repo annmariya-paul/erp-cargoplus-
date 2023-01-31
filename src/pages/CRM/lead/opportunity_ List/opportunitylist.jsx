@@ -953,18 +953,19 @@ function Opportunitylist(props) {
       </div>
       <CustomModel
         show={showViewModal}
+        bodyStyle={{ height: "630px", overflowY: "scroll" }}
         onHide={() => setShowViewModal(false)}
         View_list
         list_content={
-          <div className="container-fluid p-3">
-            <div className="d-flex justify-content-between my-1">
-              <div className="mt-3">
-                <h5 className="opportunity_heading">Opportunity</h5>
+          <>
+            <div className="d-flex justify-content-between mx-3">
+              <div className="mt-1">
+                <h5 className="view_oppor_heading">Opportunity</h5>
               </div>
-              <div className="">
+              <div className="me-2">
                 <Button btnType="add_borderless">
                   <span
-                    className="d-flex align-items-center justify-content-between gap-1  p-1 button_span"
+                    className="d-flex align-items-center justify-content-between gap-1  p-1 edit_button"
                     style={{ fontSize: "14px" }}
                     onClick={() => {
                       // setShowEditModal(true);
@@ -979,101 +980,102 @@ function Opportunitylist(props) {
                 </Button>
               </div>
             </div>
-
-            <div>
-              <table className="table table-borderless">
-                <thead></thead>
-                <tbody>
-                  <tr>
-                    <td>Opportunity No.</td>
-                    <td>:</td>
-                    <td>{viewoppurtunity.opportunity_number}</td>
-                  </tr>
-                  <tr>
-                    <td>Type</td>
-                    <td>:</td>
-                    <td>{viewoppurtunity.opportunity_type}</td>
-                  </tr>
-                  <tr>
-                    <td>From</td>
-                    <td>:</td>
-                    <td>{viewoppurtunity.opportunity_from}</td>
-                  </tr>
-                  <tr>
-                    <td>Converted By</td>
-                    <td>:</td>
-                    <td>{viewoppurtunity.convertedby}</td>
-                  </tr>
-                  <tr>
-                    <td>Source</td>
-                    <td>:</td>
-                    <td>{viewoppurtunity.opportunity_source}</td>
-                  </tr>
-                  <tr>
-                    <td>Party</td>
-                    <td>:</td>
-                    <td>{viewoppurtunity.opportunity_party}</td>
-                  </tr>
-                  <tr>
-                    <td>Valid up to</td>
-                    <td>:</td>
-                    <td>{viewoppurtunity.opportunity_validity}</td>
-                  </tr>
-                  <tr>
-                    <td>details</td>
-                    <td>:</td>
-                    <td>{viewoppurtunity.opportunity_description}</td>
-                  </tr>
-                  <tr>
-                    <td>expecting Amount</td>
-                    <td>:</td>
-                    <td>{viewoppurtunity.opportunity_amount}</td>
-                  </tr>
-                  <tr>
-                    <td>Probability of conversion</td>
-                    <td>:</td>
-                    <td>{viewoppurtunity.opportunity_probability}</td>
-                  </tr>
-                  <tr>
-                    <td>status </td>
-                    <td>:</td>
-                    <td>{viewoppurtunity.opportunity_status}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <div className="d-flex justify-content-between my-1">
-              <div className="mt-3">
-                <h5 className="opportunity_heading">Opportunity Progress</h5>
+            <div className="container-fluid p-2">
+              <div>
+                <table className="table table-borderless">
+                  <thead></thead>
+                  <tbody>
+                    <tr>
+                      <td>Opportunity No.</td>
+                      <td>:</td>
+                      <td>{viewoppurtunity.opportunity_number}</td>
+                    </tr>
+                    <tr>
+                      <td>Type</td>
+                      <td>:</td>
+                      <td>{viewoppurtunity.opportunity_type}</td>
+                    </tr>
+                    <tr>
+                      <td>From</td>
+                      <td>:</td>
+                      <td>{viewoppurtunity.opportunity_from}</td>
+                    </tr>
+                    <tr>
+                      <td>Converted By</td>
+                      <td>:</td>
+                      <td>{viewoppurtunity.convertedby}</td>
+                    </tr>
+                    <tr>
+                      <td>Source</td>
+                      <td>:</td>
+                      <td>{viewoppurtunity.opportunity_source}</td>
+                    </tr>
+                    <tr>
+                      <td>Party</td>
+                      <td>:</td>
+                      <td>{viewoppurtunity.opportunity_party}</td>
+                    </tr>
+                    <tr>
+                      <td>Valid up to</td>
+                      <td>:</td>
+                      <td>{viewoppurtunity.opportunity_validity}</td>
+                    </tr>
+                    <tr>
+                      <td>details</td>
+                      <td>:</td>
+                      <td>{viewoppurtunity.opportunity_description}</td>
+                    </tr>
+                    <tr>
+                      <td>expecting Amount</td>
+                      <td>:</td>
+                      <td>{viewoppurtunity.opportunity_amount}</td>
+                    </tr>
+                    <tr>
+                      <td>Probability of conversion</td>
+                      <td>:</td>
+                      <td>{viewoppurtunity.opportunity_probability}</td>
+                    </tr>
+                    <tr>
+                      <td>status </td>
+                      <td>:</td>
+                      <td>{viewoppurtunity.opportunity_status}</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
-              <div className="">
-                <Button btnType="add_borderless">
-                  <span
-                    className="d-flex align-items-center justify-content-between gap-1  p-1 "
-                    style={{ fontSize: "14px" }}
-                    onClick={() => {
-                      handleAddclick(viewoppurtunity.id);
-                      console.log("id is inn", viewoppurtunity);
-                      setShowProgresssModal(true);
-                      setShowViewModal(false);
-                    }}
-                  >
-                    <BsPlusCircleFill fontSize={18} /> Add
-                  </span>
-                </Button>
-              </div>
-            </div>
-            {tableprogress ? (
-              tableprogress && (
-                <div>
-                  <TableData columns={progress} data={tableprogress} />
+
+              <div className="d-flex justify-content-between my-1">
+                <div className="mt-3">
+                  <h5 className="view_oppor_heading">Opportunity Progress</h5>
                 </div>
-              )
-            ) : (
-              <div> </div>
-            )}
-          </div>
+                <div className="">
+                  <Button btnType="add_borderless">
+                    <span
+                      className="d-flex align-items-center justify-content-between gap-1  p-1 edit_button"
+                      style={{ fontSize: "14px" }}
+                      onClick={() => {
+                        handleAddclick(viewoppurtunity.id);
+                        console.log("id is inn", viewoppurtunity);
+                        setShowProgresssModal(true);
+                        setShowViewModal(false);
+                      }}
+                    >
+                      <BsPlusCircleFill fontSize={18} /> Add
+                    </span>
+                  </Button>
+                </div>
+              </div>
+              {tableprogress ? (
+                tableprogress && (
+                  <div>
+                    <TableData columns={progress} data={tableprogress} />
+                  </div>
+                )
+              ) : (
+                <div> </div>
+              )}
+            </div>
+          </>
         }
       />
 
@@ -1425,7 +1427,7 @@ function Opportunitylist(props) {
                   value={opportunityNum}
                   onChange={(e) => setOpportunityNum(e.target.value)}
                   className="input_number_style mt-2"
-                  style={{width:"100%"}}
+                  style={{ width: "100%" }}
                   readOnly
                 />
               </div>

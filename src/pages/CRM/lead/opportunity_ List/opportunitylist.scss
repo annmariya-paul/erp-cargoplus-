@@ -14,13 +14,11 @@
 .modal_view_p_sub_active {
   color: #5aa15e;
 }
-.opportunity_heading {
+.view_oppor_heading {
   color: variables.$primary;
+  font-weight: 499;
 }
-.button_span {
-  border-radius: 3px;
-  box-shadow: 0px 2px 5px variables.$boxshadow;
-}
+
 .input_type_style {
   border: 0;
   background-color: whitesmoke;

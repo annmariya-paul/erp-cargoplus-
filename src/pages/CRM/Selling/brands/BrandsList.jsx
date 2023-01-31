@@ -372,7 +372,7 @@ function BrandsList() {
               </div>
             </div>
             <div className="row my-3">
-              <div className="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-12  px-3">
+              <div className="col-4  px-3">
                 <Select
                   // defaultValue={"25"}
                   bordered={false}
@@ -385,6 +385,7 @@ function BrandsList() {
                   }}
                 >
                   {/* <Select.Option value="5">5 | pages</Select.Option> */}
+
                   <Select.Option value="25">
                     Show{" "}
                     <span style={{ color: "lightgray" }} className="ms-1">
@@ -416,8 +417,20 @@ function BrandsList() {
                   </Select.Option>
                 </Select>
               </div>
-              <div className="col-xl-6 col-lg-6 col-md-6 col-sm-8 col-12"></div>
-              <div className="col-lg-3 col-lg-3 col-md-3 col-sm-12 col-12 d-flex justify-content-end">
+              <div className="col-4 d-flex align-items-center justify-content-center">
+              <MyPagination
+                total={brands?.length}
+                current={current}
+                showSizeChanger={true}
+                pageSize={pageSize}
+                onChange={(current, pageSize) => {
+                  console.log("ggdhffs", current, pageSize);
+                  setCurrent(current);
+                  setPageSize(pageSize);
+                }}
+              />
+            </div>
+              <div className="col-4  d-flex justify-content-end">
                 <Button
                   //   onClick={() => setShowAddOpportunity(true)}
                   className="add_opportunity"

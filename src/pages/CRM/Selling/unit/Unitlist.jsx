@@ -38,7 +38,7 @@ const[unitid,setUnitid]=useState();
 const [editForm]= Form.useForm();
 
  const getData = (current, pageSize) => {
-  return unitTable?.slice((current - 1) * pageSize, current * pageSize);
+  return allunit?.slice((current - 1) * pageSize, current * pageSize);
 };
 
 const [viewUnit, setViewUnit]=useState({
@@ -398,15 +398,26 @@ console.log("filtered columns::",filteredColumns);
         </div>
 
         <div className="row my-3">
-          <div className="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-12  px-3">
+          <div className="col-xl-4 col-lg-4  col-sm-6 col-12  px-3">
             <Select
               // defaultValue={"25"}
               bordered={false}
               className="w-50 page_size_style"
               value={pageSize}
-              onChange={(e) => setPageSize(e)}
+              onChange={(e) => {
+                setCurrent(1);
+                setPageSize(e)}}
             >
               {/* <Select.Option value="5">5 | pages</Select.Option> */}
+              {/* <Select.Option value="5">
+                Show{" "}
+                <span style={{ color: "lightgray" }} className="ms-1">
+                  |
+                </span>
+                <span style={{ color: "#2f6b8f" }} className="ms-2">
+                  5
+                </span>{" "}
+              </Select.Option> */}
               <Select.Option value="25">
                 Show{" "}
                 <span style={{ color: "lightgray" }} className="ms-1">
@@ -438,8 +449,20 @@ console.log("filtered columns::",filteredColumns);
               </Select.Option>
             </Select>
           </div>
-          <div className="col-xl-6 col-lg-6 col-md-5  col-12"></div>
-          <div className="col-lg-3 col-lg-3 col-md-3 col-sm-12 col-12  ">
+          {/* <div className="col-xl-6 col-lg-6 col-md-5  col-12"></div> */}
+          <div className="col-xl-4 col-lg-4  col-sm-6 col-12  d-flex py-2 justify-content-center">
+          <MyPagination
+            total={allunit?.length}
+            current={current}
+            showSizeChanger={true}
+            pageSize={pageSize}
+            onChange={(current, pageSize) => {
+              setCurrent(current);
+              setPageSize(pageSize);
+            }}
+          />
+        </div>
+          <div className="col-xl-4 col-lg-4   col-sm-12 col-12  ">
             <div className="d-flex justify-content-end">
               <Link to={ROUTES.ADD_UNIT}>
                 <Button btnType="save">Add Unit</Button>
@@ -642,7 +665,7 @@ console.log("filtered columns::",filteredColumns);
 
         <div className="d-flex py-2 justify-content-center">
           <MyPagination
-            total={unitdata.length}
+            total={parseInt(allunit?.length)}
             current={current}
             showSizeChanger={true}
             pageSize={pageSize}

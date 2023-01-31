@@ -52,6 +52,7 @@ function LeadEdit() {
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
   const [FileSizeError, setFileSizeError] = useState(false);
+  const [sampledata, setsambpledata] = useState();
 
   const [editForm] = Form.useForm();
   const [error, setError] = useState(false);
@@ -63,6 +64,8 @@ function LeadEdit() {
   const goToLeadlist = () => {
     navigate("/lead_list");
   };
+
+  console.log("lead attachment", leadAttachment);
 
   const getBase64 = (file) =>
     new Promise((resolve, reject) => {
@@ -82,10 +85,12 @@ function LeadEdit() {
       file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
     );
   };
+
   const close_modal = (mShow, time) => {
     if (!mShow) {
       setTimeout(() => {
         setModalShow(false);
+        goToLeadlist();
       }, time);
     }
   };
@@ -104,6 +109,7 @@ function LeadEdit() {
           setLeadSource(res?.data?.data?.lead_source);
           setLeadDescription(res?.data?.data?.lead_description);
           setLeadAttachment(res?.data?.data?.attachments);
+          setsambpledata(res?.data?.data?.attachments);
           setLeadStatus(res?.data?.data?.lead_status);
           editForm.setFieldsValue({
             leadType: res?.data?.data?.lead_type,
@@ -126,9 +132,11 @@ function LeadEdit() {
 
   useEffect(() => {
     GetLeadData();
-  }, []);
+  }, [id]);
 
   console.log("grt all data", oneLeadData);
+  const uploaad = `${process.env.REACT_APP_BASE_URL}/${sampledata}`;
+  console.log("uploads11", uploaad);
 
   const updateUser = (event) => {
     setFormSubmitted(true);
@@ -151,11 +159,12 @@ function LeadEdit() {
       "Content-Type": "Multipart/form-Data",
     })
       .then(function (response) {
-        goToLeadlist();
         console.log("hellooooooo", response);
 
         if (response.data.success) {
           console.log("hello", response.data.data);
+          setModalShow(true);
+          close_modal(modalShow, 1200);
         } else {
           console.log("Failed while adding data");
         }
@@ -386,10 +395,6 @@ function LeadEdit() {
                     </div>
                     <div className="col-12 mt-3">
                       <Form.Item name="leadAttachment">
-                        {/* <FileUpload
-                          value={leadAttachment}
-                          onChange={(e) => setLeadAttachment(e.target.files[0])}
-                        /> */}
                         <FileUpload
                           multiple
                           filetype={"Accept only pdf and docs"}

@@ -15,6 +15,8 @@ function Input_Number({
   precision,
   min,
   step,
+  onPressEnter,
+  disabled,
  
 }) {
   return (
@@ -36,6 +38,8 @@ function Input_Number({
           style={{ backgroundColor: "#f4f4f7"  }}
           className={`input_number_style w-100 my-2 pb-2 ${className}`}
           type="number"
+          onPressEnter={onPressEnter}
+          disabled={disabled}
         />
       </div>
     </div>

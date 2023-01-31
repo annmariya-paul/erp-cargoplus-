@@ -10,6 +10,7 @@ function QuotationAssign() {
   const { id } = useParams();
   console.log("id::params", id);
   const navigate = useNavigate();
+  const [addForm] = Form.useForm();
   const [allAgents, setAllAgents] = useState();
   const [successPopup, setSuccessPopup] = useState();
 
@@ -51,7 +52,13 @@ function QuotationAssign() {
             <div className="my-3">
               <h6 className="lead_text">Assign to Quotation</h6>
             </div>
-            <Form>
+            <Form
+              name="addForm"
+              form={addForm}
+              onFinish={(value) => {
+                console.log("Form Values", value);
+              }}
+            >
               <div className="row my-5">
                 {allAgents &&
                   allAgents.length > 0 &&

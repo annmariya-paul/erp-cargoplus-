@@ -269,7 +269,7 @@ export default function Departments(props) {
           </div>
         </div>
         <div className="row my-3">
-          <div className="col-3 px-3">
+          <div className="col-4 px-3">
             <Select
               bordered={false}
               className="page_size_style"
@@ -296,7 +296,20 @@ export default function Departments(props) {
               </Select.Option>
             </Select>
           </div>
-          <div className="col-9 d-flex justify-content-end">
+          <div className=" col-4 d-flex py-2 justify-content-center">
+          <MyPagination
+           total={alldepartmentdata?.length}
+           current={current}
+           showSizeChanger={true}
+           pageSize={pageSize}
+           onChange={(current, pageSize) => {
+             console.log("ggdhffs", current, pageSize);
+             setCurrent(current);
+             setPageSize(pageSize);
+           }}
+          />
+        </div>
+          <div className="col-4 d-flex justify-content-end">
             <Button btnType="add" onClick={() => setModalAddDept(true)}>
               Add Department
             </Button>

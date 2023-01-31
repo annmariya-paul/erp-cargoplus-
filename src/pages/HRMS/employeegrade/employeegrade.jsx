@@ -9,6 +9,7 @@ import PublicFetch from "../../../utils/PublicFetch";
 import { CRM_BASE_URL_HRMS } from "../../../api/bootapi";
 import { UniqueErrorMsg } from "../../../ErrorMessages/UniqueErrorMessage";
 import CheckUnique from "../../../check Unique/CheckUnique";
+import MyPagination from "../../../components/Pagination/MyPagination";
 
 function Employeegrade() {
   const [searchedText, setSearchedText] = useState("");
@@ -274,8 +275,11 @@ function Employeegrade() {
               bordered={false}
               className="page_size_style"
               value={pageSize}
-              onChange={(e) => setPageSize(e)}
+              onChange={(e) => {
+                setCurrent(1)
+                setPageSize(e)}}
             >
+              
               <Select.Option value="25">
                 Show
                 <span className="vertical ms-1">|</span>
@@ -302,6 +306,20 @@ function Employeegrade() {
             custom_table_css="table_lead_list"
           />
         </div>
+       
+        <div className="d-flex py-2 justify-content-center">
+              <MyPagination
+                total={employeegradedata?.length}
+                current={current}
+                showSizeChanger={true}
+                pageSize={pageSize}
+                onChange={(current, pageSize) => {
+                  console.log("ggdhffs", current, pageSize);
+                  setCurrent(current);
+                  setPageSize(pageSize);
+                }}
+              />
+            </div>
 
         <Custom_model
           size={"sm"}

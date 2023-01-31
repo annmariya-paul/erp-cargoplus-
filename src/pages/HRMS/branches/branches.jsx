@@ -12,6 +12,7 @@ import { CRM_BASE_URL_HRMS } from "../../../api/bootapi";
 import PublicFetch from "../../../utils/PublicFetch";
 import { UniqueErrorMsg } from "../../../ErrorMessages/UniqueErrorMessage";
 import CheckUnique from "../../../check Unique/CheckUnique";
+import MyPagination from "../../../components/Pagination/MyPagination";
 
 // { Add and list Branches - Ann - 16/11/22 }
 export default function Branches(props) {
@@ -21,7 +22,10 @@ export default function Branches(props) {
   const [successPopup, setSuccessPopup] = useState(false);
  const [searchedText, setSearchedText] = useState("");
 const [modalAddBranch, setModalAddBranch] = useState(false);
+
 const [pageSize, setPageSize] = useState("25");
+const [current, setCurrent] = useState(1);
+
   const [branches, setBranches] = useState();
   const [Errormsg, setErrormsg] = useState();
   const [NameInput, setNameInput] = useState();
@@ -48,6 +52,10 @@ const [branchname, setBranchname] = useState();
         setSuccessPopup(false);
       }, time);
     }
+  };
+
+  const getData = (current, pageSize) => {
+    return branches?.slice((current - 1) * pageSize, current * pageSize);
   };
 
   //API for branches -- shahida 12.12.22
@@ -262,8 +270,11 @@ const [branchname, setBranchname] = useState();
               bordered={false}
               className="page_size_style"
               value={pageSize}
-              onChange={(e) => setPageSize(e)}
+              onChange={(e) => {
+                setCurrent(1);
+                setPageSize(e)}}
             >
+               
               <Select.Option value="25">
                 Show
                 <span className="vertical ms-1">|</span>
@@ -297,12 +308,26 @@ const [branchname, setBranchname] = useState();
         </div>
         <div className="datatable">
           <TableData
-           
-            data={branches}
+                data={getData(current, pageSize)}
+            // data={branches}
             columns={columns}
             custom_table_css="table_lead_list"
           />
         </div>
+        
+        <div className="d-flex py-2 justify-content-center">
+              <MyPagination
+                total={branches?.length}
+                current={current}
+                showSizeChanger={true}
+                pageSize={pageSize}
+                onChange={(current, pageSize) => {
+                  console.log("ggdhffs", current, pageSize);
+                  setCurrent(current);
+                  setPageSize(pageSize);
+                }}
+              />
+            </div>
       </div>
 
 {/* Modal for add Branch */}

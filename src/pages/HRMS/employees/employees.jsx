@@ -26,7 +26,7 @@ function Employees() {
   const[employeeGrade,setEmployeeGrade] = useState("");
   const[employeeType,setEmployeeType] = useState("");
   const [pageSize, setPageSize] = useState("25");
-  const [current, setCurrent] = useState("");
+  const [current, setCurrent] = useState(1);
   const [allEmployees, setAllEmployees] = useState([]);
  const [allbranches, setAllBranches] = useState();
   const [alldesgination, setAllDesignation] = useState();
@@ -38,6 +38,10 @@ function Employees() {
   const [newName, setNewName] = useState();
  const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
   
+
+ const getData = (current, pageSize) => {
+  return allEmployees?.slice((current - 1) * pageSize, current * pageSize);
+};
 
   //Columns
   const columns = [
@@ -357,15 +361,15 @@ function Employees() {
         </div>
         <div className="datatable">
           <TableData
-           
-            data={allEmployees}
+           data={getData(current,pageSize)}
+            // data={allEmployees}
             columns={columns}
             custom_table_css="table_lead_list"
           />
         </div>
         <div className="d-flex py-2 justify-content-center">
           <MyPagination
-           
+           total={allEmployees?.length}
             current={current}
             showSizeChanger={true}
             pageSize={pageSize}

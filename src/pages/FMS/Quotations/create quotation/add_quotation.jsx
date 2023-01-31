@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useCallback } from "react";
 import dayjs from "dayjs";
+import { cargo_typeoptions } from "../../../../utils/SelectOptions";
 import { DragOutlined, FontColorsOutlined } from "@ant-design/icons";
 import dragula from "dragula";
+import { CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
 import "dragula/dist/dragula.css";
+import { CRM_BASE_URL } from "../../../../api/bootapi";
 import TableData from "../../../../components/table/table_data";
 import { FaTrash } from "react-icons/fa";
 import { CRM_BASE_URL_FMS } from "../../../../api/bootapi";
@@ -21,6 +24,8 @@ import Input_Number from "../../../../components/InputNumber/InputNumber";
 
 export default function Add_Quotation(custom_table_css) {
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [cargooptions, setCargooptions] = useState(cargo_typeoptions);
+  console.log("cargo options : ", cargooptions);
   const today = new Date().toISOString().split("T")[0];
   const [date, setDate] = useState();
   const [addForm] = Form.useForm();
@@ -38,7 +43,7 @@ export default function Add_Quotation(custom_table_css) {
   const [tableData, setTableData] = useState(dataSource);
   const getIndexInParent = (el) =>
     Array.from(el.parentNode.children).indexOf(el);
-  const handleInputChange = (e, key, col,) => {
+  const handleInputChange = (e, key, col) => {
     setTableData(
       tableData.map((item) => {
         if (item.key === key) {
@@ -48,7 +53,7 @@ export default function Add_Quotation(custom_table_css) {
       })
     );
   };
-  const handleInputChange2 = (e, index, col,) => {
+  const handleInputChange2 = (e, index, col) => {
     setTableData(
       tableData.map((item) => {
         if (item.key === index.key) {
@@ -74,15 +79,14 @@ export default function Add_Quotation(custom_table_css) {
           totalamount: "",
         },
       ]);
-     
     }
-    console.log("tabledata",tableData)
+    console.log("tabledata", tableData);
     let sum = 0;
-    tableData.forEach((item)=>{
-      sum += item.cost + item.taxamount
-    })
-    console.log("sum",sum)
-    setTotal(sum)
+    tableData.forEach((item) => {
+      sum += item.cost + item.taxamount;
+    });
+    console.log("sum", sum);
+    setTotal(sum);
   };
 
   const handleReorder = (dragIndex, draggedIndex) => {
@@ -109,12 +113,26 @@ export default function Add_Quotation(custom_table_css) {
       handleReorder(start, end);
     });
   }, []);
+  const [noofItems, setNoofItems] = useState("25");
+  const [current, setCurrent] = useState(1);
+  const [totalCount, setTotalcount] = useState();
+  const pageofIndex = noofItems * (current - 1) - 1 + 1;
+  const pagesizecount = Math.ceil(totalCount / noofItems);
+  console.log("page number isss", pagesizecount);
+  useEffect(() => {
+    GetAllLeadData();
+  }, [noofItems, pageofIndex, pagesizecount]);
+
+  const numofItemsTo = noofItems * current;
 
   const [frighttype, setFrighttype] = useState();
   const [currencydata, setCurrencydata] = useState();
   const [carrierdata, setCarrierdata] = useState();
+  const [OpportunityList, setOpportunityList] = useState([]);
+  const [currentcount, setCurrentcount] = useState();
 
-
+  const [allLeadList, setAllLeadList] = useState([]);
+  console.log("Lead names :", allLeadList);
   const getallcarrier = async () => {
     try {
       const getcarrier = await PublicFetch.get(`${CRM_BASE_URL_FMS}/carrier`);
@@ -152,6 +170,7 @@ export default function Add_Quotation(custom_table_css) {
     getallfrighttype();
     getallcurrency();
     getallcarrier();
+    getallPaymentTerms();
   }, []);
 
   const handleDelete = (key) => {
@@ -159,9 +178,10 @@ export default function Add_Quotation(custom_table_css) {
     setTableData(newData);
   };
   const handleadd = (index) => {
-   console.log("hello",index);
-   
+    console.log("hello", index);
   };
+
+  
   const columns = [
     {
       title: "Action",
@@ -211,11 +231,18 @@ export default function Add_Quotation(custom_table_css) {
               value={index.tasks}
               onChange={(e) => handleInputChange(e, index.key, "tasks")}
             >
-              <Select.Option value="Airline">
-                FREIGHT CHARGES WITH EX WORK
-              </Select.Option>
-              <Select.Option value="Shipper">Shipper</Select.Option>
-              <Select.Option value="Road">Road</Select.Option>
+              {services &&
+                            services.length > 0 &&
+                            services.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  key={item.service_id}
+                                  value={item.service_id}
+                                >
+                                  {item.service_name}
+                                </Select.Option>
+                              );
+                            })}
             </SelectBox>
           </div>
         );
@@ -312,15 +339,14 @@ export default function Add_Quotation(custom_table_css) {
               className="text_right"
               // value={    index.totalamount=(index.cost + index.taxamount)
               // }
-              value={   index.cost + index.taxamount
-              }
+              value={index.cost + index.taxamount}
               onChange={(e) => handleInputChange2(e, index, "totalamount")}
               align="right"
               step={0.01}
               min={0}
               precision={2}
               controlls={false}
-              onKeyDown={(e) => handleEnter(e, index.key) }
+              onKeyDown={(e) => handleEnter(e, index.key)}
             />
           </div>
         );
@@ -331,13 +357,182 @@ export default function Add_Quotation(custom_table_css) {
   ];
 
   const [total, setTotal] = useState(0);
-  console.log("total ",total);
+  console.log("total ", total);
+  const GetAllLeadData = () => {
+    PublicFetch.get(
+      `${CRM_BASE_URL}/lead?startIndex=${pageofIndex}&noOfItems=${noofItems}`
+    )
+      .then((res) => {
+        if (res?.data?.success) {
+          console.log("All lead data", res?.data?.data);
+          // setAllLeadList(res?.data?.data?.leads);
+          setTotalcount(res?.data?.data?.totalCount);
+          setCurrentcount(res?.data?.data?.currentCount);
+          let array = [];
+          res?.data?.data?.leads?.forEach((item, index) => {
+            {
+              {
+                array.push({
+                  lead_id: item?.lead_id,
 
-  // useEffect(() => {
-  //   setTotal(tableData.reduce((acc, cur) =>
-  //   acc + cur.totalamount , 0));
-  // }
-  // , [tableData]);
+                  lead_customer_name: item?.lead_customer_name,
+                });
+                setAllLeadList(array);
+              }
+            }
+          });
+        } else {
+          console.log("FAILED T LOAD DATA");
+        }
+      })
+      .catch((err) => {
+        console.log("Errror while getting data", err);
+      });
+  };
+  const [allPaymentTerms, setAllPaymentTerms] = useState();
+  console.log("payment terms : ", allPaymentTerms);
+  const getallPaymentTerms = () => {
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/paymentTerms`)
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          console.log("successs", res.data.data);
+          setAllPaymentTerms(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+  const [allunit,setAllunit]=useState([]);
+
+  console.log("all units are : ",allunit);
+  const[unitTable,setunitTable]=useState("");
+  const getallunits=async ()=>{
+    try{
+    const  allunits =await PublicFetch.get(
+      `${CRM_BASE_URL_SELLING}/unit`)
+      console.log("all units are ::",allunits?.data?.data)
+    
+      // if(allunits?.data.success){}
+      setAllunit(allunits?.data?.data)
+      setunitTable(allunits?.data?.data)
+    }
+    catch(err) {
+    console.log("error to getting all units",err)
+    }
+    
+    }
+    
+    useEffect(()=>{
+      getallunits()
+    },[])
+    const [oppnew, setOppnew] = useState([]);
+    console.log("Opportunities are :::", oppnew);
+    const [oppleadid,setOppleadid]=useState();
+    console.log("Opportunities lead id :::", oppleadid);
+    const [numOfItems, setNumOfItems] = useState("25");
+    const GetOpportunityData = () => {
+      PublicFetch.get(
+        `${CRM_BASE_URL}/opportunity?startIndex=${pageofIndex}&noOfItems=${numOfItems}`
+      )
+        .then((res) => {
+          if (res?.data?.success) {
+            console.log("All opportunity dataqqq", res?.data?.data.leads);
+  
+            let tempArr = [];
+            res?.data?.data?.leads.forEach((item, index) => {
+              tempArr.push({
+                opportunity_id: item?.opportunity_id,
+                opportunity_number: item?.opportunity_number,
+                opportunity_type: item?.opportunity_type,
+                opportunity_party: item?.crm_v1_contacts?.contact_person_name,
+                opportunity_from: item?.opportunity_from,
+                lead_customer_name: item?.crm_v1_leads?.lead_customer_name,
+                opportunity_created_at: item?.opportunity_created_at,
+                opportunity_created_by: item?.opportunity_created_by,
+                opportunity_source: item?.opportunity_source,
+                opportunity_probability: item?.opportunity_probability,
+                opportunity_description: item?.opportunity_description,
+                opportunity_amount: item?.opportunity_amount,
+                opportunity_status: item?.opportunity_status,
+                lead_id:item?.crm_v1_leads?.lead_id,
+                assigned_employee: item?.assigned_employee,
+              });
+            });
+            console.log("hellooooqqqqq", tempArr);
+            setOppnew(tempArr);
+            setOppleadid( res?.data?.data?.leads?.opportunity_lead_id);
+            console.log("newwww",res?.data?.data?.leads?.opportunity_lead_id);
+            setOpportunityList(res?.data?.data?.leads);
+            setTotalcount(res?.data?.data?.totalCount);
+            console.log("totalcount iss", res?.data?.data?.totalCount);
+            // let samplearry = [];
+            // res?.data?.data?.leads.forEach((item, index) => {
+            //   samplearry.push(item.opportunity_id);
+            // });
+            // console.log("pushedd ", samplearry);
+  
+            // setOppurtunityid(samplearry);
+          } else {
+            console.log("Failed to load data !");
+          }
+        })
+        .catch((err) => {
+          console.log("Errror while getting data", err);
+        });
+    };
+  
+    useEffect(() => {
+      GetOpportunityData();
+    }, [pageofIndex, numOfItems]);
+    const [services, setServices] = useState([]);
+    console.log("Servicesss are :::", services);
+    const [allservices, setAllservices] = useState();
+
+    const getAllservices = () => {
+      PublicFetch.get(
+        `${CRM_BASE_URL_SELLING}/service?startIndex=${pageofIndex}&noOfItems=${numOfItems}`
+      )
+        .then((res) => {
+          console.log("all services is ", res.data.data);
+          if (res?.data?.success) {
+            console.log("All services dataawww", res?.data?.data?.services);
+            let tempArr = [];
+            res?.data?.data?.services.forEach((item, index) => {
+            tempArr.push({
+              service_id:item?.service_id,
+              service_name: item?.service_name,
+              service_category_id: item?.crm_v1_categories?.category_id,
+              service_category_name: item?.crm_v1_categories?.category_name,
+              service_code: item?.service_code,
+              service_pic: item?.service_pic,
+              service_hsn:item?.service_hsn,
+              service_taxrate:item?.service_taxrate,
+              service_description:item?.service_description,
+              service_category_name:item?.crm_v1_categories?.category_name
+              
+            });
+          });
+            console.log("hellooooqqqqq", tempArr);
+            setServices(tempArr);
+  
+            setAllservices(res?.data?.data.services);
+            setTotalcount(res?.data?.data?.totalCount);
+            // setCurrentcount(res?.data?.data?.currentCount);
+          } else {
+            console.log("FAILED T LOAD DATA");
+          }
+        })
+        .catch((err) => {
+          console.log("Errror while getting data", err);
+        });
+    };
+  
+    useEffect(() => {
+      getAllservices();
+    }, [numOfItems, pageofIndex]);
+
   return (
     <>
       <div className="container-fluid">
@@ -348,7 +543,7 @@ export default function Add_Quotation(custom_table_css) {
             </div>
           </div>
 
-          <div className="content-tabs" style={{ maxHeight: "2000px" }}>
+          <div className="content-tabs">
             <Form
               form={addForm}
               onFinish={(values) => {
@@ -361,7 +556,7 @@ export default function Add_Quotation(custom_table_css) {
               <div className="container mb-4">
                 <div className="row">
                   <div className="row ">
-                    <div className="col-xl-3 col-sm-6 mt-2">
+                    {/* <div className="col-xl-3 col-sm-6 mt-2">
                       <label>Quotation No</label>
                       <Form.Item
                         name="quotation_no"
@@ -375,7 +570,7 @@ export default function Add_Quotation(custom_table_css) {
                       >
                         <InputType />
                       </Form.Item>
-                    </div>
+                    </div> */}
                     <div className="col-xl-3 col-sm-6 mt-2">
                       <label>Quotation date</label>
                       <Form.Item
@@ -404,17 +599,18 @@ export default function Add_Quotation(custom_table_css) {
                       <label>Validity date</label>
                       <Form.Item
                         name="vdate"
-                        rules={[
-                          {
-                            required: true,
-                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                            message: "Please enter a Valid value",
-                          },
-                        ]}
+                        // rules={[
+                        //   {
+                        //     required: true,
+                        //     pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                        //     message: "Please enter a Valid value",
+                        //   },
+                        // ]}
                       >
                         <DatePicker
                           style={{ borderWidth: 0, marginTop: 10 }}
                           disabledDate={(d) => !d || d.isBefore(today)}
+                          format={dateFormatList}
                           onChange={(e) => {
                             console.log("date mmm", e);
                             setDate(e);
@@ -422,6 +618,37 @@ export default function Add_Quotation(custom_table_css) {
                         />
                       </Form.Item>
                     </div>
+                    <div className="col-xl-3 col-sm-6 mt-2">
+                      <label>Enquiry No</label>
+                      <Form.Item
+                        name="eno"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please select a Type",
+                          },
+                        ]}
+                      >
+                        <SelectBox
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
+                        >
+                            {oppnew &&
+                            oppnew.length > 0 &&
+                            oppnew.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  key={item.opportunity_id}
+                                  value={item.opportunity_id}
+                                >
+                                  {item.opportunity_number}
+                                </Select.Option>
+                              );
+                            })}
+                        </SelectBox>
+                      </Form.Item>
+                    </div> 
 
                     <div className="col-xl-3 col-sm-6 mt-2">
                       <label>Consignee</label>
@@ -439,8 +666,18 @@ export default function Add_Quotation(custom_table_css) {
                           showSearch
                           optionFilterProp="children"
                         >
-                          <Select.Option value="A">Test</Select.Option>
-                          <Select.Option value="B">Demo</Select.Option>
+                          {allLeadList &&
+                            allLeadList.length > 0 &&
+                            allLeadList.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  key={item.lead_id}
+                                  value={item.lead_id}
+                                >
+                                  {item.lead_customer_name}
+                                </Select.Option>
+                              );
+                            })}
                         </SelectBox>
                       </Form.Item>
                     </div>
@@ -461,7 +698,7 @@ export default function Add_Quotation(custom_table_css) {
                       </Form.Item>
                     </div>
 
-                    <div className="col-xl-3 col-sm-6 mt-2">
+                    {/* <div className="col-xl-3 col-sm-6 mt-2">
                       <label> Origin Agent</label>
                       <Form.Item
                         name="OrginAgent"
@@ -503,7 +740,7 @@ export default function Add_Quotation(custom_table_css) {
                           <Select.Option value="B">Demo</Select.Option>
                         </SelectBox>
                       </Form.Item>
-                    </div>
+                    </div> */}
 
                     <div className="col-xl-3 col-sm-6 mt-2">
                       <label>Freight Type</label>
@@ -553,8 +790,15 @@ export default function Add_Quotation(custom_table_css) {
                           showSearch
                           optionFilterProp="children"
                         >
-                          <Select.Option value="S">Test</Select.Option>
-                          <Select.Option value="A">Data</Select.Option>
+                          {cargooptions &&
+                            cargooptions.length > 0 &&
+                            cargooptions.map((item, index) => {
+                              return (
+                                <Select.Option key={item.id} value={item.id}>
+                                  {item.name}
+                                </Select.Option>
+                              );
+                            })}
                         </SelectBox>
                       </Form.Item>
                     </div>
@@ -575,9 +819,9 @@ export default function Add_Quotation(custom_table_css) {
                           showSearch
                           optionFilterProp="children"
                         >
-                          <Select.Option value="S">Shipment</Select.Option>
-                          <Select.Option value="B">Cargo</Select.Option>
-                          <Select.Option value="C">Airline</Select.Option>
+                          <Select.Option value="A">Air</Select.Option>
+                          <Select.Option value="S">Sea</Select.Option>
+                          <Select.Option value="R">Road</Select.Option>
                         </SelectBox>
                       </Form.Item>
                     </div>
@@ -673,8 +917,18 @@ export default function Add_Quotation(custom_table_css) {
                           showSearch
                           optionFilterProp="children"
                         >
-                          <Select.Option value="A">Test</Select.Option>
-                          <Select.Option value="B">Demo</Select.Option>
+                          {allPaymentTerms &&
+                            allPaymentTerms.length > 0 &&
+                            allPaymentTerms.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  key={item.payment_term_id}
+                                  value={item.payment_term_id}
+                                >
+                                  {item.payment_term_name}
+                                </Select.Option>
+                              );
+                            })}
                         </SelectBox>
                       </Form.Item>
                     </div>
@@ -712,12 +966,80 @@ export default function Add_Quotation(custom_table_css) {
                           showSearch
                           optionFilterProp="children"
                         >
-                          <Select.Option value="A">Test</Select.Option>
-                          <Select.Option value="B">Demo</Select.Option>
+                          {allunit &&
+                            allunit.length > 0 &&
+                            allunit.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  value={item.unit_id}
+                                  key={item.unit_id}
+                                >
+                                  {item.unit_name}
+                                </Select.Option>
+                              );
+                            })}
                         </SelectBox>
                       </Form.Item>
                     </div>
 
+                    <div className="col-xl-3 col-sm-6 mt-2">
+                      <label>Currency</label>
+                      <Form.Item
+                        name="currency"
+                        rules={[
+                          {
+                            required: true,
+                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                            message: "Please enter a Valid value",
+                          },
+                        ]}
+                      >
+                        <SelectBox
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
+                        >
+                          {currencydata &&
+                            currencydata.length > 0 &&
+                            currencydata.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  value={item.currency_id}
+                                  key={item.currency_id}
+                                >
+                                  {item.currency_name}
+                                </Select.Option>
+                              );
+                            })}
+                        </SelectBox>
+                      </Form.Item>
+                    </div>
+                  
+
+                    <div className="col-xl-3 col-sm-6 mt-2">
+                      <label>Exchange Rate</label>
+                      <Form.Item
+                        name="exchnagerate"
+                        rules={[
+                          {
+                            required: true,
+                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                            message: "Please enter a Valid value",
+                          },
+                        ]}
+                      >
+                        <Input_Number
+                          className="text_right"
+                          // value={amount}
+                          // onChange={handleChange}
+                          align="right"
+                          step={0.01}
+                          min={0}
+                          precision={2}
+                          controlls={false}
+                        />
+                      </Form.Item>
+                    </div>
                     <div className="col-xl-3 col-sm-6 mt-2">
                       <label>Gross Weight</label>
                       <Form.Item
@@ -767,104 +1089,57 @@ export default function Add_Quotation(custom_table_css) {
                         />
                       </Form.Item>
                     </div>
+                   
+                    <div className="col-6 ">
+                      <label>Add Attachments</label>
+                      <Form.Item className="mt-2" name="new">
+                        <FileUpload
+                          multiple
+                          listType="picture"
+                          accept=".png,.jpeg,.jpg"
+                          // onPreview={handlePreview}
+                          beforeUpload={false}
+                          onChange={(file) => {
+                            console.log("Before upload", file.file);
+                            console.log(
+                              "Before upload file size",
+                              file.file.size
+                            );
 
-                    <div className="col-xl-3 col-sm-6 mt-2">
-                      <label>Currency</label>
-                      <Form.Item
-                        name="currency"
-                        rules={[
-                          {
-                            required: true,
-                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                            message: "Please enter a Valid value",
-                          },
-                        ]}
-                      >
-                        <SelectBox
-                          allowClear
-                          showSearch
-                          optionFilterProp="children"
-                        >
-                          {currencydata &&
-                            currencydata.length > 0 &&
-                            currencydata.map((item, index) => {
-                              return (
-                                <Select.Option
-                                  value={item.currency_id}
-                                  key={item.currency_id}
-                                >
-                                  {item.currency_name}
-                                </Select.Option>
+                            if (
+                              file.file.size > 2000 &&
+                              file.file.size < 500000
+                            ) {
+                              // setImg(file.file.originFileObj);
+                              console.log(
+                                "selet imggg",
+                                file.file.originFileObj
                               );
-                            })}
-                        </SelectBox>
-                      </Form.Item>
-                    </div>
-
-                    <div className="col-xl-3 col-sm-6 mt-2">
-                      <label>Exchange Rate</label>
-                      <Form.Item
-                        name="exchnagerate"
-                        rules={[
-                          {
-                            required: true,
-                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                            message: "Please enter a Valid value",
-                          },
-                        ]}
-                      >
-                        <Input_Number
-                          className="text_right"
-                          // value={amount}
-                          // onChange={handleChange}
-                          align="right"
-                          step={0.01}
-                          min={0}
-                          precision={2}
-                          controlls={false}
+                              // setImageSize(false);
+                            } else {
+                              // setImageSize(true);
+                              console.log(
+                                "Error in upload, upload image size between 1 kb and  500 kb"
+                              );
+                            }
+                          }}
                         />
                       </Form.Item>
                     </div>
                   </div>
                 </div>
               </div>
-              <div className="row justify-content-center">
-                <div className="col-6 ">
-                  <label>Add Attachments</label>
-                  <Form.Item className="mt-2" name="new">
-                    <FileUpload
-                      multiple
-                      listType="picture"
-                      accept=".png,.jpeg,.jpg"
-                      // onPreview={handlePreview}
-                      beforeUpload={false}
-                      onChange={(file) => {
-                        console.log("Before upload", file.file);
-                        console.log("Before upload file size", file.file.size);
-
-                        if (file.file.size > 2000 && file.file.size < 500000) {
-                          // setImg(file.file.originFileObj);
-                          console.log("selet imggg", file.file.originFileObj);
-                          // setImageSize(false);
-                        } else {
-                          // setImageSize(true);
-                          console.log(
-                            "Error in upload, upload image size between 1 kb and  500 kb"
-                          );
-                        }
-                      }}
-                    />
-                  </Form.Item>
-                </div>
-              </div>
+              {/* <div className="row justify-content-center">
+             
+              </div> */}
 
               <div className="row">
                 <div className="datatable">
-                  <div
-                    className={`row mt-2 mx-3 qtable_data ${custom_table_css}`}
-                  >
-                    <TableData data={tableData} columns={columns} />
-                  </div>
+                  <TableData
+                    data={tableData}
+                    columns={columns}
+                    custom_table_css="table_qtn"
+                  />
                 </div>
               </div>
               <div className="d-flex justify-content-end mt-4 mx-5">
@@ -873,15 +1148,11 @@ export default function Add_Quotation(custom_table_css) {
                 </div>
 
                 <div className="col-lg-2 col-sm-2 col-xs-2">
-                  <Form.Item
-                   
-                  >
-                    <Input_Number 
-              
+                  <Form.Item>
+                    <Input_Number
                       className="text_right"
                       value={total}
                       fontWeight={1000}
-                   
                       // onChange={handleChange}
                       align="right"
                       step={0.01}

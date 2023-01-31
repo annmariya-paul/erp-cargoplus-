@@ -30,6 +30,10 @@ tbody,  tfoot, th, thead, tr {
   }
  
 }
+.table_qtn {
+  // height: 300px !important;
+  overflow-y: scroll !important;
+}
 
 .tborder{
   border: 1px solid rgb(212, 208, 208);
@@ -157,4 +161,21 @@ th {
   right: 0;
   height: 50px;
   /* other styles */
+}
+@media screen and ( max-width:570px){
+.content-tabs{
+  height: fit-content;
+}
+
+};
+  
+.assign_btn{
+  padding-inline: 5px !important;
+  padding-block:2px !important;
+  margin: 1px;
+}
+.view_btn{
+   padding-inline: 10px !important;
+  padding-block:2px !important;
+  margin: 1px;
 }

@@ -14,6 +14,7 @@ import { CRM_BASE_URL_HRMS } from "../../../api/bootapi";
 import PublicFetch from "../../../utils/PublicFetch";
 import { UniqueErrorMsg } from "../../../ErrorMessages/UniqueErrorMessage";
 import CheckUnique from "../../../check Unique/CheckUnique";
+import MyPagination from "../../../components/Pagination/MyPagination";
 
 // { Add and list Designation - Ann - 15/11/22 }
 export default function Designation() {
@@ -333,13 +334,16 @@ export default function Designation() {
           </div>
         </div>
         <div className="row my-3">
-          <div className="col-3 px-3">
+          <div className="col-4 px-3">
             <Select
               bordered={false}
               className="page_size_style"
               value={pageSize}
-              onChange={(e) => setPageSize(e)}
+              onChange={(e) => {
+                setCurrent(1)
+                setPageSize(e)}}
             >
+              
               <Select.Option value="25">
                 Show
                 <span className="vertical ms-1">|</span>
@@ -357,6 +361,20 @@ export default function Designation() {
               </Select.Option>
             </Select>
           </div>
+          <div className="col-4 d-flex  justify-content-center">
+              <MyPagination
+                total={desigtiondata?.length}
+                current={current}
+                showSizeChanger={true}
+                pageSize={pageSize}
+                onChange={(current, pageSize) => {
+                  console.log("ggdhffs", current, pageSize);
+                  setCurrent(current);
+                  setPageSize(pageSize);
+                }}
+              />
+            </div>
+            <div className="col-4"></div>
         </div>
         <div className="datatable">
           <TableData
@@ -367,6 +385,19 @@ export default function Designation() {
             custom_table_css="table_lead_list"
           />
         </div>
+        <div className="d-flex py-2 justify-content-center">
+              <MyPagination
+                total={desigtiondata?.length}
+                current={current}
+                showSizeChanger={true}
+                pageSize={pageSize}
+                onChange={(current, pageSize) => {
+                  console.log("ggdhffs", current, pageSize);
+                  setCurrent(current);
+                  setPageSize(pageSize);
+                }}
+              />
+            </div>
 
         <Custom_model
           size={"sm"}

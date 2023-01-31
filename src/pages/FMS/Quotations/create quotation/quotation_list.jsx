@@ -4,22 +4,20 @@ import Button from "../../../../components/button/button";
 import InputType from "../../../../components/Input Type textbox/InputType";
 import ErrorMsg from "../../../../components/error/ErrorMessage";
 import Custom_model from "../../../../components/custom_modal/custom_model";
-import {Link, useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { MdPageview } from "react-icons/md";
-import { Form,Input,Select,DatePicker} from "antd";
+import { Form, Input, Select, DatePicker } from "antd";
 import TableData from "../../../../components/table/table_data";
-import { FaEdit,FaTrash } from "react-icons/fa";
+import { FaEdit, FaTrash } from "react-icons/fa";
 import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
-import {ROUTES} from "../../../../routes";
+import { ROUTES } from "../../../../routes";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { FiEdit } from "react-icons/fi";
 import CustomModel from "../../../../components/custom_modal/custom_model";
 
-import { CRM_BASE_URL_HRMS } from "../../../../api/bootapi";
-
+import { CRM_BASE_URL_HRMS, CRM_BASE_URL_FMS } from "../../../../api/bootapi";
 
 export default function Quotations(props) {
-
   const navigate = useNavigate();
   const [addForm] = Form.useForm();
   const [error, setError] = useState(false);
@@ -30,12 +28,13 @@ export default function Quotations(props) {
   const [modalAddFright, setModalAddFright] = useState(false);
 
   const [pageSize, setPageSize] = useState("25");
- 
+
   const [Errormsg, setErrormsg] = useState();
   const [NameInput, setNameInput] = useState();
   const [CodeInput, setCodeInput] = useState();
+  const [AllQuotations, setAllQuotations] = useState();
   //  const [showViewModal, setShowViewModal] = useState(false);
- 
+
   const [editForm] = Form.useForm();
   const close_modal = (mShow, time) => {
     if (!mShow) {
@@ -44,12 +43,10 @@ export default function Quotations(props) {
       }, time);
     }
   };
-  
+
   const [date, setDate] = useState();
   console.log(date);
   const today = new Date().toISOString().split("T")[0];
-  
-
 
   const columns = [
     {
@@ -58,7 +55,7 @@ export default function Quotations(props) {
       key: "key",
       width: "10%",
       render: (data, index) => {
-        console.log("index is :",index);
+        console.log("index is :", index);
         return (
           <div className="d-flex justify-content-center align-items-center gap-2 me-2">
             <div
@@ -67,14 +64,16 @@ export default function Quotations(props) {
                 navigate(`/edit_quotation`);
               }}
             >
-              <FaEdit style={{ marginLeft: 15}}/>
+              <FaEdit style={{ marginLeft: 15 }} />
             </div>
             <div
               className="viewIcon m-0"
-                onClick={() => {navigate(`/view_quotation`)}}
-                // onClick={()=>{
-                //   setShowViewModal(true);
-                // }}
+              onClick={() => {
+                navigate(`/view_quotation`);
+              }}
+              // onClick={()=>{
+              //   setShowViewModal(true);
+              // }}
             >
               <MdPageview style={{ marginLeft: 15, marginRight: 15 }} />
             </div>
@@ -92,9 +91,7 @@ export default function Quotations(props) {
       key: "qno",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.qno)
-          .toLowerCase()
-          .includes(value.toLowerCase());
+        return String(record.qno).toLowerCase().includes(value.toLowerCase());
       },
       align: "center",
     },
@@ -105,70 +102,103 @@ export default function Quotations(props) {
       align: "center",
     },
     {
-        title: "VALIDITY",
-        dataIndex: "validity",
-        key: "validity",
-        align: "center",
+      title: "VALIDITY",
+      dataIndex: "validity",
+      key: "validity",
+      align: "center",
+    },
+    {
+      title: "CONSIGNEE",
+      dataIndex: "consignee",
+      key: "consignee",
+      align: "center",
+    },
+    {
+      title: "SHIPPER",
+      dataIndex: "shipper",
+      key: "shipper",
+      align: "center",
+    },
+    {
+      title: "STATUS",
+      dataIndex: "status",
+      key: "status",
+      align: "center",
+    },
+    {
+      title: "",
+      dataIndex: "assign",
+      key: "assign",
+      align: "center",
+      render: (data, index) => {
+        return (
+          <>
+            {index.assigned_employee && index.assigned_employee.length > 0 ? (
+              <div className="">
+                <Button btnType="add" className="me-1 view_btn">
+                  view
+                </Button>
+              </div>
+            ) : (
+              <div className="">
+                <Button
+                  btnType="add"
+                  className="me-1 view_btn"
+                  onClick={() => {
+                    navigate(`${ROUTES.ASSIGN_QUOTATION}/${index.id}`);
+                  }}
+                >
+                  Assign
+                </Button>
+              </div>
+            )}
+          </>
+        );
       },
-      {
-        title: "CONSIGNEE",
-        dataIndex: "consignee",
-        key: "consignee",
-        align: "center",
-      },
-      {
-        title: "SHIPPER",
-        dataIndex: "shipper",
-        key: "shipper",
-        align: "center",
-      },
-      {
-        title: "STATUS",
-        dataIndex: "status",
-        key: "status",
-        align: "center",
-      },
-
+    },
   ];
 
   const data = [
     {
-      qno: "1",
-       date: "4-01-2023",
-       validity:"test",
-       consignee:"xyz",
-       shipper:"new",
-       status:"data",
+      id: "1",
+      date: "4-01-2023",
+      validity: "test",
+      consignee: "xyz",
+      shipper: "new",
+      status: "data",
 
-       key: "1",
+      key: "1",
     },
     {
-      qno: "2",
+      id: "2",
       date: "22-01-2023",
-      validity:"test",
-      consignee:"xyz",
-      shipper:"new",
-      status:"data",
+      validity: "test",
+      consignee: "xyz",
+      shipper: "new",
+      status: "data",
 
-       key: "2",
+      key: "2",
     },
-   
-  ];  
+  ];
 
+  const getAllQuotation = () => {
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/quotation`)
+      .then((res) => {
+        console.log("Response", res);
+        if (res.data.success) {
+          console.log("success", res.data.data);
+          setAllQuotations(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
 
+  useEffect(() => {
+    getAllQuotation();
+  }, []);
 
-
-
-  
-
-
-
-
-
-
-  
-
-  
   return (
     <>
       <div className="container-fluid container2 pt-3">
@@ -194,7 +224,7 @@ export default function Quotations(props) {
           </div>
         </div>
         <div className="row my-3">
-          <div className="col-3 px-3">
+          <div className="col-xl-3 col-lg-3 col-sm-12 px-3">
             <Select
               bordered={false}
               className="page_size_style"
@@ -218,19 +248,19 @@ export default function Quotations(props) {
               </Select.Option>
             </Select>
           </div>
-          <div className="col-9 d-flex justify-content-end">
-          <div className="col mb-2 px-4">
-            <Link to={ROUTES.ADD_QUOTATION} style={{ color: "white" }}>
-              <Button btnType="add">Add Quotations</Button>
-            </Link>
-          </div>
-           
+          <div className="col-xl-1 col-lg-1 col-sm-12 p-1"></div>
+          <div className="col-xl-8 col-lg-8 col-sm-12 d-flex justify-content-end">
+            <div className="col mb-2 px-4">
+              <Link to={ROUTES.ADD_QUOTATION} style={{ color: "white" }}>
+                <Button btnType="add">Add Quotations</Button>
+              </Link>
+            </div>
           </div>
         </div>
         <div className="datatable">
           <TableData
             // data={getData(numofItemsTo, pageofIndex)}
-           
+
             data={data}
             columns={columns}
             custom_table_css="table_lead_list"
@@ -392,18 +422,13 @@ export default function Quotations(props) {
         }
       /> */}
 
-
-     
-
-
-       
-          <CustomModel
+      <CustomModel
         size={"sm"}
         show={successPopup}
         onHide={() => setSuccessPopup(false)}
         success
       />
-      {error? <ErrorMsg code={"500"} /> : " "}
+      {error ? <ErrorMsg code={"500"} /> : " "}
     </>
   );
 }

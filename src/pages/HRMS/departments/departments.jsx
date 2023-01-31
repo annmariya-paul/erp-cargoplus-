@@ -26,7 +26,7 @@ export default function Departments(props) {
   const [deptName, setDeptName] = useState();
   const [deptCode, setDeptCode] = useState();
   const [pageSize, setPageSize] = useState("25");
-  const [current, setCurrent] = useState("");
+  const [current, setCurrent] = useState(1);
   const [alldepartmentdata, setAllDepartmentData] = useState();
   const [showEditModal, setShowEditModal] = useState();
   const [department_id, setDepartment_id] = useState();
@@ -44,6 +44,10 @@ export default function Departments(props) {
         setSuccessModal(false);
       }, time);
     }
+  };
+
+  const getData = (current, pageSize) => {
+    return alldepartmentdata?.slice((current - 1) * pageSize, current * pageSize);
   };
 
   useEffect(() => {
@@ -67,9 +71,10 @@ export default function Departments(props) {
         if (res.data.success) {
           console.log("success ", res.data.success);
           setSuccessModal(true);
+          getAllDepartments();
           close_modal(successModal, 1000);
           setModalAddDept(false);
-          getAllDepartments();
+          
         }
       })
       .catch((err) => {
@@ -81,7 +86,7 @@ export default function Departments(props) {
   const getAllDepartments = () => {
     PublicFetch.get(`${CRM_BASE_URL_HRMS}/departments`)
       .then((res) => {
-        console.log("response", res);
+        console.log("all dept response", res.data.data);
         if (res.data.success) {
           setAllDepartmentData(res.data.data);
         }
@@ -174,9 +179,7 @@ export default function Departments(props) {
   //   }
   // };
 
-  const getData = (current, pageSize) => {
-    return data?.slice((current - 1) * pageSize, current * pageSize);
-  };
+
   const columns = [
     {
       title: "ACTION",
@@ -271,8 +274,11 @@ export default function Departments(props) {
               bordered={false}
               className="page_size_style"
               value={pageSize}
-              onChange={(e) => setPageSize(e)}
+              onChange={(e) => {
+                setCurrent(1);
+                setPageSize(e)}}
             >
+               
               <Select.Option value="25">
                 Show
                 <span className="vertical ms-1">|</span>
@@ -298,22 +304,23 @@ export default function Departments(props) {
         </div>
         <div className="datatable">
           <TableData
-            // data={getData(current, pageSize)}
-            data={alldepartmentdata}
+            data={getData(current, pageSize)}
+            // data={alldepartmentdata}
             columns={columns}
             custom_table_css="table_lead_list"
           />
         </div>
         <div className="d-flex py-2 justify-content-center">
           <MyPagination
-            total={data.length}
-            current={current}
-            showSizeChanger={true}
-            pageSize={pageSize}
-            onChange={(current, pageSize) => {
-              setCurrent(current);
-              setPageSize(pageSize);
-            }}
+           total={alldepartmentdata?.length}
+           current={current}
+           showSizeChanger={true}
+           pageSize={pageSize}
+           onChange={(current, pageSize) => {
+             console.log("ggdhffs", current, pageSize);
+             setCurrent(current);
+             setPageSize(pageSize);
+           }}
           />
         </div>
       </div>

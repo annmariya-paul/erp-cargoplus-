@@ -21,7 +21,7 @@ function Login() {
       const logeduser = PublicFetch.post(
         `${process.env.REACT_APP_BASE_URL}/auth/login`,
         {
-          user_name: username,
+          user_email: username,
           user_password: password,
         }
       ).then((res) => {
@@ -88,11 +88,11 @@ function Login() {
                   <h3>LOGIN</h3>
                   <label>User Name</label>
                   <Form.Item
-                    name="user_name"
+                    name="user_email"
                     rules={[
                       {
                         required: true,
-                        pattern: new RegExp("^[A-Za-z]+$"),
+                        // pattern: new RegExp("^[A-Za-z]+$"),
                         message: "Please enter a valid User Name",
                       },
                     ]}

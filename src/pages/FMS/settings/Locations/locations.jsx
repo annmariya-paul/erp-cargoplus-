@@ -68,7 +68,18 @@ export default function Locations() {
     try {
       const locations = await PublicFetch.get(`${CRM_BASE_URL_FMS}/locations`);
       console.log("all locations are", locations.data.data);
-      setAllLocations(locations.data.data);
+      // setAllLocations(locations.data.data);
+      let temp = [];
+      locations.data.data.forEach((item,index)=>{
+        temp.push({
+          location_id: item.location_id,
+          location_code: item.location_code,
+          location_name: item.location_name,
+          location_type: item.location_type,
+          location_country: item.countries.country_name,
+        });
+        setAllLocations(temp);
+      })
     } catch (err) {
       console.log("error while getting the locations: ", err);
     }

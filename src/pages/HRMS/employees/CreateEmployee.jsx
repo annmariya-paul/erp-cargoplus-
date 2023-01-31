@@ -148,240 +148,269 @@ function CreateEmployee() {
 
   return (
     <div>
-      <div className="container p-3">
-        <div className="">
-          <h3 style={{ color: "#0891d1" }}>Add Employee</h3>
-          <div className="row">
-            <div className="col-12 my-3">
-              <div className="card p-4 border-0 shadow-sm">
-                <Form
-                  onFinish={(value) => {
-                    console.log("success of create", value);
-                    CreateEmployee(value);
-                  }}
-                >
-                  <div className="">
-                    <div className="row">
-                      <div className="col-6">
-                        <div className="">
-                          <label>Employee Name</label>
-                          <Form.Item
-                            name="employee_name"
-                            rules={[
-                              {
-                                required: true,
-                                message: "Employee Name is Required",
-                              },
-                              {
-                                min: 2,
-                                message: "Required Minimum 2 characters",
-                              },
-                              {
-                                max: 100,
-                                message: "Required Maximum 100 chraraters ",
-                              },
-                            ]}
-                          >
-                            <InputType />
-                          </Form.Item>
-                        </div>
+      <div className="container p-2">
+        <div className="row ps-3">
+          <h4 className="lead_text">Add Employee</h4>
+        </div>
+        <div className="row">
+          <div className="col-12 ">
+            <div className="card p-4 border-0 shadow-sm">
+              <Form
+                onFinish={(value) => {
+                  console.log("success of create", value);
+                  CreateEmployee(value);
+                }}
+              >
+                <div className="row">
+                  <div className="col-sm-6">
+                    <label>Employee Name</label>
+                    <Form.Item
+                      name="employee_name"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Employee Name is Required",
+                        },
+                        {
+                          min: 2,
+                          message: "Required Minimum 2 characters",
+                        },
+                        {
+                          max: 100,
+                          message: "Required Maximum 100 chraraters ",
+                        },
+                      ]}
+                    >
+                      <InputType />
+                    </Form.Item>
+                  </div>
+                  <div className="col-sm-6">
+                    <label>Employee Code</label>
+                    <Form.Item
+                      name="employee_code"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Employee Code is Required",
+                        },
+                      ]}
+                    >
+                      <InputType
+                        onChange={(e) => {
+                          setEmployeeCode(e.target.value);
+                          setuniqueCode(false);
+                        }}
+                        // onBlur={(e) => {
+                        //   // checkemployeeCodeis();
+                        // }}
+                        // type=employeecode&value=${employeeCode}`
+                        onBlur={async () => {
+                          // checkAttributeNameis();
+                          let a = await CheckUnique({
+                            type: "employeecode",
+                            value: employeeCode,
+                          });
+                          console.log("hai how are u", a);
+                          setuniqueCode(a);
+                        }}
+                      />
+                    </Form.Item>
+                    {uniqueCode ? (
+                      <p style={{ color: "red", marginTop: "-24px" }}>
+                        Employee code {uniqueErrMsg.UniqueErrName}
+                      </p>
+                    ) : null}
+                  </div>
+                  <div className="col-sm-6">
+                    <label>Employee Branch</label>
+                    <Form.Item
+                      name="employee_branch"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Employee branch is Required",
+                        },
+                      ]}
+                    >
+                      <SelectBox>
+                        {allbranches &&
+                          allbranches.length > 0 &&
+                          allbranches.map((item, index) => {
+                            return (
+                              <Select.Option
+                                key={item.branch_id}
+                                value={item.branch_id}
+                              >
+                                {item.branch_name}
+                              </Select.Option>
+                            );
+                          })}
+                      </SelectBox>
+                    </Form.Item>
+                  </div>
+                  <div className="col-sm-6">
+                    <label>Employee Department</label>
+                    <Form.Item
+                      name="employee_department"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Employee Department is Required",
+                        },
+                      ]}
+                    >
+                      <SelectBox>
+                        {alldespartment &&
+                          alldespartment.length > 0 &&
+                          alldespartment.map((item, index) => {
+                            return (
+                              <Select.Option
+                                key={item.department_id}
+                                value={item.department_id}
+                              >
+                                {item.department_name}
+                              </Select.Option>
+                            );
+                          })}
+                      </SelectBox>
+                    </Form.Item>
+                  </div>
+                  <div className="col-sm-6">
+                    <label>Employee Designation</label>
+                    <Form.Item
+                      name="employee_designation"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Employee Designation is Required",
+                        },
+                      ]}
+                    >
+                      <SelectBox>
+                        {alldesgination &&
+                          alldesgination.length > 0 &&
+                          alldesgination.map((item, index) => {
+                            return (
+                              <Select.Option
+                                key={item.designation_id}
+                                value={item.designation_id}
+                              >
+                                {item.designation_name}
+                              </Select.Option>
+                            );
+                          })}
+                      </SelectBox>
+                    </Form.Item>
+                  </div>
+                  <div className="col-sm-6">
+                    <label>Employee Type</label>
+                    <Form.Item
+                      name="employee_type"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Employee Type is Required",
+                        },
+                      ]}
+                    >
+                      <SelectBox>
+                        {allemptype &&
+                          allemptype.length > 0 &&
+                          allemptype.map((item, index) => {
+                            return (
+                              <Select.Option
+                                key={item.employment_type_id}
+                                value={item.employment_type_id}
+                              >
+                                {item.employment_type_name}
+                              </Select.Option>
+                            );
+                          })}
+                      </SelectBox>
+                    </Form.Item>
+                  </div>
+                  <div className="col-sm-6">
+                    <label>Employee Grade</label>
+                    <Form.Item
+                      name="employee_grade"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Employee Grade is Required",
+                        },
+                      ]}
+                    >
+                      <SelectBox>
+                        {allempgrade &&
+                          allempgrade.length > 0 &&
+                          allempgrade.map((item, index) => {
+                            return (
+                              <Select.Option
+                                key={item.employee_grade_id}
+                                value={item.employee_grade_id}
+                              >
+                                {item.employee_grade_name}
+                              </Select.Option>
+                            );
+                          })}
+                      </SelectBox>
+                    </Form.Item>
+                  </div>
+                  <div className="col-12">
+                    <div className="row login_border">
+                      {/* <div className="col-12 lead_text mb-2"> */}
+                      <h6 className="lead_text my-3">Login Info</h6>
+                      {/* </div> */}
+                      <div className="col-sm-6">
+                        <label>Email</label>
+                        <Form.Item
+                          // name="employee_email"
+                          // rules={[
+                          //   {
+                          //     required: true,
+                          //     pattern: new RegExp(
+                          //       "^[A-Za-z0-9_!#$%&'*+/=?`{|}~^.-]+@[A-Za-z0-9.-]+$"
+                          //     ),
+                          //     message: "Email is Required",
+                          //   },
+                          // ]}
+                        >
+                          <InputType />
+                        </Form.Item>
                       </div>
-                      <div className="col-6">
-                        <div className="">
-                          <label>Employee Code</label>
-                          <Form.Item
-                            name="employee_code"
-                            rules={[
-                              {
-                                required: true,
-                                message: "Employee Code is Required",
-                              },
-                            ]}
-                          >
-                            <InputType
-                              onChange={(e) => {
-                                setEmployeeCode(e.target.value);
-                                setuniqueCode(false);
-                              }}
-                              // onBlur={(e) => {
-                              //   // checkemployeeCodeis();
-                              // }}
-                              // type=employeecode&value=${employeeCode}`
-                              onBlur={ async () => {
-                                // checkAttributeNameis();
-                                let a = await CheckUnique({type:"employeecode",value:employeeCode})
-                                console.log("hai how are u", a)
-                                setuniqueCode(a)
-                              }}
-
-                            />
-                          </Form.Item>
-                          {uniqueCode ? (
-                            <p style={{ color: "red",marginTop:"-24px" }}>
-                            Employee code  {uniqueErrMsg.UniqueErrName}
-                            </p>
-                          ) : null}
-                        </div>
-                      </div>
-                      <div className="col-6">
-                        <div className="">
-                          <label>Employee Branch</label>
-                          <Form.Item
-                            name="employee_branch"
-                            rules={[
-                              {
-                                required: true,
-                                message: "Employee branch is Required",
-                              },
-                            ]}
-                          >
-                            <SelectBox>
-                              {allbranches &&
-                                allbranches.length > 0 &&
-                                allbranches.map((item, index) => {
-                                  return (
-                                    <Select.Option
-                                      key={item.branch_id}
-                                      value={item.branch_id}
-                                    >
-                                      {item.branch_name}
-                                    </Select.Option>
-                                  );
-                                })}
-                            </SelectBox>
-                          </Form.Item>
-                        </div>
-                      </div>
-                      <div className="col-6">
-                        <div className="">
-                          <label>Employee Department</label>
-                          <Form.Item
-                            name="employee_department"
-                            rules={[
-                              {
-                                required: true,
-                                message: "Employee Department is Required",
-                              },
-                            ]}
-                          >
-                            <SelectBox>
-                              {alldespartment &&
-                                alldespartment.length > 0 &&
-                                alldespartment.map((item, index) => {
-                                  return (
-                                    <Select.Option
-                                      key={item.department_id}
-                                      value={item.department_id}
-                                    >
-                                      {item.department_name}
-                                    </Select.Option>
-                                  );
-                                })}
-                            </SelectBox>
-                          </Form.Item>
-                        </div>
-                      </div>
-                      <div className="col-6">
-                        <div className="">
-                          <label>Employee Designation</label>
-                          <Form.Item
-                            name="employee_designation"
-                            rules={[
-                              {
-                                required: true,
-                                message: "Employee Designation is Required",
-                              },
-                            ]}
-                          >
-                            <SelectBox>
-                              {alldesgination &&
-                                alldesgination.length > 0 &&
-                                alldesgination.map((item, index) => {
-                                  return (
-                                    <Select.Option
-                                      key={item.designation_id}
-                                      value={item.designation_id}
-                                    >
-                                      {item.designation_name}
-                                    </Select.Option>
-                                  );
-                                })}
-                            </SelectBox>
-                          </Form.Item>
-                        </div>
-                      </div>
-                      <div className="col-6">
-                        <div className="">
-                          <label>Employee Type</label>
-                          <Form.Item
-                            name="employee_type"
-                            rules={[
-                              {
-                                required: true,
-                                message: "Employee Type is Required",
-                              },
-                            ]}
-                          >
-                            <SelectBox>
-                              {allemptype &&
-                                allemptype.length > 0 &&
-                                allemptype.map((item, index) => {
-                                  return (
-                                    <Select.Option
-                                      key={item.employment_type_id}
-                                      value={item.employment_type_id}
-                                    >
-                                      {item.employment_type_name}
-                                    </Select.Option>
-                                  );
-                                })}
-                            </SelectBox>
-                          </Form.Item>
-                        </div>
-                      </div>
-                      <div className="col-6">
-                        <div className="">
-                          <label>Employee Grade</label>
-                          <Form.Item
-                            name="employee_grade"
-                            rules={[
-                              {
-                                required: true,
-                                message: "Employee Grade is Required",
-                              },
-                            ]}
-                          >
-                            <SelectBox>
-                              {allempgrade &&
-                                allempgrade.length > 0 &&
-                                allempgrade.map((item, index) => {
-                                  return (
-                                    <Select.Option
-                                      key={item.employee_grade_id}
-                                      value={item.employee_grade_id}
-                                    >
-                                      {item.employee_grade_name}
-                                    </Select.Option>
-                                  );
-                                })}
-                            </SelectBox>
-                          </Form.Item>
-                        </div>
-                      </div>
-                      <div className="col-12">
-                        <div className="d-flex justify-content-center">
-                          <Button
-                            type="submit"
-                            className="p-2 save_button_style"
-                          >
-                            Save
-                          </Button>
-                        </div>
+                      <div className="col-sm-6">
+                        <label>Password</label>
+                        <Form.Item
+                          // name="employee_password"
+                          // rules={[
+                          //   {
+                          //     required: true,
+                          //     message: "Password is Required",
+                          //   },
+                          //   {
+                          //     min: 3,
+                          //     message: "Required Minimum 3 characters",
+                          //   },
+                          //   {
+                          //     max: 100,
+                          //     message: "Required Maximum 100 chraraters ",
+                          //   },
+                          // ]}
+                        >
+                          <InputType />
+                        </Form.Item>
                       </div>
                     </div>
                   </div>
-                </Form>
-              </div>
+                  <div className="col-12 mt-2">
+                    <div className="d-flex justify-content-center">
+                      <Button type="submit" className="p-2 save_button_style">
+                        Save
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </Form>
             </div>
           </div>
         </div>

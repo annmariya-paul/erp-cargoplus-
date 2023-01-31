@@ -376,7 +376,7 @@ function Employees() {
         </div>
         <div className="datatable">
           <TableData
-           data={getData(current,pageSize)}
+            data={getData(current, pageSize)}
             // data={allEmployees}
             columns={columns}
             custom_table_css="table_lead_list"
@@ -384,7 +384,7 @@ function Employees() {
         </div>
         <div className="d-flex py-2 justify-content-center">
           <MyPagination
-           total={allEmployees?.length}
+            total={allEmployees?.length}
             current={current}
             showSizeChanger={true}
             pageSize={pageSize}
@@ -398,11 +398,12 @@ function Employees() {
       <CustomModel
         width={650}
         show={modalEditEmployee}
+        bodyStyle={{height:"640px",overflowY:"scroll"}}
         onHide={() => setModalEditEmployee(false)}
         View_list
         list_content={
-          <div className="">
-            <h5 style={{ color: "#0891d1" }}>Edit Employee</h5>
+          <div>
+            <h5 className="lead_text">Edit Employee</h5>
             <div className="row">
               <div className="col-12 my-3">
                 <div className="px-2">
@@ -413,7 +414,6 @@ function Employees() {
                       updateEmployee();
                     }}
                   >
-                    <div className="">
                       <div className="row">
                         <div className="col-6">
                           <div className="">
@@ -435,14 +435,16 @@ function Employees() {
                                 },
                               ]}
                             >
-                              <InputType value={employeeName}
-                               onChange={(e) => setEmployeeName(e.target.value)}
-                                />
+                              <InputType
+                                value={employeeName}
+                                onChange={(e) =>
+                                  setEmployeeName(e.target.value)
+                                }
+                              />
                             </Form.Item>
                           </div>
                         </div>
                         <div className="col-6">
-                          <div className="">
                             <label>Employee Code</label>
                             <Form.Item
                               name="employee_code"
@@ -453,37 +455,31 @@ function Employees() {
                                 },
                               ]}
                             >
-                              <InputType 
-                              value={employeeCode}
-                              onChange={(e) => 
-                              {
-                                setEmployeeCode(e.target.value)
-                                setuniqueeditCode(false);
-                              }
-                              }
-                 
-
-                              onBlur={ async () => {
-                            
-                                if (newName !== employeeCode){
-                                  let a = await CheckUnique({type:"employeecode",value:employeeCode})
-                                  console.log("hai how are u", a)
-                                  setuniqueeditCode(a);
-                                 
-                                }
-                                
-                              }}
+                              <InputType
+                                value={employeeCode}
+                                onChange={(e) => {
+                                  setEmployeeCode(e.target.value);
+                                  setuniqueeditCode(false);
+                                }}
+                                onBlur={async () => {
+                                  if (newName !== employeeCode) {
+                                    let a = await CheckUnique({
+                                      type: "employeecode",
+                                      value: employeeCode,
+                                    });
+                                    console.log("hai how are u", a);
+                                    setuniqueeditCode(a);
+                                  }
+                                }}
                               />
                             </Form.Item>
                             {uniqueeditCode ? (
-                        <p style={{ color: "red", marginTop:"-24px" }} className="mb-2">
-                         Employee Code {uniqueErrMsg.UniqueErrName}
-                        </p>
-                      ) : null}
-                          </div>
+                              <p style={{ color: "red", marginTop: "-24px" }}>
+                                Employee Code {uniqueErrMsg.UniqueErrName}
+                              </p>
+                            ) : null}
                         </div>
                         <div className="col-6">
-                          <div className="">
                             <label>Employee Branch</label>
                             <Form.Item
                               name="employee_branch"
@@ -494,12 +490,11 @@ function Employees() {
                                 },
                               ]}
                             >
-                              <SelectBox 
-                               value={employeeBranch}
-                               onChange={(e) => {
-                                 setEmployeeBranch(e);
-                               }}
-                              
+                              <SelectBox
+                                value={employeeBranch}
+                                onChange={(e) => {
+                                  setEmployeeBranch(e);
+                                }}
                               >
                                 {allbranches &&
                                   allbranches.length > 0 &&
@@ -515,10 +510,8 @@ function Employees() {
                                   })}
                               </SelectBox>
                             </Form.Item>
-                          </div>
                         </div>
                         <div className="col-6">
-                          <div className="">
                             <label>Employee Department</label>
                             <Form.Item
                               name="employee_department"
@@ -529,12 +522,11 @@ function Employees() {
                                 },
                               ]}
                             >
-                              <SelectBox 
-                               value={employeeDept}
-                               onChange={(e) => {
-                                 setEmployeeDept(e);
-                               }}
-                              
+                              <SelectBox
+                                value={employeeDept}
+                                onChange={(e) => {
+                                  setEmployeeDept(e);
+                                }}
                               >
                                 {alldespartment &&
                                   alldespartment.length > 0 &&
@@ -550,10 +542,8 @@ function Employees() {
                                   })}
                               </SelectBox>
                             </Form.Item>
-                          </div>
                         </div>
                         <div className="col-6">
-                          <div className="">
                             <label>Employee Designation</label>
                             <Form.Item
                               name="employee_designation"
@@ -564,12 +554,11 @@ function Employees() {
                                 },
                               ]}
                             >
-                              <SelectBox 
-                               value={employeeDesignation}
-                               onChange={(e) => {
-                                 setEmployeeDesignation(e);
-                               }}
-                              
+                              <SelectBox
+                                value={employeeDesignation}
+                                onChange={(e) => {
+                                  setEmployeeDesignation(e);
+                                }}
                               >
                                 {alldesgination &&
                                   alldesgination.length > 0 &&
@@ -585,10 +574,8 @@ function Employees() {
                                   })}
                               </SelectBox>
                             </Form.Item>
-                          </div>
                         </div>
                         <div className="col-6">
-                          <div className="">
                             <label>Employee Type</label>
                             <Form.Item
                               name="employee_type"
@@ -599,12 +586,11 @@ function Employees() {
                                 },
                               ]}
                             >
-                               <SelectBox 
-                               value={employeeType}
-                               onChange={(e) => {
-                                 setEmployeeType(e);
-                               }}
-                              
+                              <SelectBox
+                                value={employeeType}
+                                onChange={(e) => {
+                                  setEmployeeType(e);
+                                }}
                               >
                                 {allemptype &&
                                   allemptype.length > 0 &&
@@ -620,10 +606,8 @@ function Employees() {
                                   })}
                               </SelectBox>
                             </Form.Item>
-                          </div>
                         </div>
                         <div className="col-6">
-                          <div className="">
                             <label>Employee Grade</label>
                             <Form.Item
                               name="employee_grade"
@@ -634,12 +618,11 @@ function Employees() {
                                 },
                               ]}
                             >
-                               <SelectBox 
-                               value={employeeGrade}
-                               onChange={(e) => {
-                                 setEmployeeGrade(e);
-                               }}
-                              
+                              <SelectBox
+                                value={employeeGrade}
+                                onChange={(e) => {
+                                  setEmployeeGrade(e);
+                                }}
                               >
                                 {allempgrade &&
                                   allempgrade.length > 0 &&
@@ -655,9 +638,54 @@ function Employees() {
                                   })}
                               </SelectBox>
                             </Form.Item>
-                          </div>
                         </div>
                         <div className="col-12">
+                          <div className="row login_border">
+                            {/* <div className="col-12 lead_text mb-2"> */}
+                            <h6 className="lead_text my-3">Login Info</h6>
+                            {/* </div> */}
+                            <div className="col-sm-6">
+                              <label>Email</label>
+                              <Form.Item
+                              // name="employee_email"
+                              // rules={[
+                              //   {
+                              //     required: true,
+                              //     pattern: new RegExp(
+                              //       "^[A-Za-z0-9_!#$%&'*+/=?`{|}~^.-]+@[A-Za-z0-9.-]+$"
+                              //     ),
+                              //     message: "Email is Required",
+                              //   },
+                              // ]}
+                              >
+                                <InputType />
+                              </Form.Item>
+                            </div>
+                            <div className="col-sm-6">
+                              <label>Password</label>
+                              <Form.Item
+                              // name="employee_password"
+                              // rules={[
+                              //   {
+                              //     required: true,
+                              //     message: "Password is Required",
+                              //   },
+                              //   {
+                              //     min: 3,
+                              //     message: "Required Minimum 3 characters",
+                              //   },
+                              //   {
+                              //     max: 100,
+                              //     message: "Required Maximum 100 chraraters ",
+                              //   },
+                              // ]}
+                              >
+                                <InputType />
+                              </Form.Item>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="col-12 mt-2">
                           <div className="d-flex justify-content-center">
                             <Button
                               type="submit"
@@ -668,7 +696,6 @@ function Employees() {
                           </div>
                         </div>
                       </div>
-                    </div>
                   </Form>
                 </div>
               </div>

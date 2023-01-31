@@ -16,6 +16,7 @@ import { CRM_BASE_URL, CRM_BASE_URL_FMS } from "../../../../api/bootapi";
 
 export default function Agent_Response() {
   const { id } = useParams();
+  console.log("idddddddddddddddd",id);
   const [addForm] = Form.useForm();
   const [successPopup, setSuccessPopup] = useState(false);
   const [modalAddResponse, setModalAddResponse] = useState(false);
@@ -27,7 +28,6 @@ export default function Agent_Response() {
   const [agentResponseId, setAgentResponseId] = useState();
   const [responseId,setResponseId] = useState();
   const [agentResponse, setAgentResponse] = useState([]);
-  console.log("correspondinng responses", agentResponse);
 
   const close_modal = (mShow, time) => {
     if (!mShow) {
@@ -100,6 +100,7 @@ export default function Agent_Response() {
 
   // { API to add agent reponse - Ann - 27/1/23}
   const addResponses = (data) => {
+    console.log("response dataaa:::",data);
     PublicFetch.post(`${CRM_BASE_URL_FMS}/enquiry-response`, {
       enquiry_response_enquiry_id: parseInt(id),
       enquiry_response_agent: data.enquiry_response_agent,
@@ -271,8 +272,8 @@ export default function Agent_Response() {
                           assignOpporData.map((item, index) => {
                             return (
                               <Select.Option
-                                key={item.opportunity_assign_employee_id}
-                                value={item.opportunity_assign_employee_id}
+                                key={item.opportunity_assign_id}
+                                value={item.opportunity_assign_id}
                               >
                                 {item.hrms_v1_employee.employee_name}
                               </Select.Option>

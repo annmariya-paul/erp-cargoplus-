@@ -334,7 +334,7 @@ export default function Designation() {
           </div>
         </div>
         <div className="row my-3">
-          <div className="col-3 px-3">
+          <div className="col-4 px-3">
             <Select
               bordered={false}
               className="page_size_style"
@@ -361,6 +361,20 @@ export default function Designation() {
               </Select.Option>
             </Select>
           </div>
+          <div className="col-4 d-flex  justify-content-center">
+              <MyPagination
+                total={desigtiondata?.length}
+                current={current}
+                showSizeChanger={true}
+                pageSize={pageSize}
+                onChange={(current, pageSize) => {
+                  console.log("ggdhffs", current, pageSize);
+                  setCurrent(current);
+                  setPageSize(pageSize);
+                }}
+              />
+            </div>
+            <div className="col-4"></div>
         </div>
         <div className="datatable">
           <TableData

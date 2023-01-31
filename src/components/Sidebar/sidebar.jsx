@@ -89,10 +89,19 @@ export default function Sidebar({ showSidebar }) {
                   // to="/"
                   onClick={() => setHRMSopen(!HRMSopen)}
                 >
-                  <RiTeamFill className="sidebar_icons" />
-                  HRMS
-                  <div className="d-flex justify-content-end ms-5 ps-5">
-                    <AiOutlineCaretDown className="toggle_btn " />
+                  <div className="d-flex justify-content-between gap-5">
+                    <div className="d-flex">
+                      <RiTeamFill className="sidebar_icons" />
+                      <div style={{ width: "120px" }} className="">
+                        HRMS
+                      </div>
+                    </div>
+
+                    <div className="  ">
+                      <div className="text-right ">
+                        <AiOutlineCaretDown className="toggle_btn " />
+                      </div>
+                    </div>
                   </div>
                 </Link>
               </li>
@@ -221,10 +230,19 @@ export default function Sidebar({ showSidebar }) {
                   // to="/"
                   onClick={() => setCRMopen(!CRMopen)}
                 >
-                  <RiTeamFill className="sidebar_icons" />
-                  CRM
-                  <div className="d-flex justify-content-end ms-5 ps-5">
-                    <AiOutlineCaretDown className="toggle_btn " />
+                  <div className="d-flex justify-content-between gap-5">
+                    <div className="d-flex">
+                      <RiTeamFill className="sidebar_icons" />
+                      <div style={{ width: "120px" }} className="">
+                        CRM
+                      </div>
+                    </div>
+
+                    <div className="  ">
+                      <div className="text-right ">
+                        <AiOutlineCaretDown className="toggle_btn " />
+                      </div>
+                    </div>
                   </div>
                 </Link>
               </li>
@@ -243,10 +261,19 @@ export default function Sidebar({ showSidebar }) {
                       // to="/"
                       onClick={() => setSaleOpen(!Saleopen)}
                     >
-                      <RiTeamFill className="sidebar_icons ms-3" />
-                      Sale
-                      <div className="d-flex justify-content-end sale_crm_sliderbar_margin_style">
-                        <AiOutlineCaretDown className="toggle_btn  " />
+                      <div className="d-flex justify-content-between gap-5 ms-2">
+                        <div className="d-flex">
+                          <RiTeamFill className="sidebar_icons" />
+                          <div style={{ width: "100px" }} className="">
+                            Sale
+                          </div>
+                        </div>
+
+                        <div className="  ">
+                          <div className="text-right ">
+                            <AiOutlineCaretDown className="toggle_btn " />
+                          </div>
+                        </div>
                       </div>
                     </Link>
                   </li>
@@ -347,10 +374,19 @@ export default function Sidebar({ showSidebar }) {
                       // to="/"
                       onClick={() => setCRMselling(!CRMselling)}
                     >
-                      <RiTeamFill className="sidebar_icons ms-3" />
-                      Selling
-                      <div className="d-flex justify-content-end ms-5 ps-5">
-                        <AiOutlineCaretDown className="toggle_btn " />
+                      <div className="d-flex justify-content-between gap-5 ms-2">
+                        <div className="d-flex">
+                          <RiTeamFill className="sidebar_icons" />
+                          <div style={{ width: "100px" }} className="">
+                            Selling
+                          </div>
+                        </div>
+
+                        <div className="  ">
+                          <div className="text-right ">
+                            <AiOutlineCaretDown className="toggle_btn " />
+                          </div>
+                        </div>
                       </div>
                     </Link>
                   </li>
@@ -458,10 +494,19 @@ export default function Sidebar({ showSidebar }) {
                   // to="/"
                   onClick={() => setFMSOpen(!FMSOpen)}
                 >
-                  <RiTeamFill className="sidebar_icons" />
-                  FMS
-                  <div className="d-flex justify-content-end ms-5 ps-5">
-                    <AiOutlineCaretDown className="toggle_btn " />
+                  <div className="d-flex justify-content-between gap-5">
+                    <div className="d-flex">
+                      <RiTeamFill className="sidebar_icons" />
+                      <div style={{ width: "120px" }} className="">
+                        FMS
+                      </div>
+                    </div>
+
+                    <div className="  ">
+                      <div className="text-right ">
+                        <AiOutlineCaretDown className="toggle_btn " />
+                      </div>
+                    </div>
                   </div>
                 </Link>
               </li>
@@ -561,10 +606,19 @@ export default function Sidebar({ showSidebar }) {
                       // to="/"
                       onClick={() => setFMSSettingsopen(!FMSSettingsopen)}
                     >
-                      <RiTeamFill className="sidebar_icons ms-3" />
-                      Settings
-                      <div className="d-flex justify-content-end ms-3 ps-5">
-                        <AiOutlineCaretDown className="toggle_btn " />
+                      <div className="d-flex justify-content-between gap-5 ms-2">
+                        <div className="d-flex">
+                          <RiTeamFill className="sidebar_icons ms-1 " />
+                          <div style={{ width: "90px" }} className="">
+                            Settings
+                          </div>
+                        </div>
+
+                        <div className="  ">
+                          <div className="text-right ">
+                            <AiOutlineCaretDown className="toggle_btn " />
+                          </div>
+                        </div>
                       </div>
                     </Link>
                   </li>
@@ -780,10 +834,19 @@ export default function Sidebar({ showSidebar }) {
                   // to="/"
                   onClick={() => setGeneralSettingsopen(!GeneralSettingsopen)}
                 >
-                  <RiTeamFill className="sidebar_icons" />
-                  General Settings
-                  <div className="d-flex justify-content-end ms-5 ">
-                    <AiOutlineCaretDown className="toggle_btn " />
+                  <div className="d-flex justify-content-between gap-5">
+                    <div className="d-flex">
+                      <RiTeamFill className="sidebar_icons" />
+                      <div style={{ width: "120px" }} className=" d-flex">
+                        General Settings
+                      </div>
+                    </div>
+
+                    <div className="  ">
+                      <div className="text-right ">
+                        <AiOutlineCaretDown className="toggle_btn " />
+                      </div>
+                    </div>
                   </div>
                 </Link>
               </li>

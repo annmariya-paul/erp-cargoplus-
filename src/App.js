@@ -78,6 +78,7 @@ import Seaport from "./pages/FMS/settings/Seaport/seaport";
 import Companyinfo from "./pages/General Settings/companyinfo/companyinfo";
 import Locations from "./pages/FMS/settings/Locations/locations";
 import SelectCountry from "./pages/General Settings/country/CountrySelect";
+import QuotationAssign from "./pages/FMS/Quotations/QuotationAssign";
 // import Lead from "./pages/lead/lead";
 
 function App() {
@@ -188,6 +189,10 @@ function App() {
             <Route path={ROUTES.AIRPORT} element={<Airport />} />
             <Route path={ROUTES.SEAPORT} element={<Seaport />} />
             <Route path={ROUTES.LOCATIONS} element={<Locations />} />
+            <Route
+              path={ROUTES.ASSIGN_QUOTATION_ID}
+              element={<QuotationAssign />}
+            />
 
             {/* General settings */}
 

@@ -66,14 +66,21 @@ function QuotationAssign() {
                     return (
                       <div className="col-6">
                         <Form.Item name="employees">
-                          <Checkbox>{item.employee_name}</Checkbox>
+                          <Checkbox
+                            key={item.employee_id}
+                            value={item.employee_id}
+                          >
+                            {item.employee_name}
+                          </Checkbox>
                         </Form.Item>
                       </div>
                     );
                   })}
 
                 <div className="col-12 d-flex justify-content-center align-item-center gap-3 mt-5">
-                  <Button className="save_button">Save</Button>
+                  <Button type={"submit"} className="save_button">
+                    Save
+                  </Button>
                   <Button
                     className="cancel_button"
                     onClick={() => {

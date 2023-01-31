@@ -637,7 +637,7 @@ export default function Sidebar({ showSidebar }) {
                           </NavLink>
                         </li>
                       )}
-                      {checkPermission("airport") && (
+                      {/* {checkPermission("airport") && (
                         <li className="nav-text">
                           <NavLink
                             className={({ isActive }) =>
@@ -649,9 +649,9 @@ export default function Sidebar({ showSidebar }) {
                             Airport
                           </NavLink>
                         </li>
-                      )}
+                      )} */}
 
-                      {checkPermission("seaport") && (
+                      {/* {checkPermission("seaport") && (
                         <li className="nav-text">
                           <NavLink
                             className={({ isActive }) =>
@@ -663,7 +663,7 @@ export default function Sidebar({ showSidebar }) {
                             Seaport
                           </NavLink>
                         </li>
-                      )}
+                      )} */}
                     </>
                   ) : (
                     ""
@@ -689,7 +689,7 @@ export default function Sidebar({ showSidebar }) {
                   )}
                   {FMSSettingsopen ? (
                     <>
-                      {checkPermission("mode") && (
+                      {/* {checkPermission("mode") && (
                         <li className="nav-text">
                           <NavLink
                             className={({ isActive }) =>
@@ -701,7 +701,7 @@ export default function Sidebar({ showSidebar }) {
                             Mode
                           </NavLink>
                         </li>
-                      )}
+                      )} */}
                     </>
                   ) : (
                     ""
@@ -742,7 +742,7 @@ export default function Sidebar({ showSidebar }) {
 
                   {FMSSettingsopen ? (
                     <>
-                      {checkPermission("job tasks") && (
+                      {/* {checkPermission("job tasks") && (
                         <li className="nav-text">
                           <NavLink
                             className={({ isActive }) =>
@@ -754,7 +754,7 @@ export default function Sidebar({ showSidebar }) {
                             Job Tasks
                           </NavLink>
                         </li>
-                      )}
+                      )} */}
                     </>
                   ) : (
                     ""

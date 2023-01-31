@@ -1,68 +1,92 @@
 import React, { useState, useEffect, useCallback } from "react";
 import dayjs from "dayjs";
-import {AiFillDelete} from "react-icons/ai";
-import { DragOutlined } from "@ant-design/icons";
+import { DragOutlined, FontColorsOutlined } from "@ant-design/icons";
 import dragula from "dragula";
 import "dragula/dist/dragula.css";
 import TableData from "../../../../components/table/table_data";
 import { FaTrash } from "react-icons/fa";
-
 import { CRM_BASE_URL_FMS } from "../../../../api/bootapi";
-
 import { GENERAL_SETTING_BASE_URL } from "../../../../api/bootapi";
-
 import FileUpload from "../../../../components/fileupload/fileUploader";
-import {Form} from "antd";
+import { Form } from "antd";
 import Button from "../../../../components/button/button";
 import PublicFetch from "../../../../utils/PublicFetch";
 import InputType from "../../../../components/Input Type textbox/InputType";
-
-import { Select,Popconfirm } from "antd";
-
-import { useNavigate } from "react-router-dom";
-
+import { Select, Popconfirm } from "antd";
 import Custom_model from "../../../../components/custom_modal/custom_model";
 import SelectBox from "../../../../components/Select Box/SelectBox";
-
 import { DatePicker } from "antd";
 import "./quotation.scss";
-
 import Input_Number from "../../../../components/InputNumber/InputNumber";
 
-export default function Add_Quotation(
-  custom_table_css,
- 
-) {
- 
-
+export default function Add_Quotation(custom_table_css) {
   const [saveSuccess, setSaveSuccess] = useState(false);
   const today = new Date().toISOString().split("T")[0];
-
   const [date, setDate] = useState();
-  console.log(date);
-
   const [addForm] = Form.useForm();
-  
   const dateFormatList = ["DD-MM-YYYY", "DD-MM-YY"];
-  const [amount, setAmount] = useState(0);
-
-  const handleChange = (value) => {
-    setAmount(value);
-  };
-  const getIndexInParent = (el) => Array.from(el.parentNode.children).indexOf(el);
-  const [yourTableData, setYourTableData] = useState([
+  const dataSource = [
     {
-     
-      id: "",
-      tasks: [],
+      key: "1",
+      tasks: "",
       cost: "",
       taxtype: "",
       taxamount: "",
       totalamount: "",
     },
-  ]);
+  ];
+  const [tableData, setTableData] = useState(dataSource);
+  const getIndexInParent = (el) =>
+    Array.from(el.parentNode.children).indexOf(el);
+  const handleInputChange = (e, key, col,) => {
+    setTableData(
+      tableData.map((item) => {
+        if (item.key === key) {
+          return { ...item, [col]: e };
+        }
+        return item;
+      })
+    );
+  };
+  const handleInputChange2 = (e, index, col,) => {
+    setTableData(
+      tableData.map((item) => {
+        if (item.key === index.key) {
+          return { ...item, [col]: e };
+        }
+        return item;
+      })
+    );
+  };
+
+  const handleEnter = (e) => {
+    console.log("Hello");
+    console.log("Key ::::::: ", e.key);
+    if (e.key === "Enter" || e.key === "Tab") {
+      setTableData([
+        ...tableData,
+        {
+          key: `${tableData.length + 1}`,
+          tasks: "",
+          cost: "",
+          taxtype: "",
+          taxamount: "",
+          totalamount: "",
+        },
+      ]);
+     
+    }
+    console.log("tabledata",tableData)
+    let sum = 0;
+    tableData.forEach((item)=>{
+      sum += item.cost + item.taxamount
+    })
+    console.log("sum",sum)
+    setTotal(sum)
+  };
+
   const handleReorder = (dragIndex, draggedIndex) => {
-    setYourTableData((oldState) => {
+    setTableData((oldState) => {
       const newState = [...oldState];
       const item = newState.splice(dragIndex, 1)[0];
       newState.splice(draggedIndex, 0, item);
@@ -82,16 +106,14 @@ export default function Add_Quotation(
 
     drake.on("drop", (el) => {
       end = getIndexInParent(el);
-      handleReorder(start,end);
+      handleReorder(start, end);
     });
   }, []);
-
-  
- 
 
   const [frighttype, setFrighttype] = useState();
   const [currencydata, setCurrencydata] = useState();
   const [carrierdata, setCarrierdata] = useState();
+
 
   const getallcarrier = async () => {
     try {
@@ -132,50 +154,40 @@ export default function Add_Quotation(
     getallcarrier();
   }, []);
 
-  
-
- 
   const handleDelete = (key) => {
-    const newData = yourTableData?.filter((item) => item?.key !== key);
-    setYourTableData(newData);
+    const newData = tableData?.filter((item) => item?.key !== key);
+    setTableData(newData);
+  };
+  const handleadd = (index) => {
+   console.log("hello",index);
+   
   };
   const columns = [
     {
-      
-            title: "Action",
-            dataIndex: "action",
-            key: "action",
-            className: "drag-visible",
-            render: (data, index) => {
-             
-              return (
-                <div className="d-flex justify-content-center align-items-center gap-2">
-                 
-
-
-
-
-
-                  <div
-            
-              className="actionEdit m-0 p-0"
-            >
+      title: "Action",
+      dataIndex: "action",
+      key: "action",
+      className: "drag-visible",
+      render: (data, index) => {
+        return (
+          <div className="d-flex justify-content-center align-items-center gap-2">
+            <div className="actionEdit m-0 p-0">
               <DragOutlined className="draggable" type="swap" />
             </div>
-           
-               
-                </div>
-              );
-            },
-      
+          </div>
+        );
+      },
     },
     {
-      title: '',
-      dataIndex: 'operation',
-       render: (_, record) =>
-      yourTableData.length >= 1 ? (
-          <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.key)}>
-         <div className="deleteIcon m-0">
+      title: "",
+      dataIndex: "operation",
+      render: (_, record) =>
+        tableData.length >= 1 ? (
+          <Popconfirm
+            title="Sure to delete?"
+            onConfirm={() => handleDelete(record.key)}
+          >
+            <div className="deleteIcon m-0">
               <FaTrash />
             </div>
           </Popconfirm>
@@ -186,7 +198,6 @@ export default function Add_Quotation(
       dataIndex: "tasks",
       key: "tasks",
       width: "40%",
-     
 
       render: (data, index) => {
         console.log("index is :", index);
@@ -196,8 +207,9 @@ export default function Add_Quotation(
               allowClear
               showSearch
               optionFilterProp="children"
-             
               className="selectwidth mb-2"
+              value={index.tasks}
+              onChange={(e) => handleInputChange(e, index.key, "tasks")}
             >
               <Select.Option value="Airline">
                 FREIGHT CHARGES WITH EX WORK
@@ -214,15 +226,18 @@ export default function Add_Quotation(
       title: "COST",
       dataIndex: "cost",
       key: "cost",
-     
+
       render: (data, index) => {
         console.log("index is :", index);
         return (
           <div className="d-flex justify-content-center align-items-center tborder ">
             <Input_Number
               className="text_right"
-              value={amount}
-              onChange={handleChange}
+              value={index.cost}
+              onChange={(value) => {
+                handleInputChange(value, index.key, "cost");
+                console.log(" input numberevent ", value, index.key);
+              }}
               align="right"
               step={0.01}
               min={0}
@@ -239,7 +254,6 @@ export default function Add_Quotation(
       title: "TAX TYPE",
       dataIndex: "taxtype",
       key: "taxtype",
-     
 
       render: (data, index) => {
         console.log("index is :", index);
@@ -247,8 +261,8 @@ export default function Add_Quotation(
           <div className="d-flex justify-content-center align-items-center tborder">
             <Input_Number
               className="text_right"
-              value={amount}
-              onChange={handleChange}
+              value={index.taxtype}
+              onChange={(e) => handleInputChange(e, index.key, "taxtype")}
               align="right"
               step={0.01}
               min={0}
@@ -264,15 +278,15 @@ export default function Add_Quotation(
       title: "TAX AMOUNT",
       dataIndex: "taxamount",
       key: "taxamount",
-     
+
       render: (data, index) => {
         console.log("index is :", index);
         return (
           <div className="d-flex justify-content-center align-items-center tborder ">
             <Input_Number
               className="text_right"
-              value={amount}
-              onChange={handleChange}
+              value={index.taxamount}
+              onChange={(e) => handleInputChange(e, index.key, "taxamount")}
               align="right"
               step={0.01}
               min={0}
@@ -289,23 +303,24 @@ export default function Add_Quotation(
       title: "TOTAL AMOUNT",
       dataIndex: "totalamount",
       key: "totalamount",
-     
-      onCell: (record) => ({
-        onKeyDown: (e) => handleKeyDown(e, record.key),
-      }),
+
       render: (data, index) => {
         console.log("index is :", index);
         return (
           <div className="d-flex justify-content-center align-items-center tborder ">
             <Input_Number
               className="text_right"
-              value={amount}
-              onChange={handleChange}
+              // value={    index.totalamount=(index.cost + index.taxamount)
+              // }
+              value={   index.cost + index.taxamount
+              }
+              onChange={(e) => handleInputChange2(e, index, "totalamount")}
               align="right"
               step={0.01}
               min={0}
               precision={2}
               controlls={false}
+              onKeyDown={(e) => handleEnter(e, index.key) }
             />
           </div>
         );
@@ -313,33 +328,16 @@ export default function Add_Quotation(
 
       align: "right",
     },
-   
   ];
 
-  const handleKeyDown = (e, index) => {
-    if (e.keyCode === 13 || e.keyCode === 9) {
-    
-      const data = [...yourTableData];
+  const [total, setTotal] = useState(0);
+  console.log("total ",total);
 
-    
-      const newRow = {
-        key: data.length + 1,
-        tasks: [],
-        cost: "",
-        taxtype: "",
-        taxamount: "",
-        totalamount: "",
-      };
-
-      // Insert the new row in the appropriate position
-      data.splice(index + 1, 0, newRow);
-
-      // Update the table data
-      setYourTableData(data);
-    }
-  };
- 
-
+  // useEffect(() => {
+  //   setTotal(tableData.reduce((acc, cur) =>
+  //   acc + cur.totalamount , 0));
+  // }
+  // , [tableData]);
   return (
     <>
       <div className="container-fluid">
@@ -361,7 +359,6 @@ export default function Add_Quotation(
               }}
             >
               <div className="container mb-4">
-              
                 <div className="row">
                   <div className="row ">
                     <div className="col-xl-3 col-sm-6 mt-2">
@@ -393,7 +390,6 @@ export default function Add_Quotation(
                       >
                         <DatePicker
                           style={{ borderWidth: 0, marginTop: 10 }}
-                        
                           defaultValue={dayjs()}
                           format={dateFormatList}
                           disabledDate={(d) => !d || d.isBefore(today)}
@@ -418,7 +414,6 @@ export default function Add_Quotation(
                       >
                         <DatePicker
                           style={{ borderWidth: 0, marginTop: 10 }}
-                        
                           disabledDate={(d) => !d || d.isBefore(today)}
                           onChange={(e) => {
                             console.log("date mmm", e);
@@ -738,7 +733,7 @@ export default function Add_Quotation(
                         <Input_Number
                           className="text_right"
                           // value={amount}
-                          onChange={handleChange}
+                          // onChange={handleChange}
                           align="right"
                           step={0.01}
                           min={0}
@@ -763,7 +758,7 @@ export default function Add_Quotation(
                         <Input_Number
                           className="text_right"
                           // value={amount}
-                          onChange={handleChange}
+                          // onChange={handleChange}
                           align="right"
                           step={0.01}
                           min={0}
@@ -821,7 +816,7 @@ export default function Add_Quotation(
                         <Input_Number
                           className="text_right"
                           // value={amount}
-                          onChange={handleChange}
+                          // onChange={handleChange}
                           align="right"
                           step={0.01}
                           min={0}
@@ -868,158 +863,7 @@ export default function Add_Quotation(
                   <div
                     className={`row mt-2 mx-3 qtable_data ${custom_table_css}`}
                   >
-                    {/* <div className="tablecontainer">
-                    <DragDropContext onDragEnd={handleDragEnd}>
-
-                      <table className="table tborder">
-                        <thead className="tborder">
-                          <tr>
-                            <th className="tborder" width="6%">Action</th>
-                            
-                            <th className="hiddenid">ID</th>
-                            <th className="tborder">TASKS</th>
-                            <th className="tborder text-right">COST</th>
-                            <th className="tborder text-right">TAX TYPE</th>
-                            <th className="tborder text-right">TAX AMOUNT</th>
-                            <th className="tborder text-right">TOTAL AMOUNT</th>
-                          </tr>
-                        </thead>
-                          <Droppable droppableId="table-rows">
-                            {(provided) => (
-                              <tbody
-                                ref={provided.innerRef}
-                                {...provided.droppableProps}
-                                className="tborder"
-                              >
-                                {rows && rows.length > 0 && rows?.map((row, index) => {
-                                  console.log("rowwwwws",row);
-                                  return(
-                                    <Draggable
-                                    draggableId={row.id}
-                                    key={row.id}
-                                    index={index}
-                                  >
-                                    {(provided) => (
-                                      <tr 
-                                        {...provided.draggableProps}
-                                        ref={provided.innerRef}
-                                      >
-                                        <td width="6%"
-                                        {...provided.dragHandleProps}
-                                        style={{ width: 59,paddingLeft:"4px" }}>
-                                        <div className="d-flex">
-                                          <div
-                                          
-                                          >
-                                            <MdDragHandle size={16} />
-                                          </div>
-                                          <div 
-                                           onClick={() => handleDelete(row.id)}
-                                          >
-                                            <AiOutlineDelete size={15}  />
-                                          </div>
-                                          </div>
-                                        </td>
-
-                                       
-                                        <td className="hiddenid">{row.id}</td>
-                                        <td className="tborder" width="20%">
-                                          <SelectBox
-                                           allowClear
-                                           showSearch
-                                          optionFilterProp="children"
-                                         
-                onChange={(event) => {
-                  setSearchType(event ? [event] : []);
-                }}
-                                          className="selectwidth mb-2">
-                                            <Select.Option value="Airline">
-                                              FREIGHT CHARGES WITH EX WORK
-                                            </Select.Option>
-                                            <Select.Option value="Shipper">
-                                              Shipper
-                                            </Select.Option>
-                                            <Select.Option value="Road">
-                                              Road
-                                            </Select.Option>
-                                          </SelectBox>
-                                        </td>
-                                        <td className="tborder my-1 ">
-                                    
-                                          <Input_Number
-                                            className="text_right"
-                                            value={amount}
-                                            onChange={handleChange}
-                                            align="right"
-                                            step={0.01}
-                                            min={0}
-                                            precision={2}
-                                            controlls={false}
-                                          />
-                                        </td>
-                                        <td className="tborder">
-                                          <Input_Number
-                                            className="text_right"
-                                            value={amount}
-                                            onChange={handleChange}
-                                            align="right"
-                                            step={0.01}
-                                            min={0}
-                                            precision={2}
-                                            controlls={false}
-                                          />
-                                        </td>
-                                        <td className="tborder">
-                                          
-                                          <Input_Number
-                                            className="text_right"
-                                            value={amount}
-                                            onChange={handleChange}
-                                            align="right"
-                                            step={0.01}
-                                            min={0}
-                                            precision={2}
-                                            controlls={false}
-                                          />
-                                        </td>
-                                        <td className="tborder" width="16%">
-                                       <Input_Number
-                                            className="text_right"
-                                            value={amount}
-                                            onChange={handleChange}
-                                            align="right"
-                                            step={0.01}
-                                            min={0}
-                                            precision={2}
-                                            controlls={false}
-                                            onKeyDown={(e) =>
-                                              handleKeyDown(e, row.id)
-                                            }
-                                          />
-                                        </td>
-                                      </tr>
-                                    )}
-                                  </Draggable>
-                                  )
-                                }
-                                  
-                                )}
-                             
-                              </tbody>
-                            )}
-                          </Droppable>
-                      </table>
-                      </DragDropContext>
-
-                    </div> */}
-                    {/* tablenew */}
-                    <TableData
-                      data={yourTableData}
-                    
-                      columns={columns}
-                   
-                      // custom_table_css="table_lead_list"
-                    />
+                    <TableData data={tableData} columns={columns} />
                   </div>
                 </div>
               </div>
@@ -1030,20 +874,15 @@ export default function Add_Quotation(
 
                 <div className="col-lg-2 col-sm-2 col-xs-2">
                   <Form.Item
-                    name="gtotal"
-                    rules={[
-                      {
-                        required: true,
-                        pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                        message: "Please enter a Valid value",
-                      },
-                    ]}
+                   
                   >
-                    {/* <InputType className="text-right" /> */}
-                    <Input_Number
+                    <Input_Number 
+              
                       className="text_right"
-                      value={amount}
-                      onChange={handleChange}
+                      value={total}
+                      fontWeight={1000}
+                   
+                      // onChange={handleChange}
                       align="right"
                       step={0.01}
                       min={0}

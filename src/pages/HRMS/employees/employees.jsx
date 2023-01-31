@@ -329,12 +329,14 @@ function Employees() {
           </div>
         </div>
         <div className="row my-3">
-          <div className="col-3 px-3">
+          <div className="col-4 px-3">
             <Select
               bordered={false}
               className="page_size_style"
               value={pageSize}
-              onChange={(e) => setPageSize(e)}
+              onChange={(e) => {
+                setCurrent(1)
+                setPageSize(e)}}
             >
               <Select.Option value="25">
                 Show
@@ -353,7 +355,20 @@ function Employees() {
               </Select.Option>
             </Select>
           </div>
-          <div className="col-9 d-flex justify-content-end">
+          <div className=" col-4 d-flex align-items-center justify-content-center">
+          <MyPagination
+           total={allEmployees?.length}
+            current={current}
+            showSizeChanger={true}
+            pageSize={pageSize}
+            onChange={(current, pageSize) => {
+              setCurrent(current);
+              setPageSize(pageSize);
+            }}
+          />
+        </div>
+
+          <div className="col-4 d-flex justify-content-end">
             <Link to="/createemployee">
               <Button btnType="add">Add Employee</Button>
             </Link>

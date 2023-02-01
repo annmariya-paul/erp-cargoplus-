@@ -583,23 +583,23 @@ const [taxratee,setTaxRatee] = useState()
 
     const OnSubmit = () => {
       const formData = new FormData();
-      formData.append("quotation_consignee", name);
-      formData.append("quotation_freight_type", code);
-      formData.append("quotation_carrier", State);
-      formData.append("quotation_mode", brand);
-      formData.append("quotation_origin_id", unit);
-      formData.append("quotation_destination_id", img);
-      formData.append("quotation_no_of_pieces", productattribute);
-      formData.append("quotation_uom", description);
-      formData.append("quotation_gross_wt", description);
-      formData.append("quotation_chargeable_wt", description);
-      formData.append("quotation_payment_terms ", description);
-      formData.append("quotation_currency", description);
-      formData.append("quotation_exchange_rate", description);
-      formData.append("quotation_grand_total", description);
-      formData.append("quotation_docs ", description);
+      // formData.append("quotation_consignee", qtnconsignee);
+      // formData.append("quotation_freight_type", qtnfrighttype);
+      // formData.append("quotation_carrier", qtncarrier);
+      // formData.append("quotation_mode", qtnmode);
+      // formData.append("quotation_origin_id", qtnoriginid);
+      // formData.append("quotation_destination_id", qtndestid);
+      // formData.append("quotation_no_of_pieces", productatt);
+      // formData.append("quotation_uom", description);
+      // formData.append("quotation_gross_wt", description);
+      // formData.append("quotation_chargeable_wt", description);
+      // formData.append("quotation_payment_terms ", description);
+      // formData.append("quotation_currency", description);
+      // formData.append("quotation_exchange_rate", description);
+      // formData.append("quotation_grand_total", description);
+      // formData.append("quotation_docs ", description);
       
-      formData.append("quotation_details ", description);
+      // formData.append("quotation_details ", description);
   
       PublicFetch.post(`${CRM_BASE_URL_FMS}/quotation`, formData, {
         "Content-Type": "Multipart/form-Data",

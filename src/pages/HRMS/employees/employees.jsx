@@ -25,6 +25,8 @@ function Employees() {
   const[employeeDesignation,setEmployeeDesignation] = useState("");
   const[employeeGrade,setEmployeeGrade] = useState("");
   const[employeeType,setEmployeeType] = useState("");
+   const [empEmail, setEmpEmail] = useState();
+   const [empPassword, setEmpPassword] = useState();
   const [pageSize, setPageSize] = useState("25");
   const [current, setCurrent] = useState(1);
   const [allEmployees, setAllEmployees] = useState([]);
@@ -36,6 +38,7 @@ function Employees() {
  const [emp_id, setEmp_Id] = useState();
  const [employeeName,setEmployeeName] = useState("");
   const [newName, setNewName] = useState();
+ 
  const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
   
 
@@ -214,6 +217,8 @@ function Employees() {
           res.data.data.forEach((item, index) => {
             array.push({
               employee_id: item.employee_id,
+              employee_email: item.employee_email,
+              employee_password: item.employee_password,
               employee_name: item.employee_name,
               employee_code: item.employee_code,
               employee_department_id:item.hrms_v1_departments.department_id,
@@ -252,6 +257,8 @@ function Employees() {
     setEmployeeDesignation(data.employee_designation_id);
     setEmployeeGrade(data.employee_grade_id);
     setEmployeeType(data.employee_type_id);
+    setEmpEmail(data.employee_email);
+    setEmpPassword(data.employee_password);
 
     if (data) {
       editForm.setFieldsValue({
@@ -263,22 +270,28 @@ function Employees() {
         employee_designation: data.employee_designation_id,
         employee_grade: data.employee_grade_id,
         employee_type: data.employee_type_id,
+        employee_email: data.employee_email,
+        employee_password: data.employee_password,
       });
       setModalEditEmployee(true);
     }
   };
   const updateEmployee=async (id)=>{
     try{
-    const updating= await PublicFetch.patch(`${CRM_BASE_URL_HRMS}/employees/${emp_id}`,{
-        employee_name:employeeName.trim(""),
-        employee_code:employeeCode,
-        employee_branch:employeeBranch,
-        employee_department:employeeDept,
-        employee_designation:employeeDesignation,
-        employee_grade:employeeGrade,
-        employee_type:employeeType,
-       
-      })
+    const updating = await PublicFetch.patch(
+      `${CRM_BASE_URL_HRMS}/employees/${emp_id}`,
+      {
+        employee_name: employeeName.trim(""),
+        employee_code: employeeCode,
+        employee_branch: employeeBranch,
+        employee_department: employeeDept,
+        employee_designation: employeeDesignation,
+        employee_grade: employeeGrade,
+        employee_type: employeeType,
+        employee_email: empEmail,
+        employee_password: empPassword,
+      }
+    );
       console.log("editedd data is",updating)
       if(updating.data.success){
         console.log("Success for updating employee", updating.data.data);
@@ -647,16 +660,16 @@ function Employees() {
                             <div className="col-sm-6">
                               <label>Email</label>
                               <Form.Item
-                              // name="employee_email"
-                              // rules={[
-                              //   {
-                              //     required: true,
-                              //     pattern: new RegExp(
-                              //       "^[A-Za-z0-9_!#$%&'*+/=?`{|}~^.-]+@[A-Za-z0-9.-]+$"
-                              //     ),
-                              //     message: "Email is Required",
-                              //   },
-                              // ]}
+                              name="employee_email"
+                              rules={[
+                                {
+                                  required: true,
+                                  pattern: new RegExp(
+                                    "^[A-Za-z0-9_!#$%&'*+/=?`{|}~^.-]+@[A-Za-z0-9.-]+$"
+                                  ),
+                                  message: "Email is Required",
+                                },
+                              ]}
                               >
                                 <InputType />
                               </Form.Item>
@@ -664,21 +677,21 @@ function Employees() {
                             <div className="col-sm-6">
                               <label>Password</label>
                               <Form.Item
-                              // name="employee_password"
-                              // rules={[
-                              //   {
-                              //     required: true,
-                              //     message: "Password is Required",
-                              //   },
-                              //   {
-                              //     min: 3,
-                              //     message: "Required Minimum 3 characters",
-                              //   },
-                              //   {
-                              //     max: 100,
-                              //     message: "Required Maximum 100 chraraters ",
-                              //   },
-                              // ]}
+                              name="employee_password"
+                              rules={[
+                                {
+                                  required: true,
+                                  message: "Password is Required",
+                                },
+                                // {
+                                //   min: 3,
+                                //   message: "Required Minimum 3 characters",
+                                // },
+                                // {
+                                //   max: 100,
+                                //   message: "Required Maximum 100 chraraters ",
+                                // },
+                              ]}
                               >
                                 <InputType />
                               </Form.Item>

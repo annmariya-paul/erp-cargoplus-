@@ -41,17 +41,30 @@ export default function Add_Quotation(custom_table_css) {
     },
   ];
   const [tableData, setTableData] = useState(dataSource);
+  const [sampleid, setSampleid] = useState()
   const getIndexInParent = (el) =>
     Array.from(el.parentNode.children).indexOf(el);
-  const handleInputChange = (e, key, col) => {
+  const handleInputChange = (e, key, col, tx) => {
+    console.log("gai guys", e, col , tx)
+    setSampleid(e)
+    allservices.map((item,index)=> {
+      if( tx && e === item.service_id) {
+        setTaxRatee(item.service_taxrate)
+      let hai = item.service_taxrate
+     
     setTableData(
       tableData.map((item) => {
         if (item.key === key) {
-          return { ...item, [col]: e };
+
+          return (  
+            { ...item,  taxtype:  hai, [col]: e }
+            );
         }
         return item;
       })
     );
+  }
+})
   };
   const handleInputChange2 = (e, index, col) => {
     setTableData(
@@ -67,7 +80,7 @@ export default function Add_Quotation(custom_table_css) {
   const handleEnter = (e) => {
     console.log("Hello");
     console.log("Key ::::::: ", e.key);
-    if (e.key === "Enter" || e.key === "Tab") {
+    if ( e.key === "Enter" || e.key === "Tab") {
       setTableData([
         ...tableData,
         {
@@ -79,6 +92,7 @@ export default function Add_Quotation(custom_table_css) {
           totalamount: "",
         },
       ]);
+      // setTaxRatee()
     }
     console.log("tabledata", tableData);
     let sum = 0;
@@ -130,7 +144,7 @@ export default function Add_Quotation(custom_table_css) {
   const [carrierdata, setCarrierdata] = useState();
   const [OpportunityList, setOpportunityList] = useState([]);
   const [currentcount, setCurrentcount] = useState();
-
+const [taxratee,setTaxRatee] = useState()
   const [allLeadList, setAllLeadList] = useState([]);
   console.log("Lead names :", allLeadList);
   const getallcarrier = async () => {
@@ -229,15 +243,27 @@ export default function Add_Quotation(custom_table_css) {
               optionFilterProp="children"
               className="selectwidth mb-2"
               value={index.tasks}
-              onChange={(e) => handleInputChange(e, index.key, "tasks")}
+              onChange={(e) =>{
+                console.log("servicess11123", e);
+                
+                handleInputChange(e, index.key, "tasks", "tx")
+            
+            }
+            
+            }
             >
               {services &&
                             services.length > 0 &&
                             services.map((item, index) => {
+                              let value = {id: item.service_id, tax: item.service_taxrate}
+                              console.log("u are",value)
                               return (
                                 <Select.Option
                                   key={item.service_id}
                                   value={item.service_id}
+                                  // onChange={()=>{
+                                  //   setTaxRatee(item.service_taxrate)
+                                  // }}
                                 >
                                   {item.service_name}
                                 </Select.Option>
@@ -312,7 +338,7 @@ export default function Add_Quotation(custom_table_css) {
           <div className="d-flex justify-content-center align-items-center tborder ">
             <Input_Number
               className="text_right"
-              value={index.taxamount}
+              // value={index.taxamount}
               onChange={(e) => handleInputChange(e, index.key, "taxamount")}
               align="right"
               step={0.01}
@@ -405,6 +431,8 @@ export default function Add_Quotation(custom_table_css) {
       });
   };
   const [allunit,setAllunit]=useState([]);
+
+  console.log("tXRATE", taxratee)
 
   console.log("all units are : ",allunit);
   const[unitTable,setunitTable]=useState("");
@@ -513,6 +541,10 @@ export default function Add_Quotation(custom_table_css) {
               service_category_name:item?.crm_v1_categories?.category_name
               
             });
+
+            if (sampleid &&sampleid === item?.service_id){
+            setTaxRatee(item?.service_taxrate) 
+            }
           });
             console.log("hellooooqqqqq", tempArr);
             setServices(tempArr);

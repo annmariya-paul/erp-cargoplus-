@@ -9,6 +9,7 @@ import { CRM_BASE_URL } from "../../../../api/bootapi";
 import TableData from "../../../../components/table/table_data";
 import { FaTrash } from "react-icons/fa";
 import { CRM_BASE_URL_FMS } from "../../../../api/bootapi";
+import { useNavigate } from "react-router-dom";
 import { GENERAL_SETTING_BASE_URL } from "../../../../api/bootapi";
 import FileUpload from "../../../../components/fileupload/fileUploader";
 import { Form } from "antd";
@@ -20,15 +21,19 @@ import Custom_model from "../../../../components/custom_modal/custom_model";
 import SelectBox from "../../../../components/Select Box/SelectBox";
 import { DatePicker } from "antd";
 import "./quotation.scss";
+import {ROUTES} from "../../../../routes";
 import Input_Number from "../../../../components/InputNumber/InputNumber";
 
-export default function Add_Quotation(custom_table_css) {
+export default function Add_Quotation() {
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [successPopup, setSuccessPopup] = useState(false);
+  const [error, setError] = useState(false);
   const [cargooptions, setCargooptions] = useState(cargo_typeoptions);
   console.log("cargo options : ", cargooptions);
   const today = new Date().toISOString().split("T")[0];
   const [date, setDate] = useState();
   const [addForm] = Form.useForm();
+  const navigate = useNavigate();
   const dateFormatList = ["DD-MM-YYYY", "DD-MM-YY"];
   const dataSource = [
     {
@@ -40,6 +45,16 @@ export default function Add_Quotation(custom_table_css) {
       totalamount: "",
     },
   ];
+  const [Errormsg, setErrormsg] = useState();
+
+  const close_modal = (mShow, time) => {
+    if (!mShow) {
+      setTimeout(() => {
+        setSuccessPopup(false);
+        navigate(ROUTES.PRODUCT);
+      }, time);
+    }
+  };
   const [tableData, setTableData] = useState(dataSource);
   const [sampleid, setSampleid] = useState()
   const getIndexInParent = (el) =>
@@ -565,6 +580,46 @@ const [taxratee,setTaxRatee] = useState()
       getAllservices();
     }, [numOfItems, pageofIndex]);
 
+
+    const OnSubmit = () => {
+      const formData = new FormData();
+      formData.append("quotation_consignee", name);
+      formData.append("quotation_freight_type", code);
+      formData.append("quotation_carrier", State);
+      formData.append("quotation_mode", brand);
+      formData.append("quotation_origin_id", unit);
+      formData.append("quotation_destination_id", img);
+      formData.append("quotation_no_of_pieces", productattribute);
+      formData.append("quotation_uom", description);
+      formData.append("quotation_gross_wt", description);
+      formData.append("quotation_chargeable_wt", description);
+      formData.append("quotation_payment_terms ", description);
+      formData.append("quotation_currency", description);
+      formData.append("quotation_exchange_rate", description);
+      formData.append("quotation_grand_total", description);
+      formData.append("quotation_docs ", description);
+      
+      formData.append("quotation_details ", description);
+  
+      PublicFetch.post(`${CRM_BASE_URL_FMS}/quotation`, formData, {
+        "Content-Type": "Multipart/form-Data",
+      })
+        .then((res) => {
+          console.log("data is successfully saved", res.data.success);
+          if (res.data.success) {
+            setSuccessPopup(true);
+            addForm.resetFields();
+            close_modal(successPopup, 1000);
+          } else {
+            setErrormsg(res.data.data);
+          }
+        })
+        .catch((err) => {
+          console.log("error", err);
+          setError(true);
+        });
+    };
+
   return (
     <>
       <div className="container-fluid">
@@ -577,9 +632,11 @@ const [taxratee,setTaxRatee] = useState()
 
           <div className="content-tabs">
             <Form
+             name="addForm"
               form={addForm}
               onFinish={(values) => {
                 console.log("values iss", values);
+                OnSubmit();
               }}
               onFinishFailed={(error) => {
                 console.log(error);

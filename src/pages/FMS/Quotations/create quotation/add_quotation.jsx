@@ -369,16 +369,11 @@ export default function Add_Quotation(custom_table_css) {
           setCurrentcount(res?.data?.data?.currentCount);
           let array = [];
           res?.data?.data?.leads?.forEach((item, index) => {
-            {
-              {
-                array.push({
-                  lead_id: item?.lead_id,
-
-                  lead_customer_name: item?.lead_customer_name,
-                });
-                setAllLeadList(array);
-              }
-            }
+            array.push({
+              lead_id: item?.lead_id,
+              lead_customer_name: item?.lead_customer_name,
+            });
+            setAllLeadList(array);
           });
         } else {
           console.log("FAILED T LOAD DATA");
@@ -455,10 +450,10 @@ export default function Add_Quotation(custom_table_css) {
               lead_id: item?.crm_v1_leads?.lead_id,
               assigned_employee: item?.assigned_employee,
             });
+            setOppleadid(item?.crm_v1_leads?.lead_id);
           });
           console.log("hellooooqqqqq", tempArr);
           setOppnew(tempArr);
-          setOppleadid(res?.data?.data?.leads?.opportunity_lead_id);
           console.log("newwww", res?.data?.data?.leads?.opportunity_lead_id);
           setOpportunityList(res?.data?.data?.leads);
           setTotalcount(res?.data?.data?.totalCount);

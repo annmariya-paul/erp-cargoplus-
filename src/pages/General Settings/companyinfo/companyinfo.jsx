@@ -154,7 +154,7 @@ function Companyinfo(){
               setcompanywatermark(null)
               setCompanylogo(null)
               setSuccessPopup(true);
-              // addForm.resetFields();
+              addForm.resetFields();
              getallcmpny()
               close_modal(successPopup, 1000);
             } 

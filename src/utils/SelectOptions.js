@@ -56,4 +56,16 @@ const Prob_conversion = [
   { id: "2", name: "Medium", value: "2" },
   { id: "3", name: "High", value: "3" },
 ];
-module.exports = { LeadType, LeadStatus, LeadOrganization, Oppor_Status, Prob_conversion };
+
+const cargo_typeoptions = [
+  {
+    id:"1", name : "Frozen",value :"1"
+  },
+  {
+    id:"2", name : "Dangerous",value :"2"
+  },
+  {
+    id:"3", name : "Refrigerated",value :"3"
+  }, 
+]
+module.exports = { LeadType, LeadStatus, LeadOrganization, Oppor_Status, Prob_conversion,cargo_typeoptions };

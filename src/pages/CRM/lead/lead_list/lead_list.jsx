@@ -365,7 +365,7 @@ export default function LeadList() {
             </div>
           </div>
           <div className="row my-3">
-            <div className="col-3 px-3">
+            <div className="col-4 px-3">
               <Select
                 // defaultValue={"25"}
                 bordered={false}
@@ -418,7 +418,23 @@ export default function LeadList() {
                 </Select.Option>
               </Select>
             </div>
-            <div className="col-9 d-flex justify-content-end">
+            <div className="col-4 d-flex py-2 justify-content-center">
+            <MyPagination
+              total={parseInt(totalCount)}
+              current={current}
+              pageSize={noofItems}
+              // defaultPageSize={noofItems}
+              showSizeChanger={false}
+              onChange={(current, pageSize) => {
+                console.log("page index isss", pageSize);
+                setCurrent(current);
+                // setPageSize(pageSize);
+                // setNoofItems(pageSize);
+                // setCurrent(noofItems !== pageSize ? 0 : current);
+              }}
+            />
+          </div>
+            <div className="col-4 d-flex justify-content-end">
               <Link to={ROUTES.LEAD}>
                 <Button
                   btnType="add"

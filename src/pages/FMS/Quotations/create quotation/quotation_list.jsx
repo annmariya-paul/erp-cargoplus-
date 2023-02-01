@@ -182,7 +182,7 @@ export default function Quotations(props) {
   ];
 
   const getAllQuotation = () => {
-    PublicFetch.get(`${CRM_BASE_URL_FMS}/quotation`)
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/quotation?startIndex=0&noOfItems=10`)
       .then((res) => {
         console.log("Response", res);
         if (res.data.success) {

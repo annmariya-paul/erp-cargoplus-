@@ -21,6 +21,8 @@ function CreateEmployee() {
   const [allempgrade, setAllEmpGrade] = useState();
   const [uniqueCode, setuniqueCode] = useState(false);
   const [employeeCode, setEmployeeCode] = useState();
+  const [empEmail, setEmpEmail] = useState();
+  const [empPassword, setEmpPassword] = useState();
   const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
 
   const close_modal = (mShow, time) => {
@@ -364,16 +366,16 @@ function CreateEmployee() {
                       <div className="col-sm-6">
                         <label>Email</label>
                         <Form.Item
-                          // name="employee_email"
-                          // rules={[
-                          //   {
-                          //     required: true,
-                          //     pattern: new RegExp(
-                          //       "^[A-Za-z0-9_!#$%&'*+/=?`{|}~^.-]+@[A-Za-z0-9.-]+$"
-                          //     ),
-                          //     message: "Email is Required",
-                          //   },
-                          // ]}
+                        name="employee_email"
+                        rules={[
+                          {
+                            required: true,
+                            pattern: new RegExp(
+                              "^[A-Za-z0-9_!#$%&'*+/=?`{|}~^.-]+@[A-Za-z0-9.-]+$"
+                            ),
+                            message: "Email is Required",
+                          },
+                        ]}
                         >
                           <InputType />
                         </Form.Item>
@@ -381,21 +383,21 @@ function CreateEmployee() {
                       <div className="col-sm-6">
                         <label>Password</label>
                         <Form.Item
-                          // name="employee_password"
-                          // rules={[
-                          //   {
-                          //     required: true,
-                          //     message: "Password is Required",
-                          //   },
-                          //   {
-                          //     min: 3,
-                          //     message: "Required Minimum 3 characters",
-                          //   },
-                          //   {
-                          //     max: 100,
-                          //     message: "Required Maximum 100 chraraters ",
-                          //   },
-                          // ]}
+                        name="employee_password"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Password is Required",
+                          },
+                          // {
+                          //   min: 3,
+                          //   message: "Required Minimum 3 characters",
+                          // },
+                          // {
+                          //   max: 100,
+                          //   message: "Required Maximum 100 chraraters ",
+                          // },
+                        ]}
                         >
                           <InputType />
                         </Form.Item>

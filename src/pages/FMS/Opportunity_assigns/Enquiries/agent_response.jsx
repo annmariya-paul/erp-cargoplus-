@@ -16,7 +16,7 @@ import { CRM_BASE_URL, CRM_BASE_URL_FMS } from "../../../../api/bootapi";
 
 export default function Agent_Response() {
   const { id } = useParams();
-  console.log("idddddddddddddddd",id);
+  console.log("idddddddddddddddd", id);
   const [addForm] = Form.useForm();
   const [successPopup, setSuccessPopup] = useState(false);
   const [modalAddResponse, setModalAddResponse] = useState(false);
@@ -26,7 +26,8 @@ export default function Agent_Response() {
   const [opporLead, setOpporLead] = useState();
   const [assignOpporData, setAssignOpporData] = useState();
   const [agentResponseId, setAgentResponseId] = useState();
-  const [responseId,setResponseId] = useState();
+  const [responseEnquiryId,setResponseEnquiryId] = useState();
+  const [responseId, setResponseId] = useState();
   const [agentResponse, setAgentResponse] = useState([]);
 
   const close_modal = (mShow, time) => {
@@ -78,7 +79,7 @@ export default function Agent_Response() {
               {
                 arr.push({
                   enquiry_response_id: item.enquiry_response_id,
-                  agent_name: item.enquiry_response_agent,
+                  agent_name: item.agents.hrms_v1_employee.employee_name,
                   agent_response: item.enquiry_response_response,
                 });
               }
@@ -100,7 +101,7 @@ export default function Agent_Response() {
 
   // { API to add agent reponse - Ann - 27/1/23}
   const addResponses = (data) => {
-    console.log("response dataaa:::",data);
+    console.log("response dataaa:::", data);
     PublicFetch.post(`${CRM_BASE_URL_FMS}/enquiry-response`, {
       enquiry_response_enquiry_id: parseInt(id),
       enquiry_response_agent: data.enquiry_response_agent,
@@ -124,17 +125,18 @@ export default function Agent_Response() {
 
   // {function to repopulate data to edit - Ann - 25/1/23}
   const ResponseEdit = (e) => {
-    console.log("eeeeeeeeeeeee",e);
+    console.log("eeeeeeeeeeeee", e);
     setResponseId(e.enquiry_response_id);
     addForm.setFieldsValue({
       responseId: e.enquiry_response_id,
-      agentName: e.enquiry_response_agent,
-      enquiryResponse: e.enquiry_response_response,
+      responseEnquiryId: e.enquiry_response_enquiry_id,
+      agentName: e.agent_name,
+      enquiryResponse: e.agent_response,
     });
     setModalEditResponse(true);
   };
 
-  const updateAgentResponse = (data) =>{
+  const updateAgentResponse = (data) => {
     PublicFetch.patch(`${CRM_BASE_URL_FMS}/enquiry-response/${responseId}`, {
       enquiry_response_enquiry_id: parseInt(id),
       enquiry_response_agent: data.agentName,
@@ -152,7 +154,7 @@ export default function Agent_Response() {
       .catch((err) => {
         console.log("Error", err);
       });
-  }
+  };
 
   const columns = [
     {

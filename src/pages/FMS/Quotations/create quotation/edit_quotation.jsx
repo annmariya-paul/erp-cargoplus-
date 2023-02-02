@@ -20,7 +20,7 @@ import { Collapse, Form, Input } from "antd";
 import Button from "../../../../components/button/button";
 import PublicFetch from "../../../../utils/PublicFetch";
 import InputType from "../../../../components/Input Type textbox/InputType";
-import { CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
+import { CRM_BASE_URL_FMS, CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
 import {Select} from "antd";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
 import { useNavigate } from "react-router-dom";
@@ -105,6 +105,38 @@ export default function EditQuotation(
     const newRows = rows.filter((li) => li.id !== id);
     setRows(newRows);
   }
+
+
+// api integration
+
+  const getallfrighttype = async () => {
+    try {
+      const allfrighttype = await PublicFetch.get(
+        `${CRM_BASE_URL_FMS}/freightTypes/`
+      );
+      console.log("all freighttypes are ::", allfrighttype?.data?.data);
+    } catch (err) {
+      console.log("error to getting all freighttype", err);
+    }
+  };
+
+  const getallcarrier = async () => {
+    try {
+      const allcarrier = await PublicFetch.get(
+        `${CRM_BASE_URL_FMS}/freightTypes/`
+      );
+      console.log("all freighttypes are ::", allcarrier?.data?.data);
+    } catch (err) {
+      console.log("error to getting all freighttype", err);
+    }
+  };
+
+  useEffect(() => {
+    getallfrighttype();
+    getallcarrier();
+  }, []);
+
+
 
   return (
     <>
@@ -228,7 +260,7 @@ export default function EditQuotation(
                         <InputType />
                       </Form.Item>
                     </div>
-
+{/* 
                     <div className="col-xl-3 col-sm-6 mt-2">
                       <label> Origin Agent</label>
                       <Form.Item
@@ -245,9 +277,9 @@ export default function EditQuotation(
                           <Select.Option value="B">Demo</Select.Option>
                         </SelectBox>
                       </Form.Item>
-                    </div>
+                    </div> */}
 
-                    <div className="col-xl-3 col-sm-6 mt-2">
+                    {/* <div className="col-xl-3 col-sm-6 mt-2">
                       <label>Destination Agent</label>
                       <Form.Item
                         name="corgin"
@@ -263,7 +295,7 @@ export default function EditQuotation(
                           <Select.Option value="B">Demo</Select.Option>
                         </SelectBox>
                       </Form.Item>
-                    </div>
+                    </div> */}
 
                     <div className="col-xl-3 col-sm-6 mt-2">
                       <label>Freight Type</label>

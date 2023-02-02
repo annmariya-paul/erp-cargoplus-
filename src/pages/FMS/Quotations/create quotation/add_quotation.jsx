@@ -39,11 +39,11 @@ export default function Add_Quotation() {
   const dataSource = [
     {
       key: "1",
-      tasks: "",
-      cost: "",
-      taxtype: "",
-      taxamount: "",
-      totalamount: "",
+      quotation_details_service_id: "",
+      quotation_details_cost: "",
+      quotation_details_tax_type: "",
+      quotation_details_tax_amount: "",
+      quotation_details_total: "",
     },
   ];
   const [Errormsg, setErrormsg] = useState();
@@ -63,7 +63,7 @@ export default function Add_Quotation() {
     console.log("gai guys", e, col , tx)
     // setSampleid(e)
     allservices.map((item,index)=> {
-      // if( tx && e === item.service_id) {
+      if( tx && e === item.service_id) {
         if (col && key && tx && e === item.service_id){
         // setTaxRatee(item.service_taxrate)
       let hai = item.service_taxrate;
@@ -71,13 +71,15 @@ export default function Add_Quotation() {
       setTableData(
         tableData.map((item) => {
           if (item.key === key) {
-            return { ...item, taxtype: hai, tasks: e };
+            return { ...item, quotation_details_tax_type: hai, quotation_details_service_id: e };
           }
           return item;
         })
       );
     }
+  }
   });
+
 };
 const handleInputchange1 = (e, key, col) => {
   setTableData(
@@ -108,18 +110,18 @@ const handleInputchange1 = (e, key, col) => {
         ...tableData,
         {
           key: `${tableData.length + 1}`,
-          tasks: "",
-          cost: "",
-          taxtype: "",
-          taxamount: "",
-          totalamount: "",
+          quotation_details_service_id: "",
+          quotation_details_cost: "",
+          quotation_details_tax_type: "",
+          quotation_details_tax_amount: "",
+          quotation_details_total: "",
         },
       ]);
     }
     console.log("tabledata", tableData);
     let sum = 0;
     tableData.forEach((item) => {
-      sum += item.cost + item.taxamount;
+      sum += item.quotation_details_cost + item.quotation_details_tax_amount;
     });
     console.log("sum", sum);
     setTotal(sum);
@@ -275,7 +277,7 @@ const handleInputchange1 = (e, key, col) => {
               showSearch
               optionFilterProp="children"
               className="selectwidth mb-2"
-              value={index.tasks}
+              value={index.quotation_details_service_id}
               onChange={(e) =>{
                 console.log("servicess11123", e);
                 
@@ -319,7 +321,7 @@ const handleInputchange1 = (e, key, col) => {
       >
             <Input_Number
               className="text_right"
-              value={index.cost}
+              value={index.quotation_details_cost}
               onChange={(value) => {
                 handleInputchange1(value, index.key, "quotation_details_cost");
                 console.log(" input numberevent ", value, index.key);
@@ -343,7 +345,7 @@ const handleInputchange1 = (e, key, col) => {
       key: "quotation_details_tax_type",
 
       render: (data, index) => {
-        console.log("index is :", index);
+        console.log("index is 112:", index.quotation_details_tax_type);
         return (
           <div className="d-flex justify-content-center align-items-center tborder">
               <Form.Item
@@ -353,8 +355,8 @@ const handleInputchange1 = (e, key, col) => {
 
             <Input_Number
               className="text_right"
-              value={index.taxtype}
-              // onChange={(e) => handleInputchange1(e, index.key, "taxtype")}
+              value={index.quotation_details_tax_type}
+              onChange={(e) => handleInputchange1(e, index.key, "quotation_details_tax_type")}
               align="right"
               step={0.01}
               min={0}
@@ -362,6 +364,7 @@ const handleInputchange1 = (e, key, col) => {
               controlls={false}
             />
             </Form.Item>
+            
           </div>
         );
       },
@@ -417,7 +420,7 @@ const handleInputchange1 = (e, key, col) => {
               className="text_right"
               // value={    index.totalamount=(index.cost + index.taxamount)
               // }
-              value={index.cost + index.taxamount}
+              value={index.quotation_details_cost + index.quotation_details_tax_amount}
               onChange={(e) => handleInputChange2(e, index, "quotation_details_total")}
               align="right"
               step={0.01}
@@ -686,7 +689,7 @@ console.log("file",filenew);
         const userData = Object.values(data.quotation_details);
         console.log("qtn details",data.quotation_details);
         console.log("usserData",userData);
-        const [tasks, cost,taxtype,taxamount,totalamount] = userData;
+        const [quotation_details_service_id, quotation_details_cost,quotation_details_tax_type,quotation_details_tax_amount,quotation_details_total] = userData;
         // formData.append('userData', JSON.stringify(userData));
         formData.append('quotation_details', JSON.stringify(userData));
         

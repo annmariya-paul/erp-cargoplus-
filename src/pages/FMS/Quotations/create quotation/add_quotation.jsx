@@ -12,7 +12,7 @@ import { CRM_BASE_URL_FMS } from "../../../../api/bootapi";
 import { useNavigate } from "react-router-dom";
 import { GENERAL_SETTING_BASE_URL } from "../../../../api/bootapi";
 import FileUpload from "../../../../components/fileupload/fileUploader";
-import { Form } from "antd";
+import { Form, InputNumber } from "antd";
 import Button from "../../../../components/button/button";
 import PublicFetch from "../../../../utils/PublicFetch";
 import InputType from "../../../../components/Input Type textbox/InputType";
@@ -23,6 +23,7 @@ import { DatePicker } from "antd";
 import "./quotation.scss";
 import {ROUTES} from "../../../../routes";
 import Input_Number from "../../../../components/InputNumber/InputNumber";
+import moment from "moment"
 
 export default function Add_Quotation() {
   const [saveSuccess, setSaveSuccess] = useState(false);
@@ -63,24 +64,32 @@ export default function Add_Quotation() {
     console.log("gai guys", e, col , tx)
     setSampleid(e)
     allservices.map((item,index)=> {
-      if( tx && e === item.service_id) {
+      // if( tx && e === item.service_id) {
+        if (col && key && tx && e === item.service_id){
         setTaxRatee(item.service_taxrate)
-      let hai = item.service_taxrate
+      let hai = item.service_taxrate;
      
-    setTableData(
-      tableData.map((item) => {
-        if (item.key === key) {
-
-          return (  
-            { ...item,  taxtype:  hai, [col]: e }
-            );
-        }
-        return item;
-      })
-    );
-  }
-})
-  };
+      setTableData(
+        tableData.map((item) => {
+          if (item.key === key) {
+            return { ...item, taxtype: hai, tasks: e };
+          }
+          return item;
+        })
+      );
+    }
+  });
+};
+const handleInputchange1 = (e, key, col) => {
+  setTableData(
+    tableData.map((item) => {
+      if (item.key === key) {
+        return { ...item, [col]: e };
+      }
+      return item;
+    })
+  );
+};
   const handleInputChange2 = (e, index, col) => {
     setTableData(
       tableData.map((item) => {
@@ -206,10 +215,17 @@ const [taxratee,setTaxRatee] = useState()
     const newData = tableData?.filter((item) => item?.key !== key);
     setTableData(newData);
   };
-  const handleadd = (index) => {
-    console.log("hello", index);
-  };
+ 
 
+    // console.log("userdata task",index);
+    //         formData.append(`quotation_details[${index}][quotation_details_service_id] `,item.tasks);
+    //         formData.append(`quotation_details[${index}][quotation_details_cost] `, item.cost);
+    //         formData.append(`quotation_details[${index}][quotation_details_tax_type] `, item.taxtype);
+    //         formData.append(`quotation_details[${index}][quotation_details_tax_amount] `,item.taxamount);
+    //         formData.append(`quotation_details[${index}][quotation_details_total] `, item.totalamount);
+    //       })
+         
+         
   
   const columns = [
     {
@@ -244,14 +260,18 @@ const [taxratee,setTaxRatee] = useState()
     },
     {
       title: "TASKS",
-      dataIndex: "tasks",
-      key: "tasks",
+      dataIndex: "quotation_details_service_id",
+      key: "quotation_details_service_id",
       width: "40%",
 
       render: (data, index) => {
         console.log("index is :", index);
         return (
           <div className="d-flex justify-content-center align-items-center tborder ">
+           <Form.Item
+        name={['quotation_details', index.key, 'quotation_details_service_id']}
+        // rules={[{ required: true, message: 'Please input the name' }]}
+      >
             <SelectBox
               allowClear
               showSearch
@@ -261,7 +281,7 @@ const [taxratee,setTaxRatee] = useState()
               onChange={(e) =>{
                 console.log("servicess11123", e);
                 
-                handleInputChange(e, index.key, "tasks", "tx")
+                handleInputChange(e, index.key, "quotation_details_service_id", "tx")
             
             }
             
@@ -285,6 +305,7 @@ const [taxratee,setTaxRatee] = useState()
                               );
                             })}
             </SelectBox>
+            </Form.Item>
           </div>
         );
       },
@@ -292,18 +313,22 @@ const [taxratee,setTaxRatee] = useState()
     },
     {
       title: "COST",
-      dataIndex: "cost",
-      key: "cost",
+      dataIndex: "quotation_details_cost",
+      key: "quotation_details_cost",
 
       render: (data, index) => {
         console.log("index is :", index);
         return (
           <div className="d-flex justify-content-center align-items-center tborder ">
+            <Form.Item
+        name={['quotation_details', index.key, 'quotation_details_cost']}
+        // rules={[{ required: true, message: 'Please input the name' }]}
+      >
             <Input_Number
               className="text_right"
               value={index.cost}
               onChange={(value) => {
-                handleInputChange(value, index.key, "cost");
+                handleInputchange1(value, index.key, "quotation_details_cost");
                 console.log(" input numberevent ", value, index.key);
               }}
               align="right"
@@ -312,6 +337,7 @@ const [taxratee,setTaxRatee] = useState()
               precision={2}
               controlls={false}
             />
+            </Form.Item>
           </div>
         );
       },
@@ -320,23 +346,29 @@ const [taxratee,setTaxRatee] = useState()
     },
     {
       title: "TAX TYPE",
-      dataIndex: "taxtype",
-      key: "taxtype",
+      dataIndex: "quotation_details_tax_type",
+      key: "quotation_details_tax_type",
 
       render: (data, index) => {
         console.log("index is :", index);
         return (
           <div className="d-flex justify-content-center align-items-center tborder">
+              <Form.Item
+        name={['quotation_details', index.key, 'quotation_details_tax_type']}
+        // rules={[{ required: true, message: 'Please input the name' }]}
+      >
+
             <Input_Number
               className="text_right"
               value={index.taxtype}
-              onChange={(e) => handleInputChange(e, index.key, "taxtype")}
+              // onChange={(e) => handleInputchange1(e, index.key, "taxtype")}
               align="right"
               step={0.01}
               min={0}
               precision={2}
               controlls={false}
             />
+            </Form.Item>
           </div>
         );
       },
@@ -344,24 +376,30 @@ const [taxratee,setTaxRatee] = useState()
     },
     {
       title: "TAX AMOUNT",
-      dataIndex: "taxamount",
-      key: "taxamount",
+      dataIndex: "quotation_details_tax_amount",
+      key: "quotation_details_tax_amount",
 
       render: (data, index) => {
         console.log("index is :", index);
         return (
           <div className="d-flex justify-content-center align-items-center tborder ">
+              <Form.Item
+        name={['quotation_details', index.key, 'quotation_details_tax_amount']}
+        // rules={[{ required: true, message: 'Please input the name' }]}
+      >
             <Input_Number
               className="text_right"
               // value={index.taxamount}
-              onChange={(e) => handleInputChange(e, index.key, "taxamount")}
+              onChange={(e) => handleInputchange1(e, index.key, "quotation_details_tax_amount")}
               align="right"
               step={0.01}
               min={0}
               precision={2}
               controlls={false}
             />
+            </Form.Item>
           </div>
+          
         );
       },
 
@@ -369,19 +407,25 @@ const [taxratee,setTaxRatee] = useState()
     },
     {
       title: "TOTAL AMOUNT",
-      dataIndex: "totalamount",
-      key: "totalamount",
+      dataIndex: "quotation_details_total",
+      key: "quotation_details_total",
 
       render: (data, index) => {
         console.log("index is :", index);
         return (
           <div className="d-flex justify-content-center align-items-center tborder ">
+   <Form.Item
+        name={['quotation_details', index.key, 'quotation_details_total']}
+        // rules={[{ required: true, message: 'Please input the name' }]}
+      >
+
+
             <Input_Number
               className="text_right"
               // value={    index.totalamount=(index.cost + index.taxamount)
               // }
               value={index.cost + index.taxamount}
-              onChange={(e) => handleInputChange2(e, index, "totalamount")}
+              onChange={(e) => handleInputChange2(e, index, "quotation_details_total")}
               align="right"
               step={0.01}
               min={0}
@@ -389,6 +433,7 @@ const [taxratee,setTaxRatee] = useState()
               controlls={false}
               onKeyDown={(e) => handleEnter(e, index.key)}
             />
+            </Form.Item>
           </div>
         );
       },
@@ -450,6 +495,27 @@ const [taxratee,setTaxRatee] = useState()
   console.log("tXRATE", taxratee)
 
   console.log("all units are : ",allunit);
+
+  const [previewVisible, setPreviewVisible] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+  const [previewTitle, setPreviewTitle] = useState("");
+  const getBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setPreviewImage(file.url || file.preview);
+    setPreviewVisible(true);
+    setPreviewTitle(
+      file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
+    );
+  };
   const[unitTable,setunitTable]=useState("");
   const getallunits=async ()=>{
     try{
@@ -532,6 +598,33 @@ const [taxratee,setTaxRatee] = useState()
     const [services, setServices] = useState([]);
     console.log("Servicesss are :::", services);
     const [allservices, setAllservices] = useState();
+    const [allLocations, setAllLocations] = useState();
+    console.log("locations ",allLocations);
+    const getAllLocations = async () => {
+      try {
+        const locations = await PublicFetch.get(`${CRM_BASE_URL_FMS}/locations`);
+        console.log("all locations are", locations.data.data);
+        // setAllLocations(locations.data.data);
+        let temp = [];
+        locations.data.data.forEach((item,index)=>{
+          temp.push({
+            location_id: item.location_id,
+            location_code: item.location_code,
+            location_name: item.location_name,
+            location_type: item.location_type,
+            location_country: item.countries.country_name,
+          });
+          setAllLocations(temp);
+        })
+      } catch (err) {
+        console.log("error while getting the locations: ", err);
+      }
+    };
+  
+    useEffect(() => {
+    
+      getAllLocations();
+    }, []);
 
     const getAllservices = () => {
       PublicFetch.get(
@@ -580,26 +673,60 @@ const [taxratee,setTaxRatee] = useState()
       getAllservices();
     }, [numOfItems, pageofIndex]);
 
-
-    const OnSubmit = () => {
+const [filenew,setFilenew]=useState();
+console.log("file",filenew);
+    const OnSubmit = (data) => {
+      console.log("submitting data", data);
+      const data11 = "443255654"
+      const date1 = moment(data.qdate).format("YYYY-MM-DD")
+      const date2 = moment(data.vdate).format("YYYY-MM-DD")
+     const docfile = data.new.file.originFileObj;
       const formData = new FormData();
-      // formData.append("quotation_consignee", qtnconsignee);
-      // formData.append("quotation_freight_type", qtnfrighttype);
-      // formData.append("quotation_carrier", qtncarrier);
-      // formData.append("quotation_mode", qtnmode);
-      // formData.append("quotation_origin_id", qtnoriginid);
-      // formData.append("quotation_destination_id", qtndestid);
-      // formData.append("quotation_no_of_pieces", productatt);
-      // formData.append("quotation_uom", description);
-      // formData.append("quotation_gross_wt", description);
-      // formData.append("quotation_chargeable_wt", description);
-      // formData.append("quotation_payment_terms ", description);
-      // formData.append("quotation_currency", description);
-      // formData.append("quotation_exchange_rate", description);
-      // formData.append("quotation_grand_total", description);
-      // formData.append("quotation_docs ", description);
+      formData.append("quotation_no", data11);
+      formData.append("quotation_enquiry", data.eno);
+      formData.append("quotation_date",date1);
+      formData.append("quotation_validity",date2);
+      formData.append("quotation_consignee",  data.consignee);
+      formData.append("quotation_shipper", data.shipper);
+      formData.append("quotation_freight_type", data.freighttype);
+      formData.append("quotation_cargo_type",  data.cargotype);
+      formData.append("quotation_carrier",  data.carrier);
+      formData.append("quotation_mode",  data.mode);
+      formData.append("quotation_origin_id ", data.corgin);
+      // formData.append("quotation_origin", parseInt(data.corgin)); 
+      formData.append("quotation_destination_id",  data.cdest);
+      // formData.append("quotation_destination",  data.cdest);
+      formData.append("quotation_no_of_pieces ",  data.npieces);
+      formData.append("quotation_uom ", data.uom);
+      formData.append("quotation_gross_wt ",  data.gweight);
+      formData.append("quotation_chargeable_wt ", data.weight);
+      formData.append("quotation_payment_terms ", data.terms);
+      formData.append("quotation_currency ", data.currency);
+      formData.append("quotation_exchange_rate ",  data.exchnagerate);
+      formData.append("quotation_grand_total ", data.grandtotal);
+      formData.append("attachments", filenew);
+      console.log("file we get :", data.new.file.originFileObj);
+      console.log("abc",data.quotation_details);
+
+        const userData = Object.values(data.quotation_details);
+        console.log("qtn details",data.quotation_details);
+        console.log("usserData",userData);
+        const [tasks, cost,taxtype,taxamount,totalamount] = userData;
+        // formData.append('userData', JSON.stringify(userData));
+        formData.append('quotation_details', JSON.stringify(userData));
+        
+//       userData.map((item,index)=>{
+// console.log("userdata task",index);
+//         formData.append(`quotation_details[${index}][quotation_details_service_id] `,item.tasks);
+//         formData.append(`quotation_details[${index}][quotation_details_cost] `, item.cost);
+//         formData.append(`quotation_details[${index}][quotation_details_tax_type] `, item.taxtype);
+//         formData.append(`quotation_details[${index}][quotation_details_tax_amount] `,item.taxamount);
+//         formData.append(`quotation_details[${index}][quotation_details_total] `, item.totalamount);
+//       })
+     
+     
+
       
-      // formData.append("quotation_details ", description);
   
       PublicFetch.post(`${CRM_BASE_URL_FMS}/quotation`, formData, {
         "Content-Type": "Multipart/form-Data",
@@ -634,9 +761,9 @@ const [taxratee,setTaxRatee] = useState()
             <Form
              name="addForm"
               form={addForm}
-              onFinish={(values) => {
-                console.log("values iss", values);
-                OnSubmit();
+              onFinish={(value) => {
+                console.log("values iss", value);
+                OnSubmit(value);
               }}
               onFinishFailed={(error) => {
                 console.log(error);
@@ -664,17 +791,17 @@ const [taxratee,setTaxRatee] = useState()
                       <label>Quotation date</label>
                       <Form.Item
                         name="qdate"
-                        rules={[
-                          {
-                            required: true,
-                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                            message: "Please enter a Valid value",
-                          },
-                        ]}
+                        // rules={[
+                        //   {
+                        //     required: true,
+                        //     pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                        //     message: "Please enter a Valid value",
+                        //   },
+                        // ]}
                       >
                         <DatePicker
                           style={{ borderWidth: 0, marginTop: 10 }}
-                          defaultValue={dayjs()}
+                          initialValues={dayjs()}
                           format={dateFormatList}
                           disabledDate={(d) => !d || d.isBefore(today)}
                           onChange={(e) => {
@@ -908,9 +1035,9 @@ const [taxratee,setTaxRatee] = useState()
                           showSearch
                           optionFilterProp="children"
                         >
-                          <Select.Option value="A">Air</Select.Option>
-                          <Select.Option value="S">Sea</Select.Option>
-                          <Select.Option value="R">Road</Select.Option>
+                          <Select.Option value="Air">Air</Select.Option>
+                          <Select.Option value="Sea">Sea</Select.Option>
+                          <Select.Option value="Road">Road</Select.Option>
                         </SelectBox>
                       </Form.Item>
                     </div>
@@ -931,8 +1058,18 @@ const [taxratee,setTaxRatee] = useState()
                           showSearch
                           optionFilterProp="children"
                         >
-                          <Select.Option value="A">Test</Select.Option>
-                          <Select.Option value="B">Demo</Select.Option>
+                           {allLocations &&
+                          allLocations.length > 0 &&
+                          allLocations.map((item, index) => {
+                            return (
+                              <Select.Option
+                                value={item.location_id}
+                                key={item.location_id}
+                              >
+                                {item.location_name}
+                              </Select.Option>
+                            );
+                          })}
                         </SelectBox>
                       </Form.Item>
                     </div>
@@ -947,13 +1084,24 @@ const [taxratee,setTaxRatee] = useState()
                           },
                         ]}
                       >
+                     
                         <SelectBox
                           allowClear
                           showSearch
                           optionFilterProp="children"
-                        >
-                          <Select.Option value="A">Test</Select.Option>
-                          <Select.Option value="B">Demo</Select.Option>
+                        > 
+                        {allLocations &&
+                          allLocations.length > 0 &&
+                          allLocations.map((item, index) => {
+                            return (
+                              <Select.Option
+                                value={item.location_id}
+                                key={item.location_id}
+                              >
+                                {item.location_name}
+                              </Select.Option>
+                            );
+                          })}
                         </SelectBox>
                       </Form.Item>
                     </div>
@@ -1034,11 +1182,11 @@ const [taxratee,setTaxRatee] = useState()
                           },
                         ]}
                       >
-                        <InputType />
+                        <Input_Number/>
                       </Form.Item>
                     </div>
 
-                    <div className="col-xl-3 col-sm-6 mt-2">
+                    <div className="col-xl-3 col-ileUplsm-6 mt-2">
                       <label>UOM</label>
                       <Form.Item
                         name="uom"
@@ -1109,13 +1257,13 @@ const [taxratee,setTaxRatee] = useState()
                       <label>Exchange Rate</label>
                       <Form.Item
                         name="exchnagerate"
-                        rules={[
-                          {
-                            required: true,
-                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                            message: "Please enter a Valid value",
-                          },
-                        ]}
+                        // rules={[
+                        //   {
+                        //     required: true,
+                        //     pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                        //     message: "Please enter a Valid value",
+                        //   },
+                        // ]}
                       >
                         <Input_Number
                           className="text_right"
@@ -1182,37 +1330,38 @@ const [taxratee,setTaxRatee] = useState()
                     <div className="col-6 ">
                       <label>Add Attachments</label>
                       <Form.Item className="mt-2" name="new">
-                        <FileUpload
-                          multiple
-                          listType="picture"
-                          accept=".png,.jpeg,.jpg"
-                          // onPreview={handlePreview}
-                          beforeUpload={false}
-                          onChange={(file) => {
-                            console.log("Before upload", file.file);
-                            console.log(
-                              "Before upload file size",
-                              file.file.size
-                            );
+                       
+                          <FileUpload
+                            multiple
+                            filetype={"Accept only pdf and docs"}
+                            listType="picture"
+                            accept=".pdf,.docs,"
+                            onPreview={handlePreview}
+                            // value={leadAttachment}
+                            // onChange={(e) => setLeadAttachment(e.target.value)}
+                            onChange={(file) => {
+                              console.log("Before upload", file.file);
+                              console.log(
+                                "Before upload file size",
+                                file.file.size
+                              );
+                              setFilenew(file.file.originFileObj);
 
-                            if (
-                              file.file.size > 2000 &&
-                              file.file.size < 500000
-                            ) {
-                              // setImg(file.file.originFileObj);
-                              console.log(
-                                "selet imggg",
-                                file.file.originFileObj
-                              );
-                              // setImageSize(false);
-                            } else {
-                              // setImageSize(true);
-                              console.log(
-                                "Error in upload, upload image size between 1 kb and  500 kb"
-                              );
-                            }
-                          }}
-                        />
+                              // if (
+                              //   file.file.size > 1000 &&
+                              //   file.file.size < 500000
+                              // ) {
+                              //   // setLeadimg(file.file.originFileObj);
+                              //   // setFileSizeError(false);
+                              //   console.log(
+                              //     "file greater than 1 kb and less than 500 kb"
+                              //   );
+                              // } else {
+                              //   // setFileSizeError(true);
+                              //   console.log("hgrtryyryr");
+                              // }
+                            }}
+                          />
                       </Form.Item>
                     </div>
                   </div>
@@ -1227,6 +1376,7 @@ const [taxratee,setTaxRatee] = useState()
                   <TableData
                     data={tableData}
                     columns={columns}
+                    rowKey={(record) => record.key}
                     custom_table_css="table_qtn"
                   />
                 </div>
@@ -1237,7 +1387,9 @@ const [taxratee,setTaxRatee] = useState()
                 </div>
 
                 <div className="col-lg-2 col-sm-2 col-xs-2">
-                  <Form.Item>
+                  <Form.Item
+                  name="grandtotal"
+                  >
                     <Input_Number
                       className="text_right"
                       value={total}
@@ -1254,7 +1406,7 @@ const [taxratee,setTaxRatee] = useState()
               </div>
               <div className="d-flex justify-content-center my-4">
                 <div className="col-lg-1 ">
-                  <Button className="qtn_save" btnType="save">
+                  <Button type="submit" className="qtn_save" btnType="save">
                     Save
                   </Button>
                 </div>

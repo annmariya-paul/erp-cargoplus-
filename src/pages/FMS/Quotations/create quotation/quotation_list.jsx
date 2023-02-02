@@ -14,6 +14,7 @@ import { ROUTES } from "../../../../routes";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { FiEdit } from "react-icons/fi";
 import CustomModel from "../../../../components/custom_modal/custom_model";
+import moment from "moment";
 
 import { CRM_BASE_URL_HRMS, CRM_BASE_URL_FMS } from "../../../../api/bootapi";
 
@@ -87,42 +88,44 @@ export default function Quotations(props) {
     },
     {
       title: "QUOTATION No",
-      dataIndex: "qno",
-      key: "qno",
+      dataIndex: "quotation_no",
+      key: "quotation_no",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.qno).toLowerCase().includes(value.toLowerCase());
+        return String(record.quotation_no)
+          .toLowerCase()
+          .includes(value.toLowerCase());
       },
       align: "center",
     },
     {
       title: "DATE",
-      dataIndex: "date",
-      key: "date",
+      dataIndex: "quotation_date",
+      key: "quotation_date",
       align: "center",
     },
     {
       title: "VALIDITY",
-      dataIndex: "validity",
-      key: "validity",
+      dataIndex: "quotation_validity",
+      key: "quotation_validity",
       align: "center",
     },
     {
       title: "CONSIGNEE",
-      dataIndex: "consignee",
-      key: "consignee",
+      dataIndex: "consignee_name",
+      key: "consignee_name",
       align: "center",
     },
     {
       title: "SHIPPER",
-      dataIndex: "shipper",
-      key: "shipper",
+      dataIndex: "quotation_shipper",
+      key: "quotation_shipper",
       align: "center",
     },
     {
       title: "STATUS",
-      dataIndex: "status",
-      key: "status",
+      dataIndex: "quotation_status",
+      key: "quotation_status",
       align: "center",
     },
     {
@@ -133,9 +136,18 @@ export default function Quotations(props) {
       render: (data, index) => {
         return (
           <>
-            {index.assigned_employee && index.assigned_employee.length > 0 ? (
+            {index.fms_v1_quotation_agents &&
+            index.fms_v1_quotation_agents.length > 0 ? (
               <div className="">
-                <Button btnType="add" className="me-1 view_btn">
+                <Button
+                  btnType="add"
+                  className="me-1 view_btn"
+                  onClick={() => {
+                    navigate(
+                      `${ROUTES.ASSIGN_QUOTATION}/${index.quotation_id}`
+                    );
+                  }}
+                >
                   view
                 </Button>
               </div>
@@ -145,7 +157,9 @@ export default function Quotations(props) {
                   btnType="add"
                   className="me-1 view_btn"
                   onClick={() => {
-                    navigate(`${ROUTES.ASSIGN_QUOTATION}/${index.id}`);
+                    navigate(
+                      `${ROUTES.ASSIGN_QUOTATION}/${index.quotation_id}`
+                    );
                   }}
                 >
                   Assign
@@ -182,12 +196,30 @@ export default function Quotations(props) {
   ];
 
   const getAllQuotation = () => {
-    PublicFetch.get(`${CRM_BASE_URL_FMS}/quotation`)
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/quotation?startIndex=0&noOfItems=100`)
       .then((res) => {
         console.log("Response", res);
         if (res.data.success) {
           console.log("success", res.data.data);
-          setAllQuotations(res.data.data);
+          let temp = [];
+          res.data.data.forEach((item, index) => {
+            let date = moment(item.quotation_date).format("DD-MM-YYYY");
+            let validity = moment(item.quotation_validity).format("DD-MM-YYYY");
+            temp.push({
+              quotation_cargo_type: item.quotation_cargo_type,
+              quotation_carrier: item.quotation_carrier,
+              quotation_id: item.quotation_id,
+              quotation_no: item.quotation_no,
+              quotation_date: date,
+              quotation_validity: validity,
+              quotation_consignee: item.quotation_consignee,
+              consignee_name: item.crm_v1_leads.lead_customer_name,
+              quotation_shipper: item.quotation_shipper,
+              quotation_status: item.quotation_status,
+              fms_v1_quotation_agents: item.fms_v1_quotation_agents,
+            });
+          });
+          setAllQuotations(temp);
         }
       })
       .catch((err) => {
@@ -261,7 +293,7 @@ export default function Quotations(props) {
           <TableData
             // data={getData(numofItemsTo, pageofIndex)}
 
-            data={data}
+            data={AllQuotations}
             columns={columns}
             custom_table_css="table_lead_list"
           />

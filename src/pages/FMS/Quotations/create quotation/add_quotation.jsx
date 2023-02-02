@@ -56,30 +56,17 @@ export default function Add_Quotation() {
     }
   };
   const [tableData, setTableData] = useState(dataSource);
-  const [sampleid, setSampleid] = useState()
   const getIndexInParent = (el) =>
     Array.from(el.parentNode.children).indexOf(el);
-  const handleInputChange = (e, key, col, tx) => {
-    console.log("gai guys", e, col , tx)
-    setSampleid(e)
-    allservices.map((item,index)=> {
-      if( tx && e === item.service_id) {
-        setTaxRatee(item.service_taxrate)
-      let hai = item.service_taxrate
-     
+  const handleInputChange = (e, key, col) => {
     setTableData(
       tableData.map((item) => {
         if (item.key === key) {
-
-          return (  
-            { ...item,  taxtype:  hai, [col]: e }
-            );
+          return { ...item, [col]: e };
         }
         return item;
       })
     );
-  }
-})
   };
   const handleInputChange2 = (e, index, col) => {
     setTableData(
@@ -95,7 +82,7 @@ export default function Add_Quotation() {
   const handleEnter = (e) => {
     console.log("Hello");
     console.log("Key ::::::: ", e.key);
-    if ( e.key === "Enter" || e.key === "Tab") {
+    if (e.key === "Enter" || e.key === "Tab") {
       setTableData([
         ...tableData,
         {
@@ -107,7 +94,6 @@ export default function Add_Quotation() {
           totalamount: "",
         },
       ]);
-      // setTaxRatee()
     }
     console.log("tabledata", tableData);
     let sum = 0;
@@ -159,7 +145,7 @@ export default function Add_Quotation() {
   const [carrierdata, setCarrierdata] = useState();
   const [OpportunityList, setOpportunityList] = useState([]);
   const [currentcount, setCurrentcount] = useState();
-const [taxratee,setTaxRatee] = useState()
+
   const [allLeadList, setAllLeadList] = useState([]);
   console.log("Lead names :", allLeadList);
   const getallcarrier = async () => {
@@ -210,7 +196,6 @@ const [taxratee,setTaxRatee] = useState()
     console.log("hello", index);
   };
 
-  
   const columns = [
     {
       title: "Action",
@@ -258,32 +243,20 @@ const [taxratee,setTaxRatee] = useState()
               optionFilterProp="children"
               className="selectwidth mb-2"
               value={index.tasks}
-              onChange={(e) =>{
-                console.log("servicess11123", e);
-                
-                handleInputChange(e, index.key, "tasks", "tx")
-            
-            }
-            
-            }
+              onChange={(e) => handleInputChange(e, index.key, "tasks")}
             >
               {services &&
-                            services.length > 0 &&
-                            services.map((item, index) => {
-                              let value = {id: item.service_id, tax: item.service_taxrate}
-                              console.log("u are",value)
-                              return (
-                                <Select.Option
-                                  key={item.service_id}
-                                  value={item.service_id}
-                                  // onChange={()=>{
-                                  //   setTaxRatee(item.service_taxrate)
-                                  // }}
-                                >
-                                  {item.service_name}
-                                </Select.Option>
-                              );
-                            })}
+                services.length > 0 &&
+                services.map((item, index) => {
+                  return (
+                    <Select.Option
+                      key={item.service_id}
+                      value={item.service_id}
+                    >
+                      {item.service_name}
+                    </Select.Option>
+                  );
+                })}
             </SelectBox>
           </div>
         );
@@ -353,7 +326,7 @@ const [taxratee,setTaxRatee] = useState()
           <div className="d-flex justify-content-center align-items-center tborder ">
             <Input_Number
               className="text_right"
-              // value={index.taxamount}
+              value={index.taxamount}
               onChange={(e) => handleInputChange(e, index.key, "taxamount")}
               align="right"
               step={0.01}
@@ -411,16 +384,11 @@ const [taxratee,setTaxRatee] = useState()
           setCurrentcount(res?.data?.data?.currentCount);
           let array = [];
           res?.data?.data?.leads?.forEach((item, index) => {
-            {
-              {
-                array.push({
-                  lead_id: item?.lead_id,
-
-                  lead_customer_name: item?.lead_customer_name,
-                });
-                setAllLeadList(array);
-              }
-            }
+            array.push({
+              lead_id: item?.lead_id,
+              lead_customer_name: item?.lead_customer_name,
+            });
+            setAllLeadList(array);
           });
         } else {
           console.log("FAILED T LOAD DATA");
@@ -445,140 +413,130 @@ const [taxratee,setTaxRatee] = useState()
         console.log("Error", err);
       });
   };
-  const [allunit,setAllunit]=useState([]);
+  const [allunit, setAllunit] = useState([]);
 
-  console.log("tXRATE", taxratee)
+  console.log("all units are : ", allunit);
+  const [unitTable, setunitTable] = useState("");
+  const getallunits = async () => {
+    try {
+      const allunits = await PublicFetch.get(`${CRM_BASE_URL_SELLING}/unit`);
+      console.log("all units are ::", allunits?.data?.data);
 
-  console.log("all units are : ",allunit);
-  const[unitTable,setunitTable]=useState("");
-  const getallunits=async ()=>{
-    try{
-    const  allunits =await PublicFetch.get(
-      `${CRM_BASE_URL_SELLING}/unit`)
-      console.log("all units are ::",allunits?.data?.data)
-    
       // if(allunits?.data.success){}
-      setAllunit(allunits?.data?.data)
-      setunitTable(allunits?.data?.data)
+      setAllunit(allunits?.data?.data);
+      setunitTable(allunits?.data?.data);
+    } catch (err) {
+      console.log("error to getting all units", err);
     }
-    catch(err) {
-    console.log("error to getting all units",err)
-    }
-    
-    }
-    
-    useEffect(()=>{
-      getallunits()
-    },[])
-    const [oppnew, setOppnew] = useState([]);
-    console.log("Opportunities are :::", oppnew);
-    const [oppleadid,setOppleadid]=useState();
-    console.log("Opportunities lead id :::", oppleadid);
-    const [numOfItems, setNumOfItems] = useState("25");
-    const GetOpportunityData = () => {
-      PublicFetch.get(
-        `${CRM_BASE_URL}/opportunity?startIndex=${pageofIndex}&noOfItems=${numOfItems}`
-      )
-        .then((res) => {
-          if (res?.data?.success) {
-            console.log("All opportunity dataqqq", res?.data?.data.leads);
-  
-            let tempArr = [];
-            res?.data?.data?.leads.forEach((item, index) => {
-              tempArr.push({
-                opportunity_id: item?.opportunity_id,
-                opportunity_number: item?.opportunity_number,
-                opportunity_type: item?.opportunity_type,
-                opportunity_party: item?.crm_v1_contacts?.contact_person_name,
-                opportunity_from: item?.opportunity_from,
-                lead_customer_name: item?.crm_v1_leads?.lead_customer_name,
-                opportunity_created_at: item?.opportunity_created_at,
-                opportunity_created_by: item?.opportunity_created_by,
-                opportunity_source: item?.opportunity_source,
-                opportunity_probability: item?.opportunity_probability,
-                opportunity_description: item?.opportunity_description,
-                opportunity_amount: item?.opportunity_amount,
-                opportunity_status: item?.opportunity_status,
-                lead_id:item?.crm_v1_leads?.lead_id,
-                assigned_employee: item?.assigned_employee,
-              });
-            });
-            console.log("hellooooqqqqq", tempArr);
-            setOppnew(tempArr);
-            setOppleadid( res?.data?.data?.leads?.opportunity_lead_id);
-            console.log("newwww",res?.data?.data?.leads?.opportunity_lead_id);
-            setOpportunityList(res?.data?.data?.leads);
-            setTotalcount(res?.data?.data?.totalCount);
-            console.log("totalcount iss", res?.data?.data?.totalCount);
-            // let samplearry = [];
-            // res?.data?.data?.leads.forEach((item, index) => {
-            //   samplearry.push(item.opportunity_id);
-            // });
-            // console.log("pushedd ", samplearry);
-  
-            // setOppurtunityid(samplearry);
-          } else {
-            console.log("Failed to load data !");
-          }
-        })
-        .catch((err) => {
-          console.log("Errror while getting data", err);
-        });
-    };
-  
-    useEffect(() => {
-      GetOpportunityData();
-    }, [pageofIndex, numOfItems]);
-    const [services, setServices] = useState([]);
-    console.log("Servicesss are :::", services);
-    const [allservices, setAllservices] = useState();
+  };
 
-    const getAllservices = () => {
-      PublicFetch.get(
-        `${CRM_BASE_URL_SELLING}/service?startIndex=${pageofIndex}&noOfItems=${numOfItems}`
-      )
-        .then((res) => {
-          console.log("all services is ", res.data.data);
-          if (res?.data?.success) {
-            console.log("All services dataawww", res?.data?.data?.services);
-            let tempArr = [];
-            res?.data?.data?.services.forEach((item, index) => {
+  useEffect(() => {
+    getallunits();
+  }, []);
+  const [oppnew, setOppnew] = useState([]);
+  console.log("Opportunities are :::", oppnew);
+  const [oppleadid, setOppleadid] = useState();
+  console.log("Opportunities lead id :::", oppleadid);
+  const [numOfItems, setNumOfItems] = useState("25");
+  const GetOpportunityData = () => {
+    PublicFetch.get(
+      `${CRM_BASE_URL}/opportunity?startIndex=${pageofIndex}&noOfItems=${numOfItems}`
+    )
+      .then((res) => {
+        if (res?.data?.success) {
+          console.log("All opportunity dataqqq", res?.data?.data.leads);
+
+          let tempArr = [];
+          res?.data?.data?.leads.forEach((item, index) => {
             tempArr.push({
-              service_id:item?.service_id,
+              opportunity_id: item?.opportunity_id,
+              opportunity_number: item?.opportunity_number,
+              opportunity_type: item?.opportunity_type,
+              opportunity_party: item?.crm_v1_contacts?.contact_person_name,
+              opportunity_from: item?.opportunity_from,
+              lead_customer_name: item?.crm_v1_leads?.lead_customer_name,
+              opportunity_created_at: item?.opportunity_created_at,
+              opportunity_created_by: item?.opportunity_created_by,
+              opportunity_source: item?.opportunity_source,
+              opportunity_probability: item?.opportunity_probability,
+              opportunity_description: item?.opportunity_description,
+              opportunity_amount: item?.opportunity_amount,
+              opportunity_status: item?.opportunity_status,
+              lead_id: item?.crm_v1_leads?.lead_id,
+              assigned_employee: item?.assigned_employee,
+            });
+            setOppleadid(item?.crm_v1_leads?.lead_id);
+          });
+          console.log("hellooooqqqqq", tempArr);
+          setOppnew(tempArr);
+          console.log("newwww", res?.data?.data?.leads?.opportunity_lead_id);
+          setOpportunityList(res?.data?.data?.leads);
+          setTotalcount(res?.data?.data?.totalCount);
+          console.log("totalcount iss", res?.data?.data?.totalCount);
+          // let samplearry = [];
+          // res?.data?.data?.leads.forEach((item, index) => {
+          //   samplearry.push(item.opportunity_id);
+          // });
+          // console.log("pushedd ", samplearry);
+
+          // setOppurtunityid(samplearry);
+        } else {
+          console.log("Failed to load data !");
+        }
+      })
+      .catch((err) => {
+        console.log("Errror while getting data", err);
+      });
+  };
+
+  useEffect(() => {
+    GetOpportunityData();
+  }, [pageofIndex, numOfItems]);
+  const [services, setServices] = useState([]);
+  console.log("Servicesss are :::", services);
+  const [allservices, setAllservices] = useState();
+
+  const getAllservices = () => {
+    PublicFetch.get(
+      `${CRM_BASE_URL_SELLING}/service?startIndex=${pageofIndex}&noOfItems=${numOfItems}`
+    )
+      .then((res) => {
+        console.log("all services is ", res.data.data);
+        if (res?.data?.success) {
+          console.log("All services dataawww", res?.data?.data?.services);
+          let tempArr = [];
+          res?.data?.data?.services.forEach((item, index) => {
+            tempArr.push({
+              service_id: item?.service_id,
               service_name: item?.service_name,
               service_category_id: item?.crm_v1_categories?.category_id,
               service_category_name: item?.crm_v1_categories?.category_name,
               service_code: item?.service_code,
               service_pic: item?.service_pic,
-              service_hsn:item?.service_hsn,
-              service_taxrate:item?.service_taxrate,
-              service_description:item?.service_description,
-              service_category_name:item?.crm_v1_categories?.category_name
-              
+              service_hsn: item?.service_hsn,
+              service_taxrate: item?.service_taxrate,
+              service_description: item?.service_description,
+              service_category_name: item?.crm_v1_categories?.category_name,
             });
-
-            if (sampleid &&sampleid === item?.service_id){
-            setTaxRatee(item?.service_taxrate) 
-            }
           });
-            console.log("hellooooqqqqq", tempArr);
-            setServices(tempArr);
-  
-            setAllservices(res?.data?.data.services);
-            setTotalcount(res?.data?.data?.totalCount);
-            // setCurrentcount(res?.data?.data?.currentCount);
-          } else {
-            console.log("FAILED T LOAD DATA");
-          }
-        })
-        .catch((err) => {
-          console.log("Errror while getting data", err);
-        });
-    };
-  
-    useEffect(() => {
-      getAllservices();
-    }, [numOfItems, pageofIndex]);
+          console.log("hellooooqqqqq", tempArr);
+          setServices(tempArr);
+
+          setAllservices(res?.data?.data.services);
+          setTotalcount(res?.data?.data?.totalCount);
+          // setCurrentcount(res?.data?.data?.currentCount);
+        } else {
+          console.log("FAILED T LOAD DATA");
+        }
+      })
+      .catch((err) => {
+        console.log("Errror while getting data", err);
+      });
+  };
+
+  useEffect(() => {
+    getAllservices();
+  }, [numOfItems, pageofIndex]);
 
 
     const OnSubmit = () => {
@@ -723,7 +681,7 @@ const [taxratee,setTaxRatee] = useState()
                           showSearch
                           optionFilterProp="children"
                         >
-                            {oppnew &&
+                          {oppnew &&
                             oppnew.length > 0 &&
                             oppnew.map((item, index) => {
                               return (
@@ -737,7 +695,7 @@ const [taxratee,setTaxRatee] = useState()
                             })}
                         </SelectBox>
                       </Form.Item>
-                    </div> 
+                    </div>
 
                     <div className="col-xl-3 col-sm-6 mt-2">
                       <label>Consignee</label>
@@ -1103,7 +1061,6 @@ const [taxratee,setTaxRatee] = useState()
                         </SelectBox>
                       </Form.Item>
                     </div>
-                  
 
                     <div className="col-xl-3 col-sm-6 mt-2">
                       <label>Exchange Rate</label>
@@ -1178,7 +1135,7 @@ const [taxratee,setTaxRatee] = useState()
                         />
                       </Form.Item>
                     </div>
-                   
+
                     <div className="col-6 ">
                       <label>Add Attachments</label>
                       <Form.Item className="mt-2" name="new">

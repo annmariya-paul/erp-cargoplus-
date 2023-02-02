@@ -592,6 +592,29 @@ export default function Sidebar({ showSidebar }) {
               ) : (
                 ""
               )}
+
+{FMSOpen ? (
+                <>
+                  {checkPermission("opportunity assign") && (
+                    <li className="nav-text ">
+                      <NavLink
+                        className={({ isActive }) =>
+                          isActive ? "active-link" : "link"
+                        }
+                        to={ROUTES.LIST_JOB}
+                      >
+                        <RiTeamFill className="sidebar_icons ms-3" />
+                       JobList
+                      </NavLink>
+                    </li>
+                  )}
+
+                 
+                </>
+              ) : (
+                ""
+              )}
+
               {FMSOpen ? (
                 <>
                   <li

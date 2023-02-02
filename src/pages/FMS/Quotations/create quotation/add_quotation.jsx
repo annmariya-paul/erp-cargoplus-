@@ -9,6 +9,7 @@ import { CRM_BASE_URL } from "../../../../api/bootapi";
 import TableData from "../../../../components/table/table_data";
 import { FaTrash } from "react-icons/fa";
 import { CRM_BASE_URL_FMS } from "../../../../api/bootapi";
+import { useNavigate } from "react-router-dom";
 import { GENERAL_SETTING_BASE_URL } from "../../../../api/bootapi";
 import FileUpload from "../../../../components/fileupload/fileUploader";
 import { Form } from "antd";
@@ -20,15 +21,19 @@ import Custom_model from "../../../../components/custom_modal/custom_model";
 import SelectBox from "../../../../components/Select Box/SelectBox";
 import { DatePicker } from "antd";
 import "./quotation.scss";
+import {ROUTES} from "../../../../routes";
 import Input_Number from "../../../../components/InputNumber/InputNumber";
 
-export default function Add_Quotation(custom_table_css) {
+export default function Add_Quotation() {
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [successPopup, setSuccessPopup] = useState(false);
+  const [error, setError] = useState(false);
   const [cargooptions, setCargooptions] = useState(cargo_typeoptions);
   console.log("cargo options : ", cargooptions);
   const today = new Date().toISOString().split("T")[0];
   const [date, setDate] = useState();
   const [addForm] = Form.useForm();
+  const navigate = useNavigate();
   const dateFormatList = ["DD-MM-YYYY", "DD-MM-YY"];
   const dataSource = [
     {
@@ -40,18 +45,41 @@ export default function Add_Quotation(custom_table_css) {
       totalamount: "",
     },
   ];
+  const [Errormsg, setErrormsg] = useState();
+
+  const close_modal = (mShow, time) => {
+    if (!mShow) {
+      setTimeout(() => {
+        setSuccessPopup(false);
+        navigate(ROUTES.PRODUCT);
+      }, time);
+    }
+  };
   const [tableData, setTableData] = useState(dataSource);
+  const [sampleid, setSampleid] = useState()
   const getIndexInParent = (el) =>
     Array.from(el.parentNode.children).indexOf(el);
-  const handleInputChange = (e, key, col) => {
+  const handleInputChange = (e, key, col, tx) => {
+    console.log("gai guys", e, col , tx)
+    setSampleid(e)
+    allservices.map((item,index)=> {
+      if( tx && e === item.service_id) {
+        setTaxRatee(item.service_taxrate)
+      let hai = item.service_taxrate
+     
     setTableData(
       tableData.map((item) => {
         if (item.key === key) {
-          return { ...item, [col]: e };
+
+          return (  
+            { ...item,  taxtype:  hai, [col]: e }
+            );
         }
         return item;
       })
     );
+  }
+})
   };
   const handleInputChange2 = (e, index, col) => {
     setTableData(
@@ -67,7 +95,7 @@ export default function Add_Quotation(custom_table_css) {
   const handleEnter = (e) => {
     console.log("Hello");
     console.log("Key ::::::: ", e.key);
-    if (e.key === "Enter" || e.key === "Tab") {
+    if ( e.key === "Enter" || e.key === "Tab") {
       setTableData([
         ...tableData,
         {
@@ -79,6 +107,7 @@ export default function Add_Quotation(custom_table_css) {
           totalamount: "",
         },
       ]);
+      // setTaxRatee()
     }
     console.log("tabledata", tableData);
     let sum = 0;
@@ -130,7 +159,7 @@ export default function Add_Quotation(custom_table_css) {
   const [carrierdata, setCarrierdata] = useState();
   const [OpportunityList, setOpportunityList] = useState([]);
   const [currentcount, setCurrentcount] = useState();
-
+const [taxratee,setTaxRatee] = useState()
   const [allLeadList, setAllLeadList] = useState([]);
   console.log("Lead names :", allLeadList);
   const getallcarrier = async () => {
@@ -229,15 +258,27 @@ export default function Add_Quotation(custom_table_css) {
               optionFilterProp="children"
               className="selectwidth mb-2"
               value={index.tasks}
-              onChange={(e) => handleInputChange(e, index.key, "tasks")}
+              onChange={(e) =>{
+                console.log("servicess11123", e);
+                
+                handleInputChange(e, index.key, "tasks", "tx")
+            
+            }
+            
+            }
             >
               {services &&
                             services.length > 0 &&
                             services.map((item, index) => {
+                              let value = {id: item.service_id, tax: item.service_taxrate}
+                              console.log("u are",value)
                               return (
                                 <Select.Option
                                   key={item.service_id}
                                   value={item.service_id}
+                                  // onChange={()=>{
+                                  //   setTaxRatee(item.service_taxrate)
+                                  // }}
                                 >
                                   {item.service_name}
                                 </Select.Option>
@@ -312,7 +353,7 @@ export default function Add_Quotation(custom_table_css) {
           <div className="d-flex justify-content-center align-items-center tborder ">
             <Input_Number
               className="text_right"
-              value={index.taxamount}
+              // value={index.taxamount}
               onChange={(e) => handleInputChange(e, index.key, "taxamount")}
               align="right"
               step={0.01}
@@ -405,6 +446,8 @@ export default function Add_Quotation(custom_table_css) {
       });
   };
   const [allunit,setAllunit]=useState([]);
+
+  console.log("tXRATE", taxratee)
 
   console.log("all units are : ",allunit);
   const[unitTable,setunitTable]=useState("");
@@ -513,6 +556,10 @@ export default function Add_Quotation(custom_table_css) {
               service_category_name:item?.crm_v1_categories?.category_name
               
             });
+
+            if (sampleid &&sampleid === item?.service_id){
+            setTaxRatee(item?.service_taxrate) 
+            }
           });
             console.log("hellooooqqqqq", tempArr);
             setServices(tempArr);
@@ -533,6 +580,46 @@ export default function Add_Quotation(custom_table_css) {
       getAllservices();
     }, [numOfItems, pageofIndex]);
 
+
+    const OnSubmit = () => {
+      const formData = new FormData();
+      // formData.append("quotation_consignee", qtnconsignee);
+      // formData.append("quotation_freight_type", qtnfrighttype);
+      // formData.append("quotation_carrier", qtncarrier);
+      // formData.append("quotation_mode", qtnmode);
+      // formData.append("quotation_origin_id", qtnoriginid);
+      // formData.append("quotation_destination_id", qtndestid);
+      // formData.append("quotation_no_of_pieces", productatt);
+      // formData.append("quotation_uom", description);
+      // formData.append("quotation_gross_wt", description);
+      // formData.append("quotation_chargeable_wt", description);
+      // formData.append("quotation_payment_terms ", description);
+      // formData.append("quotation_currency", description);
+      // formData.append("quotation_exchange_rate", description);
+      // formData.append("quotation_grand_total", description);
+      // formData.append("quotation_docs ", description);
+      
+      // formData.append("quotation_details ", description);
+  
+      PublicFetch.post(`${CRM_BASE_URL_FMS}/quotation`, formData, {
+        "Content-Type": "Multipart/form-Data",
+      })
+        .then((res) => {
+          console.log("data is successfully saved", res.data.success);
+          if (res.data.success) {
+            setSuccessPopup(true);
+            addForm.resetFields();
+            close_modal(successPopup, 1000);
+          } else {
+            setErrormsg(res.data.data);
+          }
+        })
+        .catch((err) => {
+          console.log("error", err);
+          setError(true);
+        });
+    };
+
   return (
     <>
       <div className="container-fluid">
@@ -545,9 +632,11 @@ export default function Add_Quotation(custom_table_css) {
 
           <div className="content-tabs">
             <Form
+             name="addForm"
               form={addForm}
               onFinish={(values) => {
                 console.log("values iss", values);
+                OnSubmit();
               }}
               onFinishFailed={(error) => {
                 console.log(error);

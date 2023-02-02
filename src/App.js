@@ -79,6 +79,8 @@ import Companyinfo from "./pages/General Settings/companyinfo/companyinfo";
 import Locations from "./pages/FMS/settings/Locations/locations";
 import SelectCountry from "./pages/General Settings/country/CountrySelect";
 import QuotationAssign from "./pages/FMS/Quotations/QuotationAssign";
+import Listjob from "./pages/FMS/Jobtask/joblist";
+import CreateJob from "./pages/FMS/Jobtask/createjob";
 // import Lead from "./pages/lead/lead";
 
 function App() {
@@ -191,8 +193,9 @@ function App() {
             <Route path={ROUTES.LOCATIONS} element={<Locations />} />
             <Route
               path={ROUTES.ASSIGN_QUOTATION_ID}
-              element={<QuotationAssign />}
-            />
+              element={<QuotationAssign />}/>
+            <Route path={ROUTES.LIST_JOB } element={<Listjob/> }/>
+            <Route path={ROUTES.CREATEJOB} element={<CreateJob/> }/> 
 
             {/* General settings */}
 

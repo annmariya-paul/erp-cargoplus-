@@ -12,7 +12,8 @@ export default function TableData({
   expandIconColumnIndex,
   className,
   style,
-  bordered
+  bordered,
+  rowKey
 }) {
   return (
     <>
@@ -26,6 +27,7 @@ export default function TableData({
           className={className}
           style={style}
           bordered={bordered}
+          rowKey={rowKey}
         />
       </div>
     </>

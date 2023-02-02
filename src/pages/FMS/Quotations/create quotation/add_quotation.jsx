@@ -57,7 +57,6 @@ export default function Add_Quotation() {
     }
   };
   const [tableData, setTableData] = useState(dataSource);
-  const [sampleid, setSampleid] = useState()
   const getIndexInParent = (el) =>
     Array.from(el.parentNode.children).indexOf(el);
   const handleInputChange = (e, key, col, tx) => {
@@ -104,7 +103,7 @@ const handleInputchange1 = (e, key, col) => {
   const handleEnter = (e) => {
     console.log("Hello");
     console.log("Key ::::::: ", e.key);
-    if ( e.key === "Enter" || e.key === "Tab") {
+    if (e.key === "Enter" || e.key === "Tab") {
       setTableData([
         ...tableData,
         {
@@ -116,7 +115,6 @@ const handleInputchange1 = (e, key, col) => {
           totalamount: "",
         },
       ]);
-      // setTaxRatee()
     }
     console.log("tabledata", tableData);
     let sum = 0;
@@ -168,7 +166,7 @@ const handleInputchange1 = (e, key, col) => {
   const [carrierdata, setCarrierdata] = useState();
   const [OpportunityList, setOpportunityList] = useState([]);
   const [currentcount, setCurrentcount] = useState();
-const [taxratee,setTaxRatee] = useState()
+
   const [allLeadList, setAllLeadList] = useState([]);
   console.log("Lead names :", allLeadList);
   const getallcarrier = async () => {
@@ -288,22 +286,17 @@ const [taxratee,setTaxRatee] = useState()
             }
             >
               {services &&
-                            services.length > 0 &&
-                            services.map((item, index) => {
-                              let value = {id: item.service_id, tax: item.service_taxrate}
-                              console.log("u are",value)
-                              return (
-                                <Select.Option
-                                  key={item.service_id}
-                                  value={item.service_id}
-                                  // onChange={()=>{
-                                  //   setTaxRatee(item.service_taxrate)
-                                  // }}
-                                >
-                                  {item.service_name}
-                                </Select.Option>
-                              );
-                            })}
+                services.length > 0 &&
+                services.map((item, index) => {
+                  return (
+                    <Select.Option
+                      key={item.service_id}
+                      value={item.service_id}
+                    >
+                      {item.service_name}
+                    </Select.Option>
+                  );
+                })}
             </SelectBox>
             </Form.Item>
           </div>
@@ -456,16 +449,11 @@ const [taxratee,setTaxRatee] = useState()
           setCurrentcount(res?.data?.data?.currentCount);
           let array = [];
           res?.data?.data?.leads?.forEach((item, index) => {
-            {
-              {
-                array.push({
-                  lead_id: item?.lead_id,
-
-                  lead_customer_name: item?.lead_customer_name,
-                });
-                setAllLeadList(array);
-              }
-            }
+            array.push({
+              lead_id: item?.lead_id,
+              lead_customer_name: item?.lead_customer_name,
+            });
+            setAllLeadList(array);
           });
         } else {
           console.log("FAILED T LOAD DATA");
@@ -490,11 +478,22 @@ const [taxratee,setTaxRatee] = useState()
         console.log("Error", err);
       });
   };
-  const [allunit,setAllunit]=useState([]);
+  const [allunit, setAllunit] = useState([]);
 
-  console.log("tXRATE", taxratee)
+  console.log("all units are : ", allunit);
+  const [unitTable, setunitTable] = useState("");
+  const getallunits = async () => {
+    try {
+      const allunits = await PublicFetch.get(`${CRM_BASE_URL_SELLING}/unit`);
+      console.log("all units are ::", allunits?.data?.data);
 
   console.log("all units are : ",allunit);
+    }
+    catch(err) {
+      console.log("error to getting all units",err)
+      }
+    }
+  
 
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
@@ -516,26 +515,7 @@ const [taxratee,setTaxRatee] = useState()
       file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
     );
   };
-  const[unitTable,setunitTable]=useState("");
-  const getallunits=async ()=>{
-    try{
-    const  allunits =await PublicFetch.get(
-      `${CRM_BASE_URL_SELLING}/unit`)
-      console.log("all units are ::",allunits?.data?.data)
-    
-      // if(allunits?.data.success){}
-      setAllunit(allunits?.data?.data)
-      setunitTable(allunits?.data?.data)
-    }
-    catch(err) {
-    console.log("error to getting all units",err)
-    }
-    
-    }
-    
-    useEffect(()=>{
-      getallunits()
-    },[])
+  
     const [oppnew, setOppnew] = useState([]);
     console.log("Opportunities are :::", oppnew);
     const [oppleadid,setOppleadid]=useState();
@@ -626,52 +606,47 @@ const [taxratee,setTaxRatee] = useState()
       getAllLocations();
     }, []);
 
-    const getAllservices = () => {
-      PublicFetch.get(
-        `${CRM_BASE_URL_SELLING}/service?startIndex=${pageofIndex}&noOfItems=${numOfItems}`
-      )
-        .then((res) => {
-          console.log("all services is ", res.data.data);
-          if (res?.data?.success) {
-            console.log("All services dataawww", res?.data?.data?.services);
-            let tempArr = [];
-            res?.data?.data?.services.forEach((item, index) => {
+  const getAllservices = () => {
+    PublicFetch.get(
+      `${CRM_BASE_URL_SELLING}/service?startIndex=${pageofIndex}&noOfItems=${numOfItems}`
+    )
+      .then((res) => {
+        console.log("all services is ", res.data.data);
+        if (res?.data?.success) {
+          console.log("All services dataawww", res?.data?.data?.services);
+          let tempArr = [];
+          res?.data?.data?.services.forEach((item, index) => {
             tempArr.push({
-              service_id:item?.service_id,
+              service_id: item?.service_id,
               service_name: item?.service_name,
               service_category_id: item?.crm_v1_categories?.category_id,
               service_category_name: item?.crm_v1_categories?.category_name,
               service_code: item?.service_code,
               service_pic: item?.service_pic,
-              service_hsn:item?.service_hsn,
-              service_taxrate:item?.service_taxrate,
-              service_description:item?.service_description,
-              service_category_name:item?.crm_v1_categories?.category_name
-              
+              service_hsn: item?.service_hsn,
+              service_taxrate: item?.service_taxrate,
+              service_description: item?.service_description,
+              service_category_name: item?.crm_v1_categories?.category_name,
             });
-
-            if (sampleid &&sampleid === item?.service_id){
-            setTaxRatee(item?.service_taxrate) 
-            }
           });
-            console.log("hellooooqqqqq", tempArr);
-            setServices(tempArr);
-  
-            setAllservices(res?.data?.data.services);
-            setTotalcount(res?.data?.data?.totalCount);
-            // setCurrentcount(res?.data?.data?.currentCount);
-          } else {
-            console.log("FAILED T LOAD DATA");
-          }
-        })
-        .catch((err) => {
-          console.log("Errror while getting data", err);
-        });
-    };
-  
-    useEffect(() => {
-      getAllservices();
-    }, [numOfItems, pageofIndex]);
+          console.log("hellooooqqqqq", tempArr);
+          setServices(tempArr);
+
+          setAllservices(res?.data?.data.services);
+          setTotalcount(res?.data?.data?.totalCount);
+          // setCurrentcount(res?.data?.data?.currentCount);
+        } else {
+          console.log("FAILED T LOAD DATA");
+        }
+      })
+      .catch((err) => {
+        console.log("Errror while getting data", err);
+      });
+  };
+
+  useEffect(() => {
+    getAllservices();
+  }, [numOfItems, pageofIndex]);
 
 const [filenew,setFilenew]=useState();
 console.log("file",filenew);
@@ -850,7 +825,7 @@ console.log("file",filenew);
                           showSearch
                           optionFilterProp="children"
                         >
-                            {oppnew &&
+                          {oppnew &&
                             oppnew.length > 0 &&
                             oppnew.map((item, index) => {
                               return (
@@ -864,7 +839,7 @@ console.log("file",filenew);
                             })}
                         </SelectBox>
                       </Form.Item>
-                    </div> 
+                    </div>
 
                     <div className="col-xl-3 col-sm-6 mt-2">
                       <label>Consignee</label>
@@ -1251,7 +1226,6 @@ console.log("file",filenew);
                         </SelectBox>
                       </Form.Item>
                     </div>
-                  
 
                     <div className="col-xl-3 col-sm-6 mt-2">
                       <label>Exchange Rate</label>
@@ -1326,7 +1300,7 @@ console.log("file",filenew);
                         />
                       </Form.Item>
                     </div>
-                   
+
                     <div className="col-6 ">
                       <label>Add Attachments</label>
                       <Form.Item className="mt-2" name="new">
@@ -1429,4 +1403,4 @@ console.log("file",filenew);
       </div>
     </>
   );
-}
+            }

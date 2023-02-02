@@ -81,7 +81,9 @@ const ROUTES = {
   LOCATIONS: "/locations",
   ASSIGN_QUOTATION: "/assign_quotation",
   ASSIGN_QUOTATION_ID: "/assign_quotation/:id",
-
+  LIST_JOB:"/joblist",
+  CREATEJOB:"/createjob",
+  UPDATEJOB:"/updatejob",
   // general settings
   CURRENCY: "/currency",
   COMPANYINFO: "/company_info",

@@ -23,6 +23,7 @@ function UpdateAgent() {
   const [editempid, seteditempid] = useState();
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [allCountries, setAllCountries] = useState();
+  const [employeeagentid,setemployeeagentid]= useState()
   const navigate = useNavigate();
 
   const options = useMemo(() => getData(), []);
@@ -61,6 +62,9 @@ function UpdateAgent() {
         `${process.env.REACT_APP_BASE_URL}/agents/${id}`
       );
       console.log("one agentss are ::", oneagent?.data?.data);
+      console.log("one employee agent id ::", oneagent?.data?.data.agent_emp_id);
+      setemployeeagentid(oneagent?.data?.data?.agent_emp_id)
+
       console.log(
         "emp agent is ::",
         oneagent?.data?.data.hrms_v1_employee.employee_name
@@ -82,7 +86,7 @@ function UpdateAgent() {
       const updating = await PublicFetch.patch(
         `${process.env.REACT_APP_BASE_URL}/agents/${id}`,
         {
-          agent_emp_id: editempid,
+          agent_emp_id: employeeagentid,
           agent_country: editcountrynme,
           agent_commission_details: editcommision,
         }

@@ -40,6 +40,7 @@ function ListAgent() {
           agent_id: item.agent_id,
           agent_country: item.agent_country,
           agent_emp_id: item.hrms_v1_employee.employee_code,
+          agent_emp_name:item.hrms_v1_employee.employee_name
         });
       });
       setAgentdata(array);
@@ -131,10 +132,11 @@ function ListAgent() {
       onFilter: (value, record) => {
         console.log("valuesss in", record);
         return (
-          String(record.attribute_name)
+          String(record.agent_country)
             .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.attribute_description)
+            .includes(value.toLowerCase()) 
+            ||
+          String(record.agent_emp_name)
             .toLowerCase()
             .includes(value.toLowerCase())
         );
@@ -144,6 +146,14 @@ function ListAgent() {
     {
       title: "Employee Code",
       dataIndex: "agent_emp_id",
+      width: "30%",
+      key: "DESCRIPTION",
+
+      align: "left",
+    },
+    {
+      title: "Employee Name",
+      dataIndex: "agent_emp_name",
       width: "30%",
       key: "DESCRIPTION",
 

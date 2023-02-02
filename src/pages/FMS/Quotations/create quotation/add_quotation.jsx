@@ -61,11 +61,11 @@ export default function Add_Quotation() {
     Array.from(el.parentNode.children).indexOf(el);
   const handleInputChange = (e, key, col, tx) => {
     console.log("gai guys", e, col , tx)
-    setSampleid(e)
+    // setSampleid(e)
     allservices.map((item,index)=> {
       // if( tx && e === item.service_id) {
         if (col && key && tx && e === item.service_id){
-        setTaxRatee(item.service_taxrate)
+        // setTaxRatee(item.service_taxrate)
       let hai = item.service_taxrate;
      
       setTableData(

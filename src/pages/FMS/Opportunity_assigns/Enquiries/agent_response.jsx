@@ -26,10 +26,10 @@ export default function Agent_Response() {
   const [opporLead, setOpporLead] = useState();
   const [assignOpporData, setAssignOpporData] = useState();
   const [agentResponseId, setAgentResponseId] = useState();
-  const [responseEnquiryId,setResponseEnquiryId] = useState();
+  const [responseEnquiryId, setResponseEnquiryId] = useState();
   const [responseId, setResponseId] = useState();
   const [agentResponse, setAgentResponse] = useState();
-  console.log("selected agentsss",agentResponse);
+  console.log("selected agentsss", agentResponse);
 
   const close_modal = (mShow, time) => {
     if (!mShow) {
@@ -57,8 +57,9 @@ export default function Agent_Response() {
       .then((res) => {
         console.log("response", res);
         if (res.data.success) {
-          console.log("success", res.data.data);
+          console.log("success_enquiry", res.data.data);
           setAssignOpporData(res.data.data);
+
         }
       })
       .catch((err) => {
@@ -275,8 +276,8 @@ export default function Agent_Response() {
                           assignOpporData.map((item, index) => {
                             return (
                               <Select.Option
-                                key={item.opportunity_assign_id}
-                                value={item.opportunity_assign_id}
+                                key={item.opportunity_assign_employee_id}
+                                value={item.opportunity_assign_employee_id}
                               >
                                 {item.hrms_v1_employee.employee_name}
                               </Select.Option>

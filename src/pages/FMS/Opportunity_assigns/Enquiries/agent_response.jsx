@@ -28,7 +28,8 @@ export default function Agent_Response() {
   const [agentResponseId, setAgentResponseId] = useState();
   const [responseEnquiryId,setResponseEnquiryId] = useState();
   const [responseId, setResponseId] = useState();
-  const [agentResponse, setAgentResponse] = useState([]);
+  const [agentResponse, setAgentResponse] = useState();
+  console.log("selected agentsss",agentResponse);
 
   const close_modal = (mShow, time) => {
     if (!mShow) {

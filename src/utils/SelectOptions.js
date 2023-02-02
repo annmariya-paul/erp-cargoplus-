@@ -59,13 +59,13 @@ const Prob_conversion = [
 
 const cargo_typeoptions = [
   {
-    id:"1", name : "Frozen",value :"1"
+    id:"1", name : "Frozen",value :"Frozen"
   },
   {
-    id:"2", name : "Dangerous",value :"2"
+    id:"2", name : "Dangerous",value :"Dangerous"
   },
   {
-    id:"3", name : "Refrigerated",value :"3"
+    id:"3", name : "Refrigerated",value :"Refrigerator"
   }, 
 ]
 module.exports = { LeadType, LeadStatus, LeadOrganization, Oppor_Status, Prob_conversion,cargo_typeoptions };

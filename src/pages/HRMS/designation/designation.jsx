@@ -428,7 +428,7 @@ export default function Designation() {
                       rules={[
                         {
                           required: true,
-                          pattern: new RegExp("^[A-Za-z]+$"),
+                          pattern: new RegExp("^[A-Za-z ]+$"),
                           message: "Please enter a Valid Designation Name",
                         },
                         {

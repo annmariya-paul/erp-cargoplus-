@@ -94,7 +94,7 @@ export default function TaxType() {
       console.log("err to add the frights", err);
     }
   };
-
+  const [nameSearch, setNamesearch] = useState();
   // { function to display a taxtype in input to edit - Ann - 19/1/23}
   const TaxTypeEdit = (i) => {
     console.log("taxtypppe", i);
@@ -203,7 +203,7 @@ export default function TaxType() {
       key: "tax_type_name",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.tax_type_name)
+        return String(record.tax_type_name || nameSearch)
           .toLowerCase()
           .includes(value.toLowerCase());
       },

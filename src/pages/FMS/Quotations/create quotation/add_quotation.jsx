@@ -54,30 +54,59 @@ export default function Add_Quotation() {
     if (!mShow) {
       setTimeout(() => {
         setSuccessPopup(false);
-        navigate(ROUTES.PRODUCT);
+        navigate(ROUTES.QUATATIONS);
       }, time);
     }
   };
   const [tableData, setTableData] = useState(dataSource);
+
   const getIndexInParent = (el) =>
     Array.from(el.parentNode.children).indexOf(el);
   const handleInputChange = (e, key, col, tx) => {
     console.log("gai guys", e, col , tx)
     // setSampleid(e)
-    allservices.map((item,index)=> {
-      if( tx && e === item.service_id) {
-        if (col && key && tx && e === item.service_id){
-        setTaxRatee(item.service_taxrate)
-      let hai = item.service_taxrate;
+    taxTypes.map((item,index)=> {
+      if( tx && e === item.tax_type_id) {
+        if (col && key && tx && e === item.tax_type_id){
+        setTaxRatee(item.tax_type_percentage)
+      // let hai = item.tax_type_percentage;
      
+      
+      let existingValues = addForm.getFieldsValue()
+      console.log("existing form", existingValues)
+      let {quotation_details} = existingValues
+        let assignValues = quotation_details[key]
+
+      let taxamount = ( assignValues["quotation_details_cost"] * item.tax_type_percentage) /100
+      console.log("sum of tax", taxamount)
+      assignValues["quotation_details_tax_amount"] = taxamount
+
+      
+      let totalAmount = assignValues["quotation_details_cost"] + assignValues["quotation_details_tax_amount"]
+      console.log("total aount", totalAmount)
+      assignValues["quotation_details_total"] = totalAmount
+      console.log("quation deatils", quotation_details)
+      addForm.setFieldsValue({quotation_details})
+      
+
       setTableData(
         tableData.map((item) => {
           if (item.key === key) {
-            return { ...item, quotation_details_tax_type: hai, quotation_details_service_id: e };
+            return { ...item, quotation_details_tax_amount: taxamount, quotation_details_tax_type: e , quotation_details_total: totalAmount };
           }
           return item;
         })
       );
+      console.log("tabledata", tableData);
+      let sum = 0;
+      tableData.forEach((item) => {
+        sum += item.quotation_details_cost + item.quotation_details_tax_amount;
+      });
+      console.log("sum", sum);
+      setTotal(sum);
+      addForm.setFieldsValue({
+        grandtotal: sum
+      })
     }
   }
   });
@@ -121,13 +150,7 @@ const handleInputchange1 = (e, key, col) => {
         },
       ]);
     }
-    console.log("tabledata", tableData);
-    let sum = 0;
-    tableData.forEach((item) => {
-      sum += item.quotation_details_cost + item.quotation_details_tax_amount;
-    });
-    console.log("sum", sum);
-    setTotal(sum);
+    
   };
 
   const handleReorder = (dragIndex, draggedIndex) => {
@@ -207,6 +230,28 @@ const handleInputchange1 = (e, key, col) => {
       console.log("Error in fetching fright types : ", err);
     }
   };
+
+  // const gatallTaxType= ()=> {
+  //   PublicFetch.get(`${CRM_BASE_URL_FMS}/tax-types?startIndex=${pageofIndex}&noOfItems=${noofItems}`).then((res)=> {
+  //     console.
+  //   })
+  // }
+  const [taxTypes, setTaxTypes] = useState();
+  const getAllTaxTypes = async () => {
+    try {
+      const allTxTypes = await PublicFetch.get(
+        `${CRM_BASE_URL_FMS}/tax-types?startIndex=${pageofIndex}&perPage=${numOfItems}`
+      );
+      console.log("all taxtype are", allTxTypes.data.data);
+      setTaxTypes(allTxTypes.data.data);
+    } catch (err) {
+      console.log("error while getting the tax types: ", err);
+    }
+  };
+
+  useEffect(() => {
+    getAllTaxTypes();
+  }, []);
   useEffect(() => {
     getallfrighttype();
     getallcurrency();
@@ -283,8 +328,8 @@ const handleInputchange1 = (e, key, col) => {
               value={index.quotation_details_service_id}
               onChange={(e) =>{
                 console.log("servicess11123", e);
-                
-                handleInputChange(e, index.key, "quotation_details_service_id", "tx")
+                handleInputchange1(e, index.key, "quotation_details_service_id")
+                // handleInputChange(e, index.key, "quotation_details_service_id", "tx")
             
             }
             
@@ -356,7 +401,7 @@ const handleInputchange1 = (e, key, col) => {
         // rules={[{ required: true, message: 'Please input the name' }]}
       >
 
-            <Input_Number
+            {/* <Input_Number
               className="text_right"
               value={taxratee}
               onChange={(e) => handleInputchange1(e, index.key, "quotation_details_tax_type")}
@@ -365,7 +410,38 @@ const handleInputchange1 = (e, key, col) => {
               min={0}
               precision={2}
               controlls={false}
-            />
+            /> */}
+
+             <SelectBox
+              allowClear
+              showSearch
+              optionFilterProp="children"
+              className="selectwidthnew mb-2"
+              value={index.quotation_details_tax_type}
+              onChange={(e) =>{
+                console.log("servicess11123", e);
+                // handleInputchange1(e, index.key, "quotation_details_tax_type")
+                handleInputChange(e, index.key, "quotation_details_tax_type", "tx")
+
+            
+            }
+            
+            }
+            >
+              {taxTypes &&
+                taxTypes.length > 0 &&
+                taxTypes.map((item, index) => {
+                  return (
+                    <Select.Option
+                      key={item.tax_type_id}
+                      value={item.tax_type_id}
+                    >
+                      {item.tax_type_name}
+                    </Select.Option>
+                  );
+                })}
+            </SelectBox>
+
             </Form.Item>
             
           </div>
@@ -492,8 +568,9 @@ const handleInputchange1 = (e, key, col) => {
     try {
       const allunits = await PublicFetch.get(`${CRM_BASE_URL_SELLING}/unit`);
       console.log("all units are ::", allunits?.data?.data);
-
+      setAllunit(allunits?.data?.data)
   console.log("all units are : ",allunit);
+
     }
     catch(err) {
       console.log("error to getting all units",err)
@@ -608,7 +685,7 @@ const handleInputchange1 = (e, key, col) => {
     };
   
     useEffect(() => {
-    
+      getallunits();
       getAllLocations();
     }, []);
 
@@ -658,10 +735,10 @@ const [filenew,setFilenew]=useState();
 console.log("file",filenew);
     const OnSubmit = (data) => {
       console.log("submitting data", data);
-      const data11 = "443255654"
+      const data11 = "noufal12343221"
       const date1 = moment(data.qdate).format("YYYY-MM-DD")
       const date2 = moment(data.vdate).format("YYYY-MM-DD")
-     const docfile = data.new.file.originFileObj;
+     const docfile = data?.new?.file?.originFileObj;
       const formData = new FormData();
       formData.append("quotation_no", data11);
       formData.append("quotation_enquiry", data.eno);
@@ -673,42 +750,45 @@ console.log("file",filenew);
       formData.append("quotation_cargo_type",  data.cargotype);
       formData.append("quotation_carrier",  data.carrier);
       formData.append("quotation_mode",  data.mode);
-      formData.append("quotation_origin_id ", data.corgin);
+      formData.append("quotation_origin_id", data.corgin);
       // formData.append("quotation_origin", parseInt(data.corgin)); 
       formData.append("quotation_destination_id",  data.cdest);
       // formData.append("quotation_destination",  data.cdest);
-      formData.append("quotation_no_of_pieces ",  data.npieces);
-      formData.append("quotation_uom ", data.uom);
-      formData.append("quotation_gross_wt ",  data.gweight);
-      formData.append("quotation_chargeable_wt ", data.weight);
-      formData.append("quotation_payment_terms ", data.terms);
-      formData.append("quotation_currency ", data.currency);
-      formData.append("quotation_exchange_rate ",  data.exchnagerate);
-      formData.append("quotation_grand_total ", data.grandtotal);
-      formData.append("attachments", filenew);
-      console.log("file we get :", data.new.file.originFileObj);
+      formData.append("quotation_no_of_pieces",  data.npieces);
+      formData.append("quotation_uom", data.uom);
+      formData.append("quotation_gross_wt",  data.gweight);
+      formData.append("quotation_chargeable_wt", data.weight);
+      formData.append("quotation_payment_terms", data.terms);
+      formData.append("quotation_currency", data.currency);
+      formData.append("quotation_exchange_rate",  data.exchnagerate);
+      formData.append("quotation_grand_total", data.grandtotal);
+      if(filenew){
+        formData.append("attachments", filenew);
+      }
+     
+      // console.log("file we get :", data.new.file.originFileObj);
       console.log("abc",data.quotation_details);
 
         const userData = Object.values(data.quotation_details);
         console.log("qtn details",data.quotation_details);
         console.log("usserData",userData);
-        const [quotation_details_service_id, quotation_details_cost,quotation_details_tax_type,quotation_details_tax_amount,quotation_details_total] = userData;
+        // const [quotation_details_service_id, quotation_details_cost,quotation_details_tax_type,quotation_details_tax_amount,quotation_details_total] = userData;
         // formData.append('userData', JSON.stringify(userData));
-        formData.append('quotation_details', JSON.stringify(userData));
+        // formData.append('quotation_details', JSON.stringify(userData));
         
-//       userData.map((item,index)=>{
-// console.log("userdata task",index);
-//         formData.append(`quotation_details[${index}][quotation_details_service_id] `,item.tasks);
-//         formData.append(`quotation_details[${index}][quotation_details_cost] `, item.cost);
-//         formData.append(`quotation_details[${index}][quotation_details_tax_type] `, item.taxtype);
-//         formData.append(`quotation_details[${index}][quotation_details_tax_amount] `,item.taxamount);
-//         formData.append(`quotation_details[${index}][quotation_details_total] `, item.totalamount);
-//       })
+      userData.map((item,index)=>{
+console.log("userdata task",index);
+        formData.append(`quotation_details[${index}][quotation_details_service_id]`,item.quotation_details_service_id);
+        formData.append(`quotation_details[${index}][quotation_details_cost]`, item.quotation_details_cost);
+        formData.append(`quotation_details[${index}][quotation_details_tax_type]`, item.quotation_details_tax_type);
+        formData.append(`quotation_details[${index}][quotation_details_tax_amount]`,item.quotation_details_tax_amount);
+        formData.append(`quotation_details[${index}][quotation_details_total]`, item.quotation_details_total);
+      })
      
      
 
       
-  
+      console.log("before sending data")
       PublicFetch.post(`${CRM_BASE_URL_FMS}/quotation`, formData, {
         "Content-Type": "Multipart/form-Data",
       })
@@ -991,7 +1071,7 @@ console.log("file",filenew);
                             cargooptions.length > 0 &&
                             cargooptions.map((item, index) => {
                               return (
-                                <Select.Option key={item.id} value={item.id}>
+                                <Select.Option key={item.id} value={item.name}>
                                   {item.name}
                                 </Select.Option>
                               );
@@ -1316,6 +1396,7 @@ console.log("file",filenew);
                             filetype={"Accept only pdf and docs"}
                             listType="picture"
                             accept=".pdf,.docs,"
+                            // aceept=".jpeg,.jpg,.png"
                             onPreview={handlePreview}
                             // value={leadAttachment}
                             // onChange={(e) => setLeadAttachment(e.target.value)}
@@ -1400,8 +1481,8 @@ console.log("file",filenew);
 
             <Custom_model
               size={"sm"}
-              show={saveSuccess}
-              onHide={() => setSaveSuccess(false)}
+              show={successPopup}
+              onHide={() => setSuccessPopup(false)}
               success
             />
           </div>

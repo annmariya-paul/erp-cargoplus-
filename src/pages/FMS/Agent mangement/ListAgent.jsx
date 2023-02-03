@@ -124,7 +124,7 @@ function ListAgent() {
     //   align: "left",
     // },
     {
-      title: "Country",
+      title: "COUNTRY",
       dataIndex: "agent_country",
       key: "NAME",
       width: "25%",
@@ -134,8 +134,7 @@ function ListAgent() {
         return (
           String(record.agent_country)
             .toLowerCase()
-            .includes(value.toLowerCase()) 
-            ||
+            .includes(value.toLowerCase()) ||
           String(record.agent_emp_name)
             .toLowerCase()
             .includes(value.toLowerCase())
@@ -144,7 +143,7 @@ function ListAgent() {
       align: "left",
     },
     {
-      title: "Employee Code",
+      title: "EMPLOYEE CODE",
       dataIndex: "agent_emp_id",
       width: "30%",
       key: "DESCRIPTION",
@@ -152,7 +151,7 @@ function ListAgent() {
       align: "left",
     },
     {
-      title: "Employee Name",
+      title: "EMPLOYEE NAME",
       dataIndex: "agent_emp_name",
       width: "30%",
       key: "DESCRIPTION",

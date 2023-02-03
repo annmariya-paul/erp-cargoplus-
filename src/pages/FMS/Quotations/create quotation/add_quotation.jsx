@@ -24,6 +24,7 @@ import "./quotation.scss";
 import {ROUTES} from "../../../../routes";
 import Input_Number from "../../../../components/InputNumber/InputNumber";
 import moment from "moment"
+import axios from "axios";
 
 export default function Add_Quotation() {
   const [saveSuccess, setSaveSuccess] = useState(false);
@@ -248,6 +249,27 @@ const handleInputchange1 = (e, key, col) => {
       console.log("error while getting the tax types: ", err);
     }
   };
+
+  const [currencyRates, setCurrencyRates] = useState();
+  console.log("ratesssss", currencyRates);
+  const getCurrencyRate = (data) => {
+    console.log(";;;;;;;;;", data);
+    axios
+      .get("https://open.er-api.com/v6/latest/USD")
+      .then(function (response) {
+        console.log("currency current rate:", response);
+        let a = response.data.rates[data];
+        console.log("currency match", a);
+        setCurrencyRates(a);
+        addForm.setFieldValue({
+          exchnagerate: a,
+        });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
 
   useEffect(() => {
     getAllTaxTypes();
@@ -820,7 +842,7 @@ console.log("userdata task",index);
 
           <div className="content-tabs">
             <Form
-             name="addForm"
+              name="addForm"
               form={addForm}
               onFinish={(value) => {
                 console.log("values iss", value);
@@ -1119,18 +1141,18 @@ console.log("userdata task",index);
                           showSearch
                           optionFilterProp="children"
                         >
-                           {allLocations &&
-                          allLocations.length > 0 &&
-                          allLocations.map((item, index) => {
-                            return (
-                              <Select.Option
-                                value={item.location_id}
-                                key={item.location_id}
-                              >
-                                {item.location_name}
-                              </Select.Option>
-                            );
-                          })}
+                          {allLocations &&
+                            allLocations.length > 0 &&
+                            allLocations.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  value={item.location_id}
+                                  key={item.location_id}
+                                >
+                                  {item.location_name}
+                                </Select.Option>
+                              );
+                            })}
                         </SelectBox>
                       </Form.Item>
                     </div>
@@ -1145,24 +1167,23 @@ console.log("userdata task",index);
                           },
                         ]}
                       >
-                     
                         <SelectBox
                           allowClear
                           showSearch
                           optionFilterProp="children"
-                        > 
-                        {allLocations &&
-                          allLocations.length > 0 &&
-                          allLocations.map((item, index) => {
-                            return (
-                              <Select.Option
-                                value={item.location_id}
-                                key={item.location_id}
-                              >
-                                {item.location_name}
-                              </Select.Option>
-                            );
-                          })}
+                        >
+                          {allLocations &&
+                            allLocations.length > 0 &&
+                            allLocations.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  value={item.location_id}
+                                  key={item.location_id}
+                                >
+                                  {item.location_name}
+                                </Select.Option>
+                              );
+                            })}
                         </SelectBox>
                       </Form.Item>
                     </div>
@@ -1243,7 +1264,7 @@ console.log("userdata task",index);
                           },
                         ]}
                       >
-                        <Input_Number/>
+                        <Input_Number />
                       </Form.Item>
                     </div>
 
@@ -1296,13 +1317,17 @@ console.log("userdata task",index);
                           allowClear
                           showSearch
                           optionFilterProp="children"
+                          onChange={(e) => {
+                            console.log("ann", e);
+                            getCurrencyRate(e);
+                          }}
                         >
                           {currencydata &&
                             currencydata.length > 0 &&
                             currencydata.map((item, index) => {
                               return (
                                 <Select.Option
-                                  value={item.currency_id}
+                                  value={item.currency_code}
                                   key={item.currency_id}
                                 >
                                   {item.currency_name}
@@ -1316,7 +1341,7 @@ console.log("userdata task",index);
                     <div className="col-xl-3 col-sm-6 mt-2">
                       <label>Exchange Rate</label>
                       <Form.Item
-                        name="exchnagerate"
+                        // name="exchnagerate"
                         // rules={[
                         //   {
                         //     required: true,
@@ -1327,7 +1352,7 @@ console.log("userdata task",index);
                       >
                         <Input_Number
                           className="text_right"
-                          // value={amount}
+                          value={currencyRates}
                           // onChange={handleChange}
                           align="right"
                           step={0.01}
@@ -1390,39 +1415,38 @@ console.log("userdata task",index);
                     <div className="col-6 ">
                       <label>Add Attachments</label>
                       <Form.Item className="mt-2" name="new">
-                       
-                          <FileUpload
-                            multiple
-                            filetype={"Accept only pdf and docs"}
-                            listType="picture"
-                            accept=".pdf,.docs,"
-                            // aceept=".jpeg,.jpg,.png"
-                            onPreview={handlePreview}
-                            // value={leadAttachment}
-                            // onChange={(e) => setLeadAttachment(e.target.value)}
-                            onChange={(file) => {
-                              console.log("Before upload", file.file);
-                              console.log(
-                                "Before upload file size",
-                                file.file.size
-                              );
-                              setFilenew(file.file.originFileObj);
+                        <FileUpload
+                          multiple
+                          filetype={"Accept only pdf and docs"}
+                          listType="picture"
+                          accept=".pdf,.docs,"
+                          // aceept=".jpeg,.jpg,.png"
+                          onPreview={handlePreview}
+                          // value={leadAttachment}
+                          // onChange={(e) => setLeadAttachment(e.target.value)}
+                          onChange={(file) => {
+                            console.log("Before upload", file.file);
+                            console.log(
+                              "Before upload file size",
+                              file.file.size
+                            );
+                            setFilenew(file.file.originFileObj);
 
-                              // if (
-                              //   file.file.size > 1000 &&
-                              //   file.file.size < 500000
-                              // ) {
-                              //   // setLeadimg(file.file.originFileObj);
-                              //   // setFileSizeError(false);
-                              //   console.log(
-                              //     "file greater than 1 kb and less than 500 kb"
-                              //   );
-                              // } else {
-                              //   // setFileSizeError(true);
-                              //   console.log("hgrtryyryr");
-                              // }
-                            }}
-                          />
+                            // if (
+                            //   file.file.size > 1000 &&
+                            //   file.file.size < 500000
+                            // ) {
+                            //   // setLeadimg(file.file.originFileObj);
+                            //   // setFileSizeError(false);
+                            //   console.log(
+                            //     "file greater than 1 kb and less than 500 kb"
+                            //   );
+                            // } else {
+                            //   // setFileSizeError(true);
+                            //   console.log("hgrtryyryr");
+                            // }
+                          }}
+                        />
                       </Form.Item>
                     </div>
                   </div>
@@ -1448,9 +1472,7 @@ console.log("userdata task",index);
                 </div>
 
                 <div className="col-lg-2 col-sm-2 col-xs-2">
-                  <Form.Item
-                  name="grandtotal"
-                  >
+                  <Form.Item name="grandtotal">
                     <Input_Number
                       className="text_right"
                       value={total}

@@ -586,6 +586,8 @@ const GetAllLeadData = () => {
 
       editForm.setFieldsValue({
         quotation_no:onequatation?.data?.data?.quotation_no,
+        // quotationdate:onequatation?.data?.data?.quotation_date,
+        // validity_date:onequatation?.data?.data?.quotation_validity,
         shipper:onequatation?.data?.data?.quotation_shipper,
         quotation_consignee:onequatation?.data?.data?.crm_v1_leads.lead_customer_name,
         freight_type:onequatation?.data?.data?.fms_v1_freight_types.freight_type_name,
@@ -753,7 +755,7 @@ const GetAllLeadData = () => {
                     <div className="col-xl-3 col-sm-6 mt-2">
                       <label>Quotation date</label>
                       <Form.Item
-                        name="qdate"
+                        name="quotationdate"
                         // rules={[
                         //   {
                         //     required: true,
@@ -777,7 +779,7 @@ const GetAllLeadData = () => {
                     <div className="col-xl-3 col-sm-6 mt-2">
                       <label>Validity date</label>
                       <Form.Item
-                        name="vdate"
+                        name="validity_date"
                         // rules={[
                         //   {
                         //     required: true,

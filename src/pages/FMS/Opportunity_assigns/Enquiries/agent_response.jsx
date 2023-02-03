@@ -81,7 +81,9 @@ export default function Agent_Response() {
               {
                 arr.push({
                   enquiry_response_id: item.enquiry_response_id,
-                  agent_name: item.agents.hrms_v1_employee.employee_name,
+                  agent_name:
+                    item.enquiry_response_agent_details
+                      .employee_name,
                   agent_response: item.enquiry_response_response,
                 });
               }

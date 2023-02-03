@@ -192,7 +192,7 @@ function ListAgent() {
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
-              placeholder="Search by Name and Description "
+              placeholder="Search by Country or  Employee Name "
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
               onChange={(e) => {

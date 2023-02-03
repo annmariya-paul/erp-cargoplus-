@@ -24,7 +24,7 @@ export default function Carrierlist(props) {
   const [successPopup, setSuccessPopup] = useState(false);
 
   const [searchedText, setSearchedText] = useState("");
-
+  const [searchType, setSearchType] = useState("");
   const [modalAddCarrier, setModalAddCarrier] = useState(false);
 
 
@@ -222,49 +222,29 @@ export default function Carrierlist(props) {
       title: "CARRIER CODE",
       dataIndex: "carrier_code",
       key: "carrier_code",
-      filteredValue: [searchedText],
-      onFilter: (value, record) => {
-        return String(record.carrier_code)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
+      // filteredValue: [searchedText],
+      // onFilter: (value, record) => {
+      //   return String(record.carrier_code)
+      //     .toLowerCase()
+      //     .includes(value.toLowerCase());
+      // },
       align: "center",
     },
     {
       title: "CARRIER TYPE",
       dataIndex: "carrier_type",
       key: "carrier_type",
-      filteredValue: [searchedText],
-      onFilter: (value, record) => {
-        return String(record.carrier_type)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
+      // filteredValue: [searchedType],
+      // onFilter: (value, record) => {
+      //   return String(record.carrier_type)
+      //     .toLowerCase()
+      //     .includes(value.toLowerCase());
+      // },
       align: "center",
     },
   ];
 
-  const data = [
-    {
-      carrier_name: "Carrier X",
-      carrier_code: "3241",
-      carrier_type: "Airline",
-
-      key: "1",
-    },
-    {
-      carrier_name: "Carrier y",
-      carrier_code: "3242",
-      carrier_type: "Shipper",
-      key: "2",
-    },
-    {
-      carrier_name: "Carrier z",
-      carrier_code: "3243",
-      carrier_type: "Road",
-      key: "3",
-    },
-  ];
+ 
 
   const [carriername, setCarriername] = useState();
   const [carrier_id, setCarrier_id] = useState();
@@ -286,7 +266,7 @@ export default function Carrierlist(props) {
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
-              placeholder="Search by Fright type Name"
+              placeholder="Search by Carrier Name"
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
               onChange={(e) => {
@@ -296,6 +276,23 @@ export default function Carrierlist(props) {
                 setSearchedText(value);
               }}
             />
+          </div>
+          <div className="col-4">
+            <Select
+              allowClear
+              showSearch
+              style={{ width: "100%", marginTop: "8px", borderRadius: "5px" }}
+              placeholder="Search by Type"
+              className="select_search"
+              optionFilterProp="children"
+              onChange={(event) => {
+                setSearchType(event ? [event] : []);
+              }}
+            >
+              <Select.Option value="Airline">Airline</Select.Option>
+              <Select.Option value="Shipping line">Shipping line</Select.Option>
+              <Select.Option value="Road">Road</Select.Option>
+            </Select>
           </div>
         </div>
         <div className="row my-3">
@@ -324,18 +321,17 @@ export default function Carrierlist(props) {
             </Select>
           </div>
           <div className=" col-4 d-flex  align-items-center justify-content-center">
-          
-          <MyPagination
-            total={parseInt(carrierdata?.length)}
-            current={current}
-            showSizeChanger={true}
-            pageSize={pageSize}
-            onChange={(current, pageSize) => {
-              setCurrent(current);
-              setPageSize(pageSize);
-            }}
-          />
-        </div>
+            <MyPagination
+              total={parseInt(carrierdata?.length)}
+              current={current}
+              showSizeChanger={true}
+              pageSize={pageSize}
+              onChange={(current, pageSize) => {
+                setCurrent(current);
+                setPageSize(pageSize);
+              }}
+            />
+          </div>
           <div className="col-4 d-flex justify-content-end">
             <Button btnType="add" onClick={() => setModalAddCarrier(true)}>
               Add Carrier types
@@ -351,7 +347,6 @@ export default function Carrierlist(props) {
           />
         </div>
         <div className="d-flex py-2 justify-content-center">
-          
           <MyPagination
             total={parseInt(carrierdata?.length)}
             current={current}
@@ -363,7 +358,6 @@ export default function Carrierlist(props) {
             }}
           />
         </div>
-        
       </div>
 
       <CustomModel
@@ -382,11 +376,10 @@ export default function Carrierlist(props) {
               form={addForm}
               onFinish={(data) => {
                 console.log("valuezzzzzzz", data);
-                createcarrier()
+                createcarrier();
               }}
               onFinishFailed={(error) => {
                 console.log(error);
-               
               }}
             >
               <div className="row py-4">
@@ -404,7 +397,7 @@ export default function Carrierlist(props) {
 
                         {
                           min: 3,
-                          message: "Name must be atleast 3 characters",
+                          message: "Name must be at least 3 characters",
                         },
                         {
                           max: 100,
@@ -413,15 +406,12 @@ export default function Carrierlist(props) {
                       ]}
                     >
                       <InputType
-                      value={addcarriername}
-                      onChange={(e)=>{
-                        setAddcarriername(e.target.value)
-                       
-                      }}
-                    
+                        value={addcarriername}
+                        onChange={(e) => {
+                          setAddcarriername(e.target.value);
+                        }}
                       />
                     </Form.Item>
-              
                   </div>
                 </div>
                 <div className="col-12 pt-1">
@@ -438,33 +428,36 @@ export default function Carrierlist(props) {
 
                         {
                           min: 3,
-                          message: "code must be atleast 3 characters",
+                          message: "code must be at least 3 characters",
                         },
                       ]}
                     >
-                      <InputType 
-                      value={addcarriercode}
-                      onChange={(e)=>{
-                        setAddcarriercode(e.target.value)
-                        setuniqueCode(false)
-                      }}
-                      onBlur={ async () => {
-                        // checkAttributeNameis();
-                        let a = await CheckUnique({type:"carriercode",value:addcarriercode})
-                        console.log("hai how are u", a)
-                        setuniqueCode(a)
-                      }}
+                      <InputType
+                        value={addcarriercode}
+                        onChange={(e) => {
+                          setAddcarriercode(e.target.value);
+                          setuniqueCode(false);
+                        }}
+                        onBlur={async () => {
+                          // checkAttributeNameis();
+                          let a = await CheckUnique({
+                            type: "carriercode",
+                            value: addcarriercode,
+                          });
+                          console.log("hai how are u", a);
+                          setuniqueCode(a);
+                        }}
                       />
                     </Form.Item>
                     {uniqueCode ? (
-                <div>
-                  <label style={{ color: "red" }}>
-                   carrier Code {UniqueErrorMsg.UniqueErrName}
-                  </label>
-                </div>
-              ) : (
-                ""
-              )}
+                      <div>
+                        <label style={{ color: "red" }}>
+                          carrier Code {UniqueErrorMsg.UniqueErrName}
+                        </label>
+                      </div>
+                    ) : (
+                      ""
+                    )}
                   </div>
                 </div>
                 <div className="col-12 pt-1">
@@ -481,13 +474,15 @@ export default function Carrierlist(props) {
                       ]}
                     >
                       <SelectBox
-                      value={addcarriertype}
-                      onChange={(e)=>{
-                        setAddcarriertype(e)
-                      }}
+                        value={addcarriertype}
+                        onChange={(e) => {
+                          setAddcarriertype(e);
+                        }}
                       >
                         <Select.Option value="Airline">Airline</Select.Option>
-                        <Select.Option value="Shipper">Shipper</Select.Option>
+                        <Select.Option value="Shipping line">
+                          Shipping line
+                        </Select.Option>
                         <Select.Option value="Road">Road</Select.Option>
                       </SelectBox>
                     </Form.Item>
@@ -544,7 +539,9 @@ export default function Carrierlist(props) {
               </div>
               <div className="col-1">:</div>
               <div className="col-6 justify-content-start">
-                <p className="modal-view-data">{viewcarriers.carrierviewname} </p>
+                <p className="modal-view-data">
+                  {viewcarriers.carrierviewname}{" "}
+                </p>
               </div>
             </div>
             <div className="row mt-4">
@@ -553,7 +550,9 @@ export default function Carrierlist(props) {
               </div>
               <div className="col-1">:</div>
               <div className="col-6 justify-content-start">
-                <p className="modal-view-data">{viewcarriers.carrierviewcode} </p>
+                <p className="modal-view-data">
+                  {viewcarriers.carrierviewcode}{" "}
+                </p>
               </div>
             </div>
             <div className="row mt-4">
@@ -562,7 +561,9 @@ export default function Carrierlist(props) {
               </div>
               <div className="col-1">:</div>
               <div className="col-6 justify-content-start">
-                <p className="modal-view-data">{viewcarriers.carrierviewtype} </p>
+                <p className="modal-view-data">
+                  {viewcarriers.carrierviewtype}{" "}
+                </p>
               </div>
             </div>
           </div>
@@ -583,7 +584,7 @@ export default function Carrierlist(props) {
                   form={editForm}
                   onFinish={(values) => {
                     console.log("values iss", values);
-                    handleupdate()
+                    handleupdate();
                   }}
                   onFinishFailed={(error) => {
                     console.log(error);
@@ -609,11 +610,12 @@ export default function Carrierlist(props) {
                         },
                       ]}
                     >
-                      <InputType className="input_type_style w-100"
-                      value={editcarriername}
-                      onChange={(e)=>{
-                        setEditcarriername(e.target.value)
-                      }}
+                      <InputType
+                        className="input_type_style w-100"
+                        value={editcarriername}
+                        onChange={(e) => {
+                          setEditcarriername(e.target.value);
+                        }}
                       />
                     </Form.Item>
                   </div>
@@ -631,10 +633,10 @@ export default function Carrierlist(props) {
                         ]}
                       >
                         <InputType
-                        value={editcarriercode}
-                        onChange={(e)=>{
-                          setEditcarriercode(e.target.value)
-                        }}
+                          value={editcarriercode}
+                          onChange={(e) => {
+                            setEditcarriercode(e.target.value);
+                          }}
                         />
                       </Form.Item>
                     </div>
@@ -653,13 +655,15 @@ export default function Carrierlist(props) {
                         ]}
                       >
                         <SelectBox
-                        value={editcarriertype}
-                        onChange={(e)=>{
-                          setEditcarriertype(e)
-                        }}
+                          value={editcarriertype}
+                          onChange={(e) => {
+                            setEditcarriertype(e);
+                          }}
                         >
                           <Select.Option value="Airline">Airline</Select.Option>
-                          <Select.Option value="Shipper">Shipper</Select.Option>
+                          <Select.Option value="Shipping line">
+                            Shipping line
+                          </Select.Option>
                           <Select.Option value="Road">Road</Select.Option>
                         </SelectBox>
                       </Form.Item>

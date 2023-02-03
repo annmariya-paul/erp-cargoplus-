@@ -9,8 +9,6 @@ import ErrorMsg from "../../../../components/error/ErrorMessage";
 import Custom_model from "../../../../components/custom_modal/custom_model";
 import TableData from "../../../../components/table/table_data";
 import { FaEdit, FaTrash } from "react-icons/fa";
-import { MdPageview } from "react-icons/md";
-import { ROUTES } from "../../../../routes";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { CRM_BASE_URL, CRM_BASE_URL_FMS } from "../../../../api/bootapi";
 

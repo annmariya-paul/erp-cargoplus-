@@ -6,6 +6,7 @@ import Button from "../../../components/button/button";
 import FileUpload from "../../../components/fileupload/fileUploader";
 import InputType from "../../../components/Input Type textbox/InputType";
 import SelectBox from "../../../components/Select Box/SelectBox";
+import {Select} from "antd";
 function CreateJob(){
 
 
@@ -51,7 +52,9 @@ function CreateJob(){
                         ]}
                       >
                       <SelectBox>
-
+                      <Select.Option value="A">Air</Select.Option>
+                          <Select.Option value="S">Sea</Select.Option>
+                          <Select.Option value="R">Road</Select.Option>
                       </SelectBox>
                       </Form.Item>
 

@@ -16,22 +16,24 @@ import { MdDragHandle } from "react-icons/md";
 import { Droppable, Draggable, DragDropContext } from "react-beautiful-dnd";
 import { AiOutlineDelete } from "react-icons/ai";
 
-import { Collapse, Form, Input } from "antd";
+import { Collapse, Form, Input, Popconfirm } from "antd";
 import Button from "../../../../components/button/button";
 import PublicFetch from "../../../../utils/PublicFetch";
 import InputType from "../../../../components/Input Type textbox/InputType";
-import { CRM_BASE_URL_FMS, CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
+import { CRM_BASE_URL_FMS, CRM_BASE_URL_SELLING, GENERAL_SETTING_BASE_URL } from "../../../../api/bootapi";
 import {Select} from "antd";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../../routes";
 import Custom_model from "../../../../components/custom_modal/custom_model";
 import SelectBox from "../../../../components/Select Box/SelectBox";
-
+import {  useParams } from "react-router-dom";
 import { DatePicker } from "antd";
 import "./quotation.scss";
-import { RightOutlined } from "@ant-design/icons";
+import { DragOutlined, RightOutlined } from "@ant-design/icons";
 import Input_Number from "../../../../components/InputNumber/InputNumber";
+import { FaTrash } from "react-icons/fa";
+import { cargo_typeoptions } from "../../../../utils/SelectOptions";
 export default function EditQuotation(
   custom_table_css,
   expandable,
@@ -105,6 +107,257 @@ export default function EditQuotation(
     const newRows = rows.filter((li) => li.id !== id);
     setRows(newRows);
   }
+  const { id } = useParams();
+  const [noofItems, setNoofItems] = useState("25");
+  const [numOfItems, setNumOfItems] = useState("25");
+  const [current, setCurrent] = useState(1);
+  const [totalCount, setTotalcount] = useState();
+  const pageofIndex = noofItems * (current - 1) - 1 + 1;
+  const pagesizecount = Math.ceil(totalCount / noofItems);
+  const [carrierdata, setCarrierdata] = useState();
+
+  const [quatationno,setquatationno]= useState("")
+  const [quotconsignee,setQuotconsignee] = useState()
+  const[quotshipper,setquotshipper] = useState()
+  const[quotfreighttype,setquotfreighttype] = useState()
+  const[quotcargotype,setquotcargotype] = useState()
+  const[quotmode,setquotmode] = useState()
+  
+  const [allPaymentTerms, setAllPaymentTerms] = useState();
+  const [currencydata, setCurrencydata] = useState();
+
+  const [cargooptions, setCargooptions] = useState(cargo_typeoptions);
+  console.log("cargo options : ", cargooptions);
+
+  const [frighttype, setFrighttype] = useState();
+  const [services, setServices] = useState([]);
+  console.log("Servicesss are :::", services);
+  const [allservices, setAllservices] = useState();
+  const [unitdata,setUnitdata]= useState()
+
+  const [tableData, setTableData] = useState();
+ 
+  const getAllservices = () => {
+    PublicFetch.get(
+      `${CRM_BASE_URL_SELLING}/service?startIndex=${pageofIndex}&noOfItems=${numOfItems}`
+    )
+      .then((res) => {
+        console.log("all services is ", res.data.data);
+        if (res?.data?.success) {
+          console.log("All services dataawww", res?.data?.data?.services);
+          let tempArr = [];
+          res?.data?.data?.services.forEach((item, index) => {
+            tempArr.push({
+              service_id: item?.service_id,
+              service_name: item?.service_name,
+              service_category_id: item?.crm_v1_categories?.category_id,
+              service_category_name: item?.crm_v1_categories?.category_name,
+              service_code: item?.service_code,
+              service_pic: item?.service_pic,
+              service_hsn: item?.service_hsn,
+              service_taxrate: item?.service_taxrate,
+              service_description: item?.service_description,
+              service_category_name: item?.crm_v1_categories?.category_name,
+            });
+          });
+          console.log("hellooooqqqqq", tempArr);
+          setServices(tempArr);
+
+          setAllservices(res?.data?.data.services);
+          setTotalcount(res?.data?.data?.totalCount);
+          // setCurrentcount(res?.data?.data?.currentCount);
+        } else {
+          console.log("FAILED T LOAD DATA");
+        }
+      })
+      .catch((err) => {
+        console.log("Errror while getting data", err);
+      });
+  };
+
+ 
+
+  useEffect(() => {
+    getAllservices();
+  }, [numOfItems, pageofIndex]);
+
+
+  const columns = [
+    {
+      title: "Action",
+      dataIndex: "action",
+      key: "action",
+      className: "drag-visible",
+      render: (data, index) => {
+        return (
+          <div className="d-flex justify-content-center align-items-center gap-2">
+            <div className="actionEdit m-0 p-0">
+              <DragOutlined className="draggable" type="swap" />
+            </div>
+          </div>
+        );
+      },
+    },
+    {
+      title: "",
+      dataIndex: "operation",
+      render: (_, record) =>
+        tableData.length >= 1 ? (
+          <Popconfirm
+            title="Sure to delete?"
+            onConfirm={() => handleDelete(record.key)}
+          >
+            <div className="deleteIcon m-0">
+              <FaTrash />
+            </div>
+          </Popconfirm>
+        ) : null,
+    },
+    {
+      title: "TASKS",
+      dataIndex: "tasks",
+      key: "tasks",
+      width: "40%",
+
+      render: (data, index) => {
+        console.log("index is :", index);
+        return (
+          <div className="d-flex justify-content-center align-items-center tborder ">
+            <SelectBox
+              allowClear
+              showSearch
+              optionFilterProp="children"
+              className="selectwidth mb-2"
+              value={index.tasks}
+              // onChange={(e) => handleInputChange(e, index.key, "tasks")}
+            >
+              {services &&
+                services.length > 0 &&
+                services.map((item, index) => {
+                  return (
+                    <Select.Option
+                      key={item.service_id}
+                      value={item.service_id}
+                    >
+                      {item.service_name}
+                    </Select.Option>
+                  )
+                })}
+            </SelectBox>
+          </div>
+        );
+      },
+      align: "center",
+    },
+    {
+      title: "COST",
+      dataIndex: "cost",
+      key: "cost",
+
+      render: (data, index) => {
+        console.log("index is :", index);
+        return (
+          <div className="d-flex justify-content-center align-items-center tborder ">
+            <Input_Number
+              className="text_right"
+              value={index.cost}
+              // onChange={(value) => {
+              //   handleInputChange(value, index.key, "cost");
+              //   console.log(" input numberevent ", value, index.key);
+              // }}
+              align="right"
+              step={0.01}
+              min={0}
+              precision={2}
+              controlls={false}
+            />
+          </div>
+        );
+      },
+
+      align: "right",
+    },
+    {
+      title: "TAX TYPE",
+      dataIndex: "taxtype",
+      key: "taxtype",
+
+      render: (data, index) => {
+        console.log("index is :", index);
+        return (
+          <div className="d-flex justify-content-center align-items-center tborder">
+            <Input_Number
+              className="text_right"
+              value={index.taxtype}
+              // onChange={(e) => handleInputChange(e, index.key, "taxtype")}
+              align="right"
+              step={0.01}
+              min={0}
+              precision={2}
+              controlls={false}
+            />
+          </div>
+        );
+      },
+      align: "right",
+    },
+    {
+      title: "TAX AMOUNT",
+      dataIndex: "taxamount",
+      key: "taxamount",
+
+      render: (data, index) => {
+        console.log("index is :", index);
+        return (
+          <div className="d-flex justify-content-center align-items-center tborder ">
+            <Input_Number
+              className="text_right"
+              value={index.taxamount}
+              // onChange={(e) => handleInputChange(e, index.key, "taxamount")}
+              align="right"
+              step={0.01}
+              min={0}
+              precision={2}
+              controlls={false}
+            />
+          </div>
+        );
+      },
+
+      align: "right",
+    },
+    {
+      title: "TOTAL AMOUNT",
+      dataIndex: "totalamount",
+      key: "totalamount",
+
+      render: (data, index) => {
+        console.log("index is :", index);
+        return (
+          <div className="d-flex justify-content-center align-items-center tborder ">
+            <Input_Number
+              className="text_right"
+              // value={    index.totalamount=(index.cost + index.taxamount)
+              // }
+              value={index.cost + index.taxamount}
+              // onChange={(e) => handleInputChange2(e, index, "totalamount")}
+              align="right"
+              step={0.01}
+              min={0}
+              precision={2}
+              controlls={false}
+              // onKeyDown={(e) => handleEnter(e, index.key)}
+            />
+          </div>
+        );
+      },
+
+      align: "right",
+    },
+  ];
+
+  
+
 
 
 // api integration
@@ -115,6 +368,7 @@ export default function EditQuotation(
         `${CRM_BASE_URL_FMS}/freightTypes/`
       );
       console.log("all freighttypes are ::", allfrighttype?.data?.data);
+      setFrighttype(allfrighttype?.data?.data);
     } catch (err) {
       console.log("error to getting all freighttype", err);
     }
@@ -123,17 +377,81 @@ export default function EditQuotation(
   const getallcarrier = async () => {
     try {
       const allcarrier = await PublicFetch.get(
-        `${CRM_BASE_URL_FMS}/freightTypes/`
+        `${CRM_BASE_URL_FMS}/carrier`
       );
-      console.log("all freighttypes are ::", allcarrier?.data?.data);
+      console.log("all carrier are ::", allcarrier?.data?.data);
+      setCarrierdata(allcarrier?.data?.data)
     } catch (err) {
       console.log("error to getting all freighttype", err);
     }
   };
 
+  const getonequatation = async () => {
+    try {
+      const onequatation = await PublicFetch.get(
+        `${CRM_BASE_URL_FMS}/quotation/${id}`
+      );
+      console.log("one quatation iss ::", onequatation?.data?.data);
+      console.log(" quatation no is:", onequatation?.data?.data.quotation_no);
+      setquatationno(onequatation?.data?.data?.quotation_no)
+      setquotshipper(onequatation?.data?.data?.quotation_shipper)
+      editForm.setFieldsValue({
+        quotation_no:onequatation?.data?.data?.quotation_no,
+        shipper:onequatation?.data?.data?.quotation_shipper,
+      })
+
+    } catch (err) {
+      console.log("error to getting all freighttype", err);
+    }
+  };
+
+  const getallunits = async () => {
+    try {
+      const allunits = await PublicFetch.get(`${CRM_BASE_URL_SELLING}/unit`);
+      console.log("all units are ::", allunits?.data?.data);
+
+      setUnitdata(allunits?.data?.data);
+      // setunitTable(allunits?.data?.data);
+    } catch (err) {
+      console.log("error to getting all units", err);
+    }
+  };
+
+  const getallPaymentTerms = () => {
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/paymentTerms`)
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          console.log("successs", res.data.data);
+          setAllPaymentTerms(res.data.data)
+          // setAllPaymentTerms(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+  const getallcurrency = async () => {
+    try {
+      const allcurrency = await PublicFetch.get(
+        `${GENERAL_SETTING_BASE_URL}/currency`
+      );
+      console.log("Getting all currency : ", allcurrency.data.data);
+      setCurrencydata(allcurrency.data.data);
+    } catch (err) {
+      console.log("Error in getting currency : ", err);
+    }
+  };
+
+
   useEffect(() => {
     getallfrighttype();
+    getallPaymentTerms();
+    getallunits();
     getallcarrier();
+    getallcurrency();
+    getonequatation();
   }, []);
 
 
@@ -174,7 +492,10 @@ export default function EditQuotation(
                           },
                         ]}
                       >
-                        <InputType />
+                        <InputType 
+                        value={quatationno}
+                      
+                        />
                       </Form.Item>
                     </div>
                     <div className="col-xl-3 col-sm-6 mt-2">
@@ -257,7 +578,9 @@ export default function EditQuotation(
                           },
                         ]}
                       >
-                        <InputType />
+                        <InputType 
+                        // value={}
+                        />
                       </Form.Item>
                     </div>
 {/* 
@@ -308,9 +631,23 @@ export default function EditQuotation(
                           },
                         ]}
                       >
-                        <SelectBox>
-                          <Select.Option value="S">Ship</Select.Option>
-                          <Select.Option value="A">Air</Select.Option>
+                         <SelectBox
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
+                        >
+                          {frighttype &&
+                            frighttype.length > 0 &&
+                            frighttype.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  key={item.freight_type_id}
+                                  value={item.freight_type_id}
+                                >
+                                  {item.freight_type_name}
+                                </Select.Option>
+                              );
+                            })}
                         </SelectBox>
                       </Form.Item>
                     </div>
@@ -326,9 +663,24 @@ export default function EditQuotation(
                           },
                         ]}
                       >
-                        <SelectBox>
+                        {/* <SelectBox>
                           <Select.Option value="S">Test</Select.Option>
                           <Select.Option value="A">Data</Select.Option>
+                        </SelectBox> */}
+                          <SelectBox
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
+                        >
+                          {cargooptions &&
+                            cargooptions.length > 0 &&
+                            cargooptions.map((item, index) => {
+                              return (
+                                <Select.Option key={item.id} value={item.id}>
+                                  {item.name}
+                                </Select.Option>
+                              );
+                            })}
                         </SelectBox>
                       </Form.Item>
                     </div>
@@ -344,9 +696,14 @@ export default function EditQuotation(
                           },
                         ]}
                       >
-                        <SelectBox>
-                          <Select.Option value="A">Test</Select.Option>
-                          <Select.Option value="B">Demo</Select.Option>
+                           <SelectBox
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
+                        >
+                          <Select.Option value="A">Air</Select.Option>
+                          <Select.Option value="S">Sea</Select.Option>
+                          <Select.Option value="R">Road</Select.Option>
                         </SelectBox>
                       </Form.Item>
                     </div>
@@ -397,9 +754,23 @@ export default function EditQuotation(
                           },
                         ]}
                       >
-                        <SelectBox>
-                          <Select.Option value="A">Test</Select.Option>
-                          <Select.Option value="B">Demo</Select.Option>
+                          <SelectBox
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
+                        >
+                          {carrierdata &&
+                            carrierdata.length > 0 &&
+                            carrierdata.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  value={item.carrier_id}
+                                  key={item.carrier_id}
+                                >
+                                  {item.carrier_name}
+                                </Select.Option>
+                              );
+                            })}
                         </SelectBox>
                       </Form.Item>
                     </div>
@@ -415,9 +786,23 @@ export default function EditQuotation(
                           },
                         ]}
                       >
-                        <SelectBox>
-                          <Select.Option value="A">Test</Select.Option>
-                          <Select.Option value="B">Demo</Select.Option>
+                         <SelectBox
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
+                        >
+                          {allPaymentTerms &&
+                            allPaymentTerms.length > 0 &&
+                            allPaymentTerms.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  key={item.payment_term_id}
+                                  value={item.payment_term_id}
+                                >
+                                  {item.payment_term_name}
+                                </Select.Option>
+                              );
+                            })}
                         </SelectBox>
                       </Form.Item>
                     </div>
@@ -450,9 +835,23 @@ export default function EditQuotation(
                           },
                         ]}
                       >
-                        <SelectBox>
-                          <Select.Option value="A">Test</Select.Option>
-                          <Select.Option value="B">Demo</Select.Option>
+                          <SelectBox
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
+                        >
+                          {unitdata &&
+                            unitdata.length > 0 &&
+                            unitdata.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  value={item.unit_id}
+                                  key={item.unit_id}
+                                >
+                                  {item.unit_name}
+                                </Select.Option>
+                              );
+                            })}
                         </SelectBox>
                       </Form.Item>
                     </div>
@@ -519,9 +918,23 @@ export default function EditQuotation(
                           },
                         ]}
                       >
-                        <SelectBox>
-                          <Select.Option value="A">Test</Select.Option>
-                          <Select.Option value="B">Demo</Select.Option>
+                         <SelectBox
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
+                        >
+                          {currencydata &&
+                            currencydata.length > 0 &&
+                            currencydata.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  value={item.currency_id}
+                                  key={item.currency_id}
+                                >
+                                  {item.currency_name}
+                                </Select.Option>
+                              );
+                            })}
                         </SelectBox>
                       </Form.Item>
                     </div>
@@ -583,7 +996,18 @@ export default function EditQuotation(
                   </Form.Item>
                 </div>
                 </div>
-              <div className="row">
+  
+                <div className="row">
+                <div className="datatable">
+                  <TableData
+                    data={tableData}
+                    columns={columns}
+                    custom_table_css="table_qtn"
+                  />
+                </div>
+              </div>
+
+              {/* <div className="row">
                 <div className="datatable">
                   <div
                     className={`row mt-2 mx-3 qtable_data ${custom_table_css}`}
@@ -641,8 +1065,7 @@ export default function EditQuotation(
                                           </div>
                                         </td>
 
-                                        {/* {rows.map(row => ( */}
-                                        {/* <tr key={row.id} className="tablewidth"> */}
+                                     
                                         <td className="hiddenid">{row.id}</td>
                                         <td className="tborder" width="20%">
                                           <Select
@@ -725,7 +1148,7 @@ export default function EditQuotation(
                                 }
                                   
                                 )}
-                                {/* {provided.placeholder} */}
+                             
                               </tbody>
                             )}
                           </Droppable>
@@ -735,7 +1158,7 @@ export default function EditQuotation(
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
               <div className="d-flex justify-content-end mt-4 mx-3 ">
                 <div className="col-lg-2 col-sm-4 col-xs-3 d-flex justify-content-end mt-3 me-2">
                   <p style={{ fontWeight: 500 }}>Grand Total</p>

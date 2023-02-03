@@ -77,8 +77,8 @@ function Companyinfo(){
         );
         // console.log("getting all cmpny", allcmpny);
         console.log(" all cmpny", allcmpny.data.data);
-        setcmpnyupdate(allcmpny.data.data)
-
+        setcmpnyupdate(allcmpny.data.data.length)
+console.log("dataa",allcmpny.data.data.length);
         let arry=[]
         allcmpny.data.data.forEach((i,indx)=>{
          arry.push(i)     
@@ -174,11 +174,12 @@ function Companyinfo(){
       })
         .then((res) => {
           console.log("dataa is successfully saved", res.data.success);
-          // if (res.data.success) {
-          //   setSuccessPopup(true);
-          //   addForm.resetFields();
-          //   close_modal(successPopup, 1000);
-          // } else {
+          if (res.data.success) {
+            setSuccessPopup(true);
+            // addForm.resetFields();
+            close_modal(successPopup, 1000);
+          }
+          //  else {
           //   setErrormsg(res.data.data);
           // }
         })

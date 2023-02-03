@@ -29,6 +29,8 @@ export default function Add_Quotation() {
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [successPopup, setSuccessPopup] = useState(false);
   const [error, setError] = useState(false);
+  const [taxratee,setTaxRatee] = useState();
+  console.log("tax rate ",taxratee);
   const [cargooptions, setCargooptions] = useState(cargo_typeoptions);
   console.log("cargo options : ", cargooptions);
   const today = new Date().toISOString().split("T")[0];
@@ -65,7 +67,7 @@ export default function Add_Quotation() {
     allservices.map((item,index)=> {
       if( tx && e === item.service_id) {
         if (col && key && tx && e === item.service_id){
-        // setTaxRatee(item.service_taxrate)
+        setTaxRatee(item.service_taxrate)
       let hai = item.service_taxrate;
      
       setTableData(
@@ -90,6 +92,7 @@ const handleInputchange1 = (e, key, col) => {
       return item;
     })
   );
+  addForm.setFieldValue("quotation_details_tax_type",taxratee);
 };
   const handleInputChange2 = (e, index, col) => {
     setTableData(
@@ -355,7 +358,7 @@ const handleInputchange1 = (e, key, col) => {
 
             <Input_Number
               className="text_right"
-              value={index.quotation_details_tax_type}
+              value={taxratee}
               onChange={(e) => handleInputchange1(e, index.key, "quotation_details_tax_type")}
               align="right"
               step={0.01}

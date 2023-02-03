@@ -61,11 +61,17 @@ export default function Quotations(props) {
           <div className="d-flex justify-content-center align-items-center gap-2 me-2">
             <div
               className="editIcon m-0 "
-              onClick={() => {
-                navigate(`/edit_quotation`);
-              }}
+              // onClick={() => {
+              //   navigate(`/edit_quotation`);
+              // }}
             >
-              <FaEdit style={{ marginLeft: 15 }} />
+               <Link to={`${ROUTES.EDIT_QUOTATION}/${index.quotation_id}`}>
+               {/* <FaEdit style={{ marginLeft: 15 }} /> */}
+               <div className="actioneditdelete">
+                  <FaEdit />
+                </div>
+               </Link>
+             
             </div>
             <div
               className="viewIcon m-0"

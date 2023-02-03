@@ -77,7 +77,7 @@ export default function Carrierlist(props) {
     getallcarrier();
   }, []);
 
-
+  const [nameSearch, setNamesearch] = useState();
   const createcarrier = async () => {
     try {
       const addcarrier = await PublicFetch.post(
@@ -212,7 +212,7 @@ export default function Carrierlist(props) {
       key: "carrier_name",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.carrier_name)
+        return String(record.carrier_name || nameSearch)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
@@ -222,24 +222,24 @@ export default function Carrierlist(props) {
       title: "CARRIER CODE",
       dataIndex: "carrier_code",
       key: "carrier_code",
-      // filteredValue: [searchedText],
-      // onFilter: (value, record) => {
-      //   return String(record.carrier_code)
-      //     .toLowerCase()
-      //     .includes(value.toLowerCase());
-      // },
+     
+      onFilter: (value, record) => {
+        return String(record.carrier_code)
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      },
       align: "center",
     },
     {
       title: "CARRIER TYPE",
       dataIndex: "carrier_type",
       key: "carrier_type",
-      // filteredValue: [searchedType],
-      // onFilter: (value, record) => {
-      //   return String(record.carrier_type)
-      //     .toLowerCase()
-      //     .includes(value.toLowerCase());
-      // },
+     
+      onFilter: (value, record) => {
+        return String(record.carrier_type)
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      },
       align: "center",
     },
   ];

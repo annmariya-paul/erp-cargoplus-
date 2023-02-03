@@ -197,7 +197,7 @@ export default function Frightlist(props) {
       key: "freight_type_name",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.fright_name)
+        return String(record.freight_type_name  || nameSearch)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
@@ -207,7 +207,7 @@ export default function Frightlist(props) {
       title: "FRIGHT TYPE PREFIX",
       dataIndex: "freight_type_prefix",
       key: "freight_type_prefix",
-      filteredValue: [searchedText],
+     
       onFilter: (value, record) => {
         return String(record.freight_type_prefix)
           .toLowerCase()
@@ -240,7 +240,7 @@ export default function Frightlist(props) {
   //       key: "3",
   //   },
   // ];  
-
+  const [nameSearch, setNamesearch] = useState();
   const [newName, setNewName] = useState();
   const [saveSuccess, setSaveSuccess] =useState(false)
   const [frightError, setFrightError] = useState();

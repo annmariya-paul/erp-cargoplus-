@@ -5,7 +5,8 @@ import "./quotation.scss";
 // import InputType from "../../../../components/Input Type textbox/InputType";
 // import SelectBox from "../../../../components/Select Box/SelectBox";
 // import Button from "../../../../components/button/button";
-
+import dragula from "dragula";
+import "dragula/dist/dragula.css";
 import FileUpload from "../../../../components/fileupload/fileUploader";
 import React, { useState, useEffect, useCallback } from "react";
 import dayjs from "dayjs";
@@ -20,7 +21,7 @@ import { Collapse, Form, Input, Popconfirm } from "antd";
 import Button from "../../../../components/button/button";
 import PublicFetch from "../../../../utils/PublicFetch";
 import InputType from "../../../../components/Input Type textbox/InputType";
-import { CRM_BASE_URL_FMS, CRM_BASE_URL_SELLING, GENERAL_SETTING_BASE_URL } from "../../../../api/bootapi";
+import { CRM_BASE_URL, CRM_BASE_URL_FMS, CRM_BASE_URL_SELLING, GENERAL_SETTING_BASE_URL } from "../../../../api/bootapi";
 import {Select} from "antd";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
 import { useNavigate } from "react-router-dom";
@@ -53,6 +54,7 @@ export default function EditQuotation(
   const navigate = useNavigate();
   const dateFormatList = ["DD-MM-YYYY", "DD-MM-YY"];
   const [amount, setAmount] = useState(0);
+
 
   const handleChange = (value) => {
     setAmount(value);
@@ -115,6 +117,7 @@ export default function EditQuotation(
   const pageofIndex = noofItems * (current - 1) - 1 + 1;
   const pagesizecount = Math.ceil(totalCount / noofItems);
   const [carrierdata, setCarrierdata] = useState();
+  const [allLocations, setAllLocations] = useState();
 
   const [quatationno,setquatationno]= useState("")
   const [quotconsignee,setQuotconsignee] = useState()
@@ -122,7 +125,16 @@ export default function EditQuotation(
   const[quotfreighttype,setquotfreighttype] = useState()
   const[quotcargotype,setquotcargotype] = useState()
   const[quotmode,setquotmode] = useState()
-  
+  const[quotcarrier,setquotcarrier] = useState()
+  const[quotterms,setquotterms] = useState()
+  const [quotgrosswt,setquotgrosswt] = useState()
+  const [quotchargeablewt,setquotchargeablewt] =useState()
+  const[noofpieces,setnoofpieces]=useState()
+  const [quotcurrency,setquotcurrency]=useState()
+  const [quotexchngerate,setquotexchngerate]=useState()
+  const [quotunits,setquotunits]=useState()
+
+
   const [allPaymentTerms, setAllPaymentTerms] = useState();
   const [currencydata, setCurrencydata] = useState();
 
@@ -135,8 +147,118 @@ export default function EditQuotation(
   const [allservices, setAllservices] = useState();
   const [unitdata,setUnitdata]= useState()
 
-  const [tableData, setTableData] = useState();
+  const [allLeadList, setAllLeadList] = useState([]);
+  // const [tableData, setTableData] = useState();
  
+  const dataSource = [
+    {
+      key: "1",
+      quotation_details_service_id: "",
+      quotation_details_cost: "",
+      quotation_details_tax_type: "",
+      quotation_details_tax_amount: "",
+      quotation_details_total: "",
+    },
+  ];
+  const [taxratee,setTaxRatee] = useState();
+  const [total, setTotal] = useState(0);
+  const [tableData, setTableData] = useState(dataSource);
+  const getIndexInParent = (el) =>
+    Array.from(el.parentNode.children).indexOf(el);
+  const handleInputChange = (e, key, col, tx) => {
+    console.log("gai guys", e, col , tx)
+    // setSampleid(e)
+    allservices.map((item,index)=> {
+      if( tx && e === item.service_id) {
+        if (col && key && tx && e === item.service_id){
+        setTaxRatee(item.service_taxrate)
+      let hai = item.service_taxrate;
+     
+      setTableData(
+        tableData.map((item) => {
+          if (item.key === key) {
+            return { ...item, quotation_details_tax_type: hai, quotation_details_service_id: e };
+          }
+          return item;
+        })
+      );
+    }
+  }
+  });
+
+};
+const handleInputchange1 = (e, key, col) => {
+  setTableData(
+    tableData.map((item) => {
+      if (item.key === key) {
+        return { ...item, [col]: e };
+      }
+      return item;
+    })
+  );
+  addForm.setFieldValue("quotation_details_tax_type",taxratee);
+};
+  const handleInputChange2 = (e, index, col) => {
+    setTableData(
+      tableData.map((item) => {
+        if (item.key === index.key) {
+          return { ...item, [col]: e };
+        }
+        return item;
+      })
+    );
+  };
+
+  const handleEnter = (e) => {
+    console.log("Hello");
+    console.log("Key ::::::: ", e.key);
+    if (e.key === "Enter" || e.key === "Tab") {
+      setTableData([
+        ...tableData,
+        {
+          key: `${tableData.length + 1}`,
+          quotation_details_service_id: "",
+          quotation_details_cost: "",
+          quotation_details_tax_type: "",
+          quotation_details_tax_amount: "",
+          quotation_details_total: "",
+        },
+      ]);
+    }
+    console.log("tabledata", tableData);
+    let sum = 0;
+    tableData.forEach((item) => {
+      sum += item.quotation_details_cost + item.quotation_details_tax_amount;
+    });
+    console.log("sum", sum);
+    setTotal(sum);
+  };
+
+  const handleReorder = (dragIndex, draggedIndex) => {
+    setTableData((oldState) => {
+      const newState = [...oldState];
+      const item = newState.splice(dragIndex, 1)[0];
+      newState.splice(draggedIndex, 0, item);
+      return newState;
+    });
+  };
+  React.useEffect(() => {
+    let start;
+    let end;
+    const container = document.querySelector(".ant-table-tbody");
+    const drake = dragula([container], {
+      moves: (el) => {
+        start = getIndexInParent(el);
+        return true;
+      },
+    });
+
+    drake.on("drop", (el) => {
+      end = getIndexInParent(el);
+      handleReorder(start, end);
+    });
+  }, []);
+
   const getAllservices = () => {
     PublicFetch.get(
       `${CRM_BASE_URL_SELLING}/service?startIndex=${pageofIndex}&noOfItems=${numOfItems}`
@@ -179,6 +301,7 @@ export default function EditQuotation(
 
   useEffect(() => {
     getAllservices();
+    GetAllLeadData();
   }, [numOfItems, pageofIndex]);
 
 
@@ -229,7 +352,7 @@ export default function EditQuotation(
               optionFilterProp="children"
               className="selectwidth mb-2"
               value={index.tasks}
-              // onChange={(e) => handleInputChange(e, index.key, "tasks")}
+              onChange={(e) => handleInputChange(e, index.key, "tasks")}
             >
               {services &&
                 services.length > 0 &&
@@ -261,10 +384,10 @@ export default function EditQuotation(
             <Input_Number
               className="text_right"
               value={index.cost}
-              // onChange={(value) => {
-              //   handleInputChange(value, index.key, "cost");
-              //   console.log(" input numberevent ", value, index.key);
-              // }}
+              onChange={(value) => {
+                handleInputChange(value, index.key, "cost");
+                console.log(" input numberevent ", value, index.key);
+              }}
               align="right"
               step={0.01}
               min={0}
@@ -289,7 +412,7 @@ export default function EditQuotation(
             <Input_Number
               className="text_right"
               value={index.taxtype}
-              // onChange={(e) => handleInputChange(e, index.key, "taxtype")}
+              onChange={(e) => handleInputChange(e, index.key, "taxtype")}
               align="right"
               step={0.01}
               min={0}
@@ -313,7 +436,7 @@ export default function EditQuotation(
             <Input_Number
               className="text_right"
               value={index.taxamount}
-              // onChange={(e) => handleInputChange(e, index.key, "taxamount")}
+              onChange={(e) => handleInputChange(e, index.key, "taxamount")}
               align="right"
               step={0.01}
               min={0}
@@ -340,13 +463,13 @@ export default function EditQuotation(
               // value={    index.totalamount=(index.cost + index.taxamount)
               // }
               value={index.cost + index.taxamount}
-              // onChange={(e) => handleInputChange2(e, index, "totalamount")}
+              onChange={(e) => handleInputChange2(e, index, "totalamount")}
               align="right"
               step={0.01}
               min={0}
               precision={2}
               controlls={false}
-              // onKeyDown={(e) => handleEnter(e, index.key)}
+              onKeyDown={(e) => handleEnter(e, index.key)}
             />
           </div>
         );
@@ -361,6 +484,57 @@ export default function EditQuotation(
 
 
 // api integration
+
+const getAllLocations = async () => {
+  try {
+    const locations = await PublicFetch.get(`${CRM_BASE_URL_FMS}/locations`);
+    console.log("all locations are", locations.data.data);
+    // setAllLocations(locations.data.data);
+    let temp = [];
+    locations.data.data.forEach((item,index)=>{
+      temp.push({
+        location_id: item.location_id,
+        location_code: item.location_code,
+        location_name: item.location_name,
+        location_type: item.location_type,
+        location_country: item.countries.country_name,
+      });
+      setAllLocations(temp);
+    })
+  } catch (err) {
+    console.log("error while getting the locations: ", err);
+  }
+};
+
+
+const GetAllLeadData = () => {
+  PublicFetch.get(
+    `${CRM_BASE_URL}/lead?startIndex=${pageofIndex}&noOfItems=${noofItems}`
+  )
+    .then((res) => {
+      if (res?.data?.success) {
+        console.log("All lead data", res?.data?.data);
+        // setAllLeadList(res?.data?.data?.leads);
+        setTotalcount(res?.data?.data?.totalCount);
+        // setCurrentcount(res?.data?.data?.currentCount);
+        let array = [];
+        res?.data?.data?.leads?.forEach((item, index) => {
+          array.push({
+            lead_id: item?.lead_id,
+            lead_customer_name: item?.lead_customer_name,
+          });
+          setAllLeadList(array);
+        });
+      } else {
+        console.log("FAILED T LOAD DATA");
+      }
+    })
+    .catch((err) => {
+      console.log("Errror while getting data", err);
+    });
+};
+
+
 
   const getallfrighttype = async () => {
     try {
@@ -386,6 +560,7 @@ export default function EditQuotation(
     }
   };
 
+
   const getonequatation = async () => {
     try {
       const onequatation = await PublicFetch.get(
@@ -395,9 +570,38 @@ export default function EditQuotation(
       console.log(" quatation no is:", onequatation?.data?.data.quotation_no);
       setquatationno(onequatation?.data?.data?.quotation_no)
       setquotshipper(onequatation?.data?.data?.quotation_shipper)
+      setQuotconsignee(onequatation?.data?.data?.crm_v1_leads.lead_customer_name)
+      setquotfreighttype(onequatation?.data?.data?.fms_v1_freight_types.freight_type_name)
+      setquotcargotype(onequatation?.data?.data?.quotation_cargo_type)
+      setquotmode(onequatation?.data?.data?.quotation_mode)
+      setquotcarrier(onequatation?.data?.data?.fms_v1_carrier.carrier_name)
+      setquotterms(onequatation?.data?.data?.fms_v1_payment_terms.payment_term_name)
+      setquotchargeablewt(onequatation?.data?.data?.quotation_chargeable_wt)
+      setquotgrosswt(onequatation?.data?.data?.quotation_gross_wt)
+
+      setnoofpieces(onequatation?.data?.data?.quotation_no_of_pieces)
+      setquotcurrency(onequatation?.data?.data?.generalsettings_v1_currency.currency_name)
+      setquotexchngerate(onequatation?.data?.data?.quotation_exchange_rate)
+      setquotunits(onequatation?.data?.data?.crm_v1_units.unit_name)
+
       editForm.setFieldsValue({
         quotation_no:onequatation?.data?.data?.quotation_no,
         shipper:onequatation?.data?.data?.quotation_shipper,
+        quotation_consignee:onequatation?.data?.data?.crm_v1_leads.lead_customer_name,
+        freight_type:onequatation?.data?.data?.fms_v1_freight_types.freight_type_name,
+        quotation_cargotype:onequatation?.data?.data?.quotation_cargo_type,
+        quotation_mode:onequatation?.data?.data?.quotation_mode,
+        quotation_carrier:onequatation?.data?.data?.fms_v1_payment_terms.payment_term_name,
+        quotation_terms:onequatation?.data?.data?.fms_v1_payment_terms.payment_term_name,
+        gross_wt:onequatation?.data?.data?.quotation_gross_wt,
+        chargeable_wt:onequatation?.data?.data?.quotation_chargeable_wt,
+        quot_npieces:onequatation?.data?.data?.quotation_no_of_pieces,
+        currency:onequatation?.data?.data?.generalsettings_v1_currency.currency_name,
+        exchnagerate:onequatation?.data?.data?.quotation_exchange_rate,
+        quotation_units:onequatation?.data?.data?.crm_v1_units.unit_name,
+        quotation_destination:onequatation?.data?.data?.fms_v1_locations_fms_v1_quotation_quotation_destination_idTofms_v1_locations.location_name,
+        quotation_origin:onequatation?.data?.data?.fms_v1_locations_fms_v1_quotation_quotation_origin_idTofms_v1_locations.location_name
+
       })
 
     } catch (err) {
@@ -444,6 +648,53 @@ export default function EditQuotation(
     }
   };
 
+  // const OnSubmitedit = () => {
+  //   const formData = new FormData();
+  //   formData.append("quotation_no", prname.trim(" "));
+  //   formData.append("quotation_date", prcode);
+  //   formData.append("product_code", prcode);
+  //   formData.append("quotation_validity", prcategory);
+  //   formData.append("quotation_consignee", prbrand);
+  //   formData.append("quotation_shipper", prunit);
+  //   formData.append("quotation_freight_type", prunit);
+  //   formData.append("quotation_cargo_type", prunit);
+  //   formData.append("quotation_carrier", prattribtearray);
+  //   formData.append("quotation_mode", prDescription);
+  //   formData.append("quotation_origin_id", prDescription);
+  //   formData.append("quotation_origin", prDescription);
+  //   formData.append("quotation_destination_id", prDescription);
+  //   formData.append("quotation_destination", prDescription);
+  //   formData.append("quotation_no_of_pieces", prDescription);
+  //   formData.append("quotation_uom", prDescription);
+  //   formData.append("quotation_gross_wt", prDescription);
+  //   formData.append("quotation_chargeable_wt", prDescription);
+  //   formData.append("quotation_payment_terms", prDescription);
+  //   formData.append("quotation_currency", prDescription);
+  //   formData.append("quotation_exchange_rate", prDescription);
+   //   if (img) {
+  //     formData.append("product_pic", img);
+  //   }
+  //   // formData.append("quotation_payment_terms", prDescription);
+
+  //     PublicFetch.patch(
+  //       `${CRM_BASE_URL_SELLING}/product/${parseInt(prid)}`,
+  //       formData,
+  //       {
+  //         "Content-Type": "Multipart/form-Data",
+  //       }
+  //     )
+  //       .then((res) => {
+  //         console.log("data is successfully saved", res.data.success);
+       
+  //       })
+  //       .catch((err) => {
+  //         console.log("error", err);
+  //         setError(true);
+  //       });
+    
+  // };
+
+
 
   useEffect(() => {
     getallfrighttype();
@@ -452,6 +703,7 @@ export default function EditQuotation(
     getallcarrier();
     getallcurrency();
     getonequatation();
+    getAllLocations()
   }, []);
 
 
@@ -502,18 +754,17 @@ export default function EditQuotation(
                       <label>Quotation date</label>
                       <Form.Item
                         name="qdate"
-                        rules={[
-                          {
-                            required: true,
-                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                            message: "Please enter a Valid value",
-                          },
-                        ]}
+                        // rules={[
+                        //   {
+                        //     required: true,
+                        //     pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                        //     message: "Please enter a Valid value",
+                        //   },
+                        // ]}
                       >
                         <DatePicker
                           style={{ borderWidth: 0, marginTop: 10 }}
-                          // defaultValue={today}
-                          defaultValue={dayjs()}
+                          initialValues={dayjs()}
                           format={dateFormatList}
                           disabledDate={(d) => !d || d.isBefore(today)}
                           onChange={(e) => {
@@ -527,18 +778,18 @@ export default function EditQuotation(
                       <label>Validity date</label>
                       <Form.Item
                         name="vdate"
-                        rules={[
-                          {
-                            required: true,
-                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                            message: "Please enter a Valid value",
-                          },
-                        ]}
+                        // rules={[
+                        //   {
+                        //     required: true,
+                        //     pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                        //     message: "Please enter a Valid value",
+                        //   },
+                        // ]}
                       >
-                        <DatePicker
+                          <DatePicker
                           style={{ borderWidth: 0, marginTop: 10 }}
-                          // defaultValue={today}
-                          // defaultValue={dayjs()}
+                          initialValues={dayjs()}
+                          format={dateFormatList}
                           disabledDate={(d) => !d || d.isBefore(today)}
                           onChange={(e) => {
                             console.log("date mmm", e);
@@ -551,7 +802,7 @@ export default function EditQuotation(
                     <div className="col-xl-3 col-sm-6 mt-2">
                       <label>Consignee</label>
                       <Form.Item
-                        name="consignee"
+                        name="quotation_consignee"
                         rules={[
                           {
                             required: true,
@@ -559,9 +810,23 @@ export default function EditQuotation(
                           },
                         ]}
                       >
-                        <SelectBox>
-                          <Select.Option value="A">Test</Select.Option>
-                          <Select.Option value="B">Demo</Select.Option>
+                        <SelectBox
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
+                        >
+                          {allLeadList &&
+                            allLeadList.length > 0 &&
+                            allLeadList.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  key={item.lead_id}
+                                  value={item.lead_id}
+                                >
+                                  {item.lead_customer_name}
+                                </Select.Option>
+                              )
+                            })}
                         </SelectBox>
                       </Form.Item>
                     </div>
@@ -579,7 +844,7 @@ export default function EditQuotation(
                         ]}
                       >
                         <InputType 
-                        // value={}
+                       value={quotshipper}
                         />
                       </Form.Item>
                     </div>
@@ -623,7 +888,7 @@ export default function EditQuotation(
                     <div className="col-xl-3 col-sm-6 mt-2">
                       <label>Freight Type</label>
                       <Form.Item
-                        name=""
+                        name="freight_type"
                         rules={[
                           {
                             required: true,
@@ -655,7 +920,7 @@ export default function EditQuotation(
                     <div className="col-xl-3 col-sm-6 mt-2">
                       <label>Cargo Type</label>
                       <Form.Item
-                        name=""
+                        name="quotation_cargotype"
                         rules={[
                           {
                             required: true,
@@ -688,7 +953,7 @@ export default function EditQuotation(
                     <div className="col-xl-3 col-sm-6 mt-2">
                       <label>Mode</label>
                       <Form.Item
-                        name=""
+                        name="quotation_mode"
                         rules={[
                           {
                             required: true,
@@ -711,7 +976,7 @@ export default function EditQuotation(
                     <div className="col-xl-3 col-sm-6 mt-2">
                       <label> Origin</label>
                       <Form.Item
-                        name="corgin"
+                        name="quotation_origin"
                         rules={[
                           {
                             required: true,
@@ -719,16 +984,30 @@ export default function EditQuotation(
                           },
                         ]}
                       >
-                        <SelectBox>
-                          <Select.Option value="A">Test</Select.Option>
-                          <Select.Option value="B">Demo</Select.Option>
+                            <SelectBox
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
+                        > 
+                        {allLocations &&
+                          allLocations.length > 0 &&
+                          allLocations.map((item, index) => {
+                            return (
+                              <Select.Option
+                                value={item.location_id}
+                                key={item.location_id}
+                              >
+                                {item.location_name}
+                              </Select.Option>
+                            );
+                          })}
                         </SelectBox>
                       </Form.Item>
                     </div>
                     <div className="col-xl-3 col-sm-6 mt-2">
                       <label> Destination</label>
                       <Form.Item
-                        name="cdest"
+                        name="quotation_destination"
                         rules={[
                           {
                             required: true,
@@ -736,9 +1015,23 @@ export default function EditQuotation(
                           },
                         ]}
                       >
-                        <SelectBox>
-                          <Select.Option value="A">Test</Select.Option>
-                          <Select.Option value="B">Demo</Select.Option>
+                          <SelectBox
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
+                        > 
+                        {allLocations &&
+                          allLocations.length > 0 &&
+                          allLocations.map((item, index) => {
+                            return (
+                              <Select.Option
+                                value={item.location_id}
+                                key={item.location_id}
+                              >
+                                {item.location_name}
+                              </Select.Option>
+                            );
+                          })}
                         </SelectBox>
                       </Form.Item>
                     </div>
@@ -746,7 +1039,7 @@ export default function EditQuotation(
                     <div className="col-xl-3 col-sm-6 mt-2">
                       <label>Carrier</label>
                       <Form.Item
-                        name=""
+                        name="quotation_carrier"
                         rules={[
                           {
                             required: true,
@@ -778,7 +1071,7 @@ export default function EditQuotation(
                     <div className="col-xl-3 col-sm-6 mt-2">
                       <label>Terms</label>
                       <Form.Item
-                        name=""
+                        name="quotation_terms"
                         rules={[
                           {
                             required: true,
@@ -810,7 +1103,7 @@ export default function EditQuotation(
                     <div className="col-xl-3 col-sm-6  mt-2">
                       <label>Number of pieces</label>
                       <Form.Item
-                        name="npieces"
+                        name="quot_npieces"
                         rules={[
                           {
                             required: true,
@@ -819,14 +1112,16 @@ export default function EditQuotation(
                           },
                         ]}
                       >
-                        <InputType />
+                        <InputType 
+                        // value={}
+                        />
                       </Form.Item>
                     </div>
 
                     <div className="col-xl-3 col-sm-6 mt-2">
                       <label>UOM</label>
                       <Form.Item
-                        name="npieces"
+                        name="quotation_units"
                         rules={[
                           {
                             required: true,
@@ -859,7 +1154,7 @@ export default function EditQuotation(
                     <div className="col-xl-3 col-sm-6 mt-2">
                       <label>Gross Weight</label>
                       <Form.Item
-                        name="gweight"
+                        name="gross_wt"
                         rules={[
                           {
                             required: true,
@@ -884,7 +1179,7 @@ export default function EditQuotation(
                     <div className="col-xl-3 col-sm-6 mt-2">
                       <label>Chargeable Weight</label>
                       <Form.Item
-                        name="weight"
+                        name="chargeable_wt"
                         rules={[
                           {
                             required: true,
@@ -909,7 +1204,7 @@ export default function EditQuotation(
                     <div className="col-xl-3 col-sm-6 mt-2">
                       <label>Currency</label>
                       <Form.Item
-                        name="npieces"
+                        name="currency"
                         rules={[
                           {
                             required: true,

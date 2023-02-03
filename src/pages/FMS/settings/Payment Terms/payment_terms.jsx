@@ -99,7 +99,7 @@ export default function PaymentTerms(props) {
       title: "SHORT NAME",
       dataIndex: "payment_term_shortname",
       key: "payment_term_shortname",
-      filteredValue: [searchedText],
+      
       onFilter: (value, record) => {
         return String(record.payment_term_shortname)
           .toLowerCase()
@@ -111,7 +111,7 @@ export default function PaymentTerms(props) {
       title: "Descripton",
       dataIndex: "payment_term_description",
       key: "payment_term_description",
-      filteredValue: [searchedText],
+      
       onFilter: (value, record) => {
         return String(record.payment_term_description)
           .toLowerCase()
@@ -236,7 +236,7 @@ export default function PaymentTerms(props) {
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-5">
             <Input.Search
-              placeholder="Search by Fright type Name"
+              placeholder="Search by Name"
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
               onChange={(e) => {

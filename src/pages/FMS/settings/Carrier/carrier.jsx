@@ -77,7 +77,7 @@ export default function Carrierlist(props) {
     getallcarrier();
   }, []);
 
-
+  const [nameSearch, setNamesearch] = useState();
   const createcarrier = async () => {
     try {
       const addcarrier = await PublicFetch.post(
@@ -212,7 +212,7 @@ export default function Carrierlist(props) {
       key: "carrier_name",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.carrier_name)
+        return String(record.carrier_name || nameSearch)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
@@ -222,7 +222,7 @@ export default function Carrierlist(props) {
       title: "CARRIER CODE",
       dataIndex: "carrier_code",
       key: "carrier_code",
-      filteredValue: [searchedText],
+     
       onFilter: (value, record) => {
         return String(record.carrier_code)
           .toLowerCase()
@@ -234,7 +234,7 @@ export default function Carrierlist(props) {
       title: "CARRIER TYPE",
       dataIndex: "carrier_type",
       key: "carrier_type",
-      filteredValue: [searchedText],
+     
       onFilter: (value, record) => {
         return String(record.carrier_type)
           .toLowerCase()
@@ -286,7 +286,7 @@ export default function Carrierlist(props) {
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
-              placeholder="Search by Fright type Name"
+              placeholder="Search by Carrier Name"
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
               onChange={(e) => {

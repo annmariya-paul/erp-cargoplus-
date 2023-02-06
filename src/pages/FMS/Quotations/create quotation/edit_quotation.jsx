@@ -200,7 +200,6 @@ export default function EditQuotation(
         return item;
       })
     );
-    editForm.setFieldValue("quotation_details_tax_type", taxratee);
   };
   const handleInputChange2 = (e, index, col) => {
     setTableData(
@@ -706,10 +705,39 @@ export default function EditQuotation(
             .location_name,
       });
 
-      let existingValues = editForm.getFieldsValue();
-      let { quotation_details } = existingValues;
-      console.log("existing values", quotation_details);
-      let assignValues = quotation_details;
+      onequatation?.data?.data.fms_v1_quotation_details.forEach(
+        (item, index) => {
+          let existingValues = editForm.getFieldsValue();
+          let { quotation_details } = existingValues;
+          console.log("existing values", quotation_details);
+          // quotation_details.forEach((quotation_details, index) => {
+          let sum = 0;
+          let assignValues = quotation_details[tableData.length];
+          assignValues["quotation_details_service_id"] =
+            item.quotation_details_service_id;
+          assignValues["quotation_details_cost"] = item.quotation_details_cost;
+          assignValues["quotation_details_tax_type"] =
+            item.quotation_details_tax_type;
+          assignValues["quotation_details_tax_amount"] =
+            item.quotation_details_tax_amount;
+          assignValues["quotation_details_total"] =
+            item.quotation_details_total;
+          editForm.setFieldsValue({ quotation_details });
+          // });
+
+          setTableData([
+            ...tableData,
+            {
+              key: index,
+              quotation_details_service_id: item.quotation_details_service_id,
+              quotation_details_cost: item.quotation_details_cost,
+              quotation_details_tax_type: item.quotation_details_tax_type,
+              quotation_details_tax_amount: item.quotation_details_tax_amount,
+              quotation_details_total: item.quotation_details_total,
+            },
+          ]);
+        }
+      );
     } catch (err) {
       console.log("error to getting all freighttype", err);
     }

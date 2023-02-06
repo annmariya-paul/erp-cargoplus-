@@ -7,6 +7,7 @@ import "./quotation.scss";
 // import Button from "../../../../components/button/button";
 import dragula from "dragula";
 import "dragula/dist/dragula.css";
+import { v4 as uuidv4 } from "uuid";
 import FileUpload from "../../../../components/fileupload/fileUploader";
 import React, { useState, useEffect, useCallback } from "react";
 import dayjs from "dayjs";
@@ -16,7 +17,7 @@ import { Link } from "react-router-dom";
 import { MdDragHandle } from "react-icons/md";
 import { Droppable, Draggable, DragDropContext } from "react-beautiful-dnd";
 import { AiOutlineDelete } from "react-icons/ai";
-
+import moment from "moment";
 import { Collapse, Form, Input, Popconfirm } from "antd";
 import Button from "../../../../components/button/button";
 import PublicFetch from "../../../../utils/PublicFetch";
@@ -166,27 +167,73 @@ export default function EditQuotation(
   const [tableData, setTableData] = useState(dataSource);
   const getIndexInParent = (el) =>
     Array.from(el.parentNode.children).indexOf(el);
+
   const handleInputChange = (e, key, col, tx) => {
     console.log("gai guys", e, col, tx);
     // setSampleid(e)
-    allservices.map((item, index) => {
-      if (tx && e === item.service_id) {
-        if (col && key && tx && e === item.service_id) {
-          setTaxRatee(item.service_taxrate);
-          let hai = item.service_taxrate;
+    taxTypes.map((item, index) => {
+      if (tx && e === item.tax_type_id) {
+        if (col && key && tx && e === item.tax_type_id) {
+          setTaxRatee(item.tax_type_percentage);
+          // let hai = item.tax_type_percentage;
+
+          let existingValues = editForm.getFieldsValue();
+          console.log("existing form", existingValues);
+          let { quotation_details } = existingValues;
+          let assignValues = quotation_details[key];
+
+          let taxamount =
+            (assignValues["quotation_details_cost"] *
+              item.tax_type_percentage) /
+            100;
+          console.log("sum of tax", taxamount);
+          assignValues["quotation_details_tax_amount"] = taxamount;
+
+          let totalAmount =
+            assignValues["quotation_details_cost"] +
+            assignValues["quotation_details_tax_amount"];
+          console.log("total aount", totalAmount);
+          assignValues["quotation_details_total"] = totalAmount;
+          console.log("quation deatils", quotation_details);
+          editForm.setFieldsValue({ quotation_details });
+          // setTotal(sum);
+          // addForm.setFieldsValue({
+          //   grandtotal: sum,
+          // });
+          let grandTotal = 0;
+          for (let key in quotation_details) {
+            let item = quotation_details[key];
+            grandTotal += item["quotation_details_total"];
+            // setNewGrandTotal(grandTotal);
+            editForm.setFieldsValue({ gtotal: grandTotal });
+          }
+
+          console.log("Grand Total:", grandTotal);
 
           setTableData(
             tableData.map((item) => {
               if (item.key === key) {
                 return {
                   ...item,
-                  quotation_details_tax_type: hai,
-                  quotation_details_service_id: e,
+                  quotation_details_tax_amount: taxamount,
+                  quotation_details_tax_type: e,
+                  quotation_details_total: totalAmount,
                 };
               }
               return item;
             })
           );
+          console.log("tabledata", tableData);
+          // let sum = 0;
+          // tableData.forEach((item) => {
+          //   sum +=
+          //     item.quotation_details_cost + item.quotation_details_tax_amount;
+          // });
+          // console.log("sum", sum);
+          // setTotal(sum);
+          // addForm.setFieldsValue({
+          //   grandtotal: sum,
+          // });
         }
       }
     });
@@ -443,17 +490,6 @@ export default function EditQuotation(
               ]}
               // rules={[{ required: true, message: 'Please input the name' }]}
             >
-              {/* <Input_Number
-              className="text_right"
-              value={taxratee}
-              onChange={(e) => handleInputchange1(e, index.key, "quotation_details_tax_type")}
-              align="right"
-              step={0.01}
-              min={0}
-              precision={2}
-              controlls={false}
-            /> */}
-
               <SelectBox
                 allowClear
                 showSearch
@@ -651,9 +687,7 @@ export default function EditQuotation(
       console.log(" quatation no is:", onequatation?.data?.data.quotation_no);
       setquatationno(onequatation?.data?.data?.quotation_no);
       setquotshipper(onequatation?.data?.data?.quotation_shipper);
-      setQuotconsignee(
-        onequatation?.data?.data?.crm_v1_leads.lead_customer_name
-      );
+      setQuotconsignee(onequatation?.data?.data?.crm_v1_leads.lead_id);
       setquotfreighttype(
         onequatation?.data?.data?.fms_v1_freight_types.freight_type_name
       );
@@ -672,37 +706,30 @@ export default function EditQuotation(
       );
       setquotexchngerate(onequatation?.data?.data?.quotation_exchange_rate);
       setquotunits(onequatation?.data?.data?.crm_v1_units.unit_name);
+      let qdate = moment(onequatation?.data?.data?.quotation_date);
+      let vdate = moment(onequatation?.data?.data?.quotation_validity);
 
       editForm.setFieldsValue({
         quotation_no: onequatation?.data?.data?.quotation_no,
-        // quotationdate:onequatation?.data?.data?.quotation_date,
-        // validity_date:onequatation?.data?.data?.quotation_validity,
+        quotationdate: qdate,
+        validity_date: vdate,
         shipper: onequatation?.data?.data?.quotation_shipper,
-        quotation_consignee:
-          onequatation?.data?.data?.crm_v1_leads.lead_customer_name,
-        freight_type:
-          onequatation?.data?.data?.fms_v1_freight_types.freight_type_name,
+        quotation_consignee: onequatation?.data?.data?.crm_v1_leads.lead_id,
+        freight_type: onequatation?.data?.data?.quotation_freight_type,
         quotation_cargotype: onequatation?.data?.data?.quotation_cargo_type,
         quotation_mode: onequatation?.data?.data?.quotation_mode,
-        quotation_carrier:
-          onequatation?.data?.data?.fms_v1_payment_terms.payment_term_name,
+        quotation_carrier: onequatation?.data?.data?.quotation_carrier,
         quotation_terms:
-          onequatation?.data?.data?.fms_v1_payment_terms.payment_term_name,
+          onequatation?.data?.data?.fms_v1_payment_terms.payment_term_id,
         gross_wt: onequatation?.data?.data?.quotation_gross_wt,
         chargeable_wt: onequatation?.data?.data?.quotation_chargeable_wt,
         quot_npieces: onequatation?.data?.data?.quotation_no_of_pieces,
-        currency:
-          onequatation?.data?.data?.generalsettings_v1_currency.currency_name,
+        currency: onequatation?.data?.data?.quotation_currency,
         exchnagerate: onequatation?.data?.data?.quotation_exchange_rate,
-        quotation_units: onequatation?.data?.data?.crm_v1_units.unit_name,
+        quotation_units: onequatation?.data?.data?.quotation_uom,
         quotation_destination:
-          onequatation?.data?.data
-            ?.fms_v1_locations_fms_v1_quotation_quotation_destination_idTofms_v1_locations
-            .location_name,
-        quotation_origin:
-          onequatation?.data?.data
-            ?.fms_v1_locations_fms_v1_quotation_quotation_origin_idTofms_v1_locations
-            .location_name,
+          onequatation?.data?.data?.quotation_destination_id,
+        quotation_origin: onequatation?.data?.data?.quotation_origin_id,
       });
 
       onequatation?.data?.data.fms_v1_quotation_details.forEach(
@@ -728,7 +755,7 @@ export default function EditQuotation(
           setTableData([
             ...tableData,
             {
-              key: index,
+              key: tableData.length + 1,
               quotation_details_service_id: item.quotation_details_service_id,
               quotation_details_cost: item.quotation_details_cost,
               quotation_details_tax_type: item.quotation_details_tax_type,
@@ -795,51 +822,47 @@ export default function EditQuotation(
     }
   };
 
-  // const OnSubmitedit = () => {
-  //   const formData = new FormData();
-  //   formData.append("quotation_no", prname.trim(" "));
-  //   formData.append("quotation_date", prcode);
-  //   formData.append("product_code", prcode);
-  //   formData.append("quotation_validity", prcategory);
-  //   formData.append("quotation_consignee", prbrand);
-  //   formData.append("quotation_shipper", prunit);
-  //   formData.append("quotation_freight_type", prunit);
-  //   formData.append("quotation_cargo_type", prunit);
-  //   formData.append("quotation_carrier", prattribtearray);
-  //   formData.append("quotation_mode", prDescription);
-  //   formData.append("quotation_origin_id", prDescription);
-  //   formData.append("quotation_origin", prDescription);
-  //   formData.append("quotation_destination_id", prDescription);
-  //   formData.append("quotation_destination", prDescription);
-  //   formData.append("quotation_no_of_pieces", prDescription);
-  //   formData.append("quotation_uom", prDescription);
-  //   formData.append("quotation_gross_wt", prDescription);
-  //   formData.append("quotation_chargeable_wt", prDescription);
-  //   formData.append("quotation_payment_terms", prDescription);
-  //   formData.append("quotation_currency", prDescription);
-  //   formData.append("quotation_exchange_rate", prDescription);
-  //   if (img) {
-  //     formData.append("product_pic", img);
-  //   }
-  //   // formData.append("quotation_payment_terms", prDescription);
+  const OnSubmitedit1 = (data) => {
+    const formData = new FormData();
 
-  //     PublicFetch.patch(
-  //       `${CRM_BASE_URL_SELLING}/product/${parseInt(prid)}`,
-  //       formData,
-  //       {
-  //         "Content-Type": "Multipart/form-Data",
-  //       }
-  //     )
-  //       .then((res) => {
-  //         console.log("data is successfully saved", res.data.success);
+    formData.append("quotation_no", data.quotation_no.trim(" "));
+    formData.append("quotation_date", new Date(data.quotationdate));
+    formData.append("quotation_validity", new Date(data.validity_date));
+    formData.append("quotation_consignee", data.quotation_consignee);
+    formData.append("quotation_shipper", data.shipper);
+    formData.append("quotation_freight_type", data.freight_type);
+    formData.append("quotation_cargo_type", data.quotation_cargotype);
+    formData.append("quotation_carrier", data.quotation_carrier);
+    formData.append("quotation_mode", data.quotation_mode);
+    formData.append("quotation_origin_id", data.quotation_origin);
+    formData.append("quotation_origin", data.quotation_origin);
+    formData.append("quotation_destination_id", data.quotation_destination);
+    formData.append("quotation_destination", data.quotation_destination);
+    formData.append("quotation_no_of_pieces", data.quot_npieces);
+    formData.append("quotation_uom", data.quotation_units);
+    formData.append("quotation_gross_wt", data.gross_wt);
+    formData.append("quotation_grand_total", data.gtotal);
+    formData.append("quotation_chargeable_wt", data.chargeable_wt);
+    formData.append("quotation_payment_terms", data.quotation_terms);
+    formData.append("quotation_currency", data.currency);
+    formData.append("quotation_exchange_rate", data.exchnagerate);
+    formData.append("quotation_details", data.quotation_details);
+    if (data.new) {
+      formData.append("attachments", data.new);
+    }
+    // formData.append("quotation_payment_terms", prDescription);
 
-  //       })
-  //       .catch((err) => {
-  //         console.log("error", err);
-  //         setError(true);
-  //       });
-
-  // };
+    PublicFetch.patch(`${CRM_BASE_URL_FMS}/quotation/${id}`, formData, {
+      "Content-Type": "Multipart/form-Data",
+    })
+      .then((res) => {
+        console.log("data is successfully saved", res.data.success);
+      })
+      .catch((err) => {
+        console.log("error", err);
+        setError(true);
+      });
+  };
 
   useEffect(() => {
     getallfrighttype();
@@ -867,6 +890,7 @@ export default function EditQuotation(
               form={editForm}
               onFinish={(values) => {
                 console.log("values iss", values);
+                OnSubmitedit1(values);
               }}
               onFinishFailed={(error) => {
                 console.log(error);
@@ -1603,12 +1627,11 @@ export default function EditQuotation(
                     rules={[
                       {
                         required: true,
-                        pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                        // pattern: new RegExp("^[A-Za-z0-9 ]+$"),
                         message: "Please enter a Valid value",
                       },
                     ]}
                   >
-                    {/* <InputType className="text-right" /> */}
                     <Input_Number
                       className="text_right"
                       value={amount}
@@ -1624,7 +1647,7 @@ export default function EditQuotation(
               </div>
               <div className="d-flex justify-content-center my-4">
                 <div className="col-lg-1 ">
-                  <Button className="qtn_save" btnType="save">
+                  <Button type="submit" className="qtn_save" btnType="save">
                     Save
                   </Button>
                 </div>

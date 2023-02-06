@@ -9,6 +9,7 @@ import FileUpload from "../../../components/fileupload/fileUploader";
 import { getData, getNameList } from "country-list";
 import Phone_Input from "../../../components/PhoneInput/phoneInput";
 import PublicFetch from "../../../utils/PublicFetch";
+import { countryList } from "../../../utils/countries";
 import { CRM_BASE_URL_FMS, GENERAL_SETTING_BASE_URL } from "../../../api/bootapi";
 
 function Companyinfo(){
@@ -41,9 +42,9 @@ function Companyinfo(){
     const [getcmpnywatermark,setgetcmpnywatermark]= useState()
     const [successPopup, setSuccessPopup] = useState(false);
 
-    const handleChange = (e) => {
-      setCountryis(e);
-    };
+    // const handleChange = (e) => {
+    //   setCountryis(e);
+    // };
 
     const close_modal = (mShow, time) => {
       if (!mShow) {
@@ -192,100 +193,97 @@ console.log("dataa",allcmpny.data.data.length);
   
     // console.log("data of cmpny",cmpnydata)
     return (
-        <div>
-          <div className="">
-            <div className="row">
-              <div className="col-12">
-                <div className="card  border-0 shadow-sm">
-                  <div className="container">
-                    <div className="row">
-                      <div className="col-12">
-                        <h4 className="">Add CompanyInfo</h4>
-                        <div className="">
-                          <Form
+      <div>
+        <div className="">
+          <div className="row">
+            <div className="col-12">
+              <div className="card  border-0 shadow-sm">
+                <div className="container">
+                  <div className="row">
+                    <div className="col-12">
+                      <h4 className="">Add CompanyInfo</h4>
+                      <div className="">
+                        <Form
                           form={addForm}
                           onFinish={(value) => {
                             console.log("the formvaluess iss", value);
-                            createcompanyinfo()
+                            createcompanyinfo();
                           }}
                           onFinishFailed={(error) => {
                             console.log(error);
                           }}
-                          >
-                            <div className="row">
-                              <div className="col-xl-6 col-lg-6  col-12">
-                                <div className="">
-                                  <label>Company Name</label>
-                                  <Form.Item
-                                name="company_name"
-                                rules={[
-                                  {
-                                    required: true,
-                                    message: "Company Name is Required",
-                                  },
-                                ]}
-                              >
-                                <InputType
-                                value={companyname}
-                                onChange={(e)=>{
-                                  setCompanyname(e.target.value)
-                                }}
-                                />
-                                
-                              </Form.Item>
-                                </div>
+                        >
+                          <div className="row">
+                            <div className="col-xl-6 col-lg-6  col-12">
+                              <div className="">
+                                <label>Company Name</label>
+                                <Form.Item
+                                  name="company_name"
+                                  rules={[
+                                    {
+                                      required: true,
+                                      message: "Company Name is Required",
+                                    },
+                                  ]}
+                                >
+                                  <InputType
+                                    value={companyname}
+                                    onChange={(e) => {
+                                      setCompanyname(e.target.value);
+                                    }}
+                                  />
+                                </Form.Item>
                               </div>
-                              <div className="col-xl-6 col-lg-6  col-12">
-                                <div className="">
-                                  <label>Address</label>
-                                  <Form.Item
-                                name="company_address"
-                                rules={[
-                                  {
-                                    required: true,
-                                    message: "Address is Required",
-                                  },
-                                ]}
-                              >
-                                <TextArea 
-                                value={companyaddress}
-                                onChange={(e)=>{
-                                  setCompanyaddress(e.target.value)
-                                }}
-                                />
-                                
-                              </Form.Item>
-                                </div>
+                            </div>
+                            <div className="col-xl-6 col-lg-6  col-12">
+                              <div className="">
+                                <label>Address</label>
+                                <Form.Item
+                                  name="company_address"
+                                  rules={[
+                                    {
+                                      required: true,
+                                      message: "Address is Required",
+                                    },
+                                  ]}
+                                >
+                                  <TextArea
+                                    value={companyaddress}
+                                    onChange={(e) => {
+                                      setCompanyaddress(e.target.value);
+                                    }}
+                                  />
+                                </Form.Item>
                               </div>
-                              </div>
+                            </div>
+                          </div>
 
-                              <div className="row mt-2">
-                              <div className="col-xl-6 col-lg-6  col-12">
-                                <div className="">
-                                  <label>Email</label>
-                                  <Form.Item
-                                name="company_email"
-                                rules={[
-                                  {
-                                    required: true,
-                                    message: "Email is Required",
-                                  },
-                                ]}
-                              >
-                                <InputType  
-                                value={companyemail}
-                                onChange={(e)=>{
-                                  setCompanyemail(e.target.value)
-                                 }}
-                                />
-                                
-                              </Form.Item>
-                                </div>
+                          <div className="row mt-2">
+                            <div className="col-xl-6 col-lg-6  col-12">
+                              <div className="">
+                                <label>Email</label>
+                                <Form.Item
+                                  name="company_email"
+                                  rules={[
+                                    {
+                                      required: true,
+                                      message: "Email is Required",
+                                    },
+                                  ]}
+                                >
+                                  <InputType
+                                    value={companyemail}
+                                    onChange={(e) => {
+                                      setCompanyemail(e.target.value);
+                                    }}
+                                  />
+                                </Form.Item>
                               </div>
-                              <div className=" col-sm-6">
-                                <div>
-                                  <label>Phone</label>
-                                  <Form.Item
+                            </div>
+                            <div className=" col-sm-6">
+                              <div>
+                                <label>Phone</label>
+                                <Form.Item
                                   name="company_phone"
                                   rules={[
                                     {
@@ -293,170 +291,180 @@ console.log("dataa",allcmpny.data.data.length);
                                       message: "Email is Required",
                                     },
                                   ]}
-                              >
-                               {/* <Phone_Input
+                                >
+                                  {/* <Phone_Input
                                value={companyphone}
                                onChange={(e)=>{
                                 setCompanyphone(e)
                                }}
                                /> */}
-                                 <InputType  
-                                value={companyphone}
-                                onChange={(e)=>{
-                                 setCompanyphone(e.target.value)
-                                }}
-                                />
-                                
-                              </Form.Item>
-                                </div>
+                                  <InputType
+                                    value={companyphone}
+                                    onChange={(e) => {
+                                      setCompanyphone(e.target.value);
+                                    }}
+                                  />
+                                </Form.Item>
                               </div>
-                              </div>
-                              <div className="row mt-2">
-                              <div className="col-xl-6 col-lg-6 col-12">
-                                <div className="">
-                                  <label>Country</label>
-                                  <Form.Item
-                                  name="company_country"
-                                  >
-                                <SelectBox
-                                  value={countryis}
-                                  onChange={handleChange}
-                                >
-                                  {options.map((item, index) => {
-                                    return (
-                                      <Select.Option
-                                        key={item.code}
-                                        value={item.name}
-                                      >
-                                        {item.name}
-                                      </Select.Option>
-                                    );
-                                  })}
-                                </SelectBox>
-                              </Form.Item>
-                                </div>
-                              </div>
-                              <div className="col-xl-6 col-lg-6 col-12">
-                                <div className="">
-                                  <label>ZipCode</label>
-                                  <Form.Item
-                                name="cmpny_zipcode"
-                                // rules={[
-                                //   {
-                                //     required: true,
-                                //     message: "zipcode is Required",
-                                //   },
-                                // ]}
-                              >
-                                <InputType 
-                                value={companyzipcode}
-                                onChange={(e)=>{
-                                  setcompanyzipcode(e.target.value)
-                                }}
-                                />
-                                
-                              </Form.Item>
-                                </div>
-                              </div>
-                              </div>
-                              <div className="row">
-                               <div className="col-xl-6 col-lg-6  col-12">
-                               <div className="">
-                                <label>Logo</label>
-                                <Form.Item
-                                name="cmpny_logo"
-                                >
-                                <FileUpload
-                      multiple
-                      listType="picture"
-                      accept=".docx,.jpg,.jpeg"
-                      // onPreview={handlePreview}
-                      beforeUpload={false}
-                      onChange={(file) => {
-                        console.log("Before upload", file.file);
-                        console.log("Before upload file size", file.file.size);
-
-                        if (file.file.size > 1000 && file.file.size < 500000) {
-                          setCompanylogo(file.file.originFileObj);
-                          setImgSizeError(false);
-                          console.log(
-                            "Image must be greater than 1 kb and less than 500 kb"
-                          );
-                        } else {
-                          console.log("failed beacuse of large size");
-                          setImgSizeError(true);
-                        }
-                      }}
-                    />
-                    </Form.Item>
-                    <img
-                      src={`${process.env.REACT_APP_BASE_URL}/${getcmpnylogo}`}
-                      height="40px"
-                      width={"40px"}
-                    />
-                                </div>
-                               </div>
-                               <div className="col-xl-6 col-lg-6 col-12">
+                            </div>
+                          </div>
+                          <div className="row mt-2">
+                            <div className="col-xl-6 col-lg-6 col-12">
                               <div className="">
-                              <label>Water Mark</label>
-                              <Form.Item
-                              name="cmpny_watermark"
-                              >
-                              <FileUpload
-                              multiple
-                              listType="picture"
-                              accept=".docx,.jpg,.jpeg"
-                              // onPreview={handlePreview}
-                              beforeUpload={false}
-                              onChange={(file) => {
-                              console.log("Before upload", file.file);
-                              console.log("Before upload file size", file.file.size);
-
-                        if (file.file.size > 1000 && file.file.size < 500000) {
-                          setcompanywatermark(file.file.originFileObj);
-                          setImgSizeError(false);
-                          console.log(
-                            "Image must be greater than 1 kb and less than 500 kb"
-                          );
-                        } else {
-                          console.log("failed beacuse of large size");
-                          setImgSizeError(true);
-                        }
-                      }}
-                    />
-                    </Form.Item>
-                    <img
-                      src={`${process.env.REACT_APP_BASE_URL}/${getcmpnywatermark}`}
-                      height="40px"
-                      width={"40px"}
-                    />
-                              </div>
-                               </div>
-                              </div>
-
-                              <div className="col-12 mt-2 py-3">
-                                <div className="d-flex justify-content-center">
-                                 
-                                  <Button
-                                    type="submit"
-                                    className="p-2 save_button_style"
+                                <label>Country</label>
+                                <Form.Item name="company_country">
+                                  <SelectBox
+                                    allowClear
+                                    showSearch
+                                    placeholder="Select Country"
+                                    optionFilterProp="children"
+                                    value={countryis}
+                                    onChange={(event) => setCountryis(event)}
                                   >
-                                    Save
-                                  </Button>
-                                </div>
+                                    {countryList &&
+                                      countryList.map((item, index) => {
+                                        return (
+                                          <Select.Option
+                                            key={item.id}
+                                            value={item.name}
+                                          >
+                                            {item.name}
+                                          </Select.Option>
+                                        );
+                                      })}
+                                  </SelectBox>
+                                </Form.Item>
                               </div>
-                           
-                          </Form>
-                      
-                          
-                          <Custom_model
+                            </div>
+                            <div className="col-xl-6 col-lg-6 col-12">
+                              <div className="">
+                                <label>ZipCode</label>
+                                <Form.Item
+                                  name="cmpny_zipcode"
+                                  // rules={[
+                                  //   {
+                                  //     required: true,
+                                  //     message: "zipcode is Required",
+                                  //   },
+                                  // ]}
+                                >
+                                  <InputType
+                                    value={companyzipcode}
+                                    onChange={(e) => {
+                                      setcompanyzipcode(e.target.value);
+                                    }}
+                                  />
+                                </Form.Item>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="row">
+                            <div className="col-xl-6 col-lg-6  col-12">
+                              <div className="">
+                                <label>Logo</label>
+                                <Form.Item name="cmpny_logo">
+                                  <FileUpload
+                                    multiple
+                                    listType="picture"
+                                    accept=".docx,.jpg,.jpeg"
+                                    // onPreview={handlePreview}
+                                    beforeUpload={false}
+                                    onChange={(file) => {
+                                      console.log("Before upload", file.file);
+                                      console.log(
+                                        "Before upload file size",
+                                        file.file.size
+                                      );
+
+                                      if (
+                                        file.file.size > 1000 &&
+                                        file.file.size < 500000
+                                      ) {
+                                        setCompanylogo(file.file.originFileObj);
+                                        setImgSizeError(false);
+                                        console.log(
+                                          "Image must be greater than 1 kb and less than 500 kb"
+                                        );
+                                      } else {
+                                        console.log(
+                                          "failed beacuse of large size"
+                                        );
+                                        setImgSizeError(true);
+                                      }
+                                    }}
+                                  />
+                                </Form.Item>
+                                <img
+                                  src={`${process.env.REACT_APP_BASE_URL}/${getcmpnylogo}`}
+                                  height="40px"
+                                  width={"40px"}
+                                />
+                              </div>
+                            </div>
+                            <div className="col-xl-6 col-lg-6 col-12">
+                              <div className="">
+                                <label>Water Mark</label>
+                                <Form.Item name="cmpny_watermark">
+                                  <FileUpload
+                                    multiple
+                                    listType="picture"
+                                    accept=".docx,.jpg,.jpeg"
+                                    // onPreview={handlePreview}
+                                    beforeUpload={false}
+                                    onChange={(file) => {
+                                      console.log("Before upload", file.file);
+                                      console.log(
+                                        "Before upload file size",
+                                        file.file.size
+                                      );
+
+                                      if (
+                                        file.file.size > 1000 &&
+                                        file.file.size < 500000
+                                      ) {
+                                        setcompanywatermark(
+                                          file.file.originFileObj
+                                        );
+                                        setImgSizeError(false);
+                                        console.log(
+                                          "Image must be greater than 1 kb and less than 500 kb"
+                                        );
+                                      } else {
+                                        console.log(
+                                          "failed beacuse of large size"
+                                        );
+                                        setImgSizeError(true);
+                                      }
+                                    }}
+                                  />
+                                </Form.Item>
+                                <img
+                                  src={`${process.env.REACT_APP_BASE_URL}/${getcmpnywatermark}`}
+                                  height="40px"
+                                  width={"40px"}
+                                />
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="col-12 mt-2 py-3">
+                            <div className="d-flex justify-content-center">
+                              <Button
+                                type="submit"
+                                className="p-2 save_button_style"
+                              >
+                                Save
+                              </Button>
+                            </div>
+                          </div>
+                        </Form>
+
+                        <Custom_model
                           size={"sm"}
                           show={successPopup}
                           onHide={() => setSuccessPopup(false)}
                           success
-                          />
-    
-                        </div>
+                        />
                       </div>
                     </div>
                   </div>
@@ -465,6 +473,7 @@ console.log("dataa",allcmpny.data.data.length);
             </div>
           </div>
         </div>
-      );
+      </div>
+    );
 }
 export default Companyinfo

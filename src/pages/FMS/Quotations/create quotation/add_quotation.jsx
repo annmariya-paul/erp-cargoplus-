@@ -976,12 +976,12 @@ const [qno,setQno]=useState(Date.now());
 
                       <Form.Item
                         name="qdate"
-                        // rules={[
-                        //   {
-                        //     required: true,
-                        //     message: "Please select quotation date",
-                        //   },
-                        // ]}
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please select quotation date",
+                          },
+                        ]}
                       >
                         <DatePicker
                           style={{ borderWidth: 0, marginTop: 10 }}
@@ -990,11 +990,11 @@ const [qno,setQno]=useState(Date.now());
                           
                           format={dateFormatList}
                           disabledDate={(d) => !d || d.isBefore(today)}
-                          onChange={(e) => {
-                            console.log("date mmm", e);
-                            addForm.setFieldValue('qdate', e)
-                            setDate(e);
-                          }}
+                          // onChange={(e) => {
+                          //   console.log("date mmm", e);
+                          //   addForm.setFieldValue('qdate', e)
+                          //   setDate(e);
+                          // }}
                           // onChange={(selectedDate,e) => {
                           //   validateDate(selectedDate);
                           //   setDate(e);

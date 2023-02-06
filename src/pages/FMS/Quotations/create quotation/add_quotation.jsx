@@ -21,17 +21,17 @@ import Custom_model from "../../../../components/custom_modal/custom_model";
 import SelectBox from "../../../../components/Select Box/SelectBox";
 import { DatePicker } from "antd";
 import "./quotation.scss";
-import {ROUTES} from "../../../../routes";
+import { ROUTES } from "../../../../routes";
 import Input_Number from "../../../../components/InputNumber/InputNumber";
-import moment from "moment"
+import moment from "moment";
 import axios from "axios";
 
 export default function Add_Quotation() {
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [successPopup, setSuccessPopup] = useState(false);
   const [error, setError] = useState(false);
-  const [taxratee,setTaxRatee] = useState();
-  console.log("tax rate ",taxratee);
+  const [taxratee, setTaxRatee] = useState();
+  console.log("tax rate ", taxratee);
   const [cargooptions, setCargooptions] = useState(cargo_typeoptions);
   console.log("cargo options : ", cargooptions);
   const today = new Date().toISOString().split("T")[0];
@@ -64,66 +64,73 @@ export default function Add_Quotation() {
   const getIndexInParent = (el) =>
     Array.from(el.parentNode.children).indexOf(el);
   const handleInputChange = (e, key, col, tx) => {
-    console.log("gai guys", e, col , tx)
+    console.log("gai guys", e, col, tx);
     // setSampleid(e)
-    taxTypes.map((item,index)=> {
-      if( tx && e === item.tax_type_id) {
-        if (col && key && tx && e === item.tax_type_id){
-        setTaxRatee(item.tax_type_percentage)
-      // let hai = item.tax_type_percentage;
-     
-      
-      let existingValues = addForm.getFieldsValue()
-      console.log("existing form", existingValues)
-      let {quotation_details} = existingValues
-        let assignValues = quotation_details[key]
+    taxTypes.map((item, index) => {
+      if (tx && e === item.tax_type_id) {
+        if (col && key && tx && e === item.tax_type_id) {
+          setTaxRatee(item.tax_type_percentage);
+          // let hai = item.tax_type_percentage;
 
-      let taxamount = ( assignValues["quotation_details_cost"] * item.tax_type_percentage) /100
-      console.log("sum of tax", taxamount)
-      assignValues["quotation_details_tax_amount"] = taxamount
+          let existingValues = addForm.getFieldsValue();
+          console.log("existing form", existingValues);
+          let { quotation_details } = existingValues;
+          let assignValues = quotation_details[key];
 
-      
-      let totalAmount = assignValues["quotation_details_cost"] + assignValues["quotation_details_tax_amount"]
-      console.log("total aount", totalAmount)
-      assignValues["quotation_details_total"] = totalAmount
-      console.log("quation deatils", quotation_details)
-      addForm.setFieldsValue({quotation_details})
-      
+          let taxamount =
+            (assignValues["quotation_details_cost"] *
+              item.tax_type_percentage) /
+            100;
+          console.log("sum of tax", taxamount);
+          assignValues["quotation_details_tax_amount"] = taxamount;
 
-      setTableData(
-        tableData.map((item) => {
-          if (item.key === key) {
-            return { ...item, quotation_details_tax_amount: taxamount, quotation_details_tax_type: e , quotation_details_total: totalAmount };
-          }
-          return item;
-        })
-      );
-      console.log("tabledata", tableData);
-      let sum = 0;
-      tableData.forEach((item) => {
-        sum += item.quotation_details_cost + item.quotation_details_tax_amount;
-      });
-      console.log("sum", sum);
-      setTotal(sum);
-      addForm.setFieldsValue({
-        grandtotal: sum
-      })
-    }
-  }
-  });
+          let totalAmount =
+            assignValues["quotation_details_cost"] +
+            assignValues["quotation_details_tax_amount"];
+          console.log("total aount", totalAmount);
+          assignValues["quotation_details_total"] = totalAmount;
+          console.log("quation deatils", quotation_details);
+          addForm.setFieldsValue({ quotation_details });
 
-};
-const handleInputchange1 = (e, key, col) => {
-  setTableData(
-    tableData.map((item) => {
-      if (item.key === key) {
-        return { ...item, [col]: e };
+          setTableData(
+            tableData.map((item) => {
+              if (item.key === key) {
+                return {
+                  ...item,
+                  quotation_details_tax_amount: taxamount,
+                  quotation_details_tax_type: e,
+                  quotation_details_total: totalAmount,
+                };
+              }
+              return item;
+            })
+          );
+          console.log("tabledata", tableData);
+          let sum = 0;
+          tableData.forEach((item) => {
+            sum +=
+              item.quotation_details_cost + item.quotation_details_tax_amount;
+          });
+          console.log("sum", sum);
+          setTotal(sum);
+          addForm.setFieldsValue({
+            grandtotal: sum,
+          });
+        }
       }
-      return item;
-    })
-  );
-  addForm.setFieldValue("quotation_details_tax_type",taxratee);
-};
+    });
+  };
+  const handleInputchange1 = (e, key, col) => {
+    setTableData(
+      tableData.map((item) => {
+        if (item.key === key) {
+          return { ...item, [col]: e };
+        }
+        return item;
+      })
+    );
+    addForm.setFieldValue("quotation_details_tax_type", taxratee);
+  };
   const handleInputChange2 = (e, index, col) => {
     setTableData(
       tableData.map((item) => {
@@ -151,7 +158,6 @@ const handleInputchange1 = (e, key, col) => {
         },
       ]);
     }
-    
   };
 
   const handleReorder = (dragIndex, draggedIndex) => {
@@ -252,13 +258,20 @@ const handleInputchange1 = (e, key, col) => {
 
   const [currencyRates, setCurrencyRates] = useState();
   console.log("ratesssss", currencyRates);
+  let b;
   const getCurrencyRate = (data) => {
+    const code = currencydata?.filter((item) => {
+      if (item?.currency_id === data) {
+        b = item?.currency_code;
+      }
+    });
+    console.log("code", b);
     console.log(";;;;;;;;;", data);
     axios
       .get("https://open.er-api.com/v6/latest/USD")
       .then(function (response) {
         console.log("currency current rate:", response);
-        let a = response.data.rates[data];
+        let a = response.data.rates[b];
         console.log("currency match", a);
         setCurrencyRates(a);
         addForm.setFieldValue({
@@ -269,7 +282,6 @@ const handleInputchange1 = (e, key, col) => {
         console.log(error);
       });
   };
-
 
   useEffect(() => {
     getAllTaxTypes();
@@ -285,18 +297,15 @@ const handleInputchange1 = (e, key, col) => {
     const newData = tableData?.filter((item) => item?.key !== key);
     setTableData(newData);
   };
- 
 
-    // console.log("userdata task",index);
-    //         formData.append(`quotation_details[${index}][quotation_details_service_id] `,item.tasks);
-    //         formData.append(`quotation_details[${index}][quotation_details_cost] `, item.cost);
-    //         formData.append(`quotation_details[${index}][quotation_details_tax_type] `, item.taxtype);
-    //         formData.append(`quotation_details[${index}][quotation_details_tax_amount] `,item.taxamount);
-    //         formData.append(`quotation_details[${index}][quotation_details_total] `, item.totalamount);
-    //       })
-         
-         
-  
+  // console.log("userdata task",index);
+  //         formData.append(`quotation_details[${index}][quotation_details_service_id] `,item.tasks);
+  //         formData.append(`quotation_details[${index}][quotation_details_cost] `, item.cost);
+  //         formData.append(`quotation_details[${index}][quotation_details_tax_type] `, item.taxtype);
+  //         formData.append(`quotation_details[${index}][quotation_details_tax_amount] `,item.taxamount);
+  //         formData.append(`quotation_details[${index}][quotation_details_total] `, item.totalamount);
+  //       })
+
   const columns = [
     {
       title: "Action",
@@ -338,38 +347,43 @@ const handleInputchange1 = (e, key, col) => {
         console.log("index is :", index);
         return (
           <div className="d-flex justify-content-center align-items-center tborder ">
-           <Form.Item
-        name={['quotation_details', index.key, 'quotation_details_service_id']}
-        // rules={[{ required: true, message: 'Please input the name' }]}
-      >
-            <SelectBox
-              allowClear
-              showSearch
-              optionFilterProp="children"
-              className="selectwidth mb-2"
-              value={index.quotation_details_service_id}
-              onChange={(e) =>{
-                console.log("servicess11123", e);
-                handleInputchange1(e, index.key, "quotation_details_service_id")
-                // handleInputChange(e, index.key, "quotation_details_service_id", "tx")
-            
-            }
-            
-            }
+            <Form.Item
+              name={[
+                "quotation_details",
+                index.key,
+                "quotation_details_service_id",
+              ]}
+              // rules={[{ required: true, message: 'Please input the name' }]}
             >
-              {services &&
-                services.length > 0 &&
-                services.map((item, index) => {
-                  return (
-                    <Select.Option
-                      key={item.service_id}
-                      value={item.service_id}
-                    >
-                      {item.service_name}
-                    </Select.Option>
+              <SelectBox
+                allowClear
+                showSearch
+                optionFilterProp="children"
+                className="selectwidth mb-2"
+                value={index.quotation_details_service_id}
+                onChange={(e) => {
+                  console.log("servicess11123", e);
+                  handleInputchange1(
+                    e,
+                    index.key,
+                    "quotation_details_service_id"
                   );
-                })}
-            </SelectBox>
+                  // handleInputChange(e, index.key, "quotation_details_service_id", "tx")
+                }}
+              >
+                {services &&
+                  services.length > 0 &&
+                  services.map((item, index) => {
+                    return (
+                      <Select.Option
+                        key={item.service_id}
+                        value={item.service_id}
+                      >
+                        {item.service_name}
+                      </Select.Option>
+                    );
+                  })}
+              </SelectBox>
             </Form.Item>
           </div>
         );
@@ -386,22 +400,26 @@ const handleInputchange1 = (e, key, col) => {
         return (
           <div className="d-flex justify-content-center align-items-center tborder ">
             <Form.Item
-        name={['quotation_details', index.key, 'quotation_details_cost']}
-        // rules={[{ required: true, message: 'Please input the name' }]}
-      >
-            <Input_Number
-              className="text_right"
-              value={index.quotation_details_cost}
-              onChange={(value) => {
-                handleInputchange1(value, index.key, "quotation_details_cost");
-                console.log(" input numberevent ", value, index.key);
-              }}
-              align="right"
-              step={0.01}
-              min={0}
-              precision={2}
-              controlls={false}
-            />
+              name={["quotation_details", index.key, "quotation_details_cost"]}
+              // rules={[{ required: true, message: 'Please input the name' }]}
+            >
+              <Input_Number
+                className="text_right"
+                value={index.quotation_details_cost}
+                onChange={(value) => {
+                  handleInputchange1(
+                    value,
+                    index.key,
+                    "quotation_details_cost"
+                  );
+                  console.log(" input numberevent ", value, index.key);
+                }}
+                align="right"
+                step={0.01}
+                min={0}
+                precision={2}
+                controlls={false}
+              />
             </Form.Item>
           </div>
         );
@@ -418,12 +436,15 @@ const handleInputchange1 = (e, key, col) => {
         console.log("index is 112:", index.quotation_details_tax_type);
         return (
           <div className="d-flex justify-content-center align-items-center tborder">
-              <Form.Item
-        name={['quotation_details', index.key, 'quotation_details_tax_type']}
-        // rules={[{ required: true, message: 'Please input the name' }]}
-      >
-
-            {/* <Input_Number
+            <Form.Item
+              name={[
+                "quotation_details",
+                index.key,
+                "quotation_details_tax_type",
+              ]}
+              // rules={[{ required: true, message: 'Please input the name' }]}
+            >
+              {/* <Input_Number
               className="text_right"
               value={taxratee}
               onChange={(e) => handleInputchange1(e, index.key, "quotation_details_tax_type")}
@@ -434,38 +455,37 @@ const handleInputchange1 = (e, key, col) => {
               controlls={false}
             /> */}
 
-             <SelectBox
-              allowClear
-              showSearch
-              optionFilterProp="children"
-              className="selectwidthnew mb-2"
-              value={index.quotation_details_tax_type}
-              onChange={(e) =>{
-                console.log("servicess11123", e);
-                // handleInputchange1(e, index.key, "quotation_details_tax_type")
-                handleInputChange(e, index.key, "quotation_details_tax_type", "tx")
-
-            
-            }
-            
-            }
-            >
-              {taxTypes &&
-                taxTypes.length > 0 &&
-                taxTypes.map((item, index) => {
-                  return (
-                    <Select.Option
-                      key={item.tax_type_id}
-                      value={item.tax_type_id}
-                    >
-                      {item.tax_type_name}
-                    </Select.Option>
+              <SelectBox
+                allowClear
+                showSearch
+                optionFilterProp="children"
+                className="selectwidthnew mb-2"
+                value={index.quotation_details_tax_type}
+                onChange={(e) => {
+                  console.log("servicess11123", e);
+                  // handleInputchange1(e, index.key, "quotation_details_tax_type")
+                  handleInputChange(
+                    e,
+                    index.key,
+                    "quotation_details_tax_type",
+                    "tx"
                   );
-                })}
-            </SelectBox>
-
+                }}
+              >
+                {taxTypes &&
+                  taxTypes.length > 0 &&
+                  taxTypes.map((item, index) => {
+                    return (
+                      <Select.Option
+                        key={item.tax_type_id}
+                        value={item.tax_type_id}
+                      >
+                        {item.tax_type_name}
+                      </Select.Option>
+                    );
+                  })}
+              </SelectBox>
             </Form.Item>
-            
           </div>
         );
       },
@@ -480,23 +500,32 @@ const handleInputchange1 = (e, key, col) => {
         console.log("index is :", index);
         return (
           <div className="d-flex justify-content-center align-items-center tborder ">
-              <Form.Item
-        name={['quotation_details', index.key, 'quotation_details_tax_amount']}
-        // rules={[{ required: true, message: 'Please input the name' }]}
-      >
-            <Input_Number
-              className="text_right"
-              // value={index.taxamount}
-              onChange={(e) => handleInputchange1(e, index.key, "quotation_details_tax_amount")}
-              align="right"
-              step={0.01}
-              min={0}
-              precision={2}
-              controlls={false}
-            />
+            <Form.Item
+              name={[
+                "quotation_details",
+                index.key,
+                "quotation_details_tax_amount",
+              ]}
+              // rules={[{ required: true, message: 'Please input the name' }]}
+            >
+              <Input_Number
+                className="text_right"
+                // value={index.taxamount}
+                onChange={(e) =>
+                  handleInputchange1(
+                    e,
+                    index.key,
+                    "quotation_details_tax_amount"
+                  )
+                }
+                align="right"
+                step={0.01}
+                min={0}
+                precision={2}
+                controlls={false}
+              />
             </Form.Item>
           </div>
-          
         );
       },
 
@@ -511,25 +540,28 @@ const handleInputchange1 = (e, key, col) => {
         console.log("index is :", index);
         return (
           <div className="d-flex justify-content-center align-items-center tborder ">
-   <Form.Item
-        name={['quotation_details', index.key, 'quotation_details_total']}
-        // rules={[{ required: true, message: 'Please input the name' }]}
-      >
-
-
-            <Input_Number
-              className="text_right"
-              // value={    index.totalamount=(index.cost + index.taxamount)
-              // }
-              value={index.quotation_details_cost + index.quotation_details_tax_amount}
-              onChange={(e) => handleInputChange2(e, index, "quotation_details_total")}
-              align="right"
-              step={0.01}
-              min={0}
-              precision={2}
-              controlls={false}
-              onKeyDown={(e) => handleEnter(e, index.key)}
-            />
+            <Form.Item
+              name={["quotation_details", index.key, "quotation_details_total"]}
+              // rules={[{ required: true, message: 'Please input the name' }]}
+            >
+              <Input_Number
+                className="text_right"
+                // value={    index.totalamount=(index.cost + index.taxamount)
+                // }
+                value={
+                  index.quotation_details_cost +
+                  index.quotation_details_tax_amount
+                }
+                onChange={(e) =>
+                  handleInputChange2(e, index, "quotation_details_total")
+                }
+                align="right"
+                step={0.01}
+                min={0}
+                precision={2}
+                controlls={false}
+                onKeyDown={(e) => handleEnter(e, index.key)}
+              />
             </Form.Item>
           </div>
         );
@@ -590,26 +622,23 @@ const handleInputchange1 = (e, key, col) => {
     try {
       const allunits = await PublicFetch.get(`${CRM_BASE_URL_SELLING}/unit`);
       console.log("all units are ::", allunits?.data?.data);
-      setAllunit(allunits?.data?.data)
-  console.log("all units are : ",allunit);
-
+      setAllunit(allunits?.data?.data);
+      console.log("all units are : ", allunit);
+    } catch (err) {
+      console.log("error to getting all units", err);
     }
-    catch(err) {
-      console.log("error to getting all units",err)
-      }
-    }
-  
+  };
 
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
   const getBase64 = (file) =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = (error) => reject(error);
-  });
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj);
@@ -620,96 +649,96 @@ const handleInputchange1 = (e, key, col) => {
       file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
     );
   };
-  
-    const [oppnew, setOppnew] = useState([]);
-    console.log("Opportunities are :::", oppnew);
-    const [oppleadid,setOppleadid]=useState();
-    console.log("Opportunities lead id :::", oppleadid);
-    const [numOfItems, setNumOfItems] = useState("25");
-    const GetOpportunityData = () => {
-      PublicFetch.get(
-        `${CRM_BASE_URL}/opportunity?startIndex=${pageofIndex}&noOfItems=${numOfItems}`
-      )
-        .then((res) => {
-          if (res?.data?.success) {
-            console.log("All opportunity dataqqq", res?.data?.data.leads);
-  
-            let tempArr = [];
-            res?.data?.data?.leads.forEach((item, index) => {
-              tempArr.push({
-                opportunity_id: item?.opportunity_id,
-                opportunity_number: item?.opportunity_number,
-                opportunity_type: item?.opportunity_type,
-                opportunity_party: item?.crm_v1_contacts?.contact_person_name,
-                opportunity_from: item?.opportunity_from,
-                lead_customer_name: item?.crm_v1_leads?.lead_customer_name,
-                opportunity_created_at: item?.opportunity_created_at,
-                opportunity_created_by: item?.opportunity_created_by,
-                opportunity_source: item?.opportunity_source,
-                opportunity_probability: item?.opportunity_probability,
-                opportunity_description: item?.opportunity_description,
-                opportunity_amount: item?.opportunity_amount,
-                opportunity_status: item?.opportunity_status,
-                lead_id:item?.crm_v1_leads?.lead_id,
-                assigned_employee: item?.assigned_employee,
-              });
+
+  const [oppnew, setOppnew] = useState([]);
+  console.log("Opportunities are :::", oppnew);
+  const [oppleadid, setOppleadid] = useState();
+  console.log("Opportunities lead id :::", oppleadid);
+  const [numOfItems, setNumOfItems] = useState("25");
+  const GetOpportunityData = () => {
+    PublicFetch.get(
+      `${CRM_BASE_URL}/opportunity?startIndex=${pageofIndex}&noOfItems=${numOfItems}`
+    )
+      .then((res) => {
+        if (res?.data?.success) {
+          console.log("All opportunity dataqqq", res?.data?.data.leads);
+
+          let tempArr = [];
+          res?.data?.data?.leads.forEach((item, index) => {
+            tempArr.push({
+              opportunity_id: item?.opportunity_id,
+              opportunity_number: item?.opportunity_number,
+              opportunity_type: item?.opportunity_type,
+              opportunity_party: item?.crm_v1_contacts?.contact_person_name,
+              opportunity_from: item?.opportunity_from,
+              lead_customer_name: item?.crm_v1_leads?.lead_customer_name,
+              opportunity_created_at: item?.opportunity_created_at,
+              opportunity_created_by: item?.opportunity_created_by,
+              opportunity_source: item?.opportunity_source,
+              opportunity_probability: item?.opportunity_probability,
+              opportunity_description: item?.opportunity_description,
+              opportunity_amount: item?.opportunity_amount,
+              opportunity_status: item?.opportunity_status,
+              lead_id: item?.crm_v1_leads?.lead_id,
+              assigned_employee: item?.assigned_employee,
             });
-            console.log("hellooooqqqqq", tempArr);
-            setOppnew(tempArr);
-            setOppleadid( res?.data?.data?.leads?.opportunity_lead_id);
-            console.log("newwww",res?.data?.data?.leads?.opportunity_lead_id);
-            setOpportunityList(res?.data?.data?.leads);
-            setTotalcount(res?.data?.data?.totalCount);
-            console.log("totalcount iss", res?.data?.data?.totalCount);
-            // let samplearry = [];
-            // res?.data?.data?.leads.forEach((item, index) => {
-            //   samplearry.push(item.opportunity_id);
-            // });
-            // console.log("pushedd ", samplearry);
-  
-            // setOppurtunityid(samplearry);
-          } else {
-            console.log("Failed to load data !");
-          }
-        })
-        .catch((err) => {
-          console.log("Errror while getting data", err);
-        });
-    };
-  
-    useEffect(() => {
-      GetOpportunityData();
-    }, [pageofIndex, numOfItems]);
-    const [services, setServices] = useState([]);
-    console.log("Servicesss are :::", services);
-    const [allservices, setAllservices] = useState();
-    const [allLocations, setAllLocations] = useState();
-    console.log("locations ",allLocations);
-    const getAllLocations = async () => {
-      try {
-        const locations = await PublicFetch.get(`${CRM_BASE_URL_FMS}/locations`);
-        console.log("all locations are", locations.data.data);
-        // setAllLocations(locations.data.data);
-        let temp = [];
-        locations.data.data.forEach((item,index)=>{
-          temp.push({
-            location_id: item.location_id,
-            location_code: item.location_code,
-            location_name: item.location_name,
-            location_type: item.location_type,
-            location_country: item.countries.country_name,
           });
-          setAllLocations(temp);
-        })
-      } catch (err) {
-        console.log("error while getting the locations: ", err);
-      }
-    };
-  
-    useEffect(() => {
-      getallunits();
-      getAllLocations();
-    }, []);
+          console.log("hellooooqqqqq", tempArr);
+          setOppnew(tempArr);
+          setOppleadid(res?.data?.data?.leads?.opportunity_lead_id);
+          console.log("newwww", res?.data?.data?.leads?.opportunity_lead_id);
+          setOpportunityList(res?.data?.data?.leads);
+          setTotalcount(res?.data?.data?.totalCount);
+          console.log("totalcount iss", res?.data?.data?.totalCount);
+          // let samplearry = [];
+          // res?.data?.data?.leads.forEach((item, index) => {
+          //   samplearry.push(item.opportunity_id);
+          // });
+          // console.log("pushedd ", samplearry);
+
+          // setOppurtunityid(samplearry);
+        } else {
+          console.log("Failed to load data !");
+        }
+      })
+      .catch((err) => {
+        console.log("Errror while getting data", err);
+      });
+  };
+
+  useEffect(() => {
+    GetOpportunityData();
+  }, [pageofIndex, numOfItems]);
+  const [services, setServices] = useState([]);
+  console.log("Servicesss are :::", services);
+  const [allservices, setAllservices] = useState();
+  const [allLocations, setAllLocations] = useState();
+  console.log("locations ", allLocations);
+  const getAllLocations = async () => {
+    try {
+      const locations = await PublicFetch.get(`${CRM_BASE_URL_FMS}/locations`);
+      console.log("all locations are", locations.data.data);
+      // setAllLocations(locations.data.data);
+      let temp = [];
+      locations.data.data.forEach((item, index) => {
+        temp.push({
+          location_id: item.location_id,
+          location_code: item.location_code,
+          location_name: item.location_name,
+          location_type: item.location_type,
+          location_country: item.countries.country_name,
+        });
+        setAllLocations(temp);
+      });
+    } catch (err) {
+      console.log("error while getting the locations: ", err);
+    }
+  };
+
+  useEffect(() => {
+    getallunits();
+    getAllLocations();
+  }, []);
 
   const getAllservices = () => {
     PublicFetch.get(
@@ -752,83 +781,95 @@ const handleInputchange1 = (e, key, col) => {
   useEffect(() => {
     getAllservices();
   }, [numOfItems, pageofIndex]);
+const [qno,setQno]=useState(Date.now());
+  const [filenew, setFilenew] = useState();
+  console.log("file", filenew);
+  const OnSubmit = (data) => {
+    console.log("submitting data", data);
+    const data11 = "noufal12343221";
+    const date1 = moment(data.qdate).format("YYYY-MM-DD");
+    const date2 = moment(data.vdate).format("YYYY-MM-DD");
+    const docfile = data?.new?.file?.originFileObj;
+    const formData = new FormData();
+    formData.append("quotation_no", qno);
+    formData.append("quotation_enquiry", data.eno);
+    formData.append("quotation_date", date1);
+    formData.append("quotation_validity", date2);
+    formData.append("quotation_consignee", data.consignee);
+    formData.append("quotation_shipper", data.shipper);
+    formData.append("quotation_freight_type", data.freighttype);
+    formData.append("quotation_cargo_type", data.cargotype);
+    formData.append("quotation_carrier", data.carrier);
+    formData.append("quotation_mode", data.mode);
+    formData.append("quotation_origin_id", data.corgin);
+    // formData.append("quotation_origin", parseInt(data.corgin));
+    formData.append("quotation_destination_id", data.cdest);
+    // formData.append("quotation_destination",  data.cdest);
+    formData.append("quotation_no_of_pieces", data.npieces);
+    formData.append("quotation_uom", data.uom);
+    formData.append("quotation_gross_wt", data.gweight);
+    formData.append("quotation_chargeable_wt", data.weight);
+    formData.append("quotation_payment_terms", data.terms);
+    formData.append("quotation_currency", data.currency);
+    formData.append("quotation_exchange_rate", data.exchnagerate);
+    formData.append("quotation_grand_total", data.grandtotal);
+    if (filenew) {
+      formData.append("attachments", filenew);
+    }
 
-const [filenew,setFilenew]=useState();
-console.log("file",filenew);
-    const OnSubmit = (data) => {
-      console.log("submitting data", data);
-      const data11 = "noufal12343221"
-      const date1 = moment(data.qdate).format("YYYY-MM-DD")
-      const date2 = moment(data.vdate).format("YYYY-MM-DD")
-     const docfile = data?.new?.file?.originFileObj;
-      const formData = new FormData();
-      formData.append("quotation_no", data11);
-      formData.append("quotation_enquiry", data.eno);
-      formData.append("quotation_date",date1);
-      formData.append("quotation_validity",date2);
-      formData.append("quotation_consignee",  data.consignee);
-      formData.append("quotation_shipper", data.shipper);
-      formData.append("quotation_freight_type", data.freighttype);
-      formData.append("quotation_cargo_type",  data.cargotype);
-      formData.append("quotation_carrier",  data.carrier);
-      formData.append("quotation_mode",  data.mode);
-      formData.append("quotation_origin_id", data.corgin);
-      // formData.append("quotation_origin", parseInt(data.corgin)); 
-      formData.append("quotation_destination_id",  data.cdest);
-      // formData.append("quotation_destination",  data.cdest);
-      formData.append("quotation_no_of_pieces",  data.npieces);
-      formData.append("quotation_uom", data.uom);
-      formData.append("quotation_gross_wt",  data.gweight);
-      formData.append("quotation_chargeable_wt", data.weight);
-      formData.append("quotation_payment_terms", data.terms);
-      formData.append("quotation_currency", data.currency);
-      formData.append("quotation_exchange_rate",  data.exchnagerate);
-      formData.append("quotation_grand_total", data.grandtotal);
-      if(filenew){
-        formData.append("attachments", filenew);
-      }
-     
-      // console.log("file we get :", data.new.file.originFileObj);
-      console.log("abc",data.quotation_details);
+    // console.log("file we get :", data.new.file.originFileObj);
+    console.log("abc", data.quotation_details);
 
-        const userData = Object.values(data.quotation_details);
-        console.log("qtn details",data.quotation_details);
-        console.log("usserData",userData);
-        // const [quotation_details_service_id, quotation_details_cost,quotation_details_tax_type,quotation_details_tax_amount,quotation_details_total] = userData;
-        // formData.append('userData', JSON.stringify(userData));
-        // formData.append('quotation_details', JSON.stringify(userData));
-        
-      userData.map((item,index)=>{
-console.log("userdata task",index);
-        formData.append(`quotation_details[${index}][quotation_details_service_id]`,item.quotation_details_service_id);
-        formData.append(`quotation_details[${index}][quotation_details_cost]`, item.quotation_details_cost);
-        formData.append(`quotation_details[${index}][quotation_details_tax_type]`, item.quotation_details_tax_type);
-        formData.append(`quotation_details[${index}][quotation_details_tax_amount]`,item.quotation_details_tax_amount);
-        formData.append(`quotation_details[${index}][quotation_details_total]`, item.quotation_details_total);
+    const userData = Object.values(data.quotation_details);
+    console.log("qtn details", data.quotation_details);
+    console.log("usserData", userData);
+    // const [quotation_details_service_id, quotation_details_cost,quotation_details_tax_type,quotation_details_tax_amount,quotation_details_total] = userData;
+    // formData.append('userData', JSON.stringify(userData));
+    // formData.append('quotation_details', JSON.stringify(userData));
+
+    userData.map((item, index) => {
+      console.log("userdata task", index);
+      formData.append(
+        `quotation_details[${index}][quotation_details_service_id]`,
+        item.quotation_details_service_id
+      );
+      formData.append(
+        `quotation_details[${index}][quotation_details_cost]`,
+        item.quotation_details_cost
+      );
+      formData.append(
+        `quotation_details[${index}][quotation_details_tax_type]`,
+        item.quotation_details_tax_type
+      );
+      formData.append(
+        `quotation_details[${index}][quotation_details_tax_amount]`,
+        item.quotation_details_tax_amount
+      );
+      formData.append(
+        `quotation_details[${index}][quotation_details_total]`,
+        item.quotation_details_total
+      );
+    });
+
+    console.log("before sending data");
+    PublicFetch.post(`${CRM_BASE_URL_FMS}/quotation`, formData, {
+      "Content-Type": "Multipart/form-Data",
+    })
+      .then((res) => {
+        console.log("data is successfully saved", res.data.success);
+        if (res.data.success) {
+          setSuccessPopup(true);
+          addForm.resetFields();
+          close_modal(successPopup, 1000);
+        } else {
+          setErrormsg(res.data.data);
+        }
       })
-     
-     
-
-      
-      console.log("before sending data")
-      PublicFetch.post(`${CRM_BASE_URL_FMS}/quotation`, formData, {
-        "Content-Type": "Multipart/form-Data",
-      })
-        .then((res) => {
-          console.log("data is successfully saved", res.data.success);
-          if (res.data.success) {
-            setSuccessPopup(true);
-            addForm.resetFields();
-            close_modal(successPopup, 1000);
-          } else {
-            setErrormsg(res.data.data);
-          }
-        })
-        .catch((err) => {
-          console.log("error", err);
-          setError(true);
-        });
-    };
+      .catch((err) => {
+        console.log("error", err);
+        setError(true);
+      });
+  };
 
   return (
     <>
@@ -1327,7 +1368,7 @@ console.log("userdata task",index);
                             currencydata.map((item, index) => {
                               return (
                                 <Select.Option
-                                  value={item.currency_code}
+                                  value={item.currency_id}
                                   key={item.currency_id}
                                 >
                                   {item.currency_name}
@@ -1341,14 +1382,14 @@ console.log("userdata task",index);
                     <div className="col-xl-3 col-sm-6 mt-2">
                       <label>Exchange Rate</label>
                       <Form.Item
-                        // name="exchnagerate"
-                        // rules={[
-                        //   {
-                        //     required: true,
-                        //     pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                        //     message: "Please enter a Valid value",
-                        //   },
-                        // ]}
+                      name="exchnagerate"
+                      // rules={[
+                      //   {
+                      //     required: true,
+                      //     pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                      //     message: "Please enter a Valid value",
+                      //   },
+                      // ]}
                       >
                         <Input_Number
                           className="text_right"
@@ -1512,4 +1553,4 @@ console.log("userdata task",index);
       </div>
     </>
   );
-            }
+}

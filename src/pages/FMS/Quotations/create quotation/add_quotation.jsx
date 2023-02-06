@@ -37,6 +37,7 @@ export default function Add_Quotation() {
   console.log("cargo options : ", cargooptions);
   const today = new Date().toISOString().split("T")[0];
   const [date, setDate] = useState();
+  
   const [addForm] = Form.useForm();
   const navigate = useNavigate();
   const dateFormatList = ["DD-MM-YYYY", "DD-MM-YY"];
@@ -274,7 +275,7 @@ console.log("Grand Total:", grandTotal);
     }
   };
 
-  const [currencyRates, setCurrencyRates] = useState();
+  const [currencyRates, setCurrencyRates] = useState(0);
   console.log("ratesssss", currencyRates);
   let b;
   const getCurrencyRate = (data) => {
@@ -292,9 +293,10 @@ console.log("Grand Total:", grandTotal);
         let a = response.data.rates[b];
         console.log("currency match", a);
         setCurrencyRates(a);
-        addForm.setFieldValue({
-          exchnagerate: a,
-        });
+        addForm.setFieldValue(
+          "exchnagerate", a
+        );
+       
       })
       .catch(function (error) {
         console.log(error);
@@ -689,6 +691,7 @@ console.log("Grand Total:", grandTotal);
 
   console.log("Selected  enquiry lead id is " ,leadIdEnq)
   const handleLeadIdEnq = leadIdenq => {
+    addForm.setFieldValue("consignee",leadIdenq);
     setLeadIdEnq(leadIdenq);
   };
   // const handleFirstDropdownChange = (event) => {
@@ -825,12 +828,25 @@ console.log("Grand Total:", grandTotal);
   useEffect(() => {
     getAllservices();
   }, [numOfItems, pageofIndex]);
+
+
+
+  const [errornw, setErrornw] = useState(false);
+
+const validateDate = (selectedDate) => {
+  if (!selectedDate) {
+    setErrornw(true);
+    return;
+  }
+  setErrornw(false);
+};
 const [qno,setQno]=useState(Date.now());
   const [filenew, setFilenew] = useState();
   console.log("file", filenew);
   const OnSubmit = (data) => {
     console.log("submitting data", data);
     const data11 = "noufal12343221";
+    
     const date1 = moment(data.qdate).format("YYYY-MM-DD");
     const date2 = moment(data.vdate).format("YYYY-MM-DD");
     const docfile = data?.new?.file?.originFileObj;
@@ -957,14 +973,15 @@ const [qno,setQno]=useState(Date.now());
                     </div> */}
                     <div className="col-xl-3 col-sm-6 mt-2">
                       <label>Quotation date</label>
+
                       <Form.Item
                         name="qdate"
-                        // rules={[
-                        //   {
-                        //     required: true,
-                        //     message: "Please select quotation date",
-                        //   },
-                        // ]}
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please select quotation date",
+                          },
+                        ]}
                       >
                         <DatePicker
                           style={{ borderWidth: 0, marginTop: 10 }}
@@ -973,12 +990,20 @@ const [qno,setQno]=useState(Date.now());
                           
                           format={dateFormatList}
                           disabledDate={(d) => !d || d.isBefore(today)}
-                          onChange={(e) => {
-                            console.log("date mmm", e);
-                            setDate(e);
-                          }}
+                          // onChange={(e) => {
+                          //   console.log("date mmm", e);
+                          //   addForm.setFieldValue('qdate', e)
+                          //   setDate(e);
+                          // }}
+                          // onChange={(selectedDate,e) => {
+                          //   validateDate(selectedDate);
+                          //   setDate(e);
+                          // }}
                         />
+                       
+                        {/* {errornw && <div style={{ color: "red" }}>Please select a date</div>} */}
                       </Form.Item>
+                      
                     </div>
                     <div className="col-xl-3 col-sm-6 mt-2">
                       <label>Validity date</label>
@@ -1475,13 +1500,13 @@ const [qno,setQno]=useState(Date.now());
                       <label>Exchange Rate</label>
                       <Form.Item
                       name="exchnagerate"
-                      rules={[
-                        {
-                          required: true,
+                      // rules={[
+                      //   {
+                      //     required: true,
                         
-                          message: "Please enter a Valid value",
-                        },
-                      ]}
+                      //     message: "Please enter a Valid value",
+                      //   },
+                      // ]}
                       >
                         <Input_Number
                           className="text_right"

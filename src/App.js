@@ -81,6 +81,7 @@ import SelectCountry from "./pages/General Settings/country/CountrySelect";
 import QuotationAssign from "./pages/FMS/Quotations/QuotationAssign";
 import Listjob from "./pages/FMS/Jobtask/joblist";
 import CreateJob from "./pages/FMS/Jobtask/createjob";
+import Updatejob from "./pages/FMS/Jobtask/Updatejob";
 // import Lead from "./pages/lead/lead";
 
 function App() {
@@ -203,6 +204,7 @@ function App() {
             />
             <Route path={ROUTES.LIST_JOB} element={<Listjob />} />
             <Route path={ROUTES.CREATEJOB} element={<CreateJob />} />
+            <Route path={ROUTES.UPDATEJOB} element={<Updatejob/>}/>
 
             {/* General settings */}
 

@@ -66,7 +66,7 @@ const ROUTES = {
   QUATATIONS: "/quatations_list",
   ADD_QUOTATION: "/add_quotation",
   EDIT_QUOTATION: "/edit_quotation",
-  EDIT_QUOTATION_ID:"/edit_quotation/:id",
+  EDIT_QUOTATION_ID: "/edit_quotation/:id",
 
   VIEW_QUOTATION: "/view_quotation",
   ENQUIRIES: "/enquiries",
@@ -83,9 +83,10 @@ const ROUTES = {
   LOCATIONS: "/locations",
   ASSIGN_QUOTATION: "/assign_quotation",
   ASSIGN_QUOTATION_ID: "/assign_quotation/:id",
-  LIST_JOB:"/joblist",
-  CREATEJOB:"/createjob",
-  UPDATEJOB:"/updatejob",
+  LIST_JOB: "/joblist",
+  CREATEJOB: "/createjob",
+  UPDATEJOB: "/updatejob",
+  VIEW_QUOTATION_ID: "/view_quotation/:id",
   // general settings
   CURRENCY: "/currency",
   COMPANYINFO: "/company_info",

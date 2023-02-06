@@ -27,9 +27,9 @@ function Listjob(){
                 //     navigate(`/edit_quotation`);
                 //   }}
                 >
-                  {/* <Link  to={ROUTES.UPDATEJOB} > */}
+                  <Link  to={ROUTES.UPDATEJOB} >
                   <FaEdit style={{ marginLeft: 15 }} />
-                  {/* </Link> */}
+                  </Link>
                 </div>
                 <div
                   className="viewIcon m-0"

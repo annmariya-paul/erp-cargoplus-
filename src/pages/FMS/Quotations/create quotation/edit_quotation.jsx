@@ -21,14 +21,19 @@ import { Collapse, Form, Input, Popconfirm } from "antd";
 import Button from "../../../../components/button/button";
 import PublicFetch from "../../../../utils/PublicFetch";
 import InputType from "../../../../components/Input Type textbox/InputType";
-import { CRM_BASE_URL, CRM_BASE_URL_FMS, CRM_BASE_URL_SELLING, GENERAL_SETTING_BASE_URL } from "../../../../api/bootapi";
-import {Select} from "antd";
+import {
+  CRM_BASE_URL,
+  CRM_BASE_URL_FMS,
+  CRM_BASE_URL_SELLING,
+  GENERAL_SETTING_BASE_URL,
+} from "../../../../api/bootapi";
+import { Select } from "antd";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../../routes";
 import Custom_model from "../../../../components/custom_modal/custom_model";
 import SelectBox from "../../../../components/Select Box/SelectBox";
-import {  useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { DatePicker } from "antd";
 import "./quotation.scss";
 import { DragOutlined, RightOutlined } from "@ant-design/icons";
@@ -39,7 +44,6 @@ export default function EditQuotation(
   custom_table_css,
   expandable,
   expandIconColumnIndex
-
 ) {
   const [editForm] = Form.useForm();
   const [formSubmitted, setFormSubmitted] = useState(false);
@@ -50,11 +54,9 @@ export default function EditQuotation(
   const [date, setDate] = useState();
   console.log(date);
 
-  const [addForm] = Form.useForm();
   const navigate = useNavigate();
   const dateFormatList = ["DD-MM-YYYY", "DD-MM-YY"];
   const [amount, setAmount] = useState(0);
-
 
   const handleChange = (value) => {
     setAmount(value);
@@ -94,7 +96,7 @@ export default function EditQuotation(
     [rows]
   );
   function handleDragEnd(e) {
-    console.log("event",e);
+    console.log("event", e);
     if (!e.destination) return;
     let tempData = Array.from(rows);
     let [source_data] = tempData.splice(e.source.index, 1);
@@ -119,21 +121,20 @@ export default function EditQuotation(
   const [carrierdata, setCarrierdata] = useState();
   const [allLocations, setAllLocations] = useState();
 
-  const [quatationno,setquatationno]= useState("")
-  const [quotconsignee,setQuotconsignee] = useState()
-  const[quotshipper,setquotshipper] = useState()
-  const[quotfreighttype,setquotfreighttype] = useState()
-  const[quotcargotype,setquotcargotype] = useState()
-  const[quotmode,setquotmode] = useState()
-  const[quotcarrier,setquotcarrier] = useState()
-  const[quotterms,setquotterms] = useState()
-  const [quotgrosswt,setquotgrosswt] = useState()
-  const [quotchargeablewt,setquotchargeablewt] =useState()
-  const[noofpieces,setnoofpieces]=useState()
-  const [quotcurrency,setquotcurrency]=useState()
-  const [quotexchngerate,setquotexchngerate]=useState()
-  const [quotunits,setquotunits]=useState()
-
+  const [quatationno, setquatationno] = useState("");
+  const [quotconsignee, setQuotconsignee] = useState();
+  const [quotshipper, setquotshipper] = useState();
+  const [quotfreighttype, setquotfreighttype] = useState();
+  const [quotcargotype, setquotcargotype] = useState();
+  const [quotmode, setquotmode] = useState();
+  const [quotcarrier, setquotcarrier] = useState();
+  const [quotterms, setquotterms] = useState();
+  const [quotgrosswt, setquotgrosswt] = useState();
+  const [quotchargeablewt, setquotchargeablewt] = useState();
+  const [noofpieces, setnoofpieces] = useState();
+  const [quotcurrency, setquotcurrency] = useState();
+  const [quotexchngerate, setquotexchngerate] = useState();
+  const [quotunits, setquotunits] = useState();
 
   const [allPaymentTerms, setAllPaymentTerms] = useState();
   const [currencydata, setCurrencydata] = useState();
@@ -145,11 +146,11 @@ export default function EditQuotation(
   const [services, setServices] = useState([]);
   console.log("Servicesss are :::", services);
   const [allservices, setAllservices] = useState();
-  const [unitdata,setUnitdata]= useState()
+  const [unitdata, setUnitdata] = useState();
 
   const [allLeadList, setAllLeadList] = useState([]);
   // const [tableData, setTableData] = useState();
- 
+
   const dataSource = [
     {
       key: "1",
@@ -160,44 +161,47 @@ export default function EditQuotation(
       quotation_details_total: "",
     },
   ];
-  const [taxratee,setTaxRatee] = useState();
+  const [taxratee, setTaxRatee] = useState();
   const [total, setTotal] = useState(0);
   const [tableData, setTableData] = useState(dataSource);
   const getIndexInParent = (el) =>
     Array.from(el.parentNode.children).indexOf(el);
   const handleInputChange = (e, key, col, tx) => {
-    console.log("gai guys", e, col , tx)
+    console.log("gai guys", e, col, tx);
     // setSampleid(e)
-    allservices.map((item,index)=> {
-      if( tx && e === item.service_id) {
-        if (col && key && tx && e === item.service_id){
-        setTaxRatee(item.service_taxrate)
-      let hai = item.service_taxrate;
-     
-      setTableData(
-        tableData.map((item) => {
-          if (item.key === key) {
-            return { ...item, quotation_details_tax_type: hai, quotation_details_service_id: e };
-          }
-          return item;
-        })
-      );
-    }
-  }
-  });
+    allservices.map((item, index) => {
+      if (tx && e === item.service_id) {
+        if (col && key && tx && e === item.service_id) {
+          setTaxRatee(item.service_taxrate);
+          let hai = item.service_taxrate;
 
-};
-const handleInputchange1 = (e, key, col) => {
-  setTableData(
-    tableData.map((item) => {
-      if (item.key === key) {
-        return { ...item, [col]: e };
+          setTableData(
+            tableData.map((item) => {
+              if (item.key === key) {
+                return {
+                  ...item,
+                  quotation_details_tax_type: hai,
+                  quotation_details_service_id: e,
+                };
+              }
+              return item;
+            })
+          );
+        }
       }
-      return item;
-    })
-  );
-  addForm.setFieldValue("quotation_details_tax_type",taxratee);
-};
+    });
+  };
+  const handleInputchange1 = (e, key, col) => {
+    setTableData(
+      tableData.map((item) => {
+        if (item.key === key) {
+          return { ...item, [col]: e };
+        }
+        return item;
+      })
+    );
+    editForm.setFieldValue("quotation_details_tax_type", taxratee);
+  };
   const handleInputChange2 = (e, index, col) => {
     setTableData(
       tableData.map((item) => {
@@ -297,13 +301,10 @@ const handleInputchange1 = (e, key, col) => {
       });
   };
 
- 
-
   useEffect(() => {
     getAllservices();
     GetAllLeadData();
   }, [numOfItems, pageofIndex]);
-
 
   const columns = [
     {
@@ -338,35 +339,52 @@ const handleInputchange1 = (e, key, col) => {
     },
     {
       title: "TASKS",
-      dataIndex: "tasks",
-      key: "tasks",
+      dataIndex: "quotation_details_service_id",
+      key: "quotation_details_service_id",
       width: "40%",
 
       render: (data, index) => {
         console.log("index is :", index);
         return (
           <div className="d-flex justify-content-center align-items-center tborder ">
-            <SelectBox
-              allowClear
-              showSearch
-              optionFilterProp="children"
-              className="selectwidth mb-2"
-              value={index.tasks}
-              onChange={(e) => handleInputChange(e, index.key, "tasks")}
+            <Form.Item
+              name={[
+                "quotation_details",
+                index.key,
+                "quotation_details_service_id",
+              ]}
+              // rules={[{ required: true, message: 'Please input the name' }]}
             >
-              {services &&
-                services.length > 0 &&
-                services.map((item, index) => {
-                  return (
-                    <Select.Option
-                      key={item.service_id}
-                      value={item.service_id}
-                    >
-                      {item.service_name}
-                    </Select.Option>
-                  )
-                })}
-            </SelectBox>
+              <SelectBox
+                allowClear
+                showSearch
+                optionFilterProp="children"
+                className="selectwidth mb-2"
+                value={index.quotation_details_service_id}
+                onChange={(e) => {
+                  console.log("servicess11123", e);
+                  handleInputchange1(
+                    e,
+                    index.key,
+                    "quotation_details_service_id"
+                  );
+                  // handleInputChange(e, index.key, "quotation_details_service_id", "tx")
+                }}
+              >
+                {services &&
+                  services.length > 0 &&
+                  services.map((item, index) => {
+                    return (
+                      <Select.Option
+                        key={item.service_id}
+                        value={item.service_id}
+                      >
+                        {item.service_name}
+                      </Select.Option>
+                    );
+                  })}
+              </SelectBox>
+            </Form.Item>
           </div>
         );
       },
@@ -374,26 +392,35 @@ const handleInputchange1 = (e, key, col) => {
     },
     {
       title: "COST",
-      dataIndex: "cost",
-      key: "cost",
+      dataIndex: "quotation_details_cost",
+      key: "quotation_details_cost",
 
       render: (data, index) => {
         console.log("index is :", index);
         return (
           <div className="d-flex justify-content-center align-items-center tborder ">
-            <Input_Number
-              className="text_right"
-              value={index.cost}
-              onChange={(value) => {
-                handleInputChange(value, index.key, "cost");
-                console.log(" input numberevent ", value, index.key);
-              }}
-              align="right"
-              step={0.01}
-              min={0}
-              precision={2}
-              controlls={false}
-            />
+            <Form.Item
+              name={["quotation_details", index.key, "quotation_details_cost"]}
+              // rules={[{ required: true, message: 'Please input the name' }]}
+            >
+              <Input_Number
+                className="text_right"
+                value={index.quotation_details_cost}
+                onChange={(value) => {
+                  handleInputchange1(
+                    value,
+                    index.key,
+                    "quotation_details_cost"
+                  );
+                  console.log(" input numberevent ", value, index.key);
+                }}
+                align="right"
+                step={0.01}
+                min={0}
+                precision={2}
+                controlls={false}
+              />
+            </Form.Item>
           </div>
         );
       },
@@ -402,23 +429,63 @@ const handleInputchange1 = (e, key, col) => {
     },
     {
       title: "TAX TYPE",
-      dataIndex: "taxtype",
-      key: "taxtype",
+      dataIndex: "quotation_details_tax_type",
+      key: "quotation_details_tax_type",
 
       render: (data, index) => {
-        console.log("index is :", index);
+        console.log("index is 112:", index.quotation_details_tax_type);
         return (
           <div className="d-flex justify-content-center align-items-center tborder">
-            <Input_Number
+            <Form.Item
+              name={[
+                "quotation_details",
+                index.key,
+                "quotation_details_tax_type",
+              ]}
+              // rules={[{ required: true, message: 'Please input the name' }]}
+            >
+              {/* <Input_Number
               className="text_right"
-              value={index.taxtype}
-              onChange={(e) => handleInputChange(e, index.key, "taxtype")}
+              value={taxratee}
+              onChange={(e) => handleInputchange1(e, index.key, "quotation_details_tax_type")}
               align="right"
               step={0.01}
               min={0}
               precision={2}
               controlls={false}
-            />
+            /> */}
+
+              <SelectBox
+                allowClear
+                showSearch
+                optionFilterProp="children"
+                className="selectwidthnew mb-2"
+                value={index.quotation_details_tax_type}
+                onChange={(e) => {
+                  console.log("servicess11123", e);
+                  // handleInputchange1(e, index.key, "quotation_details_tax_type")
+                  handleInputChange(
+                    e,
+                    index.key,
+                    "quotation_details_tax_type",
+                    "tx"
+                  );
+                }}
+              >
+                {taxTypes &&
+                  taxTypes.length > 0 &&
+                  taxTypes.map((item, index) => {
+                    return (
+                      <Select.Option
+                        key={item.tax_type_id}
+                        value={item.tax_type_id}
+                      >
+                        {item.tax_type_name}
+                      </Select.Option>
+                    );
+                  })}
+              </SelectBox>
+            </Form.Item>
           </div>
         );
       },
@@ -426,23 +493,38 @@ const handleInputchange1 = (e, key, col) => {
     },
     {
       title: "TAX AMOUNT",
-      dataIndex: "taxamount",
-      key: "taxamount",
+      dataIndex: "quotation_details_tax_amount",
+      key: "quotation_details_tax_amount",
 
       render: (data, index) => {
         console.log("index is :", index);
         return (
           <div className="d-flex justify-content-center align-items-center tborder ">
-            <Input_Number
-              className="text_right"
-              value={index.taxamount}
-              onChange={(e) => handleInputChange(e, index.key, "taxamount")}
-              align="right"
-              step={0.01}
-              min={0}
-              precision={2}
-              controlls={false}
-            />
+            <Form.Item
+              name={[
+                "quotation_details",
+                index.key,
+                "quotation_details_tax_amount",
+              ]}
+              // rules={[{ required: true, message: 'Please input the name' }]}
+            >
+              <Input_Number
+                className="text_right"
+                // value={index.taxamount}
+                onChange={(e) =>
+                  handleInputchange1(
+                    e,
+                    index.key,
+                    "quotation_details_tax_amount"
+                  )
+                }
+                align="right"
+                step={0.01}
+                min={0}
+                precision={2}
+                controlls={false}
+              />
+            </Form.Item>
           </div>
         );
       },
@@ -451,26 +533,36 @@ const handleInputchange1 = (e, key, col) => {
     },
     {
       title: "TOTAL AMOUNT",
-      dataIndex: "totalamount",
-      key: "totalamount",
+      dataIndex: "quotation_details_total",
+      key: "quotation_details_total",
 
       render: (data, index) => {
         console.log("index is :", index);
         return (
           <div className="d-flex justify-content-center align-items-center tborder ">
-            <Input_Number
-              className="text_right"
-              // value={    index.totalamount=(index.cost + index.taxamount)
-              // }
-              value={index.cost + index.taxamount}
-              onChange={(e) => handleInputChange2(e, index, "totalamount")}
-              align="right"
-              step={0.01}
-              min={0}
-              precision={2}
-              controlls={false}
-              onKeyDown={(e) => handleEnter(e, index.key)}
-            />
+            <Form.Item
+              name={["quotation_details", index.key, "quotation_details_total"]}
+              // rules={[{ required: true, message: 'Please input the name' }]}
+            >
+              <Input_Number
+                className="text_right"
+                // value={    index.totalamount=(index.cost + index.taxamount)
+                // }
+                value={
+                  index.quotation_details_cost +
+                  index.quotation_details_tax_amount
+                }
+                onChange={(e) =>
+                  handleInputChange2(e, index, "quotation_details_total")
+                }
+                align="right"
+                step={0.01}
+                min={0}
+                precision={2}
+                controlls={false}
+                onKeyDown={(e) => handleEnter(e, index.key)}
+              />
+            </Form.Item>
           </div>
         );
       },
@@ -479,62 +571,55 @@ const handleInputchange1 = (e, key, col) => {
     },
   ];
 
-  
+  // api integration
 
-
-
-// api integration
-
-const getAllLocations = async () => {
-  try {
-    const locations = await PublicFetch.get(`${CRM_BASE_URL_FMS}/locations`);
-    console.log("all locations are", locations.data.data);
-    // setAllLocations(locations.data.data);
-    let temp = [];
-    locations.data.data.forEach((item,index)=>{
-      temp.push({
-        location_id: item.location_id,
-        location_code: item.location_code,
-        location_name: item.location_name,
-        location_type: item.location_type,
-        location_country: item.countries.country_name,
-      });
-      setAllLocations(temp);
-    })
-  } catch (err) {
-    console.log("error while getting the locations: ", err);
-  }
-};
-
-
-const GetAllLeadData = () => {
-  PublicFetch.get(
-    `${CRM_BASE_URL}/lead?startIndex=${pageofIndex}&noOfItems=${noofItems}`
-  )
-    .then((res) => {
-      if (res?.data?.success) {
-        console.log("All lead data", res?.data?.data);
-        // setAllLeadList(res?.data?.data?.leads);
-        setTotalcount(res?.data?.data?.totalCount);
-        // setCurrentcount(res?.data?.data?.currentCount);
-        let array = [];
-        res?.data?.data?.leads?.forEach((item, index) => {
-          array.push({
-            lead_id: item?.lead_id,
-            lead_customer_name: item?.lead_customer_name,
-          });
-          setAllLeadList(array);
+  const getAllLocations = async () => {
+    try {
+      const locations = await PublicFetch.get(`${CRM_BASE_URL_FMS}/locations`);
+      console.log("all locations are", locations.data.data);
+      // setAllLocations(locations.data.data);
+      let temp = [];
+      locations.data.data.forEach((item, index) => {
+        temp.push({
+          location_id: item.location_id,
+          location_code: item.location_code,
+          location_name: item.location_name,
+          location_type: item.location_type,
+          location_country: item.countries.country_name,
         });
-      } else {
-        console.log("FAILED T LOAD DATA");
-      }
-    })
-    .catch((err) => {
-      console.log("Errror while getting data", err);
-    });
-};
+        setAllLocations(temp);
+      });
+    } catch (err) {
+      console.log("error while getting the locations: ", err);
+    }
+  };
 
-
+  const GetAllLeadData = () => {
+    PublicFetch.get(
+      `${CRM_BASE_URL}/lead?startIndex=${pageofIndex}&noOfItems=${noofItems}`
+    )
+      .then((res) => {
+        if (res?.data?.success) {
+          console.log("All lead data", res?.data?.data);
+          // setAllLeadList(res?.data?.data?.leads);
+          setTotalcount(res?.data?.data?.totalCount);
+          // setCurrentcount(res?.data?.data?.currentCount);
+          let array = [];
+          res?.data?.data?.leads?.forEach((item, index) => {
+            array.push({
+              lead_id: item?.lead_id,
+              lead_customer_name: item?.lead_customer_name,
+            });
+            setAllLeadList(array);
+          });
+        } else {
+          console.log("FAILED T LOAD DATA");
+        }
+      })
+      .catch((err) => {
+        console.log("Errror while getting data", err);
+      });
+  };
 
   const getallfrighttype = async () => {
     try {
@@ -550,16 +635,13 @@ const GetAllLeadData = () => {
 
   const getallcarrier = async () => {
     try {
-      const allcarrier = await PublicFetch.get(
-        `${CRM_BASE_URL_FMS}/carrier`
-      );
+      const allcarrier = await PublicFetch.get(`${CRM_BASE_URL_FMS}/carrier`);
       console.log("all carrier are ::", allcarrier?.data?.data);
-      setCarrierdata(allcarrier?.data?.data)
+      setCarrierdata(allcarrier?.data?.data);
     } catch (err) {
       console.log("error to getting all freighttype", err);
     }
   };
-
 
   const getonequatation = async () => {
     try {
@@ -568,44 +650,66 @@ const GetAllLeadData = () => {
       );
       console.log("one quatation iss ::", onequatation?.data?.data);
       console.log(" quatation no is:", onequatation?.data?.data.quotation_no);
-      setquatationno(onequatation?.data?.data?.quotation_no)
-      setquotshipper(onequatation?.data?.data?.quotation_shipper)
-      setQuotconsignee(onequatation?.data?.data?.crm_v1_leads.lead_customer_name)
-      setquotfreighttype(onequatation?.data?.data?.fms_v1_freight_types.freight_type_name)
-      setquotcargotype(onequatation?.data?.data?.quotation_cargo_type)
-      setquotmode(onequatation?.data?.data?.quotation_mode)
-      setquotcarrier(onequatation?.data?.data?.fms_v1_carrier.carrier_name)
-      setquotterms(onequatation?.data?.data?.fms_v1_payment_terms.payment_term_name)
-      setquotchargeablewt(onequatation?.data?.data?.quotation_chargeable_wt)
-      setquotgrosswt(onequatation?.data?.data?.quotation_gross_wt)
+      setquatationno(onequatation?.data?.data?.quotation_no);
+      setquotshipper(onequatation?.data?.data?.quotation_shipper);
+      setQuotconsignee(
+        onequatation?.data?.data?.crm_v1_leads.lead_customer_name
+      );
+      setquotfreighttype(
+        onequatation?.data?.data?.fms_v1_freight_types.freight_type_name
+      );
+      setquotcargotype(onequatation?.data?.data?.quotation_cargo_type);
+      setquotmode(onequatation?.data?.data?.quotation_mode);
+      setquotcarrier(onequatation?.data?.data?.fms_v1_carrier.carrier_name);
+      setquotterms(
+        onequatation?.data?.data?.fms_v1_payment_terms.payment_term_name
+      );
+      setquotchargeablewt(onequatation?.data?.data?.quotation_chargeable_wt);
+      setquotgrosswt(onequatation?.data?.data?.quotation_gross_wt);
 
-      setnoofpieces(onequatation?.data?.data?.quotation_no_of_pieces)
-      setquotcurrency(onequatation?.data?.data?.generalsettings_v1_currency.currency_name)
-      setquotexchngerate(onequatation?.data?.data?.quotation_exchange_rate)
-      setquotunits(onequatation?.data?.data?.crm_v1_units.unit_name)
+      setnoofpieces(onequatation?.data?.data?.quotation_no_of_pieces);
+      setquotcurrency(
+        onequatation?.data?.data?.generalsettings_v1_currency.currency_name
+      );
+      setquotexchngerate(onequatation?.data?.data?.quotation_exchange_rate);
+      setquotunits(onequatation?.data?.data?.crm_v1_units.unit_name);
 
       editForm.setFieldsValue({
-        quotation_no:onequatation?.data?.data?.quotation_no,
+        quotation_no: onequatation?.data?.data?.quotation_no,
         // quotationdate:onequatation?.data?.data?.quotation_date,
         // validity_date:onequatation?.data?.data?.quotation_validity,
-        shipper:onequatation?.data?.data?.quotation_shipper,
-        quotation_consignee:onequatation?.data?.data?.crm_v1_leads.lead_customer_name,
-        freight_type:onequatation?.data?.data?.fms_v1_freight_types.freight_type_name,
-        quotation_cargotype:onequatation?.data?.data?.quotation_cargo_type,
-        quotation_mode:onequatation?.data?.data?.quotation_mode,
-        quotation_carrier:onequatation?.data?.data?.fms_v1_payment_terms.payment_term_name,
-        quotation_terms:onequatation?.data?.data?.fms_v1_payment_terms.payment_term_name,
-        gross_wt:onequatation?.data?.data?.quotation_gross_wt,
-        chargeable_wt:onequatation?.data?.data?.quotation_chargeable_wt,
-        quot_npieces:onequatation?.data?.data?.quotation_no_of_pieces,
-        currency:onequatation?.data?.data?.generalsettings_v1_currency.currency_name,
-        exchnagerate:onequatation?.data?.data?.quotation_exchange_rate,
-        quotation_units:onequatation?.data?.data?.crm_v1_units.unit_name,
-        quotation_destination:onequatation?.data?.data?.fms_v1_locations_fms_v1_quotation_quotation_destination_idTofms_v1_locations.location_name,
-        quotation_origin:onequatation?.data?.data?.fms_v1_locations_fms_v1_quotation_quotation_origin_idTofms_v1_locations.location_name
+        shipper: onequatation?.data?.data?.quotation_shipper,
+        quotation_consignee:
+          onequatation?.data?.data?.crm_v1_leads.lead_customer_name,
+        freight_type:
+          onequatation?.data?.data?.fms_v1_freight_types.freight_type_name,
+        quotation_cargotype: onequatation?.data?.data?.quotation_cargo_type,
+        quotation_mode: onequatation?.data?.data?.quotation_mode,
+        quotation_carrier:
+          onequatation?.data?.data?.fms_v1_payment_terms.payment_term_name,
+        quotation_terms:
+          onequatation?.data?.data?.fms_v1_payment_terms.payment_term_name,
+        gross_wt: onequatation?.data?.data?.quotation_gross_wt,
+        chargeable_wt: onequatation?.data?.data?.quotation_chargeable_wt,
+        quot_npieces: onequatation?.data?.data?.quotation_no_of_pieces,
+        currency:
+          onequatation?.data?.data?.generalsettings_v1_currency.currency_name,
+        exchnagerate: onequatation?.data?.data?.quotation_exchange_rate,
+        quotation_units: onequatation?.data?.data?.crm_v1_units.unit_name,
+        quotation_destination:
+          onequatation?.data?.data
+            ?.fms_v1_locations_fms_v1_quotation_quotation_destination_idTofms_v1_locations
+            .location_name,
+        quotation_origin:
+          onequatation?.data?.data
+            ?.fms_v1_locations_fms_v1_quotation_quotation_origin_idTofms_v1_locations
+            .location_name,
+      });
 
-      })
-
+      let existingValues = editForm.getFieldsValue();
+      let { quotation_details } = existingValues;
+      console.log("existing values", quotation_details);
+      let assignValues = quotation_details;
     } catch (err) {
       console.log("error to getting all freighttype", err);
     }
@@ -629,7 +733,7 @@ const GetAllLeadData = () => {
         console.log("response", res);
         if (res.data.success) {
           console.log("successs", res.data.data);
-          setAllPaymentTerms(res.data.data)
+          setAllPaymentTerms(res.data.data);
           // setAllPaymentTerms(res.data.data);
         }
       })
@@ -647,6 +751,19 @@ const GetAllLeadData = () => {
       setCurrencydata(allcurrency.data.data);
     } catch (err) {
       console.log("Error in getting currency : ", err);
+    }
+  };
+
+  const [taxTypes, setTaxTypes] = useState();
+  const getAllTaxTypes = async () => {
+    try {
+      const allTxTypes = await PublicFetch.get(
+        `${CRM_BASE_URL_FMS}/tax-types?startIndex=${pageofIndex}&perPage=${numOfItems}`
+      );
+      console.log("all taxtype are", allTxTypes.data.data);
+      setTaxTypes(allTxTypes.data.data);
+    } catch (err) {
+      console.log("error while getting the tax types: ", err);
     }
   };
 
@@ -673,7 +790,7 @@ const GetAllLeadData = () => {
   //   formData.append("quotation_payment_terms", prDescription);
   //   formData.append("quotation_currency", prDescription);
   //   formData.append("quotation_exchange_rate", prDescription);
-   //   if (img) {
+  //   if (img) {
   //     formData.append("product_pic", img);
   //   }
   //   // formData.append("quotation_payment_terms", prDescription);
@@ -687,16 +804,14 @@ const GetAllLeadData = () => {
   //     )
   //       .then((res) => {
   //         console.log("data is successfully saved", res.data.success);
-       
+
   //       })
   //       .catch((err) => {
   //         console.log("error", err);
   //         setError(true);
   //       });
-    
+
   // };
-
-
 
   useEffect(() => {
     getallfrighttype();
@@ -705,10 +820,9 @@ const GetAllLeadData = () => {
     getallcarrier();
     getallcurrency();
     getonequatation();
-    getAllLocations()
+    getAllLocations();
+    getAllTaxTypes();
   }, []);
-
-
 
   return (
     <>
@@ -746,10 +860,7 @@ const GetAllLeadData = () => {
                           },
                         ]}
                       >
-                        <InputType 
-                        value={quatationno}
-                      
-                        />
+                        <InputType value={quatationno} />
                       </Form.Item>
                     </div>
                     <div className="col-xl-3 col-sm-6 mt-2">
@@ -788,7 +899,7 @@ const GetAllLeadData = () => {
                         //   },
                         // ]}
                       >
-                          <DatePicker
+                        <DatePicker
                           style={{ borderWidth: 0, marginTop: 10 }}
                           initialValues={dayjs()}
                           format={dateFormatList}
@@ -827,7 +938,7 @@ const GetAllLeadData = () => {
                                 >
                                   {item.lead_customer_name}
                                 </Select.Option>
-                              )
+                              );
                             })}
                         </SelectBox>
                       </Form.Item>
@@ -845,12 +956,10 @@ const GetAllLeadData = () => {
                           },
                         ]}
                       >
-                        <InputType 
-                       value={quotshipper}
-                        />
+                        <InputType value={quotshipper} />
                       </Form.Item>
                     </div>
-{/* 
+                    {/* 
                     <div className="col-xl-3 col-sm-6 mt-2">
                       <label> Origin Agent</label>
                       <Form.Item
@@ -898,7 +1007,7 @@ const GetAllLeadData = () => {
                           },
                         ]}
                       >
-                         <SelectBox
+                        <SelectBox
                           allowClear
                           showSearch
                           optionFilterProp="children"
@@ -934,7 +1043,7 @@ const GetAllLeadData = () => {
                           <Select.Option value="S">Test</Select.Option>
                           <Select.Option value="A">Data</Select.Option>
                         </SelectBox> */}
-                          <SelectBox
+                        <SelectBox
                           allowClear
                           showSearch
                           optionFilterProp="children"
@@ -963,7 +1072,7 @@ const GetAllLeadData = () => {
                           },
                         ]}
                       >
-                           <SelectBox
+                        <SelectBox
                           allowClear
                           showSearch
                           optionFilterProp="children"
@@ -986,23 +1095,23 @@ const GetAllLeadData = () => {
                           },
                         ]}
                       >
-                            <SelectBox
+                        <SelectBox
                           allowClear
                           showSearch
                           optionFilterProp="children"
-                        > 
-                        {allLocations &&
-                          allLocations.length > 0 &&
-                          allLocations.map((item, index) => {
-                            return (
-                              <Select.Option
-                                value={item.location_id}
-                                key={item.location_id}
-                              >
-                                {item.location_name}
-                              </Select.Option>
-                            );
-                          })}
+                        >
+                          {allLocations &&
+                            allLocations.length > 0 &&
+                            allLocations.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  value={item.location_id}
+                                  key={item.location_id}
+                                >
+                                  {item.location_name}
+                                </Select.Option>
+                              );
+                            })}
                         </SelectBox>
                       </Form.Item>
                     </div>
@@ -1017,23 +1126,23 @@ const GetAllLeadData = () => {
                           },
                         ]}
                       >
-                          <SelectBox
+                        <SelectBox
                           allowClear
                           showSearch
                           optionFilterProp="children"
-                        > 
-                        {allLocations &&
-                          allLocations.length > 0 &&
-                          allLocations.map((item, index) => {
-                            return (
-                              <Select.Option
-                                value={item.location_id}
-                                key={item.location_id}
-                              >
-                                {item.location_name}
-                              </Select.Option>
-                            );
-                          })}
+                        >
+                          {allLocations &&
+                            allLocations.length > 0 &&
+                            allLocations.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  value={item.location_id}
+                                  key={item.location_id}
+                                >
+                                  {item.location_name}
+                                </Select.Option>
+                              );
+                            })}
                         </SelectBox>
                       </Form.Item>
                     </div>
@@ -1049,7 +1158,7 @@ const GetAllLeadData = () => {
                           },
                         ]}
                       >
-                          <SelectBox
+                        <SelectBox
                           allowClear
                           showSearch
                           optionFilterProp="children"
@@ -1081,7 +1190,7 @@ const GetAllLeadData = () => {
                           },
                         ]}
                       >
-                         <SelectBox
+                        <SelectBox
                           allowClear
                           showSearch
                           optionFilterProp="children"
@@ -1114,7 +1223,7 @@ const GetAllLeadData = () => {
                           },
                         ]}
                       >
-                        <InputType 
+                        <InputType
                         // value={}
                         />
                       </Form.Item>
@@ -1132,7 +1241,7 @@ const GetAllLeadData = () => {
                           },
                         ]}
                       >
-                          <SelectBox
+                        <SelectBox
                           allowClear
                           showSearch
                           optionFilterProp="children"
@@ -1215,7 +1324,7 @@ const GetAllLeadData = () => {
                           },
                         ]}
                       >
-                         <SelectBox
+                        <SelectBox
                           allowClear
                           showSearch
                           optionFilterProp="children"
@@ -1264,7 +1373,7 @@ const GetAllLeadData = () => {
                 </div>
               </div>
               <div className="row justify-content-center">
-              <div className="col-6 ">
+                <div className="col-6 ">
                   <label>Add Attachments</label>
                   <Form.Item className="mt-2" name="new">
                     <FileUpload
@@ -1289,12 +1398,11 @@ const GetAllLeadData = () => {
                         }
                       }}
                     />
-                   
                   </Form.Item>
                 </div>
-                </div>
-  
-                <div className="row">
+              </div>
+
+              <div className="row">
                 <div className="datatable">
                   <TableData
                     data={tableData}
@@ -1485,8 +1593,6 @@ const GetAllLeadData = () => {
                     />
                   </Form.Item>
                 </div>
-
-
               </div>
               <div className="d-flex justify-content-center my-4">
                 <div className="col-lg-1 ">
@@ -1511,7 +1617,6 @@ const GetAllLeadData = () => {
           </div>
         </div>
       </div>
-    
     </>
   );
 }

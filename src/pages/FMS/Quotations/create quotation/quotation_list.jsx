@@ -65,18 +65,17 @@ export default function Quotations(props) {
               //   navigate(`/edit_quotation`);
               // }}
             >
-               <Link to={`${ROUTES.EDIT_QUOTATION}/${index.quotation_id}`}>
-               {/* <FaEdit style={{ marginLeft: 15 }} /> */}
-               <div className="actioneditdelete">
+              <Link to={`${ROUTES.EDIT_QUOTATION}/${index.quotation_id}`}>
+                {/* <FaEdit style={{ marginLeft: 15 }} /> */}
+                <div className="actioneditdelete">
                   <FaEdit />
                 </div>
-               </Link>
-             
+              </Link>
             </div>
             <div
               className="viewIcon m-0"
               onClick={() => {
-                navigate(`/view_quotation`);
+                navigate(`${ROUTES.VIEW_QUOTATION}/${index.quotation_id}`);
               }}
               // onClick={()=>{
               //   setShowViewModal(true);

@@ -7,6 +7,8 @@ import SelectBox from "../../../components/Select Box/SelectBox";
 import { Select } from "antd";
 import { cargo_typeoptions } from "../../../utils/SelectOptions";
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import { ROUTES } from "../../../routes";
 function CreateJob() {
 
   const [cargooptions, setCargooptions] = useState(cargo_typeoptions);
@@ -334,9 +336,12 @@ function CreateJob() {
                       </Button>
                     </div>
                     <div className="col-lg-1 ">
+                     
+                     <Link  to={ROUTES.LIST_JOB} >
                       <Button className="qtn_save" btnType="cancel">
                         Cancel
                       </Button>
+                      </Link>
                     </div>
                   </div>
                   {/* </div> */}

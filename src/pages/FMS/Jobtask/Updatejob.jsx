@@ -5,7 +5,9 @@ import FileUpload from "../../../components/fileupload/fileUploader";
 import InputType from "../../../components/Input Type textbox/InputType";
 import SelectBox from "../../../components/Select Box/SelectBox";
 
-function Updatejob() {}
+function Updatejob() {
+
+
 return (
   <>
     <div className="container-fluid">
@@ -332,4 +334,5 @@ return (
     </div>
   </>
 );
+}
 export default Updatejob;

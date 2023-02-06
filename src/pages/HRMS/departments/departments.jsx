@@ -212,7 +212,7 @@ export default function Departments(props) {
       key: "department_name",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.dept_name)
+        return String(record.department_name)
           .toLowerCase()
           .includes(value.toLowerCase());
       },

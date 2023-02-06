@@ -173,8 +173,14 @@ function App() {
             <Route path={ROUTES.CARRIER} element={<Carrierlist />} />
             <Route path={ROUTES.MODE} element={<Modelist />} />
             <Route path={ROUTES.QUATATIONS} element={<Quotations />} />
-            <Route path={ROUTES.EDIT_QUOTATION_ID} element={<EditQuotation />} />
-            <Route path={ROUTES.VIEW_QUOTATION} element={<ViewQuotation />} />
+            <Route
+              path={ROUTES.EDIT_QUOTATION_ID}
+              element={<EditQuotation />}
+            />
+            <Route
+              path={ROUTES.VIEW_QUOTATION_ID}
+              element={<ViewQuotation />}
+            />
             <Route path={ROUTES.ENQUIRIES} element={<Enquiries />} />
             <Route
               path={ROUTES.AGENT_RESPONSE_ID}
@@ -193,9 +199,10 @@ function App() {
             <Route path={ROUTES.LOCATIONS} element={<Locations />} />
             <Route
               path={ROUTES.ASSIGN_QUOTATION_ID}
-              element={<QuotationAssign />}/>
-            <Route path={ROUTES.LIST_JOB } element={<Listjob/> }/>
-            <Route path={ROUTES.CREATEJOB} element={<CreateJob/> }/> 
+              element={<QuotationAssign />}
+            />
+            <Route path={ROUTES.LIST_JOB} element={<Listjob />} />
+            <Route path={ROUTES.CREATEJOB} element={<CreateJob />} />
 
             {/* General settings */}
 

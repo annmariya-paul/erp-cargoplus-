@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import dayjs from "dayjs";
+import { v4 as uuidv4 } from 'uuid';
 import { cargo_typeoptions } from "../../../../utils/SelectOptions";
 import { DragOutlined, FontColorsOutlined } from "@ant-design/icons";
 import dragula from "dragula";
@@ -41,7 +42,7 @@ export default function Add_Quotation() {
   const dateFormatList = ["DD-MM-YYYY", "DD-MM-YY"];
   const dataSource = [
     {
-      key: "1",
+      key: uuidv4(),
       quotation_details_service_id: "",
       quotation_details_cost: "",
       quotation_details_tax_type: "",
@@ -59,8 +60,11 @@ export default function Add_Quotation() {
       }, time);
     }
   };
-  const [tableData, setTableData] = useState(dataSource);
 
+
+
+  const [tableData, setTableData] = useState(dataSource);
+  const [newGrandTotal, setNewGrandTotal] = useState();
   const getIndexInParent = (el) =>
     Array.from(el.parentNode.children).indexOf(el);
   const handleInputChange = (e, key, col, tx) => {
@@ -91,6 +95,19 @@ export default function Add_Quotation() {
           assignValues["quotation_details_total"] = totalAmount;
           console.log("quation deatils", quotation_details);
           addForm.setFieldsValue({ quotation_details });
+          // setTotal(sum);
+          // addForm.setFieldsValue({
+          //   grandtotal: sum,
+          // });
+          let grandTotal = 0;
+for (let key in quotation_details) {
+  let item = quotation_details[key];
+  grandTotal += item["quotation_details_total"];
+  setNewGrandTotal(grandTotal);
+addForm.setFieldsValue({ grandtotal:grandTotal });
+}
+
+console.log("Grand Total:", grandTotal);
 
           setTableData(
             tableData.map((item) => {
@@ -106,16 +123,16 @@ export default function Add_Quotation() {
             })
           );
           console.log("tabledata", tableData);
-          let sum = 0;
-          tableData.forEach((item) => {
-            sum +=
-              item.quotation_details_cost + item.quotation_details_tax_amount;
-          });
-          console.log("sum", sum);
-          setTotal(sum);
-          addForm.setFieldsValue({
-            grandtotal: sum,
-          });
+          // let sum = 0;
+          // tableData.forEach((item) => {
+          //   sum +=
+          //     item.quotation_details_cost + item.quotation_details_tax_amount;
+          // });
+          // console.log("sum", sum);
+          // setTotal(sum);
+          // addForm.setFieldsValue({
+          //   grandtotal: sum,
+          // });
         }
       }
     });
@@ -149,7 +166,8 @@ export default function Add_Quotation() {
       setTableData([
         ...tableData,
         {
-          key: `${tableData.length + 1}`,
+          // key: `${tableData.length + 1}`,
+          key: uuidv4(),
           quotation_details_service_id: "",
           quotation_details_cost: "",
           quotation_details_tax_type: "",
@@ -296,6 +314,12 @@ export default function Add_Quotation() {
   const handleDelete = (key) => {
     const newData = tableData?.filter((item) => item?.key !== key);
     setTableData(newData);
+    let grandTotal = 0;
+    for (let item of newData) {
+      grandTotal += item["quotation_details_total"];
+    }
+    setNewGrandTotal(grandTotal);
+    addForm.setFieldsValue({ grandtotal:grandTotal });
   };
 
   // console.log("userdata task",index);
@@ -353,7 +377,7 @@ export default function Add_Quotation() {
                 index.key,
                 "quotation_details_service_id",
               ]}
-              // rules={[{ required: true, message: 'Please input the name' }]}
+              rules={[{ required: true, message: 'Please select a task' }]}
             >
               <SelectBox
                 allowClear
@@ -401,7 +425,7 @@ export default function Add_Quotation() {
           <div className="d-flex justify-content-center align-items-center tborder ">
             <Form.Item
               name={["quotation_details", index.key, "quotation_details_cost"]}
-              // rules={[{ required: true, message: 'Please input the name' }]}
+              rules={[{ required: true, message: 'Required' }]}
             >
               <Input_Number
                 className="text_right"
@@ -415,7 +439,7 @@ export default function Add_Quotation() {
                   console.log(" input numberevent ", value, index.key);
                 }}
                 align="right"
-                step={0.01}
+                // step={0.01}
                 min={0}
                 precision={2}
                 controlls={false}
@@ -442,7 +466,7 @@ export default function Add_Quotation() {
                 index.key,
                 "quotation_details_tax_type",
               ]}
-              // rules={[{ required: true, message: 'Please input the name' }]}
+              rules={[{ required: true, message: 'Required  ' }]}
             >
               {/* <Input_Number
               className="text_right"
@@ -519,7 +543,7 @@ export default function Add_Quotation() {
                   )
                 }
                 align="right"
-                step={0.01}
+                // step={0.01}
                 min={0}
                 precision={2}
                 controlls={false}
@@ -556,7 +580,7 @@ export default function Add_Quotation() {
                   handleInputChange2(e, index, "quotation_details_total")
                 }
                 align="right"
-                step={0.01}
+                // step={0.01}
                 min={0}
                 precision={2}
                 controlls={false}
@@ -572,6 +596,13 @@ export default function Add_Quotation() {
   ];
 
   const [total, setTotal] = useState(0);
+  const [leadId, setLeadId] = useState('');
+
+  console.log("Selected lead id is " ,leadId)
+  const handleLeadId = leadId => {
+    setLeadId(leadId);
+  };
+
   console.log("total ", total);
   const GetAllLeadData = () => {
     PublicFetch.get(
@@ -590,6 +621,7 @@ export default function Add_Quotation() {
               lead_customer_name: item?.lead_customer_name,
             });
             setAllLeadList(array);
+            handleLeadId(item.lead_id);
           });
         } else {
           console.log("FAILED T LOAD DATA");
@@ -649,9 +681,20 @@ export default function Add_Quotation() {
       file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
     );
   };
-
+  const [selectedOption, setSelectedOption] = useState('');
   const [oppnew, setOppnew] = useState([]);
   console.log("Opportunities are :::", oppnew);
+
+  const [leadIdEnq, setLeadIdEnq] = useState('');
+
+  console.log("Selected  enquiry lead id is " ,leadIdEnq)
+  const handleLeadIdEnq = leadIdenq => {
+    setLeadIdEnq(leadIdenq);
+  };
+  // const handleFirstDropdownChange = (event) => {
+  //   setSelectedOption(event);
+  // };
+
   const [oppleadid, setOppleadid] = useState();
   console.log("Opportunities lead id :::", oppleadid);
   const [numOfItems, setNumOfItems] = useState("25");
@@ -682,6 +725,7 @@ export default function Add_Quotation() {
               lead_id: item?.crm_v1_leads?.lead_id,
               assigned_employee: item?.assigned_employee,
             });
+            handleLeadIdEnq(item.lead_id);
           });
           console.log("hellooooqqqqq", tempArr);
           setOppnew(tempArr);
@@ -918,14 +962,15 @@ const [qno,setQno]=useState(Date.now());
                         // rules={[
                         //   {
                         //     required: true,
-                        //     pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                        //     message: "Please enter a Valid value",
+                        //     message: "Please select quotation date",
                         //   },
                         // ]}
                       >
                         <DatePicker
                           style={{ borderWidth: 0, marginTop: 10 }}
-                          initialValues={dayjs()}
+                          // initialValues={ dayjs() }
+                          defaultValue={moment(date)}
+                          
                           format={dateFormatList}
                           disabledDate={(d) => !d || d.isBefore(today)}
                           onChange={(e) => {
@@ -939,13 +984,13 @@ const [qno,setQno]=useState(Date.now());
                       <label>Validity date</label>
                       <Form.Item
                         name="vdate"
-                        // rules={[
-                        //   {
-                        //     required: true,
-                        //     pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                        //     message: "Please enter a Valid value",
-                        //   },
-                        // ]}
+                        rules={[
+                          {
+                            required: true,
+                           
+                            message: "Please select validity date",
+                          },
+                        ]}
                       >
                         <DatePicker
                           style={{ borderWidth: 0, marginTop: 10 }}
@@ -962,14 +1007,20 @@ const [qno,setQno]=useState(Date.now());
                       <label>Enquiry No</label>
                       <Form.Item
                         name="eno"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please select a Type",
-                          },
-                        ]}
+                        // rules={[
+                        //   {
+                        //     required: true,
+                        //     message: "Please select a Type",
+                        //   },
+                        // ]}
                       >
                         <SelectBox
+                          onChange={e =>
+                            // handleFirstDropdownChange()
+                            handleLeadIdEnq(e)
+                          
+                            
+                          }
                           allowClear
                           showSearch
                           optionFilterProp="children"
@@ -997,18 +1048,45 @@ const [qno,setQno]=useState(Date.now());
                         rules={[
                           {
                             required: true,
-                            message: "Please select a Type",
+                            message: "Please select Consignee",
                           },
                         ]}
                       >
                         <SelectBox
+                        onChange={e => handleLeadId(e)}
                           allowClear
                           showSearch
                           optionFilterProp="children"
+                         
+                          
                         >
-                          {allLeadList &&
+                        {allLeadList &&
                             allLeadList.length > 0 &&
                             allLeadList.map((item, index) => {
+                              // console.log("lead id ddd:",item.lead_id)
+
+                            //  if( leadIdEnq && leadIdEnq === leadId){
+                              
+                            //   return (
+                            //     <Select.Option
+                            //       key={item.lead_id}
+                            //       value={item.lead_id}
+                            //     >
+                            //       {item.lead_customer_name}
+                            //     </Select.Option>
+                            //   );
+
+                            //  }else{
+                            //   return (
+                            //     <Select.Option
+                            //       key={item.lead_id}
+                            //       value={item.lead_id}
+                            //     >
+                            //       {item.lead_customer_name}
+                            //     </Select.Option>
+                            //   );
+                            //  }
+                            if ( leadIdEnq && leadIdEnq === item.lead_id) {
                               return (
                                 <Select.Option
                                   key={item.lead_id}
@@ -1017,7 +1095,21 @@ const [qno,setQno]=useState(Date.now());
                                   {item.lead_customer_name}
                                 </Select.Option>
                               );
+                            } else if( leadIdEnq === undefined) {
+                              return (
+                                <Select.Option
+                                  key={item.lead_id}
+                                  value={item.lead_id}
+                                >
+                                  {item.lead_customer_name}
+                                </Select.Option>
+                              );
+                            }
+                            // return null;
+
+                             
                             })}
+                          
                         </SelectBox>
                       </Form.Item>
                     </div>
@@ -1029,8 +1121,8 @@ const [qno,setQno]=useState(Date.now());
                         rules={[
                           {
                             required: true,
-                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                            message: "Please enter a Valid value",
+                          
+                            message: "Please enter shipper name",
                           },
                         ]}
                       >
@@ -1089,7 +1181,7 @@ const [qno,setQno]=useState(Date.now());
                         rules={[
                           {
                             required: true,
-                            message: "Please select a Type",
+                            message: "Please select a Freight Type",
                           },
                         ]}
                       >
@@ -1121,7 +1213,7 @@ const [qno,setQno]=useState(Date.now());
                         rules={[
                           {
                             required: true,
-                            message: "Please select a Type",
+                            message: "Please select a Cargo Type",
                           },
                         ]}
                       >
@@ -1173,7 +1265,7 @@ const [qno,setQno]=useState(Date.now());
                         rules={[
                           {
                             required: true,
-                            message: "Please select a Type",
+                            message: "Please select origin",
                           },
                         ]}
                       >
@@ -1204,7 +1296,7 @@ const [qno,setQno]=useState(Date.now());
                         rules={[
                           {
                             required: true,
-                            message: "Please select a Type",
+                            message: "Please select destination",
                           },
                         ]}
                       >
@@ -1236,7 +1328,7 @@ const [qno,setQno]=useState(Date.now());
                         rules={[
                           {
                             required: true,
-                            message: "Please select a Type",
+                            message: "Please select Carrier",
                           },
                         ]}
                       >
@@ -1268,7 +1360,7 @@ const [qno,setQno]=useState(Date.now());
                         rules={[
                           {
                             required: true,
-                            message: "Please select a Type",
+                            message: "Please select Terms",
                           },
                         ]}
                       >
@@ -1301,7 +1393,7 @@ const [qno,setQno]=useState(Date.now());
                           {
                             required: true,
                             pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                            message: "Please enter a Valid value",
+                            message: "Please enter Number of pieces",
                           },
                         ]}
                       >
@@ -1317,7 +1409,7 @@ const [qno,setQno]=useState(Date.now());
                           {
                             required: true,
                             pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                            message: "Please enter a Valid value",
+                            message: "Please select UOM",
                           },
                         ]}
                       >
@@ -1350,7 +1442,7 @@ const [qno,setQno]=useState(Date.now());
                           {
                             required: true,
                             pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                            message: "Please enter a Valid value",
+                            message: "Please select currency",
                           },
                         ]}
                       >
@@ -1383,20 +1475,20 @@ const [qno,setQno]=useState(Date.now());
                       <label>Exchange Rate</label>
                       <Form.Item
                       name="exchnagerate"
-                      // rules={[
-                      //   {
-                      //     required: true,
-                      //     pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                      //     message: "Please enter a Valid value",
-                      //   },
-                      // ]}
+                      rules={[
+                        {
+                          required: true,
+                        
+                          message: "Please enter a Valid value",
+                        },
+                      ]}
                       >
                         <Input_Number
                           className="text_right"
                           value={currencyRates}
                           // onChange={handleChange}
                           align="right"
-                          step={0.01}
+                          // step={0.01}
                           min={0}
                           precision={2}
                           controlls={false}
@@ -1420,7 +1512,7 @@ const [qno,setQno]=useState(Date.now());
                           // value={amount}
                           // onChange={handleChange}
                           align="right"
-                          step={0.01}
+                          // step={0.01}
                           min={0}
                           precision={2}
                           controlls={false}
@@ -1445,7 +1537,7 @@ const [qno,setQno]=useState(Date.now());
                           // value={amount}
                           // onChange={handleChange}
                           align="right"
-                          step={0.01}
+                          // step={0.01}
                           min={0}
                           precision={2}
                           controlls={false}
@@ -1520,7 +1612,7 @@ const [qno,setQno]=useState(Date.now());
                       fontWeight={1000}
                       // onChange={handleChange}
                       align="right"
-                      step={0.01}
+                      // step={0.01}
                       min={0}
                       precision={2}
                       controlls={false}

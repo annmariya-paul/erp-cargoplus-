@@ -831,15 +831,15 @@ console.log("Grand Total:", grandTotal);
 
 
 
-  const [errornw, setErrornw] = useState(false);
+//   const [errornw, setErrornw] = useState(false);
 
-const validateDate = (selectedDate) => {
-  if (!selectedDate) {
-    setErrornw(true);
-    return;
-  }
-  setErrornw(false);
-};
+// const validateDate = (selectedDate) => {
+//   if (!selectedDate) {
+//     setErrornw(true);
+//     return;
+//   }
+//   setErrornw(false);
+// };
 const [qno,setQno]=useState(Date.now());
   const [filenew, setFilenew] = useState();
   console.log("file", filenew);
@@ -989,7 +989,8 @@ const [qno,setQno]=useState(Date.now());
                           defaultValue={moment(date)}
                           
                           format={dateFormatList}
-                          disabledDate={(d) => !d || d.isBefore(today)}
+                          // disabledDate={(d) => !d || d.isBefore(today)}
+                          
                           // onChange={(e) => {
                           //   console.log("date mmm", e);
                           //   addForm.setFieldValue('qdate', e)

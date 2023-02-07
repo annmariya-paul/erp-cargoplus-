@@ -238,6 +238,7 @@ function BrandCreate() {
                       multiple
                       listType="picture"
                       accept=".png,.jpg,.jpeg"
+                      height={130}
                       onPreview={handlePreview}
                       beforeUpload={false}
                       onChange={(file) => {

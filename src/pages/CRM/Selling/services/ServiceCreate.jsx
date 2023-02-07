@@ -360,9 +360,10 @@ useEffect(() => {
                 ""
               )}
                 </div>
-                <div className="col-6 mt-2">
-                  <label className="mb-2">Tax Rate</label>
+                <div className="col-6 ">
+                  <label className="">Tax Type</label>
                   <Form.Item
+                   className="mt-2"
                     name="taxRate"
                     rules={[
                       {

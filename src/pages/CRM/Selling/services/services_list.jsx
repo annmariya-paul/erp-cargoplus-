@@ -24,10 +24,11 @@ import CustomModel from "../../../../components/custom_modal/custom_model";
 import FileUpload from "../../../../components/fileupload/fileUploader";
 import ErrorMsg from "../../../../components/error/ErrorMessage";
 import PublicFetch from "../../../../utils/PublicFetch";
-import { CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
+import { CRM_BASE_URL_FMS, CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
 import InputType from "../../../../components/Input Type textbox/InputType";
 import { TreeSelect, Form, InputNumber } from "antd";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
+import SelectBox from "../../../../components/Select Box/SelectBox";
 
 function Services() {
   const [editForm] = Form.useForm();
@@ -51,6 +52,7 @@ function Services() {
   const [serviceCategory, setServicecategory] = useState("");
   const [serviceImg, setServiceImg] = useState([]);
   const [imageSize, setImageSize] = useState(false);
+  const [alltaxtype,setalltaxtype]= useState("")
 
   const [serviceid, setserviceid] = useState();
   const [ImageUpload, setImageUpload] = useState();
@@ -91,7 +93,7 @@ function Services() {
     servicedescription: "",
     serviceimage: "",
     servicecat_id:"",
-    
+    servicetaxtype_id:"",
   });
 
   const handlePreview = async (file) => {
@@ -135,7 +137,8 @@ function Services() {
             service_taxrate:item?.service_taxrate,
             service_description:item?.service_description,
             service_category_name:item?.crm_v1_categories?.category_name,
-            service_taxtype_name:item?.fms_v1_tax_types?.tax_type_name
+            service_taxtype_name:item?.fms_v1_tax_types?.tax_type_name,
+            service_taxtype_id:item?.fms_v1_tax_types?.tax_type_id
           });
           // console.log("taxtype service is",item?.fms_v1_tax_types?.tax_type_name)
         });
@@ -154,9 +157,29 @@ function Services() {
       });
   };
 
+  const getAllTaxTypes = async () => {
+    try {
+      const allTxTypes = await PublicFetch.get(
+        `${CRM_BASE_URL_FMS}/tax-types?startIndex=${pageofIndex}&perPage=${noofitems}`
+      );
+      console.log("all taxtype are", allTxTypes.data.data);
+      setalltaxtype(allTxTypes.data.data)
+    } catch (err) {
+      console.log("error while getting the tax types: ", err);
+    }
+  };
+
   useEffect(() => {
     getAllservices();
+    getAllTaxTypes()
   }, [noofitems, pageofIndex]);
+
+ 
+  
+  // useEffect(() => {
+  //   getAllTaxTypes();
+  // }, []);
+
 
   const handleViewClick = (item) => {
     console.log("view the services", item);
@@ -165,11 +188,13 @@ function Services() {
       id: item.service_id,
       servicename: item.service_name,
       servicecode: item.service_code,
-      servicecategory: item.service_category_id,
+      servicecategory: item.service_category_name,
       servicehsn: item.service_hsn,
       servicedescription: item.service_description,
-      servicetaxrate: item.service_taxrate,
+      servicetaxrate: item.service_taxtype_name,
       serviceimage: item.service_pic,
+      servicecat_id:item.service_category_id,
+      servicetaxtype_id:item.service_taxtype_id,
     });
     setServiceView(true);
   };
@@ -181,7 +206,7 @@ function Services() {
     setserviceName(i.service_name);
     setServiceCode(i.service_code);
     setServiceHsn(i.service_hsn);
-    setServicetaxrate(i.service_taxrate);
+    setServicetaxrate(i.service_taxtype_id);
     setServicedescription(i.service_description);
     setServicecategory(i.service_category_id);
     setServiceImg(i.service_pic);
@@ -190,7 +215,7 @@ function Services() {
       service_name: i.service_name,
       serviceCode: i.service_code,
       serviceHsn: i.service_hsn,
-      taxRate: i.service_taxrate,
+      taxRate: i.service_taxtype_id,
       servicedescription: i.service_description,
       serviceCategory: i.service_category_id,
     });
@@ -198,23 +223,24 @@ function Services() {
   };
 
   const handleEditfromview = (item) => {
-    console.log("edit iss", item);
+    console.log("edit view iss", item);
     setserviceid(item.id);
     setserviceName(item.servicename);
     setServiceCode(item.servicecode);
     setServiceHsn(item.servicehsn);
-    setServicetaxrate(item.servicetaxrate);
+    setServicetaxrate(item.servicetaxtype_id);
     setServicedescription(item.servicedescription);
-    setServicecategory(item.servicecategory);
+    setServicecategory(item.servicecat_id);
+
     setServiceImg(item.serviceimage);
     editForm.setFieldsValue({
       // serviceid: item.service_id,
       service_name: item.servicename,
       serviceCode: item.servicecode,
       serviceHsn: item.servicehsn,
-      taxRate: item.servicetaxrate,
+      taxRate: item.servicetaxtype_id,
       servicedescription: item.servicedescription,
-      serviceCategory: item.servicecategory,
+      serviceCategory: item.servicecat_id,
     });
     setShowServiceEditModal(true);
     setServiceView(false);
@@ -290,7 +316,7 @@ function Services() {
     //   formData.append("service_pic", serviceImg);
     // }
     formData.append("service_pic", img);
-    formData.append("service_taxrate", servicetaxrate);
+    formData.append("service_taxtype", servicetaxrate);
     formData.append("service_description", servicedescription);
 
     PublicFetch.patch(
@@ -352,10 +378,13 @@ function Services() {
       key: "key",
       width: "14%",
       render: (data, index) => {
+        console.log("tb dataa",index )
         return (
           <div className="d-flex justify-content-center align-items-center gap-4">
             <div
-              onClick={() => handleEditclick(index)}
+              onClick={() => {
+                console.log("tb dataa",index )
+                handleEditclick(index)}}
               className="actionEdit m-0 p-0"
             >
               <FaEdit />
@@ -421,7 +450,7 @@ function Services() {
       align: "center",
       filteredValue: [searchType],
       onFilter: (value, record) => {
-        return String(record.code).toLowerCase().includes(value.toLowerCase());
+        return String(record.service_code).toLowerCase().includes(value.toLowerCase());
       },
     },
     {
@@ -432,7 +461,7 @@ function Services() {
       align: "center",
       filteredValue: [searchStatus],
       onFilter: (value, record) => {
-        return String(record.category)
+        return String(record.service_category_name)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
@@ -492,7 +521,19 @@ function Services() {
               />
             </div>
             <div className="col-4 ">
-              <Select
+
+            <Input.Search
+                placeholder="Search by Code"
+                style={{ margin: "5px", borderRadius: "5px" }}
+                value={searchedText}
+                onChange={(e) => {
+                  setSearchedText(e.target.value ? [e.target.value] : []);
+                }}
+                onSearch={(value) => {
+                  setSearchedText(value);
+                }}
+              />
+              {/* <Select
                 allowClear
                 showSearch
                 style={{
@@ -510,7 +551,7 @@ function Services() {
                 <Select.Option value="sales">sales</Select.Option>
                 <Select.Option value="maintenance">Maintenance</Select.Option>
                 <Select.Option value="support">support</Select.Option>
-              </Select>
+              </Select> */}
             </div>
             <div className="col-4 ">
               <Select
@@ -528,16 +569,17 @@ function Services() {
                   setSearchStatus(event ? [event] : []);
                 }}
               >
-                {/* {LeadStatus &&
-                  LeadStatus.map((item, index) => {
+                {services&&
+                  services.map((item, index) => {
+                    console.log("dataaa",item)
                     return (
-                      <Select.Option key={item.id} value={item.value}>
-                        {item.name}
+                      <Select.Option key={item.service_category_id} value={item.service_category_name}>
+                        {item.service_category_name}
                       </Select.Option>
                     );
-                  })} */}
-                <Select.Option value="Watch">watch</Select.Option>
-                <Select.Option value="cookware">cookware</Select.Option>
+                  })}
+                {/* <Select.Option value="Watch">watch</Select.Option>
+                <Select.Option value="cookware">cookware</Select.Option> */}
               </Select>
             </div>
           </div>
@@ -812,7 +854,7 @@ function Services() {
                           },
                         ]}
                       >
-                        <InputNumber
+                        {/* <InputNumber
                           style={{
                             border: "0",
                             backgroundColor: "whitesmoke",
@@ -822,7 +864,29 @@ function Services() {
                           }}
                           value={servicetaxrate}
                           onChange={(e) => setServicetaxrate(e)}
-                        />
+                        /> */}
+                       
+                         <SelectBox
+                      placeholder={"--Please Select--"}
+                      value={servicetaxrate}
+                      onChange={(e) => {
+                        console.log("select the brandss", e);
+                        setServicetaxrate(parseInt(e));
+                      }}
+                    >
+                      {alltaxtype &&
+                        alltaxtype.length > 0 &&
+                        alltaxtype.map((item, index) => {
+                          return (
+                            <Select.Option
+                              key={item.tax_type_id}
+                              value={item.tax_type_id}
+                            >
+                              {item.tax_type_name}
+                            </Select.Option>
+                          );
+                        })}
+                    </SelectBox>
                       </Form.Item>
                     </div>
 
@@ -1030,7 +1094,7 @@ function Services() {
                       <div className="col-1">:</div>
                       <div className="col-6 justify-content-start">
                         <p className="modal_view_p_sub">
-                          {viewservices.servicetaxrate} %
+                          {viewservices.servicetaxrate} 
                         </p>
                       </div>
                     </div>

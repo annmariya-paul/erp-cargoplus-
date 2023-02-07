@@ -369,7 +369,7 @@ function Productlist() {
                   products.map((item, index) => {
                     console.log("catvaluess",item)
                     return (
-                      <Select.Option key={item.product_id} value={item.product_id}>
+                      <Select.Option key={item.product_id} value={item.catgeory_name}>
                         {item.catgeory_name}
                       </Select.Option>
                     );

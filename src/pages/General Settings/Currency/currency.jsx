@@ -351,19 +351,17 @@ export default function Currency(props) {
             </Select>
           </div>
           <div className=" col-4 d-flex align-items-center  justify-content-center">
-          
-         
-          <MyPagination
-           total={parseInt(AllCurrency?.length)}
-            current={current}
-            showSizeChanger={true}
-            pageSize={pageSize}
-            onChange={(current, pageSize) => {
-              setCurrent(current);
-              setPageSize(pageSize);
-            }}
-          />
-        </div>
+            <MyPagination
+              total={parseInt(AllCurrency?.length)}
+              current={current}
+              showSizeChanger={true}
+              pageSize={pageSize}
+              onChange={(current, pageSize) => {
+                setCurrent(current);
+                setPageSize(pageSize);
+              }}
+            />
+          </div>
           <div className="col-4 d-flex justify-content-end">
             <Button btnType="add" onClick={() => setModalAddCurrency(true)}>
               Add Currency
@@ -373,17 +371,14 @@ export default function Currency(props) {
         <div className="datatable">
           <TableData
             data={getData(current, pageSize)}
-
             // data={AllCurrency}
             columns={columns}
             custom_table_css="table_lead_list"
           />
         </div>
         <div className="d-flex py-2 justify-content-center">
-          
-         
           <MyPagination
-           total={parseInt(AllCurrency?.length)}
+            total={parseInt(AllCurrency?.length)}
             current={current}
             showSizeChanger={true}
             pageSize={pageSize}
@@ -633,22 +628,6 @@ export default function Currency(props) {
                 >
                   <div className="row py-4">
                     <div className="col-6 pt-1">
-                      <label> Currency Name</label>
-                      <Form.Item
-                        name="currencyInput"
-                        rules={[
-                          {
-                            required: true,
-                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                            message: "Please enter a Valid Currency Name",
-                          },
-                        ]}
-                      >
-                        <InputType className="input_type_style w-100" />
-                      </Form.Item>
-                    </div>
-
-                    <div className="col-6 pt-1">
                       <label>Country</label>
                       <div>
                         <Form.Item
@@ -676,6 +655,22 @@ export default function Currency(props) {
                           </SelectBox>
                         </Form.Item>
                       </div>
+                    </div>
+
+                    <div className="col-6 pt-1">
+                      <label> Currency Name</label>
+                      <Form.Item
+                        name="currencyInput"
+                        rules={[
+                          {
+                            required: true,
+                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                            message: "Please enter a Valid Currency Name",
+                          },
+                        ]}
+                      >
+                        <InputType className="input_type_style w-100" />
+                      </Form.Item>
                     </div>
 
                     <div className="col-6 pt-1">

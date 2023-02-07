@@ -291,7 +291,7 @@ function ProductCreate() {
         >
           <div className="container my-3">
             <div className="my-3">
-              <h6 className="lead_text">Basic Info</h6>
+              <h6 className="lead_text">Add Product</h6>
             </div>
             <Form
               name="addForm"

@@ -251,6 +251,7 @@ function Productlist() {
       align: "center",
       filteredValue: [searchCategory],
       onFilter: (value, record) => {
+        console.log("prrrr",record)
         return String(record.catgeory_name)
           .toLowerCase()
           .includes(value.toLowerCase());
@@ -289,6 +290,9 @@ function Productlist() {
   const onChange = (checkedValues) => {
     setSelectedColumns(checkedValues);
   };
+
+
+  console.log("cattt",products)
   return (
     <div>
       <div className="container-fluid lead_list my-3 py-3">
@@ -363,8 +367,9 @@ function Productlist() {
               >
                 {products &&
                   products.map((item, index) => {
+                    console.log("catvaluess",item)
                     return (
-                      <Select.Option key={item.id} value={item.value}>
+                      <Select.Option key={item.product_id} value={item.product_id}>
                         {item.catgeory_name}
                       </Select.Option>
                     );

@@ -110,9 +110,9 @@ export default function Add_Attribute() {
       </div>
       <div className="container-fluid add_attributes p-4 ">
         <div className="row flex-wrap pt-2">
-          <div className="col">
-            <h6 className="lead_text">Basic Info</h6>
-          </div>
+          {/* <div className="col">
+            <h6 className="lead_text">Add Attribute</h6>
+          </div> */}
         </div>
 
         <Form

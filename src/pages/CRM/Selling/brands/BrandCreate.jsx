@@ -116,9 +116,9 @@ function BrandCreate() {
           className="card border-0 content-tabs  my-3 px-4"
         >
           <div className="container my-3">
-            <div className="my-3">
-              <h5 className="lead_text">Basic Info</h5>
-            </div>
+            {/* <div className="my-3">
+              <h5 className="lead_text">Add Brand</h5>
+            </div> */}
             <Form
               name="addForm"
               form={addForm}
@@ -131,7 +131,8 @@ function BrandCreate() {
               }}
             >
               <div className="row my-5">
-                <div className="col-4">
+              <div className="row">
+                <div className="col-6">
                   <label>Name</label>
                   <div>
                     <Form.Item
@@ -178,10 +179,37 @@ function BrandCreate() {
                     )}
                   </div>
                 </div>
-                <div className="col-8">
+                </div>
+                {/* <div className="col-8">
                   <label>Description</label>
                   <div>
-                    {/* <textarea className="input_type_style w-100" /> */}
+                   
+                    <Form.Item
+                      name="description"
+                      rules={[
+                        {
+                          min: 2,
+                          message: "Description must be at least 2 characters",
+                        },
+                        {
+                          max: 500,
+                          message:
+                            "Description cannot be longer than 500 characters",
+                        },
+                      ]}
+                    >
+                      <TextArea
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                      />
+                    </Form.Item>
+                  </div>
+                </div> */}
+                <div className="row">
+                <div className="col-6">
+                  <label>Description</label>
+                  <div>
+                   
                     <Form.Item
                       name="description"
                       rules={[
@@ -203,7 +231,7 @@ function BrandCreate() {
                     </Form.Item>
                   </div>
                 </div>
-                <div className="col-4">
+                <div className="col-6">
                   <label>Display Picture</label>
                   <Form.Item name="new">
                     <FileUpload
@@ -238,6 +266,7 @@ function BrandCreate() {
                   ) : (
                     ""
                   )}
+                </div>
                 </div>
 
                 <div className="col-12 d-flex justify-content-center  gap-2 py-5">

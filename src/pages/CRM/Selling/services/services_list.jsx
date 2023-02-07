@@ -134,11 +134,12 @@ function Services() {
             service_hsn:item?.service_hsn,
             service_taxrate:item?.service_taxrate,
             service_description:item?.service_description,
-            service_category_name:item?.crm_v1_categories?.category_name
-            
+            service_category_name:item?.crm_v1_categories?.category_name,
+            service_taxtype_name:item?.fms_v1_tax_types?.tax_type_name
           });
+          // console.log("taxtype service is",item?.fms_v1_tax_types?.tax_type_name)
         });
-          console.log("hellooooqqqqq", tempArr);
+          console.log("temparr datass", tempArr);
           setServices(tempArr);
 
           setAllservices(res?.data?.data.services);
@@ -437,8 +438,8 @@ function Services() {
       },
     },
     {
-      title: "TAX RATE",
-      dataIndex: "service_taxrate",
+      title: "TAX TYPE NAME",
+      dataIndex: "service_taxtype_name",
       key: "key",
 
       align: "center",

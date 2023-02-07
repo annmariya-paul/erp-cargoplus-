@@ -177,7 +177,7 @@ console.log("dataa",allcmpny.data.data.length);
           console.log("dataa is successfully saved", res.data.success);
           if (res.data.success) {
             setSuccessPopup(true);
-            // addForm.resetFields();
+            addForm.resetFields();
             close_modal(successPopup, 1000);
           }
           //  else {
@@ -394,11 +394,15 @@ console.log("dataa",allcmpny.data.data.length);
                                     }}
                                   />
                                 </Form.Item>
+                                <div>
+                               {getcmpnylogo?(
                                 <img
                                   src={`${process.env.REACT_APP_BASE_URL}/${getcmpnylogo}`}
                                   height="40px"
                                   width={"40px"}
                                 />
+                                ) :""}
+                                </div>
                               </div>
                             </div>
                             <div className="col-xl-6 col-lg-6 col-12">
@@ -438,11 +442,15 @@ console.log("dataa",allcmpny.data.data.length);
                                     }}
                                   />
                                 </Form.Item>
+                                <div>
+                                {getcmpnywatermark?(
                                 <img
                                   src={`${process.env.REACT_APP_BASE_URL}/${getcmpnywatermark}`}
                                   height="40px"
                                   width={"40px"}
                                 />
+                                ):""  } 
+                              </div>
                               </div>
                             </div>
                           </div>

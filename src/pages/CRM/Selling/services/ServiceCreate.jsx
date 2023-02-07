@@ -10,7 +10,7 @@ import SelectBox from "../../../../components/Select Box/SelectBox";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
 import { Form, message, InputNumber } from "antd";
 import PublicFetch from "../../../../utils/PublicFetch";
-import { CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
+import { CRM_BASE_URL_FMS, CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
 import { TreeSelect } from "antd";
 import { Navigate, useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../../routes";
@@ -46,6 +46,11 @@ function ServiceCreate() {
   const [uniqueserCode, setuniqueserCode] = useState();
   const [uniqueHsnCode,setuniqueHsnCode]= useState();
 
+  const [numOfItems, setNumOfItems] = useState("25");
+  const [current, setCurrent] = useState(1);
+  const pageofIndex = numOfItems * (current - 1) - 1 + 1;
+ 
+const [alltaxtype, setalltaxtype]= useState("")
   const [addform] = Form.useForm();
   const navigate = useNavigate();
   const getBase64 = (file) =>
@@ -132,7 +137,7 @@ function ServiceCreate() {
     formData.append("service_category_id", State);
     formData.append("service_hsn", Hsn);
     formData.append("service_pic", img);
-    formData.append("service_taxrate", taxRate);
+    formData.append("service_taxtype", taxRate);
     formData.append("service_description", description);
 
     PublicFetch.post(`${CRM_BASE_URL_SELLING}/service`, formData, {
@@ -156,6 +161,23 @@ function ServiceCreate() {
  }
 
 
+ const getAllTaxTypes = async () => {
+  try {
+    const allTxTypes = await PublicFetch.get(
+      `${CRM_BASE_URL_FMS}/tax-types?startIndex=${pageofIndex}&perPage=${numOfItems}`
+    );
+    console.log("all taxtype are", allTxTypes.data.data);
+    setalltaxtype(allTxTypes.data.data)
+    // setTaxTypes(allTxTypes.data.data);
+  } catch (err) {
+    console.log("error while getting the tax types: ", err);
+  }
+};
+
+useEffect(() => {
+  getAllTaxTypes();
+}, []);
+
 
   return (
     <div>
@@ -169,7 +191,7 @@ function ServiceCreate() {
         >
           <div className="container my-3">
             <div className="my-3">
-              <h5 className="lead_text">Basic Info</h5>
+              <h5 className="lead_text">Add Services</h5>
             </div>
 
             <Form
@@ -338,9 +360,10 @@ function ServiceCreate() {
                 ""
               )}
                 </div>
-                <div className="col-6 mt-2">
-                  <label className="mb-2">Tax Rate</label>
+                <div className="col-6 ">
+                  <label className="">Tax Type</label>
                   <Form.Item
+                   className="mt-2"
                     name="taxRate"
                     rules={[
                       {
@@ -353,7 +376,7 @@ function ServiceCreate() {
                       },
                     ]}
                   >
-                    <InputNumber
+                    {/* <InputNumber
                       style={{
                         border: "0",
                         backgroundColor: "whitesmoke",
@@ -362,8 +385,29 @@ function ServiceCreate() {
                         boxShadow: "none",
                       }}
                       value={taxRate}
-                      onChange={(e) => setTaxRate(e)}
-                    />
+                      onChange={(e) => setTaxRate(e.target.value)}
+                    /> */}
+                       <SelectBox
+                      placeholder={"--Please Select--"}
+                      value={taxRate}
+                      onChange={(e) => {
+                        console.log("select the brandss", e);
+                        setTaxRate(parseInt(e));
+                      }}
+                    >
+                      {alltaxtype &&
+                        alltaxtype.length > 0 &&
+                        alltaxtype.map((item, index) => {
+                          return (
+                            <Select.Option
+                              key={item.tax_type_id}
+                              value={item.tax_type_id}
+                            >
+                              {item.tax_type_name}
+                            </Select.Option>
+                          );
+                        })}
+                    </SelectBox>
                   </Form.Item>
                 </div>
 

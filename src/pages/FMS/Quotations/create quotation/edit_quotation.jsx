@@ -136,6 +136,7 @@ export default function EditQuotation(
   const [quotcurrency, setquotcurrency] = useState();
   const [quotexchngerate, setquotexchngerate] = useState();
   const [quotunits, setquotunits] = useState();
+  const [qDetails, setQDetails] = useState();
 
   const [allPaymentTerms, setAllPaymentTerms] = useState();
   const [currencydata, setCurrencydata] = useState();
@@ -154,12 +155,13 @@ export default function EditQuotation(
 
   const dataSource = [
     {
-      key: "1",
+      key: 1,
       quotation_details_service_id: "",
       quotation_details_cost: "",
       quotation_details_tax_type: "",
       quotation_details_tax_amount: "",
       quotation_details_total: "",
+      quotation_details_id: "",
     },
   ];
   const [taxratee, setTaxRatee] = useState();
@@ -683,6 +685,7 @@ export default function EditQuotation(
       const onequatation = await PublicFetch.get(
         `${CRM_BASE_URL_FMS}/quotation/${id}`
       );
+      setQDetails(onequatation?.data?.data.fms_v1_quotation_details);
       console.log("one quatation iss ::", onequatation?.data?.data);
       console.log(" quatation no is:", onequatation?.data?.data.quotation_no);
       setquatationno(onequatation?.data?.data?.quotation_no);
@@ -732,43 +735,88 @@ export default function EditQuotation(
         quotation_origin: onequatation?.data?.data?.quotation_origin_id,
       });
 
-      onequatation?.data?.data.fms_v1_quotation_details.forEach(
-        (item, index) => {
-          let existingValues = editForm.getFieldsValue();
-          let { quotation_details } = existingValues;
-          console.log("existing values", quotation_details);
-          // quotation_details.forEach((quotation_details, index) => {
-          let sum = 0;
-          let assignValues = quotation_details[tableData.length];
-          assignValues["quotation_details_service_id"] =
-            item.quotation_details_service_id;
-          assignValues["quotation_details_cost"] = item.quotation_details_cost;
-          assignValues["quotation_details_tax_type"] =
-            item.quotation_details_tax_type;
-          assignValues["quotation_details_tax_amount"] =
-            item.quotation_details_tax_amount;
-          assignValues["quotation_details_total"] =
-            item.quotation_details_total;
-          editForm.setFieldsValue({ quotation_details });
-          // });
+      console.log("qdetail", onequatation?.data?.data.fms_v1_quotation_details);
 
-          setTableData([
-            ...tableData,
-            {
-              key: tableData.length + 1,
-              quotation_details_service_id: item.quotation_details_service_id,
-              quotation_details_cost: item.quotation_details_cost,
-              quotation_details_tax_type: item.quotation_details_tax_type,
-              quotation_details_tax_amount: item.quotation_details_tax_amount,
-              quotation_details_total: item.quotation_details_total,
-            },
-          ]);
-        }
-      );
+      onequatation?.data?.data.fms_v1_quotation_details.map((item, index) => {
+        let existingValues = editForm.getFieldsValue();
+        // let { quotation_details } = existingValues;
+        // console.log("existing values", quotation_details);
+        // quotation_details.forEach((quotation_details, index) => {
+        let quotation_details = [undefined];
+        let sum = 0;
+        // let assignValues = quotation_details[index];
+        quotation_details.push({
+          quotation_details_service_id: item.quotation_details_service_id,
+          quotation_details_cost: item.quotation_details_cost,
+          quotation_details_tax_type: item.quotation_details_tax_type,
+          quotation_details_tax_amount: item.quotation_details_tax_amount,
+          quotation_details_total: item.quotation_details_total,
+          quotation_details_id: item.quotation_details_id,
+        });
+        // quotation_details[index + 1]["quotation_details_service_id"] =
+        //   item.quotation_details_service_id;
+        // quotation_details[index + 1]["quotation_details_cost"] =
+        //   item.quotation_details_cost;
+        // quotation_details[index + 1]["quotation_details_tax_type"] =
+        //   item.quotation_details_tax_type;
+        // quotation_details[index + 1]["quotation_details_tax_amount"] =
+        //   item.quotation_details_tax_amount;
+        // quotation_details[index + 1]["quotation_details_total"] =
+        //   item.quotation_details_total;
+        // quotation_details[index + 1]["quotation_details_id"] =
+        //   item.quotation_details_id;
+        // console.log("existing values", quotation_details);
+        console.log("existing a", quotation_details);
+        editForm.setFieldsValue({ quotation_details });
+        // });
+
+        // setTableData([
+        //   ...tableData,
+        //   {
+        //     key: index,
+        //     quotation_details_service_id: item.quotation_details_service_id,
+        //     quotation_details_cost: item.quotation_details_cost,
+        //     quotation_details_tax_type: item.quotation_details_tax_type,
+        //     quotation_details_tax_amount: item.quotation_details_tax_amount,
+        //     quotation_details_total: item.quotation_details_total,
+        //   },
+        // ]);
+      });
     } catch (err) {
       console.log("error to getting all freighttype", err);
     }
   };
+  useEffect(() => {
+    let quotation_details = [];
+    qDetails &&
+      qDetails?.map((item, index) => {
+        // let assignValues = quotation_details[index];
+        quotation_details.push({
+          quotation_details_service_id: item.quotation_details_service_id,
+          quotation_details_cost: item.quotation_details_cost,
+          quotation_details_tax_type: item.quotation_details_tax_type,
+          quotation_details_tax_amount: item.quotation_details_tax_amount,
+          quotation_details_total: item.quotation_details_total,
+          quotation_details_id: item.quotation_details_id,
+        });
+        setTableData([
+          ...tableData,
+          {
+            key: index,
+            quotation_details_service_id: item.quotation_details_service_id,
+            quotation_details_cost: item.quotation_details_cost,
+            quotation_details_tax_type: item.quotation_details_tax_type,
+            quotation_details_tax_amount: item.quotation_details_tax_amount,
+            quotation_details_total: item.quotation_details_total,
+          },
+        ]);
+      });
+    console.log("mainItem", tableData);
+
+    editForm.setFieldsValue({ quotation_details });
+  }, [qDetails]);
+
+  console.log("table inside data", tableData);
 
   const getallunits = async () => {
     try {
@@ -823,8 +871,8 @@ export default function EditQuotation(
   };
 
   const OnSubmitedit1 = (data) => {
+    console.log("Quotation details", data);
     const formData = new FormData();
-
     formData.append("quotation_no", data.quotation_no.trim(" "));
     formData.append("quotation_date", new Date(data.quotationdate));
     formData.append("quotation_validity", new Date(data.validity_date));
@@ -847,6 +895,7 @@ export default function EditQuotation(
     formData.append("quotation_currency", data.currency);
     formData.append("quotation_exchange_rate", data.exchnagerate);
     formData.append("quotation_details", data.quotation_details);
+
     if (data.new) {
       formData.append("attachments", data.new);
     }
@@ -1011,42 +1060,6 @@ export default function EditQuotation(
                         <InputType value={quotshipper} />
                       </Form.Item>
                     </div>
-                    {/* 
-                    <div className="col-xl-3 col-sm-6 mt-2">
-                      <label> Origin Agent</label>
-                      <Form.Item
-                        name="OrginAgent"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please select a Type",
-                          },
-                        ]}
-                      >
-                        <SelectBox>
-                          <Select.Option value="A">Test</Select.Option>
-                          <Select.Option value="B">Demo</Select.Option>
-                        </SelectBox>
-                      </Form.Item>
-                    </div> */}
-
-                    {/* <div className="col-xl-3 col-sm-6 mt-2">
-                      <label>Destination Agent</label>
-                      <Form.Item
-                        name="corgin"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please select a Type",
-                          },
-                        ]}
-                      >
-                        <SelectBox>
-                          <Select.Option value="A">Test</Select.Option>
-                          <Select.Option value="B">Demo</Select.Option>
-                        </SelectBox>
-                      </Form.Item>
-                    </div> */}
 
                     <div className="col-xl-3 col-sm-6 mt-2">
                       <label>Freight Type</label>

@@ -79,9 +79,9 @@ import Companyinfo from "./pages/General Settings/companyinfo/companyinfo";
 import Locations from "./pages/FMS/settings/Locations/locations";
 import SelectCountry from "./pages/General Settings/country/CountrySelect";
 import QuotationAssign from "./pages/FMS/Quotations/QuotationAssign";
-import Listjob from "./pages/FMS/Jobtask/joblist";
-import CreateJob from "./pages/FMS/Jobtask/createjob";
-import Updatejob from "./pages/FMS/Jobtask/Updatejob";
+import Listjob from "./pages/FMS/Job/joblist";
+import CreateJob from "./pages/FMS/Job/createjob";
+import Updatejob from "./pages/FMS/Job/Updatejob";
 // import Lead from "./pages/lead/lead";
 
 function App() {

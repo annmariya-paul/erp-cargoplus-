@@ -9,6 +9,7 @@ import "antd/dist/antd.css";
 import MyPagination from "../../../../components/Pagination/MyPagination";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { CRM_BASE_URL } from "../../../../api/bootapi";
+import { LeadType,LeadStatus } from "../../../../utils/SelectOptions";
 
 export default function LeadReport() {
   const { Option } = Select;
@@ -32,6 +33,8 @@ export default function LeadReport() {
   const [toggleState, setToggleState] = useState(1);
   const [generateCount, setGenerateCount] = useState();
   const [convertCount, setConvertCount] = useState();
+  const [ldStatus, setLdStatus] = useState(LeadStatus);
+  const [ldType, setLdType] = useState(LeadType);
   const toggleTab = (index) => {
     setToggleState(index);
   };
@@ -50,38 +53,52 @@ export default function LeadReport() {
           let arrA = [];
           let arrB = [];
           res?.data?.data?.leads.forEach((item, index) => {
+           
             setAllLeadList(item.lead_status);
 
             var date1 = moment(item.lead_created_at).format("MM-DD-YYYY");
-            if (item.lead_status === 5) {
+              ldStatus.forEach((i, index) => {
+             ldType.forEach((t, index) => {
+            var leadStat = parseInt(i.value);
+            if (
+              item.lead_status === 5 &&
+              leadStat === item.lead_status &&
+              t.value === item.lead_type
+            ) {
               {
                 arrA.push({
                   lead_customer_name: item?.lead_customer_name,
                   lead_id: item?.lead_id,
                   lead_organization: item?.lead_organization,
                   lead_source: item?.lead_source,
-                  lead_status: item?.lead_status,
-                  lead_type: item?.lead_type,
+                  lead_status: i?.name,
+                  lead_type: t?.name,
                   lead_user_type: item?.lead_user_type,
                 });
                 setConvertedTable(arrA);
               }
+              
             }
              
-            if (item.lead_status === 1  ) {
+            if (
+              item.lead_status === 1 &&
+              leadStat === item.lead_status &&
+              t.value === item.lead_type
+            ) {
               arrB.push({
                 lead_customer_name: item?.lead_customer_name,
                 lead_id: item?.lead_id,
                 lead_organization: item?.lead_organization,
                 lead_source: item?.lead_source,
-                lead_status: item?.lead_status,
-                lead_type: item?.lead_type,
+                lead_status: i?.name,
+                lead_type: t?.name,
                 lead_user_type: item?.lead_user_type,
-                lead_created_date:item?.lead_created_at,
+                lead_created_date: item?.lead_created_at,
               });
               setGeneratedTable(arrB);
             }
-            
+          });
+          });
           });
         } else {
           console.log("FAILED TO LOAD DATA");
@@ -233,7 +250,7 @@ console.log("generated data isss ", generatedTable )
               <div className="col-md-6 col-sm-12">
                 <label htmlFor="date">Date</label>
                 <DatePicker
-                  format={"MM-DD-YYYY"}
+                  format={"DD-MM-YYYY"}
                   defaultValue={moment(newDate)}
                   value={selectedDate}
                   onChange={(e) => {
@@ -246,7 +263,7 @@ console.log("generated data isss ", generatedTable )
               <div className="col-md-6 col-sm-12">
                 <label htmlFor="month">Month</label>
                 <DatePicker
-                  format={"MM/01/YYYY"}
+                  format={"01-DD-YYYY"}
                   value={selectedMonth}
                   onChange={(e) => {
                     setSelectedMonth(e);
@@ -261,7 +278,7 @@ console.log("generated data isss ", generatedTable )
                   <div className="col-md-6">
                     <label htmlFor="startDate">Start Date</label>
                     <DatePicker
-                      format={"MM/DD/YYYY"}
+                      format={"DD-MM-YYYY"}
                       value={startDate}
                       onChange={(e) => setStartDate(e)}
                     />
@@ -269,7 +286,7 @@ console.log("generated data isss ", generatedTable )
                   <div className="col-md-6">
                     <label htmlFor="endDate">End Date</label>
                     <DatePicker
-                      format={"MM/DD/YYYY"}
+                      format={"DD-MM-YYYY"}
                       value={endDate}
                       onChange={(e) => setEndDate(e)}
                     />
@@ -304,10 +321,13 @@ console.log("generated data isss ", generatedTable )
                 }
                 onClick={() => toggleTab(1)}
               >
-                 {generateCount== 0?(
-             <label>Generated</label> 
-              ):(  <label>Generated <span>({generateCount})</span></label>)}
-              
+                {generateCount == 0 ? (
+                  <label>Generated</label>
+                ) : (
+                  <label>
+                    Generated <span>({generateCount})</span>
+                  </label>
+                )}
               </button>
               <button
                 id="button-tabs"
@@ -318,11 +338,13 @@ console.log("generated data isss ", generatedTable )
                 }
                 onClick={() => toggleTab(2)}
               >
-                 {convertCount== 0?(
-             <label>Converted</label> 
-              ):(  <label>Converted <span>({convertCount})</span></label>)}
-
-                
+                {convertCount == 0 ? (
+                  <label>Converted</label>
+                ) : (
+                  <label>
+                    Converted <span>({convertCount})</span>
+                  </label>
+                )}
               </button>
             </div>
           </div>
@@ -530,7 +552,6 @@ console.log("generated data isss ", generatedTable )
             </div>
             <div className="d-flex py-2 justify-content-center">
               <MyPagination
-              
                 total={parseInt(convertedTable?.length)}
                 current={current}
                 showSizeChanger={true}

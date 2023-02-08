@@ -205,18 +205,6 @@ export default function LeadList() {
       align: "center",
     },
     {
-      title: "TYPE",
-      dataIndex: "lead_type",
-      key: "TYPE",
-      filteredValue: [searchType],
-      onFilter: (value, record) => {
-        return String(record.lead_type)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
-      align: "center",
-    },
-    {
       title: "NAME",
       dataIndex: "lead_customer_name",
       key: "NAME",
@@ -229,6 +217,19 @@ export default function LeadList() {
       },
       align: "center",
     },
+    {
+      title: "TYPE",
+      dataIndex: "lead_type",
+      key: "TYPE",
+      filteredValue: [searchType],
+      onFilter: (value, record) => {
+        return String(record.lead_type)
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      },
+      align: "center",
+    },
+
     {
       title: "ORGANIZATION",
       dataIndex: "lead_organization",
@@ -356,7 +357,7 @@ export default function LeadList() {
                 {LeadStatus &&
                   LeadStatus.map((item, index) => {
                     return (
-                      <Select.Option key={item.id} value={item.value}>
+                      <Select.Option key={item.id} value={item.name}>
                         {item.name}
                       </Select.Option>
                     );

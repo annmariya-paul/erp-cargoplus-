@@ -193,11 +193,10 @@ function Opportunitylist(props) {
             opportunity_status: item?.opportunity_status,
           });
         });
-        console.log("hellooooqqqqq", tempArr);
         setOppnew(tempArr);
           setOpportunityList(res?.data?.data?.leads);
           setTotalcount(res?.data?.data?.totalCount);
-          console.log("totalcount iss", res?.data?.data?.totalCount);
+          // console.log("totalcount iss", res?.data?.data?.totalCount);
           // let samplearry = [];
           // res?.data?.data?.leads.forEach((item, index) => {
           //   samplearry.push(item.opportunity_id);
@@ -537,6 +536,13 @@ function Opportunitylist(props) {
         );
       },
       align: "center",
+    },
+    {
+      title: "ENQUIRY NO",
+      dataIndex: "opportunity_number",
+      key: "opportunity_number",
+      width: "12%",
+      // align: "center",
     },
     {
       title: "TYPE",

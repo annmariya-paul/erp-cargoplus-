@@ -235,7 +235,7 @@ function OpportunityReport() {
               <div className="col-md-6 col-sm-12">
                 <label htmlFor="date">Date</label>
                 <DatePicker
-                  format={"MM/DD/YYYY"}
+                  format={"DD-MM-YYYY"}
                   defaultValue={moment(newDate)}
                   value={selectedDate}
                   onChange={(e) => {
@@ -248,7 +248,7 @@ function OpportunityReport() {
               <div className="col-md-6 col-sm-12">
                 <label htmlFor="month">Month</label>
                 <DatePicker
-                  format={"MM/01/YYYY"}
+                  format={"01-DD-YYYY"}
                   value={selectedMonth}
                   onChange={(e) => {
                     setSelectedMonth(e);
@@ -263,7 +263,7 @@ function OpportunityReport() {
                   <div className="col-md-6">
                     <label htmlFor="startDate">Start Date</label>
                     <DatePicker
-                      format={"MM/DD/YYYY"}
+                      format={"DD-MM-YYYY"}
                       value={startDate}
                       onChange={(e) => setStartDate(e)}
                     />
@@ -271,7 +271,7 @@ function OpportunityReport() {
                   <div className="col-md-6">
                     <label htmlFor="endDate">End Date</label>
                     <DatePicker
-                      format={"MM/DD/YYYY"}
+                      format={"DD-MM-YYYY"}
                       value={endDate}
                       onChange={(e) => setEndDate(e)}
                     />
@@ -303,15 +303,13 @@ function OpportunityReport() {
                 }
                 onClick={() => toggleTab(1)}
               >
-                 {/* {convertedcount== 0?(
+                {/* {convertedcount== 0?(
              <label>Generated</label> 
               ):(  <label>Generated <span>({generatedcount})</span></label>   )  } */}
-                  <label>Generated ({generatedcount}) </label> 
+                <label>Generated ({generatedcount}) </label>
               </button>
-              
-              
+
               <button
-             
                 id="button-tabs"
                 className={
                   toggleState === 2
@@ -320,12 +318,11 @@ function OpportunityReport() {
                 }
                 onClick={() => toggleTab(2)}
               >
-              {/* {convertedcount== 0?(
+                {/* {convertedcount== 0?(
              <label>Converted</label> 
               ):(  <label>Converted <span>({convertedcount})</span></label>   )  } */}
-                  <label>Converted({convertedcount}) </label> 
+                <label>Converted({convertedcount}) </label>
               </button>
-
             </div>
           </div>
         </div>

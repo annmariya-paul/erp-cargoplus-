@@ -38,6 +38,7 @@ function Lead({}) {
   const [FileSizeError, setFileSizeError] = useState(false);
   const [leadName, setLeadName] = useState();
   const [leadUsertype, setLeadUsertype] = useState("O");
+  const [organizationDisable, setOrganizationDisable] = useState();
   const [leadOrganization, setLeadOrganization] = useState("");
   const [leadSource, setLeadSource] = useState("online registration");
   const [leadDescription, setLeadDescription] = useState("");
@@ -143,6 +144,7 @@ function Lead({}) {
 
   return (
     <>
+      <h5 className="lead_text">Add Lead/Customer</h5>
       <div className="container-fluid">
         <div className="lead_container">
           <div className="row justify-content-md-center">
@@ -287,7 +289,10 @@ function Lead({}) {
                       >
                         <SelectBox
                           value={leadUsertype}
-                          onChange={(e) => setLeadUsertype(e)}
+                          onChange={(e) => {
+                            setLeadUsertype(e);
+                            setOrganizationDisable(e);
+                          }}
                         >
                           <Select.Option value="O">Organisation</Select.Option>
                           <Select.Option value="I">Indivdual</Select.Option>
@@ -315,6 +320,7 @@ function Lead({}) {
                         ]}
                       >
                         <InputType
+                          disabled={organizationDisable === "I"}
                           value={leadOrganization}
                           onChange={(e) => setLeadOrganization(e.target.value)}
                         />
@@ -485,7 +491,9 @@ function Lead({}) {
                     />
                   </div>
                   <div className="col mt-4">
-                    <Button btnType="save">Save</Button>
+                    <Button btnType="save" onClick={() => toggleTab(3)}>
+                      Next
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -512,7 +520,9 @@ function Lead({}) {
                     />
                   </div>
                   <div className="col mt-4">
-                    <Button btnType="save">Save</Button>
+                    <Button btnType="save" onClick={() => toggleTab(4)}>
+                      Next
+                    </Button>
                   </div>
                 </div>
               </div>

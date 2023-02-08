@@ -369,7 +369,7 @@ function Category() {
                   </Form.Item>
                 </div>
                 <div className="col-sm-4 pt-3">
-                  <label>category_code</label>
+                  <label>Category Code</label>
                   <Form.Item
                     name="category_code"
                     rules={[

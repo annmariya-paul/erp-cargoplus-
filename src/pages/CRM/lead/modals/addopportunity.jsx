@@ -343,6 +343,7 @@ export default function AddOpportunity(props) {
                     <Select.Option value="oppId">{oppId}</Select.Option>
                   </SelectBox> */}
                       <DatePicker
+                      format={"DD-MM-YYYY"}
                         style={{ borderWidth: 0 }}
                         //  disabledDate={today}
                         disabledDate={(d) => !d || d.isBefore(today)}

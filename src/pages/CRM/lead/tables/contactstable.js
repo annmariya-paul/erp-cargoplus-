@@ -309,7 +309,7 @@ function ContactTable(props) {
                   </Form.Item>
                 </div>
                 <div className="d-flex justify-content-center mt-3">
-                  <Button btnType="save">Next</Button>
+                  <Button btnType="save">Save</Button>
                 </div>
               </div>
             </Form>

@@ -82,6 +82,7 @@ import QuotationAssign from "./pages/FMS/Quotations/QuotationAssign";
 import Listjob from "./pages/FMS/Job/joblist";
 import CreateJob from "./pages/FMS/Job/createjob";
 import Updatejob from "./pages/FMS/Job/Updatejob";
+import Taskexpenses from "./pages/FMS/Job/Task and Expenses/add_task_expenses";
 // import Lead from "./pages/lead/lead";
 
 function App() {
@@ -210,6 +211,7 @@ function App() {
 
             <Route path={ROUTES.CURRENCY} element={<Currency />} />
             <Route path={ROUTES.COMPANYINFO} element={<Companyinfo />} />
+            <Route path={ROUTES.TASKANDEXPENSES} element={<Taskexpenses />} />
           </Route>
         </Routes>
       </BrowserRouter>

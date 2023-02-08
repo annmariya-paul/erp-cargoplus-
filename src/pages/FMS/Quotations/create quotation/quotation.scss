@@ -81,6 +81,8 @@ th {
   overflow-y: scroll;
 }
 
+
+
 @media (min-width: 800px) {
   .selectwidth{
     width: 450px!important;
@@ -213,3 +215,67 @@ th {
 
     }
 }
+// .task_expense_table{
+  // thead{
+    // .firstrow{
+    //   background-color: rgb(205, 226, 244);
+    // } 
+    // .secondrow{
+    //   background-color: rgb(215, 221, 221);
+    // } 
+    // .actions{
+    //   background-color:none;
+    //   // border: none;
+    // } 
+    // } 
+    // .thirdrow{
+    //   background-color: rgb(230, 202, 202);
+    // } 
+    // .fourthrow{
+    //   background-color: rgb(205, 227, 244);
+    // } 
+  // }
+
+
+.task_expense_table{
+  
+    // height: 445px !important;
+    // overflow-y: auto !important;
+    thead {tr{
+
+    
+      th{
+       
+
+        z-index: 1;
+        background-color: rgb(240, 248, 254);
+        font-size: 0.8rem;
+        // padding: px;
+        position: sticky;
+        // border-color: rgb(125, 129, 131);
+        border: 1px solid rgb(188, 183, 183);
+        top: 0;
+      }
+     
+    }
+  }
+    tbody {
+      tr {
+        border-color: rgb(237, 239, 240);
+        td {
+          // font-size: 0.8rem;
+          padding-inline: 5px;
+          margin-block: -5px;
+          
+  
+        }
+      }
+    }
+  }
+  //for tasks and expences
+  @media (min-width: 800px) {
+    .selectwidthexp{
+      width: 100px!important;
+     
+    }
+  }

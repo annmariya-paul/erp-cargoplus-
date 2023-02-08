@@ -13,7 +13,8 @@ export default function TableData({
   className,
   style,
   bordered,
-  rowKey
+  rowKey,
+  footer,
 }) {
   return (
     <>
@@ -28,6 +29,7 @@ export default function TableData({
           style={style}
           bordered={bordered}
           rowKey={rowKey}
+          footer={footer}
         />
       </div>
     </>

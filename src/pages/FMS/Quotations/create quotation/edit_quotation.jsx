@@ -52,6 +52,63 @@ export default function EditQuotation(
   const [saveSuccess, setSaveSuccess] = useState(false);
   const today = new Date().toISOString().split("T")[0];
 
+  const { id } = useParams();
+  const [noofItems, setNoofItems] = useState("25");
+  const [numOfItems, setNumOfItems] = useState("25");
+  const [current, setCurrent] = useState(1);
+  const [totalCount, setTotalcount] = useState();
+  const pageofIndex = noofItems * (current - 1) - 1 + 1;
+  const pagesizecount = Math.ceil(totalCount / noofItems);
+  const [carrierdata, setCarrierdata] = useState();
+  const [allLocations, setAllLocations] = useState();
+
+  const [quatationno, setquatationno] = useState("");
+  const [quotconsignee, setQuotconsignee] = useState();
+  const [quotshipper, setquotshipper] = useState();
+  const [quotfreighttype, setquotfreighttype] = useState();
+  const [quotcargotype, setquotcargotype] = useState();
+  const [quotmode, setquotmode] = useState();
+  const [quotcarrier, setquotcarrier] = useState();
+  const [quotterms, setquotterms] = useState();
+  const [quotgrosswt, setquotgrosswt] = useState();
+  const [quotchargeablewt, setquotchargeablewt] = useState();
+  const [noofpieces, setnoofpieces] = useState();
+  const [quotcurrency, setquotcurrency] = useState();
+  const [quotexchngerate, setquotexchngerate] = useState();
+  const [quotunits, setquotunits] = useState();
+  const [qDetails, setQDetails] = useState();
+
+  const [allPaymentTerms, setAllPaymentTerms] = useState();
+  const [currencydata, setCurrencydata] = useState();
+
+  const [cargooptions, setCargooptions] = useState(cargo_typeoptions);
+  console.log("cargo options : ", cargooptions);
+
+  const [frighttype, setFrighttype] = useState();
+  const [services, setServices] = useState([]);
+  console.log("Servicesss are :::", services);
+  const [allservices, setAllservices] = useState();
+  const [unitdata, setUnitdata] = useState();
+
+  const [allLeadList, setAllLeadList] = useState([]);
+  // const [tableData, setTableData] = useState();
+
+  const dataSource = [
+    {
+      key: 1,
+      quotation_details_service_id: "",
+      quotation_details_cost: "",
+      quotation_details_tax_type: "",
+      quotation_details_tax_amount: "",
+      quotation_details_total: "",
+      quotation_details_id: "",
+      quotation_details_status: "",
+    },
+  ];
+  const [taxratee, setTaxRatee] = useState();
+  const [total, setTotal] = useState(0);
+  const [tableData, setTableData] = useState(dataSource);
+
   const [date, setDate] = useState();
   console.log(date);
 
@@ -108,63 +165,51 @@ export default function EditQuotation(
     });
   }
 
-  function handleDelete(id) {
-    const newRows = rows.filter((li) => li.id !== id);
-    setRows(newRows);
-  }
-  const { id } = useParams();
-  const [noofItems, setNoofItems] = useState("25");
-  const [numOfItems, setNumOfItems] = useState("25");
-  const [current, setCurrent] = useState(1);
-  const [totalCount, setTotalcount] = useState();
-  const pageofIndex = noofItems * (current - 1) - 1 + 1;
-  const pagesizecount = Math.ceil(totalCount / noofItems);
-  const [carrierdata, setCarrierdata] = useState();
-  const [allLocations, setAllLocations] = useState();
+  const handleDelete = (key) => {
+    console.log("key of delete", key);
+    const newData = tableData?.map((item) => {
+      if (item?.key == key.key) {
+        return { ...item, quotation_details_status: 0 };
+      } else {
+        return { ...item };
+      }
+    });
+    // const dtanew = tableData?.filter((item) => {
+    //   if (item.key !== key.key) {
+    //     let quotation_details = [];
+    //     tableData &&
+    //       tableData?.map((item, index) => {
+    //         // let assignValues = quotation_details[index];
+    //         if (item.quotation_details_status !== 0) {
+    //           quotation_details.push({
+    //             key: index,
+    //             quotation_details_service_id: item.quotation_details_service_id,
+    //             quotation_details_cost: item.quotation_details_cost,
+    //             quotation_details_tax_type: item.quotation_details_tax_type,
+    //             quotation_details_tax_amount: item.quotation_details_tax_amount,
+    //             quotation_details_total: item.quotation_details_total,
+    //             quotation_details_id: item.quotation_details_id,
+    //             quotation_details_status: item.quotation_details_status,
+    //           });
+    //           setTableData([...quotation_details]);
+    //           editForm.setFieldsValue({ quotation_details });
+    //         }
+    //       });
+    //   }
+    // });
+    // setTableData(dtanew);
+    const dtanew = tableData?.filter((item) => item.key !== key.key);
+    console.log("new delete", dtanew);
+    setTableData(newData);
+    let grandTotal = 0;
+    for (let item of newData) {
+      grandTotal += item["quotation_details_total"];
+    }
+    // setNewGrandTotal(grandTotal);
+    editForm.setFieldsValue({ quotation_details: dtanew });
+    editForm.setFieldsValue({ gtotal: grandTotal });
+  };
 
-  const [quatationno, setquatationno] = useState("");
-  const [quotconsignee, setQuotconsignee] = useState();
-  const [quotshipper, setquotshipper] = useState();
-  const [quotfreighttype, setquotfreighttype] = useState();
-  const [quotcargotype, setquotcargotype] = useState();
-  const [quotmode, setquotmode] = useState();
-  const [quotcarrier, setquotcarrier] = useState();
-  const [quotterms, setquotterms] = useState();
-  const [quotgrosswt, setquotgrosswt] = useState();
-  const [quotchargeablewt, setquotchargeablewt] = useState();
-  const [noofpieces, setnoofpieces] = useState();
-  const [quotcurrency, setquotcurrency] = useState();
-  const [quotexchngerate, setquotexchngerate] = useState();
-  const [quotunits, setquotunits] = useState();
-
-  const [allPaymentTerms, setAllPaymentTerms] = useState();
-  const [currencydata, setCurrencydata] = useState();
-
-  const [cargooptions, setCargooptions] = useState(cargo_typeoptions);
-  console.log("cargo options : ", cargooptions);
-
-  const [frighttype, setFrighttype] = useState();
-  const [services, setServices] = useState([]);
-  console.log("Servicesss are :::", services);
-  const [allservices, setAllservices] = useState();
-  const [unitdata, setUnitdata] = useState();
-
-  const [allLeadList, setAllLeadList] = useState([]);
-  // const [tableData, setTableData] = useState();
-
-  const dataSource = [
-    {
-      key: "1",
-      quotation_details_service_id: "",
-      quotation_details_cost: "",
-      quotation_details_tax_type: "",
-      quotation_details_tax_amount: "",
-      quotation_details_total: "",
-    },
-  ];
-  const [taxratee, setTaxRatee] = useState();
-  const [total, setTotal] = useState(0);
-  const [tableData, setTableData] = useState(dataSource);
   const getIndexInParent = (el) =>
     Array.from(el.parentNode.children).indexOf(el);
 
@@ -201,18 +246,23 @@ export default function EditQuotation(
           //   grandtotal: sum,
           // });
           let grandTotal = 0;
-          for (let key in quotation_details) {
-            let item = quotation_details[key];
-            grandTotal += item["quotation_details_total"];
-            // setNewGrandTotal(grandTotal);
-            editForm.setFieldsValue({ gtotal: grandTotal });
-          }
-
+          // for (let key in quotation_details) {
+          //   let item = quotation_details[key];
+          //   grandTotal += item["quotation_details_total"];
+          //   // setNewGrandTotal(grandTotal);
+          // quotation_details.map((item, index) => {
+          //   console.log("deatils totals", item);
+          //   grandTotal += item.quotation_details_total;
+          // });
+          // // }
+          // editForm.setFieldsValue({ gtotal: grandTotal });
           console.log("Grand Total:", grandTotal);
 
           setTableData(
             tableData.map((item) => {
-              if (item.key === key) {
+              console.log("mmaaiinn", item);
+              if (item.key == key) {
+                delete item.quotation_details_id;
                 return {
                   ...item,
                   quotation_details_tax_amount: taxamount,
@@ -238,6 +288,15 @@ export default function EditQuotation(
       }
     });
   };
+  useEffect(() => {
+    let grandTotal = 0;
+    tableData?.map((item, index) => {
+      console.log("deatils totals", item);
+      grandTotal += item.quotation_details_total;
+    });
+    // }
+    editForm.setFieldsValue({ gtotal: grandTotal });
+  }, [tableData]);
   const handleInputchange1 = (e, key, col) => {
     setTableData(
       tableData.map((item) => {
@@ -266,7 +325,7 @@ export default function EditQuotation(
       setTableData([
         ...tableData,
         {
-          key: `${tableData.length + 1}`,
+          key: tableData.length + 1,
           quotation_details_service_id: "",
           quotation_details_cost: "",
           quotation_details_tax_type: "",
@@ -276,12 +335,12 @@ export default function EditQuotation(
       ]);
     }
     console.log("tabledata", tableData);
-    let sum = 0;
-    tableData.forEach((item) => {
-      sum += item.quotation_details_cost + item.quotation_details_tax_amount;
-    });
-    console.log("sum", sum);
-    setTotal(sum);
+    // let sum = 0;
+    // tableData.forEach((item) => {
+    //   sum += item.quotation_details_cost + item.quotation_details_tax_amount;
+    // });
+    // console.log("sum", sum);
+    // setTotal(sum);
   };
 
   const handleReorder = (dragIndex, draggedIndex) => {
@@ -308,6 +367,15 @@ export default function EditQuotation(
       handleReorder(start, end);
     });
   }, []);
+
+  const close_modal = (mShow, time) => {
+    if (!mShow) {
+      setTimeout(() => {
+        setSaveSuccess(false);
+        navigate(ROUTES.QUATATIONS);
+      }, time);
+    }
+  };
 
   const getAllservices = () => {
     PublicFetch.get(
@@ -375,7 +443,7 @@ export default function EditQuotation(
         tableData.length >= 1 ? (
           <Popconfirm
             title="Sure to delete?"
-            onConfirm={() => handleDelete(record.key)}
+            onConfirm={() => handleDelete(record)}
           >
             <div className="deleteIcon m-0">
               <FaTrash />
@@ -399,7 +467,7 @@ export default function EditQuotation(
                 index.key,
                 "quotation_details_service_id",
               ]}
-              // rules={[{ required: true, message: 'Please input the name' }]}
+              // rules={[{ required: true, message: "Please input the name" }]}
             >
               <SelectBox
                 allowClear
@@ -447,7 +515,7 @@ export default function EditQuotation(
           <div className="d-flex justify-content-center align-items-center tborder ">
             <Form.Item
               name={["quotation_details", index.key, "quotation_details_cost"]}
-              // rules={[{ required: true, message: 'Please input the name' }]}
+              // rules={[{ required: true, message: "Please input the name" }]}
             >
               <Input_Number
                 className="text_right"
@@ -479,7 +547,7 @@ export default function EditQuotation(
       key: "quotation_details_tax_type",
 
       render: (data, index) => {
-        console.log("index is 112:", index.quotation_details_tax_type);
+        console.log("index is 112:", index.key);
         return (
           <div className="d-flex justify-content-center align-items-center tborder">
             <Form.Item
@@ -488,7 +556,7 @@ export default function EditQuotation(
                 index.key,
                 "quotation_details_tax_type",
               ]}
-              // rules={[{ required: true, message: 'Please input the name' }]}
+              // rules={[{ required: true, message: "Please input the name" }]}
             >
               <SelectBox
                 allowClear
@@ -541,18 +609,18 @@ export default function EditQuotation(
                 index.key,
                 "quotation_details_tax_amount",
               ]}
-              // rules={[{ required: true, message: 'Please input the name' }]}
+              // rules={[{ required: true, message: "Please input the name" }]}
             >
               <Input_Number
                 className="text_right"
                 // value={index.taxamount}
-                onChange={(e) =>
-                  handleInputchange1(
-                    e,
-                    index.key,
-                    "quotation_details_tax_amount"
-                  )
-                }
+                // onChange={(e) =>
+                //   handleInputchange1(
+                //     e,
+                //     index.key,
+                //     "quotation_details_tax_amount"
+                //   )
+                // }
                 align="right"
                 step={0.01}
                 min={0}
@@ -577,7 +645,7 @@ export default function EditQuotation(
           <div className="d-flex justify-content-center align-items-center tborder ">
             <Form.Item
               name={["quotation_details", index.key, "quotation_details_total"]}
-              // rules={[{ required: true, message: 'Please input the name' }]}
+              // rules={[{ required: true, message: "Please input the name" }]}
             >
               <Input_Number
                 className="text_right"
@@ -587,9 +655,9 @@ export default function EditQuotation(
                   index.quotation_details_cost +
                   index.quotation_details_tax_amount
                 }
-                onChange={(e) =>
-                  handleInputChange2(e, index, "quotation_details_total")
-                }
+                // onChange={(e) =>
+                //   handleInputChange2(e, index, "quotation_details_total")
+                // }
                 align="right"
                 step={0.01}
                 min={0}
@@ -683,6 +751,7 @@ export default function EditQuotation(
       const onequatation = await PublicFetch.get(
         `${CRM_BASE_URL_FMS}/quotation/${id}`
       );
+      setQDetails(onequatation?.data?.data.fms_v1_quotation_details);
       console.log("one quatation iss ::", onequatation?.data?.data);
       console.log(" quatation no is:", onequatation?.data?.data.quotation_no);
       setquatationno(onequatation?.data?.data?.quotation_no);
@@ -732,43 +801,81 @@ export default function EditQuotation(
         quotation_origin: onequatation?.data?.data?.quotation_origin_id,
       });
 
-      onequatation?.data?.data.fms_v1_quotation_details.forEach(
-        (item, index) => {
-          let existingValues = editForm.getFieldsValue();
-          let { quotation_details } = existingValues;
-          console.log("existing values", quotation_details);
-          // quotation_details.forEach((quotation_details, index) => {
-          let sum = 0;
-          let assignValues = quotation_details[tableData.length];
-          assignValues["quotation_details_service_id"] =
-            item.quotation_details_service_id;
-          assignValues["quotation_details_cost"] = item.quotation_details_cost;
-          assignValues["quotation_details_tax_type"] =
-            item.quotation_details_tax_type;
-          assignValues["quotation_details_tax_amount"] =
-            item.quotation_details_tax_amount;
-          assignValues["quotation_details_total"] =
-            item.quotation_details_total;
-          editForm.setFieldsValue({ quotation_details });
-          // });
+      console.log("qdetail", onequatation?.data?.data.fms_v1_quotation_details);
 
-          setTableData([
-            ...tableData,
-            {
-              key: tableData.length + 1,
-              quotation_details_service_id: item.quotation_details_service_id,
-              quotation_details_cost: item.quotation_details_cost,
-              quotation_details_tax_type: item.quotation_details_tax_type,
-              quotation_details_tax_amount: item.quotation_details_tax_amount,
-              quotation_details_total: item.quotation_details_total,
-            },
-          ]);
-        }
-      );
+      // onequatation?.data?.data.fms_v1_quotation_details.map((item, index) => {
+      //   let existingValues = editForm.getFieldsValue();
+      //   // let { quotation_details } = existingValues;
+      //   // console.log("existing values", quotation_details);
+      //   // quotation_details.forEach((quotation_details, index) => {
+      //   let quotation_details = [undefined];
+      //   let sum = 0;
+      //   // let assignValues = quotation_details[index];
+      //   quotation_details.push({
+      //     key: index,
+      //     quotation_details_service_id: item.quotation_details_service_id,
+      //     quotation_details_cost: item.quotation_details_cost,
+      //     quotation_details_tax_type: item.quotation_details_tax_type,
+      //     quotation_details_tax_amount: item.quotation_details_tax_amount,
+      //     quotation_details_total: item.quotation_details_total,
+      //     quotation_details_id: item.quotation_details_id,
+      //   });
+      //   // quotation_details[index + 1]["quotation_details_service_id"] =
+      //   //   item.quotation_details_service_id;
+      //   // quotation_details[index + 1]["quotation_details_cost"] =
+      //   //   item.quotation_details_cost;
+      //   // quotation_details[index + 1]["quotation_details_tax_type"] =
+      //   //   item.quotation_details_tax_type;
+      //   // quotation_details[index + 1]["quotation_details_tax_amount"] =
+      //   //   item.quotation_details_tax_amount;
+      //   // quotation_details[index + 1]["quotation_details_total"] =
+      //   //   item.quotation_details_total;
+      //   // quotation_details[index + 1]["quotation_details_id"] =
+      //   //   item.quotation_details_id;
+      //   // console.log("existing values", quotation_details);
+      //   console.log("existing a", quotation_details);
+      //   editForm.setFieldsValue({ quotation_details });
+      //   // });
+
+      //   // setTableData([
+      //   //   ...tableData,
+      //   //   {
+      //   //     key: index,
+      //   //     quotation_details_service_id: item.quotation_details_service_id,
+      //   //     quotation_details_cost: item.quotation_details_cost,
+      //   //     quotation_details_tax_type: item.quotation_details_tax_type,
+      //   //     quotation_details_tax_amount: item.quotation_details_tax_amount,
+      //   //     quotation_details_total: item.quotation_details_total,
+      //   //   },
+      //   // ]);
+      // });
     } catch (err) {
       console.log("error to getting all freighttype", err);
     }
   };
+  useEffect(() => {
+    let quotation_details = [];
+    qDetails &&
+      qDetails?.map((item, index) => {
+        // let assignValues = quotation_details[index];
+        quotation_details.push({
+          key: index,
+          quotation_details_service_id: item.quotation_details_service_id,
+          quotation_details_cost: item.quotation_details_cost,
+          quotation_details_tax_type: item.quotation_details_tax_type,
+          quotation_details_tax_amount: item.quotation_details_tax_amount,
+          quotation_details_total: item.quotation_details_total,
+          quotation_details_id: item.quotation_details_id,
+          quotation_details_status: item.quotation_details_status,
+        });
+      });
+    console.log("mainItem", tableData);
+
+    setTableData([...quotation_details]);
+    editForm.setFieldsValue({ quotation_details });
+  }, [qDetails]);
+
+  console.log("table inside data", tableData);
 
   const getallunits = async () => {
     try {
@@ -823,8 +930,8 @@ export default function EditQuotation(
   };
 
   const OnSubmitedit1 = (data) => {
+    console.log("Quotation details", data);
     const formData = new FormData();
-
     formData.append("quotation_no", data.quotation_no.trim(" "));
     formData.append("quotation_date", new Date(data.quotationdate));
     formData.append("quotation_validity", new Date(data.validity_date));
@@ -846,22 +953,74 @@ export default function EditQuotation(
     formData.append("quotation_payment_terms", data.quotation_terms);
     formData.append("quotation_currency", data.currency);
     formData.append("quotation_exchange_rate", data.exchnagerate);
-    formData.append("quotation_details", data.quotation_details);
+    // formData.append(
+    //   "quotation_details",
+    //   JSON.stringify(data.quotation_details)
+    // );
+    let tmp = false;
+    tableData.map((item, index) => {
+      if (item.quotation_details_status === 1) {
+        tmp = true;
+      }
+      console.log("userdata task", item);
+
+      formData.append(
+        `quotation_details[${index}][quotation_details_service_id]`,
+        item.quotation_details_service_id
+      );
+      formData.append(
+        `quotation_details[${index}][quotation_details_cost]`,
+        item.quotation_details_cost
+      );
+      formData.append(
+        `quotation_details[${index}][quotation_details_tax_type]`,
+        item.quotation_details_tax_type
+      );
+      formData.append(
+        `quotation_details[${index}][quotation_details_tax_amount]`,
+        item.quotation_details_tax_amount
+      );
+      formData.append(
+        `quotation_details[${index}][quotation_details_total]`,
+        item.quotation_details_total
+      );
+      if (item.quotation_details_id) {
+        formData.append(
+          `quotation_details[${index}][quotation_details_id]`,
+          item.quotation_details_id
+        );
+      }
+      if (item.quotation_details_status === 0) {
+        formData.append(
+          `quotation_details[${index}][quotation_details_status]`,
+          item.quotation_details_status
+        );
+      }
+    });
+
     if (data.new) {
       formData.append("attachments", data.new);
     }
     // formData.append("quotation_payment_terms", prDescription);
-
-    PublicFetch.patch(`${CRM_BASE_URL_FMS}/quotation/${id}`, formData, {
-      "Content-Type": "Multipart/form-Data",
-    })
-      .then((res) => {
-        console.log("data is successfully saved", res.data.success);
+    if (tmp === true) {
+      PublicFetch.patch(`${CRM_BASE_URL_FMS}/quotation/${id}`, formData, {
+        "Content-Type": "Multipart/form-Data",
       })
-      .catch((err) => {
-        console.log("error", err);
-        setError(true);
-      });
+        .then((res) => {
+          console.log("data is successfully saved", res.data.success);
+          if (res.data.success) {
+            setSaveSuccess(true);
+            close_modal(saveSuccess, 1200);
+            getonequatation();
+          }
+        })
+        .catch((err) => {
+          console.log("error", err);
+          setError(true);
+        });
+    } else {
+      console.log("Error of Error");
+    }
   };
 
   useEffect(() => {
@@ -1011,42 +1170,6 @@ export default function EditQuotation(
                         <InputType value={quotshipper} />
                       </Form.Item>
                     </div>
-                    {/* 
-                    <div className="col-xl-3 col-sm-6 mt-2">
-                      <label> Origin Agent</label>
-                      <Form.Item
-                        name="OrginAgent"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please select a Type",
-                          },
-                        ]}
-                      >
-                        <SelectBox>
-                          <Select.Option value="A">Test</Select.Option>
-                          <Select.Option value="B">Demo</Select.Option>
-                        </SelectBox>
-                      </Form.Item>
-                    </div> */}
-
-                    {/* <div className="col-xl-3 col-sm-6 mt-2">
-                      <label>Destination Agent</label>
-                      <Form.Item
-                        name="corgin"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please select a Type",
-                          },
-                        ]}
-                      >
-                        <SelectBox>
-                          <Select.Option value="A">Test</Select.Option>
-                          <Select.Option value="B">Demo</Select.Option>
-                        </SelectBox>
-                      </Form.Item>
-                    </div> */}
 
                     <div className="col-xl-3 col-sm-6 mt-2">
                       <label>Freight Type</label>
@@ -1129,9 +1252,9 @@ export default function EditQuotation(
                           showSearch
                           optionFilterProp="children"
                         >
-                          <Select.Option value="A">Air</Select.Option>
-                          <Select.Option value="S">Sea</Select.Option>
-                          <Select.Option value="R">Road</Select.Option>
+                          <Select.Option value="Air">Air</Select.Option>
+                          <Select.Option value="Sea">Sea</Select.Option>
+                          <Select.Option value="Road">Road</Select.Option>
                         </SelectBox>
                       </Form.Item>
                     </div>

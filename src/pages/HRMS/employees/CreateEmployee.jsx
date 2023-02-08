@@ -24,6 +24,7 @@ function CreateEmployee() {
   const [empEmail, setEmpEmail] = useState();
   const [empPassword, setEmpPassword] = useState();
   const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
+  const [allRoles, setAllRoles] = useState();
 
   const close_modal = (mShow, time) => {
     if (!mShow) {
@@ -61,7 +62,7 @@ function CreateEmployee() {
         console.log("Error", err);
       });
   };
-  
+
   const getDepartment = () => {
     PublicFetch.get(`${CRM_BASE_URL_HRMS}/departments`)
       .then((res) => {
@@ -104,12 +105,27 @@ function CreateEmployee() {
       });
   };
 
+  const AllRoleData = () => {
+    PublicFetch.get(`${process.env.REACT_APP_BASE_URL}/permissions/roles`)
+      .then((res) => {
+        console.log("Response", res);
+        if (res.data.success) {
+          console.log("suceess of role", res.data.data);
+          setAllRoles(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
   useEffect(() => {
     getbranches();
     getDesignation();
     getDepartment();
     getemployeetype();
     getemployeegrade();
+    AllRoleData();
   }, []);
 
   const CreateEmployee = (data) => {
@@ -331,6 +347,7 @@ function CreateEmployee() {
                       </SelectBox>
                     </Form.Item>
                   </div>
+
                   <div className="col-sm-6">
                     <label>Employee Grade</label>
                     <Form.Item
@@ -358,6 +375,30 @@ function CreateEmployee() {
                       </SelectBox>
                     </Form.Item>
                   </div>
+                  <div className="col-sm-6">
+                    <label>Employee Role</label>
+                    <Form.Item
+                      name="employee_role_id"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Employee Type is Required",
+                        },
+                      ]}
+                    >
+                      <SelectBox>
+                        {allRoles &&
+                          allRoles.length > 0 &&
+                          allRoles.map((item, index) => {
+                            return (
+                              <Select.Option key={item.id} value={item.id}>
+                                {item.name}
+                              </Select.Option>
+                            );
+                          })}
+                      </SelectBox>
+                    </Form.Item>
+                  </div>
                   <div className="col-12">
                     <div className="row login_border">
                       {/* <div className="col-12 lead_text mb-2"> */}
@@ -366,16 +407,16 @@ function CreateEmployee() {
                       <div className="col-sm-6">
                         <label>Email</label>
                         <Form.Item
-                        name="employee_email"
-                        rules={[
-                          {
-                            required: true,
-                            pattern: new RegExp(
-                              "^[A-Za-z0-9_!#$%&'*+/=?`{|}~^.-]+@[A-Za-z0-9.-]+$"
-                            ),
-                            message: "Email is Required",
-                          },
-                        ]}
+                          name="employee_email"
+                          rules={[
+                            {
+                              required: true,
+                              pattern: new RegExp(
+                                "^[A-Za-z0-9_!#$%&'*+/=?`{|}~^.-]+@[A-Za-z0-9.-]+$"
+                              ),
+                              message: "Email is Required",
+                            },
+                          ]}
                         >
                           <InputType />
                         </Form.Item>
@@ -383,21 +424,21 @@ function CreateEmployee() {
                       <div className="col-sm-6">
                         <label>Password</label>
                         <Form.Item
-                        name="employee_password"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Password is Required",
-                          },
-                          // {
-                          //   min: 3,
-                          //   message: "Required Minimum 3 characters",
-                          // },
-                          // {
-                          //   max: 100,
-                          //   message: "Required Maximum 100 chraraters ",
-                          // },
-                        ]}
+                          name="employee_password"
+                          rules={[
+                            {
+                              required: true,
+                              message: "Password is Required",
+                            },
+                            // {
+                            //   min: 3,
+                            //   message: "Required Minimum 3 characters",
+                            // },
+                            // {
+                            //   max: 100,
+                            //   message: "Required Maximum 100 chraraters ",
+                            // },
+                          ]}
                         >
                           <InputType />
                         </Form.Item>

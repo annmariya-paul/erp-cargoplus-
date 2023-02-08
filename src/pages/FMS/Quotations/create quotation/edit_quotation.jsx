@@ -1002,7 +1002,7 @@ export default function EditQuotation(
       formData.append("attachments", data.new);
     }
     // formData.append("quotation_payment_terms", prDescription);
-    if (tmp === true) {
+    if (tableData && tableData.length > 1) {
       PublicFetch.patch(`${CRM_BASE_URL_FMS}/quotation/${id}`, formData, {
         "Content-Type": "Multipart/form-Data",
       })
@@ -1019,7 +1019,7 @@ export default function EditQuotation(
           setError(true);
         });
     } else {
-      console.log("Error of Error");
+      console.log("Error of Error tyfyfyyfyfyfy", tableData.length);
     }
   };
 
@@ -1063,13 +1063,13 @@ export default function EditQuotation(
                       <label>Quotation No</label>
                       <Form.Item
                         name="quotation_no"
-                        rules={[
-                          {
-                            required: true,
-                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                            message: "Please enter a Valid number",
-                          },
-                        ]}
+                        // rules={[
+                        //   {
+                        //     required: true,
+                        //     pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                        //     message: "Please enter a Valid number",
+                        //   },
+                        // ]}
                       >
                         <InputType value={quatationno} />
                       </Form.Item>
@@ -1214,10 +1214,6 @@ export default function EditQuotation(
                           },
                         ]}
                       >
-                        {/* <SelectBox>
-                          <Select.Option value="S">Test</Select.Option>
-                          <Select.Option value="A">Data</Select.Option>
-                        </SelectBox> */}
                         <SelectBox
                           allowClear
                           showSearch
@@ -1260,7 +1256,7 @@ export default function EditQuotation(
                     </div>
 
                     <div className="col-xl-3 col-sm-6 mt-2">
-                      <label> Origin</label>
+                      <label>Origin</label>
                       <Form.Item
                         name="quotation_origin"
                         rules={[
@@ -1291,7 +1287,7 @@ export default function EditQuotation(
                       </Form.Item>
                     </div>
                     <div className="col-xl-3 col-sm-6 mt-2">
-                      <label> Destination</label>
+                      <label>Destination</label>
                       <Form.Item
                         name="quotation_destination"
                         rules={[
@@ -1587,158 +1583,6 @@ export default function EditQuotation(
                 </div>
               </div>
 
-              {/* <div className="row">
-                <div className="datatable">
-                  <div
-                    className={`row mt-2 mx-3 qtable_data ${custom_table_css}`}
-                  >
-                    <div className="tablecontainer">
-                    <DragDropContext onDragEnd={handleDragEnd}>
-
-                      <table className="table tborder">
-                        <thead className="tborder">
-                          <tr>
-                            <th className="tborder" width="6%">Action</th>
-                            
-                            <th className="hiddenid">ID</th>
-                            <th className="tborder">TASKS</th>
-                            <th className="tborder text-right">COST</th>
-                            <th className="tborder text-right">TAX TYPE</th>
-                            <th className="tborder text-right">TAX AMOUNT</th>
-                            <th className="tborder text-right">TOTAL AMOUNT</th>
-                          </tr>
-                        </thead>
-                          <Droppable droppableId="table-rows">
-                            {(provided) => (
-                              <tbody
-                                ref={provided.innerRef}
-                                {...provided.droppableProps}
-                                className="tborder"
-                              >
-                                {rows && rows.length > 0 && rows?.map((row, index) => {
-                                  console.log("rowwwwws",row);
-                                  return(
-                                    <Draggable
-                                    draggableId={row.id}
-                                    key={row.id}
-                                    index={index}
-                                  >
-                                    {(provided) => (
-                                      <tr 
-                                        {...provided.draggableProps}
-                                        ref={provided.innerRef}
-                                      >
-                                        <td width="6%"
-                                        {...provided.dragHandleProps}
-                                        style={{ width: 59,paddingLeft:"4px" }}>
-                                        <div className="d-flex">
-                                          <div
-                                          
-                                          >
-                                            <MdDragHandle size={16} />
-                                          </div>
-                                          <div 
-                                           onClick={() => handleDelete(row.id)}
-                                          >
-                                            <AiOutlineDelete size={15}  />
-                                          </div>
-                                          </div>
-                                        </td>
-
-                                     
-                                        <td className="hiddenid">{row.id}</td>
-                                        <td className="tborder" width="20%">
-                                          <Select
-                                           allowClear
-                                           showSearch
-                                          optionFilterProp="children"
-                                         
-                onChange={(event) => {
-                  setSearchType(event ? [event] : []);
-                }}
-                                          className=" select_search selectwidth mb-2">
-                                            <Select.Option value="Airline">
-                                              FREIGHT CHARGES WITH EX WORK
-                                            </Select.Option>
-                                            <Select.Option value="Shipper">
-                                              Shipper
-                                            </Select.Option>
-                                            <Select.Option value="Road">
-                                              Road
-                                            </Select.Option>
-                                          </Select>
-                                        </td>
-                                        <td className="tborder my-1 ">
-                                    
-                                          <Input_Number
-                                            className="text_right"
-                                            value={amount}
-                                            onChange={handleChange}
-                                            align="right"
-                                            step={0.01}
-                                            min={0}
-                                            precision={2}
-                                            controlls={false}
-                                          />
-                                        </td>
-                                        <td className="tborder">
-                                          <Input_Number
-                                            className="text_right"
-                                            value={amount}
-                                            onChange={handleChange}
-                                            align="right"
-                                            step={0.01}
-                                            min={0}
-                                            precision={2}
-                                            controlls={false}
-                                          />
-                                        </td>
-                                        <td className="tborder">
-                                          
-                                          <Input_Number
-                                            className="text_right"
-                                            value={amount}
-                                            onChange={handleChange}
-                                            align="right"
-                                            step={0.01}
-                                            min={0}
-                                            precision={2}
-                                            controlls={false}
-                                          />
-                                        </td>
-                                        <td className="tborder" width="16%">
-                                       <Input_Number
-                                            className="text_right"
-                                            value={amount}
-                                            onChange={handleChange}
-                                            align="right"
-                                            step={0.01}
-                                            min={0}
-                                            precision={2}
-                                            controlls={false}
-                                            onKeyDown={(e) =>
-                                              handleKeyDown(e, row.id)
-                                            }
-                                          />
-                                        </td>
-                                      </tr>
-                                    )}
-                                  </Draggable>
-                                  )
-                                }
-                                  
-                                )}
-                             
-                              </tbody>
-                            )}
-                          </Droppable>
-                      </table>
-                      </DragDropContext>
-
-                    </div>
-                  </div>
-                </div>
-              </div> */}
               <div className="d-flex justify-content-end mt-4 mx-3 ">
                 <div className="col-lg-2 col-sm-4 col-xs-3 d-flex justify-content-end mt-3 me-2">
                   <p style={{ fontWeight: 500 }}>Grand Total</p>
@@ -1750,7 +1594,6 @@ export default function EditQuotation(
                     rules={[
                       {
                         required: true,
-                        // pattern: new RegExp("^[A-Za-z0-9 ]+$"),
                         message: "Please enter a Valid value",
                       },
                     ]}

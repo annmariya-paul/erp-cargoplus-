@@ -831,15 +831,15 @@ console.log("Grand Total:", grandTotal);
 
 
 
-  const [errornw, setErrornw] = useState(false);
+//   const [errornw, setErrornw] = useState(false);
 
-const validateDate = (selectedDate) => {
-  if (!selectedDate) {
-    setErrornw(true);
-    return;
-  }
-  setErrornw(false);
-};
+// const validateDate = (selectedDate) => {
+//   if (!selectedDate) {
+//     setErrornw(true);
+//     return;
+//   }
+//   setErrornw(false);
+// };
 const [qno,setQno]=useState(Date.now());
   const [filenew, setFilenew] = useState();
   console.log("file", filenew);
@@ -976,12 +976,12 @@ const [qno,setQno]=useState(Date.now());
 
                       <Form.Item
                         name="qdate"
-                        // rules={[
-                        //   {
-                        //     required: true,
-                        //     message: "Please select quotation date",
-                        //   },
-                        // ]}
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please select quotation date",
+                          },
+                        ]}
                       >
                         <DatePicker
                           style={{ borderWidth: 0, marginTop: 10 }}
@@ -989,12 +989,13 @@ const [qno,setQno]=useState(Date.now());
                           defaultValue={moment(date)}
                           
                           format={dateFormatList}
-                          disabledDate={(d) => !d || d.isBefore(today)}
-                          onChange={(e) => {
-                            console.log("date mmm", e);
-                            addForm.setFieldValue('qdate', e)
-                            setDate(e);
-                          }}
+                          // disabledDate={(d) => !d || d.isBefore(today)}
+                          
+                          // onChange={(e) => {
+                          //   console.log("date mmm", e);
+                          //   addForm.setFieldValue('qdate', e)
+                          //   setDate(e);
+                          // }}
                           // onChange={(selectedDate,e) => {
                           //   validateDate(selectedDate);
                           //   setDate(e);

@@ -6,11 +6,17 @@ import { MdPageview } from "react-icons/md";
 import Button from "../../../components/button/button";
 import { Link } from "react-router-dom";
 import { ROUTES } from "../../../routes";
+import PublicFetch from "../../../utils/PublicFetch";
+import { CRM_BASE_URL_FMS } from "../../../api/bootapi";
+import moment from "moment";
 
 function Listjob(){
     const [searchedText, setSearchedText] = useState("");
     const [pageSize, setPageSize] = useState("25");
-
+    const [searchedNo, setSearchedNo] = useState("");
+    // const [searchedText, setSearchedText] = useState("");
+  const [searchName, setSearchName] = useState("");
+  const [searchStatus, setSearchStatus] = useState("");
     const columns = [
         {
           title: "ACTION",
@@ -52,49 +58,91 @@ function Listjob(){
         },
         {
           title: "JOB NO",
-          dataIndex: "qno",
-          key: "qno",
+          dataIndex: "job_number",
+          key: "job_number",
           filteredValue: [searchedText],
           onFilter: (value, record) => {
-            return String(record.qno).toLowerCase().includes(value.toLowerCase());
+            return String(record.job_number).toLowerCase().includes(value.toLowerCase());
           },
           align: "center",
         },
         {
           title: "DATE",
-          dataIndex: "date",
-          key: "date",
+          dataIndex: "job_date",
+          key: "job_date",
           align: "center",
         },
         {
           title: "AWB/BL",
-          dataIndex: "validity",
-          key: "validity",
+          dataIndex: "job_awb_bl_no",
+          key: "job_awb_bl_no",
+          filteredValue: [searchedNo],
+          onFilter: (value, record) => {
+            return String(record.job_awb_bl_no).toLowerCase().includes(value.toLowerCase());
+          },
           align: "center",
         },
         {
           title: "CONSIGNEE",
-          dataIndex: "consignee",
-          key: "consignee",
+          dataIndex: "job_consignee_name",
+          key: "job_consignee_name",
+          filteredValue: [searchName],
+          onFilter: (value, record) => {
+            return String(record.job_consignee_name).toLowerCase().includes(value.toLowerCase());
+          },
           align: "center",
         },
         {
           title: "SHIPPER",
-          dataIndex: "shipper",
-          key: "shipper",
+          dataIndex: "job_shipper",
+          key: "job_shipper",
           align: "center",
         },
         {
           title: "STATUS",
-          dataIndex: "status",
-          key: "status",
+          dataIndex: "job_status",
+          key: "job_status",
           align: "center",
+        },
+        {
+          title: "",
+          dataIndex: "action",
+          key: "key",
+          width: "14%",
+          render: (data, index) => {
+            console.log("index is :", index);
+            return (
+              <div className="d-flex justify-content-center align-items-center gap-2 me-2">
+                <div
+                  className="editIcon m-0 "
+                //   onClick={() => {
+                //     navigate(`/edit_quotation`);
+                //   }}
+                >
+                   <Link to={ROUTES.TASKANDEXPENSES } style={{ color: "white" }}>
+                <Button btnType="add"  className="view_btn"> Tasks & Expenses</Button>
+              
+              </Link>
+                 {/* <Button
+                      btnType="add"
+                      className="view_btn"
+                      onClick={() => {
+                        navigate(`${ROUTES.ASSIGN_QUOTATION}/${index.id}`);
+                      }}
+                    >
+                      Tasks & Expenses
+                    </Button> */}
+                </div>
+                </div>
+                );
+            }
         },
         {
           title: "",
           dataIndex: "assign",
           key: "assign",
           align: "center",
+          width: "5%",
           render: (data, index) => {
             return (
               <>
@@ -146,6 +194,51 @@ function Listjob(){
         },
       ];
 
+
+
+const [AllJobs, setAllJobs] = useState();
+      const getAllJobs= () => {
+        PublicFetch.get(`${CRM_BASE_URL_FMS}/job?startIndex=0&noOfItems=100`)
+          .then((res) => {
+            console.log("Response", res);
+            if (res.data.success) {
+              console.log("success", res.data.data);
+              let temp = [];
+              res.data.data.forEach((item, index) => {
+                let date = moment(item.job_date).format("DD-MM-YYYY");
+                
+                temp.push({
+                  job_number: item.job_number,
+                  // quotation_carrier: item.quotation_carrier,
+                  job_id: item.job_id,
+                  job_consignee: item.job_consignee,
+                  job_consignee_name:item.crm_v1_leads.lead_customer_name,
+                  job_date: date,
+                  job_shipper: item.job_shipper,
+                  job_freight_type: item.job_freight_type,
+                  job_cargo_type: item.job_cargo_type,
+                  job_carrier: item.job_carrier,
+                  job_awb_bl_no: item.job_awb_bl_no,
+                  job_mode: item.job_mode,
+                  job_origin_id: item.job_origin_id,
+                  job_destination_id: item.job_destination_id,
+                  job_no_of_pieces: item.job_no_of_pieces,
+                  job_uom: item.job_uom,
+                  job_status: item.job_status,
+                });
+              });
+              setAllJobs(temp);
+            }
+          })
+          .catch((err) => {
+            console.log("Error", err);
+          });
+      };
+    
+      useEffect(() => {
+        getAllJobs();
+      }, []);
+
     return(
         <>
         
@@ -159,7 +252,7 @@ function Listjob(){
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
-              placeholder="Search by Quotation Number"
+              placeholder="Search by Job Number"
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
               onChange={(e) => {
@@ -167,6 +260,32 @@ function Listjob(){
               }}
               onSearch={(value) => {
                 setSearchedText(value);
+              }}
+            />
+          </div>
+          <div className="col-4">
+            <Input.Search
+              placeholder="Search by AWB/BL Number"
+              style={{ margin: "5px", borderRadius: "5px" }}
+              value={searchedNo}
+              onChange={(e) => {
+                setSearchedNo(e.target.value ? [e.target.value] : []);
+              }}
+              onSearch={(value) => {
+                setSearchedNo(value);
+              }}
+            />
+          </div>
+          <div className="col-4">
+            <Input.Search
+              placeholder="Search by Consignee"
+              style={{ margin: "5px", borderRadius: "5px" }}
+              value={searchName}
+              onChange={(e) => {
+                setSearchName(e.target.value ? [e.target.value] : []);
+              }}
+              onSearch={(value) => {
+                setSearchName(value);
               }}
             />
           </div>
@@ -211,7 +330,7 @@ function Listjob(){
           <TableData
             // data={getData(numofItemsTo, pageofIndex)}
 
-            data={data}
+            data={AllJobs}
             columns={columns}
             custom_table_css="table_lead_list"
           />

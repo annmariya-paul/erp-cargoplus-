@@ -840,7 +840,7 @@ console.log("Grand Total:", grandTotal);
 //   }
 //   setErrornw(false);
 // };
-const [qno,setQno]=useState(Date.now());
+// const [qno,setQno]=useState(Date.now());
   const [filenew, setFilenew] = useState();
   console.log("file", filenew);
   const OnSubmit = (data) => {
@@ -851,7 +851,7 @@ const [qno,setQno]=useState(Date.now());
     const date2 = moment(data.vdate).format("YYYY-MM-DD");
     const docfile = data?.new?.file?.originFileObj;
     const formData = new FormData();
-    formData.append("quotation_no", qno);
+    // formData.append("quotation_no", qno);
     formData.append("quotation_enquiry", data.eno);
     formData.append("quotation_date", date1);
     formData.append("quotation_validity", date2);
@@ -976,12 +976,12 @@ const [qno,setQno]=useState(Date.now());
 
                       <Form.Item
                         name="qdate"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please select quotation date",
-                          },
-                        ]}
+                        // rules={[
+                        //   {
+                        //     required: true,
+                        //     message: "Please select quotation date",
+                        //   },
+                        // ]}
                       >
                         <DatePicker
                           style={{ borderWidth: 0, marginTop: 10 }}

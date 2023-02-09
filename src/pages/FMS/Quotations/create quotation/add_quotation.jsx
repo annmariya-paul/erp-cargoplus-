@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import dayjs from "dayjs";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 import { cargo_typeoptions } from "../../../../utils/SelectOptions";
 import { DragOutlined, FontColorsOutlined } from "@ant-design/icons";
 import dragula from "dragula";
@@ -37,7 +37,8 @@ export default function Add_Quotation() {
   console.log("cargo options : ", cargooptions);
   const today = new Date().toISOString().split("T")[0];
   const [date, setDate] = useState();
-  
+  const [taxType, setTaxtype] = useState();
+
   const [addForm] = Form.useForm();
   const navigate = useNavigate();
   const dateFormatList = ["DD-MM-YYYY", "DD-MM-YY"];
@@ -61,8 +62,6 @@ export default function Add_Quotation() {
       }, time);
     }
   };
-
-
 
   const [tableData, setTableData] = useState(dataSource);
   const [newGrandTotal, setNewGrandTotal] = useState();
@@ -100,15 +99,15 @@ export default function Add_Quotation() {
           // addForm.setFieldsValue({
           //   grandtotal: sum,
           // });
-          let grandTotal = 0;
-for (let key in quotation_details) {
-  let item = quotation_details[key];
-  grandTotal += item["quotation_details_total"];
-  setNewGrandTotal(grandTotal);
-addForm.setFieldsValue({ grandtotal:grandTotal });
-}
+          // let grandTotal = 0;
+          // for (let key in quotation_details) {
+          //   let item = quotation_details[key];
+          //   grandTotal += item["quotation_details_total"];
+          //   setNewGrandTotal(grandTotal);
+          //   addForm.setFieldsValue({ grandtotal: grandTotal });
+          // }
 
-console.log("Grand Total:", grandTotal);
+          // console.log("Grand Total:", grandTotal);
 
           setTableData(
             tableData.map((item) => {
@@ -138,7 +137,16 @@ console.log("Grand Total:", grandTotal);
       }
     });
   };
-  const handleInputchange1 = (e, key, col) => {
+  useEffect(() => {
+    let grandTotal = 0;
+    tableData?.map((item, index) => {
+      console.log("deatils totals", item);
+      grandTotal += item.quotation_details_total;
+    });
+    // }
+    addForm.setFieldsValue({ grandtotal: grandTotal });
+  }, [tableData]);
+  const handleInputchange1 = (e, key, col, tr) => {
     setTableData(
       tableData.map((item) => {
         if (item.key === key) {
@@ -147,8 +155,30 @@ console.log("Grand Total:", grandTotal);
         return item;
       })
     );
-    addForm.setFieldValue("quotation_details_tax_type", taxratee);
+    if (e && col === "quotation_details_service_id") {
+      allservices.map((item, index) => {
+        if (e === item.service_id) {
+          setTaxtype(item.service_taxtype);
+          let existingValues = addForm.getFieldsValue();
+          let { quotation_details } = existingValues;
+          let assignValues = quotation_details[key];
+          assignValues["quotation_details_tax_type"] = item.service_taxtype;
+          addForm.setFieldsValue({ quotation_details });
+          // if (tr) {
+          //   handleInputChange(
+          //     item.service_taxtype,
+          //     index.key,
+          //     "quotation_details_tax_type",
+          //     "tx"
+          //   );
+          // }
+        }
+      });
+    }
+    // addForm.setFieldValue("quotation_details_tax_type", taxratee);
   };
+  console.log("tax type ::123", taxType);
+
   const handleInputChange2 = (e, index, col) => {
     setTableData(
       tableData.map((item) => {
@@ -220,6 +250,7 @@ console.log("Grand Total:", grandTotal);
   const [carrierdata, setCarrierdata] = useState();
   const [OpportunityList, setOpportunityList] = useState([]);
   const [currentcount, setCurrentcount] = useState();
+  const [locationType, setLocationType] = useState();
 
   const [allLeadList, setAllLeadList] = useState([]);
   console.log("Lead names :", allLeadList);
@@ -293,10 +324,7 @@ console.log("Grand Total:", grandTotal);
         let a = response.data.rates[b];
         console.log("currency match", a);
         setCurrencyRates(a);
-        addForm.setFieldValue(
-          "exchnagerate", a
-        );
-       
+        addForm.setFieldValue("exchnagerate", a);
       })
       .catch(function (error) {
         console.log(error);
@@ -315,13 +343,21 @@ console.log("Grand Total:", grandTotal);
 
   const handleDelete = (key) => {
     const newData = tableData?.filter((item) => item?.key !== key);
-    setTableData(newData);
+    console.log("new dtata", newData.length);
+    if (newData.length > 0) {
+      setTableData(newData);
+    }
+
     let grandTotal = 0;
     for (let item of newData) {
       grandTotal += item["quotation_details_total"];
     }
     setNewGrandTotal(grandTotal);
-    addForm.setFieldsValue({ grandtotal:grandTotal });
+    if (newData.length <= 0) {
+      addForm.setFieldsValue({ quotation_details: newData });
+    }
+
+    addForm.setFieldsValue({ grandtotal: grandTotal });
   };
 
   // console.log("userdata task",index);
@@ -379,7 +415,7 @@ console.log("Grand Total:", grandTotal);
                 index.key,
                 "quotation_details_service_id",
               ]}
-              rules={[{ required: true, message: 'Please select a task' }]}
+              // rules={[{ required: true, message: "Please select a task" }]}
             >
               <SelectBox
                 allowClear
@@ -427,7 +463,7 @@ console.log("Grand Total:", grandTotal);
           <div className="d-flex justify-content-center align-items-center tborder ">
             <Form.Item
               name={["quotation_details", index.key, "quotation_details_cost"]}
-              rules={[{ required: true, message: 'Required' }]}
+              // rules={[{ required: true, message: "Required" }]}
             >
               <Input_Number
                 className="text_right"
@@ -436,7 +472,8 @@ console.log("Grand Total:", grandTotal);
                   handleInputchange1(
                     value,
                     index.key,
-                    "quotation_details_cost"
+                    "quotation_details_cost",
+                    "tr"
                   );
                   console.log(" input numberevent ", value, index.key);
                 }}
@@ -445,6 +482,15 @@ console.log("Grand Total:", grandTotal);
                 min={0}
                 precision={2}
                 controlls={false}
+                onBlur={() => {
+                  handleInputChange(
+                    taxType,
+                    index.key,
+                    "quotation_details_tax_type",
+                    "tx"
+                  );
+                }}
+                onKeyDown={(e) => handleEnter(e, index.key)}
               />
             </Form.Item>
           </div>
@@ -468,19 +514,8 @@ console.log("Grand Total:", grandTotal);
                 index.key,
                 "quotation_details_tax_type",
               ]}
-              rules={[{ required: true, message: 'Required  ' }]}
+              // rules={[{ required: true, message: "Required  " }]}
             >
-              {/* <Input_Number
-              className="text_right"
-              value={taxratee}
-              onChange={(e) => handleInputchange1(e, index.key, "quotation_details_tax_type")}
-              align="right"
-              step={0.01}
-              min={0}
-              precision={2}
-              controlls={false}
-            /> */}
-
               <SelectBox
                 allowClear
                 showSearch
@@ -497,6 +532,7 @@ console.log("Grand Total:", grandTotal);
                     "tx"
                   );
                 }}
+                disabled={true}
               >
                 {taxTypes &&
                   taxTypes.length > 0 &&
@@ -549,6 +585,7 @@ console.log("Grand Total:", grandTotal);
                 min={0}
                 precision={2}
                 controlls={false}
+                disabled={true}
               />
             </Form.Item>
           </div>
@@ -586,7 +623,8 @@ console.log("Grand Total:", grandTotal);
                 min={0}
                 precision={2}
                 controlls={false}
-                onKeyDown={(e) => handleEnter(e, index.key)}
+                disabled={true}
+                // onKeyDown={(e) => handleEnter(e, index.key)}
               />
             </Form.Item>
           </div>
@@ -598,10 +636,10 @@ console.log("Grand Total:", grandTotal);
   ];
 
   const [total, setTotal] = useState(0);
-  const [leadId, setLeadId] = useState('');
+  const [leadId, setLeadId] = useState("");
 
-  console.log("Selected lead id is " ,leadId)
-  const handleLeadId = leadId => {
+  console.log("Selected lead id is ", leadId);
+  const handleLeadId = (leadId) => {
     setLeadId(leadId);
   };
 
@@ -683,15 +721,15 @@ console.log("Grand Total:", grandTotal);
       file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
     );
   };
-  const [selectedOption, setSelectedOption] = useState('');
+  const [selectedOption, setSelectedOption] = useState("");
   const [oppnew, setOppnew] = useState([]);
   console.log("Opportunities are :::", oppnew);
 
-  const [leadIdEnq, setLeadIdEnq] = useState('');
+  const [leadIdEnq, setLeadIdEnq] = useState("");
 
-  console.log("Selected  enquiry lead id is " ,leadIdEnq)
-  const handleLeadIdEnq = leadIdenq => {
-    addForm.setFieldValue("consignee",leadIdenq);
+  console.log("Selected  enquiry lead id is ", leadIdEnq);
+  const handleLeadIdEnq = (leadIdenq) => {
+    addForm.setFieldValue("consignee", leadIdenq);
     setLeadIdEnq(leadIdenq);
   };
   // const handleFirstDropdownChange = (event) => {
@@ -775,16 +813,42 @@ console.log("Grand Total:", grandTotal);
           location_type: item.location_type,
           location_country: item.countries.country_name,
         });
-        setAllLocations(temp);
+        // setAllLocations(temp);
       });
     } catch (err) {
       console.log("error while getting the locations: ", err);
     }
   };
 
+  const locationBytype = (data) => {
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/locations/type-location/${data}`)
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          console.log("success of location type", res.data, data);
+          setLocationType(res.data.data.location_type);
+          let temp = [];
+          res.data.data.forEach((item, index) => {
+            temp.push({
+              location_id: item.location_id,
+              location_code: item.location_code,
+              location_name: item.location_name,
+              location_type: item.location_type,
+              location_country: item.location_country,
+            });
+            setAllLocations(temp);
+          });
+        }
+      })
+      .catch((err) => {
+        console.log("Error of location type", err);
+      });
+  };
+
   useEffect(() => {
     getallunits();
     getAllLocations();
+    quotationDate();
   }, []);
 
   const getAllservices = () => {
@@ -829,24 +893,22 @@ console.log("Grand Total:", grandTotal);
     getAllservices();
   }, [numOfItems, pageofIndex]);
 
+  //   const [errornw, setErrornw] = useState(false);
 
-
-//   const [errornw, setErrornw] = useState(false);
-
-// const validateDate = (selectedDate) => {
-//   if (!selectedDate) {
-//     setErrornw(true);
-//     return;
-//   }
-//   setErrornw(false);
-// };
-// const [qno,setQno]=useState(Date.now());
+  // const validateDate = (selectedDate) => {
+  //   if (!selectedDate) {
+  //     setErrornw(true);
+  //     return;
+  //   }
+  //   setErrornw(false);
+  // };
+  // const [qno,setQno]=useState(Date.now());
   const [filenew, setFilenew] = useState();
   console.log("file", filenew);
   const OnSubmit = (data) => {
     console.log("submitting data", data);
     const data11 = "noufal12343221";
-    
+
     const date1 = moment(data.qdate).format("YYYY-MM-DD");
     const date2 = moment(data.vdate).format("YYYY-MM-DD");
     const docfile = data?.new?.file?.originFileObj;
@@ -889,26 +951,28 @@ console.log("Grand Total:", grandTotal);
 
     userData.map((item, index) => {
       console.log("userdata task", index);
-      formData.append(
-        `quotation_details[${index}][quotation_details_service_id]`,
-        item.quotation_details_service_id
-      );
-      formData.append(
-        `quotation_details[${index}][quotation_details_cost]`,
-        item.quotation_details_cost
-      );
-      formData.append(
-        `quotation_details[${index}][quotation_details_tax_type]`,
-        item.quotation_details_tax_type
-      );
-      formData.append(
-        `quotation_details[${index}][quotation_details_tax_amount]`,
-        item.quotation_details_tax_amount
-      );
-      formData.append(
-        `quotation_details[${index}][quotation_details_total]`,
-        item.quotation_details_total
-      );
+      if (item.quotation_details_service_id) {
+        formData.append(
+          `quotation_details[${index}][quotation_details_service_id]`,
+          item.quotation_details_service_id
+        );
+        formData.append(
+          `quotation_details[${index}][quotation_details_cost]`,
+          item.quotation_details_cost
+        );
+        formData.append(
+          `quotation_details[${index}][quotation_details_tax_type]`,
+          item.quotation_details_tax_type
+        );
+        formData.append(
+          `quotation_details[${index}][quotation_details_tax_amount]`,
+          item.quotation_details_tax_amount
+        );
+        formData.append(
+          `quotation_details[${index}][quotation_details_total]`,
+          item.quotation_details_total
+        );
+      }
     });
 
     console.log("before sending data");
@@ -929,6 +993,12 @@ console.log("Grand Total:", grandTotal);
         console.log("error", err);
         setError(true);
       });
+  };
+
+  const quotationDate = () => {
+    let date = new Date();
+    let date1 = moment(date);
+    addForm.setFieldsValue({ qdate: date1 });
   };
 
   return (
@@ -976,21 +1046,20 @@ console.log("Grand Total:", grandTotal);
 
                       <Form.Item
                         name="qdate"
-                        // rules={[
-                        //   {
-                        //     required: true,
-                        //     message: "Please select quotation date",
-                        //   },
-                        // ]}
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please select quotation date",
+                          },
+                        ]}
                       >
                         <DatePicker
                           style={{ borderWidth: 0, marginTop: 10 }}
                           // initialValues={ dayjs() }
                           defaultValue={moment(date)}
-                          
                           format={dateFormatList}
                           // disabledDate={(d) => !d || d.isBefore(today)}
-                          
+
                           // onChange={(e) => {
                           //   console.log("date mmm", e);
                           //   addForm.setFieldValue('qdate', e)
@@ -1001,10 +1070,9 @@ console.log("Grand Total:", grandTotal);
                           //   setDate(e);
                           // }}
                         />
-                       
+
                         {/* {errornw && <div style={{ color: "red" }}>Please select a date</div>} */}
                       </Form.Item>
-                      
                     </div>
                     <div className="col-xl-3 col-sm-6 mt-2">
                       <label>Validity date</label>
@@ -1013,7 +1081,7 @@ console.log("Grand Total:", grandTotal);
                         rules={[
                           {
                             required: true,
-                           
+
                             message: "Please select validity date",
                           },
                         ]}
@@ -1041,11 +1109,9 @@ console.log("Grand Total:", grandTotal);
                         // ]}
                       >
                         <SelectBox
-                          onChange={e =>
+                          onChange={(e) =>
                             // handleFirstDropdownChange()
                             handleLeadIdEnq(e)
-                          
-                            
                           }
                           allowClear
                           showSearch
@@ -1079,63 +1145,58 @@ console.log("Grand Total:", grandTotal);
                         ]}
                       >
                         <SelectBox
-                        onChange={e => handleLeadId(e)}
+                          onChange={(e) => handleLeadId(e)}
                           allowClear
                           showSearch
                           optionFilterProp="children"
-                         
-                          
                         >
-                        {allLeadList &&
+                          {allLeadList &&
                             allLeadList.length > 0 &&
                             allLeadList.map((item, index) => {
                               // console.log("lead id ddd:",item.lead_id)
 
-                            //  if( leadIdEnq && leadIdEnq === leadId){
-                              
-                            //   return (
-                            //     <Select.Option
-                            //       key={item.lead_id}
-                            //       value={item.lead_id}
-                            //     >
-                            //       {item.lead_customer_name}
-                            //     </Select.Option>
-                            //   );
+                              //  if( leadIdEnq && leadIdEnq === leadId){
 
-                            //  }else{
-                            //   return (
-                            //     <Select.Option
-                            //       key={item.lead_id}
-                            //       value={item.lead_id}
-                            //     >
-                            //       {item.lead_customer_name}
-                            //     </Select.Option>
-                            //   );
-                            //  }
-                            if ( leadIdEnq && leadIdEnq === item.lead_id) {
-                              return (
-                                <Select.Option
-                                  key={item.lead_id}
-                                  value={item.lead_id}
-                                >
-                                  {item.lead_customer_name}
-                                </Select.Option>
-                              );
-                            } else if( leadIdEnq === undefined) {
-                              return (
-                                <Select.Option
-                                  key={item.lead_id}
-                                  value={item.lead_id}
-                                >
-                                  {item.lead_customer_name}
-                                </Select.Option>
-                              );
-                            }
-                            // return null;
+                              //   return (
+                              //     <Select.Option
+                              //       key={item.lead_id}
+                              //       value={item.lead_id}
+                              //     >
+                              //       {item.lead_customer_name}
+                              //     </Select.Option>
+                              //   );
 
-                             
+                              //  }else{
+                              //   return (
+                              //     <Select.Option
+                              //       key={item.lead_id}
+                              //       value={item.lead_id}
+                              //     >
+                              //       {item.lead_customer_name}
+                              //     </Select.Option>
+                              //   );
+                              //  }
+                              if (leadIdEnq && leadIdEnq === item.lead_id) {
+                                return (
+                                  <Select.Option
+                                    key={item.lead_id}
+                                    value={item.lead_id}
+                                  >
+                                    {item.lead_customer_name}
+                                  </Select.Option>
+                                );
+                              } else if (leadIdEnq === undefined) {
+                                return (
+                                  <Select.Option
+                                    key={item.lead_id}
+                                    value={item.lead_id}
+                                  >
+                                    {item.lead_customer_name}
+                                  </Select.Option>
+                                );
+                              }
+                              // return null;
                             })}
-                          
                         </SelectBox>
                       </Form.Item>
                     </div>
@@ -1147,7 +1208,7 @@ console.log("Grand Total:", grandTotal);
                         rules={[
                           {
                             required: true,
-                          
+
                             message: "Please enter shipper name",
                           },
                         ]}
@@ -1276,6 +1337,9 @@ console.log("Grand Total:", grandTotal);
                           allowClear
                           showSearch
                           optionFilterProp="children"
+                          onChange={(e) => {
+                            locationBytype(e);
+                          }}
                         >
                           <Select.Option value="Air">Air</Select.Option>
                           <Select.Option value="Sea">Sea</Select.Option>
@@ -1500,14 +1564,14 @@ console.log("Grand Total:", grandTotal);
                     <div className="col-xl-3 col-sm-6 mt-2">
                       <label>Exchange Rate</label>
                       <Form.Item
-                      name="exchnagerate"
-                      // rules={[
-                      //   {
-                      //     required: true,
-                        
-                      //     message: "Please enter a Valid value",
-                      //   },
-                      // ]}
+                        name="exchnagerate"
+                        // rules={[
+                        //   {
+                        //     required: true,
+
+                        //     message: "Please enter a Valid value",
+                        //   },
+                        // ]}
                       >
                         <Input_Number
                           className="text_right"
@@ -1642,6 +1706,7 @@ console.log("Grand Total:", grandTotal);
                       min={0}
                       precision={2}
                       controlls={false}
+                      disabled={true}
                     />
                   </Form.Item>
                 </div>
@@ -1653,7 +1718,13 @@ console.log("Grand Total:", grandTotal);
                   </Button>
                 </div>
                 <div className="col-lg-1 ">
-                  <Button className="qtn_save" btnType="save">
+                  <Button
+                    onClick={() => {
+                      navigate(`${ROUTES.QUATATIONS}`);
+                    }}
+                    className="qtn_save"
+                    btnType="save"
+                  >
                     Cancel
                   </Button>
                 </div>

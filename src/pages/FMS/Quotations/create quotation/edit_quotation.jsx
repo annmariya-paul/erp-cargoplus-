@@ -108,9 +108,11 @@ export default function EditQuotation(
   const [taxratee, setTaxRatee] = useState();
   const [total, setTotal] = useState(0);
   const [tableData, setTableData] = useState(dataSource);
-
+  const [sampletable, setSampletable] = useState(dataSource);
+  console.log("sample table", sampletable);
   const [date, setDate] = useState();
   console.log(date);
+  const [taxType, setTaxtype] = useState();
 
   const navigate = useNavigate();
   const dateFormatList = ["DD-MM-YYYY", "DD-MM-YY"];
@@ -180,7 +182,7 @@ export default function EditQuotation(
     //     tableData &&
     //       tableData?.map((item, index) => {
     //         // let assignValues = quotation_details[index];
-    //         if (item.quotation_details_status !== 0) {
+    //         if (item.quotation_details_status === 0) {
     //           quotation_details.push({
     //             key: index,
     //             quotation_details_service_id: item.quotation_details_service_id,
@@ -199,14 +201,25 @@ export default function EditQuotation(
     // });
     // setTableData(dtanew);
     const dtanew = tableData?.filter((item) => item.key !== key.key);
-    console.log("new delete", dtanew);
+    const dtanew1 = sampletable?.filter((item) => item.key !== key.key);
+
+    console.log("new delete", dtanew1);
+    if (dtanew1.length > 0) {
+      setSampletable(dtanew1);
+    }
     setTableData(newData);
     let grandTotal = 0;
     for (let item of newData) {
       grandTotal += item["quotation_details_total"];
     }
     // setNewGrandTotal(grandTotal);
-    editForm.setFieldsValue({ quotation_details: dtanew });
+    // if (dtanew.length > 0) {
+    //   setTableData(dtanew);
+    // }
+    // editForm.setFieldsValue({ quotation_details: dtanew });
+    if (dtanew1 <= 0) {
+      editForm.setFieldsValue({ quotation_details: dtanew1 });
+    }
     editForm.setFieldsValue({ gtotal: grandTotal });
   };
 
@@ -273,7 +286,24 @@ export default function EditQuotation(
               return item;
             })
           );
+          setSampletable(
+            sampletable.map((item) => {
+              console.log("mmaaiinn", item);
+              if (item.key == key) {
+                delete item.quotation_details_id;
+                return {
+                  ...item,
+                  quotation_details_tax_amount: taxamount,
+                  quotation_details_tax_type: e,
+                  quotation_details_total: totalAmount,
+                };
+              }
+              return item;
+            })
+          );
           console.log("tabledata", tableData);
+          console.log("sampletable of of", sampletable);
+
           // let sum = 0;
           // tableData.forEach((item) => {
           //   sum +=
@@ -306,6 +336,34 @@ export default function EditQuotation(
         return item;
       })
     );
+    setSampletable(
+      sampletable.map((item) => {
+        if (item.key === key) {
+          return { ...item, [col]: e };
+        }
+        return item;
+      })
+    );
+    if (e && col === "quotation_details_service_id") {
+      allservices.map((item, index) => {
+        if (e === item.service_id) {
+          setTaxtype(item.service_taxtype);
+          let existingValues = editForm.getFieldsValue();
+          let { quotation_details } = existingValues;
+          let assignValues = quotation_details[key];
+          assignValues["quotation_details_tax_type"] = item.service_taxtype;
+          editForm.setFieldsValue({ quotation_details });
+          // if (tr) {
+          //   handleInputChange(
+          //     item.service_taxtype,
+          //     index.key,
+          //     "quotation_details_tax_type",
+          //     "tx"
+          //   );
+          // }
+        }
+      });
+    }
   };
   const handleInputChange2 = (e, index, col) => {
     setTableData(
@@ -333,6 +391,17 @@ export default function EditQuotation(
           quotation_details_total: "",
         },
       ]);
+      setSampletable([
+        ...sampletable,
+        {
+          key: sampletable.length + 1,
+          quotation_details_service_id: "",
+          quotation_details_cost: "",
+          quotation_details_tax_type: "",
+          quotation_details_tax_amount: "",
+          quotation_details_total: "",
+        },
+      ]);
     }
     console.log("tabledata", tableData);
     // let sum = 0;
@@ -345,6 +414,12 @@ export default function EditQuotation(
 
   const handleReorder = (dragIndex, draggedIndex) => {
     setTableData((oldState) => {
+      const newState = [...oldState];
+      const item = newState.splice(dragIndex, 1)[0];
+      newState.splice(draggedIndex, 0, item);
+      return newState;
+    });
+    setSampletable((oldState) => {
       const newState = [...oldState];
       const item = newState.splice(dragIndex, 1)[0];
       newState.splice(draggedIndex, 0, item);
@@ -533,6 +608,15 @@ export default function EditQuotation(
                 min={0}
                 precision={2}
                 controlls={false}
+                onBlur={() => {
+                  handleInputChange(
+                    taxType,
+                    index.key,
+                    "quotation_details_tax_type",
+                    "tx"
+                  );
+                }}
+                onKeyDown={(e) => handleEnter(e, index.key)}
               />
             </Form.Item>
           </div>
@@ -574,6 +658,7 @@ export default function EditQuotation(
                     "tx"
                   );
                 }}
+                disabled={true}
               >
                 {taxTypes &&
                   taxTypes.length > 0 &&
@@ -626,6 +711,7 @@ export default function EditQuotation(
                 min={0}
                 precision={2}
                 controlls={false}
+                disabled={true}
               />
             </Form.Item>
           </div>
@@ -663,7 +749,8 @@ export default function EditQuotation(
                 min={0}
                 precision={2}
                 controlls={false}
-                onKeyDown={(e) => handleEnter(e, index.key)}
+                disabled={true}
+                // onKeyDown={(e) => handleEnter(e, index.key)}
               />
             </Form.Item>
           </div>
@@ -690,7 +777,7 @@ export default function EditQuotation(
           location_type: item.location_type,
           location_country: item.countries.country_name,
         });
-        setAllLocations(temp);
+        // setAllLocations(temp);
       });
     } catch (err) {
       console.log("error while getting the locations: ", err);
@@ -778,6 +865,7 @@ export default function EditQuotation(
       let qdate = moment(onequatation?.data?.data?.quotation_date);
       let vdate = moment(onequatation?.data?.data?.quotation_validity);
 
+      locationBytype(onequatation?.data?.data?.quotation_mode);
       editForm.setFieldsValue({
         quotation_no: onequatation?.data?.data?.quotation_no,
         quotationdate: qdate,
@@ -873,6 +961,7 @@ export default function EditQuotation(
 
     setTableData([...quotation_details]);
     editForm.setFieldsValue({ quotation_details });
+    setSampletable([...quotation_details]);
   }, [qDetails]);
 
   console.log("table inside data", tableData);
@@ -928,6 +1017,30 @@ export default function EditQuotation(
       console.log("error while getting the tax types: ", err);
     }
   };
+  const locationBytype = (data) => {
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/locations/type-location/${data}`)
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          console.log("success of location type", res.data, data);
+          // setLocationType(res.data.data.location_type);
+          let temp = [];
+          res.data.data.forEach((item, index) => {
+            temp.push({
+              location_id: item.location_id,
+              location_code: item.location_code,
+              location_name: item.location_name,
+              location_type: item.location_type,
+              location_country: item.location_country,
+            });
+            setAllLocations(temp);
+          });
+        }
+      })
+      .catch((err) => {
+        console.log("Error of location type", err);
+      });
+  };
 
   const OnSubmitedit1 = (data) => {
     console.log("Quotation details", data);
@@ -963,38 +1076,39 @@ export default function EditQuotation(
         tmp = true;
       }
       console.log("userdata task", item);
-
-      formData.append(
-        `quotation_details[${index}][quotation_details_service_id]`,
-        item.quotation_details_service_id
-      );
-      formData.append(
-        `quotation_details[${index}][quotation_details_cost]`,
-        item.quotation_details_cost
-      );
-      formData.append(
-        `quotation_details[${index}][quotation_details_tax_type]`,
-        item.quotation_details_tax_type
-      );
-      formData.append(
-        `quotation_details[${index}][quotation_details_tax_amount]`,
-        item.quotation_details_tax_amount
-      );
-      formData.append(
-        `quotation_details[${index}][quotation_details_total]`,
-        item.quotation_details_total
-      );
-      if (item.quotation_details_id) {
+      if (item.quotation_details_service_id) {
         formData.append(
-          `quotation_details[${index}][quotation_details_id]`,
-          item.quotation_details_id
+          `quotation_details[${index}][quotation_details_service_id]`,
+          item.quotation_details_service_id
         );
-      }
-      if (item.quotation_details_status === 0) {
         formData.append(
-          `quotation_details[${index}][quotation_details_status]`,
-          item.quotation_details_status
+          `quotation_details[${index}][quotation_details_cost]`,
+          item.quotation_details_cost
         );
+        formData.append(
+          `quotation_details[${index}][quotation_details_tax_type]`,
+          item.quotation_details_tax_type
+        );
+        formData.append(
+          `quotation_details[${index}][quotation_details_tax_amount]`,
+          item.quotation_details_tax_amount
+        );
+        formData.append(
+          `quotation_details[${index}][quotation_details_total]`,
+          item.quotation_details_total
+        );
+        if (item.quotation_details_id) {
+          formData.append(
+            `quotation_details[${index}][quotation_details_id]`,
+            item.quotation_details_id
+          );
+        }
+        if (item.quotation_details_status === 0) {
+          formData.append(
+            `quotation_details[${index}][quotation_details_status]`,
+            item.quotation_details_status
+          );
+        }
       }
     });
 
@@ -1019,7 +1133,7 @@ export default function EditQuotation(
           setError(true);
         });
     } else {
-      console.log("Error of Error");
+      console.log("Error of Error tyfyfyyfyfyfy", tableData.length);
     }
   };
 
@@ -1063,13 +1177,13 @@ export default function EditQuotation(
                       <label>Quotation No</label>
                       <Form.Item
                         name="quotation_no"
-                        rules={[
-                          {
-                            required: true,
-                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                            message: "Please enter a Valid number",
-                          },
-                        ]}
+                        // rules={[
+                        //   {
+                        //     required: true,
+                        //     pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                        //     message: "Please enter a Valid number",
+                        //   },
+                        // ]}
                       >
                         <InputType value={quatationno} />
                       </Form.Item>
@@ -1214,10 +1328,6 @@ export default function EditQuotation(
                           },
                         ]}
                       >
-                        {/* <SelectBox>
-                          <Select.Option value="S">Test</Select.Option>
-                          <Select.Option value="A">Data</Select.Option>
-                        </SelectBox> */}
                         <SelectBox
                           allowClear
                           showSearch
@@ -1251,6 +1361,9 @@ export default function EditQuotation(
                           allowClear
                           showSearch
                           optionFilterProp="children"
+                          onChange={(e) => {
+                            locationBytype(e);
+                          }}
                         >
                           <Select.Option value="Air">Air</Select.Option>
                           <Select.Option value="Sea">Sea</Select.Option>
@@ -1260,7 +1373,7 @@ export default function EditQuotation(
                     </div>
 
                     <div className="col-xl-3 col-sm-6 mt-2">
-                      <label> Origin</label>
+                      <label>Origin</label>
                       <Form.Item
                         name="quotation_origin"
                         rules={[
@@ -1291,7 +1404,7 @@ export default function EditQuotation(
                       </Form.Item>
                     </div>
                     <div className="col-xl-3 col-sm-6 mt-2">
-                      <label> Destination</label>
+                      <label>Destination</label>
                       <Form.Item
                         name="quotation_destination"
                         rules={[
@@ -1580,165 +1693,13 @@ export default function EditQuotation(
               <div className="row">
                 <div className="datatable">
                   <TableData
-                    data={tableData}
+                    data={sampletable}
                     columns={columns}
                     custom_table_css="table_qtn"
                   />
                 </div>
               </div>
 
-              {/* <div className="row">
-                <div className="datatable">
-                  <div
-                    className={`row mt-2 mx-3 qtable_data ${custom_table_css}`}
-                  >
-                    <div className="tablecontainer">
-                    <DragDropContext onDragEnd={handleDragEnd}>
-
-                      <table className="table tborder">
-                        <thead className="tborder">
-                          <tr>
-                            <th className="tborder" width="6%">Action</th>
-                            
-                            <th className="hiddenid">ID</th>
-                            <th className="tborder">TASKS</th>
-                            <th className="tborder text-right">COST</th>
-                            <th className="tborder text-right">TAX TYPE</th>
-                            <th className="tborder text-right">TAX AMOUNT</th>
-                            <th className="tborder text-right">TOTAL AMOUNT</th>
-                          </tr>
-                        </thead>
-                          <Droppable droppableId="table-rows">
-                            {(provided) => (
-                              <tbody
-                                ref={provided.innerRef}
-                                {...provided.droppableProps}
-                                className="tborder"
-                              >
-                                {rows && rows.length > 0 && rows?.map((row, index) => {
-                                  console.log("rowwwwws",row);
-                                  return(
-                                    <Draggable
-                                    draggableId={row.id}
-                                    key={row.id}
-                                    index={index}
-                                  >
-                                    {(provided) => (
-                                      <tr 
-                                        {...provided.draggableProps}
-                                        ref={provided.innerRef}
-                                      >
-                                        <td width="6%"
-                                        {...provided.dragHandleProps}
-                                        style={{ width: 59,paddingLeft:"4px" }}>
-                                        <div className="d-flex">
-                                          <div
-                                          
-                                          >
-                                            <MdDragHandle size={16} />
-                                          </div>
-                                          <div 
-                                           onClick={() => handleDelete(row.id)}
-                                          >
-                                            <AiOutlineDelete size={15}  />
-                                          </div>
-                                          </div>
-                                        </td>
-
-                                     
-                                        <td className="hiddenid">{row.id}</td>
-                                        <td className="tborder" width="20%">
-                                          <Select
-                                           allowClear
-                                           showSearch
-                                          optionFilterProp="children"
-                                         
-                onChange={(event) => {
-                  setSearchType(event ? [event] : []);
-                }}
-                                          className=" select_search selectwidth mb-2">
-                                            <Select.Option value="Airline">
-                                              FREIGHT CHARGES WITH EX WORK
-                                            </Select.Option>
-                                            <Select.Option value="Shipper">
-                                              Shipper
-                                            </Select.Option>
-                                            <Select.Option value="Road">
-                                              Road
-                                            </Select.Option>
-                                          </Select>
-                                        </td>
-                                        <td className="tborder my-1 ">
-                                    
-                                          <Input_Number
-                                            className="text_right"
-                                            value={amount}
-                                            onChange={handleChange}
-                                            align="right"
-                                            step={0.01}
-                                            min={0}
-                                            precision={2}
-                                            controlls={false}
-                                          />
-                                        </td>
-                                        <td className="tborder">
-                                          <Input_Number
-                                            className="text_right"
-                                            value={amount}
-                                            onChange={handleChange}
-                                            align="right"
-                                            step={0.01}
-                                            min={0}
-                                            precision={2}
-                                            controlls={false}
-                                          />
-                                        </td>
-                                        <td className="tborder">
-                                          
-                                          <Input_Number
-                                            className="text_right"
-                                            value={amount}
-                                            onChange={handleChange}
-                                            align="right"
-                                            step={0.01}
-                                            min={0}
-                                            precision={2}
-                                            controlls={false}
-                                          />
-                                        </td>
-                                        <td className="tborder" width="16%">
-                                       <Input_Number
-                                            className="text_right"
-                                            value={amount}
-                                            onChange={handleChange}
-                                            align="right"
-                                            step={0.01}
-                                            min={0}
-                                            precision={2}
-                                            controlls={false}
-                                            onKeyDown={(e) =>
-                                              handleKeyDown(e, row.id)
-                                            }
-                                          />
-                                        </td>
-                                      </tr>
-                                    )}
-                                  </Draggable>
-                                  )
-                                }
-                                  
-                                )}
-                             
-                              </tbody>
-                            )}
-                          </Droppable>
-                      </table>
-                      </DragDropContext>
-
-                    </div>
-                  </div>
-                </div>
-              </div> */}
               <div className="d-flex justify-content-end mt-4 mx-3 ">
                 <div className="col-lg-2 col-sm-4 col-xs-3 d-flex justify-content-end mt-3 me-2">
                   <p style={{ fontWeight: 500 }}>Grand Total</p>
@@ -1750,7 +1711,6 @@ export default function EditQuotation(
                     rules={[
                       {
                         required: true,
-                        // pattern: new RegExp("^[A-Za-z0-9 ]+$"),
                         message: "Please enter a Valid value",
                       },
                     ]}
@@ -1764,6 +1724,7 @@ export default function EditQuotation(
                       min={0}
                       precision={2}
                       controlls={false}
+                      disabled={true}
                     />
                   </Form.Item>
                 </div>
@@ -1775,7 +1736,13 @@ export default function EditQuotation(
                   </Button>
                 </div>
                 <div className="col-lg-1 ">
-                  <Button className="qtn_save" btnType="save">
+                  <Button
+                    onClick={() => {
+                      navigate(`${ROUTES.QUATATIONS}`);
+                    }}
+                    className="qtn_save"
+                    btnType="save"
+                  >
                     Cancel
                   </Button>
                 </div>

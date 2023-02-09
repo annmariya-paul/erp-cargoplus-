@@ -1,6 +1,7 @@
 import { Form } from "antd";
-import React, { useEffect} from "react";
+import React, { useEffect } from "react";
 import { DatePicker } from "antd";
+import { CRM_BASE_URL_SELLING } from "../../../api/bootapi";
 import { CRM_BASE_URL } from "../../../api/bootapi";
 import Button from "../../../components/button/button";
 import FileUpload from "../../../components/fileupload/fileUploader";
@@ -24,11 +25,13 @@ function CreateJob() {
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
-  const [leadIdEnq, setLeadIdEnq] = useState('');
+  const [leadIdEnq, setLeadIdEnq] = useState("");
+  const [disable, setDisable] = useState(false);
   const [Errormsg, setErrormsg] = useState();
   const [error, setError] = useState(false);
   const [filenew, setFilenew] = useState();
-  const [leadId, setLeadId] = useState('');
+  const [leadId, setLeadId] = useState("");
+  console.log("qto idd id : ", leadId);
   const [successPopup, setSuccessPopup] = useState(false);
   const [date, setDate] = useState();
   const [addForm] = Form.useForm();
@@ -39,7 +42,15 @@ function CreateJob() {
   const pageofIndex = noofItems * (current - 1) - 1 + 1;
   const pagesizecount = Math.ceil(totalCount / noofItems);
   const navigate = useNavigate();
-
+  const [frighttype, setFrighttype] = useState();
+  const [allLocations, setAllLocations] = useState();
+  console.log("locations ", allLocations);
+  const [carrierdata, setCarrierdata] = useState();
+  const [allPaymentTerms, setAllPaymentTerms] = useState();
+  console.log("payment terms : ", allPaymentTerms);
+  const [allunit, setAllunit] = useState([]);
+  console.log("all units are : ", allunit);
+  const [unitTable, setunitTable] = useState("");
 
   const getBase64 = (file) =>
     new Promise((resolve, reject) => {
@@ -58,40 +69,44 @@ function CreateJob() {
       file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
     );
   };
-  
-  
-  
+
+  const [qtnid, setQtnid] = useState();
+  console.log("qtn id is : ", qtnid);
+
   const getonequatation = async (id) => {
     try {
       const onequatation = await PublicFetch.get(
         `${CRM_BASE_URL_FMS}/quotation/${id}`
       );
       console.log("one quatation iss ::", onequatation?.data?.data);
-     
+
       addForm.setFieldsValue({
-        
-        job_chargable_weight:onequatation?.data?.data?.quotation_chargeable_wt,
-        job_grossweight:onequatation?.data?.data?.quotation_gross_wt,
-       
+        job_chargable_weight: onequatation?.data?.data?.quotation_chargeable_wt,
+        job_grossweight: onequatation?.data?.data?.quotation_gross_wt,
+
         job_shipper: onequatation?.data?.data?.quotation_shipper,
-        job_consignee: onequatation?.data?.data?.crm_v1_leads.lead_customer_name,
-        job_freight_type: onequatation?.data?.data?.fms_v1_freight_types.freight_type_name,
+        job_consignee:
+          onequatation?.data?.data?.crm_v1_leads.lead_customer_name,
+        job_freight_type:
+          onequatation?.data?.data?.fms_v1_freight_types.freight_type_name,
         job_cargo_type: onequatation?.data?.data?.quotation_cargo_type,
         job_mode: onequatation?.data?.data?.quotation_mode,
         job_carrier: onequatation?.data?.data?.fms_v1_carrier.carrier_name,
         job_payment_terms:
           onequatation?.data?.data?.fms_v1_payment_terms.payment_term_name,
-       
+
         job_no_of_pieces: onequatation?.data?.data?.quotation_no_of_pieces,
-        
+
         job_uom: onequatation?.data?.data?.crm_v1_units.unit_name,
         job_destination_id:
-          onequatation?.data?.data?.fms_v1_locations_fms_v1_quotation_quotation_destination_idTofms_v1_locations.location_name,
-          job_origin_id: onequatation?.data?.data?.fms_v1_locations_fms_v1_quotation_quotation_origin_idTofms_v1_locations.location_name
-          ,
+          onequatation?.data?.data
+            ?.fms_v1_locations_fms_v1_quotation_quotation_destination_idTofms_v1_locations
+            .location_name,
+        job_origin_id:
+          onequatation?.data?.data
+            ?.fms_v1_locations_fms_v1_quotation_quotation_origin_idTofms_v1_locations
+            .location_name,
       });
-
-     
     } catch (err) {
       console.log("error to getting all freighttype", err);
     }
@@ -120,14 +135,14 @@ function CreateJob() {
               quotation_status: item.quotation_status,
               fms_v1_quotation_agents: item.fms_v1_quotation_agents,
             });
+            setQtnid(item.quotation_id);
             // let name= item.crm_v1_leads.lead_customer_name;
             // console.log("name",name);
             // addForm.setFieldsValue({ consignee:name });
           });
           setAllQuotations(temp);
+
           // let name= res.data.data.quotation_consignee;
-;
-          
         }
       })
       .catch((err) => {
@@ -138,15 +153,13 @@ function CreateJob() {
   useEffect(() => {
     getAllQuotation();
   }, []);
-  
 
- 
   const handleLeadIdEnq = (e) => {
     // addForm.setFieldValue("consignee",leadIdenq);
     getonequatation(e);
     setLeadIdEnq(e);
   };
-  
+
   const [allLeadList, setAllLeadList] = useState([]);
   const GetAllLeadData = () => {
     PublicFetch.get(
@@ -174,9 +187,8 @@ function CreateJob() {
       .catch((err) => {
         console.log("Errror while getting data", err);
       });
-      
   };
-  
+
   const close_modal = (mShow, time) => {
     if (!mShow) {
       setTimeout(() => {
@@ -185,29 +197,26 @@ function CreateJob() {
       }, time);
     }
   };
-  
 
-  console.log("Selected lead id is " ,leadId)
-  const handleLeadId = leadId => {
+  console.log("Selected lead id is ", leadId);
+  const handleLeadId = (leadId) => {
     setLeadId(leadId);
   };
- 
-  
+
   useEffect(() => {
     GetAllLeadData();
   }, [noofItems, pageofIndex, pagesizecount]);
 
   const OnSubmit = (data) => {
     console.log("submitting data", data);
-   
-    
+
     const date1 = moment(data.jobdate).format("YYYY-MM-DD");
-   
+
     const docfile = data?.new?.file?.originFileObj;
     const formData = new FormData();
-    
+
     formData.append("job_date", date1);
-    formData.append("job_consignee",data.job_consignee);
+    formData.append("job_consignee", data.job_consignee);
     formData.append("job_shipper", data.job_shipper);
     formData.append("job_freight_type", data.job_freight_type);
     formData.append("job_cargo_type", data.job_cargo_type);
@@ -215,23 +224,21 @@ function CreateJob() {
     formData.append("job_awb_bl_no", data.job_awb);
     formData.append("job_mode", data.job_mode);
     formData.append("job_origin_id", data.job_origin_id);
-    
+
     formData.append("job_destination_id", data.job_destination_id);
-   
+
     formData.append("job_no_of_pieces", data.job_no_of_pieces);
     formData.append("job_uom", data.job_uom);
     formData.append("job_gross_wt", data.job_grossweight);
     formData.append("job_chargeable_wt", data.job_chargable_weight);
     formData.append("job_payment_terms", data.job_payment_terms);
- 
+
     if (filenew) {
       formData.append("attachments", filenew);
     }
 
-    
-
     console.log("before sending data");
-    PublicFetch.post(`${CRM_BASE_URL_FMS}/quotation`, formData, {
+    PublicFetch.post(`${CRM_BASE_URL_FMS}/job`, formData, {
       "Content-Type": "Multipart/form-Data",
     })
       .then((res) => {
@@ -250,6 +257,83 @@ function CreateJob() {
       });
   };
 
+  const getallfrighttype = async () => {
+    try {
+      const allfrighttypes = await PublicFetch.get(
+        `${CRM_BASE_URL_FMS}/freightTypes`
+      );
+      console.log("Getting all frieght types : ", allfrighttypes.data.data);
+      setFrighttype(allfrighttypes.data.data);
+    } catch (err) {
+      console.log("Error in fetching fright types : ", err);
+    }
+  };
+
+  const getAllLocations = async () => {
+    try {
+      const locations = await PublicFetch.get(`${CRM_BASE_URL_FMS}/locations`);
+      console.log("all locations are", locations.data.data);
+      // setAllLocations(locations.data.data);
+      let temp = [];
+      locations.data.data.forEach((item, index) => {
+        temp.push({
+          location_id: item.location_id,
+          location_code: item.location_code,
+          location_name: item.location_name,
+          location_type: item.location_type,
+          location_country: item.countries.country_name,
+        });
+        setAllLocations(temp);
+      });
+    } catch (err) {
+      console.log("error while getting the locations: ", err);
+    }
+  };
+
+  const getallcarrier = async () => {
+    try {
+      const getcarrier = await PublicFetch.get(`${CRM_BASE_URL_FMS}/carrier`);
+      console.log("Getting all carrier : ", getcarrier.data.data);
+      setCarrierdata(getcarrier.data.data);
+    } catch (err) {
+      console.log("Error in getting carrier : ", err);
+    }
+  };
+
+  const getallPaymentTerms = () => {
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/paymentTerms`)
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          console.log("successs", res.data.data);
+          setAllPaymentTerms(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+  const getallunits = async () => {
+    try {
+      const allunits = await PublicFetch.get(`${CRM_BASE_URL_SELLING}/unit`);
+      console.log("all units are ::", allunits?.data?.data);
+      setAllunit(allunits?.data?.data);
+      console.log("all units are : ", allunit);
+    } catch (err) {
+      console.log("error to getting all units", err);
+    }
+  };
+
+  useEffect(() => {
+    // getallunits();
+    getAllLocations();
+    getallcarrier();
+    getallPaymentTerms();
+    getallunits();
+    getallfrighttype();
+  }, []);
+
   return (
     <>
       <div className="container-fluid">
@@ -261,7 +345,7 @@ function CreateJob() {
           </div>
           <div className="content-tabs">
             <Form
-                form={addForm}
+              form={addForm}
               onFinish={(values) => {
                 console.log("values iss", values);
                 OnSubmit(values);
@@ -273,29 +357,23 @@ function CreateJob() {
               <div className="container mb-4">
                 <div className="row">
                   <div className="row ">
-                   
-
                     <div className="col-xl-3 col-sm-6 mt-2">
                       <label>Job Date</label>
                       <Form.Item
                         name="jobdate"
-                        rules={[
-                          {
-                            required: true,
-                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                            message: "Please enter a Valid date",
-                          },
-                        ]}
+                        // rules={[
+                        //   {
+                        //     required: true,
+                        //     pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                        //     message: "Please enter a Valid date",
+                        //   },
+                        // ]}
                       >
                         <DatePicker
                           style={{ borderWidth: 0, marginTop: 10 }}
-                         
                           defaultValue={moment(date)}
-                          
                           format={dateFormatList}
-                        
                         />
-                       
                       </Form.Item>
                     </div>
 
@@ -311,7 +389,24 @@ function CreateJob() {
                           },
                         ]}
                       >
-                        <SelectBox>
+                        <SelectBox
+                          disabled={disable}
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
+                        >
+                          {frighttype &&
+                            frighttype.length > 0 &&
+                            frighttype.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  key={item.freight_type_id}
+                                  value={item.freight_type_id}
+                                >
+                                  {item.freight_type_name}
+                                </Select.Option>
+                              );
+                            })}
                         </SelectBox>
                       </Form.Item>
                     </div>
@@ -328,17 +423,15 @@ function CreateJob() {
                         ]}
                       >
                         <SelectBox
-                         onChange={e =>
-                         
-                          handleLeadIdEnq(e)
-                        
-                          
-                        }
-                        allowClear
-                        showSearch
-                        optionFilterProp="children"
-                       >
-                        {AllQuotations &&
+                          onChange={(e) => {
+                            handleLeadIdEnq(e);
+                            setDisable(true);
+                          }}
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
+                        >
+                          {AllQuotations &&
                             AllQuotations.length > 0 &&
                             AllQuotations.map((item, index) => {
                               return (
@@ -350,7 +443,7 @@ function CreateJob() {
                                 </Select.Option>
                               );
                             })}
-                       </SelectBox>
+                        </SelectBox>
                       </Form.Item>
                     </div>
                     <div className="col-xl-3 col-sm-6 mt-2">
@@ -366,16 +459,17 @@ function CreateJob() {
                         ]}
                       >
                         <SelectBox
-                          onChange={e => handleLeadId(e)}
+                          onChange={(e) => {
+                            handleLeadId(e);
+                          }}
                           allowClear
                           showSearch
                           optionFilterProp="children"
+                          disabled={disable}
                         >
-                             {allLeadList &&
+                          {allLeadList &&
                             allLeadList.length > 0 &&
                             allLeadList.map((item, index) => {
-                            
-                            if ( leadIdEnq && leadIdEnq === item.lead_id) {
                               return (
                                 <Select.Option
                                   key={item.lead_id}
@@ -384,25 +478,10 @@ function CreateJob() {
                                   {item.lead_customer_name}
                                 </Select.Option>
                               );
-                            } else if( leadIdEnq === undefined) {
-                              return (
-                                <Select.Option
-                                  key={item.lead_id}
-                                  value={item.lead_id}
-                                >
-                                  {item.lead_customer_name}
-                                </Select.Option>
-                              );
-                            }
-                           
-
-                             
                             })}
                         </SelectBox>
                       </Form.Item>
                     </div>
-
-                   
                   </div>
 
                   <div className="row ">
@@ -418,7 +497,7 @@ function CreateJob() {
                           },
                         ]}
                       >
-                        <InputType />
+                        <InputType disabled={disable} />
                       </Form.Item>
                     </div>
                     <div className="col-xl-3 col-sm-6 mt-2">
@@ -437,6 +516,7 @@ function CreateJob() {
                           allowClear
                           showSearch
                           optionFilterProp="children"
+                          disabled={disable}
                         >
                           {cargooptions &&
                             cargooptions.length > 0 &&
@@ -462,10 +542,11 @@ function CreateJob() {
                           },
                         ]}
                       >
-                         <SelectBox
+                        <SelectBox
                           allowClear
                           showSearch
                           optionFilterProp="children"
+                          disabled={disable}
                         >
                           <Select.Option value="A">Air</Select.Option>
                           <Select.Option value="S">Sea</Select.Option>
@@ -485,7 +566,25 @@ function CreateJob() {
                           },
                         ]}
                       >
-                        <SelectBox></SelectBox>
+                        <SelectBox
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
+                          disabled={disable}
+                        >
+                          {allLocations &&
+                            allLocations.length > 0 &&
+                            allLocations.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  value={item.location_id}
+                                  key={item.location_id}
+                                >
+                                  {item.location_name}
+                                </Select.Option>
+                              );
+                            })}
+                        </SelectBox>
                       </Form.Item>
                     </div>
                   </div>
@@ -503,7 +602,25 @@ function CreateJob() {
                           },
                         ]}
                       >
-                        <SelectBox></SelectBox>
+                        <SelectBox
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
+                          disabled={disable}
+                        >
+                          {allLocations &&
+                            allLocations.length > 0 &&
+                            allLocations.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  value={item.location_id}
+                                  key={item.location_id}
+                                >
+                                  {item.location_name}
+                                </Select.Option>
+                              );
+                            })}
+                        </SelectBox>
                       </Form.Item>
                     </div>
                     <div className="col-xl-3 col-sm-6 mt-2">
@@ -518,7 +635,25 @@ function CreateJob() {
                           },
                         ]}
                       >
-                        <SelectBox></SelectBox>
+                        <SelectBox
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
+                          disabled={disable}
+                        >
+                          {carrierdata &&
+                            carrierdata.length > 0 &&
+                            carrierdata.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  value={item.carrier_id}
+                                  key={item.carrier_id}
+                                >
+                                  {item.carrier_name}
+                                </Select.Option>
+                              );
+                            })}
+                        </SelectBox>
                       </Form.Item>
                     </div>
                     <div className="col-xl-3 col-sm-6 mt-2">
@@ -548,7 +683,25 @@ function CreateJob() {
                           },
                         ]}
                       >
-                        <SelectBox></SelectBox>
+                        <SelectBox
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
+                          disabled={disable}
+                        >
+                          {allPaymentTerms &&
+                            allPaymentTerms.length > 0 &&
+                            allPaymentTerms.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  key={item.payment_term_id}
+                                  value={item.payment_term_id}
+                                >
+                                  {item.payment_term_name}
+                                </Select.Option>
+                              );
+                            })}
+                        </SelectBox>
                       </Form.Item>
                     </div>
                   </div>
@@ -565,7 +718,7 @@ function CreateJob() {
                           },
                         ]}
                       >
-                        <InputType />
+                        <InputType disabled={disable} />
                       </Form.Item>
                     </div>
                     <div className="col-xl-3 col-sm-6 mt-2">
@@ -580,7 +733,25 @@ function CreateJob() {
                           },
                         ]}
                       >
-                        <SelectBox></SelectBox>
+                        <SelectBox
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
+                          disabled={disable}
+                        >
+                          {allunit &&
+                            allunit.length > 0 &&
+                            allunit.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  value={item.unit_id}
+                                  key={item.unit_id}
+                                >
+                                  {item.unit_name}
+                                </Select.Option>
+                              );
+                            })}
+                        </SelectBox>
                       </Form.Item>
                     </div>
                     <div className="col-xl-3 col-sm-6 mt-2">
@@ -595,7 +766,7 @@ function CreateJob() {
                           },
                         ]}
                       >
-                        <InputType />
+                        <InputType disabled={disable} />
                       </Form.Item>
                     </div>
                     <div className="col-xl-3 col-sm-6 mt-2">
@@ -610,14 +781,12 @@ function CreateJob() {
                           },
                         ]}
                       >
-                        <InputType />
+                        <InputType disabled={disable} />
                       </Form.Item>
                     </div>
                   </div>
                   <div className="row">
                     <div className="col-xl-3 col-lg-3 col-sm-6 ">
-                     
-                    
                       <label>Add Attachments</label>
                       <Form.Item className="mt-2" name="new">
                         <FileUpload
@@ -653,31 +822,26 @@ function CreateJob() {
                           }}
                         />
                       </Form.Item>
-                    
                     </div>
                   </div>
 
-                 
                   <div className="d-flex justify-content-center my-4">
                     <div className="col-lg-1 ">
-                      <Button className="qtn_save" btnType="save">
+                      <Button type="submit" className="qtn_save" btnType="save">
                         Save
                       </Button>
                     </div>
                     <div className="col-lg-1 ">
-                     
-                     <Link  to={ROUTES.LIST_JOB} >
-                      <Button className="qtn_save" btnType="cancel">
-                        Cancel
-                      </Button>
+                      <Link to={ROUTES.LIST_JOB}>
+                        <Button className="qtn_save" btnType="cancel">
+                          Cancel
+                        </Button>
                       </Link>
                     </div>
                   </div>
-                 
                 </div>
               </div>
             </Form>
-
 
             <Custom_model
               size={"sm"}

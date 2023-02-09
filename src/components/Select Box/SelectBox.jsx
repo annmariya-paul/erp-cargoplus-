@@ -12,6 +12,8 @@ function SelectBox({
   showSearch,
   allowClear,
   optionFilterProp,
+  disabled,
+ 
 }) {
   return (
     <div>
@@ -20,6 +22,7 @@ function SelectBox({
           style={{
             backgroundColor: "whitesmoke",
             borderRadius: "5px",
+            
           }}
           bordered={false}
           className={`w-100 ${className}`}
@@ -31,6 +34,8 @@ function SelectBox({
           showSearch={showSearch}
           allowClear={allowClear}
           optionFilterProp={optionFilterProp}
+          disabled={disabled}
+        
         >
           {children}
         </Select>

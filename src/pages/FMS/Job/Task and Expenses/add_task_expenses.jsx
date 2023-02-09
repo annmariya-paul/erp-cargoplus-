@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 import { v4 as uuidv4 } from 'uuid';
 import {Checkbox} from "antd";
 import { cargo_typeoptions } from "../../../../utils/SelectOptions";
-import { DragOutlined, FontColorsOutlined } from "@ant-design/icons";
+import { BorderBottomOutlined, DragOutlined, FontColorsOutlined } from "@ant-design/icons";
 import dragula from "dragula";
 import { CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
 import "dragula/dist/dragula.css";
@@ -1323,6 +1323,33 @@ const columns = [
   useEffect(() => {
     GetOpportunityData();
   }, [pageofIndex, numOfItems]);
+
+
+  // const footer = () => {
+  //   let totalAge = 0;
+
+  //   // data.forEach(item => {
+  //   //   totalAge += item.age;
+  //   // });
+
+  //   return (
+  //     <>
+  //       <tr>
+  //         <th>Total</th>
+  //         <th>{totalAge}</th>
+  //         <th><InputType /></th>
+  //         <th><InputType /></th>
+  //         <th><InputType /></th>
+  //         <th><InputType /></th>
+  //         <th><InputType /></th>
+  //         <th><InputType /></th>
+  //         <th><InputType /></th>
+
+  //         <th>N/A</th>
+  //       </tr>
+  //     </>
+  //   );
+  // };
   const [services, setServices] = useState([]);
   console.log("Servicesss are :::", services);
   const [allservices, setAllservices] = useState();
@@ -1633,19 +1660,78 @@ const [qno,setQno]=useState(Date.now());
                     data={tableData}
                     columns={columns}
                     rowKey={(record) => record.key}
-                    footer={() => 'Footer'}
+        //            footer={() => (
+        //   <div className="row">
+        //     <div className="col-4 d-flex">
+        //       <p>Total :</p>
+        //     </div>
+        //     <div className="footer_select col-4 d-flex">
+        //     {/* <Form.Item name="field1"> */}
+        //     <div className="col-3">
+        //       <SelectBox border={22}></SelectBox>
+        //       </div>
+        //       <div className="col-3">
+        //       <SelectBox></SelectBox>
+        //       </div>
+        //       <div className="col-3">
+        //       <SelectBox></SelectBox>
+        //       </div>
+        //       <div className="col-3">
+        //       <SelectBox></SelectBox>
+        //       </div>
+        //     </div> <div className="col-4 d-flex">
+        //     <Form.Item name="field1">
+        //       <InputType placeholder="Field 1" />
+        //     </Form.Item>
+        //     <Form.Item name="field2">
+        //       <InputType placeholder="Field 2" />
+        //     </Form.Item>
+        //     <Form.Item name="field3">
+        //       <InputType placeholder="Field 3" />
+        //     </Form.Item>
+        //     <Form.Item name="field4">
+        //       <InputType placeholder="Field 4" />
+        //     </Form.Item>
+        //     </div>
+           
+           
+            
+        //     </div>
+        // )}
+      />
+  
+ 
                    
-                  />
+                  
                   
 
 
                 </div>
               </div>
-              <div className="d-flex justify-content-end mt-4 mx-5">
-                {/* <div className="col-lg-2 col-sm-4 col-xs-3 d-flex justify-content-end mt-3 me-2">
-                  <p style={{ fontWeight: 500 }}>Grand Total</p>
-                </div>
+              {/* <div className="d-flex justify-content-end mt-4 mx-5">
+                 <div className="col-lg-2 col-sm-4 col-xs-3 d-flex justify-content-end mt-3 me-2">
+                  <p style={{ fontWeight: 500 }}>Total</p>
+                </div> */}
+                 {/* <div className="d-flex  mt-4 mx-5">
+                 <div className="col-lg-2 col-sm-4 col-xs-3 d-flex  mt-1 me-1">
+                  <p style={{ fontWeight: 500 }}>Total</p>
+                </div> */}
 
+                {/* <div className="col-lg-2 col-sm-2 col-xs-2">
+                  <Form.Item name="grandtotal">
+                    <Input_Number
+                      className="text_right"
+                      value={total}
+                      fontWeight={1000}
+                      // onChange={handleChange}
+                      align="right"
+                      // step={0.01}
+                      min={0}
+                      precision={2}
+                      controlls={false}
+                    />
+                  </Form.Item>
+                </div> 
                 <div className="col-lg-2 col-sm-2 col-xs-2">
                   <Form.Item name="grandtotal">
                     <Input_Number
@@ -1660,8 +1746,56 @@ const [qno,setQno]=useState(Date.now());
                       controlls={false}
                     />
                   </Form.Item>
-                </div> */}
-              </div>
+                </div> 
+                <div className="col-lg-2 col-sm-2 col-xs-2">
+                  <Form.Item name="grandtotal">
+                    <Input_Number
+                      className="text_right"
+                      value={total}
+                      fontWeight={1000}
+                      // onChange={handleChange}
+                      align="right"
+                      // step={0.01}
+                      min={0}
+                      precision={2}
+                      controlls={false}
+                    />
+                  </Form.Item>
+                </div> 
+                <div className="col-lg-2 col-sm-2 col-xs-2">
+                  <Form.Item name="grandtotal">
+                    <Input_Number
+                      className="text_right"
+                      value={total}
+                      fontWeight={1000}
+                      // onChange={handleChange}
+                      align="right"
+                      // step={0.01}
+                      min={0}
+                      precision={2}
+                      controlls={false}
+                    />
+                  </Form.Item>
+                </div>  */}
+                
+              {/* </div> */}
+              <div className="container-new">
+      <label htmlFor="input1">Input 1:</label>
+      <input type="text" id="input1" />
+
+      <label htmlFor="input2">Input 2:</label>
+      <input type="text" id="input2" />
+
+      <label htmlFor="input3">Input 3:</label>
+      <input type="text" id="input3" />
+
+      <label htmlFor="input4">Input 4:</label>
+      <input type="text" id="input4" />
+
+      <label htmlFor="input5">Input 5:</label>
+      <input type="text" id="input5" />
+      </div>
+              
               <div className="d-flex justify-content-center my-4">
                 <div className="col-lg-1 ">
                   <Button type="submit" className="qtn_save" btnType="save">

@@ -99,15 +99,15 @@ export default function Add_Quotation() {
           // addForm.setFieldsValue({
           //   grandtotal: sum,
           // });
-          let grandTotal = 0;
-          for (let key in quotation_details) {
-            let item = quotation_details[key];
-            grandTotal += item["quotation_details_total"];
-            setNewGrandTotal(grandTotal);
-            addForm.setFieldsValue({ grandtotal: grandTotal });
-          }
+          // let grandTotal = 0;
+          // for (let key in quotation_details) {
+          //   let item = quotation_details[key];
+          //   grandTotal += item["quotation_details_total"];
+          //   setNewGrandTotal(grandTotal);
+          //   addForm.setFieldsValue({ grandtotal: grandTotal });
+          // }
 
-          console.log("Grand Total:", grandTotal);
+          // console.log("Grand Total:", grandTotal);
 
           setTableData(
             tableData.map((item) => {
@@ -137,6 +137,15 @@ export default function Add_Quotation() {
       }
     });
   };
+  useEffect(() => {
+    let grandTotal = 0;
+    tableData?.map((item, index) => {
+      console.log("deatils totals", item);
+      grandTotal += item.quotation_details_total;
+    });
+    // }
+    addForm.setFieldsValue({ grandtotal: grandTotal });
+  }, [tableData]);
   const handleInputchange1 = (e, key, col, tr) => {
     setTableData(
       tableData.map((item) => {
@@ -406,7 +415,7 @@ export default function Add_Quotation() {
                 index.key,
                 "quotation_details_service_id",
               ]}
-              rules={[{ required: true, message: "Please select a task" }]}
+              // rules={[{ required: true, message: "Please select a task" }]}
             >
               <SelectBox
                 allowClear
@@ -454,7 +463,7 @@ export default function Add_Quotation() {
           <div className="d-flex justify-content-center align-items-center tborder ">
             <Form.Item
               name={["quotation_details", index.key, "quotation_details_cost"]}
-              rules={[{ required: true, message: "Required" }]}
+              // rules={[{ required: true, message: "Required" }]}
             >
               <Input_Number
                 className="text_right"
@@ -481,6 +490,7 @@ export default function Add_Quotation() {
                     "tx"
                   );
                 }}
+                onKeyDown={(e) => handleEnter(e, index.key)}
               />
             </Form.Item>
           </div>
@@ -504,7 +514,7 @@ export default function Add_Quotation() {
                 index.key,
                 "quotation_details_tax_type",
               ]}
-              rules={[{ required: true, message: "Required  " }]}
+              // rules={[{ required: true, message: "Required  " }]}
             >
               <SelectBox
                 allowClear
@@ -522,6 +532,7 @@ export default function Add_Quotation() {
                     "tx"
                   );
                 }}
+                disabled={true}
               >
                 {taxTypes &&
                   taxTypes.length > 0 &&
@@ -612,7 +623,8 @@ export default function Add_Quotation() {
                 min={0}
                 precision={2}
                 controlls={false}
-                onKeyDown={(e) => handleEnter(e, index.key)}
+                disabled={true}
+                // onKeyDown={(e) => handleEnter(e, index.key)}
               />
             </Form.Item>
           </div>
@@ -939,26 +951,28 @@ export default function Add_Quotation() {
 
     userData.map((item, index) => {
       console.log("userdata task", index);
-      formData.append(
-        `quotation_details[${index}][quotation_details_service_id]`,
-        item.quotation_details_service_id
-      );
-      formData.append(
-        `quotation_details[${index}][quotation_details_cost]`,
-        item.quotation_details_cost
-      );
-      formData.append(
-        `quotation_details[${index}][quotation_details_tax_type]`,
-        item.quotation_details_tax_type
-      );
-      formData.append(
-        `quotation_details[${index}][quotation_details_tax_amount]`,
-        item.quotation_details_tax_amount
-      );
-      formData.append(
-        `quotation_details[${index}][quotation_details_total]`,
-        item.quotation_details_total
-      );
+      if (item.quotation_details_service_id) {
+        formData.append(
+          `quotation_details[${index}][quotation_details_service_id]`,
+          item.quotation_details_service_id
+        );
+        formData.append(
+          `quotation_details[${index}][quotation_details_cost]`,
+          item.quotation_details_cost
+        );
+        formData.append(
+          `quotation_details[${index}][quotation_details_tax_type]`,
+          item.quotation_details_tax_type
+        );
+        formData.append(
+          `quotation_details[${index}][quotation_details_tax_amount]`,
+          item.quotation_details_tax_amount
+        );
+        formData.append(
+          `quotation_details[${index}][quotation_details_total]`,
+          item.quotation_details_total
+        );
+      }
     });
 
     console.log("before sending data");
@@ -1692,6 +1706,7 @@ export default function Add_Quotation() {
                       min={0}
                       precision={2}
                       controlls={false}
+                      disabled={true}
                     />
                   </Form.Item>
                 </div>
@@ -1703,7 +1718,13 @@ export default function Add_Quotation() {
                   </Button>
                 </div>
                 <div className="col-lg-1 ">
-                  <Button className="qtn_save" btnType="save">
+                  <Button
+                    onClick={() => {
+                      navigate(`${ROUTES.QUATATIONS}`);
+                    }}
+                    className="qtn_save"
+                    btnType="save"
+                  >
                     Cancel
                   </Button>
                 </div>

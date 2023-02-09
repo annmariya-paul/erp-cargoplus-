@@ -616,6 +616,7 @@ export default function EditQuotation(
                     "tx"
                   );
                 }}
+                onKeyDown={(e) => handleEnter(e, index.key)}
               />
             </Form.Item>
           </div>
@@ -657,6 +658,7 @@ export default function EditQuotation(
                     "tx"
                   );
                 }}
+                disabled={true}
               >
                 {taxTypes &&
                   taxTypes.length > 0 &&
@@ -709,6 +711,7 @@ export default function EditQuotation(
                 min={0}
                 precision={2}
                 controlls={false}
+                disabled={true}
               />
             </Form.Item>
           </div>
@@ -746,7 +749,8 @@ export default function EditQuotation(
                 min={0}
                 precision={2}
                 controlls={false}
-                onKeyDown={(e) => handleEnter(e, index.key)}
+                disabled={true}
+                // onKeyDown={(e) => handleEnter(e, index.key)}
               />
             </Form.Item>
           </div>
@@ -1072,38 +1076,39 @@ export default function EditQuotation(
         tmp = true;
       }
       console.log("userdata task", item);
-
-      formData.append(
-        `quotation_details[${index}][quotation_details_service_id]`,
-        item.quotation_details_service_id
-      );
-      formData.append(
-        `quotation_details[${index}][quotation_details_cost]`,
-        item.quotation_details_cost
-      );
-      formData.append(
-        `quotation_details[${index}][quotation_details_tax_type]`,
-        item.quotation_details_tax_type
-      );
-      formData.append(
-        `quotation_details[${index}][quotation_details_tax_amount]`,
-        item.quotation_details_tax_amount
-      );
-      formData.append(
-        `quotation_details[${index}][quotation_details_total]`,
-        item.quotation_details_total
-      );
-      if (item.quotation_details_id) {
+      if (item.quotation_details_service_id) {
         formData.append(
-          `quotation_details[${index}][quotation_details_id]`,
-          item.quotation_details_id
+          `quotation_details[${index}][quotation_details_service_id]`,
+          item.quotation_details_service_id
         );
-      }
-      if (item.quotation_details_status === 0) {
         formData.append(
-          `quotation_details[${index}][quotation_details_status]`,
-          item.quotation_details_status
+          `quotation_details[${index}][quotation_details_cost]`,
+          item.quotation_details_cost
         );
+        formData.append(
+          `quotation_details[${index}][quotation_details_tax_type]`,
+          item.quotation_details_tax_type
+        );
+        formData.append(
+          `quotation_details[${index}][quotation_details_tax_amount]`,
+          item.quotation_details_tax_amount
+        );
+        formData.append(
+          `quotation_details[${index}][quotation_details_total]`,
+          item.quotation_details_total
+        );
+        if (item.quotation_details_id) {
+          formData.append(
+            `quotation_details[${index}][quotation_details_id]`,
+            item.quotation_details_id
+          );
+        }
+        if (item.quotation_details_status === 0) {
+          formData.append(
+            `quotation_details[${index}][quotation_details_status]`,
+            item.quotation_details_status
+          );
+        }
       }
     });
 
@@ -1719,6 +1724,7 @@ export default function EditQuotation(
                       min={0}
                       precision={2}
                       controlls={false}
+                      disabled={true}
                     />
                   </Form.Item>
                 </div>

@@ -108,9 +108,11 @@ export default function EditQuotation(
   const [taxratee, setTaxRatee] = useState();
   const [total, setTotal] = useState(0);
   const [tableData, setTableData] = useState(dataSource);
-
+  const [sampletable, setSampletable] = useState(dataSource);
+  console.log("sample table", sampletable);
   const [date, setDate] = useState();
   console.log(date);
+  const [taxType, setTaxtype] = useState();
 
   const navigate = useNavigate();
   const dateFormatList = ["DD-MM-YYYY", "DD-MM-YY"];
@@ -180,7 +182,7 @@ export default function EditQuotation(
     //     tableData &&
     //       tableData?.map((item, index) => {
     //         // let assignValues = quotation_details[index];
-    //         if (item.quotation_details_status !== 0) {
+    //         if (item.quotation_details_status === 0) {
     //           quotation_details.push({
     //             key: index,
     //             quotation_details_service_id: item.quotation_details_service_id,
@@ -199,14 +201,25 @@ export default function EditQuotation(
     // });
     // setTableData(dtanew);
     const dtanew = tableData?.filter((item) => item.key !== key.key);
-    console.log("new delete", dtanew);
+    const dtanew1 = sampletable?.filter((item) => item.key !== key.key);
+
+    console.log("new delete", dtanew1);
+    if (dtanew1.length > 0) {
+      setSampletable(dtanew1);
+    }
     setTableData(newData);
     let grandTotal = 0;
     for (let item of newData) {
       grandTotal += item["quotation_details_total"];
     }
     // setNewGrandTotal(grandTotal);
-    editForm.setFieldsValue({ quotation_details: dtanew });
+    // if (dtanew.length > 0) {
+    //   setTableData(dtanew);
+    // }
+    // editForm.setFieldsValue({ quotation_details: dtanew });
+    if (dtanew1 <= 0) {
+      editForm.setFieldsValue({ quotation_details: dtanew1 });
+    }
     editForm.setFieldsValue({ gtotal: grandTotal });
   };
 
@@ -273,7 +286,24 @@ export default function EditQuotation(
               return item;
             })
           );
+          setSampletable(
+            sampletable.map((item) => {
+              console.log("mmaaiinn", item);
+              if (item.key == key) {
+                delete item.quotation_details_id;
+                return {
+                  ...item,
+                  quotation_details_tax_amount: taxamount,
+                  quotation_details_tax_type: e,
+                  quotation_details_total: totalAmount,
+                };
+              }
+              return item;
+            })
+          );
           console.log("tabledata", tableData);
+          console.log("sampletable of of", sampletable);
+
           // let sum = 0;
           // tableData.forEach((item) => {
           //   sum +=
@@ -306,6 +336,34 @@ export default function EditQuotation(
         return item;
       })
     );
+    setSampletable(
+      sampletable.map((item) => {
+        if (item.key === key) {
+          return { ...item, [col]: e };
+        }
+        return item;
+      })
+    );
+    if (e && col === "quotation_details_service_id") {
+      allservices.map((item, index) => {
+        if (e === item.service_id) {
+          setTaxtype(item.service_taxtype);
+          let existingValues = editForm.getFieldsValue();
+          let { quotation_details } = existingValues;
+          let assignValues = quotation_details[key];
+          assignValues["quotation_details_tax_type"] = item.service_taxtype;
+          editForm.setFieldsValue({ quotation_details });
+          // if (tr) {
+          //   handleInputChange(
+          //     item.service_taxtype,
+          //     index.key,
+          //     "quotation_details_tax_type",
+          //     "tx"
+          //   );
+          // }
+        }
+      });
+    }
   };
   const handleInputChange2 = (e, index, col) => {
     setTableData(
@@ -333,6 +391,17 @@ export default function EditQuotation(
           quotation_details_total: "",
         },
       ]);
+      setSampletable([
+        ...sampletable,
+        {
+          key: sampletable.length + 1,
+          quotation_details_service_id: "",
+          quotation_details_cost: "",
+          quotation_details_tax_type: "",
+          quotation_details_tax_amount: "",
+          quotation_details_total: "",
+        },
+      ]);
     }
     console.log("tabledata", tableData);
     // let sum = 0;
@@ -345,6 +414,12 @@ export default function EditQuotation(
 
   const handleReorder = (dragIndex, draggedIndex) => {
     setTableData((oldState) => {
+      const newState = [...oldState];
+      const item = newState.splice(dragIndex, 1)[0];
+      newState.splice(draggedIndex, 0, item);
+      return newState;
+    });
+    setSampletable((oldState) => {
       const newState = [...oldState];
       const item = newState.splice(dragIndex, 1)[0];
       newState.splice(draggedIndex, 0, item);
@@ -533,6 +608,14 @@ export default function EditQuotation(
                 min={0}
                 precision={2}
                 controlls={false}
+                onBlur={() => {
+                  handleInputChange(
+                    taxType,
+                    index.key,
+                    "quotation_details_tax_type",
+                    "tx"
+                  );
+                }}
               />
             </Form.Item>
           </div>
@@ -690,7 +773,7 @@ export default function EditQuotation(
           location_type: item.location_type,
           location_country: item.countries.country_name,
         });
-        setAllLocations(temp);
+        // setAllLocations(temp);
       });
     } catch (err) {
       console.log("error while getting the locations: ", err);
@@ -778,6 +861,7 @@ export default function EditQuotation(
       let qdate = moment(onequatation?.data?.data?.quotation_date);
       let vdate = moment(onequatation?.data?.data?.quotation_validity);
 
+      locationBytype(onequatation?.data?.data?.quotation_mode);
       editForm.setFieldsValue({
         quotation_no: onequatation?.data?.data?.quotation_no,
         quotationdate: qdate,
@@ -873,6 +957,7 @@ export default function EditQuotation(
 
     setTableData([...quotation_details]);
     editForm.setFieldsValue({ quotation_details });
+    setSampletable([...quotation_details]);
   }, [qDetails]);
 
   console.log("table inside data", tableData);
@@ -927,6 +1012,30 @@ export default function EditQuotation(
     } catch (err) {
       console.log("error while getting the tax types: ", err);
     }
+  };
+  const locationBytype = (data) => {
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/locations/type-location/${data}`)
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          console.log("success of location type", res.data, data);
+          // setLocationType(res.data.data.location_type);
+          let temp = [];
+          res.data.data.forEach((item, index) => {
+            temp.push({
+              location_id: item.location_id,
+              location_code: item.location_code,
+              location_name: item.location_name,
+              location_type: item.location_type,
+              location_country: item.location_country,
+            });
+            setAllLocations(temp);
+          });
+        }
+      })
+      .catch((err) => {
+        console.log("Error of location type", err);
+      });
   };
 
   const OnSubmitedit1 = (data) => {
@@ -1002,7 +1111,7 @@ export default function EditQuotation(
       formData.append("attachments", data.new);
     }
     // formData.append("quotation_payment_terms", prDescription);
-    if (tableData && tableData.length > 1) {
+    if (tmp === true) {
       PublicFetch.patch(`${CRM_BASE_URL_FMS}/quotation/${id}`, formData, {
         "Content-Type": "Multipart/form-Data",
       })
@@ -1247,6 +1356,9 @@ export default function EditQuotation(
                           allowClear
                           showSearch
                           optionFilterProp="children"
+                          onChange={(e) => {
+                            locationBytype(e);
+                          }}
                         >
                           <Select.Option value="Air">Air</Select.Option>
                           <Select.Option value="Sea">Sea</Select.Option>
@@ -1576,7 +1688,7 @@ export default function EditQuotation(
               <div className="row">
                 <div className="datatable">
                   <TableData
-                    data={tableData}
+                    data={sampletable}
                     columns={columns}
                     custom_table_css="table_qtn"
                   />
@@ -1618,7 +1730,13 @@ export default function EditQuotation(
                   </Button>
                 </div>
                 <div className="col-lg-1 ">
-                  <Button className="qtn_save" btnType="save">
+                  <Button
+                    onClick={() => {
+                      navigate(`${ROUTES.QUATATIONS}`);
+                    }}
+                    className="qtn_save"
+                    btnType="save"
+                  >
                     Cancel
                   </Button>
                 </div>

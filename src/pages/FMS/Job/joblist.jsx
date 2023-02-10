@@ -1,19 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState} from "react";
 import { Form, Input, Select, DatePicker } from "antd";
 import TableData from "../../../components/table/table_data";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { MdPageview } from "react-icons/md";
 import Button from "../../../components/button/button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../routes";
 import PublicFetch from "../../../utils/PublicFetch";
 import { CRM_BASE_URL_FMS } from "../../../api/bootapi";
 import moment from "moment";
 
+
 function Listjob(){
     const [searchedText, setSearchedText] = useState("");
     const [pageSize, setPageSize] = useState("25");
     const [searchedNo, setSearchedNo] = useState("");
+    const navigate = useNavigate();
     // const [searchedText, setSearchedText] = useState("");
   const [searchName, setSearchName] = useState("");
   const [searchStatus, setSearchStatus] = useState("");
@@ -37,7 +39,19 @@ function Listjob(){
                   <FaEdit style={{ marginLeft: 15 }} />
                   </Link>
                 </div>
+
                 <div
+              className="viewIcon m-0"
+              onClick={() => {
+                navigate(`${ROUTES.VIEW_JOB}/${index.job_id}`);
+              }}
+              // onClick={()=>{
+              //   setShowViewModal(true);
+              // }}
+            >
+              <MdPageview style={{ marginLeft: 15, marginRight: 15 }} />
+            </div>
+                {/* <div
                   className="viewIcon m-0"
                 //   onClick={() => {
                 //     navigate(`/view_quotation`);
@@ -47,7 +61,7 @@ function Listjob(){
                   // }}
                 >
                   <MdPageview style={{ marginLeft: 15, marginRight: 15 }} />
-                </div>
+                </div> */}
                 <div className="deleteIcon m-0">
                   <FaTrash />
                 </div>

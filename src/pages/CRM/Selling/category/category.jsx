@@ -401,7 +401,7 @@ function Category() {
                   </Form.Item>
                   {uniqueCode ? (
                     <label style={{ color: "red" }} className=" mb-2">
-                      Employee Code {UniqueErrorMsg.UniqueErrName}
+                      Category Code {UniqueErrorMsg.UniqueErrName}
                     </label>
                   ) : null}
                 </div>

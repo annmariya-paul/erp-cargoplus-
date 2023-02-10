@@ -37,6 +37,7 @@ export default function Departments(props) {
   const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
   const [editUniqueName, setEditUniqueName] = useState();
   const [editUniqueCode, setEditUniqueCode] = useState();
+  const [searchedcodeText, setSearchedcodeText] = useState("");
 
   const close_modal = (mShow, time) => {
     if (!mShow) {
@@ -210,7 +211,7 @@ export default function Departments(props) {
       title: "DEPARTMENT NAME",
       dataIndex: "department_name",
       key: "department_name",
-      filteredValue: [searchedText],
+       filteredValue: [searchedText],
       onFilter: (value, record) => {
         return String(record.department_name)
           .toLowerCase()
@@ -222,6 +223,12 @@ export default function Departments(props) {
       title: "DEPARTMENT CODE",
       dataIndex: "department_code",
       key: "department_code",
+      filteredValue: [searchedcodeText],
+      onFilter: (value, record) => {
+        return String(record.department_code)
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      },
       align: "center",
     },
   ];
@@ -264,6 +271,19 @@ export default function Departments(props) {
               }}
               onSearch={(value) => {
                 setSearchedText(value);
+              }}
+            />
+          </div>
+          <div className="col-4">
+            <Input.Search
+              placeholder="Search by Department Code"
+              style={{ margin: "5px", borderRadius: "5px" }}
+              value={searchedcodeText}
+              onChange={(e) => {
+                setSearchedcodeText(e.target.value ? [e.target.value] : []);
+              }}
+              onSearch={(value) => {
+                setSearchedcodeText(value);
               }}
             />
           </div>

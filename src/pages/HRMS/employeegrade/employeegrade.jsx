@@ -30,6 +30,8 @@ function Employeegrade() {
   const [employeeGrade, setEmployeeGrade] = useState();
   const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
 
+  const[addmodalshow,setAddmodalshow] =useState(false)
+
   const close_modal = (mShow, time) => {
     if (!mShow) {
       setTimeout(() => {
@@ -75,6 +77,7 @@ function Employeegrade() {
       console.log("employegrade data is added ", addemployegrade);
       if (addemployegrade.data.success) {
         getallempgrade();
+        setAddmodalshow(false)
         setSuccessModal(true);
         addForm.resetFields();
         setSaveSuccess(true);
@@ -165,88 +168,8 @@ function Employeegrade() {
  
   return (
     <>
-      <div className="container mb-4 d-flex justify-content-center">
-        <div className="containerdesig ">
-          <div className="row mx-2">
-            <Form
-              name="addForm"
-              form={addForm}
-              onFinish={(value) => {
-                console.log("valuezzzzzzz", value);
-                submitaddemp();
-               
-              }}
-              onFinishFailed={(error) => {
-                console.log(error);
-              }}
-            >
-              <div className="row flex-wrap pt-1">
-                <div className="row ms-0 py-1">
-                  <div className="col-12 pt-3">
-                    <label htmlfor="emp_type_name">Employment grade Name</label>
-                    <Form.Item
-                      name="Employment_grade_name"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z ]+$"),
-                          message: "Please enter a valid Employment Type Name",
-                        },
-                        {
-                          min: 2,
-                          message: "Name must be at least 2 characters",
-                        },
-                        {
-                          max: 100,
-                          message: "Name cannot be longer than 100 characters",
-                        },
-                      ]}
-                    >
-                      <InputType
-                        onChange={(e) => {
-                          setEmployeeGrade(e.target.value);
-                          setuniqueCode(false);
-                        }}
-                       
-                        onBlur={ async () => {
-                        
-                          let a = await CheckUnique({type:"employmentgradename",value:employeeGrade})
-                          console.log("hai how are u", a)
-                          setuniqueCode(a);
-                          
-                        }}
-                      
-                      />
-                    </Form.Item>
-                    {uniqueCode ? (
-                      <p style={{ color: "red", marginTop: "-24px" }}>
-                        Employement Grade Name {uniqueErrMsg.UniqueErrName}
-                      </p>
-                    ) : null}
-                  </div>
-                </div>
-              </div>
-              <div className="row justify-content-center">
-                <div className="col-auto">
-                  <Button type="submit" className="p-2 save_button_style">
-                    Save
-                  </Button>
-                </div>
-              </div>
-            </Form>
-
-            <Custom_model
-              size={"sm"}
-              show={saveSuccess}
-              onHide={() => setSaveSuccess(false)}
-              success
-            />
-
-          
-          </div>
-        </div>
-      </div>
-
+   
+     
       <div className="container-fluid container2 pt-3">
         <div className="row flex-wrap">
           <div className="col">
@@ -310,7 +233,11 @@ function Employeegrade() {
                 }}
               />
             </div>
-            <div className="col-4"></div>
+            <div className="col-4">
+            <Button btnType="add" onClick={() => setAddmodalshow(true)}>
+              Add EmployeeGrade
+            </Button>
+            </div>
         </div>
         <div className="datatable">
           <TableData
@@ -334,6 +261,98 @@ function Employeegrade() {
                 }}
               />
             </div>
+
+
+          <Custom_model
+          size={"sm"}
+          show={addmodalshow}
+          onHide={() => {
+            setAddmodalshow(false);
+          }}
+          View_list
+          list_content={
+            <>
+              <h6 className="lead_text">Add Employment Grade</h6>
+              <div className="container-fluid px-2 my-4 ">
+              <Form
+              name="addForm"
+              form={addForm}
+              onFinish={(value) => {
+                console.log("valuezzzzzzz", value);
+                submitaddemp();
+               
+              }}
+              onFinishFailed={(error) => {
+                console.log(error);
+              }}
+            >
+              <div className="row flex-wrap pt-1">
+                <div className="row ms-0 py-1">
+                  <div className="col-12 pt-3">
+                    <label htmlfor="emp_type_name">Employment grade Name</label>
+                    <Form.Item
+                      name="Employment_grade_name"
+                      rules={[
+                        {
+                          required: true,
+                          pattern: new RegExp("^[A-Za-z ]+$"),
+                          message: "Please enter a valid Employment Grade Name",
+                        },
+                        {
+                          min: 2,
+                          message: "Name must be at least 2 characters",
+                        },
+                        {
+                          max: 100,
+                          message: "Name cannot be longer than 100 characters",
+                        },
+                      ]}
+                    >
+                      <InputType
+                        onChange={(e) => {
+                          setEmployeeGrade(e.target.value);
+                          setuniqueCode(false);
+                        }}
+                       
+                        onBlur={ async () => {
+                        
+                          let a = await CheckUnique({type:"employmentgradename",value:employeeGrade})
+                          console.log("hai how are u", a)
+                          setuniqueCode(a);
+                          
+                        }}
+                      
+                      />
+                    </Form.Item>
+                    {uniqueCode ? (
+                      <p style={{ color: "red", marginTop: "-24px" }}>
+                        Employement Grade Name {uniqueErrMsg.UniqueErrName}
+                      </p>
+                    ) : null}
+                  </div>
+                </div>
+              </div>
+              <div className="row justify-content-center">
+                <div className="col-auto">
+                  <Button type="submit" className="p-2 save_button_style">
+                    Save
+                  </Button>
+                </div>
+              </div>
+            </Form>
+
+              </div>
+            </>
+          }
+        />
+
+
+            <Custom_model
+              size={"sm"}
+              show={saveSuccess}
+              onHide={() => setSaveSuccess(false)}
+              success
+            />
 
         <Custom_model
           size={"sm"}

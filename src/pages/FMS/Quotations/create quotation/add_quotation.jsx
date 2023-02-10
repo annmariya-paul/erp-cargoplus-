@@ -627,6 +627,16 @@ export default function Add_Quotation() {
                 // onKeyDown={(e) => handleEnter(e, index.key)}
               />
             </Form.Item>
+            {/* <div className="">
+              {index.quotation_details_total &&
+              index.quotation_details_total ? (
+                <></>
+              ) : (
+                <>
+                  <label>Total is required</label>
+                </>
+              )}
+            </div> */}
           </div>
         );
       },

@@ -61,6 +61,7 @@ export default function EditQuotation(
   const pagesizecount = Math.ceil(totalCount / noofItems);
   const [carrierdata, setCarrierdata] = useState();
   const [allLocations, setAllLocations] = useState();
+  const [oppnew, setOppnew] = useState([]);
 
   const [quatationno, setquatationno] = useState("");
   const [quotconsignee, setQuotconsignee] = useState();
@@ -89,7 +90,7 @@ export default function EditQuotation(
   console.log("Servicesss are :::", services);
   const [allservices, setAllservices] = useState();
   const [unitdata, setUnitdata] = useState();
-
+  const [isService, setIsService] = useState();
   const [allLeadList, setAllLeadList] = useState([]);
   // const [tableData, setTableData] = useState();
 
@@ -557,6 +558,7 @@ export default function EditQuotation(
                     index.key,
                     "quotation_details_service_id"
                   );
+                  setIsService(e);
                   // handleInputChange(e, index.key, "quotation_details_service_id", "tx")
                 }}
               >
@@ -609,12 +611,14 @@ export default function EditQuotation(
                 precision={2}
                 controlls={false}
                 onBlur={() => {
-                  handleInputChange(
-                    taxType,
-                    index.key,
-                    "quotation_details_tax_type",
-                    "tx"
-                  );
+                  if (isService) {
+                    handleInputChange(
+                      taxType,
+                      index.key,
+                      "quotation_details_tax_type",
+                      "tx"
+                    );
+                  }
                 }}
                 onKeyDown={(e) => handleEnter(e, index.key)}
               />
@@ -1185,20 +1189,20 @@ export default function EditQuotation(
                         //   },
                         // ]}
                       >
-                        <InputType value={quatationno} />
+                        <InputType value={quatationno} disabled={true} />
                       </Form.Item>
                     </div>
                     <div className="col-xl-3 col-sm-6 mt-2">
                       <label>Quotation date</label>
                       <Form.Item
                         name="quotationdate"
-                        // rules={[
-                        //   {
-                        //     required: true,
-                        //     pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                        //     message: "Please enter a Valid value",
-                        //   },
-                        // ]}
+                        rules={[
+                          {
+                            required: true,
+                            // pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                            message: "Please enter a valid date",
+                          },
+                        ]}
                       >
                         <DatePicker
                           style={{ borderWidth: 0, marginTop: 10 }}
@@ -1216,13 +1220,13 @@ export default function EditQuotation(
                       <label>Validity date</label>
                       <Form.Item
                         name="validity_date"
-                        // rules={[
-                        //   {
-                        //     required: true,
-                        //     pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                        //     message: "Please enter a Valid value",
-                        //   },
-                        // ]}
+                        rules={[
+                          {
+                            required: true,
+                            // pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                            message: "Please enter a Valid date",
+                          },
+                        ]}
                       >
                         <DatePicker
                           style={{ borderWidth: 0, marginTop: 10 }}
@@ -1236,6 +1240,41 @@ export default function EditQuotation(
                         />
                       </Form.Item>
                     </div>
+                    {/* <div className="col-xl-3 col-sm-6 mt-2">
+                      <label>Enquiry No</label>
+                      <Form.Item
+                        name="quotation_enquiry_no"
+                        // rules={[
+                        //   {
+                        //     required: true,
+                        //     message: "Please select a Type",
+                        //   },
+                        // ]}
+                      >
+                        <SelectBox
+                          // onChange={(e) =>
+                          //   // handleFirstDropdownChange()
+                          //   // handleLeadIdEnq(e)
+                          // }
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
+                        >
+                          {oppnew &&
+                            oppnew.length > 0 &&
+                            oppnew.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  key={item.opportunity_id}
+                                  value={item.opportunity_id}
+                                >
+                                  {item.opportunity_number}
+                                </Select.Option>
+                              );
+                            })}
+                        </SelectBox>
+                      </Form.Item>
+                    </div> */}
 
                     <div className="col-xl-3 col-sm-6 mt-2">
                       <label>Consignee</label>

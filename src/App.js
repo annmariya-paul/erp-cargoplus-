@@ -68,6 +68,7 @@ import Agent_Response from "./pages/FMS/Opportunity_assigns/Enquiries/agent_resp
 import Modelist from "./pages/FMS/settings/Mode/mode";
 import Assign_oppertunity_edit from "./pages/FMS/Opportunity_assigns/AssignOpportunity/assign_oppertunity_edit";
 import Consignee from "./pages/FMS/settings/Consignee/consignee";
+import ViewJob from "./pages/FMS/Job/viewjob";
 
 import PaymentTerms from "./pages/FMS/settings/Payment Terms/payment_terms";
 import Currency from "./pages/General Settings/Currency/currency";
@@ -206,6 +207,10 @@ function App() {
             <Route path={ROUTES.LIST_JOB} element={<Listjob />} />
             <Route path={ROUTES.CREATEJOB} element={<CreateJob />} />
             <Route path={ROUTES.UPDATEJOB} element={<Updatejob/>}/>
+            <Route
+              path={ROUTES.VIEW_JOB_ID}
+              element={<ViewJob />}
+            />
 
             {/* General settings */}
 

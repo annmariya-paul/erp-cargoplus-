@@ -22,7 +22,8 @@ import { Select, Popconfirm } from "antd";
 import Custom_model from "../../../../components/custom_modal/custom_model";
 import SelectBox from "../../../../components/Select Box/SelectBox";
 import { DatePicker } from "antd";
-import "../../Quotations/create quotation/quotation.scss";
+// import "../../Quotations/create quotation/quotation.scss";
+import "../job.scss"
 import { ROUTES } from "../../../../routes";
 import Input_Number from "../../../../components/InputNumber/InputNumber";
 import moment from "moment";
@@ -99,10 +100,7 @@ export default function Taskexpenses() {
           assignValues["quotation_details_total"] = totalAmount;
           console.log("quation deatils", quotation_details);
           addForm.setFieldsValue({ quotation_details });
-          // setTotal(sum);
-          // addForm.setFieldsValue({
-          //   grandtotal: sum,
-          // });
+        
           let grandTotal = 0;
 for (let key in quotation_details) {
   let item = quotation_details[key];
@@ -127,16 +125,7 @@ console.log("Grand Total:", grandTotal);
             })
           );
           console.log("tabledata", tableData);
-          // let sum = 0;
-          // tableData.forEach((item) => {
-          //   sum +=
-          //     item.quotation_details_cost + item.quotation_details_tax_amount;
-          // });
-          // console.log("sum", sum);
-          // setTotal(sum);
-          // addForm.setFieldsValue({
-          //   grandtotal: sum,
-          // });
+        
         }
       }
     });
@@ -260,11 +249,7 @@ console.log("Grand Total:", grandTotal);
     }
   };
 
-  // const gatallTaxType= ()=> {
-  //   PublicFetch.get(`${CRM_BASE_URL_FMS}/tax-types?startIndex=${pageofIndex}&noOfItems=${noofItems}`).then((res)=> {
-  //     console.
-  //   })
-  // }
+ 
   const [taxTypes, setTaxTypes] = useState();
   const getAllTaxTypes = async () => {
     try {
@@ -328,292 +313,6 @@ console.log("Grand Total:", grandTotal);
   };
 
  
-
-//   const columns = [
-//     {
-//       title: "Action",
-//       dataIndex: "action",
-//       key: "action",
-//       className: "drag-visible",
-//       render: (data, index) => {
-//         return (
-//           <div className="d-flex justify-content-center align-items-center gap-2">
-//             <div className="actionEdit m-0 p-0">
-//               <DragOutlined className="draggable" type="swap" />
-//             </div>
-//           </div>
-//         );
-//       },
-//     },
-//     {
-//       title: "",
-//       dataIndex: "operation",
-//       render: (_, record) =>
-//         tableData.length >= 1 ? (
-//           <Popconfirm
-//             title="Sure to delete?"
-//             onConfirm={() => handleDelete(record.key)}
-//           >
-//             <div className="deleteIcon m-0">
-//               <FaTrash />
-//             </div>
-//           </Popconfirm>
-//         ) : null,
-//     },
-//     {
-//       title: "",
-//       dataIndex: "quotation_details_service_id",
-//       key: "quotation_details_service_id",
-//       width: "40%",
-
-//       render: (data, index) => {
-//         console.log("index is :", index);
-//         return (
-//           <div className="d-flex justify-content-center align-items-center tborder ">
-//             <Form.Item
-//               name={[
-//                 "quotation_details",
-//                 index.key,
-//                 "quotation_details_service_id",
-//               ]}
-//               rules={[{ required: true, message: 'Please select a task' }]}
-//             >
-//               <SelectBox
-//                 allowClear
-//                 showSearch
-//                 optionFilterProp="children"
-//                 className="selectwidth mb-2"
-//                 value={index.quotation_details_service_id}
-//                 onChange={(e) => {
-//                   console.log("servicess11123", e);
-//                   handleInputchange1(
-//                     e,
-//                     index.key,
-//                     "quotation_details_service_id"
-//                   );
-//                   // handleInputChange(e, index.key, "quotation_details_service_id", "tx")
-//                 }}
-//               >
-//                 {services &&
-//                   services.length > 0 &&
-//                   services.map((item, index) => {
-//                     return (
-//                       <Select.Option
-//                         key={item.service_id}
-//                         value={item.service_id}
-//                       >
-//                         {item.service_name}
-//                       </Select.Option>
-//                     );
-//                   })}
-//               </SelectBox>
-//             </Form.Item>
-//           </div>
-//         );
-//       },
-//       align: "center",
-//     },
-//     {
-//       title: "COST",
-//       dataIndex: "quotation_details_cost",
-//       key: "quotation_details_cost",
-
-//       render: (data, index) => {
-//         console.log("index is :", index);
-//         return (
-//           <div className="d-flex justify-content-center align-items-center tborder ">
-//             <Form.Item
-//               name={["quotation_details", index.key, "quotation_details_cost"]}
-//               rules={[{ required: true, message: 'Required' }]}
-//             >
-//               <Input_Number
-//                 className="text_right"
-//                 value={index.quotation_details_cost}
-//                 onChange={(value) => {
-//                   handleInputchange1(
-//                     value,
-//                     index.key,
-//                     "quotation_details_cost"
-//                   );
-//                   console.log(" input numberevent ", value, index.key);
-//                 }}
-//                 align="right"
-//                 // step={0.01}
-//                 min={0}
-//                 precision={2}
-//                 controlls={false}
-//               />
-//             </Form.Item>
-//           </div>
-//         );
-//       },
-
-//       align: "right",
-//     },
-//     {
-//       title: "TAX TYPE",
-//       dataIndex: "quotation_details_tax_type",
-//       key: "quotation_details_tax_type",
-
-//       render: (data, index) => {
-//         console.log("index is 112:", index.quotation_details_tax_type);
-//         return (
-//           <div className="d-flex justify-content-center align-items-center tborder">
-//             <Form.Item
-//               name={[
-//                 "quotation_details",
-//                 index.key,
-//                 "quotation_details_tax_type",
-//               ]}
-//               rules={[{ required: true, message: 'Required  ' }]}
-//             >
-//               {/* <Input_Number
-//               className="text_right"
-//               value={taxratee}
-//               onChange={(e) => handleInputchange1(e, index.key, "quotation_details_tax_type")}
-//               align="right"
-//               step={0.01}
-//               min={0}
-//               precision={2}
-//               controlls={false}
-//             /> */}
-
-//               <SelectBox
-//                 allowClear
-//                 showSearch
-//                 optionFilterProp="children"
-//                 className="selectwidthnew mb-2"
-//                 value={index.quotation_details_tax_type}
-//                 onChange={(e) => {
-//                   console.log("servicess11123", e);
-//                   // handleInputchange1(e, index.key, "quotation_details_tax_type")
-//                   handleInputChange(
-//                     e,
-//                     index.key,
-//                     "quotation_details_tax_type",
-//                     "tx"
-//                   );
-//                 }}
-//               >
-//                 {taxTypes &&
-//                   taxTypes.length > 0 &&
-//                   taxTypes.map((item, index) => {
-//                     return (
-//                       <Select.Option
-//                         key={item.tax_type_id}
-//                         value={item.tax_type_id}
-//                       >
-//                         {item.tax_type_name}
-//                       </Select.Option>
-//                     );
-//                   })}
-//               </SelectBox>
-//             </Form.Item>
-//           </div>
-//         );
-//       },
-//       align: "right",
-//     },
-//     {
-//       title: "TAX AMOUNT",
-//       dataIndex: "quotation_details_tax_amount",
-//       key: "quotation_details_tax_amount",
-
-//       render: (data, index) => {
-//         console.log("index is :", index);
-//         return (
-//           <div className="d-flex justify-content-center align-items-center tborder ">
-//             <Form.Item
-//               name={[
-//                 "quotation_details",
-//                 index.key,
-//                 "quotation_details_tax_amount",
-//               ]}
-//               // rules={[{ required: true, message: 'Please input the name' }]}
-//             >
-//               <Input_Number
-//                 className="text_right"
-//                 // value={index.taxamount}
-//                 onChange={(e) =>
-//                   handleInputchange1(
-//                     e,
-//                     index.key,
-//                     "quotation_details_tax_amount"
-//                   )
-//                 }
-//                 align="right"
-//                 // step={0.01}
-//                 min={0}
-//                 precision={2}
-//                 controlls={false}
-//               />
-//             </Form.Item>
-//           </div>
-//         );
-//       },
-
-//       align: "right",
-//     },
-//     {
-//       title: "TOTAL AMOUNT",
-//       dataIndex: "quotation_details_total",
-//       key: "quotation_details_total",
-
-//       render: (data, index) => {
-//         console.log("index is :", index);
-//         return (
-//           <div className="d-flex justify-content-center align-items-center tborder ">
-//             <Form.Item
-//               name={["quotation_details", index.key, "quotation_details_total"]}
-//               // rules={[{ required: true, message: 'Please input the name' }]}
-//             >
-//               <Input_Number
-//                 className="text_right"
-//                 // value={    index.totalamount=(index.cost + index.taxamount)
-//                 // }
-//                 value={
-//                   index.quotation_details_cost +
-//                   index.quotation_details_tax_amount
-//                 }
-//                 onChange={(e) =>
-//                   handleInputChange2(e, index, "quotation_details_total")
-//                 }
-//                 align="right"
-//                 // step={0.01}
-//                 min={0}
-//                 precision={2}
-//                 controlls={false}
-//                 onKeyDown={(e) => handleEnter(e, index.key)}
-//               />
-//             </Form.Item>
-//           </div>
-//         );
-//       },
-
-//       align: "right",
-//     },
-//   ];
-// const fixedColumns = [
-//     {
-//       title: 'Total',
-//       dataIndex: 'name',
-//       fixed: true,
-//       width: 100,
-//     },
-//     {
-//       title: 'Description',
-//       dataIndex: 'description',
-//     },
-//   ];
-//   const fixedData = [];
-//   for (let i = 0; i < 20; i += 1) {
-//     fixedData.push({
-//       key: i,
-//       name: ['Light', 'Bamboo', 'Little'][i % 3],
-//       description: 'Everything that has a beginning, has an end.',
-//     });
-//   }
-  
 
 const columns = [
 {
@@ -1304,13 +1003,7 @@ const columns = [
           setOpportunityList(res?.data?.data?.leads);
           setTotalcount(res?.data?.data?.totalCount);
           console.log("totalcount iss", res?.data?.data?.totalCount);
-          // let samplearry = [];
-          // res?.data?.data?.leads.forEach((item, index) => {
-          //   samplearry.push(item.opportunity_id);
-          // });
-          // console.log("pushedd ", samplearry);
-
-          // setOppurtunityid(samplearry);
+        
         } else {
           console.log("Failed to load data !");
         }
@@ -1325,31 +1018,7 @@ const columns = [
   }, [pageofIndex, numOfItems]);
 
 
-  // const footer = () => {
-  //   let totalAge = 0;
 
-  //   // data.forEach(item => {
-  //   //   totalAge += item.age;
-  //   // });
-
-  //   return (
-  //     <>
-  //       <tr>
-  //         <th>Total</th>
-  //         <th>{totalAge}</th>
-  //         <th><InputType /></th>
-  //         <th><InputType /></th>
-  //         <th><InputType /></th>
-  //         <th><InputType /></th>
-  //         <th><InputType /></th>
-  //         <th><InputType /></th>
-  //         <th><InputType /></th>
-
-  //         <th>N/A</th>
-  //       </tr>
-  //     </>
-  //   );
-  // };
   const [services, setServices] = useState([]);
   console.log("Servicesss are :::", services);
   const [allservices, setAllservices] = useState();
@@ -1425,15 +1094,7 @@ const columns = [
 
 
 
-//   const [errornw, setErrornw] = useState(false);
 
-// const validateDate = (selectedDate) => {
-//   if (!selectedDate) {
-//     setErrornw(true);
-//     return;
-//   }
-//   setErrornw(false);
-// };
 const [qno,setQno]=useState(Date.now());
   const [filenew, setFilenew] = useState();
   console.log("file", filenew);
@@ -1471,15 +1132,13 @@ const [qno,setQno]=useState(Date.now());
       formData.append("attachments", filenew);
     }
 
-    // console.log("file we get :", data.new.file.originFileObj);
+   
     console.log("abc", data.quotation_details);
 
     const userData = Object.values(data.quotation_details);
     console.log("qtn details", data.quotation_details);
     console.log("usserData", userData);
-    // const [quotation_details_service_id, quotation_details_cost,quotation_details_tax_type,quotation_details_tax_amount,quotation_details_total] = userData;
-    // formData.append('userData', JSON.stringify(userData));
-    // formData.append('quotation_details', JSON.stringify(userData));
+   
 
     userData.map((item, index) => {
       console.log("userdata task", index);
@@ -1551,38 +1210,7 @@ const [qno,setQno]=useState(Date.now());
                 <div className="row">
                   <div className="row mt-3 ">
                     
-                    {/* <div className="col-xl-3 col-sm-6 mt-2">
-                      <label>Freight Type</label>
-                      <Form.Item
-                        name="freighttype"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please select a Freight Type",
-                          },
-                        ]}
-                      >
-                        <SelectBox
-                          allowClear
-                          showSearch
-                          optionFilterProp="children"
-                        >
-                          {frighttype &&
-                            frighttype.length > 0 &&
-                            frighttype.map((item, index) => {
-                              return (
-                                <Select.Option
-                                  key={item.freight_type_id}
-                                  value={item.freight_type_id}
-                                >
-                                  {item.freight_type_name}
-                                </Select.Option>
-                              );
-                            })}
-                        </SelectBox>
-                      </Form.Item>
-                    </div> */}
-  {/* <div className=" row mt-3"> */}
+                   
   <div className="col-6 d-flex">
           <div className="col-sm-4 d-flex">
             <div className="col-4">Job No</div>
@@ -1644,60 +1272,19 @@ const [qno,setQno]=useState(Date.now());
           </div>
           </div>
           </div>
-          {/* </div> */}
-
+         
 
                   </div>
                 </div>
               </div>
-              {/* <div className="row justify-content-center">
              
-              </div> */}
-
               <div className="row">
                 <div className="datatable">
-                  <TableData custom_table_css="task_expense_table"
+                  <TableData 
                     data={tableData}
                     columns={columns}
                     rowKey={(record) => record.key}
-        //            footer={() => (
-        //   <div className="row">
-        //     <div className="col-4 d-flex">
-        //       <p>Total :</p>
-        //     </div>
-        //     <div className="footer_select col-4 d-flex">
-        //     {/* <Form.Item name="field1"> */}
-        //     <div className="col-3">
-        //       <SelectBox border={22}></SelectBox>
-        //       </div>
-        //       <div className="col-3">
-        //       <SelectBox></SelectBox>
-        //       </div>
-        //       <div className="col-3">
-        //       <SelectBox></SelectBox>
-        //       </div>
-        //       <div className="col-3">
-        //       <SelectBox></SelectBox>
-        //       </div>
-        //     </div> <div className="col-4 d-flex">
-        //     <Form.Item name="field1">
-        //       <InputType placeholder="Field 1" />
-        //     </Form.Item>
-        //     <Form.Item name="field2">
-        //       <InputType placeholder="Field 2" />
-        //     </Form.Item>
-        //     <Form.Item name="field3">
-        //       <InputType placeholder="Field 3" />
-        //     </Form.Item>
-        //     <Form.Item name="field4">
-        //       <InputType placeholder="Field 4" />
-        //     </Form.Item>
-        //     </div>
-           
-           
-            
-        //     </div>
-        // )}
+                    custom_table_css="table_qtn task_expense_table"
       />
   
  
@@ -1706,94 +1293,79 @@ const [qno,setQno]=useState(Date.now());
                   
 
 
-                </div>
+         </div>
               </div>
-              {/* <div className="d-flex justify-content-end mt-4 mx-5">
-                 <div className="col-lg-2 col-sm-4 col-xs-3 d-flex justify-content-end mt-3 me-2">
-                  <p style={{ fontWeight: 500 }}>Total</p>
-                </div> */}
-                 {/* <div className="d-flex  mt-4 mx-5">
-                 <div className="col-lg-2 col-sm-4 col-xs-3 d-flex  mt-1 me-1">
-                  <p style={{ fontWeight: 500 }}>Total</p>
-                </div> */}
+             
 
-                {/* <div className="col-lg-2 col-sm-2 col-xs-2">
-                  <Form.Item name="grandtotal">
-                    <Input_Number
-                      className="text_right"
-                      value={total}
-                      fontWeight={1000}
-                      // onChange={handleChange}
-                      align="right"
-                      // step={0.01}
-                      min={0}
-                      precision={2}
-                      controlls={false}
-                    />
-                  </Form.Item>
+               
+              <div className="container" style={{backgroundColor:"rgb(240, 248, 254)"}} >
+                <div className="row mt-4 mx-5 " >
+                  <div className="total_exp">
+                  <div className="col-12 d-flex" >
+                  <div className="col-3 d-flex justify-content-end mt-3" >
+                  <p style={{ fontWeight: 700 }}>Total</p>
+                  
+                   </div>
+                   <div className="col-4 d-flex mx-4 p-0" style={{backgroundColor:""}}>
+                    <div className="row mx-0 px-0">
+                    <div className="col-lg-3   m-0 p-1 pt-2 ">
+                    {/* <p style={{ fontWeight: 500 }}>Total</p> */}
+                    <SelectBox className="w-100 ms-2 "  />
+                    </div>
+                    <div className="col-lg-3  m-0 p-1 ">
+                    {/* <p style={{ fontWeight: 500 }}>Total</p> */}
+                    <InputNumber style={{borderRadius:"5px"}} className="w-100 ms-2 mt-2 p-1" />
+                    </div>
+                    <div className="col-lg-3 col-sm-2 col-xs-2 m-0 p-1 ">
+                    {/* <p style={{ fontWeight: 500 }}>Total</p> */}
+                    <InputNumber style={{borderRadius:"5px"}} className="w-100 ms-2 mt-2 p-1" />
+                    </div>
+                    <div className="col-lg-3 col-sm-2 col-xs-2 m-0 p-1 ">
+                    {/* <p style={{ fontWeight: 500 }}>Total</p> */}
+                    <InputNumber style={{borderRadius:"5px"}} className="w-100 ms-2 mt-2 p-1"/>
+                    </div>
+                    </div>
+                   </div>
+                   <div className="col-4 d-flex p-0 m-0" >
+                   <div className="row mx-0 px-0">
+                    <div className="col-lg-3 col-sm-2 col-xs-2  m-0 p-1 pt-2 ">
+                    {/* <p style={{ fontWeight: 500 }}>Total</p> */}
+                    <SelectBox className="w-100 ms-2 " />
+                    </div>
+                    <div className="col-lg-3 col-sm-2 col-xs-2 m-0 p-1 ">
+                    {/* <p style={{ fontWeight: 500 }}>Total</p> */}
+                    <InputNumber style={{borderRadius:"5px"}} className="w-100 ms-2 mt-2 p-1" />
+                    </div>
+                    <div className="col-lg-3 col-sm-2 col-xs-2 m-0 p-1 ">
+                    {/* <p style={{ fontWeight: 500 }}>Total</p> */}
+                    <InputNumber style={{borderRadius:"5px"}} className="w-100 ms-2 mt-2 p-1" />
+                    </div>
+                    <div className="col-lg-3 col-sm-2 col-xs-2 m-0 p-1 ">
+                    {/* <p style={{ fontWeight: 500 }}>Total</p> */}
+                    <InputNumber style={{borderRadius:"5px"}} className="w-100 ms-2 mt-2 p-1"/>
+                    </div>
+                    </div>
+                  
+                   
+                   </div>
+
+                  </div>
+                  </div>
+                {/* <div className="d-flex  mt-4 mx-5">
+              <div className="col-lg-2 col-sm-4 col-xs-3 d-flex ">
+             
                 </div> 
                 <div className="col-lg-2 col-sm-2 col-xs-2">
-                  <Form.Item name="grandtotal">
-                    <Input_Number
-                      className="text_right"
-                      value={total}
-                      fontWeight={1000}
-                      // onChange={handleChange}
-                      align="right"
-                      // step={0.01}
-                      min={0}
-                      precision={2}
-                      controlls={false}
-                    />
-                  </Form.Item>
-                </div> 
-                <div className="col-lg-2 col-sm-2 col-xs-2">
-                  <Form.Item name="grandtotal">
-                    <Input_Number
-                      className="text_right"
-                      value={total}
-                      fontWeight={1000}
-                      // onChange={handleChange}
-                      align="right"
-                      // step={0.01}
-                      min={0}
-                      precision={2}
-                      controlls={false}
-                    />
-                  </Form.Item>
-                </div> 
-                <div className="col-lg-2 col-sm-2 col-xs-2">
-                  <Form.Item name="grandtotal">
-                    <Input_Number
-                      className="text_right"
-                      value={total}
-                      fontWeight={1000}
-                      // onChange={handleChange}
-                      align="right"
-                      // step={0.01}
-                      min={0}
-                      precision={2}
-                      controlls={false}
-                    />
-                  </Form.Item>
-                </div>  */}
-                
-              {/* </div> */}
-              <div className="container-new">
-      <label htmlFor="input1">Input 1:</label>
-      <input type="text" id="input1" />
+                <input type="text" id="input1" />
+                </div>
+     
 
-      <label htmlFor="input2">Input 2:</label>
-      <input type="text" id="input2" />
+     
+  
+      </div> */}
 
-      <label htmlFor="input3">Input 3:</label>
-      <input type="text" id="input3" />
-
-      <label htmlFor="input4">Input 4:</label>
-      <input type="text" id="input4" />
-
-      <label htmlFor="input5">Input 5:</label>
-      <input type="text" id="input5" />
+                </div>
+       
       </div>
               
               <div className="d-flex justify-content-center my-4">
@@ -1802,12 +1374,9 @@ const [qno,setQno]=useState(Date.now());
                     Save
                   </Button>
                 </div>
-                {/* <div className="col-lg-1 ">
-                  <Button className="qtn_save" btnType="save">
-                    Cancel
-                  </Button>
-                </div> */}
+               
               </div>
+              
             </Form>
 
             <Custom_model

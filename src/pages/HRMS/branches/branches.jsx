@@ -43,6 +43,7 @@ const [BranchError, setBranchError] = useState();
 const [branchcode, setBranchcode] = useState();
 const [branchname, setBranchname] = useState();
 
+const [searchcodeText, setSearchcodeText] = useState("");
 
 
 //close modal for  success pop up 
@@ -83,7 +84,7 @@ const [branchname, setBranchname] = useState();
     console.log("Branch edit", e);
     setNameInput(e.branch_name);
     setCodeInput(e.branch_code);
- setBranch_id(e.branch_id);
+    setBranch_id(e.branch_id);
     setEditUniqueName(e?.branch_name);
     setEditUniqueCode(e?.branch_code);
     editForm.setFieldsValue({
@@ -167,6 +168,12 @@ const [branchname, setBranchname] = useState();
       dataIndex: "branch_code",
       key: "branch_code",
       align: "center",
+      filteredValue: [searchcodeText],
+      onFilter: (value, record) => {
+        return String(record.branch_code)
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      },
     },
   ];
 
@@ -260,6 +267,19 @@ const [branchname, setBranchname] = useState();
               }}
               onSearch={(value) => {
                 setSearchedText(value);
+              }}
+            />
+          </div>
+          <div className="col-4">
+            <Input.Search
+              placeholder="Search by Branch Code"
+              style={{ margin: "5px", borderRadius: "5px" }}
+              value={searchcodeText}
+              onChange={(e) => {
+                setSearchcodeText(e.target.value ? [e.target.value] : []);
+              }}
+              onSearch={(value) => {
+                setSearchcodeText(value);
               }}
             />
           </div>

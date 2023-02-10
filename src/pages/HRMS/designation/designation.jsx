@@ -43,6 +43,8 @@ export default function Designation() {
   const [editUniqueCode, setEditUniqueCode] = useState();
   const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
 
+  const [addshow,setAddshow]= useState(false)
+
   const [editForm] = Form.useForm();
 
   const getData = (current, pageSize) => {
@@ -130,6 +132,8 @@ export default function Designation() {
       );
       console.log("unit data is added ", adddesigntion);
       if (adddesigntion.data.success) {
+        getalldesignation();
+        setAddshow(false);
         setSaveSuccess(true);
         addForm.resetFields();
         close_modal(saveSuccess, 1000);
@@ -207,10 +211,111 @@ export default function Designation() {
   ];
   return (
     <>
-      <div className="container mb-4 d-flex justify-content-center">
-        <div className="containerdesig ">
-          <div className="row mx-2">
-            <Form
+      
+
+      <div className="container-fluid container2 pt-3">
+        <div className="row flex-wrap">
+          <div className="col">
+            <h5 className="lead_text">Designation</h5>
+          </div>
+          {/* <Leadlist_Icons /> */}
+        </div>
+        <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
+          <div className="col-4">
+            <Input.Search
+              placeholder="Search by Designation"
+              style={{ margin: "5px", borderRadius: "5px" }}
+              value={searchedText}
+              onChange={(e) => {
+                setSearchedText(e.target.value ? [e.target.value] : []);
+              }}
+              onSearch={(value) => {
+                setSearchedText(value);
+              }}
+            />
+          </div>
+        </div>
+        <div className="row my-3">
+          <div className="col-4 px-3">
+            <Select
+              bordered={false}
+              className="page_size_style"
+              value={pageSize}
+              onChange={(e) => {
+                setCurrent(1)
+                setPageSize(e)}}
+            >
+              
+              <Select.Option value="25">
+                Show
+                <span className="vertical ms-1">|</span>
+                <span className="sizes ms-1">25</span>
+              </Select.Option>
+              <Select.Option value="50">
+                Show
+                <span className="vertical ms-1">|</span>
+                <span className="sizes ms-1"> 50</span>
+              </Select.Option>
+              <Select.Option value="100">
+                Show
+                <span className="vertical ms-1">|</span>
+                <span className="sizes ms-1">100</span>
+              </Select.Option>
+            </Select>
+          </div>
+          <div className="col-4 d-flex  justify-content-center">
+              <MyPagination
+                total={desigtiondata?.length}
+                current={current}
+                showSizeChanger={true}
+                pageSize={pageSize}
+                onChange={(current, pageSize) => {
+                  console.log("ggdhffs", current, pageSize);
+                  setCurrent(current);
+                  setPageSize(pageSize);
+                }}
+              />
+            </div>
+            <div className="col-4">
+            <Button btnType="add" onClick={() => setAddshow(true)}>
+              Add Designation
+            </Button>
+            </div>
+        </div>
+        <div className="datatable">
+          <TableData
+            // data={getData(numofItemsTo, pageofIndex)}
+            data={getData(current, pageSize)}
+            // data={data}
+            columns={columns}
+            custom_table_css="table_lead_list"
+          />
+        </div>
+        <div className="d-flex py-2 justify-content-center">
+              <MyPagination
+                total={desigtiondata?.length}
+                current={current}
+                showSizeChanger={true}
+                pageSize={pageSize}
+                onChange={(current, pageSize) => {
+                  console.log("ggdhffs", current, pageSize);
+                  setCurrent(current);
+                  setPageSize(pageSize);
+                }}
+              />
+            </div>
+
+            <Custom_model
+          size={"sm"}
+          show={addshow}
+          onHide={() => {
+            setAddshow(false);
+          }}
+          View_list
+          list_content={
+            <div className="container-fluid px-4 my-4 ">
+              <h6 className="lead_text">Add Designation</h6>
+              <Form
               name="addForm"
               form={addForm}
               onFinish={(value) => {
@@ -235,7 +340,7 @@ export default function Designation() {
                           message: "Please enter a valid Designation Name",
                         },
                       ]}
-                      // onChange={(e) => setDesignationname(e.target.value)}
+                     
                     >
                       <InputType
                         value={designationname}
@@ -301,103 +406,11 @@ export default function Designation() {
                 </div>
               </div>
             </Form>
-            <Custom_model
-              size={"sm"}
-              show={successModal}
-              onHide={() => setSuccessModal(false)}
-              success
-            />
-          </div>
-        </div>
-      </div>
+            </div>
+          }
+        />
 
-      <div className="container-fluid container2 pt-3">
-        <div className="row flex-wrap">
-          <div className="col">
-            <h5 className="lead_text">Designation</h5>
-          </div>
-          {/* <Leadlist_Icons /> */}
-        </div>
-        <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
-          <div className="col-4">
-            <Input.Search
-              placeholder="Search by Designation"
-              style={{ margin: "5px", borderRadius: "5px" }}
-              value={searchedText}
-              onChange={(e) => {
-                setSearchedText(e.target.value ? [e.target.value] : []);
-              }}
-              onSearch={(value) => {
-                setSearchedText(value);
-              }}
-            />
-          </div>
-        </div>
-        <div className="row my-3">
-          <div className="col-4 px-3">
-            <Select
-              bordered={false}
-              className="page_size_style"
-              value={pageSize}
-              onChange={(e) => {
-                setCurrent(1)
-                setPageSize(e)}}
-            >
-              
-              <Select.Option value="25">
-                Show
-                <span className="vertical ms-1">|</span>
-                <span className="sizes ms-1">25</span>
-              </Select.Option>
-              <Select.Option value="50">
-                Show
-                <span className="vertical ms-1">|</span>
-                <span className="sizes ms-1"> 50</span>
-              </Select.Option>
-              <Select.Option value="100">
-                Show
-                <span className="vertical ms-1">|</span>
-                <span className="sizes ms-1">100</span>
-              </Select.Option>
-            </Select>
-          </div>
-          <div className="col-4 d-flex  justify-content-center">
-              <MyPagination
-                total={desigtiondata?.length}
-                current={current}
-                showSizeChanger={true}
-                pageSize={pageSize}
-                onChange={(current, pageSize) => {
-                  console.log("ggdhffs", current, pageSize);
-                  setCurrent(current);
-                  setPageSize(pageSize);
-                }}
-              />
-            </div>
-            <div className="col-4"></div>
-        </div>
-        <div className="datatable">
-          <TableData
-            // data={getData(numofItemsTo, pageofIndex)}
-            data={getData(current, pageSize)}
-            // data={data}
-            columns={columns}
-            custom_table_css="table_lead_list"
-          />
-        </div>
-        <div className="d-flex py-2 justify-content-center">
-              <MyPagination
-                total={desigtiondata?.length}
-                current={current}
-                showSizeChanger={true}
-                pageSize={pageSize}
-                onChange={(current, pageSize) => {
-                  console.log("ggdhffs", current, pageSize);
-                  setCurrent(current);
-                  setPageSize(pageSize);
-                }}
-              />
-            </div>
+
 
         <Custom_model
           size={"sm"}

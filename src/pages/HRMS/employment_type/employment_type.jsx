@@ -33,6 +33,9 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
   const [employeeType, setEmployeeType] = useState();
   const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
 
+  const[addshowmodal,setaddshowmodal]= useState(false)
+  
+
   const getData = (current, pageSize) => {
     return emptypedata?.slice((current - 1) * pageSize, current * pageSize);
   };
@@ -79,6 +82,8 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
       );
       console.log(" data is added  successfully", addemptype);
       if (addemptype.data.success) {
+        getallemptype();
+        setaddshowmodal(false)
         setSaveSuccess(true);
         getallemptype();
         addForm.resetFields();
@@ -168,7 +173,7 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
 
   return (
     <>
-      <div className="container mb-4 d-flex justify-content-center">
+      {/* <div className="container mb-4 d-flex justify-content-center">
         <div className="containerdesig ">
           <div className="row mx-2">
             <Form
@@ -243,7 +248,7 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
             />
           </div>
         </div>
-      </div>
+      </div> */}
 
       <div className="container-fluid container2 pt-3">
         <div className="row flex-wrap">
@@ -307,7 +312,11 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
                 }}
               />
             </div>
-            <div className="col-4"></div>
+            <div className="col-4">
+            <Button btnType="add" onClick={() => setaddshowmodal(true)}>
+              Add EmployeMentType
+            </Button>
+            </div>
         </div>
         <div className="datatable">
           <TableData
@@ -331,6 +340,91 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
                 }}
               />
             </div>
+
+            <Custom_model
+          size={"sm"}
+          show={addshowmodal}
+          onHide={() => {
+            setaddshowmodal(false);
+          }}
+          View_list
+          list_content={
+            <>
+              <h6 className="lead_text mb-2">Add Employment Type</h6>
+              <div className="container-fluid px-4 my-4 ">
+              <Form
+              name="addForm"
+              form={addForm}
+              onFinish={(value) => {
+                console.log("values", value);
+                submitemptype();
+              }}
+              onFinishFailed={(error) => {
+                console.log(error);
+              }}
+            >
+              <div className="row flex-wrap pt-1">
+                <div className="row ms-0 py-1">
+                  <div className="col-12 pt-3">
+                    <label htmlfor="emp_type_name">Employment Type Name</label>
+                    <Form.Item
+                      name="Employment Type Name"
+                      rules={[
+                        {
+                          required: true,
+                          pattern: new RegExp("^[A-Za-z ]+$"),
+                          message: "Please enter a valid Employment Type Name",
+                        },
+                        {
+                          min: 2,
+                          message: "Branch Name must be at least 2 characters",
+                        },
+                        {
+                          max: 100,
+                          message:
+                            "Branch Name cannot be longer than 100 characters",
+                        },
+                      ]}
+                      onChange={(e) => setaddemploytypename(e.target.value)}
+                    >
+                      <InputType
+                        onChange={(e) => {
+                          setEmployeeType(e.target.value);
+                          setuniqueCode(false);
+                        }}
+                     
+                        onBlur={ async () => {
+                        
+                          let a = await CheckUnique({type:"employmenttypename",value:employeeType})
+                          
+                          setuniqueCode(a)
+                        }}
+                      />
+                    </Form.Item>
+                    {uniqueCode ? (
+                      <p style={{ color: "red", marginTop: "-24px" }}>
+                        Employment Type {uniqueErrMsg.UniqueErrName}
+                      </p>
+                    ) : null}
+                  </div>
+                </div>
+              </div>
+              <div className="row justify-content-center">
+                <div className="col-auto">
+                  <Button btnType="save">Save</Button>
+                </div>
+              </div>
+            </Form>
+              </div>
+            </>
+          }
+        />
+ <Custom_model
+          size={"sm"}
+          show={saveSuccess}
+          onHide={() => setSaveSuccess(false)}
+          success
+        />
 
         <Custom_model
           size={"sm"}

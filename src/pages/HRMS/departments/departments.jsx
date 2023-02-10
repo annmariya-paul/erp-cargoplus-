@@ -211,7 +211,7 @@ export default function Departments(props) {
       title: "DEPARTMENT NAME",
       dataIndex: "department_name",
       key: "department_name",
-       filteredValue: [searchedText],
+      filteredValue: [searchedText],
       onFilter: (value, record) => {
         return String(record.department_name)
           .toLowerCase()

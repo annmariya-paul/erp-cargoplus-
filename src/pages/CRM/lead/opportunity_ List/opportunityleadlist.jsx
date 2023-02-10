@@ -76,6 +76,8 @@ function OpportunityLeadlist(props) {
   const [opporStatus, setOpporstatus] = useState(Oppor_Status);
   const [probConversion,setProbConversion] = useState(Prob_conversion);
 
+  const[leadname,setLeadname] =useState("")
+
   //view progress
   const [tableprogress, setTableprogress] = useState("");
   const [count, setcount] = useState(0);
@@ -243,7 +245,21 @@ function OpportunityLeadlist(props) {
     }
   };
 
+  const getonelead = async () => {
+    try {
+      const onelead = await PublicFetch.get(`${CRM_BASE_URL}/lead/${id}`);
+      console.log("one lead  name iss", onelead.data.data.lead_customer_name);
+      setLeadname(onelead.data.data.lead_customer_name)
+      // setBranches(allbranches.data.data);
+      // setBranch_id(allbranches.data.branch_id);
+      // console.log("branch id", branch_id);
+    } catch (err) {
+      console.log("error while getting the leads: ", err);
+    }
+  };
+
   useEffect(() => {
+    getonelead()
     GetOpportunityData();
     // getAllContact();
   }, [numOfItems, pageSize, id]);
@@ -600,7 +616,7 @@ function OpportunityLeadlist(props) {
         <div>
           <div className="row flex-wrap">
             <div className="col">
-              <h5 className="lead_text">Opportunities of {id} </h5>
+              <h5 className="lead_text">Opportunities of {leadname} </h5>
             </div>
             {/* <Leadlist_Icons /> */}
           </div>

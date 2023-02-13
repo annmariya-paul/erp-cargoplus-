@@ -811,6 +811,18 @@ export default function Sidebar({ showSidebar }) {
                       </NavLink>
                     </li>
                   )}
+                  {checkPermission("currency") && (
+                    <li className="nav-text ">
+                      <NavLink
+                        className={({ isActive }) =>
+                          isActive ? "active-link" : "link"
+                        }
+                        to={ROUTES.CURRENCY}
+                      >
+                        <div className=" ms-4">Currency</div>
+                      </NavLink>
+                    </li>
+                  )}
 
                   {checkPermission("companyinfo") && (
                     <li className="nav-text ">
@@ -821,19 +833,6 @@ export default function Sidebar({ showSidebar }) {
                         to={ROUTES.COMPANYINFO}
                       >
                         <div className=" ms-4">CompanyInfo</div>
-                      </NavLink>
-                    </li>
-                  )}
-
-                  {checkPermission("currency") && (
-                    <li className="nav-text ">
-                      <NavLink
-                        className={({ isActive }) =>
-                          isActive ? "active-link" : "link"
-                        }
-                        to={ROUTES.CURRENCY}
-                      >
-                        <div className=" ms-4">Currency</div>
                       </NavLink>
                     </li>
                   )}

@@ -51,6 +51,7 @@ function CreateJob() {
   const [allunit, setAllunit] = useState([]);
   console.log("all units are : ", allunit);
   const [unitTable, setunitTable] = useState("");
+  const [locationType, setLocationType] = useState();
 
   const getBase64 = (file) =>
     new Promise((resolve, reject) => {
@@ -72,6 +73,31 @@ function CreateJob() {
 
   const [qtnid, setQtnid] = useState();
   console.log("qtn id is : ", qtnid);
+
+  const locationBytype = (data) => {
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/locations/type-location/${data}`)
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          console.log("success of location type", res.data, data);
+          setLocationType(res.data.data.location_type);
+          let temp = [];
+          res.data.data.forEach((item, index) => {
+            temp.push({
+              location_id: item.location_id,
+              location_code: item.location_code,
+              location_name: item.location_name,
+              location_type: item.location_type,
+              location_country: item.location_country,
+            });
+            setAllLocations(temp);
+          });
+        }
+      })
+      .catch((err) => {
+        console.log("Error of location type", err);
+      });
+  };
 
   const getonequatation = async (id) => {
     try {
@@ -269,26 +295,26 @@ function CreateJob() {
     }
   };
 
-  const getAllLocations = async () => {
-    try {
-      const locations = await PublicFetch.get(`${CRM_BASE_URL_FMS}/locations`);
-      console.log("all locations are", locations.data.data);
-      // setAllLocations(locations.data.data);
-      let temp = [];
-      locations.data.data.forEach((item, index) => {
-        temp.push({
-          location_id: item.location_id,
-          location_code: item.location_code,
-          location_name: item.location_name,
-          location_type: item.location_type,
-          location_country: item.countries.country_name,
-        });
-        setAllLocations(temp);
-      });
-    } catch (err) {
-      console.log("error while getting the locations: ", err);
-    }
-  };
+  // const getAllLocations = async () => {
+  //   try {
+  //     const locations = await PublicFetch.get(`${CRM_BASE_URL_FMS}/locations`);
+  //     console.log("all locations are", locations.data.data);
+  //     // setAllLocations(locations.data.data);
+  //     let temp = [];
+  //     locations.data.data.forEach((item, index) => {
+  //       temp.push({
+  //         location_id: item.location_id,
+  //         location_code: item.location_code,
+  //         location_name: item.location_name,
+  //         location_type: item.location_type,
+  //         location_country: item.countries.country_name,
+  //       });
+  //       setAllLocations(temp);
+  //     });
+  //   } catch (err) {
+  //     console.log("error while getting the locations: ", err);
+  //   }
+  // };
 
   const getallcarrier = async () => {
     try {
@@ -327,7 +353,7 @@ function CreateJob() {
 
   useEffect(() => {
     // getallunits();
-    getAllLocations();
+    // getAllLocations();
     getallcarrier();
     getallPaymentTerms();
     getallunits();
@@ -554,6 +580,9 @@ function CreateJob() {
                           showSearch
                           optionFilterProp="children"
                           disabled={disable}
+                          onChange={(e) => {
+                            locationBytype(e);
+                          }}
                         >
                           <Select.Option value="Air">Air</Select.Option>
                           <Select.Option value="Sea">Sea</Select.Option>

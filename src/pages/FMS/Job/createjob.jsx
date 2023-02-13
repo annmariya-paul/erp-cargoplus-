@@ -51,6 +51,7 @@ function CreateJob() {
   const [allunit, setAllunit] = useState([]);
   console.log("all units are : ", allunit);
   const [unitTable, setunitTable] = useState("");
+  const [locationType, setLocationType] = useState();
 
   const getBase64 = (file) =>
     new Promise((resolve, reject) => {
@@ -73,6 +74,31 @@ function CreateJob() {
   const [qtnid, setQtnid] = useState();
   console.log("qtn id is : ", qtnid);
 
+  const locationBytype = (data) => {
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/locations/type-location/${data}`)
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          console.log("success of location type", res.data, data);
+          setLocationType(res.data.data.location_type);
+          let temp = [];
+          res.data.data.forEach((item, index) => {
+            temp.push({
+              location_id: item.location_id,
+              location_code: item.location_code,
+              location_name: item.location_name,
+              location_type: item.location_type,
+              location_country: item.location_country,
+            });
+            setAllLocations(temp);
+          });
+        }
+      })
+      .catch((err) => {
+        console.log("Error of location type", err);
+      });
+  };
+
   const getonequatation = async (id) => {
     try {
       const onequatation = await PublicFetch.get(
@@ -86,26 +112,26 @@ function CreateJob() {
 
         job_shipper: onequatation?.data?.data?.quotation_shipper,
         job_consignee:
-          onequatation?.data?.data?.crm_v1_leads.lead_customer_name,
+          onequatation?.data?.data?.crm_v1_leads.lead_id,
         job_freight_type:
-          onequatation?.data?.data?.fms_v1_freight_types.freight_type_name,
+          onequatation?.data?.data?.fms_v1_freight_types.freight_type_id,
         job_cargo_type: onequatation?.data?.data?.quotation_cargo_type,
         job_mode: onequatation?.data?.data?.quotation_mode,
-        job_carrier: onequatation?.data?.data?.fms_v1_carrier.carrier_name,
+        job_carrier: onequatation?.data?.data?.fms_v1_carrier.carrier_id,
         job_payment_terms:
-          onequatation?.data?.data?.fms_v1_payment_terms.payment_term_name,
+          onequatation?.data?.data?.fms_v1_payment_terms.payment_term_id,
 
         job_no_of_pieces: onequatation?.data?.data?.quotation_no_of_pieces,
 
-        job_uom: onequatation?.data?.data?.crm_v1_units.unit_name,
+        job_uom: onequatation?.data?.data?.crm_v1_units.unit_id,
         job_destination_id:
           onequatation?.data?.data
             ?.fms_v1_locations_fms_v1_quotation_quotation_destination_idTofms_v1_locations
-            .location_name,
+            .location_id,
         job_origin_id:
           onequatation?.data?.data
             ?.fms_v1_locations_fms_v1_quotation_quotation_origin_idTofms_v1_locations
-            .location_name,
+            .location_id,
       });
     } catch (err) {
       console.log("error to getting all freighttype", err);
@@ -193,7 +219,7 @@ function CreateJob() {
     if (!mShow) {
       setTimeout(() => {
         setSuccessPopup(false);
-        navigate(ROUTES.JOBTASKS);
+        navigate(ROUTES.LIST_JOB);
       }, time);
     }
   };
@@ -269,26 +295,26 @@ function CreateJob() {
     }
   };
 
-  const getAllLocations = async () => {
-    try {
-      const locations = await PublicFetch.get(`${CRM_BASE_URL_FMS}/locations`);
-      console.log("all locations are", locations.data.data);
-      // setAllLocations(locations.data.data);
-      let temp = [];
-      locations.data.data.forEach((item, index) => {
-        temp.push({
-          location_id: item.location_id,
-          location_code: item.location_code,
-          location_name: item.location_name,
-          location_type: item.location_type,
-          location_country: item.countries.country_name,
-        });
-        setAllLocations(temp);
-      });
-    } catch (err) {
-      console.log("error while getting the locations: ", err);
-    }
-  };
+  // const getAllLocations = async () => {
+  //   try {
+  //     const locations = await PublicFetch.get(`${CRM_BASE_URL_FMS}/locations`);
+  //     console.log("all locations are", locations.data.data);
+  //     // setAllLocations(locations.data.data);
+  //     let temp = [];
+  //     locations.data.data.forEach((item, index) => {
+  //       temp.push({
+  //         location_id: item.location_id,
+  //         location_code: item.location_code,
+  //         location_name: item.location_name,
+  //         location_type: item.location_type,
+  //         location_country: item.countries.country_name,
+  //       });
+  //       setAllLocations(temp);
+  //     });
+  //   } catch (err) {
+  //     console.log("error while getting the locations: ", err);
+  //   }
+  // };
 
   const getallcarrier = async () => {
     try {
@@ -327,7 +353,7 @@ function CreateJob() {
 
   useEffect(() => {
     // getallunits();
-    getAllLocations();
+    // getAllLocations();
     getallcarrier();
     getallPaymentTerms();
     getallunits();
@@ -414,18 +440,25 @@ function CreateJob() {
                       <label>Quotation No</label>
                       <Form.Item
                         name="quotationno"
-                        rules={[
-                          {
-                            required: true,
-                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                            message: "Please enter a Valid quotation no",
-                          },
-                        ]}
+                        // rules={[
+                        //   {
+                        //     required: true,
+                        //     pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                        //     message: "Please enter a Valid quotation no",
+                        //   },
+                        // ]}
                       >
                         <SelectBox
-                          onChange={(e) => {
+                          onChange={(e) =>{
+                          if(e)
+                            {
                             handleLeadIdEnq(e);
                             setDisable(true);
+                          }else{
+                            addForm.resetFields();
+                             setDisable(false);
+                          }
+                           
                           }}
                           allowClear
                           showSearch
@@ -507,8 +540,8 @@ function CreateJob() {
                         rules={[
                           {
                             required: true,
-                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                            message: "Please enter a Valid cargotype",
+                          
+                            message: "Please select a Valid cargotype",
                           },
                         ]}
                       >
@@ -522,7 +555,7 @@ function CreateJob() {
                             cargooptions.length > 0 &&
                             cargooptions.map((item, index) => {
                               return (
-                                <Select.Option key={item.id} value={item.id}>
+                                <Select.Option key={item.id} value={item.name}>
                                   {item.name}
                                 </Select.Option>
                               );
@@ -547,10 +580,13 @@ function CreateJob() {
                           showSearch
                           optionFilterProp="children"
                           disabled={disable}
+                          onChange={(e) => {
+                            locationBytype(e);
+                          }}
                         >
-                          <Select.Option value="A">Air</Select.Option>
-                          <Select.Option value="S">Sea</Select.Option>
-                          <Select.Option value="R">Road</Select.Option>
+                          <Select.Option value="Air">Air</Select.Option>
+                          <Select.Option value="Sea">Sea</Select.Option>
+                          <Select.Option value="Road">Road</Select.Option>
                         </SelectBox>
                       </Form.Item>
                     </div>

@@ -91,8 +91,9 @@ function Categorylist(props) {
           category_description: category?.category_description,
           category_pic: category?.category_pic,
           children: ch,
+          // category_parent_name:
         });
-
+console.log("parntt",treeStructure)
         // }
       });
     }
@@ -882,18 +883,19 @@ function Categorylist(props) {
 
                     <div className="row mt-3">
                       <div className="col-12 d-flex justify-content-center gap-2">
-                        <Button
+                        {/* <Button
                           style={{ backgroundColor: "white" }}
                           className="p-1 shadow-sm"
                         >
                           Cancel
-                        </Button>
+                        </Button> */}
                         <Button
                           style={{
                             backgroundColor: "#0092ce",
                             color: "white",
                             borderRadius: "5px",
                           }}
+                          className="p-2"
                           type="submit"
                         >
                           Save

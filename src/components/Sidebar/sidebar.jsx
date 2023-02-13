@@ -8,11 +8,23 @@ import {
 } from "react-icons/ai";
 import { BsFillXDiamondFill, BsBookmarkFill } from "react-icons/bs";
 import { RiTeamFill } from "react-icons/ri";
-import { MdEventNote } from "react-icons/md";
+import {
+  MdEventNote,
+  MdSettingsInputComponent,
+  MdOutlineSell,
+  MdOutlinePointOfSale,
+} from "react-icons/md";
+import { GiCargoShip } from "react-icons/gi";
+import { GrSettingsOption } from "react-icons/gr";
+import { TbReport } from "react-icons/tb";
 import { ROUTES } from "../../routes";
 import { NavLink } from "react-router-dom";
 import { FiSettings } from "react-icons/fi";
 import { checkPermission } from "../../utils/check_permission";
+import hrmsIcon from "../../components/img/human-resources-icon-png-12.jpg";
+import crmIcon from "../../components/img/icons8-crm-58.png";
+import fmsIcon from "../../components/img/icons8-cargo-ship-50.png";
+import settingsicon from "../../components/img/icons8-gear-50.png";
 
 export default function Sidebar({ showSidebar }) {
   // const [sidebar, setSidebar] = useState(true);
@@ -92,6 +104,13 @@ export default function Sidebar({ showSidebar }) {
                   <div className="d-flex justify-content-between gap-5">
                     <div className="d-flex">
                       <RiTeamFill className="sidebar_icons" />
+                      {/* <img
+                        src={hrmsIcon}
+                        alt
+                        height={15}
+                        width={15}
+                        className="mt-1 me-1"
+                      /> */}
                       <div style={{ width: "120px" }} className="">
                         HRMS
                       </div>
@@ -115,8 +134,7 @@ export default function Sidebar({ showSidebar }) {
                         }
                         to={ROUTES.BRANCHES}
                       >
-                        <RiTeamFill className="sidebar_icons ms-4" />
-                        Branches
+                        <div className=" ms-4">Branches</div>
                       </NavLink>
                     </li>
                   )}
@@ -128,8 +146,7 @@ export default function Sidebar({ showSidebar }) {
                         }
                         to={ROUTES.DEPARTMENTS}
                       >
-                        <RiTeamFill className="sidebar_icons ms-4" />
-                        Departments
+                        <div className=" ms-4">Departments</div>
                       </NavLink>
                     </li>
                   )}
@@ -141,8 +158,7 @@ export default function Sidebar({ showSidebar }) {
                         }
                         to={ROUTES.DESIGNATION}
                       >
-                        <RiTeamFill className="sidebar_icons ms-4" />
-                        Designation
+                        <div className=" ms-4">Designation</div>
                       </NavLink>
                     </li>
                   )}
@@ -154,24 +170,11 @@ export default function Sidebar({ showSidebar }) {
                         }
                         to={ROUTES.EMPLOYMENT_TYPE}
                       >
-                        <RiTeamFill className="sidebar_icons ms-4" />
-                        Employment Type
+                        <div className=" ms-4">Employment Type</div>
                       </NavLink>
                     </li>
                   )}
-                  {checkPermission("employee") && (
-                    <li className="nav-text ">
-                      <NavLink
-                        className={({ isActive }) =>
-                          isActive ? "active-link" : "link"
-                        }
-                        to={ROUTES.EMPLOYEES}
-                      >
-                        <RiTeamFill className="sidebar_icons ms-4" />
-                        Employees
-                      </NavLink>
-                    </li>
-                  )}
+
                   {checkPermission("employee grade") && (
                     <li className="nav-text ">
                       <NavLink
@@ -180,8 +183,7 @@ export default function Sidebar({ showSidebar }) {
                         }
                         to={ROUTES.EMPLOYEEGRADE}
                       >
-                        <RiTeamFill className="sidebar_icons ms-4" />
-                        Employee grade
+                        <div className=" ms-4">Employee grade</div>
                       </NavLink>
                     </li>
                   )}
@@ -193,8 +195,7 @@ export default function Sidebar({ showSidebar }) {
                         }
                         to={ROUTES.ROLES_SCREEN}
                       >
-                        <RiTeamFill className="sidebar_icons ms-4" />
-                        Roles
+                        <div className=" ms-4">Roles</div>
                       </NavLink>
                     </li>
                   )}
@@ -206,8 +207,19 @@ export default function Sidebar({ showSidebar }) {
                         }
                         to={ROUTES.PERMISSIONS}
                       >
-                        <RiTeamFill className="sidebar_icons ms-4" />
-                        Assign Permissions
+                        <div className=" ms-4">Assign Permissions</div>
+                      </NavLink>
+                    </li>
+                  )}
+                  {checkPermission("employee") && (
+                    <li className="nav-text ">
+                      <NavLink
+                        className={({ isActive }) =>
+                          isActive ? "active-link" : "link"
+                        }
+                        to={ROUTES.EMPLOYEES}
+                      >
+                        <div className=" ms-4">Employees</div>
                       </NavLink>
                     </li>
                   )}
@@ -232,7 +244,15 @@ export default function Sidebar({ showSidebar }) {
                 >
                   <div className="d-flex justify-content-between gap-5">
                     <div className="d-flex">
-                      <RiTeamFill className="sidebar_icons" />
+                      {/* <RiTeamFill className="sidebar_icons" />
+                       */}
+                      <img
+                        src={crmIcon}
+                        alt=""
+                        height={15}
+                        width={15}
+                        className="mt-1 me-1"
+                      />
                       <div style={{ width: "120px" }} className="">
                         CRM
                       </div>
@@ -263,7 +283,7 @@ export default function Sidebar({ showSidebar }) {
                     >
                       <div className="d-flex justify-content-between gap-5 ms-2">
                         <div className="d-flex">
-                          <RiTeamFill className="sidebar_icons" />
+                          <MdOutlinePointOfSale className="sidebar_icons pt-1" />
                           <div style={{ width: "100px" }} className="">
                             Sale
                           </div>
@@ -287,8 +307,8 @@ export default function Sidebar({ showSidebar }) {
                             }
                             to={ROUTES.LEADLIST}
                           >
-                            <RiTeamFill className="sidebar_icons ms-4" />
-                            Lead
+                            {/* <RiTeamFill className="sidebar_icons ms-4" /> */}
+                            <div className="ms-4"> Lead</div>
                           </NavLink>
                         </li>
                       )}
@@ -300,8 +320,8 @@ export default function Sidebar({ showSidebar }) {
                             }
                             to={ROUTES.OPPORTUNITY}
                           >
-                            <BsFillXDiamondFill className="sidebar_icons ms-4" />
-                            Opportunity
+                            {/* <BsFillXDiamondFill className="sidebar_icons ms-4" /> */}
+                            <div className=" ms-4">Opportunity</div>
                           </NavLink>
                         </li>
                       )}
@@ -318,7 +338,7 @@ export default function Sidebar({ showSidebar }) {
                           // to="/"
                           onClick={() => setCRMReport(!CRMReport)}
                         >
-                          <RiTeamFill className="sidebar_icons ms-4" />
+                          <TbReport className="sidebar_icons ms-4" />
                           Reports
                           <div className="d-flex justify-content-end ms-5 ps-4">
                             <AiOutlineCaretDown className="toggle_btn " />
@@ -336,8 +356,7 @@ export default function Sidebar({ showSidebar }) {
                                 }
                                 to="/leadReport"
                               >
-                                <MdEventNote className="sidebar_icons ms-4" />
-                                Lead Report
+                                <div className=" ms-5">Lead Report</div>
                               </NavLink>
                             </li>
                           )}
@@ -349,8 +368,7 @@ export default function Sidebar({ showSidebar }) {
                                 }
                                 to={ROUTES.OPPORTUNITY_REPORT}
                               >
-                                <MdEventNote className="sidebar_icons ms-4" />
-                                Opportunity Report
+                                <div className=" ms-5">Opportunity Report</div>
                               </NavLink>
                             </li>
                           )}
@@ -376,7 +394,7 @@ export default function Sidebar({ showSidebar }) {
                     >
                       <div className="d-flex justify-content-between gap-5 ms-2">
                         <div className="d-flex">
-                          <RiTeamFill className="sidebar_icons" />
+                          <MdOutlineSell className="sidebar_icons pt-1" />
                           <div style={{ width: "100px" }} className="">
                             Selling
                           </div>
@@ -400,8 +418,7 @@ export default function Sidebar({ showSidebar }) {
                             }
                             to={ROUTES.CATEGORY_LIST}
                           >
-                            <BsBookmarkFill className="sidebar_icons ms-4" />
-                            Category
+                            <div className=" ms-4">Category</div>
                           </NavLink>
                         </li>
                       )}
@@ -413,8 +430,7 @@ export default function Sidebar({ showSidebar }) {
                             }
                             to={ROUTES.BRANDS}
                           >
-                            <RiTeamFill className="sidebar_icons ms-4" />
-                            Brands
+                            <div className=" ms-4">Brands</div>
                           </NavLink>
                         </li>
                       )}
@@ -427,8 +443,7 @@ export default function Sidebar({ showSidebar }) {
                             }
                             to={ROUTES.ATTRIBUTES}
                           >
-                            <BsFillXDiamondFill className="sidebar_icons ms-4" />
-                            Attributes
+                            <div className=" ms-4">Attributes</div>
                           </NavLink>
                         </li>
                       )}
@@ -440,8 +455,7 @@ export default function Sidebar({ showSidebar }) {
                             }
                             to={ROUTES.PRODUCT}
                           >
-                            <RiTeamFill className="sidebar_icons ms-4" />
-                            Products
+                            <div className=" ms-4">Products</div>
                           </NavLink>
                         </li>
                       )}
@@ -453,8 +467,7 @@ export default function Sidebar({ showSidebar }) {
                             }
                             to={ROUTES.SERVICES}
                           >
-                            <FiSettings className="sidebar_icons ms-4" />
-                            Services
+                            <div className="ms-4">Services</div>
                           </NavLink>
                         </li>
                       )}
@@ -466,8 +479,7 @@ export default function Sidebar({ showSidebar }) {
                             }
                             to={ROUTES.UNIT_LIST}
                           >
-                            <RiTeamFill className="sidebar_icons ms-4" />
-                            Units and Measures
+                            <div className=" ms-4">Units and Measures</div>
                           </NavLink>
                         </li>
                       )}
@@ -496,7 +508,14 @@ export default function Sidebar({ showSidebar }) {
                 >
                   <div className="d-flex justify-content-between gap-5">
                     <div className="d-flex">
-                      <RiTeamFill className="sidebar_icons" />
+                      <GiCargoShip className="sidebar_icons" />
+                      {/* <img
+                        src={fmsIcon}
+                        alt=""
+                        height={15}
+                        width={15}
+                        className="mt-1 me-1"
+                      /> */}
                       <div style={{ width: "120px" }} className="">
                         FMS
                       </div>
@@ -540,83 +559,6 @@ export default function Sidebar({ showSidebar }) {
               )} */}
               {FMSOpen ? (
                 <>
-                  {checkPermission("opportunity assign") && (
-                    <li className="nav-text ">
-                      <NavLink
-                        className={({ isActive }) =>
-                          isActive ? "active-link" : "link"
-                        }
-                        to={ROUTES.ENQUIRIES}
-                      >
-                        <RiTeamFill className="sidebar_icons ms-3" />
-                        Enquiry
-                      </NavLink>
-                    </li>
-                  )}
-
-                  {/* {track assignment link is commented and hidden in sidebar} */}
-                  {/* {checkPermission("track assignment") && (
-                        <li className="nav-text">
-                          <NavLink
-                            className={({ isActive }) =>
-                              isActive ? "active-link" : "link"
-                            }
-                            to={ROUTES.TRACK_ASSIGNMENTS}
-                          >
-                            <BsFillXDiamondFill className="sidebar_icons ms-4" />
-                            Track Assignments
-                          </NavLink>
-                        </li>
-                      )} */}
-                </>
-              ) : (
-                ""
-              )}
-
-              {FMSOpen ? (
-                <>
-                  {checkPermission("quotation") && (
-                    <li className="nav-text " style={{ marginLeft: "-61px" }}>
-                      <NavLink
-                        className={({ isActive }) =>
-                          isActive ? "active-link" : "link"
-                        }
-                        to={ROUTES.QUATATIONS}
-                      >
-                        <RiTeamFill className="sidebar_icons ms-4" />
-                        Quotation
-                      </NavLink>
-                    </li>
-                  )}
-                </>
-              ) : (
-                ""
-              )}
-
-{FMSOpen ? (
-                <>
-                  {checkPermission("opportunity assign") && (
-                    <li className="nav-text ">
-                      <NavLink
-                        className={({ isActive }) =>
-                          isActive ? "active-link" : "link"
-                        }
-                        to={ROUTES.LIST_JOB}
-                      >
-                        <RiTeamFill className="sidebar_icons ms-3" />
-                       JobList
-                      </NavLink>
-                    </li>
-                  )}
-
-                 
-                </>
-              ) : (
-                ""
-              )}
-
-              {FMSOpen ? (
-                <>
                   <li
                     className={
                       FMSSettingsopen
@@ -631,7 +573,7 @@ export default function Sidebar({ showSidebar }) {
                     >
                       <div className="d-flex justify-content-between gap-5 ms-2">
                         <div className="d-flex">
-                          <RiTeamFill className="sidebar_icons ms-1 " />
+                          <MdSettingsInputComponent className="sidebar_icons ms-1 pt-1 " />
                           <div style={{ width: "90px" }} className="">
                             Settings
                           </div>
@@ -655,8 +597,68 @@ export default function Sidebar({ showSidebar }) {
                             }
                             to={ROUTES.FRIGHTLIST}
                           >
-                            <BsBookmarkFill className="sidebar_icons ms-4" />
-                            Freight types
+                            <div className=" ms-5">Freight types</div>
+                          </NavLink>
+                        </li>
+                      )}
+                      {checkPermission("carrier") && (
+                        <li className="nav-text">
+                          <NavLink
+                            className={({ isActive }) =>
+                              isActive ? "active-link" : "link"
+                            }
+                            to={ROUTES.CARRIER}
+                          >
+                            <div className=" ms-5">Carrier</div>
+                          </NavLink>
+                        </li>
+                      )}
+                      {checkPermission("terms of shipment") && (
+                        <li className="nav-text">
+                          <NavLink
+                            className={({ isActive }) =>
+                              isActive ? "active-link" : "link"
+                            }
+                            to={ROUTES.TERMS_OF_PAYMENT}
+                          >
+                            <div className=" ms-5">Payment Terms</div>
+                          </NavLink>
+                        </li>
+                      )}
+
+                      {checkPermission("tax type") && (
+                        <li className="nav-text">
+                          <NavLink
+                            className={({ isActive }) =>
+                              isActive ? "active-link" : "link"
+                            }
+                            to={ROUTES.TAXTYPE}
+                          >
+                            <div className=" ms-5">Tax Type</div>
+                          </NavLink>
+                        </li>
+                      )}
+                      {checkPermission("job tasks") && (
+                        <li className="nav-text">
+                          <NavLink
+                            className={({ isActive }) =>
+                              isActive ? "active-link" : "link"
+                            }
+                            to={ROUTES.LISTAGENT}
+                          >
+                            <div className=" ms-5">Agents</div>
+                          </NavLink>
+                        </li>
+                      )}
+                      {checkPermission("job tasks") && (
+                        <li className="nav-text">
+                          <NavLink
+                            className={({ isActive }) =>
+                              isActive ? "active-link" : "link"
+                            }
+                            to={ROUTES.LOCATIONS}
+                          >
+                            <div className=" ms-5">Location</div>
                           </NavLink>
                         </li>
                       )}
@@ -687,31 +689,6 @@ export default function Sidebar({ showSidebar }) {
                           </NavLink>
                         </li>
                       )} */}
-                    </>
-                  ) : (
-                    ""
-                  )}
-                  {FMSSettingsopen ? (
-                    <>
-                      {checkPermission("carrier") && (
-                        <li className="nav-text">
-                          <NavLink
-                            className={({ isActive }) =>
-                              isActive ? "active-link" : "link"
-                            }
-                            to={ROUTES.CARRIER}
-                          >
-                            <BsBookmarkFill className="sidebar_icons ms-4" />
-                            Carrier
-                          </NavLink>
-                        </li>
-                      )}
-                    </>
-                  ) : (
-                    ""
-                  )}
-                  {FMSSettingsopen ? (
-                    <>
                       {/* {checkPermission("mode") && (
                         <li className="nav-text">
                           <NavLink
@@ -729,116 +706,68 @@ export default function Sidebar({ showSidebar }) {
                   ) : (
                     ""
                   )}
-                  {FMSSettingsopen ? (
-                    <>
-                      {checkPermission("terms of shipment") && (
-                        <li className="nav-text">
-                          <NavLink
-                            className={({ isActive }) =>
-                              isActive ? "active-link" : "link"
-                            }
-                            to={ROUTES.TERMS_OF_PAYMENT}
-                          >
-                            <BsBookmarkFill className="sidebar_icons ms-4" />
-                            Payment Terms
-                          </NavLink>
-                        </li>
-                      )}
-
-                      {checkPermission("tax type") && (
-                        <li className="nav-text">
-                          <NavLink
-                            className={({ isActive }) =>
-                              isActive ? "active-link" : "link"
-                            }
-                            to={ROUTES.TAXTYPE}
-                          >
-                            <BsBookmarkFill className="sidebar_icons ms-4" />
-                            Tax Type
-                          </NavLink>
-                        </li>
-                      )}
-                    </>
-                  ) : (
-                    ""
+                  {checkPermission("opportunity assign") && (
+                    <li className="nav-text ">
+                      <NavLink
+                        className={({ isActive }) =>
+                          isActive ? "active-link" : "link"
+                        }
+                        to={ROUTES.ENQUIRIES}
+                      >
+                        <div className=" ms-4">Enquiry</div>
+                      </NavLink>
+                    </li>
                   )}
-
-                  {FMSSettingsopen ? (
-                    <>
-                      {/* {checkPermission("job tasks") && (
+                  {checkPermission("quotation") && (
+                    <li className="nav-text " style={{ marginLeft: "" }}>
+                      <NavLink
+                        className={({ isActive }) =>
+                          isActive ? "active-link" : "link"
+                        }
+                        to={ROUTES.QUATATIONS}
+                      >
+                        <div className=" ms-4">Quotation</div>
+                      </NavLink>
+                    </li>
+                  )}
+                  {checkPermission("opportunity assign") && (
+                    <li className="nav-text ">
+                      <NavLink
+                        className={({ isActive }) =>
+                          isActive ? "active-link" : "link"
+                        }
+                        to={ROUTES.LIST_JOB}
+                      >
+                        <div className=" ms-4">JobList</div>
+                      </NavLink>
+                    </li>
+                  )}
+                  {checkPermission("invoice") && (
+                    <li className="nav-text ">
+                      <NavLink
+                        className={({ isActive }) =>
+                          isActive ? "active-link" : "link"
+                        }
+                        to={ROUTES.INVOICE_LIST}
+                      >
+                        <div className=" ms-4">Invoice</div>
+                      </NavLink>
+                    </li>
+                  )}
+                  {/* {track assignment link is commented and hidden in sidebar} */}
+                  {/* {checkPermission("track assignment") && (
                         <li className="nav-text">
                           <NavLink
                             className={({ isActive }) =>
                               isActive ? "active-link" : "link"
                             }
-                            to={ROUTES.JOBTASKS}
+                            to={ROUTES.TRACK_ASSIGNMENTS}
                           >
-                            <BsBookmarkFill className="sidebar_icons ms-4" />
-                            Job Tasks
+                            <BsFillXDiamondFill className="sidebar_icons ms-4" />
+                            Track Assignments
                           </NavLink>
                         </li>
                       )} */}
-                    </>
-                  ) : (
-                    ""
-                  )}
-
-                  {FMSSettingsopen ? (
-                    <>
-                      {checkPermission("job tasks") && (
-                        <li className="nav-text">
-                          <NavLink
-                            className={({ isActive }) =>
-                              isActive ? "active-link" : "link"
-                            }
-                            to={ROUTES.LISTAGENT}
-                          >
-                            <BsBookmarkFill className="sidebar_icons ms-4" />
-                            Agents
-                          </NavLink>
-                        </li>
-                      )}
-                    </>
-                  ) : (
-                    ""
-                  )}
-
-                  {FMSSettingsopen ? (
-                    <>
-                      {checkPermission("job tasks") && (
-                        <li className="nav-text">
-                          <NavLink
-                            className={({ isActive }) =>
-                              isActive ? "active-link" : "link"
-                            }
-                            to={ROUTES.LOCATIONS}
-                          >
-                            <BsBookmarkFill className="sidebar_icons ms-4" />
-                            Location
-                          </NavLink>
-                        </li>
-                      )}
-                    </>
-                  ) : (
-                    ""
-                  )}
-                  {/* {FMSQuotationsopen ? (
-                    <>
-                      <li className="nav-text">
-                        <NavLink
-                          className={({ isActive }) =>
-                            isActive ? "active-link" : "link"
-                          }
-                          to={ROUTES.QUATATIONS}
-                        >
-                          <BsBookmarkFill className="sidebar_icons ms-4" />
-                          Quotations List
-                        </NavLink>
-                      </li>
-                    </>
-                  ) : (
-                    ""
-                  )} */}
                 </>
               ) : (
                 ""
@@ -859,7 +788,14 @@ export default function Sidebar({ showSidebar }) {
                 >
                   <div className="d-flex justify-content-between gap-5">
                     <div className="d-flex">
-                      <RiTeamFill className="sidebar_icons" />
+                      <FiSettings className="sidebar_icons pt-1" />
+                      {/* <img
+                        src={settingsicon}
+                        alt=""
+                        height={15}
+                        width={15}
+                        className="mt-1 me-1 "
+                      /> */}
                       <div style={{ width: "120px" }} className=" d-flex">
                         General Settings
                       </div>
@@ -883,8 +819,19 @@ export default function Sidebar({ showSidebar }) {
                         }
                         to={ROUTES.COUNTRYSELECT}
                       >
-                        <MdEventNote className="sidebar_icons ms-4" />
-                        Countries
+                        <div className=" ms-4">Countries</div>
+                      </NavLink>
+                    </li>
+                  )}
+                  {checkPermission("currency") && (
+                    <li className="nav-text ">
+                      <NavLink
+                        className={({ isActive }) =>
+                          isActive ? "active-link" : "link"
+                        }
+                        to={ROUTES.CURRENCY}
+                      >
+                        <div className=" ms-4">Currency</div>
                       </NavLink>
                     </li>
                   )}
@@ -897,22 +844,7 @@ export default function Sidebar({ showSidebar }) {
                         }
                         to={ROUTES.COMPANYINFO}
                       >
-                        <RiTeamFill className="sidebar_icons ms-4" />
-                        CompanyInfo
-                      </NavLink>
-                    </li>
-                  )}
-
-                  {checkPermission("currency") && (
-                    <li className="nav-text ">
-                      <NavLink
-                        className={({ isActive }) =>
-                          isActive ? "active-link" : "link"
-                        }
-                        to={ROUTES.CURRENCY}
-                      >
-                        <RiTeamFill className="sidebar_icons ms-4" />
-                        Currency
+                        <div className=" ms-4">CompanyInfo</div>
                       </NavLink>
                     </li>
                   )}

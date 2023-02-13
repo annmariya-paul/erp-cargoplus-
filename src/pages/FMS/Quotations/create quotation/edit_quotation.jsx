@@ -114,7 +114,7 @@ export default function EditQuotation(
   const [date, setDate] = useState();
   console.log(date);
   const [taxType, setTaxtype] = useState();
-
+  const [opportunityNo, setOpportunityNo] = useState();
   const navigate = useNavigate();
   const dateFormatList = ["DD-MM-YYYY", "DD-MM-YY"];
   const [amount, setAmount] = useState(0);
@@ -870,11 +870,21 @@ export default function EditQuotation(
       let vdate = moment(onequatation?.data?.data?.quotation_validity);
 
       locationBytype(onequatation?.data?.data?.quotation_mode);
+      let quotation_enquiry_no = "";
+      onequatation?.data?.data?.fms_v1_enquiry_quotations.forEach(
+        (item, index) => {
+          quotation_enquiry_no = item.enquiry_quotation_opportunity_id;
+          setOpportunityNo(item.enquiry_quotation_opportunity_id);
+        }
+      );
+      console.log("quotation_enquiry_no", quotation_enquiry_no);
+
       editForm.setFieldsValue({
         quotation_no: onequatation?.data?.data?.quotation_no,
         quotationdate: qdate,
         validity_date: vdate,
         shipper: onequatation?.data?.data?.quotation_shipper,
+        quotation_enquiry_no: quotation_enquiry_no,
         quotation_consignee: onequatation?.data?.data?.crm_v1_leads.lead_id,
         freight_type: onequatation?.data?.data?.quotation_freight_type,
         quotation_cargotype: onequatation?.data?.data?.quotation_cargo_type,
@@ -980,6 +990,26 @@ export default function EditQuotation(
     } catch (err) {
       console.log("error to getting all units", err);
     }
+  };
+
+  const oneOpportunity = () => {
+    PublicFetch.get(`${CRM_BASE_URL}/opportunity/${opportunityNo}`)
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          console.log("success", res.data.data);
+          let temp = [];
+          temp.push({
+            opportunity_id: res.data.data.opportunity_id,
+            opportunity_number: res.data.data.opportunity_number,
+          });
+
+          setOppnew(temp);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
   };
 
   const getallPaymentTerms = () => {
@@ -1150,7 +1180,10 @@ export default function EditQuotation(
     getonequatation();
     getAllLocations();
     getAllTaxTypes();
-  }, []);
+    if (opportunityNo) {
+      oneOpportunity();
+    }
+  }, [opportunityNo]);
 
   return (
     <>
@@ -1240,7 +1273,7 @@ export default function EditQuotation(
                         />
                       </Form.Item>
                     </div>
-                    {/* <div className="col-xl-3 col-sm-6 mt-2">
+                    <div className="col-xl-3 col-sm-6 mt-2">
                       <label>Enquiry No</label>
                       <Form.Item
                         name="quotation_enquiry_no"
@@ -1259,6 +1292,7 @@ export default function EditQuotation(
                           allowClear
                           showSearch
                           optionFilterProp="children"
+                          disabled={true}
                         >
                           {oppnew &&
                             oppnew.length > 0 &&
@@ -1274,7 +1308,7 @@ export default function EditQuotation(
                             })}
                         </SelectBox>
                       </Form.Item>
-                    </div> */}
+                    </div>
 
                     <div className="col-xl-3 col-sm-6 mt-2">
                       <label>Consignee</label>
@@ -1291,6 +1325,7 @@ export default function EditQuotation(
                           allowClear
                           showSearch
                           optionFilterProp="children"
+                          disabled={true}
                         >
                           {allLeadList &&
                             allLeadList.length > 0 &&
@@ -1679,8 +1714,8 @@ export default function EditQuotation(
                         rules={[
                           {
                             required: true,
-                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                            message: "Please enter a Valid value",
+                            // pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                            message: "Please enter a Valid Rate",
                           },
                         ]}
                       >
@@ -1693,6 +1728,7 @@ export default function EditQuotation(
                           min={0}
                           precision={2}
                           controlls={false}
+                          disabled={true}
                         />
                       </Form.Item>
                     </div>

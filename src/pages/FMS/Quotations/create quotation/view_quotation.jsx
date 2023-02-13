@@ -19,8 +19,8 @@ const onChange = (key) => {
 const progress = [
   {
     title: "TASKS",
-    dataIndex: "quotation_details_service_id",
-    key: "quotation_details_service_id",
+    dataIndex: "service_name",
+    key: "service_name",
     align: "center",
     // render: (value, item, indx) => count + indx,
   },
@@ -32,8 +32,8 @@ const progress = [
   },
   {
     title: "TAX TYPE",
-    dataIndex: "quotation_details_tax_type",
-    key: "quotation_details_tax_type",
+    dataIndex: "tax_type_name",
+    key: "tax_type_name",
     align: "center",
   },
   {
@@ -84,7 +84,7 @@ export default function ViewQuotation() {
   console.log("id :::::", id);
   const printRef = useRef(null);
   const [allqoutation, setAllQuotations] = useState();
-
+  const [tabledata, setTableData] = useState();
   const navigate = useNavigate();
 
   const getSingleQuotation = () => {
@@ -144,6 +144,25 @@ export default function ViewQuotation() {
             quotation_docs: res.data.data.quotation_docs,
           };
           console.log("datas", temp);
+          let temp11 = [];
+
+          res.data.data.fms_v1_quotation_details.forEach((item, index) => {
+            temp11.push({
+              quotation_details_cost: item.quotation_details_cost,
+              quotation_details_id: item.quotation_details_id,
+              quotation_details_quotation_id:
+                item.quotation_details_quotation_id,
+              quotation_details_service_id: item.quotation_details_service_id,
+              quotation_details_status: item.quotation_details_status,
+              quotation_details_tax_amount: item.quotation_details_tax_amount,
+              quotation_details_tax_type: item.quotation_details_tax_type,
+              quotation_details_total: item.quotation_details_total,
+              service_name: item.crm_v1_services?.service_name,
+              tax_type_name: item.fms_v1_tax_types?.tax_type_name,
+            });
+            setTableData(temp11);
+          });
+
           setAllQuotations(temp);
         }
       })
@@ -444,11 +463,7 @@ export default function ViewQuotation() {
               <Panel header="TASK DETAILS" key="1">
                 <div>
                   {" "}
-                  <TableData
-                    columns={progress}
-                    data={allqoutation?.fms_v1_quotation_details}
-                    bordered
-                  />
+                  <TableData columns={progress} data={tabledata} bordered />
                 </div>
                 <div className="d-flex justify-content-end mt-4 mx-3 ">
                   <div className="col-lg-2 col-sm-4 col-xs-3 d-flex justify-content-end mt-3 me-2">

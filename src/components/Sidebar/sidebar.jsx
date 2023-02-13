@@ -742,6 +742,18 @@ export default function Sidebar({ showSidebar }) {
                       </NavLink>
                     </li>
                   )}
+                  {checkPermission("invoice") && (
+                    <li className="nav-text ">
+                      <NavLink
+                        className={({ isActive }) =>
+                          isActive ? "active-link" : "link"
+                        }
+                        to={ROUTES.INVOICE_LIST}
+                      >
+                        <div className=" ms-4">Invoice</div>
+                      </NavLink>
+                    </li>
+                  )}
                   {/* {track assignment link is commented and hidden in sidebar} */}
                   {/* {checkPermission("track assignment") && (
                         <li className="nav-text">

@@ -3,14 +3,14 @@
     color: black!important;
    }
   
-   .total_exp {
-    height: 70px !important;
-    overflow-y: scroll !important;
-  }
-  .ant-select-selection-item {
-    font-weight: 380!important;
-       color: black!important;
-  }
+  //  .total_exp {
+  //   height: 70px !important;
+  //   overflow-y: scroll !important;
+  // }
+  // .ant-select-selection-item {
+  //   font-weight: 380!important;
+  //      color: black!important;
+  // }
   // .task_expense_table{
   // thead{
     // .firstrow{
@@ -77,6 +77,11 @@
   // }
 
 
-
-
+.content-tabs{
+  overflow-y: scroll;
+}
+.new{
+  max-width: 100%!important;
+  overflow-y: scroll;
+}
  

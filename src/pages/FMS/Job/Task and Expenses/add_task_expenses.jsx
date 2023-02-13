@@ -1284,7 +1284,7 @@ const [qno,setQno]=useState(Date.now());
                     data={tableData}
                     columns={columns}
                     rowKey={(record) => record.key}
-                    custom_table_css="table_qtn task_expense_table"
+                    // custom_table_css="table_qtn task_expense_table"
       />
   
  
@@ -1298,7 +1298,7 @@ const [qno,setQno]=useState(Date.now());
              
 
                
-              <div className="container" style={{backgroundColor:"rgb(240, 248, 254)"}} >
+              <div className="new" style={{backgroundColor:"rgb(240, 248, 254)"}} >
                 <div className="row mt-4 mx-5 " >
                   <div className="total_exp">
                   <div className="col-12 d-flex" >
@@ -1308,19 +1308,20 @@ const [qno,setQno]=useState(Date.now());
                    </div>
                    <div className="col-4 d-flex mx-4 p-0" style={{backgroundColor:""}}>
                     <div className="row mx-0 px-0">
-                    <div className="col-lg-3   m-0 p-1 pt-2 ">
+                    <div className="col-3   m-0 p-1 pt-2 ">
                     {/* <p style={{ fontWeight: 500 }}>Total</p> */}
                     <SelectBox className="w-100 ms-2 "  />
                     </div>
-                    <div className="col-lg-3  m-0 p-1 ">
+                    <div className="col-3 d-flex m-0 p-1 ">
                     {/* <p style={{ fontWeight: 500 }}>Total</p> */}
                     <InputNumber style={{borderRadius:"5px"}} className="w-100 ms-2 mt-2 p-1" />
                     </div>
-                    <div className="col-lg-3 col-sm-2 col-xs-2 m-0 p-1 ">
+                    {/* <div className="col-lg-3 col-sm-2 col-xs-2 m-0 p-1 "> */}
+                    <div className="col-3 d-flex  m-0 p-1 ">
                     {/* <p style={{ fontWeight: 500 }}>Total</p> */}
                     <InputNumber style={{borderRadius:"5px"}} className="w-100 ms-2 mt-2 p-1" />
                     </div>
-                    <div className="col-lg-3 col-sm-2 col-xs-2 m-0 p-1 ">
+                    <div className="col-3 d-flex  m-0 p-1 ">
                     {/* <p style={{ fontWeight: 500 }}>Total</p> */}
                     <InputNumber style={{borderRadius:"5px"}} className="w-100 ms-2 mt-2 p-1"/>
                     </div>
@@ -1328,19 +1329,19 @@ const [qno,setQno]=useState(Date.now());
                    </div>
                    <div className="col-4 d-flex p-0 m-0" >
                    <div className="row mx-0 px-0">
-                    <div className="col-lg-3 col-sm-2 col-xs-2  m-0 p-1 pt-2 ">
+                    <div className="col-3 d-flex   m-0 p-1 pt-2 ">
                     {/* <p style={{ fontWeight: 500 }}>Total</p> */}
                     <SelectBox className="w-100 ms-2 " />
                     </div>
-                    <div className="col-lg-3 col-sm-2 col-xs-2 m-0 p-1 ">
+                    <div className="col-3 d-flex  m-0 p-1 ">
                     {/* <p style={{ fontWeight: 500 }}>Total</p> */}
                     <InputNumber style={{borderRadius:"5px"}} className="w-100 ms-2 mt-2 p-1" />
                     </div>
-                    <div className="col-lg-3 col-sm-2 col-xs-2 m-0 p-1 ">
+                    <div className="col-3 d-flex  m-0 p-1 ">
                     {/* <p style={{ fontWeight: 500 }}>Total</p> */}
                     <InputNumber style={{borderRadius:"5px"}} className="w-100 ms-2 mt-2 p-1" />
                     </div>
-                    <div className="col-lg-3 col-sm-2 col-xs-2 m-0 p-1 ">
+                    <div className="col-3 d-flex  m-0 p-1 ">
                     {/* <p style={{ fontWeight: 500 }}>Total</p> */}
                     <InputNumber style={{borderRadius:"5px"}} className="w-100 ms-2 mt-2 p-1"/>
                     </div>

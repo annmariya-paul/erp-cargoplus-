@@ -220,7 +220,7 @@ export default function Quotations(props) {
               quotation_consignee: item.quotation_consignee,
               consignee_name: item.crm_v1_leads.lead_customer_name,
               quotation_shipper: item.quotation_shipper,
-              quotation_status: item.quotation_status,
+              quotation_status: item.status,
               fms_v1_quotation_agents: item.fms_v1_quotation_agents,
             });
           });

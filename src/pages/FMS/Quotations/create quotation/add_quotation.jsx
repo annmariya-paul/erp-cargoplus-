@@ -628,6 +628,16 @@ export default function Add_Quotation() {
                 // onKeyDown={(e) => handleEnter(e, index.key)}
               />
             </Form.Item>
+            {/* <div className="">
+              {index.quotation_details_total &&
+              index.quotation_details_total ? (
+                <></>
+              ) : (
+                <>
+                  <label>Total is required</label>
+                </>
+              )}
+            </div> */}
           </div>
         );
       },
@@ -1566,13 +1576,13 @@ export default function Add_Quotation() {
                       <label>Exchange Rate</label>
                       <Form.Item
                         name="exchnagerate"
-                        // rules={[
-                        //   {
-                        //     required: true,
+                        rules={[
+                          {
+                            required: true,
 
-                        //     message: "Please enter a Valid value",
-                        //   },
-                        // ]}
+                            message: "Please enter a Valid Rate",
+                          },
+                        ]}
                       >
                         <Input_Number
                           className="text_right"
@@ -1583,6 +1593,7 @@ export default function Add_Quotation() {
                           min={0}
                           precision={2}
                           controlls={false}
+                          disabled={true}
                         />
                       </Form.Item>
                     </div>

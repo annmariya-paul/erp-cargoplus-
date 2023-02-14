@@ -86,13 +86,15 @@ const ROUTES = {
   LIST_JOB: "/joblist",
   CREATEJOB: "/createjob",
   UPDATEJOB: "/updatejob",
-  VIEW_JOB:"/view_job",
+  VIEW_JOB: "/view_job",
   VIEW_JOB_ID: "/view_job/:id",
   VIEW_QUOTATION_ID: "/view_quotation/:id",
+  INVOICE_LIST: "/invoice_list",
   // general settings
   CURRENCY: "/currency",
   COMPANYINFO: "/company_info",
-  TASKANDEXPENSES:"/task_expenses"
+  TASKANDEXPENSES: "/task_expenses",
+  INVOICE_PREVIEW:"/invoice_preview",
 };
 
 module.exports = { ROUTES };

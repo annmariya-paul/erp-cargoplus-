@@ -84,6 +84,8 @@ import Listjob from "./pages/FMS/Job/joblist";
 import CreateJob from "./pages/FMS/Job/createjob";
 import Updatejob from "./pages/FMS/Job/Updatejob";
 import Taskexpenses from "./pages/FMS/Job/Task and Expenses/add_task_expenses";
+import InvoiceList from "./pages/FMS/Invoice/InvoiceList";
+import InvoicePreView from "./pages/FMS/Invoice/InvoicePreView";
 // import Lead from "./pages/lead/lead";
 
 function App() {
@@ -206,12 +208,10 @@ function App() {
             />
             <Route path={ROUTES.LIST_JOB} element={<Listjob />} />
             <Route path={ROUTES.CREATEJOB} element={<CreateJob />} />
-            <Route path={ROUTES.UPDATEJOB} element={<Updatejob/>}/>
-            <Route
-              path={ROUTES.VIEW_JOB_ID}
-              element={<ViewJob />}
-            />
-
+            <Route path={ROUTES.UPDATEJOB} element={<Updatejob />} />
+            <Route path={ROUTES.VIEW_JOB_ID} element={<ViewJob />} />
+            <Route path={ROUTES.INVOICE_LIST} element={<InvoiceList />} />
+            <Route path={ROUTES.INVOICE_PREVIEW } element={<InvoicePreView/>}/>
             {/* General settings */}
 
             <Route path={ROUTES.CURRENCY} element={<Currency />} />

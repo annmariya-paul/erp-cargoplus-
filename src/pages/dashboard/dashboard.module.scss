@@ -1,0 +1,42 @@
+.summaryWrapper {
+   display: grid;
+   grid-template-columns: 1fr 1fr 1fr 1fr;
+   gap: 1rem;
+}
+
+.cartItem {
+   min-height: 130px;
+   max-height: 150px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+
+   .cardTitle {
+      font-size: 25px;
+      font-weight: 700;
+      color: #636363;
+   }
+
+   .cardSubText {
+      font-size: 22px;
+      color: rgb(131, 210, 131);
+      font-weight: 600;
+   }
+
+   .cardRevenueTitle {
+      font-size: 20px;
+      font-weight: 600;
+      color: #636363;
+   }
+
+   .cardRevenueSubText {
+      font-size: 24px;
+      color: rgb(131, 210, 131);
+      font-weight: 600;
+   }
+
+   .cardRevenueFooter {
+      font-size: 16px;
+      font-weight: 500;
+   }
+}

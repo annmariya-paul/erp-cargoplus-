@@ -94,6 +94,7 @@ const ROUTES = {
   CURRENCY: "/currency",
   COMPANYINFO: "/company_info",
   TASKANDEXPENSES: "/task_expenses",
+  INVOICE_PREVIEW:"/invoice_preview",
 };
 
 module.exports = { ROUTES };

@@ -150,7 +150,7 @@ export default function Taskexpenses() {
       key: "tasks",
       width: "40%",
       align: "center",
-      className: "firstrow",
+      className: "firstrow req_font",
       render: (data, index) => {
         console.log("index is :", index);
         return (

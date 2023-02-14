@@ -148,15 +148,15 @@ export default function ViewQuotation() {
 
           res.data.data.fms_v1_quotation_details.forEach((item, index) => {
             temp11.push({
-              quotation_details_cost: item.quotation_details_cost,
+              quotation_details_cost: item.quotation_details_cost.toFixed(2),
               quotation_details_id: item.quotation_details_id,
               quotation_details_quotation_id:
                 item.quotation_details_quotation_id,
               quotation_details_service_id: item.quotation_details_service_id,
               quotation_details_status: item.quotation_details_status,
-              quotation_details_tax_amount: item.quotation_details_tax_amount,
+              quotation_details_tax_amount: item.quotation_details_tax_amount.toFixed(2),
               quotation_details_tax_type: item.quotation_details_tax_type,
-              quotation_details_total: item.quotation_details_total,
+              quotation_details_total: item.quotation_details_total.toFixed(2),
               service_name: item.crm_v1_services?.service_name,
               tax_type_name: item.fms_v1_tax_types?.tax_type_name,
             });
@@ -441,7 +441,7 @@ export default function ViewQuotation() {
 
             <div className="col-7">
               <p className="modal-view-data">
-                {allqoutation?.quotation_exchange_rate}
+                {allqoutation?.quotation_exchange_rate.toFixed(2)}
               </p>
             </div>
           </div>
@@ -471,7 +471,7 @@ export default function ViewQuotation() {
                   </div>
                   {/* <div className="col-1">:</div> */}
                   <div className="col-lg-2 col-sm-2 col-xs-2 mt-3">
-                    <p>{allqoutation?.quotation_grand_total}</p>
+                    <p>{allqoutation?.quotation_grand_total.toFixed(2)}</p>
                   </div>
                 </div>
               </Panel>

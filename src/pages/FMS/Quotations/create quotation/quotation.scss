@@ -36,11 +36,13 @@ tr {
   // height: 300px !important;
   overflow-y: scroll !important;
 }
-
-.tborder {
-  border: 1px solid rgb(212, 208, 208);
-  // padding-block: 1px;
+.ant-form-item {
+  margin-bottom:0!important;
 }
+// .tborder {
+//   border: 1px solid rgb(212, 208, 208);
+//   // padding-block: 1px;
+// }
 .table_data tbody tr td {
   padding-block: 0;
   // width: 90px;

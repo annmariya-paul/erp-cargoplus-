@@ -419,6 +419,7 @@ export default function Add_Quotation() {
             >
               <SelectBox
                 allowClear
+                showArrow={false}
                 showSearch
                 optionFilterProp="children"
                 className="selectwidth mb-2"

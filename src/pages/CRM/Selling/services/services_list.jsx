@@ -839,7 +839,7 @@ function Services() {
                       </Form.Item>
                     </div>
                     <div className="col-6 ">
-                      <label>Tax Rate</label>
+                      <label>Tax Type</label>
                       <Form.Item
                         className="mt-2"
                         name="taxRate"

@@ -86,6 +86,7 @@ const ROUTES = {
   LIST_JOB: "/joblist",
   CREATEJOB: "/createjob",
   UPDATEJOB: "/updatejob",
+  UPDATEJOB_ID: "/updatejob/:id",
   VIEW_JOB: "/view_job",
   VIEW_JOB_ID: "/view_job/:id",
   VIEW_QUOTATION_ID: "/view_quotation/:id",

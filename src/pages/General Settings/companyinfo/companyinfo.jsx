@@ -152,11 +152,12 @@ console.log("dataa",allcmpny.data.data.length);
           .then((res) => {
             console.log("dataa is successfully saved", res.data.success);
             if (res.data.success) {
-              setcompanywatermark(null)
-              setCompanylogo(null)
+              // setcompanywatermark(null)
+              // setCompanylogo(null)
               setSuccessPopup(true);
+              getallcmpny()
               addForm.resetFields();
-             getallcmpny()
+            
               close_modal(successPopup, 1000);
             } 
             // else {

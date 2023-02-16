@@ -2,7 +2,7 @@ import { Form } from "antd";
 import { DatePicker } from "antd";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   CRM_BASE_URL,
   CRM_BASE_URL_FMS,
@@ -18,10 +18,13 @@ import { Select } from "antd";
 import { cargo_typeoptions } from "../../../utils/SelectOptions";
 import Input_Number from "../../../components/InputNumber/InputNumber";
 import moment from "moment";
+import Custom_model from "../../../components/custom_modal/custom_model";
+import { ROUTES } from "../../../routes";
 
 function Updatejob() {
   const { id } = useParams();
   console.log("Response", id);
+  const navigate = useNavigate();
   const [editForm] = Form.useForm();
   const [pageofIndex, setPageOfIndex] = useState(0);
   const [noofItems, setNoofItems] = useState(100);
@@ -35,6 +38,16 @@ function Updatejob() {
   const [cargoTypes, setCargoTypes] = useState(cargo_typeoptions);
   const [locations, setLocations] = useState();
   const [allCurrency, setAllCurreny] = useState();
+  const [SuccessPopup, setSuccessPopup] = useState(false);
+
+  const close_modal = (mShow, time) => {
+    if (!mShow) {
+      setTimeout(() => {
+        setSuccessPopup(false);
+        navigate(ROUTES.LIST_JOB);
+      }, time);
+    }
+  };
 
   const OneJobList = () => {
     PublicFetch.get(`${CRM_BASE_URL_FMS}/job/${id}`)
@@ -45,12 +58,16 @@ function Updatejob() {
           setJobList(res.data.data);
           let date = moment(res.data.data.job_date);
           locationByMode(res.data.data.job_mode);
+          let quotationNo = [];
+          res.data.data.fms_v1_quotation_jobs.forEach((item, index) => {
+            quotationNo.push(item.quotation_job_id);
+          });
           editForm.setFieldsValue({
             freighttype: res.data.data.job_freight_type,
             jobno: res.data.data.job_number,
             jobdate: date,
             consignee: res.data.data.job_consignee,
-            quotationno: res.data.data.fms_v1_quotation_jobs,
+            quotationno: quotationNo,
             shipper: res.data.data.job_shipper,
             cargotype: res.data.data.job_cargo_type,
             Mode: res.data.data.job_mode,
@@ -210,8 +227,44 @@ function Updatejob() {
       });
   };
 
-  const submitForm = () => {
+  const submitForm = (data) => {
     const formData = new FormData();
+    formData.append("job_number", data.jobno);
+    formData.append("job_date", data.jobdate);
+    formData.append("job_consignee", data.consignee);
+    formData.append("job_shipper", data.shipper);
+    formData.append("job_freight_type", data.freighttype);
+    formData.append("job_cargo_type", data.cargotype);
+    formData.append("job_carrier", data.carrier);
+    formData.append("job_awb_bl_no", data.AWB);
+    formData.append("job_mode", data.Mode);
+    formData.append("job_origin_id", data.origin);
+    formData.append("job_destination_id", data.destination);
+    formData.append("job_no_of_pieces", data.noofpieces);
+    formData.append("job_uom", data.Uom);
+    formData.append("job_gross_wt", data.grosswt);
+    formData.append("job_chargeable_wt", data.chargeablewt);
+    formData.append("job_payment_terms", data.terms);
+    formData.append("job_total_cost_currency", data.job_currency);
+    formData.append("job_total_cost_exch", data.exchangerate);
+    if (data.attachments) {
+      formData.append("job_docs", data.attachments);
+    }
+    formData.append("job_quotation", data.quotationno);
+    PublicFetch.patch(`${CRM_BASE_URL_FMS}/job/${id}`, formData, {
+      "Content-Type": "Multipart/form-Data",
+    })
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          console.log("success", res.data.data);
+          setSuccessPopup(true);
+          close_modal(SuccessPopup, 1200);
+        }
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
   };
 
   useEffect(() => {
@@ -226,6 +279,7 @@ function Updatejob() {
     currencys();
     allQuotations();
   }, [id, pageofIndex, noofItems]);
+
   return (
     <>
       <div className="container-fluid">
@@ -240,6 +294,7 @@ function Updatejob() {
               form={editForm}
               onFinish={(values) => {
                 console.log("values iss", values);
+                submitForm(values);
               }}
               onFinishFailed={(error) => {
                 console.log(error);
@@ -288,7 +343,7 @@ function Updatejob() {
                         rules={[
                           {
                             required: true,
-                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                            // pattern: new RegExp("^[A-Za-z0-9 ]+$"),
                             message: "Please enter a Valid jobno",
                           },
                         ]}
@@ -303,7 +358,7 @@ function Updatejob() {
                         rules={[
                           {
                             required: true,
-                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                            // pattern: new RegExp("^[A-Za-z0-9 ]+$"),
                             message: "Please enter a Valid jobdate",
                           },
                         ]}
@@ -786,6 +841,13 @@ function Updatejob() {
             </Form>
           </div>
         </div>
+        <Custom_model
+          success
+          show={SuccessPopup}
+          onHide={() => {
+            setSuccessPopup(false);
+          }}
+        />
       </div>
     </>
   );

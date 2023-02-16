@@ -61,6 +61,88 @@ function Listjob() {
                 >
                   <MdPageview style={{ marginLeft: 15, marginRight: 15 }} />
                 </div> */}
+                <div className="deleteIcon m-0">
+                  <FaTrash />
+                </div>
+              </div>
+            );
+          },
+          align: "center",
+        },
+        {
+          title: "JOB NO",
+          dataIndex: "job_number",
+          key: "job_number",
+          filteredValue: [searchedText],
+          onFilter: (value, record) => {
+            return String(record.job_number).toLowerCase().includes(value.toLowerCase());
+          },
+          align: "center",
+        },
+        {
+          title: "DATE",
+          dataIndex: "job_date",
+          key: "job_date",
+          align: "center",
+        },
+        {
+          title: "AWB/BL",
+          dataIndex: "job_awb_bl_no",
+          key: "job_awb_bl_no",
+          filteredValue: [searchedNo],
+          onFilter: (value, record) => {
+            return String(record.job_awb_bl_no).toLowerCase().includes(value.toLowerCase());
+          },
+          align: "center",
+        },
+        {
+          title: "CONSIGNEE",
+          dataIndex: "job_consignee_name",
+          key: "job_consignee_name",
+          filteredValue: [searchName],
+          onFilter: (value, record) => {
+            return String(record.job_consignee_name).toLowerCase().includes(value.toLowerCase());
+          },
+          align: "center",
+        },
+        {
+          title: "SHIPPER",
+          dataIndex: "job_shipper",
+          key: "job_shipper",
+          align: "center",
+        },
+        {
+          title: "STATUS",
+          dataIndex: "job_status",
+          key: "job_status",
+          align: "center",
+        },
+        {
+          title: "",
+          dataIndex: "action",
+          key: "key",
+          width: "14%",
+          render: (data, index) => {
+            console.log("index is new:", index);
+            return (
+              <div className="d-flex justify-content-center align-items-center gap-2 me-2">
+                <div
+                  className="editIcon m-0 "
+                //   onClick={() => {
+                //     navigate(`/edit_quotation`);
+                //   }}
+                >
+                  
+                   {/* <Link to={ROUTES.TASKANDEXPENSES } style={{ color: "white" }}> */}
+                <Button btnType="add"  className="view_btn"
+                 onClick={() => {
+                  navigate(`${ROUTES.TASKANDEXPENSES}/${index.job_id}`);
+                }} 
+                
+                > Tasks & Expenses</Button>
+              
+              {/* </Link> */}
+                 {/* <Button
             <div className="deleteIcon m-0">
               <FaTrash />
             </div>

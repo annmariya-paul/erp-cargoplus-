@@ -95,6 +95,7 @@ const ROUTES = {
   CURRENCY: "/currency",
   COMPANYINFO: "/company_info",
   TASKANDEXPENSES: "/task_expenses",
+  TASKANDEXPENSES_ID: "/task_expenses/:id",
   INVOICE_PREVIEW:"/invoice_preview",
   QUATATION_INVOICE:"/quatation_invoice",
   QUATATION_INVOICE_ID:"/quatation_invoice/:id",

@@ -88,7 +88,12 @@ export default function ViewJob() {
   console.log("id :::::", id);
   const printRef = useRef(null);
   const [alljobs, setAllJobs] = useState();
-
+  const [qtnno, setQtnno] = useState();
+  const [tabledata, setTabledata] = useState();
+  const [grandtotal, setGrandTotal] = useState();
+  console.log("qtntable: ",tabledata);
+  console.log("qtnno: ",qtnno);
+  console.log("grandtotal: ",grandtotal);
   const navigate = useNavigate();
 
   const getSingleJob = () => {
@@ -97,7 +102,18 @@ export default function ViewJob() {
         console.log("response of job", res);
         if (res.data.success) {
           console.log("Success of job", res.data.data);
+          let newdatas = [];
+          res.data.data.fms_v1_quotation_jobs.forEach((item, index) => {
+            newdatas.push(
+                 item.fms_v1_quotation.quotation_no,
 
+            );
+   setQtnno(newdatas)
+         
+ setTabledata( item.fms_v1_quotation.fms_v1_quotation_details)
+ setGrandTotal(item.fms_v1_quotation.quotation_grand_total)
+
+        })
           let temp = "";
         
          
@@ -237,7 +253,7 @@ export default function ViewJob() {
             <div className="col-1">:</div>
 
             <div className="col-7">
-              <p className="modal-view-data"></p>
+              <p className="modal-view-data">{qtnno}</p>
             </div>
           </div>
         
@@ -424,7 +440,7 @@ export default function ViewJob() {
               <p className="modal-view-data">{alljobs?.job_docs}</p>
             </div>
           </div>
-
+          
           <div className="mt-3">
             <Collapse
               defaultActiveKey={["1"]}
@@ -434,9 +450,10 @@ export default function ViewJob() {
               <Panel header="TASK DETAILS" key="1">
                 <div>
                   {" "}
+                  
                   <TableData
                     columns={progress}
-                    data={alljobs?.fms_v1_quotation_details}
+                    data={tabledata}
                     bordered
                   />
                 </div>
@@ -446,7 +463,7 @@ export default function ViewJob() {
                   </div>
                   {/* <div className="col-1">:</div> */}
                   <div className="col-lg-2 col-sm-2 col-xs-2 mt-3">
-                    <p>{alljobs?.quotation_grand_total}</p>
+                    <p>{grandtotal}</p>
                   </div>
                 </div>
               </Panel>

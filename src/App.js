@@ -216,7 +216,7 @@ function App() {
 
             <Route path={ROUTES.CURRENCY} element={<Currency />} />
             <Route path={ROUTES.COMPANYINFO} element={<Companyinfo />} />
-            <Route path={ROUTES.TASKANDEXPENSES} element={<Taskexpenses />} />
+            <Route path={ROUTES.TASKANDEXPENSES_ID} element={<Taskexpenses />} />
           </Route>
         </Routes>
       </BrowserRouter>

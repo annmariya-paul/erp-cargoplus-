@@ -124,7 +124,7 @@ function Listjob(){
           key: "key",
           width: "14%",
           render: (data, index) => {
-            console.log("index is :", index);
+            console.log("index is new:", index);
             return (
               <div className="d-flex justify-content-center align-items-center gap-2 me-2">
                 <div
@@ -133,10 +133,16 @@ function Listjob(){
                 //     navigate(`/edit_quotation`);
                 //   }}
                 >
-                   <Link to={ROUTES.TASKANDEXPENSES } style={{ color: "white" }}>
-                <Button btnType="add"  className="view_btn"> Tasks & Expenses</Button>
+                  
+                   {/* <Link to={ROUTES.TASKANDEXPENSES } style={{ color: "white" }}> */}
+                <Button btnType="add"  className="view_btn"
+                 onClick={() => {
+                  navigate(`${ROUTES.TASKANDEXPENSES}/${index.job_id}`);
+                }} 
+                
+                > Tasks & Expenses</Button>
               
-              </Link>
+              {/* </Link> */}
                  {/* <Button
                       btnType="add"
                       className="view_btn"

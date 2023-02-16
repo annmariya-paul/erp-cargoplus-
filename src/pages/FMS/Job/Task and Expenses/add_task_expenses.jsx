@@ -3,7 +3,9 @@ import React, { useState, useEffect } from "react";
 import { Input, Select } from "antd";
 import { v4 as uuidv4 } from "uuid";
 import { InputNumber } from "antd";
-
+import moment from "moment";
+import { CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
+import { CRM_BASE_URL_FMS } from "../../../../api/bootapi";
 import {
   BorderBottomOutlined,
   DragOutlined,
@@ -15,7 +17,7 @@ import "dragula/dist/dragula.css";
 import { CRM_BASE_URL } from "../../../../api/bootapi";
 import TableData from "../../../../components/table/table_data";
 import { FaTrash } from "react-icons/fa";
-
+import { useNavigate, useParams } from "react-router-dom";
 import { Form } from "antd";
 import Button from "../../../../components/button/button";
 import PublicFetch from "../../../../utils/PublicFetch";
@@ -26,9 +28,14 @@ import Custom_model from "../../../../components/custom_modal/custom_model";
 import "../job.scss";
 
 export default function Taskexpenses() {
-  const [successPopup, setSuccessPopup] = useState(false);
 
+  const { id } = useParams();
+  console.log("id :::::", id);
+  const [successPopup, setSuccessPopup] = useState(false);
+  const [alljobs, setAllJobs] = useState();
   const [addForm] = Form.useForm();
+  const [services, setServices] = useState([]);
+  console.log("Servicesss are :::", services);
 
   const dataSource = [
     {
@@ -102,10 +109,12 @@ export default function Taskexpenses() {
   const numofItemsTo = noofItems * current;
 
   const [currentcount, setCurrentcount] = useState();
-
+  const [taxratee, setTaxRatee] = useState();
+  console.log("tax rate ", taxratee);
+  const [taxTypes, setTaxTypes] = useState();
   const [allLeadList, setAllLeadList] = useState([]);
   console.log("Lead names :", allLeadList);
-
+  const [numOfItems, setNumOfItems] = useState("25");
   const handleDelete = (key) => {
     const newData = tableData?.filter((item) => item?.key !== key);
     setTableData(newData);
@@ -116,6 +125,225 @@ export default function Taskexpenses() {
     setNewGrandTotal(grandTotal);
     addForm.setFieldsValue({ grandtotal: grandTotal });
   };
+  const [taxType, setTaxtype] = useState();
+  const handleInputChange = (e, key, col, tx) => {
+    console.log("gai guys", e, col, tx);
+    // setSampleid(e)
+    taxTypes.map((item, index) => {
+      if (tx && e === item.tax_type_id) {
+        if (col && key && tx && e === item.tax_type_id) {
+          setTaxRatee(item.tax_type_percentage);
+          // let hai = item.tax_type_percentage;
+
+          let existingValues = addForm.getFieldsValue();
+          console.log("existing form", existingValues);
+          let { quotation_details } = existingValues;
+          let assignValues = quotation_details[key];
+
+          let taxamount =
+            (assignValues["quotation_details_cost"] *
+              item.tax_type_percentage) /
+            100;
+          console.log("sum of tax", taxamount);
+          assignValues["quotation_details_tax_amount"] = taxamount;
+
+          let totalAmount =
+            assignValues["quotation_details_cost"] +
+            assignValues["quotation_details_tax_amount"];
+          console.log("total aount", totalAmount);
+          assignValues["quotation_details_total"] = totalAmount;
+          console.log("quation deatils", quotation_details);
+          addForm.setFieldsValue({ quotation_details });
+          // setTotal(sum);
+          // addForm.setFieldsValue({
+          //   grandtotal: sum,
+          // });
+          // let grandTotal = 0;
+          // for (let key in quotation_details) {
+          //   let item = quotation_details[key];
+          //   grandTotal += item["quotation_details_total"];
+          //   setNewGrandTotal(grandTotal);
+          //   addForm.setFieldsValue({ grandtotal: grandTotal });
+          // }
+
+          // console.log("Grand Total:", grandTotal);
+
+          setTableData(
+            tableData.map((item) => {
+              if (item.key === key) {
+                return {
+                  ...item,
+                  quotation_details_tax_amount: taxamount,
+                  quotation_details_tax_type: e,
+                  quotation_details_total: totalAmount,
+                };
+              }
+              return item;
+            })
+          );
+          console.log("tabledata", tableData);
+          // let sum = 0;
+          // tableData.forEach((item) => {
+          //   sum +=
+          //     item.quotation_details_cost + item.quotation_details_tax_amount;
+          // });
+          // console.log("sum", sum);
+          // setTotal(sum);
+          // addForm.setFieldsValue({
+          //   grandtotal: sum,
+          // });
+        }
+      }
+    });
+  };
+
+  const handleInputchange1 = (e, key, col, tr) => {
+    setTableData(
+      tableData.map((item) => {
+        if (item.key === key) {
+          return { ...item, [col]: e };
+        }
+        return item;
+      })
+    );
+    if (e && col === "quotation_details_service_id") {
+      allservices.map((item, index) => {
+        if (e === item.service_id) {
+          setTaxtype(item.service_taxtype);
+          let existingValues = addForm.getFieldsValue();
+          let { quotation_details } = existingValues;
+          let assignValues = quotation_details[key];
+          assignValues["quotation_details_tax_type"] = item.service_taxtype;
+          addForm.setFieldsValue({ quotation_details });
+          // if (tr) {
+          //   handleInputChange(
+          //     item.service_taxtype,
+          //     index.key,
+          //     "quotation_details_tax_type",
+          //     "tx"
+          //   );
+          // }
+        }
+      });
+    }
+    // addForm.setFieldValue("quotation_details_tax_type", taxratee);
+  };
+  console.log("tax type ::123", taxType);
+  const getSingleJob = () => {
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/job/${id}`)
+      .then((res) => {
+        console.log("response of job", res);
+        if (res.data.success) {
+          console.log("Success of job", res.data.data);
+
+          let temp = "";
+        
+         
+          let date = moment(res.data.data.job_date).format("DD-MM-YYYY");
+          temp = {
+            job_id: res.data.data.job_id,
+            job_no: res.data.data.job_number,
+            job_cargo_type: res.data.data.job_cargo_type,
+            job_mode: res.data.data.job_mode,
+            job_no_of_pieces: res.data.data.job_no_of_pieces,
+            job_shipper: res.data.data.job_shipper,
+            // job_validity: res.data.data.job_validity,
+            // job_validity1: validity,
+            job_date: res.data.data.job_date,
+            job_date1: date,
+            job_exchange_rate: res.data.data.job_exchange_rate,
+            job_grand_total: res.data.data.job_grand_total,
+            job_gross_wt: res.data.data.job_gross_wt,
+            job_chargeable_wt: res.data.data.job_chargeable_wt,
+            job_carrier: res.data.data.job_carrier,
+            job_carrier1: res.data.data.fms_v1_carrier.carrier_name,
+            job_consignee: res.data.data.job_consignee,
+            job_consignee1: res.data.data.crm_v1_leads.lead_customer_name,
+            // job_currency: res.data.data.job_currency,
+            // job_currency1:
+            //   res.data.data.generalsettings_v1_currency.currency_name,
+            job_destination_id: res.data.data.job_destination_id,
+            job_destination_id1:
+              res.data.data
+                .fms_v1_locations_fms_v1_jobs_job_destination_idTofms_v1_locations
+                .location_name,
+            // job_destination_id1:
+            //   res.data.data
+            //     .fms_v1_locations_fms_v1_job_job_destination_idTofms_v1_locations
+            //     .location_name,
+            job_awb_bl_no: res.data.data.job_awb_bl_no,
+
+            job_freight_type: res.data.data.job_freight_type,
+            job_freight_type1:
+              res.data.data.fms_v1_freight_types.freight_type_name,
+            job_origin_id: res.data.data.job_origin_id,
+            job_origin_id1:res.data.data
+                .fms_v1_locations_fms_v1_jobs_job_origin_idTofms_v1_locations
+                  .location_name,
+            job_payment_terms: res.data.data.job_payment_terms,
+            job_payment_terms1:
+              res.data.data.fms_v1_payment_terms.payment_term_name,
+            job_uom: res.data.data.job_uom,
+            job_uom1: res.data.data.crm_v1_units.unit_name,
+            fms_v1_job_details: res.data.data.fms_v1_job_details,
+            fms_v1_enquiry_jobs: res.data.data.fms_v1_enquiry_jobs,
+            job_docs: res.data.data.job_docs,
+          };
+          console.log("datas", temp);
+          setAllJobs(temp);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+  useEffect(() => {
+    if (id) {
+      getSingleJob();
+    }
+  }, [id]);
+  const getAllservices = () => {
+    PublicFetch.get(
+      `${CRM_BASE_URL_SELLING}/service?startIndex=${pageofIndex}&noOfItems=${numOfItems}`
+    )
+      .then((res) => {
+        console.log("all services is ", res.data.data);
+        if (res?.data?.success) {
+          console.log("All services dataawww", res?.data?.data?.services);
+          let tempArr = [];
+          res?.data?.data?.services.forEach((item, index) => {
+            tempArr.push({
+              service_id: item?.service_id,
+              service_name: item?.service_name,
+              service_category_id: item?.crm_v1_categories?.category_id,
+              service_category_name: item?.crm_v1_categories?.category_name,
+              service_code: item?.service_code,
+              service_pic: item?.service_pic,
+              service_hsn: item?.service_hsn,
+              service_taxrate: item?.service_taxrate,
+              service_description: item?.service_description,
+              service_category_name: item?.crm_v1_categories?.category_name,
+            });
+          });
+          console.log("hellooooqqqqq", tempArr);
+          setServices(tempArr);
+
+          setAllservices(res?.data?.data.services);
+          setTotalcount(res?.data?.data?.totalCount);
+          // setCurrentcount(res?.data?.data?.currentCount);
+        } else {
+          console.log("FAILED T LOAD DATA");
+        }
+      })
+      .catch((err) => {
+        console.log("Errror while getting data", err);
+      });
+  };
+
+  useEffect(() => {
+    getAllservices();
+  }, [numOfItems, pageofIndex]);
 
   const columns = [
     {
@@ -146,9 +374,9 @@ export default function Taskexpenses() {
 
     {
       title: "Tasks",
-      dataIndex: "tasks",
-      key: "tasks",
-      width: "40%",
+      dataIndex: "quotation_details_service_id",
+      key: "quotation_details_service_id",
+      // width: "40%",
       align: "center",
       className: "firstrow req_font",
       render: (data, index) => {
@@ -163,7 +391,7 @@ export default function Taskexpenses() {
               ]}
               rules={[{ required: true, message: "Please select" }]}
             >
-              <Select
+              <Select style={{ minWidth: '200px' }}
                 bordered={false}
                 showArrow={false}
                 allowClear
@@ -174,7 +402,11 @@ export default function Taskexpenses() {
                 value={index.quotation_details_service_id}
                 onChange={(e) => {
                   console.log("servicess11123", e);
-                }}
+                  handleInputchange1(
+                    e,
+                    index.key,
+                    "quotation_details_service_id"
+                  )}}
               >
                 {services &&
                   services.length > 0 &&
@@ -196,27 +428,72 @@ export default function Taskexpenses() {
     },
     {
       title: "Tax Type",
-      dataIndex: "taxtype",
-      key: "taxtype",
-      width: "15%",
+      dataIndex: "quotation_details_tax_type",
+      key: "quotation_details_tax_type",
+      // width: "100",
       align: "center",
       className: "firstrow",
+      
       render: (data, index) => {
         console.log("index is :", index);
+        
         return (
           <div className="d-flex justify-content-center align-items-center tborder ">
             <Form.Item
               name={[
                 "quotation_details",
                 index.key,
-                "quotation_details_service_id",
+                "quotation_details_tax_type",
               ]}
-              rules={[{ required: true, message: "Required" }]}
+              // rules={[{ required: true, message: "Required" }]}
             >
-              <InputType
+              {/* <InputType
                 style={{ border: "none" }}
                 className="input_type_style_new"
-              />
+                value={index.quotation_details_tax_type}
+                onChange={(e) =>
+                  handleInputChange(
+                    e,
+                    index.key,
+                    "quotation_details_tax_type",
+                    "tx"
+                  )
+                }
+              /> */}
+              <Select style={{ minWidth: '200px' }}
+                bordered={false}
+                showArrow={false}
+                allowClear
+                showSearch
+                optionFilterProp="children"
+                width={30}
+                className="selectwidthexp mb-2"
+                value={index.quotation_details_tax_type}
+                onChange={(e) => {
+                  console.log("servicess11123", e);
+                  // handleInputchange1(e, index.key, "quotation_details_tax_type")
+                  handleInputChange(
+                    e,
+                    index.key,
+                    "quotation_details_tax_type",
+                    "tx"
+                  );
+                }}
+                disabled={true}
+              >
+                {taxTypes &&
+                  taxTypes.length > 0 &&
+                  taxTypes.map((item, index) => {
+                    return (
+                      <Select.Option
+                      key={item.tax_type_id}
+                      value={item.tax_type_id}
+                      >
+                         {item.tax_type_name}
+                      </Select.Option>
+                    );
+                  })}
+              </Select>
             </Form.Item>
           </div>
         );
@@ -226,7 +503,7 @@ export default function Taskexpenses() {
       title: "Tax %",
       dataIndex: "taxp",
       key: "taxp",
-      width: "5%",
+      width: "38%",
       align: "center",
       className: "firstrow",
       render: (data, index) => {
@@ -262,7 +539,7 @@ export default function Taskexpenses() {
       title: "Agent",
       dataIndex: "agent",
       key: "agent",
-      width: 150,
+      // width: 150,
       align: "center",
       className: "firstrow",
       render: (data, index) => {
@@ -277,9 +554,10 @@ export default function Taskexpenses() {
               ]}
               rules={[{ required: true, message: "Required" }]}
             >
-              <Select
+              <Select style={{ minWidth: '100px' }}
                 bordered={false}
                 showArrow={false}
+                
                 width={"1000px"}
                 allowClear
                 showSearch
@@ -291,15 +569,15 @@ export default function Taskexpenses() {
                   console.log("servicess11123", e);
                 }}
               >
-                {services &&
-                  services.length > 0 &&
-                  services.map((item, index) => {
+                {agentdata &&
+                  agentdata.length > 0 &&
+                  agentdata.map((item, index) => {
                     return (
                       <Select.Option
-                        key={item.service_id}
-                        value={item.service_id}
+                        key={item.agent_id}
+                        value={item.agent_id}
                       >
-                        {item.service_name}
+                        {item.agent_emp_name}
                       </Select.Option>
                     );
                   })}
@@ -312,7 +590,7 @@ export default function Taskexpenses() {
 
     {
       title: "Cost",
-      width: 200,
+      width: 100,
       align: "center",
       className: "secondrow",
       children: [
@@ -393,7 +671,7 @@ export default function Taskexpenses() {
           title: "Total",
           dataIndex: "total",
           key: "total",
-          width: 100,
+          width: 60,
           //   width: 80,
           //   fixed: 'right',
           align: "center",
@@ -455,7 +733,7 @@ export default function Taskexpenses() {
                   ]}
                   rules={[{ required: true, message: "Required" }]}
                 >
-                  <Select
+                  <Select style={{ minWidth: '50px' }}
                     bordered={false}
                     showArrow={false}
                     allowClear
@@ -490,7 +768,7 @@ export default function Taskexpenses() {
           title: "Exchange",
           dataIndex: "exchange",
           key: "exchange",
-          width: 60,
+          width: 20,
           align: "center",
           className: "thirdrow",
           render: (data, index) => {
@@ -527,7 +805,7 @@ export default function Taskexpenses() {
           title: "Amount Fx",
           dataIndex: "amountfx",
           key: "amountfx",
-          width: 100,
+          width: 40,
           align: "center",
           className: "thirdrow",
           render: (data, index) => {
@@ -564,7 +842,7 @@ export default function Taskexpenses() {
           title: "Amount Lx",
           dataIndex: "amountlx",
           key: "amountlx",
-          width: 100,
+          width: 40,
           align: "center",
           className: "thirdrow",
           render: (data, index) => {
@@ -661,6 +939,31 @@ export default function Taskexpenses() {
     );
   };
 
+  const [agentdata, setAgentdata] = useState("");
+  const getagents = async () => {
+    try {
+      const allagent = await PublicFetch.get(
+        `${process.env.REACT_APP_BASE_URL}/agents`
+      );
+      console.log("all agentss are ::", allagent?.data?.data);
+      let array = [];
+      allagent?.data?.data?.forEach((item, index) => {
+        array.push({
+          agent_id: item.agent_id,
+          agent_country: item.agent_country,
+          agent_emp_id: item.hrms_v1_employee.employee_code,
+          agent_emp_name:item.hrms_v1_employee.employee_name
+        });
+      });
+      setAgentdata(array);
+    } catch (err) {
+      console.log("error to getting all units", err);
+    }
+  };
+
+  useEffect(() => {
+    getagents();
+  }, []);
   const [oppnew, setOppnew] = useState([]);
   console.log("Opportunities are :::", oppnew);
 
@@ -674,10 +977,9 @@ export default function Taskexpenses() {
 
   const [oppleadid, setOppleadid] = useState();
   console.log("Opportunities lead id :::", oppleadid);
-  const [numOfItems, setNumOfItems] = useState("25");
 
-  const [services, setServices] = useState([]);
-  console.log("Servicesss are :::", services);
+
+  
   const [allservices, setAllservices] = useState();
   const [allLocations, setAllLocations] = useState();
   console.log("locations ", allLocations);
@@ -721,7 +1023,7 @@ export default function Taskexpenses() {
                         >
                           :
                         </td>
-                        <td style={{ width: "190px" }}>JQ 003</td>
+                        <td style={{ width: "190px" }}>{alljobs?.job_no}</td>
 
                         <td style={{ width: "90px", fontWeight: "bold" }}>
                           Job Date
@@ -735,7 +1037,7 @@ export default function Taskexpenses() {
                         >
                           :
                         </td>
-                        <td style={{ width: "90px" }}>120000</td>
+                        <td style={{ width: "90px" }}>{alljobs?.job_date1}</td>
 
                         <td style={{ width: "190px", fontWeight: "bold" }}>
                           Quotation No
@@ -749,7 +1051,7 @@ export default function Taskexpenses() {
                         >
                           :
                         </td>
-                        <td style={{ width: "70px" }}>QP 003</td>
+                        <td style={{ width: "70px" }}></td>
                       </tr>
                       <tr>
                         <td style={{ width: "120px", fontWeight: "bold" }}>
@@ -764,7 +1066,7 @@ export default function Taskexpenses() {
                         >
                           :
                         </td>
-                        <td style={{ width: "70px" }}>Test</td>
+                        <td style={{ width: "70px" }}>{alljobs?.job_consignee1}</td>
 
                         <td style={{ width: "120px", fontWeight: "bold" }}>
                           {" "}
@@ -779,7 +1081,7 @@ export default function Taskexpenses() {
                         >
                           :
                         </td>
-                        <td style={{ width: "160px" }}>Test </td>
+                        <td style={{ width: "160px" }}>{alljobs?.job_shipper}</td>
 
                         <td style={{ width: "120px", fontWeight: "bold" }}>
                           AWB/BL No
@@ -793,7 +1095,7 @@ export default function Taskexpenses() {
                         >
                           :
                         </td>
-                        <td style={{ width: "190px" }}>QP 00399</td>
+                        <td style={{ width: "190px" }}>{alljobs?.job_awb_bl_no}</td>
                       </tr>
                     </tbody>
                   </table>

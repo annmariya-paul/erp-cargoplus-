@@ -41,7 +41,7 @@ function CreateJob() {
   const [date, setDate] = useState();
   const [addForm] = Form.useForm();
   const [currentcount, setCurrentcount] = useState();
-  const [noofItems, setNoofItems] = useState("25");
+  const [noofItems, setNoofItems] = useState(10000);
   const [current, setCurrent] = useState(1);
   const [totalCount, setTotalcount] = useState();
   const pageofIndex = noofItems * (current - 1) - 1 + 1;
@@ -112,40 +112,48 @@ function CreateJob() {
         `${CRM_BASE_URL_FMS}/quotation/${id}`
       );
       if (onequatation.data.success) {
-        console.log("one quatation iss ::", onequatation?.data?.data);
+        console.log("one quatation iss ::", onequatation?.data?.data.quotation);
 
         addForm.setFieldsValue({
           job_chargable_weight:
-            onequatation?.data?.data?.quotation_chargeable_wt,
-          job_grossweight: onequatation?.data?.data?.quotation_gross_wt,
+            onequatation?.data?.data.quotation.quotation_chargeable_wt,
+          job_grossweight:
+            onequatation?.data?.data.quotation.quotation_gross_wt,
 
-          job_shipper: onequatation?.data?.data?.quotation_shipper,
-          job_consignee: onequatation?.data?.data?.crm_v1_leads.lead_id,
+          job_shipper: onequatation?.data?.data.quotation.quotation_shipper,
+          job_consignee:
+            onequatation?.data?.data.quotation.crm_v1_leads.lead_id,
           job_freight_type:
-            onequatation?.data?.data?.fms_v1_freight_types.freight_type_id,
-          job_cargo_type: onequatation?.data?.data?.quotation_cargo_type,
-          job_mode: onequatation?.data?.data?.quotation_mode,
-          job_carrier: onequatation?.data?.data?.fms_v1_carrier.carrier_id,
+            onequatation?.data?.data.quotation.fms_v1_freight_types
+              .freight_type_id,
+          job_cargo_type:
+            onequatation?.data?.data.quotation.quotation_cargo_type,
+          job_mode: onequatation?.data?.data.quotation.quotation_mode,
+          job_carrier:
+            onequatation?.data?.data.quotation.fms_v1_carrier.carrier_id,
           job_payment_terms:
-            onequatation?.data?.data?.fms_v1_payment_terms.payment_term_id,
+            onequatation?.data?.data.quotation.fms_v1_payment_terms
+              .payment_term_id,
 
-          job_no_of_pieces: onequatation?.data?.data?.quotation_no_of_pieces,
+          job_no_of_pieces:
+            onequatation?.data?.data.quotation.quotation_no_of_pieces,
 
-          job_uom: onequatation?.data?.data?.crm_v1_units.unit_id,
+          job_uom: onequatation?.data?.data.quotation.crm_v1_units.unit_id,
           job_destination_id:
-            onequatation?.data?.data
+            onequatation?.data?.data.quotation
               ?.fms_v1_locations_fms_v1_quotation_quotation_destination_idTofms_v1_locations
               .location_id,
           job_origin_id:
-            onequatation?.data?.data
+            onequatation?.data?.data.quotation
               ?.fms_v1_locations_fms_v1_quotation_quotation_origin_idTofms_v1_locations
               .location_id,
-          job_currency: onequatation?.data?.data?.quotation_currency,
-          exchnagerate: onequatation?.data?.data?.quotation_exchange_rate,
+          job_currency: onequatation?.data?.data.quotation.quotation_currency,
+          exchnagerate:
+            onequatation?.data?.data.quotation?.quotation_exchange_rate,
           job_total_cost_amountfx:
-            onequatation?.data?.data?.quotation_grand_total,
+            onequatation?.data?.data.quotation?.quotation_grand_total,
         });
-        setGrandTotal(onequatation?.data?.data?.quotation_grand_total);
+        setGrandTotal(onequatation?.data?.data.quotation.quotation_grand_total);
       }
     } catch (err) {
       console.log("error to getting all freighttype", err);
@@ -153,7 +161,9 @@ function CreateJob() {
   };
 
   const getAllQuotation = () => {
-    PublicFetch.get(`${CRM_BASE_URL_FMS}/quotation?startIndex=0&noOfItems=100`)
+    PublicFetch.get(
+      `${CRM_BASE_URL_FMS}/quotation?startIndex=0&noOfItems=10000`
+    )
       .then((res) => {
         console.log("Response", res);
         if (res.data.success) {
@@ -195,29 +205,26 @@ function CreateJob() {
   }, []);
 
   const handleLeadIdEnq = (e) => {
-    // addForm.setFieldValue("consignee",leadIdenq);
     getonequatation(e);
     setLeadIdEnq(e);
   };
 
   const [allLeadList, setAllLeadList] = useState([]);
   const GetAllLeadData = () => {
-    PublicFetch.get(
-      `${CRM_BASE_URL}/lead?startIndex=${pageofIndex}&noOfItems=${noofItems}`
-    )
+    PublicFetch.get(`${CRM_BASE_URL}/lead/Minimal`)
       .then((res) => {
         if (res?.data?.success) {
           console.log("All lead data", res?.data?.data);
           // setAllLeadList(res?.data?.data?.leads);
           setTotalcount(res?.data?.data?.totalCount);
           setCurrentcount(res?.data?.data?.currentCount);
+          setAllLeadList(res.data.data);
           let array = [];
-          res?.data?.data?.leads?.forEach((item, index) => {
+          res?.data?.data?.forEach((item, index) => {
             array.push({
               lead_id: item?.lead_id,
               lead_customer_name: item?.lead_customer_name,
             });
-            setAllLeadList(array);
             handleLeadId(item.lead_id);
           });
         } else {
@@ -242,6 +249,9 @@ function CreateJob() {
   const handleLeadId = (leadId) => {
     setLeadId(leadId);
   };
+  const hai = new Date();
+  const datenew1 = moment(hai);
+  addForm.setFieldValue("jobdate", datenew1);
 
   useEffect(() => {
     GetAllLeadData();
@@ -250,7 +260,7 @@ function CreateJob() {
   const OnSubmit = (data) => {
     console.log("submitting data", data);
 
-    const date1 = moment(data.jobdate).format("YYYY-MM-DD");
+    const date1 = moment(data.jobdate);
 
     const docfile = data?.new?.file?.originFileObj;
     const formData = new FormData();
@@ -446,13 +456,13 @@ function CreateJob() {
                       <label>Job Date</label>
                       <Form.Item
                         name="jobdate"
-                        // rules={[
-                        //   {
-                        //     required: true,
-                        //     pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                        //     message: "Please enter a Valid date",
-                        //   },
-                        // ]}
+                        rules={[
+                          {
+                            required: true,
+                            // pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                            message: "Please enter a Valid date",
+                          },
+                        ]}
                       >
                         <DatePicker
                           style={{ borderWidth: 0, marginTop: 10 }}
@@ -587,7 +597,17 @@ function CreateJob() {
                           },
                         ]}
                       >
-                        <InputType disabled={disable} />
+                        <Input_Number
+                          className="text_right"
+                          // value={currencyRates}
+                          // onChange={handleChange}
+                          align="right"
+                          // step={0.01}
+                          min={0}
+                          precision={2}
+                          controlls={false}
+                          disabled={true}
+                        />
                       </Form.Item>
                     </div>
                     <div className="col-xl-3 col-sm-6 mt-2">
@@ -811,7 +831,17 @@ function CreateJob() {
                           },
                         ]}
                       >
-                        <InputType disabled={disable} />
+                        <Input_Number
+                          className="text_right"
+                          // value={currencyRates}
+                          // onChange={handleChange}
+                          align="right"
+                          // step={0.01}
+                          min={0}
+                          precision={2}
+                          controlls={false}
+                          disabled={true}
+                        />
                       </Form.Item>
                     </div>
                     <div className="col-xl-3 col-sm-6 mt-2">
@@ -904,7 +934,7 @@ function CreateJob() {
                           min={0}
                           precision={2}
                           controlls={false}
-                          disabled={true}
+                          // disabled={true}
                         />
                       </Form.Item>
                     </div>
@@ -920,7 +950,17 @@ function CreateJob() {
                           },
                         ]}
                       >
-                        <InputType disabled={disable} />
+                        <Input_Number
+                          className="text_right"
+                          // value={currencyRates}
+                          // onChange={handleChange}
+                          align="right"
+                          // step={0.01}
+                          min={0}
+                          precision={2}
+                          controlls={false}
+                          disabled={true}
+                        />
                       </Form.Item>
                     </div>
                     <div className="col-xl-3 col-sm-6 mt-2">

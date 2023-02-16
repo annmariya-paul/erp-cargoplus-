@@ -597,17 +597,7 @@ function CreateJob() {
                           },
                         ]}
                       >
-                        <Input_Number
-                          className="text_right"
-                          // value={currencyRates}
-                          // onChange={handleChange}
-                          align="right"
-                          // step={0.01}
-                          min={0}
-                          precision={2}
-                          controlls={false}
-                          disabled={true}
-                        />
+                        <InputType disabled={disable} />
                       </Form.Item>
                     </div>
                     <div className="col-xl-3 col-sm-6 mt-2">

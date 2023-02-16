@@ -96,6 +96,8 @@ const ROUTES = {
   COMPANYINFO: "/company_info",
   TASKANDEXPENSES: "/task_expenses",
   INVOICE_PREVIEW:"/invoice_preview",
+  QUATATION_INVOICE:"/quatation_invoice",
+  QUATATION_INVOICE_ID:"/quatation_invoice/:id",
 };
 
 module.exports = { ROUTES };

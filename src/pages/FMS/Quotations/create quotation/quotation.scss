@@ -128,6 +128,11 @@ th {
     display: none;
   }
 }
+@media print{
+  .quotation_heading{
+    display: none;
+  }
+}
 
 // @media print {
 //   @page {
@@ -158,7 +163,13 @@ th {
   left: 0;
   right: 0;
   height: 50px;
+  display: none;
   /* other styles */
+}
+@media print{
+  .print-header{
+    display: block;
+  }
 }
 
 .print-footer {
@@ -191,6 +202,7 @@ th {
   box-shadow: 2px 2px 12px variables.$boxshadow;
 }
 
+
 // @page {
 //   size: A4;
 //   margin: 0;
@@ -201,9 +213,21 @@ th {
     height: 297mm;
     margin: 10mm;
     box-shadow: none;
+    border: solid 1px black;
   }
+  .imgquotation{
+    margin-top: 25px;
+    margin-left: 35px;
+  }
+
 }
+
+
 
 .ant-input-number-input {
   color: black;
+}
+
+.quotation_border{
+  border: solid 1px black;
 }

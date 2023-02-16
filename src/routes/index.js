@@ -86,6 +86,7 @@ const ROUTES = {
   LIST_JOB: "/joblist",
   CREATEJOB: "/createjob",
   UPDATEJOB: "/updatejob",
+  UPDATEJOB_ID: "/updatejob/:id",
   VIEW_JOB: "/view_job",
   VIEW_JOB_ID: "/view_job/:id",
   VIEW_QUOTATION_ID: "/view_quotation/:id",
@@ -96,6 +97,8 @@ const ROUTES = {
   TASKANDEXPENSES: "/task_expenses",
   TASKANDEXPENSES_ID: "/task_expenses/:id",
   INVOICE_PREVIEW:"/invoice_preview",
+  QUATATION_INVOICE:"/quatation_invoice",
+  QUATATION_INVOICE_ID:"/quatation_invoice/:id",
 };
 
 module.exports = { ROUTES };

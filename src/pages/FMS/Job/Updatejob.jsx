@@ -27,7 +27,7 @@ function Updatejob() {
   const navigate = useNavigate();
   const [editForm] = Form.useForm();
   const [pageofIndex, setPageOfIndex] = useState(0);
-  const [noofItems, setNoofItems] = useState(100);
+  const [noofItems, setNoofItems] = useState(1000);
   const [JobList, setJobList] = useState();
   const [freightType, setFreightTypes] = useState();
   const [consignees, setConsignees] = useState();
@@ -39,6 +39,7 @@ function Updatejob() {
   const [locations, setLocations] = useState();
   const [allCurrency, setAllCurreny] = useState();
   const [SuccessPopup, setSuccessPopup] = useState(false);
+  const [disable, setDisable] = useState(false);
 
   const close_modal = (mShow, time) => {
     if (!mShow) {
@@ -61,6 +62,11 @@ function Updatejob() {
           let quotationNo = [];
           res.data.data.fms_v1_quotation_jobs.forEach((item, index) => {
             quotationNo.push(item.quotation_job_id);
+            if (item.quotation_job_id) {
+              setDisable(true);
+            } else {
+              setDisable(false);
+            }
           });
           editForm.setFieldsValue({
             freighttype: res.data.data.job_freight_type,
@@ -106,14 +112,12 @@ function Updatejob() {
   };
 
   const Consigneebylead = () => {
-    PublicFetch.get(
-      `${CRM_BASE_URL}/lead?startIndex=${pageofIndex}&noOfItems=${noofItems}`
-    )
+    PublicFetch.get(`${CRM_BASE_URL}/lead/Minimal`)
       .then((res) => {
         console.log("Response", res);
         if (res.data.success) {
           console.log("Success of lead", res.data.data.leads);
-          setConsignees(res.data.data.leads);
+          setConsignees(res.data.data);
         }
       })
       .catch((err) => {
@@ -214,7 +218,9 @@ function Updatejob() {
   };
 
   const allQuotations = () => {
-    PublicFetch.get(`${CRM_BASE_URL_FMS}/quotation?startIndex=0&noOfItems=1000`)
+    PublicFetch.get(
+      `${CRM_BASE_URL_FMS}/quotation?startIndex=0&noOfItems=10000`
+    )
       .then((res) => {
         console.log("response", res);
         if (res.data.success) {
@@ -245,7 +251,7 @@ function Updatejob() {
     formData.append("job_gross_wt", data.grosswt);
     formData.append("job_chargeable_wt", data.chargeablewt);
     formData.append("job_payment_terms", data.terms);
-    formData.append("job_total_cost_currency", data.job_currency);
+    formData.append("job_total_cost_curr", data.job_currency);
     formData.append("job_total_cost_exch", data.exchangerate);
     if (data.attachments) {
       formData.append("job_docs", data.attachments);
@@ -316,7 +322,7 @@ function Updatejob() {
                         ]}
                       >
                         <SelectBox
-                          // disabled={disable}
+                          disabled={disable}
                           allowClear
                           showSearch
                           optionFilterProp="children"
@@ -348,7 +354,7 @@ function Updatejob() {
                           },
                         ]}
                       >
-                        <InputType />
+                        <InputType disabled={disable} />
                       </Form.Item>
                     </div>
                     <div className="col-xl-3 col-sm-6 mt-2">
@@ -363,7 +369,7 @@ function Updatejob() {
                           },
                         ]}
                       >
-                        <DatePicker format={"DD-MM-YYYY"} />
+                        <DatePicker format={"DD-MM-YYYY"} disabled={disable} />
                       </Form.Item>
                     </div>
                     <div className="col-xl-3 col-sm-6 mt-2">
@@ -379,7 +385,7 @@ function Updatejob() {
                         ]}
                       >
                         <SelectBox
-                          // disabled={disable}
+                          disabled={disable}
                           allowClear
                           showSearch
                           optionFilterProp="children"
@@ -406,16 +412,16 @@ function Updatejob() {
                       <label>Quotation No</label>
                       <Form.Item
                         name="quotationno"
-                        rules={[
-                          {
-                            required: true,
-                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                            message: "Please enter a Valid quotationno",
-                          },
-                        ]}
+                        // rules={[
+                        //   {
+                        //     required: true,
+                        //     pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                        //     message: "Please enter a Valid quotationno",
+                        //   },
+                        // ]}
                       >
                         <SelectBox
-                          // disabled={disable}
+                          disabled={disable}
                           allowClear
                           showSearch
                           optionFilterProp="children"
@@ -447,7 +453,7 @@ function Updatejob() {
                           },
                         ]}
                       >
-                        <InputType />
+                        <InputType disabled={disable} />
                       </Form.Item>
                     </div>
                     <div className="col-xl-3 col-sm-6 mt-2">
@@ -463,7 +469,7 @@ function Updatejob() {
                         ]}
                       >
                         <SelectBox
-                          // disabled={disable}
+                          disabled={disable}
                           allowClear
                           showSearch
                           optionFilterProp="children"
@@ -493,7 +499,7 @@ function Updatejob() {
                         ]}
                       >
                         <SelectBox
-                          // disabled={disable}
+                          disabled={disable}
                           allowClear
                           showSearch
                           optionFilterProp="children"
@@ -529,7 +535,7 @@ function Updatejob() {
                         ]}
                       >
                         <SelectBox
-                          // disabled={disable}
+                          disabled={disable}
                           allowClear
                           showSearch
                           optionFilterProp="children"
@@ -562,7 +568,7 @@ function Updatejob() {
                         ]}
                       >
                         <SelectBox
-                          // disabled={disable}
+                          disabled={disable}
                           allowClear
                           showSearch
                           optionFilterProp="children"
@@ -595,6 +601,7 @@ function Updatejob() {
                         ]}
                       >
                         <SelectBox
+                          disabled={disable}
                           allowClear
                           showSearch
                           optionFilterProp="children"
@@ -644,7 +651,7 @@ function Updatejob() {
                         ]}
                       >
                         <SelectBox
-                          // disabled={disable}
+                          disabled={disable}
                           allowClear
                           showSearch
                           optionFilterProp="children"
@@ -676,7 +683,17 @@ function Updatejob() {
                           },
                         ]}
                       >
-                        <InputType />
+                        <Input_Number
+                          className="text_right"
+                          // value={currencyRates}
+                          // onChange={handleChange}
+                          align="right"
+                          // step={0.01}
+                          min={0}
+                          precision={2}
+                          controlls={false}
+                          disabled={disable}
+                        />
                       </Form.Item>
                     </div>
                     <div className="col-xl-3 col-sm-6 mt-2">
@@ -692,7 +709,7 @@ function Updatejob() {
                         ]}
                       >
                         <SelectBox
-                          // disabled={disable}
+                          disabled={disable}
                           allowClear
                           showSearch
                           optionFilterProp="children"
@@ -719,13 +736,13 @@ function Updatejob() {
                         rules={[
                           {
                             required: true,
-                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                            // pattern: new RegExp("^[A-Za-z0-9 ]+$"),
                             message: "Please enter a Valid Currency",
                           },
                         ]}
                       >
                         <SelectBox
-                          // disabled={disable}
+                          disabled={disable}
                           allowClear
                           showSearch
                           optionFilterProp="children"
@@ -755,7 +772,7 @@ function Updatejob() {
                         rules={[
                           {
                             required: true,
-                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                            // pattern: new RegExp("^[A-Za-z0-9 ]+$"),
                             message: "Please enter a Valid Exchange Rate",
                           },
                         ]}
@@ -769,7 +786,7 @@ function Updatejob() {
                           min={0}
                           precision={2}
                           controlls={false}
-                          disabled={true}
+                          // disabled={true}
                         />
                       </Form.Item>
                     </div>
@@ -785,7 +802,17 @@ function Updatejob() {
                           },
                         ]}
                       >
-                        <InputType />
+                        <Input_Number
+                          className="text_right"
+                          // value={currencyRates}
+                          // onChange={handleChange}
+                          align="right"
+                          // step={0.01}
+                          min={0}
+                          precision={2}
+                          controlls={false}
+                          disabled={disable}
+                        />
                       </Form.Item>
                     </div>
                     <div className="col-xl-3 col-sm-6 mt-2">
@@ -800,7 +827,17 @@ function Updatejob() {
                           },
                         ]}
                       >
-                        <InputType />
+                        <Input_Number
+                          className="text_right"
+                          // value={currencyRates}
+                          // onChange={handleChange}
+                          align="right"
+                          // step={0.01}
+                          min={0}
+                          precision={2}
+                          controlls={false}
+                          disabled={disable}
+                        />
                       </Form.Item>
                     </div>
                   </div>

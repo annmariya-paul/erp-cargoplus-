@@ -789,22 +789,20 @@ export default function EditQuotation(
   };
 
   const GetAllLeadData = () => {
-    PublicFetch.get(
-      `${CRM_BASE_URL}/lead?startIndex=${pageofIndex}&noOfItems=${noofItems}`
-    )
+    PublicFetch.get(`${CRM_BASE_URL}/lead/Minimal`)
       .then((res) => {
         if (res?.data?.success) {
           console.log("All lead data", res?.data?.data);
           // setAllLeadList(res?.data?.data?.leads);
           setTotalcount(res?.data?.data?.totalCount);
           // setCurrentcount(res?.data?.data?.currentCount);
+          setAllLeadList(res?.data?.data);
           let array = [];
           res?.data?.data?.leads?.forEach((item, index) => {
             array.push({
               lead_id: item?.lead_id,
               lead_customer_name: item?.lead_customer_name,
             });
-            setAllLeadList(array);
           });
         } else {
           console.log("FAILED T LOAD DATA");

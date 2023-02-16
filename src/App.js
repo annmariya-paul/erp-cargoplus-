@@ -208,7 +208,7 @@ function App() {
             />
             <Route path={ROUTES.LIST_JOB} element={<Listjob />} />
             <Route path={ROUTES.CREATEJOB} element={<CreateJob />} />
-            <Route path={ROUTES.UPDATEJOB} element={<Updatejob />} />
+            <Route path={ROUTES.UPDATEJOB_ID} element={<Updatejob />} />
             <Route path={ROUTES.VIEW_JOB_ID} element={<ViewJob />} />
             <Route path={ROUTES.INVOICE_LIST} element={<InvoiceList />} />
             <Route path={ROUTES.INVOICE_PREVIEW } element={<InvoicePreView/>}/>

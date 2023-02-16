@@ -1,7 +1,10 @@
 import { Form } from "antd";
 import React, { useEffect } from "react";
 import { DatePicker } from "antd";
-import { CRM_BASE_URL_SELLING } from "../../../api/bootapi";
+import {
+  CRM_BASE_URL_SELLING,
+  GENERAL_SETTING_BASE_URL,
+} from "../../../api/bootapi";
 import { CRM_BASE_URL } from "../../../api/bootapi";
 import Button from "../../../components/button/button";
 import FileUpload from "../../../components/fileupload/fileUploader";
@@ -17,6 +20,8 @@ import PublicFetch from "../../../utils/PublicFetch";
 import moment from "moment";
 import { CRM_BASE_URL_FMS } from "../../../api/bootapi";
 import Custom_model from "../../../components/custom_modal/custom_model";
+import Input_Number from "../../../components/InputNumber/InputNumber";
+import axios from "axios";
 
 function CreateJob() {
   const [AllQuotations, setAllQuotations] = useState();
@@ -52,6 +57,8 @@ function CreateJob() {
   console.log("all units are : ", allunit);
   const [unitTable, setunitTable] = useState("");
   const [locationType, setLocationType] = useState();
+  const [allCurrency, setAllCurreny] = useState();
+  const [grandTotal, setGrandTotal] = useState();
 
   const getBase64 = (file) =>
     new Promise((resolve, reject) => {
@@ -104,35 +111,42 @@ function CreateJob() {
       const onequatation = await PublicFetch.get(
         `${CRM_BASE_URL_FMS}/quotation/${id}`
       );
-      console.log("one quatation iss ::", onequatation?.data?.data);
+      if (onequatation.data.success) {
+        console.log("one quatation iss ::", onequatation?.data?.data);
 
-      addForm.setFieldsValue({
-        job_chargable_weight: onequatation?.data?.data?.quotation_chargeable_wt,
-        job_grossweight: onequatation?.data?.data?.quotation_gross_wt,
+        addForm.setFieldsValue({
+          job_chargable_weight:
+            onequatation?.data?.data?.quotation_chargeable_wt,
+          job_grossweight: onequatation?.data?.data?.quotation_gross_wt,
 
-        job_shipper: onequatation?.data?.data?.quotation_shipper,
-        job_consignee:
-          onequatation?.data?.data?.crm_v1_leads.lead_id,
-        job_freight_type:
-          onequatation?.data?.data?.fms_v1_freight_types.freight_type_id,
-        job_cargo_type: onequatation?.data?.data?.quotation_cargo_type,
-        job_mode: onequatation?.data?.data?.quotation_mode,
-        job_carrier: onequatation?.data?.data?.fms_v1_carrier.carrier_id,
-        job_payment_terms:
-          onequatation?.data?.data?.fms_v1_payment_terms.payment_term_id,
+          job_shipper: onequatation?.data?.data?.quotation_shipper,
+          job_consignee: onequatation?.data?.data?.crm_v1_leads.lead_id,
+          job_freight_type:
+            onequatation?.data?.data?.fms_v1_freight_types.freight_type_id,
+          job_cargo_type: onequatation?.data?.data?.quotation_cargo_type,
+          job_mode: onequatation?.data?.data?.quotation_mode,
+          job_carrier: onequatation?.data?.data?.fms_v1_carrier.carrier_id,
+          job_payment_terms:
+            onequatation?.data?.data?.fms_v1_payment_terms.payment_term_id,
 
-        job_no_of_pieces: onequatation?.data?.data?.quotation_no_of_pieces,
+          job_no_of_pieces: onequatation?.data?.data?.quotation_no_of_pieces,
 
-        job_uom: onequatation?.data?.data?.crm_v1_units.unit_id,
-        job_destination_id:
-          onequatation?.data?.data
-            ?.fms_v1_locations_fms_v1_quotation_quotation_destination_idTofms_v1_locations
-            .location_id,
-        job_origin_id:
-          onequatation?.data?.data
-            ?.fms_v1_locations_fms_v1_quotation_quotation_origin_idTofms_v1_locations
-            .location_id,
-      });
+          job_uom: onequatation?.data?.data?.crm_v1_units.unit_id,
+          job_destination_id:
+            onequatation?.data?.data
+              ?.fms_v1_locations_fms_v1_quotation_quotation_destination_idTofms_v1_locations
+              .location_id,
+          job_origin_id:
+            onequatation?.data?.data
+              ?.fms_v1_locations_fms_v1_quotation_quotation_origin_idTofms_v1_locations
+              .location_id,
+          job_currency: onequatation?.data?.data?.quotation_currency,
+          exchnagerate: onequatation?.data?.data?.quotation_exchange_rate,
+          job_total_cost_amountfx:
+            onequatation?.data?.data?.quotation_grand_total,
+        });
+        setGrandTotal(onequatation?.data?.data?.quotation_grand_total);
+      }
     } catch (err) {
       console.log("error to getting all freighttype", err);
     }
@@ -243,6 +257,9 @@ function CreateJob() {
 
     formData.append("job_date", date1);
     formData.append("job_consignee", data.job_consignee);
+    if (data.quotationno) {
+      formData.append("job_quotation", data.quotationno);
+    }
     formData.append("job_shipper", data.job_shipper);
     formData.append("job_freight_type", data.job_freight_type);
     formData.append("job_cargo_type", data.job_cargo_type);
@@ -258,9 +275,15 @@ function CreateJob() {
     formData.append("job_gross_wt", data.job_grossweight);
     formData.append("job_chargeable_wt", data.job_chargable_weight);
     formData.append("job_payment_terms", data.job_payment_terms);
+    formData.append("job_total_cost_currency", data.job_currency);
+    formData.append("job_total_cost_exch", data.exchnagerate);
+    // formData.append("job_total_cost_amountfx", grandTotal);
+    // formData.append("job_total_cost_amountlx", grandTotal);
+    // formData.append("job_currency_rate", data.job_currency);
+    // formData.append("job_exchange_rate", data.exchnagerate);
 
     if (filenew) {
-      formData.append("attachments", filenew);
+      formData.append("job_docs", filenew);
     }
 
     console.log("before sending data");
@@ -351,6 +374,41 @@ function CreateJob() {
     }
   };
 
+  const CuurencyDatas = () => {
+    PublicFetch.get(`${GENERAL_SETTING_BASE_URL}/currency`)
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          console.log("success", res.data.data);
+          setAllCurreny(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+  let b;
+  const getCurrencyRate = (data) => {
+    const code = allCurrency?.filter((item) => {
+      if (item?.currency_id === data) {
+        b = item?.currency_code;
+      }
+    });
+    console.log("code", b);
+    console.log(";;;;;;;;;", data);
+    axios
+      .get("https://open.er-api.com/v6/latest/USD")
+      .then(function (response) {
+        console.log("currency current rate:", response);
+        let a = response.data.rates[b];
+        console.log("currency match", a);
+        // setCurrencyRates(a);
+        addForm.setFieldValue("exchnagerate", a);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
   useEffect(() => {
     // getallunits();
     // getAllLocations();
@@ -358,6 +416,7 @@ function CreateJob() {
     getallPaymentTerms();
     getallunits();
     getallfrighttype();
+    CuurencyDatas();
   }, []);
 
   return (
@@ -449,16 +508,14 @@ function CreateJob() {
                         // ]}
                       >
                         <SelectBox
-                          onChange={(e) =>{
-                          if(e)
-                            {
-                            handleLeadIdEnq(e);
-                            setDisable(true);
-                          }else{
-                            addForm.resetFields();
-                             setDisable(false);
-                          }
-                           
+                          onChange={(e) => {
+                            if (e) {
+                              handleLeadIdEnq(e);
+                              setDisable(true);
+                            } else {
+                              addForm.resetFields();
+                              setDisable(false);
+                            }
                           }}
                           allowClear
                           showSearch
@@ -540,7 +597,7 @@ function CreateJob() {
                         rules={[
                           {
                             required: true,
-                          
+
                             message: "Please select a Valid cargotype",
                           },
                         ]}
@@ -791,6 +848,67 @@ function CreateJob() {
                       </Form.Item>
                     </div>
                     <div className="col-xl-3 col-sm-6 mt-2">
+                      <label>Currency</label>
+                      <Form.Item
+                        name="job_currency"
+                        rules={[
+                          {
+                            required: true,
+                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                            message: "Please enter a Valid currency",
+                          },
+                        ]}
+                      >
+                        <SelectBox
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
+                          disabled={disable}
+                          onChange={(e) => {
+                            getCurrencyRate(e);
+                          }}
+                        >
+                          {allCurrency &&
+                            allCurrency.length > 0 &&
+                            allCurrency.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  key={item.currency_id}
+                                  value={item.currency_id}
+                                >
+                                  {item.currency_name}
+                                </Select.Option>
+                              );
+                            })}
+                        </SelectBox>
+                      </Form.Item>
+                    </div>
+                    <div className="col-xl-3 col-sm-6 mt-2">
+                      <label>Exchange Rate</label>
+                      <Form.Item
+                        name="exchnagerate"
+                        rules={[
+                          {
+                            required: true,
+
+                            message: "Please enter a Valid Rate",
+                          },
+                        ]}
+                      >
+                        <Input_Number
+                          className="text_right"
+                          // value={currencyRates}
+                          // onChange={handleChange}
+                          align="right"
+                          // step={0.01}
+                          min={0}
+                          precision={2}
+                          controlls={false}
+                          disabled={true}
+                        />
+                      </Form.Item>
+                    </div>
+                    <div className="col-xl-3 col-sm-6 mt-2">
                       <label>Gross wt</label>
                       <Form.Item
                         name="job_grossweight"
@@ -821,6 +939,7 @@ function CreateJob() {
                       </Form.Item>
                     </div>
                   </div>
+
                   <div className="row">
                     <div className="col-xl-3 col-lg-3 col-sm-6 ">
                       <label>Add Attachments</label>

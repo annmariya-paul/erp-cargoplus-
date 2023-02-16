@@ -842,9 +842,46 @@ export default function EditQuotation(
       const onequatation = await PublicFetch.get(
         `${CRM_BASE_URL_FMS}/quotation/${id}`
       );
-      setQDetails(onequatation?.data?.data.fms_v1_quotation_details);
-      console.log("one quatation iss ::", onequatation?.data?.data);
-      console.log(" quatation no is:", onequatation?.data?.data.quotation_no);
+      let data11 = onequatation?.data?.data?.quotation;
+      let qdate = moment(onequatation?.data?.data?.quotation?.quotation_date);
+      let vdate = moment(
+        onequatation?.data?.data?.quotation?.quotation_validity
+      );
+      let quotation_enquiry_no = "";
+      onequatation?.data?.data?.quotation.fms_v1_enquiry_quotations.forEach(
+        (item, index) => {
+          quotation_enquiry_no = item.enquiry_quotation_opportunity_id;
+          setOpportunityNo(item.enquiry_quotation_opportunity_id);
+        }
+      );
+
+      editForm.setFieldsValue({
+        quotation_no: data11.quotation_no,
+        quotationdate: qdate,
+        validity_date: vdate,
+        shipper: data11.quotation_shipper,
+        quotation_enquiry_no: quotation_enquiry_no,
+        quotation_consignee: data11.crm_v1_leads.lead_id,
+        freight_type: data11.quotation_freight_type,
+        quotation_cargotype: data11.quotation_cargo_type,
+        quotation_mode: data11.quotation_mode,
+        quotation_carrier: data11.quotation_carrier,
+        quotation_terms: data11.fms_v1_payment_terms.payment_term_id,
+        gross_wt: data11.quotation_gross_wt,
+        chargeable_wt: data11.quotation_chargeable_wt,
+        quot_npieces: data11.quotation_no_of_pieces,
+        currency: data11.quotation_currency,
+        exchnagerate: data11.quotation_exchange_rate,
+        quotation_units: data11.quotation_uom,
+        quotation_destination: data11.quotation_destination_id,
+        quotation_origin: data11.quotation_origin_id,
+      });
+      setQDetails(onequatation?.data?.data?.quotation.fms_v1_quotation_details);
+      console.log("one quatation iss ::", onequatation?.data?.data.quotation);
+      console.log(
+        " quatation no is:",
+        onequatation?.data?.data.quotation.quotation_no
+      );
       setquatationno(onequatation?.data?.data?.quotation_no);
       setquotshipper(onequatation?.data?.data?.quotation_shipper);
       setQuotconsignee(onequatation?.data?.data?.crm_v1_leads.lead_id);
@@ -864,46 +901,19 @@ export default function EditQuotation(
       setquotcurrency(
         onequatation?.data?.data?.generalsettings_v1_currency.currency_name
       );
-      setquotexchngerate(onequatation?.data?.data?.quotation_exchange_rate);
-      setquotunits(onequatation?.data?.data?.crm_v1_units.unit_name);
-      let qdate = moment(onequatation?.data?.data?.quotation_date);
-      let vdate = moment(onequatation?.data?.data?.quotation_validity);
-
-      locationBytype(onequatation?.data?.data?.quotation_mode);
-      let quotation_enquiry_no = "";
-      onequatation?.data?.data?.fms_v1_enquiry_quotations.forEach(
-        (item, index) => {
-          quotation_enquiry_no = item.enquiry_quotation_opportunity_id;
-          setOpportunityNo(item.enquiry_quotation_opportunity_id);
-        }
+      setquotexchngerate(
+        onequatation?.data?.data?.quotation?.quotation_exchange_rate
       );
+      setquotunits(onequatation?.data?.data?.quotation?.crm_v1_units.unit_name);
+
+      locationBytype(onequatation?.data?.data?.quotation?.quotation_mode);
+
       console.log("quotation_enquiry_no", quotation_enquiry_no);
 
-      editForm.setFieldsValue({
-        quotation_no: onequatation?.data?.data?.quotation_no,
-        quotationdate: qdate,
-        validity_date: vdate,
-        shipper: onequatation?.data?.data?.quotation_shipper,
-        quotation_enquiry_no: quotation_enquiry_no,
-        quotation_consignee: onequatation?.data?.data?.crm_v1_leads.lead_id,
-        freight_type: onequatation?.data?.data?.quotation_freight_type,
-        quotation_cargotype: onequatation?.data?.data?.quotation_cargo_type,
-        quotation_mode: onequatation?.data?.data?.quotation_mode,
-        quotation_carrier: onequatation?.data?.data?.quotation_carrier,
-        quotation_terms:
-          onequatation?.data?.data?.fms_v1_payment_terms.payment_term_id,
-        gross_wt: onequatation?.data?.data?.quotation_gross_wt,
-        chargeable_wt: onequatation?.data?.data?.quotation_chargeable_wt,
-        quot_npieces: onequatation?.data?.data?.quotation_no_of_pieces,
-        currency: onequatation?.data?.data?.quotation_currency,
-        exchnagerate: onequatation?.data?.data?.quotation_exchange_rate,
-        quotation_units: onequatation?.data?.data?.quotation_uom,
-        quotation_destination:
-          onequatation?.data?.data?.quotation_destination_id,
-        quotation_origin: onequatation?.data?.data?.quotation_origin_id,
-      });
-
-      console.log("qdetail", onequatation?.data?.data.fms_v1_quotation_details);
+      console.log(
+        "qdetail",
+        onequatation?.data?.data?.quotation?.fms_v1_quotation_details
+      );
 
       // onequatation?.data?.data.fms_v1_quotation_details.map((item, index) => {
       //   let existingValues = editForm.getFieldsValue();

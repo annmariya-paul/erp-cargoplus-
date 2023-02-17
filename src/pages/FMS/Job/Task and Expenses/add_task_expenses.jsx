@@ -460,13 +460,13 @@ export default function Taskexpenses() {
                   )
                 }
               /> */}
-              <Select style={{ minWidth: '200px' }}
+              <Select style={{ minWidth: '60px' }}
                 bordered={false}
                 showArrow={false}
                 allowClear
                 showSearch
                 optionFilterProp="children"
-                width={30}
+              
                 className="selectwidthexp mb-2"
                 value={index.quotation_details_tax_type}
                 onChange={(e) => {
@@ -503,7 +503,7 @@ export default function Taskexpenses() {
       title: "Tax %",
       dataIndex: "taxp",
       key: "taxp",
-      width: "38%",
+      // width: "38%",
       align: "center",
       className: "firstrow",
       render: (data, index) => {
@@ -518,7 +518,7 @@ export default function Taskexpenses() {
               ]}
               rules={[{ required: true, message: "Required" }]}
             >
-              <InputNumber
+              <InputNumber style={{ minWidth: '10px' }}
                 bordered={false}
                 className="text_right"
                 value={index.quotation_details_cost}
@@ -554,7 +554,7 @@ export default function Taskexpenses() {
               ]}
               rules={[{ required: true, message: "Required" }]}
             >
-              <Select style={{ minWidth: '100px' }}
+              <Select style={{ minWidth: '80px' }}
                 bordered={false}
                 showArrow={false}
                 

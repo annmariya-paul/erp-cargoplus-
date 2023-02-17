@@ -161,13 +161,13 @@ function CreateJob() {
   };
 
   const getAllQuotation = () => {
-    PublicFetch.get(
-      `${CRM_BASE_URL_FMS}/quotation?startIndex=0&noOfItems=10000`
-    )
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/quotation/Minimal`)
       .then((res) => {
         console.log("Response", res);
         if (res.data.success) {
           console.log("success", res.data.data);
+          setAllQuotations(res.data.data);
+
           let temp = [];
           res.data.data.forEach((item, index) => {
             let date = moment(item.quotation_date).format("DD-MM-YYYY");
@@ -190,7 +190,6 @@ function CreateJob() {
             // console.log("name",name);
             // addForm.setFieldsValue({ consignee:name });
           });
-          setAllQuotations(temp);
 
           // let name= res.data.data.quotation_consignee;
         }
@@ -965,7 +964,17 @@ function CreateJob() {
                           },
                         ]}
                       >
-                        <InputType disabled={disable} />
+                        <Input_Number
+                          className="text_right"
+                          // value={currencyRates}
+                          // onChange={handleChange}
+                          align="right"
+                          // step={0.01}
+                          min={0}
+                          precision={2}
+                          controlls={false}
+                          disabled={true}
+                        />
                       </Form.Item>
                     </div>
                   </div>

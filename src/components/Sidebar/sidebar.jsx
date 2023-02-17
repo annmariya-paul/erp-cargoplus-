@@ -738,7 +738,7 @@ export default function Sidebar({ showSidebar }) {
                         }
                         to={ROUTES.LIST_JOB}
                       >
-                        <div className=" ms-4">JobList</div>
+                        <div className=" ms-4">Job</div>
                       </NavLink>
                     </li>
                   )}

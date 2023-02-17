@@ -297,7 +297,7 @@ export default function Add_Quotation() {
   const getAllTaxTypes = async () => {
     try {
       const allTxTypes = await PublicFetch.get(
-        `${CRM_BASE_URL_FMS}/tax-types?startIndex=${pageofIndex}&perPage=${numOfItems}`
+        `${CRM_BASE_URL_FMS}/tax-types/Minimal`
       );
       console.log("all taxtype are", allTxTypes.data.data);
       setTaxTypes(allTxTypes.data.data);
@@ -750,15 +750,13 @@ export default function Add_Quotation() {
   console.log("Opportunities lead id :::", oppleadid);
   const [numOfItems, setNumOfItems] = useState("25");
   const GetOpportunityData = () => {
-    PublicFetch.get(
-      `${CRM_BASE_URL}/opportunity?startIndex=${pageofIndex}&noOfItems=${numOfItems}`
-    )
+    PublicFetch.get(`${CRM_BASE_URL}/opportunity/Minimal`)
       .then((res) => {
         if (res?.data?.success) {
-          console.log("All opportunity dataqqq", res?.data?.data.leads);
+          console.log("All opportunity dataqqq", res?.data?.data);
 
           let tempArr = [];
-          res?.data?.data?.leads.forEach((item, index) => {
+          res?.data?.data?.forEach((item, index) => {
             tempArr.push({
               opportunity_id: item?.opportunity_id,
               opportunity_number: item?.opportunity_number,
@@ -776,13 +774,13 @@ export default function Add_Quotation() {
               lead_id: item?.crm_v1_leads?.lead_id,
               assigned_employee: item?.assigned_employee,
             });
-            handleLeadIdEnq(item.lead_id);
+            handleLeadIdEnq();
           });
           console.log("hellooooqqqqq", tempArr);
           setOppnew(tempArr);
-          setOppleadid(res?.data?.data?.leads?.opportunity_lead_id);
-          console.log("newwww", res?.data?.data?.leads?.opportunity_lead_id);
-          setOpportunityList(res?.data?.data?.leads);
+          setOppleadid(res?.data?.data?.opportunity_lead_id);
+          console.log("newwww", res?.data?.data?.opportunity_lead_id);
+          setOpportunityList(res?.data?.data);
           setTotalcount(res?.data?.data?.totalCount);
           console.log("totalcount iss", res?.data?.data?.totalCount);
           // let samplearry = [];
@@ -862,13 +860,14 @@ export default function Add_Quotation() {
   }, []);
 
   const getAllservices = () => {
-    PublicFetch.get(
-      `${CRM_BASE_URL_SELLING}/service?startIndex=${pageofIndex}&noOfItems=${numOfItems}`
-    )
+    PublicFetch.get(`${CRM_BASE_URL_SELLING}/service/Minimal`)
       .then((res) => {
         console.log("all services is ", res.data.data);
         if (res?.data?.success) {
           console.log("All services dataawww", res?.data?.data?.services);
+          setServices(res.data.data);
+          setAllservices(res?.data?.data);
+
           let tempArr = [];
           res?.data?.data?.services.forEach((item, index) => {
             tempArr.push({
@@ -882,12 +881,12 @@ export default function Add_Quotation() {
               service_taxrate: item?.service_taxrate,
               service_description: item?.service_description,
               service_category_name: item?.crm_v1_categories?.category_name,
+              service_taxtype_percentage:
+                item.fms_v1_tax_types.tax_type_percentage,
             });
           });
           console.log("hellooooqqqqq", tempArr);
-          setServices(tempArr);
 
-          setAllservices(res?.data?.data.services);
           setTotalcount(res?.data?.data?.totalCount);
           // setCurrentcount(res?.data?.data?.currentCount);
         } else {
@@ -1592,7 +1591,7 @@ export default function Add_Quotation() {
                           min={0}
                           precision={2}
                           controlls={false}
-                          disabled={true}
+                          // disabled={true}
                         />
                       </Form.Item>
                     </div>

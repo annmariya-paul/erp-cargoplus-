@@ -454,13 +454,14 @@ export default function EditQuotation(
   };
 
   const getAllservices = () => {
-    PublicFetch.get(
-      `${CRM_BASE_URL_SELLING}/service?startIndex=${pageofIndex}&noOfItems=${numOfItems}`
-    )
+    PublicFetch.get(`${CRM_BASE_URL_SELLING}/service/Minimal`)
       .then((res) => {
         console.log("all services is ", res.data.data);
         if (res?.data?.success) {
           console.log("All services dataawww", res?.data?.data?.services);
+          setServices(res?.data?.data);
+          setAllservices(res?.data?.data);
+
           let tempArr = [];
           res?.data?.data?.services.forEach((item, index) => {
             tempArr.push({
@@ -477,9 +478,7 @@ export default function EditQuotation(
             });
           });
           console.log("hellooooqqqqq", tempArr);
-          setServices(tempArr);
 
-          setAllservices(res?.data?.data.services);
           setTotalcount(res?.data?.data?.totalCount);
           // setCurrentcount(res?.data?.data?.currentCount);
         } else {
@@ -1051,7 +1050,7 @@ export default function EditQuotation(
   const getAllTaxTypes = async () => {
     try {
       const allTxTypes = await PublicFetch.get(
-        `${CRM_BASE_URL_FMS}/tax-types?startIndex=${pageofIndex}&perPage=${numOfItems}`
+        `${CRM_BASE_URL_FMS}/tax-types/Minimal`
       );
       console.log("all taxtype are", allTxTypes.data.data);
       setTaxTypes(allTxTypes.data.data);
@@ -1736,7 +1735,7 @@ export default function EditQuotation(
                           min={0}
                           precision={2}
                           controlls={false}
-                          disabled={true}
+                          // disabled={true}
                         />
                       </Form.Item>
                     </div>

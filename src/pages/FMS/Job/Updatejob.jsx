@@ -40,6 +40,7 @@ function Updatejob() {
   const [allCurrency, setAllCurreny] = useState();
   const [SuccessPopup, setSuccessPopup] = useState(false);
   const [disable, setDisable] = useState(false);
+  const [quotationdisable, setQuotationDisable] = useState(true);
 
   const close_modal = (mShow, time) => {
     if (!mShow) {
@@ -65,7 +66,8 @@ function Updatejob() {
             if (item.quotation_job_id) {
               setDisable(true);
             } else {
-              setDisable(false);
+              setDisable(true);
+              // setQuotationDisable(true);
             }
           });
           editForm.setFieldsValue({
@@ -218,9 +220,7 @@ function Updatejob() {
   };
 
   const allQuotations = () => {
-    PublicFetch.get(
-      `${CRM_BASE_URL_FMS}/quotation?startIndex=0&noOfItems=10000`
-    )
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/quotation/Minimal`)
       .then((res) => {
         console.log("response", res);
         if (res.data.success) {
@@ -421,7 +421,7 @@ function Updatejob() {
                         // ]}
                       >
                         <SelectBox
-                          disabled={disable}
+                          disabled={quotationdisable}
                           allowClear
                           showSearch
                           optionFilterProp="children"

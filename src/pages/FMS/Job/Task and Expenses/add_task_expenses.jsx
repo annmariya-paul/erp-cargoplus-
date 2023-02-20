@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-
+import { GENERAL_SETTING_BASE_URL } from "../../../../api/bootapi";
 import { Input, Select } from "antd";
+import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import { InputNumber } from "antd";
 import moment from "moment";
@@ -40,11 +41,17 @@ export default function Taskexpenses() {
   const dataSource = [
     {
       key: uuidv4(),
-      quotation_details_service_id: "",
-      quotation_details_cost: "",
-      quotation_details_tax_type: "",
-      quotation_details_tax_amount: "",
-      quotation_details_total: "",
+      job_task_expense_task_id: "",
+      job_task_expense_taxtype_id: "",
+      job_task_expense_tax_perc: "",
+      job_task_expense_agent_id: "",
+      job_task_expense_cost_amountfx: "",
+      job_task_expense_cost_taxfx:"",
+      job_task_expense_cost_subtotalfx:"",
+      job_task_expense_exp_curr:"",
+      job_task_expense_exp_exch:"",
+      job_task_expense_exp_amountfx:"",
+      job_task_expense_exp_amountlx:"",
     },
   ];
 
@@ -53,25 +60,36 @@ export default function Taskexpenses() {
   const getIndexInParent = (el) =>
     Array.from(el.parentNode.children).indexOf(el);
 
-  const handleEnter = (e) => {
-    console.log("Hello");
-    console.log("Key ::::::: ", e.key);
-    if (e.key === "Enter" || e.key === "Tab") {
-      setTableData([
-        ...tableData,
-        {
-          // key: `${tableData.length + 1}`,
-          key: uuidv4(),
-          quotation_details_service_id: "",
-          quotation_details_cost: "",
-          quotation_details_tax_type: "",
-          quotation_details_tax_amount: "",
-          quotation_details_total: "",
-        },
-      ]);
-    }
-  };
+  // const handleEnter = (e) => {
+  //   console.log("Hello");
+  //   console.log("Key ::::::: ", e.key);
+  //   if (e.key === "Enter" || e.key === "Tab") {
+  //     setTableData([
+  //       ...tableData,
+  //       {
+  //         // key: `${tableData.length + 1}`,
+  //         key: uuidv4(),
+          
+  //         job_task_expense_task_id: "",
+  //         job_task_expense_taxtype_id: "",
+  //         job_task_expense_tax_perc: "",
+  //         job_task_expense_agent_id: "",
+  //         job_task_expense_cost_amountfx: "",
+  //         job_task_expense_cost_taxfx:"",
+  //         job_task_expense_cost_subtotalfx:"",
+  //         job_task_expense_exp_curr:"",
+  //         job_task_expense_exp_exch:"",
+  //         job_task_expense_exp_amountfx:"",
+  //         job_task_expense_exp_amountlx:"",
+  //       },
+  //     ]);
+  //   }
+  // };
 
+  const [amount, setAmount] = useState(0);
+  const handleChange = (value) => {
+    setAmount(value);
+  };
   const handleReorder = (dragIndex, draggedIndex) => {
     setTableData((oldState) => {
       const newState = [...oldState];
@@ -228,13 +246,145 @@ export default function Taskexpenses() {
     }
     // addForm.setFieldValue("quotation_details_tax_type", taxratee);
   };
-  console.log("tax type ::123", taxType);
+  const [currencydata, setCurrencydata] = useState();
+  const getallcurrency = async () => {
+    try {
+      const allcurrency = await PublicFetch.get(
+        `${GENERAL_SETTING_BASE_URL}/currency`
+      );
+      console.log("Getting all currency : ", allcurrency.data.data);
+      setCurrencydata(allcurrency.data.data);
+    } catch (err) {
+      console.log("Error in getting currency : ", err);
+    }
+  };
+  useEffect(() => {
+  
+    getallcurrency();
+    
+  }, []);
+
+  const [currencyRates, setCurrencyRates] = useState(0);
+  console.log("ratesssss", currencyRates);
+  let b;
+  const getCurrencyRate = (data) => {
+    const code = currencydata?.filter((item) => {
+      if (item?.currency_id === data) {
+        b = item?.currency_code;
+      }
+    });
+    console.log("code", b);
+    console.log(";;;;;;;;;", data);
+    axios
+      .get("https://open.er-api.com/v6/latest/USD")
+      .then(function (response) {
+        console.log("currency current rate:", response);
+        let a = response.data.rates[b];
+        console.log("currency match", a);
+        setCurrencyRates(a);
+        addForm.setFieldValue("job_task_expense_exp_exch", a);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+ 
+
+  const handleEnter = (e) => {
+    console.log("Hello");
+    console.log("Key ::::::: ", e.key);
+    if (e.key === "Enter" || e.key === "Tab") {
+      setTableData([
+        ...tableData,
+        {
+          key: tableData.length + 1,
+          job_task_expense_task_id: "",
+          job_task_expense_taxtype_id: "",
+          job_task_expense_tax_perc: "",
+          job_task_expense_agent_id: "",
+          job_task_expense_cost_amountfx: "",
+          job_task_expense_cost_taxfx:"",
+          job_task_expense_cost_subtotalfx:"",
+          job_task_expense_exp_curr:"",
+          job_task_expense_exp_exch:"",
+          job_task_expense_exp_amountfx:"",
+          job_task_expense_exp_amountlx:"",
+        },
+      ]);
+      setSampletable([
+        ...sampletable,
+        {
+          key: sampletable.length + 1,
+          job_task_expense_task_id: "",
+          job_task_expense_taxtype_id: "",
+          job_task_expense_tax_perc: "",
+          job_task_expense_agent_id: "",
+          job_task_expense_cost_amountfx: "",
+          job_task_expense_cost_taxfx:"",
+          job_task_expense_cost_subtotalfx:"",
+          job_task_expense_exp_curr:"",
+          job_task_expense_exp_exch:"",
+          job_task_expense_exp_amountfx:"",
+          job_task_expense_exp_amountlx:"",
+        },
+      ]);
+    }
+    console.log("tabledata", tableData);
+    // let sum = 0;
+    // tableData.forEach((item) => {
+    //   sum += item.quotation_details_cost + item.quotation_details_tax_amount;
+    // });
+    // console.log("sum", sum);
+    // setTotal(sum);
+  };
+
+  console.log("all jobs : ", alljobs);
+  const [qtnno, setQtnno] = useState();
+  const [tabledata, setTabledata] = useState();
+  const [grandtotal, setGrandTotal] = useState();
+  const [detailstable, setAlldetailstable] = useState();
+  console.log("details", detailstable);
+  console.log("qtntable: ", tabledata);
+  console.log("qtnno: ", qtnno);
+  console.log("grandtotal: ", grandtotal);
+  const navigate = useNavigate();
+  const [servicename, setService] = useState();
+  console.log("service name ", servicename);
+  const [tax, setTax] = useState();
+  console.log("tax name:", tax);
+  // console.log("tax type ::123", taxType);
+  const [sampletable, setSampletable] = useState(dataSource);
+
+
   const getSingleJob = () => {
     PublicFetch.get(`${CRM_BASE_URL_FMS}/job/${id}`)
       .then((res) => {
         console.log("response of job", res);
         if (res.data.success) {
           console.log("Success of job", res.data.data);
+          let newdatas = [];
+          res.data.data.fms_v1_quotation_jobs.forEach((item, index) => {
+            newdatas.push(item.fms_v1_quotation.quotation_no);
+            setQtnno(newdatas);
+            let servdata = [];
+            res.data.data.fms_v1_job_task_expenses.forEach((item, index) => {
+              servdata.push({
+                job_task_expense_task_id :item.crm_v1_services.service_id,
+                job_task_expense_cost_amountfx :item.job_task_expense_cost_amountfx,
+                job_task_expense_taxtype_id :item.fms_v1_tax_types.tax_type_id,
+                job_task_expense_taxtype_name :item.fms_v1_tax_types.tax_type_name,
+                job_task_expense_tax_perc:item.fms_v1_tax_types.tax_type_percentage,
+                job_task_expense_cost_taxfx :item.job_task_expense_cost_taxfx,
+                job_task_expense_cost_subtotalfx :item.job_task_expense_cost_subtotalfx,
+              }
+              
+              );
+              setTax(servdata);
+             
+            });
+            setGrandTotal(item.fms_v1_quotation.quotation_grand_total);
+          });
 
           let temp = "";
         
@@ -297,7 +447,31 @@ export default function Taskexpenses() {
         console.log("Error", err);
       });
   };
+  useEffect(() => {
+    let Job_quotation_details = [];
+    tax &&
+     tax?.map((item, index) => {
+        // let assignValues = quotation_details[index];
+        Job_quotation_details.push({
+          key: index,
+          job_task_expense_task_id: item.job_task_expense_task_id,
+          // quotation_details_cost: item.quotation_details_cost,
+          job_task_expense_tax_perc:item.job_task_expense_tax_perc,
+          job_task_expense_taxtype_id: item.job_task_expense_taxtype_name,
+          job_task_expense_cost_amountfx: item.job_task_expense_cost_amountfx,
+          job_task_expense_cost_taxfx: item.job_task_expense_cost_taxfx,
+          job_task_expense_cost_subtotalfx: item.job_task_expense_cost_subtotalfx,
+          // quotation_details_status: item.quotation_details_status,
+        });
+      });
+    console.log("mainItem", tableData);
 
+    setTableData([...Job_quotation_details]);
+    addForm.setFieldsValue({ Job_quotation_details });
+    setSampletable([...Job_quotation_details]);
+  }, [tax]);
+
+  console.log("table inside data", tableData);
   useEffect(() => {
     if (id) {
       getSingleJob();
@@ -321,7 +495,7 @@ export default function Taskexpenses() {
               service_code: item?.service_code,
               service_pic: item?.service_pic,
               service_hsn: item?.service_hsn,
-              service_taxrate: item?.service_taxrate,
+              service_taxtype: item?.service_taxtype,
               service_description: item?.service_description,
               service_category_name: item?.crm_v1_categories?.category_name,
             });
@@ -374,8 +548,8 @@ export default function Taskexpenses() {
 
     {
       title: "Tasks",
-      dataIndex: "quotation_details_service_id",
-      key: "quotation_details_service_id",
+      dataIndex: "job_task_expense_task_id",
+      key: "job_task_expense_task_id",
       // width: "40%",
       align: "center",
       className: "firstrow req_font",
@@ -385,9 +559,9 @@ export default function Taskexpenses() {
           <div className="d-flex justify-content-center align-items-center tborder ">
             <Form.Item
               name={[
-                "quotation_details",
+                "Job_quotation_details",
                 index.key,
-                "quotation_details_service_id",
+                "job_task_expense_task_id",
               ]}
               rules={[{ required: true, message: "Please select" }]}
             >
@@ -399,14 +573,14 @@ export default function Taskexpenses() {
                 optionFilterProp="children"
                 width={30}
                 className="selectwidthexp mb-2"
-                value={index.quotation_details_service_id}
-                onChange={(e) => {
-                  console.log("servicess11123", e);
-                  handleInputchange1(
-                    e,
-                    index.key,
-                    "quotation_details_service_id"
-                  )}}
+                value={index.job_task_expense_task_id}
+                // onChange={(e) => {
+                //   console.log("servicess11123", e);
+                //   handleInputchange1(
+                //     e,
+                //     index.key,
+                //     "quotation_details_service_id"
+                //   )}}
               >
                 {services &&
                   services.length > 0 &&
@@ -428,8 +602,8 @@ export default function Taskexpenses() {
     },
     {
       title: "Tax Type",
-      dataIndex: "quotation_details_tax_type",
-      key: "quotation_details_tax_type",
+      dataIndex: "job_task_expense_taxtype_id",
+      key: "job_task_expense_taxtype_id",
       // width: "100",
       align: "center",
       className: "firstrow",
@@ -441,9 +615,9 @@ export default function Taskexpenses() {
           <div className="d-flex justify-content-center align-items-center tborder ">
             <Form.Item
               name={[
-                "quotation_details",
+                "Job_quotation_details",
                 index.key,
-                "quotation_details_tax_type",
+                "job_task_expense_taxtype_id",
               ]}
               // rules={[{ required: true, message: "Required" }]}
             >
@@ -468,22 +642,22 @@ export default function Taskexpenses() {
                 optionFilterProp="children"
               
                 className="selectwidthexp mb-2"
-                value={index.quotation_details_tax_type}
-                onChange={(e) => {
-                  console.log("servicess11123", e);
-                  // handleInputchange1(e, index.key, "quotation_details_tax_type")
-                  handleInputChange(
-                    e,
-                    index.key,
-                    "quotation_details_tax_type",
-                    "tx"
-                  );
-                }}
+                value={index.job_task_expense_taxtype_id}
+                // onChange={(e) => {
+                //   console.log("servicess11123", e);
+                //   // handleInputchange1(e, index.key, "quotation_details_tax_type")
+                //   handleInputChange(
+                //     e,
+                //     index.key,
+                //     "job_task_expense_taxtype_id",
+                //     "tx"
+                //   );
+                // }}
                 disabled={true}
               >
-                {taxTypes &&
-                  taxTypes.length > 0 &&
-                  taxTypes.map((item, index) => {
+                {services &&
+                  services.length > 0 &&
+                  services.map((item, index) => {
                     return (
                       <Select.Option
                       key={item.tax_type_id}
@@ -501,8 +675,8 @@ export default function Taskexpenses() {
     },
     {
       title: "Tax %",
-      dataIndex: "taxp",
-      key: "taxp",
+      dataIndex: "job_task_expense_tax_perc",
+      key: "job_task_expense_tax_perc",
       // width: "38%",
       align: "center",
       className: "firstrow",
@@ -512,19 +686,19 @@ export default function Taskexpenses() {
           <div className="d-flex justify-content-center align-items-center tborder ">
             <Form.Item
               name={[
-                "quotation_details",
+                "Job_quotation_details",
                 index.key,
-                "quotation_details_service_id",
+                "job_task_expense_tax_perc",
               ]}
               rules={[{ required: true, message: "Required" }]}
             >
               <InputNumber style={{ minWidth: '10px' }}
                 bordered={false}
                 className="text_right"
-                value={index.quotation_details_cost}
-                onChange={(value) => {
-                  console.log(" input numberevent ", value, index.key);
-                }}
+                value={index.job_task_expense_tax_perc}
+                // onChange={(value) => {
+                //   console.log(" input numberevent ", value, index.key);
+                // }}
                 align="right"
                 min={0}
                 precision={2}
@@ -537,8 +711,8 @@ export default function Taskexpenses() {
     },
     {
       title: "Agent",
-      dataIndex: "agent",
-      key: "agent",
+      dataIndex: "job_task_expense_agent_id",
+      key: "job_task_expense_agent_id",
       // width: 150,
       align: "center",
       className: "firstrow",
@@ -548,9 +722,9 @@ export default function Taskexpenses() {
           <div className="d-flex justify-content-center align-items-center tborder ">
             <Form.Item
               name={[
-                "quotation_details",
+                "Job_quotation_details",
                 index.key,
-                "quotation_details_service_id",
+                "job_task_expense_agent_id",
               ]}
               rules={[{ required: true, message: "Required" }]}
             >
@@ -564,7 +738,7 @@ export default function Taskexpenses() {
                 optionFilterProp="children"
                
  
-                value={index.quotation_details_service_id}
+                value={index.job_task_expense_agent_id}
                 onChange={(e) => {
                   console.log("servicess11123", e);
                 }}
@@ -596,8 +770,8 @@ export default function Taskexpenses() {
       children: [
         {
           title: "Amount",
-          dataIndex: "amount",
-          key: "amount",
+          dataIndex: "job_task_expense_cost_amountfx",
+          key: "job_task_expense_cost_amountfx",
           width: 60,
           align: "center",
           className: "secondrow",
@@ -607,16 +781,16 @@ export default function Taskexpenses() {
               <div className="d-flex justify-content-center align-items-center tborder ">
                 <Form.Item
                   name={[
-                    "quotation_details",
+                    "Job_quotation_details",
                     index.key,
-                    "quotation_details_service_id",
+                    "job_task_expense_cost_amountfx",
                   ]}
                   rules={[{ required: true, message: "Required" }]}
                 >
                   <InputNumber
                     bordered={false}
                     className="text_right"
-                    value={index.quotation_details_cost}
+                    value={index.job_task_expense_cost_amountfx}
                     onChange={(value) => {
                       console.log(" input numberevent ", value, index.key);
                     }}
@@ -632,8 +806,8 @@ export default function Taskexpenses() {
         },
         {
           title: "Tax",
-          dataIndex: "tax",
-          key: "tax",
+          dataIndex: "job_task_expense_cost_taxfx",
+          key: "job_task_expense_cost_taxfx",
           width: 60,
           align: "center",
           className: "secondrow",
@@ -643,16 +817,16 @@ export default function Taskexpenses() {
               <div className="d-flex justify-content-center align-items-center tborder ">
                 <Form.Item
                   name={[
-                    "quotation_details",
+                    "Job_quotation_details",
                     index.key,
-                    "quotation_details_cost",
+                    "job_task_expense_cost_taxfx",
                   ]}
                   rules={[{ required: true, message: "Required" }]}
                 >
                   <InputNumber
                     bordered={false}
                     className="text_right"
-                    value={index.quotation_details_cost}
+                    value={index.job_task_expense_cost_taxfx}
                     onChange={(value) => {
                       console.log(" input numberevent ", value, index.key);
                     }}
@@ -669,8 +843,8 @@ export default function Taskexpenses() {
         },
         {
           title: "Total",
-          dataIndex: "total",
-          key: "total",
+          dataIndex: "job_task_expense_cost_subtotalfx",
+          key: "job_task_expense_cost_subtotalfx",
           width: 60,
           //   width: 80,
           //   fixed: 'right',
@@ -682,16 +856,16 @@ export default function Taskexpenses() {
               <div className="d-flex justify-content-center align-items-center tborder ">
                 <Form.Item
                   name={[
-                    "quotation_details",
+                    "Job_quotation_details",
                     index.key,
-                    "quotation_details_cost",
+                    "job_task_expense_cost_subtotalfx",
                   ]}
                   rules={[{ required: true, message: "Required" }]}
                 >
                   <InputNumber
                     bordered={false}
                     className="text_right"
-                    value={index.quotation_details_cost}
+                    value={index.job_task_expense_cost_subtotalfx}
                     onChange={(value) => {
                       console.log(" input numberevent ", value, index.key);
                     }}
@@ -716,8 +890,8 @@ export default function Taskexpenses() {
       children: [
         {
           title: "Currency",
-          dataIndex: "currency",
-          key: "currency",
+          dataIndex: "job_task_expense_exp_curr",
+          key: "job_task_expense_exp_curr",
           width: 60,
           align: "center",
           className: "thirdrow",
@@ -727,9 +901,9 @@ export default function Taskexpenses() {
               <div className="d-flex justify-content-center align-items-center tborder ">
                 <Form.Item
                   name={[
-                    "quotation_details",
+                    "Job_quotation_details",
                     index.key,
-                    "quotation_details_service_id",
+                    "job_task_expense_exp_curr",
                   ]}
                   rules={[{ required: true, message: "Required" }]}
                 >
@@ -740,23 +914,24 @@ export default function Taskexpenses() {
                     showSearch
                     optionFilterProp="children"
                     className="selectwidthexp mb-2"
-                    value={index.quotation_details_service_id}
-                    onChange={(e) => {
-                      console.log("servicess11123", e);
-                    }}
+                    value={index.job_task_expense_exp_curr}
+                     onChange={(e) => {
+                            console.log("ann", e);
+                            getCurrencyRate(e);
+                          }}
                   >
-                    {services &&
-                      services.length > 0 &&
-                      services.map((item, index) => {
-                        return (
-                          <Select.Option
-                            key={item.service_id}
-                            value={item.service_id}
-                          >
-                            {item.service_name}
-                          </Select.Option>
-                        );
-                      })}
+                    {currencydata &&
+                            currencydata.length > 0 &&
+                            currencydata.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  value={item.currency_id}
+                                  key={item.currency_id}
+                                >
+                                  {item.currency_name}
+                                </Select.Option>
+                              );
+                            })}
                   </Select>
                 </Form.Item>
               </div>
@@ -766,8 +941,8 @@ export default function Taskexpenses() {
 
         {
           title: "Exchange",
-          dataIndex: "exchange",
-          key: "exchange",
+          dataIndex: "job_task_expense_exp_exch",
+          key: "job_task_expense_exp_exch",
           width: 20,
           align: "center",
           className: "thirdrow",
@@ -777,19 +952,22 @@ export default function Taskexpenses() {
               <div className="d-flex justify-content-center align-items-center tborder ">
                 <Form.Item
                   name={[
-                    "quotation_details",
+                    "Job_quotation_details",
                     index.key,
-                    "quotation_details_cost",
+                    "job_task_expense_exp_exch",
                   ]}
                   rules={[{ required: true, message: "Required" }]}
                 >
                   <InputNumber
                     bordered={false}
                     className="text_right"
-                    value={index.quotation_details_cost}
-                    onChange={(value) => {
-                      console.log(" input numberevent ", value, index.key);
-                    }}
+                    // value={index.job_task_expense_exp_exch}
+                    // value={currencyRates}
+                    // value={amount}
+                    onChange={handleChange}
+                    // onChange={(value) => {
+                    //   console.log(" input numberevent ", value, index.key);
+                    // }}
                     align="right"
                     // step={0.01}
                     min={0}
@@ -803,8 +981,8 @@ export default function Taskexpenses() {
         },
         {
           title: "Amount Fx",
-          dataIndex: "amountfx",
-          key: "amountfx",
+          dataIndex: "job_task_expense_exp_amountfx",
+          key: "job_task_expense_exp_amountfx",
           width: 40,
           align: "center",
           className: "thirdrow",
@@ -814,16 +992,16 @@ export default function Taskexpenses() {
               <div className="d-flex justify-content-center align-items-center tborder ">
                 <Form.Item
                   name={[
-                    "quotation_details",
+                    "Job_quotation_details",
                     index.key,
-                    "quotation_details_cost",
+                    "job_task_expense_exp_amountfx",
                   ]}
                   rules={[{ required: true, message: "Required" }]}
                 >
                   <InputNumber
                     bordered={false}
                     className="text_right"
-                    value={index.quotation_details_cost}
+                    value={index.job_task_expense_exp_amountfx}
                     onChange={(value) => {
                       console.log(" input numberevent ", value, index.key);
                     }}
@@ -840,8 +1018,8 @@ export default function Taskexpenses() {
         },
         {
           title: "Amount Lx",
-          dataIndex: "amountlx",
-          key: "amountlx",
+          dataIndex: "job_task_expense_exp_amountlx",
+          key: "job_task_expense_exp_amountlx",
           width: 40,
           align: "center",
           className: "thirdrow",
@@ -851,16 +1029,16 @@ export default function Taskexpenses() {
               <div className="d-flex justify-content-center align-items-center tborder ">
                 <Form.Item
                   name={[
-                    "quotation_details",
+                    "Job_quotation_details",
                     index.key,
-                    "quotation_details_cost",
+                    "job_task_expense_exp_amountlx",
                   ]}
                   rules={[{ required: true, message: "Required" }]}
                 >
                   <InputNumber
                     bordered={false}
                     className="text_right"
-                    value={index.quotation_details_cost}
+                    value={index.job_task_expense_exp_amountlx}
                     onChange={(value) => {
                       console.log(" input numberevent ", value, index.key);
                     }}
@@ -1051,7 +1229,7 @@ export default function Taskexpenses() {
                         >
                           :
                         </td>
-                        <td style={{ width: "70px" }}></td>
+                        <td style={{ width: "70px" }}>{qtnno}</td>
                       </tr>
                       <tr>
                         <td style={{ width: "120px", fontWeight: "bold" }}>
@@ -1105,7 +1283,7 @@ export default function Taskexpenses() {
               <div className="row">
                 <div className="datatable">
                   <TableData
-                    data={tableData}
+                    data={sampletable}
                     columns={columns}
                     rowKey={(record) => record.key}
                     bordered

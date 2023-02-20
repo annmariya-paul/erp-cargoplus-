@@ -24,6 +24,7 @@ export default function Carrierlist(props) {
   const [successPopup, setSuccessPopup] = useState(false);
 
   const [searchedText, setSearchedText] = useState("");
+  const [searchedCode, setSearchedCode] = useState("");
   const [searchType, setSearchType] = useState("");
   const [modalAddCarrier, setModalAddCarrier] = useState(false);
 
@@ -97,7 +98,7 @@ export default function Carrierlist(props) {
         close_modal(successPopup, 1000);
       } 
       else if (addcarrier.data.success === false) {
-        alert(addcarrier.data.data);
+        // alert(addcarrier.data.data);
       }
     } catch (err) {
       console.log("err to add the carrier", err);
@@ -222,7 +223,7 @@ export default function Carrierlist(props) {
       title: "CARRIER CODE",
       dataIndex: "carrier_code",
       key: "carrier_code",
-     
+      filteredValue: [searchedCode],
       onFilter: (value, record) => {
         return String(record.carrier_code)
           .toLowerCase()
@@ -234,7 +235,7 @@ export default function Carrierlist(props) {
       title: "CARRIER TYPE",
       dataIndex: "carrier_type",
       key: "carrier_type",
-     
+      filteredValue: [searchType],
       onFilter: (value, record) => {
         return String(record.carrier_type)
           .toLowerCase()
@@ -294,6 +295,19 @@ export default function Carrierlist(props) {
               <Select.Option value="Road">Road</Select.Option>
             </Select>
           </div>
+          <div className="col-4">
+            <Input.Search
+              placeholder="Search by Carrier Code"
+              style={{ margin: "5px", borderRadius: "5px" }}
+              value={searchedCode}
+              onChange={(e) => {
+                setSearchedCode(e.target.value ? [e.target.value] : []);
+              }}
+              onSearch={(value) => {
+                setSearchedCode(value);
+              }}
+            />
+          </div>
         </div>
         <div className="row my-3">
           <div className="col-4 px-3">
@@ -334,7 +348,7 @@ export default function Carrierlist(props) {
           </div>
           <div className="col-4 d-flex justify-content-end">
             <Button btnType="add" onClick={() => setModalAddCarrier(true)}>
-              Add Carrier types
+              Add Carrier 
             </Button>
           </div>
         </div>
@@ -427,8 +441,8 @@ export default function Carrierlist(props) {
                         },
 
                         {
-                          min: 3,
-                          message: "code must be at least 3 characters",
+                          min: 2,
+                          message: "code must be at least 2 characters",
                         },
                       ]}
                     >
@@ -479,9 +493,9 @@ export default function Carrierlist(props) {
                           setAddcarriertype(e);
                         }}
                       >
-                        <Select.Option value="Airline">Airline</Select.Option>
+                        <Select.Option value="Airline">Airport</Select.Option>
                         <Select.Option value="Shipping line">
-                          Shipping line
+                        Shipping Line 
                         </Select.Option>
                         <Select.Option value="Road">Road</Select.Option>
                       </SelectBox>
@@ -629,6 +643,10 @@ export default function Carrierlist(props) {
                             required: true,
 
                             message: "Please enter a Valid  Code",
+                          },
+                          {
+                            min: 2,
+                            message: "code must be at least 2 characters",
                           },
                         ]}
                       >

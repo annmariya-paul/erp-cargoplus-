@@ -108,7 +108,7 @@ export default function PaymentTerms(props) {
       align: "center",
     },
     {
-      title: "Descripton",
+      title: "DESCRIPTION",
       dataIndex: "payment_term_description",
       key: "payment_term_description",
       
@@ -229,7 +229,7 @@ export default function PaymentTerms(props) {
       <div className="container-fluid container_fms pt-3">
         <div className="row flex-wrap">
           <div className="col">
-            <h5 className="lead_text"> Payment Terms</h5>
+            <h5 className="lead_text">Add Payment Term</h5>
           </div>
           {/* <Leadlist_Icons /> */}
         </div>

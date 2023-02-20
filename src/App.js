@@ -87,6 +87,7 @@ import Taskexpenses from "./pages/FMS/Job/Task and Expenses/add_task_expenses";
 import InvoiceList from "./pages/FMS/Invoice/InvoiceList";
 import InvoicePreView from "./pages/FMS/Invoice/InvoicePreView";
 import Quotationinvoice from "./pages/FMS/Quotations/create quotation/quotation_invoice";
+import Jobinvoice from "./pages/FMS/Job/Job_invoice/job_invoice";
 // import Lead from "./pages/lead/lead";
 
 function App() {
@@ -207,7 +208,7 @@ function App() {
               path={ROUTES.ASSIGN_QUOTATION_ID}
               element={<QuotationAssign />}
             />
-            <Route path={ROUTES.QUATATION_INVOICE_ID} element={<Quotationinvoice/> } />
+            
             <Route path={ROUTES.LIST_JOB} element={<Listjob />} />
             <Route path={ROUTES.CREATEJOB} element={<CreateJob />} />
             <Route path={ROUTES.UPDATEJOB_ID} element={<Updatejob />} />
@@ -220,6 +221,8 @@ function App() {
             <Route path={ROUTES.COMPANYINFO} element={<Companyinfo />} />
             <Route path={ROUTES.TASKANDEXPENSES_ID} element={<Taskexpenses />} />
           </Route>
+          <Route path={ROUTES.QUATATION_INVOICE_ID} element={<Quotationinvoice/> } />
+          <Route path={ROUTES.JOB_INVOICE_ID} element={<Jobinvoice/> }/>
         </Routes>
       </BrowserRouter>
     </div>

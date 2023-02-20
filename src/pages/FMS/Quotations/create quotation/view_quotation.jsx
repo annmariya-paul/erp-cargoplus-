@@ -163,7 +163,12 @@ export default function ViewQuotation() {
               <Button
                 btnType="add_borderless"
                 className="edit_button"
-                onClick={handlePrint}
+                // onClick={handlePrint}
+                onClick={() => {
+                  // handleviewtoedit();
+                  // navigate(`${ROUTES.QUATATION_INVOICE}/${id}`);
+                  window.open(`http://localhost:3000/quatation_invoice/${id}`, `_blank`)
+                }}
               >
                 Print
               </Button>

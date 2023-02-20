@@ -250,7 +250,10 @@ export default function ViewJob() {
               <Button
                 btnType="add_borderless"
                 className="edit_button"
-                onClick={handlePrint}
+                // onClick={handlePrint}
+                onClick={()=>{
+                  navigate(`${ROUTES.JOB_INVOICE}/${id}`);
+                }}
               >
                 Print
               </Button>

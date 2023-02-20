@@ -99,6 +99,8 @@ const ROUTES = {
   INVOICE_PREVIEW:"/invoice_preview",
   QUATATION_INVOICE:"/quatation_invoice",
   QUATATION_INVOICE_ID:"/quatation_invoice/:id",
+  JOB_INVOICE:"/job_invoice",
+  JOB_INVOICE_ID:"/job_invoice/:id",
 };
 
 module.exports = { ROUTES };

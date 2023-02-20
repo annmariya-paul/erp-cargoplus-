@@ -367,7 +367,7 @@ console.log("dataa",allcmpny.data.data.length);
                                   <FileUpload
                                     multiple
                                     listType="picture"
-                                    accept=".docx,.jpg,.jpeg"
+                                    accept=".docx,.jpg,.jpeg,.png"
                                     // onPreview={handlePreview}
                                     beforeUpload={false}
                                     onChange={(file) => {

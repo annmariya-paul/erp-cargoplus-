@@ -28,6 +28,7 @@ export default function Frightlist(props) {
   const [successPopup, setSuccessPopup] = useState(false);
 
   const [searchedText, setSearchedText] = useState("");
+  const [searchedPrefix, setSearchedPrefix] = useState("");
   const [successModal, setSuccessModal] = useState(false);
   const [modalAddFright, setModalAddFright] = useState(false);
 
@@ -192,7 +193,7 @@ export default function Frightlist(props) {
       align: "center",
     },
     {
-      title: "FRIGHT TYPE NAME",
+      title: "FREIGHT TYPE NAME",
       dataIndex: "freight_type_name",
       key: "freight_type_name",
       filteredValue: [searchedText],
@@ -204,12 +205,12 @@ export default function Frightlist(props) {
       align: "center",
     },
     {
-      title: "FRIGHT TYPE PREFIX",
+      title: "FREIGHT TYPE PREFIX",
       dataIndex: "freight_type_prefix",
       key: "freight_type_prefix",
-     
+      filteredValue: [searchedPrefix],
       onFilter: (value, record) => {
-        return String(record.freight_type_prefix)
+        return String(record.freight_type_prefix || prefixSearch)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
@@ -241,6 +242,8 @@ export default function Frightlist(props) {
   //   },
   // ];  
   const [nameSearch, setNamesearch] = useState();
+  
+  const [prefixSearch, setprefixSearch] = useState();
   const [newName, setNewName] = useState();
   const [saveSuccess, setSaveSuccess] =useState(false)
   const [frightError, setFrightError] = useState();
@@ -328,7 +331,7 @@ export default function Frightlist(props) {
   
   return (
     <>
-      <div className="container-fluid container_fms pt-3">
+      <div className="container-fluid container_fms ">
         <div className="row flex-wrap">
           <div className="col">
             <h5 className="lead_text">Freight types</h5>
@@ -349,7 +352,21 @@ export default function Frightlist(props) {
               }}
             />
           </div>
+          <div className="col-4">
+            <Input.Search
+              placeholder="Search by Freight type prefix"
+              style={{ margin: "5px", borderRadius: "5px" }}
+              value={searchedPrefix}
+              onChange={(e) => {
+                setSearchedPrefix(e.target.value ? [e.target.value] : []);
+              }}
+              onSearch={(value) => {
+                setSearchedPrefix(value);
+              }}
+            />
+          </div>
         </div>
+        
         <div className="row my-3">
           <div className="col-4 ">
             <Select
@@ -407,7 +424,7 @@ export default function Frightlist(props) {
             custom_table_css="table_lead_list"
           />
         </div>
-        <div className="d-flex py-2 justify-content-center">
+        <div className="d-flex  justify-content-center">
           
           <MyPagination
           
@@ -499,7 +516,7 @@ export default function Frightlist(props) {
                     />
                   </Form.Item>
                   {uniqueCode ? (
-                            <p style={{ color: "red",marginTop:"-24px" }}>
+                            <p style={{ color: "red" }}>
                             Freight Type Name {uniqueErrMsg.UniqueErrName}
                             </p>
                           ) : null}

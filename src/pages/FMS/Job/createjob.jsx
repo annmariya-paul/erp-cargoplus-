@@ -829,7 +829,7 @@ function CreateJob() {
                           min={0}
                           precision={2}
                           controlls={false}
-                          disabled={true}
+                          disabled={disable}
                         />
                       </Form.Item>
                     </div>
@@ -948,7 +948,7 @@ function CreateJob() {
                           min={0}
                           precision={2}
                           controlls={false}
-                          disabled={true}
+                          disabled={disable}
                         />
                       </Form.Item>
                     </div>
@@ -973,7 +973,7 @@ function CreateJob() {
                           min={0}
                           precision={2}
                           controlls={false}
-                          disabled={true}
+                          disabled={disable}
                         />
                       </Form.Item>
                     </div>

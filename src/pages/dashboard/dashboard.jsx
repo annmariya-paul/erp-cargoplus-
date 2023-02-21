@@ -93,7 +93,7 @@ function Dashboard() {
   return (
     <div className={`container-lg-fluid container-2xl`}>
       <div className="row">
-        <div className="col-12 col-lg-8">
+        <div className="col-12 col-xl-12 col-lg-12">
           <div className={`${styles.summaryWrapper}`}>
             <Card className={`${styles.cartItem}`}>
               <div>
@@ -135,27 +135,36 @@ function Dashboard() {
               </div>
             </Card>
           </div>
-          <div className="container-fluid">
+
+          <div className="container-fluid p-0 m-0">
             <div className="row mt-2">
-              <div className="col-12 col-md-6">
+              <div className="col-12 col-xl-4 col-lg-6 col-md-12">
                 <div
-                  style={{ height: "400px" }}
+                  style={{ height: "450px" }}
                   className="card rounded shadow-sm p-3"
                 >
                   <FunnelChart />
                 </div>
               </div>
-              <div className="col-12 col-md-6">
+              <div className="col-12 col-xl-4 col-lg-6 col-md-12">
                 <div
-                  style={{ height: "400px" }}
+                  style={{ height: "450px" }}
                   className="card rounded shadow-sm p-3"
                 >
                   <GeoChart />
                 </div>
               </div>
-              <div className="col-12 col-md-6 mt-3">
+              <div className="col-12 col-xl-4 col-lg-6 col-md-12 mt-3">
                 <div
-                  style={{ height: "400px" }}
+                  style={{ height: "450px" }}
+                  className="card rounded shadow-sm"
+                >
+                  <BarChart />
+                </div>
+              </div>
+              <div className="col-12 col-xl-4 col-lg-6 col-md-12 mt-3">
+                <div
+                  style={{ height: "450px" }}
                   className="card rounded shadow-sm p-3"
                 >
                   <Table
@@ -166,28 +175,45 @@ function Dashboard() {
                   />
                 </div>
               </div>
-              <div className="col-12 col-md-6 mt-3">
+              <div className="col-12 col-xl-4 col-lg-6 col-md-12 mt-3">
                 <div
-                  style={{ height: "400px" }}
+                  style={{ height: "450px" }}
                   className="card rounded shadow-sm"
                 >
                   <BarChart />
                 </div>
               </div>
+              <div className="col-12 col-xl-4 col-lg-6 col-md-12 mt-3">
+                <div
+                  style={{ height: "450px" }}
+                  className="card rounded shadow-sm"
+                >
+                  <PieChart />
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="col-12 col-lg-4">
-          <div style={{ height: "450px" }}>
-            <div className="card-rounded shadow-sm" style={{ height: "450px" }}>
-              <BarChart />
+
+          {/* <div className="col-xl-4 col-lg-5 col-md-12">
+            <div className="col-12 col-xl-12 col-lg-12 ">
+              <div style={{ height: "450px" }}>
+                <div
+                  className="card-rounded shadow-sm"
+                  style={{ height: "450px" }}
+                >
+                  <BarChart />
+                </div>
+              </div>
+              <div className="mt-4" style={{ height: "450px" }}>
+                <div
+                  className="card-rounded shadow-sm"
+                  style={{ height: "450px" }}
+                >
+                  <PieChart />
+                </div>
+              </div>
             </div>
-          </div>
-          <div className="mt-4" style={{ height: "450px" }}>
-            <div className="card-rounded shadow-sm" style={{ height: "450px" }}>
-              <PieChart />
-            </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

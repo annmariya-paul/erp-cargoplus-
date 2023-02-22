@@ -26,6 +26,41 @@ function Vendortype() {
   const [vendortypename,setVendortypename] = useState("")
   const[ vendordesc,setVendordesc] = useState("")
   const [vendortypes,setvendortypes] = useState("")
+  const [editvendortypename,seteditvendortypename]= useState("")
+  const [editvendortypedesc,seteditvendortypedesc]= useState("")
+  const [editvendortypeid,seteditvendortypeid]= useState("")
+
+  const [viewvendortype, setViewvendortype] = useState({
+    id: "",
+    vendortype_name: "",
+    vendortype_desc: "",
+  });
+
+  const handleViewClick = (item) => {
+    console.log("view all attributes", item);
+    setViewvendortype({
+      ...viewvendortype,
+      id: item.vendor_type_id,
+      vendortype_name: item.vendor_type_name,
+      vendortype_desc: item.vendor_type_desc,
+    });
+    setShowViewModal(true);
+  };
+
+  const handleviewtoedit = (i) => {
+    console.log("editing data iss", i);
+    seteditvendortypeid(i.id);
+    seteditvendortypename(i.vendortype_name);
+    seteditvendortypedesc(i.vendortype_desc);
+    editForm.setFieldsValue({
+      // unitid: e.unit_id,
+      vendortypename: i.vendortype_name,
+      vendortypedesc: i.vendortype_desc,
+    });
+    setVendorEditPopup(true);
+    // setuniqueCode(false);
+
+  };
 
 
   const close_modal = (mShow, time) => {
@@ -62,6 +97,43 @@ function Vendortype() {
       return vendortypes?.slice((current - 1) * pageSize, current * pageSize);
     };
 
+    const handleEditclick = (e) => {
+      console.log("editing id iss", e);
+      seteditvendortypeid(e.vendor_type_id)
+      seteditvendortypename(e.vendor_type_name)
+      seteditvendortypedesc(e.vendor_type_desc)
+      editForm.setFieldsValue({
+        // unitid: e.unit_id,
+        vendortypename: e.vendor_type_name,
+        vendortypedesc: e.vendor_type_desc,
+      });
+      setVendorEditPopup(true);
+      // setuniqueCode(false);
+  
+    };
+
+    const handleupdate = async () => {
+      try {
+        const updated = await PublicFetch.patch(
+          `${CRM_BASE_URL_PURCHASING}/vendorTypes/${editvendortypeid}`,
+          {
+            name:editvendortypename,
+            desc:editvendortypedesc,
+          }
+        );
+        console.log("successfully updated ", updated);
+        if (updated.data.success) {
+          setSuccessPopup(true)
+          setVendorEditPopup(false);
+          getallvendortype();
+    
+          close_modal(successPopup,1000 );
+        } 
+      } catch (err) {
+        console.log("error to update vendortype");
+      }
+    };
+
   const getallvendortype = async () => {
     try {
       const allvendortypes = await PublicFetch.get(
@@ -90,13 +162,13 @@ function Vendortype() {
            
               <div
                 className="editIcon m-0"
-                onClick={() => {setVendorEditPopup(true) } }
+                onClick={() => {handleEditclick(index) } }
               >
                 <FaEdit />
               </div>
               <div
               className="viewIcon m-0"
-              // onClick={() => handleViewClick(index) }
+              onClick={() => handleViewClick(index) }
             >
               <MdPageview   style={{marginLeft:15,marginRight:15}}/>
             </div>
@@ -338,17 +410,17 @@ function Vendortype() {
           <div className="container-fluid p-3">
             <div className="row">
               <div className="col-9">
-                <h5 className="lead_text">Freight Type</h5>
+                <h5 className="lead_text">Vendor Type</h5>
               </div>
               <div className="col-3">
                 <Button
                   btnType="add_borderless"
                   className="edit_button"
-                //   onClick={() => {
-                //     handleviewtoedit(viewfrights);
-                //     // setShowModalEdit(true);
-                //     setShowViewModal(false);
-                //   }}
+                  onClick={() => {
+                    handleviewtoedit(viewvendortype);
+                    // setShowModalEdit(true);
+                    setShowViewModal(false);
+                  }}
                 >
                   Edit
                   <FiEdit
@@ -359,21 +431,21 @@ function Vendortype() {
             </div>
             <div className="row mt-4">
               <div className="col-4">
-                <p> Freight Name</p>
+                <p> Vendortype Name</p>
               </div>
               <div className="col-1">:</div>
               <div className="col-6 justify-content-start">
-                {/* <p className="modal-view-data">{viewfrights.frightviewname}</p> */}
+                <p className="modal-view-data">{viewvendortype.vendortype_name}</p>
               </div>
             </div>
             <div className="row mt-4">
               <div className="col-4">
-                <p> Freight Prefix</p>
+                <p> Vendortype Description</p>
               </div>
               <div className="col-1">:</div>
               <div className="col-6 justify-content-start">
                 <p className="modal-view-data">
-                  {/* {viewfrights.frightprefixviewname} */}
+                  {viewvendortype.vendortype_desc}
                 </p>
               </div>
             </div>
@@ -395,7 +467,7 @@ function Vendortype() {
                   form={editForm}
                   onFinish={(values) => {
                     console.log("values iss", values);
-                    // handleUpdate();
+                    handleupdate()
                   }}
                   onFinishFailed={(error) => {
                     console.log(error);
@@ -404,12 +476,12 @@ function Vendortype() {
                   <div className="col-12">
                     <label>Name</label>
                     <Form.Item
-                      name="NameInput"
+                      name="vendortypename"
                       rules={[
                         {
                           required: true,
                           pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid Freight type Name",
+                          message: "Please enter a Valid vendortypename",
                         },
                         {
                           min: 2,
@@ -423,22 +495,13 @@ function Vendortype() {
                     >
                       <InputType
                         className="input_type_style w-100"
-                        // value={NameInput}
-                        // onChange={(e) => {
-                        //   setNameInput(e.target.value);
-                        // //   setErrormsg("");
-                        //   setuniqueeditCode(false);
-                        // }}
-                        // onBlur={async () => {
-                        //   if (newName !== NameInput) {
-                        //     let a = await CheckUnique({
-                        //       type: "freighttypename",
-                        //       value: NameInput,
-                        //     });
-                        //     console.log("hai how are u", a);
-                        //     setuniqueeditCode(a);
-                        //   }
-                        // }}
+                        value={editvendortypename}
+                        onChange={(e) => {
+                          seteditvendortypename(e.target.value);
+                        //   setErrormsg("");
+                         
+                        }}
+                      
                       />
                     </Form.Item>
                     {/* {Errormsg ? (
@@ -456,15 +519,16 @@ function Vendortype() {
                     ) : null} */}
                   </div>
                   <div className="col-12">
-                    <label>Freight Prefix</label>
-                    <Form.Item name="PrefixInput">
-                      <InputType
-                        className="input_type_style w-100"
-                        // value={PrefixInput}
-                        // onChange={(e) => {
-                        //   setprefixInput(e.target.value);
-                        // }}
-                      />
+                    <label>Vendor Type Description</label>
+                    <Form.Item 
+                    name="vendortypedesc"
+                    >
+                     <TextArea  
+                     value={editvendortypedesc}
+                     onChange={(e)=>{
+                      seteditvendortypedesc(e.target.value)
+                     }}
+                     />
                     </Form.Item>
                   </div>
 

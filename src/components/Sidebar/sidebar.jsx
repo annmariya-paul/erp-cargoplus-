@@ -25,6 +25,7 @@ import hrmsIcon from "../../components/img/human-resources-icon-png-12.jpg";
 import crmIcon from "../../components/img/icons8-crm-58.png";
 import fmsIcon from "../../components/img/icons8-cargo-ship-50.png";
 import settingsicon from "../../components/img/icons8-gear-50.png";
+import { FaRegHandshake } from "react-icons/fa";
 
 export default function Sidebar({ showSidebar }) {
   // const [sidebar, setSidebar] = useState(true);
@@ -34,6 +35,8 @@ export default function Sidebar({ showSidebar }) {
   const [CRMopen, setCRMopen] = useState(false);
   const [CRMReport, setCRMReport] = useState(false);
   const [CRMselling, setCRMselling] = useState(false);
+  const [CRMpurchasing, setCRMpurchasing] =useState(false)
+
   const [CRMgeneral, setCRMgeneral] = useState(false);
   const [FMSOpen, setFMSOpen] = useState(false);
   const [FMSOppopen, setFMSOppopen] = useState(false);
@@ -487,10 +490,59 @@ export default function Sidebar({ showSidebar }) {
                   ) : (
                     ""
                   )}
+
+                  <li
+                    className={
+                      CRMpurchasing
+                        ? "nav-text  items_hrms open"
+                        : "nav-text  items_hrms "
+                    }
+                  >
+                    <Link
+                      className={CRMpurchasing ? "active-link" : "link"}
+                      // to="/"
+                      onClick={() => setCRMpurchasing(!CRMpurchasing)}
+                    >
+                      <div className="d-flex justify-content-between gap-5 ms-2">
+                        <div className="d-flex">
+                          <FaRegHandshake className="sidebar_icons pt-1" />
+                          <div style={{ width: "100px" }} className="">
+                         Purchase
+                          </div>
+                        </div>
+
+                        <div className="  ">
+                          <div className="text-right ">
+                            <AiOutlineCaretDown className="toggle_btn " />
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  </li>
+
+                  {CRMpurchasing ? (
+                    <>
+                      {checkPermission("vendor") && (
+                        <li className="nav-text">
+                          <NavLink
+                            className={({ isActive }) =>
+                              isActive ? "active-link" : "link"
+                            }
+                            to={ROUTES.VENDOR}
+                          >
+                            <div className=" ms-4">Vendor Type</div>
+                          </NavLink>
+                        </li>
+                      )}
+                      </>
+                 ):"" }
+        
                 </>
               ) : (
                 ""
               )}
+
+
 
               {/* ##########  FMS  ######## */}
 

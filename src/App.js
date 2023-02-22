@@ -126,12 +126,9 @@ function App() {
               path={ROUTES.OPPORTUNITY_REPORT}
               element={<OpportunityReport />}
             />
-<<<<<<< HEAD
             <Route path={ROUTES.VENDOR} element={<Vendortype />} />
-=======
-            <Route path={ROUTES.VENDOR_TYPE} element={<Vendortype/>} />
-            <Route path={ROUTES.VENDOR} element={<Vendor/> }/>
->>>>>>> 01e6069f5fd2c359a45d7f0c1c937d54ca5be903
+            <Route path={ROUTES.VENDOR_TYPE} element={<Vendortype />} />
+            <Route path={ROUTES.VENDOR} element={<Vendor />} />
 
             {/* <Route path={ROUTES.UNIT_LIST} element={<Unitlist />} /> */}
             {/* <Route path={ROUTES.ADD_UNIT} element={<Addunit />} /> */}

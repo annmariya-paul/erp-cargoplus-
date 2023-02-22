@@ -1,5 +1,5 @@
 import { Input, Popconfirm, Select } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import Button from "../../../components/button/button";
 import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
@@ -7,6 +7,8 @@ import MyPagination from "../../../components/Pagination/MyPagination";
 import TableData from "../../../components/table/table_data";
 import moment from "moment";
 import { MdDelete, MdPageview } from "react-icons/md";
+import PublicFetch from "../../../utils/PublicFetch";
+import { CRM_BASE_URL_FMS } from "../../../api/bootapi";
 
 function InvoiceList() {
   const [oppnew, setOppnew] = useState([]);
@@ -163,6 +165,22 @@ function InvoiceList() {
     },
   ];
 
+  const getAllInvoices = () => {
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/invoice`)
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          console.log("success of invoices", res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+  useEffect(() => {
+    getAllInvoices();
+  }, []);
   return (
     <div>
       <div className="container-fluid">

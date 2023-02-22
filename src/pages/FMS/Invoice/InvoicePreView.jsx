@@ -65,6 +65,25 @@ function InvoicePreView() {
       });
   };
 
+  const generateInvoice = () => {
+    PublicFetch.post(`${CRM_BASE_URL_FMS}/invoice`, {
+      invoice_date: "2022/02/22",
+      invoice_job_id: id,
+      invoice_currency: 1,
+      invoice_exchange_rate: 82,
+      invoice_grand_total: 5000.23,
+    })
+      .then((res) => {
+        console.log("Response", res);
+        if (res.data.success) {
+          console.log("Success of invoice", res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
   useEffect(() => {
     if (id) {
       getOneJob();

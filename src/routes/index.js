@@ -91,18 +91,19 @@ const ROUTES = {
   VIEW_JOB_ID: "/view_job/:id",
   VIEW_QUOTATION_ID: "/view_quotation/:id",
   INVOICE_LIST: "/invoice_list",
+  INVOICE_PREVIEW: "/invoice_preview",
+  INVOICE_PREVIEW_ID: "/invoice_preview/:id",
   // general settings
   CURRENCY: "/currency",
   COMPANYINFO: "/company_info",
   TASKANDEXPENSES: "/task_expenses",
   TASKANDEXPENSES_ID: "/task_expenses/:id",
-  INVOICE_PREVIEW: "/invoice_preview",
-  INVOICE_PREVIEW_ID: "/invoice_preview/:id",
   QUATATION_INVOICE: "/quatation_invoice",
   QUATATION_INVOICE_ID: "/quatation_invoice/:id",
   JOB_INVOICE: "/job_invoice",
   JOB_INVOICE_ID: "/job_invoice/:id",
-  VENDOR: "/vendor_type",
+  VENDOR_TYPE: "/vendor_type",
+  VENDOR: "/vendor",
 };
 
 module.exports = { ROUTES };

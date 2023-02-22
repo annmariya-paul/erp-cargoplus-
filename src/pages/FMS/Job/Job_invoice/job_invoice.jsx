@@ -3,7 +3,7 @@ import { CRM_BASE_URL_FMS, GENERAL_SETTING_BASE_URL } from "../../../../api/boot
 import PublicFetch from "../../../../utils/PublicFetch";
 import moment from "moment";
 import { useNavigate, useParams } from "react-router-dom";
-
+import "./jobinvoice.scss"
 function Jobinvoice(){
     const { id } = useParams();
     console.log("id :::::", id);
@@ -19,9 +19,11 @@ function Jobinvoice(){
     const [companyzipcode,setcompanyzipcode]= useState()
     const [companylogo,setCompanylogo]= useState()
     const [cmpnyinfo,setcmpnyinfo]=useState()
-   
+    const [qtnno, setQtnno] = useState();
+    const [tax, setTax] = useState();
+    const [grandtotal, setGrandTotal] = useState();
     const [alljobs, setAllJobs] = useState();
-
+    var converter = require('number-to-words');
 
     const getSingleJob = () => {
         PublicFetch.get(`${CRM_BASE_URL_FMS}/job/${id}`)
@@ -29,7 +31,26 @@ function Jobinvoice(){
             console.log("response of job", res);
             if (res.data.success) {
               console.log("Success of job", res.data.data);
-    
+              let newdatas = [];
+              res.data.data.fms_v1_quotation_jobs.forEach((item, index) => {
+                newdatas.push(item.fms_v1_quotation.quotation_no);
+                setQtnno(newdatas);
+                let servdata = [];
+                res.data.data.fms_v1_job_task_expenses.forEach((item, index) => {
+                  servdata.push({
+                    quotation_details_service_id :item.crm_v1_services.service_name,
+                    quotation_details_cost :item.job_task_expense_cost_amountfx,
+                    quotation_details_tax_type :item.fms_v1_tax_types.tax_type_name,
+                    quotation_details_tax_amount :item.job_task_expense_cost_taxfx,
+                    quotation_details_total :item.job_task_expense_cost_subtotalfx,
+                  }
+                  
+                  );
+                  setTax(servdata);
+                });
+        
+                setGrandTotal(item.fms_v1_quotation.quotation_grand_total);
+              });
               let temp = "";
             
              
@@ -141,6 +162,37 @@ function Jobinvoice(){
         }
       };
 
+      function setPageSize() {
+        const page = document.querySelector(".print-page");
+        // page.style.width = "210mm";
+        // page.style.height = "297mm";
+        // page.style.margin = "10mm";
+        page.style.width = "21cm";
+        page.style.height = "29.7cm";
+        page.style.margin = "auto";
+        page.style.padding ="2rem"
+      }
+      const handlePrint = () => {
+        setPageSize();
+        window.print();
+      
+      };
+
+      const close_modal = ( time) => {
+        if (time) {
+          setTimeout(() => {
+          handlePrint()
+            
+          }, time);
+        }
+      };
+    
+
+      useEffect(() => {
+
+        close_modal(1500) 
+
+      }, []);
 
 console.log("all jobs", alljobs)
 
@@ -148,9 +200,10 @@ console.log("all jobs", alljobs)
         <>
 
 <div className=" print-page container">
-<div className="row  quotation_border">
+<div className="row ">
 
-           
+<table className="quotation_border px-2">
+<thead>     
 <div className="d-flex justify-content-start align-items-center gap-3 mt-4 m-0 p-0 border-bottom">
 
 <div className="">
@@ -163,31 +216,31 @@ console.log("all jobs", alljobs)
 
   <div className="">
   <h5 className="headcolorquot ">{companyname} </h5>
- 
     <div className="">
     <label>{companyaddress} </label>
     </div>
-    <div className="">
+    <div>
     <label>{companycountry} </label>
     </div>
-    <div className="">
+    <div>
     <label>{companyphone} </label>
     </div>
-    <div className="">
+    <div>
     <label>{companyemail}</label>
     </div>
    
   </div>
 </div>
+</thead>  
 
 
-<div className=" row mt-3">
+<div className=" row mt-3 p-2">
           <div className="col-6 d-flex">
             <div className="col-4">Job No</div>
             <div className="col-1">:</div>
 
             <div className="col-7">
-              <p className="modal-view-data">{alljobs?.job_no}</p>
+              <p className="modal-view-data quotation_p_name">{alljobs?.job_no}</p>
             </div>
           </div>
 
@@ -196,7 +249,7 @@ console.log("all jobs", alljobs)
             <div className="col-1">:</div>
 
             <div className="col-7">
-              <p className="modal-view-data">{alljobs?.job_date1}</p>
+              <p className="modal-view-data quotation_p_name">{alljobs?.job_date1}</p>
             </div>
           </div>
           <div className="col-6 d-flex">
@@ -204,7 +257,7 @@ console.log("all jobs", alljobs)
             <div className="col-1">:</div>
 
             <div className="col-7">
-              <p className="modal-view-data"></p>
+              <p className="modal-view-data quotation_p_name">{qtnno} </p>
             </div>
           </div>
         
@@ -214,7 +267,7 @@ console.log("all jobs", alljobs)
             <div className="col-1">:</div>
 
             <div className="col-7">
-              <p className="modal-view-data">
+              <p className="modal-view-data quotation_p_name">
                 {alljobs?.job_consignee1}
               </p>
             </div>
@@ -225,7 +278,7 @@ console.log("all jobs", alljobs)
             <div className="col-1">:</div>
 
             <div className="col-7">
-              <p className="modal-view-data">
+              <p className="modal-view-data  quotation_p_name">
                 {alljobs?.job_shipper}
               </p>
             </div>
@@ -238,7 +291,7 @@ console.log("all jobs", alljobs)
             <div className="col-1">:</div>
 
             <div className="col-7">
-              <p className="modal-view-data">
+              <p className="modal-view-data quotation_p_name">
                 {alljobs?.job_freight_type1}
               </p>
             </div>
@@ -249,7 +302,7 @@ console.log("all jobs", alljobs)
             <div className="col-1">:</div>
 
             <div className="col-7">
-              <p className="modal-view-data">
+              <p className="modal-view-data quotation_p_name">
                 {alljobs?.job_cargo_type}
               </p>
             </div>
@@ -260,7 +313,7 @@ console.log("all jobs", alljobs)
             <div className="col-1">:</div>
 
             <div className="col-7">
-              <p className="modal-view-data">
+              <p className="modal-view-data  quotation_p_name">
                 {alljobs?.job_awb_bl_no}
               </p>
             </div>
@@ -271,7 +324,7 @@ console.log("all jobs", alljobs)
             <div className="col-1">:</div>
 
             <div className="col-7">
-              <p className="modal-view-data">{alljobs?.job_mode}</p>
+              <p className="modal-view-data  quotation_p_name">{alljobs?.job_mode}</p>
             </div>
           </div>
 
@@ -280,7 +333,7 @@ console.log("all jobs", alljobs)
             <div className="col-1">:</div>
 
             <div className="col-7">
-              <p className="modal-view-data">
+              <p className="modal-view-data quotation_p_name">
                 {alljobs?.job_origin_id1}
               </p>
             </div>
@@ -291,7 +344,7 @@ console.log("all jobs", alljobs)
             <div className="col-1">:</div>
 
             <div className="col-7">
-              <p className="modal-view-data">
+              <p className="modal-view-data quotation_p_name">
                 {alljobs?.job_destination_id1}
               </p>
             </div>
@@ -302,7 +355,7 @@ console.log("all jobs", alljobs)
             <div className="col-1">:</div>
 
             <div className="col-7">
-              <p className="modal-view-data">
+              <p className="modal-view-data quotation_p_name">
                 {alljobs?.job_carrier1}
               </p>
             </div>
@@ -315,7 +368,7 @@ console.log("all jobs", alljobs)
             <div className="col-1">:</div>
 
             <div className="col-7">
-              <p className="modal-view-data">
+              <p className="modal-view-data  quotation_p_name">
                 {alljobs?.job_payment_terms1}
               </p>
             </div>
@@ -326,7 +379,7 @@ console.log("all jobs", alljobs)
             <div className="col-1">:</div>
 
             <div className="col-7">
-              <p className="modal-view-data">
+              <p className="modal-view-data  quotation_p_name">
                 {alljobs?.job_no_of_pieces}
               </p>
             </div>
@@ -337,7 +390,7 @@ console.log("all jobs", alljobs)
             <div className="col-1">:</div>
 
             <div className="col-7">
-              <p className="modal-view-data">{alljobs?.job_uom1}</p>
+              <p className="modal-view-data  quotation_p_name">{alljobs?.job_uom1}</p>
             </div>
           </div>
 
@@ -346,7 +399,7 @@ console.log("all jobs", alljobs)
             <div className="col-1">:</div>
 
             <div className="col-7">
-              <p className="modal-view-data">
+              <p className="modal-view-data quotation_p_name">
                 {alljobs?.job_gross_wt}
               </p>
             </div>
@@ -357,7 +410,7 @@ console.log("all jobs", alljobs)
             <div className="col-1">:</div>
 
             <div className="col-7">
-              <p className="modal-view-data">
+              <p className="modal-view-data quotation_p_name">
                 {alljobs?.job_chargeable_wt}
               </p>
             </div>
@@ -378,7 +431,7 @@ console.log("all jobs", alljobs)
             <div className="col-1">:</div>
 
             <div className="col-7">
-              <p className="modal-view-data">
+              <p className="modal-view-data quotation_p_name">
                 {alljobs?.job_exchange_rate}
               </p>
             </div>
@@ -387,6 +440,99 @@ console.log("all jobs", alljobs)
 
           
         </div>
+        <div className="row m-0 p-0 quotation_border_bottom">
+  <p className="font_weight_qt">Bill To</p>
+</div>
+<div className="quotation_border_bottom">
+  <h6  className="quotation_p_name p-1" >France & Middle East</h6>
+</div>
+
+<div className="p-0 m-0">
+
+{/* <TableData columns={progress} data={tabledata} bordered /> */}
+{tax && (
+
+<table class="table   p-0 m-0">
+  <thead className="">
+    <tr className="tr_bgcolor">
+      <th scope="col"className="font_weight_qt border_right" >#</th>
+      <th scope="col" className="font_weight_qt border_right task_width text_align_words">TASKS</th>
+      <th scope="col" className="font_weight_qt  border_right text_align_number">COST</th>
+      <th scope="col" className="font_weight_qt border_right text_align_words">TAX TYPE</th>
+      <th scope="col" className="font_weight_qt border_right text_align_number">TAX AMOUNT</th>
+      <th scope="col" className="font_weight_qt text_align_number">TOTAL AMOUNT</th>
+    </tr>
+  </thead>
+  <tbody>
+  {tax && tax.map((itm,indx)=> (
+  //  console.log("quott",itm)
+
+      <tr>
+        <th scope="row"  className="border_right">{indx+1} </th>
+        <th className="border_right text_align_words">{itm.quotation_details_service_id} </th>
+        <th className="border_right text_align_number">{itm.quotation_details_cost} </th>
+        <th className="border_right text_align_words">{itm.quotation_details_tax_type} </th>
+        <th className="border_right text_align_number">{itm.quotation_details_tax_amount} </th>
+        <th className="text_align_number">{itm.quotation_details_total} </th>
+      </tr>
+
+    
+   
+  )) }
+   </tbody>
+</table>
+)  }
+</div>
+{ tax && (
+<div className="row p-1 mt-2">
+<div className="col-6">
+<p> Total in Words</p>
+</div>
+<div className="col-6  ">
+  <div className="row">
+    <div className="col-4  ">
+      
+    </div>
+    <div className="col-4  ">
+     {/* <p className="">Sub Total</p> */}
+    </div>
+    <div className="col-4 ">
+    {/* <p className="text_align_number d-flex justify-content-end" > 
+    {allqoutation?.quotation_grand_total.toFixed(2)} </p> */}
+    </div>
+  </div>
+</div>
+</div>
+ )}
+ 
+ { grandtotal&& (
+<div className="row p-1">
+<div className="col-6">
+  {
+    grandtotal &&
+<p className="font_weight_qt" >{converter.toWords(grandtotal)} </p>
+  }
+</div>
+<div className="col-6  ">
+  <div className="row">
+    <div className="col-4  ">
+      
+    </div>
+    <div className="col-4  ">
+     <p className="quotation_p_name">Total</p>
+    </div>
+    <div className="col-4 ">
+    <p className="text_align_number d-flex justify-content-end" > 
+    {/* <p> {allqoutation?.generalsettings_v1_currency?.currency_code}</p>  */}
+    &nbsp; 
+    {grandtotal} </p>
+    </div>
+  </div>
+
+</div>
+</div>
+)}
+</table>  
 </div>
 
 </div>

@@ -115,14 +115,12 @@ export default function ViewJob() {
             let servdata = [];
             res.data.data.fms_v1_job_task_expenses.forEach((item, index) => {
               servdata.push({
-                quotation_details_service_id :item.crm_v1_services.service_name,
-                quotation_details_cost :item.job_task_expense_cost_amountfx,
-                quotation_details_tax_type :item.fms_v1_tax_types.tax_type_name,
-                quotation_details_tax_amount :item.job_task_expense_cost_taxfx,
-                quotation_details_total :item.job_task_expense_cost_subtotalfx,
-              }
-              
-              );
+                quotation_details_service_id: item.crm_v1_services.service_name,
+                quotation_details_cost: item.job_task_expense_cost_amountfx,
+                quotation_details_tax_type: item.fms_v1_tax_types.tax_type_name,
+                quotation_details_tax_amount: item.job_task_expense_cost_taxfx,
+                quotation_details_total: item.job_task_expense_cost_subtotalfx,
+              });
               setTax(servdata);
             });
             // let tabletasks = [];
@@ -140,7 +138,7 @@ export default function ViewJob() {
             // setTabledata(item.fms_v1_quotation.fms_v1_quotation_details);
             setGrandTotal(item.fms_v1_quotation.quotation_grand_total);
           });
-        
+
           let temp = "";
 
           //  let tabletasks = [];
@@ -242,17 +240,21 @@ export default function ViewJob() {
       <div className="print-page container-fluid view_quotation  p-3 px-4">
         <div className="print-header">Header</div>
         <div className="row">
-          <div className="col-6">
+          <div className="col-4">
             <h5 className="lead_text">View Job</h5>
           </div>
-          <div className="col-6 d-flex justify-content-end mt-2">
+          <div className="col-8 d-flex justify-content-end mt-2">
             <div className="col-2">
               <Button
                 btnType="add_borderless"
                 className="edit_button"
                 // onClick={handlePrint}
-                onClick={()=>{
-                  navigate(`${ROUTES.JOB_INVOICE}/${id}`);
+                onClick={() => {
+                  // navigate(`${ROUTES.JOB_INVOICE}/${id}`);
+                  window.open(
+                    `http://localhost:3000/job_invoice/${id}`,
+                    `_blank`
+                  );
                 }}
               >
                 Print
@@ -269,6 +271,19 @@ export default function ViewJob() {
               >
                 Edit
                 <FiEdit />
+              </Button>
+            </div>
+            <div className="col-2 ">
+              <Button
+                btnType="save"
+                className="edit_button rounded"
+                onClick={() => {
+                  // handleviewtoedit();
+                  navigate(`${ROUTES.INVOICE_PREVIEW}/${id}`);
+                }}
+              >
+                Generate Invoice
+                {/* <FiEdit /> */}
               </Button>
             </div>
           </div>
@@ -461,11 +476,7 @@ export default function ViewJob() {
                 <Panel header="TASK DETAILS" key="1">
                   <div>
                     {" "}
-                    <TableData
-                      columns={progress}
-                      data={tax}
-                      bordered
-                    />
+                    <TableData columns={progress} data={tax} bordered />
                   </div>
                   <div className="d-flex justify-content-end mt-4 mx-3 ">
                     <div className="col-lg-2 col-sm-4 col-xs-3 d-flex justify-content-end mt-3 me-2">

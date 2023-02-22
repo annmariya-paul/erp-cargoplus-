@@ -1,0 +1,19 @@
+.dropdwnHeader {
+  .ant-dropdown-menu {
+    background-color: #007bc1 !important;
+  }
+  .ant-dropdown-menu-item:hover,
+  .ant-dropdown-menu-submenu-title:hover,
+  .ant-dropdown-menu-item.ant-dropdown-menu-item-active,
+  .ant-dropdown-menu-item.ant-dropdown-menu-submenu-title-active,
+  .ant-dropdown-menu-submenu-title.ant-dropdown-menu-item-active,
+  .ant-dropdown-menu-submenu-title.ant-dropdown-menu-submenu-title-active {
+    background-color: #007bc1;
+    // display: flex !important;
+    // justify-content: end !important;
+  }
+  .ant-dropdown-menu-item, .ant-dropdown-menu-submenu-title {
+    // display: flex !important;
+    // justify-content: end !important;
+  }
+}

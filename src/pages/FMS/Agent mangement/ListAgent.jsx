@@ -1,11 +1,12 @@
 import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
 import { message, Checkbox } from "antd";
 import { Input, Select } from "antd";
+import React, { useEffect, useMemo, useState } from "react";
 import TableData from "../../../components/table/table_data";
 import MyPagination from "../../../components/Pagination/MyPagination";
 import Custom_model from "../../../components/custom_modal/custom_model";
 import Button from "../../../components/button/button";
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
 import { ROUTES } from "../../../routes";
 import { Form } from "antd";
 import InputType from "../../../components/Input Type textbox/InputType";
@@ -13,17 +14,254 @@ import { Link } from "react-router-dom";
 import { FaEdit } from "react-icons/fa";
 import { FiEdit } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
+import TextArea from "../../../components/ InputType TextArea/TextArea";
+import SelectBox from "../../../components/Select Box/SelectBox";
+import {
+  CRM_BASE_URL_HRMS,
+  GENERAL_SETTING_BASE_URL,
+} from "../../../api/bootapi";
+import { useNavigate } from "react-router-dom";
+import { UniqueErrorMsg } from "../../../ErrorMessages/UniqueErrorMessage";
 import { RiFileSearchFill } from "react-icons/ri";
 import PublicFetch from "../../../utils/PublicFetch";
-
+import { getData, getNameList } from "country-list";
+import CustomModel from "../../../components/custom_modal/custom_model";
 function ListAgent() {
+  const [countryis, setCountryis] = useState();
+  // const options = useMemo(() => getData(), []);
   const [searchedText, setSearchedText] = useState("");
   const [pageSize, setPageSize] = useState("25");
   const [current, setCurrent] = useState(1);
   const [agentdata, setAgentdata] = useState("");
-
+  console.log("agent data",agentdata);
+  const [inpiutId, setinpiutId] = useState();
+  console.log("input name :",inpiutId)
+  const [inputCountry, setinputCountry] = useState();
+  const [inputcommision, setinputcommision] = useState();
+  const [searchedCode,setSearchedCode]=useState("");
+  const [modalAddBranch, setModalAddBranch] = useState(false);
+  const [uniqueCode, setUniqueCode] = useState(false);
+  const [uniqueName, setUniqueName] = useState(false);
+  const [uniqueEditName, setUniqueEditName] = useState(false);
+  const [uniqueEditCode, setUniqueEditCode] = useState(false);
+  const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
   const [addForm] = Form.useForm();
+  const [successPopup, setSuccessPopup] = useState();
+  const [FrightEditPopup, setFrightEditPopup] = useState(false);
+  const [allempname, setAllempname] = useState();
+  console.log("all employee",allempname);
+  const [empname, setEmpname] = useState();
+  const [empcommision, setempcommision] = useState("");
+  const [countryname, setcountryname] = useState();
+  const [saveSuccess, setSaveSuccess] = useState(false);
+  const [allCountries, setAllCountries] = useState();
+  const [employeeagentid,setemployeeagentid]= useState();
+  console.log("employee agent id : ",employeeagentid);
+  const [editempname, setEditempname] = useState("");
+  const [editempid, seteditempid] = useState();
+  const [editcountrynme, seteditcountrynme] = useState("");
+  const [editcommision, seteditcommision] = useState("");
+  const [fright_id, setFright_id] = useState();
+  console.log("fright id in state",fright_id);
+  const [editForm] = Form.useForm();
 
+  const navigate = useNavigate();
+  const close_modal = (mShow, time) => {
+    if (!mShow) {
+      setTimeout(() => {
+        setSuccessPopup(false);
+        navigate(ROUTES.LISTAGENT);
+      }, time);
+    }
+  };
+
+  // const getoneagent = async () => {
+  //   try {
+  //     const oneagent = await PublicFetch.get(
+  //       `${process.env.REACT_APP_BASE_URL}/agents/${employeeagentid}`
+  //     );
+  //     console.log("one agentss are ::", oneagent?.data?.data);
+  //     console.log("one employee agent id ::", oneagent?.data?.data.agent_emp_id);
+  //     setemployeeagentid(oneagent?.data?.data?.agent_emp_id)
+
+  //     console.log(
+  //       "emp agent is ::",
+  //       oneagent?.data?.data.hrms_v1_employee.employee_name
+  //     );
+
+  //     seteditempid(oneagent?.data?.data.agent_id);
+  //     setEditempname(oneagent?.data?.data?.hrms_v1_employee.employee_name);
+  //     seteditcountrynme(oneagent?.data?.data.agent_country);
+  //     seteditcommision(oneagent?.data?.data.agent_commission_details);
+  //     // setAgentdata(allagent?.data?.data)
+  //   } catch (err) {
+  //     console.log("error to getting all units", err);
+  //   }
+  // };
+  // console.log("emp id ", editempid);
+
+  const getAllEmployee = () => {
+    PublicFetch.get(`${CRM_BASE_URL_HRMS}/employees`)
+      .then((res) => {
+        console.log("all employeessss", res);
+        console.log("all emp types aree", res.data.data);
+        let arry = [];
+        res.data.data.map((item, indx) => {
+          console.log("all jifvn", item);
+          console.log(
+            "all emp agentmap",
+            item.hrms_v1_employment_types.employment_type_name
+          );
+          arry.push({
+            emptype_name: item.hrms_v1_employment_types.employment_type_name,
+            emp_agent_name: item.employee_name,
+            emp_agent_id: item.employee_id,
+          });
+        });
+        setAllempname(arry);
+        // setAllempname(res.data.data)
+
+        // if (res.data.success) {
+        //   console.log("Success of employee", res.data.data);
+        //   let array = [];
+        //   res.data.data.forEach((item, index) => {
+        //     array.push({
+        //       employee_id: item.employee_id,
+        //       employee_name: item.employee_name,
+        //       employee_code: item.employee_code,
+        //       employee_department: item.hrms_v1_departments.department_name,
+        //       employee_branch:item.hrms_v1_branches.branch_name,
+        //       employee_grade: item.hrms_v1_employee_grades.employee_grade_name,
+        //       employee_type: item.hrms_v1_employment_types.employment_type_name,
+        //       employee_designation: item.hrms_v1_designations.designation_name,
+        //     });
+        //   });
+        //   setAllEmployees(array);
+        //   console.log("array data ::", array);
+
+        // }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+  const getCountry = () => {
+    PublicFetch.get(`${GENERAL_SETTING_BASE_URL}/country`)
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          console.log("success", res.data.data);
+          setAllCountries(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+  useEffect(() => {
+    getAllEmployee();
+    getCountry();
+  }, []);
+
+  const handleChange = (e) => {
+    setCountryis(e);
+  };
+  const handleChangetwo = (e) => {
+    setinputCountry(e);
+    // setCountryis(e);
+  };
+
+  const getAllCountries = () => {
+    PublicFetch.get(`${GENERAL_SETTING_BASE_URL}/country`)
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          console.log("success", res.data.data);
+          setAllCountries(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+  useEffect(() => {
+    getAllEmployee();
+    // getoneagent();
+    getAllCountries();
+  },[]);
+ 
+
+  const frightEdit = (e) => {
+    console.log("Fright edit", e);
+    setinputCountry(e.agent_country);
+    setinputcommision(e.agent_commission_details);
+    setinpiutId(e.agent_id);
+
+    editForm.setFieldsValue({
+      inpiutId: e.agent_emp_name,
+      // inputName:e.agent_emp_name,
+      inputCountry:e. agent_country,
+      inputcommision: e.agent_commission_details,
+    });
+    setFrightEditPopup(true);
+  };
+
+  const handleUpdate = (e) => {
+    console.log("edit data", e);
+    const formData = new FormData();
+
+  
+    let data = { 
+      agent_emp_id: inpiutId,
+          agent_country: inputCountry,
+          agent_commission_details: inputcommision,
+     
+    }
+
+    PublicFetch.patch(
+      `${process.env.REACT_APP_BASE_URL}/agents/${inpiutId}`, data )
+      .then((res) => {
+        console.log("success", res);
+        if (res.data.success) {
+          console.log("successDataa", res.data.data);
+          getagents();
+          setSuccessPopup(true);
+          close_modal(successPopup, 1000);
+          setFrightEditPopup(false);
+        } else {
+          // setErrormsg(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+        // setError(true);
+      });
+  };
+
+  const updateClick = async () => {
+    try {
+      const updating = await PublicFetch.patch(
+        `${process.env.REACT_APP_BASE_URL}/agents/${fright_id}`,
+        {
+          agent_emp_id: employeeagentid,
+          agent_country: editcountrynme,
+          agent_commission_details: editcommision,
+        }
+      );
+      console.log("editedd data is", updating);
+      if (updating.data.success) {
+        console.log("successfully updating ");
+        //  getallunits()
+        //  setEditShow(false);
+        setSaveSuccess(true);
+        close_modal(saveSuccess, 1200);
+      }
+    } catch (err) {
+      console.log("error to getting all units", err);
+    }
+  };
   const getData = (current, pageSize) => {
     return agentdata?.slice((current - 1) * pageSize, current * pageSize);
   };
@@ -39,8 +277,10 @@ function ListAgent() {
         array.push({
           agent_id: item.agent_id,
           agent_country: item.agent_country,
-          agent_emp_id: item.hrms_v1_employee.employee_code,
-          agent_emp_name:item.hrms_v1_employee.employee_name
+          agent_emp_code: item.hrms_v1_employee.employee_code,
+          agent_emp_name:item.hrms_v1_employee.employee_name,
+          agent_commission_details:item.agent_commission_details
+
         });
       });
       setAgentdata(array);
@@ -66,6 +306,7 @@ function ListAgent() {
     },
   ];
 
+  
   const columns = [
     {
       title: "ACTION",
@@ -74,21 +315,18 @@ function ListAgent() {
       key: "ACTION",
       width: "14%",
       render: (data, index) => {
+        console.log("index is of edirt",index);
         return (
           <div className="d-flex justify-content-center align-items-center gap-2">
-            <div
-              className="actioneditdelete"
-              // className="editIcon m-0"
-              // onClick={() =>
-              //   handleEditclick(index)}
-            >
-              <Link to={`${ROUTES.UPDATEAGENT}/${index.agent_id}`}>
-                <div className="actioneditdelete">
-                  <FaEdit />
-                </div>
-              </Link>
-              {/* <FaEdit /> */}
-            </div>
+           <div
+                className="editIcon m-0"
+                onClick={() =>
+                  frightEdit(index)  
+                    // setuniqueeditCode(false);
+                      }
+              >
+                <FaEdit />
+              </div>
             <div
               className="actioneditdelete "
               // className="viewIcon m-0"
@@ -126,27 +364,27 @@ function ListAgent() {
     {
       title: "COUNTRY",
       dataIndex: "agent_country",
-      key: "NAME",
+      key: "agent_country",
       width: "25%",
-      filteredValue: [searchedText],
-      onFilter: (value, record) => {
-        console.log("valuesss in", record);
-        return (
-          String(record.agent_country)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.agent_emp_name)
-            .toLowerCase()
-            .includes(value.toLowerCase())
-        );
-      },
+    
+     
       align: "left",
     },
     {
       title: "EMPLOYEE CODE",
-      dataIndex: "agent_emp_id",
+      dataIndex: "agent_emp_code",
       width: "30%",
-      key: "DESCRIPTION",
+      filteredValue: [searchedCode],
+      onFilter: (value, record) => {
+        console.log("valuesss in", record);
+        return (
+         
+          String(record.agent_emp_code)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
+      },
+      key: "agent_emp_code",
 
       align: "left",
     },
@@ -154,12 +392,47 @@ function ListAgent() {
       title: "EMPLOYEE NAME",
       dataIndex: "agent_emp_name",
       width: "30%",
-      key: "DESCRIPTION",
+      filteredValue: [searchedText],
+      onFilter: (value, record) => {
+        console.log("valuesss in", record);
+        return (
+         
+          String(record.agent_emp_name)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
+      },
+      key: "agent_emp_name",
 
       align: "left",
     },
   ];
-
+  const submitaddagent = async () => {
+    try {
+      const addagent = await PublicFetch.post(
+        `${process.env.REACT_APP_BASE_URL}/agents`,
+        {
+          agent_emp_id: empname,
+          agent_country: countryis,
+          agent_commission_details: empcommision,
+        }
+      );
+      console.log(" agent data is added ", addagent);
+      if (addagent.data.success) {
+        setSuccessPopup(true);
+        getagents();
+        addForm.resetFields();
+        setModalAddBranch(false);
+        close_modal(successPopup, 1000);
+      }
+      //  else{
+      //    <ErrorMsg code={"500"} />
+      //  }
+    } catch (err) {
+      console.log("err to add the unit", err);
+    }
+  };
+  // console.log("country", options);
   return (
     <>
       <div className="container-fluid container_fms pt-3">
@@ -191,7 +464,7 @@ function ListAgent() {
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
-              placeholder="Search by Country or  Employee Name "
+              placeholder="Search by Employee Name "
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
               onChange={(e) => {
@@ -199,6 +472,19 @@ function ListAgent() {
               }}
               onSearch={(value) => {
                 setSearchedText(value);
+              }}
+            />
+          </div>
+          <div className="col-4">
+            <Input.Search
+              placeholder="Search by Employee Code"
+              style={{ margin: "5px", borderRadius: "5px" }}
+              value={searchedCode}
+              onChange={(e) => {
+                setSearchedCode(e.target.value ? [e.target.value] : []);
+              }}
+              onSearch={(value) => {
+                setSearchedCode(value);
               }}
             />
           </div>
@@ -241,9 +527,16 @@ function ListAgent() {
           />
         </div>
           <div className="col-4 mb-2 px-4">
-            <Link to={ROUTES.CREATEAGENT} style={{ color: "white" }}>
-              <Button btnType="add">Add Agent</Button>
-            </Link>
+            {/* <Link to={ROUTES.CREATEAGENT} style={{ color: "white" }}> */}
+              <Button btnType="add" onClick={() =>
+              {
+                setModalAddBranch(true);
+              setUniqueCode(false);
+              setUniqueName(false);
+              addForm.resetFields();
+              }
+              }>Add Agent</Button>
+            {/* </Link> */}
           </div>
         </div>
 
@@ -269,92 +562,271 @@ function ListAgent() {
           />
         </div>
 
+        {/* Modal for add Agent */}
+      <CustomModel
+        show={modalAddBranch}
+        onHide={() => setModalAddBranch(false)}
+        header="Add Agent"
+        footer={false}
+        // {...props}
+        View_list
+        list_content={
+          <>
+             <div className="container-fluid px-4 my-3">
+              <div>
+                <h5 className="lead_text">Add Agent</h5>
+              </div>
+              <div className="row my-3 ">
+              <Form
+                        form={addForm}
+                        onFinish={(value) => {
+                          console.log("the formvaluess iss", value);
+                          submitaddagent();
+                          // submitaddunit();
+                        }}
+                        onFinishFailed={(error) => {
+                          console.log(error);
+                        }}
+                      >
+                        <div className="row">
+                          <div className="col-6 pb-2">
+                            <div className="">
+                              <label>Employee Id</label>
+                              <Form.Item
+                                name="employee_branch"
+                                rules={[
+                                  {
+                                    required: true,
+                                    message: "Employee agent is Required",
+                                  },
+                                ]}
+                              >
+                                <SelectBox
+                                  value={allempname}
+                                  onChange={(e) => {
+                                    console.log("selected unit iss", e);
+                                    setEmpname(e);
+                                  }}
+                                >
+                                  {allempname &&
+                                    allempname.length > 0 &&
+                                    allempname.map((item, index) => {
+                                      console.log("all emptypenamess", item);
+                                    
+                                        return (
+                                          <Select.Option
+                                            key={item.emp_agent_id}
+                                            value={item.emp_agent_id}
+                                          >
+                                            {item.emp_agent_name}
+                                          </Select.Option>
+                                        );
+                                    })}
+                                </SelectBox>
+                              </Form.Item>
+                              {/* <SelectBox>
+                                <Select.Option>Manger</Select.Option>
+                              </SelectBox> */}
+                            </div>
+                          </div>
+                          <div className="col-6">
+                            <div className="">
+                              <label>Country</label>
+                              <Form.Item>
+                                <SelectBox
+                                  showSearch={true}
+                                  allowClear
+                                  value={countryis}
+                                  optionFilterProp="children"
+                                  onChange={handleChange}
+                                >
+                                  {allCountries &&
+                                    allCountries.length > 0 &&
+                                    allCountries.map((item, index) => {
+                                      return (
+                                        <Select.Option
+                                          key={item.country_id}
+                                          id={item.country_id}
+                                          value={item.country_name}
+                                        >
+                                          {item.country_name}
+                                        </Select.Option>
+                                      );
+                                    })}
+                                </SelectBox>
+                              </Form.Item>
+                            </div>
+                          </div>
+                          <div className="col-12 pb-4">
+                            <div className="">
+                              <label>Commission</label>
+                              <Form.Item>
+                                <TextArea
+                                
+                                  value={empcommision}
+                                  onChange={(e) =>
+                                    setempcommision(e.target.value)
+                                  }
+                                />
+                              </Form.Item>
+                            </div>
+                          </div>
+                          <div className="col-12">
+                            <div className="d-flex justify-content-center">
+                              <Button
+                                type="submit"
+                                className="p-2 save_button_style"
+                              >
+                                Save
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      </Form>
+
+                
+              </div>
+              </div>
+           
+           
+          </>
+        }
+      >
         <Custom_model
           size={"sm"}
-          // show={showModalEdit}
-          // onHide={() => setShowModalEdit(false)}
-          // header="Attributes"
-          footer={false}
-          // {...props}
-          View_list
-          list_content={
-            <div className="container-fluid p-4">
-              <div className="d-flex justify-content-between">
-                <div>
-                  <h5 className="lead_text">Attribute</h5>
-                </div>
-              </div>
-
-              <Form
-                form={addForm}
-                onFinish={(values) => {
-                  console.log("values iss", values);
-                  // handleupdate()
-                }}
-                onFinishFailed={(error) => {
-                  console.log(error);
-                }}
-              >
-                <div className="row py-1">
-                  <div className="col-sm-6 pt-3">
-                    <label>Name</label>
-                    <Form.Item
-                      name="attribute"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid attributename",
-                        },
-                        {
-                          whitespace: true,
-                        },
-                        {
-                          min: 3,
-                          message: "attribute name must be 3 characters",
-                        },
-                        {
-                          max: 100,
-                        },
-                      ]}
-                    >
-                      <InputType />
-                    </Form.Item>
-                  </div>
-                  <div className="col-sm-6 pt-3">
-                    <label>Description</label>
-                    <Form.Item
-                      name="description"
-                      rules={[
-                        // {
-                        //   required: true,
-                        //   pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-
-                        //   message: "Please enter valid description",
-                        // },
-
-                        {
-                          whitespace: true,
-                        },
-                        {
-                          min: 2,
-                        },
-                        {
-                          max: 500,
-                        },
-                      ]}
-                    ></Form.Item>
-                  </div>
-                </div>
-                <div className="row justify-content-center mt-5">
-                  <div className="col-1">
-                    <Button btnType="save">Save</Button>
-                  </div>
-                </div>
-              </Form>
-            </div>
-          }
+          success
+          show={successPopup}
+          onHide={() => setSuccessPopup(false)}
+         
         />
+      </CustomModel>
+
+ {/* Modal for edit Agent */}
+      <Custom_model
+         show={FrightEditPopup}
+        onHide={() => setFrightEditPopup(false)}
+        View_list
+        list_content={
+          <div>
+            <div className="container-fluid px-4 my-3">
+              <div>
+                <h5 className="lead_text">Update Agent</h5>
+              </div>
+              <div className="row my-3 ">
+              <Form
+                        form={editForm}
+                        onFinish={(value) => {
+                          console.log("the formvaluess iss", value);
+                          handleUpdate();
+                        }}
+                        onFinishFailed={(error) => {
+                          console.log(error);
+                        }}
+                      >
+                        <div className="row">
+                          <div className="col-6 pb-3">
+                            <div className="">
+                              <label>Employee Id</label>
+                              <Form.Item
+                              name="inpiutId"
+                                rules={[
+                                  {
+                                    required: true,
+                                    message: "empname is Required",
+                                  },
+                                ]}
+                              >
+                                <SelectBox
+                                  value={inpiutId}
+                                  onChange={(e) => {
+                                    console.log("sdf", e);
+                                    setinpiutId(parseInt(e));
+                                  }}
+                                  // onChange={(e) => {
+                                  //   console.log("selected unit iss", e);
+                                  //   // setEmpname(e);
+                                  // }}
+                                >
+                                  {allempname &&
+                                    allempname.length > 0 &&
+                                    allempname.map((item, index) => {
+                                      // if (item.emptype_name == "Agent") {
+                                        return (
+                                          <Select.Option
+                                          key={item.emp_agent_id}
+                                          value={item.emp_agent_id}
+                                        >
+                                          {item.emp_agent_name}
+                                        </Select.Option>
+                                        );
+                                        // }
+                                    })}
+                                </SelectBox>
+                              </Form.Item>
+                            </div>
+                          </div>
+                          <div className="col-6">
+                            <div className="">
+                              <label>Country</label>
+                              <Form.Item>
+                                <SelectBox
+                                  value={inputCountry}
+                                  showSearch
+                                  allowClear={true}
+                                  optionFilterProp="children"
+                                  onChange={handleChangetwo}
+                                >
+                                  {allCountries &&
+                                    allCountries.length > 0 &&
+                                    allCountries.map((item, index) => {
+                                      return (
+                                        <Select.Option
+                                          key={item.country_id}
+                                          id={item.country_id}
+                                          value={item.country_name}
+                                        >
+                                          {item.country_name}
+                                        </Select.Option>
+                                      );
+                                    })}
+                                </SelectBox>
+                              </Form.Item>
+                            </div>
+                          </div>
+                          <div className="col-12">
+                            <div className="">
+                              <label>Commission</label>
+                              <Form.Item name="inputcommision">
+                                <TextArea
+                                  value={inputcommision}
+                                  onChange={(e) => {
+                                    setinputcommision(e.target.value);
+                                  }}
+                                />
+                              </Form.Item>
+                            </div>
+                          </div>
+                          <div className="col-12">
+                          <div className="col-12 d-flex justify-content-center mt-5">
+                    <Button className="save_button">Save</Button>
+                  </div>
+                          </div>
+                        </div>
+                      </Form>
+              </div>
+              {/* {error ? (
+                <div className="">
+                  <ErrorMsg code={"400"} />
+                </div>
+              ) : (
+                ""
+              )} */}
+            </div>
+          </div>
+        }
+      />
+
+      
       </div>
     </>
   );

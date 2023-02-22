@@ -367,7 +367,7 @@ export default function TaxType() {
                       />
                     </Form.Item>
                     {uniqueName ? (
-                      <p style={{ color: "red", marginTop: "-24px" }}>
+                      <p style={{ color: "red" }}>
                         Tax type Name {uniqueErrMsg.UniqueErrName}
                       </p>
                     ) : null}

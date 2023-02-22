@@ -427,7 +427,7 @@ const [searchcodeText, setSearchcodeText] = useState("");
                       />
                     </Form.Item>
                     {uniqueName ? (
-                      <p style={{ color: "red", marginTop: "-24px" }}>
+                      <p style={{ color: "red" }}>
                         Branch Name {uniqueErrMsg.UniqueErrName}
                       </p>
                     ) : null}
@@ -471,7 +471,7 @@ const [searchcodeText, setSearchcodeText] = useState("");
                     />
                   </Form.Item>
                   {uniqueCode ? (
-                    <p style={{ color: "red", marginTop: "-24px" }}>
+                    <p style={{ color: "red" }}>
                       Branch code {uniqueErrMsg.UniqueErrName}
                     </p>
                   ) : null}

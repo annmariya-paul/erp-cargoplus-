@@ -516,7 +516,7 @@ export default function Frightlist(props) {
                     />
                   </Form.Item>
                   {uniqueCode ? (
-                            <p style={{ color: "red" }}>
+                            <p style={{ color: "red",marginTop:"15px"  }}>
                             Freight Type Name {uniqueErrMsg.UniqueErrName}
                             </p>
                           ) : null}

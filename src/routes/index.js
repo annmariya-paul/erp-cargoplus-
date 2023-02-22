@@ -96,12 +96,13 @@ const ROUTES = {
   COMPANYINFO: "/company_info",
   TASKANDEXPENSES: "/task_expenses",
   TASKANDEXPENSES_ID: "/task_expenses/:id",
-  INVOICE_PREVIEW:"/invoice_preview",
-  QUATATION_INVOICE:"/quatation_invoice",
-  QUATATION_INVOICE_ID:"/quatation_invoice/:id",
-  JOB_INVOICE:"/job_invoice",
-  JOB_INVOICE_ID:"/job_invoice/:id",
-  VENDOR:"/vendor_type",
+  INVOICE_PREVIEW: "/invoice_preview",
+  INVOICE_PREVIEW_ID: "/invoice_preview/:id",
+  QUATATION_INVOICE: "/quatation_invoice",
+  QUATATION_INVOICE_ID: "/quatation_invoice/:id",
+  JOB_INVOICE: "/job_invoice",
+  JOB_INVOICE_ID: "/job_invoice/:id",
+  VENDOR: "/vendor_type",
 };
 
 module.exports = { ROUTES };

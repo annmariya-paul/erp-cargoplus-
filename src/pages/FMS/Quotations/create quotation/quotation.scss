@@ -209,10 +209,13 @@ th {
 // }
 @media print {
   .view_quotation {
-    width: 210mm !important;
-    height: 297mm;
-    margin: 10mm;
-    box-shadow: none;
+    // width: 210mm !important;
+    // height: 297mm;
+    // margin: 10mm;
+
+    margin-left: auto;
+    margin-right: auto;
+    // box-shadow: none;
     border: solid 1px black;
   }
   .imgquotation{
@@ -222,14 +225,21 @@ th {
 
 }
 
-
+// page[size="A4"] {  
+//   width: 21cm;
+//   height: 29.7cm; 
+//   padding: 5rem;
+// }
 
 .ant-input-number-input {
   color: black;
 }
 
 .quotation_border{
+  // width: 21cm;
+  // height: 29.7cm; 
   border: solid 1px black;
+  
 }
 .quotation_p_name{
  font-weight: bold;
@@ -268,3 +278,5 @@ width: 30%;
 .text_align_words{
   text-align: left;
 }
+
+

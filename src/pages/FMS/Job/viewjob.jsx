@@ -252,7 +252,8 @@ export default function ViewJob() {
                 className="edit_button"
                 // onClick={handlePrint}
                 onClick={()=>{
-                  navigate(`${ROUTES.JOB_INVOICE}/${id}`);
+                  // navigate(`${ROUTES.JOB_INVOICE}/${id}`);
+                  window.open(`http://localhost:3000/job_invoice/${id}`, `_blank`)
                 }}
               >
                 Print

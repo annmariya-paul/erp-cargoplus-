@@ -12,6 +12,7 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
 import { ROUTES } from "../../../../routes";
 import PublicFetch from "../../../../utils/PublicFetch";
+import CheckUnique from "../../../../check Unique/CheckUnique";
 import { FiEdit } from "react-icons/fi";
 import CustomModel from "../../../../components/custom_modal/custom_model";
 import { CRM_BASE_URL_FMS } from "../../../../api/bootapi";
@@ -25,7 +26,7 @@ export default function PaymentTerms(props) {
   const [successPopup, setSuccessPopup] = useState(false);
 
   const [searchedText, setSearchedText] = useState("");
-
+  const [searchedsname, setSearchedsname] = useState("");
   const [modalAddPayment, setModalAddPayment] = useState(false);
 
   const [pageSize, setPageSize] = useState("25");
@@ -34,9 +35,11 @@ export default function PaymentTerms(props) {
 
   const [descriptionInput, setDescriptionInput] = useState();
   const [NameInput, setNameInput] = useState();
-
+  const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
   const [Errormsg, setErrormsg] = useState();
-
+  const [uniqueCode, setUniqueCode] = useState(false);
+  const [uniqueName, setUniqueName] = useState(false);
+  const [shortname, setShortname] = useState();
   const [showViewModal, setShowViewModal] = useState(false);
   const [PaymentEditPopup, setPaymentEditPopup] = useState(false);
   const [allPaymentTerms, setAllPaymentTerms] = useState();
@@ -99,7 +102,7 @@ export default function PaymentTerms(props) {
       title: "SHORT NAME",
       dataIndex: "payment_term_shortname",
       key: "payment_term_shortname",
-      
+      filteredValue: [searchedsname],
       onFilter: (value, record) => {
         return String(record.payment_term_shortname)
           .toLowerCase()
@@ -247,6 +250,19 @@ export default function PaymentTerms(props) {
               }}
             />
           </div>
+            <div className="col-5">
+            <Input.Search
+              placeholder="Search by Shortname"
+              style={{ margin: "5px", borderRadius: "5px" }}
+              value={searchedsname}
+              onChange={(e) => {
+                setSearchedsname(e.target.value ? [e.target.value] : []);
+              }}
+              onSearch={(value) => {
+                setSearchedsname(value);
+              }}
+            />
+          </div>
         </div>
         <div className="row my-2">
           <div className="col-4  ">
@@ -288,7 +304,7 @@ export default function PaymentTerms(props) {
 
           <div className="col-4">
             <Button btnType="add" onClick={() => setModalAddPayment(true)}>
-              Add Payment Terms
+              Add Payment Term
             </Button>
           </div>
          
@@ -372,7 +388,26 @@ export default function PaymentTerms(props) {
                         },
                       ]}
                     >
-                      <InputType />
+                      <InputType 
+                       value={shortname}
+                       onChange={(e) => {
+                        setShortname(e.target.value);
+                        setUniqueCode(false);
+                      }}
+                      onBlur={async () => {
+                        let a = await CheckUnique({
+                          type: "payment_term_shortname",
+                          value: shortname,
+                        });
+                        setUniqueCode(a);
+                      }}
+                      
+                      />
+                      {uniqueCode ? (
+                    <p style={{ color: "red" }}>
+                     Short Name {uniqueErrMsg.UniqueErrName}
+                    </p>
+                  ) : null}
                     </Form.Item>
                   </div>
                 </div>

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./layout.scss";
 import { AiOutlineMenu } from "react-icons/ai";
+import Header from "../components/Header/header";
 import Sidebar from "../components/Sidebar/sidebar";
 import { Outlet } from "react-router-dom";
 
@@ -9,9 +10,15 @@ export default function Layout({ children }) {
   return (
     <>
       <div className="container-fluid screen_orientation">
+        <div>
+          <Header />
+        </div>
         <div className="d-flex">
           <div className={` ${showMenu ? "d-none" : "menu-bars"}`}>
-            <AiOutlineMenu className="menu_icon" onClick={() => setShowMenu(true)} />
+            <AiOutlineMenu
+              className="menu_icon"
+              onClick={() => setShowMenu(true)}
+            />
           </div>
           <div
             className={` ${

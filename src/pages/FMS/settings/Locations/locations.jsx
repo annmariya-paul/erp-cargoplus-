@@ -128,7 +128,7 @@ export default function Locations() {
     setLocationId(e.location_id);
     addForm.setFieldsValue({
       locationId: e.location_id,
-      locationName: e.location_name,
+      // locationName: e.location_name,
       locationCode: e.location_code,
       locationType: e.location_type,
       locationCountry: e.location_country,

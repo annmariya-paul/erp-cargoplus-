@@ -1,0 +1,45 @@
+.ImgWrapper {
+    height: 45px;
+    width: 45px;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+ 
+    img {
+       height: 100%;
+       width: 100%;
+    }
+ }
+
+ .headerContainer {
+    width: 8rem;
+ }
+
+ .NotificationIcon {
+    cursor: pointer;
+ }
+
+ .DrpdwnUser {
+    display: flex;
+    justify-content: end;
+    color: white;
+    font-weight: 500;
+    font-size: 18px;
+ }
+
+.Welcome {
+    color: #b5b0cf;
+    font-size: 16px;
+}
+.HorizontalRule {
+    color: #b5b0cf;
+    height: 3px !important;
+}
+
+.HeaderOptions {
+    display: flex;
+    justify-content: end;
+    color: white;
+    font-size: 18px;
+    font-weight: 400;
+}

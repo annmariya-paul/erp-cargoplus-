@@ -249,8 +249,14 @@ export default function ViewJob() {
                 btnType="add_borderless"
                 className="edit_button"
                 // onClick={handlePrint}
+<<<<<<< HEAD
                 onClick={() => {
                   navigate(`${ROUTES.JOB_INVOICE}/${id}`);
+=======
+                onClick={()=>{
+                  // navigate(`${ROUTES.JOB_INVOICE}/${id}`);
+                  window.open(`http://localhost:3000/job_invoice/${id}`, `_blank`)
+>>>>>>> cb8a26ae98f81d0884c2a2eb4ae32ccaa5f37d6a
                 }}
               >
                 Print

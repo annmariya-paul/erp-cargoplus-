@@ -88,6 +88,8 @@ import InvoiceList from "./pages/FMS/Invoice/InvoiceList";
 import InvoicePreView from "./pages/FMS/Invoice/InvoicePreView";
 import Quotationinvoice from "./pages/FMS/Quotations/create quotation/quotation_invoice";
 import Jobinvoice from "./pages/FMS/Job/Job_invoice/job_invoice";
+import Vendor from "./pages/CRM/Purchase/vender/vendortype";
+import Vendortype from "./pages/CRM/Purchase/vender/vendortype";
 // import Lead from "./pages/lead/lead";
 
 function App() {
@@ -123,6 +125,7 @@ function App() {
               path={ROUTES.OPPORTUNITY_REPORT}
               element={<OpportunityReport />}
             />
+            <Route path={ROUTES.VENDOR} element={<Vendortype/>} />
 
             {/* <Route path={ROUTES.UNIT_LIST} element={<Unitlist />} /> */}
             {/* <Route path={ROUTES.ADD_UNIT} element={<Addunit />} /> */}

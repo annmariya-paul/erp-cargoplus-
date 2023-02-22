@@ -101,6 +101,7 @@ const ROUTES = {
   QUATATION_INVOICE_ID:"/quatation_invoice/:id",
   JOB_INVOICE:"/job_invoice",
   JOB_INVOICE_ID:"/job_invoice/:id",
+  VENDOR:"/vendor_type",
 };
 
 module.exports = { ROUTES };

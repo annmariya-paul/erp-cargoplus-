@@ -1,11 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Form } from "antd";
 import SelectBox from "../../../components/Select Box/SelectBox";
 import InputType from "../../../components/Input Type textbox/InputType";
 import { Collapse } from "antd";
 import TableData from "../../../components/table/table_data";
 import Button from "../../../components/button/button";
+import { useParams } from "react-router-dom";
+import PublicFetch from "../../../utils/PublicFetch";
+import { CRM_BASE_URL_FMS } from "../../../api/bootapi";
 function InvoicePreView() {
+  const { id } = useParams();
+  console.log("Id::::", id);
+  const [addForm] = Form.useForm();
+
   const { Panel } = Collapse;
 
   const progress = [
@@ -35,21 +42,37 @@ function InvoicePreView() {
       key: "quotation_details_tax_amount",
       // width: "35%",
       align: "center",
-     
     },
     {
       title: "TOTAL AMOUNT(KWD) ",
       dataIndex: "quotation_details_total",
       key: "quotation_details_total",
-  
+
       align: "center",
     },
   ];
 
-  const [addForm] = Form.useForm();
+  const getOneJob = () => {
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/job/job-invoice/${id}`)
+      .then((res) => {
+        console.log("Response of job", res);
+        if (res.data.success) {
+          console.log("success of job", res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+  useEffect(() => {
+    if (id) {
+      getOneJob();
+    }
+  }, [id]);
   return (
-<>
-<div className="container-fluid">
+    <>
+      <div className="container-fluid">
         <div className="row justify-content-md-center">
           <div className="row flex-wrap">
             <div className="col-6 ">
@@ -58,7 +81,7 @@ function InvoicePreView() {
           </div>
 
           <div className="content-tabs">
-          <Form
+            <Form
               form={addForm}
               onFinish={(values) => {
                 console.log("values iss", values);
@@ -68,186 +91,179 @@ function InvoicePreView() {
                 console.log(error);
               }}
             >
+              <div className="container mb-4">
+                <div className=" row mt-5">
+                  <div className="col-6 d-flex">
+                    <div className="col-4">Frieght type</div>
+                    <div className="col-1">:</div>
 
-<div className="container mb-4">
+                    <div className="col-7">
+                      <p className="modal-view-data">Frieght type</p>
+                    </div>
+                  </div>
 
-<div className=" row mt-5">
-          <div className="col-6 d-flex">
-            <div className="col-4">Frieght type</div>
-            <div className="col-1">:</div>
+                  <div className="col-6 d-flex">
+                    <div className="col-4">Invoice Date</div>
+                    <div className="col-1">:</div>
 
-            <div className="col-7">
-              <p className="modal-view-data">Frieght type</p>
-            </div>
-          </div>
+                    <div className="col-7">
+                      <p className="modal-view-data">12/2/2023</p>
+                    </div>
+                  </div>
+                  <div className="col-6 d-flex">
+                    <div className="col-4">Consignee</div>
+                    <div className="col-1">:</div>
 
-          <div className="col-6 d-flex">
-            <div className="col-4">Invoice Date</div>
-            <div className="col-1">:</div>
+                    <div className="col-7">
+                      <p className="modal-view-data">Consignee</p>
+                    </div>
+                  </div>
 
-            <div className="col-7">
-              <p className="modal-view-data">12/2/2023</p>
-            </div>
-          </div>
-          <div className="col-6 d-flex">
-            <div className="col-4">Consignee</div>
-            <div className="col-1">:</div>
+                  <div className="col-6 d-flex">
+                    <div className="col-4">Job No</div>
+                    <div className="col-1">:</div>
 
-            <div className="col-7">
-              <p className="modal-view-data">Consignee</p>
-            </div>
-          </div>
+                    <div className="col-7">
+                      <p className="modal-view-data">Jobnoo</p>
+                    </div>
+                  </div>
+                  <div className="col-6 d-flex">
+                    <div className="col-4">Shipper</div>
+                    <div className="col-1">:</div>
 
-          <div className="col-6 d-flex">
-            <div className="col-4">Job No</div>
-            <div className="col-1">:</div>
+                    <div className="col-7">
+                      <p className="modal-view-data">Shipper</p>
+                    </div>
+                  </div>
+                  <div className="col-6 d-flex">
+                    <div className="col-4">Cargo Type</div>
+                    <div className="col-1">:</div>
 
-            <div className="col-7">
-              <p className="modal-view-data">Jobnoo</p>
-            </div>
-          </div>
-          <div className="col-6 d-flex">
-            <div className="col-4">Shipper</div>
-            <div className="col-1">:</div>
+                    <div className="col-7">
+                      <p className="modal-view-data">cargotype</p>
+                    </div>
+                  </div>
 
-            <div className="col-7">
-              <p className="modal-view-data">Shipper</p>
-            </div>
-          </div>
-          <div className="col-6 d-flex">
-            <div className="col-4">Cargo Type</div>
-            <div className="col-1">:</div>
+                  <div className="col-6 d-flex">
+                    <div className="col-4">Mode</div>
+                    <div className="col-1">:</div>
 
-            <div className="col-7">
-              <p className="modal-view-data">cargotype</p>
-            </div>
-          </div>
+                    <div className="col-7">
+                      <p className="modal-view-data">mode</p>
+                    </div>
+                  </div>
+                  <div className="col-6 d-flex">
+                    <div className="col-4">Origin</div>
+                    <div className="col-1">:</div>
 
-          <div className="col-6 d-flex">
-            <div className="col-4">Mode</div>
-            <div className="col-1">:</div>
+                    <div className="col-7">
+                      <p className="modal-view-data">orign</p>
+                    </div>
+                  </div>
+                  <div className="col-6 d-flex">
+                    <div className="col-4">Destination</div>
+                    <div className="col-1">:</div>
 
-            <div className="col-7">
-              <p className="modal-view-data">mode</p>
-            </div>
-          </div>
-          <div className="col-6 d-flex">
-            <div className="col-4">Origin</div>
-            <div className="col-1">:</div>
+                    <div className="col-7">
+                      <p className="modal-view-data">Destination</p>
+                    </div>
+                  </div>
 
-            <div className="col-7">
-              <p className="modal-view-data">orign</p>
-            </div>
-          </div>
-          <div className="col-6 d-flex">
-            <div className="col-4">Destination</div>
-            <div className="col-1">:</div>
+                  <div className="col-6 d-flex">
+                    <div className="col-4">Carrier</div>
+                    <div className="col-1">:</div>
 
-            <div className="col-7">
-              <p className="modal-view-data">Destination</p>
-            </div>
-          </div>
+                    <div className="col-7">
+                      <p className="modal-view-data">Carrier</p>
+                    </div>
+                  </div>
 
-          <div className="col-6 d-flex">
-            <div className="col-4">Carrier</div>
-            <div className="col-1">:</div>
+                  <div className="col-6 d-flex">
+                    <div className="col-4">AWB/BL</div>
+                    <div className="col-1">:</div>
 
-            <div className="col-7">
-              <p className="modal-view-data">Carrier</p>
-            </div>
-          </div>
+                    <div className="col-7">
+                      <p className="modal-view-data">orign</p>
+                    </div>
+                  </div>
+                  <div className="col-6 d-flex">
+                    <div className="col-4">Terms</div>
+                    <div className="col-1">:</div>
 
-          <div className="col-6 d-flex">
-            <div className="col-4">AWB/BL</div>
-            <div className="col-1">:</div>
+                    <div className="col-7">
+                      <p className="modal-view-data">terms</p>
+                    </div>
+                  </div>
 
-            <div className="col-7">
-              <p className="modal-view-data">orign</p>
-            </div>
-          </div>
-          <div className="col-6 d-flex">
-            <div className="col-4">Terms</div>
-            <div className="col-1">:</div>
+                  <div className="col-6 d-flex">
+                    <div className="col-4">No of Pieces</div>
+                    <div className="col-1">:</div>
 
-            <div className="col-7">
-              <p className="modal-view-data">terms</p>
-            </div>
-          </div>
+                    <div className="col-7">
+                      <p className="modal-view-data">terms</p>
+                    </div>
+                  </div>
 
-          <div className="col-6 d-flex">
-            <div className="col-4">No of Pieces</div>
-            <div className="col-1">:</div>
+                  <div className="col-6 d-flex">
+                    <div className="col-4">UOM</div>
+                    <div className="col-1">:</div>
 
-            <div className="col-7">
-              <p className="modal-view-data">terms</p>
-            </div>
-          </div>
+                    <div className="col-7">
+                      <p className="modal-view-data">terms</p>
+                    </div>
+                  </div>
 
-          <div className="col-6 d-flex">
-            <div className="col-4">UOM</div>
-            <div className="col-1">:</div>
+                  <div className="col-6 d-flex">
+                    <div className="col-4">Gross wt</div>
+                    <div className="col-1">:</div>
 
-            <div className="col-7">
-              <p className="modal-view-data">terms</p>
-            </div>
-          </div>
+                    <div className="col-7">
+                      <p className="modal-view-data">Gross</p>
+                    </div>
+                  </div>
+                  <div className="col-6 d-flex">
+                    <div className="col-4">Chargeble wt</div>
+                    <div className="col-1">:</div>
 
-          <div className="col-6 d-flex">
-            <div className="col-4">Gross wt</div>
-            <div className="col-1">:</div>
+                    <div className="col-7">
+                      <p className="modal-view-data">Chargeble</p>
+                    </div>
+                  </div>
+                  <div className="col-6 d-flex">
+                    <div className="col-4">Currency</div>
+                    <div className="col-1">:</div>
 
-            <div className="col-7">
-              <p className="modal-view-data">Gross</p>
-            </div>
-          </div>
-          <div className="col-6 d-flex">
-            <div className="col-4">Chargeble wt</div>
-            <div className="col-1">:</div>
+                    <div className="col-7">
+                      <p className="modal-view-data">Currency</p>
+                    </div>
+                  </div>
+                  <div className="col-6 d-flex">
+                    <div className="col-4">Exchange Rate</div>
+                    <div className="col-1">:</div>
 
-            <div className="col-7">
-              <p className="modal-view-data">Chargeble</p>
-            </div>
-          </div>
-          <div className="col-6 d-flex">
-            <div className="col-4">Currency</div>
-            <div className="col-1">:</div>
+                    <div className="col-7">
+                      <p className="modal-view-data">Exchange</p>
+                    </div>
+                  </div>
 
-            <div className="col-7">
-              <p className="modal-view-data">Currency</p>
-            </div>
-          </div>
-          <div className="col-6 d-flex">
-            <div className="col-4">Exchange Rate</div>
-            <div className="col-1">:</div>
-
-            <div className="col-7">
-              <p className="modal-view-data">Exchange</p>
-            </div>
-          </div>
-
-
-          <div className="mt-3">
-                <div>
-                  <TableData 
-                  columns={progress} 
-                  // data={tabledata}
-                   bordered />
+                  <div className="mt-3">
+                    <div>
+                      <TableData
+                        columns={progress}
+                        // data={tabledata}
+                        bordered
+                      />
+                    </div>
+                  </div>
+                  <div className="row mt-4">
+                    <div className="d-flex  justify-content-center gap-2 ">
+                      <Button btnType="save">Generate </Button>
+                      <Button btnType="cancel">Cancel </Button>
+                    </div>
+                  </div>
                 </div>
-          </div>
-<div className="row mt-4">
-<div className="d-flex  justify-content-center gap-2 ">
-<Button  btnType="save">Generate </Button>
-<Button btnType="cancel" >Cancel </Button>
-</div>
-</div>
-          </div>
 
-          
-
-
-
-               
-{/* <div className="row ">
+                {/* <div className="row ">
                     <div className="col-xl-3 col-sm-6 mt-2">
                       <label>Freight Type</label>
                       <Form.Item
@@ -538,16 +554,13 @@ function InvoicePreView() {
                    
 
                     </div> */}
-
-                    </div>
-              </Form>
-
-            </div>
+              </div>
+            </Form>
           </div>
-            </div>
-
-</>
-  ) 
+        </div>
+      </div>
+    </>
+  );
 }
 
 export default InvoicePreView;

@@ -36,6 +36,8 @@ export default function Taskexpenses() {
   const [alljobs, setAllJobs] = useState();
   const [addForm] = Form.useForm();
   const [services, setServices] = useState([]);
+  const [isService, setIsService] = useState();
+
   console.log("Servicesss are :::", services);
 
   const dataSource = [
@@ -538,9 +540,11 @@ export default function Taskexpenses() {
         if (res.data.success) {
           console.log("Success of job", res.data.data);
           let newdatas = [];
-          // res.data.data.fms_v1_quotation_jobs.forEach((item, index) => {
-          //   newdatas.push(item.fms_v1_quotation.quotation_no);
-          //   setQtnno(newdatas);
+          res.data.data.fms_v1_quotation_jobs.forEach((item, index) => {
+            newdatas.push(item.fms_v1_quotation.quotation_no);
+            setQtnno(newdatas);
+          });
+
           let servdata = [];
           res?.data?.data?.fms_v1_job_task_expenses?.forEach((item, index) => {
             console.log("Set for diplaying data", item);
@@ -569,7 +573,6 @@ export default function Taskexpenses() {
             setTax(servdata);
           });
           // setGrandTotal(item.fms_v1_quotation.quotation_grand_total);
-          // });
 
           let temp = "";
 
@@ -784,6 +787,7 @@ export default function Taskexpenses() {
                 value={index.job_task_expense_task_id}
                 onChange={(e) => {
                   handleInputchange1(e, index.key, "job_task_expense_task_id");
+                  setIsService(e);
                   console.log("servicess11123", e);
                 }}
               >
@@ -933,8 +937,13 @@ export default function Taskexpenses() {
                 value={index.job_task_expense_agent_id}
                 onChange={(e) => {
                   console.log("servicess11123", e);
-
-                  handleInputchange1(e, index.key, "job_task_expense_agent_id");
+                  if (isService) {
+                    handleInputchange1(
+                      e,
+                      index.key,
+                      "job_task_expense_agent_id"
+                    );
+                  }
                 }}
               >
                 {agentdata &&
@@ -982,11 +991,14 @@ export default function Taskexpenses() {
                     className="text_right"
                     value={index.job_task_expense_cost_amountfx}
                     onChange={(e) => {
-                      handleInputChange(
-                        e,
-                        index.key,
-                        "job_task_expense_cost_amountfx"
-                      );
+                      if (isService) {
+                        handleInputChange(
+                          e,
+                          index.key,
+                          "job_task_expense_cost_amountfx"
+                        );
+                      }
+
                       console.log(" input numberevent ", e, index.key);
                     }}
                     align="right"
@@ -994,11 +1006,13 @@ export default function Taskexpenses() {
                     precision={2}
                     controlls={false}
                     onBlur={() => {
-                      handleInputChange2(
-                        taxType,
-                        index.key,
-                        "job_task_expense_cost_taxfx"
-                      );
+                      if (isService) {
+                        handleInputChange2(
+                          taxType,
+                          index.key,
+                          "job_task_expense_cost_taxfx"
+                        );
+                      }
                     }}
                   />
                 </Form.Item>

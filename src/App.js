@@ -126,8 +126,9 @@ function App() {
               path={ROUTES.OPPORTUNITY_REPORT}
               element={<OpportunityReport />}
             />
-            <Route path={ROUTES.VENDOR_TYPE} element={<Vendortype/>} />
-            <Route path={ROUTES.VENDOR} element={<Vendor/> }/>
+            <Route path={ROUTES.VENDOR} element={<Vendortype />} />
+            <Route path={ROUTES.VENDOR_TYPE} element={<Vendortype />} />
+            <Route path={ROUTES.VENDOR} element={<Vendor />} />
 
             {/* <Route path={ROUTES.UNIT_LIST} element={<Unitlist />} /> */}
             {/* <Route path={ROUTES.ADD_UNIT} element={<Addunit />} /> */}
@@ -213,21 +214,30 @@ function App() {
               path={ROUTES.ASSIGN_QUOTATION_ID}
               element={<QuotationAssign />}
             />
-            
+
             <Route path={ROUTES.LIST_JOB} element={<Listjob />} />
             <Route path={ROUTES.CREATEJOB} element={<CreateJob />} />
             <Route path={ROUTES.UPDATEJOB_ID} element={<Updatejob />} />
             <Route path={ROUTES.VIEW_JOB_ID} element={<ViewJob />} />
             <Route path={ROUTES.INVOICE_LIST} element={<InvoiceList />} />
-            <Route path={ROUTES.INVOICE_PREVIEW } element={<InvoicePreView/>}/>
+            <Route
+              path={ROUTES.INVOICE_PREVIEW_ID}
+              element={<InvoicePreView />}
+            />
             {/* General settings */}
 
             <Route path={ROUTES.CURRENCY} element={<Currency />} />
             <Route path={ROUTES.COMPANYINFO} element={<Companyinfo />} />
-            <Route path={ROUTES.TASKANDEXPENSES_ID} element={<Taskexpenses />} />
+            <Route
+              path={ROUTES.TASKANDEXPENSES_ID}
+              element={<Taskexpenses />}
+            />
           </Route>
-          <Route path={ROUTES.QUATATION_INVOICE_ID} element={<Quotationinvoice/> } />
-          <Route path={ROUTES.JOB_INVOICE_ID} element={<Jobinvoice/> }/>
+          <Route
+            path={ROUTES.QUATATION_INVOICE_ID}
+            element={<Quotationinvoice />}
+          />
+          <Route path={ROUTES.JOB_INVOICE_ID} element={<Jobinvoice />} />
         </Routes>
       </BrowserRouter>
     </div>

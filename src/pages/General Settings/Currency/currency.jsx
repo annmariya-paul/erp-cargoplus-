@@ -17,7 +17,7 @@ import CustomModel from "../../../components/custom_modal/custom_model";
 import { GENERAL_SETTING_BASE_URL } from "../../../api/bootapi";
 import PublicFetch from "../../../utils/PublicFetch";
 import MyPagination from "../../../components/Pagination/MyPagination";
-
+import { Checkbox } from 'antd';
 export default function Currency(props) {
   const [addForm] = Form.useForm();
   const [error, setError] = useState(false);
@@ -47,6 +47,11 @@ export default function Currency(props) {
   const [country, setCountry] = useState();
 
   // const [editForm] = Form.useForm();
+
+  const onChange = (e) => {
+    console.log(`checked = ${e.target.checked}`);
+  };
+
   const close_modal = (mShow, time) => {
     if (!mShow) {
       setTimeout(() => {
@@ -718,6 +723,24 @@ export default function Currency(props) {
                           ]}
                         >
                           <InputType />
+                        </Form.Item>
+                      </div>
+                    </div>
+
+                    <div className="col-12 pt-1">
+                      <label>Default Currency</label>
+                      <div>
+                        <Form.Item
+                          name="symbol"
+                          // rules={[
+                          //   {
+                          //     required: true,
+                          //     message: "Symbol is Required",
+                          //   },
+                          // ]}
+                          
+                        >
+                         <Checkbox onChange={onChange}></Checkbox>
                         </Form.Item>
                       </div>
                     </div>

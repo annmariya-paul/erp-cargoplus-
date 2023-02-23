@@ -402,7 +402,7 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
                       />
                     </Form.Item>
                     {uniqueCode ? (
-                      <p style={{ color: "red", marginTop: "-24px" }}>
+                      <p style={{ color: "red" }}>
                         Employment Type {uniqueErrMsg.UniqueErrName}
                       </p>
                     ) : null}
@@ -493,7 +493,7 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
                         />
                       </Form.Item>
                       {uniqueeditCode ? (
-                        <p style={{ color: "red", marginTop: "-24px" }}>
+                        <p style={{ color: "red" }}>
                           Employment Type Name {uniqueErrMsg.UniqueErrName}
                         </p>
                       ) : null}

@@ -325,7 +325,7 @@ function Employeegrade() {
                       />
                     </Form.Item>
                     {uniqueCode ? (
-                      <p style={{ color: "red", marginTop: "-24px" }}>
+                      <p style={{ color: "red" }}>
                         Employement Grade Name {uniqueErrMsg.UniqueErrName}
                       </p>
                     ) : null}
@@ -423,7 +423,7 @@ function Employeegrade() {
                         />
                       </Form.Item>
                       {uniqueeditCode ? (
-                        <p style={{ color: "red", marginTop:"-24px" }} className="mb-2">
+                        <p style={{ color: "red" }} className="mb-2">
                           Employment Grade Name {uniqueErrMsg.UniqueErrName}
                         </p>
                       ) : null}

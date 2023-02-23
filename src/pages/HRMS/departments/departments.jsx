@@ -316,7 +316,7 @@ export default function Departments(props) {
               </Select.Option>
             </Select>
           </div>
-          <div className=" col-4 d-flex py-2 justify-content-center">
+          <div className=" col-4 d-flex justify-content-center">
           <MyPagination
            total={alldepartmentdata?.length}
            current={current}
@@ -423,7 +423,7 @@ export default function Departments(props) {
                     />
                   </Form.Item>
                   {uniqueName ? (
-                    <p style={{ color: "red", marginTop: "-24px" }}>
+                    <p style={{ color: "red" }}>
                       Department Name {uniqueErrMsg.UniqueErrName}
                     </p>
                   ) : null}
@@ -466,7 +466,7 @@ export default function Departments(props) {
                     />
                   </Form.Item>
                   {uniqueCode ? (
-                    <p style={{ color: "red", marginTop: "-24px" }}>
+                    <p style={{ color: "red" }}>
                       Department code {uniqueErrMsg.UniqueErrName}
                     </p>
                   ) : null}
@@ -545,7 +545,7 @@ export default function Departments(props) {
                     />
                   </Form.Item>
                   {uniqueEditName ? (
-                    <p style={{ color: "red", marginTop: "-24px" }}>
+                    <p style={{ color: "red" }}>
                       Department Name {uniqueErrMsg.UniqueErrName}
                     </p>
                   ) : null}
@@ -590,7 +590,7 @@ export default function Departments(props) {
                     />
                   </Form.Item>
                   {uniqueEditCode ? (
-                    <p style={{ color: "red", marginTop: "-24px" }}>
+                    <p style={{ color: "red" }}>
                       Department code {uniqueErrMsg.UniqueErrName}
                     </p>
                   ) : null}

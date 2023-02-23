@@ -358,7 +358,7 @@ export default function Designation() {
                       />
                     </Form.Item>
                     {uniqueName ? (
-                      <p style={{ color: "red", marginTop: "-24px" }}>
+                      <p style={{ color: "red" }}>
                         Designation Name {uniqueErrMsg.UniqueErrName}
                       </p>
                     ) : null}
@@ -393,7 +393,7 @@ export default function Designation() {
                       />
                     </Form.Item>
                     {uniqueCode ? (
-                      <p style={{ color: "red", marginTop: "-24px" }}>
+                      <p style={{ color: "red" }}>
                         Designation Name {uniqueErrMsg.UniqueErrName}
                       </p>
                     ) : null}
@@ -473,7 +473,7 @@ export default function Designation() {
                       />
                     </Form.Item>
                     {uniqueEditName ? (
-                      <p style={{ color: "red", marginTop: "-24px" }}>
+                      <p style={{ color: "red" }}>
                         Designation Name {uniqueErrMsg.UniqueErrName}
                       </p>
                     ) : null}
@@ -517,7 +517,7 @@ export default function Designation() {
                       />
                     </Form.Item>
                     {uniqueEditCode ? (
-                      <p style={{ color: "red", marginTop: "-24px" }}>
+                      <p style={{ color: "red" }}>
                         Designation code {uniqueErrMsg.UniqueErrName}
                       </p>
                     ) : null}

@@ -93,6 +93,7 @@ const ROUTES = {
   INVOICE_LIST: "/invoice_list",
   INVOICE_PREVIEW: "/invoice_preview",
   INVOICE_PREVIEW_ID: "/invoice_preview/:id",
+  INVOICE_PRINT: "/invoice_print",
   // general settings
   CURRENCY: "/currency",
   COMPANYINFO: "/company_info",

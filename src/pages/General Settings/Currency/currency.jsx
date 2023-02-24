@@ -49,7 +49,7 @@ export default function Currency(props) {
   // const [editForm] = Form.useForm();
 
   const onChange = (e) => {
-    console.log(`checked = ${e.target.checked}`);
+    console.log(`checked iss ${e.target.checked}`);
   };
 
   const close_modal = (mShow, time) => {
@@ -513,6 +513,26 @@ export default function Currency(props) {
                     </Form.Item>
                   </div>
                 </div>
+                <div className="col-12 pt-1">
+                      <label>Default Currency</label>
+                      <div>
+                        <Form.Item
+                          name="currency_country"
+                          // rules={[
+                          //   {
+                          //     required: true,
+                          //     message: "Symbol is Required",
+                          //   },
+                          // ]}
+                          
+                        >
+                         <Checkbox onChange={onChange}
+                        //  value={}
+                         ></Checkbox>
+                        </Form.Item>
+                      </div>
+                    </div>
+
               </div>
               <div className="row justify-content-center ">
                 <div className="col-auto">

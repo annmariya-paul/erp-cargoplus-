@@ -90,6 +90,7 @@ import Quotationinvoice from "./pages/FMS/Quotations/create quotation/quotation_
 import Jobinvoice from "./pages/FMS/Job/Job_invoice/job_invoice";
 import Vendortype from "./pages/CRM/Purchase/vendertype/vendortype";
 import Vendor from "./pages/CRM/Purchase/vendor/vendor";
+import InvoicePrint from "./components/Invoice/InvoicePrint";
 // import Vendortype from "./pages/CRM/Purchase/vendertype/vendortype";
 // import Lead from "./pages/lead/lead";
 
@@ -126,7 +127,6 @@ function App() {
               path={ROUTES.OPPORTUNITY_REPORT}
               element={<OpportunityReport />}
             />
-            <Route path={ROUTES.VENDOR} element={<Vendortype />} />
             <Route path={ROUTES.VENDOR_TYPE} element={<Vendortype />} />
             <Route path={ROUTES.VENDOR} element={<Vendor />} />
 
@@ -238,6 +238,7 @@ function App() {
             element={<Quotationinvoice />}
           />
           <Route path={ROUTES.JOB_INVOICE_ID} element={<Jobinvoice />} />
+          <Route path={ROUTES.INVOICE_PRINT} element={<InvoicePrint />} />
         </Routes>
       </BrowserRouter>
     </div>

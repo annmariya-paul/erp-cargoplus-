@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+ import React, { useEffect, useState } from "react";
 import Button from "../../../../components/button/button";
 import InputType from "../../../../components/Input Type textbox/InputType";
 import ErrorMsg from "../../../../components/error/ErrorMessage";
@@ -21,8 +21,9 @@ import MyPagination from "../../../../components/Pagination/MyPagination";
 export default function Carrierlist(props) {
   const [addForm] = Form.useForm();
   const [error, setError] = useState(false);
+  const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
   const [successPopup, setSuccessPopup] = useState(false);
-
+  const [uniqueEditCode, setUniqueEditCode] = useState(false);
   const [searchedText, setSearchedText] = useState("");
   const [searchedCode, setSearchedCode] = useState("");
   const [searchType, setSearchType] = useState("");
@@ -44,7 +45,7 @@ export default function Carrierlist(props) {
   const [uniqueCode, setuniqueCode] = useState(false);
   const [pageSize, setPageSize] = useState("25");
   const [current, setCurrent] = useState(1);
-
+  const [editUniqueCode, setEditUniqueCode] = useState();
 
   const [editForm] = Form.useForm();
   const close_modal = (mShow, time) => {
@@ -654,9 +655,24 @@ export default function Carrierlist(props) {
                           value={editcarriercode}
                           onChange={(e) => {
                             setEditcarriercode(e.target.value);
+                            setUniqueEditCode(false);
                           }}
+                          onBlur={async () => {
+                            if (editUniqueCode !== editcarriercode) {
+                            let c = await CheckUnique({
+                              type: "carriercode",
+                              value: editcarriercode,
+                            });
+                            setUniqueEditCode(c);
+                          }
+                        }}
                         />
                       </Form.Item>
+                      {uniqueEditCode ? (
+                    <p style={{ color: "red" }}>
+                     Carrier code {uniqueErrMsg.UniqueErrName}
+                    </p>
+                  ) : null}
                     </div>
                   </div>
                   <div className="col-12 pt-1">

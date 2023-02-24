@@ -22,7 +22,7 @@ export default function Frightlist(props) {
   const [uniqueCode, setuniqueCode] = useState(false);
   const [frightType, setFrightType] = useState();
   const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
- 
+  const [uniqueName, setUniqueName] = useState(false);
   const [addForm] = Form.useForm();
   const [error, setError] = useState(false);
   const [successPopup, setSuccessPopup] = useState(false);
@@ -34,7 +34,7 @@ export default function Frightlist(props) {
 
   const [pageSize, setPageSize] = useState("25");
   const [current, setCurrent] = useState(1);
-
+  const [uniqueEditName, setUniqueEditName] = useState(false);
  
   const [Errormsg, setErrormsg] = useState();
   const [NameInput, setNameInput] = useState();
@@ -242,7 +242,7 @@ export default function Frightlist(props) {
   //   },
   // ];  
   const [nameSearch, setNamesearch] = useState();
-  
+  const [editUniqueName, setEditUniqueName] = useState();
   const [prefixSearch, setprefixSearch] = useState();
   const [newName, setNewName] = useState();
   const [saveSuccess, setSaveSuccess] =useState(false)
@@ -300,7 +300,7 @@ export default function Frightlist(props) {
   });
   setFrightEditPopup(true);
   }
-
+  const [newprefix, setNewPrefix] = useState();
   const [frightname, setFrightname] = useState();
   const [frighttype, setFrighttype] = useState();
 
@@ -309,6 +309,7 @@ export default function Frightlist(props) {
     setNameInput(e.freight_type_name);
     setNewName(e.freight_type_name);
     setprefixInput(e.freight_type_prefix);
+    setEditUniqueName(e.freight_type_prefix);
     // setImageInput(e.brand_pic);
     setFright_id(e.freight_type_id);
     editForm.setFieldsValue({
@@ -410,6 +411,7 @@ export default function Frightlist(props) {
             <Button btnType="add" onClick={() =>
               {
                 setuniqueCode(false);
+                setUniqueName(false);
                 setModalAddFright(true);
               } }>
               Add Freight types
@@ -495,7 +497,7 @@ export default function Frightlist(props) {
                     value={NameInput}
                     onChange={(e) => {
                       setFrightType(e.target.value);
-                      setuniqueCode(false);
+                      setUniqueName(false);
                     }}
                     // onBlur={(e) => {
                     //   checkemployeeCodeis();
@@ -503,6 +505,62 @@ export default function Frightlist(props) {
                     onBlur={ async () => {
                       
                       let a = await CheckUnique({type:"freighttypename",value:frightType})
+                      console.log("hai how are u", a)
+                      setUniqueName(a);
+                      
+                    }}
+                    // onChange={(e) => {
+                      // setFrighttypename(e.target.value)
+
+                      // setFrightError("");
+                    // }}
+                    
+                    />
+                  </Form.Item>
+                  {uniqueName ? (
+                            <p style={{ color: "red"  }}>
+                            Freight Type Name {uniqueErrMsg.UniqueErrName}
+                            </p>
+                          ) : null}
+                </div>
+                </div>
+                <div className="col-12 pt-1">
+                  <label>Freight Type Prefix</label>
+                  <div>
+                  <Form.Item
+                    name="freightprefix"
+                    rules={[
+                      {
+                        required: true,
+                        pattern: new RegExp("^[A-Za-z ]+$"),
+                        message: "Please enter a Valid Freight type Name",
+                      },
+                      
+                      {
+                        min: 3,
+                        message: "Name must be atleast 3 characters",
+                      },
+                      {
+                        max: 100,
+                        message:
+                          " Name cannot be longer than 100 characters",
+                      },
+                    ]}
+                   
+                    onChange={(e) => setFrighttypeprefix(e.target.value)}
+                  >
+                    <InputType 
+                    value={PrefixInput}
+                    onChange={(e) => {
+                      setprefixInput(e.target.value);
+                      setuniqueCode(false);
+                    }}
+                    // onBlur={(e) => {
+                    //   checkemployeeCodeis();
+                    // }}
+                    onBlur={ async () => {
+                      
+                      let a = await CheckUnique({type:"freighttypeprefix",value:frighttypeprefix})
                       console.log("hai how are u", a)
                       setuniqueCode(a);
                       
@@ -515,50 +573,11 @@ export default function Frightlist(props) {
                     
                     />
                   </Form.Item>
-                  {uniqueCode ? (
-                            <p style={{ color: "red",marginTop:"15px"  }}>
-                            Freight Type Name {uniqueErrMsg.UniqueErrName}
+                 {uniqueCode ? (
+                            <p style={{ color: "red" }}>
+                            Fright Type Prefix {uniqueErrMsg.UniqueErrName}
                             </p>
-                          ) : null}
-                </div>
-                </div>
-                <div className="col-12 pt-1">
-                  <label>Freight Type Prefix</label>
-                  <div>
-                  <Form.Item
-                    name="freightprefix"
-                   
-                    onChange={(e) => setFrighttypeprefix(e.target.value)}
-                  >
-                    <InputType 
-                    value={PrefixInput}
-                    onChange={(e) => {
-                      setprefixInput(e.target.value);
-                      // setuniqueCode(false);
-                    }}
-                    // onBlur={(e) => {
-                    //   checkemployeeCodeis();
-                    // }}
-                    // onBlur={ async () => {
-                      
-                    //   let a = await CheckUnique({type:"freighttypename",value:frightType})
-                    //   console.log("hai how are u", a)
-                    //   setuniqueCode(a);
-                      
-                    // }}
-                    // onChange={(e) => {
-                      // setFrighttypename(e.target.value)
-
-                      // setFrightError("");
-                    // }}
-                    
-                    />
-                  </Form.Item>
-                  {/* {uniqueCode ? (
-                            <p style={{ color: "red",marginTop:"-24px" }}>
-                            Fright Type Name {uniqueErrMsg.UniqueErrName}
-                            </p>
-                          ) : null} */}
+                          ) : null} 
                 </div>
                 </div>
 
@@ -721,8 +740,8 @@ export default function Frightlist(props) {
                       ""
                     )} */}
                      {uniqueeditCode ? (
-                        <p style={{ color: "red", marginTop:"-24px" }} className="mb-2">
-                          Freight type Name {uniqueErrMsg.UniqueErrName}
+                        <p style={{ color: "red"}} className="mb-2">
+                          Freight type name {uniqueErrMsg.UniqueErrName}
                         </p>
                       ) : null}
                   </div>
@@ -737,12 +756,25 @@ export default function Frightlist(props) {
                         value={PrefixInput}
                         onChange={(e) => {
                           setprefixInput(e.target.value);
-                         
+                          setUniqueEditName(false);
                         }}
-                       
+                        onBlur={async () => {
+                          if (editUniqueName !== PrefixInput) {
+                            let n = await CheckUnique({
+                              type: "freighttypeprefix",
+                              value: PrefixInput,
+                            });
+                            setUniqueEditName(n);
+                          }
+                        }}
                       />
                     </Form.Item>
-                  
+
+                   {uniqueEditName ? (
+                    <p style={{ color: "red"}}>
+                    Freight type name {uniqueErrMsg.UniqueErrName}
+                    </p>
+                  ) : null}
                   </div>
 
 

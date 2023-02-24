@@ -90,6 +90,7 @@ import Quotationinvoice from "./pages/FMS/Quotations/create quotation/quotation_
 import Jobinvoice from "./pages/FMS/Job/Job_invoice/job_invoice";
 import Vendortype from "./pages/CRM/Purchase/vendertype/vendortype";
 import Vendor from "./pages/CRM/Purchase/vendor/vendor";
+import ProtectedRoute from "./components/ProtectedRoute";
 // import Vendortype from "./pages/CRM/Purchase/vendertype/vendortype";
 // import Lead from "./pages/lead/lead";
 
@@ -101,6 +102,7 @@ function App() {
           <Route path={ROUTES.LOGIN} element={<Login />} />
           <Route path={ROUTES.SIDEBAR} element={<Sidebar />} />
           <Route path={ROUTES.Layout} element={<Layout />}>
+            {/* <Route path={ROUTES.DASHBOARD} element={<ProtectedRoute />}> */}
             <Route path={ROUTES.DASHBOARD} element={<Dashboard />} />
             <Route path={ROUTES.COUNTRYSELECT} element={<SelectCountry />} />
             <Route path={ROUTES.LEAD} element={<Lead />} />
@@ -232,6 +234,7 @@ function App() {
               path={ROUTES.TASKANDEXPENSES_ID}
               element={<Taskexpenses />}
             />
+            {/* </Route> */}
           </Route>
           <Route
             path={ROUTES.QUATATION_INVOICE_ID}

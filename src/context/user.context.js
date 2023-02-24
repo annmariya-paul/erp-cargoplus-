@@ -16,6 +16,7 @@ function UserProvider({ children }) {
   };
 
   const isAuthenticated = () => {
+    console.log("inside authentication function");
     let t = localStorage.getItem("userToken");
     if (!t) {
       console.log("********** Unauthorized");

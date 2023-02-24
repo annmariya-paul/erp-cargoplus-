@@ -91,6 +91,7 @@ import Jobinvoice from "./pages/FMS/Job/Job_invoice/job_invoice";
 import Vendortype from "./pages/CRM/Purchase/vendertype/vendortype";
 import Vendor from "./pages/CRM/Purchase/vendor/vendor";
 import ProtectedRoute from "./components/ProtectedRoute";
+import InvoicePrint from "./components/Invoice/InvoicePrint";
 // import Vendortype from "./pages/CRM/Purchase/vendertype/vendortype";
 // import Lead from "./pages/lead/lead";
 
@@ -107,32 +108,73 @@ function App() {
               <Route index element={<Dashboard />} />
             </Route>
 
-            <Route path={ROUTES.COUNTRYSELECT} element={<SelectCountry />} />
-            <Route path={ROUTES.LEAD} element={<Lead />} />
-            <Route path={ROUTES.LEADLIST} element={<LeadList />} />
-            <Route path={ROUTES.LEAD} element={<Lead />} />
+            <Route path={ROUTES.COUNTRYSELECT} element={<ProtectedRoute />}>
+              <Route index element={<SelectCountry />} />
+            </Route>
+            <Route path={ROUTES.LEAD} element={<ProtectedRoute />}>
+              <Route index element={<Lead />} />
+            </Route>
 
-            <Route path={ROUTES.CATEGORY} element={<Category />} />
-            <Route path={ROUTES.TEST_PAGE} element={<TestPage />} />
-            <Route path={ROUTES.OPPORTUNITY} element={<Opportunitylist />} />
+            <Route path={ROUTES.LEADLIST} element={<ProtectedRoute />}>
+              <Route index element={<LeadList />} />
+            </Route>
+
+            <Route path={ROUTES.LEAD} element={<ProtectedRoute />}>
+              <Route index element={<Lead />} />
+            </Route>
+
+            <Route path={ROUTES.CATEGORY} element={<ProtectedRoute />}>
+              <Route index element={<Category />} />
+            </Route>
+
+            <Route path={ROUTES.TEST_PAGE} element={<ProtectedRoute />}>
+              <Route index element={<TestPage />} />
+            </Route>
+            <Route path={ROUTES.OPPORTUNITY} element={<ProtectedRoute />}>
+              <Route index element={<Opportunitylist />} />
+            </Route>
+
             <Route
               path={ROUTES.OPPORTUNITY_LEAD_ID}
-              element={<OpportunityLeadlist />}
-            />
-            <Route path={ROUTES.CATEGORY_LIST} element={<Categorylist />} />
-            <Route path={ROUTES.LEAD_REPORT} element={<LeadReport />} />
-            <Route path={ROUTES.LEAD_EDIT_ID} element={<LeadEdit />} />
+              element={<ProtectedRoute />}
+            >
+              <Route index element={<OpportunityLeadlist />} />
+            </Route>
 
-            <Route path={ROUTES.BRANDS} element={<BrandsList />} />
-            <Route path={ROUTES.ATTRIBUTES} element={<Attribute />} />
-            <Route path={ROUTES.ADD_ATTRIBUTES} element={<Add_Attribute />} />
+            <Route path={ROUTES.CATEGORY_LIST} element={<ProtectedRoute />}>
+              <Route index element={<Categorylist />} />
+            </Route>
+
+            <Route path={ROUTES.LEAD_REPORT} element={<ProtectedRoute />}>
+              <Route index element={<LeadReport />} />
+            </Route>
+
+            <Route path={ROUTES.LEAD_EDIT_ID} element={<ProtectedRoute />}>
+              <Route index element={<LeadEdit />} />
+            </Route>
+
+            <Route path={ROUTES.BRANDS} element={<ProtectedRoute />}>
+              <Route index element={<BrandsList />} />
+            </Route>
+            <Route path={ROUTES.ATTRIBUTES} element={<ProtectedRoute />}>
+              <Route index element={<Attribute />} />
+            </Route>
+
+            <Route path={ROUTES.ADD_ATTRIBUTES} element={<ProtectedRoute />}>
+              <Route index element={<Add_Attribute />} />
+            </Route>
 
             <Route
               path={ROUTES.OPPORTUNITY_REPORT}
-              element={<OpportunityReport />}
-            />
-            <Route path={ROUTES.VENDOR} element={<Vendortype />} />
-            <Route path={ROUTES.VENDOR_TYPE} element={<Vendortype />} />
+              element={<ProtectedRoute />}
+            >
+              <Route index element={<OpportunityReport />} />
+            </Route>
+
+            <Route path={ROUTES.VENDOR_TYPE} element={<ProtectedRoute />}>
+              <Route index element={<Vendortype />} />
+            </Route>
+
             <Route path={ROUTES.VENDOR} element={<Vendor />} />
 
             {/* <Route path={ROUTES.UNIT_LIST} element={<Unitlist />} /> */}
@@ -244,6 +286,7 @@ function App() {
             element={<Quotationinvoice />}
           />
           <Route path={ROUTES.JOB_INVOICE_ID} element={<Jobinvoice />} />
+          <Route path={ROUTES.INVOICE_PRINT} element={<InvoicePrint />} />
         </Routes>
       </BrowserRouter>
     </div>

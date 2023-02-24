@@ -16,7 +16,7 @@ function Permission() {
   // const rolePermission = PERMISSIONS[0];
   const [rolePermissions, setRolePermissions] = useState([]);
   const [selectedRole, setSelectedRole] = useState(null);
-  const [searchedText, setSearchedText] = useState("");
+
 
   const getRoles = () => {
     PublicFetch.get(`${process.env.REACT_APP_BASE_URL}/permissions/roles`)
@@ -95,7 +95,7 @@ function Permission() {
         `${process.env.REACT_APP_BASE_URL}/permissions/${id}`
       );
       if (res?.data?.success) {
-        console.log("all permissions",res.data.data);
+        console.log("all permissions", res.data.data);
         setRolePermissions(res?.data?.data);
       }
     } catch (err) {
@@ -316,49 +316,35 @@ function Permission() {
   const columns = [
     {
       title: "SCREENS",
-      dataIndex: "action",
+      dataIndex: "name",
       key: "key",
-      width: "40%",
+      // width: "40%",
 
       render: (data, index) => {
-        console.log("dattaaa",index)
         return (
-          <div className="d-flex justify-content-center align-items-center gap-2">
-            
-           
-                {module1Click ? (
-                    <>
-                      {AllObjects &&
-                        AllObjects.length > 0 &&
-                        AllObjects.map((object, objectIndex) => {
-                          return (
-                            <>
-                              <div className="col-12 my-3" key={object.id}>
-                                <div className="row">
-                                  <div className="col-3"></div>
-                                  <div className="col-3 ">
-                                    <div className=" d-flex justify-content-start gap-2">
-                                      {/* <Form.Item name="object_id"> */}
-                                      <Checkbox
-                                        name={object.name}
-                                        value={object.id}
-                                        onChange={(e) =>
-                                          handleSubModuleChange(
-                                            e.target.checked,
-                                            object.id
-                                          )
-                                        }
-                                        checked={checkSubmodule(object.id)}
-                                      >
-                                        {object.name}
-                                      </Checkbox>
-                                      {/* </Form.Item> */}
-                                    </div>
-                                  </div>
+          <div className="d-flex justify-content-start  gap-2">
+            {module1Click ? (
+              <>
+                <div className="col-12 my-1" key={index.id}>
+                      <div className=" d-flex justify-content-start gap-2">
+                        {/* <Form.Item name="object_id"> */}
+                        <Checkbox
+                          name={index.name}
+                          value={index.id}
+                          onChange={(e) =>
+                            handleSubModuleChange(e.target.checked, index.id)
+                          }
+                          checked={checkSubmodule(index.id)}
+                        >
+                          {index.name}
+                        </Checkbox>
+                        {/* </Form.Item> */}
+                      </div>
+                    </div>
 
-                                  <div className="col-6 ps-4">
-                                    <div className="row">
-                                      {/* {AllObjects &&
+                    <div className="col-6 ps-4">
+                      <div className="row">
+                        {/* {AllObjects &&
                                         AllObjects.length > 0 &&
                                         arrayofcheckbox.map(
                                           (permission, permissionIndex) => {
@@ -387,21 +373,16 @@ function Permission() {
                                             );
                                           }
                                         )} */}
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </>
-                          );
-                        })}
-                    </>
-                  ) : (
-                    ""
-                  )}
+                      </div>
+                    </div>
+              </>
+            ) : (
+              ""
+            )}
           </div>
         );
       },
-      align: "center",
+      align: "left",
     },
     {
       title: " CREATE",
@@ -409,27 +390,22 @@ function Permission() {
       key: "designation_name",
       align: "center",
       render: (data, index) => {
-        console.log("indxx", index)
+        console.log("indxx", index);
         return (
           <div className="d-flex justify-content-center align-items-center gap-2">
             <div className="m-0">
-              <div
-                className="editIcon m-0"
-              >
+              <div className="editIcon m-0">
                 <Checkbox
                   key={`create-${index.id}`}
                   value={`create-${index.id}`}
                   onChange={(e) =>
                     handleSinglePermissionChange(
                       e.target.checked,
-                     "create",
+                      "create",
                       index.id
                     )
                   }
-                  checked={checkPermission(
-                    "create",
-                    index.id
-                  )}
+                  checked={checkPermission("create", index.id)}
                 />
               </div>
             </div>
@@ -443,7 +419,6 @@ function Permission() {
       //     .toLowerCase()
       //     .includes(value.toLowerCase());
       // },
-  
     },
     {
       title: "READ",
@@ -454,23 +429,18 @@ function Permission() {
         return (
           <div className="d-flex justify-content-center align-items-center gap-2">
             <div className="m-0">
-              <div
-                className="editIcon m-0"
-              >
+              <div className="editIcon m-0">
                 <Checkbox
                   key={`read-${index.id}`}
                   value={`read-${index.id}`}
                   onChange={(e) =>
                     handleSinglePermissionChange(
                       e.target.checked,
-                     "read",
+                      "read",
                       index.id
                     )
                   }
-                  checked={checkPermission(
-                    "read",
-                    index.id
-                  )}
+                  checked={checkPermission("read", index.id)}
                 />
               </div>
             </div>
@@ -487,23 +457,18 @@ function Permission() {
         return (
           <div className="d-flex justify-content-center align-items-center gap-2">
             <div className="m-0">
-              <div
-                className="editIcon m-0"
-              >
+              <div className="editIcon m-0">
                 <Checkbox
-                   key={`update-${index.id}`}
-                   value={`update-${index.id}`}
-                   onChange={(e) =>
-                     handleSinglePermissionChange(
-                       e.target.checked,
+                  key={`update-${index.id}`}
+                  value={`update-${index.id}`}
+                  onChange={(e) =>
+                    handleSinglePermissionChange(
+                      e.target.checked,
                       "update",
-                       index.id
-                     )
-                   }
-                   checked={checkPermission(
-                     "update",
-                     index.id
-                   )}
+                      index.id
+                    )
+                  }
+                  checked={checkPermission("update", index.id)}
                 />
               </div>
             </div>
@@ -520,23 +485,18 @@ function Permission() {
         return (
           <div className="d-flex justify-content-center align-items-center gap-2">
             <div className="m-0">
-              <div
-                className="editIcon m-0"
-              >
+              <div className="editIcon m-0">
                 <Checkbox
-                   key={`delete-${index.id}`}
-                   value={`delete-${index.id}`}
-                   onChange={(e) =>
-                     handleSinglePermissionChange(
-                       e.target.checked,
+                  key={`delete-${index.id}`}
+                  value={`delete-${index.id}`}
+                  onChange={(e) =>
+                    handleSinglePermissionChange(
+                      e.target.checked,
                       "delete",
-                       index.id
-                     )
-                   }
-                   checked={checkPermission(
-                     "delete",
-                     index.id
-                   )}
+                      index.id
+                    )
+                  }
+                  checked={checkPermission("delete", index.id)}
                 />
               </div>
             </div>
@@ -545,8 +505,6 @@ function Permission() {
       },
     },
   ];
-
-  
 
   return (
     <div>
@@ -689,14 +647,14 @@ function Permission() {
                 
               </div> */}
 
- {/* Alan adding dummy data uncomment the below for api integration */}
-<TableData
- data={AllObjects}
- columns={columns}
- custom_table_css="table_lead_list"
-/>
+              {/* Alan adding dummy data uncomment the below for api integration */}
+              <TableData
+                data={AllObjects}
+                columns={columns}
+                custom_table_css="table_lead_list"
+              />
 
-      {/* <table class="table">
+              {/* <table class="table">
       <thead>
     <tr>
       <th scope="col">Create</th>
@@ -714,7 +672,6 @@ function Permission() {
     </tr>
   </tbody>
 </table> */}
-
 
               <div className="col-12 d-flex justify-content-center">
                 <Button

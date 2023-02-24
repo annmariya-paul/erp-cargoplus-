@@ -45,8 +45,8 @@ export default function PaymentTerms(props) {
   const [PaymentEditPopup, setPaymentEditPopup] = useState(false);
   const [allPaymentTerms, setAllPaymentTerms] = useState();
   
-  const [pshortname,setPshortsname] = useState();
-  console.log("shortname: ",pshortname);
+  // const [pshortname,setPshortsname] = useState();
+  // console.log("shortname: ",pshortname);
   const [editForm] = Form.useForm();
   const close_modal = (mShow, time) => {
     if (!mShow) {
@@ -73,7 +73,11 @@ export default function PaymentTerms(props) {
         console.log("index is :", index);
         return (
           <div className="d-flex justify-content-center align-items-center gap-2">
-            <div className="editIcon m-0" onClick={() => paymentEdit(index)}>
+            <div className="editIcon m-0" onClick={() =>{
+               setuniqueeditCode(false);
+               setUniqueEditName(false);
+               paymentEdit(index)
+            }}>
               <FaEdit />
             </div>
             <div
@@ -187,13 +191,14 @@ export default function PaymentTerms(props) {
   const [payname,setpayname]=useState();
   const [paysname,setpaysname]=useState();
   const [frighttypeprefix,setFrighttypeprefix]=useState();
+  console.log("onchange :",frighttypeprefix);
   const [paydescription,setpaydescription]=useState();
   const [uniqueEditName, setUniqueEditName] = useState(false);
   const CreatePaymentTerms =async()=>{
     try{
     const addpayments = await  PublicFetch.post(`${CRM_BASE_URL_FMS}/paymentTerms`,{
       payment_term_name:payname,
-      payment_term_shortname:frighttypeprefix,
+      payment_term_shortname:prefixInput,
       payment_term_description:paydescription
 
      })
@@ -211,15 +216,18 @@ export default function PaymentTerms(props) {
     }
   
     }
-    const [PrefixInput, setprefixInput] = useState();
+    const [prefixInput, setprefixInput] = useState();
     const [newname, setNewName] = useState();
     // const [seditnewname, setEditUniqueName] = useState();
     const [editUniqueName, setEditUniqueName] = useState();
+
+
   const paymentEdit = (e) => {
     console.log("payment edit", e);
     setNameInput(e.payment_term_name);
 
     setNewName(e.payment_term_name);
+
     setprefixInput(e.payment_term_shortname);
     setEditUniqueName(e.payment_term_shortname);
 
@@ -229,8 +237,8 @@ export default function PaymentTerms(props) {
     addForm.setFieldsValue({
       payment_id: e.payment_term_id,
       NameInput: e.payment_term_name,
-      ShortNameInput: e.payment_term_shortname,
-      description: e.payment_term_description,
+     prefixInput: e.payment_term_shortname,
+     descriptionInput: e.payment_term_description,
     });
     setPaymentEditPopup(true);
   };
@@ -247,14 +255,13 @@ export default function PaymentTerms(props) {
     setShowViewModal(true);
   };
   console.log("jhwdwjh", payment_id);
- const[editpaymentname,setEditPaymentname]=useState();
- const[editShortname,seteditShortname]=useState();
- const[editDescription,setEditDescription]=useState();
+
+
   const updatePaymentTerms = (e) => {
     PublicFetch.patch(`${CRM_BASE_URL_FMS}/paymentTerms/${payment_id}`, {
-      payment_term_name: editpaymentname,
-      payment_term_shortname: editShortname,
-      payment_term_description: editDescription,
+      payment_term_name:NameInput.trim(""),
+      payment_term_shortname: prefixInput,
+      payment_term_description: descriptionInput,
     })
       .then((res) => {
         console.log("response", res);
@@ -399,7 +406,7 @@ export default function PaymentTerms(props) {
               form={addForm}
               onFinish={(data) => {
                 console.log("valuezzzzzzz", data);
-                CreatePaymentTerms(data);
+                CreatePaymentTerms();
               }}
               onFinishFailed={(error) => {
                 console.log(error);
@@ -443,25 +450,26 @@ export default function PaymentTerms(props) {
 
                   </div>
                 </div>
-                <div className="col-12 pt-1">
+                {/* <div className="col-12 pt-1">
                   <label>Short Name</label>
                   <div>
                     <Form.Item
-                      name="paymentsname"
-                      // rules={[
-                      //   {
-                      //     required: true,
-                      //     // pattern: new RegExp("^[A-Za-z ]+$"),
-                      //     message: "Please enter a Valid Short Name",
-                      //   },
-                      // ]}
+                      name="prefixInput"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please enter a Valid Freight type Name",
+                        },
+                        
+                       
+                      ]}
                       onChange={(e) => setFrighttypeprefix(e.target.value)}
                     >
                       <InputType 
-                      //  value={shortname}
+                       value={prefixInput}
                        onChange={(e) => {
                         // setShortname(e.target.value);
-                        setPshortsname(e.target.value);
+                        setprefixInput(e.target.value);
                         setUniqueCode(false);
                       }}
                       onBlur={async () => {
@@ -480,7 +488,45 @@ export default function PaymentTerms(props) {
                   ) : null}
                     </Form.Item>
                   </div>
-                </div>
+                </div> */}
+                 <div className="col-12 pt-1">
+                    <label>Short Name</label>
+                    <Form.Item
+                      name="prefixInput"
+                      rules={[
+                        {
+                          required: true,
+                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                          message: "Please enter a Valid  Short Name",
+                        },
+                      ]}
+                    >
+                      <InputType className="input_type_style w-100"
+                        value={prefixInput}
+                        onChange={(e) => {
+                          setprefixInput(e.target.value);
+                          // setUniqueEditName(false);
+                          setUniqueCode(false);
+                        }}
+                        onBlur={async () => {
+                         
+                            let n = await CheckUnique({
+                              type: "paymenttermshortname",
+                              value: prefixInput,
+                            });
+                            setUniqueCode(n);
+                          }
+                        }
+                      
+                      
+                      />
+                    </Form.Item>
+                    {uniqueCode ? (
+                    <p style={{ color: "red"}}>
+                   Payment shortname {uniqueErrMsg.UniqueErrName}
+                    </p>
+                  ) : null}
+                  </div>
                 <div className="col-12 pt-1">
                   <label>Description</label>
                   <div>
@@ -627,16 +673,19 @@ export default function PaymentTerms(props) {
                          }
                          
                        }}
-                      
-                      
-                      
-                      />
+                       />
                     </Form.Item>
+                    {uniqueeditCode ? (
+                        <p style={{ color: "red"}} className="mb-2">
+                          Payment term name {uniqueErrMsg.UniqueErrName}
+                        </p>
+                      ) : null}
+
                   </div>
                   <div className="col-12 pt-1">
                     <label>Short Name</label>
                     <Form.Item
-                      name="PrefixInput"
+                      name="prefixInput"
                       rules={[
                         {
                           required: true,
@@ -646,16 +695,17 @@ export default function PaymentTerms(props) {
                       ]}
                     >
                       <InputType className="input_type_style w-100"
-                        value={PrefixInput}
+                        value={prefixInput}
                         onChange={(e) => {
-                          seteditShortname(e.target.value);
+                          setprefixInput(e.target.value);
                           setUniqueEditName(false);
+                             setuniqueeditCode(false);
                         }}
                         onBlur={async () => {
-                          if (editUniqueName !== PrefixInput) {
+                          if (editUniqueName !== prefixInput) {
                             let n = await CheckUnique({
                               type: "paymenttermshortname",
-                              value: PrefixInput,
+                              value: prefixInput,
                             });
                             setUniqueEditName(n);
                           }
@@ -666,18 +716,18 @@ export default function PaymentTerms(props) {
                     </Form.Item>
                     {uniqueEditName ? (
                     <p style={{ color: "red"}}>
-                    Freight type name {uniqueErrMsg.UniqueErrName}
+                   Payment shortname {uniqueErrMsg.UniqueErrName}
                     </p>
                   ) : null}
                   </div>
                   <div className="col-12 pt-1">
                     <label>Description</label>
                     <div>
-                      <Form.Item name="description">
+                      <Form.Item name="descriptionInput">
                         <TextArea 
                                  value={descriptionInput}
                       
-                                 onChange={(e) => setpaydescription(e.target.value)}
+                                 onChange={(e) => setDescriptionInput(e.target.value)}
                                  />
                       </Form.Item>
                     </div>

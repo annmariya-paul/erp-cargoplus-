@@ -237,8 +237,7 @@ export default function ViewJob() {
 
   return (
     <>
-      <div className="print-page container-fluid view_quotation  p-3 px-4">
-        <div className="print-header">Header</div>
+      <div className=" container-fluid view_quotation  p-3 px-4">
         <div className="row">
           <div className="col-4">
             <h5 className="lead_text">View Job</h5>
@@ -286,6 +285,7 @@ export default function ViewJob() {
                 {/* <FiEdit /> */}
               </Button>
             </div>
+            <div className="col-2"></div>
           </div>
         </div>
         <div className=" row mt-3">
@@ -492,7 +492,6 @@ export default function ViewJob() {
             </div>
           ) : null}
         </div>
-        <div className="print-footer">Footer</div>
       </div>
     </>
   );

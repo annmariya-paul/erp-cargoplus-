@@ -528,9 +528,21 @@ export default function Sidebar({ showSidebar }) {
                             className={({ isActive }) =>
                               isActive ? "active-link" : "link"
                             }
-                            to={ROUTES.VENDOR}
+                            to={ROUTES.VENDOR_TYPE}
                           >
                             <div className=" ms-4">Vendor Type</div>
+                          </NavLink>
+                        </li>
+                      )}
+                      {checkPermission("vendor") && (
+                        <li className="nav-text">
+                          <NavLink
+                            className={({ isActive }) =>
+                              isActive ? "active-link" : "link"
+                            }
+                            to={ROUTES.VENDOR}
+                          >
+                            <div className=" ms-4">Vendor</div>
                           </NavLink>
                         </li>
                       )}

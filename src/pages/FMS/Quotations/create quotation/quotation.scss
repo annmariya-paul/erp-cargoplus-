@@ -37,7 +37,7 @@ tr {
   overflow-y: scroll !important;
 }
 .ant-form-item {
-  margin-bottom:0!important;
+  margin-bottom: 0 !important;
 }
 // .tborder {
 //   border: 1px solid rgb(212, 208, 208);
@@ -128,8 +128,8 @@ th {
     display: none;
   }
 }
-@media print{
-  .quotation_heading{
+@media print {
+  .quotation_heading {
     display: none;
   }
 }
@@ -166,8 +166,8 @@ th {
   display: none;
   /* other styles */
 }
-@media print{
-  .print-header{
+@media print {
+  .print-header {
     display: block;
   }
 }
@@ -197,11 +197,10 @@ th {
   margin: 1px;
 }
 .view_quotation {
-  width: 1100px !important;
+  // width: 1100px !important;
   border-radius: 4px;
   box-shadow: 2px 2px 12px variables.$boxshadow;
 }
-
 
 // @page {
 //   size: A4;
@@ -218,16 +217,15 @@ th {
     // box-shadow: none;
     border: solid 1px black;
   }
-  .imgquotation{
+  .imgquotation {
     margin-top: 25px;
     margin-left: 35px;
   }
-
 }
 
-// page[size="A4"] {  
+// page[size="A4"] {
 //   width: 21cm;
-//   height: 29.7cm; 
+//   height: 29.7cm;
 //   padding: 5rem;
 // }
 
@@ -235,48 +233,45 @@ th {
   color: black;
 }
 
-.quotation_border{
+.quotation_border {
   // width: 21cm;
-  // height: 29.7cm; 
+  // height: 29.7cm;
   border: solid 1px black;
-  
 }
-.quotation_p_name{
- font-weight: bold;
- color: black;
+.quotation_p_name {
+  font-weight: bold;
+  color: black;
 }
 // .quotation_heading{
 //   color: brown;
 //   font-weight: 700;
 // }
-.headcolorquot{
+.headcolorquot {
   color: brown;
   font-weight: 700;
 }
-.quotation_border_bottom{
+.quotation_border_bottom {
   // border-left: none;
   // border-right: none;
   border-bottom: solid 1px black;
 }
-.tr_bgcolor{
+.tr_bgcolor {
   background-color: rgb(211, 218, 224);
   border-bottom: black;
 }
-.font_weight_qt{
-font-weight: 900 ;
-color: black;
+.font_weight_qt {
+  font-weight: 900;
+  color: black;
 }
-.task_width{
-width: 30%;
+.task_width {
+  width: 30%;
 }
-.border_right{
+.border_right {
   border-right: 1px solid;
 }
-.text_align_number{
+.text_align_number {
   text-align: right;
 }
-.text_align_words{
+.text_align_words {
   text-align: left;
 }
-
-

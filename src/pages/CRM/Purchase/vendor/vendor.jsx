@@ -158,8 +158,8 @@ function Vendor(){
       country_id:editcountry,
       city:editvendorcity,
       address:editvendoraddress,
-      vendor_desc:editvendordescription,
-      vendor_tax_no:editvendortaxno
+      description:editvendordescription,
+      tax_no:editvendortaxno
         }
       );
       console.log("successfully updated ", updated);
@@ -248,8 +248,8 @@ function Vendor(){
       country_id:countryis,
       city:vendorcity,
       address:vendoraddress,
-      vendor_desc:vendordescription,
-      vendor_tax_no:vendortaxno
+      description:vendordescription,
+      tax_no:vendortaxno
 
      })
     console.log("vendors added successfully",addvendor)
@@ -359,7 +359,7 @@ function Vendor(){
     }
 
   ];
-
+// console.log()
 
     const data = [
     {

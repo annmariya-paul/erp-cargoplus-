@@ -126,7 +126,6 @@ function App() {
               path={ROUTES.OPPORTUNITY_REPORT}
               element={<OpportunityReport />}
             />
-            <Route path={ROUTES.VENDOR} element={<Vendortype />} />
             <Route path={ROUTES.VENDOR_TYPE} element={<Vendortype />} />
             <Route path={ROUTES.VENDOR} element={<Vendor />} />
 

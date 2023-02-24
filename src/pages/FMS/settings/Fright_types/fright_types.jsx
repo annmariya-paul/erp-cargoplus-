@@ -757,6 +757,7 @@ export default function Frightlist(props) {
                         onChange={(e) => {
                           setprefixInput(e.target.value);
                           setUniqueEditName(false);
+                          setuniqueeditCode(false);
                         }}
                         onBlur={async () => {
                           if (editUniqueName !== PrefixInput) {

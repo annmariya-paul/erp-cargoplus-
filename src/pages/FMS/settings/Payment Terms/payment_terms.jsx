@@ -24,7 +24,8 @@ export default function PaymentTerms(props) {
   const [addForm] = Form.useForm();
   const [error, setError] = useState(false);
   const [successPopup, setSuccessPopup] = useState(false);
-
+  
+  const[paymenttermsname,setPaymenttermsname]=useState()
   const [searchedText, setSearchedText] = useState("");
   const [searchedsname, setSearchedsname] = useState("");
   const [modalAddPayment, setModalAddPayment] = useState(false);
@@ -43,6 +44,9 @@ export default function PaymentTerms(props) {
   const [showViewModal, setShowViewModal] = useState(false);
   const [PaymentEditPopup, setPaymentEditPopup] = useState(false);
   const [allPaymentTerms, setAllPaymentTerms] = useState();
+  
+  const [pshortname,setPshortsname] = useState();
+  console.log("shortname: ",pshortname);
   const [editForm] = Form.useForm();
   const close_modal = (mShow, time) => {
     if (!mShow) {
@@ -158,28 +162,70 @@ export default function PaymentTerms(props) {
       });
   };
 
-  const CreatePaymentTerms = (data) => {
-    PublicFetch.post(`${CRM_BASE_URL_FMS}/paymentTerms`, data)
-      .then((res) => {
-        console.log("Response", res);
-        if (res.data.success) {
-          console.log("success", res.data.data);
-          setSuccessPopup(true);
-          getallPaymentTerms()
-          close_modal(successPopup, 1200);
-          addForm.resetFields();
-          setModalAddPayment(false);
-        }
-      })
-      .catch((err) => {
-        console.log("Error", err);
-      });
-  };
+  // const CreatePaymentTerms = (data) => {
+  //   console.log("data",data);
+  //   PublicFetch.post(`${CRM_BASE_URL_FMS}/paymentTerms`, data)
+  //     .then((res) => {
+  //       console.log("Response", res);
+  //       if (res.data.success) {
+  //         console.log("success", res.data.data);
+  //         setSuccessPopup(true);
+  //         getallPaymentTerms()
+  //         close_modal(successPopup, 1200);
+  //         addForm.resetFields();
+  //         setModalAddPayment(false);
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log("Error", err);
+  //     });
+  // };
+ 
+  const [uniqueeditCode, setuniqueeditCode] = useState(false);
+  const[payunique,setpaynameunique]=useState();
+  const[paynameInput,setpaynameInput]=useState();
+  const [payname,setpayname]=useState();
+  const [paysname,setpaysname]=useState();
+  const [frighttypeprefix,setFrighttypeprefix]=useState();
+  const [paydescription,setpaydescription]=useState();
+  const [uniqueEditName, setUniqueEditName] = useState(false);
+  const CreatePaymentTerms =async()=>{
+    try{
+    const addpayments = await  PublicFetch.post(`${CRM_BASE_URL_FMS}/paymentTerms`,{
+      payment_term_name:payname,
+      payment_term_shortname:frighttypeprefix,
+      payment_term_description:paydescription
 
+     })
+    console.log("paymrnt added successfully",addpayments)
+    if(addpayments.data.success){
+      setSuccessPopup(true);
+      getallPaymentTerms();
+      addForm.resetFields();
+      setModalAddPayment(false);
+      close_modal(successPopup,1000 );
+    }
+    }
+    catch(err){ 
+    console.log("err to add the payment terms",err)
+    }
+  
+    }
+    const [PrefixInput, setprefixInput] = useState();
+    const [newname, setNewName] = useState();
+    // const [seditnewname, setEditUniqueName] = useState();
+    const [editUniqueName, setEditUniqueName] = useState();
   const paymentEdit = (e) => {
     console.log("payment edit", e);
-    setNameInput(e.payment_name);
+    setNameInput(e.payment_term_name);
+
+    setNewName(e.payment_term_name);
+    setprefixInput(e.payment_term_shortname);
+    setEditUniqueName(e.payment_term_shortname);
+
+    // setNewShortNameInput(e.payment_term_shortname);
     setPayment_id(e.payment_term_id);
+    setDescriptionInput(e.payment_term_description);
     addForm.setFieldsValue({
       payment_id: e.payment_term_id,
       NameInput: e.payment_term_name,
@@ -201,12 +247,14 @@ export default function PaymentTerms(props) {
     setShowViewModal(true);
   };
   console.log("jhwdwjh", payment_id);
-
-  const updatePaymentTerms = (data) => {
+ const[editpaymentname,setEditPaymentname]=useState();
+ const[editShortname,seteditShortname]=useState();
+ const[editDescription,setEditDescription]=useState();
+  const updatePaymentTerms = (e) => {
     PublicFetch.patch(`${CRM_BASE_URL_FMS}/paymentTerms/${payment_id}`, {
-      payment_term_name: data.NameInput,
-      payment_term_shortname: data.ShortNameInput,
-      payment_term_description: data.description,
+      payment_term_name: editpaymentname,
+      payment_term_shortname: editShortname,
+      payment_term_description: editDescription,
     })
       .then((res) => {
         console.log("response", res);
@@ -362,7 +410,7 @@ export default function PaymentTerms(props) {
                   <label> Name</label>
                   <div>
                     <Form.Item
-                      name="payment_term_name"
+                      name="paymentname"
                       rules={[
                         {
                           required: true,
@@ -370,34 +418,56 @@ export default function PaymentTerms(props) {
                           message: "Please enter a Valid  Name",
                         },
                       ]}
+                      onChange={(e) => setpayname(e.target.value)}
                     >
-                      <InputType />
+                      <InputType
+                       value={paynameInput}
+                      onChange={(e) => {
+                      setpaynameunique(e.target.value);
+                        setUniqueName(false);
+                      }}
+                      onBlur={ async () => {
+                      
+                        let a = await CheckUnique({type:"paymenttermname",value:payunique})
+                        console.log("hai how are u", a)
+                        setUniqueName(a);
+                        
+                      }}
+                      />
                     </Form.Item>
+                    {uniqueName ? (
+                            <p style={{ color: "red"  }}>
+                           Payment terms name {uniqueErrMsg.UniqueErrName}
+                            </p>
+                          ) : null}
+
                   </div>
                 </div>
                 <div className="col-12 pt-1">
                   <label>Short Name</label>
                   <div>
                     <Form.Item
-                      name="payment_term_shortname"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z ]+$"),
-                          message: "Please enter a Valid Short Name",
-                        },
-                      ]}
+                      name="paymentsname"
+                      // rules={[
+                      //   {
+                      //     required: true,
+                      //     // pattern: new RegExp("^[A-Za-z ]+$"),
+                      //     message: "Please enter a Valid Short Name",
+                      //   },
+                      // ]}
+                      onChange={(e) => setFrighttypeprefix(e.target.value)}
                     >
                       <InputType 
-                       value={shortname}
+                      //  value={shortname}
                        onChange={(e) => {
-                        setShortname(e.target.value);
+                        // setShortname(e.target.value);
+                        setPshortsname(e.target.value);
                         setUniqueCode(false);
                       }}
                       onBlur={async () => {
                         let a = await CheckUnique({
-                          type: "payment_term_shortname",
-                          value: shortname,
+                          type: "paymenttermshortname",
+                          value: frighttypeprefix,
                         });
                         setUniqueCode(a);
                       }}
@@ -415,7 +485,11 @@ export default function PaymentTerms(props) {
                   <label>Description</label>
                   <div>
                     <Form.Item name="payment_term_description">
-                      <TextArea />
+                      <TextArea
+                      value={paydescription}
+                      
+                      onChange={(e) => setpaydescription(e.target.value)}
+                      />
                     </Form.Item>
                   </div>
                 </div>
@@ -517,8 +591,8 @@ export default function PaymentTerms(props) {
                 <Form
                   form={addForm}
                   onFinish={(values) => {
-                    console.log("values iss", values);
-                    updatePaymentTerms(values);
+                    console.log("values iss edit pay", values);
+                    updatePaymentTerms();
                   }}
                   onFinishFailed={(error) => {
                     console.log(error);
@@ -536,13 +610,33 @@ export default function PaymentTerms(props) {
                         },
                       ]}
                     >
-                      <InputType className="input_type_style w-100" />
+                      <InputType className="input_type_style w-100"
+                       value={NameInput}
+                       onChange={(e) => {
+                         setNameInput(e.target.value);
+                         setErrormsg("");
+                         setuniqueeditCode(false);
+                       }}
+                       onBlur={ async () => {
+                           
+                         if (newname !== NameInput){
+                           let a = await CheckUnique({type:"paymenttermname",value:NameInput})
+                           console.log("hai how are u", a)
+                           setuniqueeditCode(a);
+                          
+                         }
+                         
+                       }}
+                      
+                      
+                      
+                      />
                     </Form.Item>
                   </div>
                   <div className="col-12 pt-1">
                     <label>Short Name</label>
                     <Form.Item
-                      name="ShortNameInput"
+                      name="PrefixInput"
                       rules={[
                         {
                           required: true,
@@ -551,14 +645,40 @@ export default function PaymentTerms(props) {
                         },
                       ]}
                     >
-                      <InputType className="input_type_style w-100" />
+                      <InputType className="input_type_style w-100"
+                        value={PrefixInput}
+                        onChange={(e) => {
+                          seteditShortname(e.target.value);
+                          setUniqueEditName(false);
+                        }}
+                        onBlur={async () => {
+                          if (editUniqueName !== PrefixInput) {
+                            let n = await CheckUnique({
+                              type: "paymenttermshortname",
+                              value: PrefixInput,
+                            });
+                            setUniqueEditName(n);
+                          }
+                        }}
+                      
+                      
+                      />
                     </Form.Item>
+                    {uniqueEditName ? (
+                    <p style={{ color: "red"}}>
+                    Freight type name {uniqueErrMsg.UniqueErrName}
+                    </p>
+                  ) : null}
                   </div>
                   <div className="col-12 pt-1">
                     <label>Description</label>
                     <div>
                       <Form.Item name="description">
-                        <TextArea />
+                        <TextArea 
+                                 value={descriptionInput}
+                      
+                                 onChange={(e) => setpaydescription(e.target.value)}
+                                 />
                       </Form.Item>
                     </div>
                   </div>

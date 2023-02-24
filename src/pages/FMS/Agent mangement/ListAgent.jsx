@@ -16,6 +16,7 @@ import { FiEdit } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
 import TextArea from "../../../components/ InputType TextArea/TextArea";
 import SelectBox from "../../../components/Select Box/SelectBox";
+import CheckUnique from "../../../check Unique/CheckUnique";
 import {
   CRM_BASE_URL_HRMS,
   GENERAL_SETTING_BASE_URL,
@@ -32,6 +33,7 @@ function ListAgent() {
   const [searchedText, setSearchedText] = useState("");
   const [pageSize, setPageSize] = useState("25");
   const [current, setCurrent] = useState(1);
+
   const [agentdata, setAgentdata] = useState("");
   console.log("agent data",agentdata);
   const [inpiutId, setinpiutId] = useState();
@@ -41,14 +43,16 @@ function ListAgent() {
   const [searchedCode,setSearchedCode]=useState("");
   const [modalAddBranch, setModalAddBranch] = useState(false);
   const [uniqueCode, setUniqueCode] = useState(false);
-  const [uniqueName, setUniqueName] = useState(false);
+  // const [uniqueName, setUniqueName] = useState(false);
   const [uniqueEditName, setUniqueEditName] = useState(false);
   const [uniqueEditCode, setUniqueEditCode] = useState(false);
-  const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
+  // const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
   const [addForm] = Form.useForm();
   const [successPopup, setSuccessPopup] = useState();
   const [FrightEditPopup, setFrightEditPopup] = useState(false);
   const [allempname, setAllempname] = useState();
+  const [uniqueName, setUniqueName] = useState(true);
+  const [uniqueErrMsg, setUniqueErrMsg] = useState({});
   console.log("all employee",allempname);
   const [empname, setEmpname] = useState();
   const [empcommision, setempcommision] = useState("");
@@ -64,6 +68,26 @@ function ListAgent() {
   const [fright_id, setFright_id] = useState();
   console.log("fright id in state",fright_id);
   const [editForm] = Form.useForm();
+
+  const handleEmpnameChange = async (value, option) => {
+    console.log("Selected Employee ID:", value);
+    setEmpname(value);
+
+    let isUnique = await CheckUnique({
+      type: "employeeid",
+      value: value,
+    });
+    console.log("isUnique:", isUnique);
+    if (!isUnique) {
+      setUniqueName(false);
+      setUniqueErrMsg({ UniqueErrName: "Employee ID is not unique" });
+    } else {
+      setUniqueName(true);
+      setUniqueErrMsg({});
+    }
+  }
+
+  
 
   const navigate = useNavigate();
   const close_modal = (mShow, time) => {
@@ -592,7 +616,7 @@ function ListAgent() {
                           <div className="col-6 pb-2">
                             <div className="">
                               <label>Employee Id</label>
-                              <Form.Item
+                              {/* <Form.Item
                                 name="employee_branch"
                                 rules={[
                                   {
@@ -606,6 +630,14 @@ function ListAgent() {
                                   onChange={(e) => {
                                     console.log("selected unit iss", e);
                                     setEmpname(e);
+                                    setUniqueName(false);
+                                  }}
+                                  onBlur={ async () => {
+                      
+                                    let a = await CheckUnique({type:"employeeid",value:allempname})
+                                    console.log("hai how are u", a)
+                                    setUniqueName(a);
+                                    
                                   }}
                                 >
                                   {allempname &&
@@ -624,6 +656,46 @@ function ListAgent() {
                                     })}
                                 </SelectBox>
                               </Form.Item>
+                              {uniqueName ? (
+                            <p style={{ color: "red"  }}>
+                            Freight Type Name {uniqueErrMsg.UniqueErrName}
+                            </p>
+                          ) : null} */}
+                           <Form.Item
+        name="employee_branch"
+        rules={[
+          {
+            required: true,
+            message: "Employee agent is Required",
+          },
+        ]}
+        // validateStatus={uniqueName ? "success" : "error"}
+        // help={uniqueErrMsg.UniqueErrName}
+      >
+        <SelectBox
+          value={allempname}
+          onChange={handleEmpnameChange}
+          onBlur={handleEmpnameChange}
+          >
+          {allempname && allempname.length > 0 && allempname.map((item,index) => {
+            console.log("all emptypenamess", item);
+            return(
+              <Select.Option key={item.emp_agent_id} value={item.emp_agent_id}>
+              {item.emp_agent_name}
+            </Select.Option>
+            )
+          }
+           
+          )}
+        </SelectBox>
+      </Form.Item>
+      {uniqueName ? (
+                            <p style={{ color: "red"  }}>
+                           Agent already exist {uniqueErrMsg.UniqueErrName}
+                            </p>
+                          ) : null} 
+
+
                               {/* <SelectBox>
                                 <Select.Option>Manger</Select.Option>
                               </SelectBox> */}

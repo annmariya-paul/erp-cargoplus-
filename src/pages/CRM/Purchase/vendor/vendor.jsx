@@ -144,6 +144,40 @@ function Vendor(){
     setVendorEditPopup(true);
   };
 
+  const handleviewtoedit=(e)=>{
+    console.log("editing id iss", e);
+    seteditvendorid(e.id)
+    seteditvendorname(e.vendor_name)
+    seteditvendoremail(e.vendor_email)
+    seteditvendorcity(e.vendor_city)
+    seteditvendoraddress(e.vendor_address)
+    seteditvendorcontact(e.vendor_contact)
+    seteditvendordescription(e.vendor_description)
+    seteditvendortaxno(e.vender_taxno)
+
+    seteditvendorOrganisation(e.vendor_Organisation)
+    seteditcountry(e.vendor_country_id)
+    seteditvendortyp(e.vendor_type_id)
+    
+    editForm.setFieldsValue({
+      vendor_name:e.vendor_name,
+      vendor_Organisation:e.vendor_Organisation,
+      vendor_email:e.vendor_email,
+      vendor_contact:e.vendor_contact,
+      vendor_city:e.vendor_city,
+      vendor_taxno:e.vender_taxno,
+      vendor_address:e.vendor_address,
+      vendor_description:e.vendor_description,
+
+      vendor_country:e.vendor_country_id,
+      vendor_type:e.vendor_type_id,
+      
+    
+    });
+    setVendorEditPopup(true);
+
+  }
+
 
   const handleupdate = async () => {
     try {
@@ -936,6 +970,7 @@ function Vendor(){
                       onClick={() => {
                         // handleviewtoedit(viewvendortype);
                         // setShowModalEdit(true);
+                        handleviewtoedit(viewvendor)
                         setShowViewModal(false);
                       }}
                     >

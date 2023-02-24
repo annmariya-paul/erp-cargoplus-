@@ -174,111 +174,251 @@ function App() {
             <Route path={ROUTES.VENDOR_TYPE} element={<ProtectedRoute />}>
               <Route index element={<Vendortype />} />
             </Route>
-
-            <Route path={ROUTES.VENDOR} element={<Vendor />} />
+            <Route path={ROUTES.VENDOR} element={<ProtectedRoute />}>
+              <Route index element={<Vendor />} />
+            </Route>
 
             {/* <Route path={ROUTES.UNIT_LIST} element={<Unitlist />} /> */}
             {/* <Route path={ROUTES.ADD_UNIT} element={<Addunit />} /> */}
 
-            <Route path={ROUTES.UNIT_LIST} element={<Unitlist />} />
-            <Route path={ROUTES.ADD_UNIT} element={<Addunit />} />
+            <Route path={ROUTES.UNIT_LIST} element={<ProtectedRoute />}>
+              <Route index element={<Unitlist />} />
+            </Route>
 
-            <Route path={ROUTES.BRANDCREATE} element={<BrandCreate />} />
-            <Route path={ROUTES.PRODUCT} element={<Productlist />} />
-            <Route path={ROUTES.PRODUCTCREATE} element={<ProductCreate />} />
+            <Route path={ROUTES.ADD_UNIT} element={<ProtectedRoute />}>
+              <Route index element={<Addunit />} />
+            </Route>
+
+            <Route path={ROUTES.BRANDCREATE} element={<ProtectedRoute />}>
+              <Route index element={<BrandCreate />} />
+            </Route>
+
+            <Route path={ROUTES.PRODUCT} element={<ProtectedRoute />}>
+              <Route index element={<Productlist />} />
+            </Route>
+
+            <Route path={ROUTES.PRODUCTCREATE} element={<ProtectedRoute />}>
+              <Route index element={<ProductCreate />} />
+            </Route>
+
+            <Route path={ROUTES.PRODUCTDETAIL_ID} element={<ProtectedRoute />}>
+              <Route index element={<ProductDetails />} />
+            </Route>
+
             <Route
-              path={ROUTES.PRODUCTDETAIL_ID}
-              element={<ProductDetails />}
-            />
-            <Route path={ROUTES.PRODUCTVARIENTS_ID} element={<Varients />} />
-            <Route path={ROUTES.SERVICES} element={<Services />} />
-            <Route path={ROUTES.SERVICECREATE} element={<ServiceCreate />} />
-            <Route path={ROUTES.BRANCHES} element={<Branches />} />
-            <Route path={ROUTES.DEPARTMENTS} element={<Departments />} />
-            <Route path={ROUTES.DESIGNATION} element={<Designation />} />
-            <Route path={ROUTES.EMPLOYMENT_TYPE} element={<EmploymentType />} />
-            <Route path={ROUTES.PERMISSIONS} element={<Permission />} />
-            <Route path={ROUTES.ROLES_SCREEN} element={<Roles_and_Screen />} />
-            <Route path={ROUTES.EMPLOYEES} element={<Employees />} />
-            <Route path={ROUTES.CREATEEMPLOYEE} element={<CreateEmployee />} />
-            <Route path={ROUTES.EMPLOYEEGRADE} element={<Employeegrade />} />
+              path={ROUTES.PRODUCTVARIENTS_ID}
+              element={<ProtectedRoute />}
+            >
+              <Route index element={<Varients />} />
+            </Route>
+
+            <Route path={ROUTES.SERVICES} element={<ProtectedRoute />}>
+              <Route index element={<Services />} />
+            </Route>
+
+            <Route path={ROUTES.SERVICECREATE} element={<ProtectedRoute />}>
+              <Route index element={<ServiceCreate />} />
+            </Route>
+
+            <Route path={ROUTES.BRANCHES} element={<ProtectedRoute />}>
+              <Route index element={<Branches />} />
+            </Route>
+
+            <Route path={ROUTES.DEPARTMENTS} element={<ProtectedRoute />}>
+              <Route index element={<Departments />} />
+            </Route>
+
+            <Route path={ROUTES.DESIGNATION} element={<ProtectedRoute />}>
+              <Route index element={<Designation />} />
+            </Route>
+
+            <Route path={ROUTES.EMPLOYMENT_TYPE} element={<ProtectedRoute />}>
+              <Route index element={<EmploymentType />} />
+            </Route>
+
+            <Route path={ROUTES.PERMISSIONS} element={<ProtectedRoute />}>
+              <Route index element={<Permission />} />
+            </Route>
+
+            <Route path={ROUTES.ROLES_SCREEN} element={<ProtectedRoute />}>
+              <Route index element={<Roles_and_Screen />} />
+            </Route>
+
+            <Route path={ROUTES.EMPLOYEES} element={<ProtectedRoute />}>
+              <Route index element={<Employees />} />
+            </Route>
+
+            <Route path={ROUTES.CREATEEMPLOYEE} element={<ProtectedRoute />}>
+              <Route index element={<CreateEmployee />} />
+            </Route>
+
+            <Route path={ROUTES.EMPLOYEEGRADE} element={<ProtectedRoute />}>
+              <Route index element={<Employeegrade />} />
+            </Route>
 
             {/* {FMS} */}
-            <Route
-              path={ROUTES.TRACK_ASSIGNMENTS}
-              element={<Track_assignments />}
-            />
-            <Route path={ROUTES.LISTAGENT} element={<ListAgent />} />
+            <Route path={ROUTES.TRACK_ASSIGNMENTS} element={<ProtectedRoute />}>
+              <Route index element={<Track_assignments />} />
+            </Route>
+
+            <Route path={ROUTES.LISTAGENT} element={<ProtectedRoute />}>
+              <Route index element={<ListAgent />} />
+            </Route>
 
             {/* <Route  path={ROUTES.UPDATEAGENT}
               element={<UpdateAgent />} />   */}
+            <Route path={ROUTES.UPDATEAGENT_ID} element={<ProtectedRoute />}>
+              <Route index element={<UpdateAgent />} />
+            </Route>
 
-            <Route path={ROUTES.UPDATEAGENT_ID} element={<UpdateAgent />} />
             <Route
               path={ROUTES.ASSIGN_OPPORTUNITIES_ID}
-              element={<Assign_opportunity />}
-            />
+              element={<ProtectedRoute />}
+            >
+              <Route index element={<Assign_opportunity />} />
+            </Route>
+
             <Route
               path={ROUTES.UPDATE_OPPORTUNITY_ASSIGNMENT}
-              element={<UpdateAssignOppurtunity />}
-            />
-            <Route path={ROUTES.CREATEAGENT} element={<CreateAgent />} />
+              element={<ProtectedRoute />}
+            >
+              <Route index element={<UpdateAssignOppurtunity />} />
+            </Route>
+
+            <Route path={ROUTES.CREATEAGENT} element={<ProtectedRoute />}>
+              <Route index element={<CreateAgent />} />
+            </Route>
+
             {/* <Route
               path={ROUTES.FRIGHTLIST}
               element={<Frightlist />}
             /> */}
-            <Route path={ROUTES.QUATATIONS} element={<Quotations />} />
-            <Route path={ROUTES.ADD_QUOTATION} element={<Add_Quotation />} />
-            <Route path={ROUTES.FRIGHTLIST} element={<Frightlist />} />
-            <Route path={ROUTES.CARRIER} element={<Carrierlist />} />
-            <Route path={ROUTES.MODE} element={<Modelist />} />
-            <Route path={ROUTES.QUATATIONS} element={<Quotations />} />
-            <Route
-              path={ROUTES.EDIT_QUOTATION_ID}
-              element={<EditQuotation />}
-            />
-            <Route
-              path={ROUTES.VIEW_QUOTATION_ID}
-              element={<ViewQuotation />}
-            />
-            <Route path={ROUTES.ENQUIRIES} element={<Enquiries />} />
-            <Route
-              path={ROUTES.AGENT_RESPONSE_ID}
-              element={<Agent_Response />}
-            />
+            <Route path={ROUTES.QUATATIONS} element={<ProtectedRoute />}>
+              <Route index element={<Quotations />} />
+            </Route>
+
+            <Route path={ROUTES.ADD_QUOTATION} element={<ProtectedRoute />}>
+              <Route index element={<Add_Quotation />} />
+            </Route>
+
+            <Route path={ROUTES.FRIGHTLIST} element={<ProtectedRoute />}>
+              <Route index element={<Frightlist />} />
+            </Route>
+
+            <Route path={ROUTES.CARRIER} element={<ProtectedRoute />}>
+              <Route index element={<Carrierlist />} />
+            </Route>
+
+            <Route path={ROUTES.MODE} element={<ProtectedRoute />}>
+              <Route index element={<Modelist />} />
+            </Route>
+
+            <Route path={ROUTES.QUATATIONS} element={<ProtectedRoute />}>
+              <Route index element={<Quotations />} />
+            </Route>
+
+            <Route path={ROUTES.EDIT_QUOTATION_ID} element={<ProtectedRoute />}>
+              <Route index element={<EditQuotation />} />
+            </Route>
+
+            <Route path={ROUTES.VIEW_QUOTATION_ID} element={<ProtectedRoute />}>
+              <Route index element={<ViewQuotation />} />
+            </Route>
+
+            <Route path={ROUTES.ENQUIRIES} element={<ProtectedRoute />}>
+              <Route index element={<Enquiries />} />
+            </Route>
+
+            <Route path={ROUTES.AGENT_RESPONSE_ID} element={<ProtectedRoute />}>
+              <Route index element={<Agent_Response />} />
+            </Route>
+
             <Route
               path={ROUTES.EDIT_ASSIGN_OPPORTUNITY_ID}
-              element={<Assign_oppertunity_edit />}
-            />
-            <Route path={ROUTES.CONSIGNEE} element={<Consignee />} />
-            <Route path={ROUTES.TERMS_OF_PAYMENT} element={<PaymentTerms />} />
-            <Route path={ROUTES.TAXTYPE} element={<TaxType />} />
-            <Route path={ROUTES.JOBTASKS} element={<JobTasks />} />
-            <Route path={ROUTES.AIRPORT} element={<Airport />} />
-            <Route path={ROUTES.SEAPORT} element={<Seaport />} />
-            <Route path={ROUTES.LOCATIONS} element={<Locations />} />
+              element={<ProtectedRoute />}
+            >
+              <Route index element={<Assign_oppertunity_edit />} />
+            </Route>
+
+            <Route path={ROUTES.CONSIGNEE} element={<ProtectedRoute />}>
+              <Route index element={<Consignee />} />
+            </Route>
+
+            <Route path={ROUTES.TERMS_OF_PAYMENT} element={<ProtectedRoute />}>
+              <Route index element={<PaymentTerms />} />
+            </Route>
+
+            <Route path={ROUTES.TAXTYPE} element={<ProtectedRoute />}>
+              <Route index element={<TaxType />} />
+            </Route>
+
+            <Route path={ROUTES.JOBTASKS} element={<ProtectedRoute />}>
+              <Route index element={<JobTasks />} />
+            </Route>
+
+            <Route path={ROUTES.AIRPORT} element={<ProtectedRoute />}>
+              <Route index element={<Airport />} />
+            </Route>
+
+            <Route path={ROUTES.SEAPORT} element={<ProtectedRoute />}>
+              <Route index element={<Seaport />} />
+            </Route>
+
+            <Route path={ROUTES.LOCATIONS} element={<ProtectedRoute />}>
+              <Route index element={<Locations />} />
+            </Route>
+
             <Route
               path={ROUTES.ASSIGN_QUOTATION_ID}
-              element={<QuotationAssign />}
-            />
+              element={<ProtectedRoute />}
+            >
+              <Route index element={<QuotationAssign />} />
+            </Route>
 
-            <Route path={ROUTES.LIST_JOB} element={<Listjob />} />
-            <Route path={ROUTES.CREATEJOB} element={<CreateJob />} />
-            <Route path={ROUTES.UPDATEJOB_ID} element={<Updatejob />} />
-            <Route path={ROUTES.VIEW_JOB_ID} element={<ViewJob />} />
-            <Route path={ROUTES.INVOICE_LIST} element={<InvoiceList />} />
+            <Route path={ROUTES.LIST_JOB} element={<ProtectedRoute />}>
+              <Route index element={<Listjob />} />
+            </Route>
+
+            <Route path={ROUTES.CREATEJOB} element={<ProtectedRoute />}>
+              <Route index element={<CreateJob />} />
+            </Route>
+
+            <Route path={ROUTES.UPDATEJOB_ID} element={<ProtectedRoute />}>
+              <Route index element={<Updatejob />} />
+            </Route>
+
+            <Route path={ROUTES.VIEW_JOB_ID} element={<ProtectedRoute />}>
+              <Route index element={<ViewJob />} />
+            </Route>
+
+            <Route path={ROUTES.INVOICE_LIST} element={<ProtectedRoute />}>
+              <Route index element={<InvoiceList />} />
+            </Route>
+
             <Route
               path={ROUTES.INVOICE_PREVIEW_ID}
-              element={<InvoicePreView />}
-            />
+              element={<ProtectedRoute />}
+            >
+              <Route index element={<InvoicePreView />} />
+            </Route>
+
             {/* General settings */}
 
-            <Route path={ROUTES.CURRENCY} element={<Currency />} />
-            <Route path={ROUTES.COMPANYINFO} element={<Companyinfo />} />
+            <Route path={ROUTES.CURRENCY} element={<ProtectedRoute />}>
+              <Route index element={<Currency />} />
+            </Route>
+
+            <Route path={ROUTES.COMPANYINFO} element={<ProtectedRoute />}>
+              <Route index element={<Companyinfo />} />
+            </Route>
+
             <Route
               path={ROUTES.TASKANDEXPENSES_ID}
-              element={<Taskexpenses />}
-            />
+              element={<ProtectedRoute />}
+            >
+              <Route index element={<Taskexpenses />} />
+            </Route>
+
             {/* </Route> */}
           </Route>
           <Route

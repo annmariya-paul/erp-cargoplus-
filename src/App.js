@@ -103,7 +103,10 @@ function App() {
           <Route path={ROUTES.SIDEBAR} element={<Sidebar />} />
           <Route path={ROUTES.Layout} element={<Layout />}>
             {/* <Route path={ROUTES.DASHBOARD} element={<ProtectedRoute />}> */}
-            <Route path={ROUTES.DASHBOARD} element={<Dashboard />} />
+            <Route path={ROUTES.DASHBOARD} element={<ProtectedRoute />}>
+              <Route index element={<Dashboard />} />
+            </Route>
+
             <Route path={ROUTES.COUNTRYSELECT} element={<SelectCountry />} />
             <Route path={ROUTES.LEAD} element={<Lead />} />
             <Route path={ROUTES.LEADLIST} element={<LeadList />} />

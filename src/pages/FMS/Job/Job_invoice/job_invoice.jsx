@@ -4,6 +4,7 @@ import PublicFetch from "../../../../utils/PublicFetch";
 import moment from "moment";
 import { useNavigate, useParams } from "react-router-dom";
 import "./jobinvoice.scss"
+import InvoicePrint from "../../../../components/Invoice/InvoicePrint";
 function Jobinvoice(){
     const { id } = useParams();
     console.log("id :::::", id);
@@ -178,28 +179,37 @@ function Jobinvoice(){
       
       };
 
-      const close_modal = ( time) => {
-        if (time) {
-          setTimeout(() => {
-          handlePrint()
+      // const close_modal = ( time) => {
+      //   if (time) {
+      //     setTimeout(() => {
+      //     handlePrint()
             
-          }, time);
-        }
-      };
+      //     }, time);
+      //   }
+      // };
     
 
-      useEffect(() => {
+      // useEffect(() => {
 
-        close_modal(1500) 
+      //   close_modal(1500) 
 
-      }, []);
+      // }, []);
 
 console.log("all jobs", alljobs)
 
     return(
         <>
 
-<div className=" print-page container">
+
+<InvoicePrint
+invoice_details1={ <div>
+  <th>Job No</th>
+  <tr>Job No</tr>
+</div> }
+/>
+
+
+{/* <div className=" print-page container">
 <div className="row ">
 
 <table className="quotation_border px-2">
@@ -416,16 +426,7 @@ console.log("all jobs", alljobs)
             </div>
           </div>
 
-          {/* <div className="col-6 d-flex">
-            <div className="col-4">Currency </div>
-            <div className="col-1">:</div>
-
-            <div className="col-7">
-              <p className="modal-view-data">
-                {alljobs?.job_currency1}
-              </p>
-            </div>
-          </div> */}
+          
           <div className="col-6 d-flex">
             <div className="col-4">Exchange Rate </div>
             <div className="col-1">:</div>
@@ -449,7 +450,7 @@ console.log("all jobs", alljobs)
 
 <div className="p-0 m-0">
 
-{/* <TableData columns={progress} data={tabledata} bordered /> */}
+
 {tax && (
 
 <table class="table   p-0 m-0">
@@ -494,11 +495,10 @@ console.log("all jobs", alljobs)
       
     </div>
     <div className="col-4  ">
-     {/* <p className="">Sub Total</p> */}
+    
     </div>
     <div className="col-4 ">
-    {/* <p className="text_align_number d-flex justify-content-end" > 
-    {allqoutation?.quotation_grand_total.toFixed(2)} </p> */}
+    
     </div>
   </div>
 </div>
@@ -523,7 +523,7 @@ console.log("all jobs", alljobs)
     </div>
     <div className="col-4 ">
     <p className="text_align_number d-flex justify-content-end" > 
-    {/* <p> {allqoutation?.generalsettings_v1_currency?.currency_code}</p>  */}
+   
     &nbsp; 
     {grandtotal} </p>
     </div>
@@ -535,7 +535,7 @@ console.log("all jobs", alljobs)
 </table>  
 </div>
 
-</div>
+</div> */}
         </>
     )
 }

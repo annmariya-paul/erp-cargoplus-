@@ -92,6 +92,7 @@ import Vendortype from "./pages/CRM/Purchase/vendertype/vendortype";
 import Vendor from "./pages/CRM/Purchase/vendor/vendor";
 import ProtectedRoute from "./components/ProtectedRoute";
 import InvoicePrint from "./components/Invoice/InvoicePrint";
+import PrintInvoice from "./pages/FMS/Invoice/PrintInvoice";
 // import Vendortype from "./pages/CRM/Purchase/vendertype/vendortype";
 // import Lead from "./pages/lead/lead";
 
@@ -425,6 +426,9 @@ function App() {
             path={ROUTES.QUATATION_INVOICE_ID}
             element={<Quotationinvoice />}
           />
+          <Route path={ROUTES.PRINT_INVOICE_ID} element={<ProtectedRoute />}>
+            <Route path={ROUTES.PRINT_INVOICE_ID} element={<PrintInvoice />} />
+          </Route>
           <Route path={ROUTES.JOB_INVOICE_ID} element={<Jobinvoice />} />
           <Route path={ROUTES.INVOICE_PRINT} element={<InvoicePrint />} />
         </Routes>

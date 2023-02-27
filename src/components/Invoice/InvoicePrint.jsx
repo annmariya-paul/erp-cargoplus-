@@ -13,6 +13,9 @@ function InvoicePrint({
   total,
   permanent_made,
   balance_due,
+  invoice_no,
+  Invoice_type,
+  invoice_number,
 }) {
   const [companyInfodata, setCompanyInfodata] = useState();
 
@@ -66,12 +69,14 @@ function InvoicePrint({
                           </div>
                         </div>
                       </div>
-                      <div className="header__invoice">
-                        <h1>Invoice</h1>
-                        <div>
-                          Invoice# <span>1234567890</span>
+                      {invoice_no && (
+                        <div className="header__invoice">
+                          <h1>{Invoice_type}</h1>
+                          <div>
+                            {Invoice_type}# <span>{invoice_number}</span>
+                          </div>
                         </div>
-                      </div>
+                      )}
                     </div>
                   </tr>
                 </thead>

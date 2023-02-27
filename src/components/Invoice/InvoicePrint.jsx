@@ -130,22 +130,22 @@ function InvoicePrint({
                 <div style={{ width: "100%" }}>
                   <table className="invoice_header">
                     <tbody className="invoice_header">
-                      <tr className="invoice_header">
+                      {/* <tr className="invoice_header">
                         <td>Sub Total</td>
                         <td>{sub_total}</td>
-                      </tr>
+                      </tr> */}
                       <tr>
-                        <td>Total</td>
-                        <td>{total}</td>
+                        <td style={{ fontWeight: 600 }}>Total</td>
+                        <td style={{ fontWeight: 600 }}>{total}</td>
                       </tr>
-                      <tr>
+                      {/* <tr>
                         <td>Permanent Made</td>
                         <td>{permanent_made}</td>
                       </tr>
                       <tr>
                         <td>Balance Due</td>
                         <td>{balance_due}</td>
-                      </tr>
+                      </tr> */}
                     </tbody>
                   </table>
                 </div>

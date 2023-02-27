@@ -141,7 +141,7 @@ function InvoiceList() {
                 btnType="add"
                 className="me-1 view_btn"
                 onClick={() => {
-                  navigate(`${ROUTES.PRINTINVOICE}`);
+                  navigate(`${ROUTES.PRINT_INVOICE}/${index.invoice_id}`);
                 }}
               >
                 Print

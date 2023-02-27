@@ -13,7 +13,71 @@ function PrintInvoice() {
         invoice_details1={
           <>
             <tr>
-              <td>Invoice Job No </td>
+              <td>Invoice Date </td>
+              <td>:</td>
+              <td>1000</td>
+            </tr>
+            <tr>
+              <td>Terms</td>
+              <td>:</td>
+              <td>1000</td>
+            </tr>
+            <tr>
+              <td>Chargable Weight</td>
+              <td>:</td>
+              <td>1000</td>
+            </tr>
+            <tr>
+              <td>Carrier</td>
+              <td>:</td>
+              <td>1000</td>
+            </tr>
+            <tr>
+              <td>Mode</td>
+              <td>:</td>
+              <td>1000</td>
+            </tr>
+          </>
+        }
+        invoice_details2={
+          <>
+            <tr>
+              <td>Project Name</td>
+              <td>:</td>
+              <td>1000</td>
+            </tr>
+            <tr>
+              <td>AWB/BL</td>
+              <td>:</td>
+              <td>1000</td>
+            </tr>
+            <tr>
+              <td>Origin</td>
+              <td>:</td>
+              <td>1000</td>
+            </tr>
+            <tr>
+              <td>Destination</td>
+              <td>:</td>
+              <td>1000</td>
+            </tr>
+            <tr>
+              <td>Shipper</td>
+              <td>:</td>
+              <td>1000</td>
+            </tr>
+            <tr>
+              <td>Chargable Weight</td>
+              <td>:</td>
+              <td>1000</td>
+            </tr>
+            <tr>
+              <td>Chargable Weight</td>
+              <td>:</td>
+              <td>1000</td>
+            </tr>
+            <tr>
+              <td>Chargable Weight</td>
               <td>:</td>
               <td>1000</td>
             </tr>

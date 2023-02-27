@@ -36,7 +36,8 @@ function PrintInvoice() {
               });
               let grandtotal = 0;
               grandtotal += item.job_task_expense_cost_subtotalfx;
-              setGrandTotal(grandtotal);
+              grandtotal = Number.parseFloat(grandtotal);
+              setGrandTotal(grandtotal.toFixed(2));
             }
           );
           setTabledata(temp);

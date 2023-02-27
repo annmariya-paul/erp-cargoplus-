@@ -38,6 +38,8 @@ export default function Add_Quotation() {
   const today = new Date().toISOString().split("T")[0];
   const [date, setDate] = useState();
   const [taxType, setTaxtype] = useState();
+   const [currencyDefault, setCurrencyDefault] = useState();
+   console.log("curencydefault", currencyDefault);
 
   const [addForm] = Form.useForm();
   const navigate = useNavigate();
@@ -271,6 +273,13 @@ export default function Add_Quotation() {
       );
       console.log("Getting all currency : ", allcurrency.data.data);
       setCurrencydata(allcurrency.data.data);
+       let arr = [];
+       allcurrency?.data?.data?.forEach((item, index) => {
+         if (item.currency_is_default === 1) {
+           arr = item?.currency_code;
+           setCurrencyDefault(arr);
+         }
+       });
     } catch (err) {
       console.log("Error in getting currency : ", err);
     }
@@ -318,7 +327,7 @@ export default function Add_Quotation() {
     console.log("code", b);
     console.log(";;;;;;;;;", data);
     axios
-      .get("https://open.er-api.com/v6/latest/USD")
+      .get(`https://open.er-api.com/v6/latest/${currencyDefault}`)
       .then(function (response) {
         console.log("currency current rate:", response);
         let a = response.data.rates[b];

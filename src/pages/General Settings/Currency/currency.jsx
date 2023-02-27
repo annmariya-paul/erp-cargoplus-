@@ -17,7 +17,7 @@ import CustomModel from "../../../components/custom_modal/custom_model";
 import { GENERAL_SETTING_BASE_URL } from "../../../api/bootapi";
 import PublicFetch from "../../../utils/PublicFetch";
 import MyPagination from "../../../components/Pagination/MyPagination";
-import { Checkbox } from 'antd';
+import { Checkbox } from "antd";
 export default function Currency(props) {
   const [addForm] = Form.useForm();
   const [error, setError] = useState(false);
@@ -45,11 +45,20 @@ export default function Currency(props) {
   const [currency_id, setCurrency_id] = useState();
   const [currency_ids, setCurrency_ids] = useState();
   const [country, setCountry] = useState();
-
+  const [currencyDefault, setCurrencyDefault] = useState(0);
+  console.log("checkeeddd", currencyDefault);
   // const [editForm] = Form.useForm();
 
   const onChange = (e) => {
     console.log(`checked iss ${e.target.checked}`);
+  };
+
+  const handleChecked = (e, key) => {
+    console.log("isChecked", e);
+    if (e.target.checked) {
+      console.log("suceccss checked", e.target.checked);
+      setCurrencyDefault(1);
+    }
   };
 
   const close_modal = (mShow, time) => {
@@ -72,6 +81,7 @@ export default function Currency(props) {
     setCodeInput(e.currency_code);
     setCoinInput(e.currency_coin);
     setSymbolInput(e.symbol);
+    setCurrencyDefault(e.currency_is_default);
 
     addForm.setFieldsValue({
       currency_id: e.currency_id,
@@ -230,6 +240,7 @@ export default function Currency(props) {
               currency_name: item.currency_name,
               currency_symbol: item.currency_symbol,
               currency_status: item.currency_statuss,
+              currencyDefault: item.currency_is_default,
             });
           });
           setAllCurrency(temp);
@@ -247,6 +258,7 @@ export default function Currency(props) {
       currency_coin: data.coin,
       currency_symbol: data.symbol,
       currency_country: data.country,
+      currency_is_default: currencyDefault,
     })
       .then((res) => {
         console.log("response", res);
@@ -514,25 +526,24 @@ export default function Currency(props) {
                   </div>
                 </div>
                 <div className="col-12 pt-1">
-                      <label>Default Currency</label>
-                      <div>
-                        <Form.Item
-                          name="currency_country"
-                          // rules={[
-                          //   {
-                          //     required: true,
-                          //     message: "Symbol is Required",
-                          //   },
-                          // ]}
-                          
-                        >
-                         <Checkbox onChange={onChange}
-                        //  value={}
-                         ></Checkbox>
-                        </Form.Item>
-                      </div>
-                    </div>
-
+                  <label>Default Currency</label>
+                  <div>
+                    <Form.Item
+                      name="currency_country"
+                      // rules={[
+                      //   {
+                      //     required: true,
+                      //     message: "Symbol is Required",
+                      //   },
+                      // ]}
+                    >
+                      <Checkbox
+                      // onChange={onChange}
+                      //  value={}
+                      ></Checkbox>
+                    </Form.Item>
+                  </div>
+                </div>
               </div>
               <div className="row justify-content-center ">
                 <div className="col-auto">
@@ -751,16 +762,19 @@ export default function Currency(props) {
                       <label>Default Currency</label>
                       <div>
                         <Form.Item
-                          name="symbol"
+                          name="currencyDefault"
                           // rules={[
                           //   {
                           //     required: true,
                           //     message: "Symbol is Required",
                           //   },
                           // ]}
-                          
                         >
-                         <Checkbox onChange={onChange}></Checkbox>
+                          <Checkbox
+                            // value={currencyDefault}
+                            onChange={handleChecked}
+                            // checked={currencyDefault === 0 ? false : true}
+                          ></Checkbox>
                         </Form.Item>
                       </div>
                     </div>

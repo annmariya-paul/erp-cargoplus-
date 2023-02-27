@@ -58,6 +58,7 @@ function CreateJob() {
   const [unitTable, setunitTable] = useState("");
   const [locationType, setLocationType] = useState();
   const [allCurrency, setAllCurreny] = useState();
+  const [currencyDefault,setCurrencyDefault]= useState();
   const [grandTotal, setGrandTotal] = useState();
 
   const getBase64 = (file) =>
@@ -390,7 +391,15 @@ function CreateJob() {
         if (res.data.success) {
           console.log("success", res.data.data);
           setAllCurreny(res.data.data);
+          let arr = [];
+          res?.data?.data?.forEach((item,index)=>{
+            if(item.currency_is_default === 1){
+              arr = item?.currency_code;
+              setCurrencyDefault(arr);
+            }
+          });
         }
+        
       })
       .catch((err) => {
         console.log("Error", err);
@@ -406,7 +415,7 @@ function CreateJob() {
     console.log("code", b);
     console.log(";;;;;;;;;", data);
     axios
-      .get("https://open.er-api.com/v6/latest/USD")
+      .get(`https://open.er-api.com/v6/latest/${currencyDefault}`)
       .then(function (response) {
         console.log("currency current rate:", response);
         let a = response.data.rates[b];

@@ -34,9 +34,9 @@ function Services() {
   const [editForm] = Form.useForm();
   const [pageSize, setPageSize] = useState("25"); // page size
   const [current, setCurrent] = useState(1);
-  const [searchedText, setSearchedText] = useState(""); // search by text input
-  const [searchType, setSearchType] = useState(""); //search by type select box
-  const [searchStatus, setSearchStatus] = useState("");
+  const [searchedName, setSearchedName] = useState(""); // search by text input
+  const [searchCategory, setSearchCategory] = useState(""); //search by type select box
+  const [searchCode, setSearchCode] = useState("");
   const [showServiceEditModal, setShowServiceEditModal] = useState(false);
   const [serviceView, setServiceView] = useState(false);
   const [successPopup, setSuccessPopup] = useState(false);
@@ -432,7 +432,7 @@ function Services() {
       title: "NAME",
       dataIndex: "service_name",
       key: "key",
-      filteredValue: [searchedText],
+      filteredValue: [searchedName],
       onFilter: (value, record) => {
         return String(record.service_name)
           .toLowerCase()
@@ -448,7 +448,7 @@ function Services() {
       key: "key",
       //   width: "23%",
       align: "center",
-      filteredValue: [searchType],
+      filteredValue: [searchCode],
       onFilter: (value, record) => {
         return String(record.service_code).toLowerCase().includes(value.toLowerCase());
       },
@@ -459,7 +459,7 @@ function Services() {
       key: "key",
       width: "14%",
       align: "center",
-      filteredValue: [searchStatus],
+      filteredValue: [searchCategory],
       onFilter: (value, record) => {
         return String(record.service_category_name)
           .toLowerCase()
@@ -511,26 +511,25 @@ function Services() {
               <Input.Search
                 placeholder="Search by Name"
                 style={{ margin: "5px", borderRadius: "5px" }}
-                value={searchedText}
+                value={searchedName}
                 onChange={(e) => {
-                  setSearchedText(e.target.value ? [e.target.value] : []);
+                  setSearchedName(e.target.value ? [e.target.value] : []);
                 }}
                 onSearch={(value) => {
-                  setSearchedText(value);
+                  setSearchedName(value);
                 }}
               />
             </div>
             <div className="col-4 ">
-
-            <Input.Search
+              <Input.Search
                 placeholder="Search by Code"
                 style={{ margin: "5px", borderRadius: "5px" }}
-                value={searchedText}
+                value={searchCode}
                 onChange={(e) => {
-                  setSearchedText(e.target.value ? [e.target.value] : []);
+                  setSearchCode(e.target.value ? [e.target.value] : []);
                 }}
                 onSearch={(value) => {
-                  setSearchedText(value);
+                  setSearchCode(value);
                 }}
               />
               {/* <Select
@@ -566,20 +565,21 @@ function Services() {
                 className="select_search"
                 optionFilterProp="children"
                 onChange={(event) => {
-                  setSearchStatus(event ? [event] : []);
+                  setSearchCategory(event ? [event] : []);
                 }}
               >
-                {services&&
+                {services &&
                   services.map((item, index) => {
-                    console.log("dataaa",item)
+                    console.log("dataaa", item);
                     return (
-                      <Select.Option key={item.service_category_id} value={item.service_category_name}>
+                      <Select.Option
+                        key={item.service_category_id}
+                        value={item.service_category_name}
+                      >
                         {item.service_category_name}
                       </Select.Option>
                     );
                   })}
-                {/* <Select.Option value="Watch">watch</Select.Option>
-                <Select.Option value="cookware">cookware</Select.Option> */}
               </Select>
             </div>
           </div>
@@ -630,31 +630,28 @@ function Services() {
                 </Select.Option>
               </Select>
             </div>
-            <div className=" col-4 d-flex py-2 justify-content-center">
-            <MyPagination
-              total={parseInt(totalCount)}
-              current={current}
-              pageSize={noofitems}
-              // defaultPageSize={noofItems}
-              showSizeChanger={false}
-              onChange={(current, pageSize) => {
-                console.log("page index isss", pageSize);
-                setCurrent(current);
-              }}
-            />
-          </div>
+            <div className=" col-4 d-flex justify-content-center">
+              <MyPagination
+                total={parseInt(totalCount)}
+                current={current}
+                pageSize={noofitems}
+                // defaultPageSize={noofItems}
+                showSizeChanger={false}
+                onChange={(current, pageSize) => {
+                  console.log("page index isss", pageSize);
+                  setCurrent(current);
+                }}
+              />
+            </div>
             <div className="col-4 d-flex justify-content-end">
-              <Button
-                //   onClick={() => setShowAddOpportunity(true)}
-                className="add_opportunity"
-              >
+              <Button btnType="add">
                 <Link to={ROUTES.SERVICECREATE}>
                   <span
                     style={{
                       color: "white",
                     }}
                   >
-                    Add
+                    Add Service
                   </span>
                 </Link>
               </Button>
@@ -698,27 +695,7 @@ function Services() {
           header="Edit Service"
           // size={`xl`}
           width={800}
-          footer={[
-            <Button
-              onClick={() => {
-                handleUpdate();
-                // setSuccessPopup(true);
-                // setError(true);
-              }}
-              btnType="save"
-            >
-              Save
-            </Button>,
-            <Button
-              onClick={() => {
-                setShowServiceEditModal(false);
-              }}
-              className="cancel_button p-2"
-            >
-              cancel
-            </Button>,
-            ,
-          ]}
+
           // {...props}
         >
           <div className="container">
@@ -737,7 +714,7 @@ function Services() {
                     console.log(error);
                   }}
                 >
-                  <div className="row ">
+                  <div className="row">
                     <div className="col-4">
                       <label>Name</label>
                       <Form.Item
@@ -748,7 +725,7 @@ function Services() {
                             pattern: new RegExp("^[A-Za-z0-9 ]+$"),
                             message: "Please enter a Valid Name",
                           },
-                          {whitespace:true},
+                          { whitespace: true },
                           {
                             min: 2,
                             message: "Name must be at least 2 characters",
@@ -865,38 +842,39 @@ function Services() {
                           value={servicetaxrate}
                           onChange={(e) => setServicetaxrate(e)}
                         /> */}
-                       
-                         <SelectBox
-                      placeholder={"--Please Select--"}
-                      value={servicetaxrate}
-                      onChange={(e) => {
-                        console.log("select the brandss", e);
-                        setServicetaxrate(parseInt(e));
-                      }}
-                    >
-                      {alltaxtype &&
-                        alltaxtype.length > 0 &&
-                        alltaxtype.map((item, index) => {
-                          return (
-                            <Select.Option
-                              key={item.tax_type_id}
-                              value={item.tax_type_id}
-                            >
-                              {item.tax_type_name}
-                            </Select.Option>
-                          );
-                        })}
-                    </SelectBox>
+
+                        <SelectBox
+                          placeholder={"--Please Select--"}
+                          value={servicetaxrate}
+                          onChange={(e) => {
+                            console.log("select the brandss", e);
+                            setServicetaxrate(parseInt(e));
+                          }}
+                        >
+                          {alltaxtype &&
+                            alltaxtype.length > 0 &&
+                            alltaxtype.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  key={item.tax_type_id}
+                                  value={item.tax_type_id}
+                                >
+                                  {item.tax_type_name}
+                                </Select.Option>
+                              );
+                            })}
+                        </SelectBox>
                       </Form.Item>
                     </div>
 
                     <div className="col-6 mt-2">
                       <label>Display Picture</label>
-                      <Form.Item name="new">
+                      <Form.Item name="new" className="mt-2">
                         <FileUpload
                           multiple
                           listType="picture"
                           accept=".png,.jpeg"
+                          height={100}
                           onPreview={handlePreview}
                           beforeUpload={false}
                           onChange={(file) => {
@@ -939,14 +917,15 @@ function Services() {
                     <div className="col-6 mt-2">
                       <label>Description</label>
                       <Form.Item
-                        // name="description"
+                        className="mt-2"
+                        name="servicedescription"
                         rules={[
                           {
                             whitespace: true,
                           },
                           {
                             min: 2,
-                            message: "Description must be atleast 2 characters",
+                            message: "Description must be at least 2 characters",
                           },
                           {
                             max: 500,
@@ -960,6 +939,27 @@ function Services() {
                           }}
                         />
                       </Form.Item>
+                    </div>
+                    <div className="col-12 d-flex justify-content-center mt-5 pt-4 gap-3 ">
+                      <Button
+                        className="save_button"
+                        onClick={() => {
+                          handleUpdate();
+                        }}
+                      >
+                        Save
+                      </Button>
+                      <Button
+                        as="input"
+                        type="reset"
+                        value="Reset"
+                        onClick={() => {
+                          setShowServiceEditModal(false);
+                        }}
+                        className="cancel_button p-2"
+                      >
+                        Cancel
+                      </Button>
                     </div>
                   </div>
                 </Form>
@@ -1094,7 +1094,7 @@ function Services() {
                       <div className="col-1">:</div>
                       <div className="col-6 justify-content-start">
                         <p className="modal_view_p_sub">
-                          {viewservices.servicetaxrate} 
+                          {viewservices.servicetaxrate}
                         </p>
                       </div>
                     </div>

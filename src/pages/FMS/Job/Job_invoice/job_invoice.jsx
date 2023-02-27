@@ -75,9 +75,10 @@ function Jobinvoice(){
                 job_carrier1: res.data.data.fms_v1_carrier.carrier_name,
                 job_consignee: res.data.data.job_consignee,
                 job_consignee1: res.data.data.crm_v1_leads.lead_customer_name,
-                // job_currency: res.data.data.job_currency,
-                // job_currency1:
-                //   res.data.data.generalsettings_v1_currency.currency_name,
+
+                job_currency: res.data.data.job_currency,
+                job_currency1:
+                  res.data.data.generalsettings_v1_currency.currency_name,
                 job_destination_id: res.data.data.job_destination_id,
                 job_destination_id1:
                   res.data.data
@@ -202,10 +203,136 @@ console.log("all jobs", alljobs)
 
 
 <InvoicePrint
-invoice_details1={ <div>
-  <th>Job No</th>
-  <tr>Job No</tr>
-</div> }
+invoice_details1={ <>
+  <tr className="p-2 ">
+ <td>Job No </td>
+ <td>: </td>
+ <td>{alljobs?.job_no}</td>
+ </tr>
+ <tr className="p-2">
+ <td>Job Date </td>
+ <td>: </td>
+ <td>{alljobs?.job_date1}</td>
+ </tr>
+ <tr className="p-2">
+ <td>Quotation No </td>
+ <td>: </td>
+ <td>{qtnno}</td>
+ </tr>
+
+
+ <tr className="p-2 ">
+ <td>Freight type </td>
+ <td>: </td>
+ <td>{alljobs?.job_freight_type1}</td>
+ </tr>
+ <tr className="p-2">
+ <td>Payment Terms </td>
+ <td>: </td>
+ <td> {alljobs?.job_payment_terms1}</td>
+ </tr>
+ <tr className="p-2">
+ <td>No of Pieces </td>
+ <td>: </td>
+ <td> {alljobs?.job_no_of_pieces}</td>
+ </tr>
+ <tr className="p-2">
+ <td>Chargeable wt </td>
+ <td>: </td>
+ <td>{alljobs?.job_chargeable_wt}</td>
+ </tr>
+ <tr className="p-2">
+ <td>Gross wt </td>
+ <td>: </td>
+ <td>{alljobs?.job_gross_wt}</td>
+ </tr>
+
+</> }
+
+invoice_details2={
+  <>
+   <tr className="p-2 ">
+ <td>Shipper </td>
+ <td>: </td>
+ <td>{alljobs?.job_shipper}</td>
+ </tr>
+ <tr className="p-2">
+ <td>Consignee </td>
+ <td>: </td>
+ <td> {alljobs?.job_consignee1}</td>
+ </tr>
+ <tr className="p-2">
+ <td>Origin </td>
+ <td>: </td>
+ <td> {alljobs?.job_origin_id1}</td>
+ </tr>
+ <tr className="p-2">
+ <td>Destination </td>
+ <td>: </td>
+ <td> {alljobs?.job_destination_id1}</td>
+ </tr>
+ <tr className="p-2">
+ <td>Cargo Type </td>
+ <td>: </td>
+ <td>  {alljobs?.job_cargo_type}</td>
+ </tr>
+ <tr className="p-2">
+ <td>Currency </td>
+ <td>: </td>
+ <td> {alljobs?.job_currency}</td>
+ </tr>
+ <tr className="p-2">
+ <td>Exchange Rate </td>
+ <td>: </td>
+ <td>{alljobs?.job_exchange_rate}</td>
+ </tr>
+ <tr className="p-2">
+ <td>UOM </td>
+ <td>: </td>
+ <td> {alljobs?.job_uom1}</td>
+ </tr>
+
+  </>
+}
+
+invoice_table_header={
+   <>
+  <th scope="col"className="font_weight_qt border_right" >#</th>
+  <th scope="col" className="font_weight_qt border_right task_width text_align_words">TASKS</th>
+  <th scope="col" className="font_weight_qt  border_right text_align_number">COST</th>
+  <th scope="col" className="font_weight_qt border_right text_align_words">TAX TYPE</th>
+  <th scope="col" className="font_weight_qt border_right text_align_number">TAX AMOUNT</th>
+  <th scope="col" className="font_weight_qt text_align_number">TOTAL AMOUNT</th>
+  </>
+}
+invoice_table_data={
+  <>
+    {tax && tax.map((itm,indx)=> (
+ 
+      <tr>
+        <td  className="border_right">{indx+1} </td>
+        <td className="border_right text_align_words">{itm.quotation_details_service_id} </td>
+        <td className="border_right text_align_number">{itm.quotation_details_cost} </td>
+        <td className="border_right text_align_words">{itm.quotation_details_tax_type} </td>
+        <td className="border_right text_align_number">{itm.quotation_details_tax_amount} </td>
+        <td className="text_align_number">{itm.quotation_details_total} </td>
+      </tr>
+
+
+  )) }
+  </>
+}
+amount_in_words={ 
+<>
+{grandtotal && (
+  <>
+ { converter.toWords(grandtotal)}
+  </>
+)}
+</>
+}
+sub_total={grandtotal}
+total={grandtotal}
 />
 
 

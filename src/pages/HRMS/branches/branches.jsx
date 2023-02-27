@@ -25,7 +25,7 @@ const [modalAddBranch, setModalAddBranch] = useState(false);
 
 const [pageSize, setPageSize] = useState("25");
 const [current, setCurrent] = useState(1);
-
+const [serialNo, setserialNo] = useState(1);
   const [branches, setBranches] = useState();
   const [Errormsg, setErrormsg] = useState();
   const [NameInput, setNameInput] = useState();
@@ -125,6 +125,12 @@ const [searchcodeText, setSearchcodeText] = useState("");
 
 //columns
   const columns = [
+    {
+      title: "SI.NO",
+      key: "index",
+      render: (value, item, index) => serialNo + index,
+      align: "center",
+    },
     {
       title: "ACTION",
       dataIndex: "action",

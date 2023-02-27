@@ -107,18 +107,16 @@ function BrandCreate() {
 
   return (
     <div>
-      <div className="container-fluid my-4">
-        <div>
-          <h4 className="lead_text">Brands</h4>
-        </div>
+      <div className="container-fluid">
+       
         <div
           style={{ borderRadius: "8px" }}
-          className="card border-0 content-tabs  my-3 px-4"
+          className="card border-0 content-tabs  px-2"
         >
-          <div className="container my-3">
-            {/* <div className="my-3">
+          <div className="container my-2">
+            <div className="my-3">
               <h5 className="lead_text">Add Brand</h5>
-            </div> */}
+            </div>
             <Form
               name="addForm"
               form={addForm}
@@ -130,7 +128,7 @@ function BrandCreate() {
                 console.log(error);
               }}
             >
-              <div className="row my-5">
+             
               <div className="row">
                 <div className="col-6">
                   <label>Name</label>
@@ -238,7 +236,7 @@ function BrandCreate() {
                       multiple
                       listType="picture"
                       accept=".png,.jpg,.jpeg"
-                      height={130}
+                      height={100}
                       onPreview={handlePreview}
                       beforeUpload={false}
                       onChange={(file) => {
@@ -281,7 +279,6 @@ function BrandCreate() {
                     cancel
                   </Button>
                 </div>
-              </div>
             </Form>
           </div>
         </div>

@@ -67,17 +67,17 @@ function PrintInvoice() {
               <td>1000</td>
             </tr>
             <tr>
-              <td>Chargable Weight</td>
+              <td>Consignee</td>
               <td>:</td>
               <td>1000</td>
             </tr>
             <tr>
-              <td>Chargable Weight</td>
+              <td>No of pieces</td>
               <td>:</td>
               <td>1000</td>
             </tr>
             <tr>
-              <td>Chargable Weight</td>
+              <td>Grows weight</td>
               <td>:</td>
               <td>1000</td>
             </tr>

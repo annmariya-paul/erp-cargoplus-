@@ -101,14 +101,11 @@ function BrandCreate() {
       });
   };
 
-
-
   console.log("data", brand, description);
 
   return (
     <div>
       <div className="container-fluid">
-       
         <div
           style={{ borderRadius: "8px" }}
           className="card border-0 content-tabs  px-2"
@@ -128,7 +125,6 @@ function BrandCreate() {
                 console.log(error);
               }}
             >
-             
               <div className="row">
                 <div className="col-6">
                   <label>Name</label>
@@ -159,10 +155,12 @@ function BrandCreate() {
                           setBrandError("");
                           setuniqueCode(false);
                         }}
-                        onBlur={async() => {
-                          
-                          let a = await CheckUnique({type:"brandname",value:brand})
-                          setuniqueCode(a)
+                        onBlur={async () => {
+                          let a = await CheckUnique({
+                            type: "brandname",
+                            value: brand,
+                          });
+                          setuniqueCode(a);
                         }}
                       />
                     </Form.Item>
@@ -177,8 +175,8 @@ function BrandCreate() {
                     )}
                   </div>
                 </div>
-                </div>
-                {/* <div className="col-8">
+              </div>
+              {/* <div className="col-8">
                   <label>Description</label>
                   <div>
                    
@@ -203,11 +201,10 @@ function BrandCreate() {
                     </Form.Item>
                   </div>
                 </div> */}
-                <div className="row">
+              <div className="row">
                 <div className="col-6">
                   <label>Description</label>
                   <div>
-                   
                     <Form.Item
                       name="description"
                       rules={[
@@ -238,7 +235,7 @@ function BrandCreate() {
                       accept=".png,.jpg,.jpeg"
                       height={100}
                       onPreview={handlePreview}
-                      beforeUpload={false}
+                      beforeUpload={true}
                       onChange={(file) => {
                         console.log("Before upload", file.file);
                         console.log("Before upload file size", file.file.size);
@@ -266,19 +263,19 @@ function BrandCreate() {
                     ""
                   )}
                 </div>
-                </div>
+              </div>
 
-                <div className="col-12 d-flex justify-content-center  gap-2 py-5">
-                  <Button className="save_button">Save</Button>
-                  <Button
-                    btnType="cancel"
-                    onClick={() => {
-                      handleCancel();
-                    }}
-                  >
-                    cancel
-                  </Button>
-                </div>
+              <div className="col-12 d-flex justify-content-center  gap-2 py-5">
+                <Button className="save_button">Save</Button>
+                <Button
+                  btnType="cancel"
+                  onClick={() => {
+                    handleCancel();
+                  }}
+                >
+                  cancel
+                </Button>
+              </div>
             </Form>
           </div>
         </div>

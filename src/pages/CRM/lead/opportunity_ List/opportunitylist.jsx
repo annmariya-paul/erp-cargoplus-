@@ -55,6 +55,7 @@ function Opportunitylist(props) {
   const today = new Date();
   const [EditForm] = Form.useForm();
   const [numOfItems, setNumOfItems] = useState("25");
+   const [oppstatus,setOppstatus]=useState(Oppor_Status);
   const dateFormatList = ["DD-MM-YYYY", "DD-MM-YY"];
   const [pageSize, setPageSize] = useState(0); // page size
   const [current, setCurrent] = useState(1); // current page
@@ -76,6 +77,7 @@ function Opportunitylist(props) {
   const [oppurtunitysource, setOppurtunitysource] = useState();
   const [oppurtunityparty, setOppurtunityparty] = useState("");
   const [oppurtunityvalidity, setOppurtunityvalidity] = useState();
+  console.log("opp validity", oppurtunityvalidity);
   const [oppurtunityamount, setOppurtunityamount] = useState("");
   const [oppurtunityprobability, setOppurtunityProbability] = useState("");
   const [opportunitydescription, setOpportunitydescription] = useState("");
@@ -141,23 +143,24 @@ function Opportunitylist(props) {
     opportunity_probability: "",
     opportunity_status: "",
     opportunity_leadid: "",
+    opportunity_statusname:"",
   });
 
-  const [editOppurtunity, setEditOppurtunity] = useState({
-    opportunity_id: "",
-    opportunity_lead_id: oppId,
-    opportunity_number: "",
-    opportunitytype: "",
-    opportunityfrom: "",
-    convertedby: "",
-    opportunitysource: "",
-    opportunityparty: "",
-    opportunityvalidity: "",
-    opportunitydescription: "",
-    opportunityamount: "",
-    opportunityprobability: "",
-    opportunitystatus: "",
-  });
+  // const [editOppurtunity, setEditOppurtunity] = useState({
+  //   opportunity_id: "",
+  //   opportunity_lead_id: oppId,
+  //   opportunity_number: "",
+  //   opportunitytype: "",
+  //   opportunityfrom: "",
+  //   convertedby: "",
+  //   opportunitysource: "",
+  //   opportunityparty: "",
+  //   opportunityvalidity: "",
+  //   opportunitydescription: "",
+  //   opportunityamount: "",
+  //   opportunityprobability: "",
+  //   opportunitystatus: "",
+  // });
 
   // { function to get all opportunity data - Ann mariya(27/10/22)}
 
@@ -180,21 +183,33 @@ function Opportunitylist(props) {
           
           let tempArr = [];
           res?.data?.data?.leads.forEach((item, index) => {
-          tempArr.push({
-            opportunity_Id: item?.opportunity_id,
-            opportunity_number: item?.opportunity_number,
-            opportunity_type: item?.opportunity_type,
-            opportunity_party: item?.crm_v1_contacts?.contact_person_name,
-            opportunity_party1: item?.crm_v1_contacts?.contact_id,
-            opportunity_from: item?.opportunity_from,
-            opportunity_created_by1: item?.crm_v1_leads?.lead_id,
-            opportunity_created_by: item?.crm_v1_leads?.lead_customer_name,
-            opportunity_source: item?.opportunity_source,
-            opportunity_probability: item?.opportunity_probability,
-            opportunity_description: item?.opportunity_description,
-            opportunity_amount:item?.opportunity_amount,
-            opportunity_status: item?.opportunity_status,
-          });
+
+            oppstatus.forEach((sts,index)=>{
+
+              var statusnew= parseInt(sts.value);
+              if(
+                statusnew==item.opportunity_status
+              ){
+                tempArr.push({
+                  opportunity_Id: item?.opportunity_id,
+                  opportunity_number: item?.opportunity_number,
+                  opportunity_type: item?.opportunity_type,
+                  opportunity_party: item?.crm_v1_contacts?.contact_person_name,
+                  opportunity_party1: item?.crm_v1_contacts?.contact_id,
+                  opportunity_from: item?.opportunity_from,
+                  opportunity_statusname: sts?.name,
+                  opportunity_created_by1: item?.crm_v1_leads?.lead_id,
+                  opportunity_created_by: item?.crm_v1_leads?.lead_customer_name,
+                  opportunity_source: item?.opportunity_source,
+                  opportunity_probability: item?.opportunity_probability,
+                  opportunity_description: item?.opportunity_description,
+                  opportunity_amount:item?.opportunity_amount,
+                  opportunity_status: item?.opportunity_status,
+                  opportunity_validity:item?.opportunity_validity,
+                });
+              }
+        
+        })
         });
         setOppnew(tempArr);
           setOpportunityList(res?.data?.data?.leads);
@@ -320,14 +335,14 @@ function Opportunitylist(props) {
       convertedby: item.opportunity_created_by,
       opportunity_source: item.opportunity_source,
       opportunity_party: item.opportunity_party,
-      opportunity_validity: moment(item.opportunity_validity).format(
-        "DD/MM/YYYY"
-      ),
+      opportunity_validity:  item.opportunity_validity,
       opportunity_description: item.opportunity_description,
       opportunity_amount: item.opportunity_amount,
       opportunity_probability: item.opportunity_probability,
       opportunity_status: item.opportunity_status,
       opportunity_leadid: item.opportunity_lead_id,
+      opportunity_lead_name: item.opportunity_created_by,
+      opportunity_statusname:item.opportunity_statusname,
     });
     getOppurtunityProgress(item);
 
@@ -373,7 +388,7 @@ function Opportunitylist(props) {
       opportunity_from: i.opportunity_from,
       opportunity_party: i.opportunity_party,
       opportunity_source: i.opportunity_source,
-      opportunity_validity: i.opportunity_validity,
+      opportunity_validity: validityDate,
       opportunity_amount: i.opportunity_amount,
       opportunity_description: i.opportunity_description,
       opportunity_probability: i.opportunity_probability,
@@ -527,6 +542,7 @@ function Opportunitylist(props) {
       key: "ACTION",
       width: "15%",
       render: (data, index) => {
+        console.log("indexx",index);
         return (
           <div className="d-flex justify-content-center gap-2">
             <div className="editcolor">
@@ -1040,7 +1056,10 @@ function Opportunitylist(props) {
                     <tr>
                       <td>Valid up to</td>
                       <td>:</td>
-                      <td>{viewoppurtunity.opportunity_validity}</td>
+                      <td>{moment(viewoppurtunity.opportunity_validity).format(
+                        "DD/MM/YYYY"
+                      )}
+                      </td>
                     </tr>
                     <tr>
                       <td>details</td>
@@ -1060,7 +1079,7 @@ function Opportunitylist(props) {
                     <tr>
                       <td>status </td>
                       <td>:</td>
-                      <td>{viewoppurtunity.opportunity_status}</td>
+                      <td>{viewoppurtunity.opportunity_statusname}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -1606,32 +1625,10 @@ function Opportunitylist(props) {
                   format={dateFormat}
                 /> */}
                 {/* <Form.Group className="mb-2" controlId="lead_valid_up_to"> */}
-                <label>Valid Up toooo</label>
-                <div className="">
-                  <Form.Item
-                   name="opportunity_validity"
-                    // rules={[
-                    //   {
-                    //     required: true,
-                    //     message: "Please select a Valid Date",
-                    //   },
-                    // ]}
-                  >
-                    {/* <input
-                      type="date"
-                      name="lead_validity"
-                      className="p-2 mt-2"
-                      style={{ borderWidth: 0, borderRadius: "5px" }}
-                      // defaultValue={todaydate}
-                      // disabled={(d) => !d || d.isBefore(today)}
-                      value={moment(oppurtunityvalidity).format("YYYY-MM-DD")}
-                      onChange={(event) => {
-                        console.log("selected datae : ", event.target.value);
-                        setOppurtunityvalidity(event.target.value);
-                        setIsDate(event);
-                      }}
-                      min={disableDate()}
-                    /> */}
+                <label>Valid Up to</label>
+               
+                  <Form.Item name="opportunity_validity">
+                   
                         <DatePicker
                           style={{ borderWidth: 0, marginTop: 10 }}
                           initialValues={oppurtunityvalidity}
@@ -1645,8 +1642,8 @@ function Opportunitylist(props) {
 
 
                   </Form.Item>
-                
-                </div>
+                  
+            
                 {/* </Form.Group> */}
               </div>
 

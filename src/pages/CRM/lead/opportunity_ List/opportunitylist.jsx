@@ -55,6 +55,7 @@ function Opportunitylist(props) {
   const today = new Date();
   const [EditForm] = Form.useForm();
   const [numOfItems, setNumOfItems] = useState("25");
+  const dateFormatList = ["DD-MM-YYYY", "DD-MM-YY"];
   const [pageSize, setPageSize] = useState(0); // page size
   const [current, setCurrent] = useState(1); // current page
   const [searchSource, setSearchSource] = useState(""); // search by text input
@@ -180,11 +181,13 @@ function Opportunitylist(props) {
           let tempArr = [];
           res?.data?.data?.leads.forEach((item, index) => {
           tempArr.push({
-            opportunity_id: item?.opportunity_id,
-            opportunity_number: item?. opportunity_number,
+            opportunity_Id: item?.opportunity_id,
+            opportunity_number: item?.opportunity_number,
             opportunity_type: item?.opportunity_type,
             opportunity_party: item?.crm_v1_contacts?.contact_person_name,
+            opportunity_party1: item?.crm_v1_contacts?.contact_id,
             opportunity_from: item?.opportunity_from,
+            opportunity_created_by1: item?.crm_v1_leads?.lead_id,
             opportunity_created_by: item?.crm_v1_leads?.lead_customer_name,
             opportunity_source: item?.opportunity_source,
             opportunity_probability: item?.opportunity_probability,
@@ -348,21 +351,23 @@ function Opportunitylist(props) {
   const handleEditedclick = (i) => {
     console.log("edittingg in list::: ", i);
 
-    setOppurtunityid(i.opportunity_id);
+    setOppurtunityid(i.opportunity_Id);
     setOpportunityNum(i.opportunity_number);
     setoppurtunitytype(i.opportunity_type);
     setOppurtunityfrom(i.opportunity_from);
-    setOppurtunityparty(i.opportunity_party);
+    setOppurtunityparty(i.opportunity_party1);
     setOppurtunitysource(i.opportunity_source);
     setOppurtunityvalidity(i.opportunity_validity);
     setOppurtunityamount(i.opportunity_amount);
     setOpportunitydescription(i.opportunity_description);
     setOppurtunityProbability(i.opportunity_probability);
     setOppurtunitystatus(i.opportunity_status);
-    setOppurtunitylead(i.opportunity_lead_id);
+    setOppurtunitylead(i.opportunity_created_by1);
     getAllContact();
     setShowEditModal(true);
+    let validityDate = moment(i.opportunity_validity)
     editForm.setFieldsValue({
+      opportunity_id: i.opportunity_id,
       opportunity_number: i.opportunity_number,
       opportunity_type: i.opportunity_type,
       opportunity_from: i.opportunity_from,
@@ -373,8 +378,9 @@ function Opportunitylist(props) {
       opportunity_description: i.opportunity_description,
       opportunity_probability: i.opportunity_probability,
       opportunity_status: i.opportunity_status,
-      opportunity_lead_id: i.opportunity_lead_id,
+      opportunity_lead_id: i.opportunity_created_by,
     });
+    setShowEditModal(true);
   };
 
   //for xlsx download
@@ -1600,18 +1606,18 @@ function Opportunitylist(props) {
                   format={dateFormat}
                 /> */}
                 {/* <Form.Group className="mb-2" controlId="lead_valid_up_to"> */}
-                <label>Valid Up to</label>
+                <label>Valid Up toooo</label>
                 <div className="">
                   <Form.Item
-                    // name={"opportunity_validity"}
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please select a Valid Date",
-                      },
-                    ]}
+                   name="opportunity_validity"
+                    // rules={[
+                    //   {
+                    //     required: true,
+                    //     message: "Please select a Valid Date",
+                    //   },
+                    // ]}
                   >
-                    <input
+                    {/* <input
                       type="date"
                       name="lead_validity"
                       className="p-2 mt-2"
@@ -1625,13 +1631,21 @@ function Opportunitylist(props) {
                         setIsDate(event);
                       }}
                       min={disableDate()}
-                    />
+                    /> */}
+                        <DatePicker
+                          style={{ borderWidth: 0, marginTop: 10 }}
+                          initialValues={oppurtunityvalidity}
+                          format={dateFormatList}
+                          // disabledDate={(d) => !d || d.isBefore(today)}
+                          onChange={(e) => {
+                            console.log("date mmm", e);
+                            setOppurtunityvalidity(e);
+                          }}
+                        />
+
+
                   </Form.Item>
-                  {oppurtunityvalidity ? (
-                    <></>
-                  ) : (
-                    <lable style={{ color: "red" }}>Please enter Date</lable>
-                  )}
+                
                 </div>
                 {/* </Form.Group> */}
               </div>

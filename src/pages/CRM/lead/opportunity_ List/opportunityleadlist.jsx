@@ -61,17 +61,17 @@ function OpportunityLeadlist(props) {
   const [oppurtunityfrom, setOppurtunityfrom] = useState();
   const [oppurtunitysource, setOppurtunitysource] = useState();
   const [oppurtunityparty, setOppurtunityparty] = useState("");
-  console.log("opp party",oppurtunityparty);
+  console.log("opp party", oppurtunityparty);
   const [oppurtunityvalidity, setOppurtunityvalidity] = useState();
-  console.log("opp validity",oppurtunityvalidity);
-  
+  console.log("opp validity", oppurtunityvalidity);
+
   const [oppurtunityamount, setOppurtunityamount] = useState();
   const [oppurtunityprobability, setOppurtunityProbability] = useState("");
   const [opportunitydescription, setOpportunitydescription] = useState("");
   const [oppurtunitystatus, setOppurtunitystatus] = useState("");
   const [oppurtunityviewprogress, setoppurtunityviewprogress] = useState();
   const [oppurtunityid, setOppurtunityid] = useState();
-  console.log("iddd",oppurtunityid);
+  console.log("iddd", oppurtunityid);
 
   const [contact, setContact] = useState([]);
   const [progressResponse, setProgressResponse] = useState("");
@@ -80,9 +80,9 @@ function OpportunityLeadlist(props) {
   const [progressUpdatestatus, setProgressUpdatestatus] = useState(5);
   const [opportunity_Id, setOpportunity_Id] = useState();
   const [opporStatus, setOpporstatus] = useState(Oppor_Status);
-  const [probConversion,setProbConversion] = useState(Prob_conversion);
+  const [probConversion, setProbConversion] = useState(Prob_conversion);
 
-  const[leadname,setLeadname] =useState("")
+  const [leadname, setLeadname] = useState("");
 
   //view progress
   const [tableprogress, setTableprogress] = useState("");
@@ -103,6 +103,7 @@ function OpportunityLeadlist(props) {
     opportunity_probability: "",
     opportunity_status: "",
     opportunity_lead_id: "",
+    opportunity_lead_name: "",
   });
 
   const [editOppurtunity, setEditOppurtunity] = useState({
@@ -128,9 +129,9 @@ function OpportunityLeadlist(props) {
 
   // { function to get all opportunity data - Ann mariya(27/10/22)}
 
-const [newOpportunityList, setNewOpportunityList] = useState();
+  const [newOpportunityList, setNewOpportunityList] = useState();
   console.log("QQQQQQQQQQQQQ", newOpportunityList);
-  
+
   // const [oppurtunityid, setOppurtunityid] = useState();
 
   const GetOpportunityData = () => {
@@ -139,66 +140,59 @@ const [newOpportunityList, setNewOpportunityList] = useState();
         if (res?.data?.success) {
           console.log("All opportunity data", res?.data?.data);
           //   setNewOpportunityList(res?.data?.data);
-          
+
           let samplearry = [];
-          res?.data?.data?.crm_v1_contacts.forEach((item,index)=>{
-            res?.data?.data?.crm_v1_opportunities.forEach((oppo,index)=>{
-            
- samplearry.push({
-  opportunity_Id:oppo?.opportunity_id,
-   opportunity_type: oppo?.opportunity_type,
-   opportunity_from: oppo?.opportunity_from,
-   opportunity_created_by1: res?.data?.data.lead_id,
-   opportunity_created_by: res?.data?.data.lead_customer_name,
-   opportunity_source: oppo?.opportunity_source,
-   opportunity_probability:oppo?.opportunity_probability,
-   opportunity_description:oppo?.opportunity_description,
-   opportunity_status:oppo?.opportunity_status,
-   opportunity_amount:oppo?.opportunity_amount,
-   opportunity_party: item?.contact_person_name,
-   opportunity_party1: item?.contact_id,
-   opportunity_validity: oppo?.opportunity_validity,
-
- 
- });
-//  setoppnewid(oppo?.opportunity_id);
- setNewOpportunityList(samplearry);
- 
-
+          res?.data?.data?.crm_v1_contacts.forEach((item, index) => {
+            res?.data?.data?.crm_v1_opportunities.forEach((oppo, index) => {
+              samplearry.push({
+                opportunity_Id: oppo?.opportunity_id,
+                opportunity_type: oppo?.opportunity_type,
+                opportunity_from: oppo?.opportunity_from,
+                opportunity_created_by1: res?.data?.data.lead_id,
+                opportunity_created_by: res?.data?.data.lead_customer_name,
+                opportunity_source: oppo?.opportunity_source,
+                opportunity_probability: oppo?.opportunity_probability,
+                opportunity_description: oppo?.opportunity_description,
+                opportunity_status: oppo?.opportunity_status,
+                opportunity_amount: oppo?.opportunity_amount,
+                opportunity_party: item?.contact_person_name,
+                opportunity_party1: item?.contact_id,
+                opportunity_validity: oppo?.opportunity_validity,
+              });
+              //  setoppnewid(oppo?.opportunity_id);
+              setNewOpportunityList(samplearry);
             });
-
           });
-         
-// #3#######
-      // res?.data?.data?.crm_v1_contacts.forEach((item, index) => {
-      //   res?.data?.data?.crm_v1_opportunities.forEach((oppo, index) => {
-      //     opporStatus.forEach((s, index) => {
-      //       var oppoStatus = parseInt(s.value);
-      //       if (oppoStatus === item.opportunity_status) {
-      //         samplearry.push({
-      //           opportunity_type: oppo?.opportunity_type,
-      //           opportunity_from: oppo?.opportunity_from,
-      //           opportunity_created_by: oppo?.opportunity_created_by,
-      //           opportunity_source: oppo?.opportunity_source,
-      //           opportunity_probability: oppo?.opportunity_probability,
-      //           opportunity_description: oppo?.opportunity_description,
-      //           opportunity_status: s?.name,
-      //           opportunity_amount: oppo?.opportunity_amount,
-      //           opportunity_party: item?.contact_person_name,
-      //         });
-      //         setNewOpportunityList(samplearry);
-      //       }
-      //     });
-      //   });
-      // });
-// ##########
+
+          // #3#######
+          // res?.data?.data?.crm_v1_contacts.forEach((item, index) => {
+          //   res?.data?.data?.crm_v1_opportunities.forEach((oppo, index) => {
+          //     opporStatus.forEach((s, index) => {
+          //       var oppoStatus = parseInt(s.value);
+          //       if (oppoStatus === item.opportunity_status) {
+          //         samplearry.push({
+          //           opportunity_type: oppo?.opportunity_type,
+          //           opportunity_from: oppo?.opportunity_from,
+          //           opportunity_created_by: oppo?.opportunity_created_by,
+          //           opportunity_source: oppo?.opportunity_source,
+          //           opportunity_probability: oppo?.opportunity_probability,
+          //           opportunity_description: oppo?.opportunity_description,
+          //           opportunity_status: s?.name,
+          //           opportunity_amount: oppo?.opportunity_amount,
+          //           opportunity_party: item?.contact_person_name,
+          //         });
+          //         setNewOpportunityList(samplearry);
+          //       }
+          //     });
+          //   });
+          // });
+          // ##########
           // res?.data?.data?.leads.forEach((item, index) => {
           //   samplearry.push(item.opportunity_id);
           // });
           // console.log("pushedd ", samplearry);
 
           // setNewOpportunityList(samplearry);
-         
         } else {
           console.log("Failed to load data !");
         }
@@ -239,7 +233,7 @@ const [newOpportunityList, setNewOpportunityList] = useState();
       setOppurtunitystatus(oneoppurtunities.data?.data?.opportunity_status);
       setOppurtunitylead(oneoppurtunities.data?.data?.opportunity_lead_id);
       setOppurtunityparty(oneoppurtunities.data?.data?.opportunity_party);
-      
+
       // setOppurtunityparty()
     } catch (err) {
       console.log("error while getting all leads: ", err);
@@ -266,7 +260,7 @@ const [newOpportunityList, setNewOpportunityList] = useState();
     try {
       const onelead = await PublicFetch.get(`${CRM_BASE_URL}/lead/${id}`);
       console.log("one lead  name iss", onelead.data.data.lead_customer_name);
-      setLeadname(onelead.data.data.lead_customer_name)
+      setLeadname(onelead.data.data.lead_customer_name);
       // setBranches(allbranches.data.data);
       // setBranch_id(allbranches.data.branch_id);
       // console.log("branch id", branch_id);
@@ -276,7 +270,7 @@ const [newOpportunityList, setNewOpportunityList] = useState();
   };
 
   useEffect(() => {
-    getonelead()
+    getonelead();
     GetOpportunityData();
     // getAllContact();
   }, [numOfItems, pageSize, id]);
@@ -325,13 +319,14 @@ const [newOpportunityList, setNewOpportunityList] = useState();
       opportunity_from: item.opportunity_from,
       // convertedby: item.opportunity_created_by,
       opportunity_source: item.opportunity_source,
-      opportunity_party: item.opportunity_party,
+      opportunity_party: item.opportunity_party1,
       opportunity_validity: item.opportunity_validity,
       opportunity_description: item.opportunity_description,
       opportunity_amount: item.opportunity_amount,
       opportunity_probability: item.opportunity_probability,
       opportunity_status: item.opportunity_status,
-      opportunity_lead_id: item.opportunity_created_by,
+      opportunity_lead_id: item.opportunity_created_by1,
+      opportunity_lead_name: item.opportunity_created_by,
       // opportunity_leadid: item.opportunity_created_by1,
     });
     // getOppurtunityProgress(item);
@@ -363,25 +358,25 @@ const [newOpportunityList, setNewOpportunityList] = useState();
     setOppurtunityid(i.opportunity_Id);
     setoppurtunitytype(i.opportunity_type);
     setOppurtunityfrom(i.opportunity_from);
-    setOppurtunityparty(i. opportunity_party1);
+    setOppurtunityparty(i.opportunity_party1);
     setOppurtunitysource(i.opportunity_source);
-  
+
     setOppurtunityvalidity(i.opportunity_validity);
     setOppurtunityamount(i.opportunity_amount);
     setOpportunitydescription(i.opportunity_description);
     setOppurtunityProbability(i.opportunity_probability);
     setOppurtunitystatus(i.opportunity_status);
-    setOppurtunitylead(i. opportunity_created_by1);
+    setOppurtunitylead(i.opportunity_created_by1);
 
     getAllContact();
 
-    let validityDate = moment(i.opportunity_validity)
+    let validityDate = moment(i.opportunity_validity);
 
     editForm.setFieldsValue({
       opportunity_id: i.opportunity_id,
       opportunity_type: i.opportunity_type,
       opportunity_from: i.opportunity_from,
-      opportunity_party: i.opportunity_party,
+      opportunity_party: i.opportunity_party1,
       opportunity_source: i.opportunity_source,
       opportunity_validity: validityDate,
       opportunity_amount: i.opportunity_amount,
@@ -399,22 +394,22 @@ const [newOpportunityList, setNewOpportunityList] = useState();
     setOppurtunityid(i.opportunity_id);
     setoppurtunitytype(i.opportunity_type);
     setOppurtunityfrom(i.opportunity_from);
-    setOppurtunityparty(i. opportunity_party1);
+    setOppurtunityparty(i.opportunity_party);
     setOppurtunitysource(i.opportunity_source);
-  
+
     setOppurtunityvalidity(i.opportunity_validity);
     setOppurtunityamount(i.opportunity_amount);
     setOpportunitydescription(i.opportunity_description);
     setOppurtunityProbability(i.opportunity_probability);
     setOppurtunitystatus(i.opportunity_status);
-    setOppurtunitylead(i.opportunity_created_by1);
+    setOppurtunitylead(i.opportunity_lead_id);
 
     getAllContact();
 
-    let validityDate = moment(i.opportunity_validity)
+    let validityDate = moment(i.opportunity_validity);
 
     editForm.setFieldsValue({
-      // opportunity_id: i.opportunity_id,
+      opportunity_id: i.opportunity_id,
       opportunity_type: i.opportunity_type,
       opportunity_from: i.opportunity_from,
       opportunity_party: i.opportunity_party,
@@ -424,7 +419,7 @@ const [newOpportunityList, setNewOpportunityList] = useState();
       opportunity_description: i.opportunity_description,
       opportunity_probability: i.opportunity_probability,
       opportunity_status: i.opportunity_status,
-      opportunity_lead_id: i.opportunity_created_by,
+      opportunity_lead_id: i?.opportunity_lead_name,
     });
 
     setShowEditModal(true);
@@ -436,6 +431,8 @@ const [newOpportunityList, setNewOpportunityList] = useState();
   //   getAllContact();
   //   setShowEditModal(true);
   // };
+
+  console.log("opportunity 11111111", oppurtunityparty);
 
   const updatedOppurtunity = async () => {
     // const UpdatedFormdata = {
@@ -455,16 +452,18 @@ const [newOpportunityList, setNewOpportunityList] = useState();
     try {
       const editoppurtunity = await PublicFetch.patch(
         `${CRM_BASE_URL}/opportunity/${oppurtunityid}`,
-    {  opportunity_lead_id: oppurtunitylead,
-      opportunity_type: oppurtunitytype,
-      opportunity_from: oppurtunityfrom,
-      opportunity_source: oppurtunitysource,
-      opportunity_party: oppurtunityparty,
-      opportunity_validity: oppurtunityvalidity,
-      opportunity_description: opportunitydescription,
-      opportunity_amount: oppurtunityamount,
-      opportunity_probability: oppurtunityprobability,
-      opportunity_status: oppurtunitystatus,}
+        {
+          opportunity_lead_id: oppurtunitylead,
+          opportunity_type: oppurtunitytype,
+          opportunity_from: oppurtunityfrom,
+          opportunity_source: oppurtunitysource,
+          opportunity_party: oppurtunityparty,
+          opportunity_validity: oppurtunityvalidity,
+          opportunity_description: opportunitydescription,
+          opportunity_amount: oppurtunityamount,
+          opportunity_probability: oppurtunityprobability,
+          opportunity_status: oppurtunitystatus,
+        }
       );
 
       console.log("editdata", editoppurtunity);
@@ -532,7 +531,7 @@ const [newOpportunityList, setNewOpportunityList] = useState();
       key: "action",
       width: "15%",
       render: (data, index) => {
-        console.log("indexxx",index);;
+        console.log("indexxx", index);
         return (
           <div className="d-flex justify-content-center gap-2">
             <div className="editcolor">
@@ -1348,7 +1347,6 @@ const [newOpportunityList, setNewOpportunityList] = useState();
                 > */}
                 <label>Generated/Converted by</label>
                 <Form.Item name="opportunity_lead_id">
-                
                   <SelectBox
                     defaultValue={oppurtunitylead}
                     // onChange={(e) => {
@@ -1356,7 +1354,6 @@ const [newOpportunityList, setNewOpportunityList] = useState();
                     // }}
                   >
                     {/* <Select.Option value="lead">Lead</Select.Option> */}
-                   
                   </SelectBox>
                 </Form.Item>
 
@@ -1442,19 +1439,17 @@ const [newOpportunityList, setNewOpportunityList] = useState();
                 {/* <Form.Group className="mb-2" controlId="lead_valid_up_to"> */}
                 <label>Valid Up to</label>
 
-                <Form.Item name="opportunity_validity" >
-                  
-                    <DatePicker
-                          style={{ borderWidth: 0, marginTop: 10 }}
-                          initialValues={oppurtunityvalidity}
-                          format={dateFormatList}
-                          // disabledDate={(d) => !d || d.isBefore(today)}
-                          onChange={(e) => {
-                            console.log("date mmm", e);
-                            setOppurtunityvalidity(e);
-                          }}
-                        />
-
+                <Form.Item name="opportunity_validity">
+                  <DatePicker
+                    style={{ borderWidth: 0, marginTop: 10 }}
+                    initialValues={oppurtunityvalidity}
+                    format={dateFormatList}
+                    // disabledDate={(d) => !d || d.isBefore(today)}
+                    onChange={(e) => {
+                      console.log("date mmm", e);
+                      setOppurtunityvalidity(e);
+                    }}
+                  />
                 </Form.Item>
 
                 {/* </Form.Group> */}
@@ -1685,11 +1680,8 @@ const [newOpportunityList, setNewOpportunityList] = useState();
 
 export default OpportunityLeadlist;
 
-
-
-
-
-{/* <input
+{
+  /* <input
                     type="date"
                     // name="lead_validity"
                     style={{ borderWidth: 0, borderRadius: "5px" }}
@@ -1701,4 +1693,5 @@ export default OpportunityLeadlist;
                       console.log("selected datae : ", event.target.value);
                       setOppurtunityvalidity(event.target.value);
                     }}
-                  /> */}
+                  /> */
+}

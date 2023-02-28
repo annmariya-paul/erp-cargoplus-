@@ -18,8 +18,6 @@ import "./product.scss";
 
 // import { UniqueErrorMsg } from "../../../../ErrorMessages/UniqueErrorMessage";
 
-
-
 import CheckUnique from "../../../../check Unique/CheckUnique";
 import { UniqueErrorMsg } from "../../../../ErrorMessages/UniqueErrorMessage";
 
@@ -60,13 +58,10 @@ function ProductCreate() {
   const [productattribute, setProductAttribute] = useState([]);
   const [Errormsg, setErrormsg] = useState();
 
-  const [viewimg,setViewimg]=useState("")
+  const [viewimg, setViewimg] = useState("");
 
-  
-
-  const [uniqueCode,setuniqueCode]= useState(false)
-  const [uniqueCode2,setuniqueCode2] = useState()
-
+  const [uniqueCode, setuniqueCode] = useState(false);
+  const [uniqueCode2, setuniqueCode2] = useState();
 
   const newValues = (checkedValues) => {
     console.log("checked = ", checkedValues);
@@ -243,7 +238,7 @@ function ProductCreate() {
       file.preview = await getBase64(file.originFileObj);
     }
     setPreviewImage(file.url || file.preview);
-   
+
     setPreviewVisible(true);
     setPreviewTitle(
       file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
@@ -281,7 +276,7 @@ function ProductCreate() {
   };
 
   console.log("data in catt", State);
-  console.log("imgg ",previewImage )
+  console.log("imgg ", previewImage);
 
   return (
     <div>
@@ -334,29 +329,27 @@ function ProductCreate() {
                       onChange={(e) => {
                         setName(e.target.value);
 
-                        setuniqueCode()
+                        setuniqueCode();
                       }}
-                      
-                      onBlur={async()=> {
-                        let a = await CheckUnique({type:"productname",value:name})
+                      onBlur={async () => {
+                        let a = await CheckUnique({
+                          type: "productname",
+                          value: name,
+                        });
 
-                        setuniqueCode(a)
+                        setuniqueCode(a);
                       }}
                     />
                   </Form.Item>
                   {uniqueCode ? (
-
-                <div>
-                  <label style={{ color: "red" }}>
-                    Product name {UniqueErrorMsg.UniqueErrName}
-                  </label>
-                </div>
-              ) : (
-                ""
-              )}
-
-                 
-
+                    <div>
+                      <label style={{ color: "red" }}>
+                        Product name {UniqueErrorMsg.UniqueErrName}
+                      </label>
+                    </div>
+                  ) : (
+                    ""
+                  )}
                 </div>
                 <div className="col-4">
                   <label>Code</label>
@@ -379,17 +372,24 @@ function ProductCreate() {
                       },
                     ]}
                     onChange={(e) => {
-                      setCode(e.target.value)
-                      setuniqueCode2(false)}}
+                      setCode(e.target.value);
+                      setuniqueCode2(false);
+                    }}
                   >
-                    <InputType onBlur={async()=>{
-                      let a = await CheckUnique({type:"productcode",value:code})
-                      setuniqueCode2(a)
-                    }}/>
+                    <InputType
+                      onBlur={async () => {
+                        let a = await CheckUnique({
+                          type: "productcode",
+                          value: code,
+                        });
+                        setuniqueCode2(a);
+                      }}
+                    />
                   </Form.Item>
                   {uniqueCode2 ? (
                     <label style={{ color: "red" }}>
-                      Product Code {UniqueErrorMsg.UniqueErrName}</label>
+                      Product Code {UniqueErrorMsg.UniqueErrName}
+                    </label>
                   ) : (
                     ""
                   )}
@@ -492,8 +492,7 @@ function ProductCreate() {
                 </div>
 
                 <div className="col-6 mt-2">
-
-                <label>Description</label>
+                  <label>Description</label>
                   <Form.Item
                     className="mt-2"
                     name="description"
@@ -512,7 +511,6 @@ function ProductCreate() {
                   >
                     <TextArea />
                   </Form.Item>
-                 
                 </div>
 
                 <div className="col-6 mt-2">
@@ -524,14 +522,14 @@ function ProductCreate() {
                       accept=".png,.jpeg,.jpg"
                       filetype={"Accept only png,jpg and jpeg"}
                       onPreview={handlePreview}
-                      beforeUpload={false}
+                      beforeUpload={true}
                       onChange={(file) => {
                         console.log("Before upload", file.file);
                         console.log("Before upload file size", file.file.size);
 
                         if (file.file.size > 2000 && file.file.size < 500000) {
                           setImg(file.file.originFileObj);
-                        
+
                           console.log("selet imggg", file.file.originFileObj);
                           setImageSize(false);
                         } else {
@@ -541,14 +539,12 @@ function ProductCreate() {
                           );
                         }
                       }}
-                     
                     />
-                    
 
                     {/* <img src={previewImage}   
                     height="40px"
                     width="40px"/> */}
-           
+
                     {imageSize ? (
                       <p style={{ color: "red" }}>
                         Upload Image size between 1 kb and 500 kb
@@ -559,7 +555,7 @@ function ProductCreate() {
                   </Form.Item>
                 </div>
                 <div className="col-6 ">
-                <label>Attributes</label>
+                  <label>Attributes</label>
                   <Form.Item
                     name="attribute"
                     rules={[

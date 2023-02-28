@@ -888,7 +888,7 @@ function Services() {
                             accept=".png,.jpeg"
                             height={100}
                             onPreview={handlePreview}
-                            beforeUpload={false}
+                            beforeUpload={true}
                             onChange={(file) => {
                               console.log("Before upload", file.file);
                               console.log(

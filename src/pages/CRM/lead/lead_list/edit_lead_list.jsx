@@ -53,7 +53,7 @@ function LeadEdit() {
   const [previewTitle, setPreviewTitle] = useState("");
   const [FileSizeError, setFileSizeError] = useState(false);
   const [sampledata, setsambpledata] = useState();
-
+  const [organizationDisable, setOrganizationDisable] = useState();
   const [editForm] = Form.useForm();
   const [error, setError] = useState(false);
   const toggleTab = (index) => {
@@ -219,7 +219,7 @@ function LeadEdit() {
                 {/* <div className="col-12"> */}
                 <div className="row mb-2 ">
                   <div class="col-md-7 col-sm-12">
-                    <h5 class="lead_text">Lead Edit ({leadName})</h5>
+                    <h5 class="lead_text"> Edit Lead/Customer ({leadName})</h5>
                   </div>
                   <div className="col-md-5 col-sm-12 ">
                     <div className="d-flex justify-content-end">
@@ -329,7 +329,10 @@ function LeadEdit() {
                       >
                         <SelectBox
                           value={leadUsertype}
-                          onChange={(e) => setLeadUsertype(e)}
+                          onChange={(e) => {
+                            setLeadUsertype(e)
+                            setOrganizationDisable(e)
+                          }}
                         >
                           <Select.Option value="O">Organisation</Select.Option>
                           <Select.Option value="I">Individual</Select.Option>
@@ -361,6 +364,7 @@ function LeadEdit() {
                         ]}
                       >
                         <InputType
+                         disabled={organizationDisable === "I"}
                           // value={leadOrganization}
                           onChange={(e) => setLeadOrganization(e.target.value)}
                         />

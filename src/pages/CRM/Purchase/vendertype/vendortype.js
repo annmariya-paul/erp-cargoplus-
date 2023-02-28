@@ -29,7 +29,7 @@ function Vendortype() {
   const [editvendortypename,seteditvendortypename]= useState("")
   const [editvendortypedesc,seteditvendortypedesc]= useState("")
   const [editvendortypeid,seteditvendortypeid]= useState("")
-
+  const [serialNo, setserialNo] = useState(1);
   const [viewvendortype, setViewvendortype] = useState({
     id: "",
     vendortype_name: "",
@@ -151,6 +151,36 @@ function Vendortype() {
 
   const columns = [
     {
+      title: "Sl. No.",
+      key: "index",
+      render: (value, item, index) => serialNo + index,
+      align: "center",
+    },
+    {
+      title: " NAME",
+      dataIndex: "vendor_type_name",
+      key: "vendor_type_name",
+      filteredValue: [searchedText],
+      onFilter: (value, record) => {
+        return String(record.vendor_type_name)
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      },
+      align: "center",
+    },
+    {
+      title: " DESCRIPTION",
+      dataIndex: "vendor_type_desc",
+      key: "freight_type_prefix",
+     
+      onFilter: (value, record) => {
+        return String(record.freight_type_prefix)
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      },
+      align: "center",
+    },
+    {
       title: "ACTION",
       dataIndex: "action",
       key: "key",
@@ -181,30 +211,6 @@ function Vendortype() {
       },
       align: "center",
     },
-    {
-      title: "VENDOR TYPE NAME",
-      dataIndex: "vendor_type_name",
-      key: "freight_type_name",
-    //   filteredValue: [searchedText],
-    //   onFilter: (value, record) => {
-    //     return String(record.freight_type_name  || nameSearch)
-    //       .toLowerCase()
-    //       .includes(value.toLowerCase());
-    //   },
-      align: "center",
-    },
-    {
-      title: "VENDOR TYPE DESCRIPTION",
-      dataIndex: "vendor_type_desc",
-      key: "freight_type_prefix",
-     
-      onFilter: (value, record) => {
-        return String(record.freight_type_prefix)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
-      align: "center",
-    },
 
   ];
 
@@ -217,14 +223,14 @@ function Vendortype() {
       <div className="container-fluid container_fms pt-3">
         <div className="row flex-wrap">
           <div className="col">
-            <h5 className="lead_text">Vendor types</h5>
+            <h5 className="lead_text">Vendor Types</h5>
           </div>
           {/* <Leadlist_Icons /> */}
         </div>
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
-              placeholder="Search by Freight type Name"
+              placeholder="Search by Vendor type Name"
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
               onChange={(e) => {

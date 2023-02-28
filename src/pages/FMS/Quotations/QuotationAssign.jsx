@@ -114,7 +114,7 @@ function QuotationAssign() {
     console.log("values ssss", value);
     let ref = false;
 
-    ref = agnetData.some((agent, agentindex) => {
+    ref = agnetData?.some((agent, agentindex) => {
       return agent?.employee_id === value;
     });
     console.log("cecking", ref);

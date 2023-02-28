@@ -41,23 +41,37 @@ import { UniqueErrorMsg } from "../../../../ErrorMessages/UniqueErrorMessage";
 import CheckUnique from "../../../../check Unique/CheckUnique";
 import { type } from "@testing-library/user-event/dist/type";
 
+const getBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+
 function BrandsList() {
+  const [addForm] = Form.useForm();
   const navigate = useNavigate();
   const [pageSize, setPageSize] = useState("25"); // page size
   const [current, setCurrent] = useState(1);
   const [searchedText, setSearchedText] = useState(""); // search by text input
-  const [searchType, setSearchType] = useState(""); //search by type select box
-  const [searchStatus, setSearchStatus] = useState("");
+  const [modalAddBrand, setModalAddBrand] = useState(false);
   const [BrandEditPopup, setBrandEditPopup] = useState(false);
   const [BrandViewpopup, setBrandViewPopup] = useState(false);
   const [successPopup, setSuccessPopup] = useState(false);
   const [error, setError] = useState(false);
+  const [img, setImg] = useState([]);
+  const [imgSizeError, setImgSizeError] = useState(false);
+  const [previewVisible, setPreviewVisible] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+  const [previewTitle, setPreviewTitle] = useState("");
+  const [brand, setBrand] = useState();
   const [brands, setBrands] = useState([]);
   console.log("ddddddddd", brands);
   const [brandName, setBrandName] = useState();
   const [BrandImg, setBrandImg] = useState();
   const [brand_id, setBrand_id] = useState();
-  const [description, setDescription] = useState();
+  const [description, setDescription] = useState("");
   const [singleBrand, setSingleBrand] = useState();
   const [NameInput, setNameInput] = useState();
   const [DescriptionInput, setDescriptionInput] = useState();
@@ -65,7 +79,9 @@ function BrandsList() {
   const [ImageUpload, setImageUpload] = useState();
   const [editForm] = Form.useForm();
   const [Errormsg, setErrormsg] = useState();
+  const [BrandError, setBrandError] = useState();
   const [uniqueCode, setuniqueCode] = useState(false);
+  const [uniqueAddCode, setuniqueAddCode] = useState(false);
   const [brand_name, setBrand_name] = useState();
 
   const getData = (current, pageSize) => {
@@ -92,6 +108,46 @@ function BrandsList() {
         setSuccessPopup(false);
       }, time);
     }
+  };
+
+  const OnSubmit = () => {
+    const formData = new FormData();
+
+    formData.append("brand_pic", img);
+    formData.append("brand_description", description);
+    formData.append("brand_name", brand);
+
+    PublicFetch.post(`${CRM_BASE_URL_SELLING}/brand`, formData, {
+      "Content-Type": "Multipart/form-Data",
+    })
+      .then((res) => {
+        console.log("success", res);
+        if (res.data.success) {
+          setSuccessPopup(true);
+          addForm.resetFields();
+          close_modal(successPopup, 1000);
+          setModalAddBrand(false);
+          getallbrand();
+        } else {
+          console.log("", res.data.data);
+          setBrandError(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("error", err);
+        setError(true);
+      });
+  };
+
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setPreviewImage(file.url || file.preview);
+    setPreviewVisible(true);
+    setPreviewTitle(
+      file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
+    );
   };
 
   const data12 = brands?.map((item) => [
@@ -229,14 +285,19 @@ function BrandsList() {
       key: "IMAGE",
       width: "23%",
       align: "center",
-      render: (theImageURL, records) => (
+      render: (theImageURL, records) =>
         // console.log("image url", theImageURL);
-        <img
-          src={`${process.env.REACT_APP_BASE_URL}/${theImageURL}`}
-          height="20px"
-          width={"20px"}
-        />
-      ),
+        {
+          return theImageURL ? (
+            <img
+              src={`${process.env.REACT_APP_BASE_URL}/${theImageURL}`}
+              height="20px"
+              width={"20px"}
+            />
+          ) : (
+            ""
+          );
+        },
     },
     {
       title: "NAME",
@@ -321,55 +382,6 @@ function BrandsList() {
                   }}
                 />
               </div>
-              <div className="col-4 d-none">
-                <Select
-                  allowClear
-                  showSearch
-                  style={{
-                    width: "100%",
-                    marginTop: "8px",
-                    borderRadius: "5px",
-                  }}
-                  placeholder="Search by Type"
-                  className="select_search"
-                  optionFilterProp="children"
-                  onChange={(event) => {
-                    setSearchType(event ? [event] : []);
-                  }}
-                >
-                  <Select.Option value="sales">sales</Select.Option>
-                  <Select.Option value="maintenance">Maintenance</Select.Option>
-                  <Select.Option value="support">support</Select.Option>
-                </Select>
-              </div>
-              <div className="col-4 d-none">
-                <Select
-                  allowClear
-                  showSearch
-                  style={{
-                    width: "100%",
-                    marginTop: "8px",
-                    borderRadius: "5px",
-                  }}
-                  placeholder="Search by From"
-                  className="select_search"
-                  optionFilterProp="children"
-                  onChange={(event) => {
-                    setSearchStatus(event ? [event] : []);
-                  }}
-                >
-                  {/* {LeadStatus &&
-                  LeadStatus.map((item, index) => {
-                    return (
-                      <Select.Option key={item.id} value={item.value}>
-                        {item.name}
-                      </Select.Option>
-                    );
-                  })} */}
-                  <Select.Option value="L">Lead</Select.Option>
-                  <Select.Option value="C">Customer</Select.Option>
-                </Select>
-              </div>
             </div>
             <div className="row my-3">
               <div className="col-4  px-3">
@@ -418,32 +430,32 @@ function BrandsList() {
                 </Select>
               </div>
               <div className="col-4 d-flex align-items-center justify-content-center">
-              <MyPagination
-                total={brands?.length}
-                current={current}
-                showSizeChanger={true}
-                pageSize={pageSize}
-                onChange={(current, pageSize) => {
-                  console.log("ggdhffs", current, pageSize);
-                  setCurrent(current);
-                  setPageSize(pageSize);
-                }}
-              />
-            </div>
+                <MyPagination
+                  total={brands?.length}
+                  current={current}
+                  showSizeChanger={true}
+                  pageSize={pageSize}
+                  onChange={(current, pageSize) => {
+                    console.log("ggdhffs", current, pageSize);
+                    setCurrent(current);
+                    setPageSize(pageSize);
+                  }}
+                />
+              </div>
               <div className="col-4  d-flex justify-content-end">
                 <Button
-                  //   onClick={() => setShowAddOpportunity(true)}
+                  onClick={() => setModalAddBrand(true)}
                   className="add_opportunity"
                 >
-                  <Link to={ROUTES.BRANDCREATE}>
+                  {/* <Link to={ROUTES.BRANDCREATE}>
                     <span
                       style={{
                         color: "white",
                       }}
-                    >
-                      Add Brand
-                    </span>
-                  </Link>
+                    > */}
+                  Add Brand
+                  {/* </span> */}
+                  {/* </Link> */}
                 </Button>
               </div>
             </div>
@@ -472,6 +484,162 @@ function BrandsList() {
             {/* {"mcncncncncncncnc"} */}
           </div>
 
+          <Custom_model
+            show={modalAddBrand}
+            onHide={() => setModalAddBrand(false)}
+            footer={false}
+            View_list
+            list_content={
+              <>
+                <div className="row">
+                  <h5 className="lead_text">Add Brand</h5>
+                </div>
+                <Form
+                  name="addForm"
+                  form={addForm}
+                  onFinish={(value) => {
+                    console.log("values111333", value);
+                    OnSubmit();
+                  }}
+                  onFinishFailed={(error) => {
+                    console.log(error);
+                  }}
+                >
+                  <div className="row py-4">
+                    <div className="col-12 pt-1">
+                      <label>Name</label>
+                      <div>
+                        <Form.Item
+                          name="brandName"
+                          rules={[
+                            {
+                              required: true,
+                              pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                              message: "Please enter a Valid Brand Name",
+                            },
+                            {
+                              min: 2,
+                              message: "Name must be at least 2 characters",
+                            },
+                            {
+                              max: 100,
+                              message:
+                                "Name cannot be longer than 100 characters",
+                            },
+                          ]}
+                          onChange={(e) => setBrand(e.target.value)}
+                        >
+                          <InputType
+                            value={brand}
+                            onChange={(e) => {
+                              setBrand(e.target.value);
+                              setBrandError("");
+                              setuniqueAddCode(false);
+                            }}
+                            onBlur={async () => {
+                              let a = await CheckUnique({
+                                type: "brandname",
+                                value: brand,
+                              });
+                              setuniqueAddCode(a);
+                            }}
+                          />
+                        </Form.Item>
+                        {uniqueAddCode ? (
+                          <div>
+                            <label style={{ color: "red" }}>
+                              Brand Name {UniqueErrorMsg.UniqueErrName}
+                            </label>
+                          </div>
+                        ) : (
+                          ""
+                        )}
+                      </div>
+                    </div>
+                    <div className="col-12">
+                      <label>Description</label>
+                      <div>
+                        <Form.Item
+                          name="description"
+                          rules={[
+                            {
+                              min: 2,
+                              message:
+                                "Description must be at least 2 characters",
+                            },
+                            {
+                              max: 500,
+                              message:
+                                "Description cannot be longer than 500 characters",
+                            },
+                          ]}
+                        >
+                          <TextArea
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                          />
+                        </Form.Item>
+                      </div>
+                    </div>
+                    <div className="col-12">
+                      <label>Display Picture</label>
+                      <Form.Item name="new">
+                        <FileUpload
+                          multiple
+                          listType="picture"
+                          accept=".png,.jpg,.jpeg"
+                          height={100}
+                          onPreview={handlePreview}
+                          beforeUpload={false}
+                          onChange={(file) => {
+                            console.log("Before upload", file.file);
+                            console.log(
+                              "Before upload file size",
+                              file.file.size
+                            );
+
+                            if (
+                              file.file.size > 1000 &&
+                              file.file.size < 500000
+                            ) {
+                              setImg(file.file.originFileObj);
+                              setImgSizeError(false);
+                              console.log(
+                                "Image must be greater than 1 kb and less than 500 kb"
+                              );
+                            } else {
+                              console.log("failed beacuse of large size");
+                              setImgSizeError(true);
+                            }
+                          }}
+                        />
+                      </Form.Item>
+                      {imgSizeError ? (
+                        <div>
+                          <label style={{ color: "red" }}>
+                            Please Select Image Size under 500kb
+                          </label>
+                        </div>
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                    <div className="col-12 d-flex justify-content-center gap-2 mt-5 pt-4">
+                      <Button className="save_button">Save</Button>
+                      <Button
+                        btnType="cancel"
+                        onClick={() => {
+                          setModalAddBrand(false);
+                        }}
+                      >
+                        cancel
+                      </Button>
+                    </div>
+                  </div>
+                </Form>
+              </>
+            }
+          />
           {/*  {/* {View model of Brands  section Two    }  */}
 
           <Custom_model
@@ -546,7 +714,7 @@ function BrandsList() {
       </div>
       {/* { edit brand modal } */}
       <Custom_model
-        bodyStyle={{ height: 550, overflowY: "auto" }}
+        bodyStyle={{ height: 580, overflowY: "auto" }}
         size={"xl"}
         show={BrandEditPopup}
         onHide={() => {
@@ -554,142 +722,145 @@ function BrandsList() {
         }}
         View_list
         list_content={
-          <div>
-            <div className="container-fluid px-4 my-3">
-              <div>
-                <h5 className="lead_text">Edit Brand</h5>
-              </div>
-              <div className="row my-3 ">
-                <Form
-                  form={editForm}
-                  onFinish={(values) => {
-                    console.log("values iss", values);
-                    handleUpdate();
-                  }}
-                  onFinishFailed={(error) => {
-                    console.log(error);
-                  }}
-                >
-                  <div className="col-6">
-                    <label>Name</label>
-                    <Form.Item
-                      name="NameInput"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid Brand Name",
-                        },
-                        {
-                          min: 2,
-                          message: "Name must be at least 2 characters",
-                        },
-                        {
-                          max: 100,
-                          message: "Name cannot be longer than 100 characters",
-                        },
-                      ]}
-                    >
-                      <InputType
-                        className="input_type_style w-100"
-                        value={NameInput}
-                        onChange={(e) => {
-                          setNameInput(e.target.value);
-                          setErrormsg("");
-                          setuniqueCode(false);
-                        }}
-                        onBlur={async () => {
-                          if (NameInput !== brand_name) {
-                            let a = await CheckUnique({
-                              type: "brandname",
-                              value: NameInput,
-                            });
-                            setuniqueCode(a);
-                          }
-                        }}
-                      />
-                    </Form.Item>
-                    {uniqueCode ? (
-                      <label style={{ color: "red" }}>
-                        Brand Name {UniqueErrorMsg.UniqueErrName}
-                      </label>
-                    ) : (
-                      ""
-                    )}
-                  </div>
-                  <div className="col-6 my-2">
-                    <label>Description</label>
-                    <Form.Item
-                      name="DescriptionInput"
-                      rules={[
-                        {
-                          min: 5,
-                          message: "Description must be at least 5 characters",
-                        },
-                        {
-                          max: 500,
-                          message:
-                            "Description cannot be longer than 500 characters",
-                        },
-                      ]}
-                    >
-                      <TextArea
-                        value={DescriptionInput}
-                        className="input_type_style w-100"
-                        onChange={(e) => {
-                          setDescriptionInput(e.target.value);
-                        }}
-                      />
-                    </Form.Item>
-                  </div>
-                  <div className="col-12 my-3">
-                    <Form.Item name="ImageUpload">
-                      <FileUpload
-                        multiple
-                        listType="picture"
-                        accept=".png,.jpg,.jpeg"
-                        beforeUpload={false}
-                        onChange={(file) => {
-                          console.log("Before upload", file.file);
-                          console.log(
-                            "Before upload file size",
-                            file.file.size
-                          );
-
-                          if (
-                            file.file.size > 1000 &&
-                            file.file.size < 500000
-                          ) {
-                            setImageUpload(file.file.originFileObj);
-                            console.log(
-                              "Image must be greater than 1 kb and less than 500 kb"
-                            );
-                          } else {
-                            console.log("hgrtryyryr");
-                          }
-                        }}
-                      />
-                    </Form.Item>
-                    <img
-                      src={`${process.env.REACT_APP_BASE_URL}/${ImageInput}`}
-                      height="40px"
-                      width={"40px"}
-                    />
-                  </div>
-                  <div className="col-12 d-flex justify-content-center mt-5">
-                    <Button className="save_button">Save</Button>
-                  </div>
-                </Form>
-              </div>
-              {error ? (
-                <div className="">
-                  <ErrorMsg code={"400"} />
-                </div>
-              ) : (
-                ""
-              )}
+          <>
+            <div className="row">
+              <h5 className="lead_text">Edit Brand</h5>
             </div>
-          </div>
+
+            <Form
+              form={editForm}
+              onFinish={(values) => {
+                console.log("values iss", values);
+                handleUpdate();
+              }}
+              onFinishFailed={(error) => {
+                console.log(error);
+              }}
+            >
+              <div className="row py-4">
+                <div className="col-12">
+                  <label>Name</label>
+                  <Form.Item
+                    name="NameInput"
+                    rules={[
+                      {
+                        required: true,
+                        pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                        message: "Please enter a Valid Brand Name",
+                      },
+                      {
+                        min: 2,
+                        message: "Name must be at least 2 characters",
+                      },
+                      {
+                        max: 100,
+                        message: "Name cannot be longer than 100 characters",
+                      },
+                    ]}
+                  >
+                    <InputType
+                      className="input_type_style w-100"
+                      value={NameInput}
+                      onChange={(e) => {
+                        setNameInput(e.target.value);
+                        setErrormsg("");
+                        setuniqueCode(false);
+                      }}
+                      onBlur={async () => {
+                        if (NameInput !== brand_name) {
+                          let a = await CheckUnique({
+                            type: "brandname",
+                            value: NameInput,
+                          });
+                          setuniqueCode(a);
+                        }
+                      }}
+                    />
+                  </Form.Item>
+                  {uniqueCode ? (
+                    <label style={{ color: "red" }}>
+                      Brand Name {UniqueErrorMsg.UniqueErrName}
+                    </label>
+                  ) : (
+                    ""
+                  )}
+                </div>
+                <div className="col-12 my-2">
+                  <label>Description</label>
+                  <Form.Item
+                    className="mt-2"
+                    name="DescriptionInput"
+                    rules={[
+                      {
+                        min: 5,
+                        message: "Description must be at least 5 characters",
+                      },
+                      {
+                        max: 500,
+                        message:
+                          "Description cannot be longer than 500 characters",
+                      },
+                    ]}
+                  >
+                    <TextArea
+                      value={DescriptionInput}
+                      className="input_type_style w-100"
+                      onChange={(e) => {
+                        setDescriptionInput(e.target.value);
+                      }}
+                    />
+                  </Form.Item>
+                </div>
+                <div className="col-12 my-3">
+                  <Form.Item name="ImageUpload">
+                    <FileUpload
+                      multiple
+                      listType="picture"
+                      accept=".png,.jpg,.jpeg"
+                      height={100}
+                      beforeUpload={false}
+                      onChange={(file) => {
+                        console.log("Before upload", file.file);
+                        console.log("Before upload file size", file.file.size);
+
+                        if (file.file.size > 1000 && file.file.size < 500000) {
+                          setImageUpload(file.file.originFileObj);
+                          console.log(
+                            "Image must be greater than 1 kb and less than 500 kb"
+                          );
+                        } else {
+                          console.log("hgrtryyryr");
+                        }
+                      }}
+                    />
+                  </Form.Item>
+                  <img
+                    src={`${process.env.REACT_APP_BASE_URL}/${ImageInput}`}
+                    height="40px"
+                    width={"40px"}
+                  />
+                </div>
+                <div className="col-12 d-flex justify-content-center mt-5 gap-2">
+                  <Button className="save_button">Save</Button>
+                  <Button
+                    btnType="cancel"
+                    onClick={() => {
+                      setBrandEditPopup(false);
+                    }}
+                  >
+                    cancel
+                  </Button>
+                </div>
+              </div>
+            </Form>
+            {error ? (
+              <div className="">
+                <ErrorMsg code={"400"} />
+              </div>
+            ) : (
+              ""
+            )}
+          </>
         }
       />
       {/* {success popups} */}

@@ -181,17 +181,14 @@ useEffect(() => {
 
   return (
     <div>
-      <div className="container-fluid mt-3">
-        <div>
-          <h4 className="lead_text">Services</h4>
-        </div>
+      <div className="container-fluid">
         <div
           style={{ borderRadius: "8px" }}
-          className="card border-0 content-tabs  my-3 px-4"
+          className="card border-0 content-tabs px-2"
         >
           <div className="container my-3">
-            <div className="my-3">
-              <h5 className="lead_text">Add Services</h5>
+            <div>
+              <h5 className="lead_text my-2">Add Services</h5>
             </div>
 
             <Form
@@ -205,7 +202,7 @@ useEffect(() => {
                 console.log(error);
               }}
             >
-              <div className="row my-5">
+              <div className="row my-4">
                 <div className="col-4">
                   <label>Name</label>
                   <Form.Item
@@ -229,27 +226,29 @@ useEffect(() => {
                     <InputType
                       value={serviceName}
                       onChange={(e) => {
-                      setServiceName(e.target.value)
-                      setuniqueCode(false);
-                    }}
-                      onBlur={ async () => {
+                        setServiceName(e.target.value);
+                        setuniqueCode(false);
+                      }}
+                      onBlur={async () => {
                         // checkAttributeNameis();
-                        let a = await CheckUnique({type:"servicename",value:serviceName})
-                        console.log("hai how are u", a)
-                        setuniqueCode(a)
+                        let a = await CheckUnique({
+                          type: "servicename",
+                          value: serviceName,
+                        });
+                        console.log("hai how are u", a);
+                        setuniqueCode(a);
                       }}
                     />
                   </Form.Item>
                   {uniqueCode ? (
-                <div>
-                  <label style={{ color: "red" }}>
-                    Service Name {UniqueErrorMsg.UniqueErrName}
-                  </label>
-                </div>
-              ) : (
-                ""
-              )}
-
+                    <div>
+                      <label style={{ color: "red" }}>
+                        Service Name {UniqueErrorMsg.UniqueErrName}
+                      </label>
+                    </div>
+                  ) : (
+                    ""
+                  )}
                 </div>
                 <div className="col-4">
                   <label>Code</label>
@@ -274,26 +273,29 @@ useEffect(() => {
                     <InputType
                       value={servicecode}
                       onChange={(e) => {
-                      setServicecode(e.target.value)
-                     setuniqueserCode(false)
-                    }}
-                      onBlur={ async () => {
+                        setServicecode(e.target.value);
+                        setuniqueserCode(false);
+                      }}
+                      onBlur={async () => {
                         // checkAttributeNameis();
-                        let a = await CheckUnique({type:"servicecode",value:servicecode})
-                        console.log("hai how are u", a)
-                       setuniqueserCode(a)
+                        let a = await CheckUnique({
+                          type: "servicecode",
+                          value: servicecode,
+                        });
+                        console.log("hai how are u", a);
+                        setuniqueserCode(a);
                       }}
                     />
                   </Form.Item>
                   {uniqueserCode ? (
-                <div>
-                  <label style={{ color: "red" }}>
-                    Service Code {UniqueErrorMsg.UniqueErrName}
-                  </label>
-                </div>
-              ) : (
-                ""
-              )}
+                    <div>
+                      <label style={{ color: "red" }}>
+                        Service Code {UniqueErrorMsg.UniqueErrName}
+                      </label>
+                    </div>
+                  ) : (
+                    ""
+                  )}
                 </div>
                 <div className="col-4">
                   <label>Category</label>
@@ -339,31 +341,33 @@ useEffect(() => {
                     <InputType
                       value={Hsn}
                       onChange={(e) => {
-                      setHsn(e.target.value)
-                      setuniqueHsnCode(false)
+                        setHsn(e.target.value);
+                        setuniqueHsnCode(false);
                       }}
-                      onBlur={ async () => {
+                      onBlur={async () => {
                         // checkAttributeNameis();
-                        let a = await CheckUnique({type:"servicehsn",value:Hsn})
-                        console.log("hai how are u", a)
-                      setuniqueHsnCode(a)
+                        let a = await CheckUnique({
+                          type: "servicehsn",
+                          value: Hsn,
+                        });
+                        console.log("hai how are u", a);
+                        setuniqueHsnCode(a);
                       }}
                     />
                   </Form.Item>
                   {uniqueHsnCode ? (
-                <div>
-                  <label style={{ color: "red" }}>
-                    Service Hsn {UniqueErrorMsg.UniqueErrName}
-                  </label>
+                    <div>
+                      <label style={{ color: "red" }}>
+                        Service Hsn {UniqueErrorMsg.UniqueErrName}
+                      </label>
+                    </div>
+                  ) : (
+                    ""
+                  )}
                 </div>
-              ) : (
-                ""
-              )}
-                </div>
-                <div className="col-6 ">
+                <div className="col-6 mt-2">
                   <label className="">Tax Type</label>
                   <Form.Item
-                   className="mt-2"
                     name="taxRate"
                     rules={[
                       {
@@ -387,7 +391,7 @@ useEffect(() => {
                       value={taxRate}
                       onChange={(e) => setTaxRate(e.target.value)}
                     /> */}
-                       <SelectBox
+                    <SelectBox
                       placeholder={"--Please Select--"}
                       value={taxRate}
                       onChange={(e) => {
@@ -411,53 +415,44 @@ useEffect(() => {
                   </Form.Item>
                 </div>
 
-                <div className="col-12 mt-2 d-flex justify-content-center ">
-                  <div className="text-center">
-                    <label>Display Picture</label>
-                    <Form.Item name="new">
-                      <FileUpload
-                        multiple
-                        listType="picture"
-                        accept=".png,.jpeg"
-                        onPreview={handlePreview}
-                        beforeUpload={false}
-                        onChange={(file) => {
+                <div className="col-6 mt-2">
+                  <label>Display Picture</label>
+                  <Form.Item name="new" className="mt-2">
+                    <FileUpload
+                      multiple
+                      listType="picture"
+                      accept=".png,.jpeg"
+                      height={100}
+                      onPreview={handlePreview}
+                      beforeUpload={false}
+                      onChange={(file) => {
+                        console.log("Before upload file size", file.file.size);
+                        if (file.file.size > 2000 && file.file.size < 500000) {
+                          setImg(file.file.originFileObj);
+                          setImageSize(false);
+                          console.log("select imaggg", file.file.originFileObj);
                           console.log(
-                            "Before upload file size",
-                            file.file.size
+                            "image is greater than 2 kb and less than 500 kb"
                           );
-                          if (
-                            file.file.size > 2000 &&
-                            file.file.size < 500000
-                          ) {
-                            setImg(file.file.originFileObj);
-                            setImageSize(false);
-                            console.log(
-                              "select imaggg",
-                              file.file.originFileObj
-                            );
-                            console.log(
-                              "image is greater than 2 kb and less than 500 kb"
-                            );
-                          } else {
-                            setImageSize(true);
-                            console.log("Error in image upload");
-                          }
-                        }}
-                      />
-                      {imageSize ? (
-                        <p style={{ color: "red" }}>
-                          Upload Image size between 1 kb and 500 kb
-                        </p>
-                      ) : (
-                        ""
-                      )}
-                    </Form.Item>
-                  </div>
+                        } else {
+                          setImageSize(true);
+                          console.log("Error in image upload");
+                        }
+                      }}
+                    />
+                    {imageSize ? (
+                      <p style={{ color: "red" }}>
+                        Upload Image size between 1 kb and 500 kb
+                      </p>
+                    ) : (
+                      ""
+                    )}
+                  </Form.Item>
                 </div>
                 <div className="col-6 mt-2">
                   <label>Description</label>
                   <Form.Item
+                    className="mt-2"
                     name="description"
                     rules={[
                       {
@@ -477,7 +472,7 @@ useEffect(() => {
                     />
                   </Form.Item>
                 </div>
-                <div className="col-12 d-flex justify-content-center pt-5 gap-3 ">
+                <div className="col-12 d-flex justify-content-center mt-5 pt-4 gap-3 ">
                   <Button className="save_button">Save</Button>{" "}
                   <Button
                     as="input"

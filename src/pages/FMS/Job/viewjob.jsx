@@ -93,6 +93,7 @@ export default function ViewJob() {
   const [tabledata, setTabledata] = useState();
   const [grandtotal, setGrandTotal] = useState();
   const [detailstable, setAlldetailstable] = useState();
+  const [invoice_status, setInvoice_Status] = useState();
   console.log("details", detailstable);
   console.log("qtntable: ", tabledata);
   console.log("qtnno: ", qtnno);
@@ -207,12 +208,15 @@ export default function ViewJob() {
           };
           console.log("datas", temp);
           setAllJobs(temp);
+          setInvoice_Status(res?.data?.data?.job_invoice_status);
         }
       })
       .catch((err) => {
         console.log("Error", err);
       });
   };
+
+  console.log("status", invoice_status);
 
   useEffect(() => {
     if (id) {
@@ -273,17 +277,31 @@ export default function ViewJob() {
               </Button>
             </div>
             <div className="col-2 ">
-              <Button
-                btnType="save"
-                className="edit_button rounded"
-                onClick={() => {
-                  // handleviewtoedit();
-                  navigate(`${ROUTES.INVOICE_PREVIEW}/${id}`);
-                }}
-              >
-                Generate Invoice
-                {/* <FiEdit /> */}
-              </Button>
+              {invoice_status == 1 ? (
+                <Button
+                  btnType="save"
+                  className="edit_button rounded"
+                  onClick={() => {
+                    // handleviewtoedit();
+                    navigate(`${ROUTES.INVOICE_PREVIEW}/${id}`);
+                  }}
+                >
+                  Regenerate Invoice
+                  {/* <FiEdit /> */}
+                </Button>
+              ) : (
+                <Button
+                  btnType="save"
+                  className="edit_button rounded"
+                  onClick={() => {
+                    // handleviewtoedit();
+                    navigate(`${ROUTES.INVOICE_PREVIEW}/${id}`);
+                  }}
+                >
+                  Generate Invoice
+                  {/* <FiEdit /> */}
+                </Button>
+              )}
             </div>
             <div className="col-2"></div>
           </div>

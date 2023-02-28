@@ -13,8 +13,12 @@ function InvoicePrint({
   total,
   permanent_made,
   balance_due,
+  invoice_no,
+  Invoice_type,
+  invoice_number,
 }) {
   const [companyInfodata, setCompanyInfodata] = useState();
+  const [defaultCurrency, setDefaultCurrency] = useState();
 
   const companyinfo = () => {
     PublicFetch.get(`${GENERAL_SETTING_BASE_URL}/company`)
@@ -29,8 +33,28 @@ function InvoicePrint({
         console.log("Error", err);
       });
   };
+
+  const allCurrency = () => {
+    PublicFetch.get(`${GENERAL_SETTING_BASE_URL}/currency`)
+      .then((res) => {
+        console.log("Response", res);
+        if (res.data.success) {
+          console.log("success of cuurency", res.data.data);
+          res?.data?.data?.forEach((item, index) => {
+            if (item.currency_is_default === 1) {
+              console.log("default currency", item);
+              setDefaultCurrency(item);
+            }
+          });
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
   useEffect(() => {
     companyinfo();
+    allCurrency();
   }, []);
   return (
     <div>
@@ -41,7 +65,7 @@ function InvoicePrint({
         <table className="invoice_header">
           {companyInfodata &&
             companyInfodata.length > 0 &&
-            companyInfodata.map((item, index) => {
+            companyInfodata?.map((item, index) => {
               return (
                 <thead className="invoice_header">
                   <tr className="invoice_header">
@@ -66,12 +90,14 @@ function InvoicePrint({
                           </div>
                         </div>
                       </div>
-                      <div className="header__invoice">
-                        <h1>Invoice</h1>
-                        <div>
-                          Invoice# <span>1234567890</span>
+                      {invoice_no && (
+                        <div className="header__invoice">
+                          <h1>{Invoice_type}</h1>
+                          <div>
+                            {Invoice_type}# <span>{invoice_number}</span>
+                          </div>
                         </div>
-                      </div>
+                      )}
                     </div>
                   </tr>
                 </thead>
@@ -118,29 +144,31 @@ function InvoicePrint({
               <div className="sub_total_wrapper__col sub_total_wrapper__col_1">
                 <div style={{ width: "100%" }}>
                   <div>Total In Words</div>
-                  <div className="sub_total_words">{amount_in_words}</div>
+                  <div className="sub_total_words">
+                    {defaultCurrency?.currency_name} {amount_in_words}
+                  </div>
                 </div>
               </div>
               <div className="sub_total_wrapper__col sub_total_wrapper__col_2">
                 <div style={{ width: "100%" }}>
                   <table className="invoice_header">
                     <tbody className="invoice_header">
-                      <tr className="invoice_header">
+                      {/* <tr className="invoice_header">
                         <td>Sub Total</td>
                         <td>{sub_total}</td>
-                      </tr>
+                      </tr> */}
                       <tr>
-                        <td>Total</td>
-                        <td>{total}</td>
+                        <td style={{ fontWeight: 600 }}>Total</td>
+                        <td style={{ fontWeight: 600 }}>{total}</td>
                       </tr>
-                      <tr>
+                      {/* <tr>
                         <td>Permanent Made</td>
                         <td>{permanent_made}</td>
                       </tr>
                       <tr>
                         <td>Balance Due</td>
                         <td>{balance_due}</td>
-                      </tr>
+                      </tr> */}
                     </tbody>
                   </table>
                 </div>

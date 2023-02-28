@@ -37,6 +37,7 @@ export default function Taskexpenses() {
   const [addForm] = Form.useForm();
   const [services, setServices] = useState([]);
   const [isService, setIsService] = useState();
+  const [currencyDefault, setCurrencyDefault] = useState();
 
   console.log("Servicesss are :::", services);
 
@@ -398,6 +399,13 @@ export default function Taskexpenses() {
       );
       console.log("Getting all currency : ", allcurrency.data.data);
       setCurrencydata(allcurrency.data.data);
+      let arr = [];
+      allcurrency?.data?.data?.forEach((item, index) => {
+        if (item.currency_is_default === 1) {
+          arr = item?.currency_code;
+          setCurrencyDefault(arr);
+        }
+      });
     } catch (err) {
       console.log("Error in getting currency : ", err);
     }
@@ -418,7 +426,7 @@ export default function Taskexpenses() {
     console.log("code", b);
     console.log(";;;;;;;;;", data);
     axios
-      .get("https://open.er-api.com/v6/latest/USD")
+      .get(`https://open.er-api.com/v6/latest/${currencyDefault}`)
       .then(function (response) {
         console.log("currency current rate:", response);
         let a = response.data.rates[b];
@@ -1443,9 +1451,10 @@ export default function Taskexpenses() {
       total += item?.job_task_expense_cost_subtotalfx;
       expense += item?.job_task_expense_exp_amountlx;
     });
-
-    setTotalCost(total);
-    setTotalExpense(expense);
+    total = Number.parseFloat(total);
+    expense = Number.parseFloat(expense);
+    setTotalCost(total.toFixed(2));
+    setTotalExpense(expense.toFixed(2));
   }, [tableData]);
 
   console.log("total cost ::", totalcost);

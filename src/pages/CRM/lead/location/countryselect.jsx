@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import {  Button } from "react-bootstrap";
+// import {  Button } from "react-bootstrap";
+import Button from "../../../../components/button/button";
 import { Form } from "antd";
 import { useForm } from "react-hook-form";
 import Custom_model from "../../../../components/custom_modal/custom_model";
@@ -175,13 +176,16 @@ function Countrystate() {
          
          
           <div className=" pt-4">
-            <Button
+            {/* <Button
               btntype="submit"
               className="btn_save"
               // onClick={() => setModalShow(true)}
             >
               Save
-            </Button>
+            </Button> */}
+              <Button type="submit" className="qtn_save" btnType="save">
+                    Save
+                  </Button>
             <Custom_model
               centered
               size={`sm`}

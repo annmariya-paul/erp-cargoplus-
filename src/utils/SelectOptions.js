@@ -67,5 +67,11 @@ const cargo_typeoptions = [
   {
     id:"3", name : "Refrigerated",value :"Refrigerator"
   }, 
-]
-module.exports = { LeadType, LeadStatus, LeadOrganization, Oppor_Status, Prob_conversion,cargo_typeoptions };
+];
+
+const vendor_Organisation = [
+  { id: "1", name: "Individual", value: "IND" },
+  { id: "2", name: "Organisation", value: "ORG" },
+  
+];
+module.exports = { LeadType, LeadStatus, LeadOrganization, Oppor_Status, Prob_conversion,cargo_typeoptions,vendor_Organisation };

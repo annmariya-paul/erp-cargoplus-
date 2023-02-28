@@ -15,10 +15,10 @@ export default function FileUpload({
   accept,
   height,
   filetype,
-  fileList
+  fileList,
+  beforeUpload,
 }) {
   // const [files, setFiles] = useState([]);
-
 
   // const { register, handleSubmit } = useForm();
 
@@ -62,19 +62,19 @@ export default function FileUpload({
     setTimeout(() => {
       return true;
     }, 100);
-    return true
-  }
+    return true;
+  };
 
-  return (  
+  return (
     <>
       <Dragger
-      // fileList={[]}
-      
+        // fileList={[]}
         action={async () => await customAction()}
         multiple={multiple}
         listType={listType}
         accept={accept}
         height={height}
+        beforeUpload={beforeUpload}
         onChange={onChange}
         onClick={onClick}
       >

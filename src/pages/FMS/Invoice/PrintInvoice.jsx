@@ -19,6 +19,8 @@ function PrintInvoice() {
         if (res.data.success) {
           console.log("Success of invoice", res.data.data);
           let temp = [];
+          let grandtotal = 0;
+
           res?.data?.data?.fms_v1_jobs?.fms_v1_job_task_expenses.forEach(
             (item, index) => {
               temp.push({
@@ -34,7 +36,6 @@ function PrintInvoice() {
                 job_task_expense_taxtype_id: item.job_task_expense_taxtype_id,
                 job_task_expense_task_name: item?.crm_v1_services?.service_name,
               });
-              let grandtotal = 0;
               grandtotal += item.job_task_expense_cost_subtotalfx;
               grandtotal = Number.parseFloat(grandtotal);
               setGrandTotal(grandtotal.toFixed(2));

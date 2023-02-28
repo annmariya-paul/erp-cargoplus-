@@ -12,7 +12,7 @@ import { useState } from "react";
 import moment from "moment";
 import Custom_model from "../../../components/custom_modal/custom_model";
 import { ROUTES } from "../../../routes";
-function InvoicePreView() {
+function InvoiceView() {
   const navigate = useNavigate();
   const { id } = useParams();
   console.log("Id::::", id);
@@ -182,14 +182,15 @@ function InvoicePreView() {
                     <div className="col-1">:</div>
 
                     <div className="col-7">
-                      <DatePicker
+                      {/* <DatePicker
                         className="w-50"
                         format={"DD-MM-YYYY"}
                         value={Invoice_Date}
                         onChange={(e) => {
                           setInvoiceDate(e);
                         }}
-                      />
+                      /> */}
+                      <p className="modal-view-data">{IsDate_confirm}</p>
                     </div>
                   </div>
                   <div className="col-6 d-flex">
@@ -374,7 +375,7 @@ function InvoicePreView() {
                       <lable style={{ fontWeight: 600 }}>{grandTotal} </lable>
                     </div>
                   </div>
-                  <div className="row mt-4">
+                  {/* <div className="row mt-4">
                     <div className="d-flex  justify-content-center gap-2 ">
                       <Popconfirm
                         title={`Are you sure you want to continue with Invoice Date: ${IsDate_confirm} `}
@@ -399,7 +400,7 @@ function InvoicePreView() {
                         Cancel{" "}
                       </Button>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
 
                 {/* <div className="row ">
@@ -709,4 +710,4 @@ function InvoicePreView() {
   );
 }
 
-export default InvoicePreView;
+export default InvoiceView;

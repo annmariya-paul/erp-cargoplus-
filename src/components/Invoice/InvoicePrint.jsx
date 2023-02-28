@@ -18,6 +18,7 @@ function InvoicePrint({
   invoice_number,
 }) {
   const [companyInfodata, setCompanyInfodata] = useState();
+  const [defaultCurrency, setDefaultCurrency] = useState();
 
   const companyinfo = () => {
     PublicFetch.get(`${GENERAL_SETTING_BASE_URL}/company`)
@@ -32,8 +33,28 @@ function InvoicePrint({
         console.log("Error", err);
       });
   };
+
+  const allCurrency = () => {
+    PublicFetch.get(`${GENERAL_SETTING_BASE_URL}/currency`)
+      .then((res) => {
+        console.log("Response", res);
+        if (res.data.success) {
+          console.log("success of cuurency", res.data.data);
+          res?.data?.data?.forEach((item, index) => {
+            if (item.currency_is_default === 1) {
+              console.log("default currency", item);
+              setDefaultCurrency(item);
+            }
+          });
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
   useEffect(() => {
     companyinfo();
+    allCurrency();
   }, []);
   return (
     <div>
@@ -44,7 +65,7 @@ function InvoicePrint({
         <table className="invoice_header">
           {companyInfodata &&
             companyInfodata.length > 0 &&
-            companyInfodata.map((item, index) => {
+            companyInfodata?.map((item, index) => {
               return (
                 <thead className="invoice_header">
                   <tr className="invoice_header">
@@ -123,7 +144,9 @@ function InvoicePrint({
               <div className="sub_total_wrapper__col sub_total_wrapper__col_1">
                 <div style={{ width: "100%" }}>
                   <div>Total In Words</div>
-                  <div className="sub_total_words">{amount_in_words}</div>
+                  <div className="sub_total_words">
+                    {defaultCurrency?.currency_name} {amount_in_words}
+                  </div>
                 </div>
               </div>
               <div className="sub_total_wrapper__col sub_total_wrapper__col_2">

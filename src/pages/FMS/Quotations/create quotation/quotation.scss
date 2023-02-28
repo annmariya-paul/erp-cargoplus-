@@ -74,9 +74,38 @@ th {
   text-align: center;
   font-weight: 500;
 }
+
+.qtn_table_brdr{
+   thead {
+    tr {
+      th {
+        z-index: 1;
+        background-color: rgb(240, 248, 254);
+        position: sticky;
+        border: 1px solid rgb(197, 194, 194);
+        top: 0;
+      }
+      .tborder {
+        border: none !important;
+      }
+    }
+  }
+  tbody {
+    tr {
+      td {
+        padding-inline: 5px;
+        margin-block: -5px;
+        border: 1px solid rgb(196, 191, 191);
+      }
+    }
+  }
+}
 .text_right {
   text-align: right;
   padding-right: 10px;
+}
+.grandtotal,.input_bg{
+  background-color: white !important;
 }
 .tablecontainer {
   overflow-y: scroll;

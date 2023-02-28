@@ -383,31 +383,39 @@ export default function Add_Quotation() {
       dataIndex: "action",
       key: "action",
       className: "drag-visible",
-      render: (data, index) => {
+      render: (data,record, index) => {
         return (
           <div className="d-flex justify-content-center align-items-center gap-2">
             <div className="actionEdit m-0 p-0">
               <DragOutlined className="draggable" type="swap" />
             </div>
+            <Popconfirm
+              title="Sure to delete?"
+              onConfirm={() => handleDelete(record.key)}
+            >
+              <div className="deleteIcon m-0">
+                <FaTrash />
+              </div>
+            </Popconfirm>
           </div>
         );
       },
     },
-    {
-      title: "",
-      dataIndex: "operation",
-      render: (_, record) =>
-        tableData.length >= 1 ? (
-          <Popconfirm
-            title="Sure to delete?"
-            onConfirm={() => handleDelete(record.key)}
-          >
-            <div className="deleteIcon m-0">
-              <FaTrash />
-            </div>
-          </Popconfirm>
-        ) : null,
-    },
+    // {
+    //   title: "",
+    //   dataIndex: "operation",
+    //   render: (_, record) =>
+    //     tableData.length >= 1 ? (
+    //       <Popconfirm
+    //         title="Sure to delete?"
+    //         onConfirm={() => handleDelete(record.key)}
+    //       >
+    //         <div className="deleteIcon m-0">
+    //           <FaTrash />
+    //         </div>
+    //       </Popconfirm>
+    //     ) : null,
+    // },
     {
       title: "TASKS",
       dataIndex: "quotation_details_service_id",
@@ -417,7 +425,7 @@ export default function Add_Quotation() {
       render: (data, index) => {
         console.log("index is :", index);
         return (
-          <div className="d-flex justify-content-center align-items-center tborder ">
+          <div className="d-flex justify-content-center align-items-center">
             <Form.Item
               name={[
                 "quotation_details",
@@ -431,7 +439,7 @@ export default function Add_Quotation() {
                 showArrow={false}
                 showSearch
                 optionFilterProp="children"
-                className="selectwidth mb-2"
+                className="selectwidth input_bg"
                 value={index.quotation_details_service_id}
                 onChange={(e) => {
                   console.log("servicess11123", e);
@@ -476,7 +484,7 @@ export default function Add_Quotation() {
               // rules={[{ required: true, message: "Required" }]}
             >
               <Input_Number
-                className="text_right"
+                className="text_right input_bg"
                 value={index.quotation_details_cost}
                 onChange={(value) => {
                   handleInputchange1(
@@ -530,7 +538,7 @@ export default function Add_Quotation() {
                 allowClear
                 showSearch
                 optionFilterProp="children"
-                className="selectwidthnew mb-2"
+                className="selectwidthnew mb-2 input_bg"
                 value={index.quotation_details_tax_type}
                 onChange={(e) => {
                   console.log("servicess11123", e);
@@ -581,7 +589,7 @@ export default function Add_Quotation() {
               // rules={[{ required: true, message: 'Please input the name' }]}
             >
               <Input_Number
-                className="text_right"
+                className="text_right input_bg"
                 // value={index.taxamount}
                 onChange={(e) =>
                   handleInputchange1(
@@ -618,7 +626,7 @@ export default function Add_Quotation() {
               // rules={[{ required: true, message: 'Please input the name' }]}
             >
               <Input_Number
-                className="text_right"
+                className="text_right input_bg"
                 // value={    index.totalamount=(index.cost + index.taxamount)
                 // }
                 value={
@@ -1645,6 +1653,7 @@ export default function Add_Quotation() {
                           accept=".pdf,.docs,"
                           // aceept=".jpeg,.jpg,.png"
                           onPreview={handlePreview}
+                          
                           // value={leadAttachment}
                           // onChange={(e) => setLeadAttachment(e.target.value)}
                           onChange={(file) => {
@@ -1684,24 +1693,22 @@ export default function Add_Quotation() {
                     data={tableData}
                     columns={columns}
                     rowKey={(record) => record.key}
-                    custom_table_css="table_qtn"
+                    custom_table_css="table_qtn qtn_table_brdr"
                   />
                 </div>
               </div>
               <div className="d-flex justify-content-end mt-4 mx-5">
                 <div className="col-lg-2 col-sm-4 col-xs-3 d-flex justify-content-end mt-3 me-2">
-                  <p style={{ fontWeight: 500 }}>Grand Total</p>
+                  <p style={{ fontWeight: 500 }}>Grand Total :</p>
                 </div>
 
                 <div className="col-lg-2 col-sm-2 col-xs-2">
                   <Form.Item name="grandtotal">
                     <Input_Number
-                      className="text_right"
+                      className="text_right grandtotal"
                       value={total}
                       fontWeight={1000}
-                      // onChange={handleChange}
                       align="right"
-                      // step={0.01}
                       min={0}
                       precision={2}
                       controlls={false}

@@ -16,6 +16,7 @@ export default function Agent_Response() {
   const { id } = useParams();
   console.log("idddddddddddddddd", id);
   const [addForm] = Form.useForm();
+  const [serialNo, setserialNo] = useState(1);
   const [successPopup, setSuccessPopup] = useState(false);
   const [modalAddResponse, setModalAddResponse] = useState(false);
   const [modalEditResponse, setModalEditResponse] = useState(false);
@@ -79,10 +80,9 @@ export default function Agent_Response() {
               {
                 arr.push({
                   enquiry_response_id: item.enquiry_response_id,
-                  agent_name:
-                    item.enquiry_response_agent_details
-                      .employee_name,
+                  agent_name: item.enquiry_response_agent_details.employee_name,
                   agent_response: item.enquiry_response_response,
+                  enquiry_response_agent: item.enquiry_response_agent,
                 });
               }
             }
@@ -132,7 +132,7 @@ export default function Agent_Response() {
     addForm.setFieldsValue({
       responseId: e.enquiry_response_id,
       responseEnquiryId: e.enquiry_response_enquiry_id,
-      agentName: e.agent_name,
+      agentName: e.enquiry_response_agent,
       enquiryResponse: e.agent_response,
     });
     setModalEditResponse(true);
@@ -160,6 +160,25 @@ export default function Agent_Response() {
 
   const columns = [
     {
+      title: "Sl. No.",
+      key: "index",
+      width: "8%",
+      render: (value, item, index) => serialNo + index,
+      align: "center",
+    },
+    {
+      title: "AGENT",
+      dataIndex: "agent_name",
+      key: "agent_name",
+      align: "center",
+    },
+    {
+      title: "RESPONSE",
+      dataIndex: "agent_response",
+      key: "agent_response",
+      align: "center",
+    },
+    {
       title: "ACTION",
       dataIndex: "action",
       key: "key",
@@ -177,18 +196,6 @@ export default function Agent_Response() {
           </div>
         );
       },
-      align: "center",
-    },
-    {
-      title: "AGENT",
-      dataIndex: "agent_name",
-      key: "agent_name",
-      align: "center",
-    },
-    {
-      title: "RESPONSE",
-      dataIndex: "agent_response",
-      key: "agent_response",
       align: "center",
     },
   ];
@@ -386,6 +393,13 @@ export default function Agent_Response() {
             </Form>
           </>
         }
+      />
+      {/* {modal for success popups} */}
+      <Custom_model
+        size={"sm"}
+        show={successPopup}
+        onHide={() => setSuccessPopup(false)}
+        success
       />
     </>
   );

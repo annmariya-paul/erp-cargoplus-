@@ -51,6 +51,7 @@ const getBase64 = (file) =>
 
 function BrandsList() {
   const [addForm] = Form.useForm();
+  const [serialNo, setserialNo] = useState(1);
   const navigate = useNavigate();
   const [pageSize, setPageSize] = useState("25"); // page size
   const [current, setCurrent] = useState(1);
@@ -255,28 +256,10 @@ function BrandsList() {
 
   const columns = [
     {
-      title: "ACTION",
-      dataIndex: "action",
-      key: "ACTION",
-      width: "14%",
-      render: (data, index) => {
-        return (
-          <div className="d-flex justify-content-center align-items-center gap-4">
-            <div
-              onClick={() => handleEditPhase2(index)}
-              className="actionEdit m-0 p-0"
-            >
-              <FaEdit />
-            </div>
-            <div
-              onClick={() => handleViewData(index)}
-              className="actionView m-0 p-0"
-            >
-              <MdPageview />
-            </div>
-          </div>
-        );
-      },
+      title: "Sl. No.",
+      key: "index",
+      width: "8%",
+      render: (value, item, index) => serialNo + index,
       align: "center",
     },
     {
@@ -318,6 +301,31 @@ function BrandsList() {
       dataIndex: "brand_description",
       key: "DESCRIPTION",
       //   width: "23%",
+      align: "center",
+    },
+    {
+      title: "ACTION",
+      dataIndex: "action",
+      key: "ACTION",
+      width: "12%",
+      render: (data, index) => {
+        return (
+          <div className="d-flex justify-content-center align-items-center">
+            <div
+              onClick={() => handleEditPhase2(index)}
+              className="actionEdit"
+            >
+              <FaEdit />
+            </div>
+            <div
+              onClick={() => handleViewData(index)}
+              className="actionView"
+            >
+              <MdPageview />
+            </div>
+          </div>
+        );
+      },
       align: "center",
     },
   ];

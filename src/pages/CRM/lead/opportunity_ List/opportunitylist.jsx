@@ -185,7 +185,7 @@ function Opportunitylist(props) {
             opportunity_type: item?.opportunity_type,
             opportunity_party: item?.crm_v1_contacts?.contact_person_name,
             opportunity_from: item?.opportunity_from,
-            opportunity_created_by: item?.opportunity_created_by,
+            opportunity_created_by: item?.crm_v1_leads?.lead_customer_name,
             opportunity_source: item?.opportunity_source,
             opportunity_probability: item?.opportunity_probability,
             opportunity_description: item?.opportunity_description,

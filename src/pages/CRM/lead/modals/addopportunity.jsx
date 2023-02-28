@@ -41,6 +41,7 @@ export default function AddOpportunity(props) {
   const [date, setDate] = useState();
   console.log(date);
   const [name, setName] = useState();
+ 
   const [value, setValue] = useState([]);
   const [ShowEditModal, setShowEditModal] = useState(false); //oppertunity edit modal
   const [showProgressModal, setShowProgresssModal] = useState(false); //Oppoertunity progress modal
@@ -76,7 +77,30 @@ export default function AddOpportunity(props) {
   const [oppdescription, setOppDescription] = useState();
   // console.log(oppdescription);
   const [oppstatus, setOppStatus] = useState();
+  const [leadName, setLeadName] = useState("");
+  console.log("lead name :",leadName);
   // console.log(typeof oppstatus);
+  const GetLeadData = () => {
+    PublicFetch.get(`${CRM_BASE_URL}/lead/${id}`)
+      .then((res) => {
+        if (res?.data?.success) {
+          console.log("Unique Lead Id data", res?.data?.data);
+       
+          setLeadName(res?.data?.data?.lead_customer_name);
+        
+         
+        } else {
+          console.log("FAILED T LOAD DATA");
+        }
+      })
+      .catch((err) => {
+        console.log("Errror while getting data", err);
+      });
+  };
+
+  useEffect(() => {
+    GetLeadData();
+  }, [id]);
 
   const oppdata = (data) => {
     console.log("ssss");
@@ -257,18 +281,19 @@ export default function AddOpportunity(props) {
                     <label>Generated/Converted by</label>
                     <Form.Item
                       name="lead_customer_generated"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please select an option",
-                        },
-                      ]}
+                      // rules={[
+                      //   {
+                      //     required: true,
+                      //     message: "Please select an option",
+                      //   },
+                      // ]}
                     >
                       <SelectBox
-                        placeholder={"--Please Select--"}
-                        value={oppId}
+                      // defaultValue={defaultValue}
+                        // placeholder={"--Please Select--"}
+                        defaultValue={leadName}
                       >
-                        <Select.Option value="oppId">{oppId}</Select.Option>
+                        <Select.Option value="oppId">{leadName}</Select.Option>
                       </SelectBox>
                     </Form.Item>
                   </div>

@@ -165,3 +165,11 @@ a.dropdown-item {
     font-size: 1.5rem !important;
   }
 }
+@media screen and (max-width: 500px) {
+  .nav-menu-items {
+    display: none;
+  }
+  .menu-bars  {
+    display: block;
+  }
+}

@@ -331,7 +331,7 @@ function Category() {
         console.log("Error", err);
       });
   };
-  console.log("imgage preview", imgPreview);
+  // console.log("imgage preview", imgPreview);
   return (
     <>
       <div className="container-fluid">
@@ -441,7 +441,7 @@ function Category() {
                     </TreeSelect>
                   </Form.Item>
                 </div>
-                <div className=" col-sm-5 pt-3">
+                <div className="col-xl-6 col-lg-6 col-sm-12 pt-3">
                   <label>Description</label>
                   <Form.Item
                     name="category_description"
@@ -461,46 +461,39 @@ function Category() {
                     <TextArea />
                   </Form.Item>
                 </div>
+                <div className="col-xl-6 col-lg-6 col-sm-12 pt-3">
+                  <label>Display Picture</label>
+                  <Form.Item name="category_pic">
+                    <FileUpload
+                      multiple
+                      listType="picture"
+                      accept=".png,.jpg,.jpeg"
+                      // onPreview={handlePreview}
+                      beforeUpload={true}
+                      onChange={(file) => {
+                        console.log("Before upload", file.file);
+                        console.log("Before upload file size", file.file.size);
+                        if (file.file.size > 1000 && file.file.size < 500000) {
+                          setImg(file.file.originFileObj);
+                          console.log("Allowed image size");
+                          setImageSize(false);
+                          setImgPreview(file?.file?.thumbUrl);
+                        } else {
+                          setImageSize(true);
+                          console.log("image size between 1 kb and  500 kb");
+                        }
+                      }}
+                    />
+                    {imageSize ? (
+                      <p style={{ color: "red" }}>
+                        Please Upload an image between 1 kb and 500 kb
+                      </p>
+                    ) : (
+                      ""
+                    )}
+                  </Form.Item>
+                </div>
                 <div className="row ">
-                  <div className="col-12 ">
-                    <label>Display Picture</label>
-                    <Form.Item name="category_pic">
-                      <FileUpload
-                        multiple
-                        listType="picture"
-                        accept=".png,.jpg,.jpeg"
-                        // onPreview={handlePreview}
-                        beforeUpload={true}
-                        onChange={(file) => {
-                          console.log("Before upload", file.file);
-                          console.log(
-                            "Before upload file size",
-                            file.file.size
-                          );
-                          if (
-                            file.file.size > 1000 &&
-                            file.file.size < 500000
-                          ) {
-                            setImg(file.file.originFileObj);
-                            console.log("Allowed image size");
-                            setImageSize(false);
-                            setImgPreview(file?.file?.thumbUrl);
-                          } else {
-                            setImageSize(true);
-                            console.log("image size between 1 kb and  500 kb");
-                          }
-                        }}
-                      />
-                      {imageSize ? (
-                        <p style={{ color: "red" }}>
-                          Please Upload an image between 1 kb and 500 kb
-                        </p>
-                      ) : (
-                        ""
-                      )}
-                    </Form.Item>
-                  </div>
-
                   {/* {
               error403 ? (<div><p style={{textAlign:"center",color:"red"}}>Category Code has been taken </p></div>):""
             } */}

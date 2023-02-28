@@ -176,6 +176,7 @@ function Companyinfo() {
           if (res.data.success) {
             setSuccessPopup(true);
             addForm.resetFields();
+            getallcmpny();
             close_modal(successPopup, 1000);
           }
           //  else {

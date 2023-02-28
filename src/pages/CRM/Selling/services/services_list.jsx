@@ -24,7 +24,10 @@ import CustomModel from "../../../../components/custom_modal/custom_model";
 import FileUpload from "../../../../components/fileupload/fileUploader";
 import ErrorMsg from "../../../../components/error/ErrorMessage";
 import PublicFetch from "../../../../utils/PublicFetch";
-import { CRM_BASE_URL_FMS, CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
+import {
+  CRM_BASE_URL_FMS,
+  CRM_BASE_URL_SELLING,
+} from "../../../../api/bootapi";
 import InputType from "../../../../components/Input Type textbox/InputType";
 import { TreeSelect, Form, InputNumber } from "antd";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
@@ -32,6 +35,7 @@ import SelectBox from "../../../../components/Select Box/SelectBox";
 
 function Services() {
   const [editForm] = Form.useForm();
+  const [serialNo, setserialNo] = useState(1);
   const [pageSize, setPageSize] = useState("25"); // page size
   const [current, setCurrent] = useState(1);
   const [searchedName, setSearchedName] = useState(""); // search by text input
@@ -52,7 +56,7 @@ function Services() {
   const [serviceCategory, setServicecategory] = useState("");
   const [serviceImg, setServiceImg] = useState([]);
   const [imageSize, setImageSize] = useState(false);
-  const [alltaxtype,setalltaxtype]= useState("")
+  const [alltaxtype, setalltaxtype] = useState("");
 
   const [serviceid, setserviceid] = useState();
   const [ImageUpload, setImageUpload] = useState();
@@ -92,8 +96,8 @@ function Services() {
     servicetaxrate: "",
     servicedescription: "",
     serviceimage: "",
-    servicecat_id:"",
-    servicetaxtype_id:"",
+    servicecat_id: "",
+    servicetaxtype_id: "",
   });
 
   const handlePreview = async (file) => {
@@ -126,22 +130,22 @@ function Services() {
           console.log("All services dataawww", res?.data?.data?.services);
           let tempArr = [];
           res?.data?.data?.services.forEach((item, index) => {
-          tempArr.push({
-            service_id:item?.service_id,
-            service_name: item?.service_name,
-            service_category_id: item?.crm_v1_categories?.category_id,
-            service_category_name: item?.crm_v1_categories?.category_name,
-            service_code: item?.service_code,
-            service_pic: item?.service_pic,
-            service_hsn:item?.service_hsn,
-            service_taxrate:item?.service_taxrate,
-            service_description:item?.service_description,
-            service_category_name:item?.crm_v1_categories?.category_name,
-            service_taxtype_name:item?.fms_v1_tax_types?.tax_type_name,
-            service_taxtype_id:item?.fms_v1_tax_types?.tax_type_id
+            tempArr.push({
+              service_id: item?.service_id,
+              service_name: item?.service_name,
+              service_category_id: item?.crm_v1_categories?.category_id,
+              service_category_name: item?.crm_v1_categories?.category_name,
+              service_code: item?.service_code,
+              service_pic: item?.service_pic,
+              service_hsn: item?.service_hsn,
+              service_taxrate: item?.service_taxrate,
+              service_description: item?.service_description,
+              service_category_name: item?.crm_v1_categories?.category_name,
+              service_taxtype_name: item?.fms_v1_tax_types?.tax_type_name,
+              service_taxtype_id: item?.fms_v1_tax_types?.tax_type_id,
+            });
+            // console.log("taxtype service is",item?.fms_v1_tax_types?.tax_type_name)
           });
-          // console.log("taxtype service is",item?.fms_v1_tax_types?.tax_type_name)
-        });
           console.log("temparr datass", tempArr);
           setServices(tempArr);
 
@@ -163,7 +167,7 @@ function Services() {
         `${CRM_BASE_URL_FMS}/tax-types?startIndex=${pageofIndex}&perPage=${noofitems}`
       );
       console.log("all taxtype are", allTxTypes.data.data);
-      setalltaxtype(allTxTypes.data.data)
+      setalltaxtype(allTxTypes.data.data);
     } catch (err) {
       console.log("error while getting the tax types: ", err);
     }
@@ -171,15 +175,12 @@ function Services() {
 
   useEffect(() => {
     getAllservices();
-    getAllTaxTypes()
+    getAllTaxTypes();
   }, [noofitems, pageofIndex]);
 
- 
-  
   // useEffect(() => {
   //   getAllTaxTypes();
   // }, []);
-
 
   const handleViewClick = (item) => {
     console.log("view the services", item);
@@ -193,8 +194,8 @@ function Services() {
       servicedescription: item.service_description,
       servicetaxrate: item.service_taxtype_name,
       serviceimage: item.service_pic,
-      servicecat_id:item.service_category_id,
-      servicetaxtype_id:item.service_taxtype_id,
+      servicecat_id: item.service_category_id,
+      servicetaxtype_id: item.service_taxtype_id,
     });
     setServiceView(true);
   };
@@ -344,7 +345,7 @@ function Services() {
       });
   };
 
-  console.log("serivicess catid",serviceCategory)
+  console.log("serivicess catid", serviceCategory);
   const data = [
     {
       name: "Polishing",
@@ -373,38 +374,9 @@ function Services() {
 
   const columns = [
     {
-      title: "ACTION",
-      dataIndex: "action",
-      key: "key",
-      width: "14%",
-      render: (data, index) => {
-        console.log("tb dataa",index )
-        return (
-          <div className="d-flex justify-content-center align-items-center gap-4">
-            <div
-              onClick={() => {
-                console.log("tb dataa",index )
-                handleEditclick(index)}}
-              className="actionEdit m-0 p-0"
-            >
-              <FaEdit />
-            </div>
-            <Link to={ROUTES.SERVICEDETAILS}>
-              <div
-                onClick={() => handleViewClick(index)}
-                className="actionView m-0 p-0"
-              >
-                <MdPageview />
-              </div>
-            </Link>
-            <div className="deleteIcon m-0">
-              {/* <Link> */}
-              <FaTrash />
-              {/* </Link> */}
-            </div>
-          </div>
-        );
-      },
+      title: "Sl. No.",
+      key: "index",
+      render: (value, item, index) => serialNo + index,
       align: "center",
     },
     {
@@ -420,13 +392,17 @@ function Services() {
       // },
 
       align: "center",
-      render: (theImageURL, records) => (
-        <img
-          src={`${process.env.REACT_APP_BASE_URL}/${theImageURL}`}
-          height="20px"
-          width={"20px"}
-        />
-      ),
+      render: (theImageURL, records) => {
+        return theImageURL ? (
+          <img
+            src={`${process.env.REACT_APP_BASE_URL}/${theImageURL}`}
+            height="20px"
+            width={"20px"}
+          />
+        ) : (
+          ""
+        );
+      },
     },
     {
       title: "NAME",
@@ -450,7 +426,9 @@ function Services() {
       align: "center",
       filteredValue: [searchCode],
       onFilter: (value, record) => {
-        return String(record.service_code).toLowerCase().includes(value.toLowerCase());
+        return String(record.service_code)
+          .toLowerCase()
+          .includes(value.toLowerCase());
       },
     },
     {
@@ -476,6 +454,42 @@ function Services() {
       onFilter: (value, record) => {
         return String(record.code).toLowerCase().includes(value.toLowerCase());
       },
+    },
+    {
+      title: "ACTION",
+      dataIndex: "action",
+      key: "key",
+      width: "14%",
+      render: (data, index) => {
+        console.log("tb dataa", index);
+        return (
+          <div className="d-flex justify-content-center align-items-center gap-4">
+            <div
+              onClick={() => {
+                console.log("tb dataa", index);
+                handleEditclick(index);
+              }}
+              className="actionEdit m-0 p-0"
+            >
+              <FaEdit />
+            </div>
+            <Link to={ROUTES.SERVICEDETAILS}>
+              <div
+                onClick={() => handleViewClick(index)}
+                className="actionView m-0 p-0"
+              >
+                <MdPageview />
+              </div>
+            </Link>
+            <div className="deleteIcon m-0">
+              {/* <Link> */}
+              <FaTrash />
+              {/* </Link> */}
+            </div>
+          </div>
+        );
+      },
+      align: "center",
     },
   ];
   return (
@@ -689,149 +703,146 @@ function Services() {
         </div>
         {/* {section Two service Edit modal starts} */}
         <CustomModel
-          Adding_contents
           show={showServiceEditModal}
           onHide={() => setShowServiceEditModal(false)}
-          header="Edit Service"
           // size={`xl`}
           width={800}
-
-          // {...props}
-        >
-          <div className="container">
-            <div style={{ borderRadius: "8px" }} className="card border-0  ">
-              <div className="container ">
-                <div className="my-1 d-none">
-                  <h5 className="lead_text">Basic Info</h5>
-                </div>
-                <Form
-                  name="editForm"
-                  form={editForm}
-                  onFinish={(value) => {
-                    console.log("values111333", value);
-                  }}
-                  onFinishFailed={(error) => {
-                    console.log(error);
-                  }}
-                >
-                  <div className="row">
-                    <div className="col-4">
-                      <label>Name</label>
-                      <Form.Item
-                        name="service_name"
-                        rules={[
-                          {
-                            required: true,
-                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                            message: "Please enter a Valid Name",
-                          },
-                          { whitespace: true },
-                          {
-                            min: 2,
-                            message: "Name must be at least 2 characters",
-                          },
-                          {
-                            max: 100,
-                            message:
-                              "Name cannot be longer than 100 characters",
-                          },
-                        ]}
-                      >
-                        <InputType
-                          value={serviceName}
-                          onChange={(e) => setserviceName(e.target.value)}
-                        />
-                      </Form.Item>
-                    </div>
-                    <div className="col-4">
-                      <label>Code</label>
-                      <Form.Item
-                        name="serviceCode"
-                        rules={[
-                          {
-                            required: true,
-                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                            message: "Please enter a Valid Code",
-                          },
-                          {
-                            min: 2,
-                            message: "Code must be atleast 2 characters",
-                          },
-                          {
-                            max: 20,
-                            message: "Code cannot be longer than 20 characters",
-                          },
-                        ]}
-                      >
-                        <InputType
-                          value={serviceCode}
-                          onChange={(e) => setServiceCode(e.target.value)}
-                        />
-                      </Form.Item>
-                    </div>
-                    <div className="col-4">
-                      <label className="py-1">Category</label>
-                      <Form.Item
-                        name="serviceCategory"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please select a category",
-                          },
-                        ]}
-                      >
-                        <TreeSelect
-                          className="tree"
-                          name="tree"
-                          style={{ width: "100%" }}
-                          value={serviceCategory}
-                          dropdownStyle={{
-                            maxHeight: 400,
-                            overflow: "auto",
-                          }}
-                          treeData={categoryTree}
-                          treeDefaultExpandAll
-                          onChange={onChangetree}
-                          onSelect={onSelect}
-                        />
-                      </Form.Item>
-                    </div>
-                    <div className="col-6 ">
-                      <label>HSN</label>
-                      <Form.Item
-                        name="serviceHsn"
-                        rules={[
-                          {
-                            pattern: new RegExp("^[0-9]+$"),
-                            message: "Please enter a Valid Code",
-                          },
-                        ]}
-                      >
-                        <InputType
-                          value={serviceHsn}
-                          onChange={(e) => {
-                            setServiceHsn(e.target.value);
-                          }}
-                        />
-                      </Form.Item>
-                    </div>
-                    <div className="col-6 ">
-                      <label>Tax Type</label>
-                      <Form.Item
-                        className="mt-2"
-                        name="taxRate"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please enter a Valid Tax Rate",
-                          },
-                          {
-                            pattern: new RegExp("^[0-9]+$"),
-                            message: "Please enter zero or Postive integers",
-                          },
-                        ]}
-                      >
-                        {/* <InputNumber
+          View_list
+          list_content={
+            <>
+              <div style={{ borderRadius: "8px" }} className="card border-0">
+                <div className="container">
+                  <div>
+                    <h5 className="lead_text">Edit Service</h5>
+                  </div>
+                  <Form
+                    name="editForm"
+                    form={editForm}
+                    onFinish={(value) => {
+                      console.log("values111333", value);
+                    }}
+                    onFinishFailed={(error) => {
+                      console.log(error);
+                    }}
+                  >
+                    <div className="row mt-4">
+                      <div className="col-4">
+                        <label>Name</label>
+                        <Form.Item
+                          name="service_name"
+                          rules={[
+                            {
+                              required: true,
+                              pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                              message: "Please enter a Valid Name",
+                            },
+                            { whitespace: true },
+                            {
+                              min: 2,
+                              message: "Name must be at least 2 characters",
+                            },
+                            {
+                              max: 100,
+                              message:
+                                "Name cannot be longer than 100 characters",
+                            },
+                          ]}
+                        >
+                          <InputType
+                            value={serviceName}
+                            onChange={(e) => setserviceName(e.target.value)}
+                          />
+                        </Form.Item>
+                      </div>
+                      <div className="col-4">
+                        <label>Code</label>
+                        <Form.Item
+                          name="serviceCode"
+                          rules={[
+                            {
+                              required: true,
+                              pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                              message: "Please enter a Valid Code",
+                            },
+                            {
+                              min: 2,
+                              message: "Code must be atleast 2 characters",
+                            },
+                            {
+                              max: 20,
+                              message:
+                                "Code cannot be longer than 20 characters",
+                            },
+                          ]}
+                        >
+                          <InputType
+                            value={serviceCode}
+                            onChange={(e) => setServiceCode(e.target.value)}
+                          />
+                        </Form.Item>
+                      </div>
+                      <div className="col-4">
+                        <label className="py-1">Category</label>
+                        <Form.Item
+                          name="serviceCategory"
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please select a category",
+                            },
+                          ]}
+                        >
+                          <TreeSelect
+                            className="tree"
+                            name="tree"
+                            style={{ width: "100%" }}
+                            value={serviceCategory}
+                            dropdownStyle={{
+                              maxHeight: 400,
+                              overflow: "auto",
+                            }}
+                            treeData={categoryTree}
+                            treeDefaultExpandAll
+                            onChange={onChangetree}
+                            onSelect={onSelect}
+                          />
+                        </Form.Item>
+                      </div>
+                      <div className="col-6 ">
+                        <label>HSN</label>
+                        <Form.Item
+                          name="serviceHsn"
+                          rules={[
+                            {
+                              pattern: new RegExp("^[0-9]+$"),
+                              message: "Please enter a Valid Code",
+                            },
+                          ]}
+                        >
+                          <InputType
+                            value={serviceHsn}
+                            onChange={(e) => {
+                              setServiceHsn(e.target.value);
+                            }}
+                          />
+                        </Form.Item>
+                      </div>
+                      <div className="col-6 ">
+                        <label>Tax Type</label>
+                        <Form.Item
+                          name="taxRate"
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please enter a Valid Tax Rate",
+                            },
+                            {
+                              pattern: new RegExp("^[0-9]+$"),
+                              message: "Please enter zero or Postive integers",
+                            },
+                          ]}
+                        >
+                          {/* <InputNumber
                           style={{
                             border: "0",
                             backgroundColor: "whitesmoke",
@@ -843,131 +854,133 @@ function Services() {
                           onChange={(e) => setServicetaxrate(e)}
                         /> */}
 
-                        <SelectBox
-                          placeholder={"--Please Select--"}
-                          value={servicetaxrate}
-                          onChange={(e) => {
-                            console.log("select the brandss", e);
-                            setServicetaxrate(parseInt(e));
+                          <SelectBox
+                            placeholder={"--Please Select--"}
+                            value={servicetaxrate}
+                            onChange={(e) => {
+                              console.log("select the brandss", e);
+                              setServicetaxrate(parseInt(e));
+                            }}
+                          >
+                            {alltaxtype &&
+                              alltaxtype.length > 0 &&
+                              alltaxtype.map((item, index) => {
+                                return (
+                                  <Select.Option
+                                    key={item.tax_type_id}
+                                    value={item.tax_type_id}
+                                  >
+                                    {item.tax_type_name}
+                                  </Select.Option>
+                                );
+                              })}
+                          </SelectBox>
+                        </Form.Item>
+                      </div>
+
+                      <div className="col-6 mt-2">
+                        <label>Display Picture</label>
+                        <Form.Item name="new" className="mt-2">
+                          <FileUpload
+                            multiple
+                            listType="picture"
+                            accept=".png,.jpeg"
+                            height={100}
+                            onPreview={handlePreview}
+                            beforeUpload={false}
+                            onChange={(file) => {
+                              console.log("Before upload", file.file);
+                              console.log(
+                                "Before upload file size",
+                                file.file.size
+                              );
+
+                              if (
+                                file.file.size > 1000 &&
+                                file.file.size < 500000
+                              ) {
+                                setImg(file.file.originFileObj);
+                                setImageSize(false);
+                                console.log(
+                                  "select image",
+                                  file.file.originFileObj
+                                );
+                              } else {
+                                setImageSize(true);
+                                console.log("Error in image upload");
+                              }
+                            }}
+                          />
+                          {imageSize ? (
+                            <p style={{ color: "red" }}>
+                              Upload Image size between 1 kb and 500 kb
+                            </p>
+                          ) : (
+                            ""
+                          )}
+                        </Form.Item>
+                        <img
+                          src={`${process.env.REACT_APP_BASE_URL}/${serviceImg}`}
+                          height="40px"
+                          width={"40px"}
+                        />
+                      </div>
+                      <div className="col-6 mt-2">
+                        <label>Description</label>
+                        <Form.Item
+                          className="mt-2"
+                          name="servicedescription"
+                          rules={[
+                            {
+                              whitespace: true,
+                            },
+                            {
+                              min: 2,
+                              message:
+                                "Description must be at least 2 characters",
+                            },
+                            {
+                              max: 500,
+                            },
+                          ]}
+                        >
+                          <TextArea
+                            value={servicedescription}
+                            onChange={(e) => {
+                              setServicedescription(e.target.value);
+                            }}
+                          />
+                        </Form.Item>
+                      </div>
+                      <div className="col-12 d-flex justify-content-center mt-5 pt-4 gap-3 ">
+                        <Button
+                          className="save_button"
+                          onClick={() => {
+                            handleUpdate();
                           }}
                         >
-                          {alltaxtype &&
-                            alltaxtype.length > 0 &&
-                            alltaxtype.map((item, index) => {
-                              return (
-                                <Select.Option
-                                  key={item.tax_type_id}
-                                  value={item.tax_type_id}
-                                >
-                                  {item.tax_type_name}
-                                </Select.Option>
-                              );
-                            })}
-                        </SelectBox>
-                      </Form.Item>
-                    </div>
-
-                    <div className="col-6 mt-2">
-                      <label>Display Picture</label>
-                      <Form.Item name="new" className="mt-2">
-                        <FileUpload
-                          multiple
-                          listType="picture"
-                          accept=".png,.jpeg"
-                          height={100}
-                          onPreview={handlePreview}
-                          beforeUpload={false}
-                          onChange={(file) => {
-                            console.log("Before upload", file.file);
-                            console.log(
-                              "Before upload file size",
-                              file.file.size
-                            );
-
-                            if (
-                              file.file.size > 1000 &&
-                              file.file.size < 500000
-                            ) {
-                              setImg(file.file.originFileObj);
-                              setImageSize(false);
-                              console.log(
-                                "select image",
-                                file.file.originFileObj
-                              );
-                            } else {
-                              setImageSize(true);
-                              console.log("Error in image upload");
-                            }
+                          Save
+                        </Button>
+                        <Button
+                          as="input"
+                          type="reset"
+                          value="Reset"
+                          onClick={() => {
+                            setShowServiceEditModal(false);
                           }}
-                        />
-                        {imageSize ? (
-                          <p style={{ color: "red" }}>
-                            Upload Image size between 1 kb and 500 kb
-                          </p>
-                        ) : (
-                          ""
-                        )}
-                      </Form.Item>
-                      <img
-                        src={`${process.env.REACT_APP_BASE_URL}/${serviceImg}`}
-                        height="40px"
-                        width={"40px"}
-                      />
+                          className="cancel_button p-2"
+                        >
+                          Cancel
+                        </Button>
+                      </div>
                     </div>
-                    <div className="col-6 mt-2">
-                      <label>Description</label>
-                      <Form.Item
-                        className="mt-2"
-                        name="servicedescription"
-                        rules={[
-                          {
-                            whitespace: true,
-                          },
-                          {
-                            min: 2,
-                            message: "Description must be at least 2 characters",
-                          },
-                          {
-                            max: 500,
-                          },
-                        ]}
-                      >
-                        <TextArea
-                          value={servicedescription}
-                          onChange={(e) => {
-                            setServicedescription(e.target.value);
-                          }}
-                        />
-                      </Form.Item>
-                    </div>
-                    <div className="col-12 d-flex justify-content-center mt-5 pt-4 gap-3 ">
-                      <Button
-                        className="save_button"
-                        onClick={() => {
-                          handleUpdate();
-                        }}
-                      >
-                        Save
-                      </Button>
-                      <Button
-                        as="input"
-                        type="reset"
-                        value="Reset"
-                        onClick={() => {
-                          setShowServiceEditModal(false);
-                        }}
-                        className="cancel_button p-2"
-                      >
-                        Cancel
-                      </Button>
-                    </div>
-                  </div>
-                </Form>
+                  </Form>
+                </div>
               </div>
-            </div>
-          </div>
-          {/* {error ? <ErrorMsg code="500" /> : ""} */}
-        </CustomModel>
+              {/* {error ? <ErrorMsg code="500" /> : ""} */}
+            </>
+          }
+        />
         {/* {Modal for viewing service details} */}
 
         <CustomModel

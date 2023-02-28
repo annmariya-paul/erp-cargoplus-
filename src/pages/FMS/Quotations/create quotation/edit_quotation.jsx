@@ -1740,7 +1740,7 @@ export default function EditQuotation(
                       listType="picture"
                       accept=".png,.jpeg,.jpg"
                       // onPreview={handlePreview}
-                      beforeUpload={false}
+                      beforeUpload={true}
                       onChange={(file) => {
                         console.log("Before upload", file.file);
                         console.log("Before upload file size", file.file.size);

@@ -59,14 +59,20 @@ const Prob_conversion = [
 
 const cargo_typeoptions = [
   {
-    id:"1", name : "Frozen",value :"Frozen"
+    id: "1",
+    name: "Frozen",
+    value: "Frozen",
   },
   {
-    id:"2", name : "Dangerous",value :"Dangerous"
+    id: "2",
+    name: "Dangerous",
+    value: "Dangerous",
   },
   {
-    id:"3", name : "Refrigerated",value :"Refrigerator"
-  }, 
+    id: "3",
+    name: "Refrigerated",
+    value: "Refrigerator",
+  },
 ];
 
 const vendor_Organisation = [

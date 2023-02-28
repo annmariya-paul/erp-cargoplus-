@@ -20,6 +20,7 @@ import { CRM_BASE_URL_HRMS, CRM_BASE_URL_FMS } from "../../../../api/bootapi";
 
 export default function Quotations(props) {
   const navigate = useNavigate();
+  const [serialNo, setserialNo] = useState(1);
   const [addForm] = Form.useForm();
   const [error, setError] = useState(false);
   const [successPopup, setSuccessPopup] = useState(false);
@@ -51,6 +52,70 @@ export default function Quotations(props) {
 
   const columns = [
     {
+      title: "Sl. No.",
+      key: "index",
+      width: "7%",
+      render: (value, item, index) => serialNo + index,
+      align: "center",
+    },
+    {
+      title: "QUOTATION NO",
+      dataIndex: "quotation_no",
+      key: "quotation_no",
+      width: "10%",
+      filteredValue: [searchedText],
+      onFilter: (value, record) => {
+        return (
+          String(record.quotation_no)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.consignee_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.quotation_shipper)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
+      },
+      align: "center",
+    },
+    {
+      title: "DATE",
+      dataIndex: "quotation_date",
+      key: "quotation_date",
+      width: "9%",
+      align: "center",
+    },
+    {
+      title: "VALIDITY",
+      dataIndex: "quotation_validity",
+      key: "quotation_validity",
+      width: "9%",
+      align: "center",
+    },
+    {
+      title: "CONSIGNEE",
+      dataIndex: "consignee_name",
+      key: "consignee_name",
+      width: "18%",
+      align: "center",
+    },
+    {
+      title: "SHIPPER",
+      dataIndex: "quotation_shipper",
+      key: "quotation_shipper",
+      width: "15%",
+      align: "center",
+    },
+    {
+      title: "STATUS",
+      dataIndex: "quotation_status",
+      key: "quotation_status",
+      width: "12%",
+      align: "center",
+    },
+
+    {
       title: "ACTION",
       dataIndex: "action",
       key: "key",
@@ -58,7 +123,7 @@ export default function Quotations(props) {
       render: (data, index) => {
         console.log("index is :", index);
         return (
-          <div className="d-flex justify-content-center align-items-center gap-2 me-2">
+          <div className="d-flex justify-content-center align-items-center">
             <div
               className="editIcon m-0 "
               // onClick={() => {
@@ -92,85 +157,46 @@ export default function Quotations(props) {
       align: "center",
     },
     {
-      title: "QUOTATION No",
-      dataIndex: "quotation_no",
-      key: "quotation_no",
-      filteredValue: [searchedText],
-      onFilter: (value, record) => {
-        return String(record.quotation_no)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
-      align: "center",
-    },
-    {
-      title: "DATE",
-      dataIndex: "quotation_date",
-      key: "quotation_date",
-      align: "center",
-    },
-    {
-      title: "VALIDITY",
-      dataIndex: "quotation_validity",
-      key: "quotation_validity",
-      align: "center",
-    },
-    {
-      title: "CONSIGNEE",
-      dataIndex: "consignee_name",
-      key: "consignee_name",
-      align: "center",
-    },
-    {
-      title: "SHIPPER",
-      dataIndex: "quotation_shipper",
-      key: "quotation_shipper",
-      align: "center",
-    },
-    {
-      title: "STATUS",
-      dataIndex: "quotation_status",
-      key: "quotation_status",
-      align: "center",
-    },
-    {
       title: "",
       dataIndex: "assign",
       key: "assign",
+      width: "9%",
       align: "center",
       render: (data, index) => {
         return (
           <>
-            {index.fms_v1_quotation_agents &&
-            index.fms_v1_quotation_agents.length > 0 ? (
-              <div className="">
-                <Button
-                  btnType="add"
-                  className="me-1 view_btn"
-                  onClick={() => {
-                    navigate(
-                      `${ROUTES.ASSIGN_QUOTATION}/${index.quotation_id}`
-                    );
-                  }}
-                >
-                  view
-                </Button>
-              </div>
-            ) : (
-              <div className="">
-                <Button
-                  btnType="add"
-                  className="me-1 view_btn"
-                  onClick={() => {
-                    navigate(
-                      `${ROUTES.ASSIGN_QUOTATION}/${index.quotation_id}`
-                    );
-                  }}
-                >
-                  Assign
-                </Button>
-              </div>
-            )}
+            <div className="row justify-content-center">
+              {index.fms_v1_quotation_agents &&
+              index.fms_v1_quotation_agents.length > 0 ? (
+                <div className="col-2 d-flex justify-content-center">
+                  <Button
+                    btnType="add"
+                    className="me-1 view_btn"
+                    onClick={() => {
+                      navigate(
+                        `${ROUTES.ASSIGN_QUOTATION}/${index.quotation_id}`
+                      );
+                    }}
+                  >
+                    view
+                  </Button>
+                </div>
+              ) : (
+                <div className="col-2 d-flex justify-content-center">
+                  <Button
+                    btnType="add"
+                    className="view_btn"
+                    onClick={() => {
+                      navigate(
+                        `${ROUTES.ASSIGN_QUOTATION}/${index.quotation_id}`
+                      );
+                    }}
+                  >
+                    Assign
+                  </Button>
+                </div>
+              )}
+            </div>
           </>
         );
       },
@@ -248,7 +274,7 @@ export default function Quotations(props) {
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
-              placeholder="Search by Quotation Number"
+              placeholder="Search by Quotation No/Consignee/Shipper"
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
               onChange={(e) => {
@@ -289,7 +315,7 @@ export default function Quotations(props) {
           <div className="col-xl-8 col-lg-8 col-sm-12 d-flex justify-content-end">
             <div className="col mb-2 px-4">
               <Link to={ROUTES.ADD_QUOTATION} style={{ color: "white" }}>
-                <Button btnType="add">Add Quotations</Button>
+                <Button btnType="add">Add Quotation</Button>
               </Link>
             </div>
           </div>

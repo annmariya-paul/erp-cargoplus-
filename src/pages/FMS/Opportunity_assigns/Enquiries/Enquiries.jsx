@@ -1,4 +1,4 @@
-import { Checkbox, Select } from "antd";
+import { Checkbox, Select, Input } from "antd";
 import React, { useEffect, useState } from "react";
 import moment from "moment";
 import { FaEdit } from "react-icons/fa";
@@ -15,11 +15,12 @@ import CustomModel from "../../../../components/custom_modal/custom_model";
 
 function Enquiries() {
   const navigate = useNavigate();
+  const [serialNo, setserialNo] = useState(1);
   const [numOfItems, setNumOfItems] = useState("25");
   const [pageSize, setPageSize] = useState(0); // page size
   const [current, setCurrent] = useState(1); // current page
   const [searchSource, setSearchSource] = useState(""); // search by text input
-  const [searchType, setSearchType] = useState(""); //search by type select box
+  const [searchContact, setSearchContact] = useState(""); //search by type select box
   const [searchLead, setsearchLead] = useState(""); //search by status select box
   const [showViewModal, setShowViewModal] = useState(false); //oppertunity view modal
   const [ShowEditModal, setShowEditModal] = useState(false); //oppertunity edit modal
@@ -55,33 +56,13 @@ function Enquiries() {
   const [OpportunityList, setOpportunityList] = useState([]);
 
   const columns = [
-    // {
-    //   title: "ACTION",
-    //   dataIndex: "action",
-    //   key: "ACTION",
-    //   width: "15%",
-    //   render: (data, index) => {
-    //     return (
-    //       <div className="d-flex justify-content-center gap-2">
-    //         <div className="editcolor">
-    //           <FaEdit onClick={() => {
-    //             if (index.assigned_employee && index.assigned_employee.length > 0 ){
-    //               handleEditedclick(index)
-    //             }
-
-    //           }} />
-    //         </div>
-    //         {/* <div className="editcolor">
-    //           <MdPageview
-    //             // onClick={()=>viewprogressoppurtunity(index)}
-    //             onClick={() => {}}
-    //           />
-    //         </div> */}
-    //       </div>
-    //     );
-    //   },
-    //   align: "center",
-    // },
+    {
+      title: "Sl. No.",
+      key: "index",
+      render: (value, item, index) => serialNo + index,
+      width: "6%",
+      align: "center",
+    },
     {
       title: "ENQUIRY NO",
       dataIndex: "opportunity_number",
@@ -109,7 +90,7 @@ function Enquiries() {
       width: "20%",
       filteredValue: [searchLead],
       onFilter: (value, record) => {
-        return String(record.opportunity_from)
+        return String(record.lead_customer_name)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
@@ -131,8 +112,13 @@ function Enquiries() {
       title: "CONTACT PERSON",
       dataIndex: "opportunity_party",
       key: "PARTY",
-      width: "25%",
-      // align: "center",
+      width: "20%",
+      filteredValue: [searchContact],
+      onFilter: (value, record) => {
+        return String(record.opportunity_party)
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      },
     },
     {
       title: "ACTIONS",
@@ -282,220 +268,168 @@ function Enquiries() {
     navigate(`${ROUTES.ASSIGN_OPPORTUNITIES}/${index.opportunity_id}`);
   };
   return (
-    <div>
-      <div className="container-fluid">
-        <div className="row">
-          <div className="col-12">
-            <div className="container-fluid lead_list  my-3 py-3">
-              {/* opportunity listing section One */}
+    <>
+      <div className="container-fluid container2 pt-3">
+        {/* opportunity listing section One */}
 
-              <div>
-                <div className="row flex-wrap">
-                  <div className="col">
-                    <h5 className="lead_text">Opportunities</h5>
-                  </div>
+        <div className="row flex-wrap">
+          <div className="col">
+            <h5 className="lead_text">Opportunities</h5>
+          </div>
 
-                  <Leadlist_Icons
-                    datas={OpportunityList}
-                    columns={columns}
-                    items={data12}
-                    xlheading={OppHeads}
-                    filename="data.csv"
-                    chechboxes={
-                      <Checkbox.Group
-                        onChange={onChange}
-                        value={selectedColumns}
-                      >
-                        {columnsKeys.map((column) => (
-                          <li>
-                            <Checkbox value={column} key={column}>
-                              {column}
-                            </Checkbox>
-                          </li>
-                        ))}
-                      </Checkbox.Group>
-                    }
-                  />
-                </div>
-                <div
-                  className="row pb-2"
-                  style={{ backgroundColor: "#f4f4f7" }}
-                >
-                  <div className="col-3">
-                    <Select
-                      allowClear
-                      showSearch
-                      style={{
-                        width: "100%",
-                        marginTop: "8px",
-                        borderRadius: "5px",
-                      }}
-                      placeholder="Search by Source"
-                      className="select_search"
-                      optionFilterProp="children"
-                      onChange={(event) => {
-                        setSearchSource(event ? [event] : []);
-                      }}
-                    >
-                      <Select.Option value="reference">Reference</Select.Option>
-                      <Select.Option value="direct visit">
-                        Direct visit
-                      </Select.Option>
-                      <Select.Option value="online registration">
-                        Online Registration
-                      </Select.Option>
-                    </Select>
-                  </div>
-                  <div className="col-3">
-                    <Select
-                      allowClear
-                      showSearch
-                      style={{
-                        width: "100%",
-                        marginTop: "8px",
-                        borderRadius: "5px",
-                      }}
-                      placeholder="Search by Type"
-                      className="select_search"
-                      optionFilterProp="children"
-                      onChange={(event) => {
-                        setSearchType(event ? [event] : []);
-                      }}
-                    >
-                      <Select.Option value="sales">sales</Select.Option>
-                      <Select.Option value="maintenance">
-                        Maintenance
-                      </Select.Option>
-                      <Select.Option value="support">support</Select.Option>
-                    </Select>
-                  </div>
-                  <div className="col-3">
-                    <Select
-                      allowClear
-                      showSearch
-                      style={{
-                        width: "100%",
-                        marginTop: "8px",
-                        borderRadius: "5px",
-                      }}
-                      placeholder="Search by Name"
-                      className="select_search"
-                      optionFilterProp="children"
-                      onChange={(event) => {
-                        setSearchType(event ? [event] : []);
-                      }}
-                    ></Select>
-                  </div>
-                  <div className="col-3">
-                    <Select
-                      allowClear
-                      showSearch
-                      style={{
-                        width: "100%",
-                        marginTop: "8px",
-                        borderRadius: "5px",
-                      }}
-                      placeholder="Search by From"
-                      className="select_search"
-                      optionFilterProp="children"
-                      onChange={(event) => {
-                        setsearchLead(event ? [event] : []);
-                      }}
-                    >
-                      <Select.Option value="L">Lead</Select.Option>
-                      <Select.Option value="C">Customer</Select.Option>
-                    </Select>
-                  </div>
-                </div>
-                <div className="row my-3">
-                  <div className="col-4   px-3">
-                    <Select
-                      // defaultValue={"25"}
-                      bordered={false}
-                      className=" page_size_style"
-                      value={numOfItems}
-                      onChange={(e) => {
-                        setNumOfItems(e);
-                        setCurrent(1);
-                      }}
-                    >
-                      {/* <Select.Option value="5">5 | pages</Select.Option> */}
-                      <Select.Option value="25">
-                        Show{" "}
-                        <span style={{ color: "lightgray" }} className="ms-1">
-                          |
-                        </span>
-                        <span style={{ color: "#2f6b8f" }} className="ms-2">
-                          25
-                        </span>{" "}
-                      </Select.Option>
-                      <Select.Option value="50">
-                        {" "}
-                        Show{" "}
-                        <span style={{ color: "lightgray" }} className="ms-1">
-                          |
-                        </span>
-                        <span style={{ color: "#2f6b8f" }} className="ms-2">
-                          50
-                        </span>{" "}
-                      </Select.Option>
-                      <Select.Option value="100">
-                        {" "}
-                        Show{" "}
-                        <span style={{ color: "lightgray" }} className="ms-1">
-                          |
-                        </span>
-                        <span style={{ color: "#2f6b8f" }} className="ms-2">
-                          100
-                        </span>{" "}
-                      </Select.Option>
-                    </Select>
-                  </div>
-                  <div className="col-4 d-flex align-items-center justify-content-center">
-                  <MyPagination
-                    total={parseInt(totalCount)}
-                    current={current}
-                    pageSize={numOfItems}
-                    onChange={(current, pageSize) => {
-                      setCurrent(current);
-                    }}
-                  />
-                </div>
-                  {/* <div className="col-xl-6 col-lg-6 col-md-6 col-sm-8 col-12"></div> */}
-                  <div className="col-lg-3 col-lg-3 col-md-3 col-sm-12 col-12 d-flex justify-content-end">
-                    {/* <Link to={ROUTES.LEADLIST}>
+          <Leadlist_Icons
+            datas={OpportunityList}
+            columns={columns}
+            items={data12}
+            xlheading={OppHeads}
+            filename="data.csv"
+            chechboxes={
+              <Checkbox.Group onChange={onChange} value={selectedColumns}>
+                {columnsKeys.map((column) => (
+                  <li>
+                    <Checkbox value={column} key={column}>
+                      {column}
+                    </Checkbox>
+                  </li>
+                ))}
+              </Checkbox.Group>
+            }
+          />
+        </div>
+        <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
+          <div className="col-4">
+            <Input.Search
+              placeholder="Search by Lead"
+              style={{ margin: "5px", borderRadius: "5px" }}
+              value={searchLead}
+              onChange={(e) => {
+                setsearchLead(e.target.value ? [e.target.value] : []);
+              }}
+              onSearch={(value) => {
+                setsearchLead(value);
+              }}
+            />
+          </div>
+          <div className="col-4">
+            <Select
+              allowClear
+              showSearch
+              style={{
+                width: "100%",
+                marginTop: "8px",
+                borderRadius: "5px",
+              }}
+              placeholder="Search by Source"
+              className="select_search"
+              optionFilterProp="children"
+              onChange={(event) => {
+                setSearchSource(event ? [event] : []);
+              }}
+            >
+              <Select.Option value="reference">Reference</Select.Option>
+              <Select.Option value="direct visit">Direct visit</Select.Option>
+              <Select.Option value="online registration">
+                Online Registration
+              </Select.Option>
+            </Select>
+          </div>
+          <div className="col-4">
+            <Input.Search
+              placeholder="Search by Contact Person"
+              style={{ margin: "5px", borderRadius: "5px" }}
+              value={searchContact}
+              onChange={(e) => {
+                setSearchContact(e.target.value ? [e.target.value] : []);
+              }}
+              onSearch={(value) => {
+                setSearchContact(value);
+              }}
+            />
+          </div>
+        </div>
+        <div className="row my-3">
+          <div className="col-4   px-3">
+            <Select
+              // defaultValue={"25"}
+              bordered={false}
+              className=" page_size_style"
+              value={numOfItems}
+              onChange={(e) => {
+                setNumOfItems(e);
+                setCurrent(1);
+              }}
+            >
+              {/* <Select.Option value="5">5 | pages</Select.Option> */}
+              <Select.Option value="25">
+                Show{" "}
+                <span style={{ color: "lightgray" }} className="ms-1">
+                  |
+                </span>
+                <span style={{ color: "#2f6b8f" }} className="ms-2">
+                  25
+                </span>{" "}
+              </Select.Option>
+              <Select.Option value="50">
+                {" "}
+                Show{" "}
+                <span style={{ color: "lightgray" }} className="ms-1">
+                  |
+                </span>
+                <span style={{ color: "#2f6b8f" }} className="ms-2">
+                  50
+                </span>{" "}
+              </Select.Option>
+              <Select.Option value="100">
+                {" "}
+                Show{" "}
+                <span style={{ color: "lightgray" }} className="ms-1">
+                  |
+                </span>
+                <span style={{ color: "#2f6b8f" }} className="ms-2">
+                  100
+                </span>{" "}
+              </Select.Option>
+            </Select>
+          </div>
+          <div className="col-4 d-flex align-items-center justify-content-center">
+            <MyPagination
+              total={parseInt(totalCount)}
+              current={current}
+              pageSize={numOfItems}
+              onChange={(current, pageSize) => {
+                setCurrent(current);
+              }}
+            />
+          </div>
+          {/* <div className="col-xl-6 col-lg-6 col-md-6 col-sm-8 col-12"></div> */}
+          <div className="col-lg-3 col-lg-3 col-md-3 col-sm-12 col-12 d-flex justify-content-end">
+            {/* <Link to={ROUTES.LEADLIST}>
                       <Button btnType="add">Add Opportunity</Button>
                     </Link> */}
-                  </div>
-                </div>
-                <div className="datatable">
-                  <TableData
-                    data={oppnew}
-                    // data={allLeadList}
-                    // data={OpportunityList}
-                    columns={filteredColumns}
-                    custom_table_css="table_lead_list"
-                  />
-                </div>
-                <div className="d-flex py-2 justify-content-center">
-                  <MyPagination
-                    total={parseInt(totalCount)}
-                    current={current}
-                    pageSize={numOfItems}
-                    onChange={(current, pageSize) => {
-                      setCurrent(current);
-                    }}
-                  />
-                </div>
-                {/* {"mcncncncncncncnc"} */}
-              </div>
-
-              {/*  {/* {View model of opportunity  section Two    }  */}
-            </div>
           </div>
+        </div>
+        <div className="datatable">
+          <TableData
+            data={oppnew}
+            // data={allLeadList}
+            // data={OpportunityList}
+            columns={filteredColumns}
+            custom_table_css="table_lead_list"
+          />
+        </div>
+        <div className="d-flex py-2 justify-content-center">
+          <MyPagination
+            total={parseInt(totalCount)}
+            current={current}
+            pageSize={numOfItems}
+            onChange={(current, pageSize) => {
+              setCurrent(current);
+            }}
+          />
         </div>
       </div>
 
+      {/*  {/* {View model of opportunity  section Two    }  */}
       <CustomModel
         show={showViewModal}
         onHide={() => setShowViewModal(false)}
@@ -506,7 +440,7 @@ function Enquiries() {
           </div>
         }
       />
-    </div>
+    </>
   );
 }
 

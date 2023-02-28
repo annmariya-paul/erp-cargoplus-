@@ -122,7 +122,7 @@ function AddressTable(props) {
 
   const columns = [
     {
-      title: "No.",
+      title: "Sl. No.",
       key: "index",
       render: (value, item, index) => serialNo + index,
       align: "center",

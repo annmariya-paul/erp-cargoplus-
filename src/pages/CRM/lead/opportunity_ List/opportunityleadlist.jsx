@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { CRM_BASE_URL } from "../../../../api/bootapi";
 import dayjs from "dayjs";
+// import { Oppor_Status } from "../../../../utils/SelectOptions";
 import {
   FaFileExcel,
   FaFileCsv,
@@ -56,6 +57,7 @@ function OpportunityLeadlist(props) {
   const [showAddOpportunity, setShowAddOpportunity] = useState(false); //adding opportunity
   const [oppId, setOppID] = useState(parseInt(id));
   console.log(oppId);
+  const [oppstatus,setOppstatus]=useState(Oppor_Status);
   const [oppurtunitylead, setOppurtunitylead] = useState("");
   const [oppurtunitytype, setoppurtunitytype] = useState();
   const [oppurtunityfrom, setOppurtunityfrom] = useState();
@@ -97,6 +99,7 @@ function OpportunityLeadlist(props) {
     // convertedby: "",
     opportunity_source: "",
     opportunity_party: "",
+    opportunity_party1: "",
     opportunity_validity: "",
     opportunity_description: "",
     opportunity_amount: "",
@@ -104,6 +107,7 @@ function OpportunityLeadlist(props) {
     opportunity_status: "",
     opportunity_lead_id: "",
     opportunity_lead_name: "",
+    opportunity_statusname:"",
   });
 
   const [editOppurtunity, setEditOppurtunity] = useState({
@@ -144,21 +148,30 @@ function OpportunityLeadlist(props) {
           let samplearry = [];
           res?.data?.data?.crm_v1_contacts.forEach((item, index) => {
             res?.data?.data?.crm_v1_opportunities.forEach((oppo, index) => {
-              samplearry.push({
-                opportunity_Id: oppo?.opportunity_id,
-                opportunity_type: oppo?.opportunity_type,
-                opportunity_from: oppo?.opportunity_from,
-                opportunity_created_by1: res?.data?.data.lead_id,
-                opportunity_created_by: res?.data?.data.lead_customer_name,
-                opportunity_source: oppo?.opportunity_source,
-                opportunity_probability: oppo?.opportunity_probability,
-                opportunity_description: oppo?.opportunity_description,
-                opportunity_status: oppo?.opportunity_status,
-                opportunity_amount: oppo?.opportunity_amount,
-                opportunity_party: item?.contact_person_name,
-                opportunity_party1: item?.contact_id,
-                opportunity_validity: oppo?.opportunity_validity,
-              });
+              oppstatus.forEach((sts,index)=>{
+                var statusnew= parseInt(sts.value);
+                if(
+                  statusnew==oppo.opportunity_status
+                ){
+                  samplearry.push({
+                    opportunity_Id: oppo?.opportunity_id,
+                    opportunity_type: oppo?.opportunity_type,
+                    opportunity_from: oppo?.opportunity_from,
+                    opportunity_created_by1: res?.data?.data.lead_id,
+                    opportunity_created_by: res?.data?.data.lead_customer_name,
+                    opportunity_source: oppo?.opportunity_source,
+                    opportunity_probability: oppo?.opportunity_probability,
+                    opportunity_description: oppo?.opportunity_description,
+                    opportunity_statusname: sts?.name,
+                    opportunity_status:oppo?.opportunity_status,
+                    opportunity_amount: oppo?.opportunity_amount,
+                    opportunity_party: item?.contact_person_name,
+                    opportunity_party1: item?.contact_id,
+                    opportunity_validity: oppo?.opportunity_validity,
+                  });
+                }
+            
+            })
               //  setoppnewid(oppo?.opportunity_id);
               setNewOpportunityList(samplearry);
             });
@@ -320,6 +333,7 @@ function OpportunityLeadlist(props) {
       // convertedby: item.opportunity_created_by,
       opportunity_source: item.opportunity_source,
       opportunity_party: item.opportunity_party1,
+      opportunity_partyname: item.opportunity_party,
       opportunity_validity: item.opportunity_validity,
       opportunity_description: item.opportunity_description,
       opportunity_amount: item.opportunity_amount,
@@ -327,6 +341,7 @@ function OpportunityLeadlist(props) {
       opportunity_status: item.opportunity_status,
       opportunity_lead_id: item.opportunity_created_by1,
       opportunity_lead_name: item.opportunity_created_by,
+      opportunity_statusname:item.opportunity_statusname,
       // opportunity_leadid: item.opportunity_created_by1,
     });
     // getOppurtunityProgress(item);
@@ -869,7 +884,7 @@ function OpportunityLeadlist(props) {
                   <tr>
                     <td>Converted By</td>
                     <td>:</td>
-                    <td>{viewoppurtunity.opportunity_lead_id}</td>
+                    <td>{viewoppurtunity.opportunity_lead_name}</td>
                   </tr>
                   <tr>
                     <td>Source</td>
@@ -879,7 +894,7 @@ function OpportunityLeadlist(props) {
                   <tr>
                     <td>Party</td>
                     <td>:</td>
-                    <td>{viewoppurtunity.opportunity_party}</td>
+                    <td>{viewoppurtunity.opportunity_partyname}</td>
                   </tr>
                   <tr>
                     <td>Valid up to</td>
@@ -908,7 +923,7 @@ function OpportunityLeadlist(props) {
                   <tr>
                     <td>status </td>
                     <td>:</td>
-                    <td>{viewoppurtunity.opportunity_status}</td>
+                    <td>{viewoppurtunity.opportunity_statusname}</td>
                   </tr>
                 </tbody>
               </table>

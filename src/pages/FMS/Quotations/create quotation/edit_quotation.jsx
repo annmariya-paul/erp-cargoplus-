@@ -501,30 +501,23 @@ export default function EditQuotation(
       dataIndex: "action",
       key: "action",
       className: "drag-visible",
-      render: (data, index) => {
+      render: (data,record, index) => {
         return (
           <div className="d-flex justify-content-center align-items-center gap-2">
             <div className="actionEdit m-0 p-0">
               <DragOutlined className="draggable" type="swap" />
             </div>
+            <Popconfirm
+              title="Sure to delete?"
+              onConfirm={() => handleDelete(record)}
+            >
+              <div className="deleteIcon m-0">
+                <FaTrash />
+              </div>
+            </Popconfirm>
           </div>
         );
       },
-    },
-    {
-      title: "",
-      dataIndex: "operation",
-      render: (_, record) =>
-        tableData.length >= 1 ? (
-          <Popconfirm
-            title="Sure to delete?"
-            onConfirm={() => handleDelete(record)}
-          >
-            <div className="deleteIcon m-0">
-              <FaTrash />
-            </div>
-          </Popconfirm>
-        ) : null,
     },
     {
       title: "TASKS",
@@ -548,7 +541,7 @@ export default function EditQuotation(
                 allowClear
                 showSearch
                 optionFilterProp="children"
-                className="selectwidth mb-2"
+                className="selectwidth mb-2 input_bg"
                 value={index.quotation_details_service_id}
                 onChange={(e) => {
                   console.log("servicess11123", e);
@@ -594,7 +587,7 @@ export default function EditQuotation(
               // rules={[{ required: true, message: "Please input the name" }]}
             >
               <Input_Number
-                className="text_right"
+                className="text_right input_bg"
                 value={index.quotation_details_cost}
                 onChange={(value) => {
                   handleInputchange1(
@@ -649,7 +642,7 @@ export default function EditQuotation(
                 allowClear
                 showSearch
                 optionFilterProp="children"
-                className="selectwidthnew mb-2"
+                className="selectwidthnew mb-2 input_bg"
                 value={index.quotation_details_tax_type}
                 onChange={(e) => {
                   console.log("servicess11123", e);
@@ -700,7 +693,7 @@ export default function EditQuotation(
               // rules={[{ required: true, message: "Please input the name" }]}
             >
               <Input_Number
-                className="text_right"
+                className="text_right input_bg"
                 // value={index.taxamount}
                 // onChange={(e) =>
                 //   handleInputchange1(
@@ -737,7 +730,7 @@ export default function EditQuotation(
               // rules={[{ required: true, message: "Please input the name" }]}
             >
               <Input_Number
-                className="text_right"
+                className="text_right input_bg"
                 // value={    index.totalamount=(index.cost + index.taxamount)
                 // }
                 value={
@@ -1196,12 +1189,6 @@ export default function EditQuotation(
     <>
       <div className="container-fluid">
         <div className="row justify-content-md-center">
-          <div className="row flex-wrap">
-            <div className="col">
-              <h5 className="lead_text">Edit Quotation</h5>
-            </div>
-          </div>
-
           <div className="content-tabs" style={{ maxHeight: "2000px" }}>
             <Form
               form={editForm}
@@ -1214,8 +1201,11 @@ export default function EditQuotation(
               }}
             >
               <div className="container mb-4">
+                <div className="row mt-3">
+                  <h5 className="lead_text">Edit Quotation</h5>
+                </div>
                 {/* <div className="containerdesig "> */}
-                <div className="row">
+
                   <div className="row ">
                     <div className="col-xl-3 col-sm-6 mt-2">
                       <label>Quotation No</label>
@@ -1740,7 +1730,6 @@ export default function EditQuotation(
                       </Form.Item>
                     </div>
                   </div>
-                </div>
               </div>
               <div className="row justify-content-center">
                 <div className="col-6 ">
@@ -1777,14 +1766,14 @@ export default function EditQuotation(
                   <TableData
                     data={sampletable}
                     columns={columns}
-                    custom_table_css="table_qtn"
+                    custom_table_css="table_qtn qtn_table_brdr"
                   />
                 </div>
               </div>
 
               <div className="d-flex justify-content-end mt-4 mx-3 ">
                 <div className="col-lg-2 col-sm-4 col-xs-3 d-flex justify-content-end mt-3 me-2">
-                  <p style={{ fontWeight: 500 }}>Grand Total</p>
+                  <p style={{ fontWeight: 600 }}>Grand Total :</p>
                 </div>
 
                 <div className="col-lg-2 col-sm-2 col-xs-2">
@@ -1798,7 +1787,7 @@ export default function EditQuotation(
                     ]}
                   >
                     <Input_Number
-                      className="text_right"
+                      className="text_right grandtotal"
                       value={amount}
                       onChange={handleChange}
                       align="right"

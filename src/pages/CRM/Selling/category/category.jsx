@@ -16,13 +16,15 @@ import { ROUTES } from "../../../../routes";
 import InputType from "../../../../components/Input Type textbox/InputType";
 import { UniqueErrorMsg } from "../../../../ErrorMessages/UniqueErrorMessage";
 
-const getBase64 = (file) =>
+const getBase64 = (file) => {
+  console.log("getbase64", file);
   new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => resolve(reader.result);
     reader.onerror = (error) => reject(error);
   });
+};
 
 function Category() {
   const [addForm] = Form.useForm();
@@ -47,8 +49,10 @@ function Category() {
   const [parentcategory, setParentcategory] = useState(null);
   const [imageSize, setImageSize] = useState(false);
   const [uniqueCode, setuniqueCode] = useState(false);
+  const [imgPreview, setImgPreview] = useState();
   // const [parent,setParent]=useState(null);
   console.log("set image", img);
+  // console.log("bsae64", previewImage);
 
   const close_modal = (mShow, time) => {
     if (!mShow) {
@@ -63,6 +67,7 @@ function Category() {
     navigate(ROUTES.CATEGORY);
   };
   const handlePreview = async (file) => {
+    console.log("handlePreview", file);
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj);
     }
@@ -326,7 +331,7 @@ function Category() {
         console.log("Error", err);
       });
   };
-
+  console.log("imgage preview", imgPreview);
   return (
     <>
       <div className="container-fluid">
@@ -464,15 +469,14 @@ function Category() {
                         multiple
                         listType="picture"
                         accept=".png,.jpg,.jpeg"
-                        onPreview={handlePreview}
-                        beforeUpload={false}
+                        // onPreview={handlePreview}
+                        beforeUpload={true}
                         onChange={(file) => {
                           console.log("Before upload", file.file);
                           console.log(
                             "Before upload file size",
                             file.file.size
                           );
-
                           if (
                             file.file.size > 1000 &&
                             file.file.size < 500000
@@ -480,6 +484,7 @@ function Category() {
                             setImg(file.file.originFileObj);
                             console.log("Allowed image size");
                             setImageSize(false);
+                            setImgPreview(file?.file?.thumbUrl);
                           } else {
                             setImageSize(true);
                             console.log("image size between 1 kb and  500 kb");
@@ -495,10 +500,14 @@ function Category() {
                       )}
                     </Form.Item>
                   </div>
+
                   {/* {
               error403 ? (<div><p style={{textAlign:"center",color:"red"}}>Category Code has been taken </p></div>):""
             } */}
                 </div>
+                {/* <div>
+                  <img src={imgPreview} alt height={"50px"} width={"50px"} />
+                </div> */}
                 <div className="d-flex mb-3">
                   <Button className="savebtn" btnType="save">
                     Save

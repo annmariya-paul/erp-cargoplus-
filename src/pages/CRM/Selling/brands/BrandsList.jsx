@@ -311,16 +311,10 @@ function BrandsList() {
       render: (data, index) => {
         return (
           <div className="d-flex justify-content-center align-items-center">
-            <div
-              onClick={() => handleEditPhase2(index)}
-              className="actionEdit"
-            >
+            <div onClick={() => handleEditPhase2(index)} className="actionEdit">
               <FaEdit />
             </div>
-            <div
-              onClick={() => handleViewData(index)}
-              className="actionView"
-            >
+            <div onClick={() => handleViewData(index)} className="actionView">
               <MdPageview />
             </div>
           </div>
@@ -598,7 +592,7 @@ function BrandsList() {
                           accept=".png,.jpg,.jpeg"
                           height={100}
                           onPreview={handlePreview}
-                          beforeUpload={false}
+                          beforeUpload={true}
                           onChange={(file) => {
                             console.log("Before upload", file.file);
                             console.log(

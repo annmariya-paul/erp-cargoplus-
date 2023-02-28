@@ -22,7 +22,6 @@ import Item from "antd/lib/list/Item";
 import SelectBox from "../../../../../components/Select Box/SelectBox";
 import CustomModel from "../../../../../components/custom_modal/custom_model";
 
-
 export default function ProductVariantsEditModal({ show, prid, onHide }) {
   const { id } = useParams();
   console.log("ID is in productDetails", id);
@@ -57,17 +56,17 @@ export default function ProductVariantsEditModal({ show, prid, onHide }) {
   const newValues = (checkedValues) => {
     console.log("checked = ", checkedValues);
   };
-//   const [toggleState, setToggleState] = useState(1);
-//   const [State, setState] = useState("null");
-//   const [treeLine, setTreeLine] = useState(true);
-//   const [showLeafIcon, setShowLeafIcon] = useState(false);
-//   const [unitTable, setunitTable] = useState("");
-//   const toggleTab = (index) => {
-//     setToggleState(index);
-//   };
-//   const [TreeData, setTreeData] = useState();
+  //   const [toggleState, setToggleState] = useState(1);
+  //   const [State, setState] = useState("null");
+  //   const [treeLine, setTreeLine] = useState(true);
+  //   const [showLeafIcon, setShowLeafIcon] = useState(false);
+  //   const [unitTable, setunitTable] = useState("");
+  //   const toggleTab = (index) => {
+  //     setToggleState(index);
+  //   };
+  //   const [TreeData, setTreeData] = useState();
 
-//   const [categoryTree, setCategoryTree] = useState([]);
+  //   const [categoryTree, setCategoryTree] = useState([]);
   const [allprList, setAllPrList] = useState(); //state for all products
 
   // Start API call for get one product
@@ -172,7 +171,6 @@ export default function ProductVariantsEditModal({ show, prid, onHide }) {
     }
   };
 
-
   const structureTreeData = (categories) => {
     let treeStructure = [];
     if (categories && Array.isArray(categories) && categories.length > 0) {
@@ -191,15 +189,9 @@ export default function ProductVariantsEditModal({ show, prid, onHide }) {
     // console.log("Tree structure : ", treeStructure);
   };
 
-
   useEffect(() => {
     getallattributes();
-  
   }, []);
-
-
-
-
 
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
@@ -219,61 +211,59 @@ export default function ProductVariantsEditModal({ show, prid, onHide }) {
       reader.onerror = (error) => reject(error);
     });
 
-    const onChangetree = (value) => {
-      // console.log("Change", getPath(value));
-      // setState({ value });
-      console.log("Change", value);
-      // setState(parseInt(value));
-       setPrCategory(parseInt(value))
-    };
-  
-  
-    // const onSelect = (value) => {
-    //   console.log("Select:", getPath(value));
-    // };
-  
-    const onSelect = (value) => {
-      console.log("Select the category :", value);
-    };
-  
-    const close_modal = (mShow, time) => {
-      if (!mShow) {
-        setTimeout(() => {
-          setSuccessPopup(false);
-          GetAllProductData()
-          // navigate(ROUTES.PRODUCT );
-        }, time);
-      }
-    };
-    
-    const OnSubmitedit = () => {
-      const formData = new FormData();
-      formData.append("product_name",prname);
-      formData.append("product_code",prcode);
-      formData.append("product_category_id",prcategory );
-      formData.append("product_brand_id", prbrand);
-      formData.append("product_unit_id", prunit);
-      formData.append("product_pic", primage);
-      formData.append("product_attributes", prattributes);
-      formData.append("product_description",setProductDescription );
-  
-       PublicFetch.patch(`${CRM_BASE_URL_SELLING}/product/${id}`, formData, {
-        "Content-Type": "Multipart/form-Data",
+  const onChangetree = (value) => {
+    // console.log("Change", getPath(value));
+    // setState({ value });
+    console.log("Change", value);
+    // setState(parseInt(value));
+    setPrCategory(parseInt(value));
+  };
+
+  // const onSelect = (value) => {
+  //   console.log("Select:", getPath(value));
+  // };
+
+  const onSelect = (value) => {
+    console.log("Select the category :", value);
+  };
+
+  const close_modal = (mShow, time) => {
+    if (!mShow) {
+      setTimeout(() => {
+        setSuccessPopup(false);
+        GetAllProductData();
+        // navigate(ROUTES.PRODUCT );
+      }, time);
+    }
+  };
+
+  const OnSubmitedit = () => {
+    const formData = new FormData();
+    formData.append("product_name", prname);
+    formData.append("product_code", prcode);
+    formData.append("product_category_id", prcategory);
+    formData.append("product_brand_id", prbrand);
+    formData.append("product_unit_id", prunit);
+    formData.append("product_pic", primage);
+    formData.append("product_attributes", prattributes);
+    formData.append("product_description", setProductDescription);
+
+    PublicFetch.patch(`${CRM_BASE_URL_SELLING}/product/${id}`, formData, {
+      "Content-Type": "Multipart/form-Data",
+    })
+      .then((res) => {
+        console.log("data is successfully saved", res.data.success);
+        if (res.data.data) {
+          setSuccessPopup(true);
+          addForm.resetFields();
+          close_modal(successPopup, 1000);
+        }
       })
-        .then((res) => {
-          console.log("data is successfully saved", res.data.success);
-          if (res.data.data) {
-            setSuccessPopup(true);
-            addForm.resetFields();
-            close_modal(successPopup, 1000);
-          
-          }
-        })
-        .catch((err) => {
-          console.log("error", err);
-          setError(true);
-        });
-    };
+      .catch((err) => {
+        console.log("error", err);
+        setError(true);
+      });
+  };
 
   return (
     <>
@@ -320,7 +310,7 @@ export default function ProductVariantsEditModal({ show, prid, onHide }) {
                   // setDescription(value.description);
                   // setBrand(value.brand);
                   // OnSubmit();
-                  OnSubmitedit()
+                  OnSubmitedit();
                 }}
                 onFinishFailed={(error) => {
                   console.log(error);
@@ -392,7 +382,7 @@ export default function ProductVariantsEditModal({ show, prid, onHide }) {
                       >
                         <Select.Option>Watch</Select.Option>
                       </Select> */}
-                              {/* <TreeSelect
+                      {/* <TreeSelect
                         className="tree"
                         name="tree"
                         style={{ width: "100%" }}
@@ -422,7 +412,6 @@ export default function ProductVariantsEditModal({ show, prid, onHide }) {
                         onSelect={onSelect}
                         
                       /> */}
-                    
                     </div>
                   </div>
                   <div className="col-6 mt-2">
@@ -498,28 +487,25 @@ export default function ProductVariantsEditModal({ show, prid, onHide }) {
                       >
                         <Checkbox.Group onChange={newValues}>
                           <div className="row p-2">
-                           
-                         
-                          {/* <Row>
+                            {/* <Row>
                             <Col> */}
-                              {attributes &&
-                                attributes.length > 0 &&
-                                attributes.map((item, index) => {
-                                  return (
-                                    <div className="col-xl-6 col-lg-6 col-12 py-1">
-                                     <Checkbox value={item?.attribute_id}>
+                            {attributes &&
+                              attributes.length > 0 &&
+                              attributes.map((item, index) => {
+                                return (
+                                  <div className="col-xl-6 col-lg-6 col-12 py-1">
+                                    <Checkbox value={item?.attribute_id}>
                                       {item?.attribute_name}
                                     </Checkbox>
-                                    </div>
-                                    
-                                  );
-                                  // <>
-                                  // <label htmlFor={item?.attribute_id}>{item?.attribute_name}</label>
-                                  // <Checkbox id={item?.attribute_id} />
-                                  // </>
-                                })}
-                                 </div>
-                            {/* </Col>
+                                  </div>
+                                );
+                                // <>
+                                // <label htmlFor={item?.attribute_id}>{item?.attribute_name}</label>
+                                // <Checkbox id={item?.attribute_id} />
+                                // </>
+                              })}
+                          </div>
+                          {/* </Col>
                           </Row> */}
                         </Checkbox.Group>
                         {/* <label style={{ color: "gray" }} className="my-2 ">
@@ -556,7 +542,7 @@ export default function ProductVariantsEditModal({ show, prid, onHide }) {
                       listType="picture"
                       accept=".png,.jpeg"
                       onPreview={handlePreview}
-                      beforeUpload={false}
+                      beforeUpload={true}
                       onChange={(file) => {
                         console.log("Before upload", file.file);
                         console.log("Before upload file size", file.file.size);
@@ -610,7 +596,7 @@ export default function ProductVariantsEditModal({ show, prid, onHide }) {
         // onHide={() => setModalShow(false)}
         footer={false}
       /> */}
-       <CustomModel
+      <CustomModel
         size={"sm"}
         show={successPopup}
         onHide={() => setSuccessPopup(false)}

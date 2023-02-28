@@ -41,7 +41,7 @@ function Varients() {
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
   const [prid, setPrid] = useState(id);
-  const [imageSize,setImageSize]= useState(false);
+  const [imageSize, setImageSize] = useState(false);
   console.log("product id in state is ", prid);
   const [prunit, setPrUnit] = useState();
   console.log("product unit id in state is ", prunit);
@@ -139,7 +139,6 @@ function Varients() {
       );
       let temp = [];
 
-
       allvarientAttr.data.data.forEach((item, index) => {
         console.log("All varient data", item);
         console.log("Varient Id : ", item.variant_attr_variant_id);
@@ -148,7 +147,7 @@ function Varients() {
           temp.push({
             variant_attr_attribute_id: item.variant_attr_attribute_id,
             variant_attr_id: item.variant_attr_id,
-            variant_attr_attribute_name:item.crm_v1_attributes.attribute_name,
+            variant_attr_attribute_name: item.crm_v1_attributes.attribute_name,
             variant_attr_status: item.variant_attr_status,
             variant_attr_value: item.variant_attr_value,
             variant_attr_variant_id: item.variant_attr_variant_id,
@@ -176,7 +175,7 @@ function Varients() {
 
       // if(allunits?.data.success){}
       setAllunit(allunits?.data?.data);
-      
+
       // setunitTable(allunits?.data?.data)
     } catch (err) {
       console.log("error to getting all units", err);
@@ -577,7 +576,7 @@ function Varients() {
                                 listType="picture"
                                 accept=".png,.jpg,.jpeg"
                                 onPreview={handlePreview}
-                                beforeUpload={false}
+                                beforeUpload={true}
                                 onChange={(file) => {
                                   console.log("Before upload", file.file);
                                   console.log(

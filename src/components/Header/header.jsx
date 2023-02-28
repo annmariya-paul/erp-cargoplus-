@@ -1,4 +1,7 @@
 import React from "react";
+import PublicFetch from "../../utils/PublicFetch";
+import { ROUTES } from "../../routes/index";
+import { useNavigate } from "react-router-dom";
 import Avatar from "../../components/img/img_avatar.png";
 import { IoMdNotifications } from "react-icons/io";
 import { TfiKey } from "react-icons/tfi";
@@ -7,6 +10,8 @@ import { Dropdown, Space } from "antd";
 import styles from "./header.module.scss";
 
 const Header = () => {
+  const navigate = useNavigate();
+
   //Handle dropdown options click event
   const handleDropdownClick = (event) => {
     console.log(event, "Events on Click");
@@ -14,7 +19,26 @@ const Header = () => {
       console.log("Clicked Super Admin");
       return false;
     } else if (event.key === "3") {
+      LogoutUser();
       console.log("Clicked on Logout");
+    }
+  };
+
+  //Api call for when logout clicked
+  const LogoutUser = async () => {
+    try {
+      const logoutUser = await PublicFetch.get(
+        `${process.env.REACT_APP_BASE_URL}/auth/logout`
+      );
+
+      if (logoutUser?.status === 200) {
+        localStorage.removeItem("UserToken");
+        navigate(ROUTES.LOGIN);
+      }
+    } catch (err) {
+      // let errorMessage = parseAxiosError(err);
+      // message.error(errorMessage);
+      console.log("Error while Logout");
     }
   };
 
@@ -70,12 +94,12 @@ const Header = () => {
   };
 
   return (
-    <div className="d-flex justify-content-end mt-2 ms-2 me-2 mb-3">
+    <div className="d-flex justify-content-end mt-2 mb-3">
       <div
         className={`${styles.headerContainer} d-flex align-items-center justify-content-around`}
       >
         <IoMdNotifications
-          size={25}
+          size={22}
           color="#6B728E"
           className={`${styles.NotificationIcon}`}
         />

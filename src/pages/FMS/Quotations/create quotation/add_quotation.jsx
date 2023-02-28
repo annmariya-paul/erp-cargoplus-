@@ -1023,12 +1023,6 @@ export default function Add_Quotation() {
     <>
       <div className="container-fluid">
         <div className="row justify-content-md-center">
-          <div className="row flex-wrap">
-            <div className="col">
-              <h5 className="lead_text">Quotation</h5>
-            </div>
-          </div>
-
           <div className="content-tabs">
             <Form
               name="addForm"
@@ -1042,23 +1036,10 @@ export default function Add_Quotation() {
               }}
             >
               <div className="container mb-4">
+                <div className="row mt-3">
+                  <h5 className="lead_text">Add New Quotation</h5>
+                </div>
                 <div className="row">
-                  <div className="row ">
-                    {/* <div className="col-xl-3 col-sm-6 mt-2">
-                      <label>Quotation No</label>
-                      <Form.Item
-                        name="quotation_no"
-                        rules={[
-                          {
-                            required: true,
-                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                            message: "Please enter a Valid number",
-                          },
-                        ]}
-                      >
-                        <InputType />
-                      </Form.Item>
-                    </div> */}
                     <div className="col-xl-3 col-sm-6 mt-2">
                       <label>Quotation date</label>
 
@@ -1331,7 +1312,7 @@ export default function Add_Quotation() {
                             cargooptions.length > 0 &&
                             cargooptions.map((item, index) => {
                               return (
-                                <Select.Option key={item.id} value={item.name}>
+                                <Select.Option key={item.id} value={item.value}>
                                   {item.name}
                                 </Select.Option>
                               );
@@ -1691,7 +1672,6 @@ export default function Add_Quotation() {
                         />
                       </Form.Item>
                     </div>
-                  </div>
                 </div>
               </div>
               {/* <div className="row justify-content-center">

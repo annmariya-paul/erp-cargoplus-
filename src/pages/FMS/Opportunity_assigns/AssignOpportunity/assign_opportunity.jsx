@@ -10,8 +10,8 @@ import { CRM_BASE_URL_HRMS, CRM_BASE_URL_FMS } from "../../../../api/bootapi";
 import { ROUTES } from "../../../../routes";
 
 function Assign_opportunity() {
-  const opp_id = useParams();
-  console.log("opportunity_id::::", opp_id);
+  const { id } = useParams();
+  console.log("opportunity_id::::", id);
   const navigate = useNavigate();
   const [addForm] = Form.useForm();
   const [module1Click, setModule1Click] = useState(true);
@@ -37,18 +37,18 @@ function Assign_opportunity() {
   // };
 
   const getAssignOpportunity = () => {
-    PublicFetch.get(`${CRM_BASE_URL_FMS}/enquiry/${opp_id?.id}`)
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/enquiry/${id}`)
       .then((res) => {
         console.log("response", res);
         if (res.data.success) {
           console.log("success", res.data.data);
           setAssign_Opp_Data(res.data.data);
           let arr = [];
-          res.data.data.forEach((item, index) => {
+          res?.data?.data?.forEach((item, index) => {
             arr.push({
-              employee_branch: item.hrms_v1_employee.employee_branch,
-              employee_id: item.hrms_v1_employee.employee_id,
-              employee_name: item.hrms_v1_employee.employee_name,
+              employee_branch: item?.hrms_v1_employee.employee_branch,
+              employee_id: item?.hrms_v1_employee.employee_id,
+              employee_name: item?.hrms_v1_employee.employee_name,
             });
             addForm.setFieldsValue({
               employee_ids: item.hrms_v1_employee.employee_id,
@@ -80,11 +80,13 @@ function Assign_opportunity() {
   const checkEmployee = (value) => {
     console.log("values ssss", value);
     let ref = false;
+    if (value !== 0) {
+      ref = agnetData?.some((agent, agentindex) => {
+        return agent?.employee_id === value;
+      });
+      console.log("cecking", ref);
+    }
 
-    ref = agnetData.some((agent, agentindex) => {
-      return agent?.employee_id === value;
-    });
-    console.log("cecking", ref);
     return ref;
   };
 
@@ -120,7 +122,7 @@ function Assign_opportunity() {
         });
       }
       PublicFetch.post(`${CRM_BASE_URL_FMS}/enquiry`, {
-        opportunity_assign_opportunity_id: parseInt(opp_id?.id),
+        opportunity_assign_opportunity_id: parseInt(id),
         employee_ids: temp,
         opportunity_assign_agent_id: 1,
       })
@@ -151,8 +153,10 @@ function Assign_opportunity() {
   useEffect(() => {
     // getRoles();
     getAllEmployees();
-    getAssignOpportunity();
-  }, [opp_id?.id]);
+    if (id) {
+      getAssignOpportunity();
+    }
+  }, [id]);
 
   return (
     <div>

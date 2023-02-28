@@ -93,6 +93,7 @@ import Vendor from "./pages/CRM/Purchase/vendor/vendor";
 import ProtectedRoute from "./components/ProtectedRoute";
 import InvoicePrint from "./components/Invoice/InvoicePrint";
 import PrintInvoice from "./pages/FMS/Invoice/PrintInvoice";
+import InvoiceView from "./pages/FMS/Invoice/InvoiceView";
 // import Vendortype from "./pages/CRM/Purchase/vendertype/vendortype";
 // import Lead from "./pages/lead/lead";
 
@@ -401,6 +402,10 @@ function App() {
               element={<ProtectedRoute />}
             >
               <Route index element={<InvoicePreView />} />
+            </Route>
+
+            <Route path={ROUTES.INVOICE_VIEW_ID} element={<ProtectedRoute />}>
+              <Route index element={<InvoiceView />} />
             </Route>
 
             {/* General settings */}

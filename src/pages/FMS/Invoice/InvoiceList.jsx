@@ -57,8 +57,11 @@ function InvoiceList() {
                 }}
               /> */}
               <MdPageview
+                fontSize={18}
                 // onClick={()=>viewprogressoppurtunity(index)}
-                onClick={() => {}}
+                onClick={() => {
+                  navigate(`${ROUTES.INVOICE_VIEW}/${index.invoice_job_id}`);
+                }}
               />
             </div>
             {/* <div className="editcolor">

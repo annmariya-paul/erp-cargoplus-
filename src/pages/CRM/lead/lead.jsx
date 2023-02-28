@@ -403,6 +403,7 @@ function Lead({}) {
                             listType="picture"
                             accept=".pdf,.docs,"
                             onPreview={handlePreview}
+                            beforeUpload={true}
                             // value={leadAttachment}
                             // onChange={(e) => setLeadAttachment(e.target.value)}
                             onChange={(file) => {

@@ -60,6 +60,8 @@ function ProductCreate() {
   const [productattribute, setProductAttribute] = useState([]);
   const [Errormsg, setErrormsg] = useState();
 
+  const [viewimg,setViewimg]=useState("")
+
   
 
   const [uniqueCode,setuniqueCode]= useState(false)
@@ -241,6 +243,7 @@ function ProductCreate() {
       file.preview = await getBase64(file.originFileObj);
     }
     setPreviewImage(file.url || file.preview);
+   
     setPreviewVisible(true);
     setPreviewTitle(
       file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
@@ -278,6 +281,7 @@ function ProductCreate() {
   };
 
   console.log("data in catt", State);
+  console.log("imgg ",previewImage )
 
   return (
     <div>
@@ -488,7 +492,74 @@ function ProductCreate() {
                 </div>
 
                 <div className="col-6 mt-2">
-                  <label>Attributes</label>
+
+                <label>Description</label>
+                  <Form.Item
+                    className="mt-2"
+                    name="description"
+                    rules={[
+                      {
+                        min: 2,
+                        message: "Description must be at least 2 characters",
+                      },
+                      {
+                        max: 500,
+                        message:
+                          "Description cannot be longer than 500 characters",
+                      },
+                    ]}
+                    onChange={(e) => setDescription(e.target.value)}
+                  >
+                    <TextArea />
+                  </Form.Item>
+                 
+                </div>
+
+                <div className="col-6 mt-2">
+                  <label>Display Picture</label>
+                  <Form.Item className="mt-2" name="new">
+                    <FileUpload
+                      // multiple
+                      listType="picture"
+                      accept=".png,.jpeg,.jpg"
+                      filetype={"Accept only png,jpg and jpeg"}
+                      onPreview={handlePreview}
+                      beforeUpload={false}
+                      onChange={(file) => {
+                        console.log("Before upload", file.file);
+                        console.log("Before upload file size", file.file.size);
+
+                        if (file.file.size > 2000 && file.file.size < 500000) {
+                          setImg(file.file.originFileObj);
+                        
+                          console.log("selet imggg", file.file.originFileObj);
+                          setImageSize(false);
+                        } else {
+                          setImageSize(true);
+                          console.log(
+                            "Error in upload, upload image size between 1 kb and  500 kb"
+                          );
+                        }
+                      }}
+                     
+                    />
+                    
+
+                    {/* <img src={previewImage}   
+                    height="40px"
+                    width="40px"/> */}
+           
+                    {imageSize ? (
+                      <p style={{ color: "red" }}>
+                        Upload Image size between 1 kb and 500 kb
+                      </p>
+                    ) : (
+                      ""
+                    )}
+                  </Form.Item>
+                </div>
+                <div className="col-6 ">
+                <label>Attributes</label>
                   <Form.Item
                     name="attribute"
                     rules={[
@@ -520,62 +591,6 @@ function ProductCreate() {
                           })}
                       </div>
                     </Checkbox.Group>
-                  </Form.Item>
-                </div>
-
-                <div className="col-6 mt-2">
-                  <label>Display Picture</label>
-                  <Form.Item className="mt-2" name="new">
-                    <FileUpload
-                      multiple
-                      listType="picture"
-                      accept=".png,.jpeg,.jpg"
-                      onPreview={handlePreview}
-                      beforeUpload={false}
-                      onChange={(file) => {
-                        console.log("Before upload", file.file);
-                        console.log("Before upload file size", file.file.size);
-
-                        if (file.file.size > 2000 && file.file.size < 500000) {
-                          setImg(file.file.originFileObj);
-                          console.log("selet imggg", file.file.originFileObj);
-                          setImageSize(false);
-                        } else {
-                          setImageSize(true);
-                          console.log(
-                            "Error in upload, upload image size between 1 kb and  500 kb"
-                          );
-                        }
-                      }}
-                    />
-                    {imageSize ? (
-                      <p style={{ color: "red" }}>
-                        Upload Image size between 1 kb and 500 kb
-                      </p>
-                    ) : (
-                      ""
-                    )}
-                  </Form.Item>
-                </div>
-                <div className="col-6 mt-2">
-                  <label>Description</label>
-                  <Form.Item
-                    className="mt-2"
-                    name="description"
-                    rules={[
-                      {
-                        min: 2,
-                        message: "Description must be at least 2 characters",
-                      },
-                      {
-                        max: 500,
-                        message:
-                          "Description cannot be longer than 500 characters",
-                      },
-                    ]}
-                    onChange={(e) => setDescription(e.target.value)}
-                  >
-                    <TextArea />
                   </Form.Item>
                 </div>
                 <div className="col-12 d-flex justify-content-center pt-2">

@@ -45,7 +45,7 @@ export default function Currency(props) {
   const [currency_id, setCurrency_id] = useState();
   const [currency_ids, setCurrency_ids] = useState();
   const [country, setCountry] = useState();
-  const [currencyDefault, setCurrencyDefault] = useState(0);
+  const [currencyDefault, setCurrencyDefault] = useState();
   console.log("checkeeddd", currencyDefault);
   // const [editForm] = Form.useForm();
 
@@ -81,7 +81,7 @@ export default function Currency(props) {
     setCodeInput(e.currency_code);
     setCoinInput(e.currency_coin);
     setSymbolInput(e.symbol);
-    setCurrencyDefault(e.currency_is_default);
+    setCurrencyDefault(e.currencyDefault);
 
     addForm.setFieldsValue({
       currency_id: e.currency_id,
@@ -147,12 +147,12 @@ export default function Currency(props) {
       title: "COUNTRY",
       dataIndex: "country_name",
       key: "country_name",
-      filteredValue: [searchedText],
-      onFilter: (value, record) => {
-        return String(record.country_name)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
+      // filteredValue: [searchedText],
+      // onFilter: (value, record) => {
+      //   return String(record.country_name)
+      //     .toLowerCase()
+      //     .includes(value.toLowerCase());
+      // },
       align: "center",
     },
     {
@@ -171,36 +171,36 @@ export default function Currency(props) {
       title: "COIN",
       dataIndex: "currency_coin",
       key: "currency_coin",
-      filteredValue: [searchedText],
-      onFilter: (value, record) => {
-        return String(record.currency_coin)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
+      // filteredValue: [searchedText],
+      // onFilter: (value, record) => {
+      //   return String(record.currency_coin)
+      //     .toLowerCase()
+      //     .includes(value.toLowerCase());
+      // },
       align: "center",
     },
     {
       title: "CODE",
       dataIndex: "currency_code",
       key: "currency_code",
-      filteredValue: [searchedText],
-      onFilter: (value, record) => {
-        return String(record.currency_code)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
+      // filteredValue: [searchedText],
+      // onFilter: (value, record) => {
+      //   return String(record.currency_code)
+      //     .toLowerCase()
+      //     .includes(value.toLowerCase());
+      // },
       align: "center",
     },
     {
       title: "SYMBOL",
       dataIndex: "currency_symbol",
       key: "currency_symbol",
-      filteredValue: [searchedText],
-      onFilter: (value, record) => {
-        return String(record.currency_symbol)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
+      // filteredValue: [searchedText],
+      // onFilter: (value, record) => {
+      //   return String(record.currency_symbol)
+      //     .toLowerCase()
+      //     .includes(value.toLowerCase());
+      // },
       align: "center",
     },
   ];
@@ -330,7 +330,7 @@ export default function Currency(props) {
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
-              placeholder="Search by Fright type Name"
+              placeholder="Search by Currency Name"
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
               onChange={(e) => {
@@ -773,7 +773,7 @@ export default function Currency(props) {
                           <Checkbox
                             // value={currencyDefault}
                             onChange={handleChecked}
-                            // checked={currencyDefault === 0 ? false : true}
+                            checked={currencyDefault === 1 ? true : false}
                           ></Checkbox>
                         </Form.Item>
                       </div>

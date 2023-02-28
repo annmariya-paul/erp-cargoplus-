@@ -113,6 +113,8 @@ function Jobinvoice(){
               
               console.log("datas", temp);
               setAllJobs(temp);
+              // close_modal(1200)
+              // window.print()
             }
           })
           .catch((err) => {
@@ -175,26 +177,27 @@ function Jobinvoice(){
         page.style.padding ="2rem"
       }
       const handlePrint = () => {
-        setPageSize();
+        // setPageSize();
         window.print();
       
       };
 
-      // const close_modal = ( time) => {
-      //   if (time) {
-      //     setTimeout(() => {
-      //     handlePrint()
+      const close_modal = ( time) => {
+        if (time) {
+          setTimeout(() => {
+          handlePrint()
             
-      //     }, time);
-      //   }
-      // };
+          }, time);
+        }
+      };
     
 
-      // useEffect(() => {
+      useEffect(() => {
 
-      //   close_modal(1500) 
+        close_modal(1200) 
+        // handlePrint()
 
-      // }, []);
+      }, []);
 
 console.log("all jobs", alljobs)
 
@@ -203,48 +206,52 @@ console.log("all jobs", alljobs)
 
 
 <InvoicePrint
+invoice_no
+Invoice_type="JOB" 
+invoice_number={alljobs?.job_no}
+
 invoice_details1={ <>
   <tr className="p-2 ">
  <td>Job No </td>
  <td>: </td>
- <td>{alljobs?.job_no}</td>
+ <td className="quotation_p_name" >{alljobs?.job_no}</td>
  </tr>
  <tr className="p-2">
  <td>Job Date </td>
  <td>: </td>
- <td>{alljobs?.job_date1}</td>
+ <td className="quotation_p_name">{alljobs?.job_date1}</td>
  </tr>
  <tr className="p-2">
  <td>Quotation No </td>
  <td>: </td>
- <td>{qtnno}</td>
+ <td className="quotation_p_name">{qtnno}</td>
  </tr>
 
 
  <tr className="p-2 ">
  <td>Freight type </td>
  <td>: </td>
- <td>{alljobs?.job_freight_type1}</td>
+ <td className="quotation_p_name">{alljobs?.job_freight_type1}</td>
  </tr>
  <tr className="p-2">
  <td>Payment Terms </td>
  <td>: </td>
- <td> {alljobs?.job_payment_terms1}</td>
+ <td className="quotation_p_name"> {alljobs?.job_payment_terms1}</td>
  </tr>
  <tr className="p-2">
  <td>No of Pieces </td>
  <td>: </td>
- <td> {alljobs?.job_no_of_pieces}</td>
+ <td className="quotation_p_name"> {alljobs?.job_no_of_pieces}</td>
  </tr>
  <tr className="p-2">
  <td>Chargeable wt </td>
  <td>: </td>
- <td>{alljobs?.job_chargeable_wt}</td>
+ <td className="quotation_p_name">{alljobs?.job_chargeable_wt}</td>
  </tr>
  <tr className="p-2">
  <td>Gross wt </td>
  <td>: </td>
- <td>{alljobs?.job_gross_wt}</td>
+ <td className="quotation_p_name">{alljobs?.job_gross_wt}</td>
  </tr>
 
 </> }
@@ -254,42 +261,42 @@ invoice_details2={
    <tr className="p-2 ">
  <td>Shipper </td>
  <td>: </td>
- <td>{alljobs?.job_shipper}</td>
+ <td className="quotation_p_name">{alljobs?.job_shipper}</td>
  </tr>
  <tr className="p-2">
  <td>Consignee </td>
  <td>: </td>
- <td> {alljobs?.job_consignee1}</td>
+ <td className="quotation_p_name"> {alljobs?.job_consignee1}</td>
  </tr>
  <tr className="p-2">
  <td>Origin </td>
  <td>: </td>
- <td> {alljobs?.job_origin_id1}</td>
+ <td className="quotation_p_name"> {alljobs?.job_origin_id1}</td>
  </tr>
  <tr className="p-2">
  <td>Destination </td>
  <td>: </td>
- <td> {alljobs?.job_destination_id1}</td>
+ <td className="quotation_p_name"> {alljobs?.job_destination_id1}</td>
  </tr>
  <tr className="p-2">
  <td>Cargo Type </td>
  <td>: </td>
- <td>  {alljobs?.job_cargo_type}</td>
+ <td className="quotation_p_name">  {alljobs?.job_cargo_type}</td>
  </tr>
  <tr className="p-2">
  <td>Currency </td>
  <td>: </td>
- <td> {alljobs?.job_currency}</td>
+ <td className="quotation_p_name"> {alljobs?.job_currency}</td>
  </tr>
  <tr className="p-2">
  <td>Exchange Rate </td>
  <td>: </td>
- <td>{alljobs?.job_exchange_rate}</td>
+ <td className="quotation_p_name">{alljobs?.job_exchange_rate}</td>
  </tr>
  <tr className="p-2">
  <td>UOM </td>
  <td>: </td>
- <td> {alljobs?.job_uom1}</td>
+ <td className="quotation_p_name"> {alljobs?.job_uom1}</td>
  </tr>
 
   </>

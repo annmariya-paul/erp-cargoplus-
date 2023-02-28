@@ -42,6 +42,8 @@ function Productlist() {
   const [modalOpportunity, setModalOpportunity] = useState(false);
   const [productid, setProductID] = useState();
   console.log("pr id from state", productid);
+
+  const [productpic,setproductpic]=useState()
   // const  [productname, setProductName] = useState();
   // const  [productcode, setProductCode] = useState();
   // const  [productcatid, setProductcatid] = useState();
@@ -127,6 +129,7 @@ function Productlist() {
               catgeory_name: item.crm_v1_categories?.category_name,
               product_code: item?.product_code,
               product_pic: item?.product_pic,
+
             });
           });
 
@@ -209,11 +212,16 @@ function Productlist() {
 
       align: "center",
       render: (theImageURL, records) => (
-        <img
+       <>
+       {theImageURL ?(
+         <img
           src={`${process.env.REACT_APP_BASE_URL}/${theImageURL}`}
           height="20px"
           width={"20px"}
         />
+        ):""}
+       </>
+        
       ),
     },
     {

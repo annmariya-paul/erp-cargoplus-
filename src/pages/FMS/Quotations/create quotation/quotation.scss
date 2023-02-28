@@ -76,13 +76,14 @@ th {
 }
 
 .qtn_table_brdr{
+  // border-collapse:collapse;
    thead {
     tr {
       th {
         z-index: 1;
         background-color: rgb(240, 248, 254);
         position: sticky;
-        border: 1px solid rgb(197, 194, 194);
+        border: 1px solid #b1afaf;
         top: 0;
       }
       .tborder {
@@ -95,7 +96,7 @@ th {
       td {
         padding-inline: 5px;
         margin-block: -5px;
-        border: 1px solid rgb(196, 191, 191);
+        border: 1px solid #b1afaf;
       }
     }
   }
@@ -106,6 +107,11 @@ th {
 }
 .grandtotal,.input_bg{
   background-color: white !important;
+}
+.grandtotal{
+  .ant-input-number-input{
+    font-weight: 600;
+  }
 }
 .tablecontainer {
   overflow-y: scroll;

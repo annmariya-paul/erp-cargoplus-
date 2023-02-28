@@ -24,7 +24,10 @@ import { message, Select } from "antd";
 import SelectBox from "../../../components/Select Box/SelectBox";
 import InputType from "../../../components/Input Type textbox/InputType";
 import TextArea from "../../../components/ InputType TextArea/TextArea";
+import { UniqueErrorMsg } from "../../../ErrorMessages/UniqueErrorMessage";
+import CheckUnique from "../../../check Unique/CheckUnique";
 // import { useForm } from "react-hook-form";
+// import {  message } from 'antd';
 
 function Lead({}) {
   const [toggleState, setToggleState] = useState(1);
@@ -49,11 +52,24 @@ function Lead({}) {
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
   const [leadimg, setLeadimg] = useState([]);
+  const [messageApi, contextHolder] = message.useMessage();
+  const [leadid,setleadid]=useState()
+
+  const [uniqueCode, setuniqueCode] = useState();
   const [addForm] = Form.useForm();
 
   const [error, setError] = useState(false);
   const toggleTab = (index) => {
-    setToggleState(index);
+  setToggleState(index);   
+  };
+
+
+
+  const errormessage = () => {
+    messageApi.open({
+      type: 'error',
+      content: 'Lead is not saved',
+    });
   };
 
   const getBase64 = (file) =>
@@ -118,6 +134,7 @@ function Lead({}) {
           toggleTab(2);
           setLeadId(response?.data?.data?.lead_id);
         } else {
+
           console.log("Failed while adding data");
         }
       })
@@ -144,6 +161,7 @@ function Lead({}) {
 
   return (
     <>
+          {contextHolder}
       <h5 className="lead_text">Add Lead/Customer</h5>
       <div className="container-fluid">
         <div className="lead_container">
@@ -159,20 +177,26 @@ function Lead({}) {
               <button
                 id="button-tabs"
                 className={toggleState === 2 ? "tabs active-tabs" : "tabs"}
-                onClick={() => toggleTab(2)}
+                onClick={() => {
+                  leadId==null ?errormessage():toggleTab(2)
+                 }}
               >
                 Contacts
               </button>
               <button
                 id="button-tabs"
                 className={toggleState === 3 ? "tabs active-tabs" : "tabs"}
-                onClick={() => toggleTab(3)}
+                onClick={() => {
+                  leadId==null ?errormessage():toggleTab(3)
+                }}
               >
                 Address
               </button>
               <button
                 className={toggleState === 4 ? "tabs active-tabs" : "tabs"}
-                onClick={() => toggleTab(4)}
+                onClick={() => {
+                  leadId==null ?errormessage():toggleTab(4)
+                }}
               >
                 Location
               </button>
@@ -273,9 +297,27 @@ function Lead({}) {
                       >
                         <InputType
                           value={leadName}
-                          onChange={(e) => setLeadName(e.target.value)}
+                          onChange={(e) =>{ 
+                            setLeadName(e.target.value)
+                            setuniqueCode(false);
+                          }}
+
+                          onBlur={async() => {
+                          
+                            let a = await CheckUnique({type:"leadcustomername",value:leadName})
+                            setuniqueCode(a)
+                          }}
                         />
                       </Form.Item>
+                      {uniqueCode ? (
+                      <div>
+                        <label style={{ color: "red" }}>
+                          lead name {UniqueErrorMsg.UniqueErrName}
+                        </label>
+                      </div>
+                    ) : (
+                      ""
+                    )}
                     </div>
                     <div className="col-sm-4 pt-2">
                       <label>User Type</label>

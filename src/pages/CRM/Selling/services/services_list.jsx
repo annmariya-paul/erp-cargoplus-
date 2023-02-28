@@ -376,6 +376,7 @@ function Services() {
     {
       title: "Sl. No.",
       key: "index",
+      width: "8%",
       render: (value, item, index) => serialNo + index,
       align: "center",
     },
@@ -383,7 +384,7 @@ function Services() {
       title: "IMAGE",
       dataIndex: "service_pic",
       key: "key",
-      width: "23%",
+      width: "15%",
       // filteredValue: [searchStatus],
       // onFilter: (value, record) => {
       //   return String(record.lead_status)
@@ -422,7 +423,7 @@ function Services() {
       title: "CODE",
       dataIndex: "service_code",
       key: "key",
-      //   width: "23%",
+      width: "10%",
       align: "center",
       filteredValue: [searchCode],
       onFilter: (value, record) => {
@@ -435,7 +436,7 @@ function Services() {
       title: "CATEGORY",
       dataIndex: "service_category_name",
       key: "key",
-      width: "14%",
+      width: "16%",
       align: "center",
       filteredValue: [searchCategory],
       onFilter: (value, record) => {
@@ -463,7 +464,7 @@ function Services() {
       render: (data, index) => {
         console.log("tb dataa", index);
         return (
-          <div className="d-flex justify-content-center align-items-center gap-4">
+          <div className="d-flex justify-content-center align-items-center gap-3">
             <div
               onClick={() => {
                 console.log("tb dataa", index);

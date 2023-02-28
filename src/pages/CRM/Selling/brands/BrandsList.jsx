@@ -258,6 +258,7 @@ function BrandsList() {
     {
       title: "Sl. No.",
       key: "index",
+      width: "8%",
       render: (value, item, index) => serialNo + index,
       align: "center",
     },
@@ -306,19 +307,19 @@ function BrandsList() {
       title: "ACTION",
       dataIndex: "action",
       key: "ACTION",
-      width: "14%",
+      width: "12%",
       render: (data, index) => {
         return (
-          <div className="d-flex justify-content-center align-items-center gap-4">
+          <div className="d-flex justify-content-center align-items-center">
             <div
               onClick={() => handleEditPhase2(index)}
-              className="actionEdit m-0 p-0"
+              className="actionEdit"
             >
               <FaEdit />
             </div>
             <div
               onClick={() => handleViewData(index)}
-              className="actionView m-0 p-0"
+              className="actionView"
             >
               <MdPageview />
             </div>

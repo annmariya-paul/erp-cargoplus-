@@ -181,7 +181,55 @@ export default function Carrierlist(props) {
     setCarrierEditPopup(true);
   };
 
-  const columns = [
+  const [serialNo, setserialNo] = useState(1);
+ const columns = [
+   {
+     title: "SI.NO",
+     key: "index",
+     width: "13%",
+     render: (value, item, index) => serialNo + index,
+     align: "center",
+   },
+   
+    {
+      title: "CARRIER NAME",
+      dataIndex: "carrier_name",
+      key: "carrier_name",
+      filteredValue: [searchedText],
+      onFilter: (value, record) => {
+        return String(record.carrier_name)
+          .toLowerCase()
+          .includes(value.toLowerCase()) || 
+          String(record.carrier_code )
+          .toLowerCase()
+          .includes(value.toLowerCase())
+      },
+      align: "left",
+    },
+    {
+      title: "CARRIER CODE",
+      dataIndex: "carrier_code",
+      key: "carrier_code",
+      filteredValue: [searchedCode],
+      // onFilter: (value, record) => {
+      //   return String(record.carrier_code)
+      //     .toLowerCase()
+      //     .includes(value.toLowerCase());
+      // },
+      align: "left",
+    },
+    {
+      title: "CARRIER TYPE",
+      dataIndex: "carrier_type",
+      key: "carrier_type",
+      filteredValue: [searchType],
+      onFilter: (value, record) => {
+        return String(record.carrier_type)
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      },
+      align: "left",
+    },
     {
       title: "ACTION",
       dataIndex: "action",
@@ -205,42 +253,6 @@ export default function Carrierlist(props) {
             </div>
           </div>
         );
-      },
-      align: "center",
-    },
-    {
-      title: "CARRIER NAME",
-      dataIndex: "carrier_name",
-      key: "carrier_name",
-      filteredValue: [searchedText],
-      onFilter: (value, record) => {
-        return String(record.carrier_name || nameSearch)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
-      align: "center",
-    },
-    {
-      title: "CARRIER CODE",
-      dataIndex: "carrier_code",
-      key: "carrier_code",
-      filteredValue: [searchedCode],
-      onFilter: (value, record) => {
-        return String(record.carrier_code)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
-      align: "center",
-    },
-    {
-      title: "CARRIER TYPE",
-      dataIndex: "carrier_type",
-      key: "carrier_type",
-      filteredValue: [searchType],
-      onFilter: (value, record) => {
-        return String(record.carrier_type)
-          .toLowerCase()
-          .includes(value.toLowerCase());
       },
       align: "center",
     },
@@ -268,7 +280,7 @@ export default function Carrierlist(props) {
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
-              placeholder="Search by Carrier Name"
+              placeholder="Search by Carrier Name / Carrier Code"
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
               onChange={(e) => {
@@ -284,7 +296,7 @@ export default function Carrierlist(props) {
               allowClear
               showSearch
               style={{ width: "100%", marginTop: "8px", borderRadius: "5px" }}
-              placeholder="Search by Type"
+              placeholder="Search by Carrier Type"
               className="select_search"
               optionFilterProp="children"
               onChange={(event) => {
@@ -296,7 +308,7 @@ export default function Carrierlist(props) {
               <Select.Option value="Road">Road</Select.Option>
             </Select>
           </div>
-          <div className="col-4">
+          {/* <div className="col-4">
             <Input.Search
               placeholder="Search by Carrier Code"
               style={{ margin: "5px", borderRadius: "5px" }}
@@ -308,7 +320,7 @@ export default function Carrierlist(props) {
                 setSearchedCode(value);
               }}
             />
-          </div>
+          </div> */}
         </div>
         <div className="row my-3">
           <div className="col-4 px-3">
@@ -494,7 +506,7 @@ export default function Carrierlist(props) {
                           setAddcarriertype(e);
                         }}
                       >
-                        <Select.Option value="Airline">Airport</Select.Option>
+                        <Select.Option value="Airline">Airline</Select.Option>
                         <Select.Option value="Shipping line">
                         Shipping Line 
                         </Select.Option>

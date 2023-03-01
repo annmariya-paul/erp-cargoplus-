@@ -64,7 +64,7 @@ function Category() {
   };
 
   const handleCancel = () => {
-    navigate(ROUTES.CATEGORY);
+    navigate(ROUTES.CATEGORY_LIST);
   };
   const handlePreview = async (file) => {
     console.log("handlePreview", file);
@@ -331,6 +331,8 @@ function Category() {
         console.log("Error", err);
       });
   };
+
+  
   // console.log("imgage preview", imgPreview);
   const beforeUpload = (file, fileList) => {};
   return (
@@ -471,6 +473,7 @@ function Category() {
                     <FileUpload
                       multiple
                       listType="picture"
+                      // height={130}
                       accept=".png,.jpg,.jpeg"
                       // onPreview={handlePreview}
                       beforeUpload={beforeUpload}
@@ -497,17 +500,25 @@ function Category() {
                     )}
                   </Form.Item>
                 </div>
-                <div className="row ">
-                  {/* {
+                {/* <div className="row justify-content-center"> */}
+                {/* {
               error403 ? (<div><p style={{textAlign:"center",color:"red"}}>Category Code has been taken </p></div>):""
             } */}
-                </div>
+                {/* </div> */}
                 {/* <div>
                   <img src={imgPreview} alt height={"50px"} width={"50px"} />
                 </div> */}
-                <div className="d-flex mb-3">
-                  <Button className="savebtn" btnType="save">
-                    Save
+                <div className="mt-5 d-flex justify-content-center gap-2">
+                  <Button btnType="save">Save</Button>
+                  <Button
+                    as="input"
+                    type="reset"
+                    value="Reset"
+                    onClick={() => {
+                      handleCancel();
+                    }}
+                  >
+                    Cancel
                   </Button>
                 </div>
               </div>

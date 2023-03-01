@@ -14,7 +14,7 @@ import SelectBox from "../../../../components/Select Box/SelectBox";
 
 export default function LeadReport() {
   const { Option } = Select;
-
+  const [serialNo, setserialNo] = useState(1);
   const [searchedText, setSearchedText] = useState("");
   const [searchType, setSearchType] = useState("");
   const [searchStatus, setSearchStatus] = useState("");
@@ -49,57 +49,9 @@ export default function LeadReport() {
       .then((res) => {
         if (res?.data?.success) {
           console.log("All lead data", res?.data?.data);
-
-          //   { dividing data to generated and converted table - Annmariya (20/10/22) }
-          let arrA = [];
-          let arrB = [];
           res?.data?.data?.leads.forEach((item, index) => {
-           
-            setAllLeadList(item.lead_status);
-
-            var date1 = moment(item.lead_created_at).format("MM-DD-YYYY");
-              ldStatus.forEach((i, index) => {
-             ldType.forEach((t, index) => {
-            var leadStat = parseInt(i.value);
-            if (
-              item.lead_status === 5 &&
-              leadStat === item.lead_status &&
-              t.value === item.lead_type
-            ) {
-              {
-                arrA.push({
-                  lead_customer_name: item?.lead_customer_name,
-                  lead_id: item?.lead_id,
-                  lead_organization: item?.lead_organization,
-                  lead_source: item?.lead_source,
-                  lead_status: i?.name,
-                  lead_type: t?.name,
-                  lead_user_type: item?.lead_user_type,
-                });
-                setConvertedTable(arrA);
-              }
-              
-            }
-             
-            if (
-              item.lead_status === 1 &&
-              leadStat === item.lead_status &&
-              t.value === item.lead_type
-            ) {
-              arrB.push({
-                lead_customer_name: item?.lead_customer_name,
-                lead_id: item?.lead_id,
-                lead_organization: item?.lead_organization,
-                lead_source: item?.lead_source,
-                lead_status: i?.name,
-                lead_type: t?.name,
-                lead_user_type: item?.lead_user_type,
-                lead_created_date: item?.lead_created_at,
-              });
-              setGeneratedTable(arrB);
-            }
-          });
-          });
+            // setAllLeadList(item.lead_status);
+            var date1 = moment(item.lead_created_at).format("MM-DD-YYYY"); 
           });
         } else {
           console.log("FAILED TO LOAD DATA");
@@ -110,14 +62,9 @@ export default function LeadReport() {
       });
   };
 
-
-console.log("generated data isss ", generatedTable )
-
-
-
   useEffect(() => {
     // GetAllLeadData();
-    Searchbydate()
+    Searchbydate();
   }, [numOfItems, pageSize]);
   // { function to search data by date - Ann mariya (04/11/22)}
   const Searchbydate = () => {
@@ -160,8 +107,64 @@ console.log("generated data isss ", generatedTable )
           console.log("hello", response.data.data);
           setGenerateCount(response?.data?.data?.generated?.totalCount);
           setConvertCount(response?.data?.data?.converted?.totalCount);
-          setConvertedTable(response?.data?.data?.converted?.data);
-          setGeneratedTable(response?.data?.data?.generated?.data);
+          // setConvertedTable(response?.data?.data?.converted?.data);
+          // setGeneratedTable(response?.data?.data?.generated?.data);
+          let arrA = [];
+           response?.data?.data?.generated?.data?.forEach((itm, index) => {
+           setAllLeadList(itm.lead_status);
+
+            var date1 = moment(itm.lead_created_at).format("MM-DD-YYYY");
+              ldStatus.forEach((sts, index) => {
+             ldType.forEach((x, index) => {
+               var leadStat = parseInt(sts.value);
+               if (
+                 leadStat === itm.lead_status &&
+                 x.value === itm.lead_type
+               ) {
+                 {
+                   arrA.push({
+                     lead_customer_name: itm?.lead_customer_name,
+                     lead_id: itm?.lead_id,
+                     lead_organization: itm?.lead_organization,
+                     lead_source: itm?.lead_source,
+                     lead_status: sts?.name,
+                     lead_type: x?.name,
+                     lead_user_type: itm?.lead_user_type,
+                   });
+                   setGeneratedTable(arrA);
+                 }
+               }
+             })
+             })
+           })
+
+           let arrB = [];
+           response?.data?.data?.converted?.data?.forEach((item, index) => {
+             setAllLeadList(item.lead_status);
+             var date1 = moment(item.lead_created_at).format("MM-DD-YYYY");
+             ldStatus.forEach((i, index) => {
+               ldType.forEach((t, index) => {
+                 var leadStat = parseInt(i.value);
+                 if (
+                   leadStat === item.lead_status &&
+                   t.value === item.lead_type
+                 ) {
+                   {
+                     arrB.push({
+                       lead_customer_name: item?.lead_customer_name,
+                       lead_id: item?.lead_id,
+                       lead_organization: item?.lead_organization,
+                       lead_source: item?.lead_source,
+                       lead_status: i?.name,
+                       lead_type: t?.name,
+                       lead_user_type: item?.lead_user_type,
+                     });
+                     setConvertedTable(arrB);
+                   }
+                 }
+               });
+             });
+           });         
         } else {
           console.log("Failed while adding data");
         }
@@ -177,6 +180,12 @@ console.log("generated data isss ", generatedTable )
     return convertedTable?.slice((current - 1) * pageSize, current * pageSize);
   };
   const columns = [
+    {
+      title: "Sl. No.",
+      key: "index",
+      render: (value, item, index) => serialNo + index,
+      align: "center",
+    },
     {
       title: "NAME",
       dataIndex: "lead_customer_name",
@@ -286,7 +295,7 @@ console.log("generated data isss ", generatedTable )
               <div className="col-sm-4">
                 <Input.Search
                   placeholder="Search by Name"
-                  style={{ margin: "5px", borderRadius: "5px" }}
+                  style={{ marginBlock: "5px", borderRadius: "5px" }}
                   value={searchedText}
                   onChange={(e) => {
                     setSearchedText(e.target.value ? [e.target.value] : []);
@@ -319,7 +328,7 @@ console.log("generated data isss ", generatedTable )
             </div>
 
             <div className="row my-3">
-              <div className="col-2 px-3 ">
+              <div className="col-3 px-3 ">
                 <Select
                   bordered={false}
                   className="page_size_style"
@@ -532,6 +541,75 @@ console.log("generated data isss ", generatedTable )
                     </span>
                   </Select.Option>
                 </Select>
+              </div>
+              <div className="col-md-2 col-sm-12">
+                {/* <label htmlFor="criteria">Select Date Criteria</label> */}
+                <SelectBox
+                  name="criteria"
+                  defaultValue="daily"
+                  style={{ backgroundColor: "whitesmoke", borderRadius: "5px" }}
+                  className="w-100 select_box"
+                  onChange={(e) => setDateCriteria(e)}
+                >
+                  <Option value="daily">Daily</Option>
+                  <Option value="BtwnTwoDates">Between Two Dates</Option>
+                  <Option value="monthly">Monthly</Option>
+                </SelectBox>
+              </div>
+              {dateCriteria === "daily" && (
+                <div className="col-md-2 col-sm-12">
+                  {/* <label htmlFor="date">Date</label> */}
+                  <DatePicker
+                    format={"DD-MM-YYYY"}
+                    defaultValue={moment(newDate)}
+                    value={selectedDate}
+                    onChange={(e) => {
+                      setSelectedDate(e);
+                    }}
+                  />
+                </div>
+              )}
+              {dateCriteria === "monthly" && (
+                <div className="col-md-2 col-sm-12">
+                  {/* <label htmlFor="month">Month</label> */}
+                  <DatePicker
+                    format={"01-DD-YYYY"}
+                    value={selectedMonth}
+                    onChange={(e) => {
+                      setSelectedMonth(e);
+                    }}
+                    picker="month"
+                  />
+                </div>
+              )}
+              {dateCriteria === "BtwnTwoDates" && (
+                <div className="col-md-4 col-sm-12">
+                  <div className="row">
+                    <div className="col-md-6">
+                      {/* <label htmlFor="startDate">Start Date</label> */}
+                      <DatePicker
+                        format={"DD-MM-YYYY"}
+                        placeholder="Start Date"
+                        value={startDate}
+                        onChange={(e) => setStartDate(e)}
+                      />
+                    </div>
+                    <div className="col-md-6">
+                      {/* <label htmlFor="endDate">End Date</label> */}
+                      <DatePicker
+                        format={"DD-MM-YYYY"}
+                        placeholder="End Date"
+                        value={endDate}
+                        onChange={(e) => setEndDate(e)}
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+              <div className=" col-md-2">
+                <Button btnType="save" onClick={Searchbydate}>
+                  Search
+                </Button>
               </div>
             </div>
             <div className="datatable">

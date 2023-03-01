@@ -10,6 +10,8 @@ import { CRM_BASE_URL, GENERAL_SETTING_BASE_URL } from "../../../../api/bootapi"
 import SelectBox from "../../../../components/Select Box/SelectBox";
 import { Select } from "antd";
 import InputType from "../../../../components/Input Type textbox/InputType";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../../../../routes";
 
 function Countrystate() {
   const [modalShow, setModalShow] = useState(false);
@@ -21,7 +23,7 @@ function Countrystate() {
   const [countries, setCountries] = useState("");
   const [addForm] = Form.useForm();
   const [successPopup, setSuccessPopup] = useState(false);
-
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -34,6 +36,7 @@ function Countrystate() {
     if (!mShow) {
       setTimeout(() => {
         setSuccessPopup(false);
+        navigate(ROUTES.LEADLIST)
       }, time);
     }
   };
@@ -52,6 +55,7 @@ function Countrystate() {
   useEffect(() => {
     getAllCountries();
   }, []);
+
 
   const OnSubmit =  (data) => {
     PublicFetch.post(`${CRM_BASE_URL}/lead-location`, data)

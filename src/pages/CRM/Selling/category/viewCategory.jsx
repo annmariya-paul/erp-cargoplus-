@@ -93,7 +93,7 @@ function Categorylist(props) {
           children: ch,
           // category_parent_name:
         });
-console.log("parntt",treeStructure)
+        console.log("parntt", treeStructure);
         // }
       });
     }
@@ -474,29 +474,26 @@ console.log("parntt",treeStructure)
   };
 
   const checkCategoryCodeis = (data) => {
-    
-      if (categoryCode !== c_code) {
-        PublicFetch.get(
-          `${process.env.REACT_APP_BASE_URL}/misc?type=categorycode&value=${c_code}`
-        )
-          .then((res) => {
-            console.log("Response 1123", res);
-            if (res.data.success) {
-              console.log("Success", res.data.data);
-              if (res.data.data.exist) {
-                console.log("hai guys");
-                setuniqueCode(true);
-              } else {
-                setuniqueCode(false);
-              }
+    if (categoryCode !== c_code) {
+      PublicFetch.get(
+        `${process.env.REACT_APP_BASE_URL}/misc?type=categorycode&value=${c_code}`
+      )
+        .then((res) => {
+          console.log("Response 1123", res);
+          if (res.data.success) {
+            console.log("Success", res.data.data);
+            if (res.data.data.exist) {
+              console.log("hai guys");
+              setuniqueCode(true);
+            } else {
+              setuniqueCode(false);
             }
-          })
-          .catch((err) => {
-            console.log("Error", err);
-          });
-      }
-   
-    
+          }
+        })
+        .catch((err) => {
+          console.log("Error", err);
+        });
+    }
   };
 
   // console.log("jdfjdfdj", ViewingData);
@@ -604,17 +601,17 @@ console.log("parntt",treeStructure)
               </Select>
             </div>
             <div className="col-4 d-flex align-items-center justify-content-center">
-            <MyPagination
-              total={CategoryList?.length}
-              current={current}
-              showSizeChanger={true}
-              pageSize={pageSize}
-              onChange={(current, pageSize) => {
-                setCurrent(current);
-                setPageSize(pageSize);
-              }}
-            />
-          </div>
+              <MyPagination
+                total={CategoryList?.length}
+                current={current}
+                showSizeChanger={true}
+                pageSize={pageSize}
+                onChange={(current, pageSize) => {
+                  setCurrent(current);
+                  setPageSize(pageSize);
+                }}
+              />
+            </div>
             <div className="col-4 d-flex justify-content-end" style={{}}>
               <Link to={ROUTES.CATEGORY}>
                 <Button btnType="add">Add Category</Button>
@@ -847,7 +844,7 @@ console.log("parntt",treeStructure)
                     <label>category Image</label>
                     <Form.Item>
                       <FileUpload
-                        beforeUpload={false}
+                        beforeUpload={true}
                         accept=".jpg,.png,.jpeg"
                         onChange={(file) => {
                           if (

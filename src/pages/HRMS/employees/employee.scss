@@ -10,3 +10,10 @@
   border-radius: 4px;
   margin-top: 2%;
 }
+.newpass{
+  .input[type='text'], input[type='password'], input[type='number'], textarea {
+    background-color: whitesmoke;
+    border-color: whitesmoke;
+    border: none;
+  }
+}

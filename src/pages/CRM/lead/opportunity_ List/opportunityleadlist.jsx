@@ -21,7 +21,7 @@ import { ROUTES } from "../../../../routes";
 import "../../../CRM/lead/lead_list/leadlist.scss";
 import TableData from "../../../../components/table/table_data";
 import MyPagination from "../../../../components/Pagination/MyPagination";
-import Custom_model from "../../../../components/custom_modal/custom_model";
+import CustomModel from "../../../../components/custom_modal/custom_model";
 import Button from "../../../../components/button/button";
 import "./opportunitylist.scss";
 import { BsPlusCircleFill } from "react-icons/bs";
@@ -57,14 +57,14 @@ function OpportunityLeadlist(props) {
   const [showAddOpportunity, setShowAddOpportunity] = useState(false); //adding opportunity
   const [oppId, setOppID] = useState(parseInt(id));
   console.log(oppId);
-  const [oppstatus,setOppstatus]=useState(Oppor_Status);
+  const [oppstatus, setOppstatus] = useState(Oppor_Status);
   const [oppurtunitylead, setOppurtunitylead] = useState("");
   const [oppurtunitytype, setoppurtunitytype] = useState();
   const [oppurtunityfrom, setOppurtunityfrom] = useState();
   const [oppurtunitysource, setOppurtunitysource] = useState();
   const [oppurtunityparty, setOppurtunityparty] = useState("");
   const config = {
-    rules: [{ required: true, message: 'Please select Date!' }],
+    rules: [{ required: true, message: "Please select Date!" }],
   };
   console.log("opp party", oppurtunityparty);
   const [oppurtunityvalidity, setOppurtunityvalidity] = useState();
@@ -110,8 +110,8 @@ function OpportunityLeadlist(props) {
     opportunity_status: "",
     opportunity_lead_id: "",
     opportunity_lead_name: "",
-    opportunity_statusname:"",
-    opportunity_partyname:"",
+    opportunity_statusname: "",
+    opportunity_partyname: "",
   });
 
   const [editOppurtunity, setEditOppurtunity] = useState({
@@ -152,36 +152,35 @@ function OpportunityLeadlist(props) {
           let samplearry = [];
           res?.data?.data?.crm_v1_contacts.forEach((item, index) => {
             res?.data?.data?.crm_v1_opportunities.forEach((oppo, index) => {
-              oppstatus.forEach((sts,index)=>{
-                var statusnew= parseInt(sts.value);
-                if(
-                  statusnew==oppo.opportunity_status
-                ){
-                  samplearry.push({
-                    opportunity_Id: oppo?.opportunity_id,
-                    opportunity_type: oppo?.opportunity_type,
-                    opportunity_from: oppo?.opportunity_from,
-                    opportunity_created_by1: res?.data?.data.lead_id,
-                    opportunity_created_by: res?.data?.data.lead_customer_name,
-                    opportunity_source: oppo?.opportunity_source,
-                    opportunity_probability: oppo?.opportunity_probability,
-                    opportunity_description: oppo?.opportunity_description,
-                    opportunity_statusname: sts?.name,
-                    opportunity_status:oppo?.opportunity_status,
-                    opportunity_amount: oppo?.opportunity_amount,
-                    opportunity_party: item?.contact_person_name,
-                    opportunity_party1: item?.contact_id,
-                    opportunity_validity: oppo?.opportunity_validity,
-                  });
-                }
-            
-           
-              //  setoppnewid(oppo?.opportunity_id);
-             
-            })
+              if (item.contact_id === oppo.opportunity_party) {
+                oppstatus.forEach((sts, index) => {
+                  var statusnew = parseInt(sts.value);
+                  if (statusnew == oppo.opportunity_status) {
+                    samplearry.push({
+                      opportunity_Id: oppo?.opportunity_id,
+                      opportunity_type: oppo?.opportunity_type,
+                      opportunity_from: oppo?.opportunity_from,
+                      opportunity_created_by1: res?.data?.data.lead_id,
+                      opportunity_created_by:
+                        res?.data?.data.lead_customer_name,
+                      opportunity_source: oppo?.opportunity_source,
+                      opportunity_probability: oppo?.opportunity_probability,
+                      opportunity_description: oppo?.opportunity_description,
+                      opportunity_statusname: sts?.name,
+                      opportunity_status: oppo?.opportunity_status,
+                      opportunity_amount: oppo?.opportunity_amount,
+                      opportunity_party: item?.contact_person_name,
+                      opportunity_party1: item?.contact_id,
+                      opportunity_validity: oppo?.opportunity_validity,
+                    });
+                  }
+
+                  //  setoppnewid(oppo?.opportunity_id);
+                });
+              }
             });
-          
           });
+
           setNewOpportunityList(samplearry);
         } else {
           console.log("Failed to load data !");
@@ -318,7 +317,7 @@ function OpportunityLeadlist(props) {
       opportunity_status: item.opportunity_status,
       opportunity_lead_id: item.opportunity_created_by1,
       opportunity_lead_name: item.opportunity_created_by,
-      opportunity_statusname:item.opportunity_statusname,
+      opportunity_statusname: item.opportunity_statusname,
       // opportunity_leadid: item.opportunity_created_by1,
     });
     // getOppurtunityProgress(item);
@@ -815,7 +814,7 @@ function OpportunityLeadlist(props) {
 
         {/*  {/* {View model of opportunity  section Two    }  */}
       </div>
-      <Custom_model
+      <CustomModel
         show={showViewModal}
         onHide={() => setShowViewModal(false)}
         View_list
@@ -942,305 +941,8 @@ function OpportunityLeadlist(props) {
 
       {/* {Adding Opportunity Modal in Opportunity page} */}
 
-      <Custom_model
-        Adding_contents
-        show={showAddOpportunity}
-        onHide={() => setShowAddOpportunity(false)}
-        header="Add Opportunity"
-        size={`xl`}
-        // footer={[<Button btnType="save">Save</Button>]}
-        {...props}
-      >
-        <Form
-        // onSubmit={handleSubmit(submit)}
-        >
-          <div className="px-5">
-            <div className="row px-1">
-              <div className="col-sm-4 pt-2">
-                <Form.Group className="mb-2" controlId="lead_type">
-                  <Form.Label>Typeeeeeeeeeeeeeeeeeeee</Form.Label>
-                  <Form.Select
-                    aria-label="lead_type"
-                    name="lead_type"
-                    className={`${errors.lead_type && "invalid"}`}
-                    {...register("lead_type", {
-                      required: "Type is required",
-                    })}
-                    onKeyUp={() => {
-                      trigger("lead_type");
-                    }}
-                  >
-                    <option value="Sales" selected>
-                      Sales
-                    </option>
-                    <option value="Support">Support</option>
-                    <option value="maintenance">Maintenance</option>
-                  </Form.Select>
-                </Form.Group>
-              </div>
-
-              <div className="col-sm-4 pt-2">
-                <Form.Group className="mb-2" controlId="lead_customer_from">
-                  <Form.Label>From </Form.Label>
-                  <Form.Select
-                    aria-label="lead_customer_from"
-                    name="lead_customer_from"
-                    className={`${errors.lead_customer_from && "invalid"}`}
-                    {...register("lead_customer_from", {
-                      required: "Type is required",
-                    })}
-                    onKeyUp={() => {
-                      trigger("lead_customer_from");
-                    }}
-                  >
-                    {errors.lead_customer_from && (
-                      <small className="text-danger">
-                        {errors.lead_customer_from.message}
-                      </small>
-                    )}
-                    {/* <option value="Sales" selected>
-                         Sales
-                          </option> */}
-                    <option value="Customer" selected>
-                      Customer
-                    </option>
-                    <option value="Lead">Lead</option>
-                  </Form.Select>
-
-                  {errors.lead_customer_from && (
-                    <small className="text-danger">
-                      {errors.lead_customer_from.message}
-                    </small>
-                  )}
-                </Form.Group>
-              </div>
-
-              <div className="col-sm-4 pt-2">
-                <Form.Group
-                  className="mb-2"
-                  controlId="lead_customer_generated"
-                >
-                  <Form.Label>Generated/Converted by</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="lead_customer_generated"
-                    placeholder="User ID"
-                    className={`${errors.lead_customer_generated && "invalid"}`}
-                    {...register("lead_customer_generated", {
-                      required: "Please enter a valid User ID",
-                      minLength: {
-                        value: 3,
-                        message: "Minimum Required length is 3",
-                      },
-                      maxLength: {
-                        value: 100,
-                      },
-                      pattern: {
-                        value: /^[a-zA-Z0-9 ]*$/,
-                        message: "Only letters and numbers are allowed!",
-                      },
-                    })}
-                    onKeyUp={() => {
-                      trigger("lead_customer_generated");
-                    }}
-                    value={oppurtunitylead}
-                    onChange={(e) => {}}
-                  />
-                  {errors.lead_customer_generated && (
-                    <small className="text-danger">
-                      {errors.lead_customer_generated.message}
-                    </small>
-                  )}
-                </Form.Group>
-              </div>
-
-              <div className="col-sm-4 pt-2">
-                <Form.Group className="mb-2" controlId="lead_source">
-                  <Form.Label>Source</Form.Label>
-                  <Form.Select
-                    aria-label="lead_source"
-                    name="lead_source"
-                    className={`${errors.lead_source && "invalid"}`}
-                    {...register("lead_source", {
-                      minLength: {
-                        value: 5,
-                        message: "Minimum Required length is 5",
-                      },
-                    })}
-                    onKeyUp={() => {
-                      trigger("lead_source");
-                    }}
-                  >
-                    <option value="Reference" selected>
-                      Reference
-                    </option>
-                    <option value="Direct Visit">Direct Visit</option>
-                    <option value="Online Registraion">
-                      Online Registration
-                    </option>
-                  </Form.Select>
-                </Form.Group>
-              </div>
-
-              <div className="col-sm-4 pt-2">
-                <Form.Group className="mb-2" controlId="lead_party">
-                  <Form.Label>Party</Form.Label>
-                  <Form.Select
-                    aria-label="lead_party"
-                    name="lead_party"
-                    className={`${errors.lead_party && "invalid"}`}
-                    {...register("lead_party", {
-                      minLength: {
-                        value: 5,
-                        message: "Minimum Required length is 5",
-                      },
-                    })}
-                    onKeyUp={() => {
-                      trigger("lead_party");
-                    }}
-                  >
-                    <option value="Database" selected>
-                      data
-                    </option>
-                    <option value="Direct Visit"></option>
-                  </Form.Select>
-                </Form.Group>
-              </div>
-
-              <div className="col-sm-4 pt-2">
-                <Form.Group className="mb-2" controlId="lead_valid_up_to">
-                  <Form.Label>Valid Up to</Form.Label>
-                  <div className="form-control">
-                    <input
-                      type="date"
-                      style={{ borderWidth: 0 }}
-                      onChange={(date) => setDate(date)}
-                    />
-                  </div>
-                </Form.Group>
-              </div>
-
-              <div className="col-sm-8 pt-3">
-                <Form.Group className="mb-2" controlId="lead_details">
-                  <Form.Label>Details</Form.Label>
-                  <Form.Control
-                    as="textarea"
-                    rows={3}
-                    className={`${errors.lead_details && "invalid"}`}
-                    {...register("lead_details", {
-                      minLength: {
-                        value: 5,
-                        message: "Minimum Required length is 5",
-                      },
-                    })}
-                    onKeyUp={() => {
-                      trigger("lead_details");
-                    }}
-                  />
-                  {errors.lead_details && (
-                    <small className="text-danger">
-                      {errors.lead_details.message}
-                    </small>
-                  )}
-                </Form.Group>
-              </div>
-
-              <div className="col-sm-4 pt-3">
-                <Form.Group className="mb-2" controlId="lead_expecting_amt">
-                  <Form.Label>Expecting Amount</Form.Label>
-                  <Form.Control
-                    type="text"
-                    className={`${errors.lead_expecting_amt && "invalid"}`}
-                    {...register("lead_expecting_amt", {
-                      minLength: {
-                        value: 3,
-                        message: "Minimum Required length is 3",
-                      },
-                      maxLength: {
-                        value: 100,
-                      },
-                      pattern: {
-                        value: /^[a-zA-Z0-9 ]*$/,
-                        message: "Only letters and numbers are allowed!",
-                      },
-                    })}
-                    onKeyUp={() => {
-                      trigger("lead_expecting_amt");
-                    }}
-                  />{" "}
-                  {errors.lead_expecting_amt && (
-                    <small className="text-danger">
-                      {errors.lead_expecting_amt.message}
-                    </small>
-                  )}
-                </Form.Group>
-              </div>
-
-              <div className="col-sm-4 pt-2">
-                <Form.Group className="mb-2" controlId="lead_probability">
-                  <Form.Label>Probability of conversion</Form.Label>
-                  <Form.Select
-                    aria-label="lead_probability"
-                    name="lead_probability"
-                    className={`${errors.lead_probability && "invalid"}`}
-                    {...register("lead_probability", {
-                      minLength: {
-                        value: 5,
-                        message: "Minimum Required length is 5",
-                      },
-                    })}
-                    onKeyUp={() => {
-                      trigger("lead_probability");
-                    }}
-                  >
-                    <option value="low" selected>
-                      low
-                    </option>
-                    <option value="medium">medium</option>
-                    <option value="high">high</option>
-                  </Form.Select>
-                </Form.Group>
-              </div>
-
-              <div className="col-sm-4 pt-2">
-                <Form.Group className="mb-2" controlId="lead_status">
-                  <Form.Label>Status</Form.Label>
-                  <Form.Select
-                    aria-label="lead_status"
-                    name="lead_status"
-                    className={`${errors.lead_status && "invalid"}`}
-                    {...register("lead_status", {
-                      minLength: {
-                        value: 5,
-                        message: "Minimum Required length is 5",
-                      },
-                    })}
-                    onKeyUp={() => {
-                      trigger("lead_status");
-                    }}
-                  >
-                    <option value="quotation" selected>
-                      quotation
-                    </option>
-                    <option value="interested">interested</option>
-                    <option value="converted">converted</option>
-                    <option value="lost">lost</option>
-                    <option value="DND">DND</option>
-                  </Form.Select>
-                </Form.Group>
-              </div>
-              {/* <div className="col-12 d-flex justify-content-center my-2">
-                <Button onClick={submit} btnType="save">
-                  Save
-                </Button>
-              </div> */}
-            </div>
-          </div>
-        </Form>
-      </Custom_model>
-
       {/* Edit opportunity modal   section THREE */}
-      <Custom_model
+      <CustomModel
         Adding_contents
         width={1000}
         show={ShowEditModal}
@@ -1431,7 +1133,7 @@ function OpportunityLeadlist(props) {
                 {/* <Form.Group className="mb-2" controlId="lead_valid_up_to"> */}
                 <label>Valid Up to</label>
 
-                <Form.Item name="opportunity_validity"  {...config}>
+                <Form.Item name="opportunity_validity" {...config}>
                   <DatePicker
                     style={{ borderWidth: 0, marginTop: 10 }}
                     initialValues={oppurtunityvalidity}
@@ -1559,17 +1261,17 @@ function OpportunityLeadlist(props) {
             </div>
           </div>
         </Form>
-      </Custom_model>
+      </CustomModel>
 
       {/* {Success successPopup Modal } */}
-      <Custom_model
+      <CustomModel
         size={"sm"}
         show={successPopup}
         onHide={() => setSuccessPopup(false)}
         success
       />
       {/* ADD OPPORTUNITY PROGRESS MODAL    SECTION FOUR */}
-      <Custom_model
+      <CustomModel
         show={showProgressModal}
         onHide={() => setShowProgresssModal(false)}
         View_list
@@ -1687,3 +1389,295 @@ export default OpportunityLeadlist;
                     }}
                   /> */
 }
+
+// <Custom_model
+//   Adding_contents
+//   show={showAddOpportunity}
+//   onHide={() => setShowAddOpportunity(false)}
+//   header="Add Opportunity"
+//   size={`xl`}
+//   // footer={[<Button btnType="save">Save</Button>]}
+//   {...props}
+// >
+//   <Form
+//   // onSubmit={handleSubmit(submit)}
+//   >
+//     <div className="px-5">
+//       <div className="row px-1">
+//         <div className="col-sm-4 pt-2">
+//           <Form.Group className="mb-2" controlId="lead_type">
+//             <Form.Label>Typeeeeeeeeeeeeeeeeeeee</Form.Label>
+//             <Form.Select
+//               aria-label="lead_type"
+//               name="lead_type"
+//               className={`${errors.lead_type && "invalid"}`}
+//               {...register("lead_type", {
+//                 required: "Type is required",
+//               })}
+//               onKeyUp={() => {
+//                 trigger("lead_type");
+//               }}
+//             >
+//               <option value="Sales" selected>
+//                 Sales
+//               </option>
+//               <option value="Support">Support</option>
+//               <option value="maintenance">Maintenance</option>
+//             </Form.Select>
+//           </Form.Group>
+//         </div>
+
+//         <div className="col-sm-4 pt-2">
+//           <Form.Group className="mb-2" controlId="lead_customer_from">
+//             <Form.Label>From </Form.Label>
+//             <Form.Select
+//               aria-label="lead_customer_from"
+//               name="lead_customer_from"
+//               className={`${errors.lead_customer_from && "invalid"}`}
+//               {...register("lead_customer_from", {
+//                 required: "Type is required",
+//               })}
+//               onKeyUp={() => {
+//                 trigger("lead_customer_from");
+//               }}
+//             >
+//               {errors.lead_customer_from && (
+//                 <small className="text-danger">
+//                   {errors.lead_customer_from.message}
+//                 </small>
+//               )}
+//               {/* <option value="Sales" selected>
+//                          Sales
+//                           </option> */}
+//               <option value="Customer" selected>
+//                 Customer
+//               </option>
+//               <option value="Lead">Lead</option>
+//             </Form.Select>
+
+//             {errors.lead_customer_from && (
+//               <small className="text-danger">
+//                 {errors.lead_customer_from.message}
+//               </small>
+//             )}
+//           </Form.Group>
+//         </div>
+
+//         <div className="col-sm-4 pt-2">
+//           <Form.Group className="mb-2" controlId="lead_customer_generated">
+//             <Form.Label>Generated/Converted by</Form.Label>
+//             <Form.Control
+//               type="text"
+//               name="lead_customer_generated"
+//               placeholder="User ID"
+//               className={`${errors.lead_customer_generated && "invalid"}`}
+//               {...register("lead_customer_generated", {
+//                 required: "Please enter a valid User ID",
+//                 minLength: {
+//                   value: 3,
+//                   message: "Minimum Required length is 3",
+//                 },
+//                 maxLength: {
+//                   value: 100,
+//                 },
+//                 pattern: {
+//                   value: /^[a-zA-Z0-9 ]*$/,
+//                   message: "Only letters and numbers are allowed!",
+//                 },
+//               })}
+//               onKeyUp={() => {
+//                 trigger("lead_customer_generated");
+//               }}
+//               value={oppurtunitylead}
+//               onChange={(e) => {}}
+//             />
+//             {errors.lead_customer_generated && (
+//               <small className="text-danger">
+//                 {errors.lead_customer_generated.message}
+//               </small>
+//             )}
+//           </Form.Group>
+//         </div>
+
+//         <div className="col-sm-4 pt-2">
+//           <Form.Group className="mb-2" controlId="lead_source">
+//             <Form.Label>Source</Form.Label>
+//             <Form.Select
+//               aria-label="lead_source"
+//               name="lead_source"
+//               className={`${errors.lead_source && "invalid"}`}
+//               {...register("lead_source", {
+//                 minLength: {
+//                   value: 5,
+//                   message: "Minimum Required length is 5",
+//                 },
+//               })}
+//               onKeyUp={() => {
+//                 trigger("lead_source");
+//               }}
+//             >
+//               <option value="Reference" selected>
+//                 Reference
+//               </option>
+//               <option value="Direct Visit">Direct Visit</option>
+//               <option value="Online Registraion">Online Registration</option>
+//             </Form.Select>
+//           </Form.Group>
+//         </div>
+
+//         <div className="col-sm-4 pt-2">
+//           <Form.Group className="mb-2" controlId="lead_party">
+//             <Form.Label>Party</Form.Label>
+//             <Form.Select
+//               aria-label="lead_party"
+//               name="lead_party"
+//               className={`${errors.lead_party && "invalid"}`}
+//               {...register("lead_party", {
+//                 minLength: {
+//                   value: 5,
+//                   message: "Minimum Required length is 5",
+//                 },
+//               })}
+//               onKeyUp={() => {
+//                 trigger("lead_party");
+//               }}
+//             >
+//               <option value="Database" selected>
+//                 data
+//               </option>
+//               <option value="Direct Visit"></option>
+//             </Form.Select>
+//           </Form.Group>
+//         </div>
+
+//         <div className="col-sm-4 pt-2">
+//           <Form.Group className="mb-2" controlId="lead_valid_up_to">
+//             <Form.Label>Valid Up to</Form.Label>
+//             <div className="form-control">
+//               <input
+//                 type="date"
+//                 style={{ borderWidth: 0 }}
+//                 onChange={(date) => setDate(date)}
+//               />
+//             </div>
+//           </Form.Group>
+//         </div>
+
+//         <div className="col-sm-8 pt-3">
+//           <Form.Group className="mb-2" controlId="lead_details">
+//             <Form.Label>Details</Form.Label>
+//             <Form.Control
+//               as="textarea"
+//               rows={3}
+//               className={`${errors.lead_details && "invalid"}`}
+//               {...register("lead_details", {
+//                 minLength: {
+//                   value: 5,
+//                   message: "Minimum Required length is 5",
+//                 },
+//               })}
+//               onKeyUp={() => {
+//                 trigger("lead_details");
+//               }}
+//             />
+//             {errors.lead_details && (
+//               <small className="text-danger">
+//                 {errors.lead_details.message}
+//               </small>
+//             )}
+//           </Form.Group>
+//         </div>
+
+//         <div className="col-sm-4 pt-3">
+//           <Form.Group className="mb-2" controlId="lead_expecting_amt">
+//             <Form.Label>Expecting Amount</Form.Label>
+//             <Form.Control
+//               type="text"
+//               className={`${errors.lead_expecting_amt && "invalid"}`}
+//               {...register("lead_expecting_amt", {
+//                 minLength: {
+//                   value: 3,
+//                   message: "Minimum Required length is 3",
+//                 },
+//                 maxLength: {
+//                   value: 100,
+//                 },
+//                 pattern: {
+//                   value: /^[a-zA-Z0-9 ]*$/,
+//                   message: "Only letters and numbers are allowed!",
+//                 },
+//               })}
+//               onKeyUp={() => {
+//                 trigger("lead_expecting_amt");
+//               }}
+//             />{" "}
+//             {errors.lead_expecting_amt && (
+//               <small className="text-danger">
+//                 {errors.lead_expecting_amt.message}
+//               </small>
+//             )}
+//           </Form.Group>
+//         </div>
+
+//         <div className="col-sm-4 pt-2">
+//           <Form.Group className="mb-2" controlId="lead_probability">
+//             <Form.Label>Probability of conversion</Form.Label>
+//             <Form.Select
+//               aria-label="lead_probability"
+//               name="lead_probability"
+//               className={`${errors.lead_probability && "invalid"}`}
+//               {...register("lead_probability", {
+//                 minLength: {
+//                   value: 5,
+//                   message: "Minimum Required length is 5",
+//                 },
+//               })}
+//               onKeyUp={() => {
+//                 trigger("lead_probability");
+//               }}
+//             >
+//               <option value="low" selected>
+//                 low
+//               </option>
+//               <option value="medium">medium</option>
+//               <option value="high">high</option>
+//             </Form.Select>
+//           </Form.Group>
+//         </div>
+
+//         <div className="col-sm-4 pt-2">
+//           <Form.Group className="mb-2" controlId="lead_status">
+//             <Form.Label>Status</Form.Label>
+//             <Form.Select
+//               aria-label="lead_status"
+//               name="lead_status"
+//               className={`${errors.lead_status && "invalid"}`}
+//               {...register("lead_status", {
+//                 minLength: {
+//                   value: 5,
+//                   message: "Minimum Required length is 5",
+//                 },
+//               })}
+//               onKeyUp={() => {
+//                 trigger("lead_status");
+//               }}
+//             >
+//               <option value="quotation" selected>
+//                 quotation
+//               </option>
+//               <option value="interested">interested</option>
+//               <option value="converted">converted</option>
+//               <option value="lost">lost</option>
+//               <option value="DND">DND</option>
+//             </Form.Select>
+//           </Form.Group>
+//         </div>
+//         {/* <div className="col-12 d-flex justify-content-center my-2">
+//                 <Button onClick={submit} btnType="save">
+//                   Save
+//                 </Button>
+//               </div> */}
+//       </div>
+//     </div>
+//   </Form>
+// </Custom_model>;

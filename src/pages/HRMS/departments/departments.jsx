@@ -38,7 +38,7 @@ export default function Departments(props) {
   const [editUniqueName, setEditUniqueName] = useState();
   const [editUniqueCode, setEditUniqueCode] = useState();
   const [searchedcodeText, setSearchedcodeText] = useState("");
-
+  const [serialNo, setserialNo] = useState(1);
   const close_modal = (mShow, time) => {
     if (!mShow) {
       setTimeout(() => {
@@ -183,6 +183,41 @@ export default function Departments(props) {
 
   const columns = [
     {
+      title: "SI.NO",
+      key: "index",
+      width: "20%",
+      render: (value, item, index) => serialNo + index,
+      align: "center",
+    },
+   
+    {
+      title: "DEPARTMENT NAME",
+      dataIndex: "department_name",
+      key: "department_name",
+      filteredValue: [searchedText],
+      onFilter: (value, record) => {
+        return String(record.department_name)
+          .toLowerCase()
+          .includes(value.toLowerCase())||
+          String(record.department_code)
+          .toLowerCase()
+          .includes(value.toLowerCase())
+      },
+      align: "left",
+    },
+    {
+      title: "DEPARTMENT CODE",
+      dataIndex: "department_code",
+      key: "department_code",
+      filteredValue: [searchedcodeText],
+      onFilter: (value, record) => {
+        return String(record.department_code)
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      },
+      align: "left",
+    },
+    {
       title: "ACTION",
       dataIndex: "action",
       key: "key",
@@ -204,30 +239,6 @@ export default function Departments(props) {
             </div>
           </div>
         );
-      },
-      align: "center",
-    },
-    {
-      title: "DEPARTMENT NAME",
-      dataIndex: "department_name",
-      key: "department_name",
-      filteredValue: [searchedText],
-      onFilter: (value, record) => {
-        return String(record.department_name)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
-      align: "center",
-    },
-    {
-      title: "DEPARTMENT CODE",
-      dataIndex: "department_code",
-      key: "department_code",
-      filteredValue: [searchedcodeText],
-      onFilter: (value, record) => {
-        return String(record.department_code)
-          .toLowerCase()
-          .includes(value.toLowerCase());
       },
       align: "center",
     },
@@ -263,7 +274,7 @@ export default function Departments(props) {
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
-              placeholder="Search by Department Name"
+              placeholder="Search"
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
               onChange={(e) => {
@@ -274,7 +285,7 @@ export default function Departments(props) {
               }}
             />
           </div>
-          <div className="col-4">
+          {/* <div className="col-4">
             <Input.Search
               placeholder="Search by Department Code"
               style={{ margin: "5px", borderRadius: "5px" }}
@@ -286,7 +297,7 @@ export default function Departments(props) {
                 setSearchedcodeText(value);
               }}
             />
-          </div>
+          </div> */}
         </div>
         <div className="row my-3">
           <div className="col-4 px-3">

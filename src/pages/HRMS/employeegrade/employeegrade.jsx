@@ -122,7 +122,28 @@ function Employeegrade() {
     setEditShow(true);
   };
 
+  const [serialNo, setserialNo] = useState(1);
   const columns = [
+    {
+      title: "SI.NO",
+      key: "index",
+      width: "20%",
+      render: (value, item, index) => serialNo + index,
+      align: "center",
+    },
+ 
+    {
+      title: "EMPLOYEE GRADE NAME",
+      dataIndex: "employee_grade_name",
+      key: "employee_grade_name",
+      filteredValue: [searchedText],
+      onFilter: (value, record) => {
+        return String(record.employee_grade_name)
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      },
+      align: "left",
+    },
     {
       title: "ACTION",
       dataIndex: "action",
@@ -151,18 +172,6 @@ function Employeegrade() {
       },
       align: "center",
     },
-    {
-      title: "EMPLOYEE GRADE NAME",
-      dataIndex: "employee_grade_name",
-      key: "employee_grade_name",
-      filteredValue: [searchedText],
-      onFilter: (value, record) => {
-        return String(record.employee_grade_name)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
-      align: "center",
-    },
   ];
 
  
@@ -180,7 +189,7 @@ function Employeegrade() {
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
-              placeholder="Search by Employee Grade"
+              placeholder="Search"
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
               onChange={(e) => {

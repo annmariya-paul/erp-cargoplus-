@@ -1,3 +1,5 @@
+@use "../../../../styles/variables.scss";
+
 .response_btn{
     padding-block: 1px !important;
     padding-inline: 7px !important;
@@ -12,4 +14,9 @@
     padding-inline: 18px !important;
     padding-block:1px !important;
     margin: 1px;
+}
+.container_enq{
+  height: 680px;
+  border-radius: 3px;
+  box-shadow: 2px 2px 12px variables.$boxshadow;
 }

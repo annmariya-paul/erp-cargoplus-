@@ -21,7 +21,7 @@ function Enquiries() {
   const [current, setCurrent] = useState(1); // current page
   const [searchSource, setSearchSource] = useState(""); // search by text input
   const [searchContact, setSearchContact] = useState(""); //search by type select box
-  const [searchLead, setsearchLead] = useState(""); //search by status select box
+  const [Search, setSearch] = useState(""); //search by status select box
   const [showViewModal, setShowViewModal] = useState(false); //oppertunity view modal
   const [ShowEditModal, setShowEditModal] = useState(false); //oppertunity edit modal
   const [showProgressModal, setShowProgresssModal] = useState(false); //Oppoertunity progress modal
@@ -88,11 +88,19 @@ function Enquiries() {
       dataIndex: "lead_customer_name",
       key: "lead_customer_name",
       width: "20%",
-      filteredValue: [searchLead],
+      filteredValue: [Search],
       onFilter: (value, record) => {
-        return String(record.lead_customer_name)
-          .toLowerCase()
-          .includes(value.toLowerCase());
+        return (
+          String(record.lead_customer_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.opportunity_party)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.opportunity_number)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
       },
     },
 
@@ -113,12 +121,6 @@ function Enquiries() {
       dataIndex: "opportunity_party",
       key: "PARTY",
       width: "20%",
-      filteredValue: [searchContact],
-      onFilter: (value, record) => {
-        return String(record.opportunity_party)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
     },
     {
       title: "ACTIONS",
@@ -269,7 +271,7 @@ function Enquiries() {
   };
   return (
     <>
-      <div className="container-fluid container2 pt-3">
+      <div className="container-fluid container_enq pt-3">
         {/* opportunity listing section One */}
 
         <div className="row flex-wrap">
@@ -299,14 +301,14 @@ function Enquiries() {
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
-              placeholder="Search by Lead"
+              placeholder="Search"
               style={{ margin: "5px", borderRadius: "5px" }}
-              value={searchLead}
+              value={Search}
               onChange={(e) => {
-                setsearchLead(e.target.value ? [e.target.value] : []);
+                setSearch(e.target.value ? [e.target.value] : []);
               }}
               onSearch={(value) => {
-                setsearchLead(value);
+                setSearch(value);
               }}
             />
           </div>
@@ -332,19 +334,6 @@ function Enquiries() {
                 Online Registration
               </Select.Option>
             </Select>
-          </div>
-          <div className="col-4">
-            <Input.Search
-              placeholder="Search by Contact Person"
-              style={{ margin: "5px", borderRadius: "5px" }}
-              value={searchContact}
-              onChange={(e) => {
-                setSearchContact(e.target.value ? [e.target.value] : []);
-              }}
-              onSearch={(value) => {
-                setSearchContact(value);
-              }}
-            />
           </div>
         </div>
         <div className="row my-3">

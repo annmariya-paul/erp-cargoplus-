@@ -98,21 +98,21 @@ export default function Quotations(props) {
       dataIndex: "consignee_name",
       key: "consignee_name",
       width: "18%",
-      align: "center",
+      // align: "center",
     },
     {
       title: "SHIPPER",
       dataIndex: "quotation_shipper",
       key: "quotation_shipper",
       width: "15%",
-      align: "center",
+      // align: "center",
     },
     {
       title: "STATUS",
       dataIndex: "quotation_status",
       key: "quotation_status",
       width: "12%",
-      align: "center",
+      // align: "center",
     },
 
     {
@@ -274,7 +274,7 @@ export default function Quotations(props) {
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
-              placeholder="Search by Quotation No/Consignee/Shipper"
+              placeholder="Search"
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
               onChange={(e) => {

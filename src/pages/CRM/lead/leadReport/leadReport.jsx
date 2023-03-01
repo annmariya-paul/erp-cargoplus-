@@ -10,6 +10,7 @@ import MyPagination from "../../../../components/Pagination/MyPagination";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { CRM_BASE_URL } from "../../../../api/bootapi";
 import { LeadType,LeadStatus } from "../../../../utils/SelectOptions";
+import SelectBox from "../../../../components/Select Box/SelectBox";
 
 export default function LeadReport() {
   const { Option } = Select;
@@ -226,88 +227,8 @@ console.log("generated data isss ", generatedTable )
     <>
       {/* {  Search lead data by date by datepicker - Ann mariya (19/10/22)} */}
 
-      {/* {toggleState === 1 && ( */}
-      <div className="container mb-1 d-flex justify-content-center">
-        <div className="report_container1">
-          <div className="row">
-            <h5 className="report_heading mb-2">Lead</h5>
-          </div>
-          <div className="row my-4 mx-2">
-            <div className="col-md-6 col-sm-12">
-              <label htmlFor="criteria">Select Date Criteria</label>
-              <Select
-                name="criteria"
-                defaultValue="daily"
-                style={{ width: " 100% " }}
-                onChange={(e) => setDateCriteria(e)}
-              >
-                <Option value="daily">Daily</Option>
-                <Option value="BtwnTwoDates">Between Two Dates</Option>
-                <Option value="monthly">Monthly</Option>
-              </Select>
-            </div>
-            {dateCriteria === "daily" && (
-              <div className="col-md-6 col-sm-12">
-                <label htmlFor="date">Date</label>
-                <DatePicker
-                  format={"DD-MM-YYYY"}
-                  defaultValue={moment(newDate)}
-                  value={selectedDate}
-                  onChange={(e) => {
-                    setSelectedDate(e);
-                  }}
-                />
-              </div>
-            )}
-            {dateCriteria === "monthly" && (
-              <div className="col-md-6 col-sm-12">
-                <label htmlFor="month">Month</label>
-                <DatePicker
-                  format={"01-DD-YYYY"}
-                  value={selectedMonth}
-                  onChange={(e) => {
-                    setSelectedMonth(e);
-                  }}
-                  picker="month"
-                />
-              </div>
-            )}
-            {dateCriteria === "BtwnTwoDates" && (
-              <div className="col-md-6 col-sm-12">
-                <div className="row">
-                  <div className="col-md-6">
-                    <label htmlFor="startDate">Start Date</label>
-                    <DatePicker
-                      format={"DD-MM-YYYY"}
-                      value={startDate}
-                      onChange={(e) => setStartDate(e)}
-                    />
-                  </div>
-                  <div className="col-md-6">
-                    <label htmlFor="endDate">End Date</label>
-                    <DatePicker
-                      format={"DD-MM-YYYY"}
-                      value={endDate}
-                      onChange={(e) => setEndDate(e)}
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-          <div className="row justify-content-center my-2">
-            <div className="col-xl-3 col-lg-3 col-12 d-flex justify-content-center">
-              <Button btnType="save" onClick={Searchbydate}>
-                Search
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
-      {/* )} */}
-
       {/* { generated and converted lead list - Ann mariya (19/10/22)} */}
-      <br />
+      {/* <br /> */}
       <div className="container report_content">
         <div className="row">
           <div className="col-sm-4">
@@ -398,7 +319,7 @@ console.log("generated data isss ", generatedTable )
             </div>
 
             <div className="row my-3">
-              <div className="col-3 px-3 ">
+              <div className="col-2 px-3 ">
                 <Select
                   bordered={false}
                   className="page_size_style"
@@ -434,7 +355,77 @@ console.log("generated data isss ", generatedTable )
                   </Select.Option>
                 </Select>
               </div>
+              <div className="col-md-2 col-sm-12">
+                {/* <label htmlFor="criteria">Select Date Criteria</label> */}
+                <SelectBox
+                  name="criteria"
+                  defaultValue="daily"
+                  style={{ backgroundColor: "whitesmoke", borderRadius: "5px" }}
+                  className="w-100 select_box"
+                  onChange={(e) => setDateCriteria(e)}
+                >
+                  <Option value="daily">Daily</Option>
+                  <Option value="BtwnTwoDates">Between Two Dates</Option>
+                  <Option value="monthly">Monthly</Option>
+                </SelectBox>
+              </div>
+              {dateCriteria === "daily" && (
+                <div className="col-md-2 col-sm-12">
+                  {/* <label htmlFor="date">Date</label> */}
+                  <DatePicker
+                    format={"DD-MM-YYYY"}
+                    defaultValue={moment(newDate)}
+                    value={selectedDate}
+                    onChange={(e) => {
+                      setSelectedDate(e);
+                    }}
+                  />
+                </div>
+              )}
+              {dateCriteria === "monthly" && (
+                <div className="col-md-2 col-sm-12">
+                  {/* <label htmlFor="month">Month</label> */}
+                  <DatePicker
+                    format={"01-DD-YYYY"}
+                    value={selectedMonth}
+                    onChange={(e) => {
+                      setSelectedMonth(e);
+                    }}
+                    picker="month"
+                  />
+                </div>
+              )}
+              {dateCriteria === "BtwnTwoDates" && (
+                <div className="col-md-4 col-sm-12">
+                  <div className="row">
+                    <div className="col-md-6">
+                      {/* <label htmlFor="startDate">Start Date</label> */}
+                      <DatePicker
+                        format={"DD-MM-YYYY"}
+                        placeholder="Start Date"
+                        value={startDate}
+                        onChange={(e) => setStartDate(e)}
+                      />
+                    </div>
+                    <div className="col-md-6">
+                      {/* <label htmlFor="endDate">End Date</label> */}
+                      <DatePicker
+                        format={"DD-MM-YYYY"}
+                        placeholder="End Date"
+                        value={endDate}
+                        onChange={(e) => setEndDate(e)}
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+              <div className=" col-md-2">
+                <Button btnType="save" onClick={Searchbydate}>
+                  Search
+                </Button>
+              </div>
             </div>
+
             <div className="datatable">
               <TableData
                 data={getGenerateData(current, numOfItems, pageSize)}

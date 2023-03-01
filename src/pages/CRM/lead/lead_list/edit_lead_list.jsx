@@ -175,6 +175,7 @@ function LeadEdit() {
   };
 
   console.log("kkkkkk", leadDescription, leadName);
+  const beforeUpload = (file, fileList) => {};
   return (
     <>
       <div className="container-fluid">
@@ -330,8 +331,8 @@ function LeadEdit() {
                         <SelectBox
                           value={leadUsertype}
                           onChange={(e) => {
-                            setLeadUsertype(e)
-                            setOrganizationDisable(e)
+                            setLeadUsertype(e);
+                            setOrganizationDisable(e);
                           }}
                         >
                           <Select.Option value="O">Organisation</Select.Option>
@@ -364,7 +365,7 @@ function LeadEdit() {
                         ]}
                       >
                         <InputType
-                         disabled={organizationDisable === "I"}
+                          disabled={organizationDisable === "I"}
                           // value={leadOrganization}
                           onChange={(e) => setLeadOrganization(e.target.value)}
                         />
@@ -404,7 +405,8 @@ function LeadEdit() {
                           filetype={"Accept only pdf and docs"}
                           listType="picture"
                           accept=".pdf,.docs,"
-                          onPreview={handlePreview}
+                          // onPreview={handlePreview}
+                          beforeUpload={beforeUpload}
                           onChange={(file) => {
                             console.log("Before upload", file.file);
                             console.log(

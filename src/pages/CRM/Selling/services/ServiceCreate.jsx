@@ -423,7 +423,7 @@ function ServiceCreate() {
                       listType="picture"
                       accept=".png,.jpeg"
                       height={100}
-                      onPreview={handlePreview}
+                      // onPreview={handlePreview}
                       beforeUpload={true}
                       onChange={(file) => {
                         console.log("Before upload file size", file.file.size);

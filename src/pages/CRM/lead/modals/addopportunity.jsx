@@ -55,7 +55,9 @@ export default function AddOpportunity(props) {
     const float = parseFloat(e.target.value);
     setOppAmount(float.toFixed(2));
   };
-
+  const config = {
+    rules: [{ required: true, message: 'Please select Date!' }],
+  };
   const [oppoNumber, setOppoNumber] = useState();
   const [opptype, setOppType] = useState(null);
   // console.log(opptype);
@@ -363,7 +365,8 @@ export default function AddOpportunity(props) {
 
                   <div className="col-sm-4 pt-2">
                     <label>Valid Up to</label>
-                    <Form.Item className="mt-2" name="lead_valid_up_to">
+                    <Form.Item className="mt-2" name="lead_valid_up_to"  {...config}>
+                
                       {/* <SelectBox placeholder={"--Please Select--"} value={oppId}>
                     <Select.Option value="oppId">{oppId}</Select.Option>
                   </SelectBox> */}

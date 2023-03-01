@@ -264,7 +264,7 @@ export default function ProductVariantsEditModal({ show, prid, onHide }) {
         setError(true);
       });
   };
-
+  const beforeUpload = (file, fileList) => {};
   return (
     <>
       <CustomModel
@@ -541,8 +541,8 @@ export default function ProductVariantsEditModal({ show, prid, onHide }) {
                       multiple
                       listType="picture"
                       accept=".png,.jpeg"
-                      onPreview={handlePreview}
-                      beforeUpload={true}
+                      // onPreview={handlePreview}
+                      beforeUpload={beforeUpload}
                       onChange={(file) => {
                         console.log("Before upload", file.file);
                         console.log("Before upload file size", file.file.size);

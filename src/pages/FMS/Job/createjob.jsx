@@ -58,7 +58,7 @@ function CreateJob() {
   const [unitTable, setunitTable] = useState("");
   const [locationType, setLocationType] = useState();
   const [allCurrency, setAllCurreny] = useState();
-  const [currencyDefault,setCurrencyDefault]= useState();
+  const [currencyDefault, setCurrencyDefault] = useState();
   const [grandTotal, setGrandTotal] = useState();
 
   const getBase64 = (file) =>
@@ -392,14 +392,13 @@ function CreateJob() {
           console.log("success", res.data.data);
           setAllCurreny(res.data.data);
           let arr = [];
-          res?.data?.data?.forEach((item,index)=>{
-            if(item.currency_is_default === 1){
+          res?.data?.data?.forEach((item, index) => {
+            if (item.currency_is_default === 1) {
               arr = item?.currency_code;
               setCurrencyDefault(arr);
             }
           });
         }
-        
       })
       .catch((err) => {
         console.log("Error", err);
@@ -436,6 +435,7 @@ function CreateJob() {
     getallfrighttype();
     CuurencyDatas();
   }, []);
+  const beforeUpload = (file, fileList) => {};
 
   return (
     <>
@@ -998,7 +998,8 @@ function CreateJob() {
                           listType="picture"
                           accept=".pdf,.docs,"
                           // aceept=".jpeg,.jpg,.png"
-                          onPreview={handlePreview}
+                          // onPreview={handlePreview}
+                          beforeUpload={beforeUpload}
                           // value={leadAttachment}
                           // onChange={(e) => setLeadAttachment(e.target.value)}
                           onChange={(file) => {

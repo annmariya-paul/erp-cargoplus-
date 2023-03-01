@@ -70,6 +70,9 @@ function Opportunitylist(props) {
   const [showAddOpportunity, setShowAddOpportunity] = useState(false); //adding opportunity
   const [oppId, setOppID] = useState(parseInt(id));
   console.log(oppId);
+  const config = {
+    rules: [{ required: true, message: 'Please select Date!' }],
+  };
   const [oppurtunitylead, setOppurtunitylead] = useState("");
   const [opportunityNum,setOpportunityNum] = useState("");
   const [oppurtunitytype, setoppurtunitytype] = useState();
@@ -214,14 +217,7 @@ function Opportunitylist(props) {
         setOppnew(tempArr);
           setOpportunityList(res?.data?.data?.leads);
           setTotalcount(res?.data?.data?.totalCount);
-          // console.log("totalcount iss", res?.data?.data?.totalCount);
-          // let samplearry = [];
-          // res?.data?.data?.leads.forEach((item, index) => {
-          //   samplearry.push(item.opportunity_id);
-          // });
-          // console.log("pushedd ", samplearry);
-
-          // setOppurtunityid(samplearry);
+       
         } else {
           console.log("Failed to load data !");
         }
@@ -1627,7 +1623,7 @@ function Opportunitylist(props) {
                 {/* <Form.Group className="mb-2" controlId="lead_valid_up_to"> */}
                 <label>Valid Up to</label>
                
-                  <Form.Item name="opportunity_validity">
+                  <Form.Item name="opportunity_validity"  {...config}>
                    
                         <DatePicker
                           style={{ borderWidth: 0, marginTop: 10 }}

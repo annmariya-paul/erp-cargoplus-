@@ -53,22 +53,20 @@ function Lead({}) {
   const [previewTitle, setPreviewTitle] = useState("");
   const [leadimg, setLeadimg] = useState([]);
   const [messageApi, contextHolder] = message.useMessage();
-  const [leadid,setleadid]=useState()
+  const [leadid, setleadid] = useState();
 
   const [uniqueCode, setuniqueCode] = useState();
   const [addForm] = Form.useForm();
 
   const [error, setError] = useState(false);
   const toggleTab = (index) => {
-  setToggleState(index);   
+    setToggleState(index);
   };
-
-
 
   const errormessage = () => {
     messageApi.open({
-      type: 'error',
-      content: 'Lead is not saved',
+      type: "error",
+      content: "Lead is not saved",
     });
   };
 
@@ -134,7 +132,6 @@ function Lead({}) {
           toggleTab(2);
           setLeadId(response?.data?.data?.lead_id);
         } else {
-
           console.log("Failed while adding data");
         }
       })
@@ -158,10 +155,11 @@ function Lead({}) {
   console.log("lead id::", leadId);
 
   // console.log("leadd id iss", leadType.leadtypes.options[0]);
+  const beforeUpload = (file, fileList) => {};
 
   return (
     <>
-          {contextHolder}
+      {contextHolder}
       <h5 className="lead_text">Add Lead/Customer</h5>
       <div className="container-fluid">
         <div className="lead_container">
@@ -178,8 +176,8 @@ function Lead({}) {
                 id="button-tabs"
                 className={toggleState === 2 ? "tabs active-tabs" : "tabs"}
                 onClick={() => {
-                  leadId==null ?errormessage():toggleTab(2)
-                 }}
+                  leadId == null ? errormessage() : toggleTab(2);
+                }}
               >
                 Contacts
               </button>
@@ -187,7 +185,7 @@ function Lead({}) {
                 id="button-tabs"
                 className={toggleState === 3 ? "tabs active-tabs" : "tabs"}
                 onClick={() => {
-                  leadId==null ?errormessage():toggleTab(3)
+                  leadId == null ? errormessage() : toggleTab(3);
                 }}
               >
                 Address
@@ -195,7 +193,7 @@ function Lead({}) {
               <button
                 className={toggleState === 4 ? "tabs active-tabs" : "tabs"}
                 onClick={() => {
-                  leadId==null ?errormessage():toggleTab(4)
+                  leadId == null ? errormessage() : toggleTab(4);
                 }}
               >
                 Location
@@ -297,27 +295,28 @@ function Lead({}) {
                       >
                         <InputType
                           value={leadName}
-                          onChange={(e) =>{ 
-                            setLeadName(e.target.value)
+                          onChange={(e) => {
+                            setLeadName(e.target.value);
                             setuniqueCode(false);
                           }}
-
-                          onBlur={async() => {
-                          
-                            let a = await CheckUnique({type:"leadcustomername",value:leadName})
-                            setuniqueCode(a)
+                          onBlur={async () => {
+                            let a = await CheckUnique({
+                              type: "leadcustomername",
+                              value: leadName,
+                            });
+                            setuniqueCode(a);
                           }}
                         />
                       </Form.Item>
                       {uniqueCode ? (
-                      <div>
-                        <label style={{ color: "red" }}>
-                          lead name {UniqueErrorMsg.UniqueErrName}
-                        </label>
-                      </div>
-                    ) : (
-                      ""
-                    )}
+                        <div>
+                          <label style={{ color: "red" }}>
+                            lead name {UniqueErrorMsg.UniqueErrName}
+                          </label>
+                        </div>
+                      ) : (
+                        ""
+                      )}
                     </div>
                     <div className="col-sm-4 pt-2">
                       <label>User Type</label>
@@ -402,8 +401,8 @@ function Lead({}) {
                             filetype={"Accept only pdf and docs"}
                             listType="picture"
                             accept=".pdf,.docs,"
-                            onPreview={handlePreview}
-                            beforeUpload={true}
+                            // onPreview={handlePreview}
+                            beforeUpload={beforeUpload}
                             // value={leadAttachment}
                             // onChange={(e) => setLeadAttachment(e.target.value)}
                             onChange={(file) => {

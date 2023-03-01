@@ -285,6 +285,7 @@ function Updatejob() {
     currencys();
     allQuotations();
   }, [id, pageofIndex, noofItems]);
+  const beforeUpload = (file, fileList) => {};
 
   return (
     <>
@@ -854,7 +855,7 @@ function Updatejob() {
                         //   },
                         // ]}
                       >
-                        <FileUpload />
+                        <FileUpload beforeUpload={beforeUpload} />
                       </Form.Item>
                     </div>
                   </div>

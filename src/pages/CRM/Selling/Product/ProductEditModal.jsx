@@ -457,6 +457,7 @@ export default function ProductEditModal({ show, prid, onHide, fun_call }) {
       setPrAttributes([...tmp]);
     }
   };
+  const beforeUpload = (file, fileList) => {};
 
   return (
     <>
@@ -724,8 +725,8 @@ export default function ProductEditModal({ show, prid, onHide, fun_call }) {
                         multiple
                         listType="picture"
                         accept=".png,.jpeg"
-                        onPreview={handlePreview}
-                        beforeUpload={true}
+                        // onPreview={handlePreview}
+                        beforeUpload={beforeUpload}
                         onChange={(file) => {
                           console.log("Before upload", file.file);
                           console.log(

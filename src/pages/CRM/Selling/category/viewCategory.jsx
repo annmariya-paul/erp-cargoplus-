@@ -499,6 +499,7 @@ function Categorylist(props) {
   // console.log("jdfjdfdj", ViewingData);
   // console.log("hai !!!", categoryId);
   // console.log("ghsdfhashsdf", editForm);
+  const beforeUpload = (file, fileList) => {};
 
   return (
     <div>
@@ -844,7 +845,7 @@ function Categorylist(props) {
                     <label>category Image</label>
                     <Form.Item>
                       <FileUpload
-                        beforeUpload={true}
+                        beforeUpload={beforeUpload}
                         accept=".jpg,.png,.jpeg"
                         onChange={(file) => {
                           if (

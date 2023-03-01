@@ -75,6 +75,11 @@ export default function FileUpload({
         accept={accept}
         height={height}
         beforeUpload={beforeUpload}
+        customRequest={({ file, onSuccess }) => {
+          setTimeout(() => {
+            onSuccess("done");
+          }, 0);
+        }}
         onChange={onChange}
         onClick={onClick}
       >

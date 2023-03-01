@@ -493,6 +493,8 @@ function Services() {
       align: "center",
     },
   ];
+
+  const beforeUpload = (file, fileList) => {};
   return (
     <div>
       <div className="container-fluid lead_list my-3 py-3">
@@ -887,8 +889,8 @@ function Services() {
                             listType="picture"
                             accept=".png,.jpeg"
                             height={100}
-                            onPreview={handlePreview}
-                            beforeUpload={true}
+                            // onPreview={handlePreview}
+                            beforeUpload={beforeUpload}
                             onChange={(file) => {
                               console.log("Before upload", file.file);
                               console.log(

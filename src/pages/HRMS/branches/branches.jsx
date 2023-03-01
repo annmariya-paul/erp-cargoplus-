@@ -128,6 +128,7 @@ const [searchcodeText, setSearchcodeText] = useState("");
     {
       title: "SI.NO",
       key: "index",
+      width: "20%",
       render: (value, item, index) => serialNo + index,
       align: "center",
     },
@@ -136,11 +137,15 @@ const [searchcodeText, setSearchcodeText] = useState("");
       title: "BRANCH NAME",
       dataIndex: "branch_name",
       key: "branch_name",
+      width: "30%",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
         return String(record.branch_name)
           .toLowerCase()
-          .includes(value.toLowerCase());
+          .includes(value.toLowerCase()) ||
+          String(record.branch_code)
+          .toLowerCase()
+          .includes(value.toLowerCase())
       },
       align: "left",
     },
@@ -267,7 +272,7 @@ const [searchcodeText, setSearchcodeText] = useState("");
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-sm-4">
             <Input.Search
-              placeholder="Search by Branch Name"
+              placeholder="Search "
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
               onChange={(e) => {
@@ -278,7 +283,7 @@ const [searchcodeText, setSearchcodeText] = useState("");
               }}
             />
           </div>
-          <div className="col-sm-4">
+          {/* <div className="col-sm-4">
             <Input.Search
               placeholder="Search by Branch Code"
               style={{ margin: "5px", borderRadius: "5px" }}
@@ -290,7 +295,7 @@ const [searchcodeText, setSearchcodeText] = useState("");
                 setSearchcodeText(value);
               }}
             />
-          </div>
+          </div> */}
         </div>
         <div className="row my-3">
           <div className="col-sm-4 px-3">

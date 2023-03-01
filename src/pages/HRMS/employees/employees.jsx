@@ -48,7 +48,89 @@ function Employees() {
   };
 
   //Columns
+  const [serialNo, setserialNo] = useState(1);
   const columns = [
+    {
+      title: "SI.NO",
+      key: "index",
+      width: "8%",
+      render: (value, item, index) => serialNo + index,
+      align: "center",
+    },
+   
+    {
+      title: "EMPLOYEE NAME",
+      dataIndex: "employee_name",
+      key: "employee_name",
+      // filteredValue: [searchedText],
+      // onFilter: (value, record) => {
+      //   return String(record.employee_name)
+      //     .toLowerCase()
+      //     .includes(value.toLowerCase());
+      filteredValue: [searchedText],
+      onFilter: (value, record) => {
+        return (
+          String(record.employee_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.employee_code)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.employee_branch)
+            .toLowerCase()
+            .includes(value.toLowerCase())||
+            String(record.employee_department)
+              .toLowerCase()
+              .includes(value.toLowerCase())||
+              String(record.employee_designation)
+                .toLowerCase()
+                .includes(value.toLowerCase())||
+                String(record.employee_type)
+                  .toLowerCase()
+                  .includes(value.toLowerCase())||
+                  String(record.employee_grade)
+                    .toLowerCase()
+                    .includes(value.toLowerCase())
+        );
+      },
+      align: "left",
+    },
+    {
+      title: "EMPLOYEE CODE",
+      dataIndex: "employee_code",
+      key: "employee_code",
+      align: "left",
+    },
+    {
+      title: "EMPLOYEE BRANCH",
+      dataIndex: "employee_branch",
+      key: "employee_branch",
+      align: "left",
+    },
+    {
+      title: "EMPLOYEE DEPARTMENT",
+      dataIndex: "employee_department",
+      key: "employee_department",
+      align: "left",
+    },
+    {
+      title: "EMPLOYEE DESIGNATION",
+      dataIndex: "employee_designation",
+      key: "employee_designation",
+      align: "left",
+    },
+    {
+      title: "EMPLOYEE TYPE",
+      dataIndex: "employee_type",
+      key: "employee_type",
+      align: "left",
+    },
+    {
+      title: "EMPLOYEE GRADE",
+      dataIndex: "employee_grade",
+      key: "employee_grade",
+      align: "left",
+    },
     {
       title: "ACTION",
       dataIndex: "action",
@@ -71,54 +153,6 @@ function Employees() {
           </div>
         );
       },
-      align: "center",
-    },
-    {
-      title: "EMPLOYEE NAME",
-      dataIndex: "employee_name",
-      key: "employee_name",
-      filteredValue: [searchedText],
-      onFilter: (value, record) => {
-        return String(record.employee_name)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
-      align: "center",
-    },
-    {
-      title: "EMPLOYEE CODE",
-      dataIndex: "employee_code",
-      key: "employee_code",
-      align: "center",
-    },
-    {
-      title: "EMPLOYEE BRANCH",
-      dataIndex: "employee_branch",
-      key: "employee_branch",
-      align: "center",
-    },
-    {
-      title: "EMPLOYEE DEPARTMENT",
-      dataIndex: "employee_department",
-      key: "employee_department",
-      align: "center",
-    },
-    {
-      title: "EMPLOYEE DESIGNATION",
-      dataIndex: "employee_designation",
-      key: "employee_designation",
-      align: "center",
-    },
-    {
-      title: "EMPLOYEE TYPE",
-      dataIndex: "employee_type",
-      key: "employee_type",
-      align: "center",
-    },
-    {
-      title: "EMPLOYEE GRADE",
-      dataIndex: "employee_grade",
-      key: "employee_grade",
       align: "center",
     },
   ];
@@ -343,7 +377,7 @@ function Employees() {
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
-              placeholder="Search by Employee Name"
+              placeholder="Search"
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
               onChange={(e) => {

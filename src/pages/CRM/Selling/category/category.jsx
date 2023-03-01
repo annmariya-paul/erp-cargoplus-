@@ -332,6 +332,7 @@ function Category() {
       });
   };
   // console.log("imgage preview", imgPreview);
+  const beforeUpload = (file, fileList) => {};
   return (
     <>
       <div className="container-fluid">
@@ -469,7 +470,7 @@ function Category() {
                       listType="picture"
                       accept=".png,.jpg,.jpeg"
                       // onPreview={handlePreview}
-                      beforeUpload={true}
+                      beforeUpload={beforeUpload}
                       onChange={(file) => {
                         console.log("Before upload", file.file);
                         console.log("Before upload file size", file.file.size);

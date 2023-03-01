@@ -157,7 +157,50 @@ export default function Frightlist(props) {
 
  const [uniqueeditCode, setuniqueeditCode] = useState(false);
 
-  const columns = [
+ const [serialNo, setserialNo] = useState(1);
+ const columns = [
+   {
+     title: "SI.NO",
+     key: "index",
+     width: "13%",
+     render: (value, item, index) => serialNo + index,
+     align: "center",
+   },
+ 
+    {
+      title: "FREIGHT TYPE NAME",
+      dataIndex: "freight_type_name",
+      key: "freight_type_name",
+      width: "30%",
+      filteredValue: [searchedText],
+      onFilter: (value, record) => {
+        return String(record.freight_type_name)
+          .toLowerCase()
+          .includes(value.toLowerCase()) ||
+          String(record.freight_type_prefix)
+          .toLowerCase()
+          .includes(value.toLowerCase()) 
+      },
+      align: "left",
+    },
+    {
+      title: "FREIGHT TYPE PREFIX",
+      dataIndex: "freight_type_prefix",
+      key: "freight_type_prefix",
+      // filteredValue: [searchedPrefix],
+      // onFilter: (value, record) => {
+      //   return String(record.freight_type_prefix || prefixSearch)
+      //     .toLowerCase()
+      //     .includes(value.toLowerCase());
+      // },
+      align: "left",
+    },
+    // {
+    //   title: "Date",
+    //   dataIndex: "freight_type_created_at",
+    //   key: "freight_type_created_at",
+    //   align: "center",
+    // },
     {
       title: "ACTION",
       dataIndex: "action",
@@ -192,36 +235,6 @@ export default function Frightlist(props) {
       },
       align: "center",
     },
-    {
-      title: "FREIGHT TYPE NAME",
-      dataIndex: "freight_type_name",
-      key: "freight_type_name",
-      filteredValue: [searchedText],
-      onFilter: (value, record) => {
-        return String(record.freight_type_name  || nameSearch)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
-      align: "center",
-    },
-    {
-      title: "FREIGHT TYPE PREFIX",
-      dataIndex: "freight_type_prefix",
-      key: "freight_type_prefix",
-      filteredValue: [searchedPrefix],
-      onFilter: (value, record) => {
-        return String(record.freight_type_prefix || prefixSearch)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
-      align: "center",
-    },
-    // {
-    //   title: "Date",
-    //   dataIndex: "freight_type_created_at",
-    //   key: "freight_type_created_at",
-    //   align: "center",
-    // },
   ];
 
   // const data = [
@@ -342,7 +355,7 @@ export default function Frightlist(props) {
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
-              placeholder="Search by Freight type Name"
+              placeholder="Search "
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
               onChange={(e) => {
@@ -353,7 +366,7 @@ export default function Frightlist(props) {
               }}
             />
           </div>
-          <div className="col-4">
+          {/* <div className="col-4">
             <Input.Search
               placeholder="Search by Freight type prefix"
               style={{ margin: "5px", borderRadius: "5px" }}
@@ -365,7 +378,7 @@ export default function Frightlist(props) {
                 setSearchedPrefix(value);
               }}
             />
-          </div>
+          </div> */}
         </div>
         
         <div className="row my-3">

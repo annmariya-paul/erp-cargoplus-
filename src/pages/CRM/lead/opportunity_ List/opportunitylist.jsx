@@ -217,14 +217,7 @@ function Opportunitylist(props) {
         setOppnew(tempArr);
           setOpportunityList(res?.data?.data?.leads);
           setTotalcount(res?.data?.data?.totalCount);
-          // console.log("totalcount iss", res?.data?.data?.totalCount);
-          // let samplearry = [];
-          // res?.data?.data?.leads.forEach((item, index) => {
-          //   samplearry.push(item.opportunity_id);
-          // });
-          // console.log("pushedd ", samplearry);
-
-          // setOppurtunityid(samplearry);
+       
         } else {
           console.log("Failed to load data !");
         }

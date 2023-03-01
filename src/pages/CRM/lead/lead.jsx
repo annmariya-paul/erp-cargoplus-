@@ -157,6 +157,15 @@ function Lead({}) {
   // console.log("leadd id iss", leadType.leadtypes.options[0]);
   const beforeUpload = (file, fileList) => {};
 
+  const handleAddImage = (e) => {
+    console.log("handleAddImage", e);
+    let temp = [];
+    e?.fileList?.forEach((item, index) => {
+      temp.push(item?.originFileObj);
+    });
+    console.log("tempereay file", temp);
+  };
+
   return (
     <>
       {contextHolder}
@@ -416,6 +425,7 @@ function Lead({}) {
                                 file.file.size < 500000
                               ) {
                                 setLeadimg(file.file.originFileObj);
+                                handleAddImage(file);
                                 setFileSizeError(false);
                                 console.log(
                                   "file greater than 1 kb and less than 500 kb"

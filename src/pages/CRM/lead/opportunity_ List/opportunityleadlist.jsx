@@ -63,6 +63,9 @@ function OpportunityLeadlist(props) {
   const [oppurtunityfrom, setOppurtunityfrom] = useState();
   const [oppurtunitysource, setOppurtunitysource] = useState();
   const [oppurtunityparty, setOppurtunityparty] = useState("");
+  const config = {
+    rules: [{ required: true, message: 'Please select Date!' }],
+  };
   console.log("opp party", oppurtunityparty);
   const [oppurtunityvalidity, setOppurtunityvalidity] = useState();
   console.log("opp validity", oppurtunityvalidity);
@@ -108,6 +111,7 @@ function OpportunityLeadlist(props) {
     opportunity_lead_id: "",
     opportunity_lead_name: "",
     opportunity_statusname:"",
+    opportunity_partyname:"",
   });
 
   const [editOppurtunity, setEditOppurtunity] = useState({
@@ -1454,7 +1458,7 @@ function OpportunityLeadlist(props) {
                 {/* <Form.Group className="mb-2" controlId="lead_valid_up_to"> */}
                 <label>Valid Up to</label>
 
-                <Form.Item name="opportunity_validity">
+                <Form.Item name="opportunity_validity"  {...config}>
                   <DatePicker
                     style={{ borderWidth: 0, marginTop: 10 }}
                     initialValues={oppurtunityvalidity}

@@ -350,6 +350,9 @@ function Category() {
               }}
             >
               <div className="row px-4 pt-4">
+                <div>
+                  <h5 className="lead_text">Add Category</h5>
+                </div>
                 <div className="col-sm-4 pt-3">
                   <label>Name</label>
                   <Form.Item

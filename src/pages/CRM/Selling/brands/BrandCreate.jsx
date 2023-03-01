@@ -230,7 +230,7 @@ function BrandCreate() {
                   <label>Display Picture</label>
                   <Form.Item name="new">
                     <FileUpload
-                      multiple
+                      multiple={false}
                       listType="picture"
                       accept=".png,.jpg,.jpeg"
                       height={100}

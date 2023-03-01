@@ -215,8 +215,8 @@ function Employees() {
           res.data.data.forEach((item, index) => {
             array.push({
               employee_id: item.employee_id,
-              employee_email: item.employee_email,
-              employee_password: item.employee_password,
+              // employee_email: item.employee_email,
+              // employee_password: item.employee_password,
               employee_name: item.employee_name,
               employee_code: item.employee_code,
               employee_department_id: item.hrms_v1_departments.department_id,
@@ -270,8 +270,8 @@ function Employees() {
     setEmployeeDesignation(data.employee_designation_id);
     setEmployeeGrade(data.employee_grade_id);
     setEmployeeType(data.employee_type_id);
-    setEmpEmail(data.employee_email);
-    setEmpPassword(data.employee_password);
+    // setEmpEmail(data.employee_email);
+    // setEmpPassword(data.employee_password);
 
     if (data) {
       editForm.setFieldsValue({
@@ -284,8 +284,8 @@ function Employees() {
         employee_grade: data.employee_grade_id,
         employee_type: data.employee_type_id,
         employee_role_id: data.employee_role_id,
-        employee_email: data.employee_email,
-        employee_password: data.employee_password,
+        // employee_email: data.employee_email,
+        // employee_password: data.employee_password,
       });
       setModalEditEmployee(true);
     }
@@ -302,8 +302,8 @@ function Employees() {
           employee_designation: employeeDesignation,
           employee_grade: employeeGrade,
           employee_type: employeeType,
-          employee_email: empEmail,
-          employee_password: empPassword,
+          // employee_email: empEmail,
+          // employee_password: empPassword,
         }
       );
       console.log("editedd data is", updating);
@@ -686,52 +686,7 @@ function Employees() {
                           </SelectBox>
                         </Form.Item>
                       </div>
-                      <div className="col-12">
-                        <div className="row login_border">
-                          {/* <div className="col-12 lead_text mb-2"> */}
-                          <h6 className="lead_text my-3">Login Info</h6>
-                          {/* </div> */}
-                          <div className="col-sm-6">
-                            <label>Email</label>
-                            <Form.Item
-                              name="employee_email"
-                              rules={[
-                                {
-                                  required: true,
-                                  pattern: new RegExp(
-                                    "^[A-Za-z0-9_!#$%&'*+/=?`{|}~^.-]+@[A-Za-z0-9.-]+$"
-                                  ),
-                                  message: "Email is Required",
-                                },
-                              ]}
-                            >
-                              <InputType />
-                            </Form.Item>
-                          </div>
-                          <div className="col-sm-6">
-                            <label>Password</label>
-                            <Form.Item
-                              name="employee_password"
-                              rules={[
-                                {
-                                  required: true,
-                                  message: "Password is Required",
-                                },
-                                // {
-                                //   min: 3,
-                                //   message: "Required Minimum 3 characters",
-                                // },
-                                // {
-                                //   max: 100,
-                                //   message: "Required Maximum 100 chraraters ",
-                                // },
-                              ]}
-                            >
-                              <InputType />
-                            </Form.Item>
-                          </div>
-                        </div>
-                      </div>
+                    
                       <div className="col-12 mt-2">
                         <div className="d-flex justify-content-center">
                           <Button

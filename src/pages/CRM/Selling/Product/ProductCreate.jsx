@@ -277,6 +277,7 @@ function ProductCreate() {
 
   console.log("data in catt", State);
   console.log("imgg ", previewImage);
+  const beforeUpload = (file, fileList) => {};
 
   return (
     <div>
@@ -521,8 +522,8 @@ function ProductCreate() {
                       listType="picture"
                       accept=".png,.jpeg,.jpg"
                       filetype={"Accept only png,jpg and jpeg"}
-                      onPreview={handlePreview}
-                      beforeUpload={true}
+                      // onPreview={handlePreview}
+                      beforeUpload={beforeUpload}
                       onChange={(file) => {
                         console.log("Before upload", file.file);
                         console.log("Before upload file size", file.file.size);

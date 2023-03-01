@@ -360,6 +360,7 @@ function Varients() {
   };
 
   console.log("happy", attributes, attributeValue, varientattrVArient_id);
+  const beforeUpload = (file, fileList) => {};
 
   return (
     <div>
@@ -575,8 +576,8 @@ function Varients() {
                                 multiple
                                 listType="picture"
                                 accept=".png,.jpg,.jpeg"
-                                onPreview={handlePreview}
-                                beforeUpload={true}
+                                // onPreview={handlePreview}
+                                beforeUpload={beforeUpload}
                                 onChange={(file) => {
                                   console.log("Before upload", file.file);
                                   console.log(

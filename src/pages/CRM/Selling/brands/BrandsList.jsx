@@ -340,6 +340,8 @@ function BrandsList() {
     ["brand_id", "brand_name", "brand_pic", "brand_description"],
   ];
 
+  const beforeUpload = (file, fileList) => {};
+
   return (
     <div>
       <div>
@@ -587,12 +589,12 @@ function BrandsList() {
                       <label>Display Picture</label>
                       <Form.Item name="new">
                         <FileUpload
-                          multiple
+                          multiple={false}
                           listType="picture"
                           accept=".png,.jpg,.jpeg"
                           height={100}
-                          onPreview={handlePreview}
-                          beforeUpload={true}
+                          // onPreview={handlePreview}
+                          beforeUpload={beforeUpload}
                           onChange={(file) => {
                             console.log("Before upload", file.file);
                             console.log(
@@ -816,11 +818,11 @@ function BrandsList() {
                 <div className="col-12 my-3">
                   <Form.Item name="ImageUpload">
                     <FileUpload
-                      multiple
+                      multiple={false}
                       listType="picture"
                       accept=".png,.jpg,.jpeg"
                       height={100}
-                      beforeUpload={false}
+                      beforeUpload={beforeUpload}
                       onChange={(file) => {
                         console.log("Before upload", file.file);
                         console.log("Before upload file size", file.file.size);

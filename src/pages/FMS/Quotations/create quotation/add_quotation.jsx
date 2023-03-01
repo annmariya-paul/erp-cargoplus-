@@ -1649,6 +1649,7 @@ export default function Add_Quotation() {
                         <FileUpload
                           multiple
                           filetype={"Accept only pdf and docs"}
+                          height={100}
                           listType="picture"
                           accept=".pdf,.docs,"
                           // aceept=".jpeg,.jpg,.png"

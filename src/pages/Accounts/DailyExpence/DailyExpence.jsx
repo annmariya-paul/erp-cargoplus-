@@ -220,7 +220,7 @@ function DailyExpence() {
                     />
                   </div>
                 </div>
-                <div className="row my-3">
+                <div className="row my-3 ">
                   <div className="col-4 ">
                     <Select
                       // defaultValue={"25"}
@@ -278,7 +278,7 @@ function DailyExpence() {
                   <div className="col-xl-4 col-lg-4 col-md-3 col-sm-12 col-12 d-flex justify-content-end">
                     <div className="">
                       <Link
-                        to={ROUTES.ADD_QUOTATION}
+                        to={ROUTES.CREATE_EXPENSE}
                         style={{ color: "white" }}
                       >
                         <Button btnType="save">Add Daily Expence</Button>

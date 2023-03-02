@@ -418,16 +418,6 @@ function App() {
             {/* <Route path={ROUTES.PAYMEMENT_MODE} element={<ProtectedRoute/>}> */}
             {/* <Route index element={<Payment_mode/>}/> */}
             {/* </Route> */}
-            <Route path={ROUTES.PAYMEMENT_MODE} element={<ProtectedRoute />}>
-              <Route index element={<Payment_mode />} />
-            </Route>
-
-            <Route path={ROUTES.ADD_PURCHASE} element={<ProtectedRoute />}>
-              <Route index element={<Add_purchase />} />
-            </Route>
-            <Route path={ROUTES.PURCHASE} element={<ProtectedRoute />}>
-              <Route index element={<Purchase />} />
-            </Route>
 
             <Route path={ROUTES.INVOICE_VIEW_ID} element={<ProtectedRoute />}>
               <Route index element={<InvoiceView />} />
@@ -453,6 +443,23 @@ function App() {
             {/* ######## ACCOUNTS ######## */}
             <Route path={ROUTES.DAILY_EXPENSE} element={<ProtectedRoute />}>
               <Route index element={<DailyExpence />} />
+            </Route>
+            <Route path={ROUTES.CREATE_EXPENSE} element={<ProtectedRoute />}>
+              <Route index element={<CreateExpence />} />
+            </Route>
+            <Route path={ROUTES.EXPENSE_CATEGORY} element={<ProtectedRoute />}>
+              <Route index element={<ExpenseCategory />} />
+            </Route>
+
+            <Route path={ROUTES.PAYMEMENT_MODE} element={<ProtectedRoute />}>
+              <Route index element={<Payment_mode />} />
+            </Route>
+
+            <Route path={ROUTES.ADD_PURCHASE} element={<ProtectedRoute />}>
+              <Route index element={<Add_purchase />} />
+            </Route>
+            <Route path={ROUTES.PURCHASE} element={<ProtectedRoute />}>
+              <Route index element={<Purchase />} />
             </Route>
 
             {/* </Route> */}

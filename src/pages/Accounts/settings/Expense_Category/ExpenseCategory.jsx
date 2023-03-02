@@ -194,7 +194,7 @@ function ExpenseCategory() {
         console.log("Response", res);
         if (res.data.success) {
           console.log("SuccessFully", res.data.data);
-          setAllCategoryData(res.data.data);
+          //   setAllCategoryData(res.data.data);
         }
       })
       .catch((err) => {

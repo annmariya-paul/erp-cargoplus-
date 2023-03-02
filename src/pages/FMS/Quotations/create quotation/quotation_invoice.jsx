@@ -9,6 +9,8 @@ import moment from "moment";
 import { useNavigate, useParams } from "react-router-dom";
 import TableData from "../../../../components/table/table_data";
 import InvoicePrint from "../../../../components/Invoice/InvoicePrint";
+import { ROUTES } from "../../../../routes";
+
 
 function Quotationinvoice() {
   var converter = require("number-to-words");
@@ -29,6 +31,7 @@ function Quotationinvoice() {
   const [cmpnyinfo, setcmpnyinfo] = useState();
   const [quotation, setQuotation] = useState();
 
+  const navigate = useNavigate();
   const progress = [
     {
       title: "TASKS",
@@ -172,6 +175,7 @@ function Quotationinvoice() {
     if (time) {
       setTimeout(() => {
         handlePrint();
+        navigate(ROUTES.QUATATIONS)
       }, time);
     }
   };

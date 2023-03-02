@@ -45,7 +45,22 @@ function Listjob() {
       onFilter: (value, record) => {
         return String(record.job_number)
           .toLowerCase()
-          .includes(value.toLowerCase());
+          .includes(value.toLowerCase()) ||
+          String(record.job_date)
+          .toLowerCase()
+          .includes(value.toLowerCase()) ||
+          String(record.job_awb_bl_no)
+          .toLowerCase()
+          .includes(value.toLowerCase())||
+          String(record.job_consignee_name)
+          .toLowerCase()
+          .includes(value.toLowerCase())||
+          String(record.job_shipper)
+          .toLowerCase()
+          .includes(value.toLowerCase()) ||
+          String(record.job_status)
+          .toLowerCase()
+          .includes(value.toLowerCase())
       },
       align: "center",
     },
@@ -59,24 +74,24 @@ function Listjob() {
       title: "AWB/BL",
       dataIndex: "job_awb_bl_no",
       key: "job_awb_bl_no",
-      filteredValue: [searchedNo],
-      onFilter: (value, record) => {
-        return String(record.job_awb_bl_no)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
+      // filteredValue: [searchedNo],
+      // onFilter: (value, record) => {
+      //   return String(record.job_awb_bl_no)
+      //     .toLowerCase()
+      //     .includes(value.toLowerCase());
+      // },
       align: "center",
     },
     {
       title: "CONSIGNEE",
       dataIndex: "job_consignee_name",
       key: "job_consignee_name",
-      filteredValue: [searchName],
-      onFilter: (value, record) => {
-        return String(record.job_consignee_name)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
+      // filteredValue: [searchName],
+      // onFilter: (value, record) => {
+      //   return String(record.job_consignee_name)
+      //     .toLowerCase()
+      //     .includes(value.toLowerCase());
+      // },
       align: "center",
     },
     {
@@ -286,7 +301,7 @@ function Listjob() {
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
-              placeholder="Search by Job Number"
+              placeholder="Search"
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
               onChange={(e) => {
@@ -297,7 +312,7 @@ function Listjob() {
               }}
             />
           </div>
-          <div className="col-4">
+          {/* <div className="col-4">
             <Input.Search
               placeholder="Search by AWB/BL Number"
               style={{ margin: "5px", borderRadius: "5px" }}
@@ -322,7 +337,7 @@ function Listjob() {
                 setSearchName(value);
               }}
             />
-          </div>
+          </div> */}
         </div>
         <div className="row my-3">
           <div className="col-4">

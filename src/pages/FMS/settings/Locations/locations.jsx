@@ -273,6 +273,7 @@ export default function Locations() {
           <div className="col-4">
             <Input.Search
               placeholder="Search"
+            
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchCode}
               onChange={(e) => {

@@ -18,6 +18,8 @@ import { ROUTES } from "../../../../routes";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
 import { useForm } from "react-hook-form";
+import { UniqueErrorMsg } from "../../../../ErrorMessages/UniqueErrorMessage";
+import CheckUnique from "../../../../check Unique/CheckUnique";
 
 function Unitlist() {
   const [pageSize, setPageSize] = useState("25"); // page size
@@ -35,6 +37,18 @@ const [unitName,setUnitName]= useState("");
 const [unitcode,setUnitCode]=useState("");
 const [unitDescription,setUnitDescription]= useState("");
 const[unitid,setUnitid]=useState();
+
+const [addmodalShow, setaddmodalShow] = useState(false);
+
+const [addunitName,setaddunitName]= useState("")
+const [addunitCode,setaddunitCode]= useState("")
+const [addunitDesc,setaddunitDesc]= useState("")
+
+const [uniqueCode, setuniqueCode] = useState();
+const [uniqueName, setuniqueName] = useState();
+
+const [serialNo, setserialNo] = useState(1);
+const [addForm]= Form.useForm();
 const [editForm]= Form.useForm();
 
  const getData = (current, pageSize) => {
@@ -172,6 +186,33 @@ useEffect(()=>{
   getallunits()
 },[])
 
+const submitaddunit=async()=>{
+  try{
+  const addunit= await PublicFetch.post(
+    `${CRM_BASE_URL_SELLING}/unit`,{
+      unit_name:addunitName,
+      unit_code:addunitCode,
+      unit_description:addunitDesc
+      
+    })
+   console.log("unit data is added ",addunit)
+ 
+  if (addunit.data.success) {
+    setaddmodalShow(false)
+    addForm.resetFields()
+    getallunits()
+    setSaveSuccess(true);
+    close_modal(saveSuccess, 1000);
+  } else if (addunit.data.success === false) {
+    alert(addunit.data.data);
+  }
+  }
+  catch(err) {
+   console.log("err to add the unit",err)
+  }
+  
+  }
+
 const confirm = (e) => {
   console.log(e);
   message.success('Click on Yes');
@@ -206,6 +247,45 @@ const cancel = (e) => {
   // {columns is opportunity listing table componenet }
 
   const columns = [
+    {
+      title: "Sl. No",
+      key: "index",
+      render: (value, item, index) => serialNo + index,
+      align: "center",
+    },
+    {
+      title: "NAME",
+      dataIndex: "unit_name",
+      key: "NAME",
+      filteredValue: [searchType],
+      onFilter: (value, record) => {
+        return String(record.unit_name)
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      },
+      align: "left",
+      width: "23%",
+    },
+    {
+      title: "CODE",
+      dataIndex: "unit_code",
+      key: "CODE",
+      width: "23%",
+      filteredValue: [searchedText],
+      onFilter: (value, record) => {
+        return String(record.unit_code)
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      },
+      align: "left",
+    },
+    {
+      title: "DESCRIPTION",
+      dataIndex: "unit_description",
+      key: "DESCRIPTION",
+      //   width: "23%",
+      align: "left",
+    },
     {
       title: "ACTION",
       dataIndex: "action",
@@ -251,39 +331,6 @@ const cancel = (e) => {
       },
       align: "left",
     },
-    {
-      title: "NAME",
-      dataIndex: "unit_name",
-      key: "NAME",
-      filteredValue: [searchType],
-      onFilter: (value, record) => {
-        return String(record.unit_name)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
-      align: "left",
-      width: "23%",
-    },
-    {
-      title: "CODE",
-      dataIndex: "unit_code",
-      key: "CODE",
-      width: "23%",
-      filteredValue: [searchedText],
-      onFilter: (value, record) => {
-        return String(record.unit_code)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
-      align: "left",
-    },
-    {
-      title: "DESCRIPTION",
-      dataIndex: "unit_description",
-      key: "DESCRIPTION",
-      //   width: "23%",
-      align: "left",
-    },
   ];
 
   //heder icons starts --Shahida 25.11.22
@@ -326,7 +373,7 @@ console.log("filtered columns::",filteredColumns);
     <>
       <div className="container-fluid lead_list py-3">
         <div className=" d-flex justify-content-between">
-          <h6 className="lead_text">UNITS</h6>
+          <h6 className="lead_text">UNITS AND MEASUREMENTS</h6>
           <div>
             <Leadlist_Icons
               datas={allunit}
@@ -464,9 +511,13 @@ console.log("filtered columns::",filteredColumns);
         </div>
           <div className="col-xl-4 col-lg-4   col-sm-12 col-12  ">
             <div className="d-flex justify-content-end">
-              <Link to={ROUTES.ADD_UNIT}>
-                <Button btnType="save">Add Unit</Button>
-              </Link>
+              {/* <Link to={ROUTES.ADD_UNIT}> */}
+                <Button btnType="save"
+                onClick={()=>{
+                  setaddmodalShow(true)
+                }}
+                >Add Unit</Button>
+              {/* </Link> */}
             </div>
           </div>
         </div>
@@ -537,6 +588,161 @@ console.log("filtered columns::",filteredColumns);
           }
         />
 
+<Custom_model
+          size={"sm"}
+          show={addmodalShow}
+          onHide={() => {
+            setaddmodalShow(false);
+          }}
+          View_list
+          list_content={
+            <div className="container-fluid px-4 my-4 ">
+              <h6 className="lead_text">Add Units and Measurements</h6>
+              <Form
+                form={addForm}
+                onFinish={(value) => {
+                  console.log("the formvaluess iss", value);
+                  submitaddunit();
+                }}
+                onFinishFailed={(error) => {
+                  console.log(error);
+                }}
+              >
+                <div className="row">
+                  <div className="col-12">
+                    <label>Name</label>
+                    <Form.Item
+                      name="addunit_name"
+                      rules={[
+                        {
+                          required: true,
+                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+
+                          message: "Please enter a Valid Unit Name",
+                        },
+                        {
+                          whitespace: true,
+                        },
+                        {
+                          min: 2,
+                          message: "Name must be at least 2 characters",
+                        },
+                        {
+                          max: 100,
+                          message: "Name cannot be longer than 100 characters",
+                        },
+                      ]}
+                    >
+                      <InputType
+                        value={addunitName}
+                        onChange={(e) => {
+                          setaddunitName(e.target.value)
+                          setuniqueName(false)
+                        }}
+                        onBlur={ async () => {
+                          // checkAttributeNameis();
+                          let a = await CheckUnique({type:"unitname",value:addunitName})
+                          console.log("hai how are u", a)
+                          setuniqueName(a)
+                        }}
+                        
+                      />
+                    </Form.Item>
+                    {uniqueName ? (
+                <div>
+                  <label style={{ color: "red" }}>
+                    unit Name {UniqueErrorMsg.UniqueErrName}
+                  </label>
+                </div>
+              ) : (
+                ""
+              )}
+                  </div>
+                  <div className="col-12 py-2">
+                    <label>Code</label>
+                    <Form.Item
+                      name="addunit_code"
+                      rules={[
+                        {
+                          required: true,
+                          pattern: new RegExp("^[A-Za-z0-9]+$"),
+                          message: "Please enter a Valid Unit code",
+                        },
+                        {
+                          min: 2,
+                          message: "code must be at least 2 characters",
+                        },
+                        {
+                          max: 100,
+                          message:
+                            "Unit code cannot be longer than 100 characters",
+                        },
+                      ]}
+                    >
+                      <InputType
+                        value={addunitCode}
+                        onChange={(e) => {
+                        setaddunitCode(e.target.value)
+                        setuniqueCode(false)
+                      }}
+                      onBlur={ async () => {
+                        // checkAttributeNameis();
+                        let a = await CheckUnique({type:"unitcode",value:addunitCode})
+                        console.log("hai how are u", a)
+                        setuniqueCode(a)
+                      }}
+                      />
+                    </Form.Item>
+                    {uniqueCode ? (
+                <div>
+                  <label style={{ color: "red" }}>
+                    unit code {UniqueErrorMsg.UniqueErrName}
+                  </label>
+                </div>
+              ) : (
+                ""
+              )}
+                  </div>
+                  <div className="col-12 py-2">
+                    <label>Description</label>
+                    <Form.Item
+                      name="addunit_description"
+                      rules={[
+                        {
+                          min: 2,
+                          message: "Description must be at least 2 characters",
+                        },
+                        {
+                          max: 500,
+                          message:
+                            "Description cannot be longer than 500 characters",
+                        },
+                      ]}
+                    >
+                      <TextArea
+                        value={addunitDesc}
+                        onChange={(e) => setaddunitDesc(e.target.value)}
+                      />
+                    </Form.Item>
+                  </div>
+                  <div className="row d-flex justify-content-center">
+                    <div className="col-xl-2 col-lg-2 col-12 justify-content-center">
+                      <Button
+                        btnType="save"
+                        // onClick={(id) => {
+                        //   updateClick();
+                        //   setEditShow(false);
+                        // }}
+                      >
+                        Save
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </Form>
+            </div>
+          }
+        />
         <Custom_model
           size={"sm"}
           show={editShow}

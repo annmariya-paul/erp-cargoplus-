@@ -61,7 +61,7 @@ function Addvendor(){
                               message: "Please enter a Valid vendortype Name",
                             },
     
-                            {
+                            {    
                               min: 3,
                               message: "Name must be atleast 3 characters",
                             },

@@ -6,7 +6,6 @@ const ProtectedRoute = ({ roles }) => {
   const { isAuthenticated } = useContext(UserContext);
   console.log("inside proteced route");
   let authenticated = isAuthenticated();
-
   return authenticated ? <Outlet /> : <Navigate to={ROUTES.LOGIN} />;
 };
 

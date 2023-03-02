@@ -28,6 +28,14 @@ function InvoiceList() {
   const [invoice_id, setInvoice_id] = useState();
   const [successPopup, setSuccessPopup] = useState(false);
 
+  const [noofItems, setNoofItems] = useState("25");
+  // const [current, setCurrent] = useState(1);
+
+  const[totalinvoice,settotalinvoice]= useState("")
+
+
+  const pageofIndex = noofItems * (current - 1) - 1 + 1;
+
   const data = [
     {
       invoice_no: 12234444,
@@ -200,6 +208,7 @@ function InvoiceList() {
       .then((res) => {
         setInvoiceData(res?.data?.data);
         console.log("response", res);
+      
         if (res.data.success) {
           console.log("success of invoices", res.data.data);
           let temp = [];
@@ -354,7 +363,7 @@ function InvoiceList() {
                   </div>
                   <div className="col-4 d-flex align-items-center justify-content-center">
                     <MyPagination
-                      total={parseInt(totalCount)}
+                      total={parseInt(invoiceData?.length)}
                       current={current}
                       pageSize={numOfItems}
                       onChange={(current, pageSize) => {
@@ -363,7 +372,7 @@ function InvoiceList() {
                     />
                   </div>
                   {/* <div className="col-xl-6 col-lg-6 col-md-6 col-sm-8 col-12"></div> */}
-                  <div className="col-lg-3 col-lg-3 col-md-3 col-sm-12 col-12 d-flex justify-content-end"></div>
+                  <div className="col-4 d-flex justify-content-end"></div>
                 </div>
                 <div className="datatable">
                   {/* {AllinvoiceData && ( */}
@@ -377,14 +386,14 @@ function InvoiceList() {
                   {/* )} */}
                 </div>
                 <div className="d-flex py-2 justify-content-center">
-                  <MyPagination
-                    total={parseInt(totalCount)}
-                    current={current}
-                    pageSize={numOfItems}
-                    onChange={(current, pageSize) => {
-                      setCurrent(current);
-                    }}
-                  />
+                <MyPagination
+                      total={parseInt(invoiceData?.length)}
+                      current={current}
+                      pageSize={numOfItems}
+                      onChange={(current, pageSize) => {
+                        setCurrent(current);
+                      }}
+                    />
                 </div>
               </div>
             </div>
@@ -438,6 +447,9 @@ function InvoiceList() {
               }}
             />
           </div>
+
+
+
         </div>
       </div>
     </div>

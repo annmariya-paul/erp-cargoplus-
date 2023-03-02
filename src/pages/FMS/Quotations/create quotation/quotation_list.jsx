@@ -195,7 +195,7 @@ export default function Quotations(props) {
                 <div className="col-2 d-flex justify-content-center">
                   <Button
                     btnType="add"
-                    className="view_btn"
+                    className="me-1 assign_btn"
                     onClick={() => {
                       navigate(
                         `${ROUTES.ASSIGN_QUOTATION}/${index.quotation_id}`

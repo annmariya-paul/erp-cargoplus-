@@ -35,7 +35,7 @@ export default function Sidebar({ showSidebar }) {
   const [CRMopen, setCRMopen] = useState(false);
   const [CRMReport, setCRMReport] = useState(false);
   const [CRMselling, setCRMselling] = useState(false);
-  const [CRMpurchasing, setCRMpurchasing] =useState(false)
+  const [CRMpurchasing, setCRMpurchasing] = useState(false);
 
   const [CRMgeneral, setCRMgeneral] = useState(false);
   const [FMSOpen, setFMSOpen] = useState(false);
@@ -44,11 +44,10 @@ export default function Sidebar({ showSidebar }) {
   const [FMSAgentopen, setFMSAgentopen] = useState(false);
   const [FMSQuotationsopen, setFMSQuotationsopen] = useState(false);
   const [permissions, setPermissions] = useState(null);
-
+  const [Accounts, setAccounts] = useState(false);
   const [FMSSettingsopen, setFMSSettingsopen] = useState(false);
 
   const location = useLocation();
-  
 
   const { pathname } = location;
   useEffect(() => {
@@ -508,7 +507,7 @@ export default function Sidebar({ showSidebar }) {
                         <div className="d-flex">
                           <FaRegHandshake className="sidebar_icons pt-1" />
                           <div style={{ width: "100px" }} className="">
-                         Purchase
+                            Purchase
                           </div>
                         </div>
 
@@ -547,15 +546,14 @@ export default function Sidebar({ showSidebar }) {
                           </NavLink>
                         </li>
                       )}
-                      </>
-                 ):"" }
-        
+                    </>
+                  ) : (
+                    ""
+                  )}
                 </>
               ) : (
                 ""
               )}
-
-
 
               {/* ##########  FMS  ######## */}
 
@@ -837,6 +835,65 @@ export default function Sidebar({ showSidebar }) {
               ) : (
                 ""
               )}
+
+              {/* ######## Accounts ######## */}
+
+              <li
+                className={
+                  Accounts
+                    ? "nav-text  items_hrms open"
+                    : "nav-text  items_hrms "
+                }
+              >
+                <Link
+                  className={Accounts ? "active-link_main" : "link"}
+                  // to="/"
+                  onClick={() => setAccounts(!Accounts)}
+                >
+                  <div className="d-flex justify-content-between gap-5">
+                    <div className="d-flex">
+                      <RiTeamFill className="sidebar_icons" />
+                      {/* <img
+                        src={hrmsIcon}
+                        alt
+                        height={15}
+                        width={15}
+                        className="mt-1 me-1"
+                      /> */}
+                      <div style={{ width: "120px" }} className="">
+                        Accounts
+                      </div>
+                    </div>
+
+                    <div className="  ">
+                      <div className="text-right ">
+                        <AiOutlineCaretDown className="toggle_btn " />
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              </li>
+
+              {Accounts ? (
+                <>
+                  {checkPermission("daily_expence") && (
+                    <li className="nav-text ">
+                      <NavLink
+                        className={({ isActive }) =>
+                          isActive ? "active-link" : "link"
+                        }
+                        to={ROUTES.DAILY_EXPENCE}
+                      >
+                        <div className=" ms-4">Daily Expence</div>
+                      </NavLink>
+                    </li>
+                  )}
+                </>
+              ) : (
+                ""
+              )}
+
+              {/* ########## General Settings ######## */}
 
               <li
                 className={

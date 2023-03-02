@@ -178,6 +178,7 @@ function ServiceCreate() {
   useEffect(() => {
     getAllTaxTypes();
   }, []);
+  const beforeUpload = (file, fileList) => {};
 
   return (
     <div>
@@ -424,7 +425,7 @@ function ServiceCreate() {
                       accept=".png,.jpeg"
                       height={100}
                       // onPreview={handlePreview}
-                      beforeUpload={true}
+                      beforeUpload={beforeUpload}
                       onChange={(file) => {
                         console.log("Before upload file size", file.file.size);
                         if (file.file.size > 2000 && file.file.size < 500000) {

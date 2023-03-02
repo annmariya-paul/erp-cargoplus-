@@ -14,8 +14,8 @@ function CreateExpence() {
         <div className=" mb-3">
           <h2 style={{ color: "#0891d1" }}>Create Daily Expense</h2>
         </div>
-        <div className="row">
-          <div className="col-12">
+        <div className="row ">
+          <div className="col-12 ">
             <div
               style={{
                 borderRadius: "8px",
@@ -25,19 +25,19 @@ function CreateExpence() {
               <div className="container-fluid p-3">
                 <Form>
                   <div className="row ">
-                    <div className="col-4 my-2">
+                    <div className="col-xl-4  my-2">
                       <label>Voucher No</label>
                       <Form.Item>
                         <InputType />
                       </Form.Item>
                     </div>
-                    <div className="col-4 my-2">
+                    <div className="col-xl-4 my-2">
                       <label className="mb-2">Date</label>
                       <Form.Item>
                         <DatePicker />
                       </Form.Item>
                     </div>
-                    <div className="col-4 my-2">
+                    <div className="col-xl-4 my-2">
                       <label>Category</label>
                       <Form.Item>
                         <SelectBox>
@@ -45,19 +45,19 @@ function CreateExpence() {
                         </SelectBox>
                       </Form.Item>
                     </div>
-                    <div className="col-4 my-2">
+                    <div className="col-xl-4 my-2">
                       <label>Name</label>
                       <Form.Item>
                         <InputType />
                       </Form.Item>
                     </div>
-                    <div className="col-4 my-2">
+                    <div className="col-xl-4 my-2">
                       <label>Party</label>
                       <Form.Item>
                         <InputType />
                       </Form.Item>
                     </div>
-                    <div className="col-4 my-2">
+                    <div className="col-xl-4 my-2">
                       <label>Bill No</label>
                       <Form.Item>
                         <InputType />
@@ -69,7 +69,7 @@ function CreateExpence() {
                         <TextArea />
                       </Form.Item>
                     </div>
-                    <div className="col-4 my-2">
+                    <div className="col-xl-4 my-2">
                       <label>Employee</label>
                       <Form.Item>
                         <SelectBox>
@@ -77,7 +77,7 @@ function CreateExpence() {
                         </SelectBox>
                       </Form.Item>
                     </div>
-                    <div className="col-4 my-2 d-flex justify-content-center">
+                    <div className="col-xl-4 my-2 d-flex justify-content-center">
                       <div className="">
                         <label>Taxable</label>
                         <Form.Item>
@@ -85,25 +85,25 @@ function CreateExpence() {
                         </Form.Item>
                       </div>
                     </div>
-                    <div className="col-4 my-2">
+                    <div className="col-xl-4 my-2">
                       <label>Tax No</label>
                       <Form.Item>
                         <InputType />
                       </Form.Item>
                     </div>
-                    <div className="col-4 my-2">
+                    <div className="col-xl-4 my-2">
                       <label>Amount</label>
                       <Form.Item>
                         <Input_Number />
                       </Form.Item>
                     </div>
-                    <div className="col-4 my-2">
+                    <div className="col-xl-4 my-2">
                       <label>Tax Amount</label>
                       <Form.Item>
                         <Input_Number />
                       </Form.Item>
                     </div>
-                    <div className="col-4 my-2">
+                    <div className="col-xl-4 my-2">
                       <label>Total Amount</label>
                       <Form.Item>
                         <Input_Number />
@@ -115,8 +115,8 @@ function CreateExpence() {
                         <TextArea />
                       </Form.Item>
                     </div>
-                    <div className="col-4"></div>
-                    <div className="col-4 my-2">
+                    <div className="col-xl-4"></div>
+                    <div className="col-xl-4 my-2">
                       <div className="">
                         <label>Attachments</label>
 
@@ -125,7 +125,7 @@ function CreateExpence() {
                         </Form.Item>
                       </div>
                     </div>
-                    <div className="col-4"></div>
+                    <div className="col-xl-4"></div>
                     <div className="col-12 d-flex justify-content-center my-4 pt-2">
                       <Button btnType="save" type="submit">
                         Save

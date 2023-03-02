@@ -35,6 +35,7 @@ export default function Locations() {
   const [successPopup, setSuccessPopup] = useState(false);
   const [locationType, setLocationType] = useState("");
   const [selectCountry, setSelectCountry] = useState("");
+  console.log("select Country",selectCountry);
   const [allLocations, setAllLocations] = useState();
   const [locationId, setLocationId] = useState();
 
@@ -76,7 +77,8 @@ export default function Locations() {
           location_code: item.location_code,
           location_name: item.location_name,
           location_type: item.location_type,
-          location_country: item.countries.country_name,
+          location_country: item.countries.country_id,
+          location_countryname: item.countries.country_name,
         });
         setAllLocations(temp);
       })
@@ -120,6 +122,7 @@ export default function Locations() {
       location_name: item.location_name,
       location_type: item.location_type,
       location_country: item.location_country,
+      location_countryname:item.location_countryname,
     });
     setmodalViewLocation(true);
   };
@@ -128,7 +131,7 @@ export default function Locations() {
     setLocationId(e.location_id);
     addForm.setFieldsValue({
       locationId: e.location_id,
-      // locationName: e.location_name,
+      locationName: e.location_name,
       locationCode: e.location_code,
       locationType: e.location_type,
       locationCountry: e.location_country,
@@ -170,7 +173,66 @@ export default function Locations() {
       });
   };
 
+  const [serialNo, setserialNo] = useState(1);
   const columns = [
+    {
+      title: "SI.NO",
+      key: "index",
+      width: "13%",
+      render: (value, item, index) => serialNo + index,
+      align: "center",
+    },
+   
+    {
+      title: "CODE",
+      dataIndex: "location_code",
+      key: "location_code",
+      width:"13%",
+      // filteredValue: [searchCode],
+      // onFilter: (value, record) => {
+      //   return String(record.location_code)
+      //     .toLowerCase()
+      //     .includes(value.toLowerCase());
+      // },
+      align: "left",
+    },
+    {
+      title: "NAME",
+      dataIndex: "location_name",
+      key: "location_name",
+      filteredValue: [searchCode],
+      onFilter: (value, record) => {
+        return String(record.location_name)
+          .toLowerCase()
+          .includes(value.toLowerCase()) ||
+          String(record.location_code)
+          .toLowerCase()
+          .includes(value.toLowerCase()) ||
+          String(record.location_countryname)
+          .toLowerCase()
+          .includes(value.toLowerCase())
+      },
+      align: "left",
+    },
+    {
+      title: "TYPE",
+      dataIndex: "location_type",
+      key: "location_type",
+      width:"17%",
+      filteredValue: [searchbyType],
+      onFilter: (value, record) => {
+        return String(record.location_type)
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      },
+      align: "left",
+    },
+    {
+      title: "COUNTRY",
+      dataIndex: "location_countryname",
+      key: "location_countryname",
+      align: "left",
+    },
     {
       title: "ACTION",
       dataIndex: "action",
@@ -196,44 +258,6 @@ export default function Locations() {
       },
       align: "center",
     },
-    {
-      title: "CODE",
-      dataIndex: "location_code",
-      key: "location_code",
-      filteredValue: [searchCode],
-      onFilter: (value, record) => {
-        return String(record.location_code)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
-    },
-    {
-      title: "NAME",
-      dataIndex: "location_name",
-      key: "location_name",
-      filteredValue: [searchName],
-      onFilter: (value, record) => {
-        return String(record.location_name)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
-    },
-    {
-      title: "TYPE",
-      dataIndex: "location_type",
-      key: "location_type",
-      filteredValue: [searchbyType],
-      onFilter: (value, record) => {
-        return String(record.location_type)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
-    },
-    {
-      title: "COUNTRY",
-      dataIndex: "location_country",
-      key: "location_country",
-    },
   ];
 
   return (
@@ -248,7 +272,7 @@ export default function Locations() {
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
-              placeholder="Search by Code"
+              placeholder="Search"
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchCode}
               onChange={(e) => {
@@ -259,7 +283,7 @@ export default function Locations() {
               }}
             />
           </div>
-          <div className="col-4">
+          {/* <div className="col-4">
             <Input.Search
               placeholder="Search by Name"
               style={{ margin: "5px", borderRadius: "5px" }}
@@ -271,7 +295,7 @@ export default function Locations() {
                 setSearchName(value);
               }}
             />
-          </div>
+          </div> */}
           <div className="col-4">
               <Select
                 allowClear
@@ -561,6 +585,7 @@ export default function Locations() {
                 >
                   <SelectBox>
                     {selectCountry &&
+                      selectCountry.length > 0 &&
                       selectCountry.map((item, index) => {
                         return (
                           <Select.Option
@@ -646,7 +671,7 @@ export default function Locations() {
               <div className="col-1">:</div>
               <div className="col-6 ">
                 <p className="modal-view-data">
-                  {viewLocation.location_country}
+                  {viewLocation.location_countryname}
                 </p>
               </div>
             </div>

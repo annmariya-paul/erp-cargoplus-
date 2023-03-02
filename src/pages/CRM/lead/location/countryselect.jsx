@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import {  Button } from "react-bootstrap";
+// import {  Button } from "react-bootstrap";
+import Button from "../../../../components/button/button";
 import { Form } from "antd";
 import { useForm } from "react-hook-form";
 import Custom_model from "../../../../components/custom_modal/custom_model";
@@ -9,6 +10,8 @@ import { CRM_BASE_URL, GENERAL_SETTING_BASE_URL } from "../../../../api/bootapi"
 import SelectBox from "../../../../components/Select Box/SelectBox";
 import { Select } from "antd";
 import InputType from "../../../../components/Input Type textbox/InputType";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../../../../routes";
 
 function Countrystate() {
   const [modalShow, setModalShow] = useState(false);
@@ -20,7 +23,7 @@ function Countrystate() {
   const [countries, setCountries] = useState("");
   const [addForm] = Form.useForm();
   const [successPopup, setSuccessPopup] = useState(false);
-
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -33,6 +36,7 @@ function Countrystate() {
     if (!mShow) {
       setTimeout(() => {
         setSuccessPopup(false);
+        navigate(ROUTES.LEADLIST)
       }, time);
     }
   };
@@ -51,6 +55,7 @@ function Countrystate() {
   useEffect(() => {
     getAllCountries();
   }, []);
+
 
   const OnSubmit =  (data) => {
     PublicFetch.post(`${CRM_BASE_URL}/lead-location`, data)
@@ -175,13 +180,16 @@ function Countrystate() {
          
          
           <div className=" pt-4">
-            <Button
+            {/* <Button
               btntype="submit"
               className="btn_save"
               // onClick={() => setModalShow(true)}
             >
               Save
-            </Button>
+            </Button> */}
+              <Button type="submit" className="qtn_save" btnType="save">
+                    Save
+                  </Button>
             <Custom_model
               centered
               size={`sm`}

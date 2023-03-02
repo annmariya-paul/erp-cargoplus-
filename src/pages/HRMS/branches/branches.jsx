@@ -25,7 +25,7 @@ const [modalAddBranch, setModalAddBranch] = useState(false);
 
 const [pageSize, setPageSize] = useState("25");
 const [current, setCurrent] = useState(1);
-
+const [serialNo, setserialNo] = useState(1);
   const [branches, setBranches] = useState();
   const [Errormsg, setErrormsg] = useState();
   const [NameInput, setNameInput] = useState();
@@ -126,6 +126,43 @@ const [searchcodeText, setSearchcodeText] = useState("");
 //columns
   const columns = [
     {
+      title: "SI.NO",
+      key: "index",
+      width: "20%",
+      render: (value, item, index) => serialNo + index,
+      align: "center",
+    },
+   
+    {
+      title: "BRANCH NAME",
+      dataIndex: "branch_name",
+      key: "branch_name",
+      width: "30%",
+      filteredValue: [searchedText],
+      onFilter: (value, record) => {
+        return String(record.branch_name)
+          .toLowerCase()
+          .includes(value.toLowerCase()) ||
+          String(record.branch_code)
+          .toLowerCase()
+          .includes(value.toLowerCase())
+      },
+      align: "left",
+    },
+    {
+      title: "BRANCH CODE",
+      dataIndex: "branch_code",
+      key: "branch_code",
+      align: "center",
+      filteredValue: [searchcodeText],
+      onFilter: (value, record) => {
+        return String(record.branch_code)
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      },
+      align: "left",
+    },
+    {
       title: "ACTION",
       dataIndex: "action",
       key: "key",
@@ -150,30 +187,6 @@ const [searchcodeText, setSearchcodeText] = useState("");
         );
       },
       align: "center",
-    },
-    {
-      title: "BRANCH NAME",
-      dataIndex: "branch_name",
-      key: "branch_name",
-      filteredValue: [searchedText],
-      onFilter: (value, record) => {
-        return String(record.branch_name)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
-      align: "center",
-    },
-    {
-      title: "BRANCH CODE",
-      dataIndex: "branch_code",
-      key: "branch_code",
-      align: "center",
-      filteredValue: [searchcodeText],
-      onFilter: (value, record) => {
-        return String(record.branch_code)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
     },
   ];
 
@@ -257,9 +270,9 @@ const [searchcodeText, setSearchcodeText] = useState("");
           {/* <Leadlist_Icons /> */}
         </div>
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
-          <div className="col-4">
+          <div className="col-sm-4">
             <Input.Search
-              placeholder="Search by Branch Name"
+              placeholder="Search "
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
               onChange={(e) => {
@@ -270,7 +283,7 @@ const [searchcodeText, setSearchcodeText] = useState("");
               }}
             />
           </div>
-          <div className="col-4">
+          {/* <div className="col-sm-4">
             <Input.Search
               placeholder="Search by Branch Code"
               style={{ margin: "5px", borderRadius: "5px" }}
@@ -282,10 +295,10 @@ const [searchcodeText, setSearchcodeText] = useState("");
                 setSearchcodeText(value);
               }}
             />
-          </div>
+          </div> */}
         </div>
         <div className="row my-3">
-          <div className="col-4 px-3">
+          <div className="col-sm-4 px-3">
             <Select
               bordered={false}
               className="page_size_style"
@@ -312,7 +325,7 @@ const [searchcodeText, setSearchcodeText] = useState("");
               </Select.Option>
             </Select>
           </div>
-          <div className="col-4 d-flex align-items-center justify-content-center">
+          <div className="col-sm-4 d-flex align-items-center justify-content-center">
               <MyPagination
                 total={branches?.length}
                 current={current}
@@ -325,7 +338,7 @@ const [searchcodeText, setSearchcodeText] = useState("");
                 }}
               />
             </div>
-          <div className="col-4 d-flex justify-content-end">
+          <div className="col-sm-4 d-flex justify-content-end">
             <Button btnType="add" onClick={() =>
               {
                 setModalAddBranch(true);

@@ -41,6 +41,7 @@ export default function AddOpportunity(props) {
   const [date, setDate] = useState();
   console.log(date);
   const [name, setName] = useState();
+ 
   const [value, setValue] = useState([]);
   const [ShowEditModal, setShowEditModal] = useState(false); //oppertunity edit modal
   const [showProgressModal, setShowProgresssModal] = useState(false); //Oppoertunity progress modal
@@ -54,7 +55,9 @@ export default function AddOpportunity(props) {
     const float = parseFloat(e.target.value);
     setOppAmount(float.toFixed(2));
   };
-
+  const config = {
+    rules: [{ required: true, message: 'Please select Date!' }],
+  };
   const [oppoNumber, setOppoNumber] = useState();
   const [opptype, setOppType] = useState(null);
   // console.log(opptype);
@@ -76,7 +79,30 @@ export default function AddOpportunity(props) {
   const [oppdescription, setOppDescription] = useState();
   // console.log(oppdescription);
   const [oppstatus, setOppStatus] = useState();
+  const [leadName, setLeadName] = useState("");
+  console.log("lead name :",leadName);
   // console.log(typeof oppstatus);
+  const GetLeadData = () => {
+    PublicFetch.get(`${CRM_BASE_URL}/lead/${id}`)
+      .then((res) => {
+        if (res?.data?.success) {
+          console.log("Unique Lead Id data", res?.data?.data);
+       
+          setLeadName(res?.data?.data?.lead_customer_name);
+        
+         
+        } else {
+          console.log("FAILED T LOAD DATA");
+        }
+      })
+      .catch((err) => {
+        console.log("Errror while getting data", err);
+      });
+  };
+
+  useEffect(() => {
+    GetLeadData();
+  }, [id]);
 
   const oppdata = (data) => {
     console.log("ssss");
@@ -257,18 +283,19 @@ export default function AddOpportunity(props) {
                     <label>Generated/Converted by</label>
                     <Form.Item
                       name="lead_customer_generated"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please select an option",
-                        },
-                      ]}
+                      // rules={[
+                      //   {
+                      //     required: true,
+                      //     message: "Please select an option",
+                      //   },
+                      // ]}
                     >
                       <SelectBox
-                        placeholder={"--Please Select--"}
-                        value={oppId}
+                      // defaultValue={defaultValue}
+                        // placeholder={"--Please Select--"}
+                        defaultValue={leadName}
                       >
-                        <Select.Option value="oppId">{oppId}</Select.Option>
+                        <Select.Option value="oppId">{leadName}</Select.Option>
                       </SelectBox>
                     </Form.Item>
                   </div>
@@ -338,7 +365,8 @@ export default function AddOpportunity(props) {
 
                   <div className="col-sm-4 pt-2">
                     <label>Valid Up to</label>
-                    <Form.Item className="mt-2" name="lead_valid_up_to">
+                    <Form.Item className="mt-2" name="lead_valid_up_to"  {...config}>
+                
                       {/* <SelectBox placeholder={"--Please Select--"} value={oppId}>
                     <Select.Option value="oppId">{oppId}</Select.Option>
                   </SelectBox> */}

@@ -16,10 +16,13 @@ import { FiEdit } from "react-icons/fi";
 import CustomModel from "../../../../components/custom_modal/custom_model";
 import moment from "moment";
 
+
 import { CRM_BASE_URL_HRMS, CRM_BASE_URL_FMS } from "../../../../api/bootapi";
+import MyPagination from "../../../../components/Pagination/MyPagination";
 
 export default function Quotations(props) {
   const navigate = useNavigate();
+  const [serialNo, setserialNo] = useState(1);
   const [addForm] = Form.useForm();
   const [error, setError] = useState(false);
   const [successPopup, setSuccessPopup] = useState(false);
@@ -35,6 +38,14 @@ export default function Quotations(props) {
   const [CodeInput, setCodeInput] = useState();
   const [AllQuotations, setAllQuotations] = useState();
   //  const [showViewModal, setShowViewModal] = useState(false);
+  const [noofItems, setNoofItems] = useState("25");
+  const [current, setCurrent] = useState(1);
+
+  const[totalquotation,settotalquotation]= useState("")
+
+
+  const pageofIndex = noofItems * (current - 1) - 1 + 1;
+  const numofItemsTo = noofItems * current;
 
   const [editForm] = Form.useForm();
   const close_modal = (mShow, time) => {
@@ -51,6 +62,70 @@ export default function Quotations(props) {
 
   const columns = [
     {
+      title: "Sl. No.",
+      key: "index",
+      width: "7%",
+      render: (value, item, index) => serialNo + index,
+      align: "center",
+    },
+    {
+      title: "QUOTATION NO",
+      dataIndex: "quotation_no",
+      key: "quotation_no",
+      width: "10%",
+      filteredValue: [searchedText],
+      onFilter: (value, record) => {
+        return (
+          String(record.quotation_no)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.consignee_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.quotation_shipper)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
+      },
+      align: "center",
+    },
+    {
+      title: "DATE",
+      dataIndex: "quotation_date",
+      key: "quotation_date",
+      width: "9%",
+      align: "center",
+    },
+    {
+      title: "VALIDITY",
+      dataIndex: "quotation_validity",
+      key: "quotation_validity",
+      width: "9%",
+      align: "center",
+    },
+    {
+      title: "CONSIGNEE",
+      dataIndex: "consignee_name",
+      key: "consignee_name",
+      width: "18%",
+      // align: "center",
+    },
+    {
+      title: "SHIPPER",
+      dataIndex: "quotation_shipper",
+      key: "quotation_shipper",
+      width: "15%",
+      // align: "center",
+    },
+    {
+      title: "STATUS",
+      dataIndex: "quotation_status",
+      key: "quotation_status",
+      width: "12%",
+      // align: "center",
+    },
+
+    {
       title: "ACTION",
       dataIndex: "action",
       key: "key",
@@ -58,7 +133,7 @@ export default function Quotations(props) {
       render: (data, index) => {
         console.log("index is :", index);
         return (
-          <div className="d-flex justify-content-center align-items-center gap-2 me-2">
+          <div className="d-flex justify-content-center align-items-center">
             <div
               className="editIcon m-0 "
               // onClick={() => {
@@ -92,85 +167,46 @@ export default function Quotations(props) {
       align: "center",
     },
     {
-      title: "QUOTATION No",
-      dataIndex: "quotation_no",
-      key: "quotation_no",
-      filteredValue: [searchedText],
-      onFilter: (value, record) => {
-        return String(record.quotation_no)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
-      align: "center",
-    },
-    {
-      title: "DATE",
-      dataIndex: "quotation_date",
-      key: "quotation_date",
-      align: "center",
-    },
-    {
-      title: "VALIDITY",
-      dataIndex: "quotation_validity",
-      key: "quotation_validity",
-      align: "center",
-    },
-    {
-      title: "CONSIGNEE",
-      dataIndex: "consignee_name",
-      key: "consignee_name",
-      align: "center",
-    },
-    {
-      title: "SHIPPER",
-      dataIndex: "quotation_shipper",
-      key: "quotation_shipper",
-      align: "center",
-    },
-    {
-      title: "STATUS",
-      dataIndex: "quotation_status",
-      key: "quotation_status",
-      align: "center",
-    },
-    {
       title: "",
       dataIndex: "assign",
       key: "assign",
+      width: "9%",
       align: "center",
       render: (data, index) => {
         return (
           <>
-            {index.fms_v1_quotation_agents &&
-            index.fms_v1_quotation_agents.length > 0 ? (
-              <div className="">
-                <Button
-                  btnType="add"
-                  className="me-1 view_btn"
-                  onClick={() => {
-                    navigate(
-                      `${ROUTES.ASSIGN_QUOTATION}/${index.quotation_id}`
-                    );
-                  }}
-                >
-                  view
-                </Button>
-              </div>
-            ) : (
-              <div className="">
-                <Button
-                  btnType="add"
-                  className="me-1 view_btn"
-                  onClick={() => {
-                    navigate(
-                      `${ROUTES.ASSIGN_QUOTATION}/${index.quotation_id}`
-                    );
-                  }}
-                >
-                  Assign
-                </Button>
-              </div>
-            )}
+            <div className="row justify-content-center">
+              {index.fms_v1_quotation_agents &&
+              index.fms_v1_quotation_agents.length > 0 ? (
+                <div className="col-2 d-flex justify-content-center">
+                  <Button
+                    btnType="add"
+                    className="me-1 view_btn"
+                    onClick={() => {
+                      navigate(
+                        `${ROUTES.ASSIGN_QUOTATION}/${index.quotation_id}`
+                      );
+                    }}
+                  >
+                    view
+                  </Button>
+                </div>
+              ) : (
+                <div className="col-2 d-flex justify-content-center">
+                  <Button
+                    btnType="add"
+                    className="me-1 assign_btn"
+                    onClick={() => {
+                      navigate(
+                        `${ROUTES.ASSIGN_QUOTATION}/${index.quotation_id}`
+                      );
+                    }}
+                  >
+                    Assign
+                  </Button>
+                </div>
+              )}
+            </div>
           </>
         );
       },
@@ -201,11 +237,12 @@ export default function Quotations(props) {
   ];
 
   const getAllQuotation = () => {
-    PublicFetch.get(`${CRM_BASE_URL_FMS}/quotation?startIndex=0&noOfItems=100`)
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/quotation?startIndex=${pageofIndex}&noOfItems=${noofItems}`)
       .then((res) => {
         console.log("Response", res);
         if (res.data.success) {
           console.log("success", res.data.data);
+          settotalquotation(res.data.data)
           let temp = [];
           res.data.data.forEach((item, index) => {
             let date = moment(item.quotation_date).format("DD-MM-YYYY");
@@ -238,17 +275,17 @@ export default function Quotations(props) {
 
   return (
     <>
-      <div className="container-fluid container2 pt-3">
+      <div className="container-fluid container2 ">
         <div className="row flex-wrap">
           <div className="col">
-            <h5 className="lead_text">Quotations</h5>
+            <h5 className="lead_text mt-3">Quotations</h5>
           </div>
           {/* <Leadlist_Icons /> */}
         </div>
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
-              placeholder="Search by Quotation Number"
+              placeholder="Search"
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
               onChange={(e) => {
@@ -261,7 +298,7 @@ export default function Quotations(props) {
           </div>
         </div>
         <div className="row my-3">
-          <div className="col-xl-3 col-lg-3 col-sm-12 px-3">
+          <div className="col-4  px-3">
             <Select
               bordered={false}
               className="page_size_style"
@@ -285,11 +322,27 @@ export default function Quotations(props) {
               </Select.Option>
             </Select>
           </div>
-          <div className="col-xl-1 col-lg-1 col-sm-12 p-1"></div>
-          <div className="col-xl-8 col-lg-8 col-sm-12 d-flex justify-content-end">
+         
+          <div className="col-4 d-flex py-2 justify-content-center">
+            <MyPagination
+              total={parseInt(totalquotation?.length)}
+              current={current}
+              pageSize={noofItems}
+              // defaultPageSize={noofItems}
+              showSizeChanger={false}
+              onChange={(current, pageSize) => {
+                console.log("page index isss", pageSize);
+                setCurrent(current);
+                // setPageSize(pageSize);
+                // setNoofItems(pageSize);
+                // setCurrent(noofItems !== pageSize ? 0 : current);
+              }}
+            />
+          </div>
+          <div className="col-4 d-flex justify-content-end">
             <div className="col mb-2 px-4">
               <Link to={ROUTES.ADD_QUOTATION} style={{ color: "white" }}>
-                <Button btnType="add">Add Quotations</Button>
+                <Button btnType="add">Add Quotation</Button>
               </Link>
             </div>
           </div>
@@ -303,6 +356,22 @@ export default function Quotations(props) {
             custom_table_css="table_lead_list"
           />
         </div>
+        <div className="d-flex justify-content-center ">
+        <MyPagination
+              total={parseInt(totalquotation?.length)}
+              current={current}
+              pageSize={noofItems}
+              // defaultPageSize={noofItems}
+              showSizeChanger={false}
+              onChange={(current, pageSize) => {
+                console.log("page index isss", pageSize);
+                setCurrent(current);
+              
+              }}
+            />
+        </div>
+        
+       
       </div>
       {/* <CustomModel
         show={showViewModal}

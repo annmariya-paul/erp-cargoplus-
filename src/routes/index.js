@@ -95,6 +95,8 @@ const ROUTES = {
   INVOICE_LIST: "/invoice_list",
   INVOICE_PREVIEW: "/invoice_preview",
   INVOICE_PREVIEW_ID: "/invoice_preview/:id",
+  INVOICE_VIEW: "/invoice_view",
+  INVOICE_VIEW_ID: "/invoice_view/:id",
   INVOICE_PRINT: "/invoice_print",
   PRINT_INVOICE: "/print_invoice",
   PRINT_INVOICE_ID: "/print_invoice/:id",
@@ -106,6 +108,8 @@ const ROUTES = {
 
 
 
+  //  Accounts
+  DAILY_EXPENCE: "/daily_expence",
   // general settings
   CURRENCY: "/currency",
   COMPANYINFO: "/company_info",

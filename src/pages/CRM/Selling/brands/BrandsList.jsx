@@ -51,6 +51,7 @@ const getBase64 = (file) =>
 
 function BrandsList() {
   const [addForm] = Form.useForm();
+  const [serialNo, setserialNo] = useState(1);
   const navigate = useNavigate();
   const [pageSize, setPageSize] = useState("25"); // page size
   const [current, setCurrent] = useState(1);
@@ -255,28 +256,10 @@ function BrandsList() {
 
   const columns = [
     {
-      title: "ACTION",
-      dataIndex: "action",
-      key: "ACTION",
-      width: "14%",
-      render: (data, index) => {
-        return (
-          <div className="d-flex justify-content-center align-items-center gap-4">
-            <div
-              onClick={() => handleEditPhase2(index)}
-              className="actionEdit m-0 p-0"
-            >
-              <FaEdit />
-            </div>
-            <div
-              onClick={() => handleViewData(index)}
-              className="actionView m-0 p-0"
-            >
-              <MdPageview />
-            </div>
-          </div>
-        );
-      },
+      title: "Sl. No.",
+      key: "index",
+      width: "8%",
+      render: (value, item, index) => serialNo + index,
       align: "center",
     },
     {
@@ -320,6 +303,25 @@ function BrandsList() {
       //   width: "23%",
       align: "center",
     },
+    {
+      title: "ACTION",
+      dataIndex: "action",
+      key: "ACTION",
+      width: "12%",
+      render: (data, index) => {
+        return (
+          <div className="d-flex justify-content-center align-items-center">
+            <div onClick={() => handleEditPhase2(index)} className="actionEdit">
+              <FaEdit />
+            </div>
+            <div onClick={() => handleViewData(index)} className="actionView">
+              <MdPageview />
+            </div>
+          </div>
+        );
+      },
+      align: "center",
+    },
   ];
 
   //for show or hide colums start--Shahida
@@ -337,6 +339,8 @@ function BrandsList() {
   const BrandHeads = [
     ["brand_id", "brand_name", "brand_pic", "brand_description"],
   ];
+
+  const beforeUpload = (file, fileList) => {};
 
   return (
     <div>
@@ -585,12 +589,12 @@ function BrandsList() {
                       <label>Display Picture</label>
                       <Form.Item name="new">
                         <FileUpload
-                          multiple
+                          multiple={false}
                           listType="picture"
                           accept=".png,.jpg,.jpeg"
                           height={100}
-                          onPreview={handlePreview}
-                          beforeUpload={false}
+                          // onPreview={handlePreview}
+                          beforeUpload={beforeUpload}
                           onChange={(file) => {
                             console.log("Before upload", file.file);
                             console.log(
@@ -814,11 +818,11 @@ function BrandsList() {
                 <div className="col-12 my-3">
                   <Form.Item name="ImageUpload">
                     <FileUpload
-                      multiple
+                      multiple={false}
                       listType="picture"
                       accept=".png,.jpg,.jpeg"
                       height={100}
-                      beforeUpload={false}
+                      beforeUpload={beforeUpload}
                       onChange={(file) => {
                         console.log("Before upload", file.file);
                         console.log("Before upload file size", file.file.size);

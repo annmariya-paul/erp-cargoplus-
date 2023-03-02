@@ -113,18 +113,18 @@ export default function ProductEditModal({ show, prid, onHide, fun_call }) {
           setprev(res?.data?.data?.product_attributes);
           setPrDescription(res?.data?.data?.product_description);
           setPrImage(res?.data?.data?.product_pic);
-           editForm.setFieldsValue({
-             productname: res?.data?.data?.product_name,
-             productcode: res?.data?.data?.product_code,
-             productcategory: res?.data?.data?.product_category_id,
-             productbrand: res?.data?.data?.product_brand_id,
-             productunit: res?.data?.data?.product_unit_id,
+          editForm.setFieldsValue({
+            productname: res?.data?.data?.product_name,
+            productcode: res?.data?.data?.product_code,
+            productcategory: res?.data?.data?.product_category_id,
+            productbrand: res?.data?.data?.product_brand_id,
+            productunit: res?.data?.data?.product_unit_id,
 
-             productattributes: res?.data?.data?.product_attributes,
+            productattributes: res?.data?.data?.product_attributes,
 
-             productdescription: res?.data?.data?.product_description,
-             productimg: res?.data?.data?.product_pic,
-           });
+            productdescription: res?.data?.data?.product_description,
+            productimg: res?.data?.data?.product_pic,
+          });
         } else {
           console.log("FAILED T LOAD DATA");
         }
@@ -457,6 +457,7 @@ export default function ProductEditModal({ show, prid, onHide, fun_call }) {
       setPrAttributes([...tmp]);
     }
   };
+  const beforeUpload = (file, fileList) => {};
 
   return (
     <>
@@ -724,8 +725,8 @@ export default function ProductEditModal({ show, prid, onHide, fun_call }) {
                         multiple
                         listType="picture"
                         accept=".png,.jpeg"
-                        onPreview={handlePreview}
-                        beforeUpload={false}
+                        // onPreview={handlePreview}
+                        beforeUpload={beforeUpload}
                         onChange={(file) => {
                           console.log("Before upload", file.file);
                           console.log(

@@ -41,6 +41,7 @@ export default function LeadList() {
   const [allLeadList, setAllLeadList] = useState([]);
 
   const [currentcount, setCurrentcount] = useState();
+  const [serialNo, setserialNo] = useState(1);
   // pageindex =0 ->  25 * (1-1)- 1+1
 
   const [viewLead, setViewLead] = useState({
@@ -113,6 +114,7 @@ export default function LeadList() {
                         lead_description: item?.lead_description,
                         attachments: item?.attachments,
                         lead_status: i?.name,
+                        lead_creditdays:item?.lead_credit_days
                       });
                       setAllLeadList(array);
                     }
@@ -176,34 +178,14 @@ export default function LeadList() {
 
   const columns = [
     {
-      title: "ACTION",
-      dataIndex: "action",
-      key: "ACTION",
-      width: "14%",
-
-      render: (data, index) => {
-        // console.log("id is : ",index.lead_id);
-        return (
-          <div className="d-flex justify-content-center align-items-center gap-2">
-            <div className="m-0">
-              <Link
-                to={`${ROUTES.LEAD_EDIT}/${index.lead_id}`}
-                className="editcolor"
-              >
-                <FaEdit />
-              </Link>{" "}
-            </div>
-
-            <div className="actionView m-0">
-              <div className="editcolor" onClick={() => handleViewData(index)}>
-                <MdPageview />
-              </div>
-            </div>
-          </div>
-        );
-      },
+      title: "Sl. No.",
+      key: "index",
+      width: "7%",
+      render: (value, item, index) => serialNo + index,
       align: "center",
     },
+
+
     {
       title: "NAME",
       dataIndex: "lead_customer_name",
@@ -246,6 +228,47 @@ export default function LeadList() {
         return String(record.lead_status)
           .toLowerCase()
           .includes(value.toLowerCase());
+      },
+      align: "center",
+    },
+    {
+      title: "CREDIT DAYS",
+      dataIndex: "lead_creditdays",
+      key: "STATUS",
+      // filteredValue: [searchStatus],
+      // onFilter: (value, record) => {
+      //   return String(record.lead_status)
+      //     .toLowerCase()
+      //     .includes(value.toLowerCase());
+      // },
+      align: "center",
+    },
+    {
+      title: "ACTION",
+      dataIndex: "action",
+      key: "ACTION",
+      width: "14%",
+
+      render: (data, index) => {
+        // console.log("id is : ",index.lead_id);
+        return (
+          <div className="d-flex justify-content-center align-items-center gap-2">
+            <div className="m-0">
+              <Link
+                to={`${ROUTES.LEAD_EDIT}/${index.lead_id}`}
+                className="editcolor"
+              >
+                <FaEdit />
+              </Link>{" "}
+            </div>
+
+            <div className="actionView m-0">
+              <div className="editcolor" onClick={() => handleViewData(index)}>
+                <MdPageview />
+              </div>
+            </div>
+          </div>
+        );
       },
       align: "center",
     },

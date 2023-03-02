@@ -164,7 +164,46 @@ export default function TaxType() {
     }
   };
 
+  const [serialNo, setserialNo] = useState(1);
   const columns = [
+    {
+      title: "SI.NO",
+      key: "index",
+      width: "13%",
+      render: (value, item, index) => serialNo + index,
+      align: "center",
+    },
+ 
+    {
+      title: "TAX TYPE NAME",
+      dataIndex: "tax_type_name",
+      key: "tax_type_name",
+      filteredValue: [searchedText],
+      onFilter: (value, record) => {
+        return String(record.tax_type_name)
+          .toLowerCase()
+          .includes(value.toLowerCase()) ||
+          String(record.tax_type_percentage)
+          .toLowerCase()
+          .includes(value.toLowerCase()) ||
+          String(record.tax_type_description)
+          .toLowerCase()
+          .includes(value.toLowerCase())
+      },
+      align: "left",
+    },
+    {
+      title: "TAX PERCENTAGE",
+      dataIndex: "tax_type_percentage",
+      key: "tax_type_percentage",
+      align: "left",
+    },
+    {
+      title: "DESCRIPTION",
+      dataIndex: "tax_type_description",
+      key: "tax_type_description",
+      align: "left",
+    },
     {
       title: "ACTION",
       dataIndex: "action",
@@ -197,30 +236,6 @@ export default function TaxType() {
       },
       align: "center",
     },
-    {
-      title: "TAX TYPE NAME",
-      dataIndex: "tax_type_name",
-      key: "tax_type_name",
-      filteredValue: [searchedText],
-      onFilter: (value, record) => {
-        return String(record.tax_type_name || nameSearch)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
-      align: "center",
-    },
-    {
-      title: "TAX PERCENTAGE",
-      dataIndex: "tax_type_percentage",
-      key: "tax_type_percentage",
-      align: "center",
-    },
-    {
-      title: "DESCRIPTION",
-      dataIndex: "tax_type_description",
-      key: "tax_type_description",
-      align: "center",
-    },
   ];
 
   return (
@@ -235,7 +250,7 @@ export default function TaxType() {
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
-              placeholder="Search by Tax type Name"
+              placeholder="Search"
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
               onChange={(e) => {
@@ -468,7 +483,7 @@ export default function TaxType() {
                       />
                     </Form.Item>
                     {uniqueEditName ? (
-                      <p style={{ color: "red", marginTop: "-24px" }}>
+                      <p style={{ color: "red" }}>
                         Tax type Name {uniqueErrMsg.UniqueErrName}
                       </p>
                     ) : null}

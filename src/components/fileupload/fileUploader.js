@@ -15,8 +15,11 @@ export default function FileUpload({
   accept,
   height,
   filetype,
+  fileList,
+  beforeUpload,
 }) {
   // const [files, setFiles] = useState([]);
+
   // const { register, handleSubmit } = useForm();
 
   // const onDrop = useCallback((acceptedFiles) => {
@@ -55,19 +58,28 @@ export default function FileUpload({
   //     </li>
   //   );
   // });
+  const customAction = async () => {
+    setTimeout(() => {
+      return true;
+    }, 100);
+    return true;
+  };
 
   return (
     <>
       <Dragger
-        action={() =>
-          setTimeout(() => {
-            console.log();
-          }, 100)
-        }
+        // fileList={[]}
+        action={async () => await customAction()}
         multiple={multiple}
         listType={listType}
         accept={accept}
         height={height}
+        beforeUpload={beforeUpload}
+        customRequest={({ file, onSuccess }) => {
+          setTimeout(() => {
+            onSuccess("done");
+          }, 0);
+        }}
         onChange={onChange}
         onClick={onClick}
       >
@@ -87,6 +99,7 @@ export default function FileUpload({
         </p>
         <small className="filetype_text">{filetype}</small>
       </Dragger>
+
       {/* <div className="row ">
         <div className=" w-100 ">
           <div className="dropzone-div" {...getRootProps()}>

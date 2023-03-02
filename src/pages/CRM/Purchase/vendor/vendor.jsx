@@ -15,6 +15,7 @@ import {
   CRM_BASE_URL_PURCHASING,
   GENERAL_SETTING_BASE_URL,
 } from "../../../../api/bootapi";
+import { vendor_Organisation } from "../../../../utils/SelectOptions";
 
 function Vendor() {
   const [addForm] = Form.useForm();
@@ -54,7 +55,9 @@ function Vendor() {
   const [editvendordescription, seteditvendordescription] = useState("");
   const [editcountry, seteditcountry] = useState("");
   const [editvendorid, seteditvendorid] = useState("");
-
+  const [totalvendor,settotalvendor] =useState("")
+  const [vendor_org,setvendor_org]= useState(vendor_Organisation );
+  const [serialNo, setserialNo] = useState(1);
   const [viewvendor, setViewvendor] = useState({
     id: "",
     vendor_name: "",
@@ -67,6 +70,7 @@ function Vendor() {
     vendor_taxno: "",
     vendor_address: "",
     vendor_description: "",
+    vendor_country_id: "",
   });
 
   const handleViewClick = (item) => {
@@ -84,6 +88,7 @@ function Vendor() {
       vendor_description: item.vendor_description,
       vendor_taxno: item.vender_taxno,
       vendor_address: item.vendor_address,
+      vendor_country_id: item.vendor_country_id,
     });
     setShowViewModal(true);
   };
@@ -117,13 +122,13 @@ function Vendor() {
     seteditvendordescription(e.vendor_description);
     seteditvendortaxno(e.vender_taxno);
 
-    seteditvendorOrganisation(e.vendor_Organisation);
+    seteditvendorOrganisation(e.vendor_org_type);
     seteditcountry(e.vendor_country_id);
     seteditvendortyp(e.vendor_type_id);
 
     editForm.setFieldsValue({
       vendor_name: e.vendor_name,
-      vendor_Organisation: e.vendor_Organisation,
+      vendor_Organisation: e.vendor_org_type,
       vendor_email: e.vendor_email,
       vendor_contact: e.vendor_contact,
       vendor_city: e.vendor_city,
@@ -141,7 +146,7 @@ function Vendor() {
   };
 
   const handleviewtoedit = (e) => {
-    console.log("editing id iss", e);
+    console.log("editing view to edit", e);
     seteditvendorid(e.id);
     seteditvendorname(e.vendor_name);
     seteditvendoremail(e.vendor_email);
@@ -149,24 +154,24 @@ function Vendor() {
     seteditvendoraddress(e.vendor_address);
     seteditvendorcontact(e.vendor_contact);
     seteditvendordescription(e.vendor_description);
-    seteditvendortaxno(e.vender_taxno);
+    seteditvendortaxno(e.vendor_taxno);
 
-    seteditvendorOrganisation(e.vendor_Organisation);
+    seteditvendorOrganisation(e.vendor_organisation);
     seteditcountry(e.vendor_country_id);
-    seteditvendortyp(e.vendor_type_id);
+    seteditvendortyp(e.vendor_type);
 
     editForm.setFieldsValue({
       vendor_name: e.vendor_name,
-      vendor_Organisation: e.vendor_Organisation,
+      vendor_Organisation: e.vendor_organisation,
       vendor_email: e.vendor_email,
       vendor_contact: e.vendor_contact,
       vendor_city: e.vendor_city,
-      vendor_taxno: e.vender_taxno,
+      vendor_taxno: e.vendor_taxno,
       vendor_address: e.vendor_address,
       vendor_description: e.vendor_description,
 
       vendor_country: e.vendor_country_id,
-      vendor_type: e.vendor_type_id,
+      vendor_type: e.vendor_type,
     });
     setVendorEditPopup(true);
   };
@@ -184,7 +189,7 @@ function Vendor() {
           country_id: editcountry,
           city: editvendorcity,
           address: editvendoraddress,
-          description: editvendordescription,
+          desc: editvendordescription,
           tax_no: editvendortaxno,
         }
       );
@@ -222,13 +227,21 @@ function Vendor() {
         `${CRM_BASE_URL_PURCHASING}/vendors`
       );
       console.log("getting all vendorss", allvendor.data.data);
+      settotalvendor(allvendor.data.data)
       // setAllvendor(allvendor.data.data)
       let arry = [];
       allvendor.data.data.map((i, indx) => {
+        vendor_Organisation.forEach((itm,index)=>{
+          console.log("vndr",itm)
+          if (
+            itm.value === i.vendor_org_type
+          )
+          {
+
         arry.push({
           vendor_name: i.vendor_name,
           vendor_email: i.vendor_email,
-          vendor_org_type: i.vendor_org_type,
+          vendor_org_type: itm.name,
           vendor_country: i.countries.country_name,
           vendor_country_id: i.vendor_country_id,
           vendor_contact: i.vendor_contact,
@@ -238,7 +251,11 @@ function Vendor() {
           vendor_type_id: i.vendor_type_id,
           vender_id: i.vendor_id,
           vender_taxno: i.vendor_tax_no,
+          vendor_country_id: i.vendor_country_id,
         });
+      }
+
+      })
       });
       console.log("arryss", arry);
       setAllvendor(arry);
@@ -271,7 +288,7 @@ function Vendor() {
           country_id: countryis,
           city: vendorcity,
           address: vendoraddress,
-          description: vendordescription,
+          desc: vendordescription,
           tax_no: vendortaxno,
         }
       );
@@ -296,46 +313,52 @@ function Vendor() {
 
   const columns = [
     {
-      title: "ACTION",
-      dataIndex: "action",
-      key: "key",
-      width: "30%",
-      render: (data, index) => {
-        console.log("index is :", index);
-        return (
-          <div className="d-flex justify-content-center align-items-center gap-2">
-            <div
-              className="editIcon m-0"
-              onClick={() => {
-                handleEditclick(index);
-              }}
-            >
-              <FaEdit />
-            </div>
-            <div
-              className="viewIcon m-0"
-              onClick={() => handleViewClick(index)}
-            >
-              <MdPageview style={{ marginLeft: 15, marginRight: 15 }} />
-            </div>
-            <div className="deleteIcon m-0">
-              <FaTrash />
-            </div>
-          </div>
-        );
-      },
+      title: "Sl. No.",
+      key: "index",
+      render: (value, item, index) => serialNo + index,
       align: "center",
     },
+    // {
+    //   title: "ACTION",
+    //   dataIndex: "action",
+    //   key: "key",
+    //   width: "30%",
+    //   render: (data, index) => {
+    //     console.log("index is :", index);
+    //     return (
+    //       <div className="d-flex justify-content-center align-items-center gap-2">
+    //         <div
+    //           className="editIcon m-0"
+    //           onClick={() => {
+    //             handleEditclick(index);
+    //           }}
+    //         >
+    //           <FaEdit />
+    //         </div>
+    //         <div
+    //           className="viewIcon m-0"
+    //           onClick={() => handleViewClick(index)}
+    //         >
+    //           <MdPageview style={{ marginLeft: 15, marginRight: 15 }} />
+    //         </div>
+    //         <div className="deleteIcon m-0">
+    //           <FaTrash />
+    //         </div>
+    //       </div>
+    //     );
+    //   },
+    //   align: "center",
+    // },
     {
       title: "VENDOR ",
       dataIndex: "vendor_name",
-      key: "freight_type_name",
-      //   filteredValue: [searchedText],
-      //   onFilter: (value, record) => {
-      //     return String(record.freight_type_name  || nameSearch)
-      //       .toLowerCase()
-      //       .includes(value.toLowerCase());
-      //   },
+      key: "vendor_name",
+      filteredValue: [searchedText],
+      onFilter: (value, record) => {
+        return String(record.vendor_name)
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      },
       align: "center",
     },
     {
@@ -374,6 +397,37 @@ function Vendor() {
       },
       align: "center",
     },
+    {
+      title: "ACTION",
+      dataIndex: "action",
+      key: "key",
+      width: "30%",
+      render: (data, index) => {
+        console.log("index is :", index);
+        return (
+          <div className="d-flex justify-content-center align-items-center gap-2">
+            <div
+              className="editIcon m-0"
+              onClick={() => {
+                handleEditclick(index);
+              }}
+            >
+              <FaEdit />
+            </div>
+            <div
+              className="viewIcon m-0"
+              onClick={() => handleViewClick(index)}
+            >
+              <MdPageview style={{ marginLeft: 15, marginRight: 15 }} />
+            </div>
+            <div className="deleteIcon m-0">
+              <FaTrash />
+            </div>
+          </div>
+        );
+      },
+      align: "center",
+    },
   ];
   // console.log()
 
@@ -405,7 +459,7 @@ function Vendor() {
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
-              placeholder="Search by Freight type Name"
+              placeholder="Search by Vendor Name"
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
               onChange={(e) => {
@@ -445,7 +499,7 @@ function Vendor() {
 
           <div className="col-4 d-flex  align-items-center justify-content-center">
             <MyPagination
-              //  total={parseInt(vendortypes?.length)}
+               total={parseInt(totalvendor?.length)}
               current={current}
               showSizeChanger={true}
               pageSize={pageSize}
@@ -477,7 +531,7 @@ function Vendor() {
         </div>
         <div className="d-flex py-2 justify-content-center">
           <MyPagination
-            //  total={parseInt(vendortypes?.length)}
+             total={parseInt(totalvendor?.length)}
             current={current}
             showSizeChanger={true}
             pageSize={pageSize}
@@ -498,7 +552,7 @@ function Vendor() {
         View_list
         list_content={
           <>
-            <div className="row px-5">
+            <div className="row px-4 ">
               <h5 className="lead_text">Add Vendor</h5>
             </div>
             <Form
@@ -511,7 +565,7 @@ function Vendor() {
                 console.log(error);
               }}
             >
-              <div className="row py-1">
+              <div className="row px-4">
                 <div className="col-4 pt-1">
                   <label> Name</label>
                   <div>
@@ -521,19 +575,9 @@ function Vendor() {
                         {
                           required: true,
                           pattern: new RegExp("^[A-Za-z ]+$"),
-                          message: "Please enter a Valid vendortype Name",
-                        },
-
-                        {
-                          min: 3,
-                          message: "Name must be atleast 3 characters",
-                        },
-                        {
-                          max: 100,
-                          message: " Name cannot be longer than 100 characters",
+                          message: "Please enter a Valid vendor Name",
                         },
                       ]}
-                      // onChange={(e) => setFrighttypename(e.target.value)}
                     >
                       <InputType
                         value={vendorname}
@@ -553,21 +597,15 @@ function Vendor() {
                       rules={[
                         {
                           required: true,
-                          pattern: new RegExp("^[A-Za-z ]+$"),
-                          message: "Please enter a Valid vendortype Name",
-                        },
-
-                        {
-                          min: 3,
-                          message: "Name must be atleast 3 characters",
-                        },
-                        {
-                          max: 100,
-                          message: " Name cannot be longer than 100 characters",
+                          // pattern: new RegExp("^[A-Za-z ]+$"),
+                          message: "Please enter a Valid organisation",
                         },
                       ]}
                     >
                       <SelectBox
+                      showSearch={true}
+                      allowClear
+                      optionFilterProp="children"
                         value={vendorOrganisation}
                         onChange={(e) => {
                           setvendorOrganisation(e);
@@ -586,22 +624,12 @@ function Vendor() {
                   <div>
                     <Form.Item
                       name="vendortype"
-                      // rules={[
-                      //   {
-                      //     required: true,
-                      //     pattern: new RegExp("^[A-Za-z ]+$"),
-                      //     message: "Please enter a Valid vendortype Name",
-                      //   },
-
-                      //   {
-                      //     min: 3,
-                      //     message: "Name must be atleast 3 characters",
-                      //   },
-                      //   {
-                      //     max: 100,
-                      //     message: " Name cannot be longer than 100 characters",
-                      //   },
-                      // ]}
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please enter a Valid vendortype",
+                        },
+                      ]}
                     >
                       <SelectBox
                         showSearch={true}
@@ -611,7 +639,6 @@ function Vendor() {
                         onChange={(e) => {
                           setvendortyp(e);
                         }}
-                        // onChange={handleChange}
                       >
                         {vendortypes &&
                           vendortypes.length > 0 &&
@@ -632,29 +659,19 @@ function Vendor() {
                 </div>
               </div>
 
-              <div className="row py-4">
+              <div className="row px-4">
                 <div className="col-4 pt-1">
                   <label> Email</label>
                   <div>
                     <Form.Item
                       name="vendoremail"
-                      // rules={[
-                      //   {
-                      //     required: true,
-                      //     pattern: new RegExp("^[A-Za-z ]+$"),
-                      //     message: "Please enter a Valid vendortype Name",
-                      //   },
-
-                      //   {
-                      //     min: 3,
-                      //     message: "Name must be atleast 3 characters",
-                      //   },
-                      //   {
-                      //     max: 100,
-                      //     message: " Name cannot be longer than 100 characters",
-                      //   },
-                      // ]}
-                      // onChange={(e) => setFrighttypename(e.target.value)}
+                      rules={[
+                        {
+                          required: true,
+                          // pattern: new RegExp("^[A-Za-z ]+$"),
+                          message: "Please enter a Valid email",
+                        },
+                      ]}
                     >
                       <InputType
                         value={vendoremail}
@@ -671,22 +688,22 @@ function Vendor() {
                   <div>
                     <Form.Item
                       name="vendorcontact"
-                      // rules={[
-                      //   {
-                      //     required: true,
-                      //     pattern: new RegExp("^[A-Za-z ]+$"),
-                      //     message: "Please enter a Valid vendortype Name",
-                      //   },
+                      rules={[
+                        {
+                          required: true,
 
-                      //   {
-                      //     min: 3,
-                      //     message: "Name must be atleast 3 characters",
-                      //   },
-                      //   {
-                      //     max: 100,
-                      //     message: " Name cannot be longer than 100 characters",
-                      //   },
-                      // ]}
+                          message: "Please enter a Valid contact",
+                        },
+
+                        // {
+                        //   min: 3,
+                        //   message: "Name must be atleast 3 characters",
+                        // },
+                        // {
+                        //   max: 100,
+                        //   message: " Name cannot be longer than 100 characters",
+                        // },
+                      ]}
                     >
                       <InputType
                         value={vendorcontact}
@@ -703,22 +720,12 @@ function Vendor() {
                   <div>
                     <Form.Item
                       name="vendorcountry"
-                      // rules={[
-                      //   {
-                      //     required: true,
-                      //     pattern: new RegExp("^[A-Za-z ]+$"),
-                      //     message: "Please enter a Valid vendortype Name",
-                      //   },
-
-                      //   {
-                      //     min: 3,
-                      //     message: "Name must be atleast 3 characters",
-                      //   },
-                      //   {
-                      //     max: 100,
-                      //     message: " Name cannot be longer than 100 characters",
-                      //   },
-                      // ]}
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please enter a Valid country",
+                        },
+                      ]}
                     >
                       <SelectBox
                         showSearch={true}
@@ -746,29 +753,11 @@ function Vendor() {
                 </div>
               </div>
 
-              <div className="row">
+              <div className="row px-4">
                 <div className="col-4 pt-1">
                   <label>City</label>
                   <div>
-                    <Form.Item
-                      name="vendorcity"
-                      rules={[
-                        {
-                          required: true,
-                          // pattern: new RegExp("^[A-Za-z ]+$"),
-                          message: "Please enter a Valid vendortype Name",
-                        },
-
-                        {
-                          min: 3,
-                          message: "Name must be atleast 3 characters",
-                        },
-                        {
-                          max: 100,
-                          message: " Name cannot be longer than 100 characters",
-                        },
-                      ]}
-                    >
+                    <Form.Item name="vendorcity">
                       <InputType
                         value={vendorcity}
                         onChange={(e) => {
@@ -782,25 +771,7 @@ function Vendor() {
                 <div className="col-4 pt-1">
                   <label>Tax No</label>
                   <div>
-                    <Form.Item
-                      name="vendortaxno"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z ]+$"),
-                          message: "Please enter a Valid vendortype Name",
-                        },
-
-                        {
-                          min: 3,
-                          message: "Name must be atleast 3 characters",
-                        },
-                        {
-                          max: 100,
-                          message: " Name cannot be longer than 100 characters",
-                        },
-                      ]}
-                    >
+                    <Form.Item name="vendortaxno">
                       <InputType
                         value={vendortaxno}
                         onChange={(e) => {
@@ -812,28 +783,13 @@ function Vendor() {
                 </div>
               </div>
 
-              <div className="row">
+              <div className="row mt-4 px-4">
                 <div className="col-12 ">
                   <label> Address</label>
                   <div>
-                    <Form.Item
-                      name="vendoraddress"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z ]+$"),
-                          message: "Please enter a Valid vendortype Name",
-                        },
-
-                        {
-                          min: 3,
-                          message: "Name must be atleast 3 characters",
-                        },
-                        {
-                          max: 100,
-                          message: " Name cannot be longer than 100 characters",
-                        },
-                      ]}
+                    <Form.Item 
+                     className="py-1"
+                    name="vendoraddress"
                     >
                       <TextArea
                         value={vendoraddress}
@@ -846,29 +802,13 @@ function Vendor() {
                 </div>
               </div>
 
-              <div className="row">
+              <div className="row mt-4 px-4">
                 <div className="col-12 ">
                   <label> Description</label>
                   <div>
-                    <Form.Item
-                      name="vendordescription"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z ]+$"),
-                          message: "Please enter a Valid vendortype Name",
-                        },
-
-                        {
-                          min: 3,
-                          message: "Name must be atleast 3 characters",
-                        },
-                        {
-                          max: 100,
-                          message: " Name cannot be longer than 100 characters",
-                        },
-                      ]}
-                    >
+                    <Form.Item 
+                    className="py-1"
+                    name="vendordescription">
                       <TextArea
                         value={vendordescription}
                         onChange={(e) => {
@@ -1022,10 +962,10 @@ function Vendor() {
         View_list
         list_content={
           <div>
-            <div className="row px-5 ">
+            <div className="row px-3 ">
               <h5 className="lead_text">Edit Vendor </h5>
-
-              <div className="row ">
+              </div>
+              <div className="row px-4">
                 <Form
                   form={editForm}
                   onFinish={(values) => {
@@ -1047,18 +987,10 @@ function Vendor() {
                             {
                               required: true,
                               pattern: new RegExp("^[A-Za-z ]+$"),
-                              message: "Please enter a Valid vendortype Name",
+                              message: "Please enter a Valid vendor Name",
                             },
 
-                            {
-                              min: 3,
-                              message: "Name must be atleast 3 characters",
-                            },
-                            {
-                              max: 100,
-                              message:
-                                " Name cannot be longer than 100 characters",
-                            },
+                           
                           ]}
                           // onChange={(e) => setFrighttypename(e.target.value)}
                         >
@@ -1080,19 +1012,11 @@ function Vendor() {
                           rules={[
                             {
                               required: true,
-                              pattern: new RegExp("^[A-Za-z ]+$"),
-                              message: "Please enter a Valid vendortype Name",
+                              // pattern: new RegExp("^[A-Za-z ]+$"),
+                              message: "Please enter a Valid organisation",
                             },
 
-                            {
-                              min: 3,
-                              message: "Name must be atleast 3 characters",
-                            },
-                            {
-                              max: 100,
-                              message:
-                                " Name cannot be longer than 100 characters",
-                            },
+                          
                           ]}
                         >
                           <SelectBox
@@ -1116,22 +1040,12 @@ function Vendor() {
                       <div>
                         <Form.Item
                           name="vendor_type"
-                          // rules={[
-                          //   {
-                          //     required: true,
-                          //     pattern: new RegExp("^[A-Za-z ]+$"),
-                          //     message: "Please enter a Valid vendortype Name",
-                          //   },
-
-                          //   {
-                          //     min: 3,
-                          //     message: "Name must be atleast 3 characters",
-                          //   },
-                          //   {
-                          //     max: 100,
-                          //     message: " Name cannot be longer than 100 characters",
-                          //   },
-                          // ]}
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please enter a Valid vendortype",
+                            },
+                          ]}
                         >
                           <SelectBox
                             showSearch={true}
@@ -1162,29 +1076,22 @@ function Vendor() {
                     </div>
                   </div>
 
-                  <div className="row py-4">
+                  <div className="row py-3">
                     <div className="col-4 pt-1">
                       <label> Email</label>
                       <div>
                         <Form.Item
                           name="vendor_email"
-                          // rules={[
-                          //   {
-                          //     required: true,
-                          //     pattern: new RegExp("^[A-Za-z ]+$"),
-                          //     message: "Please enter a Valid vendortype Name",
-                          //   },
+                          rules={[
+                            {
+                              required: true,
+                              // pattern: new RegExp("^[A-Za-z ]+$"),
+                              message: "Please enter a Valid email",
+                            },
 
-                          //   {
-                          //     min: 3,
-                          //     message: "Name must be atleast 3 characters",
-                          //   },
-                          //   {
-                          //     max: 100,
-                          //     message: " Name cannot be longer than 100 characters",
-                          //   },
-                          // ]}
-                          // onChange={(e) => setFrighttypename(e.target.value)}
+                          
+                          ]}
+                       
                         >
                           <InputType
                             value={editvendoremail}
@@ -1201,22 +1108,15 @@ function Vendor() {
                       <div>
                         <Form.Item
                           name="vendor_contact"
-                          // rules={[
-                          //   {
-                          //     required: true,
-                          //     pattern: new RegExp("^[A-Za-z ]+$"),
-                          //     message: "Please enter a Valid vendortype Name",
-                          //   },
+                          rules={[
+                            {
+                              required: true,
+                              // pattern: new RegExp("^[A-Za-z ]+$"),
+                              message: "Please enter a Valid contact",
+                            },
 
-                          //   {
-                          //     min: 3,
-                          //     message: "Name must be atleast 3 characters",
-                          //   },
-                          //   {
-                          //     max: 100,
-                          //     message: " Name cannot be longer than 100 characters",
-                          //   },
-                          // ]}
+                            
+                          ]}
                         >
                           <InputType
                             value={editvendorcontact}
@@ -1233,22 +1133,13 @@ function Vendor() {
                       <div>
                         <Form.Item
                           name="vendor_country"
-                          // rules={[
-                          //   {
-                          //     required: true,
-                          //     pattern: new RegExp("^[A-Za-z ]+$"),
-                          //     message: "Please enter a Valid vendortype Name",
-                          //   },
-
-                          //   {
-                          //     min: 3,
-                          //     message: "Name must be atleast 3 characters",
-                          //   },
-                          //   {
-                          //     max: 100,
-                          //     message: " Name cannot be longer than 100 characters",
-                          //   },
-                          // ]}
+                          rules={[
+                            {
+                              required: true,
+                            
+                              message: "Please select a Valid country",
+                            },
+                          ]}
                         >
                           <SelectBox
                             showSearch={true}
@@ -1286,23 +1177,7 @@ function Vendor() {
                       <div>
                         <Form.Item
                           name="vendor_city"
-                          rules={[
-                            {
-                              required: true,
-                              // pattern: new RegExp("^[A-Za-z ]+$"),
-                              message: "Please enter a Valid vendortype Name",
-                            },
-
-                            {
-                              min: 3,
-                              message: "Name must be atleast 3 characters",
-                            },
-                            {
-                              max: 100,
-                              message:
-                                " Name cannot be longer than 100 characters",
-                            },
-                          ]}
+                         
                         >
                           <InputType
                             value={editvendorcity}
@@ -1319,23 +1194,7 @@ function Vendor() {
                       <div>
                         <Form.Item
                           name="vendor_taxno"
-                          rules={[
-                            {
-                              required: true,
-                              pattern: new RegExp("^[A-Za-z ]+$"),
-                              message: "Please enter a Valid vendortype Name",
-                            },
-
-                            {
-                              min: 3,
-                              message: "Name must be atleast 3 characters",
-                            },
-                            {
-                              max: 100,
-                              message:
-                                " Name cannot be longer than 100 characters",
-                            },
-                          ]}
+                          
                         >
                           <InputType
                             value={editvendortaxno}
@@ -1348,29 +1207,13 @@ function Vendor() {
                     </div>
                   </div>
 
-                  <div className="row">
+                  <div className="row mt-4">
                     <div className="col-12 ">
                       <label> Address</label>
                       <div>
                         <Form.Item
                           name="vendor_address"
-                          rules={[
-                            {
-                              required: true,
-                              pattern: new RegExp("^[A-Za-z ]+$"),
-                              message: "Please enter a Valid vendortype Name",
-                            },
-
-                            {
-                              min: 3,
-                              message: "Name must be atleast 3 characters",
-                            },
-                            {
-                              max: 100,
-                              message:
-                                " Name cannot be longer than 100 characters",
-                            },
-                          ]}
+                          className="mt-1"
                         >
                           <TextArea
                             value={editvendoraddress}
@@ -1383,29 +1226,13 @@ function Vendor() {
                     </div>
                   </div>
 
-                  <div className="row">
+                  <div className="row mt-4">
                     <div className="col-12 ">
                       <label> Description</label>
                       <div>
                         <Form.Item
                           name="vendor_description"
-                          rules={[
-                            {
-                              required: true,
-                              pattern: new RegExp("^[A-Za-z ]+$"),
-                              message: "Please enter a Valid vendortype Name",
-                            },
-
-                            {
-                              min: 3,
-                              message: "Name must be atleast 3 characters",
-                            },
-                            {
-                              max: 100,
-                              message:
-                                " Name cannot be longer than 100 characters",
-                            },
-                          ]}
+                          className="mt-1"
                         >
                           <TextArea
                             value={editvendordescription}
@@ -1430,7 +1257,7 @@ function Vendor() {
                   ) : (
                     ""
                   )} */}
-            </div>
+           
           </div>
         }
       />

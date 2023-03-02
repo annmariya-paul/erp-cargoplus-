@@ -38,7 +38,13 @@ export default function Attribute(props) {
   const [uniqueCode, setuniqueCode] = useState(false);
   const [attriName, setAttriName] = useState();
 
+  const [saveSuccess, setSaveSuccess] = useState(false);
+  const [showModaladd,setShowModaladd]= useState(false);
+  const[addattributename,setaddattributename] =useState("")
+  const[addattributedesc,setaddattributedesc] =useState("")
+  const [serialNo, setserialNo] = useState(1);
   const [addForm] = Form.useForm();
+  const [editForm]= Form.useForm()
   const [viewattributes, setViewAttributes] = useState({
     id: "",
     attributename: "",
@@ -71,7 +77,7 @@ export default function Attribute(props) {
     setAttributeId(i.id);
     setAttributeName(i.attributename);
     setAttributeDescription(i.attributedescription);
-    addForm.setFieldsValue({
+    editForm.setFieldsValue({
       // unitid: e.unit_id,
       attribute: i.attributename,
       description: i.attributedescription,
@@ -87,7 +93,7 @@ export default function Attribute(props) {
     setAttributeName(e.attribute_name);
     setAttributeDescription(e.attribute_description);
     setAttriName(e.attribute_name);
-    addForm.setFieldsValue({
+    editForm.setFieldsValue({
       // unitid: e.unit_id,
       attribute: e.attribute_name,
       description: e.attribute_description,
@@ -109,12 +115,47 @@ export default function Attribute(props) {
       console.log("successfully updated ", updated);
       if (updated.data.success) {
         setShowModalEdit(false);
+        setSaveSuccess(true);
+        close_modal(saveSuccess, 1000);
         getallattributes();
       } 
     } catch (err) {
       console.log("error to update attributes");
     }
   };
+
+  const close_modal = (mShow, time) => {
+    if (!mShow) {
+      setTimeout(() => {
+        setSaveSuccess(false);
+        // navigate(ROUTES.ATTRIBUTES);
+      }, time);
+    }
+  };
+    // function to create attributes
+
+    const createAttributes = async () => {
+      try {
+        const addattributes = await PublicFetch.post(
+          `${CRM_BASE_URL_SELLING}/attribute`,
+          {
+            attribute_name: addattributename,
+            attribute_description: addattributedesc,
+          }
+        );
+        console.log("attributes added successfully", addattributes);
+        if (addattributes.data.success) {
+          setShowModaladd(false)
+          addForm.resetFields()
+          setSaveSuccess(true);
+          close_modal(saveSuccess, 1000);
+        } else if (addattributes.data.success === false) {
+          alert(addattributes.data.data);
+        }
+      } catch (err) {
+        console.log("err to add the attributes", err);
+      }
+    };
 
   // function to getting attributes  unnimaya 11/11/22
   const getallattributes = async () => {
@@ -147,6 +188,42 @@ export default function Attribute(props) {
   ];
 
   const columns = [
+  
+    {
+      title: "Sl. No",
+      key: "index",
+      render: (value, item, index) => serialNo + index,
+      align: "center",
+      width:"10%"
+    },
+
+    {
+      title: "NAME",
+      dataIndex: "attribute_name",
+      key: "NAME",
+      width: "25%",
+      filteredValue: [searchedText],
+      onFilter: (value, record) => {
+        console.log("valuesss in", record);
+        return (
+          String(record.attribute_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.attribute_description)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
+      },
+      align: "left",
+    },
+    {
+      title: "DESCRIPTION",
+      dataIndex: "attribute_description",
+      width: "30%",
+      key: "DESCRIPTION",
+
+      align: "left",
+    },
     {
       title: "ACTION",
       dataIndex: "action",
@@ -174,33 +251,6 @@ export default function Attribute(props) {
           </div>
         );
       },
-    },
-    {
-      title: "NAME",
-      dataIndex: "attribute_name",
-      key: "NAME",
-      width: "25%",
-      filteredValue: [searchedText],
-      onFilter: (value, record) => {
-        console.log("valuesss in", record);
-        return (
-          String(record.attribute_name)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.attribute_description)
-            .toLowerCase()
-            .includes(value.toLowerCase())
-        );
-      },
-      align: "left",
-    },
-    {
-      title: "DESCRIPTION",
-      dataIndex: "attribute_description",
-      width: "30%",
-      key: "DESCRIPTION",
-
-      align: "left",
     },
   ];
 
@@ -306,9 +356,11 @@ export default function Attribute(props) {
         </div>
 
           <div className="col-4 mb-2 px-4">
-            <Link to={ROUTES.ADD_ATTRIBUTES} style={{ color: "white" }}>
-              <Button btnType="add">Add Attribute</Button>
-            </Link>
+            {/* <Link to={ROUTES.ADD_ATTRIBUTES} style={{ color: "white" }}> */}
+              <Button btnType="add" onClick={()=>{
+                setShowModaladd(true)
+              }} >Add Attribute</Button>
+            {/* </Link> */}
           </div>
         </div>
 
@@ -331,6 +383,128 @@ export default function Attribute(props) {
             }}
           />
         </div>
+
+        <Custom_model
+          size={"sm"}
+          show={showModaladd}
+          onHide={() => setShowModaladd(false)}
+          // header="Attributes"
+          footer={false}
+          {...props}
+          View_list
+          list_content={
+            <div className="container-fluid p-4">
+              <div className="d-flex justify-content-between">
+                <div>
+                  <h5 className="lead_text"> Add Attribute</h5>
+                </div>
+              </div>
+
+              <Form
+                form={addForm}
+                onFinish={(values) => {
+                  console.log("values iss", values);
+                  createAttributes()
+                  // handleupdate();
+                }}
+                onFinishFailed={(error) => {
+                  console.log(error);
+                }}
+              >
+                <div className="row py-1">
+                  <div className="col-12 pt-3">
+                    <label>Name</label>
+                    <Form.Item
+                      name="attribute"
+                      rules={[
+                        {
+                          required: true,
+                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                          message: "Please enter a Valid attributename",
+                        },
+                        {
+                          whitespace: true,
+                        },
+                        {
+                          min: 2,
+                          message: "attribute name must be 2 characters",
+                        },
+                        {
+                          max: 100,
+                        },
+                      ]}
+                    >
+                      <InputType
+                        value={addattributename}
+                        onChange={(e) => setaddattributename(e.target.value)}
+                        placeholder="Name"
+                        onBlur={async () => {
+                          if (attriName !== attributeName) {
+                            let a = await CheckUnique({
+                              type: "attributename",
+                              value: addattributename,
+                            });
+                            console.log("checking", a);
+                            setuniqueCode(a);
+                          }
+                        }}
+                      />
+                    </Form.Item>
+                    {uniqueCode ? (
+                      <div>
+                        <label style={{ color: "red" }}>
+                          Attribute Name {UniqueErrorMsg.UniqueErrName}
+                        </label>
+                      </div>
+                    ) : (
+                      ""
+                    )}
+                  </div>
+                  </div>
+                  <div className="row">
+                  <div className="col-12 pt-3">
+                    <label>Description</label>
+                    <Form.Item
+                      name="description"
+                      rules={[
+                        // {
+                        //   required: true,
+                        //   pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+
+                        //   message: "Please enter valid description",
+                        // },
+
+                        {
+                          whitespace: true,
+                        },
+                        {
+                          min: 2,
+                        },
+                        {
+                          max: 500,
+                        },
+                      ]}
+                    >
+                      <TextArea
+                        value={addattributedesc}
+                        onChange={(e) =>
+                          setaddattributedesc(e.target.value)
+                        }
+                      />
+                    </Form.Item>
+                  </div>
+                  </div>
+                <div className="row justify-content-center mt-5">
+                  <div className="col-1">
+                    <Button btnType="save">Save</Button>
+                  </div>
+                </div>
+              </Form>
+
+             
+            </div>
+          }
+        />
 
         <Custom_model
           show={showViewModal}
@@ -384,6 +558,13 @@ export default function Attribute(props) {
             </div>
           }
         />
+
+<Custom_model
+          size={"sm"}
+          show={saveSuccess}
+          onHide={() => setSaveSuccess(false)}
+          success
+        />
         <Custom_model
           size={"sm"}
           show={showModalEdit}
@@ -396,12 +577,12 @@ export default function Attribute(props) {
             <div className="container-fluid p-4">
               <div className="d-flex justify-content-between">
                 <div>
-                  <h5 className="lead_text">Attribute</h5>
+                  <h5 className="lead_text"> Edit Attribute</h5>
                 </div>
               </div>
 
               <Form
-                form={addForm}
+                form={editForm}
                 onFinish={(values) => {
                   console.log("values iss", values);
                   handleupdate();
@@ -411,7 +592,7 @@ export default function Attribute(props) {
                 }}
               >
                 <div className="row py-1">
-                  <div className="col-sm-6 pt-3">
+                  <div className="col-12 pt-3">
                     <label>Name</label>
                     <Form.Item
                       name="attribute"
@@ -459,7 +640,9 @@ export default function Attribute(props) {
                       ""
                     )}
                   </div>
-                  <div className="col-sm-6 pt-3">
+                  </div>
+                  <div className="row">
+                  <div className="col-12 pt-3">
                     <label>Description</label>
                     <Form.Item
                       name="description"
@@ -490,36 +673,15 @@ export default function Attribute(props) {
                       />
                     </Form.Item>
                   </div>
-                </div>
-                <div className="row justify-content-center mt-5">
+                  </div>
+                <div className="row justify-content-center align-items-center mt-5">
                   <div className="col-1">
                     <Button btnType="save">Save</Button>
                   </div>
                 </div>
               </Form>
 
-              {/* <div className="row px-2 my-3">
-                <Form.Group className="mb-3" controlId="attribute_name">
-                  <Form.Label>Name</Form.Label>
-                  <Form.Control type="text" value={ attributeName } onChange={(e)=> setAttributeName(e.target.value)}  placeholder="Name" />
-                </Form.Group>
-              </div>
-              <div className="row px-2">
-                <Form.Group className="mb-3" controlId="attribute_description">
-                  <Form.Label>Description</Form.Label>
-                  <Form.Control
-                    as="textarea"
-                    rows={3}
-                    value={attributedescription}
-                    onChange={(e) =>  setAttributeDescription (e.target.value)}
-                  />
-                </Form.Group>
-              </div>
-              <div className="row justify-content-center my-3">
-                <div className="col-4">
-                  <Button btnType="save" onClick={()=>handleupdate()} > Save </Button>
-                </div>
-              </div> */}
+             
             </div>
           }
         />

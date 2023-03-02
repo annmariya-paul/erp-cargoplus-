@@ -1,21 +1,14 @@
-import { Form, Input, Popconfirm, Select } from "antd";
-import React, { useEffect, useState } from "react";
-import { FaEdit } from "react-icons/fa";
+import { Input, Select } from "antd";
+import React, { useState } from "react";
+import { MdPageview } from "react-icons/md";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "../../../components/button/button";
-import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
+import Custom_model from "../../../components/custom_modal/custom_model";
 import MyPagination from "../../../components/Pagination/MyPagination";
 import TableData from "../../../components/table/table_data";
-import moment from "moment";
-import { MdDelete, MdPageview } from "react-icons/md";
-import PublicFetch from "../../../utils/PublicFetch";
-import { CRM_BASE_URL_FMS } from "../../../api/bootapi";
-import CustomModel from "../../../components/custom_modal/custom_model";
-import TextArea from "../../../components/ InputType TextArea/TextArea";
-import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../routes";
 
-function InvoiceList() {
-  const [AddForm] = Form.useForm();
+function DailyExpence() {
   const navigate = useNavigate();
   const [oppnew, setOppnew] = useState([]);
   const [numOfItems, setNumOfItems] = useState("25");
@@ -27,28 +20,41 @@ function InvoiceList() {
   const [cancelPopup, setCancelPopup] = useState(false);
   const [invoice_id, setInvoice_id] = useState();
   const [successPopup, setSuccessPopup] = useState(false);
-
-  const [noofItems, setNoofItems] = useState("25");
-  // const [current, setCurrent] = useState(1);
-
-  const[totalinvoice,settotalinvoice]= useState("")
-  const [serialNo, setserialNo] = useState(1);
-
-  const pageofIndex = noofItems * (current - 1) - 1 + 1;
-
-  const data = [
-    {
-      invoice_no: 12234444,
-      invoice_date: "23-03-2023",
-    },
-  ];
-
   const columns = [
     {
-      title: "Sl. No.",
-      key: "index",
-      width: "7%",
-      render: (value, item, index) => serialNo + index,
+      title: "ACTION",
+      dataIndex: "action",
+      key: "ACTION",
+      width: "15%",
+      render: (data, index) => {
+        console.log("mere index", index);
+        return (
+          <div className="d-flex justify-content-center gap-2">
+            <div className="editcolor">
+              {/* <FaEdit
+                onClick={() => {
+                  if (
+                    index.assigned_employee &&
+                    index.assigned_employee.length > 0
+                  ) {
+                    //   handleEditedclick(index)
+                  }
+                }}
+              /> */}
+              <MdPageview
+                fontSize={18}
+                // onClick={()=>viewprogressoppurtunity(index)}
+                onClick={() => {
+                  navigate(`${ROUTES.INVOICE_VIEW}/${index.invoice_job_id}`);
+                }}
+              />
+            </div>
+            {/* <div className="editcolor">
+              <MdDelete />
+            </div> */}
+          </div>
+        );
+      },
       align: "center",
     },
     {
@@ -64,7 +70,7 @@ function InvoiceList() {
       key: "invoice_date",
       width: "10%",
       render: (record) => {
-        return <div>{moment(record?.invoice_date).format("DD-MM-YYYY")}</div>;
+        // return <div>{moment(record?.invoice_date).format("DD-MM-YYYY")}</div>;
       },
     },
     {
@@ -105,42 +111,6 @@ function InvoiceList() {
       key: "invoice_status",
       width: "15%",
       // align: "center",
-    },
-    {
-      title: "ACTION",
-      dataIndex: "action",
-      key: "ACTION",
-      width: "15%",
-      render: (data, index) => {
-        console.log("mere index", index);
-        return (
-          <div className="d-flex justify-content-center gap-2">
-            <div className="editcolor">
-              {/* <FaEdit
-                onClick={() => {
-                  if (
-                    index.assigned_employee &&
-                    index.assigned_employee.length > 0
-                  ) {
-                    //   handleEditedclick(index)
-                  }
-                }}
-              /> */}
-              <MdPageview
-                fontSize={18}
-                // onClick={()=>viewprogressoppurtunity(index)}
-                onClick={() => {
-                  navigate(`${ROUTES.INVOICE_VIEW}/${index.invoice_job_id}`);
-                }}
-              />
-            </div>
-            {/* <div className="editcolor">
-              <MdDelete />
-            </div> */}
-          </div>
-        );
-      },
-      align: "center",
     },
     {
       title: "",
@@ -199,81 +169,6 @@ function InvoiceList() {
       },
     },
   ];
-
-  const close_modal = (mShow, time) => {
-    if (!mShow) {
-      setTimeout(() => {
-        setSuccessPopup(false);
-
-        // navigate(ROUTES.INVOICE_LIST);
-      }, time);
-    }
-  };
-
-  const getAllInvoices = () => {
-    PublicFetch.get(`${CRM_BASE_URL_FMS}/invoice`)
-      .then((res) => {
-        setInvoiceData(res?.data?.data);
-        console.log("response", res);
-      
-        if (res.data.success) {
-          console.log("success of invoices", res.data.data);
-          let temp = [];
-          res?.data?.data?.forEach((item, index) => {
-            temp.push({
-              invoice_no: item.invoice_no,
-              invoice_id: item.invoice_id,
-              invoice_job_id: item.invoice_job_id,
-              invoice_date: item.invoice_date,
-              invoice_cancel_date: item.invoice_cancel_date,
-              invoice_cancel_reason: item.invoice_cancel_reason,
-              invoice_status: item.invoice_status,
-              invoice_currency: item.invoice_currency,
-              invoice_exchange_rate: item.invoice_exchange_rate,
-              invoice_grand_total: item.invoice_grand_total,
-              invoice_job_no: item.fms_v1_jobs?.job_number,
-              invoice_job_consignee:
-                item.fms_v1_jobs?.crm_v1_leads?.lead_customer_name,
-              invoice_job_shipper: item?.fms_v1_jobs?.job_shipper,
-            });
-          });
-
-          setAllInvoiceData(temp);
-
-          // console.log(temp);
-        }
-      })
-      .catch((err) => {
-        console.log("Error", err);
-      });
-  };
-
-  console.log("response to the point", AllinvoiceData);
-
-  const cancelInvoice = (data) => {
-    console.log("reson", data);
-    PublicFetch.patch(`${CRM_BASE_URL_FMS}/invoice/cancel/${invoice_id}`, {
-      invoice_cancel_reason: data.cancel_reason,
-    })
-      .then((res) => {
-        console.log("Response", res);
-        if (res.data.success) {
-          console.log("Success of cancel", res.data.data);
-          setSuccessPopup(true);
-          close_modal(successPopup, 1200);
-          getAllInvoices();
-          setCancelPopup(false);
-          AddForm.resetFields();
-        }
-      })
-      .catch((err) => {
-        console.log("Error", err);
-      });
-  };
-
-  useEffect(() => {
-    getAllInvoices();
-  }, []);
   return (
     <div>
       <div className="container-fluid">
@@ -285,7 +180,7 @@ function InvoiceList() {
               <div>
                 <div className="row flex-wrap">
                   <div className="col">
-                    <h5 className="lead_text">Invoices</h5>
+                    <h5 className="lead_text">Daily Expence</h5>
                   </div>
 
                   {/* <Leadlist_Icons
@@ -326,7 +221,7 @@ function InvoiceList() {
                   </div>
                 </div>
                 <div className="row my-3">
-                  <div className="col-4   px-3">
+                  <div className="col-4 ">
                     <Select
                       // defaultValue={"25"}
                       bordered={false}
@@ -368,9 +263,10 @@ function InvoiceList() {
                       </Select.Option>
                     </Select>
                   </div>
-                  <div className="col-4 d-flex align-items-center justify-content-center">
+
+                  <div className="col-4 d-flex  justify-content-center align-items-center">
                     <MyPagination
-                      total={parseInt(invoiceData?.length)}
+                      total={parseInt(totalCount)}
                       current={current}
                       pageSize={numOfItems}
                       onChange={(current, pageSize) => {
@@ -379,7 +275,16 @@ function InvoiceList() {
                     />
                   </div>
                   {/* <div className="col-xl-6 col-lg-6 col-md-6 col-sm-8 col-12"></div> */}
-                  <div className="col-4 d-flex justify-content-end"></div>
+                  <div className="col-xl-4 col-lg-4 col-md-3 col-sm-12 col-12 d-flex justify-content-end">
+                    <div className="">
+                      <Link
+                        to={ROUTES.ADD_QUOTATION}
+                        style={{ color: "white" }}
+                      >
+                        <Button btnType="save">Add Daily Expence</Button>
+                      </Link>
+                    </div>
+                  </div>
                 </div>
                 <div className="datatable">
                   {/* {AllinvoiceData && ( */}
@@ -393,18 +298,18 @@ function InvoiceList() {
                   {/* )} */}
                 </div>
                 <div className="d-flex py-2 justify-content-center">
-                <MyPagination
-                      total={parseInt(invoiceData?.length)}
-                      current={current}
-                      pageSize={numOfItems}
-                      onChange={(current, pageSize) => {
-                        setCurrent(current);
-                      }}
-                    />
+                  {/* <MyPagination
+                    total={parseInt(totalCount)}
+                    current={current}
+                    pageSize={numOfItems}
+                    onChange={(current, pageSize) => {
+                      setCurrent(current);
+                    }}
+                  /> */}
                 </div>
               </div>
             </div>
-            <CustomModel
+            {/* <CustomModel
               show={cancelPopup}
               onHide={() => {
                 setCancelPopup(false);
@@ -445,8 +350,8 @@ function InvoiceList() {
                   </div>
                 </div>
               }
-            />
-            <CustomModel
+            /> */}
+            <Custom_model
               success
               show={successPopup}
               onHide={() => {
@@ -454,13 +359,10 @@ function InvoiceList() {
               }}
             />
           </div>
-
-
-
         </div>
       </div>
     </div>
   );
 }
 
-export default InvoiceList;
+export default DailyExpence;

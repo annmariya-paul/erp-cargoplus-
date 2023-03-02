@@ -146,13 +146,42 @@ export default function Designation() {
       console.log("err to add the unit", err);
     }
   };
-
+  const [serialNo, setserialNo] = useState(1);
   const columns = [
+    {
+      title: "SI.NO",
+      key: "index",
+      width: "20%",
+      render: (value, item, index) => serialNo + index,
+      align: "center",
+    },
+    {
+      title: "DESIGNATION NAME",
+      dataIndex: "designation_name",
+      key: "designation_name",
+      width: "25%",
+      filteredValue: [searchedText],
+      onFilter: (value, record) => {
+        return String(record.designation_name)
+          .toLowerCase()
+          .includes(value.toLowerCase())||
+          String(record.designation_code)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+      },
+      align: "left",
+    },
+    {
+      title: "DESIGNATION CODE",
+      dataIndex: "designation_code",
+      key: "designation_code",
+      align: "left",
+    },
     {
       title: "ACTION",
       dataIndex: "action",
       key: "key",
-      width: "40%",
+      width: "30%",
 
       render: (data, index) => {
         return (
@@ -172,25 +201,6 @@ export default function Designation() {
           </div>
         );
       },
-      align: "center",
-    },
-    {
-      title: "DESIGNATION NAME",
-      dataIndex: "designation_name",
-      key: "designation_name",
-      width: "25%",
-      filteredValue: [searchedText],
-      onFilter: (value, record) => {
-        return String(record.designation_name)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
-      // align: "center",
-    },
-    {
-      title: "DESIGNATION CODE",
-      dataIndex: "designation_code",
-      key: "designation_code",
       align: "center",
     },
   ];
@@ -223,7 +233,7 @@ export default function Designation() {
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
-              placeholder="Search by Designation"
+              placeholder="Search "
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
               onChange={(e) => {

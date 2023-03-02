@@ -100,6 +100,7 @@ const ROUTES = {
   PRINT_INVOICE_ID: "/print_invoice/:id",
   //  Accounts
   DAILY_EXPENCE: "/daily_expence",
+  ADD_PAYMENTS: "/add_payments",
   // general settings
   CURRENCY: "/currency",
   COMPANYINFO: "/company_info",

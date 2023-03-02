@@ -95,6 +95,7 @@ import InvoicePrint from "./components/Invoice/InvoicePrint";
 import PrintInvoice from "./pages/FMS/Invoice/PrintInvoice";
 import InvoiceView from "./pages/FMS/Invoice/InvoiceView";
 import DailyExpence from "./pages/Accounts/DailyExpence/DailyExpence";
+import AddPayments from "./pages/Accounts/AddPayments/AddPayments";
 // import Vendortype from "./pages/CRM/Purchase/vendertype/vendortype";
 // import Lead from "./pages/lead/lead";
 
@@ -429,6 +430,10 @@ function App() {
             {/* ######## ACCOUNTS ######## */}
             <Route path={ROUTES.DAILY_EXPENCE} element={<ProtectedRoute />}>
               <Route index element={<DailyExpence />} />
+            </Route>
+
+            <Route path={ROUTES.ADD_PAYMENTS} element={<ProtectedRoute />}>
+              <Route index element={<AddPayments />} />
             </Route>
 
             {/* </Route> */}

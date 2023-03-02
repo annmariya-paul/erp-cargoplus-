@@ -17,6 +17,7 @@ import { MdDelete } from "react-icons/md";
 import TextArea from "../../../components/ InputType TextArea/TextArea";
 import SelectBox from "../../../components/Select Box/SelectBox";
 import CheckUnique from "../../../check Unique/CheckUnique";
+import {  FaTrash } from "react-icons/fa";
 import {
   CRM_BASE_URL_HRMS,
   GENERAL_SETTING_BASE_URL,
@@ -331,44 +332,17 @@ function ListAgent() {
   ];
 
   
+  const [serialNo, setserialNo] = useState(1);
   const columns = [
     {
-      title: "ACTION",
-      dataIndex: "action",
+      title: "SI.NO",
+      key: "index",
+      width: "13%",
+      render: (value, item, index) => serialNo + index,
       align: "center",
-      key: "ACTION",
-      width: "14%",
-      render: (data, index) => {
-        console.log("index is of edirt",index);
-        return (
-          <div className="d-flex justify-content-center align-items-center gap-2">
-           <div
-                className="editIcon m-0"
-                onClick={() =>
-                  frightEdit(index)  
-                    // setuniqueeditCode(false);
-                      }
-              >
-                <FaEdit />
-              </div>
-            <div
-              className="actioneditdelete "
-              // className="viewIcon m-0"
-              // onClick={() => handleViewClick(index) }
-            >
-              <MdDelete />
-              {/* <RiFileSearchFill /> */}
-            </div>
-            <div
-              // className="deleteIcon m-0"
-              className="actioneditdelete"
-            >
-              {/* <MdDelete /> */}
-            </div>
-          </div>
-        );
-      },
     },
+ 
+    
     // {
     //   title: "Oppurtunity Name",
     //   dataIndex: "attribute_name",
@@ -398,15 +372,19 @@ function ListAgent() {
       title: "EMPLOYEE CODE",
       dataIndex: "agent_emp_code",
       width: "30%",
-      filteredValue: [searchedCode],
+      filteredValue: [searchedText],
       onFilter: (value, record) => {
         console.log("valuesss in", record);
-        return (
-         
-          String(record.agent_emp_code)
+        return String(record.agent_emp_code)
+            .toLowerCase()
+            .includes(value.toLowerCase())  || 
+            String(record.agent_country)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+             String(record.agent_emp_name)
             .toLowerCase()
             .includes(value.toLowerCase())
-        );
+        
       },
       key: "agent_emp_code",
 
@@ -416,19 +394,51 @@ function ListAgent() {
       title: "EMPLOYEE NAME",
       dataIndex: "agent_emp_name",
       width: "30%",
-      filteredValue: [searchedText],
-      onFilter: (value, record) => {
-        console.log("valuesss in", record);
-        return (
+      // filteredValue: [searchedText],
+      // onFilter: (value, record) => {
+      //   console.log("valuesss in", record);
+      //   return (
          
-          String(record.agent_emp_name)
-            .toLowerCase()
-            .includes(value.toLowerCase())
-        );
-      },
+      //     String(record.agent_emp_name)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase())
+      //   );
+      // },
       key: "agent_emp_name",
 
       align: "left",
+    },
+    {
+      title: "ACTION",
+      dataIndex: "action",
+      align: "center",
+      key: "ACTION",
+      width: "20%",
+      render: (data, index) => {
+        console.log("index is of edirt",index);
+        return (
+          <div className="d-flex justify-content-center align-items-center gap-2">
+           <div
+                className="editIcon m-0"
+                onClick={() =>
+                  frightEdit(index)  
+                    // setuniqueeditCode(false);
+                      }
+              >
+                <FaEdit style={{ marginLeft: 15, marginRight: 15 }} />
+              </div>
+            <div
+              className="deleteIcon m-0 "
+             
+            >
+                <FaTrash  style={{ marginLeft: 15, marginRight: 15 }}/>
+            
+         
+            </div>
+           
+          </div>
+        );
+      },
     },
   ];
   const submitaddagent = async () => {
@@ -488,7 +498,7 @@ function ListAgent() {
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
-              placeholder="Search by Employee Name "
+              placeholder="Search  "
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
               onChange={(e) => {
@@ -499,7 +509,7 @@ function ListAgent() {
               }}
             />
           </div>
-          <div className="col-4">
+          {/* <div className="col-4">
             <Input.Search
               placeholder="Search by Employee Code"
               style={{ margin: "5px", borderRadius: "5px" }}
@@ -511,7 +521,7 @@ function ListAgent() {
                 setSearchedCode(value);
               }}
             />
-          </div>
+          </div> */}
         </div>
         <div className="row my-3">
           <div className="col-4 px-3 ">

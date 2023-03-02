@@ -278,7 +278,7 @@ export default function Quotations(props) {
       <div className="container-fluid container2 ">
         <div className="row flex-wrap">
           <div className="col">
-            <h5 className="lead_text">Quotations</h5>
+            <h5 className="lead_text mt-3">Quotations</h5>
           </div>
           {/* <Leadlist_Icons /> */}
         </div>

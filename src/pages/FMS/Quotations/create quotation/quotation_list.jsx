@@ -16,7 +16,9 @@ import { FiEdit } from "react-icons/fi";
 import CustomModel from "../../../../components/custom_modal/custom_model";
 import moment from "moment";
 
+
 import { CRM_BASE_URL_HRMS, CRM_BASE_URL_FMS } from "../../../../api/bootapi";
+import MyPagination from "../../../../components/Pagination/MyPagination";
 
 export default function Quotations(props) {
   const navigate = useNavigate();
@@ -36,6 +38,14 @@ export default function Quotations(props) {
   const [CodeInput, setCodeInput] = useState();
   const [AllQuotations, setAllQuotations] = useState();
   //  const [showViewModal, setShowViewModal] = useState(false);
+  const [noofItems, setNoofItems] = useState("25");
+  const [current, setCurrent] = useState(1);
+
+  const[totalquotation,settotalquotation]= useState("")
+
+
+  const pageofIndex = noofItems * (current - 1) - 1 + 1;
+  const numofItemsTo = noofItems * current;
 
   const [editForm] = Form.useForm();
   const close_modal = (mShow, time) => {
@@ -227,11 +237,12 @@ export default function Quotations(props) {
   ];
 
   const getAllQuotation = () => {
-    PublicFetch.get(`${CRM_BASE_URL_FMS}/quotation?startIndex=0&noOfItems=100`)
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/quotation?startIndex=${pageofIndex}&noOfItems=${noofItems}`)
       .then((res) => {
         console.log("Response", res);
         if (res.data.success) {
           console.log("success", res.data.data);
+          settotalquotation(res.data.data)
           let temp = [];
           res.data.data.forEach((item, index) => {
             let date = moment(item.quotation_date).format("DD-MM-YYYY");
@@ -264,10 +275,10 @@ export default function Quotations(props) {
 
   return (
     <>
-      <div className="container-fluid container2 pt-3">
+      <div className="container-fluid container2 ">
         <div className="row flex-wrap">
           <div className="col">
-            <h5 className="lead_text">Quotations</h5>
+            <h5 className="lead_text mt-3">Quotations</h5>
           </div>
           {/* <Leadlist_Icons /> */}
         </div>
@@ -287,7 +298,7 @@ export default function Quotations(props) {
           </div>
         </div>
         <div className="row my-3">
-          <div className="col-xl-3 col-lg-3 col-sm-12 px-3">
+          <div className="col-4  px-3">
             <Select
               bordered={false}
               className="page_size_style"
@@ -311,8 +322,24 @@ export default function Quotations(props) {
               </Select.Option>
             </Select>
           </div>
-          <div className="col-xl-1 col-lg-1 col-sm-12 p-1"></div>
-          <div className="col-xl-8 col-lg-8 col-sm-12 d-flex justify-content-end">
+         
+          <div className="col-4 d-flex py-2 justify-content-center">
+            <MyPagination
+              total={parseInt(totalquotation?.length)}
+              current={current}
+              pageSize={noofItems}
+              // defaultPageSize={noofItems}
+              showSizeChanger={false}
+              onChange={(current, pageSize) => {
+                console.log("page index isss", pageSize);
+                setCurrent(current);
+                // setPageSize(pageSize);
+                // setNoofItems(pageSize);
+                // setCurrent(noofItems !== pageSize ? 0 : current);
+              }}
+            />
+          </div>
+          <div className="col-4 d-flex justify-content-end">
             <div className="col mb-2 px-4">
               <Link to={ROUTES.ADD_QUOTATION} style={{ color: "white" }}>
                 <Button btnType="add">Add Quotation</Button>
@@ -329,6 +356,22 @@ export default function Quotations(props) {
             custom_table_css="table_lead_list"
           />
         </div>
+        <div className="d-flex justify-content-center ">
+        <MyPagination
+              total={parseInt(totalquotation?.length)}
+              current={current}
+              pageSize={noofItems}
+              // defaultPageSize={noofItems}
+              showSizeChanger={false}
+              onChange={(current, pageSize) => {
+                console.log("page index isss", pageSize);
+                setCurrent(current);
+              
+              }}
+            />
+        </div>
+        
+       
       </div>
       {/* <CustomModel
         show={showViewModal}

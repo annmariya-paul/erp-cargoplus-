@@ -53,7 +53,8 @@ function Lead({}) {
   const [previewTitle, setPreviewTitle] = useState("");
   const [leadimg, setLeadimg] = useState([]);
   const [messageApi, contextHolder] = message.useMessage();
-  const [leadid, setleadid] = useState();
+
+  const [leadcreditdays, setLeadcreditdays] = useState();
 
   const [uniqueCode, setuniqueCode] = useState();
   const [addForm] = Form.useForm();
@@ -105,6 +106,7 @@ function Lead({}) {
     formData.append("lead_user_type", leadUsertype);
     formData.append("lead_organization", leadOrganization);
     formData.append("lead_source", leadSource);
+    formData.append("lead_credit_days", leadcreditdays);
     if (leadDescription) {
       formData.append("lead_description", leadDescription);
     }
@@ -131,6 +133,7 @@ function Lead({}) {
           setModalContact(false);
           toggleTab(2);
           setLeadId(response?.data?.data?.lead_id);
+          setLeadcreditdays()
         } else {
           console.log("Failed while adding data");
         }
@@ -402,7 +405,33 @@ function Lead({}) {
                         </SelectBox>
                       </Form.Item>
                     </div>
-                    <div className="row justify-content-center">
+                    <div className="col-sm-4 pt-2">
+                      <label>Credit Days</label>
+                      <Form.Item
+                        name="leadcreditdays"
+                        rules={[
+                          {
+                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                            message: "Special characters are not allowed",
+                          },
+                          // {
+                          //   min: 2,
+                          //   message: "organisation has at least 2 characters",
+                          // },
+                          // {
+                          //   max: 100,
+                          //   message:
+                          //     "organisation cannot be longer than 100 characters",
+                          // },
+                        ]}
+                      >
+                        <InputType
+                          value={leadcreditdays}
+                          onChange={(e) => setLeadcreditdays(e.target.value)}
+                        />
+                      </Form.Item>
+                    </div>
+                    {/* <div className="row justify-content-center">
                       <div className="col-lg-3 col-xs-12 col-sm-5 col-md-5 mt-3">
                         <Form.Item name="new">
                           <FileUpload
@@ -447,8 +476,8 @@ function Lead({}) {
                           )}
                         </Form.Item>
                       </div>
-                    </div>
-                    <div className="col-sm-8 pt-2">
+                    </div> */}
+                    <div className="col-sm-4 pt-2">
                       <label className="mb-2">Description</label>
                       <Form.Item
                         name="Description"
@@ -466,10 +495,57 @@ function Lead({}) {
                         ]}
                       >
                         <TextArea
+                        className="descheight"
                           value={leadDescription}
                           onChange={(e) => setLeadDescription(e.target.value)}
                         />
                       </Form.Item>
+                    </div>
+                    <div className="col-sm-4 mt-4 py-2">
+                    <div className="">
+                        <Form.Item name="new">
+                          <FileUpload
+                            multiple
+                            filetype={"Accept only pdf and docs"}
+                            listType="picture"
+                            accept=".pdf,.docs,"
+                            // onPreview={handlePreview}
+                            beforeUpload={beforeUpload}
+                            // value={leadAttachment}
+                            // onChange={(e) => setLeadAttachment(e.target.value)}
+                            onChange={(file) => {
+                              console.log("Before upload", file.file);
+                              console.log(
+                                "Before upload file size",
+                                file.file.size
+                              );
+                              if (
+                                file.file.size > 1000 &&
+                                file.file.size < 500000
+                              ) {
+                                setLeadimg(file.file.originFileObj);
+                                setFileSizeError(false);
+                                console.log(
+                                  "file greater than 1 kb and less than 500 kb"
+                                );
+                              } else {
+                                setFileSizeError(true);
+                                console.log("hgrtryyryr");
+                              }
+                            }}
+                          />
+                          {FileSizeError ? (
+                            <div>
+                              <label style={{ color: "red" }}>
+                                File size must be between 1kb and 500kb
+                              </label>
+                            </div>
+                          ) : (
+                            ""
+                          )}
+                        </Form.Item>
+                      </div>
+
                     </div>
                     <div className="col-sm-4 pt-2">
                       <div className="row">
@@ -503,18 +579,24 @@ function Lead({}) {
                         </div>
                       </div>
                     </div>
-
-                    <div className="col">
-                      <Button type="submit" btnType="save">
+                   <div className="row d-flex justify-content-center ">
+                    <div className="col-2">
+                      <Button 
+                      type="submit" 
+                      btnType="save"
+                      className="mt-4"
+                      >
                         Save
                       </Button>
+                      </div>
+                    </div>
                       <Custom_model
                         size={`sm`}
                         success
                         show={modalShow}
                         onHide={() => setModalShow(false)}
                       />
-                    </div>
+                   
                   </div>
                 </Form>
               </div>

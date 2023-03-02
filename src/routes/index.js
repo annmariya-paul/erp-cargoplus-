@@ -98,8 +98,16 @@ const ROUTES = {
   INVOICE_PRINT: "/invoice_print",
   PRINT_INVOICE: "/print_invoice",
   PRINT_INVOICE_ID: "/print_invoice/:id",
+
+  // Accounts
+  PAYMEMENT_MODE: "/payment_mode",
+  ADD_PURCHASE: "/add_purchase",
+  PURCHASE: "/purchase",
+
   //  Accounts
-  DAILY_EXPENCE: "/daily_expence",
+  DAILY_EXPENSE: "/daily_expense",
+  CREATE_EXPENSE: "/create_expense",
+  EXPENSE_CATEGORY: "/expense_category",
   ADD_PAYMENTS: "/add_payments",
   // general settings
   CURRENCY: "/currency",

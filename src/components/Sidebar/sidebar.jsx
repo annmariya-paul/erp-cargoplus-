@@ -47,6 +47,7 @@ export default function Sidebar({ showSidebar }) {
   const [permissions, setPermissions] = useState(null);
   const [Accounts, setAccounts] = useState(false);
   const [FMSSettingsopen, setFMSSettingsopen] = useState(false);
+  const [accountsSettings, setAccountsSettings] = useState(false);
 
   const location = useLocation();
 
@@ -877,15 +878,61 @@ export default function Sidebar({ showSidebar }) {
 
               {Accounts ? (
                 <>
+                  <li
+                    className={
+                      accountsSettings
+                        ? "nav-text  items_hrms open"
+                        : "nav-text  items_hrms "
+                    }
+                  >
+                    <Link
+                      className={accountsSettings ? "active-link" : "link"}
+                      // to="/"
+                      onClick={() => setAccountsSettings(!accountsSettings)}
+                    >
+                      <div className="d-flex justify-content-between gap-5 ms-2">
+                        <div className="d-flex">
+                          <MdSettingsInputComponent className="sidebar_icons ms-1 pt-1 " />
+                          <div style={{ width: "90px" }} className="">
+                            Settings
+                          </div>
+                        </div>
+
+                        <div className="  ">
+                          <div className="text-right ">
+                            <AiOutlineCaretDown className="toggle_btn " />
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  </li>
+                  {accountsSettings ? (
+                    <>
+                      {checkPermission("daily_expence") && (
+                        <li className="nav-text ">
+                          <NavLink
+                            className={({ isActive }) =>
+                              isActive ? "active-link" : "link"
+                            }
+                            to={ROUTES.EXPENSE_CATEGORY}
+                          >
+                            <div className=" ms-5">Expense Category</div>
+                          </NavLink>
+                        </li>
+                      )}
+                    </>
+                  ) : (
+                    ""
+                  )}
                   {checkPermission("daily_expence") && (
                     <li className="nav-text ">
                       <NavLink
                         className={({ isActive }) =>
                           isActive ? "active-link" : "link"
                         }
-                        to={ROUTES.DAILY_EXPENCE}
+                        to={ROUTES.DAILY_EXPENSE}
                       >
-                        <div className=" ms-4">Daily Expence</div>
+                        <div className=" ms-4">Daily Expense</div>
                       </NavLink>
                     </li>
                   )}

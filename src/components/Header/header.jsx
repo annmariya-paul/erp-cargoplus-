@@ -62,9 +62,9 @@ const Header = () => {
         <>
           <div className="d-flex justify-content-between align-items-center">
             <p className={`${styles.HeaderOptions}`}>
-              Change Password{" "}
-              <span className="ps-3">
-                <TfiKey size={20} />
+              Change Password
+              <span className="ps-2">
+                <TfiKey size={15} />
               </span>
             </p>
           </div>
@@ -78,7 +78,7 @@ const Header = () => {
           <div>
             <p className={`${styles.HeaderOptions}`}>
               Logout
-              <span className="ps-3">
+              <span className="ps-2">
                 <HiLogout />
               </span>
             </p>
@@ -94,7 +94,7 @@ const Header = () => {
   };
 
   return (
-    <div className="d-flex justify-content-end mt-2 mb-3">
+    <div className="d-flex justify-content-end mt-2">
       <div
         className={`${styles.headerContainer} d-flex align-items-center justify-content-around`}
       >

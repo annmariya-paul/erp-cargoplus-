@@ -20,12 +20,12 @@ const FunnelChart = () => (
       from: "color",
       modifiers: [["darker", 3]],
     }}
-    beforeSeparatorLength={100}
-    beforeSeparatorOffset={20}
-    afterSeparatorLength={100}
-    afterSeparatorOffset={20}
+    beforeSeparatorLength={30}
+    beforeSeparatorOffset={10}
+    afterSeparatorLength={30}
+    afterSeparatorOffset={10}
     currentPartSizeExtension={10}
-    currentBorderWidth={40}
+    currentBorderWidth={80}
     motionConfig="stiff"
     shapeBlending={0.5}
   />

@@ -20,6 +20,7 @@ import MyPagination from "../../../components/Pagination/MyPagination";
 import { Checkbox } from "antd";
 export default function Currency(props) {
   const [addForm] = Form.useForm();
+  const [serialNo, setserialNo] = useState(1);
   const [error, setError] = useState(false);
   const [successPopup, setSuccessPopup] = useState(false);
 
@@ -118,10 +119,70 @@ export default function Currency(props) {
 
   const columns = [
     {
+      title: "Sl. No.",
+      key: "index",
+      width: "8%",
+      render: (value, item, index) => serialNo + index,
+      align: "center",
+    },
+    {
+      title: "COUNTRY",
+      dataIndex: "country_name",
+      key: "country_name",
+      width: "23%",
+      // filteredValue: [searchedText],
+      // onFilter: (value, record) => {
+      //   return String(record.country_name)
+      //     .toLowerCase()
+      //     .includes(value.toLowerCase());
+      // },
+    },
+    {
+      title: "CURRENCY NAME",
+      dataIndex: "currency_name",
+      key: "currency_name",
+      filteredValue: [searchedText],
+      onFilter: (value, record) => {
+        return (
+          String(record.currency_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.currency_code)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
+      },
+    },
+    {
+      title: "COIN",
+      dataIndex: "currency_coin",
+      key: "currency_coin",
+      width: "10%",
+      // filteredValue: [searchedText],
+      // onFilter: (value, record) => {
+      //   return String(record.currency_coin)
+      //     .toLowerCase()
+      //     .includes(value.toLowerCase());
+      // },
+    },
+    {
+      title: "CODE",
+      dataIndex: "currency_code",
+      key: "currency_code",
+      align: "center",
+    },
+    {
+      title: "SYMBOL",
+      dataIndex: "currency_symbol",
+      key: "currency_symbol",
+      width: "10%",
+      align: "center",
+    },
+    {
       title: "ACTION",
       dataIndex: "action",
       key: "key",
-      width: "30%",
+      width: "15%",
       render: (data, index) => {
         console.log("index is :", index);
         return (
@@ -141,66 +202,6 @@ export default function Currency(props) {
           </div>
         );
       },
-      align: "center",
-    },
-    {
-      title: "COUNTRY",
-      dataIndex: "country_name",
-      key: "country_name",
-      // filteredValue: [searchedText],
-      // onFilter: (value, record) => {
-      //   return String(record.country_name)
-      //     .toLowerCase()
-      //     .includes(value.toLowerCase());
-      // },
-      align: "center",
-    },
-    {
-      title: "CURRENCY NAME",
-      dataIndex: "currency_name",
-      key: "currency_name",
-      filteredValue: [searchedText],
-      onFilter: (value, record) => {
-        return String(record.currency_name)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
-      align: "center",
-    },
-    {
-      title: "COIN",
-      dataIndex: "currency_coin",
-      key: "currency_coin",
-      // filteredValue: [searchedText],
-      // onFilter: (value, record) => {
-      //   return String(record.currency_coin)
-      //     .toLowerCase()
-      //     .includes(value.toLowerCase());
-      // },
-      align: "center",
-    },
-    {
-      title: "CODE",
-      dataIndex: "currency_code",
-      key: "currency_code",
-      // filteredValue: [searchedText],
-      // onFilter: (value, record) => {
-      //   return String(record.currency_code)
-      //     .toLowerCase()
-      //     .includes(value.toLowerCase());
-      // },
-      align: "center",
-    },
-    {
-      title: "SYMBOL",
-      dataIndex: "currency_symbol",
-      key: "currency_symbol",
-      // filteredValue: [searchedText],
-      // onFilter: (value, record) => {
-      //   return String(record.currency_symbol)
-      //     .toLowerCase()
-      //     .includes(value.toLowerCase());
-      // },
       align: "center",
     },
   ];
@@ -330,7 +331,7 @@ export default function Currency(props) {
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
-              placeholder="Search by Currency Name"
+              placeholder="Search by Currency Name or Code"
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
               onChange={(e) => {
@@ -544,10 +545,17 @@ export default function Currency(props) {
                     </Form.Item>
                   </div>
                 </div>
-              </div>
-              <div className="row justify-content-center ">
-                <div className="col-auto">
+                <div className="col-12 d-flex justify-content-center mt-5 gap-2">
                   <Button btnType="save">Save</Button>
+                  <Button
+                    btnType="cancel"
+                    type="reset"
+                    onClick={() => {
+                      setModalAddCurrency(false);
+                    }}
+                  >
+                    cancel
+                  </Button>
                 </div>
               </div>
             </Form>
@@ -778,11 +786,21 @@ export default function Currency(props) {
                         </Form.Item>
                       </div>
                     </div>
+                    <div className="col-12 d-flex justify-content-center mt-5 gap-2">
+                      <Button btnType="save">Save</Button>
+                      <Button
+                        btnType="cancel"
+                        type="reset"
+                        onClick={() => {
+                          setCurrencyEditPopup(false);
+                        }}
+                      >
+                        cancel
+                      </Button>
+                    </div>
                   </div>
 
-                  <div className="col-12 d-flex justify-content-center mt-5">
-                    <Button className="save_button">Save</Button>
-                  </div>
+                 
                 </Form>
               </div>
               {error ? (

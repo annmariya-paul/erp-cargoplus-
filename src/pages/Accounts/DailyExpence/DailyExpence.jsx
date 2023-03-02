@@ -58,14 +58,14 @@ function DailyExpence() {
       align: "center",
     },
     {
-      title: "INVOICE NO",
+      title: "VOUCHER NO",
       dataIndex: "invoice_no",
       key: "invoice_no",
       width: "12%",
       // align: "center",
     },
     {
-      title: "DATE",
+      title: "NAME",
       dataIndex: "invoice_date",
       key: "invoice_date",
       width: "10%",
@@ -74,7 +74,7 @@ function DailyExpence() {
       },
     },
     {
-      title: "JOB NO",
+      title: "BILL NO",
       dataIndex: "invoice_job_no",
       key: "invoice_job_no",
       width: "15%",
@@ -87,7 +87,7 @@ function DailyExpence() {
     },
 
     {
-      title: "CONSIGNEE",
+      title: "TAX",
       dataIndex: "invoice_job_consignee",
       key: "invoice_job_consignee",
       width: "15%",
@@ -99,7 +99,7 @@ function DailyExpence() {
       },
     },
     {
-      title: "SHIPPER",
+      title: "PARTY",
       dataIndex: "invoice_job_shipper",
       key: "invoice_job_shipper",
       width: "15%",
@@ -112,62 +112,62 @@ function DailyExpence() {
       width: "15%",
       // align: "center",
     },
-    {
-      title: "",
-      dataIndex: "buttons",
-      width: "17%",
-      key: "buttons",
-      align: "center",
-      // display:"flex",
-      render: (data, index) => {
-        console.log("table data", index);
-        return (
-          <div className="d-flex justify-content-center p-1">
-            {/* {index.assigned_employee && index.assigned_employee.length > 0 ? ( */}
-            <div>
-              <Button
-                btnType="add"
-                className="me-1 view_btn"
-                onClick={() => {
-                  navigate(`${ROUTES.PRINT_INVOICE}/${index.invoice_id}`);
-                }}
-              >
-                Print
-              </Button>
-            </div>
-          </div>
-        );
-      },
-    },
-    {
-      title: "",
-      dataIndex: "buttons",
-      width: "17%",
-      key: "buttons",
-      align: "center",
-      // display:"flex",
-      render: (data, index) => {
-        console.log("table data", index);
-        return (
-          <div className="d-flex justify-content-center p-1">
-            <div>
-              {/* <Popconfirm title="Are you sure ?" onConfirm={() => {}}> */}
-              <Button
-                btnType="add"
-                className="me-1 view_btn"
-                onClick={() => {
-                  setCancelPopup(true);
-                  setInvoice_id(index.invoice_id);
-                }}
-              >
-                cancel
-              </Button>
-              {/* </Popconfirm> */}
-            </div>
-          </div>
-        );
-      },
-    },
+    // {
+    //   title: "",
+    //   dataIndex: "buttons",
+    //   width: "17%",
+    //   key: "buttons",
+    //   align: "center",
+    //   // display:"flex",
+    //   render: (data, index) => {
+    //     console.log("table data", index);
+    //     return (
+    //       <div className="d-flex justify-content-center p-1">
+    //         {/* {index.assigned_employee && index.assigned_employee.length > 0 ? ( */}
+    //         <div>
+    //           <Button
+    //             btnType="add"
+    //             className="me-1 view_btn"
+    //             onClick={() => {
+    //               navigate(`${ROUTES.PRINT_INVOICE}/${index.invoice_id}`);
+    //             }}
+    //           >
+    //             Print
+    //           </Button>
+    //         </div>
+    //       </div>
+    //     );
+    //   },
+    // },
+    // {
+    //   title: "",
+    //   dataIndex: "buttons",
+    //   width: "17%",
+    //   key: "buttons",
+    //   align: "center",
+    //   // display:"flex",
+    //   render: (data, index) => {
+    //     console.log("table data", index);
+    //     return (
+    //       <div className="d-flex justify-content-center p-1">
+    //         <div>
+    //           {/* <Popconfirm title="Are you sure ?" onConfirm={() => {}}> */}
+    //           <Button
+    //             btnType="add"
+    //             className="me-1 view_btn"
+    //             onClick={() => {
+    //               setCancelPopup(true);
+    //               setInvoice_id(index.invoice_id);
+    //             }}
+    //           >
+    //             cancel
+    //           </Button>
+    //           {/* </Popconfirm> */}
+    //         </div>
+    //       </div>
+    //     );
+    //   },
+    // },
   ];
   return (
     <div>
@@ -180,7 +180,7 @@ function DailyExpence() {
               <div>
                 <div className="row flex-wrap">
                   <div className="col">
-                    <h5 className="lead_text">Daily Expence</h5>
+                    <h5 className="lead_text">Daily Expense</h5>
                   </div>
 
                   {/* <Leadlist_Icons
@@ -220,7 +220,7 @@ function DailyExpence() {
                     />
                   </div>
                 </div>
-                <div className="row my-3">
+                <div className="row my-3 ">
                   <div className="col-4 ">
                     <Select
                       // defaultValue={"25"}
@@ -278,7 +278,7 @@ function DailyExpence() {
                   <div className="col-xl-4 col-lg-4 col-md-3 col-sm-12 col-12 d-flex justify-content-end">
                     <div className="">
                       <Link
-                        to={ROUTES.ADD_QUOTATION}
+                        to={ROUTES.CREATE_EXPENSE}
                         style={{ color: "white" }}
                       >
                         <Button btnType="save">Add Daily Expence</Button>

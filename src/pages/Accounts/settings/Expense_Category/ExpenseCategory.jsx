@@ -1,15 +1,17 @@
 import { Form, Input, Select } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { FiEdit } from "react-icons/fi";
 import { MdPageview } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
+import { ACCOUNTS } from "../../../../api/bootapi";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
 import Button from "../../../../components/button/button";
 import CustomModel from "../../../../components/custom_modal/custom_model";
 import InputType from "../../../../components/Input Type textbox/InputType";
 import MyPagination from "../../../../components/Pagination/MyPagination";
 import TableData from "../../../../components/table/table_data";
+import PublicFetch from "../../../../utils/PublicFetch";
 
 function ExpenseCategory() {
   const [AddForm] = Form.useForm();
@@ -19,7 +21,7 @@ function ExpenseCategory() {
   const [current, setCurrent] = useState(1); // current page
   const [searchSource, setSearchSource] = useState(""); // search by text input
   const [totalCount, setTotalcount] = useState("");
-  const [AllcategoryData, setAllCAtegoryData] = useState();
+  const [AllcategoryData, setAllCategoryData] = useState();
   const [invoiceData, setInvoiceData] = useState();
   const [AddPopup, setAddPopup] = useState(false);
   const [editPopup, setEditPopup] = useState(false);
@@ -27,6 +29,7 @@ function ExpenseCategory() {
   const [invoice_id, setInvoice_id] = useState();
   const [successPopup, setSuccessPopup] = useState(false);
   const [slno, setSlNo] = useState(1);
+  const [category_id, setCategory_Id] = useState();
   const columns = [
     {
       title: "Slno",
@@ -184,6 +187,56 @@ function ExpenseCategory() {
     },
   ];
   //   setAllCAtegoryData(data);
+
+  const getAllExpenseCategory = () => {
+    PublicFetch.get(`${ACCOUNTS}/expense-category`)
+      .then((res) => {
+        console.log("Response", res);
+        if (res.data.success) {
+          console.log("SuccessFully", res.data.data);
+          setAllCategoryData(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+  const createExpenseCategory = () => {
+    PublicFetch.post(`${ACCOUNTS}/expense-category`, {
+      expense_category_name: "",
+      expense_category_description: "",
+    })
+      .then((res) => {
+        console.log("response of create", res);
+        if (res.data.success) {
+          console.log("success of create", res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+  const UpdateExpenseCategory = () => {
+    PublicFetch.patch(`${ACCOUNTS}/expense-category/${category_id}`, {
+      expense_category_name: "",
+      expense_category_description: "",
+    })
+      .then((res) => {
+        console.log("Response of update", res);
+        if (res.data.success) {
+          console.log("Success of Update", res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+  useEffect(() => {
+    getAllExpenseCategory();
+  }, []);
 
   const handleEditedclick = () => {
     setEditPopup(true);

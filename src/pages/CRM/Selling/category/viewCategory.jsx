@@ -36,6 +36,14 @@ import TextArea from "../../../../components/ InputType TextArea/TextArea";
 import { EnvironmentFilled } from "@ant-design/icons";
 import { UniqueErrorMsg } from "../../../../ErrorMessages/UniqueErrorMessage";
 
+const getBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+
 function Categorylist(props) {
   const [editForm] = Form.useForm();
 

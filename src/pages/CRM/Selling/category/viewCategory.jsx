@@ -50,7 +50,7 @@ function Categorylist(props) {
   const [pageSize, setPageSize] = useState("25");
   const [current, setCurrent] = useState(1);
   const [searchedText, setSearchedText] = useState("");
-  const [searchType, setSearchType] = useState("");
+  const [searchCode, setSearchCode] = useState("");
   const [searchStatus, setSearchStatus] = useState("");
   const [modalShow, setModalShow] = useState(false);
   const [SuccessPopup, setSuccessPopup] = useState(false);
@@ -301,6 +301,7 @@ function Categorylist(props) {
     {
       title: "Sl. No.",
       key: "index",
+      width: "7%",
       render: (value, item, index) => serialNo + index,
       align: "center",
     },
@@ -309,6 +310,7 @@ function Categorylist(props) {
       title: "CATEGORY NAME",
       dataIndex: "category_name",
       key: "category_name",
+      width: "25%",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
         // console.log("hai how are", record.children);
@@ -317,47 +319,44 @@ function Categorylist(props) {
           .toLowerCase()
           .includes(value.toLowerCase());
       },
-      align: "center",
     },
     // Table.EXPAND_COLUMN,
     {
       title: "CODE",
       dataIndex: "category_code",
       key: "category_code",
-      filteredValue: [searchType],
+      width: "11%",
+      filteredValue: [searchCode],
       onFilter: (value, record) => {
         console.log("dfhasasswww12", record);
         return String(record.category_code)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
-      align: "center",
     },
     {
       title: "PARENT CATEGORY",
       dataIndex: "category_parent_name",
       key: "category_parent_name",
-      width: "23%",
+      width: "20%",
       filteredValue: [searchStatus],
       onFilter: (value, record) => {
         return String(record.category_parent_id)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
-      align: "center",
     },
     {
       title: "DESCRIPTION",
       dataIndex: "category_description",
       key: "category_description",
-      width: "23%",
-      align: "center",
+      width: "24%",
     },
     {
       title: "ACTIONS",
       dataIndex: "actions",
       key: "actions",
-      width: "14%",
+      width: "12%",
       render: (data, index) => {
         return (
           <div className=" d-flex justify-content-center align-items-center gap-3">
@@ -548,37 +547,17 @@ function Categorylist(props) {
               />
             </div>
             <div className="col-4">
-              <Select
-                allowClear
-                showSearch
-                style={{ width: "100%", marginTop: "8px", borderRadius: "5px" }}
-                placeholder="Search by Type"
-                className="select_search"
-                optionFilterProp="children"
-                onChange={(event) => {
-                  setSearchType(event ? [event] : []);
+              <Input.Search
+                placeholder="Search by code"
+                style={{ margin: "5px", borderRadius: "5px" }}
+                value={searchCode}
+                onChange={(e) => {
+                  setSearchCode(e.target.value ? [e.target.value] : []);
                 }}
-              >
-                <Select.Option value="Electronics">Electronics</Select.Option>
-                <Select.Option value="Laptop">Laptop</Select.Option>
-                <Select.Option value="Mobile">Mobile</Select.Option>
-              </Select>
-            </div>
-            <div className="col-4">
-              <Select
-                allowClear
-                showSearch
-                style={{ width: "100%", marginTop: "8px", borderRadius: "5px" }}
-                placeholder="Search by From"
-                className="select_search"
-                optionFilterProp="children"
-                onChange={(event) => {
-                  setSearchStatus(event ? [event] : []);
+                onSearch={(value) => {
+                  setSearchCode(value);
                 }}
-              >
-                <Select.Option value="L">Lead</Select.Option>
-                <Select.Option value="C">Customer</Select.Option>
-              </Select>
+              />
             </div>
           </div>
           <div className="row my-3">

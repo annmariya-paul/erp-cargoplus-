@@ -579,8 +579,8 @@ function Lead({}) {
                         </div>
                       </div>
                     </div>
-                   <div className="row d-flex justify-content-center ">
-                    <div className="col-2">
+                   <div className=" d-flex justify-content-center py-2">
+                    <div className="">
                       <Button 
                       type="submit" 
                       btnType="save"

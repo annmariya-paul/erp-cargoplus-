@@ -55,6 +55,8 @@ function LeadEdit() {
   const [FileSizeError, setFileSizeError] = useState(false);
   const [sampledata, setsambpledata] = useState();
   const [organizationDisable, setOrganizationDisable] = useState();
+  const [leadcreditdays,setleadcreditdays]= useState()
+
   const [editForm] = Form.useForm();
   const [error, setError] = useState(false);
   const toggleTab = (index) => {
@@ -66,6 +68,9 @@ function LeadEdit() {
     navigate("/lead_list");
   };
 
+  const handleCancel=()=>{
+    navigate(ROUTES.LEADLIST)
+  }
   console.log("lead attachment", leadAttachment);
 
   const getBase64 = (file) =>
@@ -112,6 +117,7 @@ function LeadEdit() {
           setLeadAttachment(res?.data?.data?.attachments);
           setsambpledata(res?.data?.data?.attachments);
           setLeadStatus(res?.data?.data?.lead_status);
+          setleadcreditdays(res?.data?.data?.lead_credit_days);
           editForm.setFieldsValue({
             leadType: res?.data?.data?.lead_type,
             leadName: res?.data?.data?.lead_customer_name,
@@ -121,6 +127,7 @@ function LeadEdit() {
             leadDescription: res?.data?.data?.lead_description,
             leadAttachment: res?.data?.data?.attachments,
             leadStatus: res?.data?.data?.lead_status,
+            creditdays:res?.data?.data?.lead_credit_days,
           });
         } else {
           console.log("FAILED T LOAD DATA");
@@ -147,6 +154,7 @@ function LeadEdit() {
     formData.append("lead_user_type", leadUsertype);
     formData.append("lead_organization", leadOrganization);
     formData.append("lead_source", leadSource);
+    formData.append("lead_credit_days", leadcreditdays);
     if (leadDescription) {
       formData.append("lead_description", leadDescription);
     }
@@ -410,7 +418,12 @@ function LeadEdit() {
                           },
                         ]}
                       >
-                      <InputType/>
+                      <InputType  
+                      value={leadcreditdays}
+                      onChange={(e)=>{
+                      setleadcreditdays(e.target.value)
+                      }}
+                      />
                       </Form.Item>
                     </div>
                     {/* <div className="col-12 mt-3">
@@ -454,10 +467,11 @@ function LeadEdit() {
                         )}
                       </Form.Item>
                     </div> */}
-                    <div className="col-sm-4 pt-3">
+                    <div className="col-sm-4 pt-2">
                       <label>Description</label>
                       <Form.Item
                         name="leadDescription"
+                        className="py-2"
                         rules={[
                           {
                             min: 2,
@@ -519,7 +533,7 @@ function LeadEdit() {
                         )}
                       </Form.Item>
                     </div>
-                    <div className="col-sm-4 pt-3">
+                    <div className="col-sm-4 pt-1">
                       <label>Lead Status</label>
                       <Form.Item
                         name="leadStatus"
@@ -544,11 +558,21 @@ function LeadEdit() {
                         </SelectBox>
                       </Form.Item>
                     </div>
-
-                    <div className="col pt-3">
+                     <div className=" d-flex justify-content-center gap-2 py-4">
+                    <div className=" ">
                       <Button type="submit" btnType="save">
                         Update
                       </Button>
+                    </div>
+                    <div className=" ">
+                      <Button type="submit" btnType="save" 
+                      onClick={() => {
+                        handleCancel();
+                      }}
+                      >
+                        Cancel
+                      </Button>
+                    </div>
                     </div>
                   </div>
                 </Form>

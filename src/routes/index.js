@@ -68,8 +68,6 @@ const ROUTES = {
   EDIT_QUOTATION: "/edit_quotation",
   EDIT_QUOTATION_ID: "/edit_quotation/:id",
 
-
-
   VIEW_QUOTATION: "/view_quotation",
   ENQUIRIES: "/enquiries",
   AGENT_RESPONSE: "/agent_response",
@@ -102,16 +100,15 @@ const ROUTES = {
   PRINT_INVOICE_ID: "/print_invoice/:id",
 
   // Accounts
-  PAYMEMENT_MODE:"/payment_mode",
-  ADD_PURCHASE:"/add_purchase",
-  PURCHASE:"/purchase",
-
-
+  PAYMEMENT_MODE: "/payment_mode",
+  ADD_PURCHASE: "/add_purchase",
+  PURCHASE: "/purchase",
 
   //  Accounts
   DAILY_EXPENSE: "/daily_expense",
   CREATE_EXPENSE: "/create_expense",
   EXPENSE_CATEGORY: "/expense_category",
+  ADD_PAYMENTS: "/add_payments",
   // general settings
   CURRENCY: "/currency",
   COMPANYINFO: "/company_info",

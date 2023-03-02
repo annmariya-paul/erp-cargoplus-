@@ -146,6 +146,7 @@ export default function Attribute(props) {
         console.log("attributes added successfully", addattributes);
         if (addattributes.data.success) {
           setShowModaladd(false)
+          addForm.resetFields()
           setSaveSuccess(true);
           close_modal(saveSuccess, 1000);
         } else if (addattributes.data.success === false) {

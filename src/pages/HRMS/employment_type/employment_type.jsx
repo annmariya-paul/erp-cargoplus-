@@ -323,7 +323,7 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
             </div>
             <div className="col-4">
             <Button btnType="add" onClick={() => setaddshowmodal(true)}>
-              Add EmployeMentType
+              Add EmployMentType
             </Button>
             </div>
         </div>

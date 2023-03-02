@@ -473,7 +473,7 @@ function Category() {
                     <FileUpload
                       multiple
                       listType="picture"
-                      // height={130}
+                      height={100}
                       accept=".png,.jpg,.jpeg"
                       // onPreview={handlePreview}
                       beforeUpload={beforeUpload}

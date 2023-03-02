@@ -920,6 +920,31 @@ export default function Sidebar({ showSidebar }) {
                           </NavLink>
                         </li>
                       )}
+                      {checkPermission("paymentmode") && (
+                    <li className="nav-text ">
+                      <NavLink
+                        className={({ isActive }) =>
+                          isActive ? "active-link" : "link"
+                        }
+                        to={ROUTES.PAYMEMENT_MODE}
+                      >
+                        <div className=" ms-5">Payment Mode</div>
+                      </NavLink>
+                    </li>
+                  )}
+
+                  {checkPermission("purchase") && (
+                    <li className="nav-text">
+                      <NavLink
+                        className={({ isActive }) =>
+                          isActive ? "active-link" : "link"
+                        }
+                        to={ROUTES.PURCHASE}
+                      >
+                        <div className=" ms-5">Purchase</div>
+                      </NavLink>
+                    </li>
+                  )}
                     </>
                   ) : (
                     ""
@@ -1023,74 +1048,9 @@ export default function Sidebar({ showSidebar }) {
                 ""
               )}
 
-              {/* ACCOUNTS */}
+              
 
-              <li
-                className={
-                  ACCOUNTSopen
-                    ? "nav-text  items_hrms open"
-                    : "nav-text  items_hrms "
-                }
-              >
-                <Link
-                  className={ACCOUNTSopen ? "active-link_main" : "link"}
-                  // to="/"
-                  onClick={() => setACCOUNTSopen(!ACCOUNTSopen)}
-                >
-                  <div className="d-flex justify-content-between gap-5">
-                    <div className="d-flex">
-                      <RiTeamFill className="sidebar_icons" />
-                      {/* <img
-                        src={hrmsIcon}
-                        alt
-                        height={15}
-                        width={15}
-                        className="mt-1 me-1"
-                      /> */}
-                      <div style={{ width: "120px" }} className="">
-                        Accounts
-                      </div>
-                    </div>
-
-                    <div className="  ">
-                      <div className="text-right ">
-                        <AiOutlineCaretDown className="toggle_btn " />
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              </li>
-              {ACCOUNTSopen ? (
-                <>
-                  {checkPermission("paymentmode") && (
-                    <li className="nav-text ">
-                      <NavLink
-                        className={({ isActive }) =>
-                          isActive ? "active-link" : "link"
-                        }
-                        to={ROUTES.PAYMEMENT_MODE}
-                      >
-                        <div className=" ms-4">Payment Mode</div>
-                      </NavLink>
-                    </li>
-                  )}
-
-                  {checkPermission("purchase") && (
-                    <li className="nav-text">
-                      <NavLink
-                        className={({ isActive }) =>
-                          isActive ? "active-link" : "link"
-                        }
-                        to={ROUTES.PURCHASE}
-                      >
-                        <div className=" ms-4">Purchase</div>
-                      </NavLink>
-                    </li>
-                  )}
-                </>
-              ) : (
-                ""
-              )}
+              
             </ul>
           </nav>
         </div>

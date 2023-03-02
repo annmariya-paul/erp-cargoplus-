@@ -1451,9 +1451,10 @@ export default function Taskexpenses() {
       total += item?.job_task_expense_cost_subtotalfx;
       expense += item?.job_task_expense_exp_amountlx;
     });
-
-    setTotalCost(total);
-    setTotalExpense(expense);
+    total = Number.parseFloat(total);
+    expense = Number.parseFloat(expense);
+    setTotalCost(total.toFixed(2));
+    setTotalExpense(expense.toFixed(2));
   }, [tableData]);
 
   console.log("total cost ::", totalcost);

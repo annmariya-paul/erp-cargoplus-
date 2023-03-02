@@ -1,4 +1,4 @@
-import { Form, Select } from "antd";
+import { Form, Select,Input } from "antd";
 import React, { useEffect, useState } from "react";
 import Button from "../../../components/button/button";
 import InputType from "../../../components/Input Type textbox/InputType";
@@ -8,6 +8,7 @@ import "./employee.scss";
 import { CRM_BASE_URL_HRMS } from "./../../../api/bootapi";
 import Custom_model from "../../../components/custom_modal/custom_model";
 import { useNavigate } from "react-router-dom";
+
 import { ROUTES } from "../../../routes";
 import { UniqueErrorMsg } from "../../../ErrorMessages/UniqueErrorMessage";
 import CheckUnique from "../../../check Unique/CheckUnique";
@@ -421,8 +422,8 @@ function CreateEmployee() {
                           <InputType />
                         </Form.Item>
                       </div>
-                      <div className="col-sm-6">
-                        <label>Password</label>
+                      <div className="col-sm-6 mt-1  " >
+                        <label style={{marginBottom:"1%"}}>Password</label>
                         <Form.Item
                           name="employee_password"
                           rules={[
@@ -439,9 +440,10 @@ function CreateEmployee() {
                             //   message: "Required Maximum 100 chraraters ",
                             // },
                           ]}
+                        
                         >
-                          <InputType />
-                        </Form.Item>
+                          <Input.Password className="newpass" style={{backgroundColor:"whitesmoke"}}/>
+                                                  </Form.Item>
                       </div>
                     </div>
                   </div>

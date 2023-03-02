@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { CRM_BASE_URL } from "../../../../api/bootapi";
+import dayjs from "dayjs";
+// import { Oppor_Status } from "../../../../utils/SelectOptions";
 import {
   FaFileExcel,
   FaFileCsv,
@@ -19,7 +21,7 @@ import { ROUTES } from "../../../../routes";
 import "../../../CRM/lead/lead_list/leadlist.scss";
 import TableData from "../../../../components/table/table_data";
 import MyPagination from "../../../../components/Pagination/MyPagination";
-import Custom_model from "../../../../components/custom_modal/custom_model";
+import CustomModel from "../../../../components/custom_modal/custom_model";
 import Button from "../../../../components/button/button";
 import "./opportunitylist.scss";
 import { BsPlusCircleFill } from "react-icons/bs";
@@ -39,8 +41,9 @@ import TextArea from "../../../../components/ InputType TextArea/TextArea";
 function OpportunityLeadlist(props) {
   const { id } = useParams();
   console.log("ID is in leadopportunity ...", id);
-
+  const dateFormatList = ["DD-MM-YYYY", "DD-MM-YY"];
   const [numOfItems, setNumOfItems] = useState("25");
+  // const today = new Date().toISOString().split("T")[0];
   const [pageSize, setPageSize] = useState(0); // page size
   const [current, setCurrent] = useState(1); // current page
   const [searchSource, setSearchSource] = useState(""); // search by text input
@@ -54,18 +57,26 @@ function OpportunityLeadlist(props) {
   const [showAddOpportunity, setShowAddOpportunity] = useState(false); //adding opportunity
   const [oppId, setOppID] = useState(parseInt(id));
   console.log(oppId);
+  const [oppstatus, setOppstatus] = useState(Oppor_Status);
   const [oppurtunitylead, setOppurtunitylead] = useState("");
   const [oppurtunitytype, setoppurtunitytype] = useState();
   const [oppurtunityfrom, setOppurtunityfrom] = useState();
   const [oppurtunitysource, setOppurtunitysource] = useState();
   const [oppurtunityparty, setOppurtunityparty] = useState("");
+  const config = {
+    rules: [{ required: true, message: "Please select Date!" }],
+  };
+  console.log("opp party", oppurtunityparty);
   const [oppurtunityvalidity, setOppurtunityvalidity] = useState();
-  const [oppurtunityamount, setOppurtunityamount] = useState("");
+  console.log("opp validity", oppurtunityvalidity);
+
+  const [oppurtunityamount, setOppurtunityamount] = useState();
   const [oppurtunityprobability, setOppurtunityProbability] = useState("");
   const [opportunitydescription, setOpportunitydescription] = useState("");
   const [oppurtunitystatus, setOppurtunitystatus] = useState("");
   const [oppurtunityviewprogress, setoppurtunityviewprogress] = useState();
   const [oppurtunityid, setOppurtunityid] = useState();
+  console.log("iddd", oppurtunityid);
 
   const [contact, setContact] = useState([]);
   const [progressResponse, setProgressResponse] = useState("");
@@ -74,9 +85,9 @@ function OpportunityLeadlist(props) {
   const [progressUpdatestatus, setProgressUpdatestatus] = useState(5);
   const [opportunity_Id, setOpportunity_Id] = useState();
   const [opporStatus, setOpporstatus] = useState(Oppor_Status);
-  const [probConversion,setProbConversion] = useState(Prob_conversion);
+  const [probConversion, setProbConversion] = useState(Prob_conversion);
 
-  const[leadname,setLeadname] =useState("")
+  const [leadname, setLeadname] = useState("");
 
   //view progress
   const [tableprogress, setTableprogress] = useState("");
@@ -88,15 +99,19 @@ function OpportunityLeadlist(props) {
     opportunity_id: "",
     opportunity_type: "",
     opportunity_from: "",
-    convertedby: "",
+    // convertedby: "",
     opportunity_source: "",
     opportunity_party: "",
+    opportunity_party1: "",
     opportunity_validity: "",
     opportunity_description: "",
     opportunity_amount: "",
     opportunity_probability: "",
     opportunity_status: "",
-    opportunity_leadid: "",
+    opportunity_lead_id: "",
+    opportunity_lead_name: "",
+    opportunity_statusname: "",
+    opportunity_partyname: "",
   });
 
   const [editOppurtunity, setEditOppurtunity] = useState({
@@ -124,6 +139,7 @@ function OpportunityLeadlist(props) {
 
   const [newOpportunityList, setNewOpportunityList] = useState();
   console.log("QQQQQQQQQQQQQ", newOpportunityList);
+
   // const [oppurtunityid, setOppurtunityid] = useState();
 
   const GetOpportunityData = () => {
@@ -132,57 +148,40 @@ function OpportunityLeadlist(props) {
         if (res?.data?.success) {
           console.log("All opportunity data", res?.data?.data);
           //   setNewOpportunityList(res?.data?.data);
-          
+
           let samplearry = [];
-          res?.data?.data?.crm_v1_contacts.forEach((item,index)=>{
-            res?.data?.data?.crm_v1_opportunities.forEach((oppo,index)=>{
- samplearry.push({
-   opportunity_type: oppo?.opportunity_type,
-   opportunity_from: oppo?.opportunity_from,
-   opportunity_created_by: oppo?.opportunity_created_by,
-   opportunity_source: oppo?.opportunity_source,
-   opportunity_probability:oppo?.opportunity_probability,
-   opportunity_description:oppo?.opportunity_description,
-   opportunity_status:oppo?.opportunity_status,
-   opportunity_amount:oppo?.opportunity_amount,
-   opportunity_party: item?.contact_person_name,
+          res?.data?.data?.crm_v1_contacts.forEach((item, index) => {
+            res?.data?.data?.crm_v1_opportunities.forEach((oppo, index) => {
+              if (item.contact_id === oppo.opportunity_party) {
+                oppstatus.forEach((sts, index) => {
+                  var statusnew = parseInt(sts.value);
+                  if (statusnew == oppo.opportunity_status) {
+                    samplearry.push({
+                      opportunity_Id: oppo?.opportunity_id,
+                      opportunity_type: oppo?.opportunity_type,
+                      opportunity_from: oppo?.opportunity_from,
+                      opportunity_created_by1: res?.data?.data.lead_id,
+                      opportunity_created_by:
+                        res?.data?.data.lead_customer_name,
+                      opportunity_source: oppo?.opportunity_source,
+                      opportunity_probability: oppo?.opportunity_probability,
+                      opportunity_description: oppo?.opportunity_description,
+                      opportunity_statusname: sts?.name,
+                      opportunity_status: oppo?.opportunity_status,
+                      opportunity_amount: oppo?.opportunity_amount,
+                      opportunity_party: item?.contact_person_name,
+                      opportunity_party1: item?.contact_id,
+                      opportunity_validity: oppo?.opportunity_validity,
+                    });
+                  }
 
- });
- setNewOpportunityList(samplearry);
+                  //  setoppnewid(oppo?.opportunity_id);
+                });
+              }
             });
-
           });
-         
-// #3#######
-      // res?.data?.data?.crm_v1_contacts.forEach((item, index) => {
-      //   res?.data?.data?.crm_v1_opportunities.forEach((oppo, index) => {
-      //     opporStatus.forEach((s, index) => {
-      //       var oppoStatus = parseInt(s.value);
-      //       if (oppoStatus === item.opportunity_status) {
-      //         samplearry.push({
-      //           opportunity_type: oppo?.opportunity_type,
-      //           opportunity_from: oppo?.opportunity_from,
-      //           opportunity_created_by: oppo?.opportunity_created_by,
-      //           opportunity_source: oppo?.opportunity_source,
-      //           opportunity_probability: oppo?.opportunity_probability,
-      //           opportunity_description: oppo?.opportunity_description,
-      //           opportunity_status: s?.name,
-      //           opportunity_amount: oppo?.opportunity_amount,
-      //           opportunity_party: item?.contact_person_name,
-      //         });
-      //         setNewOpportunityList(samplearry);
-      //       }
-      //     });
-      //   });
-      // });
-// ##########
-          // res?.data?.data?.leads.forEach((item, index) => {
-          //   samplearry.push(item.opportunity_id);
-          // });
-          // console.log("pushedd ", samplearry);
 
-          // setNewOpportunityList(samplearry);
-         
+          setNewOpportunityList(samplearry);
         } else {
           console.log("Failed to load data !");
         }
@@ -223,6 +222,7 @@ function OpportunityLeadlist(props) {
       setOppurtunitystatus(oneoppurtunities.data?.data?.opportunity_status);
       setOppurtunitylead(oneoppurtunities.data?.data?.opportunity_lead_id);
       setOppurtunityparty(oneoppurtunities.data?.data?.opportunity_party);
+
       // setOppurtunityparty()
     } catch (err) {
       console.log("error while getting all leads: ", err);
@@ -249,7 +249,7 @@ function OpportunityLeadlist(props) {
     try {
       const onelead = await PublicFetch.get(`${CRM_BASE_URL}/lead/${id}`);
       console.log("one lead  name iss", onelead.data.data.lead_customer_name);
-      setLeadname(onelead.data.data.lead_customer_name)
+      setLeadname(onelead.data.data.lead_customer_name);
       // setBranches(allbranches.data.data);
       // setBranch_id(allbranches.data.branch_id);
       // console.log("branch id", branch_id);
@@ -259,7 +259,7 @@ function OpportunityLeadlist(props) {
   };
 
   useEffect(() => {
-    getonelead()
+    getonelead();
     GetOpportunityData();
     // getAllContact();
   }, [numOfItems, pageSize, id]);
@@ -303,18 +303,22 @@ function OpportunityLeadlist(props) {
     console.log("view oppurtunity issss:", item);
     setviewoppurtunity({
       ...viewoppurtunity,
-      opportunity_id: item.opportunity_id,
+      opportunity_id: item.opportunity_Id,
       opportunity_type: item.opportunity_type,
       opportunity_from: item.opportunity_from,
-      convertedby: item.opportunity_created_by,
+      // convertedby: item.opportunity_created_by,
       opportunity_source: item.opportunity_source,
-      opportunity_party: item.opportunity_party,
+      opportunity_party: item.opportunity_party1,
+      opportunity_partyname: item.opportunity_party,
       opportunity_validity: item.opportunity_validity,
       opportunity_description: item.opportunity_description,
       opportunity_amount: item.opportunity_amount,
       opportunity_probability: item.opportunity_probability,
       opportunity_status: item.opportunity_status,
-      opportunity_lead_id: item.opportunity_lead_id,
+      opportunity_lead_id: item.opportunity_created_by1,
+      opportunity_lead_name: item.opportunity_created_by,
+      opportunity_statusname: item.opportunity_statusname,
+      // opportunity_leadid: item.opportunity_created_by1,
     });
     // getOppurtunityProgress(item);
     setOpportunity_Id(item?.opportunity_id);
@@ -342,18 +346,58 @@ function OpportunityLeadlist(props) {
 
   const handleEditedclick = (i) => {
     console.log("edittingg in list::: ", i);
+    setOppurtunityid(i.opportunity_Id);
+    setoppurtunitytype(i.opportunity_type);
+    setOppurtunityfrom(i.opportunity_from);
+    setOppurtunityparty(i.opportunity_party1);
+    setOppurtunitysource(i.opportunity_source);
+
+    setOppurtunityvalidity(i.opportunity_validity);
+    setOppurtunityamount(i.opportunity_amount);
+    setOpportunitydescription(i.opportunity_description);
+    setOppurtunityProbability(i.opportunity_probability);
+    setOppurtunitystatus(i.opportunity_status);
+    setOppurtunitylead(i.opportunity_created_by1);
+
+    getAllContact();
+
+    let validityDate = moment(i.opportunity_validity);
+
+    editForm.setFieldsValue({
+      opportunity_id: i.opportunity_id,
+      opportunity_type: i.opportunity_type,
+      opportunity_from: i.opportunity_from,
+      opportunity_party: i.opportunity_party1,
+      opportunity_source: i.opportunity_source,
+      opportunity_validity: validityDate,
+      opportunity_amount: i.opportunity_amount,
+      opportunity_description: i.opportunity_description,
+      opportunity_probability: i.opportunity_probability,
+      opportunity_status: i.opportunity_status,
+      opportunity_lead_id: i.opportunity_created_by,
+    });
+
+    setShowEditModal(true);
+  };
+
+  const handleviewtoedit = (i) => {
+    console.log("edittingg in view to edit is", i);
     setOppurtunityid(i.opportunity_id);
     setoppurtunitytype(i.opportunity_type);
     setOppurtunityfrom(i.opportunity_from);
     setOppurtunityparty(i.opportunity_party);
     setOppurtunitysource(i.opportunity_source);
+
     setOppurtunityvalidity(i.opportunity_validity);
     setOppurtunityamount(i.opportunity_amount);
     setOpportunitydescription(i.opportunity_description);
     setOppurtunityProbability(i.opportunity_probability);
     setOppurtunitystatus(i.opportunity_status);
     setOppurtunitylead(i.opportunity_lead_id);
+
     getAllContact();
+
+    let validityDate = moment(i.opportunity_validity);
 
     editForm.setFieldsValue({
       opportunity_id: i.opportunity_id,
@@ -361,12 +405,12 @@ function OpportunityLeadlist(props) {
       opportunity_from: i.opportunity_from,
       opportunity_party: i.opportunity_party,
       opportunity_source: i.opportunity_source,
-      opportunity_validity: i.opportunity_validity,
+      opportunity_validity: validityDate,
       opportunity_amount: i.opportunity_amount,
       opportunity_description: i.opportunity_description,
       opportunity_probability: i.opportunity_probability,
       opportunity_status: i.opportunity_status,
-      opportunity_lead_id: i.opportunity_lead_id,
+      opportunity_lead_id: i?.opportunity_lead_name,
     });
 
     setShowEditModal(true);
@@ -379,25 +423,38 @@ function OpportunityLeadlist(props) {
   //   setShowEditModal(true);
   // };
 
-  const updatedOppurtunity = async (updatedData) => {
-    const UpdatedFormdata = {
-      // id: viewoppurtunity.id,
-      opportunity_lead_id: oppurtunitylead,
-      opportunity_type: oppurtunitytype,
-      opportunity_from: oppurtunityfrom,
-      opportunity_source: oppurtunitysource,
-      opportunity_party: oppurtunityparty,
-      opportunity_validity: oppurtunityvalidity,
-      opportunity_description: opportunitydescription,
-      opportunity_amount: oppurtunityamount,
-      opportunity_probability: oppurtunityprobability,
-      opportunity_status: oppurtunitystatus,
-    };
+  console.log("opportunity 11111111", oppurtunityparty);
+
+  const updatedOppurtunity = async () => {
+    // const UpdatedFormdata = {
+    //   // id: viewoppurtunity.id,
+    //   opportunity_lead_id: oppurtunitylead,
+    //   opportunity_type: oppurtunitytype,
+    //   opportunity_from: oppurtunityfrom,
+    //   opportunity_source: oppurtunitysource,
+    //   opportunity_party: oppurtunityparty,
+    //   opportunity_validity: oppurtunityvalidity,
+    //   opportunity_description: opportunitydescription,
+    //   opportunity_amount: oppurtunityamount,
+    //   opportunity_probability: oppurtunityprobability,
+    //   opportunity_status: oppurtunitystatus,
+    // };
 
     try {
       const editoppurtunity = await PublicFetch.patch(
         `${CRM_BASE_URL}/opportunity/${oppurtunityid}`,
-        UpdatedFormdata
+        {
+          opportunity_lead_id: oppurtunitylead,
+          opportunity_type: oppurtunitytype,
+          opportunity_from: oppurtunityfrom,
+          opportunity_source: oppurtunitysource,
+          opportunity_party: oppurtunityparty,
+          opportunity_validity: oppurtunityvalidity,
+          opportunity_description: opportunitydescription,
+          opportunity_amount: oppurtunityamount,
+          opportunity_probability: oppurtunityprobability,
+          opportunity_status: oppurtunitystatus,
+        }
       );
 
       console.log("editdata", editoppurtunity);
@@ -465,6 +522,7 @@ function OpportunityLeadlist(props) {
       key: "action",
       width: "15%",
       render: (data, index) => {
+        console.log("indexxx", index);
         return (
           <div className="d-flex justify-content-center gap-2">
             <div className="editcolor">
@@ -756,7 +814,7 @@ function OpportunityLeadlist(props) {
 
         {/*  {/* {View model of opportunity  section Two    }  */}
       </div>
-      <Custom_model
+      <CustomModel
         show={showViewModal}
         onHide={() => setShowViewModal(false)}
         View_list
@@ -771,10 +829,10 @@ function OpportunityLeadlist(props) {
                   <span
                     className="d-flex align-items-center justify-content-between gap-1  p-1 button_span"
                     style={{ fontSize: "14px" }}
-                    onClick={() => {
+                    onClick={(e) => {
                       // setShowEditModal(true);
                       // handleEditclick(viewoppurtunity?.id);
-                      handleEditedclick(viewoppurtunity);
+                      handleviewtoedit(viewoppurtunity);
                       console.log("edit :::", viewoppurtunity);
                       setShowViewModal(false);
                     }}
@@ -802,7 +860,7 @@ function OpportunityLeadlist(props) {
                   <tr>
                     <td>Converted By</td>
                     <td>:</td>
-                    <td>{viewoppurtunity.convertedby}</td>
+                    <td>{viewoppurtunity.opportunity_lead_name}</td>
                   </tr>
                   <tr>
                     <td>Source</td>
@@ -812,7 +870,7 @@ function OpportunityLeadlist(props) {
                   <tr>
                     <td>Party</td>
                     <td>:</td>
-                    <td>{viewoppurtunity.opportunity_party}</td>
+                    <td>{viewoppurtunity.opportunity_partyname}</td>
                   </tr>
                   <tr>
                     <td>Valid up to</td>
@@ -841,7 +899,7 @@ function OpportunityLeadlist(props) {
                   <tr>
                     <td>status </td>
                     <td>:</td>
-                    <td>{viewoppurtunity.opportunity_status}</td>
+                    <td>{viewoppurtunity.opportunity_statusname}</td>
                   </tr>
                 </tbody>
               </table>
@@ -883,305 +941,8 @@ function OpportunityLeadlist(props) {
 
       {/* {Adding Opportunity Modal in Opportunity page} */}
 
-      <Custom_model
-        Adding_contents
-        show={showAddOpportunity}
-        onHide={() => setShowAddOpportunity(false)}
-        header="Add Opportunity"
-        size={`xl`}
-        // footer={[<Button btnType="save">Save</Button>]}
-        {...props}
-      >
-        <Form
-        // onSubmit={handleSubmit(submit)}
-        >
-          <div className="px-5">
-            <div className="row px-1">
-              <div className="col-sm-4 pt-2">
-                <Form.Group className="mb-2" controlId="lead_type">
-                  <Form.Label>Typeeeeeeeeeeeeeeeeeeee</Form.Label>
-                  <Form.Select
-                    aria-label="lead_type"
-                    name="lead_type"
-                    className={`${errors.lead_type && "invalid"}`}
-                    {...register("lead_type", {
-                      required: "Type is required",
-                    })}
-                    onKeyUp={() => {
-                      trigger("lead_type");
-                    }}
-                  >
-                    <option value="Sales" selected>
-                      Sales
-                    </option>
-                    <option value="Support">Support</option>
-                    <option value="maintenance">Maintenance</option>
-                  </Form.Select>
-                </Form.Group>
-              </div>
-
-              <div className="col-sm-4 pt-2">
-                <Form.Group className="mb-2" controlId="lead_customer_from">
-                  <Form.Label>From </Form.Label>
-                  <Form.Select
-                    aria-label="lead_customer_from"
-                    name="lead_customer_from"
-                    className={`${errors.lead_customer_from && "invalid"}`}
-                    {...register("lead_customer_from", {
-                      required: "Type is required",
-                    })}
-                    onKeyUp={() => {
-                      trigger("lead_customer_from");
-                    }}
-                  >
-                    {errors.lead_customer_from && (
-                      <small className="text-danger">
-                        {errors.lead_customer_from.message}
-                      </small>
-                    )}
-                    {/* <option value="Sales" selected>
-                         Sales
-                          </option> */}
-                    <option value="Customer" selected>
-                      Customer
-                    </option>
-                    <option value="Lead">Lead</option>
-                  </Form.Select>
-
-                  {errors.lead_customer_from && (
-                    <small className="text-danger">
-                      {errors.lead_customer_from.message}
-                    </small>
-                  )}
-                </Form.Group>
-              </div>
-
-              <div className="col-sm-4 pt-2">
-                <Form.Group
-                  className="mb-2"
-                  controlId="lead_customer_generated"
-                >
-                  <Form.Label>Generated/Converted by</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="lead_customer_generated"
-                    placeholder="User ID"
-                    className={`${errors.lead_customer_generated && "invalid"}`}
-                    {...register("lead_customer_generated", {
-                      required: "Please enter a valid User ID",
-                      minLength: {
-                        value: 3,
-                        message: "Minimum Required length is 3",
-                      },
-                      maxLength: {
-                        value: 100,
-                      },
-                      pattern: {
-                        value: /^[a-zA-Z0-9 ]*$/,
-                        message: "Only letters and numbers are allowed!",
-                      },
-                    })}
-                    onKeyUp={() => {
-                      trigger("lead_customer_generated");
-                    }}
-                    value={oppurtunitylead}
-                    onChange={(e) => {}}
-                  />
-                  {errors.lead_customer_generated && (
-                    <small className="text-danger">
-                      {errors.lead_customer_generated.message}
-                    </small>
-                  )}
-                </Form.Group>
-              </div>
-
-              <div className="col-sm-4 pt-2">
-                <Form.Group className="mb-2" controlId="lead_source">
-                  <Form.Label>Source</Form.Label>
-                  <Form.Select
-                    aria-label="lead_source"
-                    name="lead_source"
-                    className={`${errors.lead_source && "invalid"}`}
-                    {...register("lead_source", {
-                      minLength: {
-                        value: 5,
-                        message: "Minimum Required length is 5",
-                      },
-                    })}
-                    onKeyUp={() => {
-                      trigger("lead_source");
-                    }}
-                  >
-                    <option value="Reference" selected>
-                      Reference
-                    </option>
-                    <option value="Direct Visit">Direct Visit</option>
-                    <option value="Online Registraion">
-                      Online Registration
-                    </option>
-                  </Form.Select>
-                </Form.Group>
-              </div>
-
-              <div className="col-sm-4 pt-2">
-                <Form.Group className="mb-2" controlId="lead_party">
-                  <Form.Label>Party</Form.Label>
-                  <Form.Select
-                    aria-label="lead_party"
-                    name="lead_party"
-                    className={`${errors.lead_party && "invalid"}`}
-                    {...register("lead_party", {
-                      minLength: {
-                        value: 5,
-                        message: "Minimum Required length is 5",
-                      },
-                    })}
-                    onKeyUp={() => {
-                      trigger("lead_party");
-                    }}
-                  >
-                    <option value="Database" selected>
-                      data
-                    </option>
-                    <option value="Direct Visit"></option>
-                  </Form.Select>
-                </Form.Group>
-              </div>
-
-              <div className="col-sm-4 pt-2">
-                <Form.Group className="mb-2" controlId="lead_valid_up_to">
-                  <Form.Label>Valid Up to</Form.Label>
-                  <div className="form-control">
-                    <input
-                      type="date"
-                      style={{ borderWidth: 0 }}
-                      onChange={(date) => setDate(date)}
-                    />
-                  </div>
-                </Form.Group>
-              </div>
-
-              <div className="col-sm-8 pt-3">
-                <Form.Group className="mb-2" controlId="lead_details">
-                  <Form.Label>Details</Form.Label>
-                  <Form.Control
-                    as="textarea"
-                    rows={3}
-                    className={`${errors.lead_details && "invalid"}`}
-                    {...register("lead_details", {
-                      minLength: {
-                        value: 5,
-                        message: "Minimum Required length is 5",
-                      },
-                    })}
-                    onKeyUp={() => {
-                      trigger("lead_details");
-                    }}
-                  />
-                  {errors.lead_details && (
-                    <small className="text-danger">
-                      {errors.lead_details.message}
-                    </small>
-                  )}
-                </Form.Group>
-              </div>
-
-              <div className="col-sm-4 pt-3">
-                <Form.Group className="mb-2" controlId="lead_expecting_amt">
-                  <Form.Label>Expecting Amount</Form.Label>
-                  <Form.Control
-                    type="text"
-                    className={`${errors.lead_expecting_amt && "invalid"}`}
-                    {...register("lead_expecting_amt", {
-                      minLength: {
-                        value: 3,
-                        message: "Minimum Required length is 3",
-                      },
-                      maxLength: {
-                        value: 100,
-                      },
-                      pattern: {
-                        value: /^[a-zA-Z0-9 ]*$/,
-                        message: "Only letters and numbers are allowed!",
-                      },
-                    })}
-                    onKeyUp={() => {
-                      trigger("lead_expecting_amt");
-                    }}
-                  />{" "}
-                  {errors.lead_expecting_amt && (
-                    <small className="text-danger">
-                      {errors.lead_expecting_amt.message}
-                    </small>
-                  )}
-                </Form.Group>
-              </div>
-
-              <div className="col-sm-4 pt-2">
-                <Form.Group className="mb-2" controlId="lead_probability">
-                  <Form.Label>Probability of conversion</Form.Label>
-                  <Form.Select
-                    aria-label="lead_probability"
-                    name="lead_probability"
-                    className={`${errors.lead_probability && "invalid"}`}
-                    {...register("lead_probability", {
-                      minLength: {
-                        value: 5,
-                        message: "Minimum Required length is 5",
-                      },
-                    })}
-                    onKeyUp={() => {
-                      trigger("lead_probability");
-                    }}
-                  >
-                    <option value="low" selected>
-                      low
-                    </option>
-                    <option value="medium">medium</option>
-                    <option value="high">high</option>
-                  </Form.Select>
-                </Form.Group>
-              </div>
-
-              <div className="col-sm-4 pt-2">
-                <Form.Group className="mb-2" controlId="lead_status">
-                  <Form.Label>Status</Form.Label>
-                  <Form.Select
-                    aria-label="lead_status"
-                    name="lead_status"
-                    className={`${errors.lead_status && "invalid"}`}
-                    {...register("lead_status", {
-                      minLength: {
-                        value: 5,
-                        message: "Minimum Required length is 5",
-                      },
-                    })}
-                    onKeyUp={() => {
-                      trigger("lead_status");
-                    }}
-                  >
-                    <option value="quotation" selected>
-                      quotation
-                    </option>
-                    <option value="interested">interested</option>
-                    <option value="converted">converted</option>
-                    <option value="lost">lost</option>
-                    <option value="DND">DND</option>
-                  </Form.Select>
-                </Form.Group>
-              </div>
-              {/* <div className="col-12 d-flex justify-content-center my-2">
-                <Button onClick={submit} btnType="save">
-                  Save
-                </Button>
-              </div> */}
-            </div>
-          </div>
-        </Form>
-      </Custom_model>
-
       {/* Edit opportunity modal   section THREE */}
-      <Custom_model
+      <CustomModel
         Adding_contents
         width={1000}
         show={ShowEditModal}
@@ -1280,7 +1041,14 @@ function OpportunityLeadlist(props) {
                 > */}
                 <label>Generated/Converted by</label>
                 <Form.Item name="opportunity_lead_id">
-                  <InputType value={oppurtunitylead} />
+                  <SelectBox
+                    defaultValue={oppurtunitylead}
+                    // onChange={(e) => {
+                    //   setOppurtunityfrom(e);
+                    // }}
+                  >
+                    {/* <Select.Option value="lead">Lead</Select.Option> */}
+                  </SelectBox>
                 </Form.Item>
 
                 {/* </Form.Group> */}
@@ -1365,17 +1133,15 @@ function OpportunityLeadlist(props) {
                 {/* <Form.Group className="mb-2" controlId="lead_valid_up_to"> */}
                 <label>Valid Up to</label>
 
-                <Form.Item name="opportunity_valid" rules={[{}]}>
-                  <input
-                    type="date"
-                    name="lead_validity"
-                    style={{ borderWidth: 0, borderRadius: "5px" }}
-                    // defaultValue={todaydate}
-                    className="p-2 mt-2"
-                    value={moment(oppurtunityvalidity).format("YYYY-MM-DD")}
-                    onChange={(event) => {
-                      console.log("selected datae : ", event.target.value);
-                      setOppurtunityvalidity(event.target.value);
+                <Form.Item name="opportunity_validity" {...config}>
+                  <DatePicker
+                    style={{ borderWidth: 0, marginTop: 10 }}
+                    initialValues={oppurtunityvalidity}
+                    format={dateFormatList}
+                    // disabledDate={(d) => !d || d.isBefore(today)}
+                    onChange={(e) => {
+                      console.log("date mmm", e);
+                      setOppurtunityvalidity(e);
                     }}
                   />
                 </Form.Item>
@@ -1495,17 +1261,17 @@ function OpportunityLeadlist(props) {
             </div>
           </div>
         </Form>
-      </Custom_model>
+      </CustomModel>
 
       {/* {Success successPopup Modal } */}
-      <Custom_model
+      <CustomModel
         size={"sm"}
         show={successPopup}
         onHide={() => setSuccessPopup(false)}
         success
       />
       {/* ADD OPPORTUNITY PROGRESS MODAL    SECTION FOUR */}
-      <Custom_model
+      <CustomModel
         show={showProgressModal}
         onHide={() => setShowProgresssModal(false)}
         View_list
@@ -1607,3 +1373,311 @@ function OpportunityLeadlist(props) {
 }
 
 export default OpportunityLeadlist;
+
+{
+  /* <input
+                    type="date"
+                    // name="lead_validity"
+                    style={{ borderWidth: 0, borderRadius: "5px" }}
+                    // defaultValue={todaydate}
+                    className="p-2 mt-2"
+                    // oppurtunityvalidity
+                    // value={moment(oppurtunityvalidity).format("YYYY-MM-DD")}
+                    onChange={(event) => {
+                      console.log("selected datae : ", event.target.value);
+                      setOppurtunityvalidity(event.target.value);
+                    }}
+                  /> */
+}
+
+// <Custom_model
+//   Adding_contents
+//   show={showAddOpportunity}
+//   onHide={() => setShowAddOpportunity(false)}
+//   header="Add Opportunity"
+//   size={`xl`}
+//   // footer={[<Button btnType="save">Save</Button>]}
+//   {...props}
+// >
+//   <Form
+//   // onSubmit={handleSubmit(submit)}
+//   >
+//     <div className="px-5">
+//       <div className="row px-1">
+//         <div className="col-sm-4 pt-2">
+//           <Form.Group className="mb-2" controlId="lead_type">
+//             <Form.Label>Typeeeeeeeeeeeeeeeeeeee</Form.Label>
+//             <Form.Select
+//               aria-label="lead_type"
+//               name="lead_type"
+//               className={`${errors.lead_type && "invalid"}`}
+//               {...register("lead_type", {
+//                 required: "Type is required",
+//               })}
+//               onKeyUp={() => {
+//                 trigger("lead_type");
+//               }}
+//             >
+//               <option value="Sales" selected>
+//                 Sales
+//               </option>
+//               <option value="Support">Support</option>
+//               <option value="maintenance">Maintenance</option>
+//             </Form.Select>
+//           </Form.Group>
+//         </div>
+
+//         <div className="col-sm-4 pt-2">
+//           <Form.Group className="mb-2" controlId="lead_customer_from">
+//             <Form.Label>From </Form.Label>
+//             <Form.Select
+//               aria-label="lead_customer_from"
+//               name="lead_customer_from"
+//               className={`${errors.lead_customer_from && "invalid"}`}
+//               {...register("lead_customer_from", {
+//                 required: "Type is required",
+//               })}
+//               onKeyUp={() => {
+//                 trigger("lead_customer_from");
+//               }}
+//             >
+//               {errors.lead_customer_from && (
+//                 <small className="text-danger">
+//                   {errors.lead_customer_from.message}
+//                 </small>
+//               )}
+//               {/* <option value="Sales" selected>
+//                          Sales
+//                           </option> */}
+//               <option value="Customer" selected>
+//                 Customer
+//               </option>
+//               <option value="Lead">Lead</option>
+//             </Form.Select>
+
+//             {errors.lead_customer_from && (
+//               <small className="text-danger">
+//                 {errors.lead_customer_from.message}
+//               </small>
+//             )}
+//           </Form.Group>
+//         </div>
+
+//         <div className="col-sm-4 pt-2">
+//           <Form.Group className="mb-2" controlId="lead_customer_generated">
+//             <Form.Label>Generated/Converted by</Form.Label>
+//             <Form.Control
+//               type="text"
+//               name="lead_customer_generated"
+//               placeholder="User ID"
+//               className={`${errors.lead_customer_generated && "invalid"}`}
+//               {...register("lead_customer_generated", {
+//                 required: "Please enter a valid User ID",
+//                 minLength: {
+//                   value: 3,
+//                   message: "Minimum Required length is 3",
+//                 },
+//                 maxLength: {
+//                   value: 100,
+//                 },
+//                 pattern: {
+//                   value: /^[a-zA-Z0-9 ]*$/,
+//                   message: "Only letters and numbers are allowed!",
+//                 },
+//               })}
+//               onKeyUp={() => {
+//                 trigger("lead_customer_generated");
+//               }}
+//               value={oppurtunitylead}
+//               onChange={(e) => {}}
+//             />
+//             {errors.lead_customer_generated && (
+//               <small className="text-danger">
+//                 {errors.lead_customer_generated.message}
+//               </small>
+//             )}
+//           </Form.Group>
+//         </div>
+
+//         <div className="col-sm-4 pt-2">
+//           <Form.Group className="mb-2" controlId="lead_source">
+//             <Form.Label>Source</Form.Label>
+//             <Form.Select
+//               aria-label="lead_source"
+//               name="lead_source"
+//               className={`${errors.lead_source && "invalid"}`}
+//               {...register("lead_source", {
+//                 minLength: {
+//                   value: 5,
+//                   message: "Minimum Required length is 5",
+//                 },
+//               })}
+//               onKeyUp={() => {
+//                 trigger("lead_source");
+//               }}
+//             >
+//               <option value="Reference" selected>
+//                 Reference
+//               </option>
+//               <option value="Direct Visit">Direct Visit</option>
+//               <option value="Online Registraion">Online Registration</option>
+//             </Form.Select>
+//           </Form.Group>
+//         </div>
+
+//         <div className="col-sm-4 pt-2">
+//           <Form.Group className="mb-2" controlId="lead_party">
+//             <Form.Label>Party</Form.Label>
+//             <Form.Select
+//               aria-label="lead_party"
+//               name="lead_party"
+//               className={`${errors.lead_party && "invalid"}`}
+//               {...register("lead_party", {
+//                 minLength: {
+//                   value: 5,
+//                   message: "Minimum Required length is 5",
+//                 },
+//               })}
+//               onKeyUp={() => {
+//                 trigger("lead_party");
+//               }}
+//             >
+//               <option value="Database" selected>
+//                 data
+//               </option>
+//               <option value="Direct Visit"></option>
+//             </Form.Select>
+//           </Form.Group>
+//         </div>
+
+//         <div className="col-sm-4 pt-2">
+//           <Form.Group className="mb-2" controlId="lead_valid_up_to">
+//             <Form.Label>Valid Up to</Form.Label>
+//             <div className="form-control">
+//               <input
+//                 type="date"
+//                 style={{ borderWidth: 0 }}
+//                 onChange={(date) => setDate(date)}
+//               />
+//             </div>
+//           </Form.Group>
+//         </div>
+
+//         <div className="col-sm-8 pt-3">
+//           <Form.Group className="mb-2" controlId="lead_details">
+//             <Form.Label>Details</Form.Label>
+//             <Form.Control
+//               as="textarea"
+//               rows={3}
+//               className={`${errors.lead_details && "invalid"}`}
+//               {...register("lead_details", {
+//                 minLength: {
+//                   value: 5,
+//                   message: "Minimum Required length is 5",
+//                 },
+//               })}
+//               onKeyUp={() => {
+//                 trigger("lead_details");
+//               }}
+//             />
+//             {errors.lead_details && (
+//               <small className="text-danger">
+//                 {errors.lead_details.message}
+//               </small>
+//             )}
+//           </Form.Group>
+//         </div>
+
+//         <div className="col-sm-4 pt-3">
+//           <Form.Group className="mb-2" controlId="lead_expecting_amt">
+//             <Form.Label>Expecting Amount</Form.Label>
+//             <Form.Control
+//               type="text"
+//               className={`${errors.lead_expecting_amt && "invalid"}`}
+//               {...register("lead_expecting_amt", {
+//                 minLength: {
+//                   value: 3,
+//                   message: "Minimum Required length is 3",
+//                 },
+//                 maxLength: {
+//                   value: 100,
+//                 },
+//                 pattern: {
+//                   value: /^[a-zA-Z0-9 ]*$/,
+//                   message: "Only letters and numbers are allowed!",
+//                 },
+//               })}
+//               onKeyUp={() => {
+//                 trigger("lead_expecting_amt");
+//               }}
+//             />{" "}
+//             {errors.lead_expecting_amt && (
+//               <small className="text-danger">
+//                 {errors.lead_expecting_amt.message}
+//               </small>
+//             )}
+//           </Form.Group>
+//         </div>
+
+//         <div className="col-sm-4 pt-2">
+//           <Form.Group className="mb-2" controlId="lead_probability">
+//             <Form.Label>Probability of conversion</Form.Label>
+//             <Form.Select
+//               aria-label="lead_probability"
+//               name="lead_probability"
+//               className={`${errors.lead_probability && "invalid"}`}
+//               {...register("lead_probability", {
+//                 minLength: {
+//                   value: 5,
+//                   message: "Minimum Required length is 5",
+//                 },
+//               })}
+//               onKeyUp={() => {
+//                 trigger("lead_probability");
+//               }}
+//             >
+//               <option value="low" selected>
+//                 low
+//               </option>
+//               <option value="medium">medium</option>
+//               <option value="high">high</option>
+//             </Form.Select>
+//           </Form.Group>
+//         </div>
+
+//         <div className="col-sm-4 pt-2">
+//           <Form.Group className="mb-2" controlId="lead_status">
+//             <Form.Label>Status</Form.Label>
+//             <Form.Select
+//               aria-label="lead_status"
+//               name="lead_status"
+//               className={`${errors.lead_status && "invalid"}`}
+//               {...register("lead_status", {
+//                 minLength: {
+//                   value: 5,
+//                   message: "Minimum Required length is 5",
+//                 },
+//               })}
+//               onKeyUp={() => {
+//                 trigger("lead_status");
+//               }}
+//             >
+//               <option value="quotation" selected>
+//                 quotation
+//               </option>
+//               <option value="interested">interested</option>
+//               <option value="converted">converted</option>
+//               <option value="lost">lost</option>
+//               <option value="DND">DND</option>
+//             </Form.Select>
+//           </Form.Group>
+//         </div>
+//         {/* <div className="col-12 d-flex justify-content-center my-2">
+//                 <Button onClick={submit} btnType="save">
+//                   Save
+//                 </Button>
+//               </div> */}
+//       </div>
+//     </div>
+//   </Form>
+// </Custom_model>;

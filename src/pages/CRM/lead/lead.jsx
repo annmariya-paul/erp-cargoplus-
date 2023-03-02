@@ -24,7 +24,10 @@ import { message, Select } from "antd";
 import SelectBox from "../../../components/Select Box/SelectBox";
 import InputType from "../../../components/Input Type textbox/InputType";
 import TextArea from "../../../components/ InputType TextArea/TextArea";
+import { UniqueErrorMsg } from "../../../ErrorMessages/UniqueErrorMessage";
+import CheckUnique from "../../../check Unique/CheckUnique";
 // import { useForm } from "react-hook-form";
+// import {  message } from 'antd';
 
 function Lead({}) {
   const [toggleState, setToggleState] = useState(1);
@@ -49,11 +52,23 @@ function Lead({}) {
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
   const [leadimg, setLeadimg] = useState([]);
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const [leadcreditdays, setLeadcreditdays] = useState();
+
+  const [uniqueCode, setuniqueCode] = useState();
   const [addForm] = Form.useForm();
 
   const [error, setError] = useState(false);
   const toggleTab = (index) => {
     setToggleState(index);
+  };
+
+  const errormessage = () => {
+    messageApi.open({
+      type: "error",
+      content: "Lead is not saved",
+    });
   };
 
   const getBase64 = (file) =>
@@ -91,6 +106,7 @@ function Lead({}) {
     formData.append("lead_user_type", leadUsertype);
     formData.append("lead_organization", leadOrganization);
     formData.append("lead_source", leadSource);
+    formData.append("lead_credit_days", leadcreditdays);
     if (leadDescription) {
       formData.append("lead_description", leadDescription);
     }
@@ -117,6 +133,7 @@ function Lead({}) {
           setModalContact(false);
           toggleTab(2);
           setLeadId(response?.data?.data?.lead_id);
+          setLeadcreditdays()
         } else {
           console.log("Failed while adding data");
         }
@@ -141,9 +158,20 @@ function Lead({}) {
   console.log("lead id::", leadId);
 
   // console.log("leadd id iss", leadType.leadtypes.options[0]);
+  const beforeUpload = (file, fileList) => {};
+
+  const handleAddImage = (e) => {
+    console.log("handleAddImage", e);
+    let temp = [];
+    e?.fileList?.forEach((item, index) => {
+      temp.push(item?.originFileObj);
+    });
+    console.log("tempereay file", temp);
+  };
 
   return (
     <>
+      {contextHolder}
       <h5 className="lead_text">Add Lead/Customer</h5>
       <div className="container-fluid">
         <div className="lead_container">
@@ -159,20 +187,26 @@ function Lead({}) {
               <button
                 id="button-tabs"
                 className={toggleState === 2 ? "tabs active-tabs" : "tabs"}
-                onClick={() => toggleTab(2)}
+                onClick={() => {
+                  leadId == null ? errormessage() : toggleTab(2);
+                }}
               >
                 Contacts
               </button>
               <button
                 id="button-tabs"
                 className={toggleState === 3 ? "tabs active-tabs" : "tabs"}
-                onClick={() => toggleTab(3)}
+                onClick={() => {
+                  leadId == null ? errormessage() : toggleTab(3);
+                }}
               >
                 Address
               </button>
               <button
                 className={toggleState === 4 ? "tabs active-tabs" : "tabs"}
-                onClick={() => toggleTab(4)}
+                onClick={() => {
+                  leadId == null ? errormessage() : toggleTab(4);
+                }}
               >
                 Location
               </button>
@@ -273,9 +307,28 @@ function Lead({}) {
                       >
                         <InputType
                           value={leadName}
-                          onChange={(e) => setLeadName(e.target.value)}
+                          onChange={(e) => {
+                            setLeadName(e.target.value);
+                            setuniqueCode(false);
+                          }}
+                          onBlur={async () => {
+                            let a = await CheckUnique({
+                              type: "leadcustomername",
+                              value: leadName,
+                            });
+                            setuniqueCode(a);
+                          }}
                         />
                       </Form.Item>
+                      {uniqueCode ? (
+                        <div>
+                          <label style={{ color: "red" }}>
+                            lead name {UniqueErrorMsg.UniqueErrName}
+                          </label>
+                        </div>
+                      ) : (
+                        ""
+                      )}
                     </div>
                     <div className="col-sm-4 pt-2">
                       <label>User Type</label>
@@ -352,7 +405,33 @@ function Lead({}) {
                         </SelectBox>
                       </Form.Item>
                     </div>
-                    <div className="row justify-content-center">
+                    <div className="col-sm-4 pt-2">
+                      <label>Credit Days</label>
+                      <Form.Item
+                        name="leadcreditdays"
+                        rules={[
+                          {
+                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                            message: "Special characters are not allowed",
+                          },
+                          // {
+                          //   min: 2,
+                          //   message: "organisation has at least 2 characters",
+                          // },
+                          // {
+                          //   max: 100,
+                          //   message:
+                          //     "organisation cannot be longer than 100 characters",
+                          // },
+                        ]}
+                      >
+                        <InputType
+                          value={leadcreditdays}
+                          onChange={(e) => setLeadcreditdays(e.target.value)}
+                        />
+                      </Form.Item>
+                    </div>
+                    {/* <div className="row justify-content-center">
                       <div className="col-lg-3 col-xs-12 col-sm-5 col-md-5 mt-3">
                         <Form.Item name="new">
                           <FileUpload
@@ -360,7 +439,78 @@ function Lead({}) {
                             filetype={"Accept only pdf and docs"}
                             listType="picture"
                             accept=".pdf,.docs,"
-                            onPreview={handlePreview}
+                            // onPreview={handlePreview}
+                            beforeUpload={beforeUpload}
+                            // value={leadAttachment}
+                            // onChange={(e) => setLeadAttachment(e.target.value)}
+                            onChange={(file) => {
+                              console.log("Before upload", file.file);
+                              console.log(
+                                "Before upload file size",
+                                file.file.size
+                              );
+                              if (
+                                file.file.size > 1000 &&
+                                file.file.size < 500000
+                              ) {
+                                setLeadimg(file.file.originFileObj);
+                                handleAddImage(file);
+                                setFileSizeError(false);
+                                console.log(
+                                  "file greater than 1 kb and less than 500 kb"
+                                );
+                              } else {
+                                setFileSizeError(true);
+                                console.log("hgrtryyryr");
+                              }
+                            }}
+                          />
+                          {FileSizeError ? (
+                            <div>
+                              <label style={{ color: "red" }}>
+                                File size must be between 1kb and 500kb
+                              </label>
+                            </div>
+                          ) : (
+                            ""
+                          )}
+                        </Form.Item>
+                      </div>
+                    </div> */}
+                    <div className="col-sm-4 pt-2">
+                      <label className="mb-2">Description</label>
+                      <Form.Item
+                        name="Description"
+                        rules={[
+                          {
+                            min: 5,
+                            message:
+                              "Description must be at least 5 characters",
+                          },
+                          {
+                            max: 500,
+                            message:
+                              "Description cannot be longer than 500 characters",
+                          },
+                        ]}
+                      >
+                        <TextArea
+                        className="descheight"
+                          value={leadDescription}
+                          onChange={(e) => setLeadDescription(e.target.value)}
+                        />
+                      </Form.Item>
+                    </div>
+                    <div className="col-sm-4 mt-4 py-2">
+                    <div className="">
+                        <Form.Item name="new">
+                          <FileUpload
+                            multiple
+                            filetype={"Accept only pdf and docs"}
+                            listType="picture"
+                            accept=".pdf,.docs,"
+                            // onPreview={handlePreview}
+                            beforeUpload={beforeUpload}
                             // value={leadAttachment}
                             // onChange={(e) => setLeadAttachment(e.target.value)}
                             onChange={(file) => {
@@ -395,29 +545,7 @@ function Lead({}) {
                           )}
                         </Form.Item>
                       </div>
-                    </div>
-                    <div className="col-sm-8 pt-2">
-                      <label className="mb-2">Description</label>
-                      <Form.Item
-                        name="Description"
-                        rules={[
-                          {
-                            min: 5,
-                            message:
-                              "Description must be at least 5 characters",
-                          },
-                          {
-                            max: 500,
-                            message:
-                              "Description cannot be longer than 500 characters",
-                          },
-                        ]}
-                      >
-                        <TextArea
-                          value={leadDescription}
-                          onChange={(e) => setLeadDescription(e.target.value)}
-                        />
-                      </Form.Item>
+
                     </div>
                     <div className="col-sm-4 pt-2">
                       <div className="row">
@@ -451,18 +579,24 @@ function Lead({}) {
                         </div>
                       </div>
                     </div>
-
-                    <div className="col">
-                      <Button type="submit" btnType="save">
+                   <div className=" d-flex justify-content-center py-2">
+                    <div className="">
+                      <Button 
+                      type="submit" 
+                      btnType="save"
+                      className="mt-4"
+                      >
                         Save
                       </Button>
+                      </div>
+                    </div>
                       <Custom_model
                         size={`sm`}
                         success
                         show={modalShow}
                         onHide={() => setModalShow(false)}
                       />
-                    </div>
+                   
                   </div>
                 </Form>
               </div>

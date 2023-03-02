@@ -25,6 +25,7 @@ function Employees() {
   const [employeeDesignation, setEmployeeDesignation] = useState("");
   const [employeeGrade, setEmployeeGrade] = useState("");
   const [employeeType, setEmployeeType] = useState("");
+  const[employeeroleid,setEmployeeroleid]=useState();
   const [empEmail, setEmpEmail] = useState();
   const [empPassword, setEmpPassword] = useState();
   const [pageSize, setPageSize] = useState("25");
@@ -47,7 +48,89 @@ function Employees() {
   };
 
   //Columns
+  const [serialNo, setserialNo] = useState(1);
   const columns = [
+    {
+      title: "SI.NO",
+      key: "index",
+      width: "8%",
+      render: (value, item, index) => serialNo + index,
+      align: "center",
+    },
+   
+    {
+      title: "EMPLOYEE NAME",
+      dataIndex: "employee_name",
+      key: "employee_name",
+      // filteredValue: [searchedText],
+      // onFilter: (value, record) => {
+      //   return String(record.employee_name)
+      //     .toLowerCase()
+      //     .includes(value.toLowerCase());
+      filteredValue: [searchedText],
+      onFilter: (value, record) => {
+        return (
+          String(record.employee_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.employee_code)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.employee_branch)
+            .toLowerCase()
+            .includes(value.toLowerCase())||
+            String(record.employee_department)
+              .toLowerCase()
+              .includes(value.toLowerCase())||
+              String(record.employee_designation)
+                .toLowerCase()
+                .includes(value.toLowerCase())||
+                String(record.employee_type)
+                  .toLowerCase()
+                  .includes(value.toLowerCase())||
+                  String(record.employee_grade)
+                    .toLowerCase()
+                    .includes(value.toLowerCase())
+        );
+      },
+      align: "left",
+    },
+    {
+      title: "EMPLOYEE CODE",
+      dataIndex: "employee_code",
+      key: "employee_code",
+      align: "left",
+    },
+    {
+      title: "EMPLOYEE BRANCH",
+      dataIndex: "employee_branch",
+      key: "employee_branch",
+      align: "left",
+    },
+    {
+      title: "EMPLOYEE DEPARTMENT",
+      dataIndex: "employee_department",
+      key: "employee_department",
+      align: "left",
+    },
+    {
+      title: "EMPLOYEE DESIGNATION",
+      dataIndex: "employee_designation",
+      key: "employee_designation",
+      align: "left",
+    },
+    {
+      title: "EMPLOYEE TYPE",
+      dataIndex: "employee_type",
+      key: "employee_type",
+      align: "left",
+    },
+    {
+      title: "EMPLOYEE GRADE",
+      dataIndex: "employee_grade",
+      key: "employee_grade",
+      align: "left",
+    },
     {
       title: "ACTION",
       dataIndex: "action",
@@ -70,54 +153,6 @@ function Employees() {
           </div>
         );
       },
-      align: "center",
-    },
-    {
-      title: "EMPLOYEE NAME",
-      dataIndex: "employee_name",
-      key: "employee_name",
-      filteredValue: [searchedText],
-      onFilter: (value, record) => {
-        return String(record.employee_name)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
-      align: "center",
-    },
-    {
-      title: "EMPLOYEE CODE",
-      dataIndex: "employee_code",
-      key: "employee_code",
-      align: "center",
-    },
-    {
-      title: "EMPLOYEE BRANCH",
-      dataIndex: "employee_branch",
-      key: "employee_branch",
-      align: "center",
-    },
-    {
-      title: "EMPLOYEE DEPARTMENT",
-      dataIndex: "employee_department",
-      key: "employee_department",
-      align: "center",
-    },
-    {
-      title: "EMPLOYEE DESIGNATION",
-      dataIndex: "employee_designation",
-      key: "employee_designation",
-      align: "center",
-    },
-    {
-      title: "EMPLOYEE TYPE",
-      dataIndex: "employee_type",
-      key: "employee_type",
-      align: "center",
-    },
-    {
-      title: "EMPLOYEE GRADE",
-      dataIndex: "employee_grade",
-      key: "employee_grade",
       align: "center",
     },
   ];
@@ -215,8 +250,8 @@ function Employees() {
           res.data.data.forEach((item, index) => {
             array.push({
               employee_id: item.employee_id,
-              employee_email: item.employee_email,
-              employee_password: item.employee_password,
+              // employee_email: item.employee_email,
+              // employee_password: item.employee_password,
               employee_name: item.employee_name,
               employee_code: item.employee_code,
               employee_department_id: item.hrms_v1_departments.department_id,
@@ -270,8 +305,9 @@ function Employees() {
     setEmployeeDesignation(data.employee_designation_id);
     setEmployeeGrade(data.employee_grade_id);
     setEmployeeType(data.employee_type_id);
-    setEmpEmail(data.employee_email);
-    setEmpPassword(data.employee_password);
+    setEmployeeroleid(data.employee_role_id);
+    // setEmpEmail(data.employee_email);
+    // setEmpPassword(data.employee_password);
 
     if (data) {
       editForm.setFieldsValue({
@@ -284,8 +320,8 @@ function Employees() {
         employee_grade: data.employee_grade_id,
         employee_type: data.employee_type_id,
         employee_role_id: data.employee_role_id,
-        employee_email: data.employee_email,
-        employee_password: data.employee_password,
+        // employee_email: data.employee_email,
+        // employee_password: data.employee_password,
       });
       setModalEditEmployee(true);
     }
@@ -302,8 +338,9 @@ function Employees() {
           employee_designation: employeeDesignation,
           employee_grade: employeeGrade,
           employee_type: employeeType,
-          employee_email: empEmail,
-          employee_password: empPassword,
+          employee_role_id:employeeroleid,
+          // employee_email: empEmail,
+          // employee_password: empPassword,
         }
       );
       console.log("editedd data is", updating);
@@ -340,7 +377,7 @@ function Employees() {
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
-              placeholder="Search by Employee Name"
+              placeholder="Search"
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
               onChange={(e) => {
@@ -423,12 +460,13 @@ function Employees() {
       <CustomModel
         width={650}
         show={modalEditEmployee}
-        bodyStyle={{ height: "640px", overflowY: "scroll" }}
+
+        bodyStyle={{ height: "550px" }}
         onHide={() => setModalEditEmployee(false)}
         View_list
         list_content={
           <div>
-            <h5 className="lead_text">Edit Employee</h5>
+            <h5 className="lead_text mt-2">Edit Employee</h5>
             <div className="row">
               <div className="col-12 my-3">
                 <div className="px-2">
@@ -440,7 +478,7 @@ function Employees() {
                     }}
                   >
                     <div className="row">
-                      <div className="col-6">
+                      <div className="col-6 mt-4">
                         <div className="">
                           <label>Employee Name</label>
                           <Form.Item
@@ -467,7 +505,7 @@ function Employees() {
                           </Form.Item>
                         </div>
                       </div>
-                      <div className="col-6">
+                      <div className="col-6 mt-4">
                         <label>Employee Code</label>
                         <Form.Item
                           name="employee_code"
@@ -502,7 +540,7 @@ function Employees() {
                           </p>
                         ) : null}
                       </div>
-                      <div className="col-6">
+                      <div className="col-6 mt-3">
                         <label>Employee Branch</label>
                         <Form.Item
                           name="employee_branch"
@@ -534,7 +572,7 @@ function Employees() {
                           </SelectBox>
                         </Form.Item>
                       </div>
-                      <div className="col-6">
+                      <div className="col-6 mt-3">
                         <label>Employee Department</label>
                         <Form.Item
                           name="employee_department"
@@ -566,7 +604,7 @@ function Employees() {
                           </SelectBox>
                         </Form.Item>
                       </div>
-                      <div className="col-6">
+                      <div className="col-6 mt-4">
                         <label>Employee Designation</label>
                         <Form.Item
                           name="employee_designation"
@@ -598,7 +636,7 @@ function Employees() {
                           </SelectBox>
                         </Form.Item>
                       </div>
-                      <div className="col-6">
+                      <div className="col-6 mt-4">
                         <label>Employee Type</label>
                         <Form.Item
                           name="employee_type"
@@ -630,7 +668,7 @@ function Employees() {
                           </SelectBox>
                         </Form.Item>
                       </div>
-                      <div className="col-6">
+                      <div className="col-6 mt-4">
                         <label>Employee Grade</label>
                         <Form.Item
                           name="employee_grade"
@@ -662,7 +700,7 @@ function Employees() {
                           </SelectBox>
                         </Form.Item>
                       </div>
-                      <div className="col-sm-6">
+                      <div className="col-sm-6 mt-4">
                         <label>Employee Role</label>
                         <Form.Item
                           name="employee_role_id"
@@ -686,53 +724,8 @@ function Employees() {
                           </SelectBox>
                         </Form.Item>
                       </div>
-                      <div className="col-12">
-                        <div className="row login_border">
-                          {/* <div className="col-12 lead_text mb-2"> */}
-                          <h6 className="lead_text my-3">Login Info</h6>
-                          {/* </div> */}
-                          <div className="col-sm-6">
-                            <label>Email</label>
-                            <Form.Item
-                              name="employee_email"
-                              rules={[
-                                {
-                                  required: true,
-                                  pattern: new RegExp(
-                                    "^[A-Za-z0-9_!#$%&'*+/=?`{|}~^.-]+@[A-Za-z0-9.-]+$"
-                                  ),
-                                  message: "Email is Required",
-                                },
-                              ]}
-                            >
-                              <InputType />
-                            </Form.Item>
-                          </div>
-                          <div className="col-sm-6">
-                            <label>Password</label>
-                            <Form.Item
-                              name="employee_password"
-                              rules={[
-                                {
-                                  required: true,
-                                  message: "Password is Required",
-                                },
-                                // {
-                                //   min: 3,
-                                //   message: "Required Minimum 3 characters",
-                                // },
-                                // {
-                                //   max: 100,
-                                //   message: "Required Maximum 100 chraraters ",
-                                // },
-                              ]}
-                            >
-                              <InputType />
-                            </Form.Item>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="col-12 mt-2">
+                    
+                      <div className="col-12 mt-5">
                         <div className="d-flex justify-content-center">
                           <Button
                             type="submit"

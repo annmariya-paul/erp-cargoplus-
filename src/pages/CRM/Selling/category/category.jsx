@@ -16,13 +16,15 @@ import { ROUTES } from "../../../../routes";
 import InputType from "../../../../components/Input Type textbox/InputType";
 import { UniqueErrorMsg } from "../../../../ErrorMessages/UniqueErrorMessage";
 
-const getBase64 = (file) =>
+const getBase64 = (file) => {
+  console.log("getbase64", file);
   new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => resolve(reader.result);
     reader.onerror = (error) => reject(error);
   });
+};
 
 function Category() {
   const [addForm] = Form.useForm();
@@ -47,8 +49,10 @@ function Category() {
   const [parentcategory, setParentcategory] = useState(null);
   const [imageSize, setImageSize] = useState(false);
   const [uniqueCode, setuniqueCode] = useState(false);
+  const [imgPreview, setImgPreview] = useState();
   // const [parent,setParent]=useState(null);
   console.log("set image", img);
+  // console.log("bsae64", previewImage);
 
   const close_modal = (mShow, time) => {
     if (!mShow) {
@@ -60,9 +64,10 @@ function Category() {
   };
 
   const handleCancel = () => {
-    navigate(ROUTES.CATEGORY);
+    navigate(ROUTES.CATEGORY_LIST);
   };
   const handlePreview = async (file) => {
+    console.log("handlePreview", file);
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj);
     }
@@ -327,6 +332,9 @@ function Category() {
       });
   };
 
+  
+  // console.log("imgage preview", imgPreview);
+  const beforeUpload = (file, fileList) => {};
   return (
     <>
       <div className="container-fluid">
@@ -344,6 +352,9 @@ function Category() {
               }}
             >
               <div className="row px-4 pt-4">
+                <div>
+                  <h5 className="lead_text">Add Category</h5>
+                </div>
                 <div className="col-sm-4 pt-3">
                   <label>Name</label>
                   <Form.Item
@@ -436,7 +447,7 @@ function Category() {
                     </TreeSelect>
                   </Form.Item>
                 </div>
-                <div className=" col-sm-5 pt-3">
+                <div className="col-xl-6 col-lg-6 col-sm-12 pt-3">
                   <label>Description</label>
                   <Form.Item
                     name="category_description"
@@ -456,52 +467,58 @@ function Category() {
                     <TextArea />
                   </Form.Item>
                 </div>
-                <div className="row ">
-                  <div className="col-12 ">
-                    <label>Display Picture</label>
-                    <Form.Item name="category_pic">
-                      <FileUpload
-                        multiple
-                        listType="picture"
-                        accept=".png,.jpg,.jpeg"
-                        onPreview={handlePreview}
-                        beforeUpload={false}
-                        onChange={(file) => {
-                          console.log("Before upload", file.file);
-                          console.log(
-                            "Before upload file size",
-                            file.file.size
-                          );
-
-                          if (
-                            file.file.size > 1000 &&
-                            file.file.size < 500000
-                          ) {
-                            setImg(file.file.originFileObj);
-                            console.log("Allowed image size");
-                            setImageSize(false);
-                          } else {
-                            setImageSize(true);
-                            console.log("image size between 1 kb and  500 kb");
-                          }
-                        }}
-                      />
-                      {imageSize ? (
-                        <p style={{ color: "red" }}>
-                          Please Upload an image between 1 kb and 500 kb
-                        </p>
-                      ) : (
-                        ""
-                      )}
-                    </Form.Item>
-                  </div>
-                  {/* {
+                <div className="col-xl-6 col-lg-6 col-sm-12 pt-3">
+                  <label>Display Picture</label>
+                  <Form.Item name="category_pic">
+                    <FileUpload
+                      multiple
+                      listType="picture"
+                      // height={130}
+                      accept=".png,.jpg,.jpeg"
+                      // onPreview={handlePreview}
+                      beforeUpload={beforeUpload}
+                      onChange={(file) => {
+                        console.log("Before upload", file.file);
+                        console.log("Before upload file size", file.file.size);
+                        if (file.file.size > 1000 && file.file.size < 500000) {
+                          setImg(file.file.originFileObj);
+                          console.log("Allowed image size");
+                          setImageSize(false);
+                          setImgPreview(file?.file?.thumbUrl);
+                        } else {
+                          setImageSize(true);
+                          console.log("image size between 1 kb and  500 kb");
+                        }
+                      }}
+                    />
+                    {imageSize ? (
+                      <p style={{ color: "red" }}>
+                        Please Upload an image between 1 kb and 500 kb
+                      </p>
+                    ) : (
+                      ""
+                    )}
+                  </Form.Item>
+                </div>
+                {/* <div className="row justify-content-center"> */}
+                {/* {
               error403 ? (<div><p style={{textAlign:"center",color:"red"}}>Category Code has been taken </p></div>):""
             } */}
-                </div>
-                <div className="d-flex mb-3">
-                  <Button className="savebtn" btnType="save">
-                    Save
+                {/* </div> */}
+                {/* <div>
+                  <img src={imgPreview} alt height={"50px"} width={"50px"} />
+                </div> */}
+                <div className="mt-5 d-flex justify-content-center gap-2">
+                  <Button btnType="save">Save</Button>
+                  <Button
+                    as="input"
+                    type="reset"
+                    value="Reset"
+                    onClick={() => {
+                      handleCancel();
+                    }}
+                  >
+                    Cancel
                   </Button>
                 </div>
               </div>

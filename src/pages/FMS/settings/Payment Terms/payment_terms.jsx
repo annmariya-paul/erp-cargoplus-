@@ -63,7 +63,60 @@ export default function PaymentTerms(props) {
     payment_term_description: "",
   });
 
+  const [serialNo, setserialNo] = useState(1);
   const columns = [
+    {
+      title: "SI.NO",
+      key: "index",
+      width: "13%",
+      render: (value, item, index) => serialNo + index,
+      align: "center",
+    },
+  
+    {
+      title: " NAME",
+      dataIndex: "payment_term_name",
+      key: "payment_term_name",
+      width: "20%",
+      filteredValue: [searchedText],
+      onFilter: (value, record) => {
+        return String(record.payment_term_name)
+          .toLowerCase()
+          .includes(value.toLowerCase()) || 
+          String(record.payment_term_shortname)
+          .toLowerCase()
+          .includes(value.toLowerCase()) ||
+          String(record.payment_term_description)
+          .toLowerCase()
+          .includes(value.toLowerCase())
+      },
+      align: "left",
+    },
+    {
+      title: "SHORT NAME",
+      dataIndex: "payment_term_shortname",
+      key: "payment_term_shortname",
+      width: "20%",
+      // filteredValue: [searchedsname],
+      // onFilter: (value, record) => {
+      //   return String(record.payment_term_shortname)
+      //     .toLowerCase()
+      //     .includes(value.toLowerCase());
+      // },
+      align: "left",
+    },
+    {
+      title: "DESCRIPTION",
+      dataIndex: "payment_term_description",
+      key: "payment_term_description",
+      
+      // onFilter: (value, record) => {
+      //   return String(record.payment_term_description)
+      //     .toLowerCase()
+      //     .includes(value.toLowerCase());
+      // },
+      align: "left",
+    },
     {
       title: "ACTION",
       dataIndex: "action",
@@ -91,42 +144,6 @@ export default function PaymentTerms(props) {
             </div>
           </div>
         );
-      },
-      align: "center",
-    },
-    {
-      title: " NAME",
-      dataIndex: "payment_term_name",
-      key: "payment_term_name",
-      filteredValue: [searchedText],
-      onFilter: (value, record) => {
-        return String(record.payment_term_name)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
-      align: "center",
-    },
-    {
-      title: "SHORT NAME",
-      dataIndex: "payment_term_shortname",
-      key: "payment_term_shortname",
-      filteredValue: [searchedsname],
-      onFilter: (value, record) => {
-        return String(record.payment_term_shortname)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
-      align: "center",
-    },
-    {
-      title: "DESCRIPTION",
-      dataIndex: "payment_term_description",
-      key: "payment_term_description",
-      
-      onFilter: (value, record) => {
-        return String(record.payment_term_description)
-          .toLowerCase()
-          .includes(value.toLowerCase());
       },
       align: "center",
     },
@@ -294,7 +311,7 @@ export default function PaymentTerms(props) {
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-5">
             <Input.Search
-              placeholder="Search by Name"
+              placeholder="Search"
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
               onChange={(e) => {
@@ -305,7 +322,7 @@ export default function PaymentTerms(props) {
               }}
             />
           </div>
-            <div className="col-5">
+            {/* <div className="col-5">
             <Input.Search
               placeholder="Search by Shortname"
               style={{ margin: "5px", borderRadius: "5px" }}
@@ -317,7 +334,7 @@ export default function PaymentTerms(props) {
                 setSearchedsname(value);
               }}
             />
-          </div>
+          </div> */}
         </div>
         <div className="row my-2">
           <div className="col-4  ">

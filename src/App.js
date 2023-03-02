@@ -93,6 +93,8 @@ import Vendor from "./pages/CRM/Purchase/vendor/vendor";
 import ProtectedRoute from "./components/ProtectedRoute";
 import InvoicePrint from "./components/Invoice/InvoicePrint";
 import PrintInvoice from "./pages/FMS/Invoice/PrintInvoice";
+import InvoiceView from "./pages/FMS/Invoice/InvoiceView";
+import DailyExpence from "./pages/Accounts/DailyExpence/DailyExpence";
 // import Vendortype from "./pages/CRM/Purchase/vendertype/vendortype";
 // import Lead from "./pages/lead/lead";
 
@@ -403,6 +405,10 @@ function App() {
               <Route index element={<InvoicePreView />} />
             </Route>
 
+            <Route path={ROUTES.INVOICE_VIEW_ID} element={<ProtectedRoute />}>
+              <Route index element={<InvoiceView />} />
+            </Route>
+
             {/* General settings */}
 
             <Route path={ROUTES.CURRENCY} element={<ProtectedRoute />}>
@@ -418,6 +424,11 @@ function App() {
               element={<ProtectedRoute />}
             >
               <Route index element={<Taskexpenses />} />
+            </Route>
+
+            {/* ######## ACCOUNTS ######## */}
+            <Route path={ROUTES.DAILY_EXPENCE} element={<ProtectedRoute />}>
+              <Route index element={<DailyExpence />} />
             </Route>
 
             {/* </Route> */}

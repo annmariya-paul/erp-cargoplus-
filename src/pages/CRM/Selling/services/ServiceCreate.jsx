@@ -10,7 +10,10 @@ import SelectBox from "../../../../components/Select Box/SelectBox";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
 import { Form, message, InputNumber } from "antd";
 import PublicFetch from "../../../../utils/PublicFetch";
-import { CRM_BASE_URL_FMS, CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
+import {
+  CRM_BASE_URL_FMS,
+  CRM_BASE_URL_SELLING,
+} from "../../../../api/bootapi";
 import { TreeSelect } from "antd";
 import { Navigate, useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../../routes";
@@ -41,16 +44,16 @@ function ServiceCreate() {
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
-  const [imageSize,setImageSize]= useState();
+  const [imageSize, setImageSize] = useState();
   const [uniqueCode, setuniqueCode] = useState();
   const [uniqueserCode, setuniqueserCode] = useState();
-  const [uniqueHsnCode,setuniqueHsnCode]= useState();
+  const [uniqueHsnCode, setuniqueHsnCode] = useState();
 
   const [numOfItems, setNumOfItems] = useState("25");
   const [current, setCurrent] = useState(1);
   const pageofIndex = numOfItems * (current - 1) - 1 + 1;
- 
-const [alltaxtype, setalltaxtype]= useState("")
+
+  const [alltaxtype, setalltaxtype] = useState("");
   const [addform] = Form.useForm();
   const navigate = useNavigate();
   const getBase64 = (file) =>
@@ -129,7 +132,6 @@ const [alltaxtype, setalltaxtype]= useState("")
     getCategorydata();
   }, []);
 
-
   const OnSubmit = () => {
     const formData = new FormData();
     formData.append("service_name", serviceName);
@@ -156,28 +158,27 @@ const [alltaxtype, setalltaxtype]= useState("")
         setError(true);
       });
   };
- const handleCancel=()=>{
-  navigate(ROUTES.SERVICES)
- }
+  const handleCancel = () => {
+    navigate(ROUTES.SERVICES);
+  };
 
+  const getAllTaxTypes = async () => {
+    try {
+      const allTxTypes = await PublicFetch.get(
+        `${CRM_BASE_URL_FMS}/tax-types?startIndex=${pageofIndex}&perPage=${numOfItems}`
+      );
+      console.log("all taxtype are", allTxTypes.data.data);
+      setalltaxtype(allTxTypes.data.data);
+      // setTaxTypes(allTxTypes.data.data);
+    } catch (err) {
+      console.log("error while getting the tax types: ", err);
+    }
+  };
 
- const getAllTaxTypes = async () => {
-  try {
-    const allTxTypes = await PublicFetch.get(
-      `${CRM_BASE_URL_FMS}/tax-types?startIndex=${pageofIndex}&perPage=${numOfItems}`
-    );
-    console.log("all taxtype are", allTxTypes.data.data);
-    setalltaxtype(allTxTypes.data.data)
-    // setTaxTypes(allTxTypes.data.data);
-  } catch (err) {
-    console.log("error while getting the tax types: ", err);
-  }
-};
-
-useEffect(() => {
-  getAllTaxTypes();
-}, []);
-
+  useEffect(() => {
+    getAllTaxTypes();
+  }, []);
+  const beforeUpload = (file, fileList) => {};
 
   return (
     <div>
@@ -423,8 +424,8 @@ useEffect(() => {
                       listType="picture"
                       accept=".png,.jpeg"
                       height={100}
-                      onPreview={handlePreview}
-                      beforeUpload={false}
+                      // onPreview={handlePreview}
+                      beforeUpload={beforeUpload}
                       onChange={(file) => {
                         console.log("Before upload file size", file.file.size);
                         if (file.file.size > 2000 && file.file.size < 500000) {

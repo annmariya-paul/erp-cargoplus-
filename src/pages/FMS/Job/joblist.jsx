@@ -9,6 +9,7 @@ import { ROUTES } from "../../../routes";
 import PublicFetch from "../../../utils/PublicFetch";
 import { CRM_BASE_URL_FMS } from "../../../api/bootapi";
 import moment from "moment";
+import MyPagination from "../../../components/Pagination/MyPagination";
 
 function Listjob() {
   const [searchedText, setSearchedText] = useState("");
@@ -18,7 +19,93 @@ function Listjob() {
   // const [searchedText, setSearchedText] = useState("");
   const [searchName, setSearchName] = useState("");
   const [searchStatus, setSearchStatus] = useState("");
+
+
+  const [noofItems, setNoofItems] = useState("25");
+  const [current, setCurrent] = useState(1);
+
+  const[totaljob,settotaljob]= useState("")
+  const [serialNo, setserialNo] = useState(1);
+
+  const pageofIndex = noofItems * (current - 1) - 1 + 1;
   const columns = [
+    {
+      title: "Sl. No.",
+      key: "index",
+      width: "7%",
+      render: (value, item, index) => serialNo + index,
+      align: "center",
+    },
+
+    {
+      title: "JOB NO",
+      dataIndex: "job_number",
+      key: "job_number",
+      filteredValue: [searchedText],
+      onFilter: (value, record) => {
+        return String(record.job_number)
+          .toLowerCase()
+          .includes(value.toLowerCase()) ||
+          String(record.job_date)
+          .toLowerCase()
+          .includes(value.toLowerCase()) ||
+          String(record.job_awb_bl_no)
+          .toLowerCase()
+          .includes(value.toLowerCase())||
+          String(record.job_consignee_name)
+          .toLowerCase()
+          .includes(value.toLowerCase())||
+          String(record.job_shipper)
+          .toLowerCase()
+          .includes(value.toLowerCase()) ||
+          String(record.job_status)
+          .toLowerCase()
+          .includes(value.toLowerCase())
+      },
+      align: "center",
+    },
+    {
+      title: "DATE",
+      dataIndex: "job_date",
+      key: "job_date",
+      align: "center",
+    },
+    {
+      title: "AWB/BL",
+      dataIndex: "job_awb_bl_no",
+      key: "job_awb_bl_no",
+      // filteredValue: [searchedNo],
+      // onFilter: (value, record) => {
+      //   return String(record.job_awb_bl_no)
+      //     .toLowerCase()
+      //     .includes(value.toLowerCase());
+      // },
+      align: "center",
+    },
+    {
+      title: "CONSIGNEE",
+      dataIndex: "job_consignee_name",
+      key: "job_consignee_name",
+      // filteredValue: [searchName],
+      // onFilter: (value, record) => {
+      //   return String(record.job_consignee_name)
+      //     .toLowerCase()
+      //     .includes(value.toLowerCase());
+      // },
+      align: "center",
+    },
+    {
+      title: "SHIPPER",
+      dataIndex: "job_shipper",
+      key: "job_shipper",
+      align: "center",
+    },
+    {
+      title: "STATUS",
+      dataIndex: "job_status",
+      key: "job_status",
+      align: "center",
+    },
     {
       title: "ACTION",
       dataIndex: "action",
@@ -67,60 +154,6 @@ function Listjob() {
           </div>
         );
       },
-      align: "center",
-    },
-    {
-      title: "JOB NO",
-      dataIndex: "job_number",
-      key: "job_number",
-      filteredValue: [searchedText],
-      onFilter: (value, record) => {
-        return String(record.job_number)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
-      align: "center",
-    },
-    {
-      title: "DATE",
-      dataIndex: "job_date",
-      key: "job_date",
-      align: "center",
-    },
-    {
-      title: "AWB/BL",
-      dataIndex: "job_awb_bl_no",
-      key: "job_awb_bl_no",
-      filteredValue: [searchedNo],
-      onFilter: (value, record) => {
-        return String(record.job_awb_bl_no)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
-      align: "center",
-    },
-    {
-      title: "CONSIGNEE",
-      dataIndex: "job_consignee_name",
-      key: "job_consignee_name",
-      filteredValue: [searchName],
-      onFilter: (value, record) => {
-        return String(record.job_consignee_name)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
-      align: "center",
-    },
-    {
-      title: "SHIPPER",
-      dataIndex: "job_shipper",
-      key: "job_shipper",
-      align: "center",
-    },
-    {
-      title: "STATUS",
-      dataIndex: "job_status",
-      key: "job_status",
       align: "center",
     },
     {
@@ -186,6 +219,7 @@ function Listjob() {
         );
       },
     },
+   
   ];
 
   const data = [
@@ -218,6 +252,7 @@ function Listjob() {
         console.log("Response", res);
         if (res.data.success) {
           console.log("success", res.data.data);
+          settotaljob(res.data.data)
           let temp = [];
           res.data.data.forEach((item, index) => {
             let date = moment(item.job_date).format("DD-MM-YYYY");
@@ -266,7 +301,7 @@ function Listjob() {
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
-              placeholder="Search by Job Number"
+              placeholder="Search"
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
               onChange={(e) => {
@@ -277,7 +312,7 @@ function Listjob() {
               }}
             />
           </div>
-          <div className="col-4">
+          {/* <div className="col-4">
             <Input.Search
               placeholder="Search by AWB/BL Number"
               style={{ margin: "5px", borderRadius: "5px" }}
@@ -302,10 +337,10 @@ function Listjob() {
                 setSearchName(value);
               }}
             />
-          </div>
+          </div> */}
         </div>
         <div className="row my-3">
-          <div className="col-xl-3 col-lg-3 col-sm-12 px-3">
+          <div className="col-4">
             <Select
               bordered={false}
               className="page_size_style"
@@ -329,8 +364,24 @@ function Listjob() {
               </Select.Option>
             </Select>
           </div>
-          <div className="col-xl-1 col-lg-1 col-sm-12 p-1"></div>
-          <div className="col-xl-8 col-lg-8 col-sm-12 d-flex justify-content-end">
+        
+          <div className="col-4 d-flex py-2 justify-content-center">
+          <MyPagination
+              total={parseInt(totaljob?.length)}
+              current={current}
+              pageSize={noofItems}
+              // defaultPageSize={noofItems}
+              showSizeChanger={false}
+              onChange={(current, pageSize) => {
+                console.log("page index isss", pageSize);
+                setCurrent(current);
+                // setPageSize(pageSize);
+                // setNoofItems(pageSize);
+                // setCurrent(noofItems !== pageSize ? 0 : current);
+              }}
+            />
+          </div>
+          <div className="col-4 d-flex justify-content-end">
             <div className="col mb-2 px-4">
               <Link to={ROUTES.CREATEJOB} style={{ color: "white" }}>
                 <Button btnType="add">Add Job</Button>
@@ -346,6 +397,21 @@ function Listjob() {
             columns={columns}
             custom_table_css="table_lead_list"
           />
+        </div>
+
+        <div className="d-flex justify-content-center ">
+        <MyPagination
+              total={parseInt(totaljob?.length)}
+              current={current}
+              pageSize={noofItems}
+              // defaultPageSize={noofItems}
+              showSizeChanger={false}
+              onChange={(current, pageSize) => {
+                console.log("page index isss", pageSize);
+                setCurrent(current);
+              
+              }}
+            />
         </div>
       </div>
     </>

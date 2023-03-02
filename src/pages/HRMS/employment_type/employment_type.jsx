@@ -124,7 +124,28 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
   }, []);
  
 
+  const [serialNo, setserialNo] = useState(1);
   const columns = [
+    {
+      title: "SI.NO",
+      key: "index",
+      width: "20%",
+      render: (value, item, index) => serialNo + index,
+      align: "center",
+    },
+  
+    {
+      title: "EMPLOYMENT TYPE NAME",
+      dataIndex: "employment_type_name",
+      key: "employment_type_name",
+      filteredValue: [searchedText],
+      onFilter: (value, record) => {
+        return String(record.employment_type_name)
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      },
+      align: "left",
+    },
     {
       title: "ACTION",
       dataIndex: "action",
@@ -150,18 +171,6 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
             </div>
           </div>
         );
-      },
-      align: "center",
-    },
-    {
-      title: "EMPLOYMENT TYPE NAME",
-      dataIndex: "employment_type_name",
-      key: "employment_type_name",
-      filteredValue: [searchedText],
-      onFilter: (value, record) => {
-        return String(record.employment_type_name)
-          .toLowerCase()
-          .includes(value.toLowerCase());
       },
       align: "center",
     },
@@ -260,7 +269,7 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
-              placeholder="Search by Employment Types"
+              placeholder="Search"
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
               onChange={(e) => {

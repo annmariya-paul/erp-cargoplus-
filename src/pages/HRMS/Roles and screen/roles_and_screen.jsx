@@ -7,6 +7,8 @@ import InputType from "../../../components/Input Type textbox/InputType";
 import TableData from "../../../components/table/table_data";
 import PublicFetch from "../../../utils/PublicFetch";
 import "./roles_screen.scss";
+import CheckUnique from "../../../check Unique/CheckUnique";
+import { UniqueErrorMsg } from "../../../ErrorMessages/UniqueErrorMessage";
 
 function Roles_and_Screen() {
   const [addForm] = Form.useForm();
@@ -14,9 +16,17 @@ function Roles_and_Screen() {
   const [isEditOn, setIsEditOn] = useState(false);
   const [isEditTwo, setIsEditTwo] = useState(false);
   const [successModal, setSuccessModal] = useState(false);
+  const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
+  const [addemploytypename, setaddemploytypename] = useState("");
+  const [newName,setNewName]=useState();
   const [getallRoles, setGetAllRoles] = useState();
+  const [employeeType, setEmployeeType] = useState();
   const [role_id, setRole_id] = useState();
   const [serialNo, setserialNo] = useState(1);
+  const [uniqueCode, setuniqueCode] = useState(false);
+const [uniqueeditCode, setuniqueeditCode] = useState(false);
+const [employeeTName, setEmployeeTName] = useState();
+  
 
   const close_modal = (mShow, time) => {
     if (!mShow) {
@@ -28,7 +38,9 @@ function Roles_and_Screen() {
   const CreateRole = (data) => {
     PublicFetch.post(
       `${process.env.REACT_APP_BASE_URL}/permissions/roles`,
-      data
+      {
+        name: addemploytypename.trim(" ")
+      }
     )
       .then((res) => {
         console.log("Response", res);
@@ -75,7 +87,9 @@ function Roles_and_Screen() {
   const updateRoles = (data) => {
     PublicFetch.patch(
       `${process.env.REACT_APP_BASE_URL}/permissions/roles/${role_id}`,
-      data
+      {
+        name: employeeTName.trim(""),
+      }
     )
       .then((res) => {
         console.log("Response", res);
@@ -192,8 +206,32 @@ function Roles_and_Screen() {
                       },
                     ]}
                   >
-                    <InputType />
+                    <InputType
+                    
+                      
+                    value={employeeTName}
+                    onChange={(e) => {
+                      setEmployeeTName(e.target.value);
+                      setuniqueeditCode(false);
+                    }}
+                   
+                    onBlur={ async () => {
+                     
+                      if (newName !== employeeTName){
+                        let a = await CheckUnique({type:"rolename",value:employeeTName})
+                       setuniqueeditCode(a)
+                      }
+                   
+                    }}
+                    
+                    />
                   </Form.Item>
+                  {uniqueeditCode ? (
+                        <p style={{ color: "red" }}>
+                          Role {uniqueErrMsg.UniqueErrName}
+                        </p>
+                      ) : null}
+
                   <div className="d-flex justify-content-center">
                     <Button type="submit" className="p-2 save_button_style">
                       Save
@@ -224,9 +262,29 @@ function Roles_and_Screen() {
                         message: "Minimum 2 characters Required",
                       },
                     ]}
+                    onChange={(e) => setaddemploytypename(e.target.value)}
                   >
-                    <InputType />
+                    <InputType 
+                    
+                    onChange={(e) => {
+                      setEmployeeType(e.target.value);
+                      setuniqueCode(false);
+                    }}
+                    onBlur={ async () => {
+                        
+                      let a = await CheckUnique({type:"rolename",value:employeeType})
+                      
+                      setuniqueCode(a)
+                    }}
+                    />
                   </Form.Item>
+                  {uniqueCode ? (
+                      <p style={{ color: "red" }}>
+                     Role {uniqueErrMsg.UniqueErrName}
+                      </p>
+                    ) : null}
+
+
                   <div className="d-flex justify-content-center">
                     <Button type="submit" className="p-2 save_button_style">
                       Save

@@ -36,9 +36,17 @@ import TextArea from "../../../../components/ InputType TextArea/TextArea";
 import { EnvironmentFilled } from "@ant-design/icons";
 import { UniqueErrorMsg } from "../../../../ErrorMessages/UniqueErrorMessage";
 
+const getBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+
 function Categorylist(props) {
   const [editForm] = Form.useForm();
-
+  const [serialNo, setserialNo] = useState(1);
   const [pageSize, setPageSize] = useState("25");
   const [current, setCurrent] = useState(1);
   const [searchedText, setSearchedText] = useState("");
@@ -57,10 +65,11 @@ function Categorylist(props) {
   const [ViewingData, setViewingDAta] = useState();
   const [categoryId, setCategory] = useState();
   const [OldData, setOldData] = useState();
+  const [CategoryImg,setCategoryImg] = useState();
   const [c_code, setCcode] = useState();
   const [cName, setCname] = useState();
   const [cPic, setCpic] = useState();
-  const [cDescription, setCdescription] = useState();
+  const [cDescription, setCdescription] = useState("");
   const [cParent, setCparent] = useState();
   const [imageSize, setImageSize] = useState(false);
   const [uniqueCode, setuniqueCode] = useState(false);
@@ -87,13 +96,14 @@ function Categorylist(props) {
           key: category?.category_id,
           category_name: category?.category_name,
           category_parent_id: category?.category_parent_id,
+          category_parent_name:category?.category_parent_name,
           category_code: category?.category_code,
           category_description: category?.category_description,
           category_pic: category?.category_pic,
           children: ch,
           // category_parent_name:
         });
-console.log("parntt",treeStructure)
+        console.log("parntt", treeStructure);
         // }
       });
     }
@@ -165,6 +175,7 @@ console.log("parntt",treeStructure)
 
                   // category_parent_id: firstItem.category_parent_id,
                   category_parent_id: firstItem.category_parent_id,
+                  category_parent_name: firstItem.category_parent_name,
                 });
                 // if (firstItem?.other_crm_v1_categories?.length > 0) {
                 for (
@@ -288,33 +299,12 @@ console.log("parntt",treeStructure)
 
   const columns = [
     {
-      title: "ACTIONS",
-      dataIndex: "actions",
-      key: "actions",
-      width: "14%",
-      render: (data, index) => {
-        return (
-          <div className=" d-flex justify-content-center align-items-center gap-3">
-            <div
-              className="actionEdit"
-              onClick={() => handleEditCategoryPhase1(index)}
-            >
-              <FaEdit />
-            </div>
-            <div
-              className="actionEdit"
-              onClick={() => handleViewCategory(index)}
-            >
-              <MdPageview />
-            </div>
-            <div className="actionDel">
-              <FaTrash />
-            </div>
-          </div>
-        );
-      },
+      title: "Sl. No.",
+      key: "index",
+      render: (value, item, index) => serialNo + index,
       align: "center",
     },
+
     {
       title: "CATEGORY NAME",
       dataIndex: "category_name",
@@ -345,8 +335,8 @@ console.log("parntt",treeStructure)
     },
     {
       title: "PARENT CATEGORY",
-      dataIndex: "category_parent_id",
-      key: "category_parent_id",
+      dataIndex: "category_parent_name",
+      key: "category_parent_name",
       width: "23%",
       filteredValue: [searchStatus],
       onFilter: (value, record) => {
@@ -361,6 +351,34 @@ console.log("parntt",treeStructure)
       dataIndex: "category_description",
       key: "category_description",
       width: "23%",
+      align: "center",
+    },
+    {
+      title: "ACTIONS",
+      dataIndex: "actions",
+      key: "actions",
+      width: "14%",
+      render: (data, index) => {
+        return (
+          <div className=" d-flex justify-content-center align-items-center gap-3">
+            <div
+              className="actionEdit"
+              onClick={() => handleEditCategoryPhase1(index)}
+            >
+              <FaEdit />
+            </div>
+            <div
+              className="actionEdit"
+              onClick={() => handleViewCategory(index)}
+            >
+              <MdPageview />
+            </div>
+            <div className="actionDel">
+              <FaTrash />
+            </div>
+          </div>
+        );
+      },
       align: "center",
     },
   ];
@@ -391,11 +409,13 @@ console.log("parntt",treeStructure)
       setCcode(e.category_code);
       setCname(e.category_name);
       setCdescription(e.category_description);
+      setCategoryImg(e.category_pic);
       setViewingDAta({
         key: e.key,
         category_name: e.category_name,
         category_code: e.category_code,
         category_parent_id: e.category_parent_id,
+        category_parent_name:e.category_parent_name,
         category_description: e.category_description,
         category_pic: e.category_pic,
       });
@@ -474,34 +494,32 @@ console.log("parntt",treeStructure)
   };
 
   const checkCategoryCodeis = (data) => {
-    
-      if (categoryCode !== c_code) {
-        PublicFetch.get(
-          `${process.env.REACT_APP_BASE_URL}/misc?type=categorycode&value=${c_code}`
-        )
-          .then((res) => {
-            console.log("Response 1123", res);
-            if (res.data.success) {
-              console.log("Success", res.data.data);
-              if (res.data.data.exist) {
-                console.log("hai guys");
-                setuniqueCode(true);
-              } else {
-                setuniqueCode(false);
-              }
+    if (categoryCode !== c_code) {
+      PublicFetch.get(
+        `${process.env.REACT_APP_BASE_URL}/misc?type=categorycode&value=${c_code}`
+      )
+        .then((res) => {
+          console.log("Response 1123", res);
+          if (res.data.success) {
+            console.log("Success", res.data.data);
+            if (res.data.data.exist) {
+              console.log("hai guys");
+              setuniqueCode(true);
+            } else {
+              setuniqueCode(false);
             }
-          })
-          .catch((err) => {
-            console.log("Error", err);
-          });
-      }
-   
-    
+          }
+        })
+        .catch((err) => {
+          console.log("Error", err);
+        });
+    }
   };
 
   // console.log("jdfjdfdj", ViewingData);
   // console.log("hai !!!", categoryId);
   // console.log("ghsdfhashsdf", editForm);
+  const beforeUpload = (file, fileList) => {};
 
   return (
     <div>
@@ -604,17 +622,17 @@ console.log("parntt",treeStructure)
               </Select>
             </div>
             <div className="col-4 d-flex align-items-center justify-content-center">
-            <MyPagination
-              total={CategoryList?.length}
-              current={current}
-              showSizeChanger={true}
-              pageSize={pageSize}
-              onChange={(current, pageSize) => {
-                setCurrent(current);
-                setPageSize(pageSize);
-              }}
-            />
-          </div>
+              <MyPagination
+                total={CategoryList?.length}
+                current={current}
+                showSizeChanger={true}
+                pageSize={pageSize}
+                onChange={(current, pageSize) => {
+                  setCurrent(current);
+                  setPageSize(pageSize);
+                }}
+              />
+            </div>
             <div className="col-4 d-flex justify-content-end" style={{}}>
               <Link to={ROUTES.CATEGORY}>
                 <Button btnType="add">Add Category</Button>
@@ -650,29 +668,32 @@ console.log("parntt",treeStructure)
         onHide={() => setShowViewModal(false)}
         View_list
         list_content={
-          <div className="container-fluid p-3">
-            <div className="d-flex justify-content-between my-1">
-              <div className="mt-3">
-                <h5 className="opportunity_heading">Category</h5>
-              </div>
+          <div className="container-fluid p-4">
+            <div className="d-flex justify-content-between">
+              <h5 className="lead_text">Category</h5>
               <div className="">
                 <Button
                   onClick={() => {
                     handleEditCategoryPhase1(ViewingData);
                   }}
                   btnType="add_borderless"
+                  className="edit_button"
                 >
-                  <span
-                    className="d-flex align-items-center justify-content-between gap-1  p-1 button_span"
-                    style={{ fontSize: "14px" }}
-                  >
-                    Edit <FiEdit />
-                  </span>
+                  Edit <FiEdit />
+                  {/* </span> */}
                 </Button>
               </div>
             </div>
 
-            <div className="row">
+            <div className="col-12 d-flex justify-content-center mt-2">
+              <img
+                src={`${process.env.REACT_APP_BASE_URL}/${CategoryImg}`}
+                // alt={logo}
+                style={{ height: "100px", width: "100px" }}
+              />
+            </div>
+
+            <div className="row mt-4">
               <div className="col-5">
                 <p className="modal_view_p_style">Category Name</p>
               </div>
@@ -697,7 +718,7 @@ console.log("parntt",treeStructure)
               <div className="col-1">:</div>
               <div className="col-6 justify-content-start">
                 <p className="modal_view_p_sub">
-                  {ViewingData?.category_parent_id}
+                  {ViewingData?.category_parent_name}
                 </p>
               </div>
             </div>
@@ -847,7 +868,7 @@ console.log("parntt",treeStructure)
                     <label>category Image</label>
                     <Form.Item>
                       <FileUpload
-                        beforeUpload={false}
+                        beforeUpload={beforeUpload}
                         accept=".jpg,.png,.jpeg"
                         onChange={(file) => {
                           if (

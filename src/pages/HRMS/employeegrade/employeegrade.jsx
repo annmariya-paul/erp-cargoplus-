@@ -122,7 +122,28 @@ function Employeegrade() {
     setEditShow(true);
   };
 
+  const [serialNo, setserialNo] = useState(1);
   const columns = [
+    {
+      title: "SI.NO",
+      key: "index",
+      width: "20%",
+      render: (value, item, index) => serialNo + index,
+      align: "center",
+    },
+ 
+    {
+      title: "EMPLOYEE GRADE NAME",
+      dataIndex: "employee_grade_name",
+      key: "employee_grade_name",
+      filteredValue: [searchedText],
+      onFilter: (value, record) => {
+        return String(record.employee_grade_name)
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      },
+      align: "left",
+    },
     {
       title: "ACTION",
       dataIndex: "action",
@@ -151,18 +172,6 @@ function Employeegrade() {
       },
       align: "center",
     },
-    {
-      title: "EMPLOYMENT GRADE NAME",
-      dataIndex: "employee_grade_name",
-      key: "employee_grade_name",
-      filteredValue: [searchedText],
-      onFilter: (value, record) => {
-        return String(record.employee_grade_name)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
-      align: "center",
-    },
   ];
 
  
@@ -173,14 +182,14 @@ function Employeegrade() {
       <div className="container-fluid container2 pt-3">
         <div className="row flex-wrap">
           <div className="col">
-            <h5 className="lead_text">Employment Grade</h5>
+            <h5 className="lead_text">Employee Grade</h5>
           </div>
       
         </div>
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
-              placeholder="Search by Employment Types"
+              placeholder="Search"
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
               onChange={(e) => {
@@ -235,7 +244,7 @@ function Employeegrade() {
             </div>
             <div className="col-4">
             <Button btnType="add" onClick={() => setAddmodalshow(true)}>
-              Add EmployeeGrade
+              Add Employee Grade
             </Button>
             </div>
         </div>
@@ -248,7 +257,7 @@ function Employeegrade() {
           />
         </div>
        
-        <div className="d-flex py-2 justify-content-center">
+        <div className="d-flex py-0 justify-content-center">
               <MyPagination
                 total={employeegradedata?.length}
                 current={current}
@@ -272,7 +281,7 @@ function Employeegrade() {
           View_list
           list_content={
             <>
-              <h6 className="lead_text">Add Employment Grade</h6>
+              <h6 className="lead_text">Add Employee Grade</h6>
               <div className="container-fluid px-2 my-4 ">
               <Form
               name="addForm"
@@ -289,14 +298,14 @@ function Employeegrade() {
               <div className="row flex-wrap pt-1">
                 <div className="row ms-0 py-1">
                   <div className="col-12 pt-3">
-                    <label htmlfor="emp_type_name">Employment grade Name</label>
+                    <label htmlfor="emp_type_name">Employee grade Name</label>
                     <Form.Item
                       name="Employment_grade_name"
                       rules={[
                         {
                           required: true,
                           pattern: new RegExp("^[A-Za-z ]+$"),
-                          message: "Please enter a valid Employment Grade Name",
+                          message: "Please enter a valid Employee Grade Name",
                         },
                         {
                           min: 2,
@@ -363,7 +372,7 @@ function Employeegrade() {
           View_list
           list_content={
             <>
-              <h6 className="lead_text">Edit Employment Grade</h6>
+              <h6 className="lead_text">Edit Employee Grade</h6>
               <div className="container-fluid px-2 my-4 ">
                 <Form
                   form={editForm}
@@ -386,7 +395,7 @@ function Employeegrade() {
                             required: true,
                             pattern: new RegExp("^[A-Za-z ]+$"),
                             message:
-                              "Please enter a valid Employment Grade Name",
+                              "Please enter a valid Employee Grade Name",
                           },
                           {
                             min: 2,
@@ -424,7 +433,7 @@ function Employeegrade() {
                       </Form.Item>
                       {uniqueeditCode ? (
                         <p style={{ color: "red" }} className="mb-2">
-                          Employment Grade Name {uniqueErrMsg.UniqueErrName}
+                          Employee Grade Name {uniqueErrMsg.UniqueErrName}
                         </p>
                       ) : null}
                     </div>

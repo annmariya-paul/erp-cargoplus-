@@ -25,27 +25,27 @@ const progress = [
     title: "TASKS",
     dataIndex: "quotation_details_service_id",
     key: "quotation_details_service_id",
-    align: "center",
+    align: "left",
     // render: (value, item, indx) => count + indx,
-  },
-  {
-    title: "COST",
-    dataIndex: "quotation_details_cost",
-    key: "quotation_details_cost",
-    align: "center",
   },
   {
     title: "TAX TYPE",
     dataIndex: "quotation_details_tax_type",
     key: "quotation_details_tax_type",
-    align: "center",
+    align: "left",
+  },
+  {
+    title: "COST",
+    dataIndex: "quotation_details_cost",
+    key: "quotation_details_cost",
+    align: "right",
   },
   {
     title: "TAX AMOUNT",
     dataIndex: "quotation_details_tax_amount",
     key: "quotation_details_tax_amount",
     width: "35%",
-    align: "center",
+    align: "right",
     // render: (opportunity_update_next_date_contact) => {
     //   return (
     //     <label>
@@ -59,7 +59,7 @@ const progress = [
     dataIndex: "quotation_details_total",
     key: "quotation_details_total",
 
-    align: "center",
+    align: "right",
   },
 ];
 const { Panel } = Collapse;
@@ -93,6 +93,7 @@ export default function ViewJob() {
   const [tabledata, setTabledata] = useState();
   const [grandtotal, setGrandTotal] = useState();
   const [detailstable, setAlldetailstable] = useState();
+  const [invoice_status, setInvoice_Status] = useState();
   console.log("details", detailstable);
   console.log("qtntable: ", tabledata);
   console.log("qtnno: ", qtnno);
@@ -108,6 +109,7 @@ export default function ViewJob() {
         console.log("response of job", res);
         if (res.data.success) {
           console.log("Success of job", res.data.data);
+          let total = 0;
           let newdatas = [];
           res.data.data.fms_v1_quotation_jobs.forEach((item, index) => {
             newdatas.push(item.fms_v1_quotation.quotation_no);
@@ -122,6 +124,8 @@ export default function ViewJob() {
                 quotation_details_total: item.job_task_expense_cost_subtotalfx,
               });
               setTax(servdata);
+              total = Number.parseFloat(total);
+              total += item.job_task_expense_cost_subtotalfx;
             });
             // let tabletasks = [];
             // item.fms_v1_quotation.fms_v1_quotation_details.forEach((item, index) => {
@@ -136,8 +140,8 @@ export default function ViewJob() {
             // })
 
             // setTabledata(item.fms_v1_quotation.fms_v1_quotation_details);
-            setGrandTotal(item.fms_v1_quotation.quotation_grand_total);
           });
+          setGrandTotal(total.toFixed(2));
 
           let temp = "";
 
@@ -207,12 +211,15 @@ export default function ViewJob() {
           };
           console.log("datas", temp);
           setAllJobs(temp);
+          setInvoice_Status(res?.data?.data?.job_invoice_status);
         }
       })
       .catch((err) => {
         console.log("Error", err);
       });
   };
+
+  console.log("status", invoice_status);
 
   useEffect(() => {
     if (id) {
@@ -273,17 +280,31 @@ export default function ViewJob() {
               </Button>
             </div>
             <div className="col-2 ">
-              <Button
-                btnType="save"
-                className="edit_button rounded"
-                onClick={() => {
-                  // handleviewtoedit();
-                  navigate(`${ROUTES.INVOICE_PREVIEW}/${id}`);
-                }}
-              >
-                Generate Invoice
-                {/* <FiEdit /> */}
-              </Button>
+              {invoice_status == 1 ? (
+                <Button
+                  btnType="save"
+                  className="edit_button rounded"
+                  onClick={() => {
+                    // handleviewtoedit();
+                    navigate(`${ROUTES.INVOICE_PREVIEW}/${id}`);
+                  }}
+                >
+                  Regenerate Invoice
+                  {/* <FiEdit /> */}
+                </Button>
+              ) : (
+                <Button
+                  btnType="save"
+                  className="edit_button rounded"
+                  onClick={() => {
+                    // handleviewtoedit();
+                    navigate(`${ROUTES.INVOICE_PREVIEW}/${id}`);
+                  }}
+                >
+                  Generate Invoice
+                  {/* <FiEdit /> */}
+                </Button>
+              )}
             </div>
             <div className="col-2"></div>
           </div>
@@ -478,13 +499,13 @@ export default function ViewJob() {
                     {" "}
                     <TableData columns={progress} data={tax} bordered />
                   </div>
-                  <div className="d-flex justify-content-end mt-4 mx-3 ">
-                    <div className="col-lg-2 col-sm-4 col-xs-3 d-flex justify-content-end mt-3 me-2">
-                      <p style={{ fontWeight: 500 }}>Grand Total : </p>
+                  <div className="d-flex justify-content-end mt-4 gap-3 ">
+                    <div className="">
+                      <p style={{ fontWeight: 600 }}>Grand Total : </p>
                     </div>
                     {/* <div className="col-1">:</div> */}
-                    <div className="col-lg-2 col-sm-2 col-xs-2 mt-3">
-                      <p>{grandtotal}</p>
+                    <div className="">
+                      <p style={{ fontWeight: 600 }}>{grandtotal}</p>
                     </div>
                   </div>
                 </Panel>

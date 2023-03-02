@@ -913,7 +913,7 @@ export default function Sidebar({ showSidebar }) {
                             className={({ isActive }) =>
                               isActive ? "active-link" : "link"
                             }
-                            to={ROUTES.DAILY_EXPENSE}
+                            to={ROUTES.EXPENSE_CATEGORY}
                           >
                             <div className=" ms-5">Expense Category</div>
                           </NavLink>

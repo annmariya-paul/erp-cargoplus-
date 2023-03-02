@@ -1,14 +1,16 @@
-import { Input, Select } from "antd";
+import { Form, Input, Select } from "antd";
 import React, { useState } from "react";
 import { MdPageview } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
-import Button from "../../../components/button/button";
-import Custom_model from "../../../components/custom_modal/custom_model";
-import MyPagination from "../../../components/Pagination/MyPagination";
-import TableData from "../../../components/table/table_data";
-import { ROUTES } from "../../../routes";
+import TextArea from "../../../../components/ InputType TextArea/TextArea";
+import Button from "../../../../components/button/button";
+import CustomModel from "../../../../components/custom_modal/custom_model";
+import InputType from "../../../../components/Input Type textbox/InputType";
+import MyPagination from "../../../../components/Pagination/MyPagination";
+import TableData from "../../../../components/table/table_data";
 
-function DailyExpence() {
+function ExpenseCategory() {
+  const [AddForm] = Form.useForm();
   const navigate = useNavigate();
   const [oppnew, setOppnew] = useState([]);
   const [numOfItems, setNumOfItems] = useState("25");
@@ -17,7 +19,7 @@ function DailyExpence() {
   const [totalCount, setTotalcount] = useState("");
   const [AllinvoiceData, setAllInvoiceData] = useState();
   const [invoiceData, setInvoiceData] = useState();
-  const [cancelPopup, setCancelPopup] = useState(false);
+  const [AddPopup, setAddPopup] = useState(false);
   const [invoice_id, setInvoice_id] = useState();
   const [successPopup, setSuccessPopup] = useState(false);
   const columns = [
@@ -45,7 +47,7 @@ function DailyExpence() {
                 fontSize={18}
                 // onClick={()=>viewprogressoppurtunity(index)}
                 onClick={() => {
-                  navigate(`${ROUTES.INVOICE_VIEW}/${index.invoice_job_id}`);
+                  //   navigate(`${ROUTES.INVOICE_VIEW}/${index.invoice_job_id}`);
                 }}
               />
             </div>
@@ -129,7 +131,7 @@ function DailyExpence() {
                 btnType="add"
                 className="me-1 view_btn"
                 onClick={() => {
-                  navigate(`${ROUTES.PRINT_INVOICE}/${index.invoice_id}`);
+                  //   navigate(`${ROUTES.PRINT_INVOICE}/${index.invoice_id}`);
                 }}
               >
                 Print
@@ -156,7 +158,7 @@ function DailyExpence() {
                 btnType="add"
                 className="me-1 view_btn"
                 onClick={() => {
-                  setCancelPopup(true);
+                  setAddPopup(true);
                   setInvoice_id(index.invoice_id);
                 }}
               >
@@ -180,7 +182,7 @@ function DailyExpence() {
               <div>
                 <div className="row flex-wrap">
                   <div className="col">
-                    <h5 className="lead_text">Daily Expense</h5>
+                    <h5 className="lead_text">Expense Category</h5>
                   </div>
 
                   {/* <Leadlist_Icons
@@ -277,12 +279,17 @@ function DailyExpence() {
                   {/* <div className="col-xl-6 col-lg-6 col-md-6 col-sm-8 col-12"></div> */}
                   <div className="col-xl-4 col-lg-4 col-md-3 col-sm-12 col-12 d-flex justify-content-end">
                     <div className="">
-                      <Link
-                        to={ROUTES.CREATE_EXPENSE}
-                        style={{ color: "white" }}
+                      {/* <Link style={{ color: "white" }}> */}
+                      <Button
+                        onClick={() => {
+                          setAddPopup(true);
+                          // setInvoice_id(index.invoice_id);
+                        }}
+                        btnType="save"
                       >
-                        <Button btnType="save">Add Daily Expence</Button>
-                      </Link>
+                        Add Expense Category
+                      </Button>
+                      {/* </Link> */}
                     </div>
                   </div>
                 </div>
@@ -309,22 +316,22 @@ function DailyExpence() {
                 </div>
               </div>
             </div>
-            {/* <CustomModel
-              show={cancelPopup}
+            <CustomModel
+              show={AddPopup}
               onHide={() => {
-                setCancelPopup(false);
+                setAddPopup(false);
               }}
               centered
               View_list
               list_content={
                 <div>
                   <div className="container">
-                    <h4 style={{ color: "#0891d1" }}>Cancel Invoice</h4>
+                    <h4 style={{ color: "#0891d1" }}>Create Category</h4>
                     <Form
                       form={AddForm}
                       onFinish={(value) => {
                         console.log("On finishing", value);
-                        cancelInvoice(value);
+                        // cancelInvoice(value);
                       }}
                     >
                       <div className="row">
@@ -332,12 +339,34 @@ function DailyExpence() {
                           <div className="col-12">
                             <div className="">
                               <div className="">
-                                <label>Reason For Cancellation</label>
-                                <Form.Item name={"cancel_reason"}>
-                                  <TextArea />
+                                <label>Category Name</label>
+                                <Form.Item
+                                  rules={[
+                                    {
+                                      required: true,
+                                      message: "Category Name is Required",
+                                    },
+                                  ]}
+                                  name={"name"}
+                                >
+                                  <InputType />
                                 </Form.Item>
                               </div>
                             </div>
+                          </div>
+                          <div className="col-12">
+                            <lable>Description</lable>
+                            <Form.Item
+                              rules={[
+                                {
+                                  min: 5,
+                                  message: "Required minimum 5 Letter",
+                                },
+                              ]}
+                              name={"description"}
+                            >
+                              <TextArea />
+                            </Form.Item>
                           </div>
                           <div className="col-12 d-flex justify-content-center">
                             <Button btnType="save" type="submit">
@@ -350,8 +379,8 @@ function DailyExpence() {
                   </div>
                 </div>
               }
-            /> */}
-            <Custom_model
+            />
+            <CustomModel
               success
               show={successPopup}
               onHide={() => {
@@ -365,4 +394,4 @@ function DailyExpence() {
   );
 }
 
-export default DailyExpence;
+export default ExpenseCategory;

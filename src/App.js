@@ -96,6 +96,7 @@ import PrintInvoice from "./pages/FMS/Invoice/PrintInvoice";
 import InvoiceView from "./pages/FMS/Invoice/InvoiceView";
 import DailyExpence from "./pages/Accounts/DailyExpence/DailyExpence";
 import CreateExpence from "./pages/Accounts/DailyExpence/CreateExpence";
+import ExpenseCategory from "./pages/Accounts/settings/Expense_Category/ExpenseCategory";
 // import Vendortype from "./pages/CRM/Purchase/vendertype/vendortype";
 // import Lead from "./pages/lead/lead";
 
@@ -433,6 +434,9 @@ function App() {
             </Route>
             <Route path={ROUTES.CREATE_EXPENSE} element={<ProtectedRoute />}>
               <Route index element={<CreateExpence />} />
+            </Route>
+            <Route path={ROUTES.EXPENSE_CATEGORY} element={<ProtectedRoute />}>
+              <Route index element={<ExpenseCategory />} />
             </Route>
 
             {/* </Route> */}

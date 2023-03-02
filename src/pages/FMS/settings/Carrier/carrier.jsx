@@ -210,7 +210,7 @@ export default function Carrierlist(props) {
       title: "CARRIER CODE",
       dataIndex: "carrier_code",
       key: "carrier_code",
-      filteredValue: [searchedCode],
+      // filteredValue: [searchedCode],
       // onFilter: (value, record) => {
       //   return String(record.carrier_code)
       //     .toLowerCase()

@@ -32,7 +32,7 @@ function InvoiceList() {
   // const [current, setCurrent] = useState(1);
 
   const[totalinvoice,settotalinvoice]= useState("")
-
+  const [serialNo, setserialNo] = useState(1);
 
   const pageofIndex = noofItems * (current - 1) - 1 + 1;
 
@@ -45,39 +45,10 @@ function InvoiceList() {
 
   const columns = [
     {
-      title: "ACTION",
-      dataIndex: "action",
-      key: "ACTION",
-      width: "15%",
-      render: (data, index) => {
-        console.log("mere index", index);
-        return (
-          <div className="d-flex justify-content-center gap-2">
-            <div className="editcolor">
-              {/* <FaEdit
-                onClick={() => {
-                  if (
-                    index.assigned_employee &&
-                    index.assigned_employee.length > 0
-                  ) {
-                    //   handleEditedclick(index)
-                  }
-                }}
-              /> */}
-              <MdPageview
-                fontSize={18}
-                // onClick={()=>viewprogressoppurtunity(index)}
-                onClick={() => {
-                  navigate(`${ROUTES.INVOICE_VIEW}/${index.invoice_job_id}`);
-                }}
-              />
-            </div>
-            {/* <div className="editcolor">
-              <MdDelete />
-            </div> */}
-          </div>
-        );
-      },
+      title: "Sl. No.",
+      key: "index",
+      width: "7%",
+      render: (value, item, index) => serialNo + index,
       align: "center",
     },
     {
@@ -134,6 +105,42 @@ function InvoiceList() {
       key: "invoice_status",
       width: "15%",
       // align: "center",
+    },
+    {
+      title: "ACTION",
+      dataIndex: "action",
+      key: "ACTION",
+      width: "15%",
+      render: (data, index) => {
+        console.log("mere index", index);
+        return (
+          <div className="d-flex justify-content-center gap-2">
+            <div className="editcolor">
+              {/* <FaEdit
+                onClick={() => {
+                  if (
+                    index.assigned_employee &&
+                    index.assigned_employee.length > 0
+                  ) {
+                    //   handleEditedclick(index)
+                  }
+                }}
+              /> */}
+              <MdPageview
+                fontSize={18}
+                // onClick={()=>viewprogressoppurtunity(index)}
+                onClick={() => {
+                  navigate(`${ROUTES.INVOICE_VIEW}/${index.invoice_job_id}`);
+                }}
+              />
+            </div>
+            {/* <div className="editcolor">
+              <MdDelete />
+            </div> */}
+          </div>
+        );
+      },
+      align: "center",
     },
     {
       title: "",

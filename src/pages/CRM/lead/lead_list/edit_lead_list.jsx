@@ -25,6 +25,7 @@ import SelectBox from "../../../../components/Select Box/SelectBox";
 // import ErrorMsg from "../../components/errormessage";
 import Custom_model from "../../../../components/custom_modal/custom_model";
 import Select from "rc-select";
+import "../lead.styles.scss"
 
 function LeadEdit() {
   // const history=useHistory();
@@ -398,7 +399,21 @@ function LeadEdit() {
                         </SelectBox>
                       </Form.Item>
                     </div>
-                    <div className="col-12 mt-3">
+                    <div className="col-sm-4 pt-2">
+                      <label>Credit Days</label>
+                      <Form.Item
+                        name="creditdays"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please select a Type",
+                          },
+                        ]}
+                      >
+                      <InputType/>
+                      </Form.Item>
+                    </div>
+                    {/* <div className="col-12 mt-3">
                       <Form.Item name="leadAttachment">
                         <FileUpload
                           multiple
@@ -438,8 +453,8 @@ function LeadEdit() {
                           ""
                         )}
                       </Form.Item>
-                    </div>
-                    <div className="col-sm-8 pt-3">
+                    </div> */}
+                    <div className="col-sm-4 pt-3">
                       <label>Description</label>
                       <Form.Item
                         name="leadDescription"
@@ -458,8 +473,50 @@ function LeadEdit() {
                       >
                         <TextArea
                           // value={leadDescription}
+                          className="descheight"
                           onChange={(e) => setLeadDescription(e.target.value)}
                         />
+                      </Form.Item>
+                    </div>
+                    <div className="col-sm-4 pt-3 mt-3">
+                    <Form.Item name="leadAttachment">
+                        <FileUpload
+                          multiple
+                          filetype={"Accept only pdf and docs"}
+                          listType="picture"
+                          accept=".pdf,.docs,"
+                          // onPreview={handlePreview}
+                          beforeUpload={beforeUpload}
+                          onChange={(file) => {
+                            console.log("Before upload", file.file);
+                            console.log(
+                              "Before upload file size",
+                              file.file.size
+                            );
+                            if (
+                              file.file.size > 1000 &&
+                              file.file.size < 500000
+                            ) {
+                              setLeadAttachment(file.file.originFileObj);
+                              setFileSizeError(false);
+                              console.log(
+                                "file greater than 1 kb and less than 500 kb"
+                              );
+                            } else {
+                              setFileSizeError(true);
+                              console.log("hgrtryyryr");
+                            }
+                          }}
+                        />
+                        {FileSizeError ? (
+                          <div>
+                            <label style={{ color: "red" }}>
+                              File size must be between 1kb and 500kb
+                            </label>
+                          </div>
+                        ) : (
+                          ""
+                        )}
                       </Form.Item>
                     </div>
                     <div className="col-sm-4 pt-3">

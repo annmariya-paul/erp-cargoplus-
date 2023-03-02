@@ -9,6 +9,7 @@ import { ROUTES } from "../../../routes";
 import PublicFetch from "../../../utils/PublicFetch";
 import { CRM_BASE_URL_FMS } from "../../../api/bootapi";
 import moment from "moment";
+import MyPagination from "../../../components/Pagination/MyPagination";
 
 function Listjob() {
   const [searchedText, setSearchedText] = useState("");
@@ -18,57 +19,24 @@ function Listjob() {
   // const [searchedText, setSearchedText] = useState("");
   const [searchName, setSearchName] = useState("");
   const [searchStatus, setSearchStatus] = useState("");
+
+
+  const [noofItems, setNoofItems] = useState("25");
+  const [current, setCurrent] = useState(1);
+
+  const[totaljob,settotaljob]= useState("")
+  const [serialNo, setserialNo] = useState(1);
+
+  const pageofIndex = noofItems * (current - 1) - 1 + 1;
   const columns = [
     {
-      title: "ACTION",
-      dataIndex: "action",
-      key: "key",
-      width: "8%",
-      render: (data, index) => {
-        console.log("index is :", index);
-        return (
-          <div className="d-flex justify-content-center align-items-center gap-2 me-2">
-            <div
-              className="editIcon m-0 "
-              onClick={() => {
-                navigate(`${ROUTES.UPDATEJOB}/${index.job_id}`);
-              }}
-            >
-              <Link>
-                <FaEdit style={{ marginLeft: 15 }} />
-              </Link>
-            </div>
-
-            <div
-              className="viewIcon m-0"
-              onClick={() => {
-                navigate(`${ROUTES.VIEW_JOB}/${index.job_id}`);
-              }}
-              // onClick={()=>{
-              //   setShowViewModal(true);
-              // }}
-            >
-              <MdPageview style={{ marginLeft: 15, marginRight: 15 }} />
-            </div>
-            {/* <div
-                  className="viewIcon m-0"
-                //   onClick={() => {
-                //     navigate(`/view_quotation`);
-                //   }}
-                  // onClick={()=>{
-                  //   setShowViewModal(true);
-                  // }}
-                >
-                  <MdPageview style={{ marginLeft: 15, marginRight: 15 }} />
-                </div> */}
-            <div className="deleteIcon m-0">
-              <FaTrash />
-            </div>
-          </div>
-        );
-      },
+      title: "Sl. No.",
+      key: "index",
+      width: "7%",
+      render: (value, item, index) => serialNo + index,
       align: "center",
     },
+
     {
       title: "JOB NO",
       dataIndex: "job_number",
@@ -121,6 +89,56 @@ function Listjob() {
       title: "STATUS",
       dataIndex: "job_status",
       key: "job_status",
+      align: "center",
+    },
+    {
+      title: "ACTION",
+      dataIndex: "action",
+      key: "key",
+      width: "8%",
+      render: (data, index) => {
+        console.log("index is :", index);
+        return (
+          <div className="d-flex justify-content-center align-items-center gap-2 me-2">
+            <div
+              className="editIcon m-0 "
+              onClick={() => {
+                navigate(`${ROUTES.UPDATEJOB}/${index.job_id}`);
+              }}
+            >
+              <Link>
+                <FaEdit style={{ marginLeft: 15 }} />
+              </Link>
+            </div>
+
+            <div
+              className="viewIcon m-0"
+              onClick={() => {
+                navigate(`${ROUTES.VIEW_JOB}/${index.job_id}`);
+              }}
+              // onClick={()=>{
+              //   setShowViewModal(true);
+              // }}
+            >
+              <MdPageview style={{ marginLeft: 15, marginRight: 15 }} />
+            </div>
+            {/* <div
+                  className="viewIcon m-0"
+                //   onClick={() => {
+                //     navigate(`/view_quotation`);
+                //   }}
+                  // onClick={()=>{
+                  //   setShowViewModal(true);
+                  // }}
+                >
+                  <MdPageview style={{ marginLeft: 15, marginRight: 15 }} />
+                </div> */}
+            <div className="deleteIcon m-0">
+              <FaTrash />
+            </div>
+          </div>
+        );
+      },
       align: "center",
     },
     {
@@ -186,6 +204,7 @@ function Listjob() {
         );
       },
     },
+   
   ];
 
   const data = [
@@ -218,6 +237,7 @@ function Listjob() {
         console.log("Response", res);
         if (res.data.success) {
           console.log("success", res.data.data);
+          settotaljob(res.data.data)
           let temp = [];
           res.data.data.forEach((item, index) => {
             let date = moment(item.job_date).format("DD-MM-YYYY");
@@ -305,7 +325,7 @@ function Listjob() {
           </div>
         </div>
         <div className="row my-3">
-          <div className="col-xl-3 col-lg-3 col-sm-12 px-3">
+          <div className="col-4">
             <Select
               bordered={false}
               className="page_size_style"
@@ -329,8 +349,24 @@ function Listjob() {
               </Select.Option>
             </Select>
           </div>
-          <div className="col-xl-1 col-lg-1 col-sm-12 p-1"></div>
-          <div className="col-xl-8 col-lg-8 col-sm-12 d-flex justify-content-end">
+        
+          <div className="col-4 d-flex py-2 justify-content-center">
+          <MyPagination
+              total={parseInt(totaljob?.length)}
+              current={current}
+              pageSize={noofItems}
+              // defaultPageSize={noofItems}
+              showSizeChanger={false}
+              onChange={(current, pageSize) => {
+                console.log("page index isss", pageSize);
+                setCurrent(current);
+                // setPageSize(pageSize);
+                // setNoofItems(pageSize);
+                // setCurrent(noofItems !== pageSize ? 0 : current);
+              }}
+            />
+          </div>
+          <div className="col-4 d-flex justify-content-end">
             <div className="col mb-2 px-4">
               <Link to={ROUTES.CREATEJOB} style={{ color: "white" }}>
                 <Button btnType="add">Add Job</Button>
@@ -346,6 +382,21 @@ function Listjob() {
             columns={columns}
             custom_table_css="table_lead_list"
           />
+        </div>
+
+        <div className="d-flex justify-content-center ">
+        <MyPagination
+              total={parseInt(totaljob?.length)}
+              current={current}
+              pageSize={noofItems}
+              // defaultPageSize={noofItems}
+              showSizeChanger={false}
+              onChange={(current, pageSize) => {
+                console.log("page index isss", pageSize);
+                setCurrent(current);
+              
+              }}
+            />
         </div>
       </div>
     </>

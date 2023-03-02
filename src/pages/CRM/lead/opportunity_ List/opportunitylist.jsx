@@ -99,7 +99,7 @@ function Opportunitylist(props) {
   const [tableprogress, setTableprogress] = useState("");
   const [count, setcount] = useState(0);
   const [editForm] = Form.useForm();
-
+  const [serialNo, setserialNo] = useState(1);
   const componentRef = useRef();
 
   //pdf file start
@@ -532,29 +532,16 @@ function Opportunitylist(props) {
   //  columns is opportunity listing table componenet
 
   const columns = [
+
     {
-      title: "ACTION",
-      dataIndex: "action",
-      key: "ACTION",
-      width: "15%",
-      render: (data, index) => {
-        console.log("indexx",index);
-        return (
-          <div className="d-flex justify-content-center gap-2">
-            <div className="editcolor">
-              <FaEdit onClick={() => handleEditedclick(index)} />
-            </div>
-            <div className="editcolor">
-              <MdPageview
-                // onClick={()=>viewprogressoppurtunity(index)}
-                onClick={() => Viewoppurtunties(index)}
-              />
-            </div>
-          </div>
-        );
-      },
+      title: "Sl. No.",
+      key: "index",
+      width: "7%",
+      render: (value, item, index) => serialNo + index,
       align: "center",
     },
+
+  
     {
       title: "ENQUIRY NO",
       dataIndex: "opportunity_number",
@@ -611,6 +598,29 @@ function Opportunitylist(props) {
       title: "PARTY",
       dataIndex: "opportunity_party",
       key: "PARTY",
+      align: "center",
+    },
+    {
+      title: "ACTION",
+      dataIndex: "action",
+      key: "ACTION",
+      width: "15%",
+      render: (data, index) => {
+        console.log("indexx",index);
+        return (
+          <div className="d-flex justify-content-center gap-2">
+            <div className="editcolor">
+              <FaEdit onClick={() => handleEditedclick(index)} />
+            </div>
+            <div className="editcolor">
+              <MdPageview
+                // onClick={()=>viewprogressoppurtunity(index)}
+                onClick={() => Viewoppurtunties(index)}
+              />
+            </div>
+          </div>
+        );
+      },
       align: "center",
     },
   ];

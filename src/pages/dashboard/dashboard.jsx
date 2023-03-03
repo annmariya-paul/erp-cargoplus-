@@ -7,8 +7,35 @@ import FunnelChart from "../../components/dashboard/charts/funnel-chart";
 import GeoChart from "../../components/dashboard/charts/geo-chart";
 import PieChart from "../../components/dashboard/charts/pie-chart";
 import { Table } from "antd";
+import { CRM_BASE_URL } from "../../api/bootapi";
+import PublicFetch from "../../utils/PublicFetch";
+import { useEffect } from "react";
 
 function Dashboard() {
+ const [pageSize, setPageSize] = useState(0);
+ const [numOfItems, setNumOfItems] = useState("25");
+ const [leadCount,setLeadCount] = useState();
+ console.log("count",leadCount);
+
+ const GetLeadData = () => {
+   PublicFetch.get(
+     `${CRM_BASE_URL}/lead?startIndex=${pageSize}&noOfItems=${numOfItems}`
+   )
+     .then((res) => {
+       if (res?.data?.success) {
+         setLeadCount(res?.data?.data?.totalCount);
+       } else {
+         console.log("FAILED TO LOAD DATA");
+       }
+     })
+     .catch((err) => {
+       console.log("Errror while getting data", err);
+     });
+ };
+ useEffect(() => {
+   GetLeadData();
+ }, []);
+
   const tableColumns = [
     {
       title: "Deal Name",
@@ -98,7 +125,7 @@ function Dashboard() {
             <Card className={`${styles.cartItem}`}>
               <div>
                 <div className={`text-center ${styles.cardTitle}`}>Lead</div>
-                <div className={`text-center ${styles.cardSubText}`}>100</div>
+                <div className={`text-center ${styles.cardSubText}`}>{leadCount}</div>
               </div>
             </Card>
             <Card className={`${styles.cartItem}`}>

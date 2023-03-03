@@ -51,7 +51,7 @@ export default function LeadReport() {
           console.log("All lead data", res?.data?.data);
           res?.data?.data?.leads.forEach((item, index) => {
             // setAllLeadList(item.lead_status);
-            var date1 = moment(item.lead_created_at).format("MM-DD-YYYY"); 
+            // var date1 = moment(item.lead_created_at).format("MM-DD-YYYY"); 
           });
         } else {
           console.log("FAILED TO LOAD DATA");
@@ -107,40 +107,33 @@ export default function LeadReport() {
           console.log("hello", response.data.data);
           setGenerateCount(response?.data?.data?.generated?.totalCount);
           setConvertCount(response?.data?.data?.converted?.totalCount);
-          // setConvertedTable(response?.data?.data?.converted?.data);
-          // setGeneratedTable(response?.data?.data?.generated?.data);
           let arrA = [];
-           response?.data?.data?.generated?.data?.forEach((itm, index) => {
-           setAllLeadList(itm.lead_status);
-
-            var date1 = moment(itm.lead_created_at).format("MM-DD-YYYY");
+           response?.data?.data?.generated?.data?.forEach((item, index) => {
               ldStatus.forEach((sts, index) => {
              ldType.forEach((x, index) => {
                var leadStat = parseInt(sts.value);
                if (
-                 leadStat === itm.lead_status &&
-                 x.value === itm.lead_type
+                 leadStat === item.lead_status &&
+                 x.value === item.lead_type
                ) {
                  {
                    arrA.push({
-                     lead_customer_name: itm?.lead_customer_name,
-                     lead_id: itm?.lead_id,
-                     lead_organization: itm?.lead_organization,
-                     lead_source: itm?.lead_source,
+                     lead_customer_name: item?.lead_customer_name,
+                     lead_id: item?.lead_id,
+                     lead_organization: item?.lead_organization,
+                     lead_source: item?.lead_source,
                      lead_status: sts?.name,
                      lead_type: x?.name,
-                     lead_user_type: itm?.lead_user_type,
+                     lead_user_type: item?.lead_user_type,
                    });
-                   setGeneratedTable(arrA);
                  }
                }
              })
              })
            })
-
+           setGeneratedTable(arrA);
            let arrB = [];
            response?.data?.data?.converted?.data?.forEach((item, index) => {
-             setAllLeadList(item.lead_status);
              var date1 = moment(item.lead_created_at).format("MM-DD-YYYY");
              ldStatus.forEach((i, index) => {
                ldType.forEach((t, index) => {
@@ -159,12 +152,13 @@ export default function LeadReport() {
                        lead_type: t?.name,
                        lead_user_type: item?.lead_user_type,
                      });
-                     setConvertedTable(arrB);
+                     
                    }
                  }
                });
              });
-           });         
+           });  
+           setConvertedTable(arrB);       
         } else {
           console.log("Failed while adding data");
         }
@@ -183,6 +177,7 @@ export default function LeadReport() {
     {
       title: "Sl. No.",
       key: "index",
+      width: "8%",
       render: (value, item, index) => serialNo + index,
       align: "center",
     },
@@ -371,6 +366,7 @@ export default function LeadReport() {
                   defaultValue="daily"
                   style={{ backgroundColor: "whitesmoke", borderRadius: "5px" }}
                   className="w-100 select_box"
+                  value={dateCriteria}
                   onChange={(e) => setDateCriteria(e)}
                 >
                   <Option value="daily">Daily</Option>
@@ -395,7 +391,7 @@ export default function LeadReport() {
                 <div className="col-md-2 col-sm-12">
                   {/* <label htmlFor="month">Month</label> */}
                   <DatePicker
-                    format={"01-DD-YYYY"}
+                    format={"01-MM-YYYY"}
                     value={selectedMonth}
                     onChange={(e) => {
                       setSelectedMonth(e);
@@ -469,7 +465,7 @@ export default function LeadReport() {
             <div className="row  justify-content-md-end">
               {/* <Leadlist_Icons /> */}
             </div>
-            <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
+            <div className="row mt-2 py-1" style={{ backgroundColor: "#f4f4f7" }}>
               <div className="col-md-4 col-sm-6">
                 <Input.Search
                   placeholder="Search by Name"
@@ -549,6 +545,7 @@ export default function LeadReport() {
                   defaultValue="daily"
                   style={{ backgroundColor: "whitesmoke", borderRadius: "5px" }}
                   className="w-100 select_box"
+                  value={dateCriteria}
                   onChange={(e) => setDateCriteria(e)}
                 >
                   <Option value="daily">Daily</Option>

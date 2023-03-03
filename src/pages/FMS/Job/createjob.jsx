@@ -210,6 +210,7 @@ function CreateJob() {
   };
 
   const [allLeadList, setAllLeadList] = useState([]);
+  console.log("all leads",allLeadList);
   const GetAllLeadData = () => {
     PublicFetch.get(`${CRM_BASE_URL}/lead/Minimal`)
       .then((res) => {
@@ -224,6 +225,7 @@ function CreateJob() {
             array.push({
               lead_id: item?.lead_id,
               lead_customer_name: item?.lead_customer_name,
+              lead_credit_days:item?.lead_credit_days,
             });
             handleLeadId(item.lead_id);
           });
@@ -426,6 +428,41 @@ function CreateJob() {
         console.log(error);
       });
   };
+
+
+//get credit days 
+  
+  const getCreditdays = (data) => {
+    console.log("data1011", data);
+    // const code = allLeadList?.filter((item) => {
+    //   if (item?.lead_id === data) {
+    //     b = item?.lead_id;
+
+    //   }
+    // });
+    // console.log("code", b);
+    // console.log(";;;;;;;;;", data);
+     PublicFetch.get(`${CRM_BASE_URL}/lead/${data}`)
+      .then((res) => {
+        if (res?.data?.success) {
+          console.log("Unique Lead Id data", res?.data?.data);
+          // setOneLeadData(res?.data?.data);
+          
+         
+        } else {
+          console.log("FAILED T LOAD DATA");
+        }
+    
+        addForm.setFieldValue("creditdays",  res?.data?.data.credit_days);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+
+
+
   useEffect(() => {
     // getallunits();
     // getAllLocations();
@@ -569,6 +606,7 @@ function CreateJob() {
                         <SelectBox
                           onChange={(e) => {
                             handleLeadId(e);
+                            getCreditdays(e);
                           }}
                           allowClear
                           showSearch
@@ -983,6 +1021,31 @@ function CreateJob() {
                           precision={2}
                           controlls={false}
                           disabled={disable}
+                        />
+                      </Form.Item>
+                    </div>
+                    <div className="col-xl-3 col-sm-6 mt-2">
+                      <label>Credit Days</label>
+                      <Form.Item
+                        name="creditdays"
+                        rules={[
+                          {
+                            required: true,
+
+                            message: "Please enter Credit Days",
+                          },
+                        ]}
+                      >
+                        <Input_Number
+                          className="text_right"
+                          // value={currencyRates}
+                          // onChange={handleChange}
+                          align="right"
+                          // step={0.01}
+                          min={0}
+                          precision={2}
+                          controlls={false}
+                          // disabled={true}
                         />
                       </Form.Item>
                     </div>

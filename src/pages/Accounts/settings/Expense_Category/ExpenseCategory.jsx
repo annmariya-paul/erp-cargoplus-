@@ -46,15 +46,15 @@ function ExpenseCategory() {
     },
     {
       title: "CATEGORY NAME",
-      dataIndex: "category_name",
-      key: "category_name",
+      dataIndex: "expense_category_name",
+      key: "expense_category_name",
       width: "8%",
       // align: "center",
     },
     {
       title: "DESCRIPTION",
-      dataIndex: "category_description",
-      key: "category_description",
+      dataIndex: "expense_category_description",
+      key: "expense_category_description",
       width: "15%",
     },
     {
@@ -194,7 +194,7 @@ function ExpenseCategory() {
         console.log("Response", res);
         if (res.data.success) {
           console.log("SuccessFully", res.data.data);
-          //   setAllCategoryData(res.data.data);
+          setAllCategoryData(res.data.data);
         }
       })
       .catch((err) => {
@@ -369,7 +369,7 @@ function ExpenseCategory() {
                 <div className="datatable">
                   {/* {AllinvoiceData && ( */}
                   <TableData
-                    data={data}
+                    data={AllcategoryData}
                     // data={allLeadList}
                     // data={OpportunityList}
                     columns={columns}

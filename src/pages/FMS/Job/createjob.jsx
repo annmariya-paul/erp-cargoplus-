@@ -113,8 +113,8 @@ function CreateJob() {
         `${CRM_BASE_URL_FMS}/quotation/${id}`
       );
       if (onequatation.data.success) {
-        console.log("one quatation iss ::", onequatation?.data?.data.quotation);
-
+        console.log("one quatation iss ::",  onequatation?.data?.data.quotation);
+        locationBytype( onequatation?.data?.data.quotation.quotation_mode)
         addForm.setFieldsValue({
           job_chargable_weight:
             onequatation?.data?.data.quotation.quotation_chargeable_wt,
@@ -124,8 +124,9 @@ function CreateJob() {
           job_shipper: onequatation?.data?.data.quotation.quotation_shipper,
           job_consignee:
             onequatation?.data?.data.quotation.crm_v1_leads.lead_id,
-          job_freight_type:
-            onequatation?.data?.data.quotation.fms_v1_freight_types
+         
+          job_credit_days: onequatation?.data?.data.quotation.crm_v1_leads.lead_credit_days,
+          job_freight_type:  onequatation?.data?.data.quotation.fms_v1_freight_types
               .freight_type_id,
           job_cargo_type:
             onequatation?.data?.data.quotation.quotation_cargo_type,
@@ -289,7 +290,7 @@ function CreateJob() {
     formData.append("job_payment_terms", data.job_payment_terms);
     formData.append("job_total_cost_currency", data.job_currency);
     formData.append("job_total_cost_exch", data.exchnagerate);
-    // formData.append("job_total_cost_amountfx", grandTotal);
+    formData.append("job_credit_days", data.job_credit_days);
     // formData.append("job_total_cost_amountlx", grandTotal);
     // formData.append("job_currency_rate", data.job_currency);
     // formData.append("job_exchange_rate", data.exchnagerate);
@@ -453,7 +454,7 @@ function CreateJob() {
           console.log("FAILED T LOAD DATA");
         }
     
-        addForm.setFieldValue("creditdays",  res?.data?.data.credit_days);
+        addForm.setFieldValue("job_credit_days",  res?.data?.data.lead_credit_days);
       })
       .catch(function (error) {
         console.log(error);
@@ -813,7 +814,7 @@ function CreateJob() {
                           {
                             required: true,
                             pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                            message: "Please enter a Valid AWB",
+                            message: "Please enter a Valid AWB/BL No",
                           },
                         ]}
                       >
@@ -1027,7 +1028,7 @@ function CreateJob() {
                     <div className="col-xl-3 col-sm-6 mt-2">
                       <label>Credit Days</label>
                       <Form.Item
-                        name="creditdays"
+                        name="job_credit_days"
                         rules={[
                           {
                             required: true,
@@ -1036,14 +1037,14 @@ function CreateJob() {
                           },
                         ]}
                       >
-                        <Input_Number
-                          className="text_right"
+                        <InputType
+                          // className="text_right"
                           // value={currencyRates}
                           // onChange={handleChange}
-                          align="right"
+                          // align="right"
                           // step={0.01}
                           min={0}
-                          precision={2}
+                          // precision={2}
                           controlls={false}
                           // disabled={true}
                         />

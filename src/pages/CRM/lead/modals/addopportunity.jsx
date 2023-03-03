@@ -293,6 +293,7 @@ export default function AddOpportunity(props) {
                       <SelectBox
                       // defaultValue={defaultValue}
                         // placeholder={"--Please Select--"}
+                        disabled={true}
                         defaultValue={leadName}
                       >
                         <Select.Option value="oppId">{leadName}</Select.Option>

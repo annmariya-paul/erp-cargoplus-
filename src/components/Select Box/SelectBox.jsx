@@ -14,7 +14,7 @@ function SelectBox({
   allowClear,
   optionFilterProp,
   disabled,
- 
+  onBlur,
 }) {
   return (
     <div>
@@ -23,7 +23,6 @@ function SelectBox({
           style={{
             backgroundColor: "whitesmoke",
             borderRadius: "5px",
-            
           }}
           bordered={false}
           className={`w-100 ${className}`}
@@ -37,7 +36,7 @@ function SelectBox({
           defaultValue={defaultValue}
           optionFilterProp={optionFilterProp}
           disabled={disabled}
-        
+          onBlur={onBlur}
         >
           {children}
         </Select>

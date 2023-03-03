@@ -57,6 +57,7 @@ function Productlist() {
   //   return products?.slice((current - 1) * pageSize, current * pageSize);
   // };
 
+  const [serialNo, setserialNo] = useState(1);
   const [totalCount, setTotalcount] = useState();
 
   const [viewproduct, setViewproduct] = useState({
@@ -168,34 +169,10 @@ function Productlist() {
 
   const columns = [
     {
-      title: "ACTION",
-      dataIndex: "action",
-      key: "ACTION",
-      width: "14%",
-      render: (data, index) => {
-        console.log("data", data);
-        console.log("index", index);
-
-        return (
-          <div className="d-flex justify-content-center align-items-center gap-4">
-            <div
-              // onClick={() => setModalOpportunity(true)}
-              onClick={() => {
-                handleEdit(index);
-              }}
-              className="actionEdit m-0 p-0"
-            >
-              <FiEdit fontSize={"12px"} />
-            </div>
-
-            <Link to={`${ROUTES.PRODUCTDETAIL}/${index.product_id}`}>
-              <div className="actionView m-0 p-0">
-                <MdPageview />
-              </div>
-            </Link>
-          </div>
-        );
-      },
+      title: "Sl. No.",
+      key: "index",
+      width: "7%",
+      render: (value, item, index) => serialNo + index,
       align: "center",
     },
     {
@@ -264,6 +241,37 @@ function Productlist() {
           .toLowerCase()
           .includes(value.toLowerCase());
       },
+    },
+    {
+      title: "ACTION",
+      dataIndex: "action",
+      key: "ACTION",
+      width: "14%",
+      render: (data, index) => {
+        console.log("data", data);
+        console.log("index", index);
+
+        return (
+          <div className="d-flex justify-content-center align-items-center gap-4">
+            <div
+              // onClick={() => setModalOpportunity(true)}
+              onClick={() => {
+                handleEdit(index);
+              }}
+              className="actionEdit m-0 p-0"
+            >
+              <FiEdit fontSize={"12px"} />
+            </div>
+
+            <Link to={`${ROUTES.PRODUCTDETAIL}/${index.product_id}`}>
+              <div className="actionView m-0 p-0">
+                <MdPageview />
+              </div>
+            </Link>
+          </div>
+        );
+      },
+      align: "center",
     },
     // {
     //   title: "PARTY",

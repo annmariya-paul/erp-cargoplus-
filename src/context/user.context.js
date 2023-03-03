@@ -26,6 +26,7 @@ function UserProvider({ children }) {
       return true;
     }
   };
+
   return (
     <UserContext.Provider
       value={{ logoutUser, isAuthenticated, setUserTokenInfo }}

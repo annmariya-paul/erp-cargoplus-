@@ -46,11 +46,11 @@ const getBase64 = (file) =>
 
 function Categorylist(props) {
   const [editForm] = Form.useForm();
-
+  const [serialNo, setserialNo] = useState(1);
   const [pageSize, setPageSize] = useState("25");
   const [current, setCurrent] = useState(1);
   const [searchedText, setSearchedText] = useState("");
-  const [searchType, setSearchType] = useState("");
+  const [searchCode, setSearchCode] = useState("");
   const [searchStatus, setSearchStatus] = useState("");
   const [modalShow, setModalShow] = useState(false);
   const [SuccessPopup, setSuccessPopup] = useState(false);
@@ -65,10 +65,11 @@ function Categorylist(props) {
   const [ViewingData, setViewingDAta] = useState();
   const [categoryId, setCategory] = useState();
   const [OldData, setOldData] = useState();
+  const [CategoryImg,setCategoryImg] = useState();
   const [c_code, setCcode] = useState();
   const [cName, setCname] = useState();
   const [cPic, setCpic] = useState();
-  const [cDescription, setCdescription] = useState();
+  const [cDescription, setCdescription] = useState("");
   const [cParent, setCparent] = useState();
   const [imageSize, setImageSize] = useState(false);
   const [uniqueCode, setuniqueCode] = useState(false);
@@ -95,6 +96,7 @@ function Categorylist(props) {
           key: category?.category_id,
           category_name: category?.category_name,
           category_parent_id: category?.category_parent_id,
+          category_parent_name:category?.category_parent_name,
           category_code: category?.category_code,
           category_description: category?.category_description,
           category_pic: category?.category_pic,
@@ -173,6 +175,7 @@ function Categorylist(props) {
 
                   // category_parent_id: firstItem.category_parent_id,
                   category_parent_id: firstItem.category_parent_id,
+                  category_parent_name: firstItem.category_parent_name,
                 });
                 // if (firstItem?.other_crm_v1_categories?.length > 0) {
                 for (
@@ -296,10 +299,64 @@ function Categorylist(props) {
 
   const columns = [
     {
+      title: "Sl. No.",
+      key: "index",
+      width: "7%",
+      render: (value, item, index) => serialNo + index,
+      align: "center",
+    },
+
+    {
+      title: "CATEGORY NAME",
+      dataIndex: "category_name",
+      key: "category_name",
+      width: "25%",
+      filteredValue: [searchedText],
+      onFilter: (value, record) => {
+        // console.log("hai how are", record.children);
+
+        return String(record.category_name || nameSearch)
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      },
+    },
+    // Table.EXPAND_COLUMN,
+    {
+      title: "CODE",
+      dataIndex: "category_code",
+      key: "category_code",
+      width: "11%",
+      filteredValue: [searchCode],
+      onFilter: (value, record) => {
+        console.log("dfhasasswww12", record);
+        return String(record.category_code)
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      },
+    },
+    {
+      title: "PARENT CATEGORY",
+      dataIndex: "category_parent_name",
+      key: "category_parent_name",
+      width: "20%",
+      filteredValue: [searchStatus],
+      onFilter: (value, record) => {
+        return String(record.category_parent_id)
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      },
+    },
+    {
+      title: "DESCRIPTION",
+      dataIndex: "category_description",
+      key: "category_description",
+      width: "24%",
+    },
+    {
       title: "ACTIONS",
       dataIndex: "actions",
       key: "actions",
-      width: "14%",
+      width: "12%",
       render: (data, index) => {
         return (
           <div className=" d-flex justify-content-center align-items-center gap-3">
@@ -321,54 +378,6 @@ function Categorylist(props) {
           </div>
         );
       },
-      align: "center",
-    },
-    {
-      title: "CATEGORY NAME",
-      dataIndex: "category_name",
-      key: "category_name",
-      filteredValue: [searchedText],
-      onFilter: (value, record) => {
-        // console.log("hai how are", record.children);
-
-        return String(record.category_name || nameSearch)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
-      align: "center",
-    },
-    // Table.EXPAND_COLUMN,
-    {
-      title: "CODE",
-      dataIndex: "category_code",
-      key: "category_code",
-      filteredValue: [searchType],
-      onFilter: (value, record) => {
-        console.log("dfhasasswww12", record);
-        return String(record.category_code)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
-      align: "center",
-    },
-    {
-      title: "PARENT CATEGORY",
-      dataIndex: "category_parent_id",
-      key: "category_parent_id",
-      width: "23%",
-      filteredValue: [searchStatus],
-      onFilter: (value, record) => {
-        return String(record.category_parent_id)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
-      align: "center",
-    },
-    {
-      title: "DESCRIPTION",
-      dataIndex: "category_description",
-      key: "category_description",
-      width: "23%",
       align: "center",
     },
   ];
@@ -399,11 +408,13 @@ function Categorylist(props) {
       setCcode(e.category_code);
       setCname(e.category_name);
       setCdescription(e.category_description);
+      setCategoryImg(e.category_pic);
       setViewingDAta({
         key: e.key,
         category_name: e.category_name,
         category_code: e.category_code,
         category_parent_id: e.category_parent_id,
+        category_parent_name:e.category_parent_name,
         category_description: e.category_description,
         category_pic: e.category_pic,
       });
@@ -536,37 +547,17 @@ function Categorylist(props) {
               />
             </div>
             <div className="col-4">
-              <Select
-                allowClear
-                showSearch
-                style={{ width: "100%", marginTop: "8px", borderRadius: "5px" }}
-                placeholder="Search by Type"
-                className="select_search"
-                optionFilterProp="children"
-                onChange={(event) => {
-                  setSearchType(event ? [event] : []);
+              <Input.Search
+                placeholder="Search by code"
+                style={{ margin: "5px", borderRadius: "5px" }}
+                value={searchCode}
+                onChange={(e) => {
+                  setSearchCode(e.target.value ? [e.target.value] : []);
                 }}
-              >
-                <Select.Option value="Electronics">Electronics</Select.Option>
-                <Select.Option value="Laptop">Laptop</Select.Option>
-                <Select.Option value="Mobile">Mobile</Select.Option>
-              </Select>
-            </div>
-            <div className="col-4">
-              <Select
-                allowClear
-                showSearch
-                style={{ width: "100%", marginTop: "8px", borderRadius: "5px" }}
-                placeholder="Search by From"
-                className="select_search"
-                optionFilterProp="children"
-                onChange={(event) => {
-                  setSearchStatus(event ? [event] : []);
+                onSearch={(value) => {
+                  setSearchCode(value);
                 }}
-              >
-                <Select.Option value="L">Lead</Select.Option>
-                <Select.Option value="C">Customer</Select.Option>
-              </Select>
+              />
             </div>
           </div>
           <div className="row my-3">
@@ -656,29 +647,32 @@ function Categorylist(props) {
         onHide={() => setShowViewModal(false)}
         View_list
         list_content={
-          <div className="container-fluid p-3">
-            <div className="d-flex justify-content-between my-1">
-              <div className="mt-3">
-                <h5 className="opportunity_heading">Category</h5>
-              </div>
+          <div className="container-fluid p-4">
+            <div className="d-flex justify-content-between">
+              <h5 className="lead_text">Category</h5>
               <div className="">
                 <Button
                   onClick={() => {
                     handleEditCategoryPhase1(ViewingData);
                   }}
                   btnType="add_borderless"
+                  className="edit_button"
                 >
-                  <span
-                    className="d-flex align-items-center justify-content-between gap-1  p-1 button_span"
-                    style={{ fontSize: "14px" }}
-                  >
-                    Edit <FiEdit />
-                  </span>
+                  Edit <FiEdit />
+                  {/* </span> */}
                 </Button>
               </div>
             </div>
 
-            <div className="row">
+            <div className="col-12 d-flex justify-content-center mt-2">
+              <img
+                src={`${process.env.REACT_APP_BASE_URL}/${CategoryImg}`}
+                // alt={logo}
+                style={{ height: "100px", width: "100px" }}
+              />
+            </div>
+
+            <div className="row mt-4">
               <div className="col-5">
                 <p className="modal_view_p_style">Category Name</p>
               </div>
@@ -703,7 +697,7 @@ function Categorylist(props) {
               <div className="col-1">:</div>
               <div className="col-6 justify-content-start">
                 <p className="modal_view_p_sub">
-                  {ViewingData?.category_parent_id}
+                  {ViewingData?.category_parent_name}
                 </p>
               </div>
             </div>

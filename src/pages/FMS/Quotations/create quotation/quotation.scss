@@ -75,9 +75,9 @@ th {
   font-weight: 500;
 }
 
-.qtn_table_brdr{
+.qtn_table_brdr {
   // border-collapse:collapse;
-   thead {
+  thead {
     tr {
       th {
         z-index: 1;
@@ -101,15 +101,21 @@ th {
     }
   }
 }
+.qtn_table_brdr {
+  .ant-table table {
+    border-collapse: collapse;
+  }
+}
 .text_right {
   text-align: right;
   padding-right: 10px;
 }
-.grandtotal,.input_bg{
+.grandtotal,
+.input_bg {
   background-color: white !important;
 }
-.grandtotal{
-  .ant-input-number-input{
+.grandtotal {
+  .ant-input-number-input {
     font-weight: 600;
   }
 }

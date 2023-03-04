@@ -77,7 +77,7 @@ export default function AddJobPayments () {
    useEffect(() => {
      CurrencyData();
    }, []);
-   
+
   return (
     <>
       <div className="container-fluid">
@@ -98,7 +98,7 @@ export default function AddJobPayments () {
                 <div>
                   <h5 className="lead_text">Add Job Payment</h5>
                 </div>
-                <div className="col-sm-4 pt-3">
+                <div className="col-sm-3 pt-3">
                   <label>Voucher Date</label>
                   <Form.Item
                     className="mt-2"
@@ -115,7 +115,7 @@ export default function AddJobPayments () {
                     />
                   </Form.Item>
                 </div>
-                <div className="col-sm-4 pt-3">
+                <div className="col-sm-3 pt-3">
                   <label>Job No.</label>
                   <Form.Item
                     name="job_no"
@@ -126,7 +126,7 @@ export default function AddJobPayments () {
                     </SelectBox>
                   </Form.Item>
                 </div>
-                <div className="col-sm-4 pt-3">
+                <div className="col-sm-3 pt-3">
                   <label>Lead</label>
                   <Form.Item
                     name="lead"
@@ -135,7 +135,7 @@ export default function AddJobPayments () {
                     <InputType disabled />
                   </Form.Item>
                 </div>
-                <div className="col-sm-4 pt-3">
+                <div className="col-sm-3 pt-3">
                   <label>Currency</label>
                   <Form.Item
                     name="job_currency"
@@ -144,7 +144,7 @@ export default function AddJobPayments () {
                     <InputType disabled />
                   </Form.Item>
                 </div>
-                <div className="col-sm-4 pt-3">
+                <div className="col-sm-3 pt-3">
                   <label>Exchange Rate</label>
                   <Form.Item
                     name="exchange_rate"
@@ -153,7 +153,7 @@ export default function AddJobPayments () {
                     <Input_Number />
                   </Form.Item>
                 </div>
-                <div className="col-sm-4 pt-3">
+                <div className="col-sm-3 pt-3">
                   <label>Job Amount</label>
                   <Form.Item
                     name="job_amount"
@@ -162,7 +162,7 @@ export default function AddJobPayments () {
                     <InputNumber />
                   </Form.Item>
                 </div>
-                <div className="col-sm-6 pt-3">
+                <div className="col-sm-3 pt-3">
                   <label>Advance Amount</label>
                   <Form.Item
                     name="advance_amount"
@@ -171,7 +171,7 @@ export default function AddJobPayments () {
                     <Input_Number />
                   </Form.Item>
                 </div>
-                <div className="col-sm-6 pt-3">
+                <div className="col-sm-3 pt-3">
                   <label>
                     Advance in <span>({currencyDefault})</span>
                   </label>

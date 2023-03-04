@@ -43,11 +43,8 @@ export default function EditJobPayment() {
                 </div>
                 <div className="col-sm-4 pt-3">
                   <label>Voucher No.</label>
-                  <Form.Item
-                    name="voucher_no"
-                    // onChange={(e) => setName(e.target.value)}
-                  >
-                    <InputType />
+                  <Form.Item name="voucher_no">
+                    <InputType disabled />
                   </Form.Item>
                 </div>
                 <div className="col-sm-4 pt-3">

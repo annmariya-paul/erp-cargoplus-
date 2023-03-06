@@ -79,7 +79,9 @@ export default function Agent_Response() {
               {
                 arr.push({
                   enquiry_response_id: item.enquiry_response_id,
-                  agent_name: item.enquiry_response_agent_details.employee_name,
+                  agent_name:
+                    item.enquiry_response_agent_details?.crm_v1_vendors
+                      .vendor_name,
                   agent_response: item.enquiry_response_response,
                   enquiry_response_agent: item.enquiry_response_agent,
                 });
@@ -282,10 +284,10 @@ export default function Agent_Response() {
                           assignOpporData.map((item, index) => {
                             return (
                               <Select.Option
-                                key={item.opportunity_assign_employee_id}
-                                value={item.opportunity_assign_employee_id}
+                                key={item.opportunity_assign_agent_id}
+                                value={item.opportunity_assign_agent_id}
                               >
-                                {item.hrms_v1_employee.employee_name}
+                                {item.agents.crm_v1_vendors?.vendor_name}
                               </Select.Option>
                             );
                           })}
@@ -357,10 +359,10 @@ export default function Agent_Response() {
                           assignOpporData.map((item, index) => {
                             return (
                               <Select.Option
-                                key={item.opportunity_assign_employee_id}
-                                value={item.opportunity_assign_employee_id}
+                                key={item.opportunity_assign_agent_id}
+                                value={item.opportunity_assign_agent_id}
                               >
-                                {item.hrms_v1_employee.employee_name}
+                                {item.agents.crm_v1_vendors?.vendor_name}
                               </Select.Option>
                             );
                           })}

@@ -8,6 +8,7 @@ import InputType from "../../../components/Input Type textbox/InputType";
 import Input_Number from "../../../components/InputNumber/InputNumber";
 import SelectBox from "../../../components/Select Box/SelectBox";
 import PublicFetch from "../../../utils/PublicFetch";
+import moment from "moment";
 
 function CreateExpence() {
   const [addForm] = Form.useForm();
@@ -54,6 +55,48 @@ function CreateExpence() {
     }
   };
 
+  const createExpense = (data) => {
+    console.log("submitted ", data);
+
+    let date = moment(data.daily_expense_date);
+
+    const formData = new FormData();
+
+    formData.append(
+      "daily_expense_category_id",
+      data.daily_expense_category_id
+    );
+    formData.append("daily_expense_name", data.daily_expense_name);
+    formData.append("daily_expense_party", data.daily_expense_party);
+    formData.append("daily_expense_bill_no", data.daily_expense_bill_no);
+    formData.append(
+      "daily_expense_party_address",
+      data.daily_expense_party_address
+    );
+    formData.append(
+      "daily_expense_employee_id",
+      data.daily_expense_employee_id
+    );
+    formData.append("daily_expense_taxable", data.daily_expense_taxable);
+    if (data.daily_expense_taxable == 1) {
+      formData.append("daily_expense_taxno", data.daily_expense_taxno);
+      formData.append(
+        "daily_expense_tax_amount",
+        data.daily_expense_tax_amount
+      );
+    }
+    formData.append("daily_expense_amount", data.daily_expense_amount);
+    formData.append(
+      "daily_expense_total_amount",
+      data.daily_expense_total_amount
+    );
+    formData.append("daily_expense_remarks", data.daily_expense_remarks);
+    formData.append("daily_expense_date");
+    formData.append("daily_expense_docs", "");
+
+    PublicFetch.get(`${ACCOUNTS}/daily-expense`);
+  };
+
   useEffect(() => {
     allEmployees();
     getExpenseCategory();
@@ -78,6 +121,7 @@ function CreateExpence() {
                   form={addForm}
                   onFinish={(value) => {
                     console.log("onFinish form submit", value);
+                    createExpense(value);
                   }}
                 >
                   <div className="row ">

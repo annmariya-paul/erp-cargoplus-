@@ -935,7 +935,7 @@ export default function Taskexpenses() {
               rules={[{ required: true, message: "Required" }]}
             >
               <Select
-                style={{ minWidth: "80px" }}
+                style={{ minWidth: "150px" }}
                 bordered={false}
                 showArrow={false}
                 width={"1000px"}
@@ -945,13 +945,9 @@ export default function Taskexpenses() {
                 value={index.job_task_expense_agent_id}
                 onChange={(e) => {
                   console.log("servicess11123", e);
-                  if (isService) {
-                    handleInputchange1(
-                      e,
-                      index.key,
-                      "job_task_expense_agent_id"
-                    );
-                  }
+                  // if (isService) {
+                  handleInputchange1(e, index.key, "job_task_expense_agent_id");
+                  // }
                 }}
               >
                 {agentdata &&
@@ -1118,7 +1114,7 @@ export default function Taskexpenses() {
           title: "Currency",
           dataIndex: "job_task_expense_exp_curr",
           key: "job_task_expense_exp_curr",
-          width: 60,
+          width: 0,
           align: "center",
           className: "thirdrow",
           render: (data, index) => {
@@ -1134,7 +1130,7 @@ export default function Taskexpenses() {
                   rules={[{ required: true, message: "Required" }]}
                 >
                   <Select
-                    style={{ minWidth: "50px" }}
+                    style={{ minWidth: "150px" }}
                     bordered={false}
                     showArrow={false}
                     allowClear
@@ -1296,9 +1292,11 @@ export default function Taskexpenses() {
       ],
     },
     {
-      title: "",
+      title: "Invoiceable",
       dataIndex: "checkbox",
       key: "checkbox",
+      align: "center",
+      width: "8px",
       render: (data, index) => {
         console.log("hai this index of atble", index);
         return (
@@ -1410,8 +1408,8 @@ export default function Taskexpenses() {
         array.push({
           agent_id: item.agent_id,
           agent_country: item.agent_country,
-          agent_emp_id: item.hrms_v1_employee.employee_code,
-          agent_emp_name: item.hrms_v1_employee.employee_name,
+          agent_emp_id: item.crm_v1_vendors.vendor_id,
+          agent_emp_name: item.crm_v1_vendors.vendor_name,
         });
       });
       setAgentdata(array);

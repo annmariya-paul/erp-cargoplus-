@@ -641,7 +641,7 @@ function ListAgent() {
                     <div className="row">
                       <div className="col-6 pb-2">
                         <div className="">
-                          <label>Employee Id</label>
+                          <label>Vendor Id</label>
                           {/* <Form.Item
                                 name="employee_branch"
                                 rules={[
@@ -818,7 +818,7 @@ function ListAgent() {
                     <div className="row">
                       <div className="col-6 pb-3">
                         <div className="">
-                          <label>Employee Id</label>
+                          <label>Vendor Id</label>
                           <Form.Item
                             name="inpiutId"
                             rules={[

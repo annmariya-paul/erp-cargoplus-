@@ -60,7 +60,7 @@ function QuotationAssign() {
                 });
             });
           } else {
-            PublicFetch.get(`${CRM_BASE_URL_PURCHASING}/vendors`)
+            PublicFetch.get(`${process.env.REACT_APP_BASE_URL}/agents`)
               .then((res) => {
                 console.log("response employee", res);
                 if (res.data.success) {
@@ -69,8 +69,8 @@ function QuotationAssign() {
                   res.data.data.forEach((item, index) => {
                     console.log("all employee who is agent", item);
                     tmp.push({
-                      employee_id: item.vendor_id,
-                      employee_name: item.vendor_name,
+                      employee_id: item?.agent_id,
+                      employee_name: item.crm_v1_vendors.vendor_name,
                     });
                   });
                   setAllAgents(tmp);

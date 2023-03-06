@@ -113,7 +113,6 @@ import JobPayments from "./pages/Accounts/JobPayments/job_payments";
 import AddJobPayments from "./pages/Accounts/JobPayments/add_job_payment";
 import EditJobPayment from "./pages/Accounts/JobPayments/edit_job_payments";
 
-
 function App() {
   return (
     <div className="App">
@@ -470,8 +469,8 @@ function App() {
             </Route>
 
             <Route path={ROUTES.BANK_DETAILS} element={<ProtectedRoute />}>
-              <Route index element={<Bank/>} />
-
+              <Route index element={<Bank />} />
+            </Route>
             <Route path={ROUTES.JOB_PAYMENTS} element={<ProtectedRoute />}>
               <Route index element={<JobPayments />} />
             </Route>
@@ -480,10 +479,7 @@ function App() {
             </Route>
             <Route path={ROUTES.EDIT_JOBPAYMENT} element={<ProtectedRoute />}>
               <Route index element={<EditJobPayment />} />
-
             </Route>
-
-             </Route> 
           </Route>
           <Route
             path={ROUTES.QUATATION_INVOICE_ID}

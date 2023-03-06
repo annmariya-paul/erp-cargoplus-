@@ -40,6 +40,7 @@ export default function LeadReport() {
     setToggleState(index);
   };
    const newDate = new Date();
+  
 
   // { function GetAllLeadData to import lead data - Ann mariya (20/10/22)}
   const GetAllLeadData = () => {
@@ -440,8 +441,9 @@ export default function LeadReport() {
               />
             </div>
             <div className="d-flex py-2 justify-content-center">
+              {generateCount>0  && (
               <MyPagination
-                total={parseInt(generatedTable?.length)}
+                total={parseInt(generateCount)}
                 current={current}
                 showSizeChanger={true}
                 pageSize={numOfItems}
@@ -450,6 +452,7 @@ export default function LeadReport() {
                   // setPageSize(pageSize);
                 }}
               />
+              )}
             </div>
           </div>
 
@@ -617,8 +620,9 @@ export default function LeadReport() {
               />
             </div>
             <div className="d-flex py-2 justify-content-center">
+              {convertCount>0 &&(
               <MyPagination
-                total={parseInt(convertedTable?.length)}
+                total={parseInt(convertCount)}
                 current={current}
                 showSizeChanger={true}
                 pageSize={numOfItems}
@@ -627,6 +631,7 @@ export default function LeadReport() {
                   // setPageSize(pageSize);
                 }}
               />
+              )}
             </div>
           </div>
         </div>

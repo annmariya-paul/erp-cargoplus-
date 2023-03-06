@@ -444,6 +444,7 @@ function Productlist() {
               </Select>
             </div>
             <div className=" col-4 d-flex align-items-center justify-content-center">
+              {totalCount>0 &&(
             <MyPagination
               total={parseInt(totalCount)}
               current={current}
@@ -452,6 +453,7 @@ function Productlist() {
                 setCurrent(current);
               }}
             />
+            )}
           </div>
             <div className="col-4 d-flex justify-content-end">
               <Button
@@ -480,15 +482,9 @@ function Productlist() {
             />
           </div>
           <div className="d-flex py-2 justify-content-center">
+            {totalCount>0 &&(
             <MyPagination
-              // total={data.length}
-              // current={current}
-              // showSizeChanger={true}
-              // pageSize={pageSize}
-              // onChange={(current, pageSize) => {
-              //   setCurrent(current);
-              //   setPageSize(pageSize);
-              // }}
+           
               total={parseInt(totalCount)}
               current={current}
               pageSize={numOfItems}
@@ -496,6 +492,7 @@ function Productlist() {
                 setCurrent(current);
               }}
             />
+            )}
           </div>
           {/* {"mcncncncncncncnc"}  {product listing ends } */}
         </div>

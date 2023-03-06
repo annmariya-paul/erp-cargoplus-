@@ -439,6 +439,18 @@ export default function Sidebar({ showSidebar }) {
                           </NavLink>
                         </li>
                       )}
+                        {checkPermission("unit and measures") && (
+                        <li className="nav-text">
+                          <NavLink
+                            className={({ isActive }) =>
+                              isActive ? "active-link" : "link"
+                            }
+                            to={ROUTES.UNIT_LIST}
+                          >
+                            <div className=" ms-4">Units and Measures</div>
+                          </NavLink>
+                        </li>
+                      )}
 
                       {checkPermission("attribute") && (
                         <li className="nav-text">
@@ -476,7 +488,7 @@ export default function Sidebar({ showSidebar }) {
                           </NavLink>
                         </li>
                       )}
-                      {checkPermission("unit and measures") && (
+                      {/* {checkPermission("unit and measures") && (
                         <li className="nav-text">
                           <NavLink
                             className={({ isActive }) =>
@@ -487,7 +499,7 @@ export default function Sidebar({ showSidebar }) {
                             <div className=" ms-4">Units and Measures</div>
                           </NavLink>
                         </li>
-                      )}
+                      )} */}
                     </>
                   ) : (
                     ""

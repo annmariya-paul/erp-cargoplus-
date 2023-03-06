@@ -58,7 +58,6 @@ export default function Agent_Response() {
         if (res.data.success) {
           console.log("success_enquiry", res.data.data);
           setAssignOpporData(res.data.data);
-
         }
       })
       .catch((err) => {

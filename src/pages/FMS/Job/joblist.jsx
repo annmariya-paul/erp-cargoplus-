@@ -251,10 +251,10 @@ function Listjob() {
       .then((res) => {
         console.log("Response", res);
         if (res.data.success) {
-          console.log("success", res.data.data);
-          settotaljob(res.data.data)
+          console.log("success of job", res.data.data);
+          settotaljob(res.data.data.totalCount)
           let temp = [];
-          res.data.data.forEach((item, index) => {
+          res.data.data.job.forEach((item, index) => {
             let date = moment(item.job_date).format("DD-MM-YYYY");
 
             temp.push({
@@ -366,8 +366,9 @@ function Listjob() {
           </div>
         
           <div className="col-4 d-flex py-2 justify-content-center">
+            {totaljob>0 &&(
           <MyPagination
-              total={parseInt(totaljob?.length)}
+              total={parseInt(totaljob)}
               current={current}
               pageSize={noofItems}
               // defaultPageSize={noofItems}
@@ -380,6 +381,7 @@ function Listjob() {
                 // setCurrent(noofItems !== pageSize ? 0 : current);
               }}
             />
+            )}
           </div>
           <div className="col-4 d-flex justify-content-end">
             <div className="col mb-2 px-4">
@@ -400,8 +402,9 @@ function Listjob() {
         </div>
 
         <div className="d-flex justify-content-center ">
+          {totaljob>0 &&(
         <MyPagination
-              total={parseInt(totaljob?.length)}
+              total={parseInt(totaljob)}
               current={current}
               pageSize={noofItems}
               // defaultPageSize={noofItems}
@@ -412,6 +415,7 @@ function Listjob() {
               
               }}
             />
+            )}
         </div>
       </div>
     </>

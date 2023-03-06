@@ -247,7 +247,7 @@ function Listjob() {
 
   const [AllJobs, setAllJobs] = useState();
   const getAllJobs = () => {
-    PublicFetch.get(`${CRM_BASE_URL_FMS}/job?startIndex=0&noOfItems=100`)
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/job?startIndex=${pageofIndex}&noOfItems=${noofItems}`)
       .then((res) => {
         console.log("Response", res);
         if (res.data.success) {

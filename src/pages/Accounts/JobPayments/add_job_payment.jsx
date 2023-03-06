@@ -23,7 +23,6 @@ export default function AddJobPayments () {
   const [addForm] = Form.useForm();
   const [successPopup, setSuccessPopup] = useState(false);
   const [currencyDefault,setCurrencyDefault] = useState();
-  console.log("currency", currencyDefault);
   const [allCurrency, setAllCurrency] = useState();
 
   const navigate = useNavigate();
@@ -241,6 +240,12 @@ export default function AddJobPayments () {
             </Form>
           </div>
         </div>
+        <Custom_model
+          size={"sm"}
+          show={successPopup}
+          onHide={() => setSuccessPopup(false)}
+          success
+        />
       </div>
     </>
   );

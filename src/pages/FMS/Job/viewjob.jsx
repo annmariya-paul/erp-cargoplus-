@@ -171,7 +171,7 @@ export default function ViewJob() {
             job_date: res.data.data.job_date,
             job_date1: date,
             job_exchange_rate: res.data.data.job_total_cost_exch,
-            // job_grand_total: res.data.data.job_grand_total,
+            job_credit_days: res.data.data.job_credit_days,
             job_gross_wt: res.data.data.job_gross_wt,
             job_chargeable_wt: res.data.data.job_chargeable_wt,
             job_carrier: res.data.data.job_carrier,
@@ -272,7 +272,7 @@ export default function ViewJob() {
                 className="edit_button"
                 onClick={() => {
                   // handleviewtoedit();
-                  navigate(`${ROUTES.EDIT_JOB}/${id}`);
+                  navigate(`${ROUTES.UPDATEJOB}/${id}`);
                 }}
               >
                 Edit
@@ -484,6 +484,14 @@ export default function ViewJob() {
 
             <div className="col-7">
               <p className="modal-view-data">{alljobs?.job_docs}</p>
+            </div>
+          </div>
+          <div className="col-6 d-flex">
+            <div className="col-4 boldhd">Credit Days</div>
+            <div className="col-1">:</div>
+
+            <div className="col-7">
+              <p className="modal-view-data">{alljobs?.job_credit_days}</p>
             </div>
           </div>
 

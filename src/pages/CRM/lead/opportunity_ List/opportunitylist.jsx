@@ -1234,6 +1234,7 @@ function Opportunitylist(props) {
                     onKeyUp={() => {
                       trigger("lead_customer_generated");
                     }}
+                    
                     value={oppurtunitylead}
                     onChange={(e) => {}}
                   />
@@ -1549,7 +1550,7 @@ function Opportunitylist(props) {
                     },
                   ]}
                 >
-                  <InputType value={oppurtunitylead} />
+                  <InputType value={oppurtunitylead}  disabled={true}/>
                 </Form.Item>
 
                 {/* </Form.Group> */}

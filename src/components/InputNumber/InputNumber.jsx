@@ -36,7 +36,7 @@ function Input_Number({
           onBlur={onBlur}
           onKeyDown={onKeyDown}
           style={{ backgroundColor: "#f4f4f7"  }}
-          className={`input_number_style w-100 my-2 pb-2 ${className}`}
+          className={`input_number_style w-100 my-2 pb-1 ${className}`}
           type="number"
           onPressEnter={onPressEnter}
           disabled={disabled}

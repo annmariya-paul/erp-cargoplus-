@@ -7,8 +7,51 @@ import FunnelChart from "../../components/dashboard/charts/funnel-chart";
 import GeoChart from "../../components/dashboard/charts/geo-chart";
 import PieChart from "../../components/dashboard/charts/pie-chart";
 import { Table } from "antd";
+import { CRM_BASE_URL, CRM_BASE_URL_FMS } from "../../api/bootapi";
+import PublicFetch from "../../utils/PublicFetch";
+import { useEffect } from "react";
 
 function Dashboard() {
+ const [pageSize, setPageSize] = useState(0);
+ const [numOfItems, setNumOfItems] = useState("25");
+ const [leadCount,setLeadCount] = useState();
+ const [opportunityCount,setOpportunityCount] = useState();
+ const [jobcount,setJobCount] = useState();
+ console.log("count",leadCount);
+
+ const GetLeadData = () => {
+   PublicFetch.get(
+     `${CRM_BASE_URL}/lead?startIndex=${pageSize}&noOfItems=${numOfItems}`
+   )
+     .then((res) => {
+       if (res?.data?.success) {
+         setLeadCount(res?.data?.data?.totalCount);
+       } else {
+         console.log("Failed to load data");
+       }
+     })
+     .catch((err) => {
+       console.log("Errror while getting data", err);
+     });
+ };
+  const getAllJobs = () => {
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/job?startIndex=0&noOfItems=100`)
+      .then((res) => {
+        if (res.data.success) {
+          setJobCount(res.data.data.totalCount);
+        } else {
+          console.log("Failed to load data");
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+ useEffect(() => {
+   GetLeadData();
+   getAllJobs();
+ }, []);
+
   const tableColumns = [
     {
       title: "Deal Name",
@@ -98,7 +141,9 @@ function Dashboard() {
             <Card className={`${styles.cartItem}`}>
               <div>
                 <div className={`text-center ${styles.cardTitle}`}>Lead</div>
-                <div className={`text-center ${styles.cardSubText}`}>100</div>
+                <div className={`text-center ${styles.cardSubText}`}>
+                  {leadCount}
+                </div>
               </div>
             </Card>
             <Card className={`${styles.cartItem}`}>
@@ -112,7 +157,9 @@ function Dashboard() {
             <Card className={`${styles.cartItem}`}>
               <div>
                 <div className={`text-center ${styles.cardTitle}`}>Jobs</div>
-                <div className={`text-center ${styles.cardSubText}`}>100</div>
+                <div className={`text-center ${styles.cardSubText}`}>
+                  {jobcount}
+                </div>
               </div>
             </Card>
             <Card className={`${styles.cartItem}`}>

@@ -178,7 +178,7 @@ export default function SelectCountry() {
               }}
             />
           </div>
-          <div className="col-4  d-flex justify-content-end">
+          <div className="col-4 d-flex justify-content-end">
             <Button
               onClick={() => setmodalAddCountry(true)}
               className="add_opportunity"

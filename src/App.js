@@ -106,9 +106,13 @@ import ExpenseCategory from "./pages/Accounts/settings/Expense_Category/ExpenseC
 import Payment_mode from "./pages/Accounts/settings/payment_mode";
 import Add_purchase from "./pages/Accounts/settings/add_purchase";
 import Purchase from "./pages/Accounts/settings/purchase";
+
+import Bank from "./pages/Accounts/settings/BankAccount/bank";
+
 import JobPayments from "./pages/Accounts/JobPayments/job_payments";
 import AddJobPayments from "./pages/Accounts/JobPayments/add_job_payment";
 import EditJobPayment from "./pages/Accounts/JobPayments/edit_job_payments";
+
 
 function App() {
   return (
@@ -464,6 +468,10 @@ function App() {
             <Route path={ROUTES.PURCHASE} element={<ProtectedRoute />}>
               <Route index element={<Purchase />} />
             </Route>
+
+            <Route path={ROUTES.BANK_DETAILS} element={<ProtectedRoute />}>
+              <Route index element={<Bank/>} />
+
             <Route path={ROUTES.JOB_PAYMENTS} element={<ProtectedRoute />}>
               <Route index element={<JobPayments />} />
             </Route>
@@ -472,9 +480,10 @@ function App() {
             </Route>
             <Route path={ROUTES.EDIT_JOBPAYMENT} element={<ProtectedRoute />}>
               <Route index element={<EditJobPayment />} />
+
             </Route>
 
-            {/* </Route> */}
+             </Route> 
           </Route>
           <Route
             path={ROUTES.QUATATION_INVOICE_ID}

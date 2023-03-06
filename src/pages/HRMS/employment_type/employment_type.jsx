@@ -135,7 +135,7 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
     },
   
     {
-      title: "EMPLOYMENT TYPE NAME",
+      title: "EMPLOYEE TYPE NAME",
       dataIndex: "employment_type_name",
       key: "employment_type_name",
       filteredValue: [searchedText],
@@ -323,7 +323,7 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
             </div>
             <div className="col-4">
             <Button btnType="add" onClick={() => setaddshowmodal(true)}>
-              Add EmployMentType
+              Add Employee Type
             </Button>
             </div>
         </div>

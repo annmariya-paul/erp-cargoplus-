@@ -109,6 +109,7 @@ const ROUTES = {
   CREATE_EXPENSE: "/create_expense",
   EXPENSE_CATEGORY: "/expense_category",
   ADD_PAYMENTS: "/add_payments",
+  BANK_DETAILS:"/list_bankdetails",
   // general settings
   CURRENCY: "/currency",
   COMPANYINFO: "/company_info",

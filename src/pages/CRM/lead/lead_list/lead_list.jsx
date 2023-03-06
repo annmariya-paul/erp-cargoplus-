@@ -442,7 +442,11 @@ export default function LeadList() {
                 </Select.Option>
               </Select>
             </div>
+           
+
+           
             <div className="col-4 d-flex py-2 justify-content-center">
+            {totalCount>0   && (
             <MyPagination
               total={parseInt(totalCount)}
               current={current}
@@ -456,8 +460,11 @@ export default function LeadList() {
                 // setNoofItems(pageSize);
                 // setCurrent(noofItems !== pageSize ? 0 : current);
               }}
+             
             />
+            ) }
           </div>
+        
             <div className="col-4 d-flex justify-content-end">
               <Link to={ROUTES.LEAD}>
                 <Button
@@ -478,6 +485,7 @@ export default function LeadList() {
             />
           </div>
           <div className="d-flex py-2 justify-content-center">
+            {totalCount>0  &&(
             <MyPagination
               total={parseInt(totalCount)}
               current={current}
@@ -492,6 +500,7 @@ export default function LeadList() {
                 // setCurrent(noofItems !== pageSize ? 0 : current);
               }}
             />
+            ) }
           </div>
 
           <Custom_model

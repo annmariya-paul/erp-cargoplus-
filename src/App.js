@@ -109,6 +109,7 @@ import Purchase from "./pages/Accounts/settings/purchase";
 import JobPayments from "./pages/Accounts/JobPayments/job_payments";
 import AddJobPayments from "./pages/Accounts/JobPayments/add_job_payment";
 import EditJobPayment from "./pages/Accounts/JobPayments/edit_job_payments";
+import ViewJobPayment from "./pages/Accounts/JobPayments/view_job_payments";
 
 function App() {
   return (
@@ -472,6 +473,9 @@ function App() {
             </Route>
             <Route path={ROUTES.EDIT_JOBPAYMENT} element={<ProtectedRoute />}>
               <Route index element={<EditJobPayment />} />
+            </Route>
+            <Route path={ROUTES.VIEW_JOBPAYMENT} element={<ProtectedRoute />}>
+              <Route index element={<ViewJobPayment />} />
             </Route>
 
             {/* </Route> */}

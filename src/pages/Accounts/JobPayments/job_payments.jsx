@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { ROUTES } from "../../../routes";
 import Button from "../../../components/button/button";
 import TableData from "../../../components/table/table_data";
+import Custom_model from "../../../components/custom_modal/custom_model";
 
 export default function JobPayments() {
   const [serialNo, setserialNo] = useState(1);
@@ -68,12 +69,16 @@ export default function JobPayments() {
                 <FaEdit />
               </div>
             </Link>
-            <div
-              className="actionEdit"
-              // onClick={() => handleViewCategory(index)}
-            >
-              <MdPageview />
-            </div>
+            <Link to={ROUTES.VIEW_JOBPAYMENT}>
+              {" "}
+              <div
+                className="actionEdit"
+                // onClick={() => handleViewCategory(index)}
+              >
+                <MdPageview />
+              </div>
+            </Link>
+
             <div className="actionDel">
               <FaTrash />
             </div>

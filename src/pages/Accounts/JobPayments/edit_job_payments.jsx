@@ -12,11 +12,38 @@ import Button from "../../../components/button/button";
 import Custom_model from "../../../components/custom_modal/custom_model";
 import PublicFetch from "../../../utils/PublicFetch";
 import Input_Number from "../../../components/InputNumber/InputNumber";
+import { GENERAL_SETTING_BASE_URL } from "../../../api/bootapi";
 
 export default function EditJobPayment() {
   const [addForm] = Form.useForm();
   const [successPopup, setSuccessPopup] = useState(false);
+  const [currencyDefault, setCurrencyDefault] = useState();
+  const [allCurrency, setAllCurrency] = useState();
   const navigate = useNavigate();
+
+   const CurrencyData = () => {
+     PublicFetch.get(`${GENERAL_SETTING_BASE_URL}/currency`)
+       .then((res) => {
+         console.log("response", res);
+         if (res.data.success) {
+           console.log("success", res.data.data);
+           setAllCurrency(res.data.data);
+           let arr = [];
+           res?.data?.data?.forEach((item, index) => {
+             if (item.currency_is_default === 1) {
+               arr = item?.currency_code;
+               setCurrencyDefault(arr);
+             }
+           });
+         }
+       })
+       .catch((err) => {
+         console.log("Error", err);
+       });
+   };
+    useEffect(() => {
+      CurrencyData();
+    }, []);
 
   const handleCancel = () => {
     navigate(ROUTES.JOB_PAYMENTS);
@@ -121,7 +148,7 @@ export default function EditJobPayment() {
                 </div>
                 <div className="col-sm-4 pt-3">
                   <label>
-                    Advance in <span>(KWD)</span>
+                    Advance in <span>({currencyDefault})</span>
                   </label>
                   <Form.Item
                     name="advance_amount"
@@ -189,6 +216,12 @@ export default function EditJobPayment() {
             </Form>
           </div>
         </div>
+        <Custom_model
+          size={"sm"}
+          show={successPopup}
+          onHide={() => setSuccessPopup(false)}
+          success
+        />
       </div>
     </>
   );

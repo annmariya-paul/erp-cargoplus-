@@ -50,7 +50,7 @@ function ListAgent() {
   const [uniqueEditCode, setUniqueEditCode] = useState(false);
   // const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
   const [addForm] = Form.useForm();
-  const [successPopup, setSuccessPopup] = useState();
+  const [successPopup, setSuccessPopup] = useState(false);
   const [FrightEditPopup, setFrightEditPopup] = useState(false);
   const [allempname, setAllempname] = useState();
   const [uniqueName, setUniqueName] = useState();
@@ -109,7 +109,7 @@ function ListAgent() {
     if (!mShow) {
       setTimeout(() => {
         setSuccessPopup(false);
-        navigate(ROUTES.LISTAGENT);
+        // navigate(ROUTES.LISTAGENT);
       }, time);
     }
   };
@@ -236,16 +236,16 @@ function ListAgent() {
 
   const frightEdit = (e) => {
     console.log("Fright edit", e);
-    setAgentId(e.agentId);
+    setAgentId(e?.agent_id);
     setinputCountry(e.agent_country);
     setinputcommision(e.agent_commission_details);
-    setinpiutId(e.agent_id);
-    setEmployee_Idd(e.agent_id);
+    setinpiutId(e.agent_vendor_id);
+    setEmployee_Idd(e.agent_vendor_id);
 
     editForm.setFieldsValue({
       inpiutId: e.agent_vendor_id,
       // inputName:e.agent_emp_name,
-      inputCountry: e.agent_country,
+      country: e.agent_country,
       inputcommision: e.agent_commission_details,
     });
     setFrightEditPopup(true);
@@ -256,10 +256,11 @@ function ListAgent() {
     const formData = new FormData();
 
     let data = {
-      agent_emp_id: inpiutId,
+      agent_vendor_id: parseInt(inpiutId),
       agent_country: inputCountry,
       agent_commission_details: inputcommision,
     };
+    let idss = parseInt(agentId);
 
     PublicFetch.patch(
       `${process.env.REACT_APP_BASE_URL}/agents/${agentId}`,
@@ -271,7 +272,7 @@ function ListAgent() {
           console.log("successDataa", res.data.data);
           getagents();
           setSuccessPopup(true);
-          close_modal(successPopup, 1000);
+          close_modal(successPopup, 1200);
           setFrightEditPopup(false);
         } else {
           // setErrormsg(res.data.data);
@@ -288,7 +289,7 @@ function ListAgent() {
       const updating = await PublicFetch.patch(
         `${process.env.REACT_APP_BASE_URL}/agents/${fright_id}`,
         {
-          agent_emp_id: employeeagentid,
+          agent_vendor_id: employeeagentid,
           agent_country: editcountrynme,
           agent_commission_details: editcommision,
         }
@@ -783,14 +784,14 @@ function ListAgent() {
               </div>
             </>
           }
-        >
-          <Custom_model
-            size={"sm"}
-            success
-            show={successPopup}
-            onHide={() => setSuccessPopup(false)}
-          />
-        </CustomModel>
+        ></CustomModel>
+
+        <Custom_model
+          size={"sm"}
+          success
+          show={successPopup}
+          onHide={() => setSuccessPopup(false)}
+        />
 
         {/* Modal for edit Agent */}
         <Custom_model
@@ -864,7 +865,7 @@ function ListAgent() {
                       <div className="col-6">
                         <div className="">
                           <label>Country</label>
-                          <Form.Item>
+                          <Form.Item name="country">
                             <SelectBox
                               value={inputCountry}
                               showSearch

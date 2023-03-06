@@ -1,12 +1,14 @@
 import { Input, Select } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdPageview } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
+import { ACCOUNTS } from "../../../api/bootapi";
 import Button from "../../../components/button/button";
 import Custom_model from "../../../components/custom_modal/custom_model";
 import MyPagination from "../../../components/Pagination/MyPagination";
 import TableData from "../../../components/table/table_data";
 import { ROUTES } from "../../../routes";
+import PublicFetch from "../../../utils/PublicFetch";
 
 function DailyExpence() {
   const navigate = useNavigate();
@@ -15,7 +17,7 @@ function DailyExpence() {
   const [current, setCurrent] = useState(1); // current page
   const [searchSource, setSearchSource] = useState(""); // search by text input
   const [totalCount, setTotalcount] = useState("");
-  const [AllinvoiceData, setAllInvoiceData] = useState();
+  const [AllexpenceData, setAllExpenseData] = useState();
   const [invoiceData, setInvoiceData] = useState();
   const [cancelPopup, setCancelPopup] = useState(false);
   const [invoice_id, setInvoice_id] = useState();
@@ -59,15 +61,15 @@ function DailyExpence() {
     },
     {
       title: "VOUCHER NO",
-      dataIndex: "invoice_no",
-      key: "invoice_no",
+      dataIndex: "daily_expense_voucher_no",
+      key: "daily_expense_voucher_no",
       width: "12%",
       // align: "center",
     },
     {
       title: "NAME",
-      dataIndex: "invoice_date",
-      key: "invoice_date",
+      dataIndex: "daily_expense_name",
+      key: "daily_expense_name",
       width: "10%",
       render: (record) => {
         // return <div>{moment(record?.invoice_date).format("DD-MM-YYYY")}</div>;
@@ -75,8 +77,8 @@ function DailyExpence() {
     },
     {
       title: "BILL NO",
-      dataIndex: "invoice_job_no",
-      key: "invoice_job_no",
+      dataIndex: "daily_expense_bill_no",
+      key: "daily_expense_bill_no",
       width: "15%",
       //  filteredValue: [searchLead],
       onFilter: (value, record) => {
@@ -88,8 +90,8 @@ function DailyExpence() {
 
     {
       title: "TAX",
-      dataIndex: "invoice_job_consignee",
-      key: "invoice_job_consignee",
+      dataIndex: "daily_expense_taxno",
+      key: "daily_expense_taxno",
       width: "15%",
       //  filteredValue: [searchSource],
       onFilter: (value, record) => {
@@ -100,8 +102,8 @@ function DailyExpence() {
     },
     {
       title: "PARTY",
-      dataIndex: "invoice_job_shipper",
-      key: "invoice_job_shipper",
+      dataIndex: "daily_expense_party",
+      key: "daily_expense_party",
       width: "15%",
       // align: "center",
     },
@@ -169,6 +171,23 @@ function DailyExpence() {
     //   },
     // },
   ];
+
+  const getDailyExpense = () => {
+    PublicFetch.get(`${ACCOUNTS}/daily-expense?startIndex=0&noOfItems=100`)
+      .then((res) => {
+        console.log("Response", res);
+        if (res.data.success) {
+          setAllExpenseData(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+  useEffect(() => {
+    getDailyExpense();
+  }, []);
   return (
     <div>
       <div className="container-fluid">
@@ -289,7 +308,7 @@ function DailyExpence() {
                 <div className="datatable">
                   {/* {AllinvoiceData && ( */}
                   <TableData
-                    data={AllinvoiceData}
+                    data={AllexpenceData}
                     // data={allLeadList}
                     // data={OpportunityList}
                     columns={columns}

@@ -962,7 +962,7 @@ export default function Sidebar({ showSidebar }) {
                     </li>
                   )}
 
-                   {checkPermission("purchase") && (
+                  {checkPermission("purchase") && (
                     <li className="nav-text">
                       <NavLink
                         className={({ isActive }) =>
@@ -974,14 +974,7 @@ export default function Sidebar({ showSidebar }) {
                       </NavLink>
                     </li>
                   )}
-                    </>
-                  ) : (
-                    ""
-                  )}
-                  {checkPermission("daily_expence") && (
-
                   {checkPermission("job_payments") && (
-
                     <li className="nav-text ">
                       <NavLink
                         className={({ isActive }) =>

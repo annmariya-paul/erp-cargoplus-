@@ -369,6 +369,7 @@ export default function Currency(props) {
             </Select>
           </div>
           <div className=" col-4 d-flex align-items-center  justify-content-center">
+            {AllCurrency && (
             <MyPagination
               total={parseInt(AllCurrency?.length)}
               current={current}
@@ -379,6 +380,7 @@ export default function Currency(props) {
                 setPageSize(pageSize);
               }}
             />
+            )}
           </div>
           <div className="col-4 d-flex justify-content-end">
             <Button btnType="add" onClick={() => setModalAddCurrency(true)}>
@@ -395,6 +397,7 @@ export default function Currency(props) {
           />
         </div>
         <div className="d-flex py-2 justify-content-center">
+          {AllCurrency && (
           <MyPagination
             total={parseInt(AllCurrency?.length)}
             current={current}
@@ -405,6 +408,7 @@ export default function Currency(props) {
               setPageSize(pageSize);
             }}
           />
+          )}
         </div>
       </div>
 

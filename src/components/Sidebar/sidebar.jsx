@@ -175,7 +175,7 @@ export default function Sidebar({ showSidebar }) {
                         }
                         to={ROUTES.EMPLOYMENT_TYPE}
                       >
-                        <div className=" ms-4">Employment Type</div>
+                        <div className=" ms-4">Employee Type</div>
                       </NavLink>
                     </li>
                   )}

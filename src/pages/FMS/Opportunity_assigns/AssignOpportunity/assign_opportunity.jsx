@@ -6,7 +6,11 @@ import PublicFetch from "../../../../utils/PublicFetch";
 import "./assign_opportunity.scss";
 import CustomModel from "../../../../components/custom_modal/custom_model";
 import { useNavigate, useParams } from "react-router-dom";
-import { CRM_BASE_URL_HRMS, CRM_BASE_URL_FMS } from "../../../../api/bootapi";
+import {
+  CRM_BASE_URL_HRMS,
+  CRM_BASE_URL_FMS,
+  CRM_BASE_URL_PURCHASING,
+} from "../../../../api/bootapi";
 import { ROUTES } from "../../../../routes";
 
 function Assign_opportunity() {
@@ -46,12 +50,12 @@ function Assign_opportunity() {
           let arr = [];
           res?.data?.data?.forEach((item, index) => {
             arr.push({
-              employee_branch: item?.hrms_v1_employee.employee_branch,
-              employee_id: item?.hrms_v1_employee.employee_id,
-              employee_name: item?.hrms_v1_employee.employee_name,
+              // employee_branch: item?.agents.employee_branch,
+              employee_id: item?.agents?.agent_id,
+              employee_name: item?.agents.crm_v1_vendors?.vendor_name,
             });
             addForm.setFieldsValue({
-              employee_ids: item.hrms_v1_employee.employee_id,
+              employee_ids: item?.agents?.agent_id,
             });
           });
 
@@ -64,7 +68,7 @@ function Assign_opportunity() {
   };
 
   const getAllEmployees = () => {
-    PublicFetch.get(`${CRM_BASE_URL_HRMS}/employees`)
+    PublicFetch.get(`${process.env.REACT_APP_BASE_URL}/agents`)
       .then((res) => {
         console.log("Response", res);
         if (res.data.success) {
@@ -191,35 +195,30 @@ function Assign_opportunity() {
                     {/* <Row> */}
                     {allEmployees &&
                       allEmployees.map((item, index) => {
-                        if (
-                          item?.hrms_v1_employment_types
-                            ?.employment_type_name === "Agent"
-                        ) {
-                          return (
-                            <div className="col-xl-4 col-lg-4 col-sm-6">
-                              <Form.Item
-                                name="employee_ids"
-                                // rules={[{ required: true, message: "Agents are Required" }]}
+                        return (
+                          <div className="col-xl-4 col-lg-4 col-sm-6">
+                            <Form.Item
+                              name="employee_ids"
+                              // rules={[{ required: true, message: "Agents are Required" }]}
+                            >
+                              <Checkbox
+                                key={item.agent_id}
+                                value={item.agent_id}
+                                onChange={(e) => {
+                                  console.log("value", e.target.value);
+                                  onHandleChange(
+                                    e.target.checked,
+                                    item.agent_id
+                                  );
+                                  setErrormsg(false);
+                                }}
+                                checked={checkEmployee(item?.agent_id)}
                               >
-                                <Checkbox
-                                  key={item.employee_id}
-                                  value={item.employee_id}
-                                  onChange={(e) => {
-                                    console.log("value", e.target.value);
-                                    onHandleChange(
-                                      e.target.checked,
-                                      item.employee_id
-                                    );
-                                    setErrormsg(false);
-                                  }}
-                                  checked={checkEmployee(item?.employee_id)}
-                                >
-                                  {item.employee_name}{" "}
-                                </Checkbox>
-                              </Form.Item>
-                            </div>
-                          );
-                        }
+                                {item?.crm_v1_vendors?.vendor_name}{" "}
+                              </Checkbox>
+                            </Form.Item>
+                          </div>
+                        );
                       })}
                     {/* </Row> */}
                     {errormsg ? (

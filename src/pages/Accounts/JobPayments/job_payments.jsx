@@ -1,16 +1,27 @@
 import { Input, Select } from "antd";
-import React from "react";
+import React, { useState } from "react";
+import { FaEdit, FaTrash } from "react-icons/fa";
+import { MdPageview } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { ROUTES } from "../../../routes";
 import Button from "../../../components/button/button";
 import TableData from "../../../components/table/table_data";
+import Custom_model from "../../../components/custom_modal/custom_model";
 
-const JobPayments = () => {
-  const colums = [
+export default function JobPayments() {
+  const [serialNo, setserialNo] = useState(1);
+
+  const columns = [
     {
-      title: "PAYMENT MODE",
-      dataIndex: "payment_mode",
-      key: "freight_type_name",
+      title: "Sl. No.",
+      key: "index",
+      render: (value, item, index) => serialNo + index,
+      align: "center",
+    },
+    {
+      title: "VOUCHER NO",
+      dataIndex: "voucher_no",
+      key: "voucher_no",
       //   filteredValue: [searchedText],
       //   onFilter: (value, record) => {
       //     return String(record.freight_type_name  || nameSearch)
@@ -18,6 +29,73 @@ const JobPayments = () => {
       //       .includes(value.toLowerCase());
       //   },
       align: "center",
+    },
+    {
+      title: "VOUCHER DATE",
+      dataIndex: "voucher_date",
+      key: "voucher_date",
+      align: "center",
+    },
+    {
+      title: "JOB NO",
+      dataIndex: "job_no",
+      key: "job_no",
+      align: "center",
+    },
+    {
+      title: "LEAD",
+      dataIndex: "lead",
+      key: "lead",
+    },
+    {
+      title: "ADVANCE AMOUNT",
+      dataIndex: "advance_amount",
+      key: "advance_amount",
+      align: "center",
+    },
+    {
+      title: "ACTIONS",
+      dataIndex: "actions",
+      key: "actions",
+      width: "12%",
+      render: (data, index) => {
+        return (
+          <div className=" d-flex justify-content-center align-items-center gap-3">
+            <Link to={ROUTES.EDIT_JOBPAYMENT}>
+              <div
+                className="actionEdit"
+                // onClick={() => handleEditCategoryPhase1(index)}
+              >
+                <FaEdit />
+              </div>
+            </Link>
+            <Link to={ROUTES.VIEW_JOBPAYMENT}>
+              {" "}
+              <div
+                className="actionEdit"
+                // onClick={() => handleViewCategory(index)}
+              >
+                <MdPageview />
+              </div>
+            </Link>
+
+            <div className="actionDel">
+              <FaTrash />
+            </div>
+          </div>
+        );
+      },
+      align: "center",
+    },
+  ];
+
+  const data = [
+    {
+      voucher_no: "001",
+      voucher_date: "01-01-2023",
+      job_no: "job001",
+      lead: "Test name",
+      advance_amount:"1000",
     },
   ];
   return (
@@ -80,8 +158,8 @@ const JobPayments = () => {
         <div className="datatable">
           <TableData
             // data={getData(current, pageSize)}
-            // data={data}
-            // columns={columns}
+            data={data}
+            columns={columns}
             custom_table_css="table_lead_list"
           />
         </div>
@@ -96,6 +174,4 @@ const JobPayments = () => {
       </div>
     </>
   );
-};
-
-export default JobPayments;
+}

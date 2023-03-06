@@ -7,33 +7,64 @@ import FunnelChart from "../../components/dashboard/charts/funnel-chart";
 import GeoChart from "../../components/dashboard/charts/geo-chart";
 import PieChart from "../../components/dashboard/charts/pie-chart";
 import { Table } from "antd";
-import { CRM_BASE_URL } from "../../api/bootapi";
+import { CRM_BASE_URL, CRM_BASE_URL_FMS } from "../../api/bootapi";
 import PublicFetch from "../../utils/PublicFetch";
 import { useEffect } from "react";
 
 function Dashboard() {
- const [pageSize, setPageSize] = useState(0);
- const [numOfItems, setNumOfItems] = useState("25");
  const [leadCount,setLeadCount] = useState();
+ const [quotationCount,setQuotationCount] = useState();
+ const [jobcount,setJobCount] = useState();
  console.log("count",leadCount);
 
  const GetLeadData = () => {
    PublicFetch.get(
-     `${CRM_BASE_URL}/lead?startIndex=${pageSize}&noOfItems=${numOfItems}`
+     `${CRM_BASE_URL}/lead?startIndex=0&noOfItems=10`
    )
      .then((res) => {
        if (res?.data?.success) {
          setLeadCount(res?.data?.data?.totalCount);
        } else {
-         console.log("FAILED TO LOAD DATA");
+         console.log("Failed to load data");
        }
      })
      .catch((err) => {
        console.log("Errror while getting data", err);
      });
  };
+
+ const getAllQuotation = () => {
+   PublicFetch.get(
+     `${CRM_BASE_URL_FMS}/quotation?startIndex=0&noOfItems=10`
+   )
+     .then((res) => {
+       console.log("Response", res);
+       if (res.data.success) {
+         console.log("success", res.data.data);
+         setQuotationCount(res.data.data.totalCount);
+       }
+     })
+     .catch((err) => {
+       console.log("Error", err);
+     });
+ };
+  const getAllJobs = () => {
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/job?startIndex=0&noOfItems=10`)
+      .then((res) => {
+        if (res.data.success) {
+          setJobCount(res.data.data.totalCount);
+        } else {
+          console.log("Failed to load data");
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
  useEffect(() => {
    GetLeadData();
+   getAllQuotation();
+   getAllJobs();
  }, []);
 
   const tableColumns = [
@@ -125,7 +156,9 @@ function Dashboard() {
             <Card className={`${styles.cartItem}`}>
               <div>
                 <div className={`text-center ${styles.cardTitle}`}>Lead</div>
-                <div className={`text-center ${styles.cardSubText}`}>{leadCount}</div>
+                <div className={`text-center ${styles.cardSubText}`}>
+                  {leadCount}
+                </div>
               </div>
             </Card>
             <Card className={`${styles.cartItem}`}>
@@ -133,13 +166,15 @@ function Dashboard() {
                 <div className={`text-center ${styles.cardTitle}`}>
                   Quotations
                 </div>
-                <div className={`text-center ${styles.cardSubText}`}>100</div>
+                <div className={`text-center ${styles.cardSubText}`}>{quotationCount}</div>
               </div>
             </Card>
             <Card className={`${styles.cartItem}`}>
               <div>
                 <div className={`text-center ${styles.cardTitle}`}>Jobs</div>
-                <div className={`text-center ${styles.cardSubText}`}>100</div>
+                <div className={`text-center ${styles.cardSubText}`}>
+                  {jobcount}
+                </div>
               </div>
             </Card>
             <Card className={`${styles.cartItem}`}>
@@ -181,7 +216,7 @@ function Dashboard() {
                   <GeoChart />
                 </div>
               </div>
-              <div className="col-12 col-xl-4 col-lg-6 col-md-12 mt-3">
+              <div className="col-12 col-xl-4 col-lg-6 col-md-12">
                 <div
                   style={{ height: "450px" }}
                   className="card rounded shadow-sm"

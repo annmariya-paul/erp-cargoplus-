@@ -8,6 +8,7 @@ import {
   CRM_BASE_URL,
   CRM_BASE_URL_FMS,
   CRM_BASE_URL_HRMS,
+  CRM_BASE_URL_PURCHASING,
 } from "../../../api/bootapi";
 import CustomModel from "../../../components/custom_modal/custom_model";
 
@@ -59,25 +60,18 @@ function QuotationAssign() {
                 });
             });
           } else {
-            PublicFetch.get(`${CRM_BASE_URL_HRMS}/employees`)
+            PublicFetch.get(`${process.env.REACT_APP_BASE_URL}/agents`)
               .then((res) => {
                 console.log("response employee", res);
                 if (res.data.success) {
                   console.log("success employee", res.data.data);
                   let tmp = [];
                   res.data.data.forEach((item, index) => {
-                    if (
-                      item.hrms_v1_employment_types &&
-                      item.hrms_v1_employment_types.employment_type_name ===
-                        "Agent"
-                    ) {
-                      console.log("all employee who is agent", item);
-                      tmp.push({
-                        employee_id: item.employee_id,
-                        employee_code: item.employee_code,
-                        employee_name: item.employee_name,
-                      });
-                    }
+                    console.log("all employee who is agent", item);
+                    tmp.push({
+                      employee_id: item?.agent_id,
+                      employee_name: item.crm_v1_vendors.vendor_name,
+                    });
                   });
                   setAllAgents(tmp);
                   // console.log("all temp employe", tmp);/

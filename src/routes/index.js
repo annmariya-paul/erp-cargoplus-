@@ -111,6 +111,12 @@ const ROUTES = {
   ADD_PAYMENTS: "/add_payments",
   JOB_PAYMENTS:"/job_payments",
   ADD_JOBPAYMENT:"/add_job_payment",
+  EDIT_JOBPAYMENT:"/edit_job_payment",
+  VIEW_JOBPAYMENT:"/view_job_payment",
+
+  BANK_DETAILS: "/list_bankdetails",
+
+
   // general settings
   CURRENCY: "/currency",
   COMPANYINFO: "/company_info",

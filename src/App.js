@@ -96,7 +96,7 @@ import PrintInvoice from "./pages/FMS/Invoice/PrintInvoice";
 // import Payment_mode from "./pages/FMS/settings/payment mode/payment_mode";
 import InvoiceView from "./pages/FMS/Invoice/InvoiceView";
 import DailyExpence from "./pages/Accounts/DailyExpence/DailyExpence";
-import AddPayments from "./pages/Accounts/AddPayments/AddPayments";
+import AddPayments from "./pages/Accounts/Payments/AddPayments";
 import CreateExpence from "./pages/Accounts/DailyExpence/CreateExpence";
 import ExpenseCategory from "./pages/Accounts/settings/Expense_Category/ExpenseCategory";
 // import Vendortype from "./pages/CRM/Purchase/vendertype/vendortype";
@@ -106,6 +106,7 @@ import ExpenseCategory from "./pages/Accounts/settings/Expense_Category/ExpenseC
 import Payment_mode from "./pages/Accounts/settings/payment_mode";
 import Add_purchase from "./pages/Accounts/settings/add_purchase";
 import Purchase from "./pages/Accounts/settings/purchase";
+import Payments from "./pages/Accounts/Payments/Payments";
 
 function App() {
   return (
@@ -461,7 +462,12 @@ function App() {
             <Route path={ROUTES.PURCHASE} element={<ProtectedRoute />}>
               <Route index element={<Purchase />} />
             </Route>
-
+            <Route path={ROUTES.PAYMENTS} element={<ProtectedRoute />}>
+              <Route index element={<Payments />} />
+            </Route>
+            <Route path={ROUTES.ADD_PAYMENTS} element={<ProtectedRoute />}>
+              <Route index element={<AddPayments />} />
+            </Route>
             {/* </Route> */}
           </Route>
           <Route

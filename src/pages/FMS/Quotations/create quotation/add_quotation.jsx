@@ -38,8 +38,8 @@ export default function Add_Quotation() {
   const today = new Date().toISOString().split("T")[0];
   const [date, setDate] = useState();
   const [taxType, setTaxtype] = useState();
-   const [currencyDefault, setCurrencyDefault] = useState();
-   console.log("curencydefault", currencyDefault);
+  const [currencyDefault, setCurrencyDefault] = useState();
+  console.log("curencydefault", currencyDefault);
 
   const [addForm] = Form.useForm();
   const navigate = useNavigate();
@@ -273,13 +273,13 @@ export default function Add_Quotation() {
       );
       console.log("Getting all currency : ", allcurrency.data.data);
       setCurrencydata(allcurrency.data.data);
-       let arr = [];
-       allcurrency?.data?.data?.forEach((item, index) => {
-         if (item.currency_is_default === 1) {
-           arr = item?.currency_code;
-           setCurrencyDefault(arr);
-         }
-       });
+      let arr = [];
+      allcurrency?.data?.data?.forEach((item, index) => {
+        if (item.currency_is_default === 1) {
+          arr = item?.currency_code;
+          setCurrencyDefault(arr);
+        }
+      });
     } catch (err) {
       console.log("Error in getting currency : ", err);
     }
@@ -383,7 +383,7 @@ export default function Add_Quotation() {
       dataIndex: "action",
       key: "action",
       className: "drag-visible",
-      render: (data,record, index) => {
+      render: (data, record, index) => {
         return (
           <div className="d-flex justify-content-center align-items-center gap-2">
             <div className="actionEdit m-0 p-0">
@@ -478,7 +478,10 @@ export default function Add_Quotation() {
       render: (data, index) => {
         console.log("index is :", index);
         return (
-          <div className="d-flex justify-content-center align-items-center tborder ">
+          <div
+            className="d-flex justify-content-center align-items-center tborder "
+            key={index.index}
+          >
             <Form.Item
               name={["quotation_details", index.key, "quotation_details_cost"]}
               // rules={[{ required: true, message: "Required" }]}

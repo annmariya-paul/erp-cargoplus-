@@ -108,6 +108,7 @@ const ROUTES = {
   DAILY_EXPENSE: "/daily_expense",
   CREATE_EXPENSE: "/create_expense",
   EXPENSE_CATEGORY: "/expense_category",
+  PAYMENTS: "/payments",
   ADD_PAYMENTS: "/add_payments",
   // general settings
   CURRENCY: "/currency",

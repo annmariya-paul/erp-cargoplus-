@@ -5,11 +5,11 @@ function BarChart({ layout = "horizontal" }) {
   return (
     <Bar
       height={450}
-      width={410}
+      width={380}
       data={data}
       keys={["dp_world", "maersk", "air_cargo", "hvclean", "real_logistics"]}
       indexBy="agents"
-      margin={{ top: 50, right: 60, bottom: 50, left: 60 }}
+      margin={{ top: 54, right: 60, bottom: 50, left: 60 }}
       pixelRatio={1}
       padding={0.3}
       innerPadding={0}

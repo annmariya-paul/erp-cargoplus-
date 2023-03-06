@@ -369,6 +369,7 @@ function InvoiceList() {
                     </Select>
                   </div>
                   <div className="col-4 d-flex align-items-center justify-content-center">
+                    {invoiceData>0 &&(
                     <MyPagination
                       total={parseInt(invoiceData?.length)}
                       current={current}
@@ -377,6 +378,7 @@ function InvoiceList() {
                         setCurrent(current);
                       }}
                     />
+                    )}
                   </div>
                   {/* <div className="col-xl-6 col-lg-6 col-md-6 col-sm-8 col-12"></div> */}
                   <div className="col-4 d-flex justify-content-end"></div>
@@ -393,6 +395,7 @@ function InvoiceList() {
                   {/* )} */}
                 </div>
                 <div className="d-flex py-2 justify-content-center">
+                {invoiceData>0 && (
                 <MyPagination
                       total={parseInt(invoiceData?.length)}
                       current={current}
@@ -401,6 +404,7 @@ function InvoiceList() {
                         setCurrent(current);
                       }}
                     />
+                    )}
                 </div>
               </div>
             </div>

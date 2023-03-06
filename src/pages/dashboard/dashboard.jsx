@@ -12,16 +12,14 @@ import PublicFetch from "../../utils/PublicFetch";
 import { useEffect } from "react";
 
 function Dashboard() {
- const [pageSize, setPageSize] = useState(0);
- const [numOfItems, setNumOfItems] = useState("25");
  const [leadCount,setLeadCount] = useState();
- const [opportunityCount,setOpportunityCount] = useState();
+ const [quotationCount,setQuotationCount] = useState();
  const [jobcount,setJobCount] = useState();
  console.log("count",leadCount);
 
  const GetLeadData = () => {
    PublicFetch.get(
-     `${CRM_BASE_URL}/lead?startIndex=${pageSize}&noOfItems=${numOfItems}`
+     `${CRM_BASE_URL}/lead?startIndex=0&noOfItems=10`
    )
      .then((res) => {
        if (res?.data?.success) {
@@ -34,8 +32,24 @@ function Dashboard() {
        console.log("Errror while getting data", err);
      });
  };
+
+ const getAllQuotation = () => {
+   PublicFetch.get(
+     `${CRM_BASE_URL_FMS}/quotation?startIndex=0&noOfItems=10`
+   )
+     .then((res) => {
+       console.log("Response", res);
+       if (res.data.success) {
+         console.log("success", res.data.data);
+         setQuotationCount(res.data.data.totalCount);
+       }
+     })
+     .catch((err) => {
+       console.log("Error", err);
+     });
+ };
   const getAllJobs = () => {
-    PublicFetch.get(`${CRM_BASE_URL_FMS}/job?startIndex=0&noOfItems=100`)
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/job?startIndex=0&noOfItems=10`)
       .then((res) => {
         if (res.data.success) {
           setJobCount(res.data.data.totalCount);
@@ -49,6 +63,7 @@ function Dashboard() {
   };
  useEffect(() => {
    GetLeadData();
+   getAllQuotation();
    getAllJobs();
  }, []);
 
@@ -151,7 +166,7 @@ function Dashboard() {
                 <div className={`text-center ${styles.cardTitle}`}>
                   Quotations
                 </div>
-                <div className={`text-center ${styles.cardSubText}`}>100</div>
+                <div className={`text-center ${styles.cardSubText}`}>{quotationCount}</div>
               </div>
             </Card>
             <Card className={`${styles.cartItem}`}>
@@ -201,7 +216,7 @@ function Dashboard() {
                   <GeoChart />
                 </div>
               </div>
-              <div className="col-12 col-xl-4 col-lg-6 col-md-12 mt-3">
+              <div className="col-12 col-xl-4 col-lg-6 col-md-12">
                 <div
                   style={{ height: "450px" }}
                   className="card rounded shadow-sm"

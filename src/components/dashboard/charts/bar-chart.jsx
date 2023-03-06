@@ -5,7 +5,7 @@ function BarChart({ layout = "horizontal" }) {
   return (
     <Bar
       height={450}
-      width={450}
+      width={410}
       data={data}
       keys={["dp_world", "maersk", "air_cargo", "hvclean", "real_logistics"]}
       indexBy="agents"
@@ -19,7 +19,7 @@ function BarChart({ layout = "horizontal" }) {
       reverse={false}
       valueScale={{ type: "linear" }}
       indexScale={{ type: "band", round: true }}
-      colors={{ scheme: "dark2" }}
+      colors={{ scheme: "paired" }}
       colorBy="keys"
       borderWidth={1}
       borderRadius={0}

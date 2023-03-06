@@ -1043,6 +1043,7 @@ function OpportunityLeadlist(props) {
                 <Form.Item name="opportunity_lead_id">
                   <SelectBox
                     defaultValue={oppurtunitylead}
+                    disabled={true}
                     // onChange={(e) => {
                     //   setOppurtunityfrom(e);
                     // }}

@@ -1,3 +1,5 @@
+
+@use "../../../styles/variables.scss";
 .ant-input {
   font-weight: 380 !important;
   color: black !important;
@@ -160,4 +162,20 @@ element.style {
   box-shadow: none;
   border-right-width: none;
   outline: none;
+}
+.content-tabs-new {
+  border-radius: 16px;
+  // min-height: 20rem;
+  padding: 18px;
+  // flex-grow: 1;
+  box-shadow: 0.5px 1px 8px variables.$boxshadow;
+}
+.content-tabs-tablenew{
+  border-radius: 16px;
+  // min-height: 20rem;
+  padding: 12px;
+  margin-left: -15px;
+  margin-right: 16px;
+  // flex-grow: 1;
+  box-shadow: 0.5px 1px 8px variables.$boxshadow;
 }

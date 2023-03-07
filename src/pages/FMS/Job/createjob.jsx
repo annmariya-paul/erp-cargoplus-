@@ -1083,11 +1083,11 @@ function CreateJob() {
                   </div>
                 </div>
                 <div className="col-md-6 col-12">
-                  <div className="content-tabs-new row justify-content mx-1 mb-1 me-3">
+                  <div className="content-tabs-new row justify-content-center mx-1 mb-1 me-3">
                     <div className="row mt-3">
                       <h5 className="lead_text">Attachments</h5>
                     </div>
-                    <div className="col-xl-12 col-sm-12 mt-2">
+                    <div className="col-xl-6 col-sm-12 mt-2">
                       <Form.Item className="mt-2" name="new">
                         <FileUpload
                           multiple

@@ -170,6 +170,7 @@ table {
   .sub_total_words {
     font-weight: 600;
     font-size: 16px;
+    font-style: italic;
   }
 
   .sub_total_wrapper__col_2 {
@@ -197,4 +198,7 @@ table {
     bottom: 0;
     border: 1px solid black;
   }
+}
+.address_width{
+width: 300px;
 }

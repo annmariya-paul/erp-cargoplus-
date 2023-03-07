@@ -10,23 +10,37 @@ import SelectBox from "../../../components/Select Box/SelectBox";
 import PublicFetch from "../../../utils/PublicFetch";
 import moment from "moment";
 import Custom_model from "../../../components/custom_modal/custom_model";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../../../routes";
 
 function CreateExpence() {
   const [addForm] = Form.useForm();
+  const navigate = useNavigate();
   const [employeeList, setEmployeeList] = useState();
   const [categoryList, setCategoryList] = useState();
   const [ischeck, setIsCheck] = useState(0);
   const [amount, setamount] = useState();
+  const [taxAmount, setTaxAmount] = useState(0);
   const [successPopup, setSuccessPopup] = useState(false);
+  const [isTaxable, setIsTaxable] = useState(false);
 
   const close_modal = (mShow, time) => {
     if (!mShow) {
       setTimeout(() => {
         setSuccessPopup(false);
+        navigate(`${ROUTES.DAILY_EXPENSE}`);
       }, time);
     }
   };
 
+  let TaxAmount = (amount * taxAmount) / 100;
+
+  let total = amount + TaxAmount;
+  addForm.setFieldsValue({
+    daily_expense_total_amount: total,
+  });
+
+  console.log("tax amount", TaxAmount);
   const allEmployees = () => {
     PublicFetch.get(`${CRM_BASE_URL_HRMS}/employees`)
       .then((res) => {
@@ -120,17 +134,24 @@ function CreateExpence() {
           console.log("Success of res", res.data.data);
           setSuccessPopup(true);
           close_modal(successPopup, 1200);
+          addForm.resetFields();
         }
       })
       .catch((err) => {
         console.log("Error", err);
       });
   };
+  let todayDate = new Date();
+  let date = moment(todayDate);
 
   useEffect(() => {
     allEmployees();
     getExpenseCategory();
-    addForm.setFieldsValue({ daily_expense_taxable: 0 });
+    addForm.setFieldsValue({
+      daily_expense_taxable: 0,
+      daily_expense_tax_amount: 0,
+      daily_expense_date: date,
+    });
   }, []);
   return (
     <div>
@@ -163,13 +184,29 @@ function CreateExpence() {
                     </div> */}
                     <div className="col-xl-4 my-2">
                       <label className="mb-2">Date</label>
-                      <Form.Item name="daily_expense_date">
+                      <Form.Item
+                        name="daily_expense_date"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Date is Required",
+                          },
+                        ]}
+                      >
                         <DatePicker format={"DD-MM-YYYY"} />
                       </Form.Item>
                     </div>
                     <div className="col-xl-4 my-2">
                       <label>Category</label>
-                      <Form.Item name="daily_expense_category_id">
+                      <Form.Item
+                        name="daily_expense_category_id"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Category is Required",
+                          },
+                        ]}
+                      >
                         <SelectBox>
                           {categoryList &&
                             categoryList.length > 0 &&
@@ -188,13 +225,29 @@ function CreateExpence() {
                     </div>
                     <div className="col-xl-4 my-2">
                       <label>Name</label>
-                      <Form.Item name="daily_expense_name">
+                      <Form.Item
+                        name="daily_expense_name"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Name is Required",
+                          },
+                        ]}
+                      >
                         <InputType />
                       </Form.Item>
                     </div>
                     <div className="col-xl-4 my-2">
                       <label>Party</label>
-                      <Form.Item name="daily_expense_party">
+                      <Form.Item
+                        name="daily_expense_party"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Party is Required",
+                          },
+                        ]}
+                      >
                         <InputType />
                       </Form.Item>
                     </div>
@@ -212,7 +265,15 @@ function CreateExpence() {
                     </div>
                     <div className="col-xl-4 my-2">
                       <label>Employee</label>
-                      <Form.Item name="daily_expense_employee_id">
+                      <Form.Item
+                        name="daily_expense_employee_id"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Employee is Required",
+                          },
+                        ]}
+                      >
                         <SelectBox>
                           {employeeList &&
                             employeeList.length > 0 &&
@@ -236,6 +297,8 @@ function CreateExpence() {
                           <Checkbox
                             onChange={(e) => {
                               handleChecked(e);
+                              setIsTaxable(e.target.checked);
+                              console.log("checked is", e);
                             }}
                           />
                         </Form.Item>
@@ -244,15 +307,37 @@ function CreateExpence() {
                     <div className="col-xl-4 my-2">
                       <label>Tax No</label>
                       <Form.Item name="daily_expense_taxno">
-                        <InputType />
+                        <InputType disabled={isTaxable ? false : true} />
                       </Form.Item>
                     </div>
                     <div className="col-xl-4 my-2">
                       <label>Amount</label>
-                      <Form.Item name="daily_expense_amount">
+                      <Form.Item
+                        name="daily_expense_amount"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Amount is Required",
+                          },
+                        ]}
+                      >
                         <Input_Number
                           onChange={(value) => {
                             setamount(value);
+                          }}
+                          min={0}
+                          precision={2}
+                          control={true}
+                        />
+                      </Form.Item>
+                    </div>
+                    <div className="col-xl-4 my-2">
+                      <label>Tax Amount</label>
+                      <Form.Item name="daily_expense_tax_amount">
+                        <Input_Number
+                          disabled={isTaxable ? false : true}
+                          onChange={(value) => {
+                            setTaxAmount(value);
                           }}
                           min={0}
                           precision={2}
@@ -260,15 +345,17 @@ function CreateExpence() {
                       </Form.Item>
                     </div>
                     <div className="col-xl-4 my-2">
-                      <label>Tax Amount</label>
-                      <Form.Item name="daily_expense_tax_amount">
-                        <Input_Number min={0} precision={2} />
-                      </Form.Item>
-                    </div>
-                    <div className="col-xl-4 my-2">
                       <label>Total Amount</label>
-                      <Form.Item name="daily_expense_total_amount">
-                        <Input_Number min={0} precision={2} />
+                      <Form.Item
+                        name="daily_expense_total_amount"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Total Amount is Required",
+                          },
+                        ]}
+                      >
+                        <Input_Number disabled={true} min={0} precision={2} />
                       </Form.Item>
                     </div>
                     <div className="col-12 my-2">

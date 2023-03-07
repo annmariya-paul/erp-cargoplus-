@@ -1,5 +1,6 @@
 import { Input, Select } from "antd";
 import React, { useEffect, useState } from "react";
+import { FaEdit } from "react-icons/fa";
 import { MdPageview } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import { ACCOUNTS } from "../../../api/bootapi";
@@ -32,27 +33,20 @@ function DailyExpence() {
         console.log("mere index", index);
         return (
           <div className="d-flex justify-content-center gap-2">
+            <div className="">
+              <FaEdit onClick={() => {}} />
+            </div>
             <div className="editcolor">
-              {/* <FaEdit
-                onClick={() => {
-                  if (
-                    index.assigned_employee &&
-                    index.assigned_employee.length > 0
-                  ) {
-                    //   handleEditedclick(index)
-                  }
-                }}
-              /> */}
               <MdPageview
                 fontSize={18}
                 // onClick={()=>viewprogressoppurtunity(index)}
                 onClick={() => {
-                  navigate(`${ROUTES.INVOICE_VIEW}/${index.invoice_job_id}`);
+                  // navigate(`${ROUTES.INVOICE_VIEW}/${index.invoice_job_id}`);
                 }}
               />
             </div>
             {/* <div className="editcolor">
-              <MdDelete />
+              < />
             </div> */}
           </div>
         );
@@ -71,9 +65,9 @@ function DailyExpence() {
       dataIndex: "daily_expense_name",
       key: "daily_expense_name",
       width: "10%",
-      render: (record) => {
-        // return <div>{moment(record?.invoice_date).format("DD-MM-YYYY")}</div>;
-      },
+      // render: (record) => {
+      //   // return <div>{moment(record?.invoice_date).format("DD-MM-YYYY")}</div>;
+      // },
     },
     {
       title: "BILL NO",
@@ -88,18 +82,18 @@ function DailyExpence() {
       },
     },
 
-    {
-      title: "TAX",
-      dataIndex: "daily_expense_taxno",
-      key: "daily_expense_taxno",
-      width: "15%",
-      //  filteredValue: [searchSource],
-      onFilter: (value, record) => {
-        return String(record.opportunity_source)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
-    },
+    // {
+    //   title: "TAX",
+    //   dataIndex: "daily_expense_taxno",
+    //   key: "daily_expense_taxno",
+    //   width: "15%",
+    //   //  filteredValue: [searchSource],
+    //   onFilter: (value, record) => {
+    //     return String(record.opportunity_source)
+    //       .toLowerCase()
+    //       .includes(value.toLowerCase());
+    //   },
+    // },
     {
       title: "PARTY",
       dataIndex: "daily_expense_party",
@@ -107,13 +101,13 @@ function DailyExpence() {
       width: "15%",
       // align: "center",
     },
-    {
-      title: "STATUS",
-      dataIndex: "invoice_status",
-      key: "invoice_status",
-      width: "15%",
-      // align: "center",
-    },
+    // {
+    //   title: "STATUS",
+    //   dataIndex: "invoice_status",
+    //   key: "invoice_status",
+    //   width: "15%",
+    //   // align: "center",
+    // },
     // {
     //   title: "",
     //   dataIndex: "buttons",

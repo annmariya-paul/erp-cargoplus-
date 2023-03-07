@@ -114,6 +114,8 @@ import AddJobPayments from "./pages/Accounts/JobPayments/add_job_payment";
 import EditJobPayment from "./pages/Accounts/JobPayments/edit_job_payments";
 import ViewJobPayment from "./pages/Accounts/JobPayments/view_job_payments";
 import Payments from "./pages/Accounts/Payments/Payments";
+import EditPayments from "./pages/Accounts/Payments/EditPayments";
+import ViewPayment from "./pages/Accounts/Payments/ViewPayment";
 
 function App() {
   return (
@@ -469,7 +471,18 @@ function App() {
             <Route path={ROUTES.PURCHASE} element={<ProtectedRoute />}>
               <Route index element={<Purchase />} />
             </Route>
-
+            <Route path={ROUTES.PAYMENTS} element={<ProtectedRoute />}>
+              <Route index element={<Payments />} />
+            </Route>
+            <Route path={ROUTES.ADD_PAYMENTS} element={<ProtectedRoute />}>
+              <Route index element={<AddPayments />} />
+            </Route>
+            <Route path={ROUTES.EDIT_PAYMENT} element={<ProtectedRoute />}>
+              <Route index element={<EditPayments />} />
+            </Route>
+            <Route path={ROUTES.VIEW_PAYMENT} element={<ProtectedRoute />}>
+              <Route index element={<ViewPayment />} />
+            </Route>
             {/* </Route> */}
           </Route>
           <Route

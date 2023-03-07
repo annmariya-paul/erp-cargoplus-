@@ -110,13 +110,16 @@ const ROUTES = {
   EXPENSE_CATEGORY: "/expense_category",
   PAYMENTS: "/payments",
   ADD_PAYMENTS: "/add_payments",
-  JOB_PAYMENTS:"/job_payments",
-  ADD_JOBPAYMENT:"/add_job_payment",
-  EDIT_JOBPAYMENT:"/edit_job_payment",
-  VIEW_JOBPAYMENT:"/view_job_payment",
+  EDIT_PAYMENT_INDEX: "/edit_payments",
+  EDIT_PAYMENT: "/edit_payments/:payment_id",
+  VIEW_PAYMENT_INDEX: "/view_payment",
+  VIEW_PAYMENT: "/view_payment/:payment_id",
+  JOB_PAYMENTS: "/job_payments",
+  ADD_JOBPAYMENT: "/add_job_payment",
+  EDIT_JOBPAYMENT: "/edit_job_payment",
+  VIEW_JOBPAYMENT: "/view_job_payment",
 
   BANK_DETAILS: "/list_bankdetails",
-
 
   // general settings
   CURRENCY: "/currency",

@@ -4,6 +4,7 @@ import { CRM_BASE_URL_FMS } from "../../../api/bootapi";
 import InvoicePrint from "../../../components/Invoice/InvoicePrint";
 import PublicFetch from "../../../utils/PublicFetch";
 import moment from "moment";
+import { camelize } from "../../../utils/camelcaseconvert";
 
 function PrintInvoice() {
   var converter = require("number-to-words");
@@ -51,6 +52,8 @@ function PrintInvoice() {
       });
   };
 
+  const capitalize = str => str.charAt(0).toUpperCase() + str.toLowerCase().slice(1)
+
   const close_modal = (time) => {
     if (time) {
       setTimeout(() => {
@@ -59,6 +62,9 @@ function PrintInvoice() {
     }
   };
 
+  // let totalAmount = converter.toWords(grandTotal)
+//  let inWords = camelize(totalAmount)
+  // console.log("grand total", inWords);
   useEffect(() => {
     if (id) {
       Invoicedata_data();
@@ -68,6 +74,7 @@ function PrintInvoice() {
     <div>
       <InvoicePrint
         invoice_no
+        billto
         Invoice_type={"Invoice"}
         invoice_number={alldata?.invoice_no}
         invoice_details1={
@@ -210,7 +217,7 @@ function PrintInvoice() {
           </>
         }
         amount_in_words={
-          <>{grandTotal && <>{converter.toWords(grandTotal)}</>}</>
+          <>{grandTotal && <>{camelize(converter.toWords(grandTotal))}</>}</>
         }
         sub_total={grandTotal}
         total={grandTotal}

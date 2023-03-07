@@ -122,6 +122,7 @@ function Quotationinvoice() {
               setQuotation(res.data.success);
             }
           );
+          close_modal(1000);
         }
       })
       .catch((err) => {
@@ -180,9 +181,9 @@ function Quotationinvoice() {
     }
   };
 
-  useEffect(() => {
-    close_modal(1500);
-  }, []);
+  // useEffect(() => {
+   
+  // }, []);
   console.log("dataa iss", tabledata);
 
   return (
@@ -190,6 +191,7 @@ function Quotationinvoice() {
 
 <InvoicePrint 
 invoice_no
+billto
 Invoice_type="QUOTATION" 
 invoice_number= {allqoutation?.quotation_no}
 invoice_details1={ <>

@@ -10,6 +10,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import TableData from "../../../../components/table/table_data";
 import InvoicePrint from "../../../../components/Invoice/InvoicePrint";
 import { ROUTES } from "../../../../routes";
+import { camelize } from "../../../../utils/camelcaseconvert";
 
 
 function Quotationinvoice() {
@@ -322,7 +323,7 @@ amount_in_words=   {
   <>
   {allqoutation && (
     <>
-    {converter.toWords(allqoutation?.quotation_grand_total)}
+    {camelize(converter.toWords(allqoutation?.quotation_grand_total))}
     </>
   )}
   </>

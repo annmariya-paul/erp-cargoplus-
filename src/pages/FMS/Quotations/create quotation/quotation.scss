@@ -123,12 +123,28 @@ th {
   overflow-y: scroll;
 }
 
+.selwidth{
+  width:300px!important;
+}
+.selwidthcost{
+  width:160px!important;
+}
+.selectwidthtaxtype{
+  width:130px!important;
+}
+.selectwidthtaxamt{
+  width:130px!important;
+}
+.selectwidthtot{
+  width:140px!important;
+}
+
 @media (min-width: 800px) {
   .selectwidth {
     width: 450px !important;
   }
   .selectwidthnew {
-    width: 170px !important;
+    width: 100px !important;
   }
 }
 .ant-collapse-header-text {
@@ -152,6 +168,10 @@ th {
 //     transform: rotate(90deg);
 //   }
 // }
+.ant-input-number-input {
+  padding-right: 13px!important;
+}
+
 @media print {
   .sidebarWrapper {
     display: none;
@@ -326,7 +346,9 @@ th {
 .content-tabs-tablenew{
   border-radius: 16px;
   // min-height: 20rem;
-  padding: 10px;
+  padding: 12px;
+  margin-left: -15px;
+  margin-right: 16px;
   // flex-grow: 1;
   box-shadow: 0.5px 1px 8px variables.$boxshadow;
 }

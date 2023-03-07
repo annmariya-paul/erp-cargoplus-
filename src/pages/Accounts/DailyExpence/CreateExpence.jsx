@@ -9,6 +9,7 @@ import Input_Number from "../../../components/InputNumber/InputNumber";
 import SelectBox from "../../../components/Select Box/SelectBox";
 import PublicFetch from "../../../utils/PublicFetch";
 import moment from "moment";
+import Custom_model from "../../../components/custom_modal/custom_model";
 
 function CreateExpence() {
   const [addForm] = Form.useForm();
@@ -16,6 +17,15 @@ function CreateExpence() {
   const [categoryList, setCategoryList] = useState();
   const [ischeck, setIsCheck] = useState(0);
   const [amount, setamount] = useState();
+  const [successPopup, setSuccessPopup] = useState(false);
+
+  const close_modal = (mShow, time) => {
+    if (!mShow) {
+      setTimeout(() => {
+        setSuccessPopup(false);
+      }, time);
+    }
+  };
 
   const allEmployees = () => {
     PublicFetch.get(`${CRM_BASE_URL_HRMS}/employees`)
@@ -91,10 +101,30 @@ function CreateExpence() {
       data.daily_expense_total_amount
     );
     formData.append("daily_expense_remarks", data.daily_expense_remarks);
-    formData.append("daily_expense_date");
-    formData.append("daily_expense_docs", "");
+    formData.append("daily_expense_date", date);
+    if (data.daily_expense_docs) {
+      formData.append(
+        "daily_expense_docs",
+        data.daily_expense_docs?.file?.originFileObj
+      );
+    }
 
-    PublicFetch.get(`${ACCOUNTS}/daily-expense`);
+    console.log("formdata", formData);
+
+    PublicFetch.post(`${ACCOUNTS}/daily-expense`, formData, {
+      "Content-Type": "Multipart/form-Data",
+    })
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          console.log("Success of res", res.data.data);
+          setSuccessPopup(true);
+          close_modal(successPopup, 1200);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
   };
 
   useEffect(() => {
@@ -269,6 +299,13 @@ function CreateExpence() {
             </div>
           </div>
         </div>
+        <Custom_model
+          show={successPopup}
+          success
+          onHide={() => {
+            setSuccessPopup(false);
+          }}
+        />
       </div>
     </div>
   );

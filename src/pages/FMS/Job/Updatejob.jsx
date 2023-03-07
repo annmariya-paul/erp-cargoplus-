@@ -320,11 +320,11 @@ function Updatejob() {
     <>
       <div className="container-fluid">
         <div className="row justify-content-md-center">
-          <div className="row flex-wrap">
+          {/* <div className="row flex-wrap">
             <div className="col-6 ">
-              <h5 className="lead_text">Edit Job</h5>
+              <h5 className="lead_text"></h5>
             </div>
-          </div>
+          </div> */}
           <div className="content-tabs">
             <Form
               form={editForm}
@@ -336,10 +336,69 @@ function Updatejob() {
                 console.log(error);
               }}
             >
-              <div className="container mb-4">
-                <div className="row">
-                  <div className="row ">
-                    <div className="col-xl-3 col-sm-6 mt-2">
+             <div className="container-fluid ">
+                <div className="row  mt-3">
+                  <h4 className="lead_text">Edit Job</h4>
+                </div>
+                <div className="row ms-1 mb-3 ">
+                  <div className="content-tabs-new row justify-content px-4" >
+                    <div className="row mt-3 ">
+                      <h5 className="lead_text">Basic Info</h5>
+                    </div>
+
+                    <div className="col-xl-4 col-sm-12 mt-2 px-3 ">
+                    <label>Job Date</label>
+                      <Form.Item
+                        name="jobdate"
+                        rules={[
+                          {
+                            required: true,
+                            // pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                            message: "Please enter a Valid jobdate",
+                          },
+                        ]}
+                      >
+                        <DatePicker format={"DD-MM-YYYY"} disabled={disable} />
+                      </Form.Item>
+                    </div>
+
+                    <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                      <label>Quotation No</label>
+                      <Form.Item
+                        name="quotationno"
+                        // rules={[
+                        //   {
+                        //     required: true,
+                        //     pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                        //     message: "Please enter a Valid quotationno",
+                        //   },
+                        // ]}
+                      >
+                        <SelectBox
+                          disabled={quotationdisable}
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
+                        >
+                          {quotations &&
+                            quotations.length > 0 &&
+                            quotations.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  key={item.quotation_id}
+                                  value={item.quotation_id}
+                                >
+                                  {item.quotation_no}
+                                </Select.Option>
+                              );
+                            })}
+                        </SelectBox>
+                      </Form.Item>
+                    </div>
+
+
+
+                    <div className="col-xl-4 col-sm-12 mt-2 px-3">
                       <label>Freight Type</label>
                       <Form.Item
                         name="freighttype"
@@ -372,37 +431,7 @@ function Updatejob() {
                         </SelectBox>
                       </Form.Item>
                     </div>
-                    <div className="col-xl-3 col-sm-6 mt-2">
-                      <label>Job No</label>
-                      <Form.Item
-                        name="jobno"
-                        rules={[
-                          {
-                            required: true,
-                            // pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                            message: "Please enter a Valid jobno",
-                          },
-                        ]}
-                      >
-                        <InputType disabled={disable} />
-                      </Form.Item>
-                    </div>
-                    <div className="col-xl-3 col-sm-6 mt-2">
-                      <label>Job Date</label>
-                      <Form.Item
-                        name="jobdate"
-                        rules={[
-                          {
-                            required: true,
-                            // pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                            message: "Please enter a Valid jobdate",
-                          },
-                        ]}
-                      >
-                        <DatePicker format={"DD-MM-YYYY"} disabled={disable} />
-                      </Form.Item>
-                    </div>
-                    <div className="col-xl-3 col-sm-6 mt-2">
+                    <div className="col-xl-4 col-sm-12 mt-2 px-3">
                       <label>Consignee</label>
                       <Form.Item
                         name="consignee"
@@ -439,43 +468,7 @@ function Updatejob() {
                         </SelectBox>
                       </Form.Item>
                     </div>
-                  </div>
-
-                  <div className="row ">
-                    <div className="col-xl-3 col-sm-6 mt-2">
-                      <label>Quotation No</label>
-                      <Form.Item
-                        name="quotationno"
-                        // rules={[
-                        //   {
-                        //     required: true,
-                        //     pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                        //     message: "Please enter a Valid quotationno",
-                        //   },
-                        // ]}
-                      >
-                        <SelectBox
-                          disabled={quotationdisable}
-                          allowClear
-                          showSearch
-                          optionFilterProp="children"
-                        >
-                          {quotations &&
-                            quotations.length > 0 &&
-                            quotations.map((item, index) => {
-                              return (
-                                <Select.Option
-                                  key={item.quotation_id}
-                                  value={item.quotation_id}
-                                >
-                                  {item.quotation_no}
-                                </Select.Option>
-                              );
-                            })}
-                        </SelectBox>
-                      </Form.Item>
-                    </div>
-                    <div className="col-xl-3 col-sm-6 mt-2">
+                    <div className="col-xl-4 col-sm-12 mt-2 px-3">
                       <label>Shipper</label>
                       <Form.Item
                         name="shipper"
@@ -490,37 +483,33 @@ function Updatejob() {
                         <InputType disabled={disable} />
                       </Form.Item>
                     </div>
-                    <div className="col-xl-3 col-sm-6 mt-2">
-                      <label>Cargo Type</label>
+
+                    <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                      <label>Job No</label>
                       <Form.Item
-                        name="cargotype"
+                        name="jobno"
                         rules={[
                           {
                             required: true,
-                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                            message: "Please enter a Valid cargotype",
+                            // pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                            message: "Please enter a Valid jobno",
                           },
                         ]}
                       >
-                        <SelectBox
-                          disabled={disable}
-                          allowClear
-                          showSearch
-                          optionFilterProp="children"
-                        >
-                          {cargoTypes &&
-                            cargoTypes.length > 0 &&
-                            cargoTypes.map((item, index) => {
-                              return (
-                                <Select.Option key={item.id} value={item.name}>
-                                  {item.name}
-                                </Select.Option>
-                              );
-                            })}
-                        </SelectBox>
+                        <InputType disabled={disable} />
                       </Form.Item>
                     </div>
-                    <div className="col-xl-3 col-sm-6 mt-2">
+                    </div>
+                </div>
+              </div>
+              <div className="row  mt-3 px-1 ">
+                <div className="col-md-6 col-12 mt-3">
+                  <div className="content-tabs-new row justify-content mx-1 mb-3">
+                    <div className="row mt-3">
+                      <h5 className="lead_text">Transportation</h5>
+                    </div>   
+
+                    <div className="col-xl-6 col-sm-12 mt-2">
                       <label>Mode</label>
                       <Form.Item
                         name="Mode"
@@ -553,10 +542,7 @@ function Updatejob() {
                         </SelectBox>
                       </Form.Item>
                     </div>
-                  </div>
-
-                  <div className="row ">
-                    <div className="col-xl-3 col-sm-6 mt-2">
+                    <div className="col-xl-6 col-sm-12 mt-2">
                       <label>Origin</label>
                       <Form.Item
                         name="origin"
@@ -589,7 +575,7 @@ function Updatejob() {
                         </SelectBox>
                       </Form.Item>
                     </div>
-                    <div className="col-xl-3 col-sm-6 mt-2">
+                    <div className="col-xl-6 col-sm-12 mt-2">
                       <label>Destination</label>
                       <Form.Item
                         name="destination"
@@ -622,7 +608,7 @@ function Updatejob() {
                         </SelectBox>
                       </Form.Item>
                     </div>
-                    <div className="col-xl-3 col-sm-6 mt-2">
+                    <div className="col-xl-6 col-sm-12 mt-2">
                       <label>Carrier</label>
                       <Form.Item
                         name="carrier"
@@ -655,7 +641,7 @@ function Updatejob() {
                         </SelectBox>
                       </Form.Item>
                     </div>
-                    <div className="col-xl-3 col-sm-6 mt-2">
+                    <div className="col-xl-6 col-sm-12 mt-2 mb-4">
                       <label>AWB/BL No</label>
                       <Form.Item
                         name="AWB"
@@ -670,17 +656,23 @@ function Updatejob() {
                         <InputType />
                       </Form.Item>
                     </div>
-                  </div>
-                  <div className="row ">
-                    <div className="col-xl-3 col-sm-6 mt-2">
-                      <label>Terms</label>
+
+                    </div>
+                </div>
+                <div className="col-md-6 col-12 mt-3">
+                  <div className="content-tabs-new row justify-content mx-1 mb-3 me-3">
+                    <div className="row mt-3">
+                      <h5 className="lead_text">Shipment Details</h5>
+                    </div>
+                    <div className="col-xl-6 col-sm-12 mt-2">
+                      <label>Cargo Type</label>
                       <Form.Item
-                        name="terms"
+                        name="cargotype"
                         rules={[
                           {
                             required: true,
                             pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                            message: "Please enter a Valid terms",
+                            message: "Please enter a Valid cargotype",
                           },
                         ]}
                       >
@@ -690,22 +682,19 @@ function Updatejob() {
                           showSearch
                           optionFilterProp="children"
                         >
-                          {PaymentTerm &&
-                            PaymentTerm.length > 0 &&
-                            PaymentTerm.map((item, index) => {
+                          {cargoTypes &&
+                            cargoTypes.length > 0 &&
+                            cargoTypes.map((item, index) => {
                               return (
-                                <Select.Option
-                                  key={item.payment_term_id}
-                                  value={item.payment_term_id}
-                                >
-                                  {item.payment_term_name}
+                                <Select.Option key={item.id} value={item.name}>
+                                  {item.name}
                                 </Select.Option>
                               );
                             })}
                         </SelectBox>
                       </Form.Item>
                     </div>
-                    <div className="col-xl-3 col-sm-6 mt-2">
+                    <div className="col-xl-6 col-sm-12 mt-2">
                       <label>No of pieces</label>
                       <Form.Item
                         name="noofpieces"
@@ -730,7 +719,7 @@ function Updatejob() {
                         />
                       </Form.Item>
                     </div>
-                    <div className="col-xl-3 col-sm-6 mt-2">
+                    <div className="col-xl-6 col-sm-12 mt-2">
                       <label>UOM</label>
                       <Form.Item
                         name="Uom"
@@ -763,7 +752,104 @@ function Updatejob() {
                         </SelectBox>
                       </Form.Item>
                     </div>
-                    <div className="col-xl-3 col-sm-6 mt-2">
+                    <div className="col-xl-6 col-sm-12 mt-2">
+                      <label>Gross wt</label>
+                      <Form.Item
+                        name="grosswt"
+                        rules={[
+                          {
+                            required: true,
+                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                            message: "Please enter a Valid grosswt",
+                          },
+                        ]}
+                      >
+                        <Input_Number
+                          className="text_right"
+                          // value={currencyRates}
+                          // onChange={handleChange}
+                          align="right"
+                          // step={0.01}
+                          min={0}
+                          precision={2}
+                          controlls={false}
+                          disabled={disable}
+                        />
+                      </Form.Item>
+                    </div>
+                    <div className="col-xl-6 col-sm-12 mt-2 pb-2">
+                      <label>Chargeable wt</label>
+                      <Form.Item
+                        name="chargeablewt"
+                        rules={[
+                          {
+                            required: true,
+                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                            message: "Please enter a Valid chargeablewt",
+                          },
+                        ]}
+                      >
+                        <Input_Number
+                          className="text_right"
+                          // value={currencyRates}
+                          // onChange={handleChange}
+                          align="right"
+                          // step={0.01}
+                          min={0}
+                          precision={2}
+                          controlls={false}
+                          disabled={disable}
+                        />
+                      </Form.Item>
+                    </div>
+
+                    </div>
+                </div>
+              </div>
+
+
+              <div className="row mt-3 px-1 ">
+                <div className="col-md-6 col-12 ">
+                  <div className="content-tabs-new row justify-content mx-1 mb-3">
+                    <div className="row mt-3">
+                      <h5 className="lead_text">Payment Info</h5>
+                    </div>
+                    <div className="col-xl-6 col-sm-12 mt-2">
+                      <label>Terms</label>
+                      <Form.Item
+                        name="terms"
+                        rules={[
+                          {
+                            required: true,
+                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                            message: "Please enter a Valid terms",
+                          },
+                        ]}
+                      >
+                        <SelectBox
+                          disabled={disable}
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
+                        >
+                          {PaymentTerm &&
+                            PaymentTerm.length > 0 &&
+                            PaymentTerm.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  key={item.payment_term_id}
+                                  value={item.payment_term_id}
+                                >
+                                  {item.payment_term_name}
+                                </Select.Option>
+                              );
+                            })}
+                        </SelectBox>
+                      </Form.Item>
+                    </div>
+
+                    
+                    <div className="col-xl-6 col-sm-12 mt-2">
                       <label>Currency</label>
                       <Form.Item
                         name="job_currency"
@@ -799,7 +885,7 @@ function Updatejob() {
                         </SelectBox>
                       </Form.Item>
                     </div>
-                    <div className="col-xl-3 col-sm-6 mt-2">
+                    <div className="col-xl-6 col-sm-12 mt-2">
                       <label>Exchange Rate</label>
                       <Form.Item
                         name="exchangerate"
@@ -824,57 +910,8 @@ function Updatejob() {
                         />
                       </Form.Item>
                     </div>
-                    <div className="col-xl-3 col-sm-6 mt-2">
-                      <label>Gross wt</label>
-                      <Form.Item
-                        name="grosswt"
-                        rules={[
-                          {
-                            required: true,
-                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                            message: "Please enter a Valid grosswt",
-                          },
-                        ]}
-                      >
-                        <Input_Number
-                          className="text_right"
-                          // value={currencyRates}
-                          // onChange={handleChange}
-                          align="right"
-                          // step={0.01}
-                          min={0}
-                          precision={2}
-                          controlls={false}
-                          disabled={disable}
-                        />
-                      </Form.Item>
-                    </div>
-                    <div className="col-xl-3 col-sm-6 mt-2">
-                      <label>Chargeable wt</label>
-                      <Form.Item
-                        name="chargeablewt"
-                        rules={[
-                          {
-                            required: true,
-                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                            message: "Please enter a Valid chargeablewt",
-                          },
-                        ]}
-                      >
-                        <Input_Number
-                          className="text_right"
-                          // value={currencyRates}
-                          // onChange={handleChange}
-                          align="right"
-                          // step={0.01}
-                          min={0}
-                          precision={2}
-                          controlls={false}
-                          disabled={disable}
-                        />
-                      </Form.Item>
-                    </div>
-                    <div className="col-xl-3 col-sm-6 mt-2">
+                
+                    <div className="col-xl-6 col-sm-12 mt-2 mb-1">
                       <label>Credit Days</label>
                       <Form.Item
                         name="creditdays"
@@ -899,11 +936,18 @@ function Updatejob() {
                         />
                       </Form.Item>
                     </div>
-                  </div>
-                  <div className="row">
-                    <div className="col-xl-3 col-lg-3 col-sm-6 ">
-                      <label>Attachments</label>
-                      <Form.Item
+
+                    </div>
+                </div>
+
+
+                <div className="col-md-6 col-12">
+                  <div className="content-tabs-new row justify-content-center mx-1 mb-1 me-3">
+                    <div className="row mt-3">
+                      <h5 className="lead_text">Attachments</h5>
+                    </div>
+                    <div className="col-xl-6 col-sm-12 mt-2 mb-2">
+                    <Form.Item
                         name="attachments"
                         // rules={[
                         //   {
@@ -915,15 +959,18 @@ function Updatejob() {
                       >
                         <FileUpload beforeUpload={beforeUpload} />
                       </Form.Item>
-                    </div>
-                  </div>
 
-                  {/* <div className="row"> */}
-                  <div className=" d-flex justify-content-center mt-5 gap-3">
-                      <Button className="qtn_save" btnType="save">
-                        Save
-                      </Button>
-                      <Button
+                      </div>
+                  </div>
+                </div>
+              </div>
+
+
+              <div className="col-12 d-flex justify-content-center my-4 gap-3">
+                <Button className="save_button" btnType="save">
+                  Save
+                </Button>
+ <Button
                         as="input"
                         type="reset"
                         value="Reset"
@@ -935,11 +982,9 @@ function Updatejob() {
                       </Button>
                   </div>
                   {/* </div> */}
-                </div>
-              </div>
+             
             </Form>
-          </div>
-        </div>
+        
         <Custom_model
           success
           show={SuccessPopup}
@@ -947,6 +992,8 @@ function Updatejob() {
             setSuccessPopup(false);
           }}
         />
+      </div>
+        </div>
       </div>
     </>
   );

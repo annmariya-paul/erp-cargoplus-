@@ -474,7 +474,7 @@ export default function Add_Quotation() {
       title: "COST",
       dataIndex: "quotation_details_cost",
       key: "quotation_details_cost",
-      width: "20%",
+      width: "10%",
 
       render: (data, index) => {
         console.log("index is :", index);
@@ -485,7 +485,7 @@ export default function Add_Quotation() {
               // rules={[{ required: true, message: "Required" }]}
             >
               <Input_Number
-                className="text_right input_bg"
+                className="text_right input_bg selwidthcost"
                 value={index.quotation_details_cost}
                 onChange={(value) => {
                   handleInputchange1(
@@ -539,7 +539,7 @@ export default function Add_Quotation() {
                 allowClear
                 showSearch
                 optionFilterProp="children"
-                className="selectwidthnew mb-2 input_bg"
+                className="selectwidthtaxtype mb-2 input_bg"
                 value={index.quotation_details_tax_type}
                 onChange={(e) => {
                   console.log("servicess11123", e);
@@ -576,7 +576,7 @@ export default function Add_Quotation() {
       title: "TAX AMOUNT",
       dataIndex: "quotation_details_tax_amount",
       key: "quotation_details_tax_amount",
-      width: "20%",
+    
 
       render: (data, index) => {
         console.log("index is :", index);
@@ -591,7 +591,7 @@ export default function Add_Quotation() {
               // rules={[{ required: true, message: 'Please input the name' }]}
             >
               <Input_Number
-                className="text_right input_bg"
+                className="text_right input_bg selectwidthtaxamt"
                 // value={index.taxamount}
                 onChange={(e) =>
                   handleInputchange1(
@@ -628,7 +628,7 @@ export default function Add_Quotation() {
               // rules={[{ required: true, message: 'Please input the name' }]}
             >
               <Input_Number
-                className="text_right input_bg"
+                className="text_right input_bg selectwidthtot"
                 // value={    index.totalamount=(index.cost + index.taxamount)
                 // }
                 value={
@@ -1058,7 +1058,7 @@ export default function Add_Quotation() {
                   <div className="row mb-2  ">
                     {/* <div className="col-md-6 col-12"> */}
                     {/* <div className="row"> */}
-                    <div className="col-xl-4 col-sm-12 mt-2 px-5 ">
+                    <div className="col-xl-4 col-sm-12 mt-2 px-3 ">
                       <label>Quotation date</label>
 
                       <Form.Item
@@ -1078,7 +1078,7 @@ export default function Add_Quotation() {
                         />
                       </Form.Item>
                     </div>
-                    <div className="col-xl-4 col-sm-12 mt-2 px-5">
+                    <div className="col-xl-4 col-sm-12 mt-2 px-3">
                       <label>Validity date</label>
                       <Form.Item
                         name="vdate"
@@ -1101,7 +1101,7 @@ export default function Add_Quotation() {
                         />
                       </Form.Item>
                     </div>
-                    <div className="col-xl-4 col-sm-12 mt-2 px-5">
+                    <div className="col-xl-4 col-sm-12 mt-2 px-3">
                       <label>Freight Type</label>
                       <Form.Item
                         name="freighttype"
@@ -1132,7 +1132,7 @@ export default function Add_Quotation() {
                         </SelectBox>
                       </Form.Item>
                     </div>
-                    <div className="col-xl-4 col-sm-12 mt-2 px-5">
+                    <div className="col-xl-4 col-sm-12 mt-2 px-3">
                       <label>Enquiry No</label>
                       <Form.Item name="eno">
                         <SelectBox
@@ -1157,7 +1157,7 @@ export default function Add_Quotation() {
                       </Form.Item>
                     </div>
 
-                    <div className="col-xl-4 col-sm-12 mt-2 px-5">
+                    <div className="col-xl-4 col-sm-12 mt-2 px-3">
                       <label>Consignee</label>
                       <Form.Item
                         name="consignee"
@@ -1225,7 +1225,7 @@ export default function Add_Quotation() {
                       </Form.Item>
                     </div>
 
-                    <div className="col-xl-4 col-sm-12 mt-2 px-5">
+                    <div className="col-xl-4 col-sm-12 mt-2 px-3">
                       <label>Shipper</label>
                       <Form.Item
                         name="shipper"

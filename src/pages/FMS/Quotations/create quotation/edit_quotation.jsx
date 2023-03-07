@@ -1189,7 +1189,7 @@ export default function EditQuotation(
     <>
       <div className="container-fluid">
         <div className="row justify-content-md-center">
-          <div className="content-tabs" style={{ maxHeight: "2000px" }}>
+         
             <Form
               form={editForm}
               onFinish={(values) => {
@@ -1200,14 +1200,19 @@ export default function EditQuotation(
                 console.log(error);
               }}
             >
-              <div className="container mb-4">
+              <div className="container-fluid ms-0 me-2">
                 <div className="row mt-3">
-                  <h5 className="lead_text">Edit Quotation</h5>
+                  <h4 className="lead_text">Edit Quotation</h4>
                 </div>
                 {/* <div className="containerdesig "> */}
 
-                <div className="row ">
-                  <div className="col-xl-3 col-sm-6 mt-2">
+                <div className="row  me-3">
+                <div className="content-tabs-new row justify-content m-3">
+                <div className="row mt-3 ">
+                    <h5 className="lead_text">Basic Info</h5>
+                  </div>
+                  <div className="row mb-2  ">
+                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
                     <label>Quotation No</label>
                     <Form.Item
                       name="quotation_no"
@@ -1222,7 +1227,7 @@ export default function EditQuotation(
                       <InputType value={quatationno} disabled={true} />
                     </Form.Item>
                   </div>
-                  <div className="col-xl-3 col-sm-6 mt-2">
+                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
                     <label>Quotation date</label>
                     <Form.Item
                       name="quotationdate"
@@ -1246,7 +1251,7 @@ export default function EditQuotation(
                       />
                     </Form.Item>
                   </div>
-                  <div className="col-xl-3 col-sm-6 mt-2">
+                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
                     <label>Validity date</label>
                     <Form.Item
                       name="validity_date"
@@ -1270,7 +1275,7 @@ export default function EditQuotation(
                       />
                     </Form.Item>
                   </div>
-                  <div className="col-xl-3 col-sm-6 mt-2">
+                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
                     <label>Enquiry No</label>
                     <Form.Item
                       name="quotation_enquiry_no"
@@ -1307,7 +1312,7 @@ export default function EditQuotation(
                     </Form.Item>
                   </div>
 
-                  <div className="col-xl-3 col-sm-6 mt-2">
+                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
                     <label>Consignee</label>
                     <Form.Item
                       name="quotation_consignee"
@@ -1340,7 +1345,7 @@ export default function EditQuotation(
                     </Form.Item>
                   </div>
 
-                  <div className="col-xl-3 col-sm-6 mt-2">
+                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
                     <label>Shipper</label>
                     <Form.Item
                       name="shipper"
@@ -1355,8 +1360,7 @@ export default function EditQuotation(
                       <InputType value={quotshipper} />
                     </Form.Item>
                   </div>
-
-                  <div className="col-xl-3 col-sm-6 mt-2">
+                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
                     <label>Freight Type</label>
                     <Form.Item
                       name="freight_type"
@@ -1388,36 +1392,17 @@ export default function EditQuotation(
                     </Form.Item>
                   </div>
 
-                  <div className="col-xl-3 col-sm-6 mt-2">
-                    <label>Cargo Type</label>
-                    <Form.Item
-                      name="quotation_cargotype"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please select a Type",
-                        },
-                      ]}
-                    >
-                      <SelectBox
-                        allowClear
-                        showSearch
-                        optionFilterProp="children"
-                      >
-                        {cargooptions &&
-                          cargooptions.length > 0 &&
-                          cargooptions.map((item, index) => {
-                            return (
-                              <Select.Option key={item.id} value={item.id}>
-                                {item.name}
-                              </Select.Option>
-                            );
-                          })}
-                      </SelectBox>
-                    </Form.Item>
                   </div>
-
-                  <div className="col-xl-3 col-sm-6 mt-2">
+                  </div>
+                  </div>
+                  <div className="row  mt-3 ">
+                <div className="col-md-6 col-12">
+                  <div className="content-tabs-new row justify-content mx-1 mb-3">
+                    <div className="row mt-3">
+                      <h5 className="lead_text">Transportation</h5>
+                    </div>
+              
+                    <div className="col-xl-6 col-sm-12 mt-2">
                     <label>Mode</label>
                     <Form.Item
                       name="quotation_mode"
@@ -1442,8 +1427,7 @@ export default function EditQuotation(
                       </SelectBox>
                     </Form.Item>
                   </div>
-
-                  <div className="col-xl-3 col-sm-6 mt-2">
+                  <div className="col-xl-6 col-sm-12 mt-2">
                     <label>Origin</label>
                     <Form.Item
                       name="quotation_origin"
@@ -1474,7 +1458,7 @@ export default function EditQuotation(
                       </SelectBox>
                     </Form.Item>
                   </div>
-                  <div className="col-xl-3 col-sm-6 mt-2">
+                  <div className="col-xl-6 col-sm-12 mt-2">
                     <label>Destination</label>
                     <Form.Item
                       name="quotation_destination"
@@ -1506,7 +1490,7 @@ export default function EditQuotation(
                     </Form.Item>
                   </div>
 
-                  <div className="col-xl-3 col-sm-6 mt-2">
+                  <div className="col-xl-6 col-sm-12 mt-2 mb-5 pb-5">
                     <label>Carrier</label>
                     <Form.Item
                       name="quotation_carrier"
@@ -1537,11 +1521,17 @@ export default function EditQuotation(
                       </SelectBox>
                     </Form.Item>
                   </div>
-
-                  <div className="col-xl-3 col-sm-6 mt-2">
-                    <label>Terms</label>
+                  </div>
+                </div>
+                <div className="col-md-6 col-12">
+                  <div className="content-tabs-new row justify-content mx-1 mb-3 ">
+                    <div className="row mt-3">
+                      <h5 className="lead_text">Shipment Details</h5>
+                    </div>
+                    <div className="col-xl-6 col-sm-12 mt-2">
+                    <label>Cargo Type</label>
                     <Form.Item
-                      name="quotation_terms"
+                      name="quotation_cargotype"
                       rules={[
                         {
                           required: true,
@@ -1554,15 +1544,12 @@ export default function EditQuotation(
                         showSearch
                         optionFilterProp="children"
                       >
-                        {allPaymentTerms &&
-                          allPaymentTerms.length > 0 &&
-                          allPaymentTerms.map((item, index) => {
+                        {cargooptions &&
+                          cargooptions.length > 0 &&
+                          cargooptions.map((item, index) => {
                             return (
-                              <Select.Option
-                                key={item.payment_term_id}
-                                value={item.payment_term_id}
-                              >
-                                {item.payment_term_name}
+                              <Select.Option key={item.id} value={item.id}>
+                                {item.name}
                               </Select.Option>
                             );
                           })}
@@ -1570,7 +1557,7 @@ export default function EditQuotation(
                     </Form.Item>
                   </div>
 
-                  <div className="col-xl-3 col-sm-6  mt-2">
+                  <div className="col-xl-6 col-sm-12  mt-2">
                     <label>Number of pieces</label>
                     <Form.Item
                       name="quot_npieces"
@@ -1587,8 +1574,7 @@ export default function EditQuotation(
                       />
                     </Form.Item>
                   </div>
-
-                  <div className="col-xl-3 col-sm-6 mt-2">
+                  <div className="col-xl-6 col-sm-12 mt-2">
                     <label>UOM</label>
                     <Form.Item
                       name="quotation_units"
@@ -1620,8 +1606,8 @@ export default function EditQuotation(
                       </SelectBox>
                     </Form.Item>
                   </div>
-
-                  <div className="col-xl-3 col-sm-6 mt-2">
+                  
+                  <div className="col-xl-6 col-sm-12 mt-2">
                     <label>Gross Weight</label>
                     <Form.Item
                       name="gross_wt"
@@ -1645,8 +1631,8 @@ export default function EditQuotation(
                       />
                     </Form.Item>
                   </div>
-
-                  <div className="col-xl-3 col-sm-6 mt-2">
+                 
+                  <div className="col-xl-6 col-sm-12 mt-2">
                     <label>Chargeable Weight</label>
                     <Form.Item
                       name="chargeable_wt"
@@ -1670,8 +1656,57 @@ export default function EditQuotation(
                       />
                     </Form.Item>
                   </div>
+                  </div>
+                </div>
+              </div>
+              <div className="row mt-4 ">
+                <div className="col-md-6 col-12 ">
+                  <div className="content-tabs-new row justify-content mx-1 mb-3">
+                    <div className="row mt-3">
+                      <h5 className="lead_text">Payment Info</h5>
+                    </div>
 
-                  <div className="col-xl-3 col-sm-6 mt-2">
+                    <div className="col-xl-6 col-sm-12 mt-2">
+
+                 
+                    <label>Terms</label>
+                    <Form.Item
+                      name="quotation_terms"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please select a Type",
+                        },
+                      ]}
+                    >
+                      <SelectBox
+                        allowClear
+                        showSearch
+                        optionFilterProp="children"
+                      >
+                        {allPaymentTerms &&
+                          allPaymentTerms.length > 0 &&
+                          allPaymentTerms.map((item, index) => {
+                            return (
+                              <Select.Option
+                                key={item.payment_term_id}
+                                value={item.payment_term_id}
+                              >
+                                {item.payment_term_name}
+                              </Select.Option>
+                            );
+                          })}
+                      </SelectBox>
+                    </Form.Item>
+                  </div>
+
+              
+
+               
+
+
+
+                  <div className="col-xl-6 col-sm-12 mt-2">
                     <label>Currency</label>
                     <Form.Item
                       name="currency"
@@ -1704,7 +1739,7 @@ export default function EditQuotation(
                     </Form.Item>
                   </div>
 
-                  <div className="col-xl-3 col-sm-6 mt-2">
+                  <div className="col-xl-6 col-sm-12 mt-2 pb-4">
                     <label>Exchange Rate</label>
                     <Form.Item
                       name="exchnagerate"
@@ -1729,11 +1764,18 @@ export default function EditQuotation(
                       />
                     </Form.Item>
                   </div>
+
+
                 </div>
               </div>
-              <div className="row justify-content-center">
-                <div className="col-6 ">
-                  <label>Add Attachments</label>
+              <div className="col-md-6 col-12">
+                  <div className="content-tabs-new row justify-content mx-1 mb-1">
+                     <div className="row mt-3">
+                      <h5 className="lead_text">Attachments</h5>
+                    </div>
+                    <div className="col-xl-12 col-sm-12 mt-2">
+
+            
                   <Form.Item className="mt-2" name="new">
                     <FileUpload
                       multiple
@@ -1761,8 +1803,14 @@ export default function EditQuotation(
                   </Form.Item>
                 </div>
               </div>
+              </div>
+              </div>
 
-              <div className="row">
+              <div className="row mt-3 me-2 ">
+                <div className="content-tabs-tablenew row justify-content m-3">
+                  <div className="row mt-3">
+                    <h5 className="lead_text">Task & Description</h5>
+                  </div>
                 <div className="datatable">
                   <TableData
                     data={sampletable}
@@ -1770,14 +1818,14 @@ export default function EditQuotation(
                     custom_table_css="table_qtn qtn_table_brdr"
                   />
                 </div>
-              </div>
+             
 
-              <div className="d-flex justify-content-end mt-4 mx-3 ">
-                <div className="col-lg-2 col-sm-4 col-xs-3 d-flex justify-content-end mt-3 me-2">
-                  <p style={{ fontWeight: 600 }}>Grand Total :</p>
-                </div>
+              <div className="d-flex justify-content-end mt-4 ms-5">
+              <div className="col-lg-2 col-sm-4 col-xs-3 d-flex justify-content-end mt-3 me-3">
+                      <p style={{ fontWeight: 600 }}>Grand Total :</p>
+                    </div>
 
-                <div className="col-lg-2 col-sm-2 col-xs-2">
+                <div className="col-lg-2 col-sm-6 col-xs-2 me-5">
                   <Form.Item
                     name="gtotal"
                     rules={[
@@ -1801,23 +1849,29 @@ export default function EditQuotation(
                   </Form.Item>
                 </div>
               </div>
-              <div className="d-flex justify-content-center my-4">
-                <div className="col-lg-1 ">
-                  <Button type="submit" className="qtn_save" btnType="save">
+              </div>
+              </div>
+              </div>
+              <div className="col-12 d-flex justify-content-center my-4 gap-3">
+                {/* <div className="col-lg-1 "> */}
+                  <Button className="save_button" btnType="save">
                     Save
                   </Button>
-                </div>
-                <div className="col-lg-1 ">
+                {/* </div> */}
+                {/* <div className="col-lg-1 "> */}
                   <Button
+                   as="input"
+                   type="reset"
+                   value="Reset"
                     onClick={() => {
                       navigate(`${ROUTES.QUATATIONS}`);
                     }}
-                    className="qtn_save"
-                    btnType="save"
+                    // className="qtn_save"
+                    // btnType="save"
                   >
                     Cancel
                   </Button>
-                </div>
+                {/* </div> */}
               </div>
             </Form>
 
@@ -1827,7 +1881,7 @@ export default function EditQuotation(
               onHide={() => setSaveSuccess(false)}
               success
             />
-          </div>
+         
         </div>
       </div>
     </>

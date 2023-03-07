@@ -2,7 +2,6 @@
   font-weight: 380 !important;
   color: black !important;
 }
-
 //  .total_exp {
 //   height: 70px !important;
 //   overflow-y: scroll !important;
@@ -39,6 +38,7 @@
 .task_expense_table {
   // height: 445px !important;
   // overflow-y: auto !important;
+  table{ border-right: 1px solid rgb(188, 183, 183);}
   thead {
     tr {
       th {
@@ -59,6 +59,7 @@
   tbody {
     tr {
       border-color: rgb(237, 239, 240);
+       border-right: 1px solid rgb(188, 183, 183);
       td {
         // font-size: 0.8rem;
         padding-inline: 5px;

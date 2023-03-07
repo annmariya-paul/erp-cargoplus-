@@ -1,6 +1,7 @@
+import "../../Job/job.scss";
 import React, { useState, useEffect } from "react";
 import { GENERAL_SETTING_BASE_URL } from "../../../../api/bootapi";
-import { Checkbox, Input, Select } from "antd";
+import { Checkbox, Input, Select, Tooltip } from "antd";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import { InputNumber } from "antd";
@@ -737,6 +738,8 @@ export default function Taskexpenses() {
     getAllTaxtype();
   }, [numOfItems, pageofIndex]);
 
+  const tooltipcolor = ["#6c6d6f"];
+
   const columns = [
     {
       title: "Actions",
@@ -748,17 +751,21 @@ export default function Taskexpenses() {
       render: (data, record, index) => {
         return (
           <div className="d-flex justify-content-center align-items-center gap-2">
-            <div className="actionEdit m-0 p-0">
-              <DragOutlined className="draggable" type="swap" />
-            </div>
-            <Popconfirm
-              title="Sure to delete?"
-              onConfirm={() => handleDelete(record.key)}
-            >
-              <div className="deleteIcon m-0">
-                <FaTrash />
-              </div>
-            </Popconfirm>
+            <Tooltip title="Click and Drag to move" color={tooltipcolor}>
+              <div className="deleteIcon m-0 p-0">
+                <DragOutlined className="draggable" type="swap" />
+              </div>{" "}
+            </Tooltip>
+            <Tooltip title="Delete Row" color={tooltipcolor}>
+              <Popconfirm
+                title="Sure to delete?"
+                onConfirm={() => handleDelete(record.key)}
+              >
+                <div className="deleteIcon m-0">
+                  <FaTrash />
+                </div>
+              </Popconfirm>{" "}
+            </Tooltip>
           </div>
         );
       },
@@ -769,7 +776,6 @@ export default function Taskexpenses() {
       dataIndex: "job_task_expense_task_id",
       key: "job_task_expense_task_id",
       // width: "40%",
-      align: "center",
       className: "firstrow req_font",
       render: (data, index) => {
         console.log("index is :", index);
@@ -822,7 +828,6 @@ export default function Taskexpenses() {
       dataIndex: "job_task_expense_taxtype_id",
       key: "job_task_expense_taxtype_id",
       // width: "100",
-      align: "center",
       className: "firstrow",
 
       render: (data, index) => {
@@ -899,7 +904,7 @@ export default function Taskexpenses() {
               <InputNumber
                 style={{ minWidth: "10px" }}
                 bordered={false}
-                className="text_right"
+                className="text_right input_bg"
                 value={index.job_task_expense_tax_perc}
                 // onChange={(value) => {
                 //   console.log(" input numberevent ", value, index.key);
@@ -920,7 +925,6 @@ export default function Taskexpenses() {
       dataIndex: "job_task_expense_agent_id",
       key: "job_task_expense_agent_id",
       // width: 150,
-      align: "center",
       className: "firstrow",
       render: (data, index) => {
         console.log("index is :", index);
@@ -1045,7 +1049,7 @@ export default function Taskexpenses() {
                 >
                   <InputNumber
                     bordered={false}
-                    className="text_right"
+                    className="text_right input_bg"
                     value={index.job_task_expense_cost_taxfx}
                     onChange={(value) => {
                       console.log(" input numberevent ", value, index.key);
@@ -1085,7 +1089,7 @@ export default function Taskexpenses() {
                 >
                   <InputNumber
                     bordered={false}
-                    className="text_right"
+                    className="text_right input_bg"
                     value={index.job_task_expense_cost_subtotalfx}
                     onChange={(value) => {
                       console.log(" input numberevent ", value, index.key);
@@ -1115,7 +1119,6 @@ export default function Taskexpenses() {
           dataIndex: "job_task_expense_exp_curr",
           key: "job_task_expense_exp_curr",
           width: 0,
-          align: "center",
           className: "thirdrow",
           render: (data, index) => {
             console.log("index is :", index);

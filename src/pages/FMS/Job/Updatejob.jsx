@@ -415,10 +415,10 @@ function Updatejob() {
                         ]}
                       >
                         <SelectBox
-                         onChange={(e) => {
-                          // handleLeadId(e);
-                          getCreditdays(e);
-                        }}
+                          onChange={(e) => {
+                            // handleLeadId(e);
+                            getCreditdays(e);
+                          }}
                           disabled={disable}
                           allowClear
                           showSearch
@@ -919,17 +919,20 @@ function Updatejob() {
                   </div>
 
                   {/* <div className="row"> */}
-                  <div className="d-flex justify-content-center my-4">
-                    <div className="col-lg-1 ">
+                  <div className=" d-flex justify-content-center mt-5 gap-3">
                       <Button className="qtn_save" btnType="save">
                         Save
                       </Button>
-                    </div>
-                    <div className="col-lg-1 ">
-                      <Button className="qtn_save" btnType="cancel">
+                      <Button
+                        as="input"
+                        type="reset"
+                        value="Reset"
+                        onClick={() => {
+                          navigate(ROUTES.LIST_JOB);
+                        }}
+                      >
                         Cancel
                       </Button>
-                    </div>
                   </div>
                   {/* </div> */}
                 </div>

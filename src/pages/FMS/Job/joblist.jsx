@@ -10,6 +10,7 @@ import PublicFetch from "../../../utils/PublicFetch";
 import { CRM_BASE_URL_FMS } from "../../../api/bootapi";
 import moment from "moment";
 import MyPagination from "../../../components/Pagination/MyPagination";
+import { JobStatus } from "../../../utils/SelectOptions";
 
 function Listjob() {
   const [searchedText, setSearchedText] = useState("");
@@ -19,7 +20,7 @@ function Listjob() {
   // const [searchedText, setSearchedText] = useState("");
   const [searchName, setSearchName] = useState("");
   const [searchStatus, setSearchStatus] = useState("");
-
+  const [jobStatus,setJobStatus] = useState(JobStatus);
 
   const [noofItems, setNoofItems] = useState("25");
   const [current, setCurrent] = useState(1);
@@ -41,26 +42,25 @@ function Listjob() {
       title: "JOB NO",
       dataIndex: "job_number",
       key: "job_number",
+      width: "10%",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.job_number)
-          .toLowerCase()
-          .includes(value.toLowerCase()) ||
-          String(record.job_date)
-          .toLowerCase()
-          .includes(value.toLowerCase()) ||
+        return (
+          String(record.job_number)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.job_date).toLowerCase().includes(value.toLowerCase()) ||
           String(record.job_awb_bl_no)
-          .toLowerCase()
-          .includes(value.toLowerCase())||
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
           String(record.job_consignee_name)
-          .toLowerCase()
-          .includes(value.toLowerCase())||
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
           String(record.job_shipper)
-          .toLowerCase()
-          .includes(value.toLowerCase()) ||
-          String(record.job_status)
-          .toLowerCase()
-          .includes(value.toLowerCase())
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.job_status).toLowerCase().includes(value.toLowerCase())
+        );
       },
       align: "center",
     },
@@ -68,12 +68,14 @@ function Listjob() {
       title: "DATE",
       dataIndex: "job_date",
       key: "job_date",
+      width: "9%",
       align: "center",
     },
     {
       title: "AWB/BL",
       dataIndex: "job_awb_bl_no",
       key: "job_awb_bl_no",
+      width: "9%",
       // filteredValue: [searchedNo],
       // onFilter: (value, record) => {
       //   return String(record.job_awb_bl_no)
@@ -92,19 +94,17 @@ function Listjob() {
       //     .toLowerCase()
       //     .includes(value.toLowerCase());
       // },
-      align: "center",
     },
     {
       title: "SHIPPER",
       dataIndex: "job_shipper",
       key: "job_shipper",
-      align: "center",
+      width: "14%",
     },
     {
       title: "STATUS",
       dataIndex: "job_status",
       key: "job_status",
-      align: "center",
     },
     {
       title: "ACTION",
@@ -160,7 +160,7 @@ function Listjob() {
       title: "",
       dataIndex: "action",
       key: "key",
-      width: "20%",
+      width: "16%",
       render: (data, index) => {
         console.log("index is new:", index);
         return (
@@ -174,7 +174,7 @@ function Listjob() {
               {/* <Link to={ROUTES.TASKANDEXPENSES } style={{ color: "white" }}> */}
               <Button
                 btnType="save"
-                className="view_btn"
+                className="assign_btn"
                 onClick={() => {
                   navigate(`${ROUTES.TASKANDEXPENSES}/${index.job_id}`);
                 }}
@@ -187,63 +187,8 @@ function Listjob() {
         );
       },
     },
-    {
-      title: "",
-      dataIndex: "assign",
-      key: "assign",
-      align: "center",
-      width: "5%",
-      render: (data, index) => {
-        return (
-          <>
-            {index.assigned_employee && index.assigned_employee.length > 0 ? (
-              <div className="">
-                <Button btnType="add" className="me-1 view_btn">
-                  view
-                </Button>
-              </div>
-            ) : (
-              <div className="">
-                <Button
-                  btnType="add"
-                  className="me-1 view_btn"
-                  //   onClick={() => {
-                  //     navigate(`${ROUTES.ASSIGN_QUOTATION}/${index.id}`);
-                  //   }}
-                >
-                  Assign
-                </Button>
-              </div>
-            )}
-          </>
-        );
-      },
-    },
-   
   ];
 
-  const data = [
-    {
-      id: "1",
-      date: "4-01-2023",
-      validity: "test",
-      consignee: "xyz",
-      shipper: "new",
-      status: "data",
-
-      key: "1",
-    },
-    {
-      id: "2",
-      date: "22-01-2023",
-      validity: "test",
-      consignee: "xyz",
-      shipper: "new",
-      status: "data",
-
-      key: "2",
-    },
-  ];
 
   const [AllJobs, setAllJobs] = useState();
   const getAllJobs = () => {
@@ -256,26 +201,30 @@ function Listjob() {
           let temp = [];
           res.data.data.job.forEach((item, index) => {
             let date = moment(item.job_date).format("DD-MM-YYYY");
-
-            temp.push({
-              job_number: item.job_number,
-              // quotation_carrier: item.quotation_carrier,
-              job_id: item.job_id,
-              job_consignee: item.job_consignee,
-              job_consignee_name: item.crm_v1_leads.lead_customer_name,
-              job_date: date,
-              job_shipper: item.job_shipper,
-              job_freight_type: item.job_freight_type,
-              job_cargo_type: item.job_cargo_type,
-              job_carrier: item.job_carrier,
-              job_awb_bl_no: item.job_awb_bl_no,
-              job_mode: item.job_mode,
-              job_origin_id: item.job_origin_id,
-              job_destination_id: item.job_destination_id,
-              job_no_of_pieces: item.job_no_of_pieces,
-              job_uom: item.job_uom,
-              job_status: item.job_status,
-            });
+           jobStatus.forEach((status, index) => {
+           var jobsts = parseInt(status.value);
+           if (jobsts === item.job_status){
+             temp.push({
+               job_number: item.job_number,
+               // quotation_carrier: item.quotation_carrier,
+               job_id: item.job_id,
+               job_consignee: item.job_consignee,
+               job_consignee_name: item.crm_v1_leads.lead_customer_name,
+               job_date: date,
+               job_shipper: item.job_shipper,
+               job_freight_type: item.job_freight_type,
+               job_cargo_type: item.job_cargo_type,
+               job_carrier: item.job_carrier,
+               job_awb_bl_no: item.job_awb_bl_no,
+               job_mode: item.job_mode,
+               job_origin_id: item.job_origin_id,
+               job_destination_id: item.job_destination_id,
+               job_no_of_pieces: item.job_no_of_pieces,
+               job_uom: item.job_uom,
+               job_status: status.name,
+             });
+            }
+          });
           });
           setAllJobs(temp);
         }

@@ -80,4 +80,17 @@ const vendor_Organisation = [
   { id: "2", name: "Organisation", value: "ORG" },
   
 ];
-module.exports = { LeadType, LeadStatus, LeadOrganization, Oppor_Status, Prob_conversion,cargo_typeoptions,vendor_Organisation };
+const JobStatus = [
+  { id: "1", name: "Pending", value: "1" },
+  { id: "2", name: "Converted", value: "2" },
+];
+module.exports = {
+  LeadType,
+  LeadStatus,
+  LeadOrganization,
+  Oppor_Status,
+  Prob_conversion,
+  cargo_typeoptions,
+  vendor_Organisation,
+  JobStatus,
+};

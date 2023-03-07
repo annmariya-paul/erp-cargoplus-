@@ -72,35 +72,35 @@ function PrintInvoice() {
         invoice_number={alldata?.invoice_no}
         invoice_details1={
           <>
-            <tr>
+            <tr className="invoice_header">
               <td>Invoice Date </td>
               <td>:</td>
               <td style={{ fontWeight: 600 }}>
                 {moment(alldata?.invoice_date).format("DD-MM-YYYY")}
               </td>
             </tr>
-            <tr>
+            <tr className="invoice_header">
               <td>Terms</td>
               <td>:</td>
               <td style={{ fontWeight: 600 }}>
                 {alldata?.fms_v1_jobs?.fms_v1_payment_terms?.payment_term_name}
               </td>
             </tr>
-            <tr>
+            <tr className="invoice_header">
               <td>Chargable Weight</td>
               <td>:</td>
               <td style={{ fontWeight: 600 }}>
                 {alldata?.fms_v1_jobs?.job_chargeable_wt}
               </td>
             </tr>
-            <tr>
+            <tr className="invoice_header">
               <td>Carrier</td>
               <td>:</td>
               <td style={{ fontWeight: 600 }}>
                 {alldata?.fms_v1_jobs?.fms_v1_carrier?.carrier_name}
               </td>
             </tr>
-            <tr>
+            <tr className="invoice_header">
               <td>Mode</td>
               <td>:</td>
               <td style={{ fontWeight: 600 }}>
@@ -111,21 +111,21 @@ function PrintInvoice() {
         }
         invoice_details2={
           <>
-            <tr>
+            <tr className="invoice_header">
               <td>Project Name</td>
               <td>:</td>
               <td style={{ fontWeight: 600 }}>
                 {alldata?.fms_v1_jobs?.job_number}
               </td>
             </tr>
-            <tr>
+            <tr className="invoice_header">
               <td>AWB/BL</td>
               <td>:</td>
               <td style={{ fontWeight: 600 }}>
                 {alldata?.fms_v1_jobs?.job_awb_bl_no}
               </td>
             </tr>
-            <tr>
+            <tr className="invoice_header">
               <td>Origin</td>
               <td>:</td>
               <td style={{ fontWeight: 600 }}>
@@ -136,7 +136,7 @@ function PrintInvoice() {
                 }
               </td>
             </tr>
-            <tr>
+            <tr className="invoice_header">
               <td>Destination</td>
               <td>:</td>
               <td style={{ fontWeight: 600 }}>
@@ -147,28 +147,28 @@ function PrintInvoice() {
                 }
               </td>
             </tr>
-            <tr>
+            <tr className="invoice_header">
               <td>Shipper</td>
               <td>:</td>
               <td style={{ fontWeight: 600 }}>
                 {alldata?.fms_v1_jobs?.job_shipper}
               </td>
             </tr>
-            <tr>
+            <tr className="invoice_header">
               <td>Consignee</td>
               <td>:</td>
               <td style={{ fontWeight: 600 }}>
                 {alldata?.fms_v1_jobs?.crm_v1_leads?.lead_customer_name}
               </td>
             </tr>
-            <tr>
+            <tr className="invoice_header">
               <td>No of pieces</td>
               <td>:</td>
               <td style={{ fontWeight: 600 }}>
                 {alldata?.fms_v1_jobs?.job_no_of_pieces}
               </td>
             </tr>
-            <tr>
+            <tr className="invoice_header">
               <td>Grows weight</td>
               <td>:</td>
               <td style={{ fontWeight: 600 }}>
@@ -179,7 +179,7 @@ function PrintInvoice() {
         }
         invoice_table_header={
           <>
-            <tr>
+            <tr className="invoice_header">
               <th>#</th>
               <th>Task & description</th>
               {/* <th>Tax Type</th>
@@ -195,7 +195,7 @@ function PrintInvoice() {
               tabledata.length > 0 &&
               tabledata.map((item, index) => {
                 return (
-                  <tr>
+                  <tr className="invoice_header">
                     <td>{index + 1}</td>
                     <td>{item?.job_task_expense_task_name}</td>
                     {/* <td></td>

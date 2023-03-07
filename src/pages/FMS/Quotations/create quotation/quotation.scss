@@ -316,3 +316,17 @@ th {
 .text_align_words {
   text-align: left;
 }
+.content-tabs-new {
+  border-radius: 16px;
+  // min-height: 20rem;
+  padding: 18px;
+  // flex-grow: 1;
+  box-shadow: 0.5px 1px 8px variables.$boxshadow;
+}
+.content-tabs-tablenew{
+  border-radius: 16px;
+  // min-height: 20rem;
+  padding: 10px;
+  // flex-grow: 1;
+  box-shadow: 0.5px 1px 8px variables.$boxshadow;
+}

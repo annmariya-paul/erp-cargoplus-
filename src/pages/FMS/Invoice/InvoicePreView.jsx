@@ -18,6 +18,7 @@ function InvoicePreView() {
   console.log("Id::::", id);
   const [addForm] = Form.useForm();
   const [jobData, setJobData] = useState();
+  console.log("jobdata",jobData);
   const [TaskExpense, setTaskexpense] = useState();
   const [currency, setCurrency] = useState();
   const [exchangerate, setExchangeRate] = useState();
@@ -124,6 +125,7 @@ function InvoicePreView() {
       invoice_currency: jobData?.job_total_cost_curr,
       invoice_exchange_rate: jobData?.job_total_cost_exch,
       invoice_grand_total: grandTotal,
+      invoice_credit_days:jobData?.crm_v1_leads.lead_credit_days,
     })
       .then((res) => {
         console.log("Response", res);
@@ -359,6 +361,17 @@ function InvoicePreView() {
                       </p>
                     </div>
                   </div>
+                  <div className="col-6 d-flex">
+                    <div className="col-4">Credit Days</div>
+                    <div className="col-1">:</div>
+
+                    <div className="col-7">
+                      <p className="modal-view-data">
+                     {jobData?.crm_v1_leads.lead_credit_days}
+                      </p>
+                    </div>
+                  </div>
+                
 
                   <div className="mt-3">
                     <div>

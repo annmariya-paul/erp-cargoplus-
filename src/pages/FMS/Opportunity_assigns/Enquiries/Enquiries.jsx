@@ -381,6 +381,7 @@ function Enquiries() {
             </Select>
           </div>
           <div className="col-4 d-flex align-items-center justify-content-center">
+            {totalCount>0 &&(
             <MyPagination
               total={parseInt(totalCount)}
               current={current}
@@ -389,6 +390,7 @@ function Enquiries() {
                 setCurrent(current);
               }}
             />
+            )}
           </div>
           {/* <div className="col-xl-6 col-lg-6 col-md-6 col-sm-8 col-12"></div> */}
           <div className="col-lg-3 col-lg-3 col-md-3 col-sm-12 col-12 d-flex justify-content-end">
@@ -407,6 +409,7 @@ function Enquiries() {
           />
         </div>
         <div className="d-flex py-2 justify-content-center">
+          {totalCount>0 &&(
           <MyPagination
             total={parseInt(totalCount)}
             current={current}
@@ -415,6 +418,7 @@ function Enquiries() {
               setCurrent(current);
             }}
           />
+          )}
         </div>
       </div>
 

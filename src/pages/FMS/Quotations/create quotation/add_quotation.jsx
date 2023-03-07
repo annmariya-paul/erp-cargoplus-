@@ -1036,7 +1036,7 @@ export default function Add_Quotation() {
     <>
       <div className="container-fluid">
         <div className="row justify-content-md-center">
-          <div className="content-tabs">
+          
             <Form
               name="addForm"
               form={addForm}
@@ -1050,10 +1050,18 @@ export default function Add_Quotation() {
             >
               <div className="container mb-4">
                 <div className="row mt-3">
-                  <h5 className="lead_text">Add New Quotation</h5>
+                  <h4 className="lead_text">Add New Quotation</h4>
                 </div>
                 <div className="row">
-                  <div className="col-xl-3 col-sm-6 mt-2">
+                <div className="content-tabs-new row justify-content-md">
+                <div className="row mt-3">
+                  <h5 className="lead_text">Basic Info</h5>
+                </div>
+                <div className="row">
+                <div className="col-md-6 col-12">
+                  <div className="row">
+                <div className="col-xl-6 col-sm-6 mt-2">
+                    
                     <label>Quotation date</label>
 
                     <Form.Item
@@ -1076,7 +1084,7 @@ export default function Add_Quotation() {
                     
                     </Form.Item>
                   </div>
-                  <div className="col-xl-3 col-sm-6 mt-2">
+                  <div className="col-xl-6 col-sm-6 mt-2">
                     <label>Validity date</label>
                     <Form.Item
                       name="vdate"
@@ -1099,7 +1107,7 @@ export default function Add_Quotation() {
                       />
                     </Form.Item>
                   </div>
-                  <div className="col-xl-3 col-sm-6 mt-2">
+                  <div className="col-xl-6 col-sm-6 mt-2">
                     <label>Enquiry No</label>
                     <Form.Item
                       name="eno"
@@ -1130,7 +1138,7 @@ export default function Add_Quotation() {
                     </Form.Item>
                   </div>
 
-                  <div className="col-xl-3 col-sm-6 mt-2">
+                  <div className="col-xl-6 col-sm-6 mt-2">
                     <label>Consignee</label>
                     <Form.Item
                       name="consignee"
@@ -1150,7 +1158,29 @@ export default function Add_Quotation() {
                         {allLeadList &&
                           allLeadList.length > 0 &&
                           allLeadList.map((item, index) => {
-                     
+                            // console.log("lead id ddd:",item.lead_id)
+
+                            //  if( leadIdEnq && leadIdEnq === leadId){
+
+                            //   return (
+                            //     <Select.Option
+                            //       key={item.lead_id}
+                            //       value={item.lead_id}
+                            //     >
+                            //       {item.lead_customer_name}
+                            //     </Select.Option>
+                            //   );
+
+                            //  }else{
+                            //   return (
+                            //     <Select.Option
+                            //       key={item.lead_id}
+                            //       value={item.lead_id}
+                            //     >
+                            //       {item.lead_customer_name}
+                            //     </Select.Option>
+                            //   );
+                            //  }
                             if (leadIdEnq && leadIdEnq === item.lead_id) {
                               return (
                                 <Select.Option
@@ -1170,13 +1200,13 @@ export default function Add_Quotation() {
                                 </Select.Option>
                               );
                             }
-                       
+                            // return null;
                           })}
                       </SelectBox>
                     </Form.Item>
                   </div>
 
-                  <div className="col-xl-3 col-sm-6 mt-2">
+                  <div className="col-xl-6 col-sm-6 mt-2">
                     <label>Shipper</label>
                     <Form.Item
                       name="shipper"
@@ -1191,52 +1221,7 @@ export default function Add_Quotation() {
                       <InputType />
                     </Form.Item>
                   </div>
-
-                  {/* <div className="col-xl-3 col-sm-6 mt-2">
-                      <label> Origin Agent</label>
-                      <Form.Item
-                        name="OrginAgent"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please select a Type",
-                          },
-                        ]}
-                      >
-                        <SelectBox
-                          allowClear
-                          showSearch
-                          optionFilterProp="children"
-                        >
-                          <Select.Option value="A">Test</Select.Option>
-                          <Select.Option value="B">Demo</Select.Option>
-                        </SelectBox>
-                      </Form.Item>
-                    </div>
-
-                    <div className="col-xl-3 col-sm-6 mt-2">
-                      <label>Destination Agent</label>
-                      <Form.Item
-                        name="corgin"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please select a Type",
-                          },
-                        ]}
-                      >
-                        <SelectBox
-                          allowClear
-                          showSearch
-                          optionFilterProp="children"
-                        >
-                          <Select.Option value="A">Test</Select.Option>
-                          <Select.Option value="B">Demo</Select.Option>
-                        </SelectBox>
-                      </Form.Item>
-                    </div> */}
-
-                  <div className="col-xl-3 col-sm-6 mt-2">
+                  <div className="col-xl-6 col-sm-6 mt-2">
                     <label>Freight Type</label>
                     <Form.Item
                       name="freighttype"
@@ -1267,35 +1252,60 @@ export default function Add_Quotation() {
                       </SelectBox>
                     </Form.Item>
                   </div>
+                </div>
+                </div>
+               
+                <div className="col-md-6 col-12 ">
+                    <label>Add Attachments</label>
+                    <Form.Item className="mt-2" name="new">
+                      <FileUpload
+                        multiple
+                        filetype={"Accept only pdf and docs"}
+                        height={188}
+                        listType="picture"
+                        accept=".pdf,.docs,"
+                        // aceept=".jpeg,.jpg,.png"
+                        onPreview={handlePreview}
+                        beforeUpload={beforeUpload}
+                        // value={leadAttachment}
+                        // onChange={(e) => setLeadAttachment(e.target.value)}
+                        onChange={(file) => {
+                          console.log("Before upload", file.file);
+                          console.log(
+                            "Before upload file size",
+                            file.file.size
+                          );
+                          setFilenew(file.file.originFileObj);
 
-                  <div className="col-xl-3 col-sm-6 mt-2">
-                    <label>Cargo Type</label>
-                    <Form.Item
-                      name="cargotype"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please select a Cargo Type",
-                        },
-                      ]}
-                    >
-                      <SelectBox
-                        allowClear
-                        showSearch
-                        optionFilterProp="children"
-                      >
-                        {cargooptions &&
-                          cargooptions.length > 0 &&
-                          cargooptions.map((item, index) => {
-                            return (
-                              <Select.Option key={item.id} value={item.value}>
-                                {item.name}
-                              </Select.Option>
-                            );
-                          })}
-                      </SelectBox>
+                          // if (
+                          //   file.file.size > 1000 &&
+                          //   file.file.size < 500000
+                          // ) {
+                          //   // setLeadimg(file.file.originFileObj);
+                          //   // setFileSizeError(false);
+                          //   console.log(
+                          //     "file greater than 1 kb and less than 500 kb"
+                          //   );
+                          // } else {
+                          //   // setFileSizeError(true);
+                          //   console.log("hgrtryyryr");
+                          // }
+                        }}
+                      />
                     </Form.Item>
                   </div>
+            
+                 
+                 
+</div>
+</div>
+                 
+
+<div className="content-tabs-new row justify-content mt-4">
+<div className="row mt-3">
+                  <h5 className="lead_text">Transportation</h5>
+                </div>
+               
 
                   <div className="col-xl-3 col-sm-6 mt-2">
                     <label>Mode</label>
@@ -1322,7 +1332,6 @@ export default function Add_Quotation() {
                       </SelectBox>
                     </Form.Item>
                   </div>
-
                   <div className="col-xl-3 col-sm-6 mt-2">
                     <label> Origin</label>
                     <Form.Item
@@ -1418,14 +1427,19 @@ export default function Add_Quotation() {
                     </Form.Item>
                   </div>
 
+                  </div>
+                  <div className="content-tabs-new row justify-content mt-4">
+                  <div className="row mt-3">
+                  <h5 className="lead_text">Shipment Details</h5>
+                </div>
                   <div className="col-xl-3 col-sm-6 mt-2">
-                    <label>Terms</label>
+                    <label>Cargo Type</label>
                     <Form.Item
-                      name="terms"
+                      name="cargotype"
                       rules={[
                         {
                           required: true,
-                          message: "Please select Terms",
+                          message: "Please select a Cargo Type",
                         },
                       ]}
                     >
@@ -1434,15 +1448,12 @@ export default function Add_Quotation() {
                         showSearch
                         optionFilterProp="children"
                       >
-                        {allPaymentTerms &&
-                          allPaymentTerms.length > 0 &&
-                          allPaymentTerms.map((item, index) => {
+                        {cargooptions &&
+                          cargooptions.length > 0 &&
+                          cargooptions.map((item, index) => {
                             return (
-                              <Select.Option
-                                key={item.payment_term_id}
-                                value={item.payment_term_id}
-                              >
-                                {item.payment_term_name}
+                              <Select.Option key={item.id} value={item.value}>
+                                {item.name}
                               </Select.Option>
                             );
                           })}
@@ -1498,6 +1509,96 @@ export default function Add_Quotation() {
                       </SelectBox>
                     </Form.Item>
                   </div>
+                  <div className="col-xl-3 col-sm-6 mt-2">
+                    <label>Gross Weight</label>
+                    <Form.Item
+                      name="gweight"
+                      rules={[
+                        {
+                          required: true,
+                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                          message: "Please enter a Valid value",
+                        },
+                      ]}
+                    >
+                      <Input_Number
+                        className="text_right"
+                        // value={amount}
+                        // onChange={handleChange}
+                        align="right"
+                        // step={0.01}
+                        min={0}
+                        precision={2}
+                        controlls={false}
+                      />
+                    </Form.Item>
+                  </div>
+
+                  <div className="col-xl-3 col-sm-6 mt-2">
+                    <label>Chargeable Weight</label>
+                    <Form.Item
+                      name="weight"
+                      rules={[
+                        {
+                          required: true,
+                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                          message: "Please enter a Valid value",
+                        },
+                      ]}
+                    >
+                      <Input_Number
+                        className="text_right"
+                        // value={amount}
+                        // onChange={handleChange}
+                        align="right"
+                        // step={0.01}
+                        min={0}
+                        precision={2}
+                        controlls={false}
+                      />
+                    </Form.Item>
+                  </div>
+
+
+                    </div>
+                
+                    <div className="content-tabs-new row justify-content mt-4">
+                    <div className="row mt-3">
+                  <h5 className="lead_text">Payment Info</h5>
+                </div>
+                  <div className="col-xl-3 col-sm-6 mt-2">
+                    <label>Terms</label>
+                    <Form.Item
+                      name="terms"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please select Terms",
+                        },
+                      ]}
+                    >
+                      <SelectBox
+                        allowClear
+                        showSearch
+                        optionFilterProp="children"
+                      >
+                        {allPaymentTerms &&
+                          allPaymentTerms.length > 0 &&
+                          allPaymentTerms.map((item, index) => {
+                            return (
+                              <Select.Option
+                                key={item.payment_term_id}
+                                value={item.payment_term_id}
+                              >
+                                {item.payment_term_name}
+                              </Select.Option>
+                            );
+                          })}
+                      </SelectBox>
+                    </Form.Item>
+                  </div>
+
+                
 
                   <div className="col-xl-3 col-sm-6 mt-2">
                     <label>Currency</label>
@@ -1561,102 +1662,20 @@ export default function Add_Quotation() {
                       />
                     </Form.Item>
                   </div>
-                  <div className="col-xl-3 col-sm-6 mt-2">
-                    <label>Gross Weight</label>
-                    <Form.Item
-                      name="gweight"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid value",
-                        },
-                      ]}
-                    >
-                      <Input_Number
-                        className="text_right"
-                        // value={amount}
-                        // onChange={handleChange}
-                        align="right"
-                        // step={0.01}
-                        min={0}
-                        precision={2}
-                        controlls={false}
-                      />
-                    </Form.Item>
-                  </div>
-
-                  <div className="col-xl-3 col-sm-6 mt-2">
-                    <label>Chargeable Weight</label>
-                    <Form.Item
-                      name="weight"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid value",
-                        },
-                      ]}
-                    >
-                      <Input_Number
-                        className="text_right"
-                        // value={amount}
-                        // onChange={handleChange}
-                        align="right"
-                        // step={0.01}
-                        min={0}
-                        precision={2}
-                        controlls={false}
-                      />
-                    </Form.Item>
-                  </div>
-
-                  <div className="col-6 ">
-                    <label>Add Attachments</label>
-                    <Form.Item className="mt-2" name="new">
-                      <FileUpload
-                        multiple
-                        filetype={"Accept only pdf and docs"}
-                        height={130}
-                        listType="picture"
-                        accept=".pdf,.docs,"
-                        // aceept=".jpeg,.jpg,.png"
-                        onPreview={handlePreview}
-                        beforeUpload={beforeUpload}
-                        // value={leadAttachment}
-                        // onChange={(e) => setLeadAttachment(e.target.value)}
-                        onChange={(file) => {
-                          console.log("Before upload", file.file);
-                          console.log(
-                            "Before upload file size",
-                            file.file.size
-                          );
-                          setFilenew(file.file.originFileObj);
-
-                          // if (
-                          //   file.file.size > 1000 &&
-                          //   file.file.size < 500000
-                          // ) {
-                          //   // setLeadimg(file.file.originFileObj);
-                          //   // setFileSizeError(false);
-                          //   console.log(
-                          //     "file greater than 1 kb and less than 500 kb"
-                          //   );
-                          // } else {
-                          //   // setFileSizeError(true);
-                          //   console.log("hgrtryyryr");
-                          // }
-                        }}
-                      />
-                    </Form.Item>
-                  </div>
+               
+</div>
+                
                 </div>
               </div>
               {/* <div className="row justify-content-center">
              
               </div> */}
 
-              <div className="row">
+              <div className="row container mb-4 "  >
+               {/* <div className="content-tabs-tablenew row justify-content mt-4"> */}
+              <div className="row mt-3">
+                  <h5 className="lead_text">Task & Description</h5>
+                </div>
                 <div className="datatable">
                   <TableData
                     data={tableData}
@@ -1665,13 +1684,13 @@ export default function Add_Quotation() {
                     custom_table_css="table_qtn qtn_table_brdr"
                   />
                 </div>
-              </div>
+              
               <div className="d-flex justify-content-end mt-4 ms-5">
                 <div className="col-lg-2 col-sm-4 col-xs-3 d-flex justify-content-end mt-3 me-2">
                   <p style={{ fontWeight: 600 }}>Grand Total :</p>
                 </div>
 
-                <div className="col-lg-2 col-sm-2 col-xs-2">
+                <div className="col-lg-2 col-sm-2 col-xs-2 me-5">
                   <Form.Item name="grandtotal">
                     <Input_Number
                       className="text_right grandtotal"
@@ -1685,6 +1704,9 @@ export default function Add_Quotation() {
                   </Form.Item>
                 </div>
               </div>
+              {/* </div> */}
+              </div>
+
               <div className="d-flex justify-content-center my-4">
                 <div className="col-lg-1 ">
                   <Button type="submit" className="qtn_save" btnType="save">
@@ -1711,7 +1733,7 @@ export default function Add_Quotation() {
               onHide={() => setSuccessPopup(false)}
               success
             />
-          </div>
+          
         </div>
       </div>
     </>

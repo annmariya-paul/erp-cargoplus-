@@ -443,6 +443,7 @@ function OpportunityReport() {
               />
             </div>
             <div className="d-flex py-2 justify-content-center">
+              {generateTable &&(
               <MyPagination
                 total={parseInt(generateTable?.length)}
                 current={current}
@@ -453,6 +454,7 @@ function OpportunityReport() {
                   setPageSize(pageSize);
                 }}
               />
+              )}
             </div>
           </div>
 
@@ -644,6 +646,7 @@ function OpportunityReport() {
               />
             </div>
             <div className="d-flex py-2 justify-content-center">
+              {convertedTable &&(
               <MyPagination
                 total={parseInt(convertedTable?.length)}
                 current={current}
@@ -654,6 +657,7 @@ function OpportunityReport() {
                   setPageSize(pageSize);
                 }}
               />
+              )}
             </div>
           </div>
         </div>

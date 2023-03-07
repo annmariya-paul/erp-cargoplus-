@@ -191,33 +191,41 @@ function LeadEdit() {
         <div className="lead_container">
           <div className="row justify-content-md-center">
             <div className="bloc-tabs tabs-responsive">
-              <button
-                id="button-tabs"
-                className={toggleState === 1 ? "tabs active-tabs" : "tabs"}
-                onClick={() => toggleTab(1)}
-              >
-                Basic Info
-              </button>
-              <button
-                id="button-tabs"
-                className={toggleState === 2 ? "tabs active-tabs" : "tabs"}
-                onClick={() => toggleTab(2)}
-              >
-                Contacts
-              </button>
-              <button
-                id="button-tabs"
-                className={toggleState === 3 ? "tabs active-tabs" : "tabs"}
-                onClick={() => toggleTab(3)}
-              >
-                Address
-              </button>
-              <button
-                className={toggleState === 4 ? "tabs active-tabs" : "tabs"}
-                onClick={() => toggleTab(4)}
-              >
-                Location
-              </button>
+              <div className="col-sm-2">
+                <button
+                  id="button-tabs"
+                  className={toggleState === 1 ? "tabs active-tabs" : "tabs"}
+                  onClick={() => toggleTab(1)}
+                >
+                  Basic Info
+                </button>
+              </div>
+              <div className="col-sm-2">
+                <button
+                  id="button-tabs"
+                  className={toggleState === 2 ? "tabs active-tabs" : "tabs"}
+                  onClick={() => toggleTab(2)}
+                >
+                  Contacts
+                </button>
+              </div>
+              <div className="col-sm-2">
+                <button
+                  id="button-tabs"
+                  className={toggleState === 3 ? "tabs active-tabs" : "tabs"}
+                  onClick={() => toggleTab(3)}
+                >
+                  Address
+                </button>
+              </div>
+              <div className="col-sm-2">
+                <button
+                  className={toggleState === 4 ? "tabs active-tabs" : "tabs"}
+                  onClick={() => toggleTab(4)}
+                >
+                  Location
+                </button>
+              </div>
             </div>
 
             <div className="content-tabs">
@@ -418,12 +426,12 @@ function LeadEdit() {
                           },
                         ]}
                       >
-                      <InputType  
-                      value={leadcreditdays}
-                      onChange={(e)=>{
-                      setleadcreditdays(e.target.value)
-                      }}
-                      />
+                        <InputType
+                          value={leadcreditdays}
+                          onChange={(e) => {
+                            setleadcreditdays(e.target.value);
+                          }}
+                        />
                       </Form.Item>
                     </div>
                     {/* <div className="col-12 mt-3">
@@ -493,7 +501,7 @@ function LeadEdit() {
                       </Form.Item>
                     </div>
                     <div className="col-sm-4 pt-3 mt-3">
-                    <Form.Item name="leadAttachment">
+                      <Form.Item name="leadAttachment">
                         <FileUpload
                           multiple
                           filetype={"Accept only pdf and docs"}
@@ -558,22 +566,21 @@ function LeadEdit() {
                         </SelectBox>
                       </Form.Item>
                     </div>
-                     <div className=" d-flex justify-content-center gap-2 py-4">
-                    <div className=" ">
-                      <Button type="submit" btnType="save">
-                        Update
-                      </Button>
-                    </div>
-                    <div className=" ">
-                      <Button type="submit" btnType="save" 
-                      onClick={() => {
-                        handleCancel();
-                      }}
-                      >
-                        Cancel
-                      </Button>
-                    </div>
-                    </div>
+                    <div className=" d-flex justify-content-center gap-2 mt-4 pt-4">
+                        <Button type="submit" btnType="save">
+                          Update
+                        </Button>
+                        <Button
+                          as="input"
+                          type="reset"
+                          value="Reset"
+                          onClick={() => {
+                            handleCancel();
+                          }}
+                        >
+                          Cancel
+                        </Button>
+                  </div>
                   </div>
                 </Form>
                 <Custom_model

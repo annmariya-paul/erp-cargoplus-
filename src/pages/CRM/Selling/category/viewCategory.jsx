@@ -812,6 +812,8 @@ function Categorylist(props) {
                             overflow: "auto",
                           }}
                           treeData={CategoryTree}
+                         
+                          // disabled={}
                           placeholder="Please select"
                           treeDefaultExpandAll
                           onChange={(e) => onChange(e)}

@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../routes";
 import {
+  CRM_BASE_URL_FMS,
   CRM_BASE_URL_SELLING,
   GENERAL_SETTING_BASE_URL,
 } from "../../../api/bootapi";
@@ -24,13 +25,10 @@ export default function AddJobPayments () {
   const [successPopup, setSuccessPopup] = useState(false);
   const [currencyDefault,setCurrencyDefault] = useState();
   const [allCurrency, setAllCurrency] = useState();
+  const [jobCount,setJobCount] = useState();
 
   const navigate = useNavigate();
   const newDate = new Date();
-
-  const handleCancel = () => {
-    navigate(ROUTES.JOB_PAYMENTS);
-  };
 
   const CurrencyData = () => {
     PublicFetch.get(`${GENERAL_SETTING_BASE_URL}/currency`)
@@ -73,8 +71,23 @@ export default function AddJobPayments () {
       });
   };
 
+   const getAllJobs = () => {
+     PublicFetch.get(`${CRM_BASE_URL_FMS}/job?startIndex=0&noOfItems=10`)
+       .then((res) => {
+         if (res.data.success) {
+           setJobCount(res.data.data);
+         } else {
+           console.log("Failed to load data");
+         }
+       })
+       .catch((err) => {
+         console.log("Error", err);
+       });
+   };
+
    useEffect(() => {
      CurrencyData();
+     getAllJobs();
    }, []);
 
   return (
@@ -224,13 +237,13 @@ export default function AddJobPayments () {
                   </Form.Item>
                 </div>
                 <div className="col-12 d-flex justify-content-center mt-5 pt-4 gap-3 ">
-                  <Button className="save_button">Save</Button>{" "}
+                  <Button btnType="save" className="save_button">Save</Button>{" "}
                   <Button
                     as="input"
                     type="reset"
                     value="Reset"
                     onClick={() => {
-                      handleCancel();
+                      navigate(ROUTES.JOB_PAYMENTS);
                     }}
                   >
                     Cancel

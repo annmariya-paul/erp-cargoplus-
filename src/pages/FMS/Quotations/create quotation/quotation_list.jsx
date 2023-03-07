@@ -325,6 +325,7 @@ export default function Quotations(props) {
           </div>
          
           <div className="col-4 d-flex py-2 justify-content-center">
+            {totalquotation>0 &&(
             <MyPagination
               total={parseInt(totalquotation)}
               current={current}
@@ -339,6 +340,7 @@ export default function Quotations(props) {
                 // setCurrent(noofItems !== pageSize ? 0 : current);
               }}
             />
+            ) }
           </div>
           <div className="col-4 d-flex justify-content-end">
             <div className="col mb-2 px-4">

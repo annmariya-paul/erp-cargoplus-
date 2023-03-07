@@ -648,6 +648,7 @@ function Services() {
               </Select>
             </div>
             <div className=" col-4 d-flex justify-content-center">
+              {totalCount>0 && (
               <MyPagination
                 total={parseInt(totalCount)}
                 current={current}
@@ -659,6 +660,7 @@ function Services() {
                   setCurrent(current);
                 }}
               />
+              )}
             </div>
             <div className="col-4 d-flex justify-content-end">
               <Button btnType="add">
@@ -684,6 +686,7 @@ function Services() {
             />
           </div>
           <div className="d-flex py-2 justify-content-center">
+            {totalCount>0 && (
             <MyPagination
               total={parseInt(totalCount)}
               // current={current}
@@ -702,6 +705,7 @@ function Services() {
                 setCurrent(current);
               }}
             />
+            ) }
           </div>
         </div>
         {/* {section Two service Edit modal starts} */}

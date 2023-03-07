@@ -5,6 +5,7 @@ import moment from "moment";
 import { useNavigate, useParams } from "react-router-dom";
 import "./jobinvoice.scss"
 import InvoicePrint from "../../../../components/Invoice/InvoicePrint";
+import { camelize } from "../../../../utils/camelcaseconvert";
 function Jobinvoice(){
     const { id } = useParams();
     console.log("id :::::", id);
@@ -335,7 +336,7 @@ amount_in_words={
 <>
 {grandtotal && (
   <>
- { converter.toWords(grandtotal)}
+ {camelize(converter.toWords(grandtotal))}
   </>
 )}
 </>

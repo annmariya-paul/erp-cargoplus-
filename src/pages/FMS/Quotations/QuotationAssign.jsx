@@ -40,25 +40,36 @@ function QuotationAssign() {
         if (res.data.success) {
           console.log("scuccess_quotation", res.data.data);
           if (
-            res.data.data.fms_v1_enquiry_quotations &&
-            res.data.data.fms_v1_enquiry_quotations.length > 0
+            res.data.data?.quotation?.fms_v1_enquiry_quotations &&
+            res.data.data?.quotation?.fms_v1_enquiry_quotations.length > 0
           ) {
-            res.data.data.fms_v1_enquiry_quotations.forEach((item, index) => {
-              setOpportunity_id(item.enquiry_quotation_opportunity_id);
-              PublicFetch.get(
-                `${CRM_BASE_URL}/opportunity/${item.enquiry_quotation_opportunity_id}`
-              )
-                .then((res) => {
-                  console.log("Response opportunity", res);
-                  if (res.data.success) {
-                    console.log("Success opportunity", res.data.data);
-                    setAllAgents(res.data.data.assigned_employees);
-                  }
-                })
-                .catch((err) => {
-                  console.log("Error", err);
-                });
-            });
+            res.data.data?.quotation?.fms_v1_enquiry_quotations.forEach(
+              (item, index) => {
+                setOpportunity_id(item.enquiry_quotation_opportunity_id);
+                PublicFetch.get(
+                  `${CRM_BASE_URL}/opportunity/${item?.enquiry_quotation_opportunity_id}`
+                )
+                  .then((res) => {
+                    console.log("Response opportunity", res);
+                    if (res.data.success) {
+                      console.log("Success opportunity", res.data.data);
+                      let temp = [];
+                      res?.data?.data?.assigned_employees.forEach(
+                        (item, index) => {
+                          temp.push({
+                            employee_id: item?.agent_id,
+                            employee_name: item?.crm_v1_vendors?.vendor_name,
+                          });
+                        }
+                      );
+                      setAllAgents(temp);
+                    }
+                  })
+                  .catch((err) => {
+                    console.log("Error", err);
+                  });
+              }
+            );
           } else {
             PublicFetch.get(`${process.env.REACT_APP_BASE_URL}/agents`)
               .then((res) => {
@@ -70,7 +81,7 @@ function QuotationAssign() {
                     console.log("all employee who is agent", item);
                     tmp.push({
                       employee_id: item?.agent_id,
-                      employee_name: item.crm_v1_vendors.vendor_name,
+                      employee_name: item?.crm_v1_vendors?.vendor_name,
                     });
                   });
                   setAllAgents(tmp);
@@ -82,21 +93,25 @@ function QuotationAssign() {
               });
           }
           let tmparr = [];
-          res.data.data.fms_v1_quotation_agents.forEach((item, index) => {
-            tmparr.push({
-              employee_id: item.quotation_agent_agent_id,
-              quotation_agent_id: item.quotation_agent_id,
-              quotation_agent_quotation_id: item.quotation_agent_quotation_id,
-            });
-          });
+          res?.data?.data?.quotation?.fms_v1_quotation_agents?.forEach(
+            (item, index) => {
+              tmparr.push({
+                employee_id: item?.quotation_agent_agent_id,
+                quotation_agent_id: item.quotation_agent_id,
+                quotation_agent_quotation_id: item.quotation_agent_quotation_id,
+              });
+            }
+          );
 
           setAgentData(tmparr);
-          res.data.data.fms_v1_quotation_agents.forEach((item, index) => {
-            console.log("Qouatation agnet id", item.quotation_agent_agent_id);
-            addForm.setFieldsValue({
-              employees: item.quotation_agent_agent_id,
-            });
-          });
+          res.data.data?.quotation?.fms_v1_quotation_agents.forEach(
+            (item, index) => {
+              console.log("Qouatation agnet id", item.quotation_agent_agent_id);
+              addForm.setFieldsValue({
+                employees: item.quotation_agent_agent_id,
+              });
+            }
+          );
         }
       })
       .catch((err) => {

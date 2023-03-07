@@ -88,6 +88,7 @@ function Updatejob() {
             Uom: res.data.data.job_uom,
             job_currency: res.data.data.job_total_cost_curr,
             exchangerate: res.data.data.job_total_cost_exch,
+            creditdays: res.data.data.job_credit_days,
             job_total_exp_amountlx: res.data.data.job_total_exp_amountlx,
             grosswt: res.data.data.job_gross_wt,
             chargeablewt: res.data.data.job_chargeable_wt,
@@ -204,6 +205,33 @@ function Updatejob() {
         console.log(error);
       });
   };
+  const getCreditdays = (data) => {
+    console.log("data1011", data);
+    // const code = allLeadList?.filter((item) => {
+    //   if (item?.lead_id === data) {
+    //     b = item?.lead_id;
+
+    //   }
+    // });
+    // console.log("code", b);
+    // console.log(";;;;;;;;;", data);
+     PublicFetch.get(`${CRM_BASE_URL}/lead/${data}`)
+      .then((res) => {
+        if (res?.data?.success) {
+          console.log("Unique Lead Id data", res?.data?.data);
+          // setOneLeadData(res?.data?.data);
+          
+         
+        } else {
+          console.log("FAILED T LOAD DATA");
+        }
+    
+        editForm.setFieldValue("creditdays",  res?.data?.data.lead_credit_days);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
 
   const locationByMode = (data) => {
     PublicFetch.get(`${CRM_BASE_URL_FMS}/locations/type-location/${data}`)
@@ -253,6 +281,7 @@ function Updatejob() {
     formData.append("job_payment_terms", data.terms);
     formData.append("job_total_cost_curr", data.job_currency);
     formData.append("job_total_cost_exch", data.exchangerate);
+    formData.append("job_credit_days", data.creditdays);
     if (data.attachments) {
       formData.append("job_docs", data.attachments);
     }
@@ -386,6 +415,10 @@ function Updatejob() {
                         ]}
                       >
                         <SelectBox
+                         onChange={(e) => {
+                          // handleLeadId(e);
+                          getCreditdays(e);
+                        }}
                           disabled={disable}
                           allowClear
                           showSearch
@@ -838,6 +871,31 @@ function Updatejob() {
                           precision={2}
                           controlls={false}
                           disabled={disable}
+                        />
+                      </Form.Item>
+                    </div>
+                    <div className="col-xl-3 col-sm-6 mt-2">
+                      <label>Credit Days</label>
+                      <Form.Item
+                        name="creditdays"
+                        rules={[
+                          {
+                            required: true,
+                            // pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                            message: "Please enter credit days",
+                          },
+                        ]}
+                      >
+                        <InputType
+                          // className="text_right"
+                          // value={currencyRates}
+                          // onChange={handleChange}
+                          // align="right"
+                          // step={0.01}
+                          min={0}
+                          // precision={2}
+                          controlls={false}
+                          // disabled={true}
                         />
                       </Form.Item>
                     </div>

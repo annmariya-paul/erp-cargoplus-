@@ -288,15 +288,16 @@ export default function TaxType() {
             </Select>
           </div>
           <div className="col-4  d-flex align-items-center justify-content-center">
+            {taxTypes &&(
           <MyPagination
             total={parseInt(taxTypes?.length)}
             current={current}
             pageSize={numOfItems}
             onChange={(current, pageSize) => {
               setCurrent(current);
-            }}
-            
+            }} 
           />
+          )}
         </div>
           <div className="col-4 d-flex justify-content-end">
             <Button
@@ -319,6 +320,7 @@ export default function TaxType() {
           />
         </div>{" "}
         <div className="d-flex mt-4 justify-content-center">
+          {taxTypes &&(
           <MyPagination
             total={parseInt(taxTypes?.length)}
             current={current}
@@ -328,6 +330,7 @@ export default function TaxType() {
             }}
             
           />
+          ) }
         </div>
       </div>
 

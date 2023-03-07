@@ -18,6 +18,7 @@ function InvoiceView() {
   console.log("Id::::", id);
   const [addForm] = Form.useForm();
   const [jobData, setJobData] = useState();
+  console.log("jobdata",jobData);
   const [TaskExpense, setTaskexpense] = useState();
   const [currency, setCurrency] = useState();
   const [exchangerate, setExchangeRate] = useState();
@@ -357,6 +358,16 @@ function InvoiceView() {
                     <div className="col-7">
                       <p className="modal-view-data">
                         {jobData?.job_total_cost_exch}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="col-6 d-flex">
+                    <div className="col-4">Credit Days</div>
+                    <div className="col-1">:</div>
+                    {jobData?.crm_v1_leads?.lead_credit_days}
+                    <div className="col-7">
+                      <p className="modal-view-data">
+                       
                       </p>
                     </div>
                   </div>

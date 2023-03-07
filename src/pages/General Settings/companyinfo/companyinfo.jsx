@@ -190,6 +190,9 @@ function Companyinfo() {
     }
   };
 
+  const beforeUpload = (file, fileList) => {
+    
+  }
   // console.log("data of cmpny",cmpnydata)
   return (
     <div>
@@ -367,7 +370,7 @@ function Companyinfo() {
                                   listType="picture"
                                   accept=".docx,.jpg,.jpeg,.png"
                                   // onPreview={handlePreview}
-                                  beforeUpload={true}
+                                  beforeUpload={beforeUpload}
                                   onChange={(file) => {
                                     console.log("Before upload", file.file);
                                     console.log(
@@ -415,7 +418,7 @@ function Companyinfo() {
                                   listType="picture"
                                   accept=".docx,.jpg,.jpeg"
                                   // onPreview={handlePreview}
-                                  beforeUpload={true}
+                                  beforeUpload={beforeUpload}
                                   onChange={(file) => {
                                     console.log("Before upload", file.file);
                                     console.log(

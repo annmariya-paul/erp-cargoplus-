@@ -1067,23 +1067,13 @@ export default function Add_Quotation() {
                     >
                       <DatePicker
                         style={{ borderWidth: 0, marginTop: 10 }}
-                        // initialValues={ dayjs() }
+                       
                         defaultValue={moment(date)}
                         format={dateFormatList}
-                        // disabledDate={(d) => !d || d.isBefore(today)}
-
-                        // onChange={(e) => {
-                        //   console.log("date mmm", e);
-                        //   addForm.setFieldValue('qdate', e)
-                        //   setDate(e);
-                        // }}
-                        // onChange={(selectedDate,e) => {
-                        //   validateDate(selectedDate);
-                        //   setDate(e);
-                        // }}
+                      
                       />
 
-                      {/* {errornw && <div style={{ color: "red" }}>Please select a date</div>} */}
+                    
                     </Form.Item>
                   </div>
                   <div className="col-xl-3 col-sm-6 mt-2">
@@ -1113,16 +1103,11 @@ export default function Add_Quotation() {
                     <label>Enquiry No</label>
                     <Form.Item
                       name="eno"
-                      // rules={[
-                      //   {
-                      //     required: true,
-                      //     message: "Please select a Type",
-                      //   },
-                      // ]}
+                    
                     >
                       <SelectBox
                         onChange={(e) =>
-                          // handleFirstDropdownChange()
+                     
                           handleLeadIdEnq(e)
                         }
                         allowClear
@@ -1165,29 +1150,7 @@ export default function Add_Quotation() {
                         {allLeadList &&
                           allLeadList.length > 0 &&
                           allLeadList.map((item, index) => {
-                            // console.log("lead id ddd:",item.lead_id)
-
-                            //  if( leadIdEnq && leadIdEnq === leadId){
-
-                            //   return (
-                            //     <Select.Option
-                            //       key={item.lead_id}
-                            //       value={item.lead_id}
-                            //     >
-                            //       {item.lead_customer_name}
-                            //     </Select.Option>
-                            //   );
-
-                            //  }else{
-                            //   return (
-                            //     <Select.Option
-                            //       key={item.lead_id}
-                            //       value={item.lead_id}
-                            //     >
-                            //       {item.lead_customer_name}
-                            //     </Select.Option>
-                            //   );
-                            //  }
+                     
                             if (leadIdEnq && leadIdEnq === item.lead_id) {
                               return (
                                 <Select.Option
@@ -1207,7 +1170,7 @@ export default function Add_Quotation() {
                                 </Select.Option>
                               );
                             }
-                            // return null;
+                       
                           })}
                       </SelectBox>
                     </Form.Item>

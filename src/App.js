@@ -106,6 +106,13 @@ import ExpenseCategory from "./pages/Accounts/settings/Expense_Category/ExpenseC
 import Payment_mode from "./pages/Accounts/settings/payment_mode";
 import Add_purchase from "./pages/Accounts/settings/add_purchase";
 import Purchase from "./pages/Accounts/settings/purchase";
+
+import Bank from "./pages/Accounts/settings/BankAccount/bank";
+
+import JobPayments from "./pages/Accounts/JobPayments/job_payments";
+import AddJobPayments from "./pages/Accounts/JobPayments/add_job_payment";
+import EditJobPayment from "./pages/Accounts/JobPayments/edit_job_payments";
+import ViewJobPayment from "./pages/Accounts/JobPayments/view_job_payments";
 import Payments from "./pages/Accounts/Payments/Payments";
 
 function App() {
@@ -462,12 +469,7 @@ function App() {
             <Route path={ROUTES.PURCHASE} element={<ProtectedRoute />}>
               <Route index element={<Purchase />} />
             </Route>
-            <Route path={ROUTES.PAYMENTS} element={<ProtectedRoute />}>
-              <Route index element={<Payments />} />
-            </Route>
-            <Route path={ROUTES.ADD_PAYMENTS} element={<ProtectedRoute />}>
-              <Route index element={<AddPayments />} />
-            </Route>
+
             {/* </Route> */}
           </Route>
           <Route

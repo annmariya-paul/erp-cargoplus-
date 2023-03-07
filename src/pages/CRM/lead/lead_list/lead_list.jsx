@@ -477,20 +477,22 @@ export default function LeadList() {
             />
           </div>
           <div className="d-flex py-2 justify-content-center">
-            <MyPagination
-              total={parseInt(totalCount)}
-              current={current}
-              pageSize={noofItems}
-              // defaultPageSize={noofItems}
-              showSizeChanger={false}
-              onChange={(current, pageSize) => {
-                console.log("page index isss", pageSize);
-                setCurrent(current);
-                // setPageSize(pageSize);
-                // setNoofItems(pageSize);
-                // setCurrent(noofItems !== pageSize ? 0 : current);
-              }}
-            />
+            {totalCount > 0 && (
+              <MyPagination
+                total={parseInt(totalCount)}
+                current={current}
+                pageSize={noofItems}
+                // defaultPageSize={noofItems}
+                showSizeChanger={false}
+                onChange={(current, pageSize) => {
+                  console.log("page index isss", pageSize);
+                  setCurrent(current);
+                  // setPageSize(pageSize);
+                  // setNoofItems(pageSize);
+                  // setCurrent(noofItems !== pageSize ? 0 : current);
+                }}
+              />
+            )}
           </div>
 
           <Custom_model

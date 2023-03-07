@@ -9,12 +9,11 @@ import Input_Number from "../../../components/InputNumber/InputNumber";
 import SelectBox from "../../../components/Select Box/SelectBox";
 import PublicFetch from "../../../utils/PublicFetch";
 
-function CreateExpence() {
+function EditExpence() {
   const [addForm] = Form.useForm();
   const [employeeList, setEmployeeList] = useState();
   const [categoryList, setCategoryList] = useState();
   const [ischeck, setIsCheck] = useState(0);
-  const [amount, setamount] = useState();
 
   const allEmployees = () => {
     PublicFetch.get(`${CRM_BASE_URL_HRMS}/employees`)
@@ -176,25 +175,19 @@ function CreateExpence() {
                     <div className="col-xl-4 my-2">
                       <label>Amount</label>
                       <Form.Item name="daily_expense_amount">
-                        <Input_Number
-                          onChange={(value) => {
-                            setamount(value);
-                          }}
-                          min={0}
-                          precision={2}
-                        />
+                        <Input_Number />
                       </Form.Item>
                     </div>
                     <div className="col-xl-4 my-2">
                       <label>Tax Amount</label>
                       <Form.Item name="daily_expense_tax_amount">
-                        <Input_Number min={0} precision={2} />
+                        <Input_Number />
                       </Form.Item>
                     </div>
                     <div className="col-xl-4 my-2">
                       <label>Total Amount</label>
                       <Form.Item name="daily_expense_total_amount">
-                        <Input_Number min={0} precision={2} />
+                        <Input_Number />
                       </Form.Item>
                     </div>
                     <div className="col-12 my-2">
@@ -230,4 +223,4 @@ function CreateExpence() {
   );
 }
 
-export default CreateExpence;
+export default EditExpence;

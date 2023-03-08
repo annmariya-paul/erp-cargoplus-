@@ -814,13 +814,13 @@ function CreateJob() {
                       <label>Cargo Type</label>
                       <Form.Item
                         name="job_cargo_type"
-                        rules={[
-                          {
-                            required: true,
+                        // rules={[
+                        //   {
+                        //     required: true,
 
-                            message: "Please select a Valid cargotype",
-                          },
-                        ]}
+                        //     message: "Please select a Valid cargotype",
+                        //   },
+                        // ]}
                       >
                         <SelectBox
                           allowClear

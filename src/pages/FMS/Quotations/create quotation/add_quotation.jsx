@@ -1384,12 +1384,12 @@ export default function Add_Quotation() {
                       <label>Cargo Type</label>
                       <Form.Item
                         name="cargotype"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please select a Cargo Type",
-                          },
-                        ]}
+                        // rules={[
+                        //   {
+                        //     required: true,
+                        //     message: "Please select a Cargo Type",
+                        //   },
+                        // ]}
                       >
                         <SelectBox
                           allowClear

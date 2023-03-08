@@ -10,6 +10,9 @@ import CustomModel from "../../../../components/custom_modal/custom_model";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
 import InputType from "../../../../components/Input Type textbox/InputType";
 import SelectBox from "../../../../components/Select Box/SelectBox";
+import { Checkbox } from "antd";
+import { ACCOUNTS, CRM_BASE_URL_FMS } from "../../../../api/bootapi";
+import PublicFetch from "../../../../utils/PublicFetch";
 function Bank(){
 
     const [addForm] = Form.useForm();
@@ -23,6 +26,95 @@ function Bank(){
     const [vendorEditPopup, setVendorEditPopup] = useState(false);
     const [editForm] = Form.useForm();
     const [serialNo, setserialNo] = useState(1);
+    const [allbankdetails,setAllbankdetails] =useState("")
+
+    const [bankaccname,setbankaccname]= useState("")
+    const [bankaccno,setbankaccno]= useState("")
+    const [bankname,setbankname]= useState("")
+    const [bankbrnch,setbankbrnch]= useState("")
+    const [bankibanno,setbankibanno]= useState("")
+    const [defaultbank,setdefaultbank] =useState()
+
+    const [viewbankdetails, setBankdetails] = useState({
+      id: "",
+      viewbankaccname: "",
+      viewbankaccno: "",
+      viewbankname: "",
+      viewbankbrnch: "",
+      viewbankibano: "",
+     
+    });
+
+    const handleChecked = (e, key) => {
+      console.log("isChecked", e);
+      if (e.target.checked) {
+        console.log("suceccss checked", e.target.checked);
+        setdefaultbank(1);
+      }
+    };
+
+
+    const close_modal = (mShow, time) => {
+      if (!mShow) {
+        setTimeout(() => {
+          setSuccessPopup(false);
+        }, time);
+      }
+    };
+    
+    const createbankdetails = async () => {
+      try {
+        const addbankdetails = await PublicFetch.post(
+          `${ACCOUNTS}/bank`,
+          {
+            bank_account_name: bankaccname,
+            bank_account_number: bankaccno,
+            bank_name: bankname,
+            bank_branch:bankbrnch,
+            bank_iban_no:bankibanno,
+            bank_default:defaultbank
+          }
+        );
+        console.log("bankdetails added successfully", addbankdetails);
+        if (addbankdetails.data.success) {
+          setSuccessPopup(true);
+          getallbanks()
+          addForm.resetFields();
+          setModalvendor(false);
+          close_modal(successPopup, 1000);
+        } 
+        else if (addbankdetails.data.success === false) {
+          // alert(addcarrier.data.data);
+        }
+      } catch (err) {
+        console.log("err to add the bankdetails", err);
+      }
+    };
+
+    const getData = (current, pageSize) => {
+      return allbankdetails?.slice((current - 1) * pageSize, current * pageSize);
+    };
+  
+
+    const getallbanks = async () => {
+      try {
+        const allbanks = await PublicFetch.get(
+          `${ACCOUNTS}/bank`
+        );
+        console.log("getting all bank details", allbanks.data.data);
+        setAllbankdetails(allbanks.data.data)
+      
+      } catch (err) {
+        console.log("error to fetching  bank details", err);
+      }
+    };
+
+
+    useEffect(() => {
+      getallbanks();
+    }, []);
+  
+
 
     const columns = [
         {
@@ -34,7 +126,7 @@ function Bank(){
      
         {
           title: "NAME ",
-          dataIndex: "name",
+          dataIndex: "bank_account_name",
           key: "vendor_name",
           filteredValue: [searchedText],
           onFilter: (value, record) => {
@@ -209,8 +301,8 @@ function Bank(){
         <div className="datatable">
             
           <TableData
-            // data={getData(current, pageSize)}
-            data={data}
+            data={getData(current, pageSize)}
+            // data={data}
             columns={columns}
             custom_table_css="table_lead_list"
           />
@@ -247,6 +339,7 @@ function Bank(){
               onFinish={(data) => {
                 console.log("valuezzzzzzz", data);
                 // createvendor();
+                createbankdetails()
               }}
               onFinishFailed={(error) => {
                 console.log(error);
@@ -257,7 +350,7 @@ function Bank(){
                   <label> Name</label>
                   <div>
                     <Form.Item
-                      name="name"
+                      name="bnkaccname"
                       rules={[
                         {
                           required: true,
@@ -267,10 +360,10 @@ function Bank(){
                       ]}
                     >
                       <InputType
-                        // value={vendorname}
-                        // onChange={(e) => {
-                        //   setvendorname(e.target.value);
-                        // }}
+                        value={bankaccname}
+                        onChange={(e) => {
+                          setbankaccname(e.target.value);
+                        }}
                       />
                     </Form.Item>
                   </div>
@@ -290,10 +383,10 @@ function Bank(){
                       ]}
                     >
                     <InputType
-                        // value={vendorname}
-                        // onChange={(e) => {
-                        //   setvendorname(e.target.value);
-                        // }}
+                        value={bankname}
+                        onChange={(e) => {
+                          setbankname(e.target.value);
+                        }}
                       />
                     </Form.Item>
                   </div>
@@ -315,7 +408,12 @@ function Bank(){
                         },
                       ]}
                     >
-                      <InputType/>
+                      <InputType 
+                       value={bankbrnch}
+                       onChange={(e)=>{
+                        setbankbrnch(e.target.value)
+                       }}
+                      />
                     </Form.Item>
                   </div>
                 </div>
@@ -333,10 +431,10 @@ function Bank(){
                       ]}
                     >
                       <InputType
-                        // value={vendoremail}
-                        // onChange={(e) => {
-                        //   setvendoremail(e.target.value);
-                        // }}
+                        value={bankaccno}
+                        onChange={(e) => {
+                          setbankaccno(e.target.value);
+                        }}
                       />
                     </Form.Item>
                   </div>
@@ -370,16 +468,31 @@ function Bank(){
                       ]}
                     >
                       <InputType
-                        // value={vendorcontact}
-                        // onChange={(e) => {
-                        //   setvendorcontact(e.target.value);
-                        // }}
+                        value={bankibanno}
+                        onChange={(e) => {
+                          setbankibanno(e.target.value);
+                        }}
                       />
                     </Form.Item>
                   </div>
                 </div>
+                <div className="col-6 pt-3">
+                      <label>Default Bank</label>
+                      <div>
+                        <Form.Item
+                          name="currencyDefault"
+                        
+                        >
+                          <Checkbox
+                            // value={currencyDefault}
+                            onChange={handleChecked}
+                            checked={defaultbank === 1 ? true : false}
+                          ></Checkbox>
+                        </Form.Item>
+                      </div>
+                    </div>
                 </div>
-
+                   
              
 
               

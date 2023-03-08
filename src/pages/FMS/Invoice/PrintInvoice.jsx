@@ -6,6 +6,7 @@ import PublicFetch from "../../../utils/PublicFetch";
 import moment from "moment";
 import { camelize } from "../../../utils/camelcaseconvert";
 
+
 function PrintInvoice() {
   var converter = require("number-to-words");
 
@@ -209,7 +210,7 @@ function PrintInvoice() {
                     <td></td>
                     <td></td> */}
                     <td style={{ textAlign: "right" }}>
-                      {item.job_task_expense_cost_subtotalfx}
+                      {item.job_task_expense_cost_subtotalfx.toFixed(2)}
                     </td>
                   </tr>
                 );

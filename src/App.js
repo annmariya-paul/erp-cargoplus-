@@ -104,8 +104,11 @@ import ExpenseCategory from "./pages/Accounts/settings/Expense_Category/ExpenseC
 
 //Account
 import Payment_mode from "./pages/Accounts/settings/payment_mode";
-import Add_purchase from "./pages/Accounts/settings/add_purchase";
-import Purchase from "./pages/Accounts/settings/purchase";
+import Add_purchase from "./pages/Accounts/settings/Purchase/add_purchase";
+import Purchase from "./pages/Accounts/settings/Purchase/purchase";
+import View_purchase from "./pages/Accounts/settings/Purchase/view_purchase";
+import Edit_purchase from "./pages/Accounts/settings/Purchase/edit_purchase";
+import Print_purchase from "./pages/Accounts/settings/Purchase/print_purchase";
 
 function App() {
   return (
@@ -425,9 +428,18 @@ function App() {
             <Route path={ROUTES.ADD_PURCHASE} element={<ProtectedRoute />}>
               <Route index element={<Add_purchase />} />
             </Route>
+            <Route path={ROUTES.VIEW_PURCHASE} element={<ProtectedRoute />}>
+              <Route index element={<View_purchase/>} />
+            </Route>
+            <Route path={ROUTES.EDIT_PURCHASE} element={<ProtectedRoute />}>
+              <Route index element={<Edit_purchase/>}/>
+            </Route>
             <Route path={ROUTES.PURCHASE} element={<ProtectedRoute />}>
               <Route index element={<Purchase />} />
             </Route>
+            <Route path={ROUTES.PRINT_PURCHASE} element={<ProtectedRoute/>}>
+              <Route index element={<Print_purchase/>}/>
+              </Route>
 
             <Route path={ROUTES.INVOICE_VIEW_ID} element={<ProtectedRoute />}>
               <Route index element={<InvoiceView />} />

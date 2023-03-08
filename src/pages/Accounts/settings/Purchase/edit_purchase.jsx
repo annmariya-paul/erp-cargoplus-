@@ -1,0 +1,386 @@
+import React, { useState } from "react";
+import { Form, Input, Select, DatePicker, Checkbox } from "antd";
+import Button from "../../../../components/button/button";
+import FileUpload from "../../../../components/fileupload/fileUploader";
+import InputType from "../../../../components/Input Type textbox/InputType";
+import moment from "moment";
+import TextArea from "../../../../components/ InputType TextArea/TextArea";
+import SelectBox from "../../../../components/Select Box/SelectBox";
+import PublicFetch from "../../../../utils/PublicFetch";
+import { ACCOUNTS, CRM_BASE_URL_PURCHASING } from "../../../../api/bootapi";
+
+import { useNavigate } from "react-router-dom";
+
+import { ROUTES } from "../../../../routes";
+
+export default function Edit_purchase() {
+  const [editForm] = Form.useForm();
+  const navigate = useNavigate();
+
+  const newDate = new Date();
+  const newDate1 = new Date();
+  const [vendorid,setvendorid]=useState("")
+  const [allvendors, setAllVendors] = useState();
+  const [allpayments, setallpayments] = useState();
+  const [imgSizeError, setImgSizeError] = useState(false);
+
+
+  const [selectedDate, setSelectedDate] = useState();
+  const [selectedDatee, setSelectedDatee] = useState();
+
+  const [editpurchaseid,seteditpurchaseid]= useState("")
+
+  const [editpurchasebillno, seteditpurchasebillno] = useState("");
+  const [editpurchasedate, seteditpurchasedate] = useState("");
+  const [editpurchaseduedate, seteditpurchaseduedate] = useState("");
+  const [editpurchasepono, seteditpurchasepono] = useState("");
+  const [editpurchasestatus, seteditpurchasestatus] = useState("");
+  const [editpurchasetotalamount, seteditpurchasetotalamount] = useState("");
+  // const [editpurchasevendor, seteditpurchasevendor] = useState("");
+  const [editpurchasepaymentmode, seteditpurchasepaymentmode] = useState("");
+  const [editpurchasecreditdays, seteditpurchasecreditdays] = useState("");
+  const [editpurchasetaxable, seteditpurchasetaxable] = useState("");
+  const [editpurchasetaxno, seteditpurchasetaxno] = useState("");
+  const [editpurchaseremarks, seteditpurchaseremarks] = useState("");
+  const [editpurchaseattachments, seteditpurchaseattachments] = useState("");
+  const [editpurchaseamount, seteditpurchaseamount] = useState("");
+  const [editpurchasetaxamount, seteditpurchasetaxamount] = useState("");
+  const [formSubmitted, setFormSubmitted] = useState(false);
+  const [modalShow, setModalShow] = useState(false);
+
+  const [img, setImg] = useState([]);
+
+  const [successModal, setSuccessModal] = useState();
+
+  const close_modal = (mShow, time) => {
+    if (!mShow) {
+      setTimeout(() => {
+        setSuccessModal(false);
+        navigate(ROUTES.PURCHASE);
+      }, time);
+    }
+  };
+
+  const handleChecked = (e, key) => {
+    console.log("isChecked", e);
+    if (e.target.checked) {
+      console.log("suceccss checked", e.target.checked);
+      seteditpurchasetaxable(1);
+    }
+  };
+
+
+  const handleupdate = () => {
+    setFormSubmitted(true);
+    const formData = new FormData();
+    formData.append("purchase_po_no", editpurchasepono);
+    formData.append("purchase_vendor_id", vendorid);
+    formData.append("purchase_amount", editpurchaseamount);
+    formData.append("purchase_purchase_date", editpurchasedate);
+    formData.append("purchase_tax_no", editpurchasetaxno);
+    formData.append("purchase_bill_no", editpurchasebillno);
+    formData.append("purchase_tax_amount", editpurchasetaxamount);
+    formData.append("purchase_payment_mode", editpurchasepaymentmode);
+    formData.append("purchase_credit_days", editpurchasecreditdays);
+    formData.append("purchase_remarks", editpurchaseremarks);
+    formData.append("purchase_taxable", editpurchasetaxable);
+    formData.append("attachments", editpurchaseattachments?.file?.originFileObj);
+    formData.append("purchase_total_amount", editpurchasetotalamount);
+    formData.append("purchase_due_date", editpurchaseduedate);
+  
+
+    PublicFetch.patch(
+      `${ACCOUNTS}/purchase/${editpurchaseid}`, formData, {
+      "Content-Type": "Multipart/form-Data",
+    })
+      .then(function (response) {
+        console.log("hellooooooo", response);
+
+        if (response.data.success) {
+          console.log("hello", response.data.data);
+          setModalShow(true);
+          close_modal(modalShow, 1200);
+        } else {
+          console.log("Failed while adding data");
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  return (
+    <>
+      <div className="container-fluid">
+        <div
+          style={{ borderRadius: "8px" }}
+          className="card border-0 content-tabs px-2"
+        >
+          <div className="container my-3">
+            <div>
+              <h5 className="lead_text my-2">Edit Purchase</h5>
+            </div>
+            <Form
+              form={editForm}
+              onFinish={(values) => {
+                console.log("values iss", values);
+                handleupdate();
+              }}
+              onFinishFailed={(error) => {
+                console.log(error);
+              }}
+            >
+              <div className="row my-4">
+                <div className="col-4">
+                  <label>Po No</label>
+                  <Form.Item name="po_no">
+                    <InputType
+                      className="input_type_style w-100"
+                      value={editpurchasepono}
+                      onChange={(e) => {
+                        seteditpurchasepono(e.target.value);
+                        console.log("editpurchasepono",editpurchasepono);
+                        //   setErrormsg("");
+                      }}
+                    />
+                  </Form.Item>
+                </div>
+
+                <div className="col-4">
+                  <label>Purchase Date</label>
+                  <Form.Item name="date" className="mt-2">
+                    <DatePicker
+                      format={"DD-MM-YYYY"}
+                      defaultValue={moment(newDate)}
+                      value={editpurchasedate}
+                      onChange={(e) => {
+                        seteditpurchasedate(e);
+                      }}
+                    />
+                  </Form.Item>
+                </div>
+                <div className="col-4">
+                  <label>Due Date</label>
+                  <Form.Item name="datee" className="mt-2">
+                    <DatePicker
+                      format={"DD-MM-YYYY"}
+                      defaultValue={moment(newDate)}
+                      value={editpurchaseduedate}
+                      onChange={(e) => {
+                        seteditpurchaseduedate(e);
+                      }}
+                    />
+                  </Form.Item>
+                </div>
+                <div className="col-4">
+                  <label>Vendor</label>
+                  <Form.Item className="mt-2" name="vendor">
+                    <SelectBox 
+                     showSearch={true}
+                     allowClear
+                     value={vendorid}
+                     optionFilterProp="children"
+                     onChange={(e) => {
+                      setvendorid(e);
+                     }}
+                    >
+                      {allvendors &&
+                        allvendors.length > 0 &&
+                        allvendors.map((item, index) => {
+                          console.log("itm",item)
+                          return(
+                            <Select.Option
+                            key={item.vendor_id}
+                            id={item.vendor_id}
+                            value={item.vendor_id}
+                          >
+                            {item.vendor_name}
+                          </Select.Option>
+                          )
+                         ;
+                        })}
+                    </SelectBox>
+                  </Form.Item>
+                </div>
+                <div className="col-4">
+                  <label>Payment Mode</label>
+                  <Form.Item className="mt-2" name="payment_mode">
+                    <SelectBox
+                    showSearch={true}
+                    allowClear
+                    value={editpurchasepaymentmode}
+                    optionFilterProp="children"
+                    onChange={(e) => {
+                     seteditpurchasepaymentmode(e);
+                    }}
+                    >
+                    {allpayments &&
+                        allpayments.length > 0 &&
+                        allpayments.map((item, index) => {
+                          return(
+                            <Select.Option
+                            key={item.pay_mode_id}
+                            id={item.pay_mode_id}
+                            value={item.pay_mode_id}
+                          >
+                            {item.pay_mode_name}
+                          </Select.Option>
+                          )
+                         ;
+                        })}
+                    </SelectBox>
+                  </Form.Item>
+                </div>
+                <div className="col-4">
+                  <label>Credit Days</label>
+                  <Form.Item name="bill_no">
+                    <InputType
+                      value={editpurchasecreditdays}
+                      onChange={(e) => {
+                        seteditpurchasecreditdays(e.target.value);
+                      }}
+                    />
+                  </Form.Item>
+                </div>
+                <div className="col-4">
+                  <label>Taxable</label>
+                  <Form.Item name="bill_no">
+                  <Checkbox
+                       onChange={handleChecked}
+                       checked={editpurchasetaxable === 1 ? true : false}
+                        // onChange={(e) => {
+                        //   handleChecked(e);
+                        // }}
+                      ></Checkbox>
+                  </Form.Item>
+                </div>
+                <div className="col-4">
+                  <label>Tax No</label>
+                  <Form.Item name="bill_no">
+                    <InputType
+                      value={editpurchasetaxno}
+                      onChange={(e) => {
+                        seteditpurchasetaxno(e.target.value);
+                      }}
+                    />
+                  </Form.Item>
+                </div>
+                <div className="col-4">
+                  <label>Bill No</label>
+                  <Form.Item name="bill_no">
+                    <InputType
+                      value={editpurchasebillno}
+                      onChange={(e) => {
+                        seteditpurchasebillno(e.target.value);
+                      }}
+                    />
+                  </Form.Item>
+                </div>
+                <div className="col-4">
+                  <label> Amount</label>
+                  <Form.Item name="amount">
+                    <InputType
+                      value={editpurchaseamount}
+                      onChange={(e) => {
+                        seteditpurchaseamount(e.target.value);
+                      }}
+                    />
+                  </Form.Item>
+                </div>
+                <div className="col-4">
+                  <label>Tax Amount</label>
+                  <Form.Item name="bill_no">
+                    <InputType
+                      value={editpurchasetaxamount}
+                      onChange={(e) => {
+                        seteditpurchasetaxamount(e.target.value);
+                      }}
+                    />
+                  </Form.Item>
+                </div>
+                <div className="col-4">
+                  <label>Total Amount</label>
+                  <Form.Item name="bill_no">
+                    <InputType
+                      value={editpurchasetotalamount}
+                      onChange={(e) => {
+                        seteditpurchasetotalamount(e.target.value);
+                      }}
+                    />
+                  </Form.Item>
+                </div>
+                <div className="col-4">
+                <label>Status</label>
+                <Form.Item name="status">
+                  <InputType
+                    value={editpurchasestatus}
+                    onChange={(e) => {
+                      seteditpurchasestatus(e.target.value);
+                    }}
+                  />
+                </Form.Item>
+              </div>
+                <div className="col-4">
+                  <label>Remarks</label>
+                  <Form.Item name="bill_no">
+                    <TextArea
+                      value={editpurchaseremarks}
+                      onChange={(e) => {
+                        seteditpurchaseremarks(e.target.value);
+                      }}
+                    />
+                  </Form.Item>
+                </div>
+                <div className="col-4">
+                  <label>Attachments</label>
+                  <Form.Item name="editpurchaseattachments" className="mt-2">
+                    <FileUpload
+                      name="editpurchaseattachments"
+                      value={editpurchaseattachments}
+                    
+                      multiple
+                      listType="picture"
+                      accept=".png,.jpg,.jpeg"
+                      height={100}
+                      // onPreview={handlePreview}
+                      beforeUpload={false}
+                      onChange={(file) => {
+                        console.log("Before upload", file.file);
+                        console.log("Before upload file size", file.file.size);
+
+                        if (file.file.size > 1000 && file.file.size < 500000) {
+                          setImg(file.file.originFileObj);
+                          setImgSizeError(false);
+                          console.log(
+                            "Image must be greater than 1 kb and less than 500 kb"
+                          );
+                        } else {
+                          console.log("failed beacuse of large size");
+                          setImgSizeError(true);
+                        }
+                      }}
+                    />
+                  </Form.Item>
+                  {imgSizeError ? (
+                    <div>
+                      <label style={{ color: "red" }}>
+                        Please Select Image Size under 500kb
+                      </label>
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                </div>
+               
+
+                <div className="col-12 d-flex justify-content-center mt-5">
+                  <Button className="save_button">Save</Button>
+                </div>
+              </div>
+            </Form>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}

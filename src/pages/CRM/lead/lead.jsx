@@ -53,9 +53,7 @@ function Lead({}) {
   const [previewTitle, setPreviewTitle] = useState("");
   const [leadimg, setLeadimg] = useState([]);
   const [messageApi, contextHolder] = message.useMessage();
-
   const [leadcreditdays, setLeadcreditdays] = useState();
-
   const [uniqueCode, setuniqueCode] = useState();
   const [addForm] = Form.useForm();
 
@@ -145,7 +143,7 @@ function Lead({}) {
   };
 
   const options = [
-    {
+   {
       value: "L",
       label: "Lead",
     },

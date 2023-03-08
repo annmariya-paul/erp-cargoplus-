@@ -814,13 +814,13 @@ function CreateJob() {
                       <label>Cargo Type</label>
                       <Form.Item
                         name="job_cargo_type"
-                        rules={[
-                          {
-                            required: true,
+                        // rules={[
+                        //   {
+                        //     required: true,
 
-                            message: "Please select a Valid cargotype",
-                          },
-                        ]}
+                        //     message: "Please select a Valid cargotype",
+                        //   },
+                        // ]}
                       >
                         <SelectBox
                           allowClear
@@ -1087,7 +1087,7 @@ function CreateJob() {
                     <div className="row mt-3">
                       <h5 className="lead_text">Attachments</h5>
                     </div>
-                    <div className="col-xl-6 col-sm-12 mt-2">
+                    <div className="col-xl-8 col-sm-12 mt-2">
                       <Form.Item className="mt-2" name="new">
                         <FileUpload
                           multiple

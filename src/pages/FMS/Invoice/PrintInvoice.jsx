@@ -81,7 +81,7 @@ function PrintInvoice() {
         invoice_details1={
           <>
             <tr className="invoice_header">
-              <td>Invoice Date </td>
+              <td>Invoice Date</td>
               <td>:</td>
               <td style={{ fontWeight: 600 }}>
                 {moment(alldata?.invoice_date).format("DD-MM-YYYY")}
@@ -188,8 +188,8 @@ function PrintInvoice() {
         invoice_table_header={
           <>
             <tr className="invoice_header">
-              <th>#</th>
-              <th>Task & description</th>
+              <th className="th_center">#</th>
+              <th className="tsk_exp">Task & description</th>
               {/* <th>Tax Type</th>
               <th>Cost</th>
               <th>Tax amount</th> */}
@@ -204,8 +204,10 @@ function PrintInvoice() {
               tabledata.map((item, index) => {
                 return (
                   <tr className="invoice_header">
-                    <td>{index + 1}</td>
-                    <td>{item?.job_task_expense_task_name}</td>
+                    <td align="center">{index + 1}</td>
+                    <td className="tsk_exp">
+                      {item?.job_task_expense_task_name}
+                    </td>
                     {/* <td></td>
                     <td></td>
                     <td></td> */}

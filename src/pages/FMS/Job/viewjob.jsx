@@ -109,19 +109,24 @@ export default function ViewJob() {
         console.log("response of job", res);
         if (res.data.success) {
           console.log("Success of job", res.data.data);
+          setAllJobs(res?.data?.data);
+
           let total = 0;
           let newdatas = [];
-          res.data.data.fms_v1_quotation_jobs.forEach((item, index) => {
-            newdatas.push(item.fms_v1_quotation.quotation_no);
+          res?.data?.data?.fms_v1_quotation_jobs?.forEach((item, index) => {
+            newdatas.push(item?.fms_v1_quotation.quotation_no);
             setQtnno(newdatas);
             let servdata = [];
             res.data.data.fms_v1_job_task_expenses.forEach((item, index) => {
               servdata.push({
                 quotation_details_service_id: item.crm_v1_services.service_name,
-                quotation_details_cost: item.job_task_expense_cost_amountfx,
+                quotation_details_cost:
+                  item.job_task_expense_cost_amountfx.toFixed(2),
                 quotation_details_tax_type: item.fms_v1_tax_types.tax_type_name,
-                quotation_details_tax_amount: item.job_task_expense_cost_taxfx,
-                quotation_details_total: item.job_task_expense_cost_subtotalfx,
+                quotation_details_tax_amount:
+                  item.job_task_expense_cost_taxfx.toFixed(2),
+                quotation_details_total:
+                  item.job_task_expense_cost_subtotalfx.toFixed(2),
               });
               setTax(servdata);
               total = Number.parseFloat(total);
@@ -210,7 +215,6 @@ export default function ViewJob() {
             job_docs: res.data.data.job_docs,
           };
           console.log("datas", temp);
-          setAllJobs(temp);
           setInvoice_Status(res?.data?.data?.job_invoice_status);
         }
       })
@@ -329,7 +333,7 @@ export default function ViewJob() {
                     <div className="col-1">:</div>
 
                     <div className="col-7">
-                      <p className="modal-view-data">{alljobs?.job_no}</p>
+                      <p className="modal-view-data">{alljobs?.job_number}</p>
                     </div>
                   </div>
 
@@ -338,17 +342,19 @@ export default function ViewJob() {
                     <div className="col-1">:</div>
 
                     <div className="col-7">
-                      <p className="modal-view-data">{alljobs?.job_date1}</p>
+                      <p className="modal-view-data">
+                        {moment(alljobs?.job_date).format("DD-MM-YYYY")}
+                      </p>
                     </div>
                   </div>
-               
+
                   <div className="col-xl-4 col-sm-12 d-flex">
                     <div className="col-4 boldhd">Freight type</div>
                     <div className="col-1">:</div>
 
                     <div className="col-7">
                       <p className="modal-view-data">
-                        {alljobs?.job_freight_type1}
+                        {alljobs?.fms_v1_freight_types?.freight_type_name}
                       </p>
                     </div>
                   </div>
@@ -366,11 +372,10 @@ export default function ViewJob() {
 
                     <div className="col-7">
                       <p className="modal-view-data">
-                        {alljobs?.job_consignee1}
+                        {alljobs?.crm_v1_leads?.lead_customer_name}
                       </p>
                     </div>
                   </div>
-               
 
                   <div className="col-xl-4 col-sm-12 d-flex">
                     <div className="col-4 boldhd">Shipper</div>
@@ -380,8 +385,6 @@ export default function ViewJob() {
                       <p className="modal-view-data">{alljobs?.job_shipper}</p>
                     </div>
                   </div>
-
-                
                 </div>
               </div>
             </div>
@@ -408,7 +411,11 @@ export default function ViewJob() {
 
                     <div className="col-8">
                       <p className="modal-view-data">
-                        {alljobs?.job_origin_id1}
+                        {
+                          alljobs
+                            ?.fms_v1_locations_fms_v1_jobs_job_origin_idTofms_v1_locations
+                            ?.location_name
+                        }
                       </p>
                     </div>
                   </div>
@@ -419,7 +426,11 @@ export default function ViewJob() {
 
                     <div className="col-8">
                       <p className="modal-view-data">
-                        {alljobs?.job_destination_id1}
+                        {
+                          alljobs
+                            ?.fms_v1_locations_fms_v1_jobs_job_destination_idTofms_v1_locations
+                            ?.location_name
+                        }
                       </p>
                     </div>
                   </div>
@@ -429,7 +440,9 @@ export default function ViewJob() {
                     <div className="col-1">:</div>
 
                     <div className="col-8">
-                      <p className="modal-view-data">{alljobs?.job_carrier1}</p>
+                      <p className="modal-view-data">
+                        {alljobs?.fms_v1_carrier?.carrier_name}
+                      </p>
                     </div>
                   </div>
 
@@ -478,7 +491,9 @@ export default function ViewJob() {
                     <div className="col-1">:</div>
 
                     <div className="col-8">
-                      <p className="modal-view-data">{alljobs?.job_uom1}</p>
+                      <p className="modal-view-data">
+                        {alljobs?.crm_v1_units?.unit_name}
+                      </p>
                     </div>
                   </div>
 
@@ -517,7 +532,7 @@ export default function ViewJob() {
 
                     <div className="col-8">
                       <p className="modal-view-data">
-                        {alljobs?.job_payment_terms1}
+                        {alljobs?.fms_v1_payment_terms?.payment_term_name}
                       </p>
                     </div>
                   </div>
@@ -528,7 +543,7 @@ export default function ViewJob() {
 
                     <div className="col-8">
                       <p className="modal-view-data">
-                        {alljobs?.job_currency1}
+                        {alljobs?.generalsettings_v1_currency?.currency_name}
                       </p>
                     </div>
                   </div>
@@ -538,7 +553,7 @@ export default function ViewJob() {
 
                     <div className="col-8">
                       <p className="modal-view-data">
-                        {alljobs?.job_exchange_rate}
+                        {alljobs?.job_total_cost_exch}
                       </p>
                     </div>
                   </div>
@@ -568,9 +583,9 @@ export default function ViewJob() {
                       <p className="modal-view-data">{alljobs?.job_docs}</p>
                     </div>
                   </div>
-                  <br/>
-                  <br/>
-                  <br/>
+                  <br />
+                  <br />
+                  <br />
                 </div>
               </div>
             </div>
@@ -592,10 +607,15 @@ export default function ViewJob() {
                       onChange={onChange}
                       expandIconPosition={"end"}
                     >
-                      <Panel  header="TASK DETAILS" key="1">
-                        <div >
+                      <Panel header="TASK DETAILS" key="1">
+                        <div>
                           {" "}
-                          <TableData columns={progress} data={tax} bordered   custom_table_css="table_job_list"/>
+                          <TableData
+                            columns={progress}
+                            data={tax}
+                            bordered
+                            custom_table_css="table_job_list"
+                          />
                         </div>
                         <div className="d-flex justify-content-end  gap-3">
                           <div className="">

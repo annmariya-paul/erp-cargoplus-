@@ -351,7 +351,7 @@ function Category() {
                 console.log(error);
               }}
             >
-              <div className="row px-4 pt-4">
+              <div className="row px-3 pt-4">
                 <div>
                   <h5 className="lead_text">Add Category</h5>
                 </div>
@@ -473,7 +473,7 @@ function Category() {
                     <FileUpload
                       multiple
                       listType="picture"
-                      // height={130}
+                      height={100}
                       accept=".png,.jpg,.jpeg"
                       // onPreview={handlePreview}
                       beforeUpload={beforeUpload}

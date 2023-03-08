@@ -5,6 +5,7 @@ import moment from "moment";
 import { useNavigate, useParams } from "react-router-dom";
 import "./jobinvoice.scss"
 import InvoicePrint from "../../../../components/Invoice/InvoicePrint";
+import { camelize } from "../../../../utils/camelcaseconvert";
 function Jobinvoice(){
     const { id } = useParams();
     console.log("id :::::", id);
@@ -50,7 +51,7 @@ function Jobinvoice(){
                   setTax(servdata);
                 });
         
-                setGrandTotal(item.fms_v1_quotation.quotation_grand_total);
+                setGrandTotal(item.fms_v1_quotation.quotation_grand_total.toFixed(2));
               });
               let temp = "";
             
@@ -67,7 +68,7 @@ function Jobinvoice(){
                 // job_validity1: validity,
                 job_date: res.data.data.job_date,
                 job_date1: date,
-                job_exchange_rate: res.data.data.job_exchange_rate,
+                job_exchange_rate: res.data.data.job_total_cost_exch,
                 job_grand_total: res.data.data.job_grand_total,
                 job_gross_wt: res.data.data.job_gross_wt,
                 job_chargeable_wt: res.data.data.job_chargeable_wt,
@@ -113,6 +114,7 @@ function Jobinvoice(){
               
               console.log("datas", temp);
               setAllJobs(temp);
+              close_modal(1200) 
               // close_modal(1200)
               // window.print()
             }
@@ -192,485 +194,192 @@ function Jobinvoice(){
       };
     
 
-      useEffect(() => {
+      // useEffect(() => {
 
-        close_modal(1200) 
-        // handlePrint()
+      //   close_modal(1200) 
+      //   // handlePrint()
 
-      }, []);
+      // }, []);
 
 console.log("all jobs", alljobs)
 
-    return(
-        <>
+    return (
+      <>
+        <InvoicePrint
+          invoice_no
+          billto
+          Invoice_type="JOB"
+          invoice_number={alljobs?.job_no}
+          invoice_details1={
+            <>
+              <tr className="p-2 ">
+                <td>Job No </td>
+                <td>: </td>
+                <td className="quotation_p_name">{alljobs?.job_no}</td>
+              </tr>
+              <tr className="p-2">
+                <td>Job Date </td>
+                <td>: </td>
+                <td className="quotation_p_name">{alljobs?.job_date1}</td>
+              </tr>
+              <tr className="p-2">
+                <td>Quotation No </td>
+                <td>: </td>
+                <td className="quotation_p_name">{qtnno}</td>
+              </tr>
 
-
-<InvoicePrint
-invoice_no
-Invoice_type="JOB" 
-invoice_number={alljobs?.job_no}
-
-invoice_details1={ <>
-  <tr className="p-2 ">
- <td>Job No </td>
- <td>: </td>
- <td className="quotation_p_name" >{alljobs?.job_no}</td>
- </tr>
- <tr className="p-2">
- <td>Job Date </td>
- <td>: </td>
- <td className="quotation_p_name">{alljobs?.job_date1}</td>
- </tr>
- <tr className="p-2">
- <td>Quotation No </td>
- <td>: </td>
- <td className="quotation_p_name">{qtnno}</td>
- </tr>
-
-
- <tr className="p-2 ">
- <td>Freight type </td>
- <td>: </td>
- <td className="quotation_p_name">{alljobs?.job_freight_type1}</td>
- </tr>
- <tr className="p-2">
- <td>Payment Terms </td>
- <td>: </td>
- <td className="quotation_p_name"> {alljobs?.job_payment_terms1}</td>
- </tr>
- <tr className="p-2">
- <td>No of Pieces </td>
- <td>: </td>
- <td className="quotation_p_name"> {alljobs?.job_no_of_pieces}</td>
- </tr>
- <tr className="p-2">
- <td>Chargeable wt </td>
- <td>: </td>
- <td className="quotation_p_name">{alljobs?.job_chargeable_wt}</td>
- </tr>
- <tr className="p-2">
- <td>Gross wt </td>
- <td>: </td>
- <td className="quotation_p_name">{alljobs?.job_gross_wt}</td>
- </tr>
-
-</> }
-
-invoice_details2={
-  <>
-   <tr className="p-2 ">
- <td>Shipper </td>
- <td>: </td>
- <td className="quotation_p_name">{alljobs?.job_shipper}</td>
- </tr>
- <tr className="p-2">
- <td>Consignee </td>
- <td>: </td>
- <td className="quotation_p_name"> {alljobs?.job_consignee1}</td>
- </tr>
- <tr className="p-2">
- <td>Origin </td>
- <td>: </td>
- <td className="quotation_p_name"> {alljobs?.job_origin_id1}</td>
- </tr>
- <tr className="p-2">
- <td>Destination </td>
- <td>: </td>
- <td className="quotation_p_name"> {alljobs?.job_destination_id1}</td>
- </tr>
- <tr className="p-2">
- <td>Cargo Type </td>
- <td>: </td>
- <td className="quotation_p_name">  {alljobs?.job_cargo_type}</td>
- </tr>
- <tr className="p-2">
- <td>Currency </td>
- <td>: </td>
- <td className="quotation_p_name"> {alljobs?.job_currency}</td>
- </tr>
- <tr className="p-2">
- <td>Exchange Rate </td>
- <td>: </td>
- <td className="quotation_p_name">{alljobs?.job_exchange_rate}</td>
- </tr>
- <tr className="p-2">
- <td>UOM </td>
- <td>: </td>
- <td className="quotation_p_name"> {alljobs?.job_uom1}</td>
- </tr>
-
-  </>
-}
-
-invoice_table_header={
-   <>
-  <th scope="col"className="font_weight_qt border_right" >#</th>
-  <th scope="col" className="font_weight_qt border_right task_width text_align_words">TASKS</th>
-  <th scope="col" className="font_weight_qt  border_right text_align_number">COST</th>
-  <th scope="col" className="font_weight_qt border_right text_align_words">TAX TYPE</th>
-  <th scope="col" className="font_weight_qt border_right text_align_number">TAX AMOUNT</th>
-  <th scope="col" className="font_weight_qt text_align_number">TOTAL AMOUNT</th>
-  </>
-}
-invoice_table_data={
-  <>
-    {tax && tax.map((itm,indx)=> (
- 
-      <tr>
-        <td  className="border_right">{indx+1} </td>
-        <td className="border_right text_align_words">{itm.quotation_details_service_id} </td>
-        <td className="border_right text_align_number">{itm.quotation_details_cost} </td>
-        <td className="border_right text_align_words">{itm.quotation_details_tax_type} </td>
-        <td className="border_right text_align_number">{itm.quotation_details_tax_amount} </td>
-        <td className="text_align_number">{itm.quotation_details_total} </td>
-      </tr>
-
-
-  )) }
-  </>
-}
-amount_in_words={ 
-<>
-{grandtotal && (
-  <>
- { converter.toWords(grandtotal)}
-  </>
-)}
-</>
-}
-sub_total={grandtotal}
-total={grandtotal}
-/>
-
-
-{/* <div className=" print-page container">
-<div className="row ">
-
-<table className="quotation_border px-2">
-<thead>     
-<div className="d-flex justify-content-start align-items-center gap-3 mt-4 m-0 p-0 border-bottom">
-
-<div className="">
-     <img src={`${process.env.REACT_APP_BASE_URL}/${companylogo}`}
-      height={"200px"}
-      width={"190px"}
-      className="imgquotation"
-      />
-</div>
-
-  <div className="">
-  <h5 className="headcolorquot ">{companyname} </h5>
-    <div className="">
-    <label>{companyaddress} </label>
-    </div>
-    <div>
-    <label>{companycountry} </label>
-    </div>
-    <div>
-    <label>{companyphone} </label>
-    </div>
-    <div>
-    <label>{companyemail}</label>
-    </div>
-   
-  </div>
-</div>
-</thead>  
-
-
-<div className=" row mt-3 p-2">
-          <div className="col-6 d-flex">
-            <div className="col-4">Job No</div>
-            <div className="col-1">:</div>
-
-            <div className="col-7">
-              <p className="modal-view-data quotation_p_name">{alljobs?.job_no}</p>
-            </div>
-          </div>
-
-          <div className="col-6 d-flex">
-            <div className="col-4">Job Date</div>
-            <div className="col-1">:</div>
-
-            <div className="col-7">
-              <p className="modal-view-data quotation_p_name">{alljobs?.job_date1}</p>
-            </div>
-          </div>
-          <div className="col-6 d-flex">
-            <div className="col-4">Quotation No</div>
-            <div className="col-1">:</div>
-
-            <div className="col-7">
-              <p className="modal-view-data quotation_p_name">{qtnno} </p>
-            </div>
-          </div>
-        
-
-          <div className="col-6 d-flex">
-            <div className="col-4">Consignee</div>
-            <div className="col-1">:</div>
-
-            <div className="col-7">
-              <p className="modal-view-data quotation_p_name">
-                {alljobs?.job_consignee1}
-              </p>
-            </div>
-          </div>
-
-          <div className="col-6 d-flex">
-            <div className="col-4">Shipper</div>
-            <div className="col-1">:</div>
-
-            <div className="col-7">
-              <p className="modal-view-data  quotation_p_name">
-                {alljobs?.job_shipper}
-              </p>
-            </div>
-          </div>
-
-        
-
-          <div className="col-6 d-flex">
-            <div className="col-4">Freight type</div>
-            <div className="col-1">:</div>
-
-            <div className="col-7">
-              <p className="modal-view-data quotation_p_name">
-                {alljobs?.job_freight_type1}
-              </p>
-            </div>
-          </div>
-
-          <div className="col-6 d-flex">
-            <div className="col-4">Cargo Type</div>
-            <div className="col-1">:</div>
-
-            <div className="col-7">
-              <p className="modal-view-data quotation_p_name">
-                {alljobs?.job_cargo_type}
-              </p>
-            </div>
-          </div>
-        
-           <div className="col-6 d-flex">
-            <div className="col-4">AWB/BL No</div>
-            <div className="col-1">:</div>
-
-            <div className="col-7">
-              <p className="modal-view-data  quotation_p_name">
-                {alljobs?.job_awb_bl_no}
-              </p>
-            </div>
-          </div>
-
-          <div className="col-6 d-flex">
-            <div className="col-4">Mode</div>
-            <div className="col-1">:</div>
-
-            <div className="col-7">
-              <p className="modal-view-data  quotation_p_name">{alljobs?.job_mode}</p>
-            </div>
-          </div>
-
-          <div className="col-6 d-flex">
-            <div className="col-4">Origin</div>
-            <div className="col-1">:</div>
-
-            <div className="col-7">
-              <p className="modal-view-data quotation_p_name">
-                {alljobs?.job_origin_id1}
-              </p>
-            </div>
-          </div>
-
-          <div className="col-6 d-flex">
-            <div className="col-4">Destination</div>
-            <div className="col-1">:</div>
-
-            <div className="col-7">
-              <p className="modal-view-data quotation_p_name">
-                {alljobs?.job_destination_id1}
-              </p>
-            </div>
-          </div>
-
-          <div className="col-6 d-flex">
-            <div className="col-4">Carrier</div>
-            <div className="col-1">:</div>
-
-            <div className="col-7">
-              <p className="modal-view-data quotation_p_name">
-                {alljobs?.job_carrier1}
-              </p>
-            </div>
-          </div>
-
-        
-
-          <div className="col-6 d-flex">
-            <div className="col-4">Payment Terms</div>
-            <div className="col-1">:</div>
-
-            <div className="col-7">
-              <p className="modal-view-data  quotation_p_name">
-                {alljobs?.job_payment_terms1}
-              </p>
-            </div>
-          </div>
-
-          <div className="col-6 d-flex">
-            <div className="col-4">No of pieces </div>
-            <div className="col-1">:</div>
-
-            <div className="col-7">
-              <p className="modal-view-data  quotation_p_name">
-                {alljobs?.job_no_of_pieces}
-              </p>
-            </div>
-          </div>
-
-          <div className="col-6 d-flex">
-            <div className="col-4">UOM</div>
-            <div className="col-1">:</div>
-
-            <div className="col-7">
-              <p className="modal-view-data  quotation_p_name">{alljobs?.job_uom1}</p>
-            </div>
-          </div>
-
-          <div className="col-6 d-flex">
-            <div className="col-4">Gross wt </div>
-            <div className="col-1">:</div>
-
-            <div className="col-7">
-              <p className="modal-view-data quotation_p_name">
-                {alljobs?.job_gross_wt}
-              </p>
-            </div>
-          </div>
-
-          <div className="col-6 d-flex">
-            <div className="col-4">Chargeable wt </div>
-            <div className="col-1">:</div>
-
-            <div className="col-7">
-              <p className="modal-view-data quotation_p_name">
-                {alljobs?.job_chargeable_wt}
-              </p>
-            </div>
-          </div>
-
-          
-          <div className="col-6 d-flex">
-            <div className="col-4">Exchange Rate </div>
-            <div className="col-1">:</div>
-
-            <div className="col-7">
-              <p className="modal-view-data quotation_p_name">
-                {alljobs?.job_exchange_rate}
-              </p>
-            </div>
-          </div>
-        
-
-          
-        </div>
-        <div className="row m-0 p-0 quotation_border_bottom">
-  <p className="font_weight_qt">Bill To</p>
-</div>
-<div className="quotation_border_bottom">
-  <h6  className="quotation_p_name p-1" >France & Middle East</h6>
-</div>
-
-<div className="p-0 m-0">
-
-
-{tax && (
-
-<table class="table   p-0 m-0">
-  <thead className="">
-    <tr className="tr_bgcolor">
-      <th scope="col"className="font_weight_qt border_right" >#</th>
-      <th scope="col" className="font_weight_qt border_right task_width text_align_words">TASKS</th>
-      <th scope="col" className="font_weight_qt  border_right text_align_number">COST</th>
-      <th scope="col" className="font_weight_qt border_right text_align_words">TAX TYPE</th>
-      <th scope="col" className="font_weight_qt border_right text_align_number">TAX AMOUNT</th>
-      <th scope="col" className="font_weight_qt text_align_number">TOTAL AMOUNT</th>
-    </tr>
-  </thead>
-  <tbody>
-  {tax && tax.map((itm,indx)=> (
-  //  console.log("quott",itm)
-
-      <tr>
-        <th scope="row"  className="border_right">{indx+1} </th>
-        <th className="border_right text_align_words">{itm.quotation_details_service_id} </th>
-        <th className="border_right text_align_number">{itm.quotation_details_cost} </th>
-        <th className="border_right text_align_words">{itm.quotation_details_tax_type} </th>
-        <th className="border_right text_align_number">{itm.quotation_details_tax_amount} </th>
-        <th className="text_align_number">{itm.quotation_details_total} </th>
-      </tr>
-
-    
-   
-  )) }
-   </tbody>
-</table>
-)  }
-</div>
-{ tax && (
-<div className="row p-1 mt-2">
-<div className="col-6">
-<p> Total in Words</p>
-</div>
-<div className="col-6  ">
-  <div className="row">
-    <div className="col-4  ">
-      
-    </div>
-    <div className="col-4  ">
-    
-    </div>
-    <div className="col-4 ">
-    
-    </div>
-  </div>
-</div>
-</div>
- )}
- 
- { grandtotal&& (
-<div className="row p-1">
-<div className="col-6">
-  {
-    grandtotal &&
-<p className="font_weight_qt" >{converter.toWords(grandtotal)} </p>
-  }
-</div>
-<div className="col-6  ">
-  <div className="row">
-    <div className="col-4  ">
-      
-    </div>
-    <div className="col-4  ">
-     <p className="quotation_p_name">Total</p>
-    </div>
-    <div className="col-4 ">
-    <p className="text_align_number d-flex justify-content-end" > 
-   
-    &nbsp; 
-    {grandtotal} </p>
-    </div>
-  </div>
-
-</div>
-</div>
-)}
-</table>  
-</div>
-
-</div> */}
-        </>
-    )
+              <tr className="p-2 ">
+                <td>Freight type </td>
+                <td>: </td>
+                <td className="quotation_p_name">
+                  {alljobs?.job_freight_type1}
+                </td>
+              </tr>
+              <tr className="p-2">
+                <td>Payment Terms </td>
+                <td>: </td>
+                <td className="quotation_p_name">
+                  {" "}
+                  {alljobs?.job_payment_terms1}
+                </td>
+              </tr>
+              <tr className="p-2">
+                <td>No of Pieces </td>
+                <td>: </td>
+                <td className="quotation_p_name">
+                  {" "}
+                  {alljobs?.job_no_of_pieces}
+                </td>
+              </tr>
+              <tr className="p-2">
+                <td>Chargeable wt </td>
+                <td>: </td>
+                <td className="quotation_p_name">
+                  {alljobs?.job_chargeable_wt}
+                </td>
+              </tr>
+              <tr className="p-2">
+                <td>Gross wt </td>
+                <td>: </td>
+                <td className="quotation_p_name">{alljobs?.job_gross_wt}</td>
+              </tr>
+            </>
+          }
+          invoice_details2={
+            <>
+              <tr className="p-2 ">
+                <td>Shipper </td>
+                <td>: </td>
+                <td className="quotation_p_name">{alljobs?.job_shipper}</td>
+              </tr>
+              <tr className="p-2">
+                <td>Consignee </td>
+                <td>: </td>
+                <td className="quotation_p_name"> {alljobs?.job_consignee1}</td>
+              </tr>
+              <tr className="p-2">
+                <td>Origin </td>
+                <td>: </td>
+                <td className="quotation_p_name"> {alljobs?.job_origin_id1}</td>
+              </tr>
+              <tr className="p-2">
+                <td>Destination </td>
+                <td>: </td>
+                <td className="quotation_p_name">
+                  {" "}
+                  {alljobs?.job_destination_id1}
+                </td>
+              </tr>
+              <tr className="p-2">
+                <td>Cargo Type </td>
+                <td>: </td>
+                <td className="quotation_p_name"> {alljobs?.job_cargo_type}</td>
+              </tr>
+              <tr className="p-2">
+                <td>Currency </td>
+                <td>: </td>
+                <td className="quotation_p_name"> {alljobs?.job_currency1}</td>
+              </tr>
+              <tr className="p-2">
+                <td>Exchange Rate </td>
+                <td>: </td>
+                <td className="quotation_p_name">
+                  {alljobs?.job_exchange_rate}
+                </td>
+              </tr>
+              <tr className="p-2">
+                <td>UOM </td>
+                <td>: </td>
+                <td className="quotation_p_name"> {alljobs?.job_uom1}</td>
+              </tr>
+            </>
+          }
+          invoice_table_header={
+            <>
+              <th scope="col" className="font_weight_qt border_right">
+                #
+              </th>
+              <th
+                scope="col"
+                className="font_weight_qt border_right task_width text_align_words"
+              >
+                TASKS
+              </th>
+              <th
+                scope="col"
+                className="font_weight_qt  border_right text_align_number"
+              >
+                COST
+              </th>
+              <th
+                scope="col"
+                className="font_weight_qt border_right text_align_words"
+              >
+                TAX TYPE
+              </th>
+              <th
+                scope="col"
+                className="font_weight_qt border_right text_align_number"
+              >
+                TAX AMOUNT
+              </th>
+              <th scope="col" className="font_weight_qt text_align_number">
+                TOTAL AMOUNT
+              </th>
+            </>
+          }
+          invoice_table_data={
+            <>
+              {tax &&
+                tax.map((itm, indx) => (
+                  <tr>
+                    <td className="border_right">{indx + 1} </td>
+                    <td className="border_right text_align_words">
+                      {itm.quotation_details_service_id}{" "}
+                    </td>
+                    <td className="border_right text_align_number">
+                      {itm.quotation_details_cost.toFixed(2)}{" "}
+                    </td>
+                    <td className="border_right text_align_words">
+                      {itm.quotation_details_tax_type}{" "}
+                    </td>
+                    <td className="border_right text_align_number">
+                      {itm.quotation_details_tax_amount.toFixed(2)}
+                    </td>
+                    <td className="text_align_number">
+                      {itm.quotation_details_total.toFixed(2)}
+                    </td>
+                  </tr>
+                ))}
+            </>
+          }
+          amount_in_words={
+            <>{grandtotal && <>{camelize(converter.toWords(grandtotal))}</>}</>
+          }
+          sub_total={grandtotal}
+          total={grandtotal}
+        />
+      </>
+    );
 }
 export default Jobinvoice

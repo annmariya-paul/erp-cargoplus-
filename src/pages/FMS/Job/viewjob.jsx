@@ -171,7 +171,7 @@ export default function ViewJob() {
             job_date: res.data.data.job_date,
             job_date1: date,
             job_exchange_rate: res.data.data.job_total_cost_exch,
-            // job_grand_total: res.data.data.job_grand_total,
+            job_credit_days: res.data.data.job_credit_days,
             job_gross_wt: res.data.data.job_gross_wt,
             job_chargeable_wt: res.data.data.job_chargeable_wt,
             job_carrier: res.data.data.job_carrier,
@@ -246,67 +246,69 @@ export default function ViewJob() {
     <>
       <div className=" container-fluid view_quotation  p-3 px-4">
         <div className="row">
-          <div className="col-4">
+          <div className="col-xl-4 col-lg-4 col-md-4 col-sm-12">
             <h5 className="lead_text">View Job</h5>
           </div>
-          <div className="col-8 d-flex justify-content-end mt-2">
-            <div className="col-2">
-              <Button
-                btnType="add_borderless"
-                className="edit_button"
-                // onClick={handlePrint}
-                onClick={() => {
-                  // navigate(`${ROUTES.JOB_INVOICE}/${id}`);
-                  window.open(
-                    `http://localhost:3000/job_invoice/${id}`,
-                    `_blank`
-                  );
-                }}
-              >
-                Print
-              </Button>
-            </div>
-            <div className="col-2 ">
-              <Button
-                btnType="add_borderless"
-                className="edit_button"
-                onClick={() => {
-                  // handleviewtoedit();
-                  navigate(`${ROUTES.EDIT_JOB}/${id}`);
-                }}
-              >
-                Edit
-                <FiEdit />
-              </Button>
-            </div>
-            <div className="col-2 ">
-              {invoice_status == 1 ? (
+          <div className="col-xl-8 col-lg-8 col-md-8 col-sm-12  mt-2">
+            <div className="row justify-content-end">
+              <div className="col-xl-2 col-lg-2 col-md-2 col-sm-12 my-2">
                 <Button
-                  btnType="save"
-                  className="edit_button rounded"
+                  btnType="add_borderless"
+                  className="edit_button"
+                  // onClick={handlePrint}
                   onClick={() => {
-                    // handleviewtoedit();
-                    navigate(`${ROUTES.INVOICE_PREVIEW}/${id}`);
+                    // navigate(`${ROUTES.JOB_INVOICE}/${id}`);
+                    window.open(
+                      `http://localhost:3000/job_invoice/${id}`,
+                      `_blank`
+                    );
                   }}
                 >
-                  Regenerate Invoice
-                  {/* <FiEdit /> */}
+                  Print
                 </Button>
-              ) : (
+              </div>
+              <div className="col-xl-2 col-lg-2 col-md-3 col-sm-12 my-2">
                 <Button
-                  btnType="save"
-                  className="edit_button rounded"
+                  btnType="add_borderless"
+                  className="edit_button"
                   onClick={() => {
                     // handleviewtoedit();
-                    navigate(`${ROUTES.INVOICE_PREVIEW}/${id}`);
+                    navigate(`${ROUTES.UPDATEJOB}/${id}`);
                   }}
                 >
-                  Generate Invoice
-                  {/* <FiEdit /> */}
+                  Edit
+                  <FiEdit />
                 </Button>
-              )}
+              </div>
+              <div className="col-xl-4 col-lg-4 col-md-7 col-sm-12 my-2">
+                {invoice_status == 1 ? (
+                  <Button
+                    btnType="save"
+                    className="edit_button rounded"
+                    onClick={() => {
+                      // handleviewtoedit();
+                      navigate(`${ROUTES.INVOICE_PREVIEW}/${id}`);
+                    }}
+                  >
+                    Regenerate Invoice
+                    {/* <FiEdit /> */}
+                  </Button>
+                ) : (
+                  <Button
+                    btnType="save"
+                    className="edit_button rounded"
+                    onClick={() => {
+                      // handleviewtoedit();
+                      navigate(`${ROUTES.INVOICE_PREVIEW}/${id}`);
+                    }}
+                  >
+                    Generate Invoice
+                    {/* <FiEdit /> */}
+                  </Button>
+                )}
+              </div>
             </div>
-            <div className="col-2"></div>
+            {/* <div className="col-1"></div> */}
           </div>
         </div>
         <div className=" row mt-3">
@@ -484,6 +486,14 @@ export default function ViewJob() {
 
             <div className="col-7">
               <p className="modal-view-data">{alljobs?.job_docs}</p>
+            </div>
+          </div>
+          <div className="col-6 d-flex">
+            <div className="col-4 boldhd">Credit Days</div>
+            <div className="col-1">:</div>
+
+            <div className="col-7">
+              <p className="modal-view-data">{alljobs?.job_credit_days}</p>
             </div>
           </div>
 

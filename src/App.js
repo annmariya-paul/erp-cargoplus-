@@ -110,6 +110,13 @@ import View_purchase from "./pages/Accounts/settings/Purchase/view_purchase";
 import Edit_purchase from "./pages/Accounts/settings/Purchase/edit_purchase";
 import Print_purchase from "./pages/Accounts/settings/Purchase/print_purchase";
 
+import Bank from "./pages/Accounts/settings/BankAccount/bank";
+
+import JobPayments from "./pages/Accounts/JobPayments/job_payments";
+import AddJobPayments from "./pages/Accounts/JobPayments/add_job_payment";
+import EditJobPayment from "./pages/Accounts/JobPayments/edit_job_payments";
+import ViewJobPayment from "./pages/Accounts/JobPayments/view_job_payments";
+
 function App() {
   return (
     <div className="App">
@@ -465,6 +472,39 @@ function App() {
             {/* ######## ACCOUNTS ######## */}
             <Route path={ROUTES.DAILY_EXPENSE} element={<ProtectedRoute />}>
               <Route index element={<DailyExpence />} />
+            </Route>
+            <Route path={ROUTES.CREATE_EXPENSE} element={<ProtectedRoute />}>
+              <Route index element={<CreateExpence />} />
+            </Route>
+            <Route path={ROUTES.EXPENSE_CATEGORY} element={<ProtectedRoute />}>
+              <Route index element={<ExpenseCategory />} />
+            </Route>
+
+            <Route path={ROUTES.PAYMEMENT_MODE} element={<ProtectedRoute />}>
+              <Route index element={<Payment_mode />} />
+            </Route>
+
+            <Route path={ROUTES.ADD_PURCHASE} element={<ProtectedRoute />}>
+              <Route index element={<Add_purchase />} />
+            </Route>
+            <Route path={ROUTES.PURCHASE} element={<ProtectedRoute />}>
+              <Route index element={<Purchase />} />
+            </Route>
+
+            <Route path={ROUTES.BANK_DETAILS} element={<ProtectedRoute />}>
+              <Route index element={<Bank />} />
+            </Route>
+            <Route path={ROUTES.JOB_PAYMENTS} element={<ProtectedRoute />}>
+              <Route index element={<JobPayments />} />
+            </Route>
+            <Route path={ROUTES.ADD_JOBPAYMENT} element={<ProtectedRoute />}>
+              <Route index element={<AddJobPayments />} />
+            </Route>
+            <Route path={ROUTES.EDIT_JOBPAYMENT} element={<ProtectedRoute />}>
+              <Route index element={<EditJobPayment />} />
+            </Route>
+            <Route path={ROUTES.VIEW_JOBPAYMENT} element={<ProtectedRoute />}>
+              <Route index element={<ViewJobPayment />} />
             </Route>
 
             {/* </Route> */}

@@ -167,6 +167,7 @@ export default function SelectCountry() {
             </Select>
           </div>
           <div className=" col-4 d-flex align-items-center justify-content-center">
+            {getCountries && (
             <MyPagination
               total={parseInt(getCountries?.length)}
               current={current}
@@ -177,8 +178,9 @@ export default function SelectCountry() {
                 setPageSize(pageSize);
               }}
             />
+            )}
           </div>
-          <div className="col-4  d-flex justify-content-end">
+          <div className="col-4 d-flex justify-content-end">
             <Button
               onClick={() => setmodalAddCountry(true)}
               className="add_opportunity"
@@ -196,6 +198,7 @@ export default function SelectCountry() {
           />
         </div>
         <div className="d-flex py-2 justify-content-center">
+          {getCountries && (
           <MyPagination
             total={parseInt(getCountries?.length)}
             current={current}
@@ -206,6 +209,7 @@ export default function SelectCountry() {
               setPageSize(pageSize);
             }}
           />
+          )}
         </div>
       </div>
       <CustomModel

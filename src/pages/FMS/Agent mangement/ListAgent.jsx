@@ -20,6 +20,7 @@ import CheckUnique from "../../../check Unique/CheckUnique";
 import { FaTrash } from "react-icons/fa";
 import {
   CRM_BASE_URL_HRMS,
+  CRM_BASE_URL_PURCHASING,
   GENERAL_SETTING_BASE_URL,
 } from "../../../api/bootapi";
 import { useNavigate } from "react-router-dom";
@@ -49,7 +50,7 @@ function ListAgent() {
   const [uniqueEditCode, setUniqueEditCode] = useState(false);
   // const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
   const [addForm] = Form.useForm();
-  const [successPopup, setSuccessPopup] = useState();
+  const [successPopup, setSuccessPopup] = useState(false);
   const [FrightEditPopup, setFrightEditPopup] = useState(false);
   const [allempname, setAllempname] = useState();
   const [uniqueName, setUniqueName] = useState();
@@ -68,6 +69,7 @@ function ListAgent() {
   const [editcommision, seteditcommision] = useState("");
   const [fright_id, setFright_id] = useState();
   const [employee_idd, setEmployee_Idd] = useState();
+  const [agentId, setAgentId] = useState();
   console.log("fright id in state", fright_id);
   const [editForm] = Form.useForm();
 
@@ -107,7 +109,7 @@ function ListAgent() {
     if (!mShow) {
       setTimeout(() => {
         setSuccessPopup(false);
-        navigate(ROUTES.LISTAGENT);
+        // navigate(ROUTES.LISTAGENT);
       }, time);
     }
   };
@@ -138,24 +140,25 @@ function ListAgent() {
   // console.log("emp id ", editempid);
 
   const getAllEmployee = () => {
-    PublicFetch.get(`${CRM_BASE_URL_HRMS}/employees`)
+    PublicFetch.get(`${CRM_BASE_URL_PURCHASING}/vendors/agents`)
       .then((res) => {
-        console.log("all employeessss", res);
-        console.log("all emp types aree", res.data.data);
+        console.log("all venders", res);
+        console.log("all venders types aree", res.data.data);
+
         let arry = [];
-        res.data.data.map((item, indx) => {
-          console.log("all jifvn", item);
-          console.log(
-            "all emp agentmap",
-            item.hrms_v1_employment_types.employment_type_name
-          );
-          arry.push({
-            emptype_name: item.hrms_v1_employment_types.employment_type_name,
-            emp_agent_name: item.employee_name,
-            emp_agent_id: item.employee_id,
-          });
-        });
-        setAllempname(arry);
+        // res.data.data.map((item, indx) => {
+        //   console.log("all jifvn", item);
+        //   console.log(
+        //     "all emp agentmap",
+        //     item.hrms_v1_employment_types.employment_type_name
+        //   );
+        //   arry.push({
+        //     emptype_name: item.hrms_v1_employment_types.employment_type_name,
+        //     emp_agent_name: item.employee_name,
+        //     emp_agent_id: item.employee_id,
+        //   });
+        // });
+        setAllempname(res?.data?.data);
         // setAllempname(res.data.data)
 
         // if (res.data.success) {
@@ -233,15 +236,16 @@ function ListAgent() {
 
   const frightEdit = (e) => {
     console.log("Fright edit", e);
+    setAgentId(e?.agent_id);
     setinputCountry(e.agent_country);
     setinputcommision(e.agent_commission_details);
-    setinpiutId(e.agent_id);
-    setEmployee_Idd(e.agent_id);
+    setinpiutId(e.agent_vendor_id);
+    setEmployee_Idd(e.agent_vendor_id);
 
     editForm.setFieldsValue({
-      inpiutId: e.agent_id,
+      inpiutId: e.agent_vendor_id,
       // inputName:e.agent_emp_name,
-      inputCountry: e.agent_country,
+      country: e.agent_country,
       inputcommision: e.agent_commission_details,
     });
     setFrightEditPopup(true);
@@ -252,13 +256,14 @@ function ListAgent() {
     const formData = new FormData();
 
     let data = {
-      agent_emp_id: inpiutId,
+      agent_vendor_id: parseInt(inpiutId),
       agent_country: inputCountry,
       agent_commission_details: inputcommision,
     };
+    let idss = parseInt(agentId);
 
     PublicFetch.patch(
-      `${process.env.REACT_APP_BASE_URL}/agents/${inpiutId}`,
+      `${process.env.REACT_APP_BASE_URL}/agents/${agentId}`,
       data
     )
       .then((res) => {
@@ -267,7 +272,7 @@ function ListAgent() {
           console.log("successDataa", res.data.data);
           getagents();
           setSuccessPopup(true);
-          close_modal(successPopup, 1000);
+          close_modal(successPopup, 1200);
           setFrightEditPopup(false);
         } else {
           // setErrormsg(res.data.data);
@@ -284,7 +289,7 @@ function ListAgent() {
       const updating = await PublicFetch.patch(
         `${process.env.REACT_APP_BASE_URL}/agents/${fright_id}`,
         {
-          agent_emp_id: employeeagentid,
+          agent_vendor_id: employeeagentid,
           agent_country: editcountrynme,
           agent_commission_details: editcommision,
         }
@@ -310,18 +315,20 @@ function ListAgent() {
       const allagent = await PublicFetch.get(
         `${process.env.REACT_APP_BASE_URL}/agents`
       );
-      console.log("all agentss are ::", allagent?.data?.data);
-      let array = [];
-      allagent?.data?.data?.forEach((item, index) => {
-        array.push({
-          agent_id: item.agent_id,
-          agent_country: item.agent_country,
-          agent_emp_code: item.hrms_v1_employee.employee_code,
-          agent_emp_name: item.hrms_v1_employee.employee_name,
-          agent_commission_details: item.agent_commission_details,
+      if (allagent?.data.success) {
+        let temp = [];
+        allagent?.data.data.forEach((item, index) => {
+          temp.push({
+            agent_id: item.agent_id,
+            agent_country: item.agent_country,
+            agent_commission_details: item.agent_commission_details,
+            agent_vendor_id: item.agent_vendor_id,
+            agent_name: item.crm_v1_vendors.vendor_name,
+          });
         });
-      });
-      setAgentdata(array);
+        setAgentdata(temp);
+        console.log("teperaefr", allagent?.data?.data);
+      }
     } catch (err) {
       console.log("error to getting all units", err);
     }
@@ -353,6 +360,24 @@ function ListAgent() {
       render: (value, item, index) => serialNo + index,
       align: "center",
     },
+    {
+      title: "NAME",
+      dataIndex: "agent_name",
+      width: "30%",
+      // filteredValue: [searchedText],
+      // onFilter: (value, record) => {
+      //   console.log("valuesss in", record);
+      //   return (
+
+      //     String(record.agent_emp_name)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase())
+      //   );
+      // },
+      key: "agent_name",
+
+      align: "left",
+    },
 
     // {
     //   title: "Oppurtunity Name",
@@ -379,8 +404,8 @@ function ListAgent() {
       align: "left",
     },
     {
-      title: "EMPLOYEE CODE",
-      dataIndex: "agent_emp_code",
+      title: "Commission",
+      dataIndex: "agent_commission_details",
       width: "30%",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
@@ -397,28 +422,11 @@ function ListAgent() {
             .includes(value.toLowerCase())
         );
       },
-      key: "agent_emp_code",
+      key: "agent_commission_details",
 
       align: "left",
     },
-    {
-      title: "EMPLOYEE NAME",
-      dataIndex: "agent_emp_name",
-      width: "30%",
-      // filteredValue: [searchedText],
-      // onFilter: (value, record) => {
-      //   console.log("valuesss in", record);
-      //   return (
 
-      //     String(record.agent_emp_name)
-      //       .toLowerCase()
-      //       .includes(value.toLowerCase())
-      //   );
-      // },
-      key: "agent_emp_name",
-
-      align: "left",
-    },
     {
       title: "ACTION",
       dataIndex: "action",
@@ -451,7 +459,7 @@ function ListAgent() {
       const addagent = await PublicFetch.post(
         `${process.env.REACT_APP_BASE_URL}/agents`,
         {
-          agent_emp_id: empname,
+          agent_vendor_id: parseInt(empname),
           agent_country: countryis,
           agent_commission_details: empcommision,
         }
@@ -471,7 +479,7 @@ function ListAgent() {
       console.log("err to add the unit", err);
     }
   };
-  // console.log("country", options);
+  console.log("country", agentdata);
   return (
     <>
       <div className="container-fluid container_fms pt-3">
@@ -584,8 +592,8 @@ function ListAgent() {
 
         <div className="datatable">
           <TableData
-            data={getData(current, pageSize)}
-            // data={data}
+            // data={getData(current, pageSize)}
+            data={agentdata}
             columns={columns}
             // columns={filteredColumns}
             custom_table_css="attribute_table"
@@ -633,7 +641,7 @@ function ListAgent() {
                     <div className="row">
                       <div className="col-6 pb-2">
                         <div className="">
-                          <label>Employee Id</label>
+                          <label>Vendor Id</label>
                           {/* <Form.Item
                                 name="employee_branch"
                                 rules={[
@@ -701,10 +709,10 @@ function ListAgent() {
                                   console.log("all emptypenamess", item);
                                   return (
                                     <Select.Option
-                                      key={item.emp_agent_id}
-                                      value={item.emp_agent_id}
+                                      key={item.vendor_id}
+                                      value={item.vendor_id}
                                     >
-                                      {item.emp_agent_name}
+                                      {item.vendor_name}
                                     </Select.Option>
                                   );
                                 })}
@@ -776,14 +784,14 @@ function ListAgent() {
               </div>
             </>
           }
-        >
-          <Custom_model
-            size={"sm"}
-            success
-            show={successPopup}
-            onHide={() => setSuccessPopup(false)}
-          />
-        </CustomModel>
+        ></CustomModel>
+
+        <Custom_model
+          size={"sm"}
+          success
+          show={successPopup}
+          onHide={() => setSuccessPopup(false)}
+        />
 
         {/* Modal for edit Agent */}
         <Custom_model
@@ -810,7 +818,7 @@ function ListAgent() {
                     <div className="row">
                       <div className="col-6 pb-3">
                         <div className="">
-                          <label>Employee Id</label>
+                          <label>Vendor Id</label>
                           <Form.Item
                             name="inpiutId"
                             rules={[
@@ -837,10 +845,10 @@ function ListAgent() {
                                   // if (item.emptype_name == "Agent") {
                                   return (
                                     <Select.Option
-                                      key={item.emp_agent_id}
-                                      value={item.emp_agent_id}
+                                      key={item.vendor_id}
+                                      value={item.vendor_id}
                                     >
-                                      {item.emp_agent_name}
+                                      {item.vendor_name}
                                     </Select.Option>
                                   );
                                   // }
@@ -857,7 +865,7 @@ function ListAgent() {
                       <div className="col-6">
                         <div className="">
                           <label>Country</label>
-                          <Form.Item>
+                          <Form.Item name="country">
                             <SelectBox
                               value={inputCountry}
                               showSearch

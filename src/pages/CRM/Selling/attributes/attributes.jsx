@@ -147,6 +147,7 @@ export default function Attribute(props) {
         if (addattributes.data.success) {
           setShowModaladd(false)
           addForm.resetFields()
+          getallattributes()
           setSaveSuccess(true);
           close_modal(saveSuccess, 1000);
         } else if (addattributes.data.success === false) {
@@ -343,6 +344,7 @@ export default function Attribute(props) {
             </Select>
           </div>
           <div className=" col-4 d-flex align-items-center justify-content-center">
+            {attributes&& (
           <MyPagination
             total={attributes?.length}
             current={current}
@@ -353,6 +355,7 @@ export default function Attribute(props) {
               setPageSize(pageSize);
             }}
           />
+          )}
         </div>
 
           <div className="col-4 mb-2 px-4">
@@ -372,6 +375,7 @@ export default function Attribute(props) {
           />
         </div>
         <div className="d-flex py-2 justify-content-center">
+          {attributes &&(
           <MyPagination
             total={attributes?.length}
             current={current}
@@ -382,6 +386,7 @@ export default function Attribute(props) {
               setPageSize(pageSize);
             }}
           />
+          )}
         </div>
 
         <Custom_model

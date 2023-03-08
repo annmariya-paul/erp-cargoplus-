@@ -16,6 +16,7 @@ function InvoicePrint({
   invoice_no,
   Invoice_type,
   invoice_number,
+  billto
 }) {
   const [companyInfodata, setCompanyInfodata] = useState();
   const [defaultCurrency, setDefaultCurrency] = useState();
@@ -52,6 +53,21 @@ function InvoicePrint({
         console.log("Error", err);
       });
   };
+
+  // function camelize(str) {
+  //   return str.replace(/(?:^\w|[A-Z]|\b\w)/g, function(word, index) {
+  //     return index === 0 ? word.toLowerCase() : word.toUpperCase();
+  //   }).replace(/\s+/g, '');
+  // }
+//   const camalize = (str) => {
+    
+//      str.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) =>{
+//       console.log("camalize", m ,chr);
+//       chr.toUpperCase()}).replace();
+// }
+// camalize("dfisfhssd")
+// const capitalize = str => str.charAt(0).toUpperCase() + str.toLowerCase().slice(1)
+
   useEffect(() => {
     companyinfo();
     allCurrency();
@@ -79,9 +95,9 @@ function InvoicePrint({
                         </div>
                         <div className="header__address_content">
                           <h3>{item.company_name}</h3>
-                          <div>
-                            {item.company_address} <br />
-                            Deej Al Farwaniyah 8500 <br />
+                          <div className="address_width">
+                            {item.company_address} 
+                            <br />
                             {item.company_country}
                             <br />
                             Phone :{item.company_phone}
@@ -116,6 +132,8 @@ function InvoicePrint({
               </table>
             </div>
           </div>
+          {billto && (
+            <>
           <div className="billto">Bill To</div>
           <div className="billto_details">
             <div>France and Middle East</div>
@@ -159,7 +177,7 @@ function InvoicePrint({
                       </tr> */}
                       <tr>
                         <td style={{ fontWeight: 600 }}>Total</td>
-                        <td style={{ fontWeight: 600 }}>{total}</td>
+                        <td style={{ fontWeight: 600 }}>{defaultCurrency?.currency_code}  {total}</td>
                       </tr>
                       {/* <tr>
                         <td>Permanent Made</td>
@@ -175,6 +193,8 @@ function InvoicePrint({
               </div>
             </div>
           </footer>
+          </>
+)}
         </table>
       </div>
     </div>

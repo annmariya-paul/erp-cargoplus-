@@ -1,3 +1,4 @@
+import "./dashboard.module.scss";
 import React, { useState } from "react";
 import Card from "../../components/dashboard/card";
 import styles from "./dashboard.module.scss";
@@ -6,9 +7,68 @@ import BarChart from "../../components/dashboard/charts/bar-chart";
 import FunnelChart from "../../components/dashboard/charts/funnel-chart";
 import GeoChart from "../../components/dashboard/charts/geo-chart";
 import PieChart from "../../components/dashboard/charts/pie-chart";
-import { Table } from "antd";
+// import { Table } from "antd";
+import { CRM_BASE_URL, CRM_BASE_URL_FMS } from "../../api/bootapi";
+import PublicFetch from "../../utils/PublicFetch";
+import { useEffect } from "react";
+import TableData from "../../components/table/table_data";
 
 function Dashboard() {
+ const [leadCount,setLeadCount] = useState();
+ const [quotationCount,setQuotationCount] = useState();
+ const [jobcount,setJobCount] = useState();
+ console.log("count",leadCount);
+
+ const GetLeadData = () => {
+   PublicFetch.get(
+     `${CRM_BASE_URL}/lead?startIndex=0&noOfItems=10`
+   )
+     .then((res) => {
+       if (res?.data?.success) {
+         setLeadCount(res?.data?.data?.totalCount);
+       } else {
+         console.log("Failed to load data");
+       }
+     })
+     .catch((err) => {
+       console.log("Errror while getting data", err);
+     });
+ };
+
+ const getAllQuotation = () => {
+   PublicFetch.get(
+     `${CRM_BASE_URL_FMS}/quotation?startIndex=0&noOfItems=10`
+   )
+     .then((res) => {
+       console.log("Response", res);
+       if (res.data.success) {
+         console.log("success", res.data.data);
+         setQuotationCount(res.data.data.totalCount);
+       }
+     })
+     .catch((err) => {
+       console.log("Error", err);
+     });
+ };
+  const getAllJobs = () => {
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/job?startIndex=0&noOfItems=10`)
+      .then((res) => {
+        if (res.data.success) {
+          setJobCount(res.data.data.totalCount);
+        } else {
+          console.log("Failed to load data");
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+ useEffect(() => {
+   GetLeadData();
+   getAllQuotation();
+   getAllJobs();
+ }, []);
+
   const tableColumns = [
     {
       title: "Deal Name",
@@ -98,7 +158,9 @@ function Dashboard() {
             <Card className={`${styles.cartItem}`}>
               <div>
                 <div className={`text-center ${styles.cardTitle}`}>Lead</div>
-                <div className={`text-center ${styles.cardSubText}`}>100</div>
+                <div className={`text-center ${styles.cardSubText}`}>
+                  {leadCount}
+                </div>
               </div>
             </Card>
             <Card className={`${styles.cartItem}`}>
@@ -106,13 +168,17 @@ function Dashboard() {
                 <div className={`text-center ${styles.cardTitle}`}>
                   Quotations
                 </div>
-                <div className={`text-center ${styles.cardSubText}`}>100</div>
+                <div className={`text-center ${styles.cardSubText}`}>
+                  {quotationCount}
+                </div>
               </div>
             </Card>
             <Card className={`${styles.cartItem}`}>
               <div>
                 <div className={`text-center ${styles.cardTitle}`}>Jobs</div>
-                <div className={`text-center ${styles.cardSubText}`}>100</div>
+                <div className={`text-center ${styles.cardSubText}`}>
+                  {jobcount}
+                </div>
               </div>
             </Card>
             <Card className={`${styles.cartItem}`}>
@@ -137,8 +203,8 @@ function Dashboard() {
           </div>
 
           <div className="container-fluid p-0 m-0">
-            <div className="row mt-2">
-              <div className="col-12 col-xl-4 col-lg-6 col-md-12">
+            <div className="row">
+              <div className="col-12 col-xl-4 col-lg-6 col-md-12 mt-2">
                 <div
                   style={{ height: "450px" }}
                   className="card rounded shadow-sm p-3"
@@ -146,7 +212,7 @@ function Dashboard() {
                   <FunnelChart />
                 </div>
               </div>
-              <div className="col-12 col-xl-4 col-lg-6 col-md-12">
+              <div className="col-12 col-xl-4 col-lg-6 col-md-12 mt-2">
                 <div
                   style={{ height: "450px" }}
                   className="card rounded shadow-sm p-3"
@@ -154,7 +220,7 @@ function Dashboard() {
                   <GeoChart />
                 </div>
               </div>
-              <div className="col-12 col-xl-4 col-lg-6 col-md-12 mt-3">
+              <div className="col-12 col-xl-4 col-lg-6 col-md-12 mt-2">
                 <div
                   style={{ height: "450px" }}
                   className="card rounded shadow-sm"
@@ -162,20 +228,21 @@ function Dashboard() {
                   <BarChart />
                 </div>
               </div>
-              <div className="col-12 col-xl-4 col-lg-6 col-md-12 mt-3">
+              <div className="col-12 col-xl-4 col-lg-6 col-md-12 mt-2">
                 <div
                   style={{ height: "450px" }}
-                  className="card rounded shadow-sm p-3"
+                  className="card rounded shadow-sm px-1"
                 >
-                  <Table
-                    dataSource={tableDataSource}
+                  <TableData
+                    data={tableDataSource}
                     columns={tableColumns}
                     bordered
                     pagination={false}
+                    // custom_table_css="table_height"
                   />
                 </div>
               </div>
-              <div className="col-12 col-xl-4 col-lg-6 col-md-12 mt-3">
+              <div className="col-12 col-xl-4 col-lg-6 col-md-12 mt-2">
                 <div
                   style={{ height: "450px" }}
                   className="card rounded shadow-sm"
@@ -183,7 +250,7 @@ function Dashboard() {
                   <BarChart />
                 </div>
               </div>
-              <div className="col-12 col-xl-4 col-lg-6 col-md-12 mt-3">
+              <div className="col-12 col-xl-4 col-lg-6 col-md-12 mt-2">
                 <div
                   style={{ height: "450px" }}
                   className="card rounded shadow-sm"

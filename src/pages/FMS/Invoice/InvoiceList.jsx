@@ -31,7 +31,7 @@ function InvoiceList() {
   const [noofItems, setNoofItems] = useState("25");
   // const [current, setCurrent] = useState(1);
 
-  const[totalinvoice,settotalinvoice]= useState("")
+  const [totalinvoice, settotalinvoice] = useState("");
   const [serialNo, setserialNo] = useState(1);
 
   const pageofIndex = noofItems * (current - 1) - 1 + 1;
@@ -63,7 +63,7 @@ function InvoiceList() {
       dataIndex: "invoice_date",
       key: "invoice_date",
       width: "10%",
-      render: (record) => {
+      render: (data, record) => {
         return <div>{moment(record?.invoice_date).format("DD-MM-YYYY")}</div>;
       },
     },
@@ -100,7 +100,7 @@ function InvoiceList() {
       // align: "center",
     },
     {
-      title: "STATUS",
+      title: "PAYMENT STATUS",
       dataIndex: "invoice_status",
       key: "invoice_status",
       width: "15%",
@@ -159,7 +159,11 @@ function InvoiceList() {
                 btnType="add"
                 className="me-1 view_btn"
                 onClick={() => {
-                  navigate(`${ROUTES.PRINT_INVOICE}/${index.invoice_id}`);
+                  // navigate(`${ROUTES.PRINT_INVOICE}/${index.invoice_id}`);
+                  window.open(
+                    `http://localhost:3000/print_invoice/${index.invoice_id}`,
+                    `_blank`
+                  );
                 }}
               >
                 Print
@@ -215,11 +219,15 @@ function InvoiceList() {
       .then((res) => {
         setInvoiceData(res?.data?.data);
         console.log("response", res);
-      
+
         if (res.data.success) {
           console.log("success of invoices", res.data.data);
           let temp = [];
+          let status = "";
           res?.data?.data?.forEach((item, index) => {
+            if (item.invoice_status == 1) {
+              status = "pending";
+            }
             temp.push({
               invoice_no: item.invoice_no,
               invoice_id: item.invoice_id,
@@ -227,7 +235,7 @@ function InvoiceList() {
               invoice_date: item.invoice_date,
               invoice_cancel_date: item.invoice_cancel_date,
               invoice_cancel_reason: item.invoice_cancel_reason,
-              invoice_status: item.invoice_status,
+              invoice_status: status,
               invoice_currency: item.invoice_currency,
               invoice_exchange_rate: item.invoice_exchange_rate,
               invoice_grand_total: item.invoice_grand_total,
@@ -240,7 +248,7 @@ function InvoiceList() {
 
           setAllInvoiceData(temp);
 
-          // console.log(temp);
+          console.log("status", status);
         }
       })
       .catch((err) => {
@@ -369,14 +377,16 @@ function InvoiceList() {
                     </Select>
                   </div>
                   <div className="col-4 d-flex align-items-center justify-content-center">
-                    <MyPagination
-                      total={parseInt(invoiceData?.length)}
-                      current={current}
-                      pageSize={numOfItems}
-                      onChange={(current, pageSize) => {
-                        setCurrent(current);
-                      }}
-                    />
+                    {invoiceData && (
+                      <MyPagination
+                        total={parseInt(invoiceData?.length)}
+                        current={current}
+                        pageSize={numOfItems}
+                        onChange={(current, pageSize) => {
+                          setCurrent(current);
+                        }}
+                      />
+                    )}
                   </div>
                   {/* <div className="col-xl-6 col-lg-6 col-md-6 col-sm-8 col-12"></div> */}
                   <div className="col-4 d-flex justify-content-end"></div>
@@ -393,7 +403,8 @@ function InvoiceList() {
                   {/* )} */}
                 </div>
                 <div className="d-flex py-2 justify-content-center">
-                <MyPagination
+                  {invoiceData && (
+                    <MyPagination
                       total={parseInt(invoiceData?.length)}
                       current={current}
                       pageSize={numOfItems}
@@ -401,6 +412,7 @@ function InvoiceList() {
                         setCurrent(current);
                       }}
                     />
+                  )}
                 </div>
               </div>
             </div>
@@ -454,9 +466,6 @@ function InvoiceList() {
               }}
             />
           </div>
-
-
-
         </div>
       </div>
     </div>

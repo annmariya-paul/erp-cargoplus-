@@ -135,7 +135,7 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
     },
   
     {
-      title: "EMPLOYMENT TYPE NAME",
+      title: "EMPLOYEE TYPE NAME",
       dataIndex: "employment_type_name",
       key: "employment_type_name",
       filteredValue: [searchedText],
@@ -262,7 +262,7 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
       <div className="container-fluid container2 pt-3">
         <div className="row flex-wrap">
           <div className="col">
-            <h5 className="lead_text">Employment Types</h5>
+            <h5 className="lead_text">Employee Types</h5>
           </div>
           {/* <Leadlist_Icons /> */}
         </div>
@@ -323,7 +323,7 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
             </div>
             <div className="col-4">
             <Button btnType="add" onClick={() => setaddshowmodal(true)}>
-              Add EmployeMentType
+              Add Employee Type
             </Button>
             </div>
         </div>
@@ -359,7 +359,7 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
           View_list
           list_content={
             <>
-              <h6 className="lead_text mb-2">Add Employment Type</h6>
+              <h6 className="lead_text mb-2">Add Employee Type</h6>
               <div className="container-fluid px-4 my-4 ">
               <Form
               name="addForm"
@@ -375,14 +375,14 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
               <div className="row flex-wrap pt-1">
                 <div className="row ms-0 py-1">
                   <div className="col-12 pt-3">
-                    <label htmlfor="emp_type_name">Employment Type Name</label>
+                    <label htmlfor="emp_type_name">Employee Type Name</label>
                     <Form.Item
                       name="Employment Type Name"
                       rules={[
                         {
                           required: true,
                           pattern: new RegExp("^[A-Za-z ]+$"),
-                          message: "Please enter a valid Employment Type Name",
+                          message: "Please enter a valid Employee Type Name",
                         },
                         {
                           min: 2,
@@ -412,7 +412,7 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
                     </Form.Item>
                     {uniqueCode ? (
                       <p style={{ color: "red" }}>
-                        Employment Type {uniqueErrMsg.UniqueErrName}
+                        Employee Type {uniqueErrMsg.UniqueErrName}
                       </p>
                     ) : null}
                   </div>
@@ -444,7 +444,7 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
           View_list
           list_content={
             <>
-              <h6 className="lead_text mb-2">Edit Employment Type</h6>
+              <h6 className="lead_text mb-2">Edit Employee Type</h6>
               <div className="container-fluid px-4 my-4 ">
                 <Form
                   form={editForm}
@@ -503,7 +503,7 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
                       </Form.Item>
                       {uniqueeditCode ? (
                         <p style={{ color: "red" }}>
-                          Employment Type Name {uniqueErrMsg.UniqueErrName}
+                          Employee Type Name {uniqueErrMsg.UniqueErrName}
                         </p>
                       ) : null}
                     </div>

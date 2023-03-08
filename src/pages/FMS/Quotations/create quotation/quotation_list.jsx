@@ -43,6 +43,7 @@ export default function Quotations(props) {
 
   const[totalquotation,settotalquotation]= useState("")
 
+  
 
   const pageofIndex = noofItems * (current - 1) - 1 + 1;
   const numofItemsTo = noofItems * current;
@@ -241,10 +242,10 @@ export default function Quotations(props) {
       .then((res) => {
         console.log("Response", res);
         if (res.data.success) {
-          console.log("success", res.data.data);
-          settotalquotation(res.data.data)
+          console.log("success of quatation", res.data.data);
+          settotalquotation(res.data.data.totalCount)
           let temp = [];
-          res.data.data.forEach((item, index) => {
+          res.data.data.quotations.forEach((item, index) => {
             let date = moment(item.quotation_date).format("DD-MM-YYYY");
             let validity = moment(item.quotation_validity).format("DD-MM-YYYY");
             temp.push({
@@ -324,8 +325,9 @@ export default function Quotations(props) {
           </div>
          
           <div className="col-4 d-flex py-2 justify-content-center">
+            {totalquotation>0 &&(
             <MyPagination
-              total={parseInt(totalquotation?.length)}
+              total={parseInt(totalquotation)}
               current={current}
               pageSize={noofItems}
               // defaultPageSize={noofItems}
@@ -338,6 +340,7 @@ export default function Quotations(props) {
                 // setCurrent(noofItems !== pageSize ? 0 : current);
               }}
             />
+            ) }
           </div>
           <div className="col-4 d-flex justify-content-end">
             <div className="col mb-2 px-4">
@@ -357,8 +360,9 @@ export default function Quotations(props) {
           />
         </div>
         <div className="d-flex justify-content-center ">
+          {totalquotation>0 &&(
         <MyPagination
-              total={parseInt(totalquotation?.length)}
+              total={parseInt(totalquotation)}
               current={current}
               pageSize={noofItems}
               // defaultPageSize={noofItems}
@@ -369,6 +373,7 @@ export default function Quotations(props) {
               
               }}
             />
+            )}
         </div>
         
        

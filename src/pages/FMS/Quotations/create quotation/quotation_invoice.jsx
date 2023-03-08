@@ -10,6 +10,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import TableData from "../../../../components/table/table_data";
 import InvoicePrint from "../../../../components/Invoice/InvoicePrint";
 import { ROUTES } from "../../../../routes";
+import { camelize } from "../../../../utils/camelcaseconvert";
 
 
 function Quotationinvoice() {
@@ -122,6 +123,7 @@ function Quotationinvoice() {
               setQuotation(res.data.success);
             }
           );
+          close_modal(1000);
         }
       })
       .catch((err) => {
@@ -180,9 +182,9 @@ function Quotationinvoice() {
     }
   };
 
-  useEffect(() => {
-    close_modal(1500);
-  }, []);
+  // useEffect(() => {
+   
+  // }, []);
   console.log("dataa iss", tabledata);
 
   return (
@@ -190,6 +192,7 @@ function Quotationinvoice() {
 
 <InvoicePrint 
 invoice_no
+billto
 Invoice_type="QUOTATION" 
 invoice_number= {allqoutation?.quotation_no}
 invoice_details1={ <>
@@ -320,7 +323,7 @@ amount_in_words=   {
   <>
   {allqoutation && (
     <>
-    {converter.toWords(allqoutation?.quotation_grand_total)}
+    {camelize(converter.toWords(allqoutation?.quotation_grand_total))}
     </>
   )}
   </>

@@ -362,6 +362,7 @@ export default function PaymentTerms(props) {
             </Select>
           </div>
           <div className="col-4 d-flex justify-content-center align-items-center">
+            {allPaymentTerms&&(
           <MyPagination
            total={parseInt(allPaymentTerms?.length)}
             current={current}
@@ -372,6 +373,7 @@ export default function PaymentTerms(props) {
               setPageSize(pageSize);
             }}
           />
+          ) }
       </div>
 
           <div className="col-4">
@@ -394,6 +396,7 @@ export default function PaymentTerms(props) {
           />
         </div>
         <div className="py-5 d-flex  justify-content-center">
+          {allPaymentTerms &&(
           <MyPagination
            total={parseInt(allPaymentTerms?.length)}
             current={current}
@@ -404,6 +407,7 @@ export default function PaymentTerms(props) {
               setPageSize(pageSize);
             }}
           />
+          ) }
         </div>
       </div>
 

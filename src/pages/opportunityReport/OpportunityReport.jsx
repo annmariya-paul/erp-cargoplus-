@@ -10,10 +10,11 @@ import moment from "moment";
 import MyPagination from "../../components/Pagination/MyPagination";
 import PublicFetch from "../../utils/PublicFetch";
 import { CRM_BASE_URL } from "../../api/bootapi";
+import SelectBox from "../../components/Select Box/SelectBox";
 
 function OpportunityReport() {
   const { Option } = Select;
-
+  const [serialNo, setserialNo] = useState(1);
   const [toggleState, setToggleState] = useState(1);
   const [searchedText, setSearchedText] = useState("");
   const [searchType, setSearchType] = useState("");
@@ -46,34 +47,7 @@ function OpportunityReport() {
       .then((res) => {
         if (res?.data?.success) {
           console.log("All opportunity data", res?.data?.data);
-          //   { dividing data to generated and converted table   - Annmariya (04/11/22) }
-          let arr1 = [];
-          let arr2 = [];
-          res?.data?.data?.leads.forEach((item, index) => {
-            setAllOpportunityList(item.opportunity_status);
-            if (item.opportunity_status === 5) {
-              arr1.push({
-                opportunity_type: item?.opportunity_type,
-                opportunity_from: item?.opportunity_from,
-                opportunity_created_by: item?.opportunity_created_by,
-                opportunity_source: item?.opportunity_source,
-                opportunity_party: item?.opportunity_party,
-                opportunity_status: item?.opportunity_status,
-              });
-              setConvertedTable(arr1);
-            }
-            if (item.opportunity_status === 2) {
-              arr2.push({
-                opportunity_type: item?.opportunity_type,
-                opportunity_from: item?.opportunity_from,
-                opportunity_created_by: item?.opportunity_created_by,
-                opportunity_source: item?.opportunity_source,
-                opportunity_party: item?.opportunity_party,
-                opportunity_status: item?.opportunity_status,
-              });
-              setGenerateTable(arr2);
-            }
-          });
+            
         } else {
           console.log("FAILED TO LOAD DATA");
         }
@@ -91,7 +65,6 @@ function OpportunityReport() {
   // { function to search data by date - Ann mariya (07/11/22)}
   const Searchbydate = () => {
     let selecteddate = moment(selectedDate).format("MM-DD-YYYY");
-    // console.log("date",selecteddate)
     let startdate = moment(startDate).format("MM-DD-YYYY");
     let enddate = moment(endDate).format("MM-DD-YYYY");
     let selectedmonth = moment(selectedMonth).format("MM-01-YYYY");
@@ -128,11 +101,34 @@ function OpportunityReport() {
         console.log("testhelllooo.....", response);
         if (response.data.success) {
           console.log("hello", response.data.data);
-          // console.log("generated iss",response.data.data.converted.totalCount)
           setGeneratedcount(response.data.data.generated.totalCount)
           setConvertedcount(response.data.data.converted.totalCount)
-          setConvertedTable(response?.data?.data?.converted?.data);
-          setGenerateTable(response?.data?.data?.generated?.data);
+          // setConvertedTable(response?.data?.data?.converted?.data);
+          // setGenerateTable(response?.data?.data?.generated?.data);
+          let arrayA = [];
+          response?.data?.data?.generated?.data?.forEach((item,index)=>{
+           arrayA.push({
+             opportunity_type: item?.opportunity_type,
+             opportunity_from: item?.opportunity_from,
+             opportunity_created_by: item?.crm_v1_leads.lead_customer_name,
+             opportunity_source: item?.opportunity_source,
+             opportunity_party: item?.crm_v1_contacts.contact_person_name,
+             opportunity_status: item?.opportunity_status,
+           });
+          });
+          setGenerateTable(arrayA);
+          let arrayB = [];
+          response?.data?.data?.converted?.data?.forEach((temp,index)=>{
+            {arrayB.push({
+              opportunity_type: temp?.opportunity_type,
+              opportunity_from: temp?.opportunity_from,
+              opportunity_created_by: temp?.crm_v1_leads.lead_customer_name,
+              opportunity_source: temp?.opportunity_source,
+              opportunity_party: temp?.crm_v1_contacts.contact_person_name,
+              opportunity_status: temp?.opportunity_status,
+            });}
+          });
+          setConvertedTable(arrayB);
         } else {
           console.log("Failed while adding data");
         }
@@ -150,6 +146,13 @@ function OpportunityReport() {
   };
 
   const columns = [
+    {
+      title: "Sl. No.",
+      key: "index",
+      width:"8%",
+      render: (value, item, index) => serialNo + index,
+      align: "center",
+    },
     {
       title: "TYPE",
       dataIndex: "opportunity_type",
@@ -212,83 +215,6 @@ function OpportunityReport() {
 
   return (
     <>
-      <div className="container mb-3 d-flex justify-content-center">
-        <div className="report_container1">
-          <div className="row">
-            <h5 className="report_heading mb-2">Opportunity</h5>
-          </div>
-          <div className="row my-4 mx-2">
-            <div className="col-md-6 col-sm-12">
-              <label htmlFor="criteria">Select Date Criteria</label>
-              <Select
-                name="criteria"
-                defaultValue="daily"
-                style={{ width: " 100% " }}
-                onChange={(e) => setDateCriteria(e)}
-              >
-                <Option value="daily">Daily</Option>
-                <Option value="BtwnTwoDates">Between Two Dates</Option>
-                <Option value="monthly">Monthly</Option>
-              </Select>
-            </div>
-            {dateCriteria === "daily" && (
-              <div className="col-md-6 col-sm-12">
-                <label htmlFor="date">Date</label>
-                <DatePicker
-                  format={"DD-MM-YYYY"}
-                  defaultValue={moment(newDate)}
-                  value={selectedDate}
-                  onChange={(e) => {
-                    setSelectedDate(e);
-                  }}
-                />
-              </div>
-            )}
-            {dateCriteria === "monthly" && (
-              <div className="col-md-6 col-sm-12">
-                <label htmlFor="month">Month</label>
-                <DatePicker
-                  format={"01-DD-YYYY"}
-                  value={selectedMonth}
-                  onChange={(e) => {
-                    setSelectedMonth(e);
-                  }}
-                  picker="month"
-                />
-              </div>
-            )}
-            {dateCriteria === "BtwnTwoDates" && (
-              <div className="col-md-6 col-sm-12">
-                <div className="row">
-                  <div className="col-md-6">
-                    <label htmlFor="startDate">Start Date</label>
-                    <DatePicker
-                      format={"DD-MM-YYYY"}
-                      value={startDate}
-                      onChange={(e) => setStartDate(e)}
-                    />
-                  </div>
-                  <div className="col-md-6">
-                    <label htmlFor="endDate">End Date</label>
-                    <DatePicker
-                      format={"DD-MM-YYYY"}
-                      value={endDate}
-                      onChange={(e) => setEndDate(e)}
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-          <div className="row  justify-content-center my-2">
-            <div className="col-xl-3 col-lg-3 col-12 d-flex justify-content-center">
-              <Button btnType="save" onClick={Searchbydate}>
-                Search
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
 
       <div className="container report_content">
         <div className="row">
@@ -338,7 +264,7 @@ function OpportunityReport() {
             <div className="row  justify-content-md-end">
               {/* <Leadlist_Icons /> */}
             </div>
-            <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
+            <div className="row mt-2 py-1" style={{ backgroundColor: "#f4f4f7" }}>
               <div className="col-sm-4 col-xs-12">
                 <Input.Search
                   placeholder="Search by type"
@@ -437,7 +363,78 @@ function OpportunityReport() {
                   </Select.Option>
                 </Select>
               </div>
+              <div className="col-md-2 col-sm-12">
+                {/* <label htmlFor="criteria">Select Date Criteria</label> */}
+                <SelectBox
+                  name="criteria"
+                  defaultValue="daily"
+                  style={{ backgroundColor: "whitesmoke", borderRadius: "5px" }}
+                  className="w-100 select_box"
+                  value={dateCriteria}
+                  onChange={(e) => setDateCriteria(e)}
+                >
+                  <Option value="daily">Daily</Option>
+                  <Option value="BtwnTwoDates">Between Two Dates</Option>
+                  <Option value="monthly">Monthly</Option>
+                </SelectBox>
+              </div>
+              {dateCriteria === "daily" && (
+                <div className="col-md-2 col-sm-12">
+                  {/* <label htmlFor="date">Date</label> */}
+                  <DatePicker
+                    format={"DD-MM-YYYY"}
+                    defaultValue={moment(newDate)}
+                    value={selectedDate}
+                    onChange={(e) => {
+                      setSelectedDate(e);
+                    }}
+                  />
+                </div>
+              )}
+              {dateCriteria === "monthly" && (
+                <div className="col-md-2 col-sm-12">
+                  {/* <label htmlFor="month">Month</label> */}
+                  <DatePicker
+                    format={"01-MM-YYYY"}
+                    value={selectedMonth}
+                    onChange={(e) => {
+                      setSelectedMonth(e);
+                    }}
+                    picker="month"
+                  />
+                </div>
+              )}
+              {dateCriteria === "BtwnTwoDates" && (
+                <div className="col-md-4 col-sm-12">
+                  <div className="row">
+                    <div className="col-md-6">
+                      {/* <label htmlFor="startDate">Start Date</label> */}
+                      <DatePicker
+                        format={"DD-MM-YYYY"}
+                        placeholder="Start Date"
+                        value={startDate}
+                        onChange={(e) => setStartDate(e)}
+                      />
+                    </div>
+                    <div className="col-md-6">
+                      {/* <label htmlFor="endDate">End Date</label> */}
+                      <DatePicker
+                        format={"DD-MM-YYYY"}
+                        placeholder="End Date"
+                        value={endDate}
+                        onChange={(e) => setEndDate(e)}
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+              <div className=" col-md-2">
+                <Button btnType="save" onClick={Searchbydate}>
+                  Search
+                </Button>
+              </div>
             </div>
+            {/* </div> */}
             <div className="datatable">
               <TableData
                 data={getGenerateData(current, numOfItems, pageSize)}
@@ -446,6 +443,7 @@ function OpportunityReport() {
               />
             </div>
             <div className="d-flex py-2 justify-content-center">
+              {generateTable &&(
               <MyPagination
                 total={parseInt(generateTable?.length)}
                 current={current}
@@ -456,6 +454,7 @@ function OpportunityReport() {
                   setPageSize(pageSize);
                 }}
               />
+              )}
             </div>
           </div>
 
@@ -469,7 +468,7 @@ function OpportunityReport() {
             <div className="row  justify-content-md-end">
               {/* <Leadlist_Icons /> */}
             </div>
-            <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
+            <div className="row mt-2 py-1" style={{ backgroundColor: "#f4f4f7" }}>
               <div className="col-4">
                 <Input.Search
                   placeholder="Search by Name"
@@ -568,6 +567,76 @@ function OpportunityReport() {
                   </Select.Option>
                 </Select>
               </div>
+               <div className="col-md-2 col-sm-12">
+                {/* <label htmlFor="criteria">Select Date Criteria</label> */}
+                <SelectBox
+                  name="criteria"
+                  defaultValue="daily"
+                  style={{ backgroundColor: "whitesmoke", borderRadius: "5px" }}
+                  className="w-100 select_box"
+                  value={dateCriteria}
+                  onChange={(e) => setDateCriteria(e)}
+                >
+                  <Option value="daily">Daily</Option>
+                  <Option value="BtwnTwoDates">Between Two Dates</Option>
+                  <Option value="monthly">Monthly</Option>
+                </SelectBox>
+              </div>
+              {dateCriteria === "daily" && (
+                <div className="col-md-2 col-sm-12">
+                  {/* <label htmlFor="date">Date</label> */}
+                  <DatePicker
+                    format={"DD-MM-YYYY"}
+                    defaultValue={moment(newDate)}
+                    value={selectedDate}
+                    onChange={(e) => {
+                      setSelectedDate(e);
+                    }}
+                  />
+                </div>
+              )}
+              {dateCriteria === "monthly" && (
+                <div className="col-md-2 col-sm-12">
+                  {/* <label htmlFor="month">Month</label> */}
+                  <DatePicker
+                    format={"01-MM-YYYY"}
+                    value={selectedMonth}
+                    onChange={(e) => {
+                      setSelectedMonth(e);
+                    }}
+                    picker="month"
+                  />
+                </div>
+              )}
+              {dateCriteria === "BtwnTwoDates" && (
+                <div className="col-md-4 col-sm-12">
+                  <div className="row">
+                    <div className="col-md-6">
+                      {/* <label htmlFor="startDate">Start Date</label> */}
+                      <DatePicker
+                        format={"DD-MM-YYYY"}
+                        placeholder="Start Date"
+                        value={startDate}
+                        onChange={(e) => setStartDate(e)}
+                      />
+                    </div>
+                    <div className="col-md-6">
+                      {/* <label htmlFor="endDate">End Date</label> */}
+                      <DatePicker
+                        format={"DD-MM-YYYY"}
+                        placeholder="End Date"
+                        value={endDate}
+                        onChange={(e) => setEndDate(e)}
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+              <div className=" col-md-2">
+                <Button btnType="save" onClick={Searchbydate}>
+                  Search
+                </Button>
+              </div>
             </div>
             <div className="datatable">
               <TableData
@@ -577,6 +646,7 @@ function OpportunityReport() {
               />
             </div>
             <div className="d-flex py-2 justify-content-center">
+              {convertedTable &&(
               <MyPagination
                 total={parseInt(convertedTable?.length)}
                 current={current}
@@ -587,6 +657,7 @@ function OpportunityReport() {
                   setPageSize(pageSize);
                 }}
               />
+              )}
             </div>
           </div>
         </div>

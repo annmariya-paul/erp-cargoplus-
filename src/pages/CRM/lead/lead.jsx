@@ -175,39 +175,47 @@ function Lead({}) {
         <div className="lead_container">
           <div className="row justify-content-md-center">
             <div className="bloc-tabs tabs-responsive">
-              <button
-                id="button-tabs"
-                className={toggleState === 1 ? "tabs active-tabs" : "tabs"}
-                onClick={() => toggleTab(1)}
-              >
-                Basic Info
-              </button>
-              <button
-                id="button-tabs"
-                className={toggleState === 2 ? "tabs active-tabs" : "tabs"}
-                onClick={() => {
-                  leadId == null ? errormessage() : toggleTab(2);
-                }}
-              >
-                Contacts
-              </button>
-              <button
-                id="button-tabs"
-                className={toggleState === 3 ? "tabs active-tabs" : "tabs"}
-                onClick={() => {
-                  leadId == null ? errormessage() : toggleTab(3);
-                }}
-              >
-                Address
-              </button>
-              <button
-                className={toggleState === 4 ? "tabs active-tabs" : "tabs"}
-                onClick={() => {
-                  leadId == null ? errormessage() : toggleTab(4);
-                }}
-              >
-                Location
-              </button>
+              <div className="col-sm-2">
+                <button
+                  id="button-tabs"
+                  className={toggleState === 1 ? "tabs active-tabs" : "tabs"}
+                  onClick={() => toggleTab(1)}
+                >
+                  Basic Info
+                </button>
+              </div>
+              <div className="col-sm-2">
+                <button
+                  id="button-tabs"
+                  className={toggleState === 2 ? "tabs active-tabs" : "tabs"}
+                  onClick={() => {
+                    leadId == null ? errormessage() : toggleTab(2);
+                  }}
+                >
+                  Contacts
+                </button>
+              </div>
+              <div className="col-sm-2">
+                <button
+                  id="button-tabs"
+                  className={toggleState === 3 ? "tabs active-tabs" : "tabs"}
+                  onClick={() => {
+                    leadId == null ? errormessage() : toggleTab(3);
+                  }}
+                >
+                  Address
+                </button>
+              </div>
+              <div className="col-sm-2">
+                <button
+                  className={toggleState === 4 ? "tabs active-tabs" : "tabs"}
+                  onClick={() => {
+                    leadId == null ? errormessage() : toggleTab(4);
+                  }}
+                >
+                  Location
+                </button>
+              </div>
             </div>
 
             <div className="content-tabs">
@@ -493,14 +501,14 @@ function Lead({}) {
                         ]}
                       >
                         <TextArea
-                        className="descheight"
+                          className="descheight"
                           value={leadDescription}
                           onChange={(e) => setLeadDescription(e.target.value)}
                         />
                       </Form.Item>
                     </div>
                     <div className="col-sm-4 mt-4 py-2">
-                    <div className="">
+                      <div className="">
                         <Form.Item name="new">
                           <FileUpload
                             multiple
@@ -543,7 +551,6 @@ function Lead({}) {
                           )}
                         </Form.Item>
                       </div>
-
                     </div>
                     <div className="col-sm-4 pt-2">
                       <div className="row">
@@ -577,24 +584,19 @@ function Lead({}) {
                         </div>
                       </div>
                     </div>
-                   <div className=" d-flex justify-content-center py-2">
-                    <div className="">
-                      <Button 
-                      type="submit" 
-                      btnType="save"
-                      className="mt-4"
-                      >
-                        Save
-                      </Button>
+                    <div className=" d-flex justify-content-center py-2">
+                      <div className="">
+                        <Button type="submit" btnType="save" className="mt-4">
+                          Save
+                        </Button>
                       </div>
                     </div>
-                      <Custom_model
-                        size={`sm`}
-                        success
-                        show={modalShow}
-                        onHide={() => setModalShow(false)}
-                      />
-                   
+                    <Custom_model
+                      size={`sm`}
+                      success
+                      show={modalShow}
+                      onHide={() => setModalShow(false)}
+                    />
                   </div>
                 </Form>
               </div>

@@ -408,6 +408,7 @@ export default function Frightlist(props) {
           </div>
 
           <div className="col-4 d-flex  align-items-center justify-content-center">
+            {frights && (
           <MyPagination
            total={parseInt(frights?.length)}
             current={current}
@@ -418,6 +419,7 @@ export default function Frightlist(props) {
               setPageSize(pageSize);
             }}
           />
+          )}
         </div>
 
           <div className="col-4 ">
@@ -440,9 +442,8 @@ export default function Frightlist(props) {
           />
         </div>
         <div className="d-flex  justify-content-center">
-          
+           {frights &&(
           <MyPagination
-          
            total={parseInt(frights?.length)}
             current={current}
             showSizeChanger={true}
@@ -452,6 +453,7 @@ export default function Frightlist(props) {
               setPageSize(pageSize);
             }}
           />
+          )}
         </div>
 
       </div>

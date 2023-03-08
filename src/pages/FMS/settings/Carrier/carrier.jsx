@@ -348,6 +348,7 @@ export default function Carrierlist(props) {
             </Select>
           </div>
           <div className=" col-4 d-flex  align-items-center justify-content-center">
+              {carrierdata &&(
             <MyPagination
               total={parseInt(carrierdata?.length)}
               current={current}
@@ -358,6 +359,7 @@ export default function Carrierlist(props) {
                 setPageSize(pageSize);
               }}
             />
+            ) }
           </div>
           <div className="col-4 d-flex justify-content-end">
             <Button btnType="add" onClick={() => setModalAddCarrier(true)}>
@@ -374,6 +376,7 @@ export default function Carrierlist(props) {
           />
         </div>
         <div className="d-flex py-2 justify-content-center">
+          {carrierdata && (
           <MyPagination
             total={parseInt(carrierdata?.length)}
             current={current}
@@ -384,6 +387,7 @@ export default function Carrierlist(props) {
               setPageSize(pageSize);
             }}
           />
+          ) }
         </div>
       </div>
 

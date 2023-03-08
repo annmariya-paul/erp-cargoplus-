@@ -27,6 +27,8 @@ $color_2: #eff4f7;
 }
 .tabs {
   font-size: 15px;
+  border: 1px solid variables.$primary;
+  color: variables.$primary;
   box-shadow: 2px 2px 12px variables.$boxshadow;
   width: 100% !important;
   margin-inline: 0.5px !important;
@@ -36,7 +38,7 @@ $color_2: #eff4f7;
   padding-block: 7px;
   background: white;
   cursor: pointer;
-  border-radius: 2px;
+  border-radius: 20px;
   box-sizing: content-box;
   position: relative;
   //   outline: none;
@@ -46,15 +48,18 @@ $color_2: #eff4f7;
 }
 
 .active-tabs {
-  background: variables.$white;
-  border: 1px solid variables.$primary;
-  color: variables.$primary;
+  background: variables.$primary;
+  // border: 1px solid variables.$primary;
+  color: variables.$white;
   &::before {
     content: "";
     display: block;
     position: absolute;
     // left: 50%;
     background: #166ea4;
+  }
+  &:hover {
+    color: variables.$white;
   }
 }
 button {

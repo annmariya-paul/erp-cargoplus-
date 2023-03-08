@@ -38,6 +38,7 @@ export default function Locations() {
   console.log("select Country",selectCountry);
   const [allLocations, setAllLocations] = useState();
   const [locationId, setLocationId] = useState();
+  const [totallocation,settotallocation]= useState()
 
   const close_modal = (mShow, time) => {
     if (!mShow) {
@@ -69,6 +70,7 @@ export default function Locations() {
     try {
       const locations = await PublicFetch.get(`${CRM_BASE_URL_FMS}/locations`);
       console.log("all locations are", locations.data.data);
+      settotallocation(locations.data.data)
       // setAllLocations(locations.data.data);
       let temp = [];
       locations.data.data.forEach((item,index)=>{
@@ -343,8 +345,9 @@ export default function Locations() {
           </div>
 
           <div className=" col-4 d-flex align-items-center justify-content-center">
+          {totallocation?.length >0 &&(
             <MyPagination
-              total={parseInt(allLocations?.length)}
+              total={parseInt(totallocation?.length)}
               current={current}
               showSizeChanger={true}
               pageSize={pageSize}
@@ -353,6 +356,7 @@ export default function Locations() {
                 setPageSize(pageSize);
               }}
             />
+          )}
           </div>
           <div className="col-4 d-flex justify-content-end">
             <Button btnType="add" onClick={() => setModalAddLocation(true)}>
@@ -369,8 +373,9 @@ export default function Locations() {
           />
         </div>
         <div className="d-flex mt-4 justify-content-center">
+          {totallocation?.length >0 &&(
             <MyPagination
-              total={parseInt(allLocations?.length)}
+              total={parseInt(totallocation?.length)}
               current={current}
               showSizeChanger={true}
               pageSize={pageSize}
@@ -379,6 +384,7 @@ export default function Locations() {
                 setPageSize(pageSize);
               }}
             />
+            )  }
           </div>
       </div>
 

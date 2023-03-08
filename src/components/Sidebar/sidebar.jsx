@@ -175,7 +175,7 @@ export default function Sidebar({ showSidebar }) {
                         }
                         to={ROUTES.EMPLOYMENT_TYPE}
                       >
-                        <div className=" ms-4">Employment Type</div>
+                        <div className=" ms-4">Employee Type</div>
                       </NavLink>
                     </li>
                   )}
@@ -439,6 +439,18 @@ export default function Sidebar({ showSidebar }) {
                           </NavLink>
                         </li>
                       )}
+                        {checkPermission("unit and measures") && (
+                        <li className="nav-text">
+                          <NavLink
+                            className={({ isActive }) =>
+                              isActive ? "active-link" : "link"
+                            }
+                            to={ROUTES.UNIT_LIST}
+                          >
+                            <div className=" ms-4">Units and Measures</div>
+                          </NavLink>
+                        </li>
+                      )}
 
                       {checkPermission("attribute") && (
                         <li className="nav-text">
@@ -476,7 +488,7 @@ export default function Sidebar({ showSidebar }) {
                           </NavLink>
                         </li>
                       )}
-                      {checkPermission("unit and measures") && (
+                      {/* {checkPermission("unit and measures") && (
                         <li className="nav-text">
                           <NavLink
                             className={({ isActive }) =>
@@ -487,7 +499,7 @@ export default function Sidebar({ showSidebar }) {
                             <div className=" ms-4">Units and Measures</div>
                           </NavLink>
                         </li>
-                      )}
+                      )} */}
                     </>
                   ) : (
                     ""
@@ -921,6 +933,7 @@ export default function Sidebar({ showSidebar }) {
                         </li>
                       )}
                       {checkPermission("paymentmode") && (
+<<<<<<< HEAD
                     <li className="nav-text ">
                       <NavLink
                         className={({ isActive }) =>
@@ -944,19 +957,32 @@ export default function Sidebar({ showSidebar }) {
                       </NavLink>
                     </li>
                   )} */}
+=======
+                        <li className="nav-text ">
+                          <NavLink
+                            className={({ isActive }) =>
+                              isActive ? "active-link" : "link"
+                            }
+                            to={ROUTES.PAYMEMENT_MODE}
+                          >
+                            <div className=" ms-5">Payment Mode</div>
+                          </NavLink>
+                        </li>
+                      )}
+>>>>>>> 8212977f048e69c0df22e13de98bb2f20c77bc82
 
-                  {checkPermission("purchase") && (
-                    <li className="nav-text">
-                      <NavLink
-                        className={({ isActive }) =>
-                          isActive ? "active-link" : "link"
-                        }
-                        to={ROUTES.PURCHASE}
-                      >
-                        <div className=" ms-5">Purchase</div>
-                      </NavLink>
-                    </li>
-                  )}
+                      {checkPermission("purchase") && (
+                        <li className="nav-text">
+                          <NavLink
+                            className={({ isActive }) =>
+                              isActive ? "active-link" : "link"
+                            }
+                            to={ROUTES.PURCHASE}
+                          >
+                            <div className=" ms-5">Purchase</div>
+                          </NavLink>
+                        </li>
+                      )}
                     </>
                   ) : (
                     ""
@@ -969,7 +995,32 @@ export default function Sidebar({ showSidebar }) {
                         }
                         to={ROUTES.DAILY_EXPENSE}
                       >
-                        <div className=" ms-4">Daily Expense</div>
+                        <div className="ms-4">Daily Expense</div>
+                      </NavLink>
+                    </li>
+                  )}
+
+                  {checkPermission("purchase") && (
+                    <li className="nav-text">
+                      <NavLink
+                        className={({ isActive }) =>
+                          isActive ? "active-link" : "link"
+                        }
+                        to={ROUTES.BANK_DETAILS}
+                      >
+                        <div className=" ms-5">Bank Details</div>
+                      </NavLink>
+                    </li>
+                  )}
+                  {checkPermission("job_payments") && (
+                    <li className="nav-text ">
+                      <NavLink
+                        className={({ isActive }) =>
+                          isActive ? "active-link" : "link"
+                        }
+                        to={ROUTES.JOB_PAYMENTS}
+                      >
+                        <div className="ms-4">Job Payments</div>
                       </NavLink>
                     </li>
                   )}
@@ -1059,10 +1110,6 @@ export default function Sidebar({ showSidebar }) {
               ) : (
                 ""
               )}
-
-              
-
-              
             </ul>
           </nav>
         </div>

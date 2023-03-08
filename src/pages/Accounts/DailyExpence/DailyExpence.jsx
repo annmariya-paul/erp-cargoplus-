@@ -5,11 +5,12 @@ import { MdPageview } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import { ACCOUNTS } from "../../../api/bootapi";
 import Button from "../../../components/button/button";
-import Custom_model from "../../../components/custom_modal/custom_model";
+import CustomModel from "../../../components/custom_modal/custom_model";
 import MyPagination from "../../../components/Pagination/MyPagination";
 import TableData from "../../../components/table/table_data";
 import { ROUTES } from "../../../routes";
 import PublicFetch from "../../../utils/PublicFetch";
+import moment from "moment";
 
 function DailyExpence() {
   const navigate = useNavigate();
@@ -20,9 +21,10 @@ function DailyExpence() {
   const [totalCount, setTotalcount] = useState("");
   const [AllexpenceData, setAllExpenseData] = useState();
   const [invoiceData, setInvoiceData] = useState();
-  const [cancelPopup, setCancelPopup] = useState(false);
+  const [ViewPopup, setViewPopup] = useState(false);
   const [invoice_id, setInvoice_id] = useState();
   const [successPopup, setSuccessPopup] = useState(false);
+  const [viewData, setViewData] = useState();
   const columns = [
     {
       title: "ACTION",
@@ -32,16 +34,21 @@ function DailyExpence() {
       render: (data, index) => {
         console.log("mere index", index);
         return (
-          <div className="d-flex justify-content-center gap-2">
-            <div className="">
-              <FaEdit onClick={() => {}} />
+          <div className="d-flex justify-content-center gap-3">
+            <div className="editcolor">
+              <FaEdit
+                fontSize={15}
+                onClick={() => {
+                  navigate(`${ROUTES.EDIT_EXPENSE}/${index.daily_expense_id}`);
+                }}
+              />
             </div>
             <div className="editcolor">
               <MdPageview
                 fontSize={18}
                 // onClick={()=>viewprogressoppurtunity(index)}
                 onClick={() => {
-                  // navigate(`${ROUTES.INVOICE_VIEW}/${index.invoice_job_id}`);
+                  handleView(index);
                 }}
               />
             </div>
@@ -178,6 +185,15 @@ function DailyExpence() {
         console.log("Error", err);
       });
   };
+
+  const handleView = (data) => {
+    if (data) {
+      setViewPopup(true);
+      setViewData(data);
+    }
+  };
+
+  console.log("Data from Table", viewData);
 
   useEffect(() => {
     getDailyExpense();
@@ -364,7 +380,192 @@ function DailyExpence() {
                 </div>
               }
             /> */}
-            <Custom_model
+
+            <CustomModel
+              width={"800px"}
+              show={ViewPopup}
+              onHide={() => {
+                setViewPopup(false);
+              }}
+              View_list
+              list_content={
+                <>
+                  <div className="container p-3">
+                    <div className="row">
+                      <div className="col-12">
+                        <h4 style={{ color: "#0891d1" }}>View Daily Expense</h4>
+                      </div>
+                    </div>
+                    <div className="row p-2">
+                      <div className="col-6">
+                        <table>
+                          <tr className="py-2">
+                            <td>
+                              <p
+                                style={{ color: "#000" }}
+                                className="modal_view_p_style"
+                              >
+                                Voucher No
+                              </p>
+                            </td>
+                            <td>
+                              <p>:</p>
+                            </td>
+                            <td>
+                              <p className="modal_view_p_sub">
+                                {viewData?.daily_expense_voucher_no}
+                              </p>
+                            </td>
+                          </tr>
+                          <tr className="py-2">
+                            <td>
+                              <p>BillNo</p>
+                            </td>
+                            <td>
+                              <p>:</p>
+                            </td>
+                            <td>
+                              <p>{viewData?.daily_expense_bill_no}</p>
+                            </td>
+                          </tr>
+                          <tr className="py-2">
+                            <td>
+                              <p>Employee</p>
+                            </td>
+                            <td>
+                              <p>:</p>
+                            </td>
+                            <td>
+                              <p>
+                                {
+                                  viewData?.daily_expense_employee
+                                    ?.employee_name
+                                }
+                              </p>
+                            </td>
+                          </tr>
+                          <tr className="py-2">
+                            <td>
+                              <p>Tax No</p>
+                            </td>
+                            <td>
+                              <p>:</p>
+                            </td>
+                            <td>
+                              <p>{viewData?.daily_expense_taxno}</p>
+                            </td>
+                          </tr>
+                          <tr className="py-2">
+                            <td>
+                              <p>Remarks</p>
+                            </td>
+                            <td>
+                              <p>:</p>
+                            </td>
+                            <td>
+                              <p>{viewData?.daily_expense_remarks}</p>
+                            </td>
+                          </tr>
+                          <tr className="py-2">
+                            <td>
+                              <p>Amount</p>
+                            </td>
+                            <td>
+                              <p>:</p>
+                            </td>
+                            <td>
+                              <p>{viewData?.daily_expense_amount}</p>
+                            </td>
+                          </tr>
+                          <tr className="py-2">
+                            <td>
+                              <p>Total Amount</p>
+                            </td>
+                            <td>
+                              <p>:</p>
+                            </td>
+                            <td>
+                              <p>{viewData?.daily_expense_total_amount}</p>
+                            </td>
+                          </tr>
+                        </table>
+                      </div>
+                      <div className="col-6">
+                        <table>
+                          <tr className="py-2">
+                            <td>
+                              <p>Date</p>
+                            </td>
+                            <td>
+                              <p>:</p>
+                            </td>
+                            <td>
+                              <p>
+                                {moment(viewData?.daily_expense_date).format(
+                                  "DD-MM-YYYY"
+                                )}
+                              </p>
+                            </td>
+                          </tr>
+                          <tr className="py-2">
+                            <td>
+                              <p>Name</p>
+                            </td>
+                            <td>
+                              <p>:</p>
+                            </td>
+                            <td>
+                              <p>{viewData?.daily_expense_name}</p>
+                            </td>
+                          </tr>
+                          <tr className="py-2">
+                            <td>
+                              <p>Party</p>
+                            </td>
+                            <td>
+                              <p>:</p>
+                            </td>
+                            <td>
+                              <p>{viewData?.daily_expense_party}</p>
+                            </td>
+                          </tr>
+                          <tr className="py-2">
+                            <td>
+                              <p>Category</p>
+                            </td>
+                            <td>
+                              <p>:</p>
+                            </td>
+                            <td>
+                              {
+                                viewData?.accounts_v1_expense_category
+                                  ?.expense_category_name
+                              }
+                            </td>
+                          </tr>
+                          <tr className="py-2">
+                            <td>Party Address</td>
+                            <td>:</td>
+                            <td>{viewData?.daily_expense_party_address}</td>
+                          </tr>
+                          <tr className="py-2">
+                            <td>Tax Amount</td>
+                            <td>:</td>
+                            <td>{viewData?.daily_expense_tax_amount}</td>
+                          </tr>
+                          <tr className="py-2">
+                            <td>Attachments</td>
+                            <td>:</td>
+                            <td>{viewData?.daily_expense_docs}</td>
+                          </tr>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              }
+            />
+            <CustomModel
               success
               show={successPopup}
               onHide={() => {

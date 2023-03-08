@@ -35,7 +35,7 @@ function CreateExpence() {
 
   let TaxAmount = (amount * taxAmount) / 100;
 
-  let total = amount + TaxAmount;
+  let total = amount + taxAmount;
   addForm.setFieldsValue({
     daily_expense_total_amount: total,
   });
@@ -157,7 +157,7 @@ function CreateExpence() {
     <div>
       <div className="container-fluid">
         <div className=" mb-3">
-          <h2 style={{ color: "#0891d1" }}>Create Daily Expense</h2>
+          <h4 style={{ color: "#0891d1" }}>Create Daily Expense</h4>
         </div>
         <div className="row ">
           <div className="col-12 ">

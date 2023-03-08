@@ -115,6 +115,7 @@ import EditJobPayment from "./pages/Accounts/JobPayments/edit_job_payments";
 import ViewJobPayment from "./pages/Accounts/JobPayments/view_job_payments";
 import EditExpence from "./pages/Accounts/DailyExpence/EditExpense";
 import AgentReport from "./pages/FMS/AgentReport/agentReport";
+import CostAndExpenseReport from "./pages/FMS/CustomerwiseCostAndExpenseReport/costAndExpenseReport";
 
 function App() {
   return (
@@ -444,6 +445,10 @@ function App() {
 
             <Route path={ROUTES.AGENT_REPORT} element={<ProtectedRoute />}>
               <Route index element={<AgentReport />} />
+            </Route>
+
+            <Route path={ROUTES.COST_AND_EXPENSE_REPORT} element={<ProtectedRoute />}>
+              <Route index element={<CostAndExpenseReport />} />
             </Route>
 
             <Route

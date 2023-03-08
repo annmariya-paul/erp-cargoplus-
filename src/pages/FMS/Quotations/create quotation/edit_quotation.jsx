@@ -501,7 +501,7 @@ export default function EditQuotation(
       dataIndex: "action",
       key: "action",
       className: "drag-visible",
-      render: (data,record, index) => {
+      render: (data, record, index) => {
         return (
           <div className="d-flex justify-content-center align-items-center gap-2">
             <div className="actionEdit m-0 p-0">
@@ -866,6 +866,8 @@ export default function EditQuotation(
         quotation_destination: data11.quotation_destination_id,
         quotation_origin: data11.quotation_origin_id,
       });
+      locationBytype(onequatation?.data?.data?.quotation?.quotation_mode);
+
       setQDetails(onequatation?.data?.data?.quotation.fms_v1_quotation_details);
       console.log("one quatation iss ::", onequatation?.data?.data.quotation);
       console.log(
@@ -895,8 +897,6 @@ export default function EditQuotation(
         onequatation?.data?.data?.quotation?.quotation_exchange_rate
       );
       setquotunits(onequatation?.data?.data?.quotation?.crm_v1_units.unit_name);
-
-      locationBytype(onequatation?.data?.data?.quotation?.quotation_mode);
 
       console.log("quotation_enquiry_no", quotation_enquiry_no);
 
@@ -1177,350 +1177,350 @@ export default function EditQuotation(
     getallunits();
     getallcarrier();
     getallcurrency();
-    getonequatation();
+    if (id) {
+      getonequatation();
+    }
     getAllLocations();
     getAllTaxTypes();
     if (opportunityNo) {
       oneOpportunity();
     }
-  }, [opportunityNo]);
+  }, [opportunityNo, id]);
 
   return (
     <>
       <div className="container-fluid">
         <div className="row justify-content-md-center">
-         
-            <Form
-              form={editForm}
-              onFinish={(values) => {
-                console.log("values iss", values);
-                OnSubmitedit1(values);
-              }}
-              onFinishFailed={(error) => {
-                console.log(error);
-              }}
-            >
-              <div className="container-fluid ms-0 me-2">
-                <div className="row mt-3">
-                  <h4 className="lead_text">Edit Quotation</h4>
-                </div>
-                {/* <div className="containerdesig "> */}
+          <Form
+            form={editForm}
+            onFinish={(values) => {
+              console.log("values iss", values);
+              OnSubmitedit1(values);
+            }}
+            onFinishFailed={(error) => {
+              console.log(error);
+            }}
+          >
+            <div className="container-fluid ms-0 me-2">
+              <div className="row mt-3">
+                <h4 className="lead_text">Edit Quotation</h4>
+              </div>
+              {/* <div className="containerdesig "> */}
 
-                <div className="row  me-3">
+              <div className="row  me-3">
                 <div className="content-tabs-new row justify-content m-3">
-                <div className="row mt-3 ">
+                  <div className="row mt-3 ">
                     <h5 className="lead_text">Basic Info</h5>
                   </div>
                   <div className="row mb-2  ">
-                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                    <label>Quotation No</label>
-                    <Form.Item
-                      name="quotation_no"
-                      // rules={[
-                      //   {
-                      //     required: true,
-                      //     pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                      //     message: "Please enter a Valid number",
-                      //   },
-                      // ]}
-                    >
-                      <InputType value={quatationno} disabled={true} />
-                    </Form.Item>
-                  </div>
-                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                    <label>Quotation date</label>
-                    <Form.Item
-                      name="quotationdate"
-                      rules={[
-                        {
-                          required: true,
-                          // pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a valid date",
-                        },
-                      ]}
-                    >
-                      <DatePicker
-                        style={{ borderWidth: 0, marginTop: 10 }}
-                        initialValues={dayjs()}
-                        format={dateFormatList}
-                        disabledDate={(d) => !d || d.isBefore(today)}
-                        onChange={(e) => {
-                          console.log("date mmm", e);
-                          setDate(e);
-                        }}
-                      />
-                    </Form.Item>
-                  </div>
-                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                    <label>Validity date</label>
-                    <Form.Item
-                      name="validity_date"
-                      rules={[
-                        {
-                          required: true,
-                          // pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid date",
-                        },
-                      ]}
-                    >
-                      <DatePicker
-                        style={{ borderWidth: 0, marginTop: 10 }}
-                        initialValues={dayjs()}
-                        format={dateFormatList}
-                        disabledDate={(d) => !d || d.isBefore(today)}
-                        onChange={(e) => {
-                          console.log("date mmm", e);
-                          setDate(e);
-                        }}
-                      />
-                    </Form.Item>
-                  </div>
-                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                    <label>Enquiry No</label>
-                    <Form.Item
-                      name="quotation_enquiry_no"
-                      // rules={[
-                      //   {
-                      //     required: true,
-                      //     message: "Please select a Type",
-                      //   },
-                      // ]}
-                    >
-                      <SelectBox
-                        // onChange={(e) =>
-                        //   // handleFirstDropdownChange()
-                        //   // handleLeadIdEnq(e)
-                        // }
-                        allowClear
-                        showSearch
-                        optionFilterProp="children"
-                        disabled={true}
+                    <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                      <label>Quotation No</label>
+                      <Form.Item
+                        name="quotation_no"
+                        // rules={[
+                        //   {
+                        //     required: true,
+                        //     pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                        //     message: "Please enter a Valid number",
+                        //   },
+                        // ]}
                       >
-                        {oppnew &&
-                          oppnew.length > 0 &&
-                          oppnew.map((item, index) => {
-                            return (
-                              <Select.Option
-                                key={item.opportunity_id}
-                                value={item.opportunity_id}
-                              >
-                                {item.opportunity_number}
-                              </Select.Option>
-                            );
-                          })}
-                      </SelectBox>
-                    </Form.Item>
-                  </div>
-
-                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                    <label>Consignee</label>
-                    <Form.Item
-                      name="quotation_consignee"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please select a Type",
-                        },
-                      ]}
-                    >
-                      <SelectBox
-                        allowClear
-                        showSearch
-                        optionFilterProp="children"
-                        disabled={true}
+                        <InputType value={quatationno} disabled={true} />
+                      </Form.Item>
+                    </div>
+                    <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                      <label>Quotation date</label>
+                      <Form.Item
+                        name="quotationdate"
+                        rules={[
+                          {
+                            required: true,
+                            // pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                            message: "Please enter a valid date",
+                          },
+                        ]}
                       >
-                        {allLeadList &&
-                          allLeadList.length > 0 &&
-                          allLeadList.map((item, index) => {
-                            return (
-                              <Select.Option
-                                key={item.lead_id}
-                                value={item.lead_id}
-                              >
-                                {item.lead_customer_name}
-                              </Select.Option>
-                            );
-                          })}
-                      </SelectBox>
-                    </Form.Item>
-                  </div>
-
-                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                    <label>Shipper</label>
-                    <Form.Item
-                      name="shipper"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid value",
-                        },
-                      ]}
-                    >
-                      <InputType value={quotshipper} />
-                    </Form.Item>
-                  </div>
-                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                    <label>Freight Type</label>
-                    <Form.Item
-                      name="freight_type"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please select a Type",
-                        },
-                      ]}
-                    >
-                      <SelectBox
-                        allowClear
-                        showSearch
-                        optionFilterProp="children"
+                        <DatePicker
+                          style={{ borderWidth: 0, marginTop: 10 }}
+                          initialValues={dayjs()}
+                          format={dateFormatList}
+                          disabledDate={(d) => !d || d.isBefore(today)}
+                          onChange={(e) => {
+                            console.log("date mmm", e);
+                            setDate(e);
+                          }}
+                        />
+                      </Form.Item>
+                    </div>
+                    <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                      <label>Validity date</label>
+                      <Form.Item
+                        name="validity_date"
+                        rules={[
+                          {
+                            required: true,
+                            // pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                            message: "Please enter a Valid date",
+                          },
+                        ]}
                       >
-                        {frighttype &&
-                          frighttype.length > 0 &&
-                          frighttype.map((item, index) => {
-                            return (
-                              <Select.Option
-                                key={item.freight_type_id}
-                                value={item.freight_type_id}
-                              >
-                                {item.freight_type_name}
-                              </Select.Option>
-                            );
-                          })}
-                      </SelectBox>
-                    </Form.Item>
-                  </div>
+                        <DatePicker
+                          style={{ borderWidth: 0, marginTop: 10 }}
+                          initialValues={dayjs()}
+                          format={dateFormatList}
+                          disabledDate={(d) => !d || d.isBefore(today)}
+                          onChange={(e) => {
+                            console.log("date mmm", e);
+                            setDate(e);
+                          }}
+                        />
+                      </Form.Item>
+                    </div>
+                    <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                      <label>Enquiry No</label>
+                      <Form.Item
+                        name="quotation_enquiry_no"
+                        // rules={[
+                        //   {
+                        //     required: true,
+                        //     message: "Please select a Type",
+                        //   },
+                        // ]}
+                      >
+                        <SelectBox
+                          // onChange={(e) =>
+                          //   // handleFirstDropdownChange()
+                          //   // handleLeadIdEnq(e)
+                          // }
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
+                          disabled={true}
+                        >
+                          {oppnew &&
+                            oppnew.length > 0 &&
+                            oppnew.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  key={item.opportunity_id}
+                                  value={item.opportunity_id}
+                                >
+                                  {item.opportunity_number}
+                                </Select.Option>
+                              );
+                            })}
+                        </SelectBox>
+                      </Form.Item>
+                    </div>
 
+                    <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                      <label>Consignee</label>
+                      <Form.Item
+                        name="quotation_consignee"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please select a Type",
+                          },
+                        ]}
+                      >
+                        <SelectBox
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
+                          disabled={true}
+                        >
+                          {allLeadList &&
+                            allLeadList.length > 0 &&
+                            allLeadList.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  key={item.lead_id}
+                                  value={item.lead_id}
+                                >
+                                  {item.lead_customer_name}
+                                </Select.Option>
+                              );
+                            })}
+                        </SelectBox>
+                      </Form.Item>
+                    </div>
+
+                    <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                      <label>Shipper</label>
+                      <Form.Item
+                        name="shipper"
+                        rules={[
+                          {
+                            required: true,
+                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                            message: "Please enter a Valid value",
+                          },
+                        ]}
+                      >
+                        <InputType value={quotshipper} />
+                      </Form.Item>
+                    </div>
+                    <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                      <label>Freight Type</label>
+                      <Form.Item
+                        name="freight_type"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please select a Type",
+                          },
+                        ]}
+                      >
+                        <SelectBox
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
+                        >
+                          {frighttype &&
+                            frighttype.length > 0 &&
+                            frighttype.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  key={item.freight_type_id}
+                                  value={item.freight_type_id}
+                                >
+                                  {item.freight_type_name}
+                                </Select.Option>
+                              );
+                            })}
+                        </SelectBox>
+                      </Form.Item>
+                    </div>
                   </div>
-                  </div>
-                  </div>
-                  <div className="row  mt-3 ">
+                </div>
+              </div>
+              <div className="row  mt-3 ">
                 <div className="col-md-6 col-12">
                   <div className="content-tabs-new row justify-content mx-1 mb-3">
                     <div className="row mt-3">
                       <h5 className="lead_text">Transportation</h5>
                     </div>
-              
-                    <div className="col-xl-6 col-sm-12 mt-2">
-                    <label>Mode</label>
-                    <Form.Item
-                      name="quotation_mode"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please select a mode",
-                        },
-                      ]}
-                    >
-                      <SelectBox
-                        allowClear
-                        showSearch
-                        optionFilterProp="children"
-                        onChange={(e) => {
-                          locationBytype(e);
-                        }}
-                      >
-                        <Select.Option value="Air">Air</Select.Option>
-                        <Select.Option value="Sea">Sea</Select.Option>
-                        <Select.Option value="Road">Road</Select.Option>
-                      </SelectBox>
-                    </Form.Item>
-                  </div>
-                  <div className="col-xl-6 col-sm-12 mt-2">
-                    <label>Origin</label>
-                    <Form.Item
-                      name="quotation_origin"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please select a Type",
-                        },
-                      ]}
-                    >
-                      <SelectBox
-                        allowClear
-                        showSearch
-                        optionFilterProp="children"
-                      >
-                        {allLocations &&
-                          allLocations.length > 0 &&
-                          allLocations.map((item, index) => {
-                            return (
-                              <Select.Option
-                                value={item.location_id}
-                                key={item.location_id}
-                              >
-                                {item.location_name}
-                              </Select.Option>
-                            );
-                          })}
-                      </SelectBox>
-                    </Form.Item>
-                  </div>
-                  <div className="col-xl-6 col-sm-12 mt-2">
-                    <label>Destination</label>
-                    <Form.Item
-                      name="quotation_destination"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please select a Type",
-                        },
-                      ]}
-                    >
-                      <SelectBox
-                        allowClear
-                        showSearch
-                        optionFilterProp="children"
-                      >
-                        {allLocations &&
-                          allLocations.length > 0 &&
-                          allLocations.map((item, index) => {
-                            return (
-                              <Select.Option
-                                value={item.location_id}
-                                key={item.location_id}
-                              >
-                                {item.location_name}
-                              </Select.Option>
-                            );
-                          })}
-                      </SelectBox>
-                    </Form.Item>
-                  </div>
 
-                  <div className="col-xl-6 col-sm-12 mt-2 mb-5 pb-5">
-                    <label>Carrier</label>
-                    <Form.Item
-                      name="quotation_carrier"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please select a Type",
-                        },
-                      ]}
-                    >
-                      <SelectBox
-                        allowClear
-                        showSearch
-                        optionFilterProp="children"
+                    <div className="col-xl-6 col-sm-12 mt-2">
+                      <label>Mode</label>
+                      <Form.Item
+                        name="quotation_mode"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please select a mode",
+                          },
+                        ]}
                       >
-                        {carrierdata &&
-                          carrierdata.length > 0 &&
-                          carrierdata.map((item, index) => {
-                            return (
-                              <Select.Option
-                                value={item.carrier_id}
-                                key={item.carrier_id}
-                              >
-                                {item.carrier_name}
-                              </Select.Option>
-                            );
-                          })}
-                      </SelectBox>
-                    </Form.Item>
-                  </div>
+                        <SelectBox
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
+                          onChange={(e) => {
+                            locationBytype(e);
+                          }}
+                        >
+                          <Select.Option value="Air">Air</Select.Option>
+                          <Select.Option value="Sea">Sea</Select.Option>
+                          <Select.Option value="Road">Road</Select.Option>
+                        </SelectBox>
+                      </Form.Item>
+                    </div>
+                    <div className="col-xl-6 col-sm-12 mt-2">
+                      <label>Origin</label>
+                      <Form.Item
+                        name="quotation_origin"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please select a Type",
+                          },
+                        ]}
+                      >
+                        <SelectBox
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
+                        >
+                          {allLocations &&
+                            allLocations.length > 0 &&
+                            allLocations.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  value={item.location_id}
+                                  key={item.location_id}
+                                >
+                                  {item.location_name}
+                                </Select.Option>
+                              );
+                            })}
+                        </SelectBox>
+                      </Form.Item>
+                    </div>
+                    <div className="col-xl-6 col-sm-12 mt-2">
+                      <label>Destination</label>
+                      <Form.Item
+                        name="quotation_destination"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please select a Type",
+                          },
+                        ]}
+                      >
+                        <SelectBox
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
+                        >
+                          {allLocations &&
+                            allLocations.length > 0 &&
+                            allLocations.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  value={item.location_id}
+                                  key={item.location_id}
+                                >
+                                  {item.location_name}
+                                </Select.Option>
+                              );
+                            })}
+                        </SelectBox>
+                      </Form.Item>
+                    </div>
+
+                    <div className="col-xl-6 col-sm-12 mt-2 mb-5 pb-5">
+                      <label>Carrier</label>
+                      <Form.Item
+                        name="quotation_carrier"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please select a Type",
+                          },
+                        ]}
+                      >
+                        <SelectBox
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
+                        >
+                          {carrierdata &&
+                            carrierdata.length > 0 &&
+                            carrierdata.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  value={item.carrier_id}
+                                  key={item.carrier_id}
+                                >
+                                  {item.carrier_name}
+                                </Select.Option>
+                              );
+                            })}
+                        </SelectBox>
+                      </Form.Item>
+                    </div>
                   </div>
                 </div>
                 <div className="col-md-6 col-12">
@@ -1529,133 +1529,133 @@ export default function EditQuotation(
                       <h5 className="lead_text">Shipment Details</h5>
                     </div>
                     <div className="col-xl-6 col-sm-12 mt-2">
-                    <label>Cargo Type</label>
-                    <Form.Item
-                      name="quotation_cargotype"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please select a Type",
-                        },
-                      ]}
-                    >
-                      <SelectBox
-                        allowClear
-                        showSearch
-                        optionFilterProp="children"
+                      <label>Cargo Type</label>
+                      <Form.Item
+                        name="quotation_cargotype"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please select a Type",
+                          },
+                        ]}
                       >
-                        {cargooptions &&
-                          cargooptions.length > 0 &&
-                          cargooptions.map((item, index) => {
-                            return (
-                              <Select.Option key={item.id} value={item.id}>
-                                {item.name}
-                              </Select.Option>
-                            );
-                          })}
-                      </SelectBox>
-                    </Form.Item>
-                  </div>
+                        <SelectBox
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
+                        >
+                          {cargooptions &&
+                            cargooptions.length > 0 &&
+                            cargooptions.map((item, index) => {
+                              return (
+                                <Select.Option key={item.id} value={item.id}>
+                                  {item.name}
+                                </Select.Option>
+                              );
+                            })}
+                        </SelectBox>
+                      </Form.Item>
+                    </div>
 
-                  <div className="col-xl-6 col-sm-12  mt-2">
-                    <label>Number of pieces</label>
-                    <Form.Item
-                      name="quot_npieces"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid value",
-                        },
-                      ]}
-                    >
-                      <InputType
-                      // value={}
-                      />
-                    </Form.Item>
-                  </div>
-                  <div className="col-xl-6 col-sm-12 mt-2">
-                    <label>UOM</label>
-                    <Form.Item
-                      name="quotation_units"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid value",
-                        },
-                      ]}
-                    >
-                      <SelectBox
-                        allowClear
-                        showSearch
-                        optionFilterProp="children"
+                    <div className="col-xl-6 col-sm-12  mt-2">
+                      <label>Number of pieces</label>
+                      <Form.Item
+                        name="quot_npieces"
+                        rules={[
+                          {
+                            required: true,
+                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                            message: "Please enter a Valid value",
+                          },
+                        ]}
                       >
-                        {unitdata &&
-                          unitdata.length > 0 &&
-                          unitdata.map((item, index) => {
-                            return (
-                              <Select.Option
-                                value={item.unit_id}
-                                key={item.unit_id}
-                              >
-                                {item.unit_name}
-                              </Select.Option>
-                            );
-                          })}
-                      </SelectBox>
-                    </Form.Item>
-                  </div>
-                  
-                  <div className="col-xl-6 col-sm-12 mt-2">
-                    <label>Gross Weight</label>
-                    <Form.Item
-                      name="gross_wt"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid value",
-                        },
-                      ]}
-                    >
-                      <Input_Number
-                        className="text_right"
-                        // value={amount}
-                        onChange={handleChange}
-                        align="right"
-                        step={0.01}
-                        min={0}
-                        precision={2}
-                        controlls={false}
-                      />
-                    </Form.Item>
-                  </div>
-                 
-                  <div className="col-xl-6 col-sm-12 mt-2">
-                    <label>Chargeable Weight</label>
-                    <Form.Item
-                      name="chargeable_wt"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid value",
-                        },
-                      ]}
-                    >
-                      <Input_Number
-                        className="text_right"
-                        // value={amount}
-                        onChange={handleChange}
-                        align="right"
-                        step={0.01}
-                        min={0}
-                        precision={2}
-                        controlls={false}
-                      />
-                    </Form.Item>
-                  </div>
+                        <InputType
+                        // value={}
+                        />
+                      </Form.Item>
+                    </div>
+                    <div className="col-xl-6 col-sm-12 mt-2">
+                      <label>UOM</label>
+                      <Form.Item
+                        name="quotation_units"
+                        rules={[
+                          {
+                            required: true,
+                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                            message: "Please enter a Valid value",
+                          },
+                        ]}
+                      >
+                        <SelectBox
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
+                        >
+                          {unitdata &&
+                            unitdata.length > 0 &&
+                            unitdata.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  value={item.unit_id}
+                                  key={item.unit_id}
+                                >
+                                  {item.unit_name}
+                                </Select.Option>
+                              );
+                            })}
+                        </SelectBox>
+                      </Form.Item>
+                    </div>
+
+                    <div className="col-xl-6 col-sm-12 mt-2">
+                      <label>Gross Weight</label>
+                      <Form.Item
+                        name="gross_wt"
+                        rules={[
+                          {
+                            required: true,
+                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                            message: "Please enter a Valid value",
+                          },
+                        ]}
+                      >
+                        <Input_Number
+                          className="text_right"
+                          // value={amount}
+                          onChange={handleChange}
+                          align="right"
+                          step={0.01}
+                          min={0}
+                          precision={2}
+                          controlls={false}
+                        />
+                      </Form.Item>
+                    </div>
+
+                    <div className="col-xl-6 col-sm-12 mt-2">
+                      <label>Chargeable Weight</label>
+                      <Form.Item
+                        name="chargeable_wt"
+                        rules={[
+                          {
+                            required: true,
+                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                            message: "Please enter a Valid value",
+                          },
+                        ]}
+                      >
+                        <Input_Number
+                          className="text_right"
+                          // value={amount}
+                          onChange={handleChange}
+                          align="right"
+                          step={0.01}
+                          min={0}
+                          precision={2}
+                          controlls={false}
+                        />
+                      </Form.Item>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1667,143 +1667,140 @@ export default function EditQuotation(
                     </div>
 
                     <div className="col-xl-6 col-sm-12 mt-2">
-
-                 
-                    <label>Terms</label>
-                    <Form.Item
-                      name="quotation_terms"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please select a Type",
-                        },
-                      ]}
-                    >
-                      <SelectBox
-                        allowClear
-                        showSearch
-                        optionFilterProp="children"
+                      <label>Terms</label>
+                      <Form.Item
+                        name="quotation_terms"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please select a Type",
+                          },
+                        ]}
                       >
-                        {allPaymentTerms &&
-                          allPaymentTerms.length > 0 &&
-                          allPaymentTerms.map((item, index) => {
-                            return (
-                              <Select.Option
-                                key={item.payment_term_id}
-                                value={item.payment_term_id}
-                              >
-                                {item.payment_term_name}
-                              </Select.Option>
-                            );
-                          })}
-                      </SelectBox>
-                    </Form.Item>
-                  </div>
+                        <SelectBox
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
+                        >
+                          {allPaymentTerms &&
+                            allPaymentTerms.length > 0 &&
+                            allPaymentTerms.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  key={item.payment_term_id}
+                                  value={item.payment_term_id}
+                                >
+                                  {item.payment_term_name}
+                                </Select.Option>
+                              );
+                            })}
+                        </SelectBox>
+                      </Form.Item>
+                    </div>
 
-              
-
-               
-
-
-
-                  <div className="col-xl-6 col-sm-12 mt-2">
-                    <label>Currency</label>
-                    <Form.Item
-                      name="currency"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid value",
-                        },
-                      ]}
-                    >
-                      <SelectBox
-                        allowClear
-                        showSearch
-                        optionFilterProp="children"
+                    <div className="col-xl-6 col-sm-12 mt-2">
+                      <label>Currency</label>
+                      <Form.Item
+                        name="currency"
+                        rules={[
+                          {
+                            required: true,
+                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                            message: "Please enter a Valid value",
+                          },
+                        ]}
                       >
-                        {currencydata &&
-                          currencydata.length > 0 &&
-                          currencydata.map((item, index) => {
-                            return (
-                              <Select.Option
-                                value={item.currency_id}
-                                key={item.currency_id}
-                              >
-                                {item.currency_name}
-                              </Select.Option>
-                            );
-                          })}
-                      </SelectBox>
-                    </Form.Item>
+                        <SelectBox
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
+                        >
+                          {currencydata &&
+                            currencydata.length > 0 &&
+                            currencydata.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  value={item.currency_id}
+                                  key={item.currency_id}
+                                >
+                                  {item.currency_name}
+                                </Select.Option>
+                              );
+                            })}
+                        </SelectBox>
+                      </Form.Item>
+                    </div>
+
+                    <div className="col-xl-6 col-sm-12 mt-2 pb-4">
+                      <label>Exchange Rate</label>
+                      <Form.Item
+                        name="exchnagerate"
+                        rules={[
+                          {
+                            required: true,
+                            // pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                            message: "Please enter a Valid Rate",
+                          },
+                        ]}
+                      >
+                        <Input_Number
+                          className="text_right"
+                          // value={amount}
+                          onChange={handleChange}
+                          align="right"
+                          step={0.01}
+                          min={0}
+                          precision={2}
+                          controlls={false}
+                          // disabled={true}
+                        />
+                      </Form.Item>
+                    </div>
                   </div>
-
-                  <div className="col-xl-6 col-sm-12 mt-2 pb-4">
-                    <label>Exchange Rate</label>
-                    <Form.Item
-                      name="exchnagerate"
-                      rules={[
-                        {
-                          required: true,
-                          // pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid Rate",
-                        },
-                      ]}
-                    >
-                      <Input_Number
-                        className="text_right"
-                        // value={amount}
-                        onChange={handleChange}
-                        align="right"
-                        step={0.01}
-                        min={0}
-                        precision={2}
-                        controlls={false}
-                        // disabled={true}
-                      />
-                    </Form.Item>
-                  </div>
-
-
                 </div>
-              </div>
-              <div className="col-md-6 col-12">
+                <div className="col-md-6 col-12">
                   <div className="content-tabs-new row justify-content mx-1 mb-1">
-                     <div className="row mt-3">
+                    <div className="row mt-3">
                       <h5 className="lead_text">Attachments</h5>
                     </div>
                     <div className="col-xl-12 col-sm-12 mt-2">
+                      <Form.Item className="mt-2" name="new">
+                        <FileUpload
+                          multiple
+                          listType="picture"
+                          filetype={"Accept only pdf and docs"}
+                          accept=".pdf,.docs,"
+                          // onPreview={handlePreview}
+                          beforeUpload={true}
+                          onChange={(file) => {
+                            console.log("Before upload", file.file);
+                            console.log(
+                              "Before upload file size",
+                              file.file.size
+                            );
 
-            
-                  <Form.Item className="mt-2" name="new">
-                    <FileUpload
-                      multiple
-                      listType="picture"
-                      filetype={"Accept only pdf and docs"}
-                      accept=".pdf,.docs,"
-                      // onPreview={handlePreview}
-                      beforeUpload={true}
-                      onChange={(file) => {
-                        console.log("Before upload", file.file);
-                        console.log("Before upload file size", file.file.size);
-
-                        if (file.file.size > 2000 && file.file.size < 500000) {
-                          // setImg(file.file.originFileObj);
-                          console.log("selet imggg", file.file.originFileObj);
-                          // setImageSize(false);
-                        } else {
-                          // setImageSize(true);
-                          console.log(
-                            "Error in upload, upload image size between 1 kb and  500 kb"
-                          );
-                        }
-                      }}
-                    />
-                  </Form.Item>
+                            if (
+                              file.file.size > 2000 &&
+                              file.file.size < 500000
+                            ) {
+                              // setImg(file.file.originFileObj);
+                              console.log(
+                                "selet imggg",
+                                file.file.originFileObj
+                              );
+                              // setImageSize(false);
+                            } else {
+                              // setImageSize(true);
+                              console.log(
+                                "Error in upload, upload image size between 1 kb and  500 kb"
+                              );
+                            }
+                          }}
+                        />
+                      </Form.Item>
+                    </div>
+                  </div>
                 </div>
-              </div>
-              </div>
               </div>
 
               <div className="row mt-3 me-2 ">
@@ -1811,77 +1808,75 @@ export default function EditQuotation(
                   <div className="row mt-3">
                     <h5 className="lead_text">Task & Description</h5>
                   </div>
-                <div className="datatable">
-                  <TableData
-                    data={sampletable}
-                    columns={columns}
-                    custom_table_css="table_qtn qtn_table_brdr"
-                  />
-                </div>
-             
+                  <div className="datatable">
+                    <TableData
+                      data={sampletable}
+                      columns={columns}
+                      custom_table_css="table_qtn qtn_table_brdr"
+                    />
+                  </div>
 
-              <div className="d-flex justify-content-end mt-4 ms-5">
-              <div className="col-lg-2 col-sm-4 col-xs-3 d-flex justify-content-end mt-3 me-3">
+                  <div className="d-flex justify-content-end mt-4 ms-5">
+                    <div className="col-lg-2 col-sm-4 col-xs-3 d-flex justify-content-end mt-3 me-3">
                       <p style={{ fontWeight: 600 }}>Grand Total :</p>
                     </div>
 
-                <div className="col-lg-2 col-sm-6 col-xs-2 me-5">
-                  <Form.Item
-                    name="gtotal"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please enter a Valid value",
-                      },
-                    ]}
-                  >
-                    <Input_Number
-                      className="text_right grandtotal"
-                      value={amount}
-                      onChange={handleChange}
-                      align="right"
-                      step={0.01}
-                      min={0}
-                      precision={2}
-                      controlls={false}
-                      disabled={true}
-                    />
-                  </Form.Item>
+                    <div className="col-lg-2 col-sm-6 col-xs-2 me-5">
+                      <Form.Item
+                        name="gtotal"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please enter a Valid value",
+                          },
+                        ]}
+                      >
+                        <Input_Number
+                          className="text_right grandtotal"
+                          value={amount}
+                          onChange={handleChange}
+                          align="right"
+                          step={0.01}
+                          min={0}
+                          precision={2}
+                          controlls={false}
+                          disabled={true}
+                        />
+                      </Form.Item>
+                    </div>
+                  </div>
                 </div>
               </div>
-              </div>
-              </div>
-              </div>
-              <div className="col-12 d-flex justify-content-center my-4 gap-3">
-                {/* <div className="col-lg-1 "> */}
-                  <Button className="save_button" btnType="save">
-                    Save
-                  </Button>
-                {/* </div> */}
-                {/* <div className="col-lg-1 "> */}
-                  <Button
-                   as="input"
-                   type="reset"
-                   value="Reset"
-                    onClick={() => {
-                      navigate(`${ROUTES.QUATATIONS}`);
-                    }}
-                    // className="qtn_save"
-                    // btnType="save"
-                  >
-                    Cancel
-                  </Button>
-                {/* </div> */}
-              </div>
-            </Form>
+            </div>
+            <div className="col-12 d-flex justify-content-center my-4 gap-3">
+              {/* <div className="col-lg-1 "> */}
+              <Button className="save_button" btnType="save">
+                Save
+              </Button>
+              {/* </div> */}
+              {/* <div className="col-lg-1 "> */}
+              <Button
+                as="input"
+                type="reset"
+                value="Reset"
+                onClick={() => {
+                  navigate(`${ROUTES.QUATATIONS}`);
+                }}
+                // className="qtn_save"
+                // btnType="save"
+              >
+                Cancel
+              </Button>
+              {/* </div> */}
+            </div>
+          </Form>
 
-            <Custom_model
-              size={"sm"}
-              show={saveSuccess}
-              onHide={() => setSaveSuccess(false)}
-              success
-            />
-         
+          <Custom_model
+            size={"sm"}
+            show={saveSuccess}
+            onHide={() => setSaveSuccess(false)}
+            success
+          />
         </div>
       </div>
     </>

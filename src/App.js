@@ -113,6 +113,7 @@ import JobPayments from "./pages/Accounts/JobPayments/job_payments";
 import AddJobPayments from "./pages/Accounts/JobPayments/add_job_payment";
 import EditJobPayment from "./pages/Accounts/JobPayments/edit_job_payments";
 import ViewJobPayment from "./pages/Accounts/JobPayments/view_job_payments";
+import EditExpence from "./pages/Accounts/DailyExpence/EditExpense";
 import AgentReport from "./pages/FMS/AgentReport/agentReport";
 
 function App() {
@@ -458,6 +459,9 @@ function App() {
             </Route>
             <Route path={ROUTES.CREATE_EXPENSE} element={<ProtectedRoute />}>
               <Route index element={<CreateExpence />} />
+            </Route>
+            <Route path={ROUTES.EDIT_EXPENSE_ID} element={<ProtectedRoute />}>
+              <Route index element={<EditExpence />} />
             </Route>
             <Route path={ROUTES.EXPENSE_CATEGORY} element={<ProtectedRoute />}>
               <Route index element={<ExpenseCategory />} />

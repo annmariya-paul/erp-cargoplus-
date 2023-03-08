@@ -33,17 +33,42 @@ function Bank(){
     const [bankname,setbankname]= useState("")
     const [bankbrnch,setbankbrnch]= useState("")
     const [bankibanno,setbankibanno]= useState("")
-    const [defaultbank,setdefaultbank] =useState()
+    const [defaultbank,setdefaultbank] =useState(0)
 
-    const [viewbankdetails, setBankdetails] = useState({
+    const [editbankaccname,seteditbankaccname]= useState("")
+    const [editbankaccno,seteditbankaccno]= useState("")
+    const [editbankname,seteditbankname]= useState("")
+    const [editbankbrnch,seteditbankbrnch]= useState("")
+    const [editbankibanno,seteditbankibanno]= useState("")
+    const [editdefaultbank,seteditdefaultbank] =useState()
+
+    const [editbankid,seteditbankid]=useState()
+
+    const [viewbankdetails, setviewbankdetails] = useState({
       id: "",
       viewbankaccname: "",
       viewbankaccno: "",
       viewbankname: "",
       viewbankbrnch: "",
       viewbankibano: "",
-     
+      viewbankdefault:""
     });
+
+    const handleViewClick = (item) => {
+      console.log("view all bankdetails", item);
+      setviewbankdetails({
+        ...viewbankdetails,
+        id: item.bank_id,
+        viewbankaccname: item.bank_account_name,
+        viewbankaccno: item.bank_account_number,
+        viewbankbrnch: item.bank_branch,
+        viewbankname:item.bank_name,
+        viewbankibano:item.bank_iban_no,
+        viewbankdefault:item.bank_default
+      });
+      setShowViewModal(true);
+    };
+  
 
     const handleChecked = (e, key) => {
       console.log("isChecked", e);
@@ -52,6 +77,88 @@ function Bank(){
         setdefaultbank(1);
       }
     };
+    const handleCheckededit = (e, key) => {
+      console.log("isChecked", e);
+      if (e.target.checked) {
+        console.log("suceccss checked", e.target.checked);
+        seteditdefaultbank(1);
+      } else {
+        seteditdefaultbank(0)
+      }
+    };
+
+
+    const handleEditclick = (e) => {
+      console.log("editing id iss", e);
+      seteditbankid(e.bank_id)
+      seteditbankaccname(e.bank_account_name)
+      seteditbankaccno(e.bank_account_number)
+      seteditbankbrnch(e.bank_branch)
+      seteditbankname(e.bank_name)
+      seteditbankibanno(e.bank_iban_no)
+      seteditdefaultbank(e.bank_default)
+
+      editForm.setFieldsValue({
+        // unitid: e.unit_id,
+        editaccname:e.bank_account_name,
+        editbank_name:e.bank_name,
+        editbnk_branch:e.bank_branch,
+        editacc_no:e.bank_account_number,
+        editiban_no:e.bank_iban_no,
+        editdefaultbnk:e.bank_default
+      });
+      setVendorEditPopup(true);
+      // setuniqueCode(false);
+  
+    };
+    const handleviewtoedit = (e) => {
+      console.log("editing view iss", e);
+      seteditbankid(e.id)
+      seteditbankaccname(e.viewbankaccname)
+      seteditbankaccno(e.viewbankaccno)
+      seteditbankbrnch(e.viewbankbrnch)
+      seteditbankname(e.viewbankname)
+      seteditbankibanno(e.viewbankibano)
+      seteditdefaultbank(e.viewbankdefault)
+
+      editForm.setFieldsValue({
+        editaccname:e.viewbankaccname,
+        editbank_name:e.viewbankname,
+        editbnk_branch:e.viewbankbrnch,
+        editacc_no:e.viewbankaccno,
+        editiban_no:e.viewbankibano,
+        editdefaultbnk:e.viewbankdefault
+      });
+      setVendorEditPopup(true);
+  
+    };
+
+    const handleupdate = async () => {
+      try {
+        const updated = await PublicFetch.patch(
+          `${ACCOUNTS}/bank/${editbankid}`,
+          {
+            bank_account_name: editbankaccname,
+            bank_account_number: editbankaccno,
+            bank_name: editbankname,
+            bank_branch:editbankbrnch,
+            bank_iban_no:editbankibanno,
+            bank_default:editdefaultbank
+          }
+        );
+        console.log("successfully updated ", updated);
+        if (updated.data.success) {
+          setSuccessPopup(true)
+          setVendorEditPopup(false);
+          getallbanks()
+    
+          close_modal(successPopup,1000 );
+        } 
+      } catch (err) {
+        console.log("error to update bankdetails");
+      }
+    };
+
 
 
     const close_modal = (mShow, time) => {
@@ -128,25 +235,25 @@ function Bank(){
           title: "NAME ",
           dataIndex: "bank_account_name",
           key: "vendor_name",
-          filteredValue: [searchedText],
-          onFilter: (value, record) => {
-            return String(record.vendor_name)
-              .toLowerCase()
-              .includes(value.toLowerCase());
-          },
-          align: "center",
+          // filteredValue: [searchedText],
+          // onFilter: (value, record) => {
+          //   return String(record.vendor_name)
+          //     .toLowerCase()
+          //     .includes(value.toLowerCase());
+          // },
+          align: "left",
         },
         {
           title: "BANK NAME",
           dataIndex: "bank_name",
-          key: "freight_type_prefix",
-    
+          key: "bank_name",
+          filteredValue: [searchedText],
           onFilter: (value, record) => {
-            return String(record.freight_type_prefix)
+            return String(record.bank_name)
               .toLowerCase()
               .includes(value.toLowerCase());
           },
-          align: "center",
+          align: "left",
         },
         {
           title: "BRANCH",
@@ -158,7 +265,7 @@ function Bank(){
               .toLowerCase()
               .includes(value.toLowerCase());
           },
-          align: "center",
+          align: "left",
         },
         // {
         //   title: "COUNTRY",
@@ -184,8 +291,7 @@ function Bank(){
                 <div
                   className="editIcon m-0"
                   onClick={() => {
-                    // handleEditclick(index);
-                   setVendorEditPopup(true)
+                    handleEditclick(index)
                   }}
                 >
                   <FaEdit />
@@ -194,7 +300,7 @@ function Bank(){
                   className="viewIcon m-0"
                   onClick={() => {
                     // handleViewClick(index)
-                    setShowViewModal(true)
+                    handleViewClick(index)
                 }}
                 >
                   <MdPageview style={{ marginLeft: 15, marginRight: 15 }} />
@@ -486,7 +592,7 @@ function Bank(){
                           <Checkbox
                             // value={currencyDefault}
                             onChange={handleChecked}
-                            checked={defaultbank === 1 ? true : false}
+                            checked={defaultbank == 1 ? true : false}
                           ></Checkbox>
                         </Form.Item>
                       </div>
@@ -533,7 +639,8 @@ function Bank(){
                     // handleviewtoedit(viewvendortype);
                     // setShowModalEdit(true);
                     // handleviewtoedit(viewvendor);
-                    setVendorEditPopup(true)
+                    handleviewtoedit(viewbankdetails)
+                    // setVendorEditPopup(true)
                     setShowViewModal(false);
                   }}
                 >
@@ -551,7 +658,7 @@ function Bank(){
               </div>
               <div className="col-1">:</div>
               <div className="col-6 justify-content-start">
-                {/* <p className="modal-view-data">{viewvendor.vendor_name}</p> */}
+                <p className="modal-view-data">{viewbankdetails.viewbankaccname}</p>
               </div>
             </div>
 
@@ -562,7 +669,7 @@ function Bank(){
               <div className="col-1">:</div>
               <div className="col-6 justify-content-start">
                 <p className="modal-view-data">
-                  {/* {viewvendor.vendor_organisation} */}
+                  {viewbankdetails.viewbankname}
                 </p>
               </div>
             </div>
@@ -573,7 +680,7 @@ function Bank(){
               </div>
               <div className="col-1">:</div>
               <div className="col-6 justify-content-start">
-                {/* <p className="modal-view-data">{viewvendor.vendor_type}</p> */}
+                <p className="modal-view-data">{viewbankdetails.viewbankbrnch}</p>
               </div>
             </div>
 
@@ -583,15 +690,19 @@ function Bank(){
               </div>
               <div className="col-1">:</div>
               <div className="col-6 justify-content-start">
-                {/* <p className="modal-view-data">{viewvendor.vendor_email}</p> */}
+                <p className="modal-view-data">{viewbankdetails.viewbankaccno}</p>
               </div>
             </div>
 
-           
-
-           
-
-           
+            <div className="row mt-2">
+              <div className="col-4">
+                <p>BankIBAN No</p>
+              </div>
+              <div className="col-1">:</div>
+              <div className="col-6 justify-content-start">
+                <p className="modal-view-data">{viewbankdetails.viewbankibano}</p>
+              </div>
+            </div>
 
            
           </div>
@@ -611,10 +722,11 @@ function Bank(){
               </div>
               <div className="row px-4">
               <Form
-              form={addForm}
+              form={editForm}
               onFinish={(data) => {
                 console.log("valuezzzzzzz", data);
                 // createvendor();
+                handleupdate()
               }}
               onFinishFailed={(error) => {
                 console.log(error);
@@ -625,7 +737,7 @@ function Bank(){
                   <label> Name</label>
                   <div>
                     <Form.Item
-                      name="name"
+                      name="editaccname"
                       rules={[
                         {
                           required: true,
@@ -635,10 +747,10 @@ function Bank(){
                       ]}
                     >
                       <InputType
-                        // value={vendorname}
-                        // onChange={(e) => {
-                        //   setvendorname(e.target.value);
-                        // }}
+                        value={editbankaccname}
+                        onChange={(e) => {
+                          seteditbankaccname(e.target.value);
+                        }}
                       />
                     </Form.Item>
                   </div>
@@ -648,7 +760,7 @@ function Bank(){
                   <label>Bank Name</label>
                   <div>
                     <Form.Item
-                      name="bank_name"
+                      name="editbank_name"
                       rules={[
                         {
                           required: true,
@@ -658,10 +770,10 @@ function Bank(){
                       ]}
                     >
                     <InputType
-                        // value={vendorname}
-                        // onChange={(e) => {
-                        //   setvendorname(e.target.value);
-                        // }}
+                        value={editbankname}
+                        onChange={(e) => {
+                          seteditbankname(e.target.value);
+                        }}
                       />
                     </Form.Item>
                   </div>
@@ -675,7 +787,7 @@ function Bank(){
                   <label>Branch</label>
                   <div>
                     <Form.Item
-                      name="bnk_branch"
+                      name="editbnk_branch"
                       rules={[
                         {
                           required: true,
@@ -683,7 +795,12 @@ function Bank(){
                         },
                       ]}
                     >
-                      <InputType/>
+                      <InputType
+                        value={editbankbrnch}
+                        onChange={(e) => {
+                          seteditbankbrnch(e.target.value);
+                        }}
+                      />
                     </Form.Item>
                   </div>
                 </div>
@@ -691,7 +808,7 @@ function Bank(){
                   <label> Account No</label>
                   <div>
                     <Form.Item
-                      name="acc_no"
+                      name="editacc_no"
                       rules={[
                         {
                           required: true,
@@ -701,10 +818,10 @@ function Bank(){
                       ]}
                     >
                       <InputType
-                        // value={vendoremail}
-                        // onChange={(e) => {
-                        //   setvendoremail(e.target.value);
-                        // }}
+                        value={editbankaccno}
+                        onChange={(e) => {
+                          seteditbankaccno(e.target.value);
+                        }}
                       />
                     </Form.Item>
                   </div>
@@ -717,7 +834,7 @@ function Bank(){
                   <label> IBAN No</label>
                   <div>
                     <Form.Item
-                      name="ibanno"
+                      name="editiban_no"
                       rules={[
                         {
                           required: true,
@@ -736,18 +853,33 @@ function Bank(){
                       ]}
                     >
                       <InputType
-                        // value={vendorcontact}
-                        // onChange={(e) => {
-                        //   setvendorcontact(e.target.value);
-                        // }}
+                        value={editbankibanno}
+                        onChange={(e) => {
+                          seteditbankibanno(e.target.value);
+                        }}
                       />
                     </Form.Item>
                   </div>
                 </div>
+                <div className="col-6 pt-3">
+                      <label>Default Bank</label>
+                      <div>
+                        <Form.Item
+                          name="editdefaultbnk"
+                        
+                        >
+                          <Checkbox
+                            // value={currencyDefault}
+                            onChange={handleCheckededit}
+                            checked={editdefaultbank == 1 ? true : false}
+                          ></Checkbox>
+                        </Form.Item>
+                      </div>
+                    </div>
 
                 </div>
 
-             
+              
 
               
 

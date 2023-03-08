@@ -244,284 +244,370 @@ export default function ViewJob() {
 
   return (
     <>
-      <div className=" container-fluid view_quotation  p-3 px-4">
-        <div className="row">
-          <div className="col-xl-4 col-lg-4 col-md-4 col-sm-12">
+      {/* <div className=" container-fluid view_quotation  p-3 px-4">
+        <div className="row"> */}
+      <div className="container-fluid">
+        <div className="row justify-content-md-center mb-2">
+          {/* <div className="col-xl-4 col-lg-4 col-md-4 col-sm-12">
             <h5 className="lead_text">View Job</h5>
-          </div>
-          <div className="col-xl-8 col-lg-8 col-md-8 col-sm-12  mt-2">
+          </div> */}
+          <div className="content-tabs ">
+            <div className="container-fluid ">
+              <div className="row  mt-3 ">
+                <div className="col-xl-6 col-lg-2 col-md-3 col-sm-12 ">
+                  <h4 className="lead_text">View Job</h4>
+                </div>
+                <div className="col-6">
+                  <div className="row justify-content-end mx-5 py-3">
+                    <div className="col-xl-2 col-lg-2 col-md-3 col-sm-12 ">
+                      <Button
+                        btnType="add_borderless"
+                        className="edit_button"
+                        // onClick={handlePrint}
+                        onClick={() => {
+                          // navigate(`${ROUTES.JOB_INVOICE}/${id}`);
+                          window.open(
+                            `http://localhost:3000/job_invoice/${id}`,
+                            `_blank`
+                          );
+                        }}
+                      >
+                        Print
+                      </Button>
+                    </div>
+                    <div className="col-xl-2 col-lg-2 col-md-3 col-sm-12 ">
+                      <Button
+                        btnType="add_borderless"
+                        className="edit_button"
+                        onClick={() => {
+                          // handleviewtoedit();
+                          navigate(`${ROUTES.UPDATEJOB}/${id}`);
+                        }}
+                      >
+                        Edit
+                        <FiEdit />
+                      </Button>
+                    </div>
+                    <div className="col-xl-4 col-lg-4 col-md-7 col-sm-12 ">
+                      {invoice_status == 1 ? (
+                        <Button
+                          btnType="save"
+                          className="edit_button rounded"
+                          onClick={() => {
+                            // handleviewtoedit();
+                            navigate(`${ROUTES.INVOICE_PREVIEW}/${id}`);
+                          }}
+                        >
+                          Regenerate Invoice
+                          {/* <FiEdit /> */}
+                        </Button>
+                      ) : (
+                        <Button
+                          btnType="save"
+                          className="edit_button rounded"
+                          onClick={() => {
+                            // handleviewtoedit();
+                            navigate(`${ROUTES.INVOICE_PREVIEW}/${id}`);
+                          }}
+                        >
+                          Generate Invoice
+                          {/* <FiEdit /> */}
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="row ms-1 mb-3 ">
+                <div className="content-tabs-new row justify-content px-4">
+                  <div className="row mt-3 mb-3">
+                    <h5 className="lead_text">Basic Info</h5>
+                  </div>
+
+                  <div className="col-4 d-flex">
+                    <div className="col-4 boldhd">Job No</div>
+                    <div className="col-1">:</div>
+
+                    <div className="col-7">
+                      <p className="modal-view-data">{alljobs?.job_no}</p>
+                    </div>
+                  </div>
+
+                  <div className="col-4 d-flex">
+                    <div className="col-4 boldhd">Job Date</div>
+                    <div className="col-1">:</div>
+
+                    <div className="col-7">
+                      <p className="modal-view-data">{alljobs?.job_date1}</p>
+                    </div>
+                  </div>
+                  <div className="col-4 d-flex">
+                    <div className="col-4 boldhd">Quotation No</div>
+                    <div className="col-1">:</div>
+
+                    <div className="col-7">
+                      <p className="modal-view-data">{qtnno}</p>
+                    </div>
+                  </div>
+
+                  <div className="col-4 d-flex">
+                    <div className="col-4 boldhd">Consignee</div>
+                    <div className="col-1">:</div>
+
+                    <div className="col-7">
+                      <p className="modal-view-data">
+                        {alljobs?.job_consignee1}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="col-4 d-flex">
+                    <div className="col-4 boldhd">Shipper</div>
+                    <div className="col-1">:</div>
+
+                    <div className="col-7">
+                      <p className="modal-view-data">{alljobs?.job_shipper}</p>
+                    </div>
+                  </div>
+
+                  <div className="col-4 d-flex">
+                    <div className="col-4 boldhd">Freight type</div>
+                    <div className="col-1">:</div>
+
+                    <div className="col-7">
+                      <p className="modal-view-data">
+                        {alljobs?.job_freight_type1}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="row  mt-3 px-1 ">
+              <div className="col-md-6 col-12 mt-3">
+                <div className="content-tabs-new row justify-content mx-1 mb-3">
+                  <div className="row mt-3 mb-3">
+                    <h5 className="lead_text">Transportation</h5>
+                  </div>
+
+                  <div className="col-6 d-flex">
+                    <div className="col-4 boldhd">Mode</div>
+                    <div className="col-1">:</div>
+
+                    <div className="col-7">
+                      <p className="modal-view-data">{alljobs?.job_mode}</p>
+                    </div>
+                  </div>
+
+                  <div className="col-6 d-flex">
+                    <div className="col-4 boldhd">Origin</div>
+                    <div className="col-1">:</div>
+
+                    <div className="col-7">
+                      <p className="modal-view-data">
+                        {alljobs?.job_origin_id1}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="col-6 d-flex">
+                    <div className="col-4 boldhd">Destination</div>
+                    <div className="col-1">:</div>
+
+                    <div className="col-7">
+                      <p className="modal-view-data">
+                        {alljobs?.job_destination_id1}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="col-6 d-flex">
+                    <div className="col-4 boldhd">Carrier</div>
+                    <div className="col-1">:</div>
+
+                    <div className="col-7">
+                      <p className="modal-view-data">{alljobs?.job_carrier1}</p>
+                    </div>
+                  </div>
+
+                  <div className="col-6 d-flex">
+                    <div className="col-4 boldhd">AWB/BL No</div>
+                    <div className="col-1">:</div>
+
+                    <div className="col-7">
+                      <p className="modal-view-data">
+                        {alljobs?.job_awb_bl_no}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="col-md-6 col-12 mt-3">
+                <div className="content-tabs-new row justify-content mx-1 mb-3 me-3">
+                  <div className="row mt-3 mb-3">
+                    <h5 className="lead_text">Shipment Details</h5>
+                  </div>
+                  <div className="col-6 d-flex">
+                    <div className="col-5 boldhd">Cargo Type</div>
+                    <div className="col-1">:</div>
+
+                    <div className="col-6">
+                      <p className="modal-view-data">
+                        {alljobs?.job_cargo_type}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="col-6 d-flex">
+                    <div className="col-5 boldhd">No of pieces </div>
+                    <div className="col-1">:</div>
+
+                    <div className="col-6">
+                      <p className="modal-view-data">
+                        {alljobs?.job_no_of_pieces}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="col-6 d-flex">
+                    <div className="col-5 boldhd">UOM</div>
+                    <div className="col-1">:</div>
+
+                    <div className="col-6">
+                      <p className="modal-view-data">{alljobs?.job_uom1}</p>
+                    </div>
+                  </div>
+
+                  <div className="col-6 d-flex">
+                    <div className="col-5 boldhd">Gross wt </div>
+                    <div className="col-1">:</div>
+
+                    <div className="col-6">
+                      <p className="modal-view-data">{alljobs?.job_gross_wt}</p>
+                    </div>
+                  </div>
+
+                  <div className="col-6 d-flex">
+                    <div className="col-5 boldhd">Chargeable wt </div>
+                    <div className="col-1">:</div>
+
+                    <div className="col-6">
+                      <p className="modal-view-data">
+                        {alljobs?.job_chargeable_wt}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="row mt-3 px-1 ">
+              <div className="col-md-6 col-12 ">
+                <div className="content-tabs-new row justify-content mx-1 mb-3">
+                  <div className="row mt-3 mb-3">
+                    <h5 className="lead_text">Payment Info</h5>
+                  </div>
+
+                  <div className="col-6 d-flex">
+                    <div className="col-5 boldhd">Payment Terms</div>
+                    <div className="col-1">:</div>
+
+                    <div className="col-6">
+                      <p className="modal-view-data">
+                        {alljobs?.job_payment_terms1}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="col-6 d-flex">
+                    <div className="col-5 boldhd">Currency </div>
+                    <div className="col-1">:</div>
+
+                    <div className="col-6">
+                      <p className="modal-view-data">
+                        {alljobs?.job_currency1}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="col-6 d-flex">
+                    <div className="col-5 boldhd">Exchange Rate </div>
+                    <div className="col-1">:</div>
+
+                    <div className="col-6">
+                      <p className="modal-view-data">
+                        {alljobs?.job_exchange_rate}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="col-6 d-flex ">
+                    <div className="col-5 boldhd">Credit Days</div>
+                    <div className="col-1">:</div>
+
+                    <div className="col-6">
+                      <p className="modal-view-data">
+                        {alljobs?.job_credit_days}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-6 col-12">
+                <div className="content-tabs-new row  mx-1 mb-1 me-3">
+                  <div className="row mt-3 mb-3">
+                    <h5 className="lead_text">Attachments</h5>
+                  </div>
+
+                  <div className="col-6 d-flex mb-5 ms-3">
+                    <div className="col-4 boldhd">Attachments </div>
+                    <div className="col-1">:</div>
+
+                    <div className="col-7">
+                      <p className="modal-view-data">{alljobs?.job_docs}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/* <div className="col-xl-8 col-lg-8 col-md-8 col-sm-12  mt-2">
             <div className="row justify-content-end">
-              <div className="col-xl-2 col-lg-2 col-md-2 col-sm-12 my-2">
-                <Button
-                  btnType="add_borderless"
-                  className="edit_button"
-                  // onClick={handlePrint}
-                  onClick={() => {
-                    // navigate(`${ROUTES.JOB_INVOICE}/${id}`);
-                    window.open(
-                      `http://localhost:3000/job_invoice/${id}`,
-                      `_blank`
-                    );
-                  }}
-                >
-                  Print
-                </Button>
-              </div>
-              <div className="col-xl-2 col-lg-2 col-md-3 col-sm-12 my-2">
-                <Button
-                  btnType="add_borderless"
-                  className="edit_button"
-                  onClick={() => {
-                    // handleviewtoedit();
-                    navigate(`${ROUTES.UPDATEJOB}/${id}`);
-                  }}
-                >
-                  Edit
-                  <FiEdit />
-                </Button>
-              </div>
-              <div className="col-xl-4 col-lg-4 col-md-7 col-sm-12 my-2">
-                {invoice_status == 1 ? (
-                  <Button
-                    btnType="save"
-                    className="edit_button rounded"
-                    onClick={() => {
-                      // handleviewtoedit();
-                      navigate(`${ROUTES.INVOICE_PREVIEW}/${id}`);
-                    }}
-                  >
-                    Regenerate Invoice
-                    {/* <FiEdit /> */}
-                  </Button>
-                ) : (
-                  <Button
-                    btnType="save"
-                    className="edit_button rounded"
-                    onClick={() => {
-                      // handleviewtoedit();
-                      navigate(`${ROUTES.INVOICE_PREVIEW}/${id}`);
-                    }}
-                  >
-                    Generate Invoice
-                    {/* <FiEdit /> */}
-                  </Button>
-                )}
-              </div>
-            </div>
-            {/* <div className="col-1"></div> */}
-          </div>
-        </div>
-        <div className=" row mt-3">
-          <div className="col-6 d-flex">
-            <div className="col-4 boldhd">Job No</div>
-            <div className="col-1">:</div>
-
-            <div className="col-7">
-              <p className="modal-view-data">{alljobs?.job_no}</p>
-            </div>
-          </div>
-
-          <div className="col-6 d-flex">
-            <div className="col-4 boldhd">Job Date</div>
-            <div className="col-1">:</div>
-
-            <div className="col-7">
-              <p className="modal-view-data">{alljobs?.job_date1}</p>
-            </div>
-          </div>
-          <div className="col-6 d-flex">
-            <div className="col-4 boldhd">Quotation No</div>
-            <div className="col-1">:</div>
-
-            <div className="col-7">
-              <p className="modal-view-data">{qtnno}</p>
-            </div>
-          </div>
-
-          <div className="col-6 d-flex">
-            <div className="col-4 boldhd">Consignee</div>
-            <div className="col-1">:</div>
-
-            <div className="col-7">
-              <p className="modal-view-data">{alljobs?.job_consignee1}</p>
-            </div>
-          </div>
-
-          <div className="col-6 d-flex">
-            <div className="col-4 boldhd">Shipper</div>
-            <div className="col-1">:</div>
-
-            <div className="col-7">
-              <p className="modal-view-data">{alljobs?.job_shipper}</p>
-            </div>
-          </div>
-
-          <div className="col-6 d-flex">
-            <div className="col-4 boldhd">Freight type</div>
-            <div className="col-1">:</div>
-
-            <div className="col-7">
-              <p className="modal-view-data">{alljobs?.job_freight_type1}</p>
-            </div>
-          </div>
-
-          <div className="col-6 d-flex">
-            <div className="col-4 boldhd">Cargo Type</div>
-            <div className="col-1">:</div>
-
-            <div className="col-7">
-              <p className="modal-view-data">{alljobs?.job_cargo_type}</p>
-            </div>
-          </div>
-
-          <div className="col-6 d-flex">
-            <div className="col-4 boldhd">AWB/BL No</div>
-            <div className="col-1">:</div>
-
-            <div className="col-7">
-              <p className="modal-view-data">{alljobs?.job_awb_bl_no}</p>
-            </div>
-          </div>
-
-          <div className="col-6 d-flex">
-            <div className="col-4 boldhd">Mode</div>
-            <div className="col-1">:</div>
-
-            <div className="col-7">
-              <p className="modal-view-data">{alljobs?.job_mode}</p>
-            </div>
-          </div>
-
-          <div className="col-6 d-flex">
-            <div className="col-4 boldhd">Origin</div>
-            <div className="col-1">:</div>
-
-            <div className="col-7">
-              <p className="modal-view-data">{alljobs?.job_origin_id1}</p>
-            </div>
-          </div>
-
-          <div className="col-6 d-flex">
-            <div className="col-4 boldhd">Destination</div>
-            <div className="col-1">:</div>
-
-            <div className="col-7">
-              <p className="modal-view-data">{alljobs?.job_destination_id1}</p>
-            </div>
-          </div>
-
-          <div className="col-6 d-flex">
-            <div className="col-4 boldhd">Carrier</div>
-            <div className="col-1">:</div>
-
-            <div className="col-7">
-              <p className="modal-view-data">{alljobs?.job_carrier1}</p>
-            </div>
-          </div>
-
-          <div className="col-6 d-flex">
-            <div className="col-4 boldhd">Payment Terms</div>
-            <div className="col-1">:</div>
-
-            <div className="col-7">
-              <p className="modal-view-data">{alljobs?.job_payment_terms1}</p>
-            </div>
-          </div>
-
-          <div className="col-6 d-flex">
-            <div className="col-4 boldhd">No of pieces </div>
-            <div className="col-1">:</div>
-
-            <div className="col-7">
-              <p className="modal-view-data">{alljobs?.job_no_of_pieces}</p>
-            </div>
-          </div>
-
-          <div className="col-6 d-flex">
-            <div className="col-4 boldhd">UOM</div>
-            <div className="col-1">:</div>
-
-            <div className="col-7">
-              <p className="modal-view-data">{alljobs?.job_uom1}</p>
-            </div>
-          </div>
-
-          <div className="col-6 d-flex">
-            <div className="col-4 boldhd">Gross wt </div>
-            <div className="col-1">:</div>
-
-            <div className="col-7">
-              <p className="modal-view-data">{alljobs?.job_gross_wt}</p>
-            </div>
-          </div>
-
-          <div className="col-6 d-flex">
-            <div className="col-4 boldhd">Chargeable wt </div>
-            <div className="col-1">:</div>
-
-            <div className="col-7">
-              <p className="modal-view-data">{alljobs?.job_chargeable_wt}</p>
-            </div>
-          </div>
-
-          <div className="col-6 d-flex">
-            <div className="col-4 boldhd">Currency </div>
-            <div className="col-1">:</div>
-
-            <div className="col-7">
-              <p className="modal-view-data">{alljobs?.job_currency1}</p>
-            </div>
-          </div>
-          <div className="col-6 d-flex">
-            <div className="col-4 boldhd">Exchange Rate </div>
-            <div className="col-1">:</div>
-
-            <div className="col-7">
-              <p className="modal-view-data">{alljobs?.job_exchange_rate}</p>
-            </div>
-          </div>
-          <div className="col-6 d-flex">
-            <div className="col-4 boldhd">Attachments </div>
-            <div className="col-1">:</div>
-
-            <div className="col-7">
-              <p className="modal-view-data">{alljobs?.job_docs}</p>
-            </div>
-          </div>
-          <div className="col-6 d-flex">
-            <div className="col-4 boldhd">Credit Days</div>
-            <div className="col-1">:</div>
-
-            <div className="col-7">
-              <p className="modal-view-data">{alljobs?.job_credit_days}</p>
-            </div>
-          </div>
-
-          {tax ? (
-            <div className="mt-3">
-              <Collapse
-                defaultActiveKey={["1"]}
-                onChange={onChange}
-                expandIconPosition={"end"}
-              >
-                <Panel header="TASK DETAILS" key="1">
-                  <div>
-                    {" "}
-                    <TableData columns={progress} data={tax} bordered />
+              <div className="col-xl-2 col-lg-2 col-md-2 col-sm-12 my-2"> */}
+            {tax ? (
+              <div className="row mt-3 me-4 mb-5">
+                <div className="content-tabs-tablenew row justify-content m-3">
+                  <div className="row mt-3">
+                    <h5 className="lead_text">Task & Description</h5>
                   </div>
-                  <div className="d-flex justify-content-end mt-4 gap-3 ">
-                    <div className="">
-                      <p style={{ fontWeight: 600 }}>Grand Total : </p>
-                    </div>
-                    {/* <div className="col-1">:</div> */}
-                    <div className="">
-                      <p style={{ fontWeight: 600 }}>{grandtotal}</p>
-                    </div>
+
+                  {/* <div className="col-1"></div> */}
+
+                  <div className="mt-3">
+                    <Collapse
+                      defaultActiveKey={["1"]}
+                      onChange={onChange}
+                      expandIconPosition={"end"}
+                    >
+                      <Panel header="TASK DETAILS" key="1">
+                        <div>
+                          {" "}
+                          <TableData columns={progress} data={tax} bordered />
+                        </div>
+                        <div className="d-flex justify-content-end mt-4 gap-3 ">
+                          <div className="">
+                            <p style={{ fontWeight: 600 }}>Grand Total : </p>
+                          </div>
+                          {/* <div className="col-1">:</div> */}
+                          <div className="">
+                            <p style={{ fontWeight: 600 }}>{grandtotal}</p>
+                          </div>
+                        </div>
+                      </Panel>
+                    </Collapse>
                   </div>
-                </Panel>
-              </Collapse>
-            </div>
-          ) : null}
+                </div>
+              </div>
+            ) : null}
+          </div>
         </div>
       </div>
     </>

@@ -419,24 +419,36 @@ function DailyExpence() {
                           </tr>
                           <tr className="py-2">
                             <td>
-                              <p>BillNo</p>
+                              <p
+                                style={{ color: "#000" }}
+                                className="modal_view_p_style"
+                              >
+                                BillNo
+                              </p>
                             </td>
                             <td>
                               <p>:</p>
                             </td>
                             <td>
-                              <p>{viewData?.daily_expense_bill_no}</p>
+                              <p className="modal_view_p_sub">
+                                {viewData?.daily_expense_bill_no}
+                              </p>
                             </td>
                           </tr>
                           <tr className="py-2">
                             <td>
-                              <p>Employee</p>
+                              <p
+                                style={{ color: "#000" }}
+                                className="modal_view_p_style"
+                              >
+                                Employee
+                              </p>
                             </td>
                             <td>
                               <p>:</p>
                             </td>
                             <td>
-                              <p>
+                              <p className="modal_view_p_sub">
                                 {
                                   viewData?.daily_expense_employee
                                     ?.employee_name
@@ -446,46 +458,74 @@ function DailyExpence() {
                           </tr>
                           <tr className="py-2">
                             <td>
-                              <p>Tax No</p>
+                              <p
+                                style={{ color: "#000" }}
+                                className="modal_view_p_style"
+                              >
+                                Tax No
+                              </p>
                             </td>
                             <td>
                               <p>:</p>
                             </td>
                             <td>
-                              <p>{viewData?.daily_expense_taxno}</p>
+                              <p className="modal_view_p_sub">
+                                {viewData?.daily_expense_taxno}
+                              </p>
                             </td>
                           </tr>
                           <tr className="py-2">
                             <td>
-                              <p>Remarks</p>
+                              <p
+                                style={{ color: "#000" }}
+                                className="modal_view_p_style"
+                              >
+                                Remarks
+                              </p>
                             </td>
                             <td>
                               <p>:</p>
                             </td>
                             <td>
-                              <p>{viewData?.daily_expense_remarks}</p>
+                              <p className="modal_view_p_sub">
+                                {viewData?.daily_expense_remarks}
+                              </p>
                             </td>
                           </tr>
                           <tr className="py-2">
                             <td>
-                              <p>Amount</p>
+                              <p
+                                style={{ color: "#000" }}
+                                className="modal_view_p_style"
+                              >
+                                Amount
+                              </p>
                             </td>
                             <td>
                               <p>:</p>
                             </td>
                             <td>
-                              <p>{viewData?.daily_expense_amount}</p>
+                              <p className="modal_view_p_sub">
+                                {viewData?.daily_expense_amount}
+                              </p>
                             </td>
                           </tr>
                           <tr className="py-2">
                             <td>
-                              <p>Total Amount</p>
+                              <p
+                                style={{ color: "#000" }}
+                                className="modal_view_p_style"
+                              >
+                                Total Amount
+                              </p>
                             </td>
                             <td>
                               <p>:</p>
                             </td>
                             <td>
-                              <p>{viewData?.daily_expense_total_amount}</p>
+                              <p className="modal_view_p_sub">
+                                {viewData?.daily_expense_total_amount}
+                              </p>
                             </td>
                           </tr>
                         </table>
@@ -494,13 +534,18 @@ function DailyExpence() {
                         <table>
                           <tr className="py-2">
                             <td>
-                              <p>Date</p>
+                              <p
+                                style={{ color: "#000" }}
+                                className="modal_view_p_style"
+                              >
+                                Date
+                              </p>
                             </td>
                             <td>
                               <p>:</p>
                             </td>
                             <td>
-                              <p>
+                              <p className="modal_view_p_sub">
                                 {moment(viewData?.daily_expense_date).format(
                                   "DD-MM-YYYY"
                                 )}
@@ -509,54 +554,115 @@ function DailyExpence() {
                           </tr>
                           <tr className="py-2">
                             <td>
-                              <p>Name</p>
+                              <p
+                                style={{ color: "#000" }}
+                                className="modal_view_p_style"
+                              >
+                                Name
+                              </p>
                             </td>
                             <td>
                               <p>:</p>
                             </td>
                             <td>
-                              <p>{viewData?.daily_expense_name}</p>
+                              <p className="modal_view_p_sub">
+                                {viewData?.daily_expense_name}
+                              </p>
                             </td>
                           </tr>
                           <tr className="py-2">
                             <td>
-                              <p>Party</p>
+                              <p
+                                style={{ color: "#000" }}
+                                className="modal_view_p_style"
+                              >
+                                Party
+                              </p>
                             </td>
                             <td>
                               <p>:</p>
                             </td>
                             <td>
-                              <p>{viewData?.daily_expense_party}</p>
+                              <p className="modal_view_p_sub">
+                                {viewData?.daily_expense_party}
+                              </p>
                             </td>
                           </tr>
                           <tr className="py-2">
                             <td>
-                              <p>Category</p>
+                              <p
+                                style={{ color: "#000" }}
+                                className="modal_view_p_style"
+                              >
+                                Category
+                              </p>
                             </td>
                             <td>
                               <p>:</p>
                             </td>
                             <td>
-                              {
-                                viewData?.accounts_v1_expense_category
-                                  ?.expense_category_name
-                              }
+                              <p className="modal_view_p_sub">
+                                {" "}
+                                {
+                                  viewData?.accounts_v1_expense_category
+                                    ?.expense_category_name
+                                }
+                              </p>
                             </td>
                           </tr>
                           <tr className="py-2">
-                            <td>Party Address</td>
-                            <td>:</td>
-                            <td>{viewData?.daily_expense_party_address}</td>
+                            <td>
+                              <p
+                                style={{ color: "#000" }}
+                                className="modal_view_p_style"
+                              >
+                                Party Address
+                              </p>
+                            </td>
+                            <td>
+                              <p>:</p>
+                            </td>
+                            <td>
+                              <p className="modal_view_p_sub">
+                                {viewData?.daily_expense_party_address}
+                              </p>
+                            </td>
                           </tr>
                           <tr className="py-2">
-                            <td>Tax Amount</td>
-                            <td>:</td>
-                            <td>{viewData?.daily_expense_tax_amount}</td>
+                            <td>
+                              <p
+                                style={{ color: "#000" }}
+                                className="modal_view_p_style"
+                              >
+                                Tax Amount
+                              </p>
+                            </td>
+                            <td>
+                              <p>:</p>
+                            </td>
+                            <td>
+                              <p className="modal_view_p_sub">
+                                {viewData?.daily_expense_tax_amount}
+                              </p>
+                            </td>
                           </tr>
                           <tr className="py-2">
-                            <td>Attachments</td>
-                            <td>:</td>
-                            <td>{viewData?.daily_expense_docs}</td>
+                            <td>
+                              <p
+                                style={{ color: "#000" }}
+                                className="modal_view_p_style"
+                              >
+                                Attachments
+                              </p>
+                            </td>
+                            <td>
+                              <p>:</p>
+                            </td>
+                            <td>
+                              <p className="modal_view_p_sub">
+                                {viewData?.daily_expense_docs}
+                              </p>
+                            </td>
                           </tr>
                         </table>
                       </div>

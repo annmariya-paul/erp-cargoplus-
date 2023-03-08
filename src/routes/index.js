@@ -98,6 +98,7 @@ const ROUTES = {
   INVOICE_PRINT: "/invoice_print",
   PRINT_INVOICE: "/print_invoice",
   PRINT_INVOICE_ID: "/print_invoice/:id",
+  AGENT_REPORT:"/agentReport",
 
   // Accounts
   PAYMEMENT_MODE: "/payment_mode",

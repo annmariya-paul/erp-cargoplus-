@@ -168,7 +168,7 @@ function InvoiceView() {
               <div className="container mb-4">
                 <div className=" row mt-5">
                   <div className="col-6 d-flex">
-                    <div className="col-4">Frieght type</div>
+                    <div className="col-4">Freight type</div>
                     <div className="col-1">:</div>
 
                     <div className="col-7">

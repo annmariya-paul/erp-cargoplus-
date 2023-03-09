@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./AddPayments.styles.scss";
 import { Checkbox, DatePicker, Form, InputNumber, Select } from "antd";
 import TextArea from "../../../components/ InputType TextArea/TextArea";
@@ -7,10 +7,17 @@ import InputType from "../../../components/Input Type textbox/InputType";
 import Input_Number from "../../../components/InputNumber/InputNumber";
 import SelectBox from "../../../components/Select Box/SelectBox";
 import TableData from "../../../components/table/table_data";
+import PublicFetch from "../../../utils/PublicFetch";
+import { ACCOUNTS, CRM_BASE_URL, CRM_BASE_URL_FMS } from "../../../api/bootapi";
 
 const AddPayments = () => {
   const [amount, setAmount] = useState();
   const [autoPay, setAutoPay] = useState(false);
+  const [leads, setLeads] = useState([]);
+  const [invoiceData, setInvoiceData] = useState([]);
+  const [refresh, setRefresh] = useState(false);
+  const [lead, setLead] = useState();
+  const [paymentModes, setPaymentModes] = useState([]);
   const columns = [
     {
       title: "Sl. No.",
@@ -115,6 +122,70 @@ const AddPayments = () => {
       balance_amount: "8000.00",
     },
   ];
+
+  const getAllLeads = async () => {
+    try {
+      const res = await PublicFetch.get(
+        `${CRM_BASE_URL}/lead?startIndex=0&noOfItems=25`
+      );
+      console.log("here is the response");
+      console.log(res);
+      if (res?.status === 200) {
+        setLeads(res.data.data.leads);
+      }
+    } catch (error) {
+      console.log("error occured");
+      console.log(error);
+    }
+  };
+
+  const getInvoice = async (value) => {
+    console.log("value", value);
+    try {
+      const res = await PublicFetch.get(`${CRM_BASE_URL_FMS}/invoice/${value}`);
+      if (res.status === 200) {
+        let tempData = [];
+        res.data.data.fms_v1_jobs.accounts_v1_invoice_accounts.forEach(
+          (item, index) => {
+            let obj = {
+              index: index,
+              invoice_no: item.invoice_accounts_no,
+              due_date: item.invoice_accounts_due_date,
+              amount: item.invoice_accounts_due_amount,
+              invoice_accounts_id: item.invoice_accounts_id,
+            };
+            tempData.push(obj);
+          }
+        );
+        setInvoiceData(tempData);
+        setRefresh(!refresh);
+      }
+    } catch (error) {
+      console.log("error while fetching invoices");
+      console.log(error);
+    }
+    //const res = await PublicFetch.get(`${CRM_BASE_URL_FMS}`);
+  };
+  const getPaymentModes = async () => {
+    try {
+      const res = await PublicFetch.get(`${ACCOUNTS}/payment-modes`);
+      if (res?.status === 200) {
+        console.log("here are payment modes");
+        console.log(res.data);
+        setPaymentModes(res.data.data);
+      }
+    } catch (error) {
+      console.log("error while fetching payment modes");
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getAllLeads();
+  }, [refresh]);
+
+  useEffect(() => {
+    getPaymentModes();
+  }, []);
   return (
     <div>
       <div className="container">
@@ -149,10 +220,14 @@ const AddPayments = () => {
                     <div className="col-xl-4 my-2">
                       <label>Lead</label>
                       <Form.Item>
-                        <SelectBox>
-                          <Select.Option>Lead 1</Select.Option>
-                          <Select.Option>Lead 2</Select.Option>
-                          <Select.Option>Lead 3</Select.Option>
+                        <SelectBox onChange={getInvoice}>
+                          {leads.map((item, index) => {
+                            return (
+                              <Select.Option value={item.lead_id}>
+                                {item.lead_customer_name}
+                              </Select.Option>
+                            );
+                          })}
                         </SelectBox>
                       </Form.Item>
                     </div>
@@ -178,9 +253,13 @@ const AddPayments = () => {
                       <label>Mode</label>
                       <Form.Item>
                         <SelectBox>
-                          <Select.Option>Mode 1</Select.Option>
-                          <Select.Option>Mode 2</Select.Option>
-                          <Select.Option>Mode 3</Select.Option>
+                          {paymentModes.map((item, index) => {
+                            return (
+                              <Select.Option value={item.pay_mode_id}>
+                                {item.pay_mode_name}
+                              </Select.Option>
+                            );
+                          })}
                         </SelectBox>
                       </Form.Item>
                     </div>
@@ -206,7 +285,7 @@ const AddPayments = () => {
                       <label>
                         <strong>Invoice details</strong>{" "}
                       </label>
-                      <TableData data={data} columns={columns} />
+                      <TableData data={invoiceData} columns={columns} />
                     </div>
                     <div className="col-xl-4"></div>
 

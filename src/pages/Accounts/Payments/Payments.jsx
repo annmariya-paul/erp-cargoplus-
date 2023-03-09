@@ -26,7 +26,7 @@ import Button from "../../../components/button/button";
 import "./Payments.scss";
 import { Link } from "react-router-dom";
 import { ROUTES } from "../../../routes/index";
-import { CRM_BASE_URL_SELLING } from "../../../api/bootapi";
+import { ACCOUNTS, CRM_BASE_URL_SELLING } from "../../../api/bootapi";
 import PublicFetch from "../../../utils/PublicFetch";
 import { date } from "yup/lib/locale";
 import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
@@ -36,6 +36,7 @@ import TextArea from "../../../components/ InputType TextArea/TextArea";
 import { EnvironmentFilled } from "@ant-design/icons";
 import { UniqueErrorMsg } from "../../../ErrorMessages/UniqueErrorMessage";
 import { useNavigate } from "react-router-dom";
+import moment from "moment";
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -79,57 +80,44 @@ function Payments(props) {
   const navigate = useNavigate();
   const [State, setState] = useState("null");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [paymentsTableData, setPaymentsTableData] = useState([]);
 
   const getData = (current, pageSize) => {
     //return CategoryList?.slice((current - 1) * pageSize, current * pageSize);
-  };
-
-  const structureTreeData = (categories) => {
-    let treeStructure = [];
-
-    if (categories && Array.isArray(categories) && categories.length > 0) {
-      categories.forEach((category, categoryIndex) => {
-        // if (category?.other_crm_v1_categories?.length > 0) {
-        let ch = structureTreeData(category?.other_crm_v1_categories);
-        treeStructure.push({
-          key: category?.category_id,
-          category_name: category?.category_name,
-          category_parent_id: category?.category_parent_id,
-          category_parent_name: category?.category_parent_name,
-          category_code: category?.category_code,
-          category_description: category?.category_description,
-          category_pic: category?.category_pic,
-          children: ch,
-          // category_parent_name:
-        });
-        console.log("parntt", treeStructure);
-        // }
-      });
-    }
-    return treeStructure;
-    // console.log("Tree structure : ", treeStructure);
-  };
-
-  const structureTreeData2 = (categories) => {
-    let TreeStructure2 = [];
-    if (categories && Array.isArray(categories) && categories.length > 0) {
-      categories.forEach((category, catgeoryIndex) => {
-        let ch = structureTreeData2(category?.other_crm_v1_categories);
-        TreeStructure2.push({
-          value: category?.category_id,
-          title: category?.category_name,
-          children: ch,
-        });
-      });
-    }
-    return TreeStructure2;
   };
 
   const [CategoryList, setCategoryList] = useState();
   const [CategoryTree, setCatgeoryTree] = useState();
 
   //api call function to get all payments
-  const getAllPayments = async () => {};
+  const getAllPayments = async () => {
+    try {
+      const res = await PublicFetch.get(
+        `${ACCOUNTS}/payment?startIndex=0&noOfItems=100`
+      );
+      console.log("here are the payments");
+      console.log(res);
+      if (res?.status == 200) {
+        let tempData = [];
+        res.data.data.forEach((item, index) => {
+          let obj = {
+            index: index,
+            voucehr_no: item.payment_voucher_no,
+            date: moment(new Date(item.payment_date)).format("DD/MM/YYYY"),
+            lead: item.accounts_v1_payment_modes.pay_mode_name,
+            amount: item.payment_amount,
+            mode: item.crm_v1_leads.lead_customer_name,
+            payment_id: item.payment_id,
+          };
+          tempData.push(obj);
+        });
+        setPaymentsTableData(tempData);
+      }
+    } catch (error) {
+      console.log("error occured");
+      console.log(error);
+    }
+  };
   useEffect(() => {
     getAllPayments();
   }, []);
@@ -267,45 +255,15 @@ function Payments(props) {
       },
     },
   ];
-
-  const data = [
-    {
-      index: "1",
-      voucehr_no: "1234",
-      date: "7/3/23",
-      lead: "Lead 1",
-      amount: "1234",
-      mode: "mode 1",
-    },
-  ];
-
-  // console.log("namesss2123", nameSearch);
-  // console.log("going well", DisplayDataa);
-  const DisplayCategories = (data) => {
-    // console.log("dispalying data type", data);
-    data?.map((item, index) => {
-      // console.log("data type", item);
-      if (item?.other_crm_v1_categories) {
-        // setDisplayDataa(item);
-        return (
-          <li key={item.category_id} title={item.category_name}>
-            {DisplayCategories(item?.other_crm_v1_categories)}
-          </li>
-        );
-      }
-      return <li key={item.category_id} title={item.category_name}></li>;
-    });
-  };
-
   //function to go to view Payment page
   const handleViewPayment = (e) => {
-    navigate(`${ROUTES.VIEW_PAYMENT_INDEX}/1`);
+    navigate(`${ROUTES.VIEW_PAYMENT_INDEX}/${e.payment_id}`);
   };
 
   // function to go to edit page
-  const handleEditPayment = (index) => {
+  const handleEditPayment = (e) => {
     //pass payment id as parameter here
-    navigate(`${ROUTES.EDIT_PAYMENT_INDEX}/1`);
+    navigate(`${ROUTES.EDIT_PAYMENT_INDEX}/${e.payment_id}`);
   };
 
   return (
@@ -409,7 +367,7 @@ function Payments(props) {
           <div className="datatable">
             <TableData
               //data={getData(current, pageSize)}
-              data={data}
+              data={paymentsTableData}
               columns={columns}
               custom_table_css="table_lead_list"
               expandable

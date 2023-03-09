@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./AddPayments.styles.scss";
 import { Checkbox, DatePicker, Form, InputNumber, Select } from "antd";
 import TextArea from "../../../components/ InputType TextArea/TextArea";
@@ -7,10 +7,29 @@ import InputType from "../../../components/Input Type textbox/InputType";
 import Input_Number from "../../../components/InputNumber/InputNumber";
 import SelectBox from "../../../components/Select Box/SelectBox";
 import TableData from "../../../components/table/table_data";
+import PublicFetch from "../../../utils/PublicFetch";
+import { ACCOUNTS } from "../../../api/bootapi";
+import { useParams } from "react-router-dom";
 
 const ViewPayment = () => {
-  const [amount, setAmount] = useState();
   const [autoPay, setAutoPay] = useState(false);
+  const { payment_id } = useParams();
+  const [singlePayment, setSinglePayment] = useState({
+    voucher_no: "",
+    voucher_date: "",
+    lead: "",
+    amount: "",
+    mode: "",
+    details: "",
+  });
+
+  const [voucherNo, setVoucherNo] = useState();
+  const [voucherDate, setVoucherDate] = useState();
+  const [lead, setLead] = useState();
+  const [amount, setAmount] = useState();
+  const [mode, setMode] = useState();
+  const [details, setDetails] = useState();
+
   const columns = [
     {
       title: "Sl. No.",
@@ -115,6 +134,28 @@ const ViewPayment = () => {
       balance_amount: "8000.00",
     },
   ];
+
+  const getPaymentDetails = async () => {
+    try {
+      const res = await PublicFetch.get(`${ACCOUNTS}/payment/${payment_id}`);
+      console.log("here is the response");
+      console.log(res);
+      if (res?.status === 200) {
+        setVoucherNo(res.data.data.payment_voucher_no);
+        setAmount(res.data.data.payment_amount);
+        setVoucherDate(res.data.data.payment_date);
+        setMode(res.data.data.accounts_v1_payment_modes.pay_mode_name);
+        setLead(res.data.data.crm_v1_leads.lead_customer_name);
+        setDetails(res.data.data.payment_details);
+      }
+    } catch (error) {
+      console.log("error occured");
+    }
+  };
+  useEffect(() => {
+    getPaymentDetails();
+  }, []);
+
   return (
     <div>
       <div className="container">
@@ -132,95 +173,102 @@ const ViewPayment = () => {
               className="card border-0 p-3 shadow-sm"
             >
               <div className="container-fluid p-3">
-                <Form>
-                  <div className="row ">
-                    <div className="col-xl-4  my-2">
-                      <label>Voucher No</label>
-                      <Form.Item>
+                {/* <Form> */}
+                <div className="row ">
+                  <div className="col-xl-4  my-2">
+                    <label>Voucher No </label>
+                    <div>{voucherNo}</div>
+                    {/* <Form.Item>
                         <InputType />
-                      </Form.Item>
-                    </div>
-                    <div className="col-xl-4 my-2">
-                      <label className="mb-2">Voucher Date</label>
-                      <Form.Item>
-                        <DatePicker />
-                      </Form.Item>
-                    </div>
-                    <div className="col-xl-4 my-2">
-                      <label>Lead</label>
-                      <Form.Item>
-                        <SelectBox>
-                          <Select.Option>Lead 1</Select.Option>
-                          <Select.Option>Lead 2</Select.Option>
-                          <Select.Option>Lead 3</Select.Option>
-                        </SelectBox>
-                      </Form.Item>
-                    </div>
-                    <div className="col-xl-4 my-2">
-                      <label>Amount</label>
-                      <Form.Item
-                        rules={[
-                          {
-                            pattern: /^[1-9]\d*$/,
-                            message: "Should be whole number",
-                          },
-                        ]}
-                      >
-                        <InputType
-                          onChange={(e) => {
-                            console.log(e.target.value);
-                            //setAmount(e.target.value);
-                          }}
-                        />
-                      </Form.Item>
-                    </div>
-                    <div className="col-xl-4 my-2">
-                      <label>Mode</label>
-                      <Form.Item>
-                        <SelectBox>
-                          <Select.Option>Mode 1</Select.Option>
-                          <Select.Option>Mode 2</Select.Option>
-                          <Select.Option>Mode 3</Select.Option>
-                        </SelectBox>
-                      </Form.Item>
-                    </div>
-                    <div className="col-xl-4 my-2">
-                      <label>Auto Pay(Bill to Bill)</label>
-                      <Form.Item>
-                        <Checkbox
-                          onChange={(e) => {
-                            console.log(e.target);
-                            setAutoPay(e.target.checked);
-                          }}
-                        />
-                      </Form.Item>
-                    </div>
-                    <div className="col-12 my-2">
-                      <label>Details</label>
-                      <Form.Item>
-                        <TextArea />
-                      </Form.Item>
-                    </div>
-
-                    <div className="col-12 my-2">
-                      <label>
-                        <strong>Invoice details</strong>{" "}
-                      </label>
-                      <TableData data={data} columns={columns} />
-                    </div>
-                    <div className="col-xl-4"></div>
-
-                    <div className="col-xl-4"></div>
-                    <div className="col-12 d-flex justify-content-center my-4 pt-2">
-                      <Button btnType="save" type="submit">
-                        Save
-                      </Button>
-                      <Button btnType="save" type="" className="ms-2">
-                        Cancel
-                      </Button>
-                    </div>
+                      </Form.Item> */}
                   </div>
-                </Form>
+                  <div className="col-xl-4 my-2">
+                    <label className="mb-2">Voucher Date</label>
+                    {/* <Form.Item>
+                      <DatePicker />
+                    </Form.Item> */}
+                    <div>{voucherDate}</div>
+                  </div>
+                  <div className="col-xl-4 my-2">
+                    <label>Lead</label>
+                    {/* <Form.Item>
+                      <SelectBox>
+                        <Select.Option>Lead 1</Select.Option>
+                        <Select.Option>Lead 2</Select.Option>
+                        <Select.Option>Lead 3</Select.Option>
+                      </SelectBox>
+                    </Form.Item> */}
+                    <div>{lead}</div>
+                  </div>
+                  <div className="col-xl-4 my-2">
+                    <label>Amount</label>
+                    <div>{amount}</div>
+                    {/* <Form.Item
+                      rules={[
+                        {
+                          pattern: /^[1-9]\d*$/,
+                          message: "Should be whole number",
+                        },
+                      ]}
+                    >
+                      <InputType
+                        onChange={(e) => {
+                          console.log(e.target.value);
+                          //setAmount(e.target.value);
+                        }}
+                      />
+                    </Form.Item> */}
+                  </div>
+                  <div className="col-xl-4 my-2">
+                    <label>Mode</label>
+                    <div>{mode}</div>
+                    {/* <Form.Item>
+                      <SelectBox>
+                        <Select.Option>Mode 1</Select.Option>
+                        <Select.Option>Mode 2</Select.Option>
+                        <Select.Option>Mode 3</Select.Option>
+                      </SelectBox>
+                    </Form.Item> */}
+                  </div>
+                  {/* <div className="col-xl-4 my-2">
+                    <label>Auto Pay(Bill to Bill)</label>
+                    <Form.Item>
+                      <Checkbox
+                        onChange={(e) => {
+                          console.log(e.target);
+                          setAutoPay(e.target.checked);
+                        }}
+                      />
+                    </Form.Item>
+                  </div> */}
+                  <div className="col-12 my-2">
+                    <label>Details</label>
+                    <div>{details}</div>
+
+                    {/* <Form.Item>
+                      <TextArea />
+                    </Form.Item> */}
+                  </div>
+
+                  <div className="col-12 my-2">
+                    <label>
+                      <strong>Invoice details</strong>{" "}
+                    </label>
+                    <TableData data={data} columns={columns} />
+                  </div>
+                  <div className="col-xl-4"></div>
+
+                  <div className="col-xl-4"></div>
+                  <div className="col-12 d-flex justify-content-center my-4 pt-2">
+                    <Button btnType="save" type="submit">
+                      Save
+                    </Button>
+                    <Button btnType="save" type="" className="ms-2">
+                      Cancel
+                    </Button>
+                  </div>
+                </div>
+                {/* </Form> */}
               </div>
             </div>
           </div>

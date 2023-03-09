@@ -115,7 +115,9 @@ const ROUTES = {
   PAYMENTS: "/payments",
   ADD_PAYMENTS: "/add_payments",
   VIEW_PAYMENTS_INDEX: "/view_payments",
+  VIEW_PAYMENT: "/view_payments/:payment_id",
   EDIT_PAYMENTS_INDEX: "/edit_payments",
+  EDIT_PAYMENT: "/edit_payments/:payment_id",
   /*payments routes end*/
 
   JOB_PAYMENTS: "/job_payments",

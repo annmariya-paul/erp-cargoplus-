@@ -98,6 +98,8 @@ const ROUTES = {
   INVOICE_PRINT: "/invoice_print",
   PRINT_INVOICE: "/print_invoice",
   PRINT_INVOICE_ID: "/print_invoice/:id",
+  AGENT_REPORT: "/agentReport",
+  COST_AND_EXPENSE_REPORT: "/cost_and_expense_report",
 
   // Accounts
   PAYMEMENT_MODE: "/payment_mode",
@@ -110,10 +112,6 @@ const ROUTES = {
   EXPENSE_CATEGORY: "/expense_category",
   PAYMENTS: "/payments",
   ADD_PAYMENTS: "/add_payments",
-  EDIT_PAYMENT_INDEX: "/edit_payments",
-  EDIT_PAYMENT: "/edit_payments/:payment_id",
-  VIEW_PAYMENT_INDEX: "/view_payment",
-  VIEW_PAYMENT: "/view_payment/:payment_id",
   JOB_PAYMENTS: "/job_payments",
   ADD_JOBPAYMENT: "/add_job_payment",
   EDIT_JOBPAYMENT: "/edit_job_payment",

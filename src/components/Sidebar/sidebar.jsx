@@ -34,6 +34,7 @@ export default function Sidebar({ showSidebar }) {
   const [HRMSopen, setHRMSopen] = useState(false);
   const [CRMopen, setCRMopen] = useState(false);
   const [CRMReport, setCRMReport] = useState(false);
+  const [fmsReport, setFmsReport] = useState(false);
   const [CRMselling, setCRMselling] = useState(false);
   const [CRMpurchasing, setCRMpurchasing] = useState(false);
   const [ACCOUNTSopen, setACCOUNTSopen] = useState(false);
@@ -439,7 +440,7 @@ export default function Sidebar({ showSidebar }) {
                           </NavLink>
                         </li>
                       )}
-                        {checkPermission("unit and measures") && (
+                      {checkPermission("unit and measures") && (
                         <li className="nav-text">
                           <NavLink
                             className={({ isActive }) =>
@@ -845,6 +846,64 @@ export default function Sidebar({ showSidebar }) {
                           </NavLink>
                         </li>
                       )} */}
+                  <li
+                    className={
+                      fmsReport
+                        ? "nav-text  items_hrms open"
+                        : "nav-text  items_hrms "
+                    }
+                  >
+                    <Link
+                      className={fmsReport ? "active-link" : "link"}
+                      // to="/"
+                      onClick={() => setFmsReport(!fmsReport)}
+                    >
+                      <div className="d-flex justify-content-between gap-5 ms-2">
+                        <div className="d-flex">
+                          <TbReport className="sidebar_icons ms-1 pt-1 " />
+                          <div style={{ width: "90px" }} className="">
+                            Report
+                          </div>
+                        </div>
+
+                        <div className="  ">
+                          <div className="text-right ">
+                            <AiOutlineCaretDown className="toggle_btn " />
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  </li>
+                  {fmsReport ? (
+                    <>
+                      {checkPermission("agent_report") && (
+                        <>
+                          <li className="nav-text ">
+                            <NavLink
+                              className={({ isActive }) =>
+                                isActive ? "active-link" : "link"
+                              }
+                              to={ROUTES.AGENT_REPORT}
+                            >
+                              <div className="ms-4">Agent Report</div>
+                            </NavLink>
+                          </li>
+                          <li className="nav-text ">
+                            <NavLink
+                              className={({ isActive }) =>
+                                isActive ? "active-link" : "link"
+                              }
+                              to={ROUTES.COST_AND_EXPENSE_REPORT}
+                            >
+                              <div className="ms-4">Cost And Expense Report</div>
+                            </NavLink>
+                          </li>
+                        </>
+                      )}
+                    </>
+                  ) : (
+                    ""
+                  )}
                 </>
               ) : (
                 ""
@@ -957,6 +1016,19 @@ export default function Sidebar({ showSidebar }) {
                           </NavLink>
                         </li>
                       )}
+
+                    {checkPermission("bankdetails") && (
+                    <li className="nav-text">
+                      <NavLink
+                        className={({ isActive }) =>
+                          isActive ? "active-link" : "link"
+                        }
+                        to={ROUTES.BANK_DETAILS}
+                      >
+                        <div className=" ms-5">Bank Details</div>
+                      </NavLink>
+                    </li>
+                  )}
                     </>
                   ) : (
                     ""
@@ -974,18 +1046,7 @@ export default function Sidebar({ showSidebar }) {
                     </li>
                   )}
 
-                  {checkPermission("purchase") && (
-                    <li className="nav-text">
-                      <NavLink
-                        className={({ isActive }) =>
-                          isActive ? "active-link" : "link"
-                        }
-                        to={ROUTES.BANK_DETAILS}
-                      >
-                        <div className=" ms-5">Bank Details</div>
-                      </NavLink>
-                    </li>
-                  )}
+                
                   {checkPermission("job_payments") && (
                     <li className="nav-text ">
                       <NavLink

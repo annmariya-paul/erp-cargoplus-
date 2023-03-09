@@ -84,6 +84,7 @@ table {
   min-height: 30px;
   border-bottom: 1px solid black;
   // border-top: 1px solid black;
+  border-inline: 1px solid black;
   background-color: rgb(230, 230, 230);
   display: flex;
   align-items: center;
@@ -103,13 +104,17 @@ table {
 .invoice_header {
   position: relative !important;
 }
-
+.tsk_exp{
+  padding-left: 10px !important;
+}
+.th_center{
+  text-align: center !important;
+}
 .details_table {
   width: 100%;
-
+ border: 1px solid black;
   thead {
     background-color: lightgrey;
-
     th {
       text-align: left;
       border-top: 1px solid black;
@@ -118,9 +123,9 @@ table {
       padding-right: 5px;
     }
 
-    th:last-child {
-      border-right: none !important;
-    }
+    // th:last-child {
+    //   border-right: none !important;
+    // }
 
     #amount {
       text-align: right !important;

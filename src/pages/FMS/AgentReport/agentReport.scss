@@ -1,0 +1,6 @@
+@use "../../../styles/variables.scss";
+.container_agent_report{
+  border-radius: 4px;
+  box-shadow: 0px -1px 5px variables.$boxshadow;
+  margin-block:10px;
+;}

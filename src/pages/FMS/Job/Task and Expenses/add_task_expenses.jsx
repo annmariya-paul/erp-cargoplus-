@@ -991,7 +991,7 @@ export default function Taskexpenses() {
                     index.key,
                     "job_task_expense_cost_amountfx",
                   ]}
-                  rules={[{ required: true, message: "Required" }]}
+                  // rules={[{ required: true, message: "Required" }]}
                 >
                   <InputNumber
                     bordered={false}
@@ -1044,7 +1044,7 @@ export default function Taskexpenses() {
                     index.key,
                     "job_task_expense_cost_taxfx",
                   ]}
-                  rules={[{ required: true, message: "Required" }]}
+                  // rules={[{ required: true, message: "Required" }]}
                 >
                   <InputNumber
                     bordered={false}
@@ -1084,7 +1084,7 @@ export default function Taskexpenses() {
                     index.key,
                     "job_task_expense_cost_subtotalfx",
                   ]}
-                  rules={[{ required: true, message: "Required" }]}
+                  // rules={[{ required: true, message: "Required" }]}
                 >
                   <InputNumber
                     bordered={false}

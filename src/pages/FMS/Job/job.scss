@@ -153,7 +153,7 @@ element.style {
 .ant-input-focused {
   border-color: none;
   .boldhd {
-    font-weight: 500;
+    font-weight: 900;
   }
 }
 .ant-input:focus,
@@ -178,4 +178,11 @@ element.style {
   margin-right: 16px;
   // flex-grow: 1;
   box-shadow: 0.5px 1px 8px variables.$boxshadow;
+}
+.ant-collapse > .ant-collapse-item > .ant-collapse-header .ant-collapse-header-text {
+  color:  #0891d1;
+}
+.table_job_list {
+  height: 300px !important;
+  overflow-y: auto !important;
 }

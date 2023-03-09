@@ -20,12 +20,12 @@ import Custom_model from "../../../components/custom_modal/custom_model";
 import PublicFetch from "../../../utils/PublicFetch";
 import Input_Number from "../../../components/InputNumber/InputNumber";
 
-export default function AddJobPayments () {
+export default function AddJobPayments() {
   const [addForm] = Form.useForm();
   const [successPopup, setSuccessPopup] = useState(false);
-  const [currencyDefault,setCurrencyDefault] = useState();
+  const [currencyDefault, setCurrencyDefault] = useState();
   const [allCurrency, setAllCurrency] = useState();
-  const [jobCount,setJobCount] = useState();
+  const [jobData, setJobData] = useState();
 
   const navigate = useNavigate();
   const newDate = new Date();
@@ -71,24 +71,25 @@ export default function AddJobPayments () {
       });
   };
 
-   const getAllJobs = () => {
-     PublicFetch.get(`${CRM_BASE_URL_FMS}/job?startIndex=0&noOfItems=10`)
-       .then((res) => {
-         if (res.data.success) {
-           setJobCount(res.data.data);
-         } else {
-           console.log("Failed to load data");
-         }
-       })
-       .catch((err) => {
-         console.log("Error", err);
-       });
-   };
+  const getAllJobs = () => {
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/job?startIndex=0&noOfItems=10`)
+      .then((res) => {
+        if (res.data.success) {
+          console.log("jobbbb", res.data.data);
+          setJobData(res.data.data);
+        } else {
+          console.log("Failed to load data");
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
 
-   useEffect(() => {
-     CurrencyData();
-     getAllJobs();
-   }, []);
+  useEffect(() => {
+    CurrencyData();
+    getAllJobs();
+  }, []);
 
   return (
     <>
@@ -130,11 +131,22 @@ export default function AddJobPayments () {
                 <div className="col-sm-3 pt-3">
                   <label>Job No.</label>
                   <Form.Item
-                    name="job_no"
+                    name="job_number"
                     // onChange={(e) => setName(e.target.value)}
                   >
                     <SelectBox>
-                      <Select.Option>test 1</Select.Option>
+                      {jobData &&
+                        jobData.length > 0 &&
+                        jobData.map((item, index) => {
+                          return (
+                            <Select.Option
+                              value={item.job_id}
+                              key={item.job_id}
+                            >
+                              {item.job_number}
+                            </Select.Option>
+                          );
+                        })}
                     </SelectBox>
                   </Form.Item>
                 </div>
@@ -237,7 +249,9 @@ export default function AddJobPayments () {
                   </Form.Item>
                 </div>
                 <div className="col-12 d-flex justify-content-center mt-5 pt-4 gap-3 ">
-                  <Button btnType="save" className="save_button">Save</Button>{" "}
+                  <Button btnType="save" className="save_button">
+                    Save
+                  </Button>{" "}
                   <Button
                     as="input"
                     type="reset"
@@ -262,5 +276,4 @@ export default function AddJobPayments () {
       </div>
     </>
   );
-};
-
+}

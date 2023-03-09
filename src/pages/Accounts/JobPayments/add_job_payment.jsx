@@ -26,6 +26,7 @@ export default function AddJobPayments() {
   const [currencyDefault, setCurrencyDefault] = useState();
   const [allCurrency, setAllCurrency] = useState();
   const [jobData, setJobData] = useState();
+  console.log("jobbbbb",jobData);
 
   const navigate = useNavigate();
   const newDate = new Date();
@@ -76,7 +77,7 @@ export default function AddJobPayments() {
       .then((res) => {
         if (res.data.success) {
           console.log("jobbbb", res.data.data);
-          setJobData(res.data.data);
+          setJobData(res.data.data.job);
         } else {
           console.log("Failed to load data");
         }
@@ -134,7 +135,11 @@ export default function AddJobPayments() {
                     name="job_number"
                     // onChange={(e) => setName(e.target.value)}
                   >
-                    <SelectBox>
+                    <SelectBox
+                      onChange={(e) => {
+                        console.log("ann", e);
+                      }}
+                    >
                       {jobData &&
                         jobData.length > 0 &&
                         jobData.map((item, index) => {

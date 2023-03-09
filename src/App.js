@@ -119,6 +119,7 @@ import ViewPayment from "./pages/Accounts/Payments/ViewPayment";
 import EditExpence from "./pages/Accounts/DailyExpence/EditExpense";
 import AgentReport from "./pages/FMS/AgentReport/agentReport";
 import CostAndExpenseReport from "./pages/FMS/CustomerwiseCostAndExpenseReport/costAndExpenseReport";
+import Invoicereport from "./pages/FMS/Invoice/InvoiceReport/Invoicereport";
 
 function App() {
   return (
@@ -462,6 +463,13 @@ function App() {
               element={<ProtectedRoute />}
             >
               <Route index element={<Taskexpenses />} />
+            </Route>
+
+            <Route
+              path={ROUTES.INVOICE_REPORT}
+              element={<ProtectedRoute />}
+            >
+              <Route index element={<Invoicereport />} />
             </Route>
 
             {/* ######## ACCOUNTS ######## */}

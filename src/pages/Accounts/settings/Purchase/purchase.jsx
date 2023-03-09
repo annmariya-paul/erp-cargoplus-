@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Form, Input, Select, DatePicker, Checkbox } from "antd";
 import MyPagination from "../../../../components/Pagination/MyPagination";
 import Button from "../../../../components/button/button";
@@ -14,6 +14,9 @@ import moment from "moment";
 import { FiEdit } from "react-icons/fi";
 import { ROUTES } from "../../../../routes";
 import { NavLink } from "react-router-dom";
+import { ACCOUNTS, CRM_BASE_URL_PURCHASING } from "../../../../api/bootapi";
+import { useNavigate } from "react-router-dom";
+import PublicFetch from "../../../../utils/PublicFetch";
 
 export default function Purchase() {
   const [pageSize, setPageSize] = useState("25");
@@ -35,6 +38,8 @@ export default function Purchase() {
   const newDate = new Date();
   const [selectedDate, setSelectedDate] = useState();
   const [showViewModal, setShowViewModal] = useState(false);
+  const [serialNo, setserialNo] = useState(1);
+
 
   const [editpurchasebillno, seteditpurchasebillno] = useState("");
   const [editpurchasedate, seteditpurchasedate] = useState("");
@@ -51,6 +56,7 @@ export default function Purchase() {
   const [editpurchaseattachments, seteditpurchaseattachments] = useState("");
   const [editpurchaseamount, seteditpurchaseamount] = useState("");
   const [editpurchasetaxamount, seteditpurchasetaxamount] = useState("");
+  const [searchedText, setSearchedText] = useState("");
 
   const [viewpurchasemode, setViewpurchasemode] = useState({
     po_no: "",
@@ -75,25 +81,36 @@ export default function Purchase() {
     setPurchaseEditPopup(true);
   };
 
+  const getallpurchase = async () => {
+    try {
+      const allpurchases = await PublicFetch.get(
+        `${ACCOUNTS}/purchase?startIndex=0&noOfItems=100`
+      );
+      console.log("getting all purchases", allpurchases);
+      setpurchase(allpurchases.data.data);
+    } catch (err) {
+      console.log("error to fetching  purchases", err);
+    }
+  };
+  useEffect(() => {
+    getallpurchase();
+  },[])
+
+
   const columns = [
     {
-      title: "Sl No",
-      dataIndex: "sl_no",
-      key: "freight_type_prefix",
-
-      // onFilter: (value, record) => {
-      //   return String(record.freight_type_prefix)
-      //     .toLowerCase()
-      //     .includes(value.toLowerCase());
-      // },
+      title: "SI.NO",
+      key: "index",
+      width: "20%",
+      render: (value, item, index) => serialNo + index,
       align: "center",
     },
     {
       title: "Po No",
-      dataIndex: "po_no",
-      key: "freight_type_name",
-      //   filteredValue: [searchedText],
-      //   onFilter: (value, record) => {
+      dataIndex: "purchase_po_no",
+      key: "purchase_po_no",
+        filteredValue: [searchedText],
+        // onFilter: (value, record) => {
       //     return String(record.freight_type_name  || nameSearch)
       //       .toLowerCase()
       //       .includes(value.toLowerCase());
@@ -102,8 +119,8 @@ export default function Purchase() {
     },
     {
       title: "DATE",
-      dataIndex: "date",
-      key: "freight_type_prefix",
+      dataIndex: "purchase_purchase_date",
+      key: "purchase_purchase_date",
 
       onFilter: (value, record) => {
         return String(record.freight_type_prefix)
@@ -128,8 +145,8 @@ export default function Purchase() {
     },
     {
       title: "BILL NO",
-      dataIndex: "bill_no",
-      key: "freight_type_prefix",
+      dataIndex: "purchase_bill_no",
+      key: "purchase_bill_no",
 
       onFilter: (value, record) => {
         return String(record.freight_type_prefix)
@@ -140,8 +157,8 @@ export default function Purchase() {
     },
     {
       title: "TOTAL AMOUNT",
-      dataIndex: "total_amount",
-      key: "freight_type_prefix",
+      dataIndex: "purchase_total_amount",
+      key: "purchase_total_amount",
 
       onFilter: (value, record) => {
         return String(record.freight_type_prefix)
@@ -153,8 +170,8 @@ export default function Purchase() {
 
     {
       title: "DUE DATE",
-      dataIndex: "due_date",
-      key: "freight_type_prefix",
+      dataIndex: "purchase_due_date",
+      key: "purchase_due_date",
 
       onFilter: (value, record) => {
         return String(record.freight_type_prefix)
@@ -165,8 +182,8 @@ export default function Purchase() {
     },
     {
       title: "STATUS",
-      dataIndex: "status",
-      key: "freight_type_prefix",
+      dataIndex: "purchase_status",
+      key: "purchase_status",
 
       onFilter: (value, record) => {
         return String(record.freight_type_prefix)
@@ -195,7 +212,7 @@ export default function Purchase() {
                 className={({ isActive }) =>
                   isActive ? "active-link" : "link"
                 }
-                to={ROUTES.EDIT_PURCHASE}
+                to={`${ROUTES.EDIT_PURCHASE}/${index?.purchase_id}`}
               >
                 <FaEdit />
               </NavLink>
@@ -217,18 +234,6 @@ export default function Purchase() {
         );
       },
       align: "center",
-    },
-  ];
-  const data = [
-    {
-      sl_no: "1",
-      po_no: "1009",
-      date: "02/03/2023",
-      vendor: "hi",
-      bill_no: "12233",
-      total_amount: "343212",
-      due_date: "12/12/2023",
-      status: "ss",
     },
   ];
 
@@ -290,9 +295,6 @@ export default function Purchase() {
             >
               <Button
                 btnType="add"
-                onClick={() => {
-                  setModalpurchase(true);
-                }}
               >
                 Add Purchase
               </Button>
@@ -301,8 +303,8 @@ export default function Purchase() {
         </div>
         <div className="datatable">
           <TableData
-            // data={getData(current, pageSize)}
-            data={data}
+            data={purchase}
+            // data={data}
             columns={columns}
             custom_table_css="table_lead_list"
           />
@@ -317,701 +319,9 @@ export default function Purchase() {
         </div>
       </div>
 
-      {/* add purchase */}
 
-      {/* <Custom_model
-        show={modalpurchase}
-        onHide={() => setModalpurchase(false)}
-        header="Add Fright"
-        footer={false} */}
-      {/* // {...props}
-        View_list
-        list_content={
-          <>
-            <div className="row">
-              <h5 className="lead_text">Add Purchase</h5>
-            </div>
-            <Form */}
-      {/* form={adForm}
-              //   onFinish={(data) => { */}
-      {/* //     console.log("valuezzzzzzz", data);
-              //     createvendortype()
-              //   }}
-              //   onFinishFailed={(error) => { */}
-      {/* //     console.log(error);
-              //   }}
-            > */}
-      {/* <div className="row my-4">
-                <div className="col-4">
-                  <label>PO No</label>
-                  <Form.Item name="PO No">
-                    <InputType
-                      value={po_no} */}
-      {/* // onChange={(e) => { */}
-      {/* //   setServiceName(e.target.value); */}
-      {/* //   setuniqueCode(false); */}
-      {/* // }} */}
-      {/* /> */}
-      {/* </Form.Item> */}
-      {/* </div>
-                <div className="col-4">
-                  <label>Purchase Date</label>
-                  <Form.Item name="purchase date" className="mt-2">
-                    <DatePicker
-                      format={"DD-MM-YYYY"}
-                      defaultValue={moment(newDate)}
-                      value={selectedDate}
-                      onChange={(e) => {
-                        setSelectedDate(e);
-                      }}
-                    />
-                  </Form.Item> */}
-      {/* </div>
-                <div className="col-4">
-                  <label>Due Date</label>
-                  <Form.Item name="purchase date" className="mt-2">
-                    <DatePicker
-                      format={"DD-MM-YYYY"}
-                      defaultValue={moment(newDate)}
-                      value={selectedDate}
-                      onChange={(e) => {
-                        setSelectedDate(e);
-                      }}
-                    />
-                  </Form.Item>
-                </div> */}
 
-      {/* <div className="col-4">
-                  <label>Vendor</label>
-                  <Form.Item className="mt-2" name="vendor">
-                    <TreeSelect
-                      className="tree"
-                      name="tree"
-                      style={{ width: "100%" }} */}
-      {/* // value={category} */}
-      {/* // value={ setState.value} */}
-      {/* dropdownStyle={{ */}
-      {/* maxHeight: 400, */}
-      {/* overflow: "auto", */}
-      {/* }} */}
-      {/* //   treeData={categoryTree} */}
-      {/* placeholder="Please select" */}
-      {/* treeDefaultExpandAll */}
-      {/* //   onChange={onChangetree}
-                      //   onSelect={onSelect} */}
-      {/* /> */}
-      {/* </Form.Item> */}
-      {/* </div> */}
 
-      {/* <div className="col-4">
-                  <label>Payment Mode</label>
-                  <Form.Item className="mt-2" name="vendor">
-                    <TreeSelect
-                      className="tree"
-                      name="tree"
-                      style={{ width: "100%" }}
-                      // value={category}
-                      // value={ setState.value}
-                      dropdownStyle={{
-                        maxHeight: 400,
-                        overflow: "auto",
-                      }}
-                      //   treeData={categoryTree}
-                      placeholder="Please select"
-                      treeDefaultExpandAll
-                      //   onChange={onChangetree}
-                      //   onSelect={onSelect}
-                    />
-                  </Form.Item>
-                </div>
-                <div className="col-4">
-                  <label>Credit Days</label>
-                  <Form.Item className="mt-2" name="category">
-                    <InputType value={due_date} />
-                  </Form.Item>
-                </div> */}
-
-      {/* <div
-                  className="col-sm-4 pt-3 "
-                  //  key={index.id}
-                >
-                  <label>Taxable</label>
-                  <div className="">
-                    {/* <Form.Item name="category_parent_id"  className="mt-2"> */}
-
-      {/* <Checkbox */}
-      {/* // name={index.name}
-                    // value={index.id}
-                    // onChange={(e) => */}
-      {/* //   handleSubModuleChange(e.target.checked, index.id)
-                    // }
-                    // checked={checkSubmodule(index.id)} */}
-      {/* > */}
-      {/* {index.name} */}
-      {/* </Checkbox> */}
-      {/* </Form.Item> */}
-      {/* </div> */}
-      {/* </div> */}
-
-      {/* <div className="col-4"> */}
-      {/* <label>Tax No</label>
-                  <Form.Item className="mt-2" name="category">
-                    <InputType value={due_date} />
-                  </Form.Item>
-                </div>
-                <div className="col-4"> */}
-      {/* <label>Bill No</label>
-                  <Form.Item className="mt-2" name="category">
-                    <InputType value={due_date} />
-                  </Form.Item>
-                </div>
-                <div className="col-4">
-                  <label>Amount</label>
-                  <Form.Item className="mt-2" name="category">
-                    <InputType value={due_date} />
-                  </Form.Item>
-                </div> */}
-      {/* <div className="col-4">
-                  <label>Tax Amount</label>
-                  <Form.Item className="mt-2" name="category">
-                    <InputType value={due_date} />
-                  </Form.Item>
-                </div>
-                <div className="col-4">
-                  <label>Total Amount</label>
-                  <Form.Item className="mt-2" name="category">
-                    <InputType value={due_date} />
-                  </Form.Item>
-                </div> */}
-
-      {/* <div className="row"> */}
-      {/* <div className="col-8 ">
-                  <label> Remarks</label>
-                  <div>
-                    <Form.Item
-                      className="mt-2"
-                      name="remarks"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z ]+$"),
-                          message: "Please enter a Valid  Name",
-                        },
-
-                        {
-                          min: 3,
-                          message: "Name must be atleast 3 characters",
-                        },
-                        {
-                          max: 100,
-                          message: " Name cannot be longer than 100 characters",
-                        },
-                      ]}
-                    >
-                      <TextArea
-                        value={remarks}
-                        //   onChange={(e) => {
-                        //     setvendordescription(e.target.value);
-                        //   }}
-                      />
-                    </Form.Item>
-                  </div>
-                </div>
-                {/* </div> */}
-
-      {/* <div className="col-4">
-                  <label>Attachments</label>
-                  <Form.Item name="new" className="mt-2">
-                    <FileUpload
-                      multiple
-                      listType="picture"
-                      accept=".png,.jpg,.jpeg"
-                      height={100} */}
-      {/* // onPreview={handlePreview} */}
-      {/* beforeUpload={false}
-                      onChange={(file) => {
-                        console.log("Before upload", file.file);
-                        console.log("Before upload file size", file.file.size);
-
-                        if (file.file.size > 1000 && file.file.size < 500000) {
-                          setImg(file.file.originFileObj);
-                          setImgSizeError(false);
-                          console.log(
-                            "Image must be greater than 1 kb and less than 500 kb"
-                          );
-                        } else {
-                          console.log("failed beacuse of large size");
-                          setImgSizeError(true);
-                        }
-                      }}
-                    /> */}
-      {/* </Form.Item>
-                  {imgSizeError ? (
-                    <div>
-                      <label style={{ color: "red" }}>
-                        Please Select Image Size under 500kb
-                      </label>
-                    </div>
-                  ) : (
-                    ""
-                  )}
-                </div>
-
-                <div className="row justify-content-center ">
-                  <div className="col-auto">
-                    <Button btnType="save">Save</Button>
-                  </div>
-                </div>
-              </div>
-            </Form> */}
-      {/* </>
-        }
-      >
-        <Custom_model
-          size={"sm"}
-          show={successPopup} */}
-      {/* //   onHide={() => setSuccessPopup(false)} */}
-      {/* // success */}
-      {/* /> */}
-      {/* </Custommodel> */}
-
-      {/* view modal */}
-
-      <Custom_model
-        show={showViewModal}
-        onHide={() => setShowViewModal(false)}
-        View_list
-        list_content={
-          <div className="container-fluid p-3">
-            <div className="row">
-              <div className="col-9">
-                <h5 className="lead_text">Purchase</h5>
-              </div>
-              <div className="col-3">
-                <Button
-                  btnType="add_borderless"
-                  className="edit_button"
-                  onClick={() => {
-                    handleviewtoedit(viewpurchasemode);
-                    // setShowModalEdit(true);
-                    setShowViewModal(false);
-                  }}
-                >
-                  Edit
-                  <FiEdit
-                    style={{ marginBottom: "4px", marginInline: "3px" }}
-                  />
-                </Button>
-              </div>
-            </div>
-            <div className="row mt-4">
-              <div className="col-4">
-                <p> Po No</p>
-              </div>
-              <div className="col-1">:</div>
-              <div className="col-6 justify-content-start">
-                <p className="modal-view-data">
-                  1009
-                  {/* {viewpaymentmode.name} */}
-                </p>
-              </div>
-            </div>
-            <div className="row mt-4">
-              <div className="col-4">
-                <p> Date</p>
-              </div>
-              <div className="col-1">:</div>
-              <div className="col-6 justify-content-start">
-                <p className="modal-view-data">
-                  02/03/2023
-                  {/* {viewpaymentmode.description} */}
-                </p>
-              </div>
-            </div>
-            <div className="row mt-4">
-              <div className="col-4">
-                <p>Due Date</p>
-              </div>
-              <div className="col-1">:</div>
-              <div className="col-6 justify-content-start">
-                <p className="modal-view-data">
-                  12/12/2023
-                  {/* {viewpaymentmode.description} */}
-                </p>
-              </div>
-            </div>
-
-            <div className="row mt-4">
-              <div className="col-4">
-                <p> Vendor</p>
-              </div>
-              <div className="col-1">:</div>
-              <div className="col-6 justify-content-start">
-                <p className="modal-view-data">
-                  hi
-                  {/* {viewpaymentmode.name} */}
-                </p>
-              </div>
-            </div>
-            <div className="row mt-4">
-              <div className="col-4">
-                <p>Payment Mode</p>
-              </div>
-              <div className="col-1">:</div>
-              <div className="col-6 justify-content-start">
-                <p className="modal-view-data">
-                  cod
-                  {/* {viewpaymentmode.description} */}
-                </p>
-              </div>
-            </div>
-            <div className="row mt-4">
-              <div className="col-4">
-                <p> Credit Days</p>
-              </div>
-              <div className="col-1">:</div>
-              <div className="col-6 justify-content-start">
-                <p className="modal-view-data">
-                  7{/* {viewpaymentmode.description} */}
-                </p>
-              </div>
-            </div>
-            <div className="row mt-4">
-              <div className="col-4">
-                <p> Taxable</p>
-              </div>
-              <div className="col-1">:</div>
-              <div className="col-6 justify-content-start">
-                <p className="modal-view-data">
-                  yes
-                  {/* {viewpaymentmode.description} */}
-                </p>
-              </div>
-            </div>
-            <div className="row mt-4">
-              <div className="col-4">
-                <p> Tax No</p>
-              </div>
-              <div className="col-1">:</div>
-              <div className="col-6 justify-content-start">
-                <p className="modal-view-data">
-                  02032023
-                  {/* {viewpaymentmode.description} */}
-                </p>
-              </div>
-            </div>
-
-            <div className="row mt-4">
-              <div className="col-4">
-                <p> Bill No</p>
-              </div>
-              <div className="col-1">:</div>
-              <div className="col-6 justify-content-start">
-                <p className="modal-view-data">
-                  12233
-                  {/* {viewpaymentmode.name} */}
-                </p>
-              </div>
-            </div>
-            <div className="row mt-4">
-              <div className="col-4">
-                <p> Amount</p>
-              </div>
-              <div className="col-1">:</div>
-              <div className="col-6 justify-content-start">
-                <p className="modal-view-data">
-                  343212
-                  {/* {viewpaymentmode.name} */}
-                </p>
-              </div>
-            </div>
-            <div className="row mt-4">
-              <div className="col-4">
-                <p>Tax Amount</p>
-              </div>
-              <div className="col-1">:</div>
-              <div className="col-6 justify-content-start">
-                <p className="modal-view-data">
-                  22323
-                  {/* {viewpaymentmode.description} */}
-                </p>
-              </div>
-            </div>
-            <div className="row mt-4">
-              <div className="col-4">
-                <p>Total Amount</p>
-              </div>
-              <div className="col-1">:</div>
-              <div className="col-6 justify-content-start">
-                <p className="modal-view-data">
-                  232023
-                  {/* {viewpaymentmode.description} */}
-                </p>
-              </div>
-            </div>
-            <div className="row mt-4">
-              <div className="col-4">
-                <p>Remarks</p>
-              </div>
-              <div className="col-1">:</div>
-              <div className="col-6 justify-content-start">
-                <p className="modal-view-data">
-                  02/03/2023 ciode njmosdj jno
-                  {/* {viewpaymentmode.description} */}
-                </p>
-              </div>
-            </div>
-            <div className="row mt-4">
-              <div className="col-4">
-                <p>Attachments</p>
-              </div>
-              <div className="col-1">:</div>
-              <div className="col-6 justify-content-start">
-                <p className="modal-view-data">
-                  {/* {viewpaymentmode.description} */}
-                </p>
-              </div>
-            </div>
-
-            <div className="row mt-4">
-              <div className="col-4">
-                <p>Status</p>
-              </div>
-              <div className="col-1">:</div>
-              <div className="col-6 justify-content-start">
-                <p className="modal-view-data">
-                  ss
-                  {/* {viewpaymentmode.name} */}
-                </p>
-              </div>
-            </div>
-            <div className="col-12 d-flex justify-content-center mt-5">
-              <Button className="save_button">Print</Button>
-            </div>
-          </div>
-        }
-      />
-
-      {/* Edit modal */}
-
-      <Custom_model
-        show={purchaseEditPopup}
-        onHide={() => setPurchaseEditPopup(false)}
-        View_list
-        list_content={
-          <div>
-            <div className="container-fluid px-4 my-3">
-              <div>
-                <h5 className="lead_text">Edit Purchase</h5>
-              </div>
-              <div className="row my-3 ">
-                <Form
-                  form={editForm}
-                  onFinish={(values) => {
-                    console.log("values iss", values);
-                    handleupdate();
-                  }}
-                  onFinishFailed={(error) => {
-                    console.log(error);
-                  }}
-                >
-                  <div className="col-12">
-                    <label>Po No</label>
-                    <Form.Item name="po_no">
-                      <InputType
-                        className="input_type_style w-100"
-                        value={editpurchasepono}
-                        onChange={(e) => {
-                          seteditpurchasepono(e.target.value);
-                          //   setErrormsg("");
-                        }}
-                      />
-                    </Form.Item>
-                  </div>
-
-                  <div className="col-12">
-                    <label>Purchase Date</label>
-                    <Form.Item name="date" className="mt-2">
-                      <DatePicker
-                        format={"DD-MM-YYYY"}
-                        defaultValue={moment(newDate)}
-                        value={selectedDate}
-                        onChange={(e) => {
-                          setSelectedDate(e);
-                        }}
-                      />
-                    </Form.Item>
-                  </div>
-                  <div className="col-12">
-                    <label>Due Date</label>
-                    <Form.Item name="date" className="mt-2">
-                      <DatePicker
-                        format={"DD-MM-YYYY"}
-                        defaultValue={moment(newDate)}
-                        value={selectedDate}
-                        onChange={(e) => {
-                          setSelectedDate(e);
-                        }}
-                      />
-                    </Form.Item>
-                  </div>
-
-                  <div className="col-12">
-                    <label>Vendor</label>
-                    <Form.Item name="vendor">
-                      <InputType
-                        value={editpurchasevendor}
-                        onChange={(e) => {
-                          seteditpurchasevendor(e.target.value);
-                        }}
-                      />
-                    </Form.Item>
-                  </div>
-                  <div className="col-12">
-                    <label>Payment Mode</label>
-                    <Form.Item name="bill_no">
-                      <InputType
-                        value={editpurchasepaymentmode}
-                        onChange={(e) => {
-                          seteditpurchasepaymentmode(e.target.value);
-                        }}
-                      />
-                    </Form.Item>
-                  </div>
-                  <div className="col-12">
-                    <label>Credit Days</label>
-                    <Form.Item name="bill_no">
-                      <InputType
-                        value={editpurchasecreditdays}
-                        onChange={(e) => {
-                          seteditpurchasecreditdays(e.target.value);
-                        }}
-                      />
-                    </Form.Item>
-                  </div>
-                  <div className="col-12">
-                    <label>Taxable</label>
-                    <Form.Item name="bill_no">
-                      <Checkbox
-                        value={editpurchasetaxable}
-                        onChange={(e) => {
-                          seteditpurchasetaxable(e.target.value);
-                        }}
-                      ></Checkbox>
-                    </Form.Item>
-                  </div>
-                  <div className="col-12">
-                    <label>Tax No</label>
-                    <Form.Item name="bill_no">
-                      <InputType
-                        value={editpurchasetaxno}
-                        onChange={(e) => {
-                          seteditpurchasetaxno(e.target.value);
-                        }}
-                      />
-                    </Form.Item>
-                  </div>
-                  <div className="col-12">
-                    <label>Bill No</label>
-                    <Form.Item name="bill_no">
-                      <InputType
-                        value={editpurchasebillno}
-                        onChange={(e) => {
-                          seteditpurchasebillno(e.target.value);
-                        }}
-                      />
-                    </Form.Item>
-                  </div>
-                  <div className="col-12">
-                    <label> Amount</label>
-                    <Form.Item name="date">
-                      <InputType
-                        value={editpurchaseamount}
-                        onChange={(e) => {
-                          seteditpurchaseamount(e.target.value);
-                        }}
-                      />
-                    </Form.Item>
-                  </div>
-                  <div className="col-12">
-                    <label>Tax Amount</label>
-                    <Form.Item name="bill_no">
-                      <InputType
-                        value={editpurchasetaxamount}
-                        onChange={(e) => {
-                          seteditpurchasetaxamount(e.target.value);
-                        }}
-                      />
-                    </Form.Item>
-                  </div>
-                  <div className="col-12">
-                    <label>Total Amount</label>
-                    <Form.Item name="bill_no">
-                      <InputType
-                        value={editpurchasetotalamount}
-                        onChange={(e) => {
-                          seteditpurchasetotalamount(e.target.value);
-                        }}
-                      />
-                    </Form.Item>
-                  </div>
-
-                  <div className="col-12">
-                    <label>Remarks</label>
-                    <Form.Item name="bill_no">
-                      <InputType
-                        value={editpurchaseremarks}
-                        onChange={(e) => {
-                          seteditpurchaseremarks(e.target.value);
-                        }}
-                      />
-                    </Form.Item>
-                  </div>
-                  <div className="col-12">
-                    <label>Attachments</label>
-                    <Form.Item name="bill_no">
-                      <FileUpload
-                        value={editpurchaseattachments}
-                        onChange={(e) => {
-                          seteditpurchaseattachments(e.target.value);
-                        }}
-                      />
-                    </Form.Item>
-                  </div>
-                  <div className="col-12">
-                    <label>Status</label>
-                    <Form.Item name="status">
-                      <InputType
-                        value={editpurchasestatus}
-                        onChange={(e) => {
-                          seteditpurchasestatus(e.target.value);
-                        }}
-                      />
-                    </Form.Item>
-                  </div>
-
-                  <div className="col-12 d-flex justify-content-center mt-5">
-                    <Button className="save_button">Save</Button>
-                  </div>
-                </Form>
-              </div>
-              {/* {error ? (
-                <div className="">
-                  <ErrorMsg code={"400"} />
-                </div>
-              ) : (
-                ""
-              )} */}
-            </div>
-          </div>
-        }
-      />
-      <Custom_model
-        size={"sm"}
-        show={successPopup}
-        onHide={() => setSuccessPopup(false)}
-        success
-      />
     </div>
   );
 }

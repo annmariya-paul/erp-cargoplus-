@@ -438,7 +438,7 @@ function App() {
             <Route path={ROUTES.VIEW_PURCHASE} element={<ProtectedRoute />}>
               <Route index element={<View_purchase/>} />
             </Route>
-            <Route path={ROUTES.EDIT_PURCHASE} element={<ProtectedRoute />}>
+            <Route path={ROUTES.EDIT_PURCHASE_ID} element={<ProtectedRoute />}>
               <Route index element={<Edit_purchase/>}/>
             </Route>
             <Route path={ROUTES.PURCHASE} element={<ProtectedRoute />}>

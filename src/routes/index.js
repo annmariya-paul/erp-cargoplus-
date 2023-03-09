@@ -111,6 +111,7 @@ const ROUTES = {
   ADD_PAYMENTS: "/add_payments",
   VIEW_PURCHASE:"/view_purchase",
   EDIT_PURCHASE:"/edit_purchase",
+  EDIT_PURCHASE_ID:"/edit_purchase/:id",
   PRINT_PURCHASE:"/print_purchase",
   
   JOB_PAYMENTS:"/job_payments",

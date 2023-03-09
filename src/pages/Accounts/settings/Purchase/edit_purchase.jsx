@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, Input, Select, DatePicker, Checkbox } from "antd";
 import Button from "../../../../components/button/button";
 import FileUpload from "../../../../components/fileupload/fileUploader";
@@ -9,16 +9,17 @@ import SelectBox from "../../../../components/Select Box/SelectBox";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { ACCOUNTS, CRM_BASE_URL_PURCHASING } from "../../../../api/bootapi";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { ROUTES } from "../../../../routes";
 
 export default function Edit_purchase() {
+  const {id} = useParams()
   const [editForm] = Form.useForm();
   const navigate = useNavigate();
 
   const newDate = new Date();
-  const newDate1 = new Date();
+  // const newDate1 = new Date();
   const [vendorid,setvendorid]=useState("")
   const [allvendors, setAllVendors] = useState();
   const [allpayments, setallpayments] = useState();
@@ -69,32 +70,113 @@ export default function Edit_purchase() {
     }
   };
 
+  const getvendors = async () =>{
+    try{
+      const getvendorss = await PublicFetch.get(
+        `${CRM_BASE_URL_PURCHASING}/vendors`,
+      )
+    console.log("response", getvendorss);
+    if(getvendorss?.data.success){
+      setAllVendors(getvendorss?.data?.data)
+     
+     
+      setvendorid(getvendorss?.data?.data.vendor_id)
+      console.log("idddsss",getvendorss?.data?.data)
+    }
+    }catch(err){
+        console.log(err);
+      }
+  }
 
-  const handleupdate = () => {
+
+
+  const getpayments = async () => {
+    try{
+      const getpayment = await PublicFetch.get(
+        `${ACCOUNTS}/payment-modes`,
+
+      )
+      console.log("res",getpayment);
+      if(getpayment?.data.success){
+        setallpayments(getpayment?.data?.data)
+      }
+    }catch(err){
+      console.log(err);
+    }
+  }
+
+
+
+
+
+  const getsinglePurchase=()=> {
+    PublicFetch.get(`${ACCOUNTS}/purchase/${id}`).then((res)=> {
+      console.log("resr",res);
+      if(res.data.success){
+        let date1 = moment(res.data.data.purchase_purchase_date)
+        let date2 = moment(res.data.data.purchase_due_date)
+        editForm.setFieldsValue({
+          po_no: res.data.data.purchase_po_no,
+          date:date1,
+          datee: date2,
+          vendor:res.data.data.purchase_vendor_id,
+          payment_mode:res.data.data.purchase_payment_mode,
+          credit_days:res.data.data.purchase_credit_days,
+          taxable:res.data.data.purchase_taxable,
+          tax_no:res.data.data.purchase_tax_no,
+          bill_no:res.data.data.purchase_bill_no,
+          amount:res.data.data.purchase_amount,
+          tax_amount:res.data.data.purchase_tax_amount,
+          total_amount:res.data.data.purchase_total_amount,
+          status:res.data.data.purchase_status,
+          remarks:res.data.data.purchase_remarks,
+          attachments:res.data.data.purchase_docs,
+        })
+      }
+     
+
+    }).catch((err)=> {
+      console.log("Error", err);
+    })
+  }
+
+  useEffect(()=> {
+    if(id){
+      getsinglePurchase()
+      getvendors()
+      getpayments()
+    }
+  }, [id])
+
+  const handleupdate = (data) => {
+    console.log("dddaaaattttaaa",data);
     setFormSubmitted(true);
+    let datedue = moment(data.datee)
+    let datepur = moment(data.date)
     const formData = new FormData();
-    formData.append("purchase_po_no", editpurchasepono);
-    formData.append("purchase_vendor_id", vendorid);
-    formData.append("purchase_amount", editpurchaseamount);
-    formData.append("purchase_purchase_date", editpurchasedate);
-    formData.append("purchase_tax_no", editpurchasetaxno);
-    formData.append("purchase_bill_no", editpurchasebillno);
-    formData.append("purchase_tax_amount", editpurchasetaxamount);
-    formData.append("purchase_payment_mode", editpurchasepaymentmode);
-    formData.append("purchase_credit_days", editpurchasecreditdays);
-    formData.append("purchase_remarks", editpurchaseremarks);
-    formData.append("purchase_taxable", editpurchasetaxable);
+    formData.append("purchase_po_no", data.po_no);
+    formData.append("purchase_vendor_id", data.vendor);
+    formData.append("purchase_amount", data.amount);
+    formData.append("purchase_purchase_date", datepur);
+    formData.append("purchase_tax_no", data.tax_no);
+    formData.append("purchase_bill_no", data.bill_no);
+    formData.append("purchase_tax_amount", data.tax_amount);
+    formData.append("purchase_payment_mode", data.payment_mode);
+    formData.append("purchase_credit_days", data.credit_days);
+    formData.append("purchase_remarks", data.remarks);
+    formData.append("purchase_taxable", data.taxable);
     formData.append("attachments", editpurchaseattachments?.file?.originFileObj);
-    formData.append("purchase_total_amount", editpurchasetotalamount);
-    formData.append("purchase_due_date", editpurchaseduedate);
+    formData.append("purchase_total_amount", data.total_amount);
+    formData.append("purchase_due_date", datedue);
   
 
     PublicFetch.patch(
-      `${ACCOUNTS}/purchase/${editpurchaseid}`, formData, {
+      `${ACCOUNTS}/purchase/${id}`, formData, {
       "Content-Type": "Multipart/form-Data",
     })
       .then(function (response) {
         console.log("hellooooooo", response);
+      
 
         if (response.data.success) {
           console.log("hello", response.data.data);
@@ -124,7 +206,7 @@ export default function Edit_purchase() {
               form={editForm}
               onFinish={(values) => {
                 console.log("values iss", values);
-                handleupdate();
+                handleupdate(values);
               }}
               onFinishFailed={(error) => {
                 console.log(error);
@@ -233,7 +315,7 @@ export default function Edit_purchase() {
                 </div>
                 <div className="col-4">
                   <label>Credit Days</label>
-                  <Form.Item name="bill_no">
+                  <Form.Item name="credit_days">
                     <InputType
                       value={editpurchasecreditdays}
                       onChange={(e) => {
@@ -244,7 +326,7 @@ export default function Edit_purchase() {
                 </div>
                 <div className="col-4">
                   <label>Taxable</label>
-                  <Form.Item name="bill_no">
+                  <Form.Item name="taxable">
                   <Checkbox
                        onChange={handleChecked}
                        checked={editpurchasetaxable === 1 ? true : false}
@@ -256,7 +338,7 @@ export default function Edit_purchase() {
                 </div>
                 <div className="col-4">
                   <label>Tax No</label>
-                  <Form.Item name="bill_no">
+                  <Form.Item name="tax_no">
                     <InputType
                       value={editpurchasetaxno}
                       onChange={(e) => {
@@ -289,7 +371,7 @@ export default function Edit_purchase() {
                 </div>
                 <div className="col-4">
                   <label>Tax Amount</label>
-                  <Form.Item name="bill_no">
+                  <Form.Item name="tax_amount">
                     <InputType
                       value={editpurchasetaxamount}
                       onChange={(e) => {
@@ -300,7 +382,7 @@ export default function Edit_purchase() {
                 </div>
                 <div className="col-4">
                   <label>Total Amount</label>
-                  <Form.Item name="bill_no">
+                  <Form.Item name="total_amount">
                     <InputType
                       value={editpurchasetotalamount}
                       onChange={(e) => {
@@ -322,7 +404,7 @@ export default function Edit_purchase() {
               </div>
                 <div className="col-4">
                   <label>Remarks</label>
-                  <Form.Item name="bill_no">
+                  <Form.Item name="remarks">
                     <TextArea
                       value={editpurchaseremarks}
                       onChange={(e) => {
@@ -333,9 +415,9 @@ export default function Edit_purchase() {
                 </div>
                 <div className="col-4">
                   <label>Attachments</label>
-                  <Form.Item name="editpurchaseattachments" className="mt-2">
+                  <Form.Item name="attachments" className="mt-2">
                     <FileUpload
-                      name="editpurchaseattachments"
+                      name="attachments"
                       value={editpurchaseattachments}
                     
                       multiple

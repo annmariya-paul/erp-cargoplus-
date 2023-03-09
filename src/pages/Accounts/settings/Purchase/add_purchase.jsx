@@ -134,7 +134,7 @@ export default function Add_purchase() {
 
         addform.resetFields()
         setSuccessModal(true);
-        getallpurchase();
+        // getallpurchase();
         addform.resetFields();
         // setModalpaymentmode(false);
         // close_modal(successPopup, 1000);
@@ -146,17 +146,17 @@ export default function Add_purchase() {
     }
   };
 
-  const getallpurchase = async () => {
-    try {
-      const allpurchases = await PublicFetch.get(
-        `${ACCOUNTS}/purchase?startIndex=0&noOfItems=100`
-      );
-      console.log("getting all purchases", allpurchases);
-      setpurchases(allpurchases.data.data);
-    } catch (err) {
-      console.log("error to fetching  purchases", err);
-    }
-  };
+  // const getallpurchase = async () => {
+  //   try {
+  //     const allpurchases = await PublicFetch.get(
+  //       `${ACCOUNTS}/purchase?startIndex=0&noOfItems=100`
+  //     );
+  //     console.log("getting all purchases", allpurchases);
+  //     setpurchases(allpurchases.data.data);
+  //   } catch (err) {
+  //     console.log("error to fetching  purchases", err);
+  //   }
+  // };
 
   const handleChecked = (e, key) => {
     console.log("isChecked", e);

@@ -933,7 +933,6 @@ export default function Sidebar({ showSidebar }) {
                         </li>
                       )}
                       {checkPermission("paymentmode") && (
-<<<<<<< HEAD
                     <li className="nav-text ">
                       <NavLink
                         className={({ isActive }) =>
@@ -957,19 +956,7 @@ export default function Sidebar({ showSidebar }) {
                       </NavLink>
                     </li>
                   )} */}
-=======
-                        <li className="nav-text ">
-                          <NavLink
-                            className={({ isActive }) =>
-                              isActive ? "active-link" : "link"
-                            }
-                            to={ROUTES.PAYMEMENT_MODE}
-                          >
-                            <div className=" ms-5">Payment Mode</div>
-                          </NavLink>
-                        </li>
-                      )}
->>>>>>> 8212977f048e69c0df22e13de98bb2f20c77bc82
+                      
 
                       {checkPermission("purchase") && (
                         <li className="nav-text">

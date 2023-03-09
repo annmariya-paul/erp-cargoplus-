@@ -1,12 +1,35 @@
-import React from "react";
 import { Form } from "antd";
 import Button from "../../../../components/button/button";
 import { FiEdit } from "react-icons/fi";
 import { ROUTES } from "../../../../routes";
 import { NavLink } from "react-router-dom";
+import React, { useState,useEffect } from "react";
 
 export default function View_purchase() {
   const [addform] = Form.useForm();
+  const[viewpurchasemode,setViewpurchasemode]= useState({
+    // id:"",
+    // po_no: "",
+    // vendor: "",
+    // amount:"",
+    // datepur:"",
+    // tax_no:"",
+    // bill_no:"",
+    // tax_amount:"",
+    // payment_mode:"",
+    // credit_days:"",
+    // attachments:"",
+    // total_amount:"",
+    // datedue:"",
+    // status:"",
+  });
+  const handleviewtoedit = (i) => {
+    console.log("iiii",i);
+    setViewpurchasemode({
+      ...viewpurchasemode
+
+    })}
+  
 
   return (
     <div>
@@ -29,16 +52,18 @@ export default function View_purchase() {
                 className={({ isActive }) =>
                   isActive ? "active-link" : "link"
                 }
-                to={ROUTES.EDIT_PURCHASE}
+              //   to={`${ROUTES.EDIT_PURCHASE}/${1}`
+              // }
               >
                   <Button
                     btnType="add_borderless"
                     className="edit_button"
-                    //   onClick={() => {
-                    //     handleviewtoedit(viewpurchasemode);
+                      onClick={() => {
+                        handleviewtoedit(viewpurchasemode);
+                        console.log("hhhiv",handleviewtoedit);
                     // setShowModalEdit(true);
                     // setShowViewModal(false);
-                    //   }}
+                      }}
                   >
                     Edit
                     <FiEdit
@@ -55,8 +80,7 @@ export default function View_purchase() {
                 <div className="col-1">:</div>
                 <div className="col-6 justify-content-start">
                   <p className="modal-view-data">
-                    1009
-                    {/* {viewpaymentmode.name} */}
+                    {viewpurchasemode.po_no}
                   </p>
                 </div>
               </div>{" "}
@@ -67,8 +91,7 @@ export default function View_purchase() {
                 <div className="col-1">:</div>
                 <div className="col-6 justify-content-start">
                   <p className="modal-view-data">
-                    02/03/2023
-                    {/* {viewpaymentmode.description} */}
+                    {viewpurchasemode.datepur}
                   </p>
                 </div>
               </div>
@@ -79,8 +102,7 @@ export default function View_purchase() {
                 <div className="col-1">:</div>
                 <div className="col-6 justify-content-start">
                   <p className="modal-view-data">
-                    12/12/2023
-                    {/* {viewpaymentmode.description} */}
+                    {viewpurchasemode.datedue}
                   </p>
                 </div>
               </div>
@@ -91,8 +113,7 @@ export default function View_purchase() {
                 <div className="col-1">:</div>
                 <div className="col-6 justify-content-start">
                   <p className="modal-view-data">
-                    Hiii
-                    {/* {viewpaymentmode.name} */}
+                    {viewpurchasemode.vendor}
                   </p>
                 </div>
               </div>
@@ -103,8 +124,7 @@ export default function View_purchase() {
                 <div className="col-1">:</div>
                 <div className="col-6 justify-content-start">
                   <p className="modal-view-data">
-                    cod
-                    {/* {viewpaymentmode.description} */}
+                    {viewpurchasemode.payment_mode}
                   </p>
                 </div>
               </div>
@@ -115,7 +135,7 @@ export default function View_purchase() {
                 <div className="col-1">:</div>
                 <div className="col-6 justify-content-start">
                   <p className="modal-view-data">
-                    7{/* {viewpaymentmode.description} */}
+                    {viewpurchasemode.credit_days}
                   </p>
                 </div>
               </div>
@@ -126,8 +146,7 @@ export default function View_purchase() {
                 <div className="col-1">:</div>
                 <div className="col-6 justify-content-start">
                   <p className="modal-view-data">
-                    yes
-                    {/* {viewpaymentmode.description} */}
+                    {viewpurchasemode.taxable}
                   </p>
                 </div>
               </div>
@@ -138,8 +157,7 @@ export default function View_purchase() {
                 <div className="col-1">:</div>
                 <div className="col-6 justify-content-start">
                   <p className="modal-view-data">
-                    2032023
-                    {/* {viewpaymentmode.description} */}
+                    {viewpurchasemode.tax_no}
                   </p>
                 </div>
               </div>
@@ -150,8 +168,7 @@ export default function View_purchase() {
                 <div className="col-1">:</div>
                 <div className="col-6 justify-content-start">
                   <p className="modal-view-data">
-                    12233
-                    {/* {viewpaymentmode.name} */}
+                    {viewpurchasemode.bill_no}
                   </p>
                 </div>
               </div>
@@ -162,8 +179,7 @@ export default function View_purchase() {
                 <div className="col-1">:</div>
                 <div className="col-6 justify-content-start">
                   <p className="modal-view-data">
-                    343212
-                    {/* {viewpaymentmode.name} */}
+                    {viewpurchasemode.amount}
                   </p>
                 </div>
               </div>
@@ -174,8 +190,7 @@ export default function View_purchase() {
                 <div className="col-1">:</div>
                 <div className="col-6 justify-content-start">
                   <p className="modal-view-data">
-                    22323
-                    {/* {viewpaymentmode.description} */}
+                    {viewpurchasemode.tax_amount}
                   </p>
                 </div>
               </div>
@@ -186,8 +201,7 @@ export default function View_purchase() {
                 <div className="col-1">:</div>
                 <div className="col-6 justify-content-start">
                   <p className="modal-view-data">
-                    232023
-                    {/* {viewpaymentmode.description} */}
+                    {viewpurchasemode.total_amount}
                   </p>
                 </div>
               </div>
@@ -198,8 +212,7 @@ export default function View_purchase() {
                 <div className="col-1">:</div>
                 <div className="col-6 justify-content-start">
                   <p className="modal-view-data">
-                    02/03/2023 ciode njmosdj jno
-                    {/* {viewpaymentmode.description} */}
+                    {viewpurchasemode.remarks}
                   </p>
                 </div>
               </div>
@@ -210,7 +223,7 @@ export default function View_purchase() {
                 <div className="col-1">:</div>
                 <div className="col-6 justify-content-start">
                   <p className="modal-view-data">
-                    {/* {viewpaymentmode.description} */}
+                    {viewpurchasemode.attachments}
                   </p>
                 </div>
               </div>
@@ -221,8 +234,7 @@ export default function View_purchase() {
                 <div className="col-1">:</div>
                 <div className="col-6 justify-content-start">
                   <p className="modal-view-data">
-                    ss
-                    {/* {viewpaymentmode.name} */}
+                    {viewpurchasemode.status}
                   </p>
                 </div>
               </div>

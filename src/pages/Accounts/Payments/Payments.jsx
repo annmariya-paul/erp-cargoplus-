@@ -257,13 +257,15 @@ function Payments(props) {
   ];
   //function to go to view Payment page
   const handleViewPayment = (e) => {
-    navigate(`${ROUTES.VIEW_PAYMENT_INDEX}/${e.payment_id}`);
+    console.log(ROUTES.VIEW_PAYMENTS_INDEX);
+    navigate(`${ROUTES.VIEW_PAYMENTS_INDEX}/${e.payment_id}`);
   };
 
   // function to go to edit page
   const handleEditPayment = (e) => {
     //pass payment id as parameter here
-    navigate(`${ROUTES.EDIT_PAYMENT_INDEX}/${e.payment_id}`);
+    console.log("here is the edit payment index", ROUTES.EDIT_PAYMENTS_INDEX);
+    //navigate(`${ROUTES.EDIT_PAYMENTS_INDEX}/${e.payment_id}`);
   };
 
   return (

@@ -500,6 +500,18 @@ function App() {
             <Route path={ROUTES.VIEW_PAYMENT} element={<ProtectedRoute />}>
               <Route index element={<ViewPayment />} />
             </Route>
+            <Route path={ROUTES.JOB_PAYMENTS} element={<ProtectedRoute />}>
+              <Route index element={<JobPayments />} />
+            </Route>
+            <Route path={ROUTES.ADD_JOBPAYMENT} element={<ProtectedRoute />}>
+              <Route index element={<AddJobPayments />} />
+            </Route>
+            <Route path={ROUTES.EDIT_JOBPAYMENT} element={<ProtectedRoute />}>
+              <Route index element={<EditJobPayment />} />
+            </Route>
+            <Route path={ROUTES.VIEW_JOBPAYMENT} element={<ProtectedRoute />}>
+              <Route index element={<ViewJobPayment />} />
+            </Route>
             {/* </Route> */}
           </Route>
           <Route

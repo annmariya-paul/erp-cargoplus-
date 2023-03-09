@@ -87,6 +87,34 @@ export default function AddJobPayments() {
       });
   };
 
+   const getOneJob = async (id) => {
+     try {
+       const oneJob = await PublicFetch.get(
+         `${CRM_BASE_URL_FMS}/job/${id}`
+       );
+       if (oneJob.data.success) {
+         console.log("one job iss ::",oneJob?.data?.data);
+        //  locationBytype(oneJob?.data?.data.quotation.quotation_mode);
+         addForm.setFieldsValue({
+           job_pay_currency:
+             oneJob?.data?.data.job.generalsettings_v1_currency.currency_name,
+           job_pay_exchange_rate: oneJob?.data?.data.job.job_exchange_rate,
+         });
+        //  setGrandTotal(
+        //    oneJob?.data?.data.quotation.quotation_grand_total
+        //  );
+       }
+     } catch (err) {
+       console.log("error to getting a job", err);
+     }
+   };
+
+
+    const handleJobNo = (e) => {
+      console.log("reached",e);
+     getOneJob(e);
+    };
+
   useEffect(() => {
     CurrencyData();
     getAllJobs();
@@ -131,13 +159,11 @@ export default function AddJobPayments() {
                 </div>
                 <div className="col-sm-3 pt-3">
                   <label>Job No.</label>
-                  <Form.Item
-                    name="job_number"
-                    // onChange={(e) => setName(e.target.value)}
-                  >
+                  <Form.Item name="job_number">
                     <SelectBox
                       onChange={(e) => {
-                        console.log("ann", e);
+                        console.log("jobnooooo", e);
+                        handleJobNo(e);
                       }}
                     >
                       {jobData &&
@@ -167,16 +193,16 @@ export default function AddJobPayments() {
                 <div className="col-sm-3 pt-3">
                   <label>Currency</label>
                   <Form.Item
-                    name="job_currency"
+                    name="job_pay_currency"
                     // onChange={(e) => setName(e.target.value)}
                   >
-                    <InputType disabled />
+                    <InputType />
                   </Form.Item>
                 </div>
                 <div className="col-sm-3 pt-3">
                   <label>Exchange Rate</label>
                   <Form.Item
-                    name="exchange_rate"
+                    name="job_pay_exchange_rate"
                     // onChange={(e) => setName(e.target.value)}
                   >
                     <Input_Number />

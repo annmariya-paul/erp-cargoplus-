@@ -1,0 +1,45 @@
+.card {
+    border: none;
+    box-shadow: 2px 2px 12px #d5d6d7;
+}
+
+.heading {
+    margin-left: 1%;
+    margin-top: 2%;
+    display: flex;
+    color: #0891d1;
+    font-weight: 400;
+}
+
+.selectboxWrap {
+    min-width: 30%;
+    margin-left: 2%;
+}
+
+.jobSelectbox {
+    min-width: 12.5%;
+}
+
+.datepicker_wrapper {
+    max-width: 40%;
+    margin-left: 2%;
+}
+
+.dateTop {
+    min-width: 13%;
+    display: flex;
+    justify-content: end;
+}
+
+.saveBtn {
+    // margin-left: 38%;
+    display: flex;
+    justify-content: center;
+    max-width: 85%;
+}
+
+.table_report_list
+{
+  height: 200px;
+  overflow-y: auto;
+}

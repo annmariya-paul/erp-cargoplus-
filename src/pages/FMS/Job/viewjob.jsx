@@ -315,6 +315,7 @@ export default function ViewJob() {
                         </Button>
                       )}
                     </div>
+
                   </div>
                 </div>
               </div>
@@ -443,6 +444,7 @@ export default function ViewJob() {
                       </p>
                     </div>
                   </div>
+
                 </div>
               </div>
 
@@ -501,6 +503,7 @@ export default function ViewJob() {
                       </p>
                     </div>
                   </div>
+
                 </div>
               </div>
             </div>
@@ -552,6 +555,8 @@ export default function ViewJob() {
                       </p>
                     </div>
                   </div>
+
+
                 </div>
               </div>
               <div className="col-md-6 col-12">

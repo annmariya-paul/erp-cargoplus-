@@ -98,7 +98,8 @@ const ROUTES = {
   INVOICE_PRINT: "/invoice_print",
   PRINT_INVOICE: "/print_invoice",
   PRINT_INVOICE_ID: "/print_invoice/:id",
-  AGENT_REPORT:"/agentReport",
+  AGENT_REPORT: "/agentReport",
+  COST_AND_EXPENSE_REPORT: "/cost_and_expense_report",
 
   // Accounts
   PAYMEMENT_MODE: "/payment_mode",
@@ -109,13 +110,19 @@ const ROUTES = {
   DAILY_EXPENSE: "/daily_expense",
   CREATE_EXPENSE: "/create_expense",
   EXPENSE_CATEGORY: "/expense_category",
+
+  /*payments routes */
+  PAYMENTS: "/payments",
   ADD_PAYMENTS: "/add_payments",
+  VIEW_PAYMENTS_INDEX: "/view_payments",
+  EDIT_PAYMENTS_INDEX: "/edit_payments",
+  /*payments routes end*/
+
   JOB_PAYMENTS: "/job_payments",
   ADD_JOBPAYMENT: "/add_job_payment",
   EDIT_JOBPAYMENT: "/edit_job_payment",
   VIEW_JOBPAYMENT: "/view_job_payment",
-  EDIT_EXPENSE: "/edit_expense",
-  EDIT_EXPENSE_ID: "/edit_expense/:id",
+
   BANK_DETAILS: "/list_bankdetails",
 
   // general settings

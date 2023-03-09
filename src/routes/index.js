@@ -110,8 +110,14 @@ const ROUTES = {
   DAILY_EXPENSE: "/daily_expense",
   CREATE_EXPENSE: "/create_expense",
   EXPENSE_CATEGORY: "/expense_category",
+
+  /*payments routes */
   PAYMENTS: "/payments",
   ADD_PAYMENTS: "/add_payments",
+  VIEW_PAYMENTS_INDEX: "/view_payments",
+  EDIT_PAYMENTS_INDEX: "/edit_payments",
+  /*payments routes end*/
+
   JOB_PAYMENTS: "/job_payments",
   ADD_JOBPAYMENT: "/add_job_payment",
   EDIT_JOBPAYMENT: "/edit_job_payment",

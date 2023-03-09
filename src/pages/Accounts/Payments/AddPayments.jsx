@@ -9,6 +9,7 @@ import SelectBox from "../../../components/Select Box/SelectBox";
 import TableData from "../../../components/table/table_data";
 import PublicFetch from "../../../utils/PublicFetch";
 import { ACCOUNTS, CRM_BASE_URL, CRM_BASE_URL_FMS } from "../../../api/bootapi";
+import moment from "moment";
 
 const AddPayments = () => {
   const [amount, setAmount] = useState();
@@ -150,7 +151,9 @@ const AddPayments = () => {
             let obj = {
               index: index,
               invoice_no: item.invoice_accounts_no,
-              due_date: item.invoice_accounts_due_date,
+              due_date: moment(new Date(item.invoice_accounts_due_date)).format(
+                "DD/MM/YYYY"
+              ),
               amount: item.invoice_accounts_due_amount,
               invoice_accounts_id: item.invoice_accounts_id,
             };

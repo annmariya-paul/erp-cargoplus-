@@ -2,7 +2,7 @@ const ROUTES = {
   LOGIN: "/",
   LAYOUT: "/layout",
   SIDEBAR: "/sidebar",
-  DASHBOARD: "/dashboard",
+  DASHBOARD: "dashboard",
   LEAD: "/lead",
   LEADLIST: "/lead_list",
   CATEGORY: "/category",

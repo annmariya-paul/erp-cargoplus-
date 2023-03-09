@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./AddPayments.styles.scss";
+import "./AddPayments.scss";
 import { Checkbox, DatePicker, Form, InputNumber, Select } from "antd";
 import TextArea from "../../../components/ InputType TextArea/TextArea";
 import Button from "../../../components/button/button";
@@ -73,10 +73,12 @@ const AddPayments = () => {
             // name={`current_amount${index.key}`}
             >
               <InputNumber
+                className="add_payments_input_box"
                 onChange={(e) => {
                   console.log(e);
                 }}
                 width={100}
+                controlls={false}
               />
             </Form.Item>
           </div>

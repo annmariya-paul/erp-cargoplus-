@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import "./AddPayments.styles.scss";
+import React, { useState, useEffect } from "react";
+// import "./AddPayments.styles.scss";
 import { Checkbox, DatePicker, Form, InputNumber, Select } from "antd";
 import TextArea from "../../../components/ InputType TextArea/TextArea";
 import Button from "../../../components/button/button";
@@ -7,10 +7,21 @@ import InputType from "../../../components/Input Type textbox/InputType";
 import Input_Number from "../../../components/InputNumber/InputNumber";
 import SelectBox from "../../../components/Select Box/SelectBox";
 import TableData from "../../../components/table/table_data";
+import PublicFetch from "../../../utils/PublicFetch";
+import { ACCOUNTS } from "../../../api/bootapi";
+import { useParams } from "react-router-dom";
+import moment from "moment";
 
 const EditPayments = () => {
-  const [amount, setAmount] = useState();
   const [autoPay, setAutoPay] = useState(false);
+  const [voucherNo, setVoucherNo] = useState();
+  const [voucherDate, setVoucherDate] = useState();
+  const [lead, setLead] = useState();
+  const [amount, setAmount] = useState();
+  const [mode, setMode] = useState();
+  const [details, setDetails] = useState();
+  const [paymentModes, setPaymentModes] = useState([]);
+  const { payment_id } = useParams();
   const columns = [
     {
       title: "Sl. No.",
@@ -115,6 +126,46 @@ const EditPayments = () => {
       balance_amount: "8000.00",
     },
   ];
+
+  const getPaymentDetails = async () => {
+    try {
+      const res = await PublicFetch.get(`${ACCOUNTS}/payment/${payment_id}`);
+      console.log("here is the response");
+      console.log(res);
+      if (res?.status === 200) {
+        setVoucherNo(res.data.data.payment_voucher_no);
+        setAmount(res.data.data.payment_amount);
+        setVoucherDate(res.data.data.payment_date);
+        setMode(res.data.data.accounts_v1_payment_modes.pay_mode_name);
+        setLead(res.data.data.crm_v1_leads.lead_customer_name);
+        setDetails(res.data.data.payment_details);
+      }
+    } catch (error) {
+      console.log("error occured");
+    }
+  };
+
+  const getPaymentModes = async () => {
+    try {
+      console.log("inside get payment modes");
+      const res = await PublicFetch.get(`${ACCOUNTS}/payment-modes`);
+      if (res?.status === 200) {
+        console.log("here are payment modes");
+        console.log(res.data.data);
+        setPaymentModes(res.data.data);
+      }
+    } catch (error) {
+      console.log("error while fetching payment modes");
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getPaymentDetails();
+  }, []);
+  useEffect(() => {
+    getPaymentModes();
+  }, []);
   return (
     <div>
       <div className="container">
@@ -135,26 +186,28 @@ const EditPayments = () => {
                 <Form>
                   <div className="row ">
                     <div className="col-xl-4  my-2">
-                      <label>Voucher No</label>
-                      <Form.Item>
+                      <label>Voucher No : {voucherNo}</label>
+                      {/* <Form.Item>
                         <InputType />
-                      </Form.Item>
+                      </Form.Item> */}
                     </div>
                     <div className="col-xl-4 my-2">
-                      <label className="mb-2">Voucher Date</label>
-                      <Form.Item>
+                      <label className="mb-2">
+                        Voucher Date : {voucherDate}
+                      </label>
+                      {/* <Form.Item>
                         <DatePicker />
-                      </Form.Item>
+                      </Form.Item> */}
                     </div>
                     <div className="col-xl-4 my-2">
-                      <label>Lead</label>
-                      <Form.Item>
+                      <label>Lead : {lead}</label>
+                      {/* <Form.Item>
                         <SelectBox>
                           <Select.Option>Lead 1</Select.Option>
                           <Select.Option>Lead 2</Select.Option>
                           <Select.Option>Lead 3</Select.Option>
                         </SelectBox>
-                      </Form.Item>
+                      </Form.Item> */}
                     </div>
                     <div className="col-xl-4 my-2">
                       <label>Amount</label>
@@ -167,6 +220,7 @@ const EditPayments = () => {
                         ]}
                       >
                         <InputType
+                          value={amount}
                           onChange={(e) => {
                             console.log(e.target.value);
                             //setAmount(e.target.value);
@@ -178,9 +232,13 @@ const EditPayments = () => {
                       <label>Mode</label>
                       <Form.Item>
                         <SelectBox>
-                          <Select.Option>Mode 1</Select.Option>
-                          <Select.Option>Mode 2</Select.Option>
-                          <Select.Option>Mode 3</Select.Option>
+                          {paymentModes.map((item, index) => {
+                            return (
+                              <Select.Option value={item.pay_mode_id}>
+                                {item.pay_mode_name}
+                              </Select.Option>
+                            );
+                          })}
                         </SelectBox>
                       </Form.Item>
                     </div>
@@ -198,7 +256,7 @@ const EditPayments = () => {
                     <div className="col-12 my-2">
                       <label>Details</label>
                       <Form.Item>
-                        <TextArea />
+                        <TextArea value={details} />
                       </Form.Item>
                     </div>
 

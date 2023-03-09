@@ -263,9 +263,8 @@ function Payments(props) {
 
   // function to go to edit page
   const handleEditPayment = (e) => {
-    //pass payment id as parameter here
     console.log("here is the edit payment index", ROUTES.EDIT_PAYMENTS_INDEX);
-    //navigate(`${ROUTES.EDIT_PAYMENTS_INDEX}/${e.payment_id}`);
+    navigate(`${ROUTES.EDIT_PAYMENTS_INDEX}/${e.payment_id}`);
   };
 
   return (

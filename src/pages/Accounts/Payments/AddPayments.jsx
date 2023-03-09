@@ -184,7 +184,7 @@ const AddPayments = () => {
   };
   useEffect(() => {
     getAllLeads();
-  }, [refresh]);
+  }, []);
 
   useEffect(() => {
     getPaymentModes();

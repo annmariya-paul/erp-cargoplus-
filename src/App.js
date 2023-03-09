@@ -96,7 +96,7 @@ import PrintInvoice from "./pages/FMS/Invoice/PrintInvoice";
 // import Payment_mode from "./pages/FMS/settings/payment mode/payment_mode";
 import InvoiceView from "./pages/FMS/Invoice/InvoiceView";
 import DailyExpence from "./pages/Accounts/DailyExpence/DailyExpence";
-import AddPayments from "./pages/Accounts/AddPayments/AddPayments";
+import AddPayments from "./pages/Accounts/Payments/AddPayments";
 import CreateExpence from "./pages/Accounts/DailyExpence/CreateExpence";
 import ExpenseCategory from "./pages/Accounts/settings/Expense_Category/ExpenseCategory";
 // import Vendortype from "./pages/CRM/Purchase/vendertype/vendortype";
@@ -113,6 +113,9 @@ import JobPayments from "./pages/Accounts/JobPayments/job_payments";
 import AddJobPayments from "./pages/Accounts/JobPayments/add_job_payment";
 import EditJobPayment from "./pages/Accounts/JobPayments/edit_job_payments";
 import ViewJobPayment from "./pages/Accounts/JobPayments/view_job_payments";
+import Payments from "./pages/Accounts/Payments/Payments";
+import EditPayments from "./pages/Accounts/Payments/EditPayments";
+import ViewPayment from "./pages/Accounts/Payments/ViewPayment";
 import EditExpence from "./pages/Accounts/DailyExpence/EditExpense";
 import AgentReport from "./pages/FMS/AgentReport/agentReport";
 import CostAndExpenseReport from "./pages/FMS/CustomerwiseCostAndExpenseReport/costAndExpenseReport";
@@ -447,7 +450,10 @@ function App() {
               <Route index element={<AgentReport />} />
             </Route>
 
-            <Route path={ROUTES.COST_AND_EXPENSE_REPORT} element={<ProtectedRoute />}>
+            <Route
+              path={ROUTES.COST_AND_EXPENSE_REPORT}
+              element={<ProtectedRoute />}
+            >
               <Route index element={<CostAndExpenseReport />} />
             </Route>
 
@@ -482,23 +488,18 @@ function App() {
             <Route path={ROUTES.PURCHASE} element={<ProtectedRoute />}>
               <Route index element={<Purchase />} />
             </Route>
-
-            <Route path={ROUTES.BANK_DETAILS} element={<ProtectedRoute />}>
-              <Route index element={<Bank />} />
+            <Route path={ROUTES.PAYMENTS} element={<ProtectedRoute />}>
+              <Route index element={<Payments />} />
             </Route>
-            <Route path={ROUTES.JOB_PAYMENTS} element={<ProtectedRoute />}>
-              <Route index element={<JobPayments />} />
+            <Route path={ROUTES.ADD_PAYMENTS} element={<ProtectedRoute />}>
+              <Route index element={<AddPayments />} />
             </Route>
-            <Route path={ROUTES.ADD_JOBPAYMENT} element={<ProtectedRoute />}>
-              <Route index element={<AddJobPayments />} />
+            <Route path={ROUTES.EDIT_PAYMENT} element={<ProtectedRoute />}>
+              <Route index element={<EditPayments />} />
             </Route>
-            <Route path={ROUTES.EDIT_JOBPAYMENT} element={<ProtectedRoute />}>
-              <Route index element={<EditJobPayment />} />
+            <Route path={ROUTES.VIEW_PAYMENT} element={<ProtectedRoute />}>
+              <Route index element={<ViewPayment />} />
             </Route>
-            <Route path={ROUTES.VIEW_JOBPAYMENT} element={<ProtectedRoute />}>
-              <Route index element={<ViewJobPayment />} />
-            </Route>
-
             {/* </Route> */}
           </Route>
           <Route

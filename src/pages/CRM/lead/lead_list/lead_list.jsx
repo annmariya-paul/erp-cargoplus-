@@ -114,7 +114,7 @@ export default function LeadList() {
                         lead_description: item?.lead_description,
                         attachments: item?.attachments,
                         lead_status: i?.name,
-                        lead_creditdays:item?.lead_credit_days
+                        lead_creditdays: item?.lead_credit_days,
                       });
                       setAllLeadList(array);
                     }
@@ -184,7 +184,6 @@ export default function LeadList() {
       render: (value, item, index) => serialNo + index,
       align: "center",
     },
-
 
     {
       title: "NAME",
@@ -442,29 +441,22 @@ export default function LeadList() {
                 </Select.Option>
               </Select>
             </div>
-           
-
-           
             <div className="col-4 d-flex py-2 justify-content-center">
-            {totalCount>0   && (
-            <MyPagination
-              total={parseInt(totalCount)}
-              current={current}
-              pageSize={noofItems}
-              // defaultPageSize={noofItems}
-              showSizeChanger={false}
-              onChange={(current, pageSize) => {
-                console.log("page index isss", pageSize);
-                setCurrent(current);
-                // setPageSize(pageSize);
-                // setNoofItems(pageSize);
-                // setCurrent(noofItems !== pageSize ? 0 : current);
-              }}
-             
-            />
-            ) }
-          </div>
-        
+              <MyPagination
+                total={parseInt(totalCount)}
+                current={current}
+                pageSize={noofItems}
+                // defaultPageSize={noofItems}
+                showSizeChanger={false}
+                onChange={(current, pageSize) => {
+                  console.log("page index isss", pageSize);
+                  setCurrent(current);
+                  // setPageSize(pageSize);
+                  // setNoofItems(pageSize);
+                  // setCurrent(noofItems !== pageSize ? 0 : current);
+                }}
+              />
+            </div>
             <div className="col-4 d-flex justify-content-end">
               <Link to={ROUTES.LEAD}>
                 <Button
@@ -485,22 +477,22 @@ export default function LeadList() {
             />
           </div>
           <div className="d-flex py-2 justify-content-center">
-            {totalCount>0  &&(
-            <MyPagination
-              total={parseInt(totalCount)}
-              current={current}
-              pageSize={noofItems}
-              // defaultPageSize={noofItems}
-              showSizeChanger={false}
-              onChange={(current, pageSize) => {
-                console.log("page index isss", pageSize);
-                setCurrent(current);
-                // setPageSize(pageSize);
-                // setNoofItems(pageSize);
-                // setCurrent(noofItems !== pageSize ? 0 : current);
-              }}
-            />
-            ) }
+            {totalCount > 0 && (
+              <MyPagination
+                total={parseInt(totalCount)}
+                current={current}
+                pageSize={noofItems}
+                // defaultPageSize={noofItems}
+                showSizeChanger={false}
+                onChange={(current, pageSize) => {
+                  console.log("page index isss", pageSize);
+                  setCurrent(current);
+                  // setPageSize(pageSize);
+                  // setNoofItems(pageSize);
+                  // setCurrent(noofItems !== pageSize ? 0 : current);
+                }}
+              />
+            )}
           </div>
 
           <Custom_model

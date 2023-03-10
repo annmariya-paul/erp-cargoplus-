@@ -301,12 +301,12 @@ function CreateJob() {
       formData.append("job_docs", filenew);
     }
 
-    console.log("before sending data");
+    console.log("before sending data",data);
     PublicFetch.post(`${CRM_BASE_URL_FMS}/job`, formData, {
       "Content-Type": "Multipart/form-Data",
     })
       .then((res) => {
-        console.log("data is successfully saved", res.data.success);
+        console.log("data is successfully saved", res.data.data);
         if (res.data.success) {
           setSuccessPopup(true);
           addForm.resetFields();

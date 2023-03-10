@@ -160,7 +160,6 @@ const AddPayments = () => {
         );
         setInvoiceData(tempData);
         setInitialInvoiceData(tempData);
-        setRefresh(!refresh);
       }
     } catch (error) {
       console.log("error while fetching invoices");

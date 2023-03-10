@@ -96,7 +96,7 @@ import PrintInvoice from "./pages/FMS/Invoice/PrintInvoice";
 // import Payment_mode from "./pages/FMS/settings/payment mode/payment_mode";
 import InvoiceView from "./pages/FMS/Invoice/InvoiceView";
 import DailyExpence from "./pages/Accounts/DailyExpence/DailyExpence";
-import AddPayments from "./pages/Accounts/AddPayments/AddPayments";
+import AddPayments from "./pages/Accounts/Payments/AddPayments";
 import CreateExpence from "./pages/Accounts/DailyExpence/CreateExpence";
 import ExpenseCategory from "./pages/Accounts/settings/Expense_Category/ExpenseCategory";
 // import Vendortype from "./pages/CRM/Purchase/vendertype/vendortype";
@@ -116,19 +116,23 @@ import JobPayments from "./pages/Accounts/JobPayments/job_payments";
 import AddJobPayments from "./pages/Accounts/JobPayments/add_job_payment";
 import EditJobPayment from "./pages/Accounts/JobPayments/edit_job_payments";
 import ViewJobPayment from "./pages/Accounts/JobPayments/view_job_payments";
+import Payments from "./pages/Accounts/Payments/Payments";
+import EditPayments from "./pages/Accounts/Payments/EditPayments";
+import ViewPayment from "./pages/Accounts/Payments/ViewPayment";
 import EditExpence from "./pages/Accounts/DailyExpence/EditExpense";
 import AgentReport from "./pages/FMS/AgentReport/agentReport";
 import CostAndExpenseReport from "./pages/FMS/CustomerwiseCostAndExpenseReport/costAndExpenseReport";
 import Monthly_report from "./pages/monthlyreport";
+import Invoicereport from "./pages/FMS/Invoice/InvoiceReport/Invoicereport";
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path={ROUTES.LOGIN} element={<Login />} />
-          <Route path={ROUTES.SIDEBAR} element={<Sidebar />} />
-          <Route path={ROUTES.Layout} element={<Layout />}>
+          <Route path="/login" element={<Login />} />
+          {/* <Route path={ROUTES.SIDEBAR} element={<Sidebar />} /> */}
+          <Route path="/" element={<Layout />}>
             {/* <Route path={ROUTES.DASHBOARD} element={<ProtectedRoute />}> */}
             <Route path={ROUTES.DASHBOARD} element={<ProtectedRoute />}>
               <Route index element={<Dashboard />} />
@@ -470,7 +474,10 @@ function App() {
               <Route index element={<AgentReport />} />
             </Route>
 
-            <Route path={ROUTES.COST_AND_EXPENSE_REPORT} element={<ProtectedRoute />}>
+            <Route
+              path={ROUTES.COST_AND_EXPENSE_REPORT}
+              element={<ProtectedRoute />}
+            >
               <Route index element={<CostAndExpenseReport />} />
             </Route>
 
@@ -481,6 +488,13 @@ function App() {
               <Route index element={<Taskexpenses />} />
             </Route>
 
+            <Route
+              path={ROUTES.INVOICE_REPORT}
+              element={<ProtectedRoute />}
+            >
+              <Route index element={<Invoicereport />} />
+            </Route>
+
             {/* ######## ACCOUNTS ######## */}
             <Route path={ROUTES.DAILY_EXPENSE} element={<ProtectedRoute />}>
               <Route index element={<DailyExpence />} />
@@ -488,7 +502,7 @@ function App() {
             <Route path={ROUTES.CREATE_EXPENSE} element={<ProtectedRoute />}>
               <Route index element={<CreateExpence />} />
             </Route>
-            <Route path={ROUTES.EDIT_EXPENSE_ID} element={<ProtectedRoute />}>
+            <Route path="/edit_daily_expense" element={<ProtectedRoute />}>
               <Route index element={<EditExpence />} />
             </Route>
             <Route path={ROUTES.EXPENSE_CATEGORY} element={<ProtectedRoute />}>
@@ -505,19 +519,19 @@ function App() {
             <Route path={ROUTES.PURCHASE} element={<ProtectedRoute />}>
               <Route index element={<Purchase />} />
             </Route>
-
-            <Route path={ROUTES.BANK_DETAILS} element={<ProtectedRoute />}>
-              <Route index element={<Bank />} />
+            <Route path={ROUTES.PAYMENTS} element={<ProtectedRoute />}>
+              <Route index element={<Payments />} />
             </Route>
-            <Route path={ROUTES.JOB_PAYMENTS} element={<ProtectedRoute />}>
-              <Route index element={<JobPayments />} />
+            <Route path={ROUTES.ADD_PAYMENTS} element={<ProtectedRoute />}>
+              <Route index element={<AddPayments />} />
             </Route>
-            <Route path={ROUTES.ADD_JOBPAYMENT} element={<ProtectedRoute />}>
-              <Route index element={<AddJobPayments />} />
+            <Route path={ROUTES.EDIT_PAYMENT} element={<ProtectedRoute />}>
+              <Route index element={<EditPayments />} />
             </Route>
-            <Route path={ROUTES.EDIT_JOBPAYMENT} element={<ProtectedRoute />}>
-              <Route index element={<EditJobPayment />} />
+            <Route path={ROUTES.VIEW_PAYMENT} element={<ProtectedRoute />}>
+              <Route index element={<ViewPayment />} />
             </Route>
+<<<<<<< HEAD
             <Route path={ROUTES.VIEW_JOBPAYMENT} element={<ProtectedRoute />}>
               <Route index element={<ViewJobPayment />} />
             </Route>
@@ -525,6 +539,8 @@ function App() {
               <Route index element={<Monthly_report/>}/>
             </Route>
 
+=======
+>>>>>>> 95e2994be08a6eb3f6307b14a18818f3cee1e587
             {/* </Route> */}
           </Route>
           <Route

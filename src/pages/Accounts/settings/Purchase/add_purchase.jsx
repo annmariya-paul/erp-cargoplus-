@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { TreeSelect } from "antd";
 import moment from "moment";
 import "../../../../components/custom_modal/custom_model.scss";
+import Input_Number from "../../../../components/InputNumber/InputNumber"; 
 
 import FileUpload from "../../../../components/fileupload/fileUploader";
 import InputType from "../../../../components/Input Type textbox/InputType";
@@ -35,7 +36,7 @@ export default function Add_purchase() {
   const [taxno, setTaxNo] = useState();
   const [billno, setBillNo] = useState();
   const [amount, setAmount] = useState();
-  const [taxamount, setTaxAmount] = useState();
+  const [taxamount, setTaxAmount] = useState(0);
   const [totalamount, setTotalAmount] = useState();
   const [paymentmode, setPaymentmode] = useState();
   const [taxable, setTaxable] = useState();
@@ -45,6 +46,9 @@ export default function Add_purchase() {
   const [allpayments, setallpayments] = useState();
   const [vendorid,setvendorid]=useState("")
   const[purchases,setpurchases]=useState();
+
+  const [isTaxable, setIsTaxable] = useState(false);
+
   // const[pay]
   const [currencyDefault, setCurrencyDefault] = useState();
   const close_modal = (mShow, time) => {
@@ -69,6 +73,14 @@ export default function Add_purchase() {
       console.log(err);
     }
   }
+  let TaxAmount = (amount * taxamount) / 100;
+
+  let total = amount + taxamount;
+  addform.setFieldsValue({
+    totalamount: total,
+  });
+
+  console.log("tax amount", TaxAmount);
 
 
 
@@ -81,7 +93,6 @@ export default function Add_purchase() {
     if(getvendorss?.data.success){
       setAllVendors(getvendorss?.data?.data)
      
-     
       setvendorid(getvendorss?.data?.data.vendor_id)
       console.log("idddsss",getvendorss?.data?.data)
     }
@@ -89,6 +100,16 @@ export default function Add_purchase() {
         console.log(err);
       }
   }
+
+
+  const handleChecked = (e) => {
+    if (e.target.checked) {
+      addform.setFieldsValue({ purchase_taxable: 1 });
+    } else {
+      addform.setFieldsValue({ purchase_taxable: 0 });
+    }
+  };
+
 
   const createPurchase = async (data) => {
     console.log("ddd", data);
@@ -145,34 +166,6 @@ export default function Add_purchase() {
       console.log("err to add the purchase", err);
     }
   };
-
-  // const getallpurchase = async () => {
-  //   try {
-  //     const allpurchases = await PublicFetch.get(
-  //       `${ACCOUNTS}/purchase?startIndex=0&noOfItems=100`
-  //     );
-  //     console.log("getting all purchases", allpurchases);
-  //     setpurchases(allpurchases.data.data);
-  //   } catch (err) {
-  //     console.log("error to fetching  purchases", err);
-  //   }
-  // };
-
-  const handleChecked = (e, key) => {
-    console.log("isChecked", e);
-    if (e.target.checked) {
-      console.log("suceccss checked", e.target.checked);
-      setTaxable(1);
-    }
-  };
-  // const handleChecked = (e) => {
-  //   if (e.target.checked) {
-  //     addform.setFieldsValue({ istaxable: 1 });
-  //   } else {
-  //     addform.setFieldsValue({ istaxable: 0 });
-  //   }
-  // };
-
   addform.setFieldsValue({ istaxable: 0 });
 
   useEffect(()=> {
@@ -216,7 +209,13 @@ export default function Add_purchase() {
                 </div>
                 <div className="col-4">
                   <label>Purchase Date</label>
-                  <Form.Item name="purchase_date" className="mt-2">
+                  <Form.Item name="purchase_date" className="mt-2"
+                   rules={[
+                     {
+                       required: true,
+                       message: "Date is Required",
+                     },
+                   ]}>
                     <DatePicker
                       format={"DD-MM-YYYY"}
                       defaultValue={moment(newDate)}
@@ -243,7 +242,13 @@ export default function Add_purchase() {
 
                 <div className="col-4">
                   <label>Vendor</label>
-                  <Form.Item className="mt-2" name="vendor">
+                  <Form.Item className="mt-2" name="vendor"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Date is Required",
+                      },
+                    ]}>
                     <SelectBox 
                      showSearch={true}
                      allowClear
@@ -322,11 +327,11 @@ export default function Add_purchase() {
                   <div className="">
                     <Form.Item name="istaxable" className="mt-2">
                       <Checkbox
-                       onChange={handleChecked}
-                       checked={taxable === 1 ? true : false}
-                        // onChange={(e) => {
-                        //   handleChecked(e);
-                        // }}
+                        onChange={(e) => {
+                          handleChecked(e);
+                          setIsTaxable(e.target.checked);
+                          console.log("checked is", e);
+                        }}
                       ></Checkbox>
                     </Form.Item>
                   </div>
@@ -341,7 +346,9 @@ export default function Add_purchase() {
                         setTaxNo(e.target.value);
                         // console.log("name name",name);
                       }}
+                      disabled={isTaxable ? false : true} 
                     />
+                    
                   </Form.Item>
                 </div>
                 <div className="col-4">
@@ -359,36 +366,52 @@ export default function Add_purchase() {
                 <div className="col-4">
                   <label>Amount</label>
                   <Form.Item className="mt-2" name="amount">
-                    <InputType
+                    {/* <InputType
                       value={amount}
                       onChange={(e) => {
                         setAmount(e.target.value);
                         // console.log("name name",name);
                       }}
-                    />
+                      
+                    /> */}
+                    <Input_Number
+                          onChange={(value) => {
+                            setAmount(value);
+                          }}
+                          min={0}
+                          precision={2}
+                          control={true}
+                        />
                   </Form.Item>
                 </div>
                 <div className="col-4">
                   <label>Tax Amount</label>
                   <Form.Item className="mt-2" name="taxamount">
-                    <InputType
+                    {/* <InputType
                       value={taxamount}
                       onChange={(e) => {
                         setTaxAmount(e.target.value);
                         // console.log("name name",name);
                       }}
-                    />
+                    /> */}
+
+                    <Input_Number
+                          disabled={isTaxable ? false : true}
+                          onChange={(value) => {
+                            setTaxAmount(value);
+                          }}
+                          min={0}
+                          precision={2}
+                        />
                   </Form.Item>
                 </div>
                 <div className="col-4">
                   <label>Total Amount</label>
                   <Form.Item className="mt-2" name="totalamount">
-                    <InputType
-                      value={totalamount}
-                      onChange={(e) => {
-                        setTotalAmount(e.target.value);
-                        // console.log("name name",name);
-                      }}
+                    <Input_Number
+                      min={0}
+                      precision={2}
+                      disabled={true} 
                     />
                   </Form.Item>
                 </div>

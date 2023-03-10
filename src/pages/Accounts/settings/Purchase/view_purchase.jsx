@@ -4,31 +4,55 @@ import { FiEdit } from "react-icons/fi";
 import { ROUTES } from "../../../../routes";
 import { NavLink } from "react-router-dom";
 import React, { useState,useEffect } from "react";
+import PublicFetch from "../../../../utils/PublicFetch";
+import { ACCOUNTS, CRM_BASE_URL_PURCHASING } from "../../../../api/bootapi";
+import { useNavigate, useParams } from "react-router-dom";
+import moment from "moment";
 
 export default function View_purchase() {
+  const {id} = useParams()
   const [addform] = Form.useForm();
-  const[viewpurchasemode,setViewpurchasemode]= useState({
-    // id:"",
-    // po_no: "",
-    // vendor: "",
-    // amount:"",
-    // datepur:"",
-    // tax_no:"",
-    // bill_no:"",
-    // tax_amount:"",
-    // payment_mode:"",
-    // credit_days:"",
-    // attachments:"",
-    // total_amount:"",
-    // datedue:"",
-    // status:"",
-  });
-  const handleviewtoedit = (i) => {
-    console.log("iiii",i);
-    setViewpurchasemode({
-      ...viewpurchasemode
+  const[viewpurchasemode,setViewpurchasemode]= useState();
+  console.log("viewpurchasemode",viewpurchasemode);
+  const handleView = (data) => {
 
-    })}
+  }
+
+
+
+
+  const getsinglePurchase=()=> {
+    PublicFetch.get(`${ACCOUNTS}/purchase/${id}`).then((res)=> {
+      console.log("resr",res);
+      if(res.data.success){
+        setViewpurchasemode(res?.data?.data)
+      }
+
+    }).catch((err)=> {
+      console.log("Error", err);
+    })
+
+  }
+
+
+  useEffect(()=> {
+    if(id){
+      getsinglePurchase()
+    }
+  }, [id])
+
+
+
+
+
+
+
+
+
+
+
+
+
   
 
   return (
@@ -52,25 +76,21 @@ export default function View_purchase() {
                 className={({ isActive }) =>
                   isActive ? "active-link" : "link"
                 }
-              //   to={`${ROUTES.EDIT_PURCHASE}/${1}`
-              // }
+                to={`${ROUTES.EDIT_PURCHASE}/${viewpurchasemode?.purchase_id}`}
               >
-                  <Button
+                 <Button
                     btnType="add_borderless"
                     className="edit_button"
-                      onClick={() => {
-                        handleviewtoedit(viewpurchasemode);
-                        console.log("hhhiv",handleviewtoedit);
-                    // setShowModalEdit(true);
-                    // setShowViewModal(false);
-                      }}
                   >
                     Edit
                     <FiEdit
                       style={{ marginBottom: "4px", marginInline: "3px" }}
                     />
+                    
                   </Button>
-                  </NavLink>
+               
+              </NavLink>
+                
                 </div>
               </div>
               <div className="row mt-4">
@@ -80,7 +100,7 @@ export default function View_purchase() {
                 <div className="col-1">:</div>
                 <div className="col-6 justify-content-start">
                   <p className="modal-view-data">
-                    {viewpurchasemode.po_no}
+                    {viewpurchasemode?.purchase_po_no}
                   </p>
                 </div>
               </div>{" "}
@@ -91,7 +111,9 @@ export default function View_purchase() {
                 <div className="col-1">:</div>
                 <div className="col-6 justify-content-start">
                   <p className="modal-view-data">
-                    {viewpurchasemode.datepur}
+                    {moment(viewpurchasemode?.purchase_purchase_date).format(
+                    "DD-MM-YYYY"
+                    )}
                   </p>
                 </div>
               </div>
@@ -102,7 +124,9 @@ export default function View_purchase() {
                 <div className="col-1">:</div>
                 <div className="col-6 justify-content-start">
                   <p className="modal-view-data">
-                    {viewpurchasemode.datedue}
+                  {moment(viewpurchasemode?.purchase_due_date).format(
+                    "DD-MM-YYYY"
+                    )}
                   </p>
                 </div>
               </div>
@@ -113,7 +137,7 @@ export default function View_purchase() {
                 <div className="col-1">:</div>
                 <div className="col-6 justify-content-start">
                   <p className="modal-view-data">
-                    {viewpurchasemode.vendor}
+                    {viewpurchasemode?.crm_v1_vendors?.vendor_name}
                   </p>
                 </div>
               </div>
@@ -124,7 +148,7 @@ export default function View_purchase() {
                 <div className="col-1">:</div>
                 <div className="col-6 justify-content-start">
                   <p className="modal-view-data">
-                    {viewpurchasemode.payment_mode}
+                    {viewpurchasemode?.accounts_v1_payment_modes?.pay_mode_name}
                   </p>
                 </div>
               </div>
@@ -135,7 +159,7 @@ export default function View_purchase() {
                 <div className="col-1">:</div>
                 <div className="col-6 justify-content-start">
                   <p className="modal-view-data">
-                    {viewpurchasemode.credit_days}
+                    {viewpurchasemode?.purchase_credit_days}
                   </p>
                 </div>
               </div>
@@ -146,7 +170,7 @@ export default function View_purchase() {
                 <div className="col-1">:</div>
                 <div className="col-6 justify-content-start">
                   <p className="modal-view-data">
-                    {viewpurchasemode.taxable}
+                    {viewpurchasemode?.purchase_taxable}
                   </p>
                 </div>
               </div>
@@ -157,7 +181,7 @@ export default function View_purchase() {
                 <div className="col-1">:</div>
                 <div className="col-6 justify-content-start">
                   <p className="modal-view-data">
-                    {viewpurchasemode.tax_no}
+                    {viewpurchasemode?.purchase_tax_no}
                   </p>
                 </div>
               </div>
@@ -168,7 +192,7 @@ export default function View_purchase() {
                 <div className="col-1">:</div>
                 <div className="col-6 justify-content-start">
                   <p className="modal-view-data">
-                    {viewpurchasemode.bill_no}
+                    {viewpurchasemode?.purchase_bill_no}
                   </p>
                 </div>
               </div>
@@ -179,7 +203,7 @@ export default function View_purchase() {
                 <div className="col-1">:</div>
                 <div className="col-6 justify-content-start">
                   <p className="modal-view-data">
-                    {viewpurchasemode.amount}
+                    {viewpurchasemode?.purchase_amount}
                   </p>
                 </div>
               </div>
@@ -190,7 +214,7 @@ export default function View_purchase() {
                 <div className="col-1">:</div>
                 <div className="col-6 justify-content-start">
                   <p className="modal-view-data">
-                    {viewpurchasemode.tax_amount}
+                    {viewpurchasemode?.purchase_tax_amount}
                   </p>
                 </div>
               </div>
@@ -201,7 +225,7 @@ export default function View_purchase() {
                 <div className="col-1">:</div>
                 <div className="col-6 justify-content-start">
                   <p className="modal-view-data">
-                    {viewpurchasemode.total_amount}
+                    {viewpurchasemode?.purchase_total_amount}
                   </p>
                 </div>
               </div>
@@ -212,7 +236,7 @@ export default function View_purchase() {
                 <div className="col-1">:</div>
                 <div className="col-6 justify-content-start">
                   <p className="modal-view-data">
-                    {viewpurchasemode.remarks}
+                    {viewpurchasemode?.purchase_remarks}
                   </p>
                 </div>
               </div>
@@ -223,7 +247,7 @@ export default function View_purchase() {
                 <div className="col-1">:</div>
                 <div className="col-6 justify-content-start">
                   <p className="modal-view-data">
-                    {viewpurchasemode.attachments}
+                    {viewpurchasemode?.purchase_docs}
                   </p>
                 </div>
               </div>
@@ -234,7 +258,7 @@ export default function View_purchase() {
                 <div className="col-1">:</div>
                 <div className="col-6 justify-content-start">
                   <p className="modal-view-data">
-                    {viewpurchasemode.status}
+                    {viewpurchasemode?.purchase_status}
                   </p>
                 </div>
               </div>

@@ -119,6 +119,7 @@ import ViewJobPayment from "./pages/Accounts/JobPayments/view_job_payments";
 import EditExpence from "./pages/Accounts/DailyExpence/EditExpense";
 import AgentReport from "./pages/FMS/AgentReport/agentReport";
 import CostAndExpenseReport from "./pages/FMS/CustomerwiseCostAndExpenseReport/costAndExpenseReport";
+import Monthly_report from "./pages/monthlyreport";
 
 function App() {
   return (
@@ -438,7 +439,7 @@ function App() {
             <Route path={ROUTES.ADD_PURCHASE} element={<ProtectedRoute />}>
               <Route index element={<Add_purchase />} />
             </Route>
-            <Route path={ROUTES.VIEW_PURCHASE} element={<ProtectedRoute />}>
+            <Route path={ROUTES.VIEW_PURCHASE_ID} element={<ProtectedRoute />}>
               <Route index element={<View_purchase/>} />
             </Route>
             <Route path={ROUTES.EDIT_PURCHASE_ID} element={<ProtectedRoute />}>
@@ -519,6 +520,9 @@ function App() {
             </Route>
             <Route path={ROUTES.VIEW_JOBPAYMENT} element={<ProtectedRoute />}>
               <Route index element={<ViewJobPayment />} />
+            </Route>
+            <Route path={ROUTES.MONTHLY_REPORT} element={<ProtectedRoute/>}>
+              <Route index element={<Monthly_report/>}/>
             </Route>
 
             {/* </Route> */}

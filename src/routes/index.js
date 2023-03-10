@@ -112,6 +112,7 @@ const ROUTES = {
   EXPENSE_CATEGORY: "/expense_category",
   ADD_PAYMENTS: "/add_payments",
   VIEW_PURCHASE:"/view_purchase",
+  VIEW_PURCHASE_ID:"/view_purchase/:id",
   EDIT_PURCHASE:"/edit_purchase",
   EDIT_PURCHASE_ID:"/edit_purchase/:id",
   PRINT_PURCHASE:"/print_purchase",
@@ -128,6 +129,16 @@ const ROUTES = {
   EDIT_EXPENSE: "/edit_expense",
   EDIT_EXPENSE_ID: "/edit_expense/:id",
   BANK_DETAILS: "/list_bankdetails",
+
+
+
+
+
+
+
+
+
+MONTHLY_REPORT:"/monthly_report",
 
   // general settings
   CURRENCY: "/currency",

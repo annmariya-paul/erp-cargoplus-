@@ -122,10 +122,6 @@ const ROUTES = {
   EDIT_PURCHASE_ID: "/edit_purchase/:id",
   PRINT_PURCHASE: "/print_purchase",
 
-  JOB_PAYMENTS: "/job_payments",
-  ADD_JOBPAYMENT: "/add_job_payment",
-  EDIT_JOBPAYMENT: "/edit_job_payment",
-  VIEW_JOBPAYMENT: "/view_job_payment",
   VIEW_PAYMENTS_INDEX: "/view_payments",
   VIEW_PAYMENT: "/view_payments/:payment_id",
   EDIT_PAYMENTS_INDEX: "/edit_payments",
@@ -137,6 +133,8 @@ const ROUTES = {
   EDIT_JOBPAYMENT: "/edit_job_payment",
   VIEW_JOBPAYMENT: "/view_job_payment",
 
+  //  Accounts -> Settings
+  CREDIT_NOTE_TYPE:"/credit_note_type",
   BANK_DETAILS: "/list_bankdetails",
   ENQUIRY_REPORT: "/enquiry_report",
 

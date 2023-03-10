@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../routes";
 import {
   CRM_BASE_URL_FMS,
-  CRM_BASE_URL_SELLING,
+  ACCOUNTS,
   GENERAL_SETTING_BASE_URL,
 } from "../../../api/bootapi";
 import moment from "moment";
@@ -22,6 +22,7 @@ import Input_Number from "../../../components/InputNumber/InputNumber";
 
 export default function AddJobPayments() {
   const [addForm] = Form.useForm();
+  const [date,setDate] = useState();
   const [successPopup, setSuccessPopup] = useState(false);
   const [currencyDefault, setCurrencyDefault] = useState();
   const [allCurrency, setAllCurrency] = useState();
@@ -30,12 +31,18 @@ export default function AddJobPayments() {
   const [advanceAmount, setAdvanceAmount] = useState();
   const [convertAmount, setConvertAmount] = useState();
   const [jobExchangeRate, setJobExchangeRate] = useState();
-  console.log("advance", advanceAmount);
-  console.log("totalcostjob", jobTotalCost);
-  console.log("jobbbbb", jobData);
+  const [fileAttach,setFileAttach] = useState();
+  const [JobLeadId,setJobLeadId] = useState();
+console.log("jjj",JobLeadId);
+  const close_modal = (mShow, time) => {
+    if (!mShow) {
+      setTimeout(() => {
+        setSuccessPopup(false);
+      }, time);
+    }
+  };
 
   const navigate = useNavigate();
-  const newDate = new Date();
 
   const CurrencyData = () => {
     PublicFetch.get(`${GENERAL_SETTING_BASE_URL}/currency`)
@@ -85,10 +92,9 @@ export default function AddJobPayments() {
   useEffect(() => {
     let conversion = advanceAmount / jobExchangeRate;
     addForm.setFieldsValue({
-      job_pay_advance_amount_lx: conversion.toFixed(2),
+      advanceIn_DefCurrency: conversion.toFixed(2),
     });
   }, [advanceAmount, jobExchangeRate]);
-  
 
   const getAllJobs = () => {
     PublicFetch.get(`${CRM_BASE_URL_FMS}/job?startIndex=0&noOfItems=10`)
@@ -109,6 +115,7 @@ export default function AddJobPayments() {
     try {
       const oneJob = await PublicFetch.get(`${CRM_BASE_URL_FMS}/job/${id}`);
       if (oneJob.data.success) {
+        setJobLeadId(oneJob?.data?.data?.crm_v1_leads?.lead_id);
         console.log("one job iss ::", oneJob?.data?.data);
         let jobAmount = 0;
         if (oneJob?.data?.data?.fms_v1_job_task_expenses) {
@@ -117,13 +124,14 @@ export default function AddJobPayments() {
           });
         }
         addForm.setFieldsValue({
-          lead: oneJob?.data?.data?.crm_v1_leads?.lead_customer_name,
-          job_pay_currency:
+          JobLeadId: oneJob?.data?.data?.crm_v1_leads?.lead_id,
+          lead_name: oneJob?.data?.data?.crm_v1_leads?.lead_customer_name,
+          currency:
             oneJob?.data?.data.generalsettings_v1_currency.currency_name,
-          job_pay_exchange_rate:
-            oneJob?.data?.data.job_total_cost_exch.toFixed(2),
-          job_pay_advance_amount_fx: jobAmount.toFixed(2),
-          // job_pay_advance_amount_fx:convertAmount,
+          currency_id:
+            oneJob?.data?.data.generalsettings_v1_currency.currency_name,
+          Job_exchangeRate: oneJob?.data?.data.job_total_cost_exch.toFixed(2),
+          job_amount: jobAmount.toFixed(2),
         });
         setJobExchangeRate(oneJob?.data?.data.job_total_cost_exch);
         getCurrencyRate(
@@ -146,6 +154,48 @@ export default function AddJobPayments() {
     getAllJobs();
   }, []);
 
+  const newDate = new Date();
+  const thisDate = moment(newDate);
+  addForm.setFieldValue("voucher_date", thisDate);
+
+  const addCreditNoteType = (data) => {
+    console.log("addcreditdata",data);
+    const date = moment(data.voucher_date);
+    const formData = new FormData(data);
+    formData.append("job_pay_voucher_date", date);
+    formData.append("job_pay_job_id", data.job_id);
+    formData.append("job_pay_lead_id", JobLeadId);
+    formData.append("job_pay_currency", data.currency_id);
+    formData.append("job_pay_exchange_rate", data.Job_exchangeRate);
+    formData.append("job_pay_job_amount", data.job_amount);
+    formData.append("job_pay_advance_amount_fx", data.advance_amount);
+    formData.append("job_pay_advance_amount_lx", data.advanceIn_DefCurrency);
+    formData.append("job_pay_remarks", data.remarks);
+    // formData.append("job_pay_docs", data.attachment);
+    if (fileAttach) {
+      formData.append("attachment", fileAttach);
+    }
+    PublicFetch.post(`${ACCOUNTS}/job-payments`, formData, {
+      "Content-Type": "Multipart/form-Data",
+    })
+      .then((res) => {
+        console.log("success", res);
+        if (res.data.success) {
+          setSuccessPopup(true);
+          addForm.resetFields();
+          close_modal(successPopup, 1000);
+        } else {
+          console.log("", res.data.data);
+          // setBrandError(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("error", err);
+        // setError(true);
+      });
+  };
+
+   const beforeUpload = (file, fileList) => {};
   return (
     <>
       <div className="container-fluid">
@@ -154,9 +204,9 @@ export default function AddJobPayments() {
             <Form
               name="addForm"
               form={addForm}
-              onFinish={(value) => {
-                console.log("values111333", value);
-                // OnSubmit();
+              onFinish={(values) => {
+                console.log("creditnote values", values);
+                addCreditNoteType(values);
               }}
               onFinishFailed={(error) => {
                 console.log(error);
@@ -175,7 +225,7 @@ export default function AddJobPayments() {
                   >
                     <DatePicker
                       format={"DD-MM-YYYY"}
-                      defaultValue={moment(newDate)}
+                      defaultValue={moment(date)}
                       // value={selectedDate}
                       // onChange={(e) => {
                       //   setSelectedDate(e);
@@ -185,10 +235,9 @@ export default function AddJobPayments() {
                 </div>
                 <div className="col-sm-3 pt-3">
                   <label>Job No.</label>
-                  <Form.Item name="job_number">
+                  <Form.Item name="job_id">
                     <SelectBox
                       onChange={(e) => {
-                        console.log("jobnooooo", e);
                         handleJobNo(e);
                       }}
                     >
@@ -210,16 +259,17 @@ export default function AddJobPayments() {
                 <div className="col-sm-3 pt-3">
                   <label>Lead</label>
                   <Form.Item
-                    name="lead"
+                    name="lead_name"
                     // onChange={(e) => setName(e.target.value)}
                   >
                     <InputType disabled />
+                    {/* <SelectBox></SelectBox> */}
                   </Form.Item>
                 </div>
                 <div className="col-sm-3 pt-3">
                   <label>Currency</label>
                   <Form.Item
-                    name="job_pay_currency"
+                    name="currency"
                     // onChange={(e) => {  console.log("currencyyy", e);getCurrencyRate(e)}}
                   >
                     <InputType disabled />
@@ -228,7 +278,7 @@ export default function AddJobPayments() {
                 <div className="col-sm-3 pt-3">
                   <label>Exchange Rate</label>
                   <Form.Item
-                    name="job_pay_exchange_rate"
+                    name="Job_exchangeRate"
                     onChange={(e) => setJobExchangeRate(e.target.value)}
                   >
                     <Input_Number
@@ -241,7 +291,7 @@ export default function AddJobPayments() {
                 </div>
                 <div className="col-sm-3 pt-3">
                   <label>Job Amount</label>
-                  <Form.Item name="job_pay_advance_amount_fx">
+                  <Form.Item name="job_amount">
                     <InputNumber disabled min={2} precision={2} />
                   </Form.Item>
                 </div>
@@ -264,7 +314,7 @@ export default function AddJobPayments() {
                     Advance in <span>({currencyDefault})</span>
                   </label>
                   <Form.Item
-                    name="job_pay_advance_amount_lx"
+                    name="advanceIn_DefCurrency"
                     // onChange={(e) => setName(e.target.value)}
                   >
                     <Input_Number
@@ -286,17 +336,17 @@ export default function AddJobPayments() {
                 </div>
                 <div className="col-6 mt-2">
                   <label>Display Picture</label>
-                  <Form.Item name="new" className="mt-2">
+                  <Form.Item name="attachment" className="mt-2">
                     <FileUpload
                       multiple
                       listType="picture"
-                      accept=".png,.jpeg"
+                      accept=".pdf,.docs,.jpeg"
                       height={100}
-                      // beforeUpload={beforeUpload}
+                      beforeUpload={beforeUpload}
                       onChange={(file) => {
                         console.log("Before upload file size", file.file.size);
                         if (file.file.size > 2000 && file.file.size < 500000) {
-                          // setImg(file.file.originFileObj);
+                          setFileAttach(file.file.originFileObj);
                           // setImageSize(false);
                           console.log("select imaggg", file.file.originFileObj);
                           console.log(

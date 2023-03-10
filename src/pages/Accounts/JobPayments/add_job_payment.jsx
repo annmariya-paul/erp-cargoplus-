@@ -26,6 +26,13 @@ export default function AddJobPayments() {
   const [currencyDefault, setCurrencyDefault] = useState();
   const [allCurrency, setAllCurrency] = useState();
   const [jobData, setJobData] = useState();
+  const [jobTotalCost, setJobTotalCost] = useState();
+  const [advanceAmount, setAdvanceAmount] = useState();
+  const [convertAmount, setConvertAmount] = useState();
+  const [jobExchangeRate, setJobExchangeRate] = useState();
+  console.log("advance", advanceAmount);
+  console.log("totalcostjob", jobTotalCost);
+  console.log("jobbbbb", jobData);
 
   const navigate = useNavigate();
   const newDate = new Date();
@@ -51,19 +58,23 @@ export default function AddJobPayments() {
       });
   };
 
-  let cur_code;
+  const [currencyRates, setCurrencyRates] = useState(0);
+  console.log("iiii", currencyRates);
+  let b;
   const getCurrencyRate = (data) => {
-    const code = allCurrency?.filter((item) => {
-      if (item?.currency_id === data) {
-        cur_code = item?.currency_code;
+    console.log("hhhhhh", data);
+    const code = jobData?.filter((item) => {
+      if (item?.generalsettings_v1_currency.currency_code === data) {
+        b = item?.generalsettings_v1_currency.currency_code;
       }
     });
     axios
       .get(`https://open.er-api.com/v6/latest/${currencyDefault}`)
       .then(function (response) {
         console.log("currency current rate:", response);
-        let a = response.data.rates[cur_code];
-        // setCurrencyRates(a);
+        let a = response.data.rates[b];
+        console.log("eeee", a);
+        setCurrencyRates(a);
         addForm.setFieldValue("exchnagerate", a);
       })
       .catch(function (error) {
@@ -71,12 +82,20 @@ export default function AddJobPayments() {
       });
   };
 
+  useEffect(() => {
+    let conversion = advanceAmount / jobExchangeRate;
+    addForm.setFieldsValue({
+      job_pay_advance_amount_lx: conversion.toFixed(2),
+    });
+  }, [advanceAmount, jobExchangeRate]);
+  
+
   const getAllJobs = () => {
     PublicFetch.get(`${CRM_BASE_URL_FMS}/job?startIndex=0&noOfItems=10`)
       .then((res) => {
         if (res.data.success) {
           console.log("jobbbb", res.data.data);
-          setJobData(res.data.data);
+          setJobData(res.data.data.job);
         } else {
           console.log("Failed to load data");
         }
@@ -84,6 +103,42 @@ export default function AddJobPayments() {
       .catch((err) => {
         console.log("Error", err);
       });
+  };
+
+  const getOneJob = async (id) => {
+    try {
+      const oneJob = await PublicFetch.get(`${CRM_BASE_URL_FMS}/job/${id}`);
+      if (oneJob.data.success) {
+        console.log("one job iss ::", oneJob?.data?.data);
+        let jobAmount = 0;
+        if (oneJob?.data?.data?.fms_v1_job_task_expenses) {
+          oneJob?.data?.data?.fms_v1_job_task_expenses.map((i, index) => {
+            jobAmount += i.job_task_expense_cost_subtotalfx;
+          });
+        }
+        addForm.setFieldsValue({
+          lead: oneJob?.data?.data?.crm_v1_leads?.lead_customer_name,
+          job_pay_currency:
+            oneJob?.data?.data.generalsettings_v1_currency.currency_name,
+          job_pay_exchange_rate:
+            oneJob?.data?.data.job_total_cost_exch.toFixed(2),
+          job_pay_advance_amount_fx: jobAmount.toFixed(2),
+          // job_pay_advance_amount_fx:convertAmount,
+        });
+        setJobExchangeRate(oneJob?.data?.data.job_total_cost_exch);
+        getCurrencyRate(
+          oneJob?.data?.data.generalsettings_v1_currency.currency_code
+        );
+      }
+    } catch (err) {
+      console.log("error to getting a job", err);
+    }
+  };
+
+  const handleJobNo = (e) => {
+    if (e) {
+      getOneJob(e);
+    }
   };
 
   useEffect(() => {
@@ -130,11 +185,13 @@ export default function AddJobPayments() {
                 </div>
                 <div className="col-sm-3 pt-3">
                   <label>Job No.</label>
-                  <Form.Item
-                    name="job_number"
-                    // onChange={(e) => setName(e.target.value)}
-                  >
-                    <SelectBox>
+                  <Form.Item name="job_number">
+                    <SelectBox
+                      onChange={(e) => {
+                        console.log("jobnooooo", e);
+                        handleJobNo(e);
+                      }}
+                    >
                       {jobData &&
                         jobData.length > 0 &&
                         jobData.map((item, index) => {
@@ -162,8 +219,8 @@ export default function AddJobPayments() {
                 <div className="col-sm-3 pt-3">
                   <label>Currency</label>
                   <Form.Item
-                    name="job_currency"
-                    // onChange={(e) => setName(e.target.value)}
+                    name="job_pay_currency"
+                    // onChange={(e) => {  console.log("currencyyy", e);getCurrencyRate(e)}}
                   >
                     <InputType disabled />
                   </Form.Item>
@@ -171,28 +228,35 @@ export default function AddJobPayments() {
                 <div className="col-sm-3 pt-3">
                   <label>Exchange Rate</label>
                   <Form.Item
-                    name="exchange_rate"
-                    // onChange={(e) => setName(e.target.value)}
+                    name="job_pay_exchange_rate"
+                    onChange={(e) => setJobExchangeRate(e.target.value)}
                   >
-                    <Input_Number />
+                    <Input_Number
+                      className="text_right"
+                      align="right"
+                      min={2}
+                      precision={2}
+                    />
                   </Form.Item>
                 </div>
                 <div className="col-sm-3 pt-3">
                   <label>Job Amount</label>
-                  <Form.Item
-                    name="job_amount"
-                    // onChange={(e) => setName(e.target.value)}
-                  >
-                    <InputNumber />
+                  <Form.Item name="job_pay_advance_amount_fx">
+                    <InputNumber disabled min={2} precision={2} />
                   </Form.Item>
                 </div>
                 <div className="col-sm-3 pt-3">
                   <label>Advance Amount</label>
                   <Form.Item
                     name="advance_amount"
-                    // onChange={(e) => setName(e.target.value)}
+                    onChange={(e) => setAdvanceAmount(e.target.value)}
                   >
-                    <Input_Number />
+                    <Input_Number
+                      className="text_right"
+                      align="right"
+                      min={2}
+                      precision={2}
+                    />
                   </Form.Item>
                 </div>
                 <div className="col-sm-3 pt-3">
@@ -200,16 +264,21 @@ export default function AddJobPayments() {
                     Advance in <span>({currencyDefault})</span>
                   </label>
                   <Form.Item
-                    name="advance_amount"
+                    name="job_pay_advance_amount_lx"
                     // onChange={(e) => setName(e.target.value)}
                   >
-                    <Input_Number />
+                    <Input_Number
+                      className="text_right"
+                      align="right"
+                      disabled
+                      // precision={2}
+                    />
                   </Form.Item>
                 </div>
                 <div className="col-sm-6 pt-2">
                   <label className="mb-2">Remarks</label>
                   <Form.Item
-                    name="advance_amount"
+                    name="remarks"
                     // onChange={(e) => setName(e.target.value)}
                   >
                     <TextArea />

@@ -542,9 +542,6 @@ function App() {
             <Route path={ROUTES.VIEW_JOBPAYMENT} element={<ProtectedRoute />}>
               <Route index element={<ViewJobPayment />} />
             </Route>
-            <Route path={ROUTES.ENQUIRY_REPORT} element={<ProtectedRoute />}>
-              <Route index element={<EnquiryReport />} />
-            </Route>
             <Route path={ROUTES.MONTHLY_REPORT} element={<ProtectedRoute />}>
               <Route index element={<Monthly_report />} />
             </Route>

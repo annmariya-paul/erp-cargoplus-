@@ -175,7 +175,7 @@ function CreateExpence() {
                     createExpense(value);
                   }}
                 >
-                  <div className="content-tabs-new row justify-content px-4">
+                  <div className="content-tabs-new row justify-content ">
                     <div className="row">
                       <div className="col-xl-4 my-2">
                         <label className="mb-2">Date</label>
@@ -288,41 +288,19 @@ function CreateExpence() {
                       </div>
                     </div>
                   </div>
-                  <div className="row ">
+                  <div className="row content-tabs-new justify-content mt-4">
                     {/* <div className="col-xl-4  my-2">
                       <label>Voucher No</label>
                       <Form.Item>
                         <InputType />
                       </Form.Item>
                     </div> */}
-
-                    <div className="col-xl-4 my-2">
-                      <label>Party</label>
-                      <Form.Item
-                        name="daily_expense_party"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Party is Required",
-                          },
-                        ]}
-                      >
-                        <InputType />
-                      </Form.Item>
-                    </div>
                     <div className="col-xl-4 my-2">
                       <label>Bill No</label>
                       <Form.Item name="daily_expense_bill_no">
                         <InputType />
                       </Form.Item>
                     </div>
-                    <div className="col-12 my-2">
-                      <label>Party Address</label>
-                      <Form.Item name="daily_expense_party_address">
-                        <TextArea />
-                      </Form.Item>
-                    </div>
-
                     <div className="col-xl-4 my-2 d-flex justify-content-center">
                       <div className="">
                         <label>Taxable</label>
@@ -343,7 +321,20 @@ function CreateExpence() {
                         <InputType disabled={isTaxable ? false : true} />
                       </Form.Item>
                     </div>
-
+                    <div className="col-xl-4 my-2">
+                      <label>Party</label>
+                      <Form.Item
+                        name="daily_expense_party"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Party is Required",
+                          },
+                        ]}
+                      >
+                        <InputType />
+                      </Form.Item>
+                    </div>
                     <div className="col-xl-4 my-2">
                       <label>Tax Amount</label>
                       <Form.Item name="daily_expense_tax_amount">
@@ -371,9 +362,15 @@ function CreateExpence() {
                         <Input_Number disabled={true} min={0} precision={2} />
                       </Form.Item>
                     </div>
+                    <div className="col-xl-6 my-2">
+                      <label>Party Address</label>
+                      <Form.Item name="daily_expense_party_address">
+                        <TextArea />
+                      </Form.Item>
+                    </div>
 
-                    <div className="col-xl-4"></div>
-                    <div className="col-xl-4 my-2">
+                    {/* <div className="col-xl-4"></div> */}
+                    <div className="col-xl-6 my-2">
                       <div className="">
                         <label>Attachments</label>
 
@@ -382,7 +379,7 @@ function CreateExpence() {
                         </Form.Item>
                       </div>
                     </div>
-                    <div className="col-xl-4"></div>
+                    {/* <div className="col-xl-4"></div> */}
                     <div className="col-12 d-flex justify-content-center my-4 pt-2">
                       <Button btnType="save" type="submit">
                         Save

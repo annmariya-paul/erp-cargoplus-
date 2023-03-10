@@ -531,7 +531,6 @@ function App() {
             <Route path={ROUTES.VIEW_PAYMENT} element={<ProtectedRoute />}>
               <Route index element={<ViewPayment />} />
             </Route>
-<<<<<<< HEAD
             <Route path={ROUTES.VIEW_JOBPAYMENT} element={<ProtectedRoute />}>
               <Route index element={<ViewJobPayment />} />
             </Route>
@@ -539,8 +538,6 @@ function App() {
               <Route index element={<Monthly_report/>}/>
             </Route>
 
-=======
->>>>>>> 95e2994be08a6eb3f6307b14a18818f3cee1e587
             {/* </Route> */}
           </Route>
           <Route

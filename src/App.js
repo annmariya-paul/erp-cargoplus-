@@ -130,9 +130,9 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path="/login" element={<Login />} />
+          <Route path={ROUTES.LOGIN} element={<Login />} />
           {/* <Route path={ROUTES.SIDEBAR} element={<Sidebar />} /> */}
-          <Route path="/" element={<Layout />}>
+          <Route  element={<Layout />}>
             {/* <Route path={ROUTES.DASHBOARD} element={<ProtectedRoute />}> */}
             <Route path={ROUTES.DASHBOARD} element={<ProtectedRoute />}>
               <Route index element={<Dashboard />} />
@@ -186,6 +186,7 @@ function App() {
             <Route path={ROUTES.BRANDS} element={<ProtectedRoute />}>
               <Route index element={<BrandsList />} />
             </Route>
+
             <Route path={ROUTES.ATTRIBUTES} element={<ProtectedRoute />}>
               <Route index element={<Attribute />} />
             </Route>
@@ -502,7 +503,7 @@ function App() {
             <Route path={ROUTES.CREATE_EXPENSE} element={<ProtectedRoute />}>
               <Route index element={<CreateExpence />} />
             </Route>
-            <Route path="/edit_daily_expense" element={<ProtectedRoute />}>
+            <Route path={ROUTES.EDIT_EXPENSE_ID} element={<ProtectedRoute />}>
               <Route index element={<EditExpence />} />
             </Route>
             <Route path={ROUTES.EXPENSE_CATEGORY} element={<ProtectedRoute />}>

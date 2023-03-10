@@ -125,6 +125,7 @@ import CostAndExpenseReport from "./pages/FMS/CustomerwiseCostAndExpenseReport/c
 import EnquiryReport from "./pages/FMS/EnquiryReport/EnquiryReport";
 import Monthly_report from "./pages/monthlyreport";
 import Invoicereport from "./pages/FMS/Invoice/InvoiceReport/Invoicereport";
+import CreditNoteType from "./pages/Accounts/settings/CreditNoteType/credit_note_type";
 
 function App() {
   return (
@@ -542,11 +543,11 @@ function App() {
             <Route path={ROUTES.VIEW_JOBPAYMENT} element={<ProtectedRoute />}>
               <Route index element={<ViewJobPayment />} />
             </Route>
-            <Route path={ROUTES.ENQUIRY_REPORT} element={<ProtectedRoute />}>
-              <Route index element={<EnquiryReport />} />
-            </Route>
             <Route path={ROUTES.MONTHLY_REPORT} element={<ProtectedRoute />}>
               <Route index element={<Monthly_report />} />
+            </Route>
+            <Route path={ROUTES.CREDIT_NOTE_TYPE} element={<ProtectedRoute />}>
+              <Route index element={<CreditNoteType />} />
             </Route>
 
             {/* </Route> */}

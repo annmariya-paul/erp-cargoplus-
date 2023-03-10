@@ -95,7 +95,7 @@ const AddPayments = () => {
                     let temp = [...invoiceData];
                     temp[index.index - 1] = index;
                     console.log("new temp", temp);
-                    setInvoiceData(temp);
+                    setInvoiceData([...temp]);
                   }}
                   width={100}
                   controlls={false}
@@ -160,7 +160,6 @@ const AddPayments = () => {
         );
         setInvoiceData(tempData);
         setInitialInvoiceData(tempData);
-        setRefresh(!refresh);
       }
     } catch (error) {
       console.log("error while fetching invoices");

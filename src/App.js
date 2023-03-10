@@ -444,17 +444,17 @@ function App() {
               <Route index element={<Add_purchase />} />
             </Route>
             <Route path={ROUTES.VIEW_PURCHASE_ID} element={<ProtectedRoute />}>
-              <Route index element={<View_purchase/>} />
+              <Route index element={<View_purchase />} />
             </Route>
             <Route path={ROUTES.EDIT_PURCHASE_ID} element={<ProtectedRoute />}>
-              <Route index element={<Edit_purchase/>}/>
+              <Route index element={<Edit_purchase />} />
             </Route>
             <Route path={ROUTES.PURCHASE} element={<ProtectedRoute />}>
               <Route index element={<Purchase />} />
             </Route>
-            <Route path={ROUTES.PRINT_PURCHASE} element={<ProtectedRoute/>}>
-              <Route index element={<Print_purchase/>}/>
-              </Route>
+            <Route path={ROUTES.PRINT_PURCHASE} element={<ProtectedRoute />}>
+              <Route index element={<Print_purchase />} />
+            </Route>
 
             <Route path={ROUTES.INVOICE_VIEW_ID} element={<ProtectedRoute />}>
               <Route index element={<InvoiceView />} />
@@ -488,10 +488,7 @@ function App() {
               <Route index element={<Taskexpenses />} />
             </Route>
 
-            <Route
-              path={ROUTES.INVOICE_REPORT}
-              element={<ProtectedRoute />}
-            >
+            <Route path={ROUTES.INVOICE_REPORT} element={<ProtectedRoute />}>
               <Route index element={<Invoicereport />} />
             </Route>
 
@@ -531,16 +528,13 @@ function App() {
             <Route path={ROUTES.VIEW_PAYMENT} element={<ProtectedRoute />}>
               <Route index element={<ViewPayment />} />
             </Route>
-<<<<<<< HEAD
             <Route path={ROUTES.VIEW_JOBPAYMENT} element={<ProtectedRoute />}>
               <Route index element={<ViewJobPayment />} />
             </Route>
-            <Route path={ROUTES.MONTHLY_REPORT} element={<ProtectedRoute/>}>
-              <Route index element={<Monthly_report/>}/>
+            <Route path={ROUTES.MONTHLY_REPORT} element={<ProtectedRoute />}>
+              <Route index element={<Monthly_report />} />
             </Route>
 
-=======
->>>>>>> 95e2994be08a6eb3f6307b14a18818f3cee1e587
             {/* </Route> */}
           </Route>
           <Route

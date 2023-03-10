@@ -95,7 +95,7 @@ const AddPayments = () => {
                     let temp = [...invoiceData];
                     temp[index.index - 1] = index;
                     console.log("new temp", temp);
-                    setInvoiceData(temp);
+                    setInvoiceData([...temp]);
                   }}
                   width={100}
                   controlls={false}

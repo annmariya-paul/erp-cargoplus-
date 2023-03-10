@@ -3,6 +3,7 @@ import PublicFetch from "../../utils/PublicFetch";
 import { ROUTES } from "../../routes/index";
 import { useNavigate } from "react-router-dom";
 import Avatar from "../../components/img/img_avatar.png";
+import HeaderIcon from "../../components/img/HeaderIcon.png"
 import { IoMdNotifications } from "react-icons/io";
 import { TfiKey } from "react-icons/tfi";
 import { HiLogout } from "react-icons/hi";
@@ -50,8 +51,8 @@ const Header = () => {
         <>
           <div>
             <p className={`${styles.Welcome} mt-2`}>Welcome Super admin!</p>
-            <p className={`${styles.DrpdwnUser}`}>Super Admin</p>
-            <hr className={`${styles.HorizontalRule}`}></hr>
+            {/* <p className={`${styles.DrpdwnUser}`}>Super Admin</p>
+            <hr className={`${styles.HorizontalRule}`}></hr> */}
           </div>
         </>
       ),
@@ -110,7 +111,7 @@ const Header = () => {
             overlayClassName="dropdwnHeader"
           >
             {/* <Space> */}
-            <img src={Avatar} alt="..." />
+            <img src={HeaderIcon} alt="..."/>
             {/* </Space> */}
           </Dropdown>
         </div>

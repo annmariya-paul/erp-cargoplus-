@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./AddPayments.styles.scss";
+// import "./AddPayments.styles.scss";
 import { Checkbox, DatePicker, Form, InputNumber, Select } from "antd";
 import TextArea from "../../../components/ InputType TextArea/TextArea";
 import Button from "../../../components/button/button";
@@ -176,21 +176,21 @@ const ViewPayment = () => {
                 {/* <Form> */}
                 <div className="row ">
                   <div className="col-xl-4  my-2">
-                    <label>Voucher No </label>
-                    <div>{voucherNo}</div>
+                    <label>Voucher No : {voucherNo}</label>
+                    <div></div>
                     {/* <Form.Item>
                         <InputType />
                       </Form.Item> */}
                   </div>
                   <div className="col-xl-4 my-2">
-                    <label className="mb-2">Voucher Date</label>
+                    <label className="mb-2">Voucher Date : {voucherDate}</label>
                     {/* <Form.Item>
                       <DatePicker />
                     </Form.Item> */}
-                    <div>{voucherDate}</div>
+                    <div></div>
                   </div>
                   <div className="col-xl-4 my-2">
-                    <label>Lead</label>
+                    <label>Lead : {lead}</label>
                     {/* <Form.Item>
                       <SelectBox>
                         <Select.Option>Lead 1</Select.Option>
@@ -198,11 +198,11 @@ const ViewPayment = () => {
                         <Select.Option>Lead 3</Select.Option>
                       </SelectBox>
                     </Form.Item> */}
-                    <div>{lead}</div>
+                    <div></div>
                   </div>
                   <div className="col-xl-4 my-2">
-                    <label>Amount</label>
-                    <div>{amount}</div>
+                    <label>Amount : {amount}</label>
+                    <div></div>
                     {/* <Form.Item
                       rules={[
                         {
@@ -220,8 +220,8 @@ const ViewPayment = () => {
                     </Form.Item> */}
                   </div>
                   <div className="col-xl-4 my-2">
-                    <label>Mode</label>
-                    <div>{mode}</div>
+                    <label>Mode : {mode}</label>
+                    <div></div>
                     {/* <Form.Item>
                       <SelectBox>
                         <Select.Option>Mode 1</Select.Option>
@@ -259,14 +259,14 @@ const ViewPayment = () => {
                   <div className="col-xl-4"></div>
 
                   <div className="col-xl-4"></div>
-                  <div className="col-12 d-flex justify-content-center my-4 pt-2">
+                  {/* <div className="col-12 d-flex justify-content-center my-4 pt-2">
                     <Button btnType="save" type="submit">
                       Save
                     </Button>
                     <Button btnType="save" type="" className="ms-2">
                       Cancel
                     </Button>
-                  </div>
+                  </div> */}
                 </div>
                 {/* </Form> */}
               </div>

@@ -104,8 +104,11 @@ import ExpenseCategory from "./pages/Accounts/settings/Expense_Category/ExpenseC
 
 //Account
 import Payment_mode from "./pages/Accounts/settings/payment_mode";
-import Add_purchase from "./pages/Accounts/settings/add_purchase";
-import Purchase from "./pages/Accounts/settings/purchase";
+import Add_purchase from "./pages/Accounts/settings/Purchase/add_purchase";
+import Purchase from "./pages/Accounts/settings/Purchase/purchase";
+import View_purchase from "./pages/Accounts/settings/Purchase/view_purchase";
+import Edit_purchase from "./pages/Accounts/settings/Purchase/edit_purchase";
+import Print_purchase from "./pages/Accounts/settings/Purchase/print_purchase";
 
 import Bank from "./pages/Accounts/settings/BankAccount/bank";
 
@@ -119,6 +122,8 @@ import ViewPayment from "./pages/Accounts/Payments/ViewPayment";
 import EditExpence from "./pages/Accounts/DailyExpence/EditExpense";
 import AgentReport from "./pages/FMS/AgentReport/agentReport";
 import CostAndExpenseReport from "./pages/FMS/CustomerwiseCostAndExpenseReport/costAndExpenseReport";
+import Monthly_report from "./pages/monthlyreport";
+import Invoicereport from "./pages/FMS/Invoice/InvoiceReport/Invoicereport";
 
 function App() {
   return (
@@ -126,8 +131,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path={ROUTES.LOGIN} element={<Login />} />
-          <Route path={ROUTES.SIDEBAR} element={<Sidebar />} />
-          <Route path={ROUTES.Layout} element={<Layout />}>
+          {/* <Route path={ROUTES.SIDEBAR} element={<Sidebar />} /> */}
+          <Route  element={<Layout />}>
             {/* <Route path={ROUTES.DASHBOARD} element={<ProtectedRoute />}> */}
             <Route path={ROUTES.DASHBOARD} element={<ProtectedRoute />}>
               <Route index element={<Dashboard />} />
@@ -181,6 +186,7 @@ function App() {
             <Route path={ROUTES.BRANDS} element={<ProtectedRoute />}>
               <Route index element={<BrandsList />} />
             </Route>
+
             <Route path={ROUTES.ATTRIBUTES} element={<ProtectedRoute />}>
               <Route index element={<Attribute />} />
             </Route>
@@ -431,6 +437,25 @@ function App() {
             {/* <Route path={ROUTES.PAYMEMENT_MODE} element={<ProtectedRoute/>}> */}
             {/* <Route index element={<Payment_mode/>}/> */}
             {/* </Route> */}
+            <Route path={ROUTES.PAYMEMENT_MODE} element={<ProtectedRoute />}>
+              <Route index element={<Payment_mode />} />
+            </Route>
+
+            <Route path={ROUTES.ADD_PURCHASE} element={<ProtectedRoute />}>
+              <Route index element={<Add_purchase />} />
+            </Route>
+            <Route path={ROUTES.VIEW_PURCHASE_ID} element={<ProtectedRoute />}>
+              <Route index element={<View_purchase/>} />
+            </Route>
+            <Route path={ROUTES.EDIT_PURCHASE_ID} element={<ProtectedRoute />}>
+              <Route index element={<Edit_purchase/>}/>
+            </Route>
+            <Route path={ROUTES.PURCHASE} element={<ProtectedRoute />}>
+              <Route index element={<Purchase />} />
+            </Route>
+            <Route path={ROUTES.PRINT_PURCHASE} element={<ProtectedRoute/>}>
+              <Route index element={<Print_purchase/>}/>
+              </Route>
 
             <Route path={ROUTES.INVOICE_VIEW_ID} element={<ProtectedRoute />}>
               <Route index element={<InvoiceView />} />
@@ -462,6 +487,13 @@ function App() {
               element={<ProtectedRoute />}
             >
               <Route index element={<Taskexpenses />} />
+            </Route>
+
+            <Route
+              path={ROUTES.INVOICE_REPORT}
+              element={<ProtectedRoute />}
+            >
+              <Route index element={<Invoicereport />} />
             </Route>
 
             {/* ######## ACCOUNTS ######## */}
@@ -512,6 +544,10 @@ function App() {
             <Route path={ROUTES.VIEW_JOBPAYMENT} element={<ProtectedRoute />}>
               <Route index element={<ViewJobPayment />} />
             </Route>
+            <Route path={ROUTES.MONTHLY_REPORT} element={<ProtectedRoute/>}>
+              <Route index element={<Monthly_report/>}/>
+            </Route>
+
             {/* </Route> */}
           </Route>
           <Route

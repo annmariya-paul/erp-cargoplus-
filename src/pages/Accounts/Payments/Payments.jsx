@@ -163,6 +163,7 @@ function Payments(props) {
       dataIndex: "voucehr_no",
       key: "voucehr_no",
       width: "25%",
+      align: "center",
       // filteredValue: [searchedText],
       //   onFilter: (value, record) => {
       //     // console.log("hai how are", record.children);
@@ -178,6 +179,7 @@ function Payments(props) {
       dataIndex: "date",
       key: "date",
       width: "11%",
+      align: "center",
       //   filteredValue: [searchCode],
       //   onFilter: (value, record) => {
       //     console.log("dfhasasswww12", record);
@@ -191,6 +193,7 @@ function Payments(props) {
       dataIndex: "lead",
       key: "lead",
       width: "20%",
+      align: "center",
       //   filteredValue: [searchStatus],
       //   onFilter: (value, record) => {
       //     return String(record.category_parent_id)
@@ -203,6 +206,7 @@ function Payments(props) {
       dataIndex: "amount",
       key: "amount",
       width: "14%",
+      align: "right",
     },
     {
       title: "Mode",
@@ -263,9 +267,8 @@ function Payments(props) {
 
   // function to go to edit page
   const handleEditPayment = (e) => {
-    //pass payment id as parameter here
     console.log("here is the edit payment index", ROUTES.EDIT_PAYMENTS_INDEX);
-    //navigate(`${ROUTES.EDIT_PAYMENTS_INDEX}/${e.payment_id}`);
+    navigate(`${ROUTES.EDIT_PAYMENTS_INDEX}/${e.payment_id}`);
   };
 
   return (

@@ -193,7 +193,8 @@ const EditPayments = () => {
                     </div>
                     <div className="col-xl-4 my-2">
                       <label className="mb-2">
-                        Voucher Date : {voucherDate}
+                        Voucher Date :{" "}
+                        {moment(new Date(voucherDate)).format("DD/MM/YYYY")}
                       </label>
                       {/* <Form.Item>
                         <DatePicker />

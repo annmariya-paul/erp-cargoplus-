@@ -53,14 +53,14 @@ const AddPayments = () => {
       dataIndex: "amount",
       key: "amount",
       width: "18%",
-      align: "center",
+      align: "right",
     },
     {
       title: "Due Amount",
       dataIndex: "due_amount",
       key: "due_amount",
       width: "15%",
-      align: "center",
+      align: "right",
     },
     {
       title: "Current Amount",
@@ -71,7 +71,7 @@ const AddPayments = () => {
       render: (data, index) => {
         if (autoPay) {
           return <div>{data}</div>;
-        } else {
+        } else if (!autoPay && amount) {
           return (
             <div
               className="d-flex justify-content-center align-items-center tborder "
@@ -95,6 +95,7 @@ const AddPayments = () => {
                     let temp = [...invoiceData];
                     temp[index.index - 1] = index;
                     console.log("new temp", temp);
+                    setInvoiceData(temp);
                   }}
                   width={100}
                   controlls={false}
@@ -110,7 +111,7 @@ const AddPayments = () => {
       dataIndex: "balance_amount",
       key: "balance_amount",
       width: "12%",
-      align: "center",
+      align: "right",
     },
   ];
 
@@ -210,7 +211,7 @@ const AddPayments = () => {
       newInvoiceData.push({
         ...temp[i],
         current_amount: current_amount,
-        balance_amount: balance_amount,
+        balance_amount: balance_amount.toFixed(2),
       });
       if (remaining_sum == 0) {
         break;
@@ -252,7 +253,14 @@ const AddPayments = () => {
                   <div className="row ">
                     <div className="col-xl-4  my-2">
                       <label>Voucher No</label>
-                      <Form.Item>
+                      <Form.Item
+                        rules={[
+                          {
+                            required: true,
+                            message: "Enter the Voucher number",
+                          },
+                        ]}
+                      >
                         <InputType
                           onChange={(e) => {
                             console.log(e.target.value);
@@ -276,7 +284,14 @@ const AddPayments = () => {
                     </div>
                     <div className="col-xl-4 my-2">
                       <label>Lead</label>
-                      <Form.Item>
+                      <Form.Item
+                        rules={[
+                          {
+                            required: true,
+                            message: "Enter the amount",
+                          },
+                        ]}
+                      >
                         <SelectBox
                           onChange={(value) => {
                             getInvoice(value);
@@ -297,6 +312,10 @@ const AddPayments = () => {
                       <label>Amount</label>
                       <Form.Item
                         rules={[
+                          {
+                            required: true,
+                            message: "Enter the amount",
+                          },
                           {
                             pattern: /^[1-9]\d*$/,
                             message: "Should be whole number",
@@ -377,7 +396,14 @@ const AddPayments = () => {
 
                     <div className="col-xl-4"></div>
                     <div className="col-12 d-flex justify-content-center my-4 pt-2">
-                      <Button btnType="save" type="submit">
+                      <Button
+                        btnType="save"
+                        type="submit"
+                        onClick={() => {
+                          console.log("submitting form");
+                          addform.submit();
+                        }}
+                      >
                         Save
                       </Button>
                       <Button className="ms-2">Cancel</Button>

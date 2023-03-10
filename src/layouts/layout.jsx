@@ -11,7 +11,7 @@ export default function Layout({ children }) {
     <>
       <div className="container-fluid screen_orientation">
         <div>
-          <Header />
+          <Header/>
         </div>
         <div className="d-flex">
           <div className={` ${showMenu ? "d-none" : "menu-bars"}`}>
@@ -25,7 +25,7 @@ export default function Layout({ children }) {
               showMenu ? "sidebarWrapper col-2" : "d-none width-100 "
             }  `}
           >
-            <Sidebar showSidebar={() => setShowMenu(false)} />
+            <Sidebar showSidebar={() => setShowMenu(false)}/>
           </div>
           <div
             className={` ${

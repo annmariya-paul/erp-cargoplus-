@@ -115,6 +115,16 @@ const ROUTES = {
   /*payments routes */
   PAYMENTS: "/payments",
   ADD_PAYMENTS: "/add_payments",
+  VIEW_PURCHASE:"/view_purchase",
+  VIEW_PURCHASE_ID:"/view_purchase/:id",
+  EDIT_PURCHASE:"/edit_purchase",
+  EDIT_PURCHASE_ID:"/edit_purchase/:id",
+  PRINT_PURCHASE:"/print_purchase",
+  
+  JOB_PAYMENTS:"/job_payments",
+  ADD_JOBPAYMENT:"/add_job_payment",
+  EDIT_JOBPAYMENT:"/edit_job_payment",
+  VIEW_JOBPAYMENT:"/view_job_payment",
   VIEW_PAYMENTS_INDEX: "/view_payments",
   VIEW_PAYMENT: "/view_payments/:payment_id",
   EDIT_PAYMENTS_INDEX: "/edit_payments",
@@ -127,6 +137,16 @@ const ROUTES = {
   VIEW_JOBPAYMENT: "/view_job_payment",
 
   BANK_DETAILS: "/list_bankdetails",
+
+
+
+
+
+
+
+
+
+MONTHLY_REPORT:"/monthly_report",
 
   // general settings
   CURRENCY: "/currency",

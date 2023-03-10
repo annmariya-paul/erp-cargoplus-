@@ -122,6 +122,7 @@ import ViewPayment from "./pages/Accounts/Payments/ViewPayment";
 import EditExpence from "./pages/Accounts/DailyExpence/EditExpense";
 import AgentReport from "./pages/FMS/AgentReport/agentReport";
 import CostAndExpenseReport from "./pages/FMS/CustomerwiseCostAndExpenseReport/costAndExpenseReport";
+import EnquiryReport from "./pages/FMS/EnquiryReport/EnquiryReport";
 import Monthly_report from "./pages/monthlyreport";
 import Invoicereport from "./pages/FMS/Invoice/InvoiceReport/Invoicereport";
 
@@ -132,7 +133,7 @@ function App() {
         <Routes>
           <Route path={ROUTES.LOGIN} element={<Login />} />
           {/* <Route path={ROUTES.SIDEBAR} element={<Sidebar />} /> */}
-          <Route  element={<Layout />}>
+          <Route element={<Layout />}>
             {/* <Route path={ROUTES.DASHBOARD} element={<ProtectedRoute />}> */}
             <Route path={ROUTES.DASHBOARD} element={<ProtectedRoute />}>
               <Route index element={<Dashboard />} />

@@ -11,6 +11,7 @@ import SelectBox from "../../../components/Select Box/SelectBox";
 import PublicFetch from "../../../utils/PublicFetch";
 import moment from "moment";
 import { ROUTES } from "../../../routes";
+import Custom_model from "../../../components/custom_modal/custom_model";
 
 function EditExpence() {
   const { id } = useParams();
@@ -427,6 +428,13 @@ function EditExpence() {
             </div>
           </div>
         </div>
+        <Custom_model
+          success
+          show={successPopup}
+          onHide={() => {
+            setSuccessPopup(false);
+          }}
+        />
       </div>
     </div>
   );

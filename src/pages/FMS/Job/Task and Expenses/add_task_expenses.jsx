@@ -775,7 +775,7 @@ export default function Taskexpenses() {
       title: "Tasks",
       dataIndex: "job_task_expense_task_id",
       key: "job_task_expense_task_id",
-      // width: "40%",
+      width: "10%",
       className: "firstrow req_font",
       render: (data, index) => {
         console.log("index is :", index);
@@ -827,7 +827,7 @@ export default function Taskexpenses() {
       title: "Tax Type",
       dataIndex: "job_task_expense_taxtype_id",
       key: "job_task_expense_taxtype_id",
-      // width: "100",
+      width: "3%",
       className: "firstrow",
       render: (data, index) => {
         console.log("index is :", index);
@@ -885,7 +885,7 @@ export default function Taskexpenses() {
       title: "Tax %",
       dataIndex: "job_task_expense_tax_perc",
       key: "job_task_expense_tax_perc",
-      // width: "38%",
+      width: "2%",
       align: "right",
       className: "firstrow",
       render: (data, index) => {
@@ -901,7 +901,7 @@ export default function Taskexpenses() {
               rules={[{ required: true, message: "Required" }]}
             >
               <InputNumber
-                style={{ minWidth: "10px" }}
+                style={{ minWidth: "5px" }}
                 bordered={false}
                 className="input_bg"
                 value={index.job_task_expense_tax_perc}
@@ -923,7 +923,7 @@ export default function Taskexpenses() {
       title: "Agent",
       dataIndex: "job_task_expense_agent_id",
       key: "job_task_expense_agent_id",
-      // width: 150,
+      width: "5%",
       className: "firstrow",
       render: (data, index) => {
         console.log("index is :", index);
@@ -970,7 +970,7 @@ export default function Taskexpenses() {
     },
     {
       title: "Cost",
-      width: 100,
+      width: "100%",
       align: "center",
       className: "secondrow",
       children: [
@@ -978,7 +978,7 @@ export default function Taskexpenses() {
           title: "Amount",
           dataIndex: "job_task_expense_cost_amountfx",
           key: "job_task_expense_cost_amountfx",
-          width: 61,
+          width: "5%",
           align: "right",
           className: "secondrow",
           render: (data, index) => {
@@ -1031,7 +1031,7 @@ export default function Taskexpenses() {
           title: "Tax",
           dataIndex: "job_task_expense_cost_taxfx",
           key: "job_task_expense_cost_taxfx",
-          width: 60,
+          width: "5%",
           align: "right",
           className: "secondrow",
           render: (data, index) => {
@@ -1048,7 +1048,7 @@ export default function Taskexpenses() {
                 >
                   <InputNumber
                     bordered={false}
-                    className="input_bg"
+                    className="input_bg m-0 p-0"
                     value={index.job_task_expense_cost_taxfx}
                     onChange={(value) => {
                       console.log(" input numberevent ", value, index.key);
@@ -1069,7 +1069,7 @@ export default function Taskexpenses() {
           title: "Total",
           dataIndex: "job_task_expense_cost_subtotalfx",
           key: "job_task_expense_cost_subtotalfx",
-          width: 60,
+          width: "5%",
           //   width: 80,
           //   fixed: 'right',
           align: "right",
@@ -1088,13 +1088,13 @@ export default function Taskexpenses() {
                 >
                   <InputNumber
                     bordered={false}
-                    className="input_bg"
+                    className="input_bg m-0 p-0"
                     value={index.job_task_expense_cost_subtotalfx}
                     onChange={(value) => {
                       console.log(" input numberevent ", value, index.key);
                     }}
                     align="right"
-                    // step={0.01}
+                    step={0.01}
                     min={0}
                     precision={2}
                     controlls={false}
@@ -1109,7 +1109,7 @@ export default function Taskexpenses() {
     },
     {
       title: "Expense",
-      width: 200,
+      width: "100%",
       align: "center",
       className: "thirdrow",
       children: [
@@ -1132,7 +1132,7 @@ export default function Taskexpenses() {
                   rules={[{ required: true, message: "Required" }]}
                 >
                   <Select
-                    style={{ minWidth: "150px" }}
+                    style={{ minWidth: "70px" }}
                     bordered={false}
                     showArrow={false}
                     allowClear
@@ -1154,7 +1154,7 @@ export default function Taskexpenses() {
                             value={item.currency_id}
                             key={item.currency_id}
                           >
-                            {item.currency_name}
+                            {item.currency_code}
                           </Select.Option>
                         );
                       })}
@@ -1169,7 +1169,7 @@ export default function Taskexpenses() {
           title: "Exchange",
           dataIndex: "job_task_expense_exp_exch",
           key: "job_task_expense_exp_exch",
-          width: 20,
+          width: "5%",
           align: "right",
           className: "thirdrow",
           render: (data, index) => {
@@ -1185,6 +1185,7 @@ export default function Taskexpenses() {
                   rules={[{ required: true, message: "Required" }]}
                 >
                   <InputNumber
+                    // style={{ minWidth: "70px" }}
                     bordered={false}
                     // className="text_right"
                     value={index.job_task_expense_exp_exch}
@@ -1212,7 +1213,7 @@ export default function Taskexpenses() {
           title: "Amount Fx",
           dataIndex: "job_task_expense_exp_amountfx",
           key: "job_task_expense_exp_amountfx",
-          width: 40,
+          width: "10%",
           align: "right",
           className: "thirdrow",
           render: (data, index) => {
@@ -1256,7 +1257,7 @@ export default function Taskexpenses() {
           title: "Amount Lx",
           dataIndex: "job_task_expense_exp_amountlx",
           key: "job_task_expense_exp_amountlx",
-          width: 40,
+          width: "10%",
           align: "right",
           className: "thirdrow",
           render: (data, index) => {
@@ -1273,7 +1274,7 @@ export default function Taskexpenses() {
                 >
                   <InputNumber
                     bordered={false}
-                    className=" input_bg"
+                    className="input_bg"
                     value={index.job_task_expense_exp_amountlx}
                     onChange={(value) => {
                       console.log(" input numberevent ", value, index.key);

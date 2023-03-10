@@ -3,7 +3,7 @@ import PublicFetch from "../../utils/PublicFetch";
 import { ROUTES } from "../../routes/index";
 import { useNavigate } from "react-router-dom";
 import Avatar from "../../components/img/img_avatar.png";
-import HeaderIcon from "../../components/img/HeaderIcon.png"
+import HeaderIcon from "../../components/img/HeaderIcon.png";
 import { IoMdNotifications } from "react-icons/io";
 import { TfiKey } from "react-icons/tfi";
 import { HiLogout } from "react-icons/hi";
@@ -89,6 +89,37 @@ const Header = () => {
     },
   ];
 
+  const notif = [
+    {
+      key: "1",
+      label: (
+        <>
+          <div>
+            <div>
+              <p>kifherufhefhejffhjefjehfjehf</p>
+            </div>
+          </div>
+        </>
+      ),
+    },
+    {
+      key: "2",
+      label: (
+        <>
+          <div>
+            <div>
+              <p>kifherufhefhejffhjefjehfjehf</p>
+            </div>
+          </div>
+        </>
+      ),
+    },
+  ];
+
+  const notificationProps = {
+    notif,
+  };
+
   const menuProps = {
     items,
     onClick: handleDropdownClick,
@@ -99,11 +130,21 @@ const Header = () => {
       <div
         className={`${styles.headerContainer} d-flex align-items-center justify-content-around`}
       >
-        <IoMdNotifications
-          size={22}
-          color="#6B728E"
-          className={`${styles.NotificationIcon}`}
-        />
+        <div className={`${styles.ImgWrappe2r}`}>
+          {/* <Dropdown
+            menu={menuProps}
+            placement="bottom"
+            overlayClassName="dropdwnHeader"
+          >
+            <Space> */}
+          <IoMdNotifications
+            size={22}
+            color="#6B728E"
+            className={`${styles.NotificationIcon}`}
+          />
+          {/* </Space> */}
+          {/* </Dropdown> */}
+        </div>
         <div className={`${styles.ImgWrapper}`}>
           <Dropdown
             menu={menuProps}
@@ -111,7 +152,7 @@ const Header = () => {
             overlayClassName="dropdwnHeader"
           >
             {/* <Space> */}
-            <img src={HeaderIcon} alt="..."/>
+            <img src={HeaderIcon} alt="..." />
             {/* </Space> */}
           </Dropdown>
         </div>

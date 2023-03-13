@@ -890,6 +890,26 @@ export default function Sidebar({ showSidebar }) {
                               <div className="ms-4">Agent Report</div>
                             </NavLink>
                           </li>
+                          <li className="nav-text ">
+                            <NavLink
+                              className={({ isActive }) =>
+                                isActive ? "active-link" : "link"
+                              }
+                              to={ROUTES.COST_AND_EXPENSE_REPORT}
+                            >
+                              <div className="ms-4">Cost And Expense Report</div>
+                            </NavLink>
+                          </li>
+                          <li className="nav-text ">
+                            <NavLink
+                              className={({ isActive }) =>
+                                isActive ? "active-link" : "link"
+                              }
+                              to={ROUTES.MONTHLY_REPORT}
+                            >
+                              <div className="ms-4">Monthly Report</div>
+                            </NavLink>
+                          </li>
                         </>
                       )}
                       {checkPermission("cost_and_expense") && (

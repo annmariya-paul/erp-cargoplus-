@@ -90,8 +90,10 @@ function ExpenseCategory() {
             {/* <div className="editcolor "> */}
             <FaEdit
               fontSize={17}
-              onClick={() => 
-                expEdit(index)
+              onClick={() => { expEdit(index)
+                setUniqueEditName(false);}
+               
+
               }   // handleEditedclick(index);
             />
               <div
@@ -393,7 +395,9 @@ function ExpenseCategory() {
                       <Button
                         onClick={() => {
                           setAddPopup(true);
+                          setUniqueName(false);
                           // setInvoice_id(index.invoice_id);
+                          AddForm.resetFields();
                         }}
                         btnType="save"
                       >
@@ -649,6 +653,7 @@ function ExpenseCategory() {
                                 // handleEditedclick();
                                 // handleupdate();
                                 handleviewtoedit(viewexp);
+                                setUniqueEditName(false);
                                 setViewPopup(false);
                               }}
                             >

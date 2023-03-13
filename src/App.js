@@ -549,6 +549,9 @@ function App() {
             <Route path={ROUTES.CREDIT_NOTE_TYPE} element={<ProtectedRoute />}>
               <Route index element={<CreditNoteType />} />
             </Route>
+            <Route path={ROUTES.BANK_DETAILS} element={<ProtectedRoute/>}>
+              <Route index element={<Bank/>}/>
+            </Route>
 
             {/* </Route> */}
           </Route>

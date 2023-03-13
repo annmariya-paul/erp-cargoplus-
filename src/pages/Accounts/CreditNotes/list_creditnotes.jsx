@@ -38,7 +38,7 @@ function Productlist() {
   const [productView, setProductView] = useState(false);
   const [successPopup, setSuccessPopup] = useState(false);
   const [error, setError] = useState(false);
-  const [products, setProducts] = useState([]);
+ 
   const [modalOpportunity, setModalOpportunity] = useState(false);
   const [productid, setProductID] = useState();
   console.log("pr id from state", productid);
@@ -169,10 +169,10 @@ function Productlist() {
     <div>
       <div className="container-fluid lead_list my-3 py-3">
         <div>
-          {/* {product listing starts section one} */}
+         
           <div className="row flex-wrap">
             <div className="col">
-              <h5 className="lead_text">Products</h5>
+              <h5 className="lead_text">Credit Notes</h5>
             </div>
          
           </div>

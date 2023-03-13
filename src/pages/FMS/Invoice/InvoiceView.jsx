@@ -285,9 +285,9 @@ function InvoiceView() {
             </div>
 
             <div className="row  mb-3">
-              <div className="col-md-6 col-12 mt-1">
-                <div className="content-tabs-new  justify-content  mb-2 ">
-                  <div className="row mt-1 mb-2">
+              <div className="col-md-6 col-12 mt-1 ">
+                <div className="content-tabs-new  justify-content  mb-2 ms-4">
+                  <div className="row mt-1 mb-2 ">
                     <h5 className="lead_text">Shipment Details</h5>
                   </div>
                   <div className="col-12 d-flex">

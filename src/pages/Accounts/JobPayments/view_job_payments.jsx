@@ -3,10 +3,36 @@ import { FiEdit } from "react-icons/fi";
 import Button from "../../../components/button/button";
 import { useNavigate, useParams } from "react-router-dom";
 import { ROUTES } from "../../../routes";
-
+import { ACCOUNTS } from "../../../api/bootapi";
+import { useState } from "react";
+import PublicFetch from "../../../utils/PublicFetch";
+import { useEffect } from "react";
 
 export default function ViewJobPayment() {
-    const navigate = useNavigate();
+  const { id } = useParams();
+  console.log("idddddddddddddddd", id);
+  const navigate = useNavigate();
+  const [jobPayData, setJobPayData] = useState();
+  console.log("jobpay", jobPayData);
+
+  // {function to fetch one Job Payment data - Ann - 13/3/23}
+  const getOneJobPayment = () => {
+    PublicFetch.get(`${ACCOUNTS}/job-payments/${id}`)
+      .then((res) => {
+        console.log("single brand value", res);
+        if (res.data.success) {
+          console.log("success job pay", res.data.data);
+          setJobPayData(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+  useEffect(() => {
+    getOneJobPayment();
+  }, []);
+
   return (
     <>
       <div className=" container-fluid view_quotation  p-3 px-4">

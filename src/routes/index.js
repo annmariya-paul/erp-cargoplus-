@@ -102,31 +102,30 @@ const ROUTES = {
   COST_AND_EXPENSE_REPORT: "/cost_and_expense_report",
   INVOICE_REPORT:"/invoice_report",
   MONTHLY_REPORT:"/monthly_report",
+  INVOICE_REPORT: "/invoice_report",
+  ENQUIRY_REPORT: "/enquiry_report",
 
   // Accounts
   PAYMEMENT_MODE: "/payment_mode",
   ADD_PURCHASE: "/add_purchase",
   PURCHASE: "/purchase",
+  
 
   //  Accounts
   DAILY_EXPENSE: "/daily_expense",
   CREATE_EXPENSE: "/create_expense",
   EXPENSE_CATEGORY: "/expense_category",
-  EDIT_EXPENSE:"/edit_expense",
-  EDIT_EXPENSE_ID:"/edit_expense/:id",
+  EDIT_EXPENSE: "/edit_expense",
+  EDIT_EXPENSE_ID: "/edit_expense/:id",
   /*payments routes */
   PAYMENTS: "/payments",
   ADD_PAYMENTS: "/add_payments",
-  VIEW_PURCHASE:"/view_purchase",
-  VIEW_PURCHASE_ID:"/view_purchase/:id",
-  EDIT_PURCHASE:"/edit_purchase",
-  EDIT_PURCHASE_ID:"/edit_purchase/:id",
-  PRINT_PURCHASE:"/print_purchase",
-  
-  JOB_PAYMENTS:"/job_payments",
-  ADD_JOBPAYMENT:"/add_job_payment",
-  EDIT_JOBPAYMENT:"/edit_job_payment",
-  VIEW_JOBPAYMENT:"/view_job_payment",
+  VIEW_PURCHASE: "/view_purchase",
+  VIEW_PURCHASE_ID: "/view_purchase/:id",
+  EDIT_PURCHASE: "/edit_purchase",
+  EDIT_PURCHASE_ID: "/edit_purchase/:id",
+  PRINT_PURCHASE: "/print_purchase",
+
   VIEW_PAYMENTS_INDEX: "/view_payments",
   VIEW_PAYMENT: "/view_payments/:payment_id",
   EDIT_PAYMENTS_INDEX: "/edit_payments",
@@ -137,7 +136,10 @@ const ROUTES = {
   ADD_JOBPAYMENT: "/add_job_payment",
   EDIT_JOBPAYMENT: "/edit_job_payment",
   VIEW_JOBPAYMENT: "/view_job_payment",
+  VIEW_JOBPAYMENT_ID:"/view_job_payment/:id",
 
+  //  Accounts -> Settings
+  CREDIT_NOTE_TYPE: "/credit_note_type",
   BANK_DETAILS: "/list_bankdetails",
 
 

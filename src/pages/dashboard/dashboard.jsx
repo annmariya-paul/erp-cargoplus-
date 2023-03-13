@@ -12,44 +12,46 @@ import { CRM_BASE_URL, CRM_BASE_URL_FMS } from "../../api/bootapi";
 import PublicFetch from "../../utils/PublicFetch";
 import { useEffect } from "react";
 import TableData from "../../components/table/table_data";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../../routes";
 
 function Dashboard() {
- const [leadCount,setLeadCount] = useState();
- const [quotationCount,setQuotationCount] = useState();
- const [jobcount,setJobCount] = useState();
- console.log("count",leadCount);
+  const navigate = useNavigate();
+  const [leadCount, setLeadCount] = useState();
+  const [quotationCount, setQuotationCount] = useState();
+  const [jobcount, setJobCount] = useState();
+  const [invoiceCount, setInvoiceCount] = useState();
+  console.log("count", leadCount);
 
- const GetLeadData = () => {
-   PublicFetch.get(
-     `${CRM_BASE_URL}/lead?startIndex=0&noOfItems=10`
-   )
-     .then((res) => {
-       if (res?.data?.success) {
-         setLeadCount(res?.data?.data?.totalCount);
-       } else {
-         console.log("Failed to load data");
-       }
-     })
-     .catch((err) => {
-       console.log("Errror while getting data", err);
-     });
- };
+  //  const GetLeadData = () => {
+  //    PublicFetch.get(
+  //      `${CRM_BASE_URL}/lead?startIndex=0&noOfItems=10`
+  //    )
+  //      .then((res) => {
+  //        if (res?.data?.success) {
+  //          setLeadCount(res?.data?.data?.totalCount);
+  //        } else {
+  //          console.log("Failed to load data");
+  //        }
+  //      })
+  //      .catch((err) => {
+  //        console.log("Errror while getting data", err);
+  //      });
+  //  };
 
- const getAllQuotation = () => {
-   PublicFetch.get(
-     `${CRM_BASE_URL_FMS}/quotation?startIndex=0&noOfItems=10`
-   )
-     .then((res) => {
-       console.log("Response", res);
-       if (res.data.success) {
-         console.log("success", res.data.data);
-         setQuotationCount(res.data.data.totalCount);
-       }
-     })
-     .catch((err) => {
-       console.log("Error", err);
-     });
- };
+  const getAllQuotation = () => {
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/quotation?startIndex=0&noOfItems=10`)
+      .then((res) => {
+        console.log("Response", res);
+        if (res.data.success) {
+          console.log("success", res.data.data);
+          setQuotationCount(res.data.data.totalCount);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
   const getAllJobs = () => {
     PublicFetch.get(`${CRM_BASE_URL_FMS}/job?startIndex=0&noOfItems=10`)
       .then((res) => {
@@ -63,11 +65,27 @@ function Dashboard() {
         console.log("Error", err);
       });
   };
- useEffect(() => {
-   GetLeadData();
-   getAllQuotation();
-   getAllJobs();
- }, []);
+
+  const getAllInvoice = () => {
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/invoice`)
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          console.log("success of res", res?.data?.data?.length);
+          setInvoiceCount(res?.data?.data?.length);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+  useEffect(() => {
+    //  GetLeadData();
+    getAllQuotation();
+    getAllJobs();
+    getAllInvoice();
+    setInvoiceCount();
+  }, []);
 
   const tableColumns = [
     {
@@ -157,18 +175,15 @@ function Dashboard() {
           <div className={`${styles.summaryWrapper}`}>
             <Card className={`${styles.cartItem}`}>
               <div>
-                <div className={`text-center ${styles.cardTitle}`}>Lead</div>
-                <div className={`text-center ${styles.cardSubText}`}>
-                  {leadCount}
-                </div>
-              </div>
-            </Card>
-            <Card className={`${styles.cartItem}`}>
-              <div>
                 <div className={`text-center ${styles.cardTitle}`}>
                   Quotations
                 </div>
-                <div className={`text-center ${styles.cardSubText}`}>
+                <div
+                  onClick={() => {
+                    navigate(`${ROUTES.QUATATIONS}`);
+                  }}
+                  className={`text-center ${styles.cardSubText}`}
+                >
                   {quotationCount}
                 </div>
               </div>
@@ -176,8 +191,28 @@ function Dashboard() {
             <Card className={`${styles.cartItem}`}>
               <div>
                 <div className={`text-center ${styles.cardTitle}`}>Jobs</div>
-                <div className={`text-center ${styles.cardSubText}`}>
+                <div
+                  onClick={() => {
+                    navigate(`${ROUTES.LIST_JOB}`);
+                  }}
+                  className={`text-center ${styles.cardSubText}`}
+                >
                   {jobcount}
+                </div>
+              </div>
+            </Card>
+            <Card className={`${styles.cartItem}`}>
+              <div>
+                <div className={`text-center ${styles.cardTitle}`}>
+                  Invoices
+                </div>
+                <div
+                  onClick={() => {
+                    navigate(`${ROUTES.INVOICE_LIST}`);
+                  }}
+                  className={`text-center ${styles.cardSubText}`}
+                >
+                  {invoiceCount}
                 </div>
               </div>
             </Card>
@@ -225,6 +260,11 @@ function Dashboard() {
                   style={{ height: "450px" }}
                   className="card rounded shadow-sm"
                 >
+                  <div className="row">
+                    <div className="col-12 d-flex justify-content-center pt-3">
+                      <label>Agent Wise Cost</label>
+                    </div>
+                  </div>
                   <BarChart />
                 </div>
               </div>
@@ -247,6 +287,11 @@ function Dashboard() {
                   style={{ height: "450px" }}
                   className="card rounded shadow-sm"
                 >
+                  <div className="row">
+                    <div className="col-12 d-flex justify-content-center pt-3">
+                      <label>job by Agent</label>
+                    </div>
+                  </div>
                   <BarChart />
                 </div>
               </div>

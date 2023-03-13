@@ -303,7 +303,11 @@ export default function ViewQuotation() {
 
             <div className="row  mt-2 px-1">
               <div className="col-md-6 col-12 mt-1">
+<<<<<<< HEAD
                 <div className="content-tabs-new row justify-content ms-1 mb-2 me-2">
+=======
+                <div className="content-tabs-new  justify-content ms-1 mb-3 me-3">
+>>>>>>> 8d50173de15bf5cb3102f4b0b728b95008bd6095
                   <div className="row mt-3 mb-3">
                     <h5 className="lead_text">Transportation</h5>
                   </div>
@@ -362,6 +366,7 @@ export default function ViewQuotation() {
                 </div>
               </div>
 
+<<<<<<< HEAD
               <div className="col-md-6 col-12 mt-1">
                 <div className="content-tabs-new row justify-content  mb-2 me-1">
                   <div className="row mt-3 mb-2">
@@ -375,6 +380,13 @@ export default function ViewQuotation() {
                       <p className="modal-view-data">
                         {allqoutation?.quotation_cargo_type}
                       </p>
+=======
+              <div className="row mt-2 px-1">
+                <div className="col-md-6 col-12 ">
+                  <div className="content-tabs-new px-2  ms-1 me-3">
+                    <div className="row mt-2 mb-1">
+                      <h5 className="lead_text">Payment Info</h5>
+>>>>>>> 8d50173de15bf5cb3102f4b0b728b95008bd6095
                     </div>
                   </div>
 
@@ -398,7 +410,13 @@ export default function ViewQuotation() {
                         {allqoutation?.crm_v1_units?.unit_name}
                       </p>
                     </div>
+<<<<<<< HEAD
                   </div>
+=======
+                    <div className="col-12 d-flex ">
+                      <div className="col-4">Exchange Rate </div>
+                      <div className="col-1">:</div>
+>>>>>>> 8d50173de15bf5cb3102f4b0b728b95008bd6095
 
                   <div className="col-12 d-flex">
                     <div className="col-4">Gross wt </div>
@@ -425,6 +443,7 @@ export default function ViewQuotation() {
               </div>
             </div>
 
+<<<<<<< HEAD
             <div className="row mt-2 px-1 ">
               <div className="col-md-6 col-12 mt-1">
                 <div className="content-tabs-new row justify-content ms-1 mb-3 me-2">
@@ -456,6 +475,26 @@ export default function ViewQuotation() {
                       </p>
                     </div>
                   </div>
+=======
+                <div className="col-md-6 col-12 ">
+                  <div className="content-tabs-new px-2  me-3 ms-1">
+                    <div className="row mt-3 mb-2 ">
+                      <h5 className="lead_text">Attachments</h5>
+                    </div>
+                     <div className="row mb-4 pb-4 ms-1 ">
+
+                      <div className="col-3 boldhd ">Attachments </div>
+                      <div className="col-1">:</div>
+
+                      <div className="col-8">
+                        <p className="modal-view-data">
+                          {allqoutation?.quotation_docs}
+                        </p>
+                      </div>
+                    </div>
+                     
+                  
+>>>>>>> 8d50173de15bf5cb3102f4b0b728b95008bd6095
 
                   <div className="col-12 d-flex">
                     <div className="col-4">Exchange Rate</div>
@@ -470,6 +509,7 @@ export default function ViewQuotation() {
                 </div>
               </div>
 
+<<<<<<< HEAD
               <div className="col-md-6 col-12 mt-1">
                 <div className="content-tabs-new row justify-content  mb-3 me-1">
                   <div className="row mt-3 mb-2">
@@ -478,6 +518,10 @@ export default function ViewQuotation() {
                   <div className="col-12 d-flex pb-5 mb-4">
                     <div className="col-4">Attachments</div>
                     <div className="col-1">:</div>
+=======
+              <div className="row mt-2 me-4 mb-1 pt-0 ">
+                <div className="content-tabs-tablenew  justify-content m-3 ">
+>>>>>>> 8d50173de15bf5cb3102f4b0b728b95008bd6095
 
                     <div className="col-7">
                       <p className="modal-view-data">
@@ -504,9 +548,10 @@ export default function ViewQuotation() {
                           columns={progress}
                           data={tabledata}
                           bordered
+                          custom_table_css="table_job_list"
                         />
                       </div>
-                      <div className="d-flex justify-content-end mt-4 mx-3 ">
+                      <div className="d-flex justify-content-end  mx-3 ">
                         <div className="col-lg-2 col-sm-4 col-xs-3 d-flex justify-content-end mt-3 me-2">
                           <p style={{ fontWeight: 500 }}>Grand Total : </p>
                         </div>
@@ -520,6 +565,7 @@ export default function ViewQuotation() {
                     </Panel>
                   </Collapse>
                 </div>
+
               </div>
             </div>
           </div>

@@ -13,6 +13,8 @@ import MyPagination from "../../../../components/Pagination/MyPagination";
 import TableData from "../../../../components/table/table_data";
 import PublicFetch from "../../../../utils/PublicFetch";
 import Custom_model from "../../../../components/custom_modal/custom_model";
+import CheckUnique from "../../../../check Unique/CheckUnique";
+import { UniqueErrorMsg } from "../../../../ErrorMessages/UniqueErrorMessage";
 
 function ExpenseCategory() {
   const [AddForm] = Form.useForm();
@@ -27,6 +29,8 @@ function ExpenseCategory() {
   const [invoiceData, setInvoiceData] = useState();
   const [AddPopup, setAddPopup] = useState(false);
   const [editPopup, setEditPopup] = useState(false);
+  const [uniqueEditName, setUniqueEditName] = useState(false);
+  const [editUniqueName, setEditUniqueName] = useState();
   const [viewPopup, setViewPopup] = useState(false);
   const [invoice_id, setInvoice_id] = useState();
   const [successPopup, setSuccessPopup] = useState(false);
@@ -34,6 +38,9 @@ function ExpenseCategory() {
   const [category_id, setCategory_Id] = useState();
   const [editcategoryid,seteditcategoryid] =useState();
   const[totallocation,settotallocation]=useState();
+  const [uniqueName, setUniqueName] = useState(false);
+  const [categoryName, setCategoryName] = useState(false);
+  const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
   const columns = [
     {
       title: "Slno",
@@ -83,8 +90,10 @@ function ExpenseCategory() {
             {/* <div className="editcolor "> */}
             <FaEdit
               fontSize={17}
-              onClick={() => 
-                expEdit(index)
+              onClick={() => { expEdit(index)
+                setUniqueEditName(false);}
+               
+
               }   // handleEditedclick(index);
             />
               <div
@@ -386,7 +395,9 @@ function ExpenseCategory() {
                       <Button
                         onClick={() => {
                           setAddPopup(true);
+                          setUniqueName(false);
                           // setInvoice_id(index.invoice_id);
+                          AddForm.resetFields();
                         }}
                         btnType="save"
                       >
@@ -429,7 +440,7 @@ function ExpenseCategory() {
               list_content={
                 <div>
                   <div className="container">
-                    <h4 style={{ color: "#0891d1" }}>Create Category</h4>
+                    <h4 style={{ color: "#0891d1" }}>Create Expense Category</h4>
                     <Form
                       form={AddForm}
                       onFinish={(value) => {
@@ -452,8 +463,29 @@ function ExpenseCategory() {
                                   ]}
                                   name="name"
                                 >
-                                  <InputType />
+                                  <InputType 
+                                   onChange={(e) => {
+
+                                    setCategoryName(e.target.value);
+                                  
+                                    setUniqueName(false);
+                                  }}
+                                  onBlur={async () => {
+                                    let n = await CheckUnique({
+                                      type: "expensecategoryname",
+                                      value: categoryName,
+                                    });
+                                    setUniqueName(n);
+                                  }}
+                                  
+                                  
+                                  />
                                 </Form.Item>
+                                {uniqueName ? (
+                      <p style={{ color: "red" }}>
+                      Expense category name {uniqueErrMsg.UniqueErrName}
+                      </p>
+                    ) : null}
                               </div>
                             </div>
                           </div>
@@ -502,7 +534,7 @@ function ExpenseCategory() {
               list_content={
                 <div>
                   <div className="container">
-                    <h4 style={{ color: "#0891d1" }}>Edit Category</h4>
+                    <h4 style={{ color: "#0891d1" }}>Edit Expense Category</h4>
                     <Form
                       form={editForm}
                       onFinish={(value) => {
@@ -532,8 +564,31 @@ function ExpenseCategory() {
                                   <InputType value={editexpname}
                                   onChange={(e) => {
                                     setEditexpname(e.target.value);
-                                  }} />
+                                    setUniqueEditName(false);
+                          
+                                  }}
+                                  
+                                  onBlur={ async () => {
+                         
+                                    if (editUniqueName !== editexpname) {
+                                      let a = await CheckUnique({type:"expensecategoryname",value:editexpname})
+                                   
+                                      setUniqueEditName(a);
+                                    }
+                                 
+                                  }}
+                                  
+                                  
+                                  />
                                 </Form.Item>
+
+                                {uniqueEditName ? (
+                      <p style={{ color: "red" }}>
+                       Expense category name {uniqueErrMsg.UniqueErrName}
+                      </p>
+                    ) : null}
+                   
+
                               </div>
                             </div>
                           </div>
@@ -598,6 +653,7 @@ function ExpenseCategory() {
                                 // handleEditedclick();
                                 // handleupdate();
                                 handleviewtoedit(viewexp);
+                                setUniqueEditName(false);
                                 setViewPopup(false);
                               }}
                             >

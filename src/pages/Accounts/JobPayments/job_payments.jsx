@@ -1,5 +1,6 @@
 import { Input, Select } from "antd";
 import React, { useState } from "react";
+import moment from "moment";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { MdPageview } from "react-icons/md";
 import { Link } from "react-router-dom";
@@ -7,21 +8,54 @@ import { ROUTES } from "../../../routes";
 import Button from "../../../components/button/button";
 import TableData from "../../../components/table/table_data";
 import Custom_model from "../../../components/custom_modal/custom_model";
+import { ACCOUNTS } from "../../../api/bootapi";
+import { useEffect } from "react";
+import PublicFetch from "../../../utils/PublicFetch";
 
 export default function JobPayments() {
   const [serialNo, setserialNo] = useState(1);
+  const [allJobPay,setAllJobPay] = useState();
+
+  const getAllJobPayments = () => {
+    PublicFetch.get(`${ACCOUNTS}/job-payments?startIndex=0&noOfItems=10`)
+      .then((res) => {
+        console.log("Response", res);
+        if (res.data.success) {
+          console.log("success of job", res.data.data);
+          let temp = [];
+          res.data.data.forEach((item, index) => {
+            temp.push({
+              job_pay_id:item.job_pay_id,
+              job_pay_voucher_no: item.job_pay_voucher_no,
+              job_pay_voucher_date:item.job_pay_voucher_date,
+              job_no: item.fms_v1_jobs.job_number,
+              job_pay_lead: item.crm_v1_leads.lead_customer_name,
+              advance_amount: item.job_pay_advance_amount_fx,
+            });
+          });
+          setAllJobPay(temp);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+  useEffect(()=>{getAllJobPayments();},[])
 
   const columns = [
     {
       title: "Sl. No.",
       key: "index",
+      width: "8%",
       render: (value, item, index) => serialNo + index,
       align: "center",
     },
     {
       title: "VOUCHER NO",
-      dataIndex: "voucher_no",
-      key: "voucher_no",
+      dataIndex: "job_pay_voucher_no",
+      key: "job_pay_voucher_no",
+      width: "13%",
       //   filteredValue: [searchedText],
       //   onFilter: (value, record) => {
       //     return String(record.freight_type_name  || nameSearch)
@@ -32,25 +66,33 @@ export default function JobPayments() {
     },
     {
       title: "VOUCHER DATE",
-      dataIndex: "voucher_date",
-      key: "voucher_date",
+      dataIndex: "job_pay_voucher_date",
+      key: "job_pay_voucher_date",
+      width: "14%",
+      render: (record) => {
+        return (
+          <div>{moment(record.job_pay_voucher_date).format("DD-MM-YYYY")}</div>
+        );
+      },
       align: "center",
     },
     {
       title: "JOB NO",
       dataIndex: "job_no",
+      width: "16%",
       key: "job_no",
       align: "center",
     },
     {
       title: "LEAD",
-      dataIndex: "lead",
-      key: "lead",
+      dataIndex: "job_pay_lead",
+      key: "job_pay_lead",
     },
     {
       title: "ADVANCE AMOUNT",
       dataIndex: "advance_amount",
       key: "advance_amount",
+      width: "18%",
       align: "center",
     },
     {
@@ -69,7 +111,7 @@ export default function JobPayments() {
                 <FaEdit />
               </div>
             </Link>
-            <Link to={ROUTES.VIEW_JOBPAYMENT}>
+            <Link to={`${ROUTES.VIEW_JOBPAYMENT}/${index.job_pay_id}`}>
               {" "}
               <div
                 className="actionEdit"
@@ -158,7 +200,7 @@ export default function JobPayments() {
         <div className="datatable">
           <TableData
             // data={getData(current, pageSize)}
-            data={data}
+            data={allJobPay}
             columns={columns}
             custom_table_css="table_lead_list"
           />

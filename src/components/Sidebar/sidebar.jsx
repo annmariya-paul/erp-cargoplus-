@@ -74,7 +74,9 @@ export default function Sidebar({ showSidebar }) {
               <li className="navbar-toggle nav-close" onClick={showSidebar}>
                 <div to="" className="nav-link">
                   {" "}
-                  <AiOutlineMenu style={{ fontSize: "25px", color: "white" }} />
+                  <AiOutlineMenu
+                    style={{ fontSize: "25px", color: "#16528d" }}
+                  />
                   {/* <i
                     className=""
                     style={{ fontSize: "25px", color: "white" }}
@@ -910,6 +912,30 @@ export default function Sidebar({ showSidebar }) {
                           </li>
                         </>
                       )}
+                      {checkPermission("cost_and_expense") && (
+                        <li className="nav-text ">
+                          <NavLink
+                            className={({ isActive }) =>
+                              isActive ? "active-link" : "link"
+                            }
+                            to={ROUTES.COST_AND_EXPENSE_REPORT}
+                          >
+                            <div className="ms-4">Cost And Expense Report</div>
+                          </NavLink>
+                        </li>
+                      )}
+                      {checkPermission("enquiry_report") && (
+                        <li className="nav-text ">
+                          <NavLink
+                            className={({ isActive }) =>
+                              isActive ? "active-link" : "link"
+                            }
+                            to={ROUTES.ENQUIRY_REPORT}
+                          >
+                            <div className=" ms-4">Enquiry Report</div>
+                          </NavLink>
+                        </li>
+                      )}
                     </>
                   ) : (
                     ""
@@ -1002,18 +1028,18 @@ export default function Sidebar({ showSidebar }) {
                         </li>
                       )}
                       {checkPermission("paymentmode") && (
-                    <li className="nav-text ">
-                      <NavLink
-                        className={({ isActive }) =>
-                          isActive ? "active-link" : "link"
-                        }
-                        to={ROUTES.PAYMEMENT_MODE}
-                      >
-                        <div className=" ms-5">Payment Mode</div>
-                      </NavLink>
-                    </li>
-                  )}
-                  {/* {checkPermission("add_purchase") && (
+                        <li className="nav-text ">
+                          <NavLink
+                            className={({ isActive }) =>
+                              isActive ? "active-link" : "link"
+                            }
+                            to={ROUTES.PAYMEMENT_MODE}
+                          >
+                            <div className=" ms-5">Payment Mode</div>
+                          </NavLink>
+                        </li>
+                      )}
+                      {/* {checkPermission("add_purchase") && (
                     <li className="nav-text">
                       <NavLink
                         className={({ isActive }) =>
@@ -1025,7 +1051,6 @@ export default function Sidebar({ showSidebar }) {
                       </NavLink>
                     </li>
                   )} */}
-                      
 
                       {checkPermission("purchase") && (
                         <li className="nav-text">
@@ -1040,18 +1065,18 @@ export default function Sidebar({ showSidebar }) {
                         </li>
                       )}
 
-                    {checkPermission("bankdetails") && (
-                    <li className="nav-text">
-                      <NavLink
-                        className={({ isActive }) =>
-                          isActive ? "active-link" : "link"
-                        }
-                        to={ROUTES.BANK_DETAILS}
-                      >
-                        <div className=" ms-5">Bank Details</div>
-                      </NavLink>
-                    </li>
-                  )}
+                      {checkPermission("bankdetails") && (
+                        <li className="nav-text">
+                          <NavLink
+                            className={({ isActive }) =>
+                              isActive ? "active-link" : "link"
+                            }
+                            to={ROUTES.BANK_DETAILS}
+                          >
+                            <div className=" ms-5">Bank Details</div>
+                          </NavLink>
+                        </li>
+                      )}
                     </>
                   ) : (
                     ""
@@ -1069,7 +1094,6 @@ export default function Sidebar({ showSidebar }) {
                     </li>
                   )}
 
-                
                   {checkPermission("job_payments") && (
                     <li className="nav-text ">
                       <NavLink

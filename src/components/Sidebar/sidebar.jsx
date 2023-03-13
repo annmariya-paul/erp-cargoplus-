@@ -74,7 +74,9 @@ export default function Sidebar({ showSidebar }) {
               <li className="navbar-toggle nav-close" onClick={showSidebar}>
                 <div to="" className="nav-link">
                   {" "}
-                  <AiOutlineMenu style={{ fontSize: "25px", color: "white" }} />
+                  <AiOutlineMenu
+                    style={{ fontSize: "25px", color: "#16528d" }}
+                  />
                   {/* <i
                     className=""
                     style={{ fontSize: "25px", color: "white" }}
@@ -1006,18 +1008,18 @@ export default function Sidebar({ showSidebar }) {
                         </li>
                       )}
                       {checkPermission("paymentmode") && (
-                    <li className="nav-text ">
-                      <NavLink
-                        className={({ isActive }) =>
-                          isActive ? "active-link" : "link"
-                        }
-                        to={ROUTES.PAYMEMENT_MODE}
-                      >
-                        <div className=" ms-5">Payment Mode</div>
-                      </NavLink>
-                    </li>
-                  )}
-                  {/* {checkPermission("add_purchase") && (
+                        <li className="nav-text ">
+                          <NavLink
+                            className={({ isActive }) =>
+                              isActive ? "active-link" : "link"
+                            }
+                            to={ROUTES.PAYMEMENT_MODE}
+                          >
+                            <div className=" ms-5">Payment Mode</div>
+                          </NavLink>
+                        </li>
+                      )}
+                      {/* {checkPermission("add_purchase") && (
                     <li className="nav-text">
                       <NavLink
                         className={({ isActive }) =>
@@ -1029,7 +1031,6 @@ export default function Sidebar({ showSidebar }) {
                       </NavLink>
                     </li>
                   )} */}
-                      
 
                       {checkPermission("purchase") && (
                         <li className="nav-text">

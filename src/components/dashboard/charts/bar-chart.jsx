@@ -19,13 +19,13 @@ function BarChart({ layout = "horizontal" }) {
       reverse={false}
       valueScale={{ type: "linear" }}
       indexScale={{ type: "band", round: true }}
-      colors={{ scheme: "paired" }}
+      colors={{ scheme: "set3" }}
       colorBy="keys"
       borderWidth={1}
       borderRadius={0}
       borderColor={{
         from: "color",
-        modifiers: [["darker", 1.6]],
+        modifiers: [["darker", 0.5]],
       }}
       axisTop={{
         legend: "",

@@ -581,7 +581,7 @@ export default function ViewJob() {
                     <h5 className="lead_text">Attachments</h5>
                   </div>
 
-                  <div className="col-xl-6 col-sm-12 d-flex mb-5 ms-3">
+                  <div className="col-xl-6 col-sm-12 d-flex mb-4 pb-2 ms-3">
                     <div className="col-5 boldhd">Attachments </div>
                     <div className="col-1">:</div>
 

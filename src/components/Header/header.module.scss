@@ -1,45 +1,51 @@
 .ImgWrapper {
-    height: 50px;
-    width: 50px;
-    border-radius: 50%;
-    overflow: hidden;
-    cursor: pointer;
- 
-    img {
-       height: 100%;
-       width: 100%;
-    }
- }
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
 
- .headerContainer {
-    width: 8rem;
- }
+  img {
+    height: 100%;
+    width: 100%;
+  }
+}
 
- .NotificationIcon {
-    cursor: pointer;
- }
+.headerContainer {
+  width: 8rem;
+}
 
- .DrpdwnUser {
-    display: flex;
-    justify-content: end;
-    color: white;
-    font-weight: 500;
-    font-size: 14px;
- }
+.NotificationIcon {
+  cursor: pointer;
+}
+
+.DrpdwnUser {
+  display: flex;
+  justify-content: end;
+  color: white;
+  font-weight: 500;
+  font-size: 14px;
+}
 
 .Welcome {
-    color: #b5b0cf;
-    font-size: 12px;
+  color: #b5b0cf;
+  font-size: 12px;
 }
 .HorizontalRule {
-    color: #b5b0cf;
-    height: 3px !important;
+  color: #b5b0cf;
+  height: 3px !important;
 }
 
 .HeaderOptions {
-    display: flex;
-    justify-content: end;
-    color: white;
-    font-size: 14px;
-    font-weight: 400;
+  display: flex;
+  justify-content: end;
+  color: white;
+  font-size: 14px;
+  font-weight: 400;
+}
+.notifi_btn_style:focus {
+  color: #fff;
+  background-color: white !important;
+  border-color: white !important;
+  box-shadow: 0 0 0 0.25rem rgb(49 132 253 / 50%);
 }

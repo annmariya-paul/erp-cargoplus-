@@ -101,6 +101,7 @@ const ROUTES = {
   AGENT_REPORT: "/agentReport",
   COST_AND_EXPENSE_REPORT: "/cost_and_expense_report",
   INVOICE_REPORT: "/invoice_report",
+  ENQUIRY_REPORT: "/enquiry_report",
 
   // Accounts
   PAYMEMENT_MODE: "/payment_mode",
@@ -135,9 +136,8 @@ const ROUTES = {
   VIEW_JOBPAYMENT_ID:"/view_job_payment/:id",
 
   //  Accounts -> Settings
-  CREDIT_NOTE_TYPE:"/credit_note_type",
+  CREDIT_NOTE_TYPE: "/credit_note_type",
   BANK_DETAILS: "/list_bankdetails",
-  ENQUIRY_REPORT: "/enquiry_report",
 
   MONTHLY_REPORT: "/monthly_report",
 

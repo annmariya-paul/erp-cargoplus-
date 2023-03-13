@@ -1,4 +1,3 @@
-
 @use "../../../styles/variables.scss";
 .ant-input {
   font-weight: 380 !important;
@@ -40,7 +39,9 @@
 .task_expense_table {
   // height: 445px !important;
   // overflow-y: auto !important;
-  table{ border-right: 1px solid rgb(188, 183, 183);}
+  table {
+    border-right: 1px solid rgb(188, 183, 183);
+  }
   thead {
     tr {
       th {
@@ -61,7 +62,7 @@
   tbody {
     tr {
       border-color: rgb(237, 239, 240);
-       border-right: 1px solid rgb(188, 183, 183);
+      border-right: 1px solid rgb(188, 183, 183);
       td {
         // font-size: 0.8rem;
         padding-inline: 5px;
@@ -170,7 +171,7 @@ element.style {
   // flex-grow: 1;
   box-shadow: 0.5px 1px 8px variables.$boxshadow;
 }
-.content-tabs-tablenew{
+.content-tabs-tablenew {
   border-radius: 16px;
   // min-height: 20rem;
   padding: 12px;
@@ -179,10 +180,54 @@ element.style {
   // flex-grow: 1;
   box-shadow: 0.5px 1px 8px variables.$boxshadow;
 }
-.ant-collapse > .ant-collapse-item > .ant-collapse-header .ant-collapse-header-text {
-  color:  #0891d1;
+.ant-collapse
+  > .ant-collapse-item
+  > .ant-collapse-header
+  .ant-collapse-header-text {
+  color: #0891d1;
 }
 .table_job_list {
-  height: 300px !important;
+  height: fit-content !important;
   overflow-y: auto !important;
 }
+
+// .input_bg {
+//   :global {
+//   }
+// }
+.ant-input-number-input {
+  width: 100%;
+  height: 30px;
+  /* padding: 0 11px; */
+  text-align: left;
+  background-color: transparent;
+  border: 0;
+  border-radius: 2px;
+  outline: 0;
+  transition: all 0.3s linear;
+  -webkit-appearance: textfield !important;
+  -moz-appearance: textfield !important;
+  appearance: textfield !important;
+}
+.ant-input-number-input {
+  padding-right: 0 !important;
+}
+.ant-input-number-input {
+  text-align: right;
+  padding-right: 0;
+}
+.ant-input-number-borderless .ant-input-number-handler-wrap {
+  border-left-width: none;
+}
+.ant-input-number:hover .ant-input-number-handler-wrap {
+  opacity: 0;
+}
+.ant-input-number-focused .ant-input-number-handler-wrap {
+  opacity: 0;
+}
+//tochange background color
+// .container-fluid{
+//   .contentWrapper {
+//     background-color:rgb(239, 249, 250)
+//   }
+//   }

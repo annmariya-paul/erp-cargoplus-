@@ -28,7 +28,7 @@ function BarChart({ layout = "horizontal" }) {
         modifiers: [["darker", 0.5]],
       }}
       axisTop={{
-        legend: "Agents wise cost",
+        legend: "",
         legendPosition: "middle",
         legendOffset: -40,
       }}

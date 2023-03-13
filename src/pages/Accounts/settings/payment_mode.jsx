@@ -223,6 +223,7 @@ useEffect(() => {
               className="editIcon m-0"
               onClick={() => {
                 handleEditclick(index);
+                setUniqueEditName(false);
               }}
             >
               <FaEdit />
@@ -316,6 +317,8 @@ useEffect(() => {
               btnType="add"
               onClick={() => {
                 setModalpaymentmode(true);
+                setUniqueName(false);
+                adForm.resetFields();
               }}
             >
               Add Payment Mode

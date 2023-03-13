@@ -169,6 +169,8 @@ element.style {
   padding: 18px;
   // flex-grow: 1;
   box-shadow: 0.5px 1px 8px variables.$boxshadow;
+ 
+  
 }
 .content-tabs-tablenew{
   border-radius: 16px;
@@ -183,6 +185,13 @@ element.style {
   color:  #0891d1;
 }
 .table_job_list {
-  height: 300px !important;
+  height: fit-content !important;
   overflow-y: auto !important;
 }
+
+//tochange background color
+// .container-fluid{
+//   .contentWrapper {
+//     background-color:rgb(239, 249, 250)
+//   }
+//   }

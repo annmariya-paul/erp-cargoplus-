@@ -9,29 +9,35 @@ export default function Layout({ children }) {
   const [showMenu, setShowMenu] = useState(true);
   return (
     <>
-      <div className="container-fluid screen_orientation">
-        <div>
-          <Header/>
+      <div className="col-12 d-flex header_layout">
+        <div className="col-1 pt-4 ps-2">
+          <AiOutlineMenu
+            className="menu_icon"
+            onClick={() => setShowMenu(true)}
+          />
         </div>
+        <div className="col-11 d-flex justify-content-end">
+          <Header />
+        </div>
+      </div>
+      <div className="container-fluid screen_orientation">
         <div className="d-flex">
-          <div className={` ${showMenu ? "d-none" : "menu-bars"}`}>
+          {/* <div className={` ${showMenu ? "d-none" : "menu-bars"}`}>
             <AiOutlineMenu
               className="menu_icon"
               onClick={() => setShowMenu(true)}
             />
-          </div>
+          </div> */}
           <div
             className={` ${
               showMenu ? "sidebarWrapper col-2" : "d-none width-100 "
             }  `}
           >
-            <Sidebar showSidebar={() => setShowMenu(false)}/>
+            <Sidebar showSidebar={() => setShowMenu(false)} />
           </div>
           <div
             className={` ${
-              showMenu
-                ? "contentWrapper col-10 mt-3"
-                : " col-11 mt-3 pe-2 ms-2 "
+              showMenu ? "contentWrapper col-10 mt-2" : " col-12 mt-2"
             }`}
           >
             <Outlet />

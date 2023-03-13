@@ -13,11 +13,15 @@
   color:variables.$primary !important;
   font-size: 22px;
 }
-// .header_layout{  background-color: #8EC5FC;
-// background-image: linear-gradient(130deg, #81bffc 0%, #c7ecfb 100%);
-//  position: fixed;
-//   top: 0;
-// z-index: 100;}
+.header_layout{ 
+   background-image: linear-gradient(120deg, #daecff 0%, #eef6ff 100%);
+background-color: #a3cdfa;
+// background-image: linear-gradient(120deg, #f2fbff 0%, #f0fbfc 100%);
+// background-image: linear-gradient(140deg, #dcf5ff 0%, #e8f5f9 100%);
+// ###   background-image: linear-gradient(140deg, #b1e9fc 0%, #e0f3f8 100%);
+ position: fixed;
+  top: 0;
+z-index: 100;}
 
 /* @media screen and (min-width: 950px) {
   .contentWrapper{

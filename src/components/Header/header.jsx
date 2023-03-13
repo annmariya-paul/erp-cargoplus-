@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PublicFetch from "../../utils/PublicFetch";
 import { ROUTES } from "../../routes/index";
 import { useNavigate } from "react-router-dom";
@@ -9,9 +9,39 @@ import { TfiKey } from "react-icons/tfi";
 import { HiLogout } from "react-icons/hi";
 import { Dropdown, Space } from "antd";
 import styles from "./header.module.scss";
+import CustomModel from "../custom_modal/custom_model";
 
 const Header = () => {
   const navigate = useNavigate();
+  const [notiModal, setNotiModal] = useState(false);
+  const [notiClicked, setNotiClicked] = useState();
+  const data = [
+    {
+      id: 1,
+      name: "Quotation Created SuccessFully",
+      description:
+        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+    },
+    {
+      id: 2,
+      name: "Job Created SuccessFully",
+      description:
+        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+    },
+    {
+      id: 3,
+      name: "Invoice Created SuccessFully",
+      description:
+        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+    },
+    {
+      id: 4,
+      name: "Opportunity Created SuccessFully",
+      description:
+        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+    },
+  ];
+  const [allNotifications, setAllNotifications] = useState(data);
 
   //Handle dropdown options click event
   const handleDropdownClick = (event) => {
@@ -89,40 +119,16 @@ const Header = () => {
     },
   ];
 
-  const notif = [
-    {
-      key: "1",
-      label: (
-        <>
-          <div>
-            <div>
-              <p>kifherufhefhejffhjefjehfjehf</p>
-            </div>
-          </div>
-        </>
-      ),
-    },
-    {
-      key: "2",
-      label: (
-        <>
-          <div>
-            <div>
-              <p>kifherufhefhejffhjefjehfjehf</p>
-            </div>
-          </div>
-        </>
-      ),
-    },
-  ];
-
-  const notificationProps = {
-    notif,
-  };
-
   const menuProps = {
     items,
     onClick: handleDropdownClick,
+  };
+
+  const handlenotification = () => {
+    setNotiModal(true);
+  };
+  const handleShowContent = (data) => {
+    setNotiClicked(data);
   };
 
   return (
@@ -130,20 +136,17 @@ const Header = () => {
       <div
         className={`${styles.headerContainer} d-flex align-items-center justify-content-around`}
       >
-        <div className={`${styles.ImgWrappe2r}`}>
-          {/* <Dropdown
-            menu={menuProps}
-            placement="bottom"
-            overlayClassName="dropdwnHeader"
-          >
-            <Space> */}
+        <div
+          className={`${styles.ImgWrappe2r}`}
+          onClick={() => {
+            handlenotification();
+          }}
+        >
           <IoMdNotifications
             size={22}
             color="#6B728E"
             className={`${styles.NotificationIcon}`}
           />
-          {/* </Space> */}
-          {/* </Dropdown> */}
         </div>
         <div className={`${styles.ImgWrapper}`}>
           <Dropdown
@@ -157,6 +160,66 @@ const Header = () => {
           </Dropdown>
         </div>
       </div>
+      <CustomModel
+        show={notiModal}
+        onHide={() => {
+          setNotiModal(false);
+        }}
+        View_list
+        list_content={
+          <>
+            <div className="container-fluid">
+              <div className="row">
+                <h4 style={{ color: "#0891d1" }}>Notifications</h4>
+                <div className="col-12">
+                  {allNotifications &&
+                    allNotifications.length > 0 &&
+                    allNotifications.map((item, index) => {
+                      return (
+                        <div className="row my-2 py-2 ">
+                          <div className="col-2">
+                            <div
+                              style={{
+                                borderRadius: "100%",
+                                backgroundColor: "whitesmoke",
+                              }}
+                              className="p-3"
+                            >
+                              <IoMdNotifications
+                                size={22}
+                                color="#6B728E"
+                                className={`${styles.NotificationIcon}`}
+                              />
+                            </div>
+                          </div>
+                          <div className="col-10">
+                            <div
+                              className="mt-3"
+                              onClick={() => {
+                                handleShowContent(item.id);
+                              }}
+                            >
+                              <h6 style={{ fontWeight: "600" }}>{item.name}</h6>
+                            </div>
+                            {notiClicked == item.id ? (
+                              <>
+                                <div className="">
+                                  <p>{item.description}</p>
+                                </div>
+                              </>
+                            ) : (
+                              ""
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                </div>
+              </div>
+            </div>
+          </>
+        }
+      />
     </div>
   );
 };

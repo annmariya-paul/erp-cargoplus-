@@ -790,7 +790,7 @@ export default function Taskexpenses() {
               rules={[{ required: true, message: "Please select" }]}
             >
               <Select
-                style={{ minWidth: "200px" }}
+                style={{ minWidth: "140px" }}
                 bordered={false}
                 showArrow={false}
                 allowClear
@@ -891,7 +891,10 @@ export default function Taskexpenses() {
       render: (data, index) => {
         console.log("index is :", index);
         return (
-          <div className="d-flex justify-content-center align-items-center tborder ">
+          <div
+            style={{ width: "57px" }}
+            className="d-flex justify-content-center align-items-center tborder "
+          >
             <Form.Item
               name={[
                 "Job_quotation_details",
@@ -903,7 +906,7 @@ export default function Taskexpenses() {
               <InputNumber
                 style={{ minWidth: "20px" }}
                 bordered={false}
-                className="input_bg "
+                className="input_bg w-100 "
                 value={index.job_task_expense_tax_perc}
                 // onChange={(value) => {
                 //   console.log(" input numberevent ", value, index.key);
@@ -928,7 +931,10 @@ export default function Taskexpenses() {
       render: (data, index) => {
         console.log("index is :", index);
         return (
-          <div className="d-flex justify-content-center align-items-center tborder ">
+          <div
+            style={{ width: "110px" }}
+            className="d-flex justify-content-center align-items-center tborder "
+          >
             <Form.Item
               name={[
                 "Job_quotation_details",
@@ -939,7 +945,7 @@ export default function Taskexpenses() {
             >
               <Select
                 className="w-100"
-                style={{ minWidth: "140px" }}
+                style={{ minWidth: "110px" }}
                 bordered={false}
                 showArrow={false}
                 width={"1000px"}
@@ -996,7 +1002,7 @@ export default function Taskexpenses() {
                 >
                   <InputNumber
                     bordered={false}
-                    // className="text_right"
+                    className=""
                     value={index.job_task_expense_cost_amountfx}
                     onChange={(e) => {
                       if (isService) {
@@ -1038,7 +1044,10 @@ export default function Taskexpenses() {
           render: (data, index) => {
             console.log("index is :", index);
             return (
-              <div className="d-flex justify-content-center align-items-center tborder ">
+              <div
+                style={{ width: "70px" }}
+                className="d-flex justify-content-center align-items-center tborder "
+              >
                 <Form.Item
                   name={[
                     "Job_quotation_details",
@@ -1049,7 +1058,7 @@ export default function Taskexpenses() {
                 >
                   <InputNumber
                     bordered={false}
-                    className="input_bg m-0 p-0"
+                    className="input_bg m-0 p-0 w-100"
                     value={index.job_task_expense_cost_taxfx}
                     onChange={(value) => {
                       console.log(" input numberevent ", value, index.key);
@@ -1176,7 +1185,10 @@ export default function Taskexpenses() {
           render: (data, index) => {
             console.log("index is : 11324", index);
             return (
-              <div className="d-flex justify-content-center align-items-center tborder ">
+              <div
+                style={{ width: "70px" }}
+                className="d-flex justify-content-center align-items-center tborder "
+              >
                 <Form.Item
                   name={[
                     "Job_quotation_details",
@@ -1188,7 +1200,7 @@ export default function Taskexpenses() {
                   <InputNumber
                     // style={{ minWidth: "70px" }}
                     bordered={false}
-                    // className="text_right"
+                    className="w-100"
                     value={index.job_task_expense_exp_exch}
                     // value={currencyRates}
                     // value={amount}

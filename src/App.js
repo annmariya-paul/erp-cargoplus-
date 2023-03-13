@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ROUTES } from "./routes";
-import Sidebar from "./components/Sidebar/sidebar";
+// import Sidebar from "./components/Sidebar/sidebar";
 import Layout from "./layouts/layout";
 import Lead from "./pages/CRM/lead/lead";
 import LeadList from "./pages/CRM/lead/lead_list/lead_list";
@@ -109,6 +109,7 @@ import Purchase from "./pages/Accounts/settings/Purchase/purchase";
 import View_purchase from "./pages/Accounts/settings/Purchase/view_purchase";
 import Edit_purchase from "./pages/Accounts/settings/Purchase/edit_purchase";
 import Print_purchase from "./pages/Accounts/settings/Purchase/print_purchase";
+import Credit_notes from "./pages/Accounts/CreditNotes/list_creditnotes";
 
 import Bank from "./pages/Accounts/settings/BankAccount/bank";
 
@@ -461,6 +462,11 @@ function App() {
 
             <Route path={ROUTES.INVOICE_VIEW_ID} element={<ProtectedRoute />}>
               <Route index element={<InvoiceView />} />
+            </Route>
+
+
+            <Route path={ROUTES.CREDIT_NOTES} element={<ProtectedRoute />}>
+              <Route index element={<Credit_notes/>} />
             </Route>
 
             {/* General settings */}

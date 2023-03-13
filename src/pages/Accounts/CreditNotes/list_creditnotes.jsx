@@ -8,26 +8,26 @@ import {
   FaEdit,
 } from "react-icons/fa";
 
-import PublicFetch from "../../../../utils/PublicFetch";
-import { CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
+
+
 import { FiEdit } from "react-icons/fi";
 import { AiFillPrinter } from "react-icons/ai";
 import { MdFileCopy, MdPageview } from "react-icons/md";
-import Button from "../../../../components/button/button";
+import { CRM_BASE_URL } from "../../../api/bootapi";
 import { Link } from "react-router-dom";
-import { ROUTES } from "../../../../routes";
-import TableData from "../../../../components/table/table_data";
-import MyPagination from "../../../../components/Pagination/MyPagination";
-import logo from "../../../../components/img/logo192.png";
-import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
-// import "../lead.styles.scss";
-// import "../../.././opportunity_ List/opportunitylist.scss";
-import CustomModel from "../../../../components/custom_modal/custom_model";
-import FileUpload from "../../../../components/fileupload/fileUploader";
-import ErrorMsg from "../../../../components/error/ErrorMessage";
-import ProductEditModal from "./ProductEditModal";
+import Button from "../../../components/button/button";
+import {ROUTES} from "../../../routes";
+import TableData from "../../../components/table/table_data";
+import logo from "../../../components/img/logo192.png";
+import MyPagination from "../../../components/Pagination/MyPagination";
 
-function Productlist() {
+import ErrorMsg from "../../../components/error/ErrorMessage";
+import PublicFetch from "../../../utils/PublicFetch";
+import FileUpload from "../../../components/fileupload/fileUploader";
+import CustomModel from "../../../components/custom_modal/custom_model";
+
+
+function Credit_notes() {
   const [numOfItems, setNumOfItems] = useState("25");
   const [pageSize, setPageSize] = useState("25"); // page size
   const [current, setCurrent] = useState(1);
@@ -38,135 +38,17 @@ function Productlist() {
   const [productView, setProductView] = useState(false);
   const [successPopup, setSuccessPopup] = useState(false);
   const [error, setError] = useState(false);
-  const [products, setProducts] = useState([]);
+ 
   const [modalOpportunity, setModalOpportunity] = useState(false);
   const [productid, setProductID] = useState();
   console.log("pr id from state", productid);
-
-  const [productpic,setproductpic]=useState()
-  // const  [productname, setProductName] = useState();
-  // const  [productcode, setProductCode] = useState();
-  // const  [productcatid, setProductcatid] = useState();
-  // const  [brandid, setBrandId] = useState();
-  // const  [productunitid, setProductUnitid] = useState();
-  // const  [productimg, setProductImg] = useState();
-  // const  [productattributes, setProductAttributes] = useState([]);
-  // const  [productdes, setProductDescription] = useState();
-
-  // const getData = (current, pageSize) => {
-  //   return products?.slice((current - 1) * pageSize, current * pageSize);
-  // };
-
   const [serialNo, setserialNo] = useState(1);
-  const [totalCount, setTotalcount] = useState();
+ 
 
-  const [viewproduct, setViewproduct] = useState({
-    product_id: "",
-    product_name: "",
-    product_code: "",
-    product_category_id: "",
-    product_brand_id: "",
-    product_unit_id: "",
-    product_pic: "",
-    product_attributes: "",
-    product_description: "",
-  });
-  const Viewproducts = (item) => {
-    console.log("view oppurtunity issss:", item);
-    setViewproduct({
-      ...viewproduct,
-      product_id: item.product_id,
-      product_name: item.product_name,
-      product_code: item.product_code,
-      product_category_id: item.product_category_id,
-      product_brand_id: item.product_brand_id,
-      product_unit_id: item.product_unit_id,
-      product_pic: item.product_pic,
-      product_attributes: item.product_attributes,
-      product_description: item.product_description,
-    });
-    // getOppurtunityProgress(item)
 
-    // setShowViewModal(true);
-  };
+        
 
-  const handleEdit = (e) => {
-    console.log("data in event ", e);
-    if (e) {
-      setProductID(e.product_id);
-      setModalOpportunity(true);
-    }
-  };
-
-  // {columns is product listing table componenet }
-  const pageofIndex = numOfItems * (current - 1) - 1 + 1;
-
-  const pagesizecount = Math.ceil(totalCount / numOfItems);
-  console.log("page number isss", pagesizecount);
-
-  const getallproduct = () => {
-    PublicFetch.get(
-      `${CRM_BASE_URL_SELLING}/product?startIndex=${pageofIndex}&noOfItems=${numOfItems}`
-    )
-      .then((res) => {
-        console.log("the prrr", res.data);
-        setTotalcount(res.data.data.totalCount);
-        if (res?.data?.success) {
-          console.log("All products success::: ", res?.data?.data.products);
-          let tempArr = [];
-          let arr2 = [];
-          res?.data?.data?.products.forEach((item, index) => {
-            console.log("gdghhh", item.crm_v1_categories);
-
-            // item?.crm_v1_categories?.forEach((itm,indx)=>{
-            //   arr2.push(itm?.category_name)
-            // for (let i=0; i<item?.crm_v1_categories.length; i++){
-            //   console.log("jefjjjehdfhe");
-            //   arr2.push(item?.category_name)
-            // }
-            tempArr.push({
-              product_id: item?.product_id,
-              product_name: item?.product_name,
-              catgeory_name: item.crm_v1_categories?.category_name,
-              product_code: item?.product_code,
-              product_pic: item?.product_pic,
-
-            });
-          });
-
-          console.log("hellooooo", tempArr);
-          setProducts(tempArr);
-
-          // let samplearry = [];
-          // res?.data?.data?.leads.forEach((item, index) => {
-          //   samplearry.push(item.opportunity_id);
-          // });
-          // console.log("pushedd ", samplearry);
-
-          // setOppurtunityid(samplearry);
-        } else {
-          console.log("Failed to load data !");
-        }
-      })
-      .catch((err) => {
-        console.log("Errror while getting data", err);
-      });
-  };
-  useEffect(() => {
-    getallproduct();
-  }, []);
-
-  const data12 = products?.map((item) => [
-    item.action,
-    item.product_pic,
-    item.product_name,
-    item.product_code,
-    item.product_category_id,
-  ]);
-  // const getData = (current, pageSize) => {
-  //   return products?.slice((current - 1) * pageSize, current * pageSize);
-  // };
-
+ 
   const columns = [
     {
       title: "Sl. No.",
@@ -176,9 +58,9 @@ function Productlist() {
       align: "center",
     },
     {
-      title: "IMAGE",
-      dataIndex: "product_pic",
-      key: "IMAGE",
+      title: "VOUCHER NO",
+      dataIndex: "voucher_no",
+      key: "voucher_no",
       width: "23%",
       // filteredValue: [searchStatus],
       // onFilter: (value, record) => {
@@ -187,57 +69,74 @@ function Productlist() {
       //     .includes(value.toLowerCase());
       // },
 
-      align: "center",
-      render: (theImageURL, records) => (
-       <>
-       {theImageURL ?(
-         <img
-          src={`${process.env.REACT_APP_BASE_URL}/${theImageURL}`}
-          height="20px"
-          width={"20px"}
-        />
-        ):""}
-       </>
-        
-      ),
+      align: "left",
+     
     },
     {
-      title: "NAME",
-      dataIndex: "product_name",
-      key: "NAME",
+      title: "DATE",
+      dataIndex: "date",
+      key: "date",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.product_name)
+        return String(record.date)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
       align: "left",
-      width: "23%",
+      width: "10%",
     },
 
     {
-      title: "CODE",
-      dataIndex: "product_code",
-      key: "CODE",
-      //   width: "23%",
+      title: "CUSTOMER",
+      dataIndex: "customer",
+      key: "customer",
+        width: "15%",
       align: "left",
       filteredValue: [searchType],
       onFilter: (value, record) => {
-        return String(record.product_code)
+        return String(record.customer)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
     },
     {
-      title: "CATEGORY",
-      dataIndex: "catgeory_name",
-      key: "CATEGORY",
-      width: "14%",
+      title: "INVOICE NO",
+      dataIndex: "invoice_no",
+      key: "invoice_no",
+      width: "12%",
       align: "left",
       filteredValue: [searchCategory],
       onFilter: (value, record) => {
         console.log("prrrr",record)
-        return String(record.catgeory_name)
+        return String(record.invoice_no)
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      },
+    },
+    {
+      title: "AMOUNT",
+      dataIndex: "amount",
+      key: "amount",
+      width: "10%",
+      align: "left",
+      filteredValue: [searchCategory],
+      onFilter: (value, record) => {
+        console.log("prrrr",record)
+        return String(record.amount)
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      },
+    },
+    {
+      title: "TYPE",
+      dataIndex: "type",
+      key: "type",
+      width: "10%",
+      align: "left",
+      filteredValue: [searchCategory],
+      onFilter: (value, record) => {
+        console.log("prrrr",record)
+        return String(record.type)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
@@ -255,9 +154,9 @@ function Productlist() {
           <div className="d-flex justify-content-center align-items-center gap-4">
             <div
               // onClick={() => setModalOpportunity(true)}
-              onClick={() => {
-                handleEdit(index);
-              }}
+              // onClick={() => {
+              //   handleEdit(index);
+              // }}
               className="actionEdit m-0 p-0"
             >
               <FiEdit fontSize={"12px"} />
@@ -282,66 +181,22 @@ function Productlist() {
     // },
   ];
 
-  const ProductHeads = [
-    [
-      "product_id",
-      "product_name",
-      "product_code",
-      "product_category_id",
-      "product_brand_id",
-      "product_unit_id",
-      "product_pic",
-      "product_attributes",
-      "product_description",
-    ],
-  ];
-  //for show or hide colums start-- shahida
-  const columnsKeys = columns.map((column) => column.key);
 
-  const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
-  const filteredColumns = columns.filter((column) =>
-    selectedColumns.includes(column.key)
-  );
-  console.log("filtered columns::", filteredColumns);
-  const onChange = (checkedValues) => {
-    setSelectedColumns(checkedValues);
-  };
-
-
-  console.log("cattt",products)
   return (
     <div>
-      <div className="container-fluid lead_list my-3 py-3">
+      <div className="container-fluid lead_list  py-3">
         <div>
-          {/* {product listing starts section one} */}
+         
           <div className="row flex-wrap">
             <div className="col">
-              <h5 className="lead_text">Products</h5>
+              <h5 className="lead_text">Credit Notes</h5>
             </div>
-            {/* <Leadlist_Icons /> */}
-            <Leadlist_Icons
-              datas={products}
-              columns={filteredColumns}
-              items={data12}
-              xlheading={ProductHeads}
-              filename="data.csv"
-              chechboxes={
-                <Checkbox.Group onChange={onChange} value={selectedColumns}>
-                  {columnsKeys.map((column) => (
-                    <li>
-                      <Checkbox value={column} key={column}>
-                        {column}
-                      </Checkbox>
-                    </li>
-                  ))}
-                </Checkbox.Group>
-              }
-            />
+         
           </div>
-          <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
+          <div className="row " style={{ backgroundColor: "#f4f4f7" }}>
             <div className="col-4">
               <Input.Search
-                placeholder="Search by Name"
+                placeholder="Search "
                 style={{ margin: "5px", borderRadius: "5px" }}
                 value={searchedText}
                 onChange={(e) => {
@@ -352,7 +207,7 @@ function Productlist() {
                 }}
               />
             </div>
-            <div className="col-4 ">
+            {/* <div className="col-4 ">
               <Input.Search
                 placeholder="Search by Code"
                 style={{ margin: "5px", borderRadius: "5px" }}
@@ -381,19 +236,9 @@ function Productlist() {
                   setSearchCategory(event ? [event] : []);
                 }}
               >
-                {products &&
-                  products.map((item, index) => {
-                    console.log("catvaluess",item)
-                    return (
-                      <Select.Option key={item.product_id} value={item.catgeory_name}>
-                        {item.catgeory_name}
-                      </Select.Option>
-                    );
-                  })}
-                {/* <Select.Option value="Watch">watch</Select.Option>
-                <Select.Option value="cookware">cookware</Select.Option> */}
+              
               </Select>
-            </div>
+            </div> */}
           </div>
           <div className="row my-3">
             <div className="col-4  px-3">
@@ -444,7 +289,7 @@ function Productlist() {
               </Select>
             </div>
             <div className=" col-4 d-flex align-items-center justify-content-center">
-              {totalCount>0 &&(
+              {/* {totalCount>0 &&(
             <MyPagination
               total={parseInt(totalCount)}
               current={current}
@@ -453,20 +298,20 @@ function Productlist() {
                 setCurrent(current);
               }}
             />
-            )}
+            )} */}
           </div>
             <div className="col-4 d-flex justify-content-end">
               <Button
                 //   onClick={() => setShowAddOpportunity(true)}
                 className="add_opportunity"
               >
-                <Link to={ROUTES.PRODUCTCREATE}>
+                <Link to={ROUTES.CREDITCREATE}>
                   <span
                     style={{
                       color: "white",
                     }}
                   >
-                    Add Product
+                    Add Credit Note
                   </span>
                 </Link>
               </Button>
@@ -475,14 +320,14 @@ function Productlist() {
           <div className="datatable">
             <TableData
               // data={getData(current,numOfItems, pageSize)}
-              data={products}
+              // data={data}
               //   data={data}
-              columns={filteredColumns}
+              columns={columns}
               custom_table_css="table_lead_list"
             />
           </div>
           <div className="d-flex py-2 justify-content-center">
-            {totalCount>0 &&(
+            {/* {totalCount>0 &&(
             <MyPagination
            
               total={parseInt(totalCount)}
@@ -492,12 +337,14 @@ function Productlist() {
                 setCurrent(current);
               }}
             />
-            )}
+            )} */}
           </div>
           {/* {"mcncncncncncncnc"}  {product listing ends } */}
         </div>
         {/* {section Two Product Edit modal starts} */}
-        <CustomModel
+
+
+        {/* <CustomModel
           Adding_contents
           show={showProductEditModal}
           onHide={() => setShowProductEditModal(false)}
@@ -653,7 +500,8 @@ function Productlist() {
             </div>
             {error ? <ErrorMsg code="500" /> : ""}
           </div>
-        </CustomModel>
+        </CustomModel> */}
+
         {/* {Modal for viewing product details} */}
 
         <CustomModel
@@ -820,13 +668,13 @@ function Productlist() {
           }
         />
       </div>
-      <ProductEditModal
+      {/* <ProductEditModal
         show={modalOpportunity}
         onHide={() => setModalOpportunity(false)}
         style="width:1250px"
         prid={productid}
         fun_call={() => getallproduct()}
-      />
+      /> */}
 
       {/* {modal for success popups} */}
       <CustomModel
@@ -839,4 +687,4 @@ function Productlist() {
   );
 }
 
-export default Productlist;
+export default Credit_notes;

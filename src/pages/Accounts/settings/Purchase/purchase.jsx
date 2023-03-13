@@ -121,7 +121,7 @@ export default function Purchase() {
     {
       title: "SI.NO",
       key: "index",
-      width: "20%",
+      // width: "20%",
       render: (value, item, index) => serialNo + index,
       align: "center",
     },
@@ -135,7 +135,7 @@ export default function Purchase() {
       //       .toLowerCase()
       //       .includes(value.toLowerCase());
       //   },
-      align: "center",
+      align: "left",
     },
     {
       title: "DATE",
@@ -147,21 +147,21 @@ export default function Purchase() {
           .toLowerCase()
           .includes(value.toLowerCase());
       },
-      align: "center",
+      align: "left",
     },
 
     {
       title: "VENDOR",
       dataIndex: "vendor_name",
       key: "vendor_name",
-      width: "20%",
+      width: "24%",
 
       onFilter: (value, record) => {
         return String(record.freight_type_prefix)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
-      align: "center",
+      align: "left",
     },
     {
       title: "BILL NO",
@@ -173,7 +173,7 @@ export default function Purchase() {
           .toLowerCase()
           .includes(value.toLowerCase());
       },
-      align: "center",
+      align: "left",
     },
     {
       title: "TOTAL AMOUNT",
@@ -185,7 +185,7 @@ export default function Purchase() {
           .toLowerCase()
           .includes(value.toLowerCase());
       },
-      align: "center",
+      align: "right",
     },
 
     {
@@ -198,7 +198,7 @@ export default function Purchase() {
           .toLowerCase()
           .includes(value.toLowerCase());
       },
-      align: "center",
+      align: "left",
     },
     {
       title: "STATUS",
@@ -210,7 +210,7 @@ export default function Purchase() {
           .toLowerCase()
           .includes(value.toLowerCase());
       },
-      align: "center",
+      align: "left",
     },
     {
       title: "ACTION",

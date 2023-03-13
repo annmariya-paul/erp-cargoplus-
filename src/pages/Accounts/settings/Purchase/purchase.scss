@@ -1,0 +1,39 @@
+.purchase_payment{
+    height:232px;
+}
+@media (max-width:575px) {
+ 
+}
+
+
+@media (min-width:576px) and (max-width:767px) {
+ 
+
+}
+
+
+@media (min-width:768) and (max-width:1024) {
+    .purchase_payment {
+        height: 294px;
+    }
+    
+}
+
+
+ @media (min-width:768px) and (max-width:991px) {
+    .purchase_payment {
+        height: 450px;
+    }
+}
+
+
+@media (min-width:992px) and (max-width:1199px) {
+
+    .purchase_payment {
+        height: 293px;
+    }
+
+
+}
+
+@media (min-width:1200px) {}

@@ -1049,14 +1049,14 @@ export default function Add_Quotation() {
               console.log(error);
             }}
           >
-            <div className="container-fluid ms-0 me-2">
+            <div className="container-fluid ms-0 me-2 ">
               <div className="row  mt-3">
-                <h4 className="lead_text">Add New Quotation</h4>
+                <h5 className="lead_text">Add New Quotation</h5>
               </div>
               <div className="row me-3">
                 <div className="content-tabs-new row justify-content m-3">
                   <div className="row mt-3 ">
-                    <h5 className="lead_text">Basic Info</h5>
+                    <h6 className="lead_text">Basic Info</h6>
                   </div>
                   <div className="row mb-2  ">
                     {/* <div className="col-md-6 col-12"> */}
@@ -1249,11 +1249,11 @@ export default function Add_Quotation() {
                   </div>
                 </div>
               </div>
-              <div className="row  mt-3 ">
+              <div className="row  mt-1 ">
                 <div className="col-md-6 col-12">
                   <div className="content-tabs-new row justify-content mx-1 mb-3">
                     <div className="row mt-3">
-                      <h5 className="lead_text">Transportation</h5>
+                      <h6 className="lead_text">Transportation</h6>
                     </div>
 
                     <div className="col-xl-6 col-sm-12 mt-2">
@@ -1379,9 +1379,9 @@ export default function Add_Quotation() {
                 </div>
 
                 <div className="col-md-6 col-12">
-                  <div className="content-tabs-new row justify-content mx-1 mb-3 ">
+                  <div className="content-tabs-new row justify-content mx-1 mb-3  ">
                     <div className="row mt-3">
-                      <h5 className="lead_text">Shipment Details</h5>
+                      <h6 className="lead_text">Shipment Details</h6>
                     </div>
                     <div className="col-xl-6 col-sm-12 mt-2">
                       <label>Cargo Type</label>
@@ -1512,11 +1512,11 @@ export default function Add_Quotation() {
                   </div>
                 </div>
               </div>
-              <div className="row mt-4 ">
+              <div className="row mt-1 ">
                 <div className="col-md-6 col-12 ">
                   <div className="content-tabs-new row justify-content mx-1 mb-3">
-                    <div className="row mt-3">
-                      <h5 className="lead_text">Payment Info</h5>
+                    <div className="row mt-2">
+                      <h6 className="lead_text">Payment Info</h6>
                     </div>
 
                     <div className="col-xl-6 col-sm-12 mt-2">
@@ -1617,8 +1617,8 @@ export default function Add_Quotation() {
                 </div>
                 <div className="col-md-6 col-12">
                   <div className="content-tabs-new row justify-content mx-1 mb-1">
-                     <div className="row mt-3">
-                      <h5 className="lead_text">Attachments</h5>
+                     <div className="row mt-2">
+                      <h6 className="lead_text">Attachments</h6>
                     </div>
                     <div className="col-xl-12 col-sm-12 mt-2">
                     
@@ -1663,10 +1663,10 @@ export default function Add_Quotation() {
                   </div>
                 </div>
               </div>
-              <div className="row mt-3 me-2 ">
+              <div className="row mt-1 me-2 ">
                 <div className="content-tabs-tablenew row justify-content m-3">
-                  <div className="row mt-3">
-                    <h5 className="lead_text">Task & Description</h5>
+                  <div className="row mt-2">
+                    <h6 className="lead_text">Task & Description</h6>
                   </div>
                   <div className="datatable">
                     <TableData

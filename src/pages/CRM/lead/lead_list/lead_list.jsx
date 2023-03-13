@@ -196,7 +196,7 @@ export default function LeadList() {
           .toLowerCase()
           .includes(value.toLowerCase());
       },
-      align: "center",
+      align: "left",
     },
     {
       title: "TYPE",
@@ -208,7 +208,7 @@ export default function LeadList() {
           .toLowerCase()
           .includes(value.toLowerCase());
       },
-      align: "center",
+      align: "left",
     },
 
     {
@@ -216,7 +216,7 @@ export default function LeadList() {
       dataIndex: "lead_organization",
       key: "ORGANIZATION",
       width: "23%",
-      align: "center",
+      align: "ledt",
     },
     {
       title: "STATUS",
@@ -228,7 +228,7 @@ export default function LeadList() {
           .toLowerCase()
           .includes(value.toLowerCase());
       },
-      align: "center",
+      align: "left",
     },
     {
       title: "CREDIT DAYS",

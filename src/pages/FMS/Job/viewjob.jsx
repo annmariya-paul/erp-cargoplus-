@@ -92,6 +92,7 @@ export default function ViewJob() {
   const [qtnno, setQtnno] = useState();
   const [tabledata, setTabledata] = useState();
   const [grandtotal, setGrandTotal] = useState();
+  console.log("grand",grandtotal);
   const [detailstable, setAlldetailstable] = useState();
   const [invoice_status, setInvoice_Status] = useState();
   console.log("details", detailstable);

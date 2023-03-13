@@ -415,7 +415,7 @@ function Services() {
           .toLowerCase()
           .includes(value.toLowerCase());
       },
-      align: "center",
+      align: "left",
       width: "23%",
     },
 
@@ -424,7 +424,7 @@ function Services() {
       dataIndex: "service_code",
       key: "key",
       width: "10%",
-      align: "center",
+      align: "left",
       filteredValue: [searchCode],
       onFilter: (value, record) => {
         return String(record.service_code)
@@ -437,7 +437,7 @@ function Services() {
       dataIndex: "service_category_name",
       key: "key",
       width: "16%",
-      align: "center",
+      align: "left",
       filteredValue: [searchCategory],
       onFilter: (value, record) => {
         return String(record.service_category_name)
@@ -450,7 +450,7 @@ function Services() {
       dataIndex: "service_taxtype_name",
       key: "key",
 
-      align: "center",
+      align: "left",
 
       onFilter: (value, record) => {
         return String(record.code).toLowerCase().includes(value.toLowerCase());

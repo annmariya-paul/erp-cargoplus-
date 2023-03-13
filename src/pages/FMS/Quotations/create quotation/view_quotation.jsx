@@ -306,7 +306,7 @@ export default function ViewQuotation() {
             <div className="row  mt-2 px-1">
 
               <div className="col-md-6 col-12 mt-1">
-                <div className="content-tabs-new row justify-content ms-1 mb-3 me-3">
+                <div className="content-tabs-new  justify-content ms-1 mb-3 me-3">
                   <div className="row mt-3 mb-3">
                     <h5 className="lead_text">Transportation</h5>
                   </div>
@@ -431,9 +431,9 @@ export default function ViewQuotation() {
                 </div>
               </div>
 
-              <div className="row mt-2 px-1 mb-0">
+              <div className="row mt-2 px-1">
                 <div className="col-md-6 col-12 ">
-                  <div className="content-tabs-new row justify-content ms-1 mb-3 me-3">
+                  <div className="content-tabs-new px-2  ms-1 me-3">
                     <div className="row mt-2 mb-1">
                       <h5 className="lead_text">Payment Info</h5>
                     </div>
@@ -465,7 +465,7 @@ export default function ViewQuotation() {
                         </p>
                       </div>
                     </div>
-                    <div className="col-12 d-flex mb-4 pb-2">
+                    <div className="col-12 d-flex ">
                       <div className="col-4">Exchange Rate </div>
                       <div className="col-1">:</div>
 
@@ -479,30 +479,32 @@ export default function ViewQuotation() {
                   </div>
                 </div>
 
-                <div className="col-md-6 col-12">
-                  <div className="content-tabs-new row  mb-2 me-3">
-                    <div className="row mt-3 mb-2">
+                <div className="col-md-6 col-12 ">
+                  <div className="content-tabs-new px-2  me-3 ms-1">
+                    <div className="row mt-3 mb-2 ">
                       <h5 className="lead_text">Attachments</h5>
                     </div>
+                     <div className="row mb-4 pb-4 ms-1 ">
 
-                    <div className="col-xl-6 col-sm-12 d-flex  ">
-                      <div className="col-5 boldhd">Attachments </div>
+                      <div className="col-3 boldhd ">Attachments </div>
                       <div className="col-1">:</div>
 
-                      <div className="col-7  pb-5">
+                      <div className="col-8">
                         <p className="modal-view-data">
                           {allqoutation?.quotation_docs}
                         </p>
                       </div>
                     </div>
+                     
+                  
 
                   
                   </div>
                 </div>
               </div>
 
-              <div className="row mt-0 me-4 mb-1 pt-0 ">
-                <div className="content-tabs-tablenew row justify-content m-3 ">
+              <div className="row mt-2 me-4 mb-1 pt-0 ">
+                <div className="content-tabs-tablenew  justify-content m-3 ">
 
                 <div className="mt-2">
                   <Collapse
@@ -517,9 +519,10 @@ export default function ViewQuotation() {
                           columns={progress}
                           data={tabledata}
                           bordered
+                          custom_table_css="table_job_list"
                         />
                       </div>
-                      <div className="d-flex justify-content-end mt-4 mx-3 ">
+                      <div className="d-flex justify-content-end  mx-3 ">
                         <div className="col-lg-2 col-sm-4 col-xs-3 d-flex justify-content-end mt-3 me-2">
                           <p style={{ fontWeight: 500 }}>Grand Total : </p>
                         </div>
@@ -533,6 +536,7 @@ export default function ViewQuotation() {
                     </Panel>
                   </Collapse>
                 </div>
+
               </div>
             </div>
           </div>

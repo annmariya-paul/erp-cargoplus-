@@ -165,7 +165,7 @@ function CreateExpence() {
               style={{
                 borderRadius: "8px",
               }}
-              className="card border-0 p-3 shadow-sm"
+              className=""
             >
               <div className="container-fluid p-3">
                 <Form
@@ -175,7 +175,120 @@ function CreateExpence() {
                     createExpense(value);
                   }}
                 >
-                  <div className="row ">
+                  <div className="content-tabs-new row justify-content ">
+                    <div className="row">
+                      <div className="col-xl-4 my-2">
+                        <label className="mb-2">Date</label>
+                        <Form.Item
+                          name="daily_expense_date"
+                          rules={[
+                            {
+                              required: true,
+                              message: "Date is Required",
+                            },
+                          ]}
+                        >
+                          <DatePicker format={"DD-MM-YYYY"} />
+                        </Form.Item>
+                      </div>
+                      <div className="col-xl-4 my-2">
+                        <label>Category</label>
+                        <Form.Item
+                          name="daily_expense_category_id"
+                          rules={[
+                            {
+                              required: true,
+                              message: "Category is Required",
+                            },
+                          ]}
+                        >
+                          <SelectBox>
+                            {categoryList &&
+                              categoryList.length > 0 &&
+                              categoryList.map((item, index) => {
+                                return (
+                                  <Select.Option
+                                    key={item.expense_category_id}
+                                    value={item.expense_category_id}
+                                  >
+                                    {item.expense_category_name}
+                                  </Select.Option>
+                                );
+                              })}
+                          </SelectBox>
+                        </Form.Item>
+                      </div>
+                      <div className="col-xl-4 my-2">
+                        <label>Name</label>
+                        <Form.Item
+                          name="daily_expense_name"
+                          rules={[
+                            {
+                              required: true,
+                              message: "Name is Required",
+                            },
+                          ]}
+                        >
+                          <InputType />
+                        </Form.Item>
+                      </div>
+                      <div className="col-xl-4 my-2">
+                        <label>Employee</label>
+                        <Form.Item
+                          name="daily_expense_employee_id"
+                          rules={[
+                            {
+                              required: true,
+                              message: "Employee is Required",
+                            },
+                          ]}
+                        >
+                          <SelectBox>
+                            {employeeList &&
+                              employeeList.length > 0 &&
+                              employeeList.map((item, index) => {
+                                return (
+                                  <Select.Option
+                                    key={item.employee_id}
+                                    value={item.employee_id}
+                                  >
+                                    {item.employee_name}
+                                  </Select.Option>
+                                );
+                              })}
+                          </SelectBox>
+                        </Form.Item>
+                      </div>
+                      <div className="col-xl-4 my-2">
+                        <label>Amount</label>
+                        <Form.Item
+                          name="daily_expense_amount"
+                          rules={[
+                            {
+                              required: true,
+                              message: "Amount is Required",
+                            },
+                          ]}
+                        >
+                          <Input_Number
+                            onChange={(value) => {
+                              setamount(value);
+                            }}
+                            min={0}
+                            precision={2}
+                            control={true}
+                          />
+                        </Form.Item>
+                      </div>
+                      <div className="col-12 my-2">
+                        <label>Remarks</label>
+                        <Form.Item name="daily_expense_remarks">
+                          <TextArea />
+                        </Form.Item>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="row content-tabs-new justify-content mt-4">
                     {/* <div className="col-xl-4  my-2">
                       <label>Voucher No</label>
                       <Form.Item>
@@ -183,111 +296,9 @@ function CreateExpence() {
                       </Form.Item>
                     </div> */}
                     <div className="col-xl-4 my-2">
-                      <label className="mb-2">Date</label>
-                      <Form.Item
-                        name="daily_expense_date"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Date is Required",
-                          },
-                        ]}
-                      >
-                        <DatePicker format={"DD-MM-YYYY"} />
-                      </Form.Item>
-                    </div>
-                    <div className="col-xl-4 my-2">
-                      <label>Category</label>
-                      <Form.Item
-                        name="daily_expense_category_id"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Category is Required",
-                          },
-                        ]}
-                      >
-                        <SelectBox>
-                          {categoryList &&
-                            categoryList.length > 0 &&
-                            categoryList.map((item, index) => {
-                              return (
-                                <Select.Option
-                                  key={item.expense_category_id}
-                                  value={item.expense_category_id}
-                                >
-                                  {item.expense_category_name}
-                                </Select.Option>
-                              );
-                            })}
-                        </SelectBox>
-                      </Form.Item>
-                    </div>
-                    <div className="col-xl-4 my-2">
-                      <label>Name</label>
-                      <Form.Item
-                        name="daily_expense_name"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Name is Required",
-                          },
-                        ]}
-                      >
-                        <InputType />
-                      </Form.Item>
-                    </div>
-                    <div className="col-xl-4 my-2">
-                      <label>Party</label>
-                      <Form.Item
-                        name="daily_expense_party"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Party is Required",
-                          },
-                        ]}
-                      >
-                        <InputType />
-                      </Form.Item>
-                    </div>
-                    <div className="col-xl-4 my-2">
                       <label>Bill No</label>
                       <Form.Item name="daily_expense_bill_no">
                         <InputType />
-                      </Form.Item>
-                    </div>
-                    <div className="col-12 my-2">
-                      <label>Party Address</label>
-                      <Form.Item name="daily_expense_party_address">
-                        <TextArea />
-                      </Form.Item>
-                    </div>
-                    <div className="col-xl-4 my-2">
-                      <label>Employee</label>
-                      <Form.Item
-                        name="daily_expense_employee_id"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Employee is Required",
-                          },
-                        ]}
-                      >
-                        <SelectBox>
-                          {employeeList &&
-                            employeeList.length > 0 &&
-                            employeeList.map((item, index) => {
-                              return (
-                                <Select.Option
-                                  key={item.employee_id}
-                                  value={item.employee_id}
-                                >
-                                  {item.employee_name}
-                                </Select.Option>
-                              );
-                            })}
-                        </SelectBox>
                       </Form.Item>
                     </div>
                     <div className="col-xl-4 my-2 d-flex justify-content-center">
@@ -311,24 +322,17 @@ function CreateExpence() {
                       </Form.Item>
                     </div>
                     <div className="col-xl-4 my-2">
-                      <label>Amount</label>
+                      <label>Party</label>
                       <Form.Item
-                        name="daily_expense_amount"
+                        name="daily_expense_party"
                         rules={[
                           {
                             required: true,
-                            message: "Amount is Required",
+                            message: "Party is Required",
                           },
                         ]}
                       >
-                        <Input_Number
-                          onChange={(value) => {
-                            setamount(value);
-                          }}
-                          min={0}
-                          precision={2}
-                          control={true}
-                        />
+                        <InputType />
                       </Form.Item>
                     </div>
                     <div className="col-xl-4 my-2">
@@ -358,14 +362,15 @@ function CreateExpence() {
                         <Input_Number disabled={true} min={0} precision={2} />
                       </Form.Item>
                     </div>
-                    <div className="col-12 my-2">
-                      <label>Remarks</label>
-                      <Form.Item name="daily_expense_remarks">
+                    <div className="col-xl-6 my-2">
+                      <label>Party Address</label>
+                      <Form.Item name="daily_expense_party_address">
                         <TextArea />
                       </Form.Item>
                     </div>
-                    <div className="col-xl-4"></div>
-                    <div className="col-xl-4 my-2">
+
+                    {/* <div className="col-xl-4"></div> */}
+                    <div className="col-xl-6 my-2">
                       <div className="">
                         <label>Attachments</label>
 
@@ -374,7 +379,7 @@ function CreateExpence() {
                         </Form.Item>
                       </div>
                     </div>
-                    <div className="col-xl-4"></div>
+                    {/* <div className="col-xl-4"></div> */}
                     <div className="col-12 d-flex justify-content-center my-4 pt-2">
                       <Button btnType="save" type="submit">
                         Save

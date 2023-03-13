@@ -1,5 +1,6 @@
 .card {
     border: none;
+    border-radius: 15px;
     box-shadow: 2px 2px 12px #d5d6d7;
 }
 
@@ -14,10 +15,11 @@
 .selectboxWrap {
     min-width: 30%;
     margin-left: 2%;
+    // margin-right: 4%;
 }
 
 .jobSelectbox {
-    min-width: 12.5%;
+    min-width: 60px;
 }
 
 .datepicker_wrapper {
@@ -26,7 +28,7 @@
 }
 
 .dateTop {
-    min-width: 13%;
+    min-width: 65px;
     display: flex;
     justify-content: end;
 }
@@ -35,7 +37,7 @@
     // margin-left: 38%;
     display: flex;
     justify-content: center;
-    max-width: 85%;
+    // max-width: 94%;
 }
 
 .table_report_list

@@ -479,7 +479,10 @@ export default function Add_Quotation() {
       render: (data, index) => {
         console.log("index is :", index);
         return (
-          <div className="d-flex justify-content-center align-items-center tborder ">
+          <div
+            className="d-flex justify-content-center align-items-center tborder "
+            key={index.index}
+          >
             <Form.Item
               name={["quotation_details", index.key, "quotation_details_cost"]}
               // rules={[{ required: true, message: "Required" }]}

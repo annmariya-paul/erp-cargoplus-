@@ -2,7 +2,7 @@ const ROUTES = {
   LOGIN: "/",
   LAYOUT: "/layout",
   SIDEBAR: "/sidebar",
-  DASHBOARD: "/dashboard",
+  DASHBOARD: "dashboard",
   LEAD: "/lead",
   LEADLIST: "/lead_list",
   CATEGORY: "/category",
@@ -98,8 +98,9 @@ const ROUTES = {
   INVOICE_PRINT: "/invoice_print",
   PRINT_INVOICE: "/print_invoice",
   PRINT_INVOICE_ID: "/print_invoice/:id",
-  AGENT_REPORT:"/agentReport",
-  COST_AND_EXPENSE_REPORT:"/cost_and_expense_report",
+  AGENT_REPORT: "/agentReport",
+  COST_AND_EXPENSE_REPORT: "/cost_and_expense_report",
+  INVOICE_REPORT: "/invoice_report",
 
   // Accounts
   PAYMEMENT_MODE: "/payment_mode",
@@ -110,14 +111,34 @@ const ROUTES = {
   DAILY_EXPENSE: "/daily_expense",
   CREATE_EXPENSE: "/create_expense",
   EXPENSE_CATEGORY: "/expense_category",
+  EDIT_EXPENSE: "/edit_expense",
+  EDIT_EXPENSE_ID: "/edit_expense/:id",
+  /*payments routes */
+  PAYMENTS: "/payments",
   ADD_PAYMENTS: "/add_payments",
+  VIEW_PURCHASE: "/view_purchase",
+  VIEW_PURCHASE_ID: "/view_purchase/:id",
+  EDIT_PURCHASE: "/edit_purchase",
+  EDIT_PURCHASE_ID: "/edit_purchase/:id",
+  PRINT_PURCHASE: "/print_purchase",
+
+  VIEW_PAYMENTS_INDEX: "/view_payments",
+  VIEW_PAYMENT: "/view_payments/:payment_id",
+  EDIT_PAYMENTS_INDEX: "/edit_payments",
+  EDIT_PAYMENT: "/edit_payments/:payment_id",
+  /*payments routes end*/
+
   JOB_PAYMENTS: "/job_payments",
   ADD_JOBPAYMENT: "/add_job_payment",
   EDIT_JOBPAYMENT: "/edit_job_payment",
   VIEW_JOBPAYMENT: "/view_job_payment",
-  EDIT_EXPENSE: "/edit_expense",
-  EDIT_EXPENSE_ID: "/edit_expense/:id",
+
+  //  Accounts -> Settings
+  CREDIT_NOTE_TYPE:"/credit_note_type",
   BANK_DETAILS: "/list_bankdetails",
+  ENQUIRY_REPORT: "/enquiry_report",
+
+  MONTHLY_REPORT: "/monthly_report",
 
   // general settings
   CURRENCY: "/currency",

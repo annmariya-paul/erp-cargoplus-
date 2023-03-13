@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import Button from "../../../components/button/button";
 import Custom_model from "../../../components/custom_modal/custom_model";
 import InputType from "../../../components/Input Type textbox/InputType";
@@ -9,7 +9,10 @@ import TableData from "../../../components/table/table_data";
 import MyPagination from "../../../components/Pagination/MyPagination";
 import TextArea from "../../../components/ InputType TextArea/TextArea";
 import { MdPageview } from "react-icons/md";
-import { GiWorld } from "react-icons/gi";
+// import { GiWorld } from "react-icons/gi";
+import PublicFetch from "../../../utils/PublicFetch";
+import { ACCOUNTS } from "../../../api/bootapi";
+
 
 export default function Payment_mode() {
   const [paymentmode, setpaymentmode] = useState("");
@@ -20,53 +23,192 @@ export default function Payment_mode() {
   const [description, setDescription] = useState("");
   const [successPopup, setSuccessPopup] = useState(false);
   const [showViewModal, setShowViewModal] = useState(false);
+  const [searchedText, setSearchedText] = useState("");
 
   const [paymentEditPopup, setPaymentEditPopup] = useState(false);
-  const [editpaymentmodename,seteditpaymentmodename]= useState("")
-  const [editpaymentmodedesc,seteditpaymentmodedesc]= useState("")
+  const [editpaymentmodeid,seteditpaymentmodeid]= useState("")
+  const [editpaymentmodename, seteditpaymentmodename] = useState("");
+  const [editpaymentmodedesc, seteditpaymentmodedesc] = useState("");
+  const [payments,setpayments] = useState("")
+  const [serialNo, setserialNo] = useState(1);
 
   const [adForm] = Form.useForm();
   const [editForm] = Form.useForm();
 
   const getData = (current, pageSize) => {
-    return paymentmode?.slice((current - 1) * pageSize, current * pageSize);
+    return payments?.slice((current - 1) * pageSize, current * pageSize);
   };
 
   const [viewpaymentmode, setViewpaymentmode] = useState({
+    id:"",
     name: "",
     description: "",
   });
 
-const handleupdate = ( ) => {
 
-}
 
-  // const handleEditclick = (e) => {
-  //   setModalpaymentmode(true)
+  const handleupdate = async (data) => {
+    console.log("dataa",data);
+    try {
+      const updated = await PublicFetch.patch(
+        `${ACCOUNTS}/payment-modes/${editpaymentmodeid}`,
+        {
+          pay_mode_name:data.paymentmodename,
+          pay_mode_desc:data.paymentmodedesc,
+          
+        }
+      );
+      console.log("successfully updated ", updated);
+      if (updated.data.success) {
+        setSuccessPopup(true)
+        setPaymentEditPopup(false);
+        getallpayment();
+  
+        close_modal(successPopup,1000 );
+      } 
+    } catch (err) {
+      console.log("error to update payment",err);
+    }
+  };
 
-  //  }
 
-  const handleEditclick = (e) => {
+
+  const handleviewtoedit = (i) => {
+    console.log("editing data iss", i);
+    seteditpaymentmodeid(i.pay_mode_id);
+    seteditpaymentmodename(i.name);
+    seteditpaymentmodedesc(i.description);
+    editForm.setFieldsValue({
+      paymentmodename: i.name,
+      paymentmodedesc: i.description,
+    });
     setPaymentEditPopup(true);
     // setShowViewModal(true)
     // console.log("setshowviewmodal",setShowViewModal);
   };
-  const handleViewClick = (e) => {
+  const handleViewClick = (item) => {
+    console.log("view all atributes",item);
+    setViewpaymentmode({
+      ...viewpaymentmode,
+      id: item.pay_mode_id,
+      name: item.pay_mode_name,
+      description: item.pay_mode_desc,
+    });
+
     setShowViewModal(true);
     // setPaymentEditPopup(true);
-
   };
-  const handleviewtoedit = (i) => {
+  const handleEditclick  = (e) => {
+    console.log("editing id iss", e);
+    seteditpaymentmodeid(e.pay_mode_id);
+    seteditpaymentmodename(e.pay_mode_name);
+    seteditpaymentmodedesc(e.pay_mode_desc);
+    editForm.setFieldsValue({
+      paymentmodename: e.pay_mode_name,
+      paymentmodedesc: e.pay_mode_desc,
+    });
     setPaymentEditPopup(true);
-
-
   };
+
+
+  const close_modal = (mShow, time) => {
+    if (!mShow) {
+      setTimeout(() => {
+        setSuccessPopup(false);
+      }, time);
+    }
+  };
+
+   
+const createPayment = async() => {
+  try{
+    const addpayment = await PublicFetch.post(`${ACCOUNTS}/payment-modes`,
+    {
+      pay_mode_name:name,
+      pay_mode_desc:description,
+    });
+    
+    console.log("payment added successfully", addpayment);
+
+    if (addpayment.data.success) {
+      setSuccessPopup(true);
+      getallpayment();
+      adForm.resetFields();
+      setModalpaymentmode(false);
+      close_modal(successPopup, 1000);
+    }
+  } catch (err) {
+    console.log("err to add the payments", err);
+  } 
+};
+
+
+// const getpayment = async() => {
+//   try{
+//     const getpaymentt = await PublicFetch.post
+//     (`${ACCOUNTS}/payment-modes`,
+//    );
+    
+//     console.log("get a payment", getpaymentt);
+//   } catch (err) {
+//     console.log("error", err);
+//   } 
+// };
+
+
+
+const getallpayment = async () => {
+  try {
+    const allpayments = await PublicFetch.get(
+      `${ACCOUNTS}/payment-modes`
+    );
+    console.log("getting all payments", allpayments);
+    setpayments(allpayments.data.data);
+  } catch (err) {
+    console.log("error to fetching  payments", err);
+  }
+};
+useEffect(() => {
+  getallpayment()
+  // getpayment()
+}, []);
 
   const columns = [
     {
+      title: "SI.NO",
+      key: "index",
+      width: "20%",
+      render: (value, item, index) => serialNo + index,
+      align: "center",
+    },
+    {
+      title: "PAYMENT MODE",
+      dataIndex: "pay_mode_name",
+      key: "pay_mode_name",
+        filteredValue: [searchedText],
+        onFilter: (value, record) => {
+          return String(record.pay_mode_name)
+          .toLowerCase()
+            .includes(value.toLowerCase());
+        },
+      align: "center",
+    },
+    {
+      title: "DESCRIPTION",
+      dataIndex: "pay_mode_desc",
+      key: "pay_mode_desc",
+
+      onFilter: (value, record) => {
+        return String(record.pay_mode_desc)
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      },
+      align: "center",
+    },
+    {
       title: "ACTION",
       dataIndex: "action",
-      key: "key", 
+      key: "key",
       width: "30%",
       render: (data, index) => {
         console.log("table index", index);
@@ -91,37 +233,16 @@ const handleupdate = ( ) => {
       },
       align: "center",
     },
-    {
-      title: "PAYMENT MODE",
-      dataIndex: "payment_mode",
-      key: "freight_type_name",
-      //   filteredValue: [searchedText],
-      //   onFilter: (value, record) => {
-      //     return String(record.freight_type_name  || nameSearch)
-      //       .toLowerCase()
-      //       .includes(value.toLowerCase());
-      //   },
-      align: "center",
-    },
-    {
-      title: "DESCRIPTION",
-      dataIndex: "description",
-      key: "freight_type_prefix",
+  ];
+  // const data = [
+  //   {
+  //     sl_no: "1",
+  //     payment_mode: "cod",
+  //     description: "cod cod",
+  //   },
+  // ];
 
-      onFilter: (value, record) => {
-        return String(record.freight_type_prefix)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
-      align: "center",
-    },
-  ];
-  const data = [
-    {
-      payment_mode: "cod",
-      description: "cod cod",
-    },
-  ];
+
   return (
     <>
       <div className="container-fluid container_fms pt-3">
@@ -135,13 +256,20 @@ const handleupdate = ( ) => {
           <div className="col-4">
             <Input.Search
               placeholder="Search"
+              value={searchedText}
+              onChange={(e) => {
+                setSearchedText(e.target.value ? [e.target.value] : []);
+              }}
+              onSearch={(value) => {
+                setSearchedText(value);
+              }}
               style={{ margin: "5px", borderRadius: "5px" }}
             />
           </div>
         </div>
         <div className="row my-3">
           <div className="col-4 ">
-          <Select
+            <Select
               bordered={false}
               className="page_size_style"
               value={pageSize}
@@ -171,6 +299,10 @@ const handleupdate = ( ) => {
               current={current}
               showSizeChanger={true}
               pageSize={pageSize}
+              onChange={(current, pageSize) => {
+                setCurrent(current);
+                setPageSize(pageSize);
+              }}
             />
           </div>
 
@@ -187,8 +319,8 @@ const handleupdate = ( ) => {
         </div>
         <div className="datatable">
           <TableData
-            // data={getData(current, pageSize)}
-            data={data}
+            data={getData(current, pageSize)}
+            // data={data}
             columns={columns}
             custom_table_css="table_lead_list"
           />
@@ -199,6 +331,10 @@ const handleupdate = ( ) => {
             current={current}
             showSizeChanger={true}
             pageSize={pageSize}
+            onChange={(current, pageSize) => {
+              setCurrent(current);
+              setPageSize(pageSize);
+            }}
           />
         </div>
       </div>
@@ -208,7 +344,6 @@ const handleupdate = ( ) => {
         onHide={() => setModalpaymentmode(false)}
         header="Add Fright"
         footer={false}
-        // {...props}
         View_list
         list_content={
           <>
@@ -217,13 +352,13 @@ const handleupdate = ( ) => {
             </div>
             <Form
               form={adForm}
-              //   onFinish={(data) => {
-              //     console.log("valuezzzzzzz", data);
-              //     createvendortype()
-              //   }}
-              //   onFinishFailed={(error) => {
-              //     console.log(error);
-              //   }}
+                onFinish={(data) => {
+                  console.log("val", data);
+                  createPayment()
+                }}
+                onFinishFailed={(error) => {
+                  console.log(error);
+                }}
             >
               <div className="row py-4">
                 <div className="col-12 pt-1">
@@ -247,9 +382,12 @@ const handleupdate = ( ) => {
                           message: " Name cannot be longer than 100 characters",
                         },
                       ]}
-                      // onChange={(e) => setFrighttypename(e.target.value)}
                     >
-                      <InputType value={name} />
+                      <InputType 
+                      onChange={(e) => {
+                        setName(e.target.value);
+                        console.log("name name",name);
+                      }} />
                     </Form.Item>
                   </div>
                 </div>
@@ -257,14 +395,18 @@ const handleupdate = ( ) => {
                   <label>Description</label>
                   <div>
                     <Form.Item name="description">
-                      <TextArea value={description} />
+                      <TextArea
+                      onChange={(e) => {
+                        setDescription(e.target.value);
+                        console.log("descriptionssssss",e.target.value);
+                      }} />
                     </Form.Item>
                   </div>
                 </div>
               </div>
               <div className="row justify-content-center ">
                 <div className="col-auto">
-                  <Button btnType="save">Save</Button>
+                  <Button type="submit" btnType="save">Save</Button>
                 </div>
               </div>
             </Form>
@@ -274,8 +416,8 @@ const handleupdate = ( ) => {
         <Custom_model
           size={"sm"}
           show={successPopup}
-          //   onHide={() => setSuccessPopup(false)}
-          // success
+            onHide={() => setSuccessPopup(false)}
+          success
         />
       </Custom_model>
 
@@ -297,7 +439,7 @@ const handleupdate = ( ) => {
                   className="edit_button"
                   onClick={() => {
                     handleviewtoedit(viewpaymentmode);
-                    // setShowModalEdit(true);
+                    console.log("ppppppp",viewpaymentmode);
                     setShowViewModal(false);
                   }}
                 >
@@ -315,8 +457,7 @@ const handleupdate = ( ) => {
               <div className="col-1">:</div>
               <div className="col-6 justify-content-start">
                 <p className="modal-view-data">
-                  cod
-                  {/* {viewpaymentmode.name} */}
+                  {viewpaymentmode.name}
                 </p>
               </div>
             </div>
@@ -327,17 +468,14 @@ const handleupdate = ( ) => {
               <div className="col-1">:</div>
               <div className="col-6 justify-content-start">
                 <p className="modal-view-data">
-                  cod cod
-                  {/* {viewpaymentmode.description} */}
+                  {/* cod cod */}
+                  {viewpaymentmode.description}
                 </p>
               </div>
             </div>
           </div>
         }
       />
-
-
-
 
       {/* edit modal */}
       <Custom_model
@@ -355,8 +493,10 @@ const handleupdate = ( ) => {
                   form={editForm}
                   onFinish={(values) => {
                     console.log("values iss", values);
-                    handleupdate()
+                    handleupdate(values);
+                    console.log("nnnnnn",values);
                   }}
+                  // onFinish={handleupdate}
                   onFinishFailed={(error) => {
                     console.log(error);
                   }}
@@ -364,7 +504,7 @@ const handleupdate = ( ) => {
                   <div className="col-12">
                     <label>Name</label>
                     <Form.Item
-                      name="name"
+                      name="paymentmodename"
                       rules={[
                         {
                           required: true,
@@ -386,54 +526,29 @@ const handleupdate = ( ) => {
                         value={editpaymentmodename}
                         onChange={(e) => {
                           seteditpaymentmodename(e.target.value);
-                        //   setErrormsg("");
-                         
                         }}
-                      
                       />
                     </Form.Item>
-                    {/* {Errormsg ? (
-                          <label style={{ color: "red" }}>{Errormsg}</label>
-                        ) : (
-                          ""
-                        )} */}
-                    {/* {uniqueeditCode ? (
-                      <p
-                        style={{ color: "red", marginTop: "-24px" }}
-                        className="mb-2"
-                      >
-                        Freight type Name {uniqueErrMsg.UniqueErrName}
-                      </p>
-                    ) : null} */}
                   </div>
                   <div className="col-12">
                     <label>Description</label>
                     <Form.Item 
-                    name="description"
+                    name="paymentmodedesc"
                     >
-                     <TextArea  
-                     value={editpaymentmodedesc}
-                     onChange={(e)=>{
-                      seteditpaymentmodedesc(e.target.value)
-                     }}
-                     />
+                      <TextArea
+                        value={editpaymentmodedesc}
+                        onChange={(e) => {
+                          seteditpaymentmodedesc(e.target.value);
+                        }}
+                      />
                     </Form.Item>
                   </div>
-
-                  
 
                   <div className="col-12 d-flex justify-content-center mt-5">
                     <Button className="save_button">Save</Button>
                   </div>
                 </Form>
               </div>
-              {/* {error ? (
-                <div className="">
-                  <ErrorMsg code={"400"} />
-                </div>
-              ) : (
-                ""
-              )} */}
             </div>
           </div>
         }
@@ -444,11 +559,6 @@ const handleupdate = ( ) => {
         onHide={() => setSuccessPopup(false)}
         success
       />
-  
-
-
-
-
     </>
   );
 }

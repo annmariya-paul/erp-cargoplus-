@@ -134,6 +134,7 @@ const ROUTES = {
   ADD_JOBPAYMENT: "/add_job_payment",
   EDIT_JOBPAYMENT: "/edit_job_payment",
   VIEW_JOBPAYMENT: "/view_job_payment",
+  VIEW_JOBPAYMENT_ID:"/view_job_payment/:id",
 
   //  Accounts -> Settings
   CREDIT_NOTE_TYPE: "/credit_note_type",

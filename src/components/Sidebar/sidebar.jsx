@@ -1106,6 +1106,18 @@ export default function Sidebar({ showSidebar }) {
                       </NavLink>
                     </li>
                   )}
+                   {checkPermission("job_payments") && (
+                    <li className="nav-text ">
+                      <NavLink
+                        className={({ isActive }) =>
+                          isActive ? "active-link" : "link"
+                        }
+                        to={ROUTES.CREDIT_NOTES}
+                      >
+                        <div className="ms-4">Credit Notes</div>
+                      </NavLink>
+                    </li>
+                  )}
                 </>
               ) : (
                 ""

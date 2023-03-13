@@ -196,7 +196,7 @@ export default function TaxType() {
       title: "TAX PERCENTAGE",
       dataIndex: "tax_type_percentage",
       key: "tax_type_percentage",
-      align: "left",
+      align: "center",
     },
     {
       title: "DESCRIPTION",

@@ -408,7 +408,7 @@ export default function Edit_purchase() {
                     <Input_Number min={0} precision={2} disabled={true} />
                   </Form.Item>
                 </div>
-                <div className="col-4">
+                {/* <div className="col-4">
                   <label>Status</label>
                   <Form.Item name="status">
                     <InputType
@@ -418,7 +418,7 @@ export default function Edit_purchase() {
                       }}
                     />
                   </Form.Item>
-                </div>
+                </div> */}
                 <div className="col-4">
                   <label>Remarks</label>
                   <Form.Item name="remarks">

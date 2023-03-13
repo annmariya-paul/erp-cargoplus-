@@ -211,7 +211,7 @@ function Productlist() {
           .toLowerCase()
           .includes(value.toLowerCase());
       },
-      align: "center",
+      align: "left",
       width: "23%",
     },
 
@@ -220,7 +220,7 @@ function Productlist() {
       dataIndex: "product_code",
       key: "CODE",
       //   width: "23%",
-      align: "center",
+      align: "left",
       filteredValue: [searchType],
       onFilter: (value, record) => {
         return String(record.product_code)
@@ -233,7 +233,7 @@ function Productlist() {
       dataIndex: "catgeory_name",
       key: "CATEGORY",
       width: "14%",
-      align: "center",
+      align: "left",
       filteredValue: [searchCategory],
       onFilter: (value, record) => {
         console.log("prrrr",record)

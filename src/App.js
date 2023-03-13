@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ROUTES } from "./routes";
-import Sidebar from "./components/Sidebar/sidebar";
+// import Sidebar from "./components/Sidebar/sidebar";
 import Layout from "./layouts/layout";
 import Lead from "./pages/CRM/lead/lead";
 import LeadList from "./pages/CRM/lead/lead_list/lead_list";

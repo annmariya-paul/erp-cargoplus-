@@ -577,7 +577,7 @@ function Opportunitylist(props) {
       dataIndex: "opportunity_created_by",
       key: "CONVERTED BY",
       width: "17%",
-      align: "center",
+      align: "left",
     },
     {
       title: "SOURCE",
@@ -595,7 +595,7 @@ function Opportunitylist(props) {
       title: "PARTY",
       dataIndex: "opportunity_party",
       key: "PARTY",
-      align: "center",
+      align: "left",
     },
     {
       title: "ACTION",

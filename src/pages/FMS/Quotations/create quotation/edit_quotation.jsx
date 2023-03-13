@@ -1187,6 +1187,8 @@ export default function EditQuotation(
     }
   }, [opportunityNo, id]);
 
+  const beforeUpload = (file, fileList) => {};
+
   return (
     <>
       <div className="container-fluid">
@@ -1771,7 +1773,7 @@ export default function EditQuotation(
                           filetype={"Accept only pdf and docs"}
                           accept=".pdf,.docs,"
                           // onPreview={handlePreview}
-                          beforeUpload={true}
+                          beforeUpload={beforeUpload}
                           onChange={(file) => {
                             console.log("Before upload", file.file);
                             console.log(

@@ -9,14 +9,16 @@ import moment from "moment";
 
 const CostAndExpenseReport = () => {
   const { Option } = Select;
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate ] = useState("");
+  const [startDate, setStartDate] = useState(moment().startOf('month'));
+  const [endDate, setEndDate ] = useState(moment());
   const [serialNo, setserialNo] = useState(1);
   const [customerList, setCustomerList] = useState();
   const [selectedCustomer, setSelectedCustomer] = useState();
   const [jobList, setJobList] = useState();
   const [selectedJob,setSelectedJob] = useState();
   const [reportData, setReportData] = useState();
+  // console.log(moment(new Date()).format("YYYY-MM-DD"))
+  console.log(moment(new Date()).format("YYYY-MM-DD"),"New Date Details")
   const columns = [
     {
       title: "Sl. No.",
@@ -36,7 +38,7 @@ const CostAndExpenseReport = () => {
       //       .toLowerCase()
       //       .includes(value.toLowerCase());
       //   },
-      align: "center",
+      align: "left",
     },
     {
       title: "Customer",
@@ -48,17 +50,17 @@ const CostAndExpenseReport = () => {
       //       .toLowerCase()
       //       .includes(value.toLowerCase());
       //   },
-      align: "center",
+      align: "left",
     },
     {
-      title: "Cost",
+      title: "Total Cost",
       dataIndex: "cost",
       key: "cost",
       //   width: "29%",
-      align: "center",
+      align: "right",
     },
     {
-      title: "Expense",
+      title: "Total Expense",
       dataIndex: "expense",
       key: "expense",
       //   width: "20%",
@@ -68,23 +70,14 @@ const CostAndExpenseReport = () => {
       //       .toLowerCase()
       //       .includes(value.toLowerCase());
       //   },
-      align: "center",
+      align: "right",
     },
     {
-      title: "Profit/Loss",
+      title: "Total Profit/Loss",
       dataIndex: "profit_loss",
       key: "profit_loss",
       //   width: "29%",
-      align: "center",
-    },
-  ];
-  const data = [
-    {
-      job_no: "00111",
-      customer: "Test",
-      cost: "30.000",
-      expense: "20.000",
-      profit_loss: "+10.000",
+      align: "right",
     },
   ];
 
@@ -95,7 +88,6 @@ const CostAndExpenseReport = () => {
       );
       if (customerList?.status === 200) {
         setCustomerList(customerList?.data.data);
-        console.log("Customer List are:", customerList?.data.data);
       }
     } catch (err) {
       console.log("Error While fetching customer list");
@@ -141,9 +133,9 @@ const CostAndExpenseReport = () => {
           temp.push({
             job_no: item.job_number,
             customer: item.customer.lead_customer_name,
-            cost: item.cost,
-            expense: item.expense,
-            profit_loss: item.profitLoss,
+            cost: item.cost != null?(item.cost).toFixed(2):"",
+            expense: item.expense != null?(item.expense).toFixed(2):"",
+            profit_loss: item.profitLoss != null?(item.profitLoss).toFixed(2):"",
           })
         })
         setReportData(temp)
@@ -225,6 +217,7 @@ const CostAndExpenseReport = () => {
                   <p className="mt-4">Date From</p>
                   <div className={styles.datepicker_wrapper}>
                     <DatePicker
+                    // defaultValue={moment(new Date()).format("YYYY-MM-DD")}
                       format={"DD-MM-YYYY"}
                       placeholder="From"
                       value={startDate}

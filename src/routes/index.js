@@ -109,6 +109,7 @@ const ROUTES = {
   PAYMEMENT_MODE: "/payment_mode",
   ADD_PURCHASE: "/add_purchase",
   PURCHASE: "/purchase",
+  CREDIT_NOTES:"/credit_notes",
   
 
   //  Accounts

@@ -12,7 +12,8 @@ import { MdPageview } from "react-icons/md";
 // import { GiWorld } from "react-icons/gi";
 import PublicFetch from "../../../utils/PublicFetch";
 import { ACCOUNTS } from "../../../api/bootapi";
-
+import CheckUnique from "../../../check Unique/CheckUnique";
+import { UniqueErrorMsg } from "../../../ErrorMessages/UniqueErrorMessage";
 
 export default function Payment_mode() {
   const [paymentmode, setpaymentmode] = useState("");
@@ -24,17 +25,19 @@ export default function Payment_mode() {
   const [successPopup, setSuccessPopup] = useState(false);
   const [showViewModal, setShowViewModal] = useState(false);
   const [searchedText, setSearchedText] = useState("");
-
+  const [uniqueCode, setUniqueCode] = useState(false);
+  const [uniqueName, setUniqueName] = useState(false);
+  const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
   const [paymentEditPopup, setPaymentEditPopup] = useState(false);
   const [editpaymentmodeid,seteditpaymentmodeid]= useState("")
   const [editpaymentmodename, seteditpaymentmodename] = useState("");
   const [editpaymentmodedesc, seteditpaymentmodedesc] = useState("");
   const [payments,setpayments] = useState("")
   const [serialNo, setserialNo] = useState(1);
-
+  const [editUniqueName, setEditUniqueName] = useState();
   const [adForm] = Form.useForm();
   const [editForm] = Form.useForm();
-
+  const [uniqueEditName, setUniqueEditName] = useState(false);
   const getData = (current, pageSize) => {
     return payments?.slice((current - 1) * pageSize, current * pageSize);
   };
@@ -103,6 +106,7 @@ export default function Payment_mode() {
     seteditpaymentmodeid(e.pay_mode_id);
     seteditpaymentmodename(e.pay_mode_name);
     seteditpaymentmodedesc(e.pay_mode_desc);
+    setEditUniqueName(e?.pay_mode_name);
     editForm.setFieldsValue({
       paymentmodename: e.pay_mode_name,
       paymentmodedesc: e.pay_mode_desc,
@@ -185,13 +189,14 @@ useEffect(() => {
       title: "PAYMENT MODE",
       dataIndex: "pay_mode_name",
       key: "pay_mode_name",
+      width: "30%",
         filteredValue: [searchedText],
         onFilter: (value, record) => {
           return String(record.pay_mode_name)
           .toLowerCase()
             .includes(value.toLowerCase());
         },
-      align: "center",
+      align: "left",
     },
     {
       title: "DESCRIPTION",
@@ -203,7 +208,7 @@ useEffect(() => {
           .toLowerCase()
           .includes(value.toLowerCase());
       },
-      align: "center",
+      align: "left",
     },
     {
       title: "ACTION",
@@ -384,11 +389,26 @@ useEffect(() => {
                       ]}
                     >
                       <InputType 
+                       value={name}
                       onChange={(e) => {
                         setName(e.target.value);
                         console.log("name name",name);
-                      }} />
+                        setUniqueName(false);
+                      }}
+                      onBlur={async () => {
+                        let n = await CheckUnique({
+                          type: "paymentmodename",
+                          value: name,
+                        });
+                        setUniqueName(n);
+                      }}
+                       />
                     </Form.Item>
+                    {uniqueName ? (
+                      <p style={{ color: "red" }}>
+                    Payment mode Name {uniqueErrMsg.UniqueErrName}
+                      </p>
+                    ) : null}
                   </div>
                 </div>
                 <div className="col-12 pt-1">
@@ -526,9 +546,26 @@ useEffect(() => {
                         value={editpaymentmodename}
                         onChange={(e) => {
                           seteditpaymentmodename(e.target.value);
+                          setUniqueEditName(false);
+                        }}
+
+                        onBlur={ async () => {
+                         
+                          if (editUniqueName !== editpaymentmodename) {
+                            let a = await CheckUnique({type:"paymentmodename",value:editpaymentmodename})
+                         
+                            setUniqueEditName(a);
+                          }
+                       
                         }}
                       />
                     </Form.Item>
+                    {uniqueEditName ? (
+                      <p style={{ color: "red"}}>
+                      Payment mode Name {uniqueErrMsg.UniqueErrName}
+                      </p>
+                    ) : null}
+
                   </div>
                   <div className="col-12">
                     <label>Description</label>

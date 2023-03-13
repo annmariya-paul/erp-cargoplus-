@@ -484,6 +484,10 @@ function App() {
               <Route index element={<CostAndExpenseReport />} />
             </Route>
 
+            <Route path={ROUTES.ENQUIRY_REPORT} element={<ProtectedRoute />}>
+              <Route index element={<EnquiryReport />} />
+            </Route>
+
             <Route
               path={ROUTES.TASKANDEXPENSES_ID}
               element={<ProtectedRoute />}

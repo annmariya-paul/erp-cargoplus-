@@ -885,7 +885,7 @@ export default function Taskexpenses() {
       title: "Tax %",
       dataIndex: "job_task_expense_tax_perc",
       key: "job_task_expense_tax_perc",
-      width: "2%",
+      width: "10%",
       align: "right",
       className: "firstrow",
       render: (data, index) => {
@@ -901,9 +901,9 @@ export default function Taskexpenses() {
               rules={[{ required: true, message: "Required" }]}
             >
               <InputNumber
-                style={{ minWidth: "5px" }}
+                style={{ minWidth: "20px" }}
                 bordered={false}
-                className="input_bg"
+                className="input_bg "
                 value={index.job_task_expense_tax_perc}
                 // onChange={(value) => {
                 //   console.log(" input numberevent ", value, index.key);
@@ -938,7 +938,8 @@ export default function Taskexpenses() {
               rules={[{ required: true, message: "Required" }]}
             >
               <Select
-                style={{ minWidth: "150px" }}
+                className="w-100"
+                style={{ minWidth: "140px" }}
                 bordered={false}
                 showArrow={false}
                 width={"1000px"}

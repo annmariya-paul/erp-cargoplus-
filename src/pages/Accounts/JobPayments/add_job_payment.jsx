@@ -33,6 +33,7 @@ export default function AddJobPayments() {
   const [jobExchangeRate, setJobExchangeRate] = useState();
   const [fileAttach,setFileAttach] = useState();
   const [JobLeadId,setJobLeadId] = useState();
+  const [currencyId,setCurrencyId] = useState();
 console.log("jjj",JobLeadId);
   const close_modal = (mShow, time) => {
     if (!mShow) {
@@ -116,7 +117,9 @@ console.log("jjj",JobLeadId);
       const oneJob = await PublicFetch.get(`${CRM_BASE_URL_FMS}/job/${id}`);
       if (oneJob.data.success) {
         setJobLeadId(oneJob?.data?.data?.crm_v1_leads?.lead_id);
-        console.log("one job iss ::", oneJob?.data?.data);
+        setCurrencyId(
+          oneJob?.data?.data.generalsettings_v1_currency.currency_id
+        );
         let jobAmount = 0;
         if (oneJob?.data?.data?.fms_v1_job_task_expenses) {
           oneJob?.data?.data?.fms_v1_job_task_expenses.map((i, index) => {
@@ -124,11 +127,9 @@ console.log("jjj",JobLeadId);
           });
         }
         addForm.setFieldsValue({
-          JobLeadId: oneJob?.data?.data?.crm_v1_leads?.lead_id,
+          // JobLeadId: oneJob?.data?.data?.crm_v1_leads?.lead_id,
           lead_name: oneJob?.data?.data?.crm_v1_leads?.lead_customer_name,
           currency:
-            oneJob?.data?.data.generalsettings_v1_currency.currency_name,
-          currency_id:
             oneJob?.data?.data.generalsettings_v1_currency.currency_name,
           Job_exchangeRate: oneJob?.data?.data.job_total_cost_exch.toFixed(2),
           job_amount: jobAmount.toFixed(2),
@@ -159,13 +160,14 @@ console.log("jjj",JobLeadId);
   addForm.setFieldValue("voucher_date", thisDate);
 
   const addCreditNoteType = (data) => {
-    console.log("addcreditdata",data);
+     console.log("addcreditdata", data);
     const date = moment(data.voucher_date);
     const formData = new FormData(data);
+   
     formData.append("job_pay_voucher_date", date);
     formData.append("job_pay_job_id", data.job_id);
     formData.append("job_pay_lead_id", JobLeadId);
-    formData.append("job_pay_currency", data.currency_id);
+    formData.append("job_pay_currency", data.currencyId);
     formData.append("job_pay_exchange_rate", data.Job_exchangeRate);
     formData.append("job_pay_job_amount", data.job_amount);
     formData.append("job_pay_advance_amount_fx", data.advance_amount);
@@ -173,19 +175,21 @@ console.log("jjj",JobLeadId);
     formData.append("job_pay_remarks", data.remarks);
     // formData.append("job_pay_docs", data.attachment);
     if (fileAttach) {
-      formData.append("attachment", fileAttach);
+      formData.append("job_pay_docs", fileAttach);
     }
+   
     PublicFetch.post(`${ACCOUNTS}/job-payments`, formData, {
       "Content-Type": "Multipart/form-Data",
     })
       .then((res) => {
         console.log("success", res);
         if (res.data.success) {
+          console.log("hello", res.data.data);
           setSuccessPopup(true);
           addForm.resetFields();
           close_modal(successPopup, 1000);
         } else {
-          console.log("", res.data.data);
+          console.log("helo", res.data.data);
           // setBrandError(res.data.data);
         }
       })
@@ -205,7 +209,7 @@ console.log("jjj",JobLeadId);
               name="addForm"
               form={addForm}
               onFinish={(values) => {
-                console.log("creditnote values", values);
+                console.log("jobpayvalues", values);
                 addCreditNoteType(values);
               }}
               onFinishFailed={(error) => {

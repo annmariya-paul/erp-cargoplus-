@@ -25,7 +25,7 @@ function Employees() {
   const [employeeDesignation, setEmployeeDesignation] = useState("");
   const [employeeGrade, setEmployeeGrade] = useState("");
   const [employeeType, setEmployeeType] = useState("");
-  const[employeeroleid,setEmployeeroleid]=useState();
+  const [employeeroleid, setEmployeeroleid] = useState();
   const [empEmail, setEmpEmail] = useState();
   const [empPassword, setEmpPassword] = useState();
   const [pageSize, setPageSize] = useState("25");
@@ -57,7 +57,7 @@ function Employees() {
       render: (value, item, index) => serialNo + index,
       align: "center",
     },
-   
+
     {
       title: "EMPLOYEE NAME",
       dataIndex: "employee_name",
@@ -78,19 +78,19 @@ function Employees() {
             .includes(value.toLowerCase()) ||
           String(record.employee_branch)
             .toLowerCase()
-            .includes(value.toLowerCase())||
-            String(record.employee_department)
-              .toLowerCase()
-              .includes(value.toLowerCase())||
-              String(record.employee_designation)
-                .toLowerCase()
-                .includes(value.toLowerCase())||
-                String(record.employee_type)
-                  .toLowerCase()
-                  .includes(value.toLowerCase())||
-                  String(record.employee_grade)
-                    .toLowerCase()
-                    .includes(value.toLowerCase())
+            .includes(value.toLowerCase()) ||
+          String(record.employee_department)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.employee_designation)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.employee_type)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.employee_grade)
+            .toLowerCase()
+            .includes(value.toLowerCase())
         );
       },
       align: "left",
@@ -332,13 +332,13 @@ function Employees() {
         `${CRM_BASE_URL_HRMS}/employees/${emp_id}`,
         {
           employee_name: employeeName.trim(""),
-          employee_code: employeeCode,
+          // employee_code: employeeCode,
           employee_branch: employeeBranch,
           employee_department: employeeDept,
           employee_designation: employeeDesignation,
           employee_grade: employeeGrade,
           employee_type: employeeType,
-          employee_role_id:employeeroleid,
+          employee_role_id: employeeroleid,
           // employee_email: empEmail,
           // employee_password: empPassword,
         }
@@ -460,7 +460,6 @@ function Employees() {
       <CustomModel
         width={650}
         show={modalEditEmployee}
-
         bodyStyle={{ height: "550px" }}
         onHide={() => setModalEditEmployee(false)}
         View_list
@@ -522,16 +521,17 @@ function Employees() {
                               setEmployeeCode(e.target.value);
                               setuniqueeditCode(false);
                             }}
-                            onBlur={async () => {
-                              if (newName !== employeeCode) {
-                                let a = await CheckUnique({
-                                  type: "employeecode",
-                                  value: employeeCode,
-                                });
-                                console.log("hai how are u", a);
-                                setuniqueeditCode(a);
-                              }
-                            }}
+                            disabled={true}
+                            // onBlur={async () => {
+                            //   if (newName !== employeeCode) {
+                            //     let a = await CheckUnique({
+                            //       type: "employeecode",
+                            //       value: employeeCode,
+                            //     });
+                            //     console.log("hai how are u", a);
+                            //     setuniqueeditCode(a);
+                            //   }
+                            // }}
                           />
                         </Form.Item>
                         {uniqueeditCode ? (
@@ -724,7 +724,7 @@ function Employees() {
                           </SelectBox>
                         </Form.Item>
                       </div>
-                    
+
                       <div className="col-12 mt-5">
                         <div className="d-flex justify-content-center">
                           <Button

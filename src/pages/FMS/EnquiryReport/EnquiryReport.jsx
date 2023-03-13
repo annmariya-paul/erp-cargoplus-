@@ -110,8 +110,8 @@ function EnquiryReport() {
                 <div className="row">
                   <div className="col-xl-3 ">
                     <label>Enquiry No</label>
-                    <div className="d-flex align-items-center">
-                      <div className=" mx-0 mt-2">
+                    {/* <div className="d-flex justify-content-center align-items-center"> */}
+                    {/* <div style={{ width: "100px" }} className=" mx-0 mt-2">
                         <Button
                           onClick={() => {
                             handleAllSelected();
@@ -121,21 +121,22 @@ function EnquiryReport() {
                         >
                           All <AiOutlineCaretDown />
                         </Button>
-                      </div>
-                      <div className="col-9 mx-0 ">
-                        <SelectBox>
-                          {allEnquiryNo &&
-                            allEnquiryNo.length > 0 &&
-                            allEnquiryNo.map((item, index) => {
-                              return (
-                                <Select.Option key={item.quotation_id}>
-                                  {item.quotation_no}
-                                </Select.Option>
-                              );
-                            })}
-                        </SelectBox>
-                      </div>
+                      </div> */}
+                    <div className="w-100 mx-0 ">
+                      <SelectBox defaultValue={"All"} className="w-100">
+                        <Select.Option value="All">All</Select.Option>
+                        {allEnquiryNo &&
+                          allEnquiryNo.length > 0 &&
+                          allEnquiryNo.map((item, index) => {
+                            return (
+                              <Select.Option key={item.quotation_id}>
+                                {item.quotation_no}
+                              </Select.Option>
+                            );
+                          })}
+                      </SelectBox>
                     </div>
+                    {/* </div> */}
                   </div>
                   <div className="col-xl-3">
                     <label className="mb-2">Date From</label>

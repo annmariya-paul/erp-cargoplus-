@@ -173,12 +173,18 @@ function DailyExpence() {
     // },
   ];
 
+  const pageofIndex = numOfItems * (current - 1) - 1 + 1;
+  const pagesizecount = Math.ceil(totalCount / numOfItems);
+
   const getDailyExpense = () => {
-    PublicFetch.get(`${ACCOUNTS}/daily-expense?startIndex=0&noOfItems=100`)
+    PublicFetch.get(
+      `${ACCOUNTS}/daily-expense?startIndex=${pageofIndex}&noOfItems=${numOfItems}`
+    )
       .then((res) => {
         console.log("Response", res);
         if (res.data.success) {
           setAllExpenseData(res.data.data);
+          setTotalcount();
         }
       })
       .catch((err) => {

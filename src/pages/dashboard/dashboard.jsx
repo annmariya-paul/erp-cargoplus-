@@ -260,6 +260,11 @@ function Dashboard() {
                   style={{ height: "450px" }}
                   className="card rounded shadow-sm"
                 >
+                  <div className="row">
+                    <div className="col-12 d-flex justify-content-center pt-3">
+                      <label>Agent Wise Cost</label>
+                    </div>
+                  </div>
                   <BarChart />
                 </div>
               </div>
@@ -282,6 +287,11 @@ function Dashboard() {
                   style={{ height: "450px" }}
                   className="card rounded shadow-sm"
                 >
+                  <div className="row">
+                    <div className="col-12 d-flex justify-content-center pt-3">
+                      <label>job by Agent</label>
+                    </div>
+                  </div>
                   <BarChart />
                 </div>
               </div>

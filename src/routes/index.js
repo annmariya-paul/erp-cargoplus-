@@ -117,6 +117,11 @@ const ROUTES = {
   EXPENSE_CATEGORY: "/expense_category",
   EDIT_EXPENSE: "/edit_expense",
   EDIT_EXPENSE_ID: "/edit_expense/:id",
+  EDIT_CREDIT_NOTES:"/edit_credit_notes",
+  EDIT_CREDIT_NOTES_ID:"/edit_credit_notes/:id",
+  VIEW_CREDIT_NOTES :"/view_credit_notes",
+  VIEW_CREDIT_NOTES_ID :"/view_credit_notes/:id",
+
   /*payments routes */
   PAYMENTS: "/payments",
   ADD_PAYMENTS: "/add_payments",

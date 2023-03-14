@@ -159,10 +159,12 @@ function Credit_notes() {
               // }}
               className="actionEdit m-0 p-0"
             >
+               <Link to={`${ROUTES.EDIT_CREDIT_NOTES}/${index.id}`}>
               <FiEdit fontSize={"12px"} />
+              </Link>
             </div>
 
-            <Link to={`${ROUTES.PRODUCTDETAIL}/${index.product_id}`}>
+            <Link to={`${ROUTES.VIEW_CREDIT_NOTES}/${index.id}`}>
               <div className="actionView m-0 p-0">
                 <MdPageview />
               </div>

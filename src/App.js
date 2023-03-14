@@ -112,7 +112,8 @@ import Print_purchase from "./pages/Accounts/settings/Purchase/print_purchase";
 import Credit_notes from "./pages/Accounts/CreditNotes/list_creditnotes";
 import Addcredit_notes from "./pages/Accounts/CreditNotes/add_creditnotes";
 import Bank from "./pages/Accounts/settings/BankAccount/bank";
-
+import Editcredit_notes from "./pages/Accounts/CreditNotes/edit_creditnote";
+import CreditnotesView from "./pages/Accounts/CreditNotes/view_creditnotes";
 import JobPayments from "./pages/Accounts/JobPayments/job_payments";
 import AddJobPayments from "./pages/Accounts/JobPayments/add_job_payment";
 import EditJobPayment from "./pages/Accounts/JobPayments/edit_job_payments";
@@ -469,6 +470,13 @@ function App() {
             </Route>
             <Route path={ROUTES.ADD_CREDIT_NOTES} element={<ProtectedRoute />}>
               <Route index element={<Addcredit_notes />} />
+            </Route>
+
+            <Route path={ROUTES.EDIT_CREDIT_NOTES_ID} element={<ProtectedRoute />}>
+              <Route index element={<Editcredit_notes />} />
+            </Route>
+            <Route path={ROUTES.VIEW_CREDIT_NOTES_ID} element={<ProtectedRoute />}>
+              <Route index element={<CreditnotesView />} />
             </Route>
 
             {/* General settings */}

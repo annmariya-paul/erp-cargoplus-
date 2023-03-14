@@ -61,7 +61,7 @@ function Credit_notes() {
       title: "VOUCHER NO",
       dataIndex: "voucher_no",
       key: "voucher_no",
-      width: "23%",
+      width: "13%",
       // filteredValue: [searchStatus],
       // onFilter: (value, record) => {
       //   return String(record.lead_status)
@@ -305,7 +305,7 @@ function Credit_notes() {
                 //   onClick={() => setShowAddOpportunity(true)}
                 className="add_opportunity"
               >
-                <Link to={ROUTES.CREDITCREATE}>
+                <Link to={ROUTES.ADD_CREDIT_NOTES}>
                   <span
                     style={{
                       color: "white",

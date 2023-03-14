@@ -17,27 +17,17 @@ import TextArea from "../../../components/ InputType TextArea/TextArea";
 import InputType from "../../../components/Input Type textbox/InputType";
 
 import SelectBox from "../../../components/Select Box/SelectBox";
-// import SelectBox from "../../../../components/Select Box/SelectBox";
-// import PublicFetch from "../../../../utils/PublicFetch";
-// import { CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
-// import { ROUTES } from "../../../../routes";
-import "./product.scss";
 
-// import { UniqueErrorMsg } from "../../../../ErrorMessages/UniqueErrorMessage";
+import {ROUTES} from "../../../routes";
 
-// import CheckUnique from "../../../../check Unique/CheckUnique";
-// import { UniqueErrorMsg } from "../../../../ErrorMessages/UniqueErrorMessage";
 
-function ProductCreate() {
+function Addcredit_notes() {
   const [successPopup, setSuccessPopup] = useState(false);
   const [error, setError] = useState(false);
   const [addForm] = Form.useForm();
   const navigate = useNavigate();
  
  
- 
-
-
   const close_modal = (mShow, time) => {
     if (!mShow) {
       setTimeout(() => {
@@ -64,7 +54,7 @@ function ProductCreate() {
     <div>
       <div className="container-fluid">
         <div>
-          <h5 className="lead_text">Products</h5>
+          <h5 className="lead_text">Credit Notes</h5>
         </div>
         <div
           style={{ borderRadius: "8px" }}
@@ -72,7 +62,7 @@ function ProductCreate() {
         >
           <div className="container my-3">
             <div className="my-3">
-              <h6 className="lead_text">Add Product</h6>
+              <h6 className="lead_text">Add Credit Notes</h6>
             </div>
             <Form
               name="addForm"
@@ -87,55 +77,12 @@ function ProductCreate() {
             >
               <div className="row my-2">
                 <div className="col-4">
-                  <label>Name</label>
-                  <Form.Item
-                    name="name"
-                    rules={[
-                      {
-                        required: true,
-                        pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                        message: "Please enter a Valid Product Name",
-                      },
-                      {
-                        min: 2,
-                        message: "Product Name must be at least 2 characters",
-                      },
-                      {
-                        max: 100,
-                        message:
-                          "Product Name cannot be longer than 100 characters",
-                      },
-                    ]}
-                  >
-                    <InputType
-                      onChange={(e) => {
-                        setName(e.target.value);
-
-                        setuniqueCode();
-                      }}
-                      onBlur={async () => {
-                        let a = await CheckUnique({
-                          type: "productname",
-                          value: name,
-                        });
-
-                        setuniqueCode(a);
-                      }}
-                    />
-                  </Form.Item>
-                  {uniqueCode ? (
-                    <div>
-                      <label style={{ color: "red" }}>
-                        Product name {UniqueErrorMsg.UniqueErrName}
-                      </label>
-                    </div>
-                  ) : (
-                    ""
-                  )}
+                  <label>Date</label>
+               
                 </div>
                 <div className="col-4">
                   <label>Code</label>
-                  <Form.Item
+                  {/* <Form.Item
                     name="code"
                     rules={[
                       {
@@ -167,18 +114,18 @@ function ProductCreate() {
                         setuniqueCode2(a);
                       }}
                     />
-                  </Form.Item>
-                  {uniqueCode2 ? (
+                  </Form.Item> */}
+                  {/* {uniqueCode2 ? (
                     <label style={{ color: "red" }}>
                       Product Code {UniqueErrorMsg.UniqueErrName}
                     </label>
                   ) : (
                     ""
-                  )}
+                  )} */}
                 </div>
                 <div className="col-4">
                   <label>Category</label>
-                  <Form.Item
+                  {/* <Form.Item
                     className="mt-2"
                     name="category"
                     rules={[
@@ -202,11 +149,11 @@ function ProductCreate() {
                       onChange={onChangetree}
                       onSelect={onSelect}
                     />
-                  </Form.Item>
+                  </Form.Item> */}
                 </div>
                 <div className="col-6 mt-2">
                   <label>Brand</label>
-                  <Form.Item
+                  {/* <Form.Item
                     name="brand"
                     rules={[
                       {
@@ -236,11 +183,11 @@ function ProductCreate() {
                           );
                         })}
                     </SelectBox>
-                  </Form.Item>
+                  </Form.Item> */}
                 </div>
                 <div className="col-6 mt-2">
                   <label>Unit</label>
-                  <Form.Item
+                  {/* <Form.Item
                     name="unit"
                     rules={[
                       {
@@ -270,12 +217,12 @@ function ProductCreate() {
                           );
                         })}
                     </SelectBox>
-                  </Form.Item>
+                  </Form.Item> */}
                 </div>
 
                 <div className="col-6 mt-2">
                   <label>Description</label>
-                  <Form.Item
+                  {/* <Form.Item
                     className="mt-2"
                     name="description"
                     rules={[
@@ -292,18 +239,18 @@ function ProductCreate() {
                     onChange={(e) => setDescription(e.target.value)}
                   >
                     <TextArea />
-                  </Form.Item>
+                  </Form.Item> */}
                 </div>
 
                 <div className="col-6 mt-2">
                   <label>Display Picture</label>
-                  <Form.Item className="mt-2" name="new">
+                  {/* <Form.Item className="mt-2" name="new">
                     <FileUpload
-                      // multiple
+                 
                       listType="picture"
                       accept=".png,.jpeg,.jpg"
                       filetype={"Accept only png,jpg and jpeg"}
-                      // onPreview={handlePreview}
+                     
                       beforeUpload={beforeUpload}
                       onChange={(file) => {
                         console.log("Before upload", file.file);
@@ -323,10 +270,7 @@ function ProductCreate() {
                       }}
                     />
 
-                    {/* <img src={previewImage}   
-                    height="40px"
-                    width="40px"/> */}
-
+                 
                     {imageSize ? (
                       <p style={{ color: "red" }}>
                         Upload Image size between 1 kb and 500 kb
@@ -334,11 +278,11 @@ function ProductCreate() {
                     ) : (
                       ""
                     )}
-                  </Form.Item>
+                  </Form.Item> */}
                 </div>
                 <div className="col-6 ">
                   <label>Attributes</label>
-                  <Form.Item
+                  {/* <Form.Item
                     name="attribute"
                     rules={[
                       {
@@ -350,10 +294,7 @@ function ProductCreate() {
                     <Checkbox.Group
                       className="mt-2 px-3"
                       onChange={newValues}
-                      //    onChange={(e) => {setAttributes(parseInt(e.target.checked))
-                      //   console.log(e.target.checked)
-                      //   }
-                      // }
+                    
                     >
                       <div className="row p-2 attributes__height">
                         {attributes &&
@@ -369,7 +310,7 @@ function ProductCreate() {
                           })}
                       </div>
                     </Checkbox.Group>
-                  </Form.Item>
+                  </Form.Item> */}
                 </div>
                 <div className="col-12 d-flex justify-content-center pt-2">
                   <Button className="save_button">Save</Button>
@@ -391,4 +332,4 @@ function ProductCreate() {
   );
 }
 
-export default ProductCreate;
+export default Addcredit_notes;

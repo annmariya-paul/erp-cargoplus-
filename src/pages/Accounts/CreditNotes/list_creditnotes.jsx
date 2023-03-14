@@ -8,26 +8,26 @@ import {
   FaEdit,
 } from "react-icons/fa";
 
-import PublicFetch from "../../../../utils/PublicFetch";
-import { CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
+
+
 import { FiEdit } from "react-icons/fi";
 import { AiFillPrinter } from "react-icons/ai";
 import { MdFileCopy, MdPageview } from "react-icons/md";
-import Button from "../../../../components/button/button";
+import { CRM_BASE_URL } from "../../../api/bootapi";
 import { Link } from "react-router-dom";
-import { ROUTES } from "../../../../routes";
-import TableData from "../../../../components/table/table_data";
-import MyPagination from "../../../../components/Pagination/MyPagination";
-import logo from "../../../../components/img/logo192.png";
-import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
-// import "../lead.styles.scss";
-// import "../../.././opportunity_ List/opportunitylist.scss";
-import CustomModel from "../../../../components/custom_modal/custom_model";
-import FileUpload from "../../../../components/fileupload/fileUploader";
-import ErrorMsg from "../../../../components/error/ErrorMessage";
-import ProductEditModal from "./ProductEditModal";
+import Button from "../../../components/button/button";
+import {ROUTES} from "../../../routes";
+import TableData from "../../../components/table/table_data";
+import logo from "../../../components/img/logo192.png";
+import MyPagination from "../../../components/Pagination/MyPagination";
 
-function Productlist() {
+import ErrorMsg from "../../../components/error/ErrorMessage";
+import PublicFetch from "../../../utils/PublicFetch";
+import FileUpload from "../../../components/fileupload/fileUploader";
+import CustomModel from "../../../components/custom_modal/custom_model";
+
+
+function Credit_notes() {
   const [numOfItems, setNumOfItems] = useState("25");
   const [pageSize, setPageSize] = useState("25"); // page size
   const [current, setCurrent] = useState(1);
@@ -42,7 +42,7 @@ function Productlist() {
   const [modalOpportunity, setModalOpportunity] = useState(false);
   const [productid, setProductID] = useState();
   console.log("pr id from state", productid);
-
+  const [serialNo, setserialNo] = useState(1);
  
 
 
@@ -58,10 +58,10 @@ function Productlist() {
       align: "center",
     },
     {
-      title: "IMAGE",
-      dataIndex: "product_pic",
-      key: "IMAGE",
-      width: "23%",
+      title: "VOUCHER NO",
+      dataIndex: "voucher_no",
+      key: "voucher_no",
+      width: "13%",
       // filteredValue: [searchStatus],
       // onFilter: (value, record) => {
       //   return String(record.lead_status)
@@ -69,57 +69,74 @@ function Productlist() {
       //     .includes(value.toLowerCase());
       // },
 
-      align: "center",
-      render: (theImageURL, records) => (
-       <>
-       {theImageURL ?(
-         <img
-          src={`${process.env.REACT_APP_BASE_URL}/${theImageURL}`}
-          height="20px"
-          width={"20px"}
-        />
-        ):""}
-       </>
-        
-      ),
+      align: "left",
+     
     },
     {
-      title: "NAME",
-      dataIndex: "product_name",
-      key: "NAME",
+      title: "DATE",
+      dataIndex: "date",
+      key: "date",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.product_name)
+        return String(record.date)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
-      align: "center",
-      width: "23%",
+      align: "left",
+      width: "10%",
     },
 
     {
-      title: "CODE",
-      dataIndex: "product_code",
-      key: "CODE",
-      //   width: "23%",
-      align: "center",
+      title: "CUSTOMER",
+      dataIndex: "customer",
+      key: "customer",
+        width: "15%",
+      align: "left",
       filteredValue: [searchType],
       onFilter: (value, record) => {
-        return String(record.product_code)
+        return String(record.customer)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
     },
     {
-      title: "CATEGORY",
-      dataIndex: "catgeory_name",
-      key: "CATEGORY",
-      width: "14%",
-      align: "center",
+      title: "INVOICE NO",
+      dataIndex: "invoice_no",
+      key: "invoice_no",
+      width: "12%",
+      align: "left",
       filteredValue: [searchCategory],
       onFilter: (value, record) => {
         console.log("prrrr",record)
-        return String(record.catgeory_name)
+        return String(record.invoice_no)
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      },
+    },
+    {
+      title: "AMOUNT",
+      dataIndex: "amount",
+      key: "amount",
+      width: "10%",
+      align: "left",
+      filteredValue: [searchCategory],
+      onFilter: (value, record) => {
+        console.log("prrrr",record)
+        return String(record.amount)
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      },
+    },
+    {
+      title: "TYPE",
+      dataIndex: "type",
+      key: "type",
+      width: "10%",
+      align: "left",
+      filteredValue: [searchCategory],
+      onFilter: (value, record) => {
+        console.log("prrrr",record)
+        return String(record.type)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
@@ -137,9 +154,9 @@ function Productlist() {
           <div className="d-flex justify-content-center align-items-center gap-4">
             <div
               // onClick={() => setModalOpportunity(true)}
-              onClick={() => {
-                handleEdit(index);
-              }}
+              // onClick={() => {
+              //   handleEdit(index);
+              // }}
               className="actionEdit m-0 p-0"
             >
               <FiEdit fontSize={"12px"} />
@@ -167,7 +184,7 @@ function Productlist() {
 
   return (
     <div>
-      <div className="container-fluid lead_list my-3 py-3">
+      <div className="container-fluid lead_list  py-3">
         <div>
          
           <div className="row flex-wrap">
@@ -176,10 +193,10 @@ function Productlist() {
             </div>
          
           </div>
-          <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
+          <div className="row " style={{ backgroundColor: "#f4f4f7" }}>
             <div className="col-4">
               <Input.Search
-                placeholder="Search by Name"
+                placeholder="Search "
                 style={{ margin: "5px", borderRadius: "5px" }}
                 value={searchedText}
                 onChange={(e) => {
@@ -190,7 +207,7 @@ function Productlist() {
                 }}
               />
             </div>
-            <div className="col-4 ">
+            {/* <div className="col-4 ">
               <Input.Search
                 placeholder="Search by Code"
                 style={{ margin: "5px", borderRadius: "5px" }}
@@ -219,19 +236,9 @@ function Productlist() {
                   setSearchCategory(event ? [event] : []);
                 }}
               >
-                {products &&
-                  products.map((item, index) => {
-                    console.log("catvaluess",item)
-                    return (
-                      <Select.Option key={item.product_id} value={item.catgeory_name}>
-                        {item.catgeory_name}
-                      </Select.Option>
-                    );
-                  })}
-                {/* <Select.Option value="Watch">watch</Select.Option>
-                <Select.Option value="cookware">cookware</Select.Option> */}
+              
               </Select>
-            </div>
+            </div> */}
           </div>
           <div className="row my-3">
             <div className="col-4  px-3">
@@ -282,7 +289,7 @@ function Productlist() {
               </Select>
             </div>
             <div className=" col-4 d-flex align-items-center justify-content-center">
-              {totalCount>0 &&(
+              {/* {totalCount>0 &&(
             <MyPagination
               total={parseInt(totalCount)}
               current={current}
@@ -291,20 +298,20 @@ function Productlist() {
                 setCurrent(current);
               }}
             />
-            )}
+            )} */}
           </div>
             <div className="col-4 d-flex justify-content-end">
               <Button
                 //   onClick={() => setShowAddOpportunity(true)}
                 className="add_opportunity"
               >
-                <Link to={ROUTES.PRODUCTCREATE}>
+                <Link to={ROUTES.ADD_CREDIT_NOTES}>
                   <span
                     style={{
                       color: "white",
                     }}
                   >
-                    Add Product
+                    Add Credit Note
                   </span>
                 </Link>
               </Button>
@@ -313,14 +320,14 @@ function Productlist() {
           <div className="datatable">
             <TableData
               // data={getData(current,numOfItems, pageSize)}
-              data={products}
+              // data={data}
               //   data={data}
-              columns={filteredColumns}
+              columns={columns}
               custom_table_css="table_lead_list"
             />
           </div>
           <div className="d-flex py-2 justify-content-center">
-            {totalCount>0 &&(
+            {/* {totalCount>0 &&(
             <MyPagination
            
               total={parseInt(totalCount)}
@@ -330,7 +337,7 @@ function Productlist() {
                 setCurrent(current);
               }}
             />
-            )}
+            )} */}
           </div>
           {/* {"mcncncncncncncnc"}  {product listing ends } */}
         </div>
@@ -661,13 +668,13 @@ function Productlist() {
           }
         />
       </div>
-      <ProductEditModal
+      {/* <ProductEditModal
         show={modalOpportunity}
         onHide={() => setModalOpportunity(false)}
         style="width:1250px"
         prid={productid}
         fun_call={() => getallproduct()}
-      />
+      /> */}
 
       {/* {modal for success popups} */}
       <CustomModel
@@ -680,4 +687,4 @@ function Productlist() {
   );
 }
 
-export default Productlist;
+export default Credit_notes;

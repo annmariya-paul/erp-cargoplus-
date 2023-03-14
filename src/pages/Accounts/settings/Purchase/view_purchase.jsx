@@ -116,7 +116,7 @@ export default function View_purchase() {
               </div>
               <div className="row  mt-3 px-1 ">
                 <div className="col-md-6 col-12 mt-2">
-                  <div className="content-tabs-new row justify-content mx-1 mb-3">
+                  <div className="vendordetails content-tabs-new row justify-content mx-1 mb-3">
                     <div className="row mt-3 mb-3">
                       <h5 className="lead_text">Vendor details</h5>
                     </div>
@@ -203,6 +203,7 @@ export default function View_purchase() {
                 </div>
 
                 <div className=" col-md-6 col-12 mt-2 ">
+                  {/* <div className="row"> */}
                   <div className="purchase_payment content-tabs-new row justify-content mx-1 mb-3 me-0">
                     <div className="row mt-3 mb-3">
                       <h5 className="lead_text">Payment</h5>
@@ -245,14 +246,73 @@ export default function View_purchase() {
                           {viewpurchasemode?.purchase_total_amount}
                         </p>
                       </div>
-                    </div>
-                    {/* <br/><br/><br/> */}
+                    {/* </div> */}
                   </div>
+
+
+
+
+
+
+                  </div>
+                  <div className="content-tabs-new row justify-content mx-1 mb-3">
+                    <div className="row mt-3 mb-3">
+                      <h5 className="lead_text">Attachments</h5>
+                    </div>
+
+                    <div className="col-6 d-flex">
+                      <div className="col-4">
+                        {" "}
+                        <p>Remarks</p>
+                      </div>
+                      <div className="col-1">:</div>
+                      <div className="col-6 justify-content-start">
+                        <p className="modal-view-data">
+                          {viewpurchasemode?.purchase_remarks}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* <div className="col-6 d-flex"> */}
+                      <div className="col-4">
+                        {" "}
+                        <p>Attachments</p>{" "}
+                      </div>
+                      <div className="col-1">:</div>
+                      <div className="col-6 justify-content-start">
+                        <p className="modal-view-data">
+                          {viewpurchasemode?.purchase_docs}
+                        </p>
+                      </div>
+                    </div>
                 </div>
+
+
+
+
+
+
+
+
+
+                <div className="col-md-6 col-12 ">
+                 
+                  </div>
+                {/* </div> */}
+
+
+
+
+
+
+
+
+
+
               </div>
 
-              <div className="row mt-1 px-1 mb-0">
-                <div className="col-md-6 col-12 ">
+              {/* <div className="row mt-1 px-1 mb-0"> */}
+                {/* <div className="col-md-6 col-12 ">
                   <div className="content-tabs-new row justify-content mx-1 mb-3">
                     <div className="row mt-3 mb-3">
                       <h5 className="lead_text">Attachments</h5>
@@ -284,8 +344,8 @@ export default function View_purchase() {
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
+                </div> */}
+              {/* </div> */}
               <div className="col-12 d-flex justify-content-center mt-5">
                 <Button className="save_button">Print</Button>
               </div>

@@ -1,46 +1,47 @@
 .summaryWrapper {
-   display: grid;
-   grid-template-columns: 1fr 1fr 1fr 1fr;
-   gap: 1rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 1rem;
 }
 
 .cartItem {
-   min-height: 130px;
-   max-height: 150px;
-   display: flex;
-   align-items: center;
-   justify-content: center;
+  min-height: 130px;
+  max-height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-   .cardTitle {
-      font-size: 20px;
-      font-weight: 600;
-      color: #636363;
-   }
+  .cardTitle {
+    font-size: 20px;
+    font-weight: 600;
+    color: #636363;
+  }
 
-   .cardSubText {
-      font-size: 18px;
-      color: rgb(131, 210, 131);
-      font-weight: 600;
-   }
+  .cardSubText {
+    font-size: 18px;
+    color: rgb(131, 210, 131);
+    font-weight: 600;
+    cursor: pointer;
+  }
 
-   .cardRevenueTitle {
-      font-size: 20px;
-      font-weight: 600;
-      color: #636363;
-   }
+  .cardRevenueTitle {
+    font-size: 20px;
+    font-weight: 600;
+    color: #636363;
+  }
 
-   .cardRevenueSubText {
-      font-size: 18px;
-      color: rgb(131, 210, 131);
-      font-weight: 600;
-   }
+  .cardRevenueSubText {
+    font-size: 18px;
+    color: rgb(131, 210, 131);
+    font-weight: 600;
+  }
 
-   .cardRevenueFooter {
-      font-size: 14px;
-      font-weight: 500;
-   }
+  .cardRevenueFooter {
+    font-size: 14px;
+    font-weight: 500;
+  }
 }
 .table_height {
-   height: 450px !important;
-   overflow-y: auto !important;
+  height: 450px !important;
+  overflow-y: auto !important;
 }

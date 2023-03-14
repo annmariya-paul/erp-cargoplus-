@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../Login/login.scss";
 import { Checkbox, Form, Input } from "antd";
 import InputType from "../../components/Input Type textbox/InputType";
@@ -6,6 +6,7 @@ import { CRM_BASE_URL } from "../../api/bootapi";
 import PublicFetch from "../../utils/PublicFetch";
 import Button from "../../components/button/button";
 import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../../routes";
 
 function Login() {
   const [addForm] = Form.useForm();
@@ -66,6 +67,14 @@ function Login() {
       // }
     }
   };
+
+  // console.log("login token", localStorage.getItem("UserToken"));
+
+  useEffect(() => {
+    if (localStorage.getItem("UserToken") !== null) {
+      navigate(`${ROUTES.DASHBOARD}`);
+    }
+  }, [localStorage.getItem("UserToken")]);
 
   return (
     <div className="container mb-4 d-flex justify-content-center">

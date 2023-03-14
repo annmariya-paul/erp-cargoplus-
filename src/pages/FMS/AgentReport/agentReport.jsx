@@ -152,9 +152,9 @@ export default function AgentReport() {
             <div>
             <Button btnType="save" >Search</Button>
             </div>
-            <div className="icon_color">
+            <div className="icon_margin">
             <li className="icon-border">
-            <a className="icon" href="#">
+            <a className="icon icon_color" href="#">
               <FaFileExcel />
             </a>
           </li>

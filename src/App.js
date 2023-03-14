@@ -124,7 +124,7 @@ import EditExpence from "./pages/Accounts/DailyExpence/EditExpense";
 import AgentReport from "./pages/FMS/AgentReport/agentReport";
 import CostAndExpenseReport from "./pages/FMS/CustomerwiseCostAndExpenseReport/costAndExpenseReport";
 import EnquiryReport from "./pages/FMS/EnquiryReport/EnquiryReport";
-import Monthly_report from "./pages/monthlyreport";
+import Monthly_report from "./pages/FMS/Monthly report/monthlyreport";
 import Invoicereport from "./pages/FMS/Invoice/InvoiceReport/Invoicereport";
 import CreditNoteType from "./pages/Accounts/settings/CreditNoteType/credit_note_type";
 

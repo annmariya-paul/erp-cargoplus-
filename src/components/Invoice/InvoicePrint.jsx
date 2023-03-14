@@ -216,10 +216,14 @@ function InvoicePrint({
 
              
             </div>
-            <div className="row">
-              <p>Thanks For your Business</p>
-              <div className="px-4">
-              <table className="invoice_header ">
+           
+           <div>
+           <p>Thanks For your Business</p>
+           </div>
+            <div className="row px-3">
+            <p>Bank Details</p>
+              <div className="invoice_details__colbank  ">
+              <table>
               {/* {companyInfodata &&
             companyInfodata.length > 0 &&
             companyInfodata?.map((item, index) => { */}
@@ -227,28 +231,32 @@ function InvoicePrint({
            {companyInfodata&& companyInfodata.length > 0 && 
             companyInfodata?.map((item, index)=>{
                return(
-                
 
-                    <tbody className="invoice_header">
+                    <tbody className="">
                       
                       <tr>
                         <td style={{ fontWeight: 600 }}>Name</td>
+                        <td>:</td>
                         <td >{item.company_name}  </td>
                       </tr>
                       <tr>
                         <td style={{ fontWeight: 600 }}>Bank Name</td>
+                        <td>:</td>
                         <td >{defaultbank?.bank_name}  </td>
                       </tr>
                       <tr>
                         <td style={{ fontWeight: 600 }}>Branch</td>
+                        <td>:</td>
                         <td >{defaultbank?.bank_branch}  </td>
                       </tr>
                       <tr>
                         <td style={{ fontWeight: 600 }}>Account No</td>
+                        <td>:</td>
                         <td >{defaultbank?.bank_account_number}  </td>
                       </tr>
                       <tr>
                         <td style={{ fontWeight: 600 }}>IBAN No</td>
+                        <td>:</td>
                         <td >{defaultbank?.bank_iban_no}  </td>
                       </tr>
                     </tbody>
@@ -257,6 +265,11 @@ function InvoicePrint({
                   }
                   </table>
               </div>
+              {/* <div className="invoice_details__col invoice_details__col_2">
+              <table>
+                <tbody></tbody>
+              </table>
+            </div> */}
             </div>
           </footer>
           </>

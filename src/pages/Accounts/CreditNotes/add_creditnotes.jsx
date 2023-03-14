@@ -3,7 +3,7 @@ import { Checkbox, Col, Row } from "antd";
 import React, { useState, useEffect } from "react";
 
 import Button from "../../../components/button/button";
-
+import { DatePicker } from "antd";
 import CustomModel from "../../../components/custom_modal/custom_model";
 import ErrorMsg from "../../../components/error/ErrorMessage";
 
@@ -52,17 +52,12 @@ function Addcredit_notes() {
 
   return (
     <div>
-      <div className="container-fluid">
+      <div className="container-fluid lead_list my-1 px-4">
+       
         <div>
-          <h5 className="lead_text">Credit Notes</h5>
-        </div>
-        <div
-          style={{ borderRadius: "8px" }}
-          className="card border-0 content-tabs  my-3 px-4"
-        >
-          <div className="container my-3">
-            <div className="my-3">
-              <h6 className="lead_text">Add Credit Notes</h6>
+          <div className="row">
+            <div className="col mt-4">
+              <h5 className="lead_text">Add Credit Notes</h5>
             </div>
             <Form
               name="addForm"
@@ -76,153 +71,62 @@ function Addcredit_notes() {
               }}
             >
               <div className="row my-2">
-                <div className="col-4">
+                <div className="col-4 mt-2">
                   <label>Date</label>
-               
+                  <Form.Item
+                      
+                      >
+                        <DatePicker
+                        
+                          // style={{ borderWidth: 0, marginTop: 10 }}
+                          // defaultValue={moment(date)}
+                          // format={dateFormatList}
+                        />
+                      </Form.Item>
                 </div>
                 <div className="col-4">
-                  <label>Code</label>
-                  {/* <Form.Item
-                    name="code"
-                    rules={[
-                      {
-                        required: true,
-                        pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                        message: "Please enter a Valid Product Code",
-                      },
-                      {
-                        min: 2,
-                        message: "Product Code must be at least 2 characters",
-                      },
-                      {
-                        max: 20,
-                        message:
-                          "Product Code cannot be longer than 20 characters",
-                      },
-                    ]}
-                    onChange={(e) => {
-                      setCode(e.target.value);
-                      setuniqueCode2(false);
-                    }}
+                  <label>Customer</label>
+                  <Form.Item
+                   
+                  
                   >
-                    <InputType
-                      onBlur={async () => {
-                        let a = await CheckUnique({
-                          type: "productcode",
-                          value: code,
-                        });
-                        setuniqueCode2(a);
-                      }}
-                    />
-                  </Form.Item> */}
-                  {/* {uniqueCode2 ? (
-                    <label style={{ color: "red" }}>
-                      Product Code {UniqueErrorMsg.UniqueErrName}
-                    </label>
-                  ) : (
-                    ""
-                  )} */}
+                   <SelectBox></SelectBox>
+                  </Form.Item>
+                 
                 </div>
                 <div className="col-4">
-                  <label>Category</label>
-                  {/* <Form.Item
-                    className="mt-2"
-                    name="category"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please Select a Category",
-                      },
-                    ]}
+                  <label>Invoice No</label>
+                  <Form.Item
+                   
+                    name="invoiceno"
+                   
                   >
-                    <TreeSelect
-                      className="tree"
-                      name="tree"
-                      style={{ width: "100%" }}
-                      dropdownStyle={{
-                        maxHeight: 400,
-                        overflow: "auto",
-                      }}
-                      treeData={categoryTree}
-                      placeholder="Please select"
-                      treeDefaultExpandAll
-                      onChange={onChangetree}
-                      onSelect={onSelect}
-                    />
-                  </Form.Item> */}
+                   <InputType/>
+                  </Form.Item>
                 </div>
                 <div className="col-6 mt-2">
-                  <label>Brand</label>
-                  {/* <Form.Item
-                    name="brand"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please Select a Brand",
-                      },
-                    ]}
+                  <label>Invoice Amount</label>
+                  <Form.Item
+                  
+                   
                   >
-                    <SelectBox
-                      placeholder={"--Please Select--"}
-                      value={brand}
-                      onChange={(e) => {
-                        console.log("select the brandss", e);
-                        setBrand(parseInt(e));
-                      }}
-                    >
-                      {brands &&
-                        brands.length > 0 &&
-                        brands.map((item, index) => {
-                          return (
-                            <Select.Option
-                              key={item.brand_id}
-                              value={item.brand_id}
-                            >
-                              {item.brand_name}
-                            </Select.Option>
-                          );
-                        })}
-                    </SelectBox>
-                  </Form.Item> */}
+                   <InputType/>
+                  </Form.Item>
                 </div>
                 <div className="col-6 mt-2">
-                  <label>Unit</label>
-                  {/* <Form.Item
-                    name="unit"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please Select a unit",
-                      },
-                    ]}
+                  <label>Due Amount</label>
+                  <Form.Item
+                    // name="unit"
+                  
                   >
-                    <SelectBox
-                      placeholder={"--Please Select--"}
-                      value={allunit}
-                      onChange={(e) => {
-                        console.log("selected unit iss", e);
-                        setUnit(parseInt(e));
-                      }}
-                    >
-                      {allunit &&
-                        allunit.length > 0 &&
-                        allunit.map((item, index) => {
-                          return (
-                            <Select.Option
-                              key={item.unit_id}
-                              value={item.unit_id}
-                            >
-                              {item.unit_name}
-                            </Select.Option>
-                          );
-                        })}
-                    </SelectBox>
-                  </Form.Item> */}
+                   <InputType/>
+                  </Form.Item>
                 </div>
-
-                <div className="col-6 mt-2">
-                  <label>Description</label>
-                  {/* <Form.Item
+                </div>
+<div className="row">
+<div className="col-6 mt-2">
+                  <label>Particulars</label>
+                  <Form.Item
                     className="mt-2"
                     name="description"
                     rules={[
@@ -236,86 +140,36 @@ function Addcredit_notes() {
                           "Description cannot be longer than 500 characters",
                       },
                     ]}
-                    onChange={(e) => setDescription(e.target.value)}
+                    
                   >
                     <TextArea />
-                  </Form.Item> */}
+                  </Form.Item>
                 </div>
-
                 <div className="col-6 mt-2">
-                  <label>Display Picture</label>
-                  {/* <Form.Item className="mt-2" name="new">
-                    <FileUpload
-                 
-                      listType="picture"
-                      accept=".png,.jpeg,.jpg"
-                      filetype={"Accept only png,jpg and jpeg"}
-                     
-                      beforeUpload={beforeUpload}
-                      onChange={(file) => {
-                        console.log("Before upload", file.file);
-                        console.log("Before upload file size", file.file.size);
-
-                        if (file.file.size > 2000 && file.file.size < 500000) {
-                          setImg(file.file.originFileObj);
-
-                          console.log("selet imggg", file.file.originFileObj);
-                          setImageSize(false);
-                        } else {
-                          setImageSize(true);
-                          console.log(
-                            "Error in upload, upload image size between 1 kb and  500 kb"
-                          );
-                        }
-                      }}
-                    />
+                  <label>Type</label>
+                  <Form.Item className="mt-2" name="new">
+                  
 
                  
-                    {imageSize ? (
-                      <p style={{ color: "red" }}>
-                        Upload Image size between 1 kb and 500 kb
-                      </p>
-                    ) : (
-                      ""
-                    )}
-                  </Form.Item> */}
-                </div>
-                <div className="col-6 ">
-                  <label>Attributes</label>
-                  {/* <Form.Item
-                    name="attribute"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please Select Attributes",
-                      },
-                    ]}
+                   <SelectBox/>
+                  </Form.Item>
+              
+                  <label>Amount</label>
+                  <Form.Item
+                   
                   >
-                    <Checkbox.Group
-                      className="mt-2 px-3"
-                      onChange={newValues}
-                    
-                    >
-                      <div className="row p-2 attributes__height">
-                        {attributes &&
-                          attributes.length > 0 &&
-                          attributes.map((item, index) => {
-                            return (
-                              <div className="col-lg-4 col-xl-4 col-12 py-1">
-                                <Checkbox value={item?.attribute_id}>
-                                  {item?.attribute_name}
-                                </Checkbox>
-                              </div>
-                            );
-                          })}
-                      </div>
-                    </Checkbox.Group>
-                  </Form.Item> */}
+                    <InputType/>
+                  </Form.Item>
                 </div>
-                <div className="col-12 d-flex justify-content-center pt-2">
+
+</div>
+               
+
+               
+                <div className="col-12 d-flex justify-content-center pt-2 mt-2">
                   <Button className="save_button">Save</Button>
                 </div>
-              </div>
+             
             </Form>
           </div>
         </div>

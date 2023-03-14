@@ -180,7 +180,9 @@ function Credit_notes() {
     //   align: "center",
     // },
   ];
+const data=[{  voucher_no:"0001",date:"12-2-2023",customer:"Arun",invoice_no:"0033",amount:"1000",type:"data"}
 
+]
 
   return (
     <div>
@@ -321,7 +323,7 @@ function Credit_notes() {
             <TableData
               // data={getData(current,numOfItems, pageSize)}
               // data={data}
-              //   data={data}
+                data={data}
               columns={columns}
               custom_table_css="table_lead_list"
             />

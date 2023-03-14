@@ -102,8 +102,17 @@ function EnquiryReport() {
       <div className="container-fluid container_agent_report p-5">
         <div className="row">
           <div className="col-12">
-            <div className="row flex-wrap py-3">
+            <div className="d-flex justify-content-between py-3">
+              <div>
               <h5 className="lead_text">Enquiry Report</h5>
+              </div>
+              <div className={`p-0`} >
+            <li className="icon-border">
+            <a className= {` icon  icon_color`} href="#">
+              <FaFileExcel  />
+            </a>
+          </li>
+          </div>
             </div>
             <div className="content-tabs-new row justify-content mb-3 ">
               <div className="col-xl-12">
@@ -163,13 +172,7 @@ function EnquiryReport() {
                     </Button>
                     </div>
                    
-            <div className={``} >
-            <li className="icon-border">
-            <a className= {` icon  icon_color`} href="#">
-              <FaFileExcel  />
-            </a>
-          </li>
-          </div>
+           
 
                   </div>
                 </div>

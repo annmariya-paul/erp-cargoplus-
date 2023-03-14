@@ -205,8 +205,8 @@ function DailyExpence() {
       .then((res) => {
         console.log("Response", res);
         if (res.data.success) {
-          setAllExpenseData(res.data.data);
-          setTotalcount();
+          setAllExpenseData(res.data.data.dailyExpenses);
+          setTotalcount(res.data.data.total);
 
         }
       })

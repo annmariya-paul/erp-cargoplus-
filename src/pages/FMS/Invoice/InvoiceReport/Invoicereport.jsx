@@ -1,13 +1,14 @@
-
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DatePicker, Input, Select } from "antd";
 import SelectBox from "../../../../components/Select Box/SelectBox";
 import Button from "../../../../components/button/button";
 import TableData from "../../../../components/table/table_data";
+import PublicFetch from "../../../../utils/PublicFetch";
+import { CRM_BASE_URL_FMS } from "../../../../api/bootapi";
 
-function Invoicereport(){
-
-    const [serialNo, setserialNo] = useState(1);
+function Invoicereport() {
+  const [serialNo, setserialNo] = useState(1);
+  const [Allinvoice, setAllInvoice] = useState();
   const columns = [
     {
       title: "Sl. No.",
@@ -17,31 +18,31 @@ function Invoicereport(){
       align: "center",
     },
     {
-        title: "INVOICE No",
-        dataIndex: "invoice_no",
-        key: "job_no",
-        width: "16%",
-        //   filteredValue: [searchedText],
-        //   onFilter: (value, record) => {
-        //     return String(record.freight_type_name  || nameSearch)
-        //       .toLowerCase()
-        //       .includes(value.toLowerCase());
-        //   },
-        align: "center",
-      },
-      {
-        title: "DATE",
-        dataIndex: "date",  
-        key: "job_no",
-        width: "10%",
-        //   filteredValue: [searchedText],
-        //   onFilter: (value, record) => {
-        //     return String(record.freight_type_name  || nameSearch)
-        //       .toLowerCase()
-        //       .includes(value.toLowerCase());
-        //   },
-        align: "center",
-      },
+      title: "INVOICE No",
+      dataIndex: "invoice_no",
+      key: "job_no",
+      width: "16%",
+      //   filteredValue: [searchedText],
+      //   onFilter: (value, record) => {
+      //     return String(record.freight_type_name  || nameSearch)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase());
+      //   },
+      align: "center",
+    },
+    {
+      title: "DATE",
+      dataIndex: "date",
+      key: "job_no",
+      width: "10%",
+      //   filteredValue: [searchedText],
+      //   onFilter: (value, record) => {
+      //     return String(record.freight_type_name  || nameSearch)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase());
+      //   },
+      align: "center",
+    },
     {
       title: "JOB NO",
       dataIndex: "job_no",
@@ -83,8 +84,8 @@ function Invoicereport(){
   ];
   const data = [
     {
-      invoice_no:"JB34u893",
-      date:"12/03/22",  
+      invoice_no: "JB34u893",
+      date: "12/03/22",
       job_no: "00111",
       customer: "Test",
       currency: "US Dollar",
@@ -93,16 +94,34 @@ function Invoicereport(){
     },
   ];
 
-return(
+  const GetAllInvoices = () => {
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/invoice`)
+      .then((res) => {
+        console.log("response data", res);
+        if (res.data.success) {
+          console.log("success of data", res.data.data);
+          setAllInvoice(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+  useEffect(() => {
+    GetAllInvoices();
+  }, []);
+
+  return (
     <>
-        <div className="container-fluid container_agent_report py-3">
+      <div className="container-fluid container_agent_report py-3">
         <div className="row flex-wrap">
           <h5 className="lead_text">Invoice Report</h5>
         </div>
         <div className="row">
           <div className="col-sm-4 col-12">
             <p>Invoice No</p>
-          
+
             <SelectBox>
               <Select.Option>Agent 1</Select.Option>
             </SelectBox>
@@ -112,9 +131,7 @@ return(
             <p></p>
           </div> */}
           <div className="col-sm-3 col-6">
-            <p>
-              Date From
-            </p>
+            <p>Date From</p>
             <div className="mt-2">
               <DatePicker></DatePicker>
             </div>
@@ -127,20 +144,18 @@ return(
               <DatePicker></DatePicker>
             </div>
           </div>
-         
         </div>
         <div className="row">
-        <div className="col-sm-4 col-6">
+          <div className="col-sm-4 col-6">
             <p>Job No</p>
             <div className="mt-2">
-            <SelectBox></SelectBox>
+              <SelectBox></SelectBox>
             </div>
           </div>
           <div className="col-sm-2 d-flex mt-4 pt-3 justify-content-center">
             <Button btnType="save">Search</Button>
-            
           </div>
-          </div>
+        </div>
       </div>
       <div className="container-fluid container_agent_report py-2">
         <div className="datatable">
@@ -153,7 +168,6 @@ return(
         </div>
       </div>
     </>
-)
-
+  );
 }
 export default Invoicereport;

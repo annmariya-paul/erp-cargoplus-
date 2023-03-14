@@ -201,8 +201,8 @@ export default function Add_purchase() {
             >
               <div className="row my-4">
                 <div className="col-4">
-                  <label>Po No</label>
-                  <Form.Item name="purchasePoNo">
+                  <label>Po Reference</label>
+                  <Form.Item name="purchasePoRef">
                     <InputType
                       value={purchasePoNo}
                       onChange={(e) => {

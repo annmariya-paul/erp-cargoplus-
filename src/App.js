@@ -109,7 +109,8 @@ import Purchase from "./pages/Accounts/settings/Purchase/purchase";
 import View_purchase from "./pages/Accounts/settings/Purchase/view_purchase";
 import Edit_purchase from "./pages/Accounts/settings/Purchase/edit_purchase";
 import Print_purchase from "./pages/Accounts/settings/Purchase/print_purchase";
-
+import Credit_notes from "./pages/Accounts/CreditNotes/list_creditnotes";
+import Addcredit_notes from "./pages/Accounts/CreditNotes/add_creditnotes";
 import Bank from "./pages/Accounts/settings/BankAccount/bank";
 
 import JobPayments from "./pages/Accounts/JobPayments/job_payments";
@@ -461,6 +462,14 @@ function App() {
 
             <Route path={ROUTES.INVOICE_VIEW_ID} element={<ProtectedRoute />}>
               <Route index element={<InvoiceView />} />
+            </Route>
+
+
+            <Route path={ROUTES.CREDIT_NOTES} element={<ProtectedRoute />}>
+              <Route index element={<Credit_notes/>} />
+            </Route>
+            <Route path={ROUTES.ADD_CREDIT_NOTES} element={<ProtectedRoute />}>
+              <Route index element={<Addcredit_notes/>} />
             </Route>
 
             {/* General settings */}

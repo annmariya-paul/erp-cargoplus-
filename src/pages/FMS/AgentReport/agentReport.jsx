@@ -94,8 +94,18 @@ export default function AgentReport() {
   return (
     <>
       <div className="container-fluid container_agent_report py-3">
-        <div className="row flex-wrap">
+        <div className=" d-flex justify-content-between">
+          <div>
           <h5 className="lead_text">Agent Report</h5>
+          </div>
+         
+          <div className="icon_margin">
+            <li className="icon-border">
+            <a className="icon icon_color" href="#">
+              <FaFileExcel />
+            </a>
+          </li>
+          </div>
         </div>
         <div className="row">
           <div className="col-sm-3 col-12">
@@ -152,13 +162,7 @@ export default function AgentReport() {
             <div>
             <Button btnType="save" >Search</Button>
             </div>
-            <div className="icon_margin">
-            <li className="icon-border">
-            <a className="icon icon_color" href="#">
-              <FaFileExcel />
-            </a>
-          </li>
-          </div>
+           
           </div>
          
           {/* <div className="col-sm-1 mt-4  pt-3d-flex justify-content-center">

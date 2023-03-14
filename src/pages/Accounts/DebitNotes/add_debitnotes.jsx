@@ -21,7 +21,7 @@ import SelectBox from "../../../components/Select Box/SelectBox";
 import {ROUTES} from "../../../routes";
 
 
-function Addcredit_notes() {
+function Adddebit_notes() {
   const [successPopup, setSuccessPopup] = useState(false);
   const [error, setError] = useState(false);
   const [addForm] = Form.useForm();
@@ -57,7 +57,7 @@ function Addcredit_notes() {
         <div>
           <div className="row">
             <div className="col mt-4">
-              <h5 className="lead_text">Add Credit Notes</h5>
+              <h5 className="lead_text">Add Debit Notes</h5>
             </div>
             <Form
               name="addForm"
@@ -85,7 +85,7 @@ function Addcredit_notes() {
                       </Form.Item>
                 </div>
                 <div className="col-xl-4 col-sm-12">
-                  <label>Customer</label>
+                  <label>Purchase No</label>
                   <Form.Item
                    
                   
@@ -94,8 +94,9 @@ function Addcredit_notes() {
                   </Form.Item>
                  
                 </div>
+             
                 <div className="col-xl-4 col-sm-12">
-                  <label>Invoice No</label>
+                  <label>Purchase Amount</label>
                   <Form.Item
                    
                     name="invoiceno"
@@ -104,8 +105,12 @@ function Addcredit_notes() {
                    <InputType/>
                   </Form.Item>
                 </div>
-                <div className="col-xl-6 col-sm-12 mt-2">
-                  <label>Invoice Amount</label>
+               
+                </div>
+                <div className="row">
+                    <div className="col-4">
+                    <div className="col-xl-12 col-sm-12 mt-2">
+                  <label>Amount</label>
                   <Form.Item
                   
                    
@@ -113,18 +118,18 @@ function Addcredit_notes() {
                    <InputType/>
                   </Form.Item>
                 </div>
-                <div className="col-xl-6 col-sm-12 mt-2">
-                  <label>Due Amount</label>
+                <div className="col-xl-12 col-sm-12 mt-2">
+                  <label>Type</label>
                   <Form.Item
                     // name="unit"
                   
                   >
-                   <InputType/>
+                  <SelectBox/>
                   </Form.Item>
                 </div>
-                </div>
-<div className="row">
-<div className="col-xl-6 col-sm-12 mt-2">
+                    </div>
+                    <div className="col-8 mt-3">
+                  
                   <label>Particulars</label>
                   <Form.Item
                     className="mt-2"
@@ -145,24 +150,17 @@ function Addcredit_notes() {
                     <TextArea />
                   </Form.Item>
                 </div>
-                <div className="col-xl-6 col-sm-12 mt-2">
-                  <label>Type</label>
-                  <Form.Item className="mt-2" name="new">
-                  
 
-                 
-                   <SelectBox/>
-                  </Form.Item>
-              
-                  <label>Amount</label>
-                  <Form.Item
                    
-                  >
-                    <InputType/>
-                  </Form.Item>
-                </div>
+               
 
+                    
 </div>
+
+
+               
+
+
                
 
                
@@ -186,4 +184,4 @@ function Addcredit_notes() {
   );
 }
 
-export default Addcredit_notes;
+export default Adddebit_notes;

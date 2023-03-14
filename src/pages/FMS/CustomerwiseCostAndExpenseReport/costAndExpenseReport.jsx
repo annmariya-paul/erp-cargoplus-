@@ -217,9 +217,21 @@ const CostAndExpenseReport = () => {
       <div className="row">
         <div className="col">
           <div className={`${styles.card} card`}>
+            <div className="d-flex justify-content-between px-4 ,t-">
+              <div className="">
             <h5 className={styles.heading}>
               Customerwise Cost And Expense Report
             </h5>
+            </div>
+            <div className={`  `} >
+            <li className="icon-border">
+            <a className= {`${styles.icon_color} icon  `} href="#">
+              <FaFileExcel onClick={handleExport} />
+            </a>
+          </li>
+          </div>
+          </div>
+
             <div className="row">
               <div className="col-md-6">
                 <div className="d-flex justify-content-around align-items-baseline mt-4">
@@ -307,13 +319,7 @@ const CostAndExpenseReport = () => {
                   Search
                 </Button>
                 </div>
-                <div className={`${styles.icon_margin}   `} >
-            <li className="icon-border">
-            <a className= {`${styles.icon_color} icon  `} href="#">
-              <FaFileExcel onClick={handleExport} />
-            </a>
-          </li>
-          </div>
+               
               </div>
             </div>
           </div>

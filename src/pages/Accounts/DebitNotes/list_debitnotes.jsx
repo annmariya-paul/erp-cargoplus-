@@ -27,7 +27,7 @@ import FileUpload from "../../../components/fileupload/fileUploader";
 import CustomModel from "../../../components/custom_modal/custom_model";
 
 
-function Credit_notes() {
+function Debit_notes() {
   const [numOfItems, setNumOfItems] = useState("25");
   const [pageSize, setPageSize] = useState("25"); // page size
   const [current, setCurrent] = useState(1);
@@ -87,9 +87,9 @@ function Credit_notes() {
     },
 
     {
-      title: "CUSTOMER",
-      dataIndex: "customer",
-      key: "customer",
+      title: "PURCHASE NO",
+      dataIndex: "purchase_no",
+      key: "purchase_no",
         width: "15%",
       align: "left",
       filteredValue: [searchType],
@@ -100,9 +100,9 @@ function Credit_notes() {
       },
     },
     {
-      title: "INVOICE NO",
-      dataIndex: "invoice_no",
-      key: "invoice_no",
+      title: "PURCHASE AMT",
+      dataIndex: "purchase_amount",
+      key: "purchase_amount",
       width: "12%",
       align: "left",
       filteredValue: [searchCategory],
@@ -159,12 +159,12 @@ function Credit_notes() {
               // }}
               className="actionEdit m-0 p-0"
             >
-               <Link to={`${ROUTES.EDIT_CREDIT_NOTES}/${index.id}`}>
+               <Link to={`${ROUTES.EDIT_DEBIT_NOTES}/${index.id}`}>
               <FiEdit fontSize={"12px"} />
               </Link>
             </div>
 
-            <Link to={`${ROUTES.VIEW_CREDIT_NOTES}/${index.id}`}>
+            <Link to={`${ROUTES.VIEW_DEBIT_NOTES}/${index.id}`}>
               <div className="actionView m-0 p-0">
                 <MdPageview />
               </div>
@@ -182,7 +182,7 @@ function Credit_notes() {
     //   align: "center",
     // },
   ];
-const data=[{  voucher_no:"0001",date:"12-2-2023",customer:"Arun",invoice_no:"0033",amount:"1000",type:"data"}
+const data=[{  voucher_no:"0001",date:"12-2-2023",purchase_no:"0043",purchase_amount:"10000",amount:"1000",type:"data"}
 
 ]
 
@@ -193,7 +193,7 @@ const data=[{  voucher_no:"0001",date:"12-2-2023",customer:"Arun",invoice_no:"00
          
           <div className="row flex-wrap">
             <div className="col">
-              <h5 className="lead_text">Credit Notes</h5>
+              <h5 className="lead_text">Debit Notes</h5>
             </div>
          
           </div>
@@ -309,13 +309,13 @@ const data=[{  voucher_no:"0001",date:"12-2-2023",customer:"Arun",invoice_no:"00
                 //   onClick={() => setShowAddOpportunity(true)}
                 className="add_opportunity"
               >
-                <Link to={ROUTES.ADD_CREDIT_NOTES}>
+                <Link to={ROUTES.ADD_DEBIT_NOTES}>
                   <span
                     style={{
                       color: "white",
                     }}
                   >
-                    Add Credit Note
+                    Add Debit Note
                   </span>
                 </Link>
               </Button>
@@ -691,4 +691,4 @@ const data=[{  voucher_no:"0001",date:"12-2-2023",customer:"Arun",invoice_no:"00
   );
 }
 
-export default Credit_notes;
+export default Debit_notes;

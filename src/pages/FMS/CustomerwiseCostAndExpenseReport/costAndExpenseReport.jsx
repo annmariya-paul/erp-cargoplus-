@@ -6,6 +6,8 @@ import SelectBox from "../../../components/Select Box/SelectBox";
 import TableData from "../../../components/table/table_data";
 import styles from "./cstexp.module.scss";
 import moment from "moment";
+import { FaFileExcel } from "react-icons/fa";
+import * as XLSX from "xlsx/xlsx.js"; //for xl download
 
 const CostAndExpenseReport = () => {
   const { Option } = Select;
@@ -79,6 +81,66 @@ const CostAndExpenseReport = () => {
       //   width: "29%",
       align: "right",
     },
+  ];
+
+  const handleExport = () => {
+    var wb = XLSX.utils.book_new();
+    
+    var ws = XLSX.utils.json_to_sheet(datas);
+    XLSX.utils.book_append_sheet(wb, ws, "Reports");
+    XLSX.utils.sheet_add_aoa(
+      ws,xlheading,
+     
+      { origin: "A1" }
+    );
+    // ws["!cols"] = [{ wch: 15 }];
+    let row = [
+      { v: "Courier: 24", t: "s", s: { font: { name: "Courier", sz: 24 } } },
+      {
+        v: "bold & color",
+        t: "s",
+        s: { font: { bold: true, color: { rgb: "FF0000" } } },
+      },
+      {
+        v: "fill: color",
+        t: "s",
+        s: { fill: { fgColor: { rgb: "E9E9E9" } } },
+      },
+      { v: "line\nbreak", t: "s", s: { alignment: { wrapText: true } } },
+    ];
+    var wscols = [
+      { wch: 15 },
+      { wch: 15 },
+      { wch: 15 },
+      { wch: 15 },
+      { wch: 15 },
+      { wch: 15 },
+      { wch: 15 },
+      { wch: 15 },
+      { wch: 15 },
+      { wch: 17 },
+      { wch: 15 },
+    ];
+    ws["!cols"] = wscols;
+   
+    XLSX.writeFile(wb, "Student Report.xlsx");
+    console.log("xlsx data", ws);
+    return addStyle();
+  };
+  const addStyle = () => {
+    console.log("xlsx downloaded");
+  };
+
+  const datas= reportData;
+
+  const xlheading = [
+    [
+      "job_no",
+      "customer",
+      "cost",
+      "expense",
+      "profit_loss",
+    ],
   ];
 
   const getCustomerList = async () => {
@@ -236,13 +298,22 @@ const CostAndExpenseReport = () => {
                 </div>
                 {/* <div className="d-flex align-items-baseline"></div> */}
               </div>
-              <div className={`${styles.saveBtn} mt-4 mb-3`}>
+              <div className={`${styles.saveBtn} mt-4 mb-3 gap-3 `}>
+                <div className="p-0 m-0">
                 <Button
                   btnType="save"
                   onClick={Searchbydate}
                 >
                   Search
                 </Button>
+                </div>
+                <div className={`${styles.icon_margin}   `} >
+            <li className="icon-border">
+            <a className= {`${styles.icon_color} icon  `} href="#">
+              <FaFileExcel onClick={handleExport} />
+            </a>
+          </li>
+          </div>
               </div>
             </div>
           </div>

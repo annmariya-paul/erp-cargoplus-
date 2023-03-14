@@ -69,7 +69,7 @@ export default function ViewJobPayment() {
               className="edit_button"
               onClick={() => {
                 // handleviewtoedit();
-                navigate(`${ROUTES.EDIT_JOBPAYMENT}`);
+                navigate(`${ROUTES.EDIT_JOBPAYMENT}/${id}`);
               }}
             >
               Edit

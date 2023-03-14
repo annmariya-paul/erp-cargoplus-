@@ -325,7 +325,8 @@ console.log("jjj",JobLeadId);
                       className="text_right"
                       align="right"
                       disabled
-                      // precision={2}
+                      min={2}
+                      precision={2}
                     />
                   </Form.Item>
                 </div>
@@ -339,7 +340,7 @@ console.log("jjj",JobLeadId);
                   </Form.Item>
                 </div>
                 <div className="col-6 mt-2">
-                  <label>Display Picture</label>
+                  <label>Attachments</label>
                   <Form.Item name="attachment" className="mt-2">
                     <FileUpload
                       multiple
@@ -372,7 +373,9 @@ console.log("jjj",JobLeadId);
                   </Form.Item>
                 </div>
                 <div className="col-12 d-flex justify-content-center mt-5 pt-4 gap-3 ">
-                  <Button btnType="save" className="save_button">Save</Button>
+                  <Button btnType="save" className="save_button">
+                    Save
+                  </Button>
                   <Button
                     as="input"
                     type="reset"

@@ -897,7 +897,9 @@ export default function Sidebar({ showSidebar }) {
                               }
                               to={ROUTES.COST_AND_EXPENSE_REPORT}
                             >
-                              <div className="ms-4">Cost And Expense Report</div>
+                              <div className="ms-4">
+                                Cost And Expense Report
+                              </div>
                             </NavLink>
                           </li>
                           <li className="nav-text ">
@@ -933,6 +935,18 @@ export default function Sidebar({ showSidebar }) {
                             to={ROUTES.ENQUIRY_REPORT}
                           >
                             <div className=" ms-4">Enquiry Report</div>
+                          </NavLink>
+                        </li>
+                      )}
+                      {checkPermission("invoice_report") && (
+                        <li className="nav-text ">
+                          <NavLink
+                            className={({ isActive }) =>
+                              isActive ? "active-link" : "link"
+                            }
+                            to={ROUTES.INVOICE_REPORT}
+                          >
+                            <div className=" ms-4">Invoice Report</div>
                           </NavLink>
                         </li>
                       )}
@@ -1077,6 +1091,18 @@ export default function Sidebar({ showSidebar }) {
                           </NavLink>
                         </li>
                       )}
+                      {checkPermission("credit_note_type") && (
+                        <li className="nav-text ">
+                          <NavLink
+                            className={({ isActive }) =>
+                              isActive ? "active-link" : "link"
+                            }
+                            to={ROUTES.CREDIT_NOTE_TYPE}
+                          >
+                            <div className=" ms-5">Credit Note Type</div>
+                          </NavLink>
+                        </li>
+                      )}
                     </>
                   ) : (
                     ""
@@ -1106,7 +1132,7 @@ export default function Sidebar({ showSidebar }) {
                       </NavLink>
                     </li>
                   )}
-                   {checkPermission("job_payments") && (
+                  {checkPermission("job_payments") && (
                     <li className="nav-text ">
                       <NavLink
                         className={({ isActive }) =>

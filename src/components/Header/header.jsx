@@ -137,11 +137,14 @@ const Header = () => {
         className={`${styles.headerContainer} d-flex align-items-center justify-content-around`}
       >
         <div
-          className={`${styles.ImgWrappe2r}`}
+          className={`${styles.notification_icon}`}
           onClick={() => {
             handlenotification();
           }}
         >
+          <span className={`${styles.icon_style}`}>
+            <lable className={`${styles.notif_count}`}>3</lable>
+          </span>
           <IoMdNotifications
             size={22}
             color="#6B728E"
@@ -183,7 +186,7 @@ const Header = () => {
                                 borderRadius: "100%",
                                 backgroundColor: "whitesmoke",
                               }}
-                              className="p-3"
+                              className={`p-3`}
                             >
                               <IoMdNotifications
                                 size={22}

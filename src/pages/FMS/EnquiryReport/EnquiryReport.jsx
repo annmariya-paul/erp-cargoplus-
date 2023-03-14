@@ -1,14 +1,14 @@
 import { DatePicker, Select } from "antd";
 import React, { useEffect, useState } from "react";
 import { AiOutlineCaretDown } from "react-icons/ai";
-import { FaArrowCircleDown, FaArrowDown } from "react-icons/fa";
+import { FaArrowCircleDown, FaArrowDown, FaFileExcel } from "react-icons/fa";
 import { CRM_BASE_URL_FMS } from "../../../api/bootapi";
 import Button from "../../../components/button/button";
 import MyPagination from "../../../components/Pagination/MyPagination";
 import SelectBox from "../../../components/Select Box/SelectBox";
 import TableData from "../../../components/table/table_data";
 import PublicFetch from "../../../utils/PublicFetch";
-
+import "../AgentReport/agentReport.scss"
 function EnquiryReport() {
   const [serialNo, setserialNo] = useState(1);
   const [numOfItems, setNumOfItems] = useState("25");
@@ -154,11 +154,23 @@ function EnquiryReport() {
                       <Select.Option>mixing</Select.Option>
                     </SelectBox>
                   </div>
-                  <div className="col-xl-12 d-flex justify-content-center align-items-center pt-4">
+                  <div className="col-xl-12 d-flex justify-content-center align-items-center gap-4 pt-4">
                     {/* <label>Status</label> */}
+                    <div>
+
                     <Button className="p-2" btnType="add">
                       Search
                     </Button>
+                    </div>
+                   
+            <div className={``} >
+            <li className="icon-border">
+            <a className= {` icon  icon_color`} href="#">
+              <FaFileExcel  />
+            </a>
+          </li>
+          </div>
+
                   </div>
                 </div>
               </div>

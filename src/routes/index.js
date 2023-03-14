@@ -100,8 +100,7 @@ const ROUTES = {
   PRINT_INVOICE_ID: "/print_invoice/:id",
   AGENT_REPORT: "/agentReport",
   COST_AND_EXPENSE_REPORT: "/cost_and_expense_report",
-  INVOICE_REPORT:"/invoice_report",
-  MONTHLY_REPORT:"/monthly_report",
+  MONTHLY_REPORT: "/monthly_report",
   INVOICE_REPORT: "/invoice_report",
   ENQUIRY_REPORT: "/enquiry_report",
 
@@ -109,9 +108,8 @@ const ROUTES = {
   PAYMEMENT_MODE: "/payment_mode",
   ADD_PURCHASE: "/add_purchase",
   PURCHASE: "/purchase",
-  CREDIT_NOTES:"/credit_notes",
-  ADD_CREDIT_NOTES:"/add_credit_notes",
-  
+  CREDIT_NOTES: "/credit_notes",
+  ADD_CREDIT_NOTES: "/add_credit_notes",
 
   //  Accounts
   DAILY_EXPENSE: "/daily_expense",
@@ -139,20 +137,11 @@ const ROUTES = {
   EDIT_JOBPAYMENT: "/edit_job_payment",
   EDIT_JOBPAYMENT_ID:"/edit_job_payment/:id",
   VIEW_JOBPAYMENT: "/view_job_payment",
-  VIEW_JOBPAYMENT_ID:"/view_job_payment/:id",
+  VIEW_JOBPAYMENT_ID: "/view_job_payment/:id",
 
   //  Accounts -> Settings
   CREDIT_NOTE_TYPE: "/credit_note_type",
   BANK_DETAILS: "/list_bankdetails",
-
-
-
-
-
-
-
-
-
 
   // general settings
   CURRENCY: "/currency",

@@ -349,8 +349,11 @@ export default function EditJobPayment() {
                       ""
                     )}
                   </Form.Item>
+                  {/* <p className="mt-4" style={{ color: "#737576" }}>
+                    {jobPayData?.job_pay_docs}
+                  </p> */}
                 </div>
-                <div className="col-12 d-flex justify-content-center mt-5 pt-4 gap-3 ">
+                <div className="col-12 d-flex justify-content-center mt-5 mb-1 gap-3 ">
                   <Button className="save_button">Save</Button>{" "}
                   <Button
                     as="input"

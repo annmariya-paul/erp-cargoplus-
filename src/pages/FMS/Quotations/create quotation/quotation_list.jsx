@@ -73,7 +73,7 @@ export default function Quotations(props) {
       title: "QUOTATION NO",
       dataIndex: "quotation_no",
       key: "quotation_no",
-      width: "10%",
+      width: "12%",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
         return (

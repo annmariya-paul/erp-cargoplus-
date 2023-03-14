@@ -128,6 +128,10 @@ import EnquiryReport from "./pages/FMS/EnquiryReport/EnquiryReport";
 import Monthly_report from "./pages/FMS/Monthly report/monthlyreport";
 import Invoicereport from "./pages/FMS/Invoice/InvoiceReport/Invoicereport";
 import CreditNoteType from "./pages/Accounts/settings/CreditNoteType/credit_note_type";
+import Adddebit_notes from "./pages/Accounts/DebitNotes/add_debitnotes";
+import Editdebit_notes from "./pages/Accounts/DebitNotes/edit_debitnote";
+import Debit_notes from "./pages/Accounts/DebitNotes/list_debitnotes";
+import DebitnotesView from "./pages/Accounts/DebitNotes/view_debitnotes";
 
 function App() {
   return (
@@ -477,6 +481,23 @@ function App() {
             </Route>
             <Route path={ROUTES.VIEW_CREDIT_NOTES_ID} element={<ProtectedRoute />}>
               <Route index element={<CreditnotesView />} />
+            </Route>
+
+
+
+
+            <Route path={ROUTES.DEBIT_NOTES} element={<ProtectedRoute />}>
+              <Route index element={<Debit_notes />} />
+            </Route>
+            <Route path={ROUTES.ADD_DEBIT_NOTES} element={<ProtectedRoute />}>
+              <Route index element={<Adddebit_notes />} />
+            </Route>
+
+            <Route path={ROUTES.EDIT_DEBIT_NOTES_ID} element={<ProtectedRoute />}>
+              <Route index element={<Editdebit_notes />} />
+            </Route>
+            <Route path={ROUTES.VIEW_DEBIT_NOTES_ID} element={<ProtectedRoute />}>
+              <Route index element={<DebitnotesView />} />
             </Route>
 
             {/* General settings */}

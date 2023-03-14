@@ -193,19 +193,11 @@ function DailyExpence() {
     // },
   ];
 
-  const pageofIndex = numOfItems * (current - 1) - 1 + 1;
+  // const pageofIndex = numOfItems * (current - 1) - 1 + 1;
   const pagesizecount = Math.ceil(totalCount / numOfItems);
 
   const getDailyExpense = () => {
-
-    PublicFetch.get(`${ACCOUNTS}/daily-expense?startIndex=${pageofIndex}&noOfItems=${numOfItems}`)
-      .then((res) => {
-        console.log("Response", res);
-        if (res.data.success) {
-          setAllExpenseData(res.data.data.dailyExpenses);
-          console.log("dataass",res.data.data)
-          // setTotalcount()
-          setTotalcount(res.data.data.total)
+   
 
     PublicFetch.get(
       `${ACCOUNTS}/daily-expense?startIndex=${pageofIndex}&noOfItems=${numOfItems}`
@@ -221,7 +213,8 @@ function DailyExpence() {
       .catch((err) => {
         console.log("Error", err);
       });
-  };
+  }
+
 
   const handleView = (data) => {
     if (data) {
@@ -721,5 +714,6 @@ function DailyExpence() {
     </div>
   );
 }
+
 
 export default DailyExpence;

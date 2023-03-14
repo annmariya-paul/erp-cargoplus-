@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Form, Input, Select, DatePicker } from "antd";
-import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../routes";
 import {
@@ -15,10 +14,10 @@ import TextArea from "../../../components/ InputType TextArea/TextArea";
 import InputType from "../../../components/Input Type textbox/InputType";
 import SelectBox from "../../../components/Select Box/SelectBox";
 import InputNumber from "../../../components/InputNumber/InputNumber";
-import Button from "../../../components/button/button";
 import Custom_model from "../../../components/custom_modal/custom_model";
 import PublicFetch from "../../../utils/PublicFetch";
 import Input_Number from "../../../components/InputNumber/InputNumber";
+import Button from "../../../components/button/button";
 
 export default function AddJobPayments() {
   const [addForm] = Form.useForm();
@@ -34,6 +33,7 @@ export default function AddJobPayments() {
   const [fileAttach,setFileAttach] = useState();
   const [JobLeadId,setJobLeadId] = useState();
   const [currencyId,setCurrencyId] = useState();
+  const [imageSize,setImageSize] = useState(false);
 console.log("jjj",JobLeadId);
   const close_modal = (mShow, time) => {
     if (!mShow) {
@@ -159,15 +159,15 @@ console.log("jjj",JobLeadId);
   const thisDate = moment(newDate);
   addForm.setFieldValue("voucher_date", thisDate);
 
-  const addCreditNoteType = (data) => {
+  const addJobPayment = (data) => {
      console.log("addcreditdata", data);
     const date = moment(data.voucher_date);
-    const formData = new FormData(data);
+    const formData = new FormData();
    
     formData.append("job_pay_voucher_date", date);
     formData.append("job_pay_job_id", data.job_id);
     formData.append("job_pay_lead_id", JobLeadId);
-    formData.append("job_pay_currency", data.currencyId);
+    formData.append("job_pay_currency", currencyId);
     formData.append("job_pay_exchange_rate", data.Job_exchangeRate);
     formData.append("job_pay_job_amount", data.job_amount);
     formData.append("job_pay_advance_amount_fx", data.advance_amount);
@@ -210,7 +210,7 @@ console.log("jjj",JobLeadId);
               form={addForm}
               onFinish={(values) => {
                 console.log("jobpayvalues", values);
-                addCreditNoteType(values);
+                addJobPayment(values);
               }}
               onFinishFailed={(error) => {
                 console.log(error);
@@ -344,37 +344,35 @@ console.log("jjj",JobLeadId);
                     <FileUpload
                       multiple
                       listType="picture"
-                      accept=".pdf,.docs,.jpeg"
+                      accept=".pdf,.docx,.zip"
                       height={100}
                       beforeUpload={beforeUpload}
                       onChange={(file) => {
                         console.log("Before upload file size", file.file.size);
                         if (file.file.size > 2000 && file.file.size < 500000) {
                           setFileAttach(file.file.originFileObj);
-                          // setImageSize(false);
+                          setImageSize(false);
                           console.log("select imaggg", file.file.originFileObj);
                           console.log(
                             "image is greater than 2 kb and less than 500 kb"
                           );
                         } else {
-                          // setImageSize(true);
+                          setImageSize(true);
                           console.log("Error in image upload");
                         }
                       }}
                     />
-                    {/* {imageSize ? (
+                    {imageSize ? (
                       <p style={{ color: "red" }}>
-                        Upload Image size between 1 kb and 500 kb
+                        Upload File size between 1 kb and 500 kb
                       </p>
                     ) : (
                       ""
-                    )} */}
+                    )}
                   </Form.Item>
                 </div>
                 <div className="col-12 d-flex justify-content-center mt-5 pt-4 gap-3 ">
-                  <Button btnType="save" className="save_button">
-                    Save
-                  </Button>{" "}
+                  <Button btnType="save" className="save_button">Save</Button>
                   <Button
                     as="input"
                     type="reset"

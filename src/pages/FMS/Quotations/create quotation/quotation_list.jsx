@@ -88,7 +88,7 @@ export default function Quotations(props) {
             .includes(value.toLowerCase())
         );
       },
-      align: "center",
+      align: "left",
     },
     {
       title: "DATE",

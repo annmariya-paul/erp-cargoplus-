@@ -20,7 +20,7 @@ export default function Layout({ children }) {
           <Header />
         </div>
       </div>
-      <div className="container-fluid screen_orientation">
+      <div className="container-fluid screen_orientation mt-5 pt-2">
         <div className="d-flex">
           {/* <div className={` ${showMenu ? "d-none" : "menu-bars"}`}>
             <AiOutlineMenu

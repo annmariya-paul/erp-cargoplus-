@@ -568,7 +568,7 @@ const [searchcodeText, setSearchcodeText] = useState("");
                       />
                     </Form.Item>{" "}
                     {uniqueEditName ? (
-                      <p style={{ color: "red", marginTop: "-24px" }}>
+                      <p style={{ color: "red" }}>
                         Branch Name {uniqueErrMsg.UniqueErrName}
                       </p>
                     ) : null}

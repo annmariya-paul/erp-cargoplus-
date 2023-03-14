@@ -103,7 +103,7 @@ export default function JobPayments() {
       render: (data, index) => {
         return (
           <div className=" d-flex justify-content-center align-items-center gap-3">
-            <Link to={ROUTES.EDIT_JOBPAYMENT}>
+            <Link to={`${ROUTES.EDIT_JOBPAYMENT}/${index.job_pay_id}`}>
               <div
                 className="actionEdit"
                 // onClick={() => handleEditCategoryPhase1(index)}

@@ -297,11 +297,11 @@ function CreateJob() {
     // formData.append("job_currency_rate", data.job_currency);
     // formData.append("job_exchange_rate", data.exchnagerate);
 
-    if (filenew) {
-      formData.append("job_docs", filenew);
+    if (docfile) {
+      formData.append("job_docs", docfile);
     }
 
-    console.log("before sending data",data);
+    console.log("before sending data", data);
     PublicFetch.post(`${CRM_BASE_URL_FMS}/job`, formData, {
       "Content-Type": "Multipart/form-Data",
     })
@@ -499,7 +499,7 @@ function CreateJob() {
                   <h4 className="lead_text">Create Job</h4>
                 </div>
                 <div className="row ms-1 mb-3 ">
-                  <div className="content-tabs-new row justify-content px-4" >
+                  <div className="content-tabs-new row justify-content px-4">
                     <div className="row mt-3 ">
                       <h5 className="lead_text">Basic Info</h5>
                     </div>

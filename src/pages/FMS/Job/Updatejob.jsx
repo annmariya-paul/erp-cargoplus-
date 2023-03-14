@@ -215,18 +215,16 @@ function Updatejob() {
     // });
     // console.log("code", b);
     // console.log(";;;;;;;;;", data);
-     PublicFetch.get(`${CRM_BASE_URL}/lead/${data}`)
+    PublicFetch.get(`${CRM_BASE_URL}/lead/${data}`)
       .then((res) => {
         if (res?.data?.success) {
           console.log("Unique Lead Id data", res?.data?.data);
           // setOneLeadData(res?.data?.data);
-          
-         
         } else {
           console.log("FAILED T LOAD DATA");
         }
-    
-        editForm.setFieldValue("creditdays",  res?.data?.data.lead_credit_days);
+
+        editForm.setFieldValue("creditdays", res?.data?.data.lead_credit_days);
       })
       .catch(function (error) {
         console.log(error);
@@ -262,6 +260,7 @@ function Updatejob() {
   };
 
   const submitForm = (data) => {
+    let docfile = data?.attachments?.file?.originFileObj;
     const formData = new FormData();
     formData.append("job_number", data.jobno);
     formData.append("job_date", data.jobdate);
@@ -282,8 +281,8 @@ function Updatejob() {
     formData.append("job_total_cost_curr", data.job_currency);
     formData.append("job_total_cost_exch", data.exchangerate);
     formData.append("job_credit_days", data.creditdays);
-    if (data.attachments) {
-      formData.append("job_docs", data.attachments);
+    if (docfile) {
+      formData.append("job_docs", docfile);
     }
     formData.append("job_quotation", data.quotationno);
     PublicFetch.patch(`${CRM_BASE_URL_FMS}/job/${id}`, formData, {
@@ -336,18 +335,18 @@ function Updatejob() {
                 console.log(error);
               }}
             >
-             <div className="container-fluid ">
+              <div className="container-fluid ">
                 <div className="row  mt-3">
                   <h4 className="lead_text">Edit Job</h4>
                 </div>
                 <div className="row ms-1 mb-3 ">
-                  <div className="content-tabs-new row justify-content px-4" >
+                  <div className="content-tabs-new row justify-content px-4">
                     <div className="row mt-3 ">
                       <h5 className="lead_text">Basic Info</h5>
                     </div>
 
                     <div className="col-xl-4 col-sm-12 mt-2 px-3 ">
-                    <label>Job Date</label>
+                      <label>Job Date</label>
                       <Form.Item
                         name="jobdate"
                         rules={[
@@ -395,8 +394,6 @@ function Updatejob() {
                         </SelectBox>
                       </Form.Item>
                     </div>
-
-
 
                     <div className="col-xl-4 col-sm-12 mt-2 px-3">
                       <label>Freight Type</label>
@@ -499,7 +496,7 @@ function Updatejob() {
                         <InputType disabled={disable} />
                       </Form.Item>
                     </div>
-                    </div>
+                  </div>
                 </div>
               </div>
               <div className="row  mt-3 px-1 ">
@@ -507,7 +504,7 @@ function Updatejob() {
                   <div className="content-tabs-new row justify-content mx-1 mb-3">
                     <div className="row mt-3">
                       <h5 className="lead_text">Transportation</h5>
-                    </div>   
+                    </div>
 
                     <div className="col-xl-6 col-sm-12 mt-2">
                       <label>Mode</label>
@@ -656,8 +653,7 @@ function Updatejob() {
                         <InputType />
                       </Form.Item>
                     </div>
-
-                    </div>
+                  </div>
                 </div>
                 <div className="col-md-6 col-12 mt-3">
                   <div className="content-tabs-new row justify-content mx-1 mb-3 me-3">
@@ -802,11 +798,9 @@ function Updatejob() {
                         />
                       </Form.Item>
                     </div>
-
-                    </div>
+                  </div>
                 </div>
               </div>
-
 
               <div className="row mt-3 px-1 ">
                 <div className="col-md-6 col-12 ">
@@ -848,7 +842,6 @@ function Updatejob() {
                       </Form.Item>
                     </div>
 
-                    
                     <div className="col-xl-6 col-sm-12 mt-2">
                       <label>Currency</label>
                       <Form.Item
@@ -910,7 +903,7 @@ function Updatejob() {
                         />
                       </Form.Item>
                     </div>
-                
+
                     <div className="col-xl-6 col-sm-12 mt-2 mb-1">
                       <label>Credit Days</label>
                       <Form.Item
@@ -936,10 +929,8 @@ function Updatejob() {
                         />
                       </Form.Item>
                     </div>
-
-                    </div>
+                  </div>
                 </div>
-
 
                 <div className="col-md-6 col-12">
                   <div className="content-tabs-new row justify-content-center mx-1 mb-1 me-3">
@@ -947,7 +938,7 @@ function Updatejob() {
                       <h5 className="lead_text">Attachments</h5>
                     </div>
                     <div className="col-xl-8 col-sm-12 mt-2 mb-2">
-                    <Form.Item
+                      <Form.Item
                         name="attachments"
                         // rules={[
                         //   {
@@ -957,42 +948,45 @@ function Updatejob() {
                         //   },
                         // ]}
                       >
-                        <FileUpload beforeUpload={beforeUpload} />
+                        <FileUpload
+                          beforeUpload={beforeUpload}
+                          multiple
+                          filetype={"Accept only pdf and docs"}
+                          listType="picture"
+                          accept=".pdf,.docs,"
+                        />
                       </Form.Item>
-
-                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
-
 
               <div className="col-12 d-flex justify-content-center my-4 gap-3">
                 <Button className="save_button" btnType="save">
                   Save
                 </Button>
- <Button
-                        as="input"
-                        type="reset"
-                        value="Reset"
-                        onClick={() => {
-                          navigate(ROUTES.LIST_JOB);
-                        }}
-                      >
-                        Cancel
-                      </Button>
-                  </div>
-                  {/* </div> */}
-             
+                <Button
+                  as="input"
+                  type="reset"
+                  value="Reset"
+                  onClick={() => {
+                    navigate(ROUTES.LIST_JOB);
+                  }}
+                >
+                  Cancel
+                </Button>
+              </div>
+              {/* </div> */}
             </Form>
-        
-        <Custom_model
-          success
-          show={SuccessPopup}
-          onHide={() => {
-            setSuccessPopup(false);
-          }}
-        />
-      </div>
+
+            <Custom_model
+              success
+              show={SuccessPopup}
+              onHide={() => {
+                setSuccessPopup(false);
+              }}
+            />
+          </div>
         </div>
       </div>
     </>

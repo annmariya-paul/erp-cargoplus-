@@ -9,6 +9,7 @@ import { CRM_BASE_URL_FMS } from "../../../../api/bootapi";
 function Invoicereport() {
   const [serialNo, setserialNo] = useState(1);
   const [Allinvoice, setAllInvoice] = useState();
+  const [Alljobs, setAllJobs] = useState();
   const columns = [
     {
       title: "Sl. No.",
@@ -108,8 +109,23 @@ function Invoicereport() {
       });
   };
 
+  const GetAllJobs = () => {
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/job?startIndex=0&noOfItems=1000`)
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          console.log("Success", res.data.data.job);
+          setAllJobs(res.data.data.job);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
   useEffect(() => {
     GetAllInvoices();
+    GetAllJobs();
   }, []);
 
   return (
@@ -123,7 +139,18 @@ function Invoicereport() {
             <p>Invoice No</p>
 
             <SelectBox>
-              <Select.Option>Agent 1</Select.Option>
+              {Allinvoice &&
+                Allinvoice.length > 0 &&
+                Allinvoice.map((item, index) => {
+                  return (
+                    <Select.Option
+                      key={item.invoice_no}
+                      value={item.invoice_no}
+                    >
+                      {item.invoice_no}{" "}
+                    </Select.Option>
+                  );
+                })}
             </SelectBox>
             {/* </Form.Item> */}
           </div>
@@ -149,7 +176,20 @@ function Invoicereport() {
           <div className="col-sm-4 col-6">
             <p>Job No</p>
             <div className="mt-2">
-              <SelectBox></SelectBox>
+              <SelectBox>
+                {Alljobs &&
+                  Alljobs.length > 0 &&
+                  Alljobs.map((item, index) => {
+                    return (
+                      <Select.Option
+                        key={item.job_number}
+                        value={item.job_number}
+                      >
+                        {item.job_number}{" "}
+                      </Select.Option>
+                    );
+                  })}
+              </SelectBox>
             </div>
           </div>
           <div className="col-sm-2 d-flex mt-4 pt-3 justify-content-center">

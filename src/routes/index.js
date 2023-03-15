@@ -157,6 +157,9 @@ const ROUTES = {
   CREDIT_NOTE_TYPE: "/credit_note_type",
   BANK_DETAILS: "/list_bankdetails",
 
+  // Accounts -> Reports
+  DAILY_EXPENSE_REPORT:"/daily_expense_report",
+
   // general settings
   CURRENCY: "/currency",
   COMPANYINFO: "/company_info",

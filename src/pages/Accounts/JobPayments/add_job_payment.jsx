@@ -204,18 +204,18 @@ console.log("jjj",JobLeadId);
     <>
       <div className="container-fluid">
         <div className="row justify-content-md-center">
-          <div className="content-tabs" style={{ maxHeight: "1000px" }}>
-            <Form
-              name="addForm"
-              form={addForm}
-              onFinish={(values) => {
-                console.log("jobpayvalues", values);
-                addJobPayment(values);
-              }}
-              onFinishFailed={(error) => {
-                console.log(error);
-              }}
-            >
+          <Form
+            name="addForm"
+            form={addForm}
+            onFinish={(values) => {
+              console.log("jobpayvalues", values);
+              addJobPayment(values);
+            }}
+            onFinishFailed={(error) => {
+              console.log(error);
+            }}
+          >
+            <div className="content-tabs" style={{ maxHeight: "1000px" }}>
               <div className="row px-3 pt-4">
                 <div>
                   <h5 className="lead_text">Add Job Payment</h5>
@@ -388,8 +388,8 @@ console.log("jjj",JobLeadId);
                   </Button>
                 </div>
               </div>
-            </Form>
-          </div>
+            </div>{" "}
+          </Form>
         </div>
         <Custom_model
           size={"sm"}

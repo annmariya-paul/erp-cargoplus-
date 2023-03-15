@@ -15,6 +15,7 @@ function Invoicereport() {
   const [Allinvoice, setAllInvoice] = useState();
   const [Alljobs, setAllJobs] = useState();
   const [allReports, setAllReports] = useState();
+
   const columns = [
     {
       title: "Sl. No.",
@@ -244,10 +245,13 @@ function Invoicereport() {
 
   const data12 = allReports?.map((item) => [
     item.action,
-    item.lead_type,
-    item.lead_customer_name,
-    item.lead_organization,
-    item.lead_status,
+    item.invoice_no,
+    item.invoice_date,
+    item.job_no,
+    item.customer,
+    item.currency,
+    item.cost_fx,
+    item.const_lx,
   ]);
 
   useEffect(() => {
@@ -269,24 +273,26 @@ function Invoicereport() {
                   <FaFileExcel onClick={handleExport} />
                 </a>
               </div> */}
-              {/* <LeadlistIcons
-                datas={allReports}
-                columns={filteredColumns}
-                items={allReports}
-                xlheading={Invoice_Report_header}
-                filename="data.csv"
-                chechboxes={
-                  <Checkbox.Group onChange={onChange} value={selectedColumns}>
-                    {columnsKeys.map((column) => (
-                      <li>
-                        <Checkbox value={column} key={column}>
-                          {column}
-                        </Checkbox>
-                      </li>
-                    ))}
-                  </Checkbox.Group>
-                }
-              /> */}
+              {allReports && (
+                <LeadlistIcons
+                  datas={allReports}
+                  columns={filteredColumns}
+                  items={data12}
+                  xlheading={Invoice_Report_header}
+                  filename="data.csv"
+                  chechboxes={
+                    <Checkbox.Group onChange={onChange} value={selectedColumns}>
+                      {columnsKeys.map((column) => (
+                        <li>
+                          <Checkbox value={column} key={column}>
+                            {column}
+                          </Checkbox>
+                        </li>
+                      ))}
+                    </Checkbox.Group>
+                  }
+                />
+              )}
             </div>
           </div>
         </div>

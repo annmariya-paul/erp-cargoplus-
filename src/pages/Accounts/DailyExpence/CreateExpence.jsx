@@ -280,7 +280,7 @@ function CreateExpence() {
                           />
                         </Form.Item>
                       </div>
-                      <div className="col-12 my-2">
+                      <div className="col-xl-4 my-2">
                         <label>Remarks</label>
                         <Form.Item name="daily_expense_remarks">
                           <TextArea />

@@ -234,13 +234,19 @@ function Bank(){
         {
           title: "NAME ",
           dataIndex: "bank_account_name",
-          key: "vendor_name",
-          // filteredValue: [searchedText],
-          // onFilter: (value, record) => {
-          //   return String(record.vendor_name)
-          //     .toLowerCase()
-          //     .includes(value.toLowerCase());
-          // },
+          key: "bank_account_name",
+          filteredValue: [searchedText],
+          onFilter: (value, record) => {
+            return String(record.bank_account_name)
+              .toLowerCase()
+              .includes(value.toLowerCase())||
+              String(record.bank_name)
+              .toLowerCase()
+              .includes(value.toLowerCase())||
+              String(record.bank_branch)
+              .toLowerCase()
+              .includes(value.toLowerCase())
+          },
           align: "left",
         },
         {
@@ -251,34 +257,22 @@ function Bank(){
           onFilter: (value, record) => {
             return String(record.bank_name)
               .toLowerCase()
-              .includes(value.toLowerCase());
+              .includes(value.toLowerCase())
           },
           align: "left",
         },
         {
           title: "BRANCH",
           dataIndex: "bank_branch",
-          key: "freight_type_prefix",
+          key: "bank_branch",
     
           onFilter: (value, record) => {
-            return String(record.freight_type_prefix)
+            return String(record.bank_branch)
               .toLowerCase()
               .includes(value.toLowerCase());
           },
           align: "left",
         },
-        // {
-        //   title: "COUNTRY",
-        //   dataIndex: "vendor_country",
-        //   key: "freight_type_prefix",
-    
-        //   onFilter: (value, record) => {
-        //     return String(record.freight_type_prefix)
-        //       .toLowerCase()
-        //       .includes(value.toLowerCase());
-        //   },
-        //   align: "center",
-        // },
         {
           title: "ACTION",
           dataIndex: "action",
@@ -314,7 +308,6 @@ function Bank(){
           align: "center",
         },
       ];
-      // console.log()
     
       const data = [
         {

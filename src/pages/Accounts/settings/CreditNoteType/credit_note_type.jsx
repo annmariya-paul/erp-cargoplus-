@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Input, Select } from "antd";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { MdPageview } from "react-icons/md";
@@ -11,30 +11,35 @@ import TableData from "../../../../components/table/table_data";
 import Custom_model from "../../../../components/custom_modal/custom_model";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { ACCOUNTS } from "../../../../api/bootapi";
-
+import CheckUnique from "../../../../check Unique/CheckUnique";
+import { UniqueErrorMsg } from "../../../../ErrorMessages/UniqueErrorMessage";
 export default function CreditNoteType() {
   const [addForm] = Form.useForm();
   const [editForm] = Form.useForm();
+  const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
+  const [uniqueEditName, setUniqueEditName] = useState(false);
+  const [editUniqueName, setEditUniqueName] = useState();
+
   const [serialNo, setserialNo] = useState(1);
   const [addCreditNote, setAddCreditNote] = useState(false);
-  const [editCreditNote,setEditCreditNote]=useState(false);
+  const [editCreditNote, setEditCreditNote] = useState(false);
   const [current, setCurrent] = useState(1);
   const [pageSize, setPageSize] = useState("25");
   const [searchedText, setSearchedText] = useState("");
+  const [uniqueName, setUniqueName] = useState(false);
 
-  const[credit_note_name,setCredit_note_name]=useState("");
-  const[credit_note_desc,setCredit_note_desc]=useState("");
-  const[allnotes,setallnotes]=useState("");
-  const [creditnote,setcreditnote] = useState("")
+  const [credit_note_name, setCredit_note_name] = useState("");
+  const [credit_note_desc, setCredit_note_desc] = useState("");
+  const [allnotes, setallnotes] = useState("");
+  const [creditnote, setcreditnote] = useState("");
 
   const [successPopup, setSuccessPopup] = useState(false);
 
-  const [credit_note_type_id,setcredit_note_type_id]= useState("")
+  const [credit_note_type_id, setcredit_note_type_id] = useState("");
   const getData = (current, pageSize) => {
     return creditnote?.slice((current - 1) * pageSize, current * pageSize);
   };
 
-  
   const close_modal = (mShow, time) => {
     if (!mShow) {
       setTimeout(() => {
@@ -43,7 +48,7 @@ export default function CreditNoteType() {
     }
   };
 
-  const handleEditclick  = (e) => {
+  const handleEditclick = (e) => {
     console.log("editing id iss", e);
     setcredit_note_type_id(e.credit_note_type_id);
     setCredit_note_name(e.credit_note_type_name);
@@ -55,72 +60,69 @@ export default function CreditNoteType() {
     // setPaymentEditPopup(true);
   };
 
-
   const handleupdate = async (data) => {
-    console.log("datassssa",data);
+    console.log("datassssa", data);
     try {
       const updated = await PublicFetch.patch(
         `${ACCOUNTS}/credit-note-type/${credit_note_type_id}`,
         {
-          credit_note_type_name:data.Credit_note_name,
-          credit_note_type_description:data.Credit_note_desc,
-          
+          credit_note_type_name: data.Credit_note_name,
+          credit_note_type_description: data.Credit_note_desc,
         }
       );
       console.log("successfully updated.... ", updated);
       if (updated.data.success) {
-        setSuccessPopup(true)
+        setSuccessPopup(true);
         // setPaymentEditPopup(false);
         getnotes();
-  
-        close_modal(successPopup,1000 );
-      } 
+
+        close_modal(successPopup, 1000);
+      }
     } catch (err) {
-      console.log("error to update payment",err);
+      console.log("error to update payment", err);
     }
   };
 
-const createCreditnotetype = async ()=>{
-  try{
-    const addCreditnotetype = await PublicFetch.post(`${ACCOUNTS}/credit-note-type`,
-    {
-      credit_note_type_name:credit_note_name,
-      credit_note_type_description:credit_note_desc,
-    });
-    
-    console.log("note added successfully", addCreditnotetype);
+  const createCreditnotetype = async () => {
+    try {
+      const addCreditnotetype = await PublicFetch.post(
+        `${ACCOUNTS}/credit-note-type`,
+        {
+          credit_note_type_name: credit_note_name,
+          credit_note_type_description: credit_note_desc,
+        }
+      );
 
-    if (addCreditnotetype.data.success) {
-      setSuccessPopup(true);
-      getnotes();
-      addForm.resetFields();
-    //   setModalpaymentmode(false);
-      close_modal(successPopup, 1000);
+      console.log("note added successfully", addCreditnotetype);
+
+      if (addCreditnotetype.data.success) {
+        setSuccessPopup(true);
+        getnotes();
+        addForm.resetFields();
+        //   setModalpaymentmode(false);
+        close_modal(successPopup, 1000);
+      }
+    } catch (err) {
+      console.log("err to add the note", err);
     }
-  } catch (err) {
-    console.log("err to add the note", err);
-  } 
-}
+  };
 
+  const getnotes = async () => {
+    try {
+      const allcreditnotes = await PublicFetch.get(
+        `${ACCOUNTS}/credit-note-type`
+      );
+      console.log("getting all notes", allcreditnotes);
+      setcreditnote(allcreditnotes.data.data);
+    } catch (err) {
+      console.log("error to fetching  notes", err);
+    }
+  };
 
-const getnotes = async () => {
-  try {
-    const allcreditnotes = await PublicFetch.get(
-      `${ACCOUNTS}/credit-note-type`
-    );
-    console.log("getting all notes", allcreditnotes);
-    setcreditnote(allcreditnotes.data.data);
-  } catch (err) {
-    console.log("error to fetching  notes", err);
-  }
-
-}
-
-useEffect(() => {
-  getnotes()
-  // getpayment()
-}, []);
-
+  useEffect(() => {
+    getnotes();
+    // getpayment()
+  }, []);
 
   const columns = [
     {
@@ -137,18 +139,16 @@ useEffect(() => {
       filteredValue: [searchedText],
       onFilter: (value, record) => {
         return String(record.credit_note_type_name)
-        .toLowerCase()
+          .toLowerCase()
           .includes(value.toLowerCase());
       },
       align: "left",
-
     },
     {
       title: "DESCRIPTION",
       dataIndex: "credit_note_type_description",
       key: "credit_note_type_description",
       align: "left",
-
     },
     {
       title: "ACTIONS",
@@ -160,7 +160,8 @@ useEffect(() => {
           <div className=" d-flex justify-content-center align-items-center gap-3">
             <div
               className="actionEdit"
-              onClick={() => {setEditCreditNote(true)
+              onClick={() => {
+                setEditCreditNote(true);
                 handleEditclick(index);
               }}
             >
@@ -202,8 +203,8 @@ useEffect(() => {
             <Select
               bordered={false}
               className="page_size_style"
-                value={pageSize}
-                onChange={(e) => setPageSize(e)}
+              value={pageSize}
+              onChange={(e) => setPageSize(e)}
             >
               <Select.Option value="25">
                 Show
@@ -234,11 +235,14 @@ useEffect(() => {
 
           <div className="col-4 ">
             {/* <Link to={ROUTES.ADD_JOBPAYMENT}> */}
-            <Button 
-            btnType="add" 
-            onClick={() => {setAddCreditNote(true);
-             addForm.resetFields();
-            }}   >
+            <Button
+              btnType="add"
+              onClick={() => {
+                setAddCreditNote(true);
+                addForm.resetFields();
+                setUniqueName(false);
+              }}
+            >
               Add Credit Note Type
             </Button>
             {/* </Link> */}
@@ -287,22 +291,27 @@ useEffect(() => {
                         },
                       ]}
                     >
-                      <InputType 
-                       value={credit_note_name}
-                       onChange={(e) => {
-                         setCredit_note_name(e.target.value);
-                         console.log("name name",credit_note_name);
-                        //  setUniqueName(false);
-                       }}
-                      //  onBlur={async () => {
-                      //    let n = await CheckUnique({
-                      //      type: "credit_note_type_name",
-                      //      value: credit_note_name,
-                      //    });
-                      //    setUniqueName(n);
-                      //  }}
+                      <InputType
+                        value={credit_note_name}
+                        onChange={(e) => {
+                          setCredit_note_name(e.target.value);
+                          console.log("name name", credit_note_name);
+                          setUniqueName(false);
+                        }}
+                        onBlur={async () => {
+                          let n = await CheckUnique({
+                            type: "credit_note_type_name",
+                            value: credit_note_name,
+                          });
+                          setUniqueName(n);
+                        }}
                       />
                     </Form.Item>
+                    {uniqueName ? (
+                      <p style={{ color: "red" }}>
+                        Credit note type Name {uniqueErrMsg.UniqueErrName}
+                      </p>
+                    ) : null}
                   </div>
                   <div className="col-12 pt-1">
                     <label>Description</label>
@@ -316,11 +325,12 @@ useEffect(() => {
                         },
                       ]}
                     >
-                      <TextArea 
-                      onChange={(e) => {
-                        setCredit_note_desc(e.target.value);
-                        console.log("desccccc",e.target.value);
-                      }}/>
+                      <TextArea
+                        onChange={(e) => {
+                          setCredit_note_desc(e.target.value);
+                          console.log("desccccc", e.target.value);
+                        }}
+                      />
                     </Form.Item>
                   </div>
                   <div className="col-12 mt-4 d-flex justify-content-center gap-3">
@@ -344,16 +354,17 @@ useEffect(() => {
         <Custom_model
           size={"sm"}
           show={successPopup}
-            onHide={() => setSuccessPopup(false)}
+          onHide={() => setSuccessPopup(false)}
           success
         />
-         <Custom_model
+        <Custom_model
           show={editCreditNote}
           onHide={() => setEditCreditNote(false)}
           footer={false}
           View_list
           list_content={
-            <><div className="row">
+            <>
+              <div className="row">
                 <h5 className="lead_text">Edit Credit Note Type</h5>
               </div>
               <Form
@@ -379,15 +390,30 @@ useEffect(() => {
                         },
                       ]}
                     >
-                      <InputType 
-                      className="input_type_style w-100"
-                      value={credit_note_name}
-                      onChange={(e) => {
-                        setCredit_note_name(e.target.value);
-                        // setUniqueEditName(false);
-                      }}
+                      <InputType
+                        className="input_type_style w-100"
+                        value={credit_note_name}
+                        onChange={(e) => {
+                          setCredit_note_name(e.target.value);
+                          // setUniqueEditName(false);
+                        }}
+                        onBlur={async () => {
+                          if (editUniqueName !== credit_note_name) {
+                            let a = await CheckUnique({
+                              type: "credit_note_name",
+                              value: credit_note_name,
+                            });
+
+                            setUniqueEditName(a);
+                          }
+                        }}
                       />
                     </Form.Item>
+                    {uniqueEditName ? (
+                      <p style={{ color: "red" }}>
+                        Credit note type Name {uniqueErrMsg.UniqueErrName}
+                      </p>
+                    ) : null}
                   </div>
                   <div className="col-12 pt-1">
                     <label>Description</label>
@@ -401,11 +427,12 @@ useEffect(() => {
                         },
                       ]}
                     >
-                      <TextArea 
-                      value={credit_note_desc}
-                      onChange={(e) => {
-                        setCredit_note_desc(e.target.value);
-                      }}/>
+                      <TextArea
+                        value={credit_note_desc}
+                        onChange={(e) => {
+                          setCredit_note_desc(e.target.value);
+                        }}
+                      />
                     </Form.Item>
                   </div>
                   <div className="col-12 mt-4 d-flex justify-content-center gap-3">
@@ -422,7 +449,10 @@ useEffect(() => {
                     </Button>
                   </div>
                 </div>
-                </Form></>}/>
+              </Form>
+            </>
+          }
+        />
       </div>
       <Custom_model
         size={"sm"}
@@ -430,7 +460,6 @@ useEffect(() => {
         onHide={() => setSuccessPopup(false)}
         success
       />
-
     </>
   );
 }

@@ -6,7 +6,7 @@ import {
   AiOutlineCaretDown,
   AiOutlineMenu,
 } from "react-icons/ai";
-import { BsFillXDiamondFill, BsBookmarkFill } from "react-icons/bs";
+// import { BsFillXDiamondFill, BsBookmarkFill } from "react-icons/bs";
 import { RiTeamFill } from "react-icons/ri";
 import {
   MdEventNote,
@@ -530,7 +530,7 @@ export default function Sidebar({ showSidebar }) {
 
                         <div className="  ">
                           <div className="text-right ">
-                            <AiOutlineCaretDown className="toggle_btn " />
+                            <AiOutlineCaretDown className="toggle_btn" />
                           </div>
                         </div>
                       </div>

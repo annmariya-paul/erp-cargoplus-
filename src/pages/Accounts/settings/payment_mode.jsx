@@ -25,6 +25,7 @@ export default function Payment_mode() {
   const [successPopup, setSuccessPopup] = useState(false);
   const [showViewModal, setShowViewModal] = useState(false);
   const [searchedText, setSearchedText] = useState("");
+  const[searchedDesc,setSearchedDesc] = useState("");
   const [uniqueCode, setUniqueCode] = useState(false);
   const [uniqueName, setUniqueName] = useState(false);
   const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
@@ -194,7 +195,10 @@ useEffect(() => {
         onFilter: (value, record) => {
           return String(record.pay_mode_name)
           .toLowerCase()
-            .includes(value.toLowerCase());
+            .includes(value.toLowerCase())||
+            String(record.pay_mode_desc)
+            .toLowerCase()
+            .includes(value.toLowerCase())
         },
       align: "left",
     },
@@ -202,7 +206,7 @@ useEffect(() => {
       title: "DESCRIPTION",
       dataIndex: "pay_mode_desc",
       key: "pay_mode_desc",
-
+      filteredValue: [searchedText],
       onFilter: (value, record) => {
         return String(record.pay_mode_desc)
           .toLowerCase()

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { DatePicker, Form, Input, Select } from "antd";
+import { Checkbox, DatePicker, Form, Input, Select } from "antd";
 import SelectBox from "../../../../components/Select Box/SelectBox";
 import Button from "../../../../components/button/button";
 import TableData from "../../../../components/table/table_data";
@@ -8,6 +8,7 @@ import { CRM_BASE_URL_FMS } from "../../../../api/bootapi";
 import moment from "moment";
 import { FaFileExcel } from "react-icons/fa";
 import * as XLSX from "xlsx/xlsx.js"; //for xl download
+import LeadlistIcons from "../../../../components/lead_list_icon/lead_list_icon";
 
 function Invoicereport() {
   const [serialNo, setserialNo] = useState(1);
@@ -230,6 +231,25 @@ function Invoicereport() {
     console.log("xlsx downloaded");
   };
 
+  const columnsKeys = columns.map((column) => column.key);
+
+  const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
+  const filteredColumns = columns.filter((column) =>
+    selectedColumns.includes(column.key)
+  );
+  console.log("filtered columns::", filteredColumns);
+  const onChange = (checkedValues) => {
+    setSelectedColumns(checkedValues);
+  };
+
+  const data12 = allReports?.map((item) => [
+    item.action,
+    item.lead_type,
+    item.lead_customer_name,
+    item.lead_organization,
+    item.lead_status,
+  ]);
+
   useEffect(() => {
     GetAllInvoices();
     GetAllJobs();
@@ -244,11 +264,29 @@ function Invoicereport() {
           </div>
           <div className="col-6">
             <div className="d-flex justify-content-end">
-              <div className="icon-border p-1">
+              {/* <div className="icon-border p-1">
                 <a className="icon" href="#">
                   <FaFileExcel onClick={handleExport} />
                 </a>
-              </div>
+              </div> */}
+              {/* <LeadlistIcons
+                datas={allReports}
+                columns={filteredColumns}
+                items={allReports}
+                xlheading={Invoice_Report_header}
+                filename="data.csv"
+                chechboxes={
+                  <Checkbox.Group onChange={onChange} value={selectedColumns}>
+                    {columnsKeys.map((column) => (
+                      <li>
+                        <Checkbox value={column} key={column}>
+                          {column}
+                        </Checkbox>
+                      </li>
+                    ))}
+                  </Checkbox.Group>
+                }
+              /> */}
             </div>
           </div>
         </div>

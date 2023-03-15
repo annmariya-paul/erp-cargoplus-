@@ -70,3 +70,8 @@
   top: 6px;
   left: 15px;
 }
+
+.ant-input-affix-wrapper > .ant-input:not(textarea) {
+  padding: 0;
+  background-color: whitesmoke;
+}

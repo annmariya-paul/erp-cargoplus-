@@ -58,7 +58,7 @@ export default function ViewJobPayment() {
 
   return (
     <>
-      <div className=" container-fluid view_quotation  p-3 px-4">
+      <div className=" container-fluid view_quotation  p-3">
         <div className="row">
           <div className="col-10">
             <h5 className="lead_text">View Job Payment</h5>
@@ -77,8 +77,8 @@ export default function ViewJobPayment() {
             </Button>
           </div>
         </div>
-        <div className=" row mt-3">
-          <div className="col-6 d-flex">
+        <div className="row mt-3">
+          <div className="col-sm-6 d-flex">
             <div className="col-4 boldhd">Voucher No</div>
             <div className="col-1">:</div>
             <div className="col-7">
@@ -88,7 +88,7 @@ export default function ViewJobPayment() {
             </div>
           </div>
         </div>
-        <div className="col-6 d-flex">
+        <div className="col-sm-6 d-flex">
           <div className="col-4 boldhd">Voucher Date</div>
           <div className="col-1">:</div>
           <div className="col-7">
@@ -97,7 +97,7 @@ export default function ViewJobPayment() {
             </p>
           </div>
         </div>
-        <div className="col-6 d-flex">
+        <div className="col-sm-6 d-flex">
           <div className="col-4 boldhd">Job No</div>
           <div className="col-1">:</div>
           <div className="col-7">
@@ -106,7 +106,7 @@ export default function ViewJobPayment() {
             </p>
           </div>
         </div>
-        <div className="col-6 d-flex">
+        <div className="col-sm-6 d-flex">
           <div className="col-4 boldhd">Lead</div>
           <div className="col-1">:</div>
           <div className="col-7">
@@ -115,7 +115,7 @@ export default function ViewJobPayment() {
             </p>
           </div>
         </div>
-        <div className="col-6 d-flex">
+        <div className="col-sm-6 d-flex">
           <div className="col-4 boldhd">Currency</div>
           <div className="col-1">:</div>
           <div className="col-7">
@@ -124,7 +124,7 @@ export default function ViewJobPayment() {
             </p>
           </div>
         </div>
-        <div className="col-6 d-flex">
+        <div className="col-sm-6 d-flex">
           <div className="col-4 boldhd">Exchange Rate</div>
           <div className="col-1">:</div>
           <div className="col-7">
@@ -133,14 +133,14 @@ export default function ViewJobPayment() {
             </p>
           </div>
         </div>
-        <div className="col-6 d-flex">
+        <div className="col-sm-6 d-flex">
           <div className="col-4 boldhd">Job Amount</div>
           <div className="col-1">:</div>
           <div className="col-7">
             <p className="modal-view-data">{jobPayData?.job_pay_job_amount}</p>
           </div>
         </div>
-        <div className="col-6 d-flex">
+        <div className="col-sm-6 d-flex">
           <div className="col-4 boldhd">Advance Amount</div>
           <div className="col-1">:</div>
           <div className="col-7">
@@ -149,7 +149,7 @@ export default function ViewJobPayment() {
             </p>
           </div>
         </div>
-        <div className="col-6 d-flex">
+        <div className="col-sm-6 d-flex">
           <div className="col-4 boldhd">Advance in ({currencyDefault})</div>
           <div className="col-1">:</div>
           <div className="col-7">
@@ -159,14 +159,14 @@ export default function ViewJobPayment() {
             </p>
           </div>
         </div>
-        <div className="col-6 d-flex">
+        <div className="col-sm-6 d-flex">
           <div className="col-4 boldhd">Remarks</div>
           <div className="col-1">:</div>
           <div className="col-7">
             <p className="modal-view-data">{jobPayData?.job_pay_remarks}</p>
           </div>
         </div>
-        <div className="col-6 d-flex">
+        <div className="col-sm-6 d-flex">
           <div className="col-4 boldhd">Attachments</div>
           <div className="col-1">:</div>
           <div className="col-7">

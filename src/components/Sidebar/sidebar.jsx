@@ -890,7 +890,7 @@ export default function Sidebar({ showSidebar }) {
                               <div className="ms-4">Agent Report</div>
                             </NavLink>
                           </li>
-                          <li className="nav-text ">
+                          {/* <li className="nav-text ">
                             <NavLink
                               className={({ isActive }) =>
                                 isActive ? "active-link" : "link"
@@ -901,7 +901,7 @@ export default function Sidebar({ showSidebar }) {
                                 Cost And Expense Report
                               </div>
                             </NavLink>
-                          </li>
+                          </li> */}
                           <li className="nav-text ">
                             <NavLink
                               className={({ isActive }) =>
@@ -1041,6 +1041,18 @@ export default function Sidebar({ showSidebar }) {
                           </NavLink>
                         </li>
                       )}
+                       {/* {checkPermission("credit_note_type") && (
+                        <li className="nav-text ">
+                          <NavLink
+                            className={({ isActive }) =>
+                              isActive ? "active-link" : "link"
+                            }
+                            to={ROUTES.CREDIT_NOTE_TYPE}
+                          >
+                            <div className=" ms-5">Credit Note Type</div>
+                          </NavLink>
+                        </li>
+                      )} */}
                       {checkPermission("paymentmode") && (
                         <li className="nav-text ">
                           <NavLink
@@ -1066,7 +1078,7 @@ export default function Sidebar({ showSidebar }) {
                     </li>
                   )} */}
 
-                      {checkPermission("purchase") && (
+                      {/* {checkPermission("purchase") && (
                         <li className="nav-text">
                           <NavLink
                             className={({ isActive }) =>
@@ -1077,7 +1089,7 @@ export default function Sidebar({ showSidebar }) {
                             <div className=" ms-5">Purchase</div>
                           </NavLink>
                         </li>
-                      )}
+                      )} */}
 
                       {checkPermission("bankdetails") && (
                         <li className="nav-text">
@@ -1103,10 +1115,24 @@ export default function Sidebar({ showSidebar }) {
                           </NavLink>
                         </li>
                       )}
+                      
                     </>
                   ) : (
                     ""
                   )}
+                  {checkPermission("purchase") && (
+                    <li className="nav-text">
+                      <NavLink
+                        className={({ isActive }) =>
+                          isActive ? "active-link" : "link"
+                        }
+                        to={ROUTES.PURCHASE}
+                      >
+                        <div className="ms-4">Purchase</div>
+                      </NavLink>
+                    </li>
+                  )}
+
                   {checkPermission("daily_expence") && (
                     <li className="nav-text ">
                       <NavLink
@@ -1132,7 +1158,7 @@ export default function Sidebar({ showSidebar }) {
                       </NavLink>
                     </li>
                   )}
-                  {checkPermission("job_payments") && (
+                  {checkPermission("add_credit_notes") && (
                     <li className="nav-text ">
                       <NavLink
                         className={({ isActive }) =>
@@ -1144,6 +1170,18 @@ export default function Sidebar({ showSidebar }) {
                       </NavLink>
                     </li>
                   )}
+                   {checkPermission("add_debit_notes") && (
+                        <li className="nav-text ">
+                          <NavLink
+                            className={({ isActive }) =>
+                              isActive ? "active-link" : "link"
+                            }
+                            to={ROUTES.DEBIT_NOTES}
+                          >
+                            <div className=" ms-4">Debit Notes</div>
+                          </NavLink>
+                        </li>
+                      )}
                 </>
               ) : (
                 ""

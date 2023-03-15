@@ -132,6 +132,7 @@ import Adddebit_notes from "./pages/Accounts/DebitNotes/add_debitnotes";
 import Editdebit_notes from "./pages/Accounts/DebitNotes/edit_debitnote";
 import Debit_notes from "./pages/Accounts/DebitNotes/list_debitnotes";
 import DebitnotesView from "./pages/Accounts/DebitNotes/view_debitnotes";
+import DailyExpenseReport from "./pages/Accounts/Reports/daily_expense_report";
 
 function App() {
   return (
@@ -476,15 +477,18 @@ function App() {
               <Route index element={<Addcredit_notes />} />
             </Route>
 
-            <Route path={ROUTES.EDIT_CREDIT_NOTES_ID} element={<ProtectedRoute />}>
+            <Route
+              path={ROUTES.EDIT_CREDIT_NOTES_ID}
+              element={<ProtectedRoute />}
+            >
               <Route index element={<Editcredit_notes />} />
             </Route>
-            <Route path={ROUTES.VIEW_CREDIT_NOTES_ID} element={<ProtectedRoute />}>
+            <Route
+              path={ROUTES.VIEW_CREDIT_NOTES_ID}
+              element={<ProtectedRoute />}
+            >
               <Route index element={<CreditnotesView />} />
             </Route>
-
-
-
 
             <Route path={ROUTES.DEBIT_NOTES} element={<ProtectedRoute />}>
               <Route index element={<Debit_notes />} />
@@ -493,10 +497,16 @@ function App() {
               <Route index element={<Adddebit_notes />} />
             </Route>
 
-            <Route path={ROUTES.EDIT_DEBIT_NOTES_ID} element={<ProtectedRoute />}>
+            <Route
+              path={ROUTES.EDIT_DEBIT_NOTES_ID}
+              element={<ProtectedRoute />}
+            >
               <Route index element={<Editdebit_notes />} />
             </Route>
-            <Route path={ROUTES.VIEW_DEBIT_NOTES_ID} element={<ProtectedRoute />}>
+            <Route
+              path={ROUTES.VIEW_DEBIT_NOTES_ID}
+              element={<ProtectedRoute />}
+            >
               <Route index element={<DebitnotesView />} />
             </Route>
 
@@ -581,7 +591,10 @@ function App() {
             <Route path={ROUTES.EDIT_JOBPAYMENT} element={<ProtectedRoute />}>
               <Route index element={<EditJobPayment />} />
             </Route>
-            <Route path={ROUTES.EDIT_JOBPAYMENT_ID} element={<ProtectedRoute />}>
+            <Route
+              path={ROUTES.EDIT_JOBPAYMENT_ID}
+              element={<ProtectedRoute />}
+            >
               <Route index element={<EditJobPayment />} />
             </Route>
             <Route path={ROUTES.VIEW_JOBPAYMENT} element={<ProtectedRoute />}>
@@ -602,6 +615,9 @@ function App() {
             </Route>
             <Route path={ROUTES.BANK_DETAILS} element={<ProtectedRoute />}>
               <Route index element={<Bank />} />
+            </Route>
+            <Route path={ROUTES.DAILY_EXPENSE_REPORT} element={<ProtectedRoute />}>
+              <Route index element={<DailyExpenseReport />} />
             </Route>
 
             {/* </Route> */}

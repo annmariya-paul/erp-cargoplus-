@@ -109,7 +109,7 @@ export default function AgentReport() {
         </div>
         <div className="row">
           <div className="col-sm-3 col-12">
-            <p>Agent</p>
+            <lable>Agent</lable>
             {/* <Form.Item
                     name="job_no"
                     // onChange={(e) => setName(e.target.value)}
@@ -143,9 +143,9 @@ export default function AgentReport() {
           </div>
          
           <div className="col-sm-3 col-6">
-            <p>
+            <label>
               Date From
-            </p>
+            </label>
             <div className="mt-2">
               <DatePicker></DatePicker>
             </div>
@@ -153,12 +153,12 @@ export default function AgentReport() {
 
           {/* <div className="col-1 pt-3 d-flex justify-content-end">To</div> */}
           <div className="col-sm-3 col-6">
-            <p>To</p>
+            <label>To</label>
             <div className="mt-2">
               <DatePicker></DatePicker>
             </div>
           </div>
-          <div className="col-sm-3 d-flex mt-4 pt-3 px-2 justify-content-center gap-3">
+          <div className="col-sm-3 d-flex mt-4 pt-1 px-2 justify-content-center gap-3">
             <div>
             <Button btnType="save" >Search</Button>
             </div>

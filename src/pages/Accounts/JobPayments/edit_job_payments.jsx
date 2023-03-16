@@ -1,3 +1,4 @@
+import "./job_payments.scss";
 import React, { useEffect, useState } from "react";
 import { Form, Input, Select, DatePicker } from "antd";
 import { useForm } from "react-hook-form";
@@ -39,17 +40,17 @@ export default function EditJobPayment() {
   const [jobPayData, setJobPayData] = useState();
   const [advanceAmount, setAdvanceAmount] = useState();
   const [jobExchangeRate, setJobExchangeRate] = useState();
-  
+
   const navigate = useNavigate();
 
-   const close_modal = (mShow, time) => {
-     if (!mShow) {
-       setTimeout(() => {
-         setSuccessPopup(false);
-         navigate(ROUTES.JOB_PAYMENTS);
-       }, time);
-     }
-   };
+  const close_modal = (mShow, time) => {
+    if (!mShow) {
+      setTimeout(() => {
+        setSuccessPopup(false);
+        navigate(ROUTES.JOB_PAYMENTS);
+      }, time);
+    }
+  };
 
   const CurrencyData = () => {
     PublicFetch.get(`${GENERAL_SETTING_BASE_URL}/currency`)
@@ -136,9 +137,9 @@ export default function EditJobPayment() {
     formData.append("job_pay_advance_amount_fx", data.advance_amount);
     formData.append("job_pay_advance_amount_lx", data.advance_in);
     formData.append("job_pay_remarks", data.jobpay_remarks);
-     if (fileAttach) {
-       formData.append("job_pay_docs", fileAttach);
-     }
+    if (fileAttach) {
+      formData.append("job_pay_docs", fileAttach);
+    }
     PublicFetch.patch(`${ACCOUNTS}/job-payments/${id}`, formData, {
       "Content-Type": "Multipart/form-Data",
     })
@@ -168,208 +169,214 @@ export default function EditJobPayment() {
   return (
     <>
       <div className="container-fluid">
-        <div className="row justify-content-md-center">
-          <div className="content-tabs" style={{ maxHeight: "1000px" }}>
-            <Form
-              name="addForm"
-              form={editForm}
-              onFinish={(values) => {
-                console.log("values111333", values);
-                EditJobPayment(values);
-              }}
-              onFinishFailed={(error) => {
-                console.log(error);
-              }}
-            >
-              <div className="row px-3 pt-4">
-                <div>
-                  <h5 className="lead_text">Edit Job Payment</h5>
-                </div>
-                <div className="col-sm-4 pt-3">
-                  <label>Voucher No.</label>
-                  <Form.Item name="voucher_no">
-                    <InputType disabled />
-                  </Form.Item>
-                </div>
-                <div className="col-sm-4 pt-3">
-                  <label>Voucher Date</label>
-                  <Form.Item
-                    className="mt-2"
-                    name="voucher_date"
-                    // onChange={(e) => setName(e.target.value)}
-                  >
-                    <DatePicker
-                      format={"DD-MM-YYYY"}
-                      // value={selectedDate}
-                      // onChange={(e) => {
-                      //   setSelectedDate(e);
-                      // }}
-                    />
-                  </Form.Item>
-                </div>
-                <div className="col-sm-4 pt-3">
-                  <label>Job No.</label>
-                  <Form.Item
-                    name="job_no"
-                    // onChange={(e) => setName(e.target.value)}
-                  >
-                    <SelectBox
-                      disabled
-                      onChange={(e) => {
-                        // handleJobNo(e);
-                      }}
-                    >
-                      {jobData &&
-                        jobData.length > 0 &&
-                        jobData.map((item, index) => {
-                          return (
-                            <Select.Option
-                              value={item.job_id}
-                              key={item.job_id}
-                            >
-                              {item.job_number}
-                            </Select.Option>
-                          );
-                        })}
-                    </SelectBox>
-                  </Form.Item>
-                </div>
-                <div className="col-sm-4 pt-3">
-                  <label>Lead</label>
-                  <Form.Item
-                    name="jobpay_lead"
-                    // onChange={(e) => setName(e.target.value)}
-                  >
-                    <InputType disabled />
-                  </Form.Item>
-                </div>
-                <div className="col-sm-4 pt-3">
-                  <label>Currency</label>
-                  <Form.Item
-                    name="job_currency"
-                    // onChange={(e) => setName(e.target.value)}
-                  >
-                    <InputType disabled />
-                  </Form.Item>
-                </div>
-                <div className="col-sm-4 pt-3">
-                  <label>Exchange Rate</label>
-                  <Form.Item
-                    name="exchange_rate"
-                    onChange={(e) => setJobExchangeRate(e.target.value)}
-                  >
-                    <Input_Number
-                      className="text_right"
-                      align="right"
-                      precision={2}
-                    />
-                  </Form.Item>
-                </div>
-                <div className="col-sm-4 pt-3">
-                  <label>Job Amount</label>
-                  <Form.Item
-                    name="job_amount"
-                    // onChange={(e) => setName(e.target.value)}
-                  >
-                    <InputNumber
-                      disabled
-                      className="text_right"
-                      align="right"
-                      precision={2}
-                    />
-                  </Form.Item>
-                </div>
-                <div className="col-sm-4 pt-3">
-                  <label>Advance Amount</label>
-                  <Form.Item
-                    name="advance_amount"
-                    onChange={(e) => setAdvanceAmount(e.target.value)}
-                  >
-                    <Input_Number
-                      className="text_right"
-                      align="right"
-                      precision={2}
-                    />
-                  </Form.Item>
-                </div>
-                <div className="col-sm-4 pt-3">
-                  <label>
-                    Advance in <span>({currencyDefault})</span>
-                  </label>
-                  <Form.Item
-                    name="advance_in"
-                    // onChange={(e) => setName(e.target.value)}
-                  >
-                    <Input_Number
-                      disabled
-                      className="text_right"
-                      align="right"
-                      precision={2}
-                    />
-                  </Form.Item>
-                </div>
-                <div className="col-sm-6 pt-3">
-                  <label>Remarks</label>
-                  <Form.Item
-                    name="jobpay_remarks"
-                    // onChange={(e) => setName(e.target.value)}
-                  >
-                    <TextArea />
-                  </Form.Item>
-                </div>
-                <div className="col-6 mt-2">
-                  <label>Attachments</label>
-                  <Form.Item name="job_docs" className="mt-2">
-                    <FileUpload
-                      multiple
-                      listType="picture"
-                      accept=".pdf,.docx,.zip"
-                      height={100}
-                      beforeUpload={beforeUpload}
-                      onChange={(file) => {
-                        console.log("Before upload file size", file.file.size);
-                        if (file.file.size > 2000 && file.file.size < 500000) {
-                          setFileAttach(file.file.originFileObj);
-                          setImageSize(false);
-                          console.log("select imaggg", file.file.originFileObj);
-                          console.log(
-                            "image is greater than 2 kb and less than 500 kb"
-                          );
-                        } else {
-                          setImageSize(true);
-                          console.log("Error in image upload");
-                        }
-                      }}
-                    />
-                    {imageSize ? (
-                      <p style={{ color: "red" }}>
-                        Upload Image size between 1 kb and 500 kb
-                      </p>
-                    ) : (
-                      ""
-                    )}
-                  </Form.Item>
-                  {/* <p className="mt-4" style={{ color: "#737576" }}>
+        <Form
+          name="addForm"
+          form={editForm}
+          onFinish={(values) => {
+            console.log("values111333", values);
+            EditJobPayment(values);
+          }}
+          onFinishFailed={(error) => {
+            console.log(error);
+          }}
+        >
+          <div className="row pt-2">
+            <h5 className="lead_text">Edit Job Payment</h5>
+          </div>
+          <div className="row jobpay_cards mt-3 mx-0 px-2 py-3">
+            <div className="col-12">
+              <h5 className="lead_text">Basic Info</h5>
+            </div>
+            <div className="col-sm-3 pt-3">
+              <label>Voucher No.</label>
+              <Form.Item name="voucher_no">
+                <InputType disabled />
+              </Form.Item>
+            </div>
+            <div className="col-sm-3 pt-3">
+              <label>Voucher Date</label>
+              <Form.Item
+                className="mt-2"
+                name="voucher_date"
+                // onChange={(e) => setName(e.target.value)}
+              >
+                <DatePicker
+                  format={"DD-MM-YYYY"}
+                  // value={selectedDate}
+                  // onChange={(e) => {
+                  //   setSelectedDate(e);
+                  // }}
+                />
+              </Form.Item>
+            </div>
+            <div className="col-sm-3 pt-3">
+              <label>Job No.</label>
+              <Form.Item
+                name="job_no"
+                // onChange={(e) => setName(e.target.value)}
+              >
+                <SelectBox
+                  disabled
+                  onChange={(e) => {
+                    // handleJobNo(e);
+                  }}
+                >
+                  {jobData &&
+                    jobData.length > 0 &&
+                    jobData.map((item, index) => {
+                      return (
+                        <Select.Option value={item.job_id} key={item.job_id}>
+                          {item.job_number}
+                        </Select.Option>
+                      );
+                    })}
+                </SelectBox>
+              </Form.Item>
+            </div>
+            <div className="col-sm-3 pt-3">
+              <label>Lead</label>
+              <Form.Item
+                name="jobpay_lead"
+                // onChange={(e) => setName(e.target.value)}
+              >
+                <InputType disabled />
+              </Form.Item>
+            </div>
+          </div>
+          <div className="row jobpay_cards mt-3 mx-0 px-2 py-3">
+            <div className="col-12">
+              <h5 className="lead_text">Payment Info</h5>
+            </div>
+            <div className="col-sm-4 pt-3">
+              <label>Currency</label>
+              <Form.Item
+                name="job_currency"
+                // onChange={(e) => setName(e.target.value)}
+              >
+                <InputType disabled />
+              </Form.Item>
+            </div>
+            <div className="col-sm-4 pt-3">
+              <label>Exchange Rate</label>
+              <Form.Item
+                name="exchange_rate"
+                onChange={(e) => setJobExchangeRate(e.target.value)}
+              >
+                <Input_Number
+                  className="text_right"
+                  align="right"
+                  precision={2}
+                />
+              </Form.Item>
+            </div>
+            <div className="col-sm-4 pt-3">
+              <label>Job Amount</label>
+              <Form.Item
+                name="job_amount"
+                // onChange={(e) => setName(e.target.value)}
+              >
+                <InputNumber
+                  disabled
+                  className="text_right"
+                  align="right"
+                  precision={2}
+                />
+              </Form.Item>
+            </div>
+            <div className="col-sm-4 pt-3">
+              <label>Advance Amount</label>
+              <Form.Item
+                name="advance_amount"
+                onChange={(e) => setAdvanceAmount(e.target.value)}
+              >
+                <Input_Number
+                  className="text_right"
+                  align="right"
+                  precision={2}
+                />
+              </Form.Item>
+            </div>
+            <div className="col-sm-4 pt-3">
+              <label>
+                Advance in <span>({currencyDefault})</span>
+              </label>
+              <Form.Item
+                name="advance_in"
+                // onChange={(e) => setName(e.target.value)}
+              >
+                <Input_Number
+                  disabled
+                  className="text_right"
+                  align="right"
+                  precision={2}
+                />
+              </Form.Item>
+            </div>
+          </div>
+          <div className="row jobpay_cards mt-3 mx-0 px-2 py-3">
+            <div className="col-12">
+              <h5 className="lead_text">Attachments</h5>
+            </div>
+            <div className="col-sm-6 pt-3">
+              <label>Remarks</label>
+              <Form.Item
+                name="jobpay_remarks"
+                // onChange={(e) => setName(e.target.value)}
+              >
+                <TextArea />
+              </Form.Item>
+            </div>
+            <div className="col-sm-6 mt-2 mb-4">
+              <label>Attachments</label>
+              <Form.Item name="job_docs" className="mt-2">
+                <FileUpload
+                  multiple
+                  listType="picture"
+                  accept=".pdf,.docx,.zip"
+                  height={100}
+                  beforeUpload={beforeUpload}
+                  onChange={(file) => {
+                    console.log("Before upload file size", file.file.size);
+                    if (file.file.size > 2000 && file.file.size < 500000) {
+                      setFileAttach(file.file.originFileObj);
+                      setImageSize(false);
+                      console.log("select imaggg", file.file.originFileObj);
+                      console.log(
+                        "image is greater than 2 kb and less than 500 kb"
+                      );
+                    } else {
+                      setImageSize(true);
+                      console.log("Error in image upload");
+                    }
+                  }}
+                />
+                {imageSize ? (
+                  <p style={{ color: "red" }}>
+                    Upload Image size between 1 kb and 500 kb
+                  </p>
+                ) : (
+                  ""
+                )}
+              </Form.Item>
+              {/* <p className="mt-4" style={{ color: "#737576" }}>
                     {jobPayData?.job_pay_docs}
                   </p> */}
-                </div>
-                <div className="col-12 d-flex justify-content-center mt-5 mb-1 gap-3 ">
-                  <Button className="save_button">Save</Button>{" "}
-                  <Button
-                    as="input"
-                    type="reset"
-                    value="Reset"
-                    onClick={() => {
-                      handleCancel();
-                    }}
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              </div>
-            </Form>
+            </div>
           </div>
-        </div>
+          <div className="col-12 d-flex justify-content-center mt-4 mb-1 gap-3">
+            <Button className="save_button">Save</Button>{" "}
+            <Button
+              as="input"
+              type="reset"
+              value="Reset"
+              onClick={() => {
+                handleCancel();
+              }}
+            >
+              Cancel
+            </Button>
+          </div>
+        </Form>
         <Custom_model
           size={"sm"}
           show={successPopup}

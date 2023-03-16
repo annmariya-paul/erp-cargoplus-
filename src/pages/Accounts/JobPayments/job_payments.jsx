@@ -1,4 +1,4 @@
-import { Input, Select } from "antd";
+import { Input, Select,Checkbox } from "antd";
 import React, { useState } from "react";
 import moment from "moment";
 import { FaEdit, FaTrash } from "react-icons/fa";
@@ -11,10 +11,14 @@ import Custom_model from "../../../components/custom_modal/custom_model";
 import { ACCOUNTS } from "../../../api/bootapi";
 import { useEffect } from "react";
 import PublicFetch from "../../../utils/PublicFetch";
+import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
 
 export default function JobPayments() {
   const [serialNo, setserialNo] = useState(1);
+  const [searchedText,setSearchedText] = useState();
   const [allJobPay,setAllJobPay] = useState();
+
+  const [jobpaymentList, setJobpaymentList] = useState([]);
 
   const getAllJobPayments = () => {
     PublicFetch.get(`${ACCOUNTS}/job-payments?startIndex=0&noOfItems=10`)
@@ -22,6 +26,7 @@ export default function JobPayments() {
         console.log("Response", res);
         if (res.data.success) {
           console.log("success of job", res.data.data);
+          setJobpaymentList(res.data.data)
           let temp = [];
           res.data.data.forEach((item, index) => {
             temp.push({
@@ -30,7 +35,7 @@ export default function JobPayments() {
               job_pay_voucher_date:item.job_pay_voucher_date,
               job_no: item.fms_v1_jobs.job_number,
               job_pay_lead: item.crm_v1_leads.lead_customer_name,
-              advance_amount: item.job_pay_advance_amount_fx,
+              advance_amount: item.job_pay_advance_amount_fx.toFixed(2),
             });
           });
           setAllJobPay(temp);
@@ -56,13 +61,6 @@ export default function JobPayments() {
       dataIndex: "job_pay_voucher_no",
       key: "job_pay_voucher_no",
       width: "13%",
-      //   filteredValue: [searchedText],
-      //   onFilter: (value, record) => {
-      //     return String(record.freight_type_name  || nameSearch)
-      //       .toLowerCase()
-      //       .includes(value.toLowerCase());
-      //   },
-      align: "center",
     },
     {
       title: "VOUCHER DATE",
@@ -74,14 +72,24 @@ export default function JobPayments() {
           <div>{moment(record.job_pay_voucher_date).format("DD-MM-YYYY")}</div>
         );
       },
-      align: "center",
     },
     {
       title: "JOB NO",
       dataIndex: "job_no",
       width: "16%",
       key: "job_no",
-      align: "center",
+      filteredValue: [searchedText],
+      onFilter: (value, record) => {
+        return (
+          String(record.job_no).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.job_pay_lead)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.job_pay_voucher_no)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
+      },
     },
     {
       title: "LEAD",
@@ -92,14 +100,14 @@ export default function JobPayments() {
       title: "ADVANCE AMOUNT",
       dataIndex: "advance_amount",
       key: "advance_amount",
-      width: "18%",
-      align: "center",
+      width: "15%",
+      align: "right",
     },
     {
       title: "ACTIONS",
       dataIndex: "actions",
       key: "actions",
-      width: "12%",
+      width: "15%",
       render: (data, index) => {
         return (
           <div className=" d-flex justify-content-center align-items-center gap-3">
@@ -140,6 +148,36 @@ export default function JobPayments() {
       advance_amount:"1000",
     },
   ];
+
+
+  const columnsKeys = columns.map((column) => column.key);
+
+  const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
+  const filteredColumns = columns.filter((column) =>
+    selectedColumns.includes(column.key)
+  );
+  const data12 = jobpaymentList?.map((item) => [
+    item.action,
+    item.opportunity_type,
+    item.opportunity_from,
+    item.opportunity_lead_id,
+    item.opportunity_source,
+    item.opportunity_party,
+  ]);
+  const OppHeads = [
+    [
+      "opportunity_id",
+      "opportunity_type",
+      "opportunity_source",
+      "opportunity_validity",
+      "opportunity_description",
+      "opportunity_status",
+      "opportunity_amount",
+    ],
+  ];
+  const onChange = (checkedValues) => {
+    setSelectedColumns(checkedValues);
+  };
   return (
     <>
       <div className="container-fluid container_fms pt-3">
@@ -147,12 +185,38 @@ export default function JobPayments() {
           <div className="col">
             <h5 className="lead_text">Job Payments</h5>
           </div>
+         
+          <Leadlist_Icons
+            datas={jobpaymentList}
+            columns={columns}
+            items={data12}
+            xlheading={OppHeads}
+            filename="data.csv"
+            chechboxes={
+              <Checkbox.Group onChange={onChange} value={selectedColumns}>
+                {columnsKeys.map((column) => (
+                  <li>
+                    <Checkbox value={column} key={column}>
+                      {column}
+                    </Checkbox>
+                  </li>
+                ))}
+              </Checkbox.Group>
+            }
+          />
         </div>
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
               placeholder="Search"
               style={{ margin: "5px", borderRadius: "5px" }}
+              value={searchedText}
+              onChange={(e) => {
+                setSearchedText(e.target.value ? [e.target.value] : []);
+              }}
+              onSearch={(value) => {
+                setSearchedText(value);
+              }}
             />
           </div>
         </div>

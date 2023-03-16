@@ -1,4 +1,4 @@
-import { Form, Input, Popconfirm, Select } from "antd";
+import { Checkbox, Form, Input, Popconfirm, Select } from "antd";
 import React, { useEffect, useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import Button from "../../../components/button/button";
@@ -279,6 +279,47 @@ function InvoiceList() {
       });
   };
 
+  const Invoice_header = [
+    [
+      "sl_no",
+      "invoice_no",
+      "invoice_date",
+      "job_no",
+      "customer",
+      "shipper",
+      "payment_status",
+      "action",
+      // "currency",
+
+      //  "lead_status",
+    ],
+  ];
+
+  const columnsKeys = columns.map((column) => column.key);
+
+  const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
+  const filteredColumns = columns.filter((column) =>
+    selectedColumns.includes(column.key)
+  );
+  console.log("filtered columns::", filteredColumns);
+  const onChange = (checkedValues) => {
+    setSelectedColumns(checkedValues);
+  };
+
+  const data12 = AllinvoiceData?.map((item, index) => [
+    index + 1,
+    item.invoice_no,
+    item.invoice_date,
+    item.invoice_job_no,
+    item.invoice_job_consignee,
+    // item.currency,
+    item.invoice_job_shipper,
+    item.invoice_status,
+    item.action,
+    // item.cost_fx,
+    // item.const_lx,
+  ]);
+
   useEffect(() => {
     getAllInvoices();
   }, []);
@@ -295,28 +336,30 @@ function InvoiceList() {
                   <div className="col">
                     <h5 className="lead_text">Invoices</h5>
                   </div>
-
-                  {/* <Leadlist_Icons
-                  // datas={OpportunityList}
-                  // columns={columns}
-                  // items={data12}
-                  // xlheading={OppHeads}
-                  // filename="data.csv"
-                  // chechboxes={
-                  //   <Checkbox.Group
-                  //     onChange={onChange}
-                  //     value={selectedColumns}
-                  //   >
-                  //     {columnsKeys.map((column) => (
-                  //       <li>
-                  //         <Checkbox value={column} key={column}>
-                  //           {column}
-                  //         </Checkbox>
-                  //       </li>
-                  //     ))}
-                  //   </Checkbox.Group>
-                  // }
-                  /> */}
+                  {AllinvoiceData && (
+                    <Leadlist_Icons
+                      datas={data12}
+                      columns={filteredColumns}
+                      items={data12}
+                      xlheading={Invoice_header}
+                      filename="data.csv"
+                      chechboxes={
+                        <Checkbox.Group
+                          onChange={onChange}
+                          value={selectedColumns}
+                        >
+                          {columnsKeys.map((column) => (
+                            <li>
+                              <Checkbox value={column} key={column}>
+                                {column}
+                              </Checkbox>
+                            </li>
+                          ))}
+                        </Checkbox.Group>
+                      }
+                      name="Invoice"
+                    />
+                  )}
                 </div>
                 <div className="row p-1" style={{ backgroundColor: "#f4f4f7" }}>
                   <div className="col-3">

@@ -251,7 +251,7 @@ export default function Add_purchase() {
                     rules={[
                       {
                         required: true,
-                        message: "Date is Required",
+                        message: "Vendor is Required",
                       },
                     ]}>
                     <SelectBox 

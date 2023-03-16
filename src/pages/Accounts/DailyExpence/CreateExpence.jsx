@@ -12,7 +12,7 @@ import moment from "moment";
 import Custom_model from "../../../components/custom_modal/custom_model";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../routes";
-
+import "../DailyExpence/dailyexpense.scss";
 function CreateExpence() {
   const [addForm] = Form.useForm();
   const navigate = useNavigate();
@@ -301,7 +301,7 @@ function CreateExpence() {
                         <InputType />
                       </Form.Item>
                     </div>
-                    <div className="col-xl-4 my-2 d-flex justify-content-center">
+                    <div className="col-xl-4 my-2 ">
                       <div className="">
                         <label>Taxable</label>
                         <Form.Item name="daily_expense_taxable">
@@ -365,7 +365,9 @@ function CreateExpence() {
                     <div className="col-xl-4 my-2">
                       <label>Party Address</label>
                       <Form.Item name="daily_expense_party_address">
-                        <TextArea />
+                        <TextArea
+                        className="dailyexpensepartyaddress"
+                        />
                       </Form.Item>
                     </div>
 

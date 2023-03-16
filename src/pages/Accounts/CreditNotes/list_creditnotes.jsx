@@ -8,15 +8,13 @@ import {
   FaEdit,
 } from "react-icons/fa";
 
-
-
 import { FiEdit } from "react-icons/fi";
 import { AiFillPrinter } from "react-icons/ai";
 import { MdFileCopy, MdPageview } from "react-icons/md";
 import { CRM_BASE_URL } from "../../../api/bootapi";
 import { Link } from "react-router-dom";
 import Button from "../../../components/button/button";
-import {ROUTES} from "../../../routes";
+import { ROUTES } from "../../../routes";
 import TableData from "../../../components/table/table_data";
 import logo from "../../../components/img/logo192.png";
 import MyPagination from "../../../components/Pagination/MyPagination";
@@ -25,7 +23,6 @@ import ErrorMsg from "../../../components/error/ErrorMessage";
 import PublicFetch from "../../../utils/PublicFetch";
 import FileUpload from "../../../components/fileupload/fileUploader";
 import CustomModel from "../../../components/custom_modal/custom_model";
-
 
 function Credit_notes() {
   const [numOfItems, setNumOfItems] = useState("25");
@@ -38,17 +35,12 @@ function Credit_notes() {
   const [productView, setProductView] = useState(false);
   const [successPopup, setSuccessPopup] = useState(false);
   const [error, setError] = useState(false);
- 
+
   const [modalOpportunity, setModalOpportunity] = useState(false);
   const [productid, setProductID] = useState();
   console.log("pr id from state", productid);
   const [serialNo, setserialNo] = useState(1);
- 
 
-
-        
-
- 
   const columns = [
     {
       title: "Sl. No.",
@@ -70,7 +62,6 @@ function Credit_notes() {
       // },
 
       align: "left",
-     
     },
     {
       title: "DATE",
@@ -78,9 +69,7 @@ function Credit_notes() {
       key: "date",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.date)
-          .toLowerCase()
-          .includes(value.toLowerCase());
+        return String(record.date).toLowerCase().includes(value.toLowerCase());
       },
       align: "left",
       width: "10%",
@@ -90,7 +79,7 @@ function Credit_notes() {
       title: "CUSTOMER",
       dataIndex: "customer",
       key: "customer",
-        width: "15%",
+      width: "15%",
       align: "left",
       filteredValue: [searchType],
       onFilter: (value, record) => {
@@ -107,7 +96,7 @@ function Credit_notes() {
       align: "left",
       filteredValue: [searchCategory],
       onFilter: (value, record) => {
-        console.log("prrrr",record)
+        console.log("prrrr", record);
         return String(record.invoice_no)
           .toLowerCase()
           .includes(value.toLowerCase());
@@ -121,7 +110,7 @@ function Credit_notes() {
       align: "left",
       filteredValue: [searchCategory],
       onFilter: (value, record) => {
-        console.log("prrrr",record)
+        console.log("prrrr", record);
         return String(record.amount)
           .toLowerCase()
           .includes(value.toLowerCase());
@@ -135,10 +124,8 @@ function Credit_notes() {
       align: "left",
       filteredValue: [searchCategory],
       onFilter: (value, record) => {
-        console.log("prrrr",record)
-        return String(record.type)
-          .toLowerCase()
-          .includes(value.toLowerCase());
+        console.log("prrrr", record);
+        return String(record.type).toLowerCase().includes(value.toLowerCase());
       },
     },
     {
@@ -159,8 +146,8 @@ function Credit_notes() {
               // }}
               className="actionEdit m-0 p-0"
             >
-               <Link to={`${ROUTES.EDIT_CREDIT_NOTES}/${index.id}`}>
-              <FiEdit fontSize={"12px"} />
+              <Link to={`${ROUTES.EDIT_CREDIT_NOTES}/${index.id}`}>
+                <FiEdit fontSize={"12px"} />
               </Link>
             </div>
 
@@ -182,20 +169,25 @@ function Credit_notes() {
     //   align: "center",
     // },
   ];
-const data=[{  voucher_no:"0001",date:"12-2-2023",customer:"Arun",invoice_no:"0033",amount:"1000",type:"data"}
-
-]
+  const data = [
+    {
+      voucher_no: "0001",
+      date: "12-2-2023",
+      customer: "Arun",
+      invoice_no: "0033",
+      amount: "1000",
+      type: "data",
+    },
+  ];
 
   return (
     <div>
       <div className="container-fluid lead_list  py-3">
         <div>
-         
           <div className="row flex-wrap">
             <div className="col">
               <h5 className="lead_text">Credit Notes</h5>
             </div>
-         
           </div>
           <div className="row " style={{ backgroundColor: "#f4f4f7" }}>
             <div className="col-4">
@@ -303,7 +295,7 @@ const data=[{  voucher_no:"0001",date:"12-2-2023",customer:"Arun",invoice_no:"00
               }}
             />
             )} */}
-          </div>
+            </div>
             <div className="col-4 d-flex justify-content-end">
               <Button
                 //   onClick={() => setShowAddOpportunity(true)}
@@ -325,7 +317,7 @@ const data=[{  voucher_no:"0001",date:"12-2-2023",customer:"Arun",invoice_no:"00
             <TableData
               // data={getData(current,numOfItems, pageSize)}
               // data={data}
-                data={data}
+              data={data}
               columns={columns}
               custom_table_css="table_lead_list"
             />
@@ -346,7 +338,6 @@ const data=[{  voucher_no:"0001",date:"12-2-2023",customer:"Arun",invoice_no:"00
           {/* {"mcncncncncncncnc"}  {product listing ends } */}
         </div>
         {/* {section Two Product Edit modal starts} */}
-
 
         {/* <CustomModel
           Adding_contents

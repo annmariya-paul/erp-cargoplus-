@@ -315,7 +315,7 @@ function EditExpence() {
                           />
                         </Form.Item>
                       </div>
-                      <div className="col-12 my-2">
+                      <div className="col-xl-4 my-2">
                         <label>Remarks</label>
                         <Form.Item name="daily_expense_remarks">
                           <TextArea />
@@ -338,7 +338,7 @@ function EditExpence() {
                       </Form.Item>
                     </div>
 
-                    <div className="col-xl-4 my-2 d-flex justify-content-center">
+                    <div className="col-xl-4 my-2 ">
                       <div className="">
                         <label>Taxable</label>
                         <Form.Item name="daily_expense_taxable">
@@ -401,13 +401,13 @@ function EditExpence() {
                     </div>
 
                     {/* <div className="col-xl-4"></div> */}
-                    <div className="col-xl-6 my-2">
+                    <div className="col-xl-4 my-2">
                       <label>Party Address</label>
                       <Form.Item name="daily_expense_party_address">
-                        <TextArea />
+                        <TextArea className="dailyexpensepartyaddress"/>
                       </Form.Item>
                     </div>
-                    <div className="col-xl-6 my-2">
+                    <div className="col-xl-4 my-2">
                       <div className="">
                         <label>Attachments</label>
 

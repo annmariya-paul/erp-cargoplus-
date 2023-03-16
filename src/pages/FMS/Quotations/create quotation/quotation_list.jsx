@@ -64,6 +64,7 @@ export default function Quotations(props) {
   const columns = [
     {
       title: "Sl. No.",
+      dataIndex: "sl_no",
       key: "index",
       width: "7%",
       render: (value, item, index) => serialNo + index,
@@ -250,6 +251,7 @@ export default function Quotations(props) {
             let date = moment(item.quotation_date).format("DD-MM-YYYY");
             let validity = moment(item.quotation_validity).format("DD-MM-YYYY");
             temp.push({
+              sl_no:index+1,
               quotation_cargo_type: item.quotation_cargo_type,
               quotation_carrier: item.quotation_carrier,
               quotation_id: item.quotation_id,
@@ -277,25 +279,30 @@ export default function Quotations(props) {
   const filteredColumns = columns.filter((column) =>
     selectedColumns.includes(column.key)
   );
-  const data12 = quatationList?.map((item) => [
-    item.action,
-    item.opportunity_type,
-    item.opportunity_from,
-    item.opportunity_lead_id,
-    item.opportunity_source,
-    item.opportunity_party,
+  const data12 = AllQuotations?.map((item) => [
+    // item.action,
+    item.sl_no,
+    item.quotation_no,
+    item.quotation_date,
+    item.quotation_validity,
+    item.consignee_name,
+    item.quotation_shipper,
+    item.quotation_status,
   ]);
   const OppHeads = [
     [
-      "opportunity_id",
-      "opportunity_type",
-      "opportunity_source",
-      "opportunity_validity",
-      "opportunity_description",
-      "opportunity_status",
-      "opportunity_amount",
+       "sl_no",
+      "quotation_no",
+      "quotation_date",
+      "quotation_validity",
+      "consignee_name",
+      "quotation_shipper",
+      "quotation_status",
+     
     ],
   ];
+console.log("quott",AllQuotations)
+
   const onChange = (checkedValues) => {
     setSelectedColumns(checkedValues);
   };
@@ -303,6 +310,8 @@ export default function Quotations(props) {
   useEffect(() => {
     getAllQuotation();
   }, []);
+  console.log("quottation",OppHeads)
+  console.log("data12", data12);
 
   return (
     <>
@@ -311,9 +320,10 @@ export default function Quotations(props) {
           <div className="col">
             <h5 className="lead_text mt-3">Quotations</h5>
           </div>
-          <Leadlist_Icons
-            datas={quatationList}
-            columns={columns}
+          {AllQuotations && (
+            <Leadlist_Icons
+            datas={data12}
+            columns={filteredColumns}
             items={data12}
             xlheading={OppHeads}
             filename="data.csv"
@@ -329,6 +339,8 @@ export default function Quotations(props) {
               </Checkbox.Group>
             }
           />
+          )}
+          
         </div>
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">

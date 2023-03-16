@@ -11,7 +11,8 @@ import { CRM_BASE_URL_FMS } from "../../../api/bootapi";
 import moment from "moment";
 import MyPagination from "../../../components/Pagination/MyPagination";
 import { JobStatus } from "../../../utils/SelectOptions";
-
+import { Checkbox } from "antd";
+import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
 function Listjob() {
   const [searchedText, setSearchedText] = useState("");
   const [pageSize, setPageSize] = useState("25");
@@ -28,6 +29,7 @@ function Listjob() {
   const[totaljob,settotaljob]= useState("")
   const [serialNo, setserialNo] = useState(1);
 
+  const [quatationList, setQuatationList] = useState([]);
   const pageofIndex = noofItems * (current - 1) - 1 + 1;
   const columns = [
     {
@@ -238,6 +240,35 @@ function Listjob() {
     getAllJobs();
   }, []);
 
+  const columnsKeys = columns.map((column) => column.key);
+
+  const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
+  const filteredColumns = columns.filter((column) =>
+    selectedColumns.includes(column.key)
+  );
+  const data12 = quatationList?.map((item) => [
+    item.action,
+    item.opportunity_type,
+    item.opportunity_from,
+    item.opportunity_lead_id,
+    item.opportunity_source,
+    item.opportunity_party,
+  ]);
+  const OppHeads = [
+    [
+      "opportunity_id",
+      "opportunity_type",
+      "opportunity_source",
+      "opportunity_validity",
+      "opportunity_description",
+      "opportunity_status",
+      "opportunity_amount",
+    ],
+  ];
+  const onChange = (checkedValues) => {
+    setSelectedColumns(checkedValues);
+  };
+
   return (
     <>
       <div className="container-fluid container2 pt-3">
@@ -245,7 +276,25 @@ function Listjob() {
           <div className="col">
             <h5 className="lead_text">Job</h5>
           </div>
-          {/* <Leadlist_Icons /> */}
+         
+          <Leadlist_Icons
+            datas={quatationList}
+            columns={columns}
+            items={data12}
+            xlheading={OppHeads}
+            filename="data.csv"
+            chechboxes={
+              <Checkbox.Group onChange={onChange} value={selectedColumns}>
+                {columnsKeys.map((column) => (
+                  <li>
+                    <Checkbox value={column} key={column}>
+                      {column}
+                    </Checkbox>
+                  </li>
+                ))}
+              </Checkbox.Group>
+            }
+          />
         </div>
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">

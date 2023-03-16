@@ -9,11 +9,15 @@ import SelectBox from "../../../components/Select Box/SelectBox";
 import TableData from "../../../components/table/table_data";
 import PublicFetch from "../../../utils/PublicFetch";
 import { ACCOUNTS, CRM_BASE_URL, CRM_BASE_URL_FMS } from "../../../api/bootapi";
+import Custom_model from "../../../components/custom_modal/custom_model";
+import { useNavigate } from "react-router-dom";
 import moment from "moment";
+import { ROUTES } from "../../../routes";
 
 const AddPayments = () => {
+  const navigate = useNavigate();
   const [amount, setAmount] = useState();
-  const [autoPay, setAutoPay] = useState(false);
+  const [autoPay, setAutoPay] = useState(0);
   const [leads, setLeads] = useState([]);
   const [invoiceData, setInvoiceData] = useState([]);
   const [refresh, setRefresh] = useState(false);
@@ -24,6 +28,7 @@ const AddPayments = () => {
   const [mode, setMode] = useState();
   const [details, setDetails] = useState();
   const [initialInvoiceData, setInitialInvoiceData] = useState([]);
+  const [successPopup, setSuccessPopup] = useState(false);
   const [addform] = Form.useForm();
 
   const columns = [
@@ -80,6 +85,7 @@ const AddPayments = () => {
               <Form.Item
               //name={["quotation_details", index.key, "quotation_details_cost"]}
               // name={`current_amount${index.key}`}
+              // name="invoiceData"
               >
                 <InputNumber
                   className="add_payments_input_box"
@@ -112,8 +118,20 @@ const AddPayments = () => {
       key: "balance_amount",
       width: "12%",
       align: "right",
+      render: (data, index) => {
+        return <div>{index.balance_amount}</div>;
+      },
     },
   ];
+
+  const close_modal = (mShow, time) => {
+    if (!mShow) {
+      setTimeout(() => {
+        setSuccessPopup(false);
+        navigate(`${ROUTES.PAYMENTS}`);
+      }, time);
+    }
+  };
 
   const getAllLeads = async () => {
     try {
@@ -131,11 +149,13 @@ const AddPayments = () => {
     }
   };
 
-  const getInvoice = async (value) => {
-    console.log("value", value);
-    //setLead(value);
+  const getInvoice = async (LeadId) => {
+    console.log("LeadId", LeadId);
+    //setLead(LeadId);
     try {
-      const res = await PublicFetch.get(`${CRM_BASE_URL_FMS}/invoice/${value}`);
+      const res = await PublicFetch.get(
+        `${CRM_BASE_URL_FMS}/invoice/${LeadId}`
+      );
       if (res.status === 200) {
         let tempData = [];
         res.data.data.fms_v1_jobs.accounts_v1_invoice_accounts.forEach(
@@ -181,8 +201,39 @@ const AddPayments = () => {
     }
   };
 
-  const addPayment = () => {
-    console.log("inside add payment");
+  const savePayment = async (value) => {
+    console.log("inside save payment");
+    try {
+      let invoice_accounts = [];
+      for (let i = 0; i < invoiceData.length; i++) {
+        if (invoiceData[i].current_amount) {
+          console.log("current amount=", invoiceData[i].current_amount);
+          let obj = {
+            invoice_accounts_invoice_id: invoiceData[i].invoice_accounts_id,
+            current_amount: parseFloat(invoiceData[i].current_amount),
+            due_amount: parseFloat(invoiceData[i].due_amount),
+          };
+          invoice_accounts.push(obj);
+        }
+      }
+      const res = await PublicFetch.post(`${ACCOUNTS}/payment`, {
+        payment_voucher_no: value.voucherNo,
+        payment_date: moment(voucherDate).format("DD/MM/YYYY"),
+        payment_pay_mode_id: value.mode,
+        payment_lead_id: value.lead,
+        payment_amount: parseFloat(value.amount),
+        payment_details: value.details,
+        payment_autopay: autoPay ? 1 : 0,
+        invoice_accounts: invoice_accounts,
+      });
+      console.log("here is the response after posting", res);
+      if (res.status === 201) {
+        setSuccessPopup(true);
+        close_modal(successPopup, 1200);
+      }
+    } catch (error) {
+      console.log("error occured", error);
+    }
   };
   const changeInvoiceTableData = () => {
     console.log("inside change invoice table data");
@@ -224,6 +275,7 @@ const AddPayments = () => {
     ]);
   };
 
+  const addPayment = async () => {};
   useEffect(() => {
     getAllLeads();
   }, []);
@@ -248,7 +300,15 @@ const AddPayments = () => {
               className="card border-0 p-3 shadow-sm"
             >
               <div className="container-fluid p-3">
-                <Form form={addform} onFinish={addPayment}>
+                <Form
+                  form={addform}
+                  onFinish={(value) => {
+                    savePayment(value);
+                  }}
+                  onFinishFailed={(value) => {
+                    console.log("inside on finish failed", value);
+                  }}
+                >
                   <div className="row ">
                     <div className="col-xl-4  my-2">
                       <label>Voucher No</label>
@@ -259,6 +319,7 @@ const AddPayments = () => {
                             message: "Enter the Voucher number",
                           },
                         ]}
+                        name="voucherNo"
                       >
                         <InputType
                           onChange={(e) => {
@@ -270,7 +331,7 @@ const AddPayments = () => {
                     </div>
                     <div className="col-xl-4 my-2">
                       <label className="mb-2">Voucher Date</label>
-                      <Form.Item>
+                      <Form.Item name="voucherDate">
                         <DatePicker
                           format={"DD-MM-YYYY"}
                           defaultValue={moment(new Date())}
@@ -287,14 +348,15 @@ const AddPayments = () => {
                         rules={[
                           {
                             required: true,
-                            message: "Enter the amount",
+                            message: "Select the lead",
                           },
                         ]}
+                        name="lead"
                       >
                         <SelectBox
-                          onChange={(value) => {
-                            getInvoice(value);
-                            setLead(value);
+                          onChange={(leadId) => {
+                            getInvoice(leadId);
+                            setLead(leadId);
                           }}
                         >
                           {leads.map((item, index) => {
@@ -310,6 +372,7 @@ const AddPayments = () => {
                     <div className="col-xl-4 my-2">
                       <label>Amount</label>
                       <Form.Item
+                        name="amount"
                         rules={[
                           {
                             required: true,
@@ -337,7 +400,15 @@ const AddPayments = () => {
                     </div>
                     <div className="col-xl-4 my-2">
                       <label>Mode</label>
-                      <Form.Item>
+                      <Form.Item
+                        name="mode"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Select the mode",
+                          },
+                        ]}
+                      >
                         <SelectBox
                           onChange={(e) => {
                             setMode(e);
@@ -355,7 +426,7 @@ const AddPayments = () => {
                     </div>
                     <div className="col-xl-4 my-2">
                       <label>Auto Pay(Bill to Bill)</label>
-                      <Form.Item>
+                      <Form.Item name="autopay">
                         <Checkbox
                           onChange={(e) => {
                             console.log(e.target);
@@ -376,7 +447,15 @@ const AddPayments = () => {
                     </div>
                     <div className="col-12 my-2">
                       <label>Details</label>
-                      <Form.Item>
+                      <Form.Item
+                        name="details"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Enter the details",
+                          },
+                        ]}
+                      >
                         <TextArea
                           onChange={(e) => {
                             setDetails(e.target.value);
@@ -398,10 +477,10 @@ const AddPayments = () => {
                       <Button
                         btnType="save"
                         type="submit"
-                        onClick={() => {
-                          console.log("submitting form");
-                          addform.submit();
-                        }}
+                        // onClick={() => {
+                        //   console.log("submitting form");
+                        //   addform.submit();
+                        // }}
                       >
                         Save
                       </Button>
@@ -414,6 +493,12 @@ const AddPayments = () => {
           </div>
         </div>
       </div>
+      <Custom_model
+        size={"sm"}
+        show={successPopup}
+        onHide={() => setSuccessPopup(false)}
+        success
+      />
     </div>
   );
 };

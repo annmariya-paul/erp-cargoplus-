@@ -183,55 +183,6 @@ function Invoicereport() {
     ],
   ];
 
-  const handleExport = () => {
-    var wb = XLSX.utils.book_new();
-
-    var ws = XLSX.utils.json_to_sheet(allReports);
-    XLSX.utils.book_append_sheet(wb, ws, "Reports");
-    XLSX.utils.sheet_add_aoa(
-      ws,
-      Invoice_Report_header,
-
-      { origin: "A1" }
-    );
-    // ws["!cols"] = [{ wch: 15 }];
-    let row = [
-      { v: "Courier: 24", t: "s", s: { font: { name: "Courier", sz: 24 } } },
-      {
-        v: "bold & color",
-        t: "s",
-        s: { font: { bold: true, color: { rgb: "FF0000" } } },
-      },
-      {
-        v: "fill: color",
-        t: "s",
-        s: { fill: { fgColor: { rgb: "E9E9E9" } } },
-      },
-      { v: "line\nbreak", t: "s", s: { alignment: { wrapText: true } } },
-    ];
-    var wscols = [
-      { wch: 15 },
-      { wch: 15 },
-      { wch: 15 },
-      { wch: 15 },
-      { wch: 15 },
-      { wch: 15 },
-      { wch: 15 },
-      { wch: 15 },
-      { wch: 15 },
-      { wch: 17 },
-      { wch: 15 },
-    ];
-    ws["!cols"] = wscols;
-
-    XLSX.writeFile(wb, "Invoice Report.xlsx");
-    console.log("xlsx data", ws);
-    return addStyle();
-  };
-  const addStyle = () => {
-    console.log("xlsx downloaded");
-  };
-
   const columnsKeys = columns.map((column) => column.key);
 
   const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
@@ -291,6 +242,7 @@ function Invoicereport() {
                       ))}
                     </Checkbox.Group>
                   }
+                  name="Invoice Report"
                 />
               )}
             </div>

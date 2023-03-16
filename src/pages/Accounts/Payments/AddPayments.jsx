@@ -144,7 +144,7 @@ const AddPayments = () => {
         setLeads(res.data.data.leads);
       }
     } catch (error) {
-      console.log("error occured");
+      console.log("error occured while fetching leads");
       console.log(error);
     }
   };

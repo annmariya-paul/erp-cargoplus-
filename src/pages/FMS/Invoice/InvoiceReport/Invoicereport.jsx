@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { DatePicker, Form, Input, Select } from "antd";
+import { Checkbox, DatePicker, Form, Input, Select } from "antd";
 import SelectBox from "../../../../components/Select Box/SelectBox";
 import Button from "../../../../components/button/button";
 import TableData from "../../../../components/table/table_data";
@@ -8,12 +8,14 @@ import { CRM_BASE_URL_FMS } from "../../../../api/bootapi";
 import moment from "moment";
 import { FaFileExcel } from "react-icons/fa";
 import * as XLSX from "xlsx/xlsx.js"; //for xl download
+import LeadlistIcons from "../../../../components/lead_list_icon/lead_list_icon";
 
 function Invoicereport() {
   const [serialNo, setserialNo] = useState(1);
   const [Allinvoice, setAllInvoice] = useState();
   const [Alljobs, setAllJobs] = useState();
   const [allReports, setAllReports] = useState();
+
   const columns = [
     {
       title: "Sl. No.",
@@ -181,54 +183,27 @@ function Invoicereport() {
     ],
   ];
 
-  const handleExport = () => {
-    var wb = XLSX.utils.book_new();
+  const columnsKeys = columns.map((column) => column.key);
 
-    var ws = XLSX.utils.json_to_sheet(allReports);
-    XLSX.utils.book_append_sheet(wb, ws, "Reports");
-    XLSX.utils.sheet_add_aoa(
-      ws,
-      Invoice_Report_header,
-
-      { origin: "A1" }
-    );
-    // ws["!cols"] = [{ wch: 15 }];
-    let row = [
-      { v: "Courier: 24", t: "s", s: { font: { name: "Courier", sz: 24 } } },
-      {
-        v: "bold & color",
-        t: "s",
-        s: { font: { bold: true, color: { rgb: "FF0000" } } },
-      },
-      {
-        v: "fill: color",
-        t: "s",
-        s: { fill: { fgColor: { rgb: "E9E9E9" } } },
-      },
-      { v: "line\nbreak", t: "s", s: { alignment: { wrapText: true } } },
-    ];
-    var wscols = [
-      { wch: 15 },
-      { wch: 15 },
-      { wch: 15 },
-      { wch: 15 },
-      { wch: 15 },
-      { wch: 15 },
-      { wch: 15 },
-      { wch: 15 },
-      { wch: 15 },
-      { wch: 17 },
-      { wch: 15 },
-    ];
-    ws["!cols"] = wscols;
-
-    XLSX.writeFile(wb, "Invoice Report.xlsx");
-    console.log("xlsx data", ws);
-    return addStyle();
+  const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
+  const filteredColumns = columns.filter((column) =>
+    selectedColumns.includes(column.key)
+  );
+  console.log("filtered columns::", filteredColumns);
+  const onChange = (checkedValues) => {
+    setSelectedColumns(checkedValues);
   };
-  const addStyle = () => {
-    console.log("xlsx downloaded");
-  };
+
+  const data12 = allReports?.map((item) => [
+    item.action,
+    item.invoice_no,
+    item.invoice_date,
+    item.job_no,
+    item.customer,
+    item.currency,
+    item.cost_fx,
+    item.const_lx,
+  ]);
 
   useEffect(() => {
     GetAllInvoices();
@@ -244,11 +219,32 @@ function Invoicereport() {
           </div>
           <div className="col-6">
             <div className="d-flex justify-content-end">
-              <div className="icon-border p-1">
+              {/* <div className="icon-border p-1">
                 <a className="icon" href="#">
                   <FaFileExcel onClick={handleExport} />
                 </a>
-              </div>
+              </div> */}
+              {allReports && (
+                <LeadlistIcons
+                  datas={allReports}
+                  columns={filteredColumns}
+                  items={data12}
+                  xlheading={Invoice_Report_header}
+                  filename="data.csv"
+                  chechboxes={
+                    <Checkbox.Group onChange={onChange} value={selectedColumns}>
+                      {columnsKeys.map((column) => (
+                        <li>
+                          <Checkbox value={column} key={column}>
+                            {column}
+                          </Checkbox>
+                        </li>
+                      ))}
+                    </Checkbox.Group>
+                  }
+                  name="Invoice Report"
+                />
+              )}
             </div>
           </div>
         </div>

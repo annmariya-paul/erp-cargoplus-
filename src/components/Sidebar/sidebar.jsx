@@ -49,6 +49,7 @@ export default function Sidebar({ showSidebar }) {
   const [Accounts, setAccounts] = useState(false);
   const [FMSSettingsopen, setFMSSettingsopen] = useState(false);
   const [accountsSettings, setAccountsSettings] = useState(false);
+  const [accountsReports, setAccountsReports] = useState(false);
 
   const location = useLocation();
 
@@ -1041,7 +1042,7 @@ export default function Sidebar({ showSidebar }) {
                           </NavLink>
                         </li>
                       )}
-                       {/* {checkPermission("credit_note_type") && (
+                      {/* {checkPermission("credit_note_type") && (
                         <li className="nav-text ">
                           <NavLink
                             className={({ isActive }) =>
@@ -1076,7 +1077,7 @@ export default function Sidebar({ showSidebar }) {
                         <div className=" ms-5">Add Purchase</div>
                       </NavLink>
                     </li>
-                  )} */}
+                    )} */}
 
                       {/* {checkPermission("purchase") && (
                         <li className="nav-text">
@@ -1115,7 +1116,6 @@ export default function Sidebar({ showSidebar }) {
                           </NavLink>
                         </li>
                       )}
-                      
                     </>
                   ) : (
                     ""
@@ -1170,18 +1170,62 @@ export default function Sidebar({ showSidebar }) {
                       </NavLink>
                     </li>
                   )}
-                   {checkPermission("add_debit_notes") && (
-                        <li className="nav-text ">
-                          <NavLink
-                            className={({ isActive }) =>
-                              isActive ? "active-link" : "link"
-                            }
-                            to={ROUTES.DEBIT_NOTES}
-                          >
-                            <div className=" ms-4">Debit Notes</div>
-                          </NavLink>
-                        </li>
-                      )}
+                  {checkPermission("add_debit_notes") && (
+                    <li className="nav-text ">
+                      <NavLink
+                        className={({ isActive }) =>
+                          isActive ? "active-link" : "link"
+                        }
+                        to={ROUTES.DEBIT_NOTES}
+                      >
+                        <div className=" ms-4">Debit Notes</div>
+                      </NavLink>
+                    </li>
+                  )}
+
+                  <li
+                    className={
+                      accountsReports
+                        ? "nav-text  items_hrms open"
+                        : "nav-text  items_hrms "
+                    }
+                  >
+                    <Link
+                      className={accountsReports ? "active-link" : "link"}
+                      // to="/"
+                      onClick={() => setAccountsReports(!accountsReports)}
+                    >
+                      <div className="d-flex justify-content-between gap-5 ms-2">
+                        <div className="d-flex">
+                          <TbReport className="sidebar_icons ms-1 pt-1 " />
+                          <div style={{ width: "90px" }} className="">
+                            Reports
+                          </div>
+                        </div>
+
+                        <div className="  ">
+                          <div className="text-right ">
+                            <AiOutlineCaretDown className="toggle_btn " />
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  </li>
+                   {accountsReports ? (
+                    <>
+                    {checkPermission("daily_expense_report") && (
+                    <li className="nav-text ">
+                      <NavLink
+                        className={({ isActive }) =>
+                          isActive ? "active-link" : "link"
+                        }
+                        to={ROUTES.DAILY_EXPENSE_REPORT}
+                      >
+                        <div className=" ms-4">Daily Expense Report</div>
+                      </NavLink>
+                    </li>
+                  )}
+                    </>):("")}
                 </>
               ) : (
                 ""

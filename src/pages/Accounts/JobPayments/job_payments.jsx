@@ -14,6 +14,7 @@ import PublicFetch from "../../../utils/PublicFetch";
 
 export default function JobPayments() {
   const [serialNo, setserialNo] = useState(1);
+  const [searchedText,setSearchedText] = useState();
   const [allJobPay,setAllJobPay] = useState();
 
   const getAllJobPayments = () => {
@@ -30,7 +31,7 @@ export default function JobPayments() {
               job_pay_voucher_date:item.job_pay_voucher_date,
               job_no: item.fms_v1_jobs.job_number,
               job_pay_lead: item.crm_v1_leads.lead_customer_name,
-              advance_amount: item.job_pay_advance_amount_fx,
+              advance_amount: item.job_pay_advance_amount_fx.toFixed(2),
             });
           });
           setAllJobPay(temp);
@@ -56,13 +57,6 @@ export default function JobPayments() {
       dataIndex: "job_pay_voucher_no",
       key: "job_pay_voucher_no",
       width: "13%",
-      //   filteredValue: [searchedText],
-      //   onFilter: (value, record) => {
-      //     return String(record.freight_type_name  || nameSearch)
-      //       .toLowerCase()
-      //       .includes(value.toLowerCase());
-      //   },
-      align: "center",
     },
     {
       title: "VOUCHER DATE",
@@ -74,14 +68,24 @@ export default function JobPayments() {
           <div>{moment(record.job_pay_voucher_date).format("DD-MM-YYYY")}</div>
         );
       },
-      align: "center",
     },
     {
       title: "JOB NO",
       dataIndex: "job_no",
       width: "16%",
       key: "job_no",
-      align: "center",
+      filteredValue: [searchedText],
+      onFilter: (value, record) => {
+        return (
+          String(record.job_no).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.job_pay_lead)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.job_pay_voucher_no)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
+      },
     },
     {
       title: "LEAD",
@@ -92,14 +96,14 @@ export default function JobPayments() {
       title: "ADVANCE AMOUNT",
       dataIndex: "advance_amount",
       key: "advance_amount",
-      width: "18%",
-      align: "center",
+      width: "15%",
+      align: "right",
     },
     {
       title: "ACTIONS",
       dataIndex: "actions",
       key: "actions",
-      width: "12%",
+      width: "15%",
       render: (data, index) => {
         return (
           <div className=" d-flex justify-content-center align-items-center gap-3">
@@ -153,6 +157,13 @@ export default function JobPayments() {
             <Input.Search
               placeholder="Search"
               style={{ margin: "5px", borderRadius: "5px" }}
+              value={searchedText}
+              onChange={(e) => {
+                setSearchedText(e.target.value ? [e.target.value] : []);
+              }}
+              onSearch={(value) => {
+                setSearchedText(value);
+              }}
             />
           </div>
         </div>

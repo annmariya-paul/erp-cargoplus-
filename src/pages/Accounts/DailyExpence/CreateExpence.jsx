@@ -362,7 +362,7 @@ function CreateExpence() {
                         <Input_Number disabled={true} min={0} precision={2} />
                       </Form.Item>
                     </div>
-                    <div className="col-xl-6 my-2">
+                    <div className="col-xl-4 my-2">
                       <label>Party Address</label>
                       <Form.Item name="daily_expense_party_address">
                         <TextArea />
@@ -370,7 +370,7 @@ function CreateExpence() {
                     </div>
 
                     {/* <div className="col-xl-4"></div> */}
-                    <div className="col-xl-6 my-2">
+                    <div className="col-xl-4 my-2">
                       <div className="">
                         <label>Attachments</label>
 

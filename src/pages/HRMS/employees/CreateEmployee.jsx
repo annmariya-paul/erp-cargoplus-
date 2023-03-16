@@ -1,4 +1,4 @@
-import { Form, Select,Input } from "antd";
+import { Form, Select, Input } from "antd";
 import React, { useEffect, useState } from "react";
 import Button from "../../../components/button/button";
 import InputType from "../../../components/Input Type textbox/InputType";
@@ -203,7 +203,7 @@ function CreateEmployee() {
                       <InputType />
                     </Form.Item>
                   </div>
-                  <div className="col-sm-6">
+                  {/* <div className="col-sm-6">
                     <label>Employee Code</label>
                     <Form.Item
                       name="employee_code"
@@ -239,7 +239,7 @@ function CreateEmployee() {
                         Employee code {uniqueErrMsg.UniqueErrName}
                       </p>
                     ) : null}
-                  </div>
+                  </div> */}
                   <div className="col-sm-6">
                     <label>Employee Branch</label>
                     <Form.Item
@@ -422,8 +422,8 @@ function CreateEmployee() {
                           <InputType />
                         </Form.Item>
                       </div>
-                      <div className="col-sm-6 mt-1  " >
-                        <label style={{marginBottom:"1%"}}>Password</label>
+                      <div className="col-sm-6 mt-1  ">
+                        <label style={{ marginBottom: "1%" }}>Password</label>
                         <Form.Item
                           name="employee_password"
                           rules={[
@@ -440,10 +440,12 @@ function CreateEmployee() {
                             //   message: "Required Maximum 100 chraraters ",
                             // },
                           ]}
-                        
                         >
-                          <Input.Password className="newpass" style={{backgroundColor:"whitesmoke"}}/>
-                                                  </Form.Item>
+                          <Input.Password
+                            className="newpass"
+                            style={{ backgroundColor: "whitesmoke" }}
+                          />
+                        </Form.Item>
                       </div>
                     </div>
                   </div>

@@ -1,12 +1,37 @@
 import "./agentReport.scss";
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { DatePicker, Input, Select } from "antd";
 import TableData from "../../../components/table/table_data";
 import SelectBox from "../../../components/Select Box/SelectBox";
 import Button from "../../../components/button/button";
+import { ACCOUNTS } from "../../../api/bootapi";
+import PublicFetch from "../../../utils/PublicFetch";
+import { FaFileExcel } from "react-icons/fa";
 
 export default function AgentReport() {
   const [serialNo, setserialNo] = useState(1);
+  const [allagents,setAllagents]= useState("")
+
+  const getallagents = async () => {
+    try {
+      const allagents = await PublicFetch.get(
+        `${process.env.REACT_APP_BASE_URL}/agents`
+      );
+      console.log("getting all agent details", allagents.data.data);
+      setAllagents(allagents.data.data)
+    
+    } catch (err) {
+      console.log("error to agent details", err);
+    }
+  };
+
+
+  useEffect(() => {
+    getallagents();
+  }, []);
+
+
+
   const columns = [
     {
       title: "Sl. No.",
@@ -63,31 +88,64 @@ export default function AgentReport() {
       totalcost_lx: "9877",
     },
   ];
+
+
+
   return (
     <>
       <div className="container-fluid container_agent_report py-3">
-        <div className="row flex-wrap">
+        <div className=" d-flex justify-content-between">
+          <div>
           <h5 className="lead_text">Agent Report</h5>
+          </div>
+         
+          <div className="icon_margin">
+            <li className="icon-border">
+            <a className="icon icon_color" href="#">
+              <FaFileExcel />
+            </a>
+          </li>
+          </div>
         </div>
         <div className="row">
-          <div className="col-sm-4 col-12">
-            <p>Agent</p>
+          <div className="col-sm-3 col-12">
+            <lable>Agent</lable>
             {/* <Form.Item
                     name="job_no"
                     // onChange={(e) => setName(e.target.value)}
                   > */}
-            <SelectBox>
-              <Select.Option>Agent 1</Select.Option>
+            <SelectBox
+               showSearch={true}
+               allowClear
+              //  value={vendortyp}
+               optionFilterProp="children"
+              //  onChange={(e) => {
+              //    setvendortyp(e);
+              //  }}
+            >
+              {allagents && allagents.length>0 && 
+              allagents.map((itm,indx)=>{
+                console.log("agent namee",itm)
+               return(
+                
+                <Select.Option
+               key={itm.agent_id}
+               id={itm.agent_id}
+               value={itm.agent_id}
+                >
+                  {itm.crm_v1_vendors.vendor_name}
+                </Select.Option>
+               )
+              })}
+             
             </SelectBox>
             {/* </Form.Item> */}
           </div>
-          {/* <div className="col-2 d-flex justify-content-end pt-3">
-            <p></p>
-          </div> */}
+         
           <div className="col-sm-3 col-6">
-            <p>
+            <label>
               Date From
-            </p>
+            </label>
             <div className="mt-2">
               <DatePicker></DatePicker>
             </div>
@@ -95,14 +153,25 @@ export default function AgentReport() {
 
           {/* <div className="col-1 pt-3 d-flex justify-content-end">To</div> */}
           <div className="col-sm-3 col-6">
-            <p>To</p>
+            <label>To</label>
             <div className="mt-2">
               <DatePicker></DatePicker>
             </div>
           </div>
-          <div className="col-sm-2 d-flex mt-4 pt-3 justify-content-center">
-            <Button btnType="save">Search</Button>
+          <div className="col-sm-3 d-flex mt-4 pt-1 px-2 justify-content-center gap-3">
+            <div>
+            <Button btnType="save" >Search</Button>
+            </div>
+           
           </div>
+         
+          {/* <div className="col-sm-1 mt-4  pt-3d-flex justify-content-center">
+          <li className="icon-border">
+            <a className="icon" href="#">
+              <FaFileExcel />
+            </a>
+          </li>
+          </div> */}
         </div>
       </div>
       <div className="container-fluid container_agent_report py-2">

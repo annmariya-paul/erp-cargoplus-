@@ -297,213 +297,200 @@ export default function ViewQuotation() {
               <p className="modal-view-data">Test</p>
             </div>
           </div> */}
-
-                 
                 </div>
               </div>
             </div>
 
             <div className="row  mt-2 px-1">
-
               <div className="col-md-6 col-12 mt-1">
-                <div className="content-tabs-new row justify-content ms-1 mb-3 me-3">
+                <div className="content-tabs-new row justify-content ms-1 mb-2 me-2">
                   <div className="row mt-3 mb-3">
                     <h5 className="lead_text">Transportation</h5>
                   </div>
 
                   <div className="col-12 d-flex">
-                      <div className="col-4">Mode</div>
-                      <div className="col-1">:</div>
+                    <div className="col-4">Mode</div>
+                    <div className="col-1">:</div>
 
-                      <div className="col-7">
-                        <p className="modal-view-data">
-                          {allqoutation?.quotation_mode}
-                        </p>
-                      </div>
+                    <div className="col-7">
+                      <p className="modal-view-data">
+                        {allqoutation?.quotation_mode}
+                      </p>
                     </div>
-
-                    <div className="col-12 d-flex">
-                      <div className="col-4">Origin</div>
-                      <div className="col-1">:</div>
-
-                      <div className="col-7">
-                        <p className="modal-view-data">
-                          {
-                            allqoutation
-                              ?.fms_v1_locations_fms_v1_quotation_quotation_origin_idTofms_v1_locations
-                              .location_name
-                          }
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="col-12 d-flex">
-                      <div className="col-4">Destination</div>
-                      <div className="col-1">:</div>
-
-                      <div className="col-7">
-                        <p className="modal-view-data">
-                          {
-                            allqoutation
-                              ?.fms_v1_locations_fms_v1_quotation_quotation_destination_idTofms_v1_locations
-                              .location_name
-                          }
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="col-12 d-flex mb-4 pb-1">
-                      <div className="col-4">Carrier</div>
-                      <div className="col-1">:</div>
-
-                      <div className="col-7">
-                        <p className="modal-view-data">
-                          {allqoutation?.fms_v1_carrier.carrier_name}
-                        </p>
-                      </div>
-                    </div>
-                    
                   </div>
-                </div>
 
-                <div className="col-md-6 col-12 mt-1">
-                  <div className="content-tabs-new row justify-content  mb-2 me-3">
-                    <div className="row mt-3 mb-2">
-                      <h5 className="lead_text">Shipment Details</h5>
+                  <div className="col-12 d-flex">
+                    <div className="col-4">Origin</div>
+                    <div className="col-1">:</div>
+
+                    <div className="col-7">
+                      <p className="modal-view-data">
+                        {
+                          allqoutation
+                            ?.fms_v1_locations_fms_v1_quotation_quotation_origin_idTofms_v1_locations
+                            .location_name
+                        }
+                      </p>
                     </div>
-                    <div className="col-12 d-flex">
-                      <div className="col-4">Cargo Type</div>
-                      <div className="col-1">:</div>
+                  </div>
 
-                      <div className="col-7">
-                        <p className="modal-view-data">
-                          {allqoutation?.quotation_cargo_type}
-                        </p>
-                      </div>
+                  <div className="col-12 d-flex">
+                    <div className="col-4">Destination</div>
+                    <div className="col-1">:</div>
+
+                    <div className="col-7">
+                      <p className="modal-view-data">
+                        {
+                          allqoutation
+                            ?.fms_v1_locations_fms_v1_quotation_quotation_destination_idTofms_v1_locations
+                            .location_name
+                        }
+                      </p>
                     </div>
+                  </div>
 
-                    <div className="col-12 d-flex">
-                      <div className="col-4">No of pieces </div>
-                      <div className="col-1">:</div>
+                  <div className="col-12 d-flex mb-4 pb-1">
+                    <div className="col-4">Carrier</div>
+                    <div className="col-1">:</div>
 
-                      <div className="col-7">
-                        <p className="modal-view-data">
-                          {allqoutation?.quotation_no_of_pieces}
-                        </p>
-                      </div>
+                    <div className="col-7">
+                      <p className="modal-view-data">
+                        {allqoutation?.fms_v1_carrier.carrier_name}
+                      </p>
                     </div>
-
-                    <div className="col-12 d-flex">
-                      <div className="col-4">UOM</div>
-                      <div className="col-1">:</div>
-
-                      <div className="col-7">
-                        <p className="modal-view-data">
-                          {allqoutation?.crm_v1_units?.unit_name}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="col-12 d-flex">
-                      <div className="col-4">Gross wt </div>
-                      <div className="col-1">:</div>
-
-                      <div className="col-7">
-                        <p className="modal-view-data">
-                          {allqoutation?.quotation_gross_wt}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="col-12 d-flex">
-                      <div className="col-4">Chargeable wt </div>
-                      <div className="col-1">:</div>
-
-                      <div className="col-7">
-                        <p className="modal-view-data">
-                          {allqoutation?.quotation_chargeable_wt}
-                        </p>
-                      </div>
-                    </div>
-
-
                   </div>
                 </div>
               </div>
 
-              <div className="row mt-2 px-1 mb-0">
-                <div className="col-md-6 col-12 ">
-                  <div className="content-tabs-new row justify-content ms-1 mb-3 me-3">
-                    <div className="row mt-2 mb-1">
-                      <h5 className="lead_text">Payment Info</h5>
+              <div className="col-md-6 col-12 mt-1">
+                <div className="content-tabs-new row justify-content  mb-2 me-1">
+                  <div className="row mt-3 mb-2">
+                    <h5 className="lead_text">Shipment Details</h5>
+                  </div>
+                  <div className="col-12 d-flex">
+                    <div className="col-4">Cargo Type</div>
+                    <div className="col-1">:</div>
+
+                    <div className="col-7">
+                      <p className="modal-view-data">
+                        {allqoutation?.quotation_cargo_type}
+                      </p>
                     </div>
+                  </div>
 
-                    <div className="col-12 d-flex">
-                      <div className="col-4">Payment Terms</div>
-                      <div className="col-1">:</div>
+                  <div className="col-12 d-flex">
+                    <div className="col-4">No of pieces </div>
+                    <div className="col-1">:</div>
 
-                      <div className="col-7">
-                        <p className="modal-view-data">
-                          {
-                            allqoutation?.fms_v1_payment_terms
-                              ?.payment_term_name
-                          }
-                        </p>
-                      </div>
+                    <div className="col-7">
+                      <p className="modal-view-data">
+                        {allqoutation?.quotation_no_of_pieces}
+                      </p>
                     </div>
+                  </div>
 
-                    <div className="col-12 d-flex">
-                      <div className="col-4">Currency </div>
-                      <div className="col-1">:</div>
+                  <div className="col-12 d-flex">
+                    <div className="col-4">UOM</div>
+                    <div className="col-1">:</div>
 
-                      <div className="col-7">
-                        <p className="modal-view-data">
-                          {
-                            allqoutation?.generalsettings_v1_currency
-                              ?.currency_name
-                          }
-                        </p>
-                      </div>
+                    <div className="col-7">
+                      <p className="modal-view-data">
+                        {allqoutation?.crm_v1_units?.unit_name}
+                      </p>
                     </div>
-                    <div className="col-12 d-flex mb-4 pb-2">
-                      <div className="col-4">Exchange Rate </div>
-                      <div className="col-1">:</div>
+                  </div>
 
-                      <div className="col-7">
-                        <p className="modal-view-data">
-                          {allqoutation?.quotation_exchange_rate.toFixed(2)}
-                        </p>
-                      </div>
+                  <div className="col-12 d-flex">
+                    <div className="col-4">Gross wt </div>
+                    <div className="col-1">:</div>
+
+                    <div className="col-7">
+                      <p className="modal-view-data">
+                        {allqoutation?.quotation_gross_wt}
+                      </p>
                     </div>
+                  </div>
 
+                  <div className="col-12 d-flex">
+                    <div className="col-4">Chargeable wt </div>
+                    <div className="col-1">:</div>
+
+                    <div className="col-7">
+                      <p className="modal-view-data">
+                        {allqoutation?.quotation_chargeable_wt}
+                      </p>
+                    </div>
                   </div>
                 </div>
+              </div>
+            </div>
 
-                <div className="col-md-6 col-12">
-                  <div className="content-tabs-new row  mb-2 me-3">
-                    <div className="row mt-3 mb-2">
-                      <h5 className="lead_text">Attachments</h5>
+            <div className="row mt-2 px-1 ">
+              <div className="col-md-6 col-12 mt-1">
+                <div className="content-tabs-new row justify-content ms-1 mb-3 me-2">
+                  <div className="row mt-3 mb-2">
+                    <h5 className="lead_text">Payment Info</h5>
+                  </div>
+
+                  <div className="col-12 d-flex">
+                    <div className="col-4">Payment Terms</div>
+                    <div className="col-1">:</div>
+
+                    <div className="col-7">
+                      <p className="modal-view-data">
+                        {allqoutation?.fms_v1_payment_terms?.payment_term_name}
+                      </p>
                     </div>
+                  </div>
 
-                    <div className="col-xl-6 col-sm-12 d-flex  ">
-                      <div className="col-5 boldhd">Attachments </div>
-                      <div className="col-1">:</div>
+                  <div className="col-12 d-flex">
+                    <div className="col-4">Currency</div>
+                    <div className="col-1">:</div>
 
-                      <div className="col-7  pb-5">
-                        <p className="modal-view-data">
-                          {allqoutation?.quotation_docs}
-                        </p>
-                      </div>
+                    <div className="col-7">
+                      <p className="modal-view-data">
+                        {
+                          allqoutation?.generalsettings_v1_currency
+                            ?.currency_name
+                        }
+                      </p>
                     </div>
+                  </div>
 
-                  
+                  <div className="col-12 d-flex">
+                    <div className="col-4">Exchange Rate</div>
+                    <div className="col-1">:</div>
+
+                    <div className="col-7">
+                      <p className="modal-view-data">
+                        {allqoutation?.quotation_exchange_rate.toFixed(2)}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <div className="row mt-0 me-4 mb-1 pt-0 ">
-                <div className="content-tabs-tablenew row justify-content m-3 ">
+              <div className="col-md-6 col-12 mt-1">
+                <div className="content-tabs-new row justify-content  mb-3 me-1">
+                  <div className="row mt-3 mb-2">
+                    <h5 className="lead_text">Attachments</h5>
+                  </div>
+                  <div className="col-12 d-flex pb-5 mb-4">
+                    <div className="col-4">Attachments</div>
+                    <div className="col-1">:</div>
 
+                    <div className="col-7">
+                      <p className="modal-view-data">
+                        {allqoutation?.quotation_docs}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="row mt-0 me-4 mb-1 pt-0 ">
+              <div className="content-tabs-tablenew row justify-content ms-3 ">
                 <div className="mt-2">
                   <Collapse
                     defaultActiveKey={["1"]}
@@ -517,9 +504,10 @@ export default function ViewQuotation() {
                           columns={progress}
                           data={tabledata}
                           bordered
+                          custom_table_css="table_job_list"
                         />
                       </div>
-                      <div className="d-flex justify-content-end mt-4 mx-3 ">
+                      <div className="d-flex justify-content-end  mx-3 ">
                         <div className="col-lg-2 col-sm-4 col-xs-3 d-flex justify-content-end mt-3 me-2">
                           <p style={{ fontWeight: 500 }}>Grand Total : </p>
                         </div>
@@ -533,6 +521,7 @@ export default function ViewQuotation() {
                     </Panel>
                   </Collapse>
                 </div>
+
               </div>
             </div>
           </div>

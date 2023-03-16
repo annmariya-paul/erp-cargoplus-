@@ -55,7 +55,7 @@ export default function Add_purchase() {
     if (!mShow) {
       setTimeout(() => {
         setSuccessModal(false);
-        navigate(ROUTES.VIEW_PURCHASE);
+        // navigate(ROUTES.VIEW_PURCHASE);
       }, time);
     }
   };
@@ -112,6 +112,11 @@ export default function Add_purchase() {
 
 
   const createPurchase = async (data) => {
+    let a = parseInt(data.istaxable)
+    let b = parseInt(data.totalamount)
+
+    console.log("aaa",a);
+
     console.log("ddd", data);
     const formData = new FormData();
     formData.append("purchase_po_no", purchasePoNo);
@@ -124,9 +129,9 @@ export default function Add_purchase() {
     formData.append("purchase_payment_mode", paymentmode);
     formData.append("purchase_credit_days", creditdays);
     formData.append("purchase_remarks", remarks);
-    formData.append("purchase_taxable", taxable);
+    formData.append("purchase_taxable", a);
     formData.append("attachments", attachments?.file?.originFileObj);
-    formData.append("purchase_total_amount", totalamount);
+    formData.append("purchase_total_amount", b);
     formData.append("purchase_due_date", due_date);
     try {
       const addpurchase = await PublicFetch.post(
@@ -196,8 +201,8 @@ export default function Add_purchase() {
             >
               <div className="row my-4">
                 <div className="col-4">
-                  <label>Po No</label>
-                  <Form.Item name="purchasePoNo">
+                  <label>Po Reference</label>
+                  <Form.Item name="purchasePoRef">
                     <InputType
                       value={purchasePoNo}
                       onChange={(e) => {
@@ -231,7 +236,7 @@ export default function Add_purchase() {
                   <Form.Item name="due_date" className="mt-2">
                     <DatePicker
                       format={"DD-MM-YYYY"}
-                      defaultValue={moment(newDate)}
+                      // defaultValue={moment(newDate)}
                       value={due_date}
                       onChange={(e) => {
                         setDue_date(e);

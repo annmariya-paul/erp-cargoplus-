@@ -525,8 +525,8 @@ export default function ViewJob() {
             </div>
             <div className="row mt-1 px-1 mb-0">
               <div className="col-md-6 col-12 ">
-                <div className="content-tabs-new row justify-content mx-1 mb-3">
-                  <div className="row mt-2 mb-1">
+                <div className="content-tabs-new row justify-content mx-1 mb-2">
+                  <div className="row mt-1 mb-1">
                     <h5 className="lead_text">Payment Info</h5>
                   </div>
 
@@ -581,11 +581,11 @@ export default function ViewJob() {
                     <h5 className="lead_text">Attachments</h5>
                   </div>
 
-                  <div className="col-xl-6 col-sm-12 d-flex mb-5 ms-3">
-                    <div className="col-5 boldhd">Attachments </div>
+                  <div className="col-xl-6 col-sm-12 d-flex mb-4 pb-2 ms-3">
+                    <div className="col-6 boldhd mb-5 pb-3">Attachments </div>
                     <div className="col-1">:</div>
 
-                    <div className="col-7 mb-5 mb-5 pb-3">
+                    <div className="col-5 ">
                       <p className="modal-view-data">{alljobs?.job_docs}</p>
                     </div>
                   </div>
@@ -623,7 +623,7 @@ export default function ViewJob() {
                             custom_table_css="table_job_list"
                           />
                         </div>
-                        <div className="d-flex justify-content-end  gap-3">
+                        <div className="d-flex justify-content-end mt-3 gap-3">
                           <div className="">
                             <p style={{ fontWeight: 600 }}>Grand Total : </p>
                           </div>

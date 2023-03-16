@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { GENERAL_SETTING_BASE_URL } from "../../api/bootapi";
+import { ACCOUNTS, GENERAL_SETTING_BASE_URL } from "../../api/bootapi";
 import PublicFetch from "../../utils/PublicFetch";
 import "./invoiceStyle.scss";
 
@@ -20,6 +20,7 @@ function InvoicePrint({
 }) {
   const [companyInfodata, setCompanyInfodata] = useState();
   const [defaultCurrency, setDefaultCurrency] = useState();
+  const [defaultbank,setdefaultbank]= useState();
 
   const companyinfo = () => {
     PublicFetch.get(`${GENERAL_SETTING_BASE_URL}/company`)
@@ -54,6 +55,26 @@ function InvoicePrint({
       });
   };
 
+  const getallbanks = async () => {
+    try {
+      const allbanks = await PublicFetch.get(
+        `${ACCOUNTS}/bank`
+      );
+      console.log("getting all bank details", allbanks.data.data);
+      // setAllbankdetails(allbanks.data.data)
+      allbanks?.data?.data?.forEach((item, index) => {
+        if (item.bank_default === 1) {
+          console.log("default bankk", item);
+          setdefaultbank(item)
+          // setDefaultCurrency(item);
+        }
+      });
+    
+    } catch (err) {
+      console.log("error to fetching  bank details", err);
+    }
+  };
+
   // function camelize(str) {
   //   return str.replace(/(?:^\w|[A-Z]|\b\w)/g, function(word, index) {
   //     return index === 0 ? word.toLowerCase() : word.toUpperCase();
@@ -71,6 +92,7 @@ function InvoicePrint({
   useEffect(() => {
     companyinfo();
     allCurrency();
+    getallbanks();
   }, []);
   return (
     <div>
@@ -191,6 +213,63 @@ function InvoicePrint({
                   </table>
                 </div>
               </div>
+
+             
+            </div>
+           
+           <div>
+           <p>Thanks For your Business</p>
+           </div>
+            <div className="row px-3">
+            <p>Bank Details</p>
+              <div className="invoice_details__colbank  ">
+              <table>
+              {/* {companyInfodata &&
+            companyInfodata.length > 0 &&
+            companyInfodata?.map((item, index) => { */}
+
+           {companyInfodata&& companyInfodata.length > 0 && 
+            companyInfodata?.map((item, index)=>{
+               return(
+
+                    <tbody className="">
+                      
+                      <tr>
+                        <td style={{ fontWeight: 600 }}>Name</td>
+                        <td>:</td>
+                        <td >{item.company_name}  </td>
+                      </tr>
+                      <tr>
+                        <td style={{ fontWeight: 600 }}>Bank Name</td>
+                        <td>:</td>
+                        <td >{defaultbank?.bank_name}  </td>
+                      </tr>
+                      <tr>
+                        <td style={{ fontWeight: 600 }}>Branch</td>
+                        <td>:</td>
+                        <td >{defaultbank?.bank_branch}  </td>
+                      </tr>
+                      <tr>
+                        <td style={{ fontWeight: 600 }}>Account No</td>
+                        <td>:</td>
+                        <td >{defaultbank?.bank_account_number}  </td>
+                      </tr>
+                      <tr>
+                        <td style={{ fontWeight: 600 }}>IBAN No</td>
+                        <td>:</td>
+                        <td >{defaultbank?.bank_iban_no}  </td>
+                      </tr>
+                    </tbody>
+                       )
+                   })
+                  }
+                  </table>
+              </div>
+              {/* <div className="invoice_details__col invoice_details__col_2">
+              <table>
+                <tbody></tbody>
+              </table>
+            </div> */}
             </div>
           </footer>
           </>

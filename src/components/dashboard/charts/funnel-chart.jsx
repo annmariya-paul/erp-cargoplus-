@@ -13,7 +13,7 @@ const FunnelChart = () => (
     data={funnelData}
     margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
     valueFormat=">-.4s"
-    colors={{ scheme: "blues" }}
+    colors={{ scheme: "green_blue" }}
     borderWidth={0}
     borderOpacity={0}
     labelColor={{

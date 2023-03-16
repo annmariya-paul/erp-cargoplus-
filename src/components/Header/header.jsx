@@ -1,17 +1,50 @@
-import React from "react";
+import React, { useState } from "react";
 import PublicFetch from "../../utils/PublicFetch";
 import { ROUTES } from "../../routes/index";
 import { useNavigate } from "react-router-dom";
 import Avatar from "../../components/img/img_avatar.png";
-import HeaderIcon from "../../components/img/HeaderIcon.png"
+import HeaderIcon from "../../components/img/HeaderIcon.png";
 import { IoMdNotifications } from "react-icons/io";
 import { TfiKey } from "react-icons/tfi";
 import { HiLogout } from "react-icons/hi";
-import { Dropdown, Space } from "antd";
+import { Dropdown, Form, Input, Space } from "antd";
 import styles from "./header.module.scss";
+import CustomModel from "../custom_modal/custom_model";
+import Button from "../button/button";
+import "./headercss.scss";
 
 const Header = () => {
   const navigate = useNavigate();
+  const [notiModal, setNotiModal] = useState(false);
+  const [notiClicked, setNotiClicked] = useState();
+  const [changeModal, setChangeModal] = useState(false);
+  const data = [
+    {
+      id: 1,
+      name: "Quotation Created SuccessFully",
+      description:
+        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+    },
+    {
+      id: 2,
+      name: "Job Created SuccessFully",
+      description:
+        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+    },
+    {
+      id: 3,
+      name: "Invoice Created SuccessFully",
+      description:
+        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+    },
+    {
+      id: 4,
+      name: "Opportunity Created SuccessFully",
+      description:
+        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+    },
+  ];
+  const [allNotifications, setAllNotifications] = useState(data);
 
   //Handle dropdown options click event
   const handleDropdownClick = (event) => {
@@ -43,6 +76,10 @@ const Header = () => {
     }
   };
 
+  const handleChangePassword = () => {
+    setChangeModal(true);
+  };
+
   //Array containing dropdown options
   const items = [
     {
@@ -61,7 +98,12 @@ const Header = () => {
       key: "2",
       label: (
         <>
-          <div className="d-flex justify-content-between align-items-center">
+          <div
+            onClick={() => {
+              handleChangePassword();
+            }}
+            className="d-flex justify-content-between align-items-center"
+          >
             <p className={`${styles.HeaderOptions}`}>
               Change Password
               <span className="ps-2">
@@ -94,16 +136,33 @@ const Header = () => {
     onClick: handleDropdownClick,
   };
 
+  const handlenotification = () => {
+    setNotiModal(true);
+  };
+  const handleShowContent = (data) => {
+    setNotiClicked(data);
+  };
+
   return (
     <div className="d-flex justify-content-end mt-2">
       <div
         className={`${styles.headerContainer} d-flex align-items-center justify-content-around`}
       >
-        <IoMdNotifications
-          size={22}
-          color="#6B728E"
-          className={`${styles.NotificationIcon}`}
-        />
+        <div
+          className={`${styles.notification_icon}`}
+          onClick={() => {
+            handlenotification();
+          }}
+        >
+          <span className={`${styles.icon_style}`}>
+            <lable className={`${styles.notif_count}`}>3</lable>
+          </span>
+          <IoMdNotifications
+            size={22}
+            color="#6B728E"
+            className={`${styles.NotificationIcon}`}
+          />
+        </div>
         <div className={`${styles.ImgWrapper}`}>
           <Dropdown
             menu={menuProps}
@@ -111,11 +170,159 @@ const Header = () => {
             overlayClassName="dropdwnHeader"
           >
             {/* <Space> */}
-            <img src={HeaderIcon} alt="..."/>
+            <img src={HeaderIcon} alt="..." />
             {/* </Space> */}
           </Dropdown>
         </div>
       </div>
+      <CustomModel
+        show={notiModal}
+        onHide={() => {
+          setNotiModal(false);
+        }}
+        View_list
+        list_content={
+          <>
+            <div className="container-fluid">
+              <div className="row">
+                <h4 style={{ color: "#0891d1" }}>Notifications</h4>
+                <div className="col-12">
+                  {allNotifications &&
+                    allNotifications.length > 0 &&
+                    allNotifications.map((item, index) => {
+                      return (
+                        <div className="row my-2 py-2 ">
+                          <div className="col-2">
+                            <div
+                              style={{
+                                borderRadius: "100%",
+                                backgroundColor: "whitesmoke",
+                              }}
+                              className={`p-3`}
+                            >
+                              <IoMdNotifications
+                                size={22}
+                                color="#6B728E"
+                                className={`${styles.NotificationIcon}`}
+                              />
+                            </div>
+                          </div>
+                          <div className="col-10">
+                            <div
+                              className="mt-3"
+                              onClick={() => {
+                                handleShowContent(item.id);
+                              }}
+                            >
+                              <h6 style={{ fontWeight: "600" }}>{item.name}</h6>
+                            </div>
+                            {notiClicked == item.id ? (
+                              <>
+                                <div className="">
+                                  <p>{item.description}</p>
+                                </div>
+                              </>
+                            ) : (
+                              ""
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                </div>
+              </div>
+            </div>
+          </>
+        }
+      />
+      <CustomModel
+        show={changeModal}
+        onHide={() => {
+          setChangeModal(false);
+        }}
+        View_list
+        list_content={
+          <>
+            <div className="container">
+              <Form>
+                <div className="row">
+                  <h4 style={{ color: "#0891d1" }}>Change Password</h4>
+                  <div className="col-12 mt-3">
+                    <label>Old Password</label>
+                    <Form.Item
+                      name="old_password"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Password is Required ",
+                        },
+                        {
+                          min: 8,
+                          message: "Required Minimum 8 Characters",
+                        },
+                      ]}
+                    >
+                      <Input.Password
+                        className={`${styles.password_style} p-2`}
+                        style={{ border: 0, backgroundColor: "whitesmoke" }}
+                      />
+                    </Form.Item>
+                  </div>
+                  <div className="col-12 mt-2">
+                    <label>New Password</label>
+                    <Form.Item
+                      name="new_password"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Password is Required ",
+                        },
+                        {
+                          min: 8,
+                          message: "Required Minimum 8 Characters",
+                        },
+                      ]}
+                    >
+                      <Input.Password
+                        className={`${styles.password_style} p-2`}
+                        style={{ border: 0, backgroundColor: "whitesmoke" }}
+                      />
+                    </Form.Item>
+                  </div>
+                  <div className="col-12 mt-2">
+                    <label>Confirm Password</label>
+                    <Form.Item
+                      name="confirm_password"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Password is Required ",
+                        },
+                        {
+                          min: 8,
+                          message: "Required Minimum 8 Characters",
+                        },
+                      ]}
+                    >
+                      <Input.Password
+                        className={`${styles.password_style} p-2`}
+                        style={{ border: 0, backgroundColor: "whitesmoke" }}
+                      />
+                    </Form.Item>
+                  </div>
+                  <div className="col-12 mt-3 d-flex justify-content-center">
+                    <div className="">
+                      <Button type="submit" btnType="save">
+                        Save
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </Form>
+            </div>
+          </>
+        }
+      />
     </div>
   );
 };

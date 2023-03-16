@@ -6,17 +6,21 @@ import SelectBox from "../../../components/Select Box/SelectBox";
 import TableData from "../../../components/table/table_data";
 import styles from "./cstexp.module.scss";
 import moment from "moment";
+import { FaFileExcel } from "react-icons/fa";
+import * as XLSX from "xlsx/xlsx.js"; //for xl download
 
 const CostAndExpenseReport = () => {
   const { Option } = Select;
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate ] = useState("");
+  const [startDate, setStartDate] = useState(moment().startOf('month'));
+  const [endDate, setEndDate ] = useState(moment());
   const [serialNo, setserialNo] = useState(1);
   const [customerList, setCustomerList] = useState();
   const [selectedCustomer, setSelectedCustomer] = useState();
   const [jobList, setJobList] = useState();
   const [selectedJob,setSelectedJob] = useState();
   const [reportData, setReportData] = useState();
+  // console.log(moment(new Date()).format("YYYY-MM-DD"))
+  console.log(moment(new Date()).format("YYYY-MM-DD"),"New Date Details")
   const columns = [
     {
       title: "Sl. No.",
@@ -36,7 +40,7 @@ const CostAndExpenseReport = () => {
       //       .toLowerCase()
       //       .includes(value.toLowerCase());
       //   },
-      align: "center",
+      align: "left",
     },
     {
       title: "Customer",
@@ -48,17 +52,17 @@ const CostAndExpenseReport = () => {
       //       .toLowerCase()
       //       .includes(value.toLowerCase());
       //   },
-      align: "center",
+      align: "left",
     },
     {
-      title: "Cost",
+      title: "Total Cost",
       dataIndex: "cost",
       key: "cost",
       //   width: "29%",
-      align: "center",
+      align: "right",
     },
     {
-      title: "Expense",
+      title: "Total Expense",
       dataIndex: "expense",
       key: "expense",
       //   width: "20%",
@@ -68,24 +72,75 @@ const CostAndExpenseReport = () => {
       //       .toLowerCase()
       //       .includes(value.toLowerCase());
       //   },
-      align: "center",
+      align: "right",
     },
     {
-      title: "Profit/Loss",
+      title: "Total Profit/Loss",
       dataIndex: "profit_loss",
       key: "profit_loss",
       //   width: "29%",
-      align: "center",
+      align: "right",
     },
   ];
-  const data = [
-    {
-      job_no: "00111",
-      customer: "Test",
-      cost: "30.000",
-      expense: "20.000",
-      profit_loss: "+10.000",
-    },
+
+  const handleExport = () => {
+    var wb = XLSX.utils.book_new();
+    
+    var ws = XLSX.utils.json_to_sheet(datas);
+    XLSX.utils.book_append_sheet(wb, ws, "Reports");
+    XLSX.utils.sheet_add_aoa(
+      ws,xlheading,
+     
+      { origin: "A1" }
+    );
+    // ws["!cols"] = [{ wch: 15 }];
+    let row = [
+      { v: "Courier: 24", t: "s", s: { font: { name: "Courier", sz: 24 } } },
+      {
+        v: "bold & color",
+        t: "s",
+        s: { font: { bold: true, color: { rgb: "FF0000" } } },
+      },
+      {
+        v: "fill: color",
+        t: "s",
+        s: { fill: { fgColor: { rgb: "E9E9E9" } } },
+      },
+      { v: "line\nbreak", t: "s", s: { alignment: { wrapText: true } } },
+    ];
+    var wscols = [
+      { wch: 15 },
+      { wch: 15 },
+      { wch: 15 },
+      { wch: 15 },
+      { wch: 15 },
+      { wch: 15 },
+      { wch: 15 },
+      { wch: 15 },
+      { wch: 15 },
+      { wch: 17 },
+      { wch: 15 },
+    ];
+    ws["!cols"] = wscols;
+   
+    XLSX.writeFile(wb, "Student Report.xlsx");
+    console.log("xlsx data", ws);
+    return addStyle();
+  };
+  const addStyle = () => {
+    console.log("xlsx downloaded");
+  };
+
+  const datas= reportData;
+
+  const xlheading = [
+    [
+      "job_no",
+      "customer",
+      "cost",
+      "expense",
+      "profit_loss",
+    ],
   ];
 
   const getCustomerList = async () => {
@@ -95,7 +150,6 @@ const CostAndExpenseReport = () => {
       );
       if (customerList?.status === 200) {
         setCustomerList(customerList?.data.data);
-        console.log("Customer List are:", customerList?.data.data);
       }
     } catch (err) {
       console.log("Error While fetching customer list");
@@ -141,9 +195,9 @@ const CostAndExpenseReport = () => {
           temp.push({
             job_no: item.job_number,
             customer: item.customer.lead_customer_name,
-            cost: item.cost,
-            expense: item.expense,
-            profit_loss: item.profitLoss,
+            cost: item.cost != null?(item.cost).toFixed(2):"",
+            expense: item.expense != null?(item.expense).toFixed(2):"",
+            profit_loss: item.profitLoss != null?(item.profitLoss).toFixed(2):"",
           })
         })
         setReportData(temp)
@@ -163,9 +217,21 @@ const CostAndExpenseReport = () => {
       <div className="row">
         <div className="col">
           <div className={`${styles.card} card`}>
+            <div className="d-flex justify-content-between px-4 ,t-">
+              <div className="">
             <h5 className={styles.heading}>
               Customerwise Cost And Expense Report
             </h5>
+            </div>
+            <div className={`  `} >
+            <li className="icon-border">
+            <a className= {`${styles.icon_color} icon  `} href="#">
+              <FaFileExcel onClick={handleExport} />
+            </a>
+          </li>
+          </div>
+          </div>
+
             <div className="row">
               <div className="col-md-6">
                 <div className="d-flex justify-content-around align-items-baseline mt-4">
@@ -225,6 +291,7 @@ const CostAndExpenseReport = () => {
                   <p className="mt-4">Date From</p>
                   <div className={styles.datepicker_wrapper}>
                     <DatePicker
+                    // defaultValue={moment(new Date()).format("YYYY-MM-DD")}
                       format={"DD-MM-YYYY"}
                       placeholder="From"
                       value={startDate}
@@ -243,13 +310,16 @@ const CostAndExpenseReport = () => {
                 </div>
                 {/* <div className="d-flex align-items-baseline"></div> */}
               </div>
-              <div className={`${styles.saveBtn} mt-4 mb-3`}>
+              <div className={`${styles.saveBtn} mt-4 mb-3 gap-3 `}>
+                <div className="p-0 m-0">
                 <Button
                   btnType="save"
                   onClick={Searchbydate}
                 >
                   Search
                 </Button>
+                </div>
+               
               </div>
             </div>
           </div>

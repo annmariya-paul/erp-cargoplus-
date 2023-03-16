@@ -228,7 +228,7 @@ export default function Edit_purchase() {
               }}
             >
               <div className="row my-4">
-                <div className="col-4">
+                <div className="col-3">
                   <label>Po No</label>
                   <Form.Item name="po_no">
                     <InputType
@@ -243,7 +243,21 @@ export default function Edit_purchase() {
                   </Form.Item>
                 </div>
 
-                <div className="col-4">
+                <div className="col-3">
+                  <label>Po Reference</label>
+                  <Form.Item name="po_no">
+                    <InputType
+                      className="input_type_style w-100"
+                      // value={editpurchasepono}
+                      // onChange={(e) => {
+                      //   seteditpurchasepono(e.target.value);
+                      //   console.log("editpurchasepono", editpurchasepono);
+                      //   //   setErrormsg("");
+                      // }}
+                    />
+                  </Form.Item>
+                </div>
+                <div className="col-3">
                   <label>Purchase Date</label>
                   <Form.Item name="date" className="mt-2">
                     <DatePicker
@@ -256,7 +270,7 @@ export default function Edit_purchase() {
                     />
                   </Form.Item>
                 </div>
-                <div className="col-4">
+                <div className="col-3">
                   <label>Due Date</label>
                   <Form.Item name="datee" className="mt-2">
                     <DatePicker
@@ -269,7 +283,7 @@ export default function Edit_purchase() {
                     />
                   </Form.Item>
                 </div>
-                <div className="col-4">
+                <div className="col-3">
                   <label>Vendor</label>
                   <Form.Item className="mt-2" name="vendor">
                     <SelectBox
@@ -298,7 +312,7 @@ export default function Edit_purchase() {
                     </SelectBox>
                   </Form.Item>
                 </div>
-                <div className="col-4">
+                <div className="col-3">
                   <label>Payment Mode</label>
                   <Form.Item className="mt-2" name="payment_mode">
                     <SelectBox
@@ -326,7 +340,7 @@ export default function Edit_purchase() {
                     </SelectBox>
                   </Form.Item>
                 </div>
-                <div className="col-4">
+                <div className="col-3">
                   <label>Credit Days</label>
                   <Form.Item name="credit_days">
                     <InputType
@@ -337,7 +351,9 @@ export default function Edit_purchase() {
                     />
                   </Form.Item>
                 </div>
-                <div className="col-4">
+                <div className="col-3">
+                <div className="row">
+                <div className="col-3">
                   <label>Taxable</label>
                   <Form.Item name="taxable">
                     <Checkbox
@@ -349,7 +365,7 @@ export default function Edit_purchase() {
                     />
                   </Form.Item>
                 </div>
-                <div className="col-4">
+                <div className="col-9">
                   <label>Tax No</label>
                   <Form.Item name="tax_no">
                     <InputType
@@ -361,7 +377,12 @@ export default function Edit_purchase() {
                     />
                   </Form.Item>
                 </div>
-                <div className="col-4">
+
+                </div>
+                </div>
+               
+               
+                <div className="col-3">
                   <label>Bill No</label>
                   <Form.Item name="bill_no">
                     <InputType
@@ -372,7 +393,7 @@ export default function Edit_purchase() {
                     />
                   </Form.Item>
                 </div>
-                <div className="col-4">
+                <div className="col-3">
                   <label> Amount</label>
                   <Form.Item name="amount">
                     <Input_Number
@@ -389,7 +410,7 @@ export default function Edit_purchase() {
                     />
                   </Form.Item>
                 </div>
-                <div className="col-4">
+                <div className="col-3">
                   <label>Tax Amount</label>
                   <Form.Item name="tax_amount">
                     <Input_Number
@@ -402,13 +423,13 @@ export default function Edit_purchase() {
                     />
                   </Form.Item>
                 </div>
-                <div className="col-4">
+                <div className="col-3">
                   <label>Total Amount</label>
                   <Form.Item name="total_amount">
                     <Input_Number min={0} precision={2} disabled={true} />
                   </Form.Item>
                 </div>
-                <div className="col-4">
+                {/* <div className="col-4">
                   <label>Status</label>
                   <Form.Item name="status">
                     <InputType
@@ -418,8 +439,8 @@ export default function Edit_purchase() {
                       }}
                     />
                   </Form.Item>
-                </div>
-                <div className="col-4">
+                </div> */}
+                <div className="col-8">
                   <label>Remarks</label>
                   <Form.Item name="remarks">
                     <TextArea

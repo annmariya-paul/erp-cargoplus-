@@ -1,14 +1,14 @@
 import { DatePicker, Select } from "antd";
 import React, { useEffect, useState } from "react";
 import { AiOutlineCaretDown } from "react-icons/ai";
-import { FaArrowCircleDown, FaArrowDown } from "react-icons/fa";
+import { FaArrowCircleDown, FaArrowDown, FaFileExcel } from "react-icons/fa";
 import { CRM_BASE_URL_FMS } from "../../../api/bootapi";
 import Button from "../../../components/button/button";
 import MyPagination from "../../../components/Pagination/MyPagination";
 import SelectBox from "../../../components/Select Box/SelectBox";
 import TableData from "../../../components/table/table_data";
 import PublicFetch from "../../../utils/PublicFetch";
-
+import "../AgentReport/agentReport.scss"
 function EnquiryReport() {
   const [serialNo, setserialNo] = useState(1);
   const [numOfItems, setNumOfItems] = useState("25");
@@ -102,16 +102,25 @@ function EnquiryReport() {
       <div className="container-fluid container_agent_report p-5">
         <div className="row">
           <div className="col-12">
-            <div className="row flex-wrap py-3">
+            <div className="d-flex justify-content-between py-3">
+              <div>
               <h5 className="lead_text">Enquiry Report</h5>
+              </div>
+              <div className={`p-0`} >
+            <li className="icon-border">
+            <a className= {` icon  icon_color`} href="#">
+              <FaFileExcel  />
+            </a>
+          </li>
+          </div>
             </div>
             <div className="content-tabs-new row justify-content mb-3 ">
               <div className="col-xl-12">
                 <div className="row">
                   <div className="col-xl-3 ">
                     <label>Enquiry No</label>
-                    <div className="d-flex align-items-center">
-                      <div className=" mx-0 mt-2">
+                    {/* <div className="d-flex justify-content-center align-items-center"> */}
+                    {/* <div style={{ width: "100px" }} className=" mx-0 mt-2">
                         <Button
                           onClick={() => {
                             handleAllSelected();
@@ -121,21 +130,22 @@ function EnquiryReport() {
                         >
                           All <AiOutlineCaretDown />
                         </Button>
-                      </div>
-                      <div className="col-9 mx-0 ">
-                        <SelectBox>
-                          {allEnquiryNo &&
-                            allEnquiryNo.length > 0 &&
-                            allEnquiryNo.map((item, index) => {
-                              return (
-                                <Select.Option key={item.quotation_id}>
-                                  {item.quotation_no}
-                                </Select.Option>
-                              );
-                            })}
-                        </SelectBox>
-                      </div>
+                      </div> */}
+                    <div className="w-100 mx-0 ">
+                      <SelectBox defaultValue={"All"} className="w-100">
+                        <Select.Option value="All">All</Select.Option>
+                        {allEnquiryNo &&
+                          allEnquiryNo.length > 0 &&
+                          allEnquiryNo.map((item, index) => {
+                            return (
+                              <Select.Option key={item.quotation_id}>
+                                {item.quotation_no}
+                              </Select.Option>
+                            );
+                          })}
+                      </SelectBox>
                     </div>
+                    {/* </div> */}
                   </div>
                   <div className="col-xl-3">
                     <label className="mb-2">Date From</label>
@@ -153,11 +163,17 @@ function EnquiryReport() {
                       <Select.Option>mixing</Select.Option>
                     </SelectBox>
                   </div>
-                  <div className="col-xl-12 d-flex justify-content-center align-items-center pt-4">
+                  <div className="col-xl-12 d-flex justify-content-center align-items-center gap-4 pt-4">
                     {/* <label>Status</label> */}
+                    <div>
+
                     <Button className="p-2" btnType="add">
                       Search
                     </Button>
+                    </div>
+                   
+           
+
                   </div>
                 </div>
               </div>

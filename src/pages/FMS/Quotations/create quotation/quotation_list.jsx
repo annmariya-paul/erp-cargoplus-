@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Button from "../../../../components/button/button";
-
+import { Checkbox } from "antd";
 import InputType from "../../../../components/Input Type textbox/InputType";
 import ErrorMsg from "../../../../components/error/ErrorMessage";
 import Custom_model from "../../../../components/custom_modal/custom_model";
@@ -43,7 +43,7 @@ export default function Quotations(props) {
 
   const[totalquotation,settotalquotation]= useState("")
 
-  
+  const [quatationList, setQuatationList] = useState([]);
 
   const pageofIndex = noofItems * (current - 1) - 1 + 1;
   const numofItemsTo = noofItems * current;
@@ -73,7 +73,7 @@ export default function Quotations(props) {
       title: "QUOTATION NO",
       dataIndex: "quotation_no",
       key: "quotation_no",
-      width: "10%",
+      width: "12%",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
         return (
@@ -88,7 +88,7 @@ export default function Quotations(props) {
             .includes(value.toLowerCase())
         );
       },
-      align: "center",
+      align: "left",
     },
     {
       title: "DATE",
@@ -244,6 +244,7 @@ export default function Quotations(props) {
         if (res.data.success) {
           console.log("success of quatation", res.data.data);
           settotalquotation(res.data.data.totalCount)
+          setQuatationList(res.data.data.quotations)
           let temp = [];
           res.data.data.quotations.forEach((item, index) => {
             let date = moment(item.quotation_date).format("DD-MM-YYYY");
@@ -270,6 +271,35 @@ export default function Quotations(props) {
       });
   };
 
+  const columnsKeys = columns.map((column) => column.key);
+
+  const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
+  const filteredColumns = columns.filter((column) =>
+    selectedColumns.includes(column.key)
+  );
+  const data12 = quatationList?.map((item) => [
+    item.action,
+    item.opportunity_type,
+    item.opportunity_from,
+    item.opportunity_lead_id,
+    item.opportunity_source,
+    item.opportunity_party,
+  ]);
+  const OppHeads = [
+    [
+      "opportunity_id",
+      "opportunity_type",
+      "opportunity_source",
+      "opportunity_validity",
+      "opportunity_description",
+      "opportunity_status",
+      "opportunity_amount",
+    ],
+  ];
+  const onChange = (checkedValues) => {
+    setSelectedColumns(checkedValues);
+  };
+
   useEffect(() => {
     getAllQuotation();
   }, []);
@@ -281,7 +311,24 @@ export default function Quotations(props) {
           <div className="col">
             <h5 className="lead_text mt-3">Quotations</h5>
           </div>
-          {/* <Leadlist_Icons /> */}
+          <Leadlist_Icons
+            datas={quatationList}
+            columns={columns}
+            items={data12}
+            xlheading={OppHeads}
+            filename="data.csv"
+            chechboxes={
+              <Checkbox.Group onChange={onChange} value={selectedColumns}>
+                {columnsKeys.map((column) => (
+                  <li>
+                    <Checkbox value={column} key={column}>
+                      {column}
+                    </Checkbox>
+                  </li>
+                ))}
+              </Checkbox.Group>
+            }
+          />
         </div>
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">

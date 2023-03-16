@@ -25,39 +25,15 @@ function DailyExpence() {
   const [invoice_id, setInvoice_id] = useState();
   const [successPopup, setSuccessPopup] = useState(false);
   const [viewData, setViewData] = useState();
+
+  const pageofIndex = numOfItems * (current - 1) - 1 + 1;
+  const [serialNo, setserialNo] = useState(1);
   const columns = [
     {
-      title: "ACTION",
-      dataIndex: "action",
-      key: "ACTION",
-      width: "15%",
-      render: (data, index) => {
-        console.log("mere index", index);
-        return (
-          <div className="d-flex justify-content-center gap-3">
-            <div className="editcolor">
-              <FaEdit
-                fontSize={15}
-                onClick={() => {
-                  navigate(`${ROUTES.EDIT_EXPENSE}/${index.daily_expense_id}`);
-                }}
-              />
-            </div>
-            <div className="editcolor">
-              <MdPageview
-                fontSize={18}
-                // onClick={()=>viewprogressoppurtunity(index)}
-                onClick={() => {
-                  handleView(index);
-                }}
-              />
-            </div>
-            {/* <div className="editcolor">
-              < />
-            </div> */}
-          </div>
-        );
-      },
+      title: "Sl. No.",
+      key: "index",
+      width: "7%",
+      render: (value, item, index) => serialNo + index,
       align: "center",
     },
     {
@@ -66,6 +42,16 @@ function DailyExpence() {
       key: "daily_expense_voucher_no",
       width: "12%",
       // align: "center",
+    },
+    {
+      title: "DATE",
+      dataIndex: "daily_expense_date",
+      key: "daily_expense_voucher_no",
+      width: "12%",
+      // align: "center",
+       render: (record) => {
+        return <div>{moment(record?.daily_expense_date).format("DD-MM-YYYY")}</div>
+      },
     },
     {
       title: "NAME",
@@ -107,6 +93,40 @@ function DailyExpence() {
       key: "daily_expense_party",
       width: "15%",
       // align: "center",
+    },
+    {
+      title: "ACTION",
+      dataIndex: "action",
+      key: "ACTION",
+      width: "15%",
+      render: (data, index) => {
+        console.log("mere index", index);
+        return (
+          <div className="d-flex justify-content-center gap-3">
+            <div className="editcolor">
+              <FaEdit
+                fontSize={15}
+                onClick={() => {
+                  navigate(`${ROUTES.EDIT_EXPENSE}/${index.daily_expense_id}`);
+                }}
+              />
+            </div>
+            <div className="editcolor">
+              <MdPageview
+                fontSize={18}
+                // onClick={()=>viewprogressoppurtunity(index)}
+                onClick={() => {
+                  handleView(index);
+                }}
+              />
+            </div>
+            {/* <div className="editcolor">
+              < />
+            </div> */}
+          </div>
+        );
+      },
+      align: "center",
     },
     // {
     //   title: "STATUS",
@@ -173,18 +193,28 @@ function DailyExpence() {
     // },
   ];
 
+  // const pageofIndex = numOfItems * (current - 1) - 1 + 1;
+  const pagesizecount = Math.ceil(totalCount / numOfItems);
+
   const getDailyExpense = () => {
-    PublicFetch.get(`${ACCOUNTS}/daily-expense?startIndex=0&noOfItems=100`)
+   
+
+    PublicFetch.get(
+      `${ACCOUNTS}/daily-expense?startIndex=${pageofIndex}&noOfItems=${numOfItems}`
+    )
       .then((res) => {
         console.log("Response", res);
         if (res.data.success) {
-          setAllExpenseData(res.data.data);
+          setAllExpenseData(res.data.data.dailyExpenses);
+          setTotalcount(res.data.data.total);
+
         }
       })
       .catch((err) => {
         console.log("Error", err);
       });
-  };
+  }
+
 
   const handleView = (data) => {
     if (data) {
@@ -327,14 +357,14 @@ function DailyExpence() {
                   {/* )} */}
                 </div>
                 <div className="d-flex py-2 justify-content-center">
-                  {/* <MyPagination
+                  <MyPagination
                     total={parseInt(totalCount)}
                     current={current}
                     pageSize={numOfItems}
                     onChange={(current, pageSize) => {
                       setCurrent(current);
                     }}
-                  /> */}
+                  />
                 </div>
               </div>
             </div>
@@ -684,5 +714,6 @@ function DailyExpence() {
     </div>
   );
 }
+
 
 export default DailyExpence;

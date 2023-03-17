@@ -39,6 +39,8 @@ export default function Taskexpenses() {
   const [services, setServices] = useState([]);
   const [isService, setIsService] = useState();
   const [currencyDefault, setCurrencyDefault] = useState();
+  const [defaultCurrencydata, setDefaultCurrencyData] = useState();
+  const [currencyRates, setCurrencyRates] = useState(0);
 
   console.log("Servicesss are :::", services);
 
@@ -393,6 +395,7 @@ export default function Taskexpenses() {
     // addForm.setFieldValue("quotation_details_tax_type", taxratee);
   };
   const [currencydata, setCurrencydata] = useState();
+
   const getallcurrency = async () => {
     try {
       const allcurrency = await PublicFetch.get(
@@ -405,17 +408,18 @@ export default function Taskexpenses() {
         if (item.currency_is_default === 1) {
           arr = item?.currency_code;
           setCurrencyDefault(arr);
+          setDefaultCurrencyData(item.currency_id);
         }
       });
     } catch (err) {
       console.log("Error in getting currency : ", err);
     }
   };
+
   useEffect(() => {
     getallcurrency();
   }, []);
 
-  const [currencyRates, setCurrencyRates] = useState(0);
   console.log("ratesssss", currencyRates);
   let b;
   const getCurrencyRate = (data, key) => {
@@ -474,6 +478,7 @@ export default function Taskexpenses() {
   const handleEnter = (e) => {
     console.log("Hello");
     console.log("Key ::::::: ", e.key);
+
     if (e.key === "Enter" || e.key === "Tab") {
       setTableData([
         ...tableData,
@@ -651,7 +656,6 @@ export default function Taskexpenses() {
         Job_quotation_details.push({
           key: index,
           job_task_expense_task_id: item.job_task_expense_task_id,
-
           job_task_expense_tax_perc: item.job_task_expense_tax_perc,
           job_task_expense_taxtype_id: item.job_task_expense_taxtype_id,
           job_task_expense_cost_amountfx: item.job_task_expense_cost_amountfx,
@@ -677,6 +681,8 @@ export default function Taskexpenses() {
       setSampletable([...dataSource]);
     }
   }, [tax]);
+
+  console.log("is deafult is ", defaultCurrencydata);
 
   console.log("table inside data", tableData);
   useEffect(() => {
@@ -787,7 +793,7 @@ export default function Taskexpenses() {
                 index.key,
                 "job_task_expense_task_id",
               ]}
-              rules={[{ required: true, message: "Please select" }]}
+              // rules={[{ required: true, message: "Please select" }]}
             >
               <Select
                 style={{ minWidth: "140px" }}
@@ -901,7 +907,7 @@ export default function Taskexpenses() {
                 index.key,
                 "job_task_expense_tax_perc",
               ]}
-              rules={[{ required: true, message: "Required" }]}
+              // rules={[{ required: true, message: "Required" }]}
             >
               <InputNumber
                 style={{ minWidth: "20px" }}
@@ -941,7 +947,7 @@ export default function Taskexpenses() {
                 index.key,
                 "job_task_expense_agent_id",
               ]}
-              rules={[{ required: true, message: "Required" }]}
+              // rules={[{ required: true, message: "Required" }]}
             >
               <Select
                 className="w-100"
@@ -1139,7 +1145,7 @@ export default function Taskexpenses() {
                     index.key,
                     "job_task_expense_exp_curr",
                   ]}
-                  rules={[{ required: true, message: "Required" }]}
+                  // rules={[{ required: true, message: "Required" }]}
                 >
                   <Select
                     style={{ minWidth: "70px" }}
@@ -1195,7 +1201,7 @@ export default function Taskexpenses() {
                     index.key,
                     "job_task_expense_exp_exch",
                   ]}
-                  rules={[{ required: true, message: "Required" }]}
+                  // rules={[{ required: true, message: "Required" }]}
                 >
                   <InputNumber
                     // style={{ minWidth: "70px" }}
@@ -1239,7 +1245,7 @@ export default function Taskexpenses() {
                     index.key,
                     "job_task_expense_exp_amountfx",
                   ]}
-                  rules={[{ required: true, message: "Required" }]}
+                  // rules={[{ required: true, message: "Required" }]}
                 >
                   <InputNumber
                     bordered={false}
@@ -1283,7 +1289,7 @@ export default function Taskexpenses() {
                     index.key,
                     "job_task_expense_exp_amountlx",
                   ]}
-                  rules={[{ required: true, message: "Required" }]}
+                  // rules={[{ required: true, message: "Required" }]}
                 >
                   <InputNumber
                     bordered={false}
@@ -1336,7 +1342,10 @@ export default function Taskexpenses() {
                 }
               }}
               checked={index.job_task_expense_invoiceable == 1 ? true : false}
-              onKeyDown={(e) => handleEnter(e, index.key)}
+              onKeyDown={(e) => {
+                handleEnter(e, index.key);
+                handlecurrency(e, index.key);
+              }}
             />
           </div>
         );
@@ -1350,6 +1359,19 @@ export default function Taskexpenses() {
       console.log("suceccss checked", e.target.checked);
       setIschecked(1);
     }
+  };
+
+  const handlecurrency = (e, key) => {
+    console.log("james bond", key);
+    let existingvalues = addForm.getFieldsValue();
+    let { Job_quotation_details } = existingvalues;
+    let assignValues = Job_quotation_details[key];
+    assignValues["job_task_expense_exp_curr"] = defaultCurrencydata;
+    assignValues["job_task_expense_exp_exch"] = currencyRates;
+    addForm.setFieldsValue({ Job_quotation_details });
+    console.log("form data s......", Job_quotation_details);
+
+    addForm.setFieldValue("job_task_expense_exp_exch", currencyRates);
   };
 
   console.log("abcdefg", isChecked);
@@ -1435,6 +1457,23 @@ export default function Taskexpenses() {
   };
 
   useEffect(() => {
+    let key = 0;
+    tableData.map((item, index) => {
+      key = item.key;
+    });
+    //  console.log("key ovf table", key);
+    if (defaultCurrencydata !== null) {
+      let existingvalues = addForm.getFieldsValue();
+      let { Job_quotation_details } = existingvalues;
+      let assignValues = Job_quotation_details[key];
+      assignValues["job_task_expense_exp_curr"] = defaultCurrencydata;
+
+      addForm.setFieldsValue({ Job_quotation_details });
+      getCurrencyRate(defaultCurrencydata, key);
+    }
+  }, [defaultCurrencydata]);
+
+  useEffect(() => {
     getagents();
   }, []);
   const [oppnew, setOppnew] = useState([]);
@@ -1474,22 +1513,33 @@ export default function Taskexpenses() {
   console.log("total cost ::", totalcost);
 
   const submitData = (data) => {
+    let temp = false;
+    tableData.map((item, index) => {
+      if (
+        item.job_task_expense_cost_amountfx &&
+        item.job_task_expense_exp_amountfx !== null
+      ) {
+        temp = true;
+      }
+    });
     console.log("Submitting data", tableData);
-    PublicFetch.post(`${CRM_BASE_URL_FMS}/job-task-expenses/${id}`, {
-      job_task_expense: tableData,
-    })
-      .then((res) => {
-        console.log("Response", res);
-        if (res.data.success) {
-          console.log("success of submitting data", res.data.data);
-          setSuccessPopup(true);
-          close_modal(successPopup, 1200);
-          getSingleJob();
-        }
+    if ((temp = true)) {
+      PublicFetch.post(`${CRM_BASE_URL_FMS}/job-task-expenses/${id}`, {
+        job_task_expense: tableData,
       })
-      .catch((err) => {
-        console.log("Error", err);
-      });
+        .then((res) => {
+          console.log("Response", res);
+          if (res.data.success) {
+            console.log("success of submitting data", res.data.data);
+            setSuccessPopup(true);
+            close_modal(successPopup, 1200);
+            getSingleJob();
+          }
+        })
+        .catch((err) => {
+          console.log("Error", err);
+        });
+    }
   };
 
   return (

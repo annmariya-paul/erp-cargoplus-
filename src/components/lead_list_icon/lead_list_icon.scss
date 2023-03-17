@@ -3,6 +3,7 @@
 $grey: #777777;
 .leadlist_icons_panel {
   list-style: none;
+  margin: 0;
 }
 .icon-border {
   display: inline-block;
@@ -22,8 +23,12 @@ $grey: #777777;
   text-decoration: none;
   padding-bottom: 5px;
   // height: 34px;
-  width: 37px;
-  font-size: 20px;
+  // width: 37px;
+  // font-size: 20px;
+
+  width: 25px;
+  font-size: 12px;
+  padding-top: 4px;
   &:hover {
     color: variables.$primary !important;
   }

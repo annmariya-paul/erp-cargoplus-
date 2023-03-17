@@ -599,14 +599,14 @@ function CreateJob() {
                     </div>
 
                     <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                      <label>Consignee</label>
+                      <label>Customer</label>
                       <Form.Item
-                        name="job_consignee"
+                        name="job_customer"
                         rules={[
                           {
                             required: true,
                             pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                            message: "Please enter a Valid  consignee",
+                            message: "Please enter a Valid  customer",
                           },
                         ]}
                       >
@@ -618,7 +618,7 @@ function CreateJob() {
                           allowClear
                           showSearch
                           optionFilterProp="children"
-                          disabled={disable}
+                         
                         >
                           {allLeadList &&
                             allLeadList.length > 0 &&
@@ -633,6 +633,22 @@ function CreateJob() {
                               );
                             })}
                         </SelectBox>
+                      </Form.Item>
+                    </div>
+                  
+                    <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                      <label>Consignee</label>
+                      <Form.Item
+                        name="job_consignee"
+                        rules={[
+                          {
+                            required: true,
+                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                            message: "Please enter a Valid consignee",
+                          },
+                        ]}
+                      >
+                        <InputType  />
                       </Form.Item>
                     </div>
                     <div className="col-xl-4 col-sm-12 mt-2 px-3">
@@ -659,7 +675,7 @@ function CreateJob() {
                     <div className="row mt-3">
                       <h5 className="lead_text">Transportation</h5>
                     </div>
-                    <div className="col-xl-6 col-sm-12 mt-2">
+                    <div className="col-xl-6 col-sm-12 mt-2" hidden>
                       <label>Mode</label>
                       <Form.Item
                         name="job_mode"
@@ -754,7 +770,7 @@ function CreateJob() {
                       </Form.Item>
                     </div>
 
-                    <div className="col-xl-6 col-sm-12 mt-2  ">
+                    <div className="col-xl-6 col-sm-12 mt-4  mb-5 pb-4">
                       <label>Carrier</label>
                       <Form.Item
                         name="job_carrier"
@@ -787,7 +803,7 @@ function CreateJob() {
                         </SelectBox>
                       </Form.Item>
                     </div>
-                    <div className="col-xl-6 col-sm-12 mt-2 mb-2">
+                    <div className="col-xl-6 col-sm-12 mt-4 mb-2">
                       <label>AWB/BL No</label>
                       <Form.Item
                         name="job_awb"
@@ -805,7 +821,7 @@ function CreateJob() {
                   </div>
                 </div>
 
-                <div className="col-md-6 col-12 mt-3">
+                <div className="col-md-6 col-12 mt-3 pb-1">
                   <div className="content-tabs-new row justify-content mx-1 mb-3 me-3">
                     <div className="row mt-3">
                       <h5 className="lead_text">Shipment Details</h5>

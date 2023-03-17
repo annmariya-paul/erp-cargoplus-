@@ -4,6 +4,7 @@ import InputType from "../../../../components/Input Type textbox/InputType";
 import ErrorMsg from "../../../../components/error/ErrorMessage";
 import Custom_model from "../../../../components/custom_modal/custom_model";
 import {Link} from "react-router-dom";
+import SelectBox from "../../../../components/Select Box/SelectBox";
 import { MdPageview } from "react-icons/md";
 import { Form,Input,Select,DatePicker} from "antd";
 import TableData from "../../../../components/table/table_data";
@@ -39,6 +40,10 @@ export default function Frightlist(props) {
   const [Errormsg, setErrormsg] = useState();
   const [NameInput, setNameInput] = useState();
   const [PrefixInput, setprefixInput] = useState();
+  const [ModeInput, setmodeInput] = useState();
+  console.log("mode",ModeInput);
+  
+
 
    const [showViewModal, setShowViewModal] = useState(false);
   const [FrightEditPopup, setFrightEditPopup] = useState(false);
@@ -83,13 +88,15 @@ export default function Frightlist(props) {
   const [frights,setFrights]=useState();
   const [frighttypename,setFrighttypename]=useState();
   const [frighttypeprefix,setFrighttypeprefix]=useState();
-
+  const [frighttypemode,setFrighttypemode]=useState();
+  console.log("fright type mode ",frighttypemode)
   const createFrights =async()=>{
     try{
     const addfrights = await PublicFetch.post(
     `${CRM_BASE_URL_FMS}/freightTypes`,{
       freight_type_name:frighttypename,
-      freight_type_prefix:frighttypeprefix
+      freight_type_prefix:frighttypeprefix,
+      freight_type_mode:frighttypemode
      })
     console.log("fright added successfully",addfrights)
     if(addfrights.data.success){
@@ -148,6 +155,7 @@ export default function Frightlist(props) {
   id:item.freight_type_id,
   frightviewname:item.freight_type_name,
   frightprefixviewname:item.freight_type_prefix,
+  frighttypemodeview:item.freight_type_mode,
   })
 
 
@@ -195,12 +203,12 @@ export default function Frightlist(props) {
       // },
       align: "left",
     },
-    // {
-    //   title: "Date",
-    //   dataIndex: "freight_type_created_at",
-    //   key: "freight_type_created_at",
-    //   align: "center",
-    // },
+    {
+      title: "MODE",
+      dataIndex: "freight_type_mode",
+      key: "freight_type_mode",
+      align: "left",
+    },
     {
       title: "ACTION",
       dataIndex: "action",
@@ -275,7 +283,8 @@ export default function Frightlist(props) {
   
     let data = { 
       freight_type_name : NameInput.trim(""),
-      freight_type_prefix:PrefixInput
+      freight_type_prefix:PrefixInput,
+      freight_type_mode:ModeInput
      
     }
 
@@ -323,19 +332,44 @@ export default function Frightlist(props) {
     setNewName(e.freight_type_name);
     setprefixInput(e.freight_type_prefix);
     setEditUniqueName(e.freight_type_prefix);
+    setmodeInput(e.freight_type_mode);
     // setImageInput(e.brand_pic);
     setFright_id(e.freight_type_id);
     editForm.setFieldsValue({
       fright_id: e.freight_type_id,
       NameInput: e.freight_type_name,
-      PrefixInput:e.freight_type_prefix
+      PrefixInput:e.freight_type_prefix,
+      ModeInput:e.freight_type_mode
   
     });
     setFrightEditPopup(true);
   };
-
-  
-
+  const [locationType, setLocationType] = useState();
+  const [allLocations, setAllLocations] = useState();
+  const locationBytype = (data) => {
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/locations/type-location/${data}`)
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          console.log("success of location type", res.data, data);
+          setLocationType(res.data.data.location_type);
+          let temp = [];
+          res.data.data.forEach((item, index) => {
+            temp.push({
+              location_id: item.location_id,
+              location_code: item.location_code,
+              location_name: item.location_name,
+              location_type: item.location_type,
+              location_country: item.location_country,
+            });
+            setAllLocations(temp);
+          });
+        }
+      })
+      .catch((err) => {
+        console.log("Error of location type", err);
+      });
+  };
 
 
 
@@ -595,6 +629,35 @@ export default function Frightlist(props) {
                           ) : null} 
                 </div>
                 </div>
+                <div className="col-12 pt-1">
+                      <label>Mode</label>
+                      <Form.Item
+                        name="freight_type_mode"
+                        rules={[
+                          {
+                            required: true,
+                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                            message: "Please enter a Valid mode",
+                          },
+                        ]}
+                       
+                      >
+                        <SelectBox
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
+                         
+                          onChange={(e) => {
+                            setFrighttypemode(e)
+                             
+                          }}
+                        >
+                          <Select.Option value="Air">Air</Select.Option>
+                          <Select.Option value="Sea">Sea</Select.Option>
+                          <Select.Option value="Road">Road</Select.Option>
+                        </SelectBox>
+                      </Form.Item>
+                    </div>
 
                 {/* <div className="col-12 pt-1">
                   <label>Date</label>
@@ -682,6 +745,15 @@ export default function Frightlist(props) {
                 <div className="col-1">:</div>
                 <div className="col-6 justify-content-start">
                   <p className="modal-view-data">{viewfrights.frightprefixviewname}</p>
+                </div>
+              </div>
+              <div className="row mt-4">
+                <div className="col-4">
+                  <p>Mode</p>
+                </div>
+                <div className="col-1">:</div>
+                <div className="col-6 justify-content-start">
+                  <p className="modal-view-data">{viewfrights.frighttypemodeview}</p>
                 </div>
               </div>
              
@@ -792,6 +864,52 @@ export default function Frightlist(props) {
                     </p>
                   ) : null}
                   </div>
+                  <div className="col-12 ">
+                  <label>Mode</label>
+             
+                  <Form.Item
+                    name="ModeInput"
+                 
+                   
+                  
+                  >
+                    <SelectBox
+                    value={ModeInput}
+                    onChange={(e) => {
+                      setmodeInput(e);
+                
+                    }}
+                    // onBlur={(e) => {
+                    //   checkemployeeCodeis();
+                    // }}
+                    // onBlur={ async () => {
+                      
+                    //   let a = await CheckUnique({type:"freighttypeprefix",value:frighttypeprefix})
+                    //   console.log("hai how are u", a)
+                    //   setuniqueCode(a);
+                      
+                    // }}
+                    // onChange={(e) => {
+                      // setFrighttypename(e.target.value)
+
+                      // setFrightError("");
+                    // }}
+                    
+                    >
+                    <Select.Option key={1} value="Air">
+                      Air
+                    </Select.Option>
+                    <Select.Option key={2} value="Sea">
+                      Sea
+                    </Select.Option>
+                    <Select.Option key={3} value="Road">
+                      Road
+                    </Select.Option>
+                  </SelectBox>
+                  </Form.Item>
+                
+           
+                </div>
 
 
                   {/* <div className="col-6">

@@ -353,55 +353,57 @@ function Vendor() {
       title: "VENDOR ",
       dataIndex: "vendor_name",
       key: "vendor_name",
+      width:"18%",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
         return String(record.vendor_name)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
-      align: "center",
+      align: "left",
     },
     {
       title: "EMAIL",
       dataIndex: "vendor_email",
       key: "freight_type_prefix",
-
+      width:"18%",
       onFilter: (value, record) => {
         return String(record.freight_type_prefix)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
-      align: "center",
+      align: "left",
     },
     {
       title: "ORGANISATION TYPE",
       dataIndex: "vendor_org_type",
       key: "freight_type_prefix",
-
+      width:"18%",
       onFilter: (value, record) => {
         return String(record.freight_type_prefix)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
-      align: "center",
+      align: "left",
     },
     {
       title: "COUNTRY",
+    
       dataIndex: "vendor_country",
       key: "freight_type_prefix",
-
+      width:"12%",
       onFilter: (value, record) => {
         return String(record.freight_type_prefix)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
-      align: "center",
+      align: "left",
     },
     {
       title: "ACTION",
       dataIndex: "action",
       key: "key",
-      width: "30%",
+      width: "20%",
       render: (data, index) => {
         console.log("index is :", index);
         return (
@@ -1048,6 +1050,7 @@ function Vendor() {
                           ]}
                         >
                           <SelectBox
+                          disabled={true}
                             showSearch={true}
                             allowClear
                             value={editvendortyp}

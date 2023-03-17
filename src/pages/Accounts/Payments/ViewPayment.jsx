@@ -8,8 +8,9 @@ import Input_Number from "../../../components/InputNumber/InputNumber";
 import SelectBox from "../../../components/Select Box/SelectBox";
 import TableData from "../../../components/table/table_data";
 import PublicFetch from "../../../utils/PublicFetch";
-import { ACCOUNTS } from "../../../api/bootapi";
+import { ACCOUNTS, CRM_BASE_URL, CRM_BASE_URL_FMS } from "../../../api/bootapi";
 import { useParams } from "react-router-dom";
+import moment from "moment";
 
 const ViewPayment = () => {
   const [autoPay, setAutoPay] = useState(false);
@@ -29,7 +30,7 @@ const ViewPayment = () => {
   const [amount, setAmount] = useState();
   const [mode, setMode] = useState();
   const [details, setDetails] = useState();
-
+  const [invoiceData, setInvoiceData] = useState([]);
   const columns = [
     {
       title: "Sl. No.",
@@ -66,73 +67,41 @@ const ViewPayment = () => {
       width: "15%",
       align: "center",
     },
-    {
-      title: "Current Amount",
-      dataIndex: "current_amount",
-      key: "current_amount",
-      width: "20%",
-      align: "center",
-      render: (data, index) => {
-        console.log("index is :", index);
-        return (
-          <div
-            className="d-flex justify-content-center align-items-center tborder "
-            key={index.index}
-          >
-            <Form.Item
-            //name={["quotation_details", index.key, "quotation_details_cost"]}
-            // name={`current_amount${index.key}`}
-            >
-              <InputNumber
-                onChange={(e) => {
-                  console.log(e);
-                }}
-                width={100}
-              />
-            </Form.Item>
-          </div>
-        );
-      },
-    },
-    {
-      title: "Balance Amount",
-      dataIndex: "balance_amount",
-      key: "balance_amount",
-      width: "12%",
-      align: "center",
-    },
-  ];
-
-  const data = [
-    {
-      index: "1",
-      invoice_no: "INV/0001",
-      due_date: "5/3/2023",
-      amount: "1000.00",
-      due_amount: "600.00",
-
-      // current_amount: "600.00",
-      balance_amount: "0.00",
-    },
-    {
-      index: "2",
-      invoice_no: "INV/0002",
-      due_date: "6/3/2023",
-      amount: "5000.00",
-      due_amount: "4000.00",
-      align: "center",
-      //  current_amount: "10 00.00",
-      balance_amount: "3000.00",
-    },
-    {
-      index: "3",
-      invoice_no: "INV/0003",
-      due_date: "10/3/2023",
-      amount: "8000.00",
-      due_amount: "8000.00",
-      //  current_amount: " ",
-      balance_amount: "8000.00",
-    },
+    // {
+    //   title: "Current Amount",
+    //   dataIndex: "current_amount",
+    //   key: "current_amount",
+    //   width: "20%",
+    //   align: "center",
+    //   render: (data, index) => {
+    //     console.log("index is :", index);
+    //     return (
+    //       <div
+    //         className="d-flex justify-content-center align-items-center tborder "
+    //         key={index.index}
+    //       >
+    //         <Form.Item
+    //         //name={["quotation_details", index.key, "quotation_details_cost"]}
+    //         // name={`current_amount${index.key}`}
+    //         >
+    //           <InputNumber
+    //             onChange={(e) => {
+    //               console.log(e);
+    //             }}
+    //             width={100}
+    //           />
+    //         </Form.Item>
+    //       </div>
+    //     );
+    //   },
+    // },
+    // {
+    //   title: "Balance Amount",
+    //   dataIndex: "balance_amount",
+    //   key: "balance_amount",
+    //   width: "12%",
+    //   align: "center",
+    // },
   ];
 
   const getPaymentDetails = async () => {
@@ -147,11 +116,56 @@ const ViewPayment = () => {
         setMode(res.data.data.accounts_v1_payment_modes.pay_mode_name);
         setLead(res.data.data.crm_v1_leads.lead_customer_name);
         setDetails(res.data.data.payment_details);
+        getInvoice(res.data.data.crm_v1_leads.lead_id);
       }
     } catch (error) {
       console.log("error occured");
     }
   };
+
+  const getInvoice = async (LeadId) => {
+    console.log("LeadId", LeadId);
+    //setLead(LeadId);
+    try {
+      const res = await PublicFetch.get(`${CRM_BASE_URL}/lead/${LeadId}`);
+      console.log("here is the invoice response", res.data);
+      if (res.status === 200) {
+        let tempData = [];
+        res.data.data.fms_v1_jobs.forEach((item, index) => {
+          console.log("***********************");
+          console.log(item.accounts_v1_invoice_accounts[0]);
+          let obj = {
+            index: index + 1,
+            invoice_no:
+              item.accounts_v1_invoice_accounts[0].invoice_accounts_no,
+            due_date: moment(
+              new Date(
+                item.accounts_v1_invoice_accounts[0].invoice_accounts_due_date
+              )
+            ).format("DD/MM/YYYY"),
+            amount:
+              item.accounts_v1_invoice_accounts[0].invoice_accounts_grand_total,
+            due_amount:
+              item.accounts_v1_invoice_accounts[0].invoice_accounts_due_amount,
+            current_amount: "",
+            balance_amount: "",
+            invoice_accounts_id:
+              item.accounts_v1_invoice_accounts[0].invoice_accounts_invoice_id,
+          };
+          if (amount) {
+            console.log("amount is present", amount);
+          }
+          tempData.push(obj);
+        });
+        setInvoiceData(tempData);
+      }
+    } catch (error) {
+      console.log("error while fetching invoices");
+      console.log(error);
+    }
+    //const res = await PublicFetch.get(`${CRM_BASE_URL_FMS}`);
+  };
+
   useEffect(() => {
     getPaymentDetails();
   }, []);
@@ -183,7 +197,10 @@ const ViewPayment = () => {
                       </Form.Item> */}
                   </div>
                   <div className="col-xl-4 my-2">
-                    <label className="mb-2">Voucher Date : {voucherDate}</label>
+                    <label className="mb-2">
+                      Voucher Date :{" "}
+                      {moment(new Date(voucherDate)).format("DD/MM/YYYY")}
+                    </label>
                     {/* <Form.Item>
                       <DatePicker />
                     </Form.Item> */}
@@ -254,7 +271,7 @@ const ViewPayment = () => {
                     <label>
                       <strong>Invoice details</strong>{" "}
                     </label>
-                    <TableData data={data} columns={columns} />
+                    <TableData data={invoiceData} columns={columns} />
                   </div>
                   <div className="col-xl-4"></div>
 

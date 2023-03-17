@@ -26,9 +26,10 @@ export default function JobPayments() {
         console.log("Response", res);
         if (res.data.success) {
           console.log("success of job", res.data.data);
-          setJobpaymentList(res.data.data)
+          setJobpaymentList(res.data.data.jobPayments)
           let temp = [];
-          res.data.data.forEach((item, index) => {
+          res.data.data.jobPayments.forEach((item, index) => {
+           
             temp.push({
               job_pay_id:item.job_pay_id,
               job_pay_voucher_no: item.job_pay_voucher_no,
@@ -37,6 +38,7 @@ export default function JobPayments() {
               job_pay_lead: item.crm_v1_leads.lead_customer_name,
               advance_amount: item.job_pay_advance_amount_fx.toFixed(2),
             });
+            console.log("foerr",temp)
           });
           setAllJobPay(temp);
         }

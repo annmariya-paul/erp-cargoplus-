@@ -3,6 +3,11 @@
 .sidebarWrapper {
   width: 220px;
   transition: 850ms;
+  
+}
+.sidebarclose{
+  left: -100%;
+   transition: 850ms;
 }
 
 .contentWrapper {

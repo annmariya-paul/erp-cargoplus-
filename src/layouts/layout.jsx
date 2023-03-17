@@ -40,7 +40,7 @@ export default function Layout({ children }) {
           </div> */}
             <div
               className={` ${
-                showMenu ? "sidebarWrapper col-2" : "d-none width-100 "
+                showMenu ? "sidebarWrapper col-2" : "d-none sidebarclose"
               }  `}
             >
               <Sidebar showSidebar={() => setShowMenu(false)} />
@@ -56,19 +56,10 @@ export default function Layout({ children }) {
         )}
         {!matches && (
           <div className="row">
-            
-            <div
-              className={`${showMenu ? "" : "d-none"}`}
-            >
+            <div className={`${showMenu ? "" : "d-none"}`}>
               <Sidebar showSidebar={() => setShowMenu(false)} />
             </div>
-            <div
-              className={` ${
-                showMenu
-                  ? "mt-0"
-                  : "mt-3"
-              }`}
-            >
+            <div className={` ${showMenu ? "mt-0" : "mt-3"}`}>
               <Outlet />
             </div>
           </div>

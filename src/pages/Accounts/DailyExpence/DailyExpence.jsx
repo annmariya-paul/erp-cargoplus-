@@ -1,4 +1,4 @@
-import { Input, Select } from "antd";
+import { Input, Select,Checkbox } from "antd";
 import React, { useEffect, useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { MdPageview } from "react-icons/md";
@@ -11,6 +11,7 @@ import TableData from "../../../components/table/table_data";
 import { ROUTES } from "../../../routes";
 import PublicFetch from "../../../utils/PublicFetch";
 import moment from "moment";
+import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
 
 function DailyExpence() {
   const navigate = useNavigate();
@@ -28,6 +29,9 @@ function DailyExpence() {
 
   const pageofIndex = numOfItems * (current - 1) - 1 + 1;
   const [serialNo, setserialNo] = useState(1);
+
+  const [dailyexpenseList, setDailyexpenseList] = useState([]);
+
   const columns = [
     {
       title: "Sl. No.",
@@ -198,7 +202,6 @@ function DailyExpence() {
 
   const getDailyExpense = () => {
    
-
     PublicFetch.get(
       `${ACCOUNTS}/daily-expense?startIndex=${pageofIndex}&noOfItems=${numOfItems}`
     )
@@ -207,7 +210,7 @@ function DailyExpence() {
         if (res.data.success) {
           setAllExpenseData(res.data.data.dailyExpenses);
           setTotalcount(res.data.data.total);
-
+setDailyexpenseList(res.data.data.dailyExpenses)
         }
       })
       .catch((err) => {
@@ -225,6 +228,35 @@ function DailyExpence() {
 
   console.log("Data from Table", viewData);
 
+  const columnsKeys = columns.map((column) => column.key);
+
+  const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
+  const filteredColumns = columns.filter((column) =>
+    selectedColumns.includes(column.key)
+  );
+  const data12 = dailyexpenseList?.map((item) => [
+    item.action,
+    item.opportunity_type,
+    item.opportunity_from,
+    item.opportunity_lead_id,
+    item.opportunity_source,
+    item.opportunity_party,
+  ]);
+  const OppHeads = [
+    [
+      "opportunity_id",
+      "opportunity_type",
+      "opportunity_source",
+      "opportunity_validity",
+      "opportunity_description",
+      "opportunity_status",
+      "opportunity_amount",
+    ],
+  ];
+  const onChange = (checkedValues) => {
+    setSelectedColumns(checkedValues);
+  };
+
   useEffect(() => {
     getDailyExpense();
   }, []);
@@ -241,28 +273,28 @@ function DailyExpence() {
                   <div className="col">
                     <h5 className="lead_text">Daily Expense</h5>
                   </div>
-
-                  {/* <Leadlist_Icons
-                  // datas={OpportunityList}
-                  // columns={columns}
-                  // items={data12}
-                  // xlheading={OppHeads}
-                  // filename="data.csv"
-                  // chechboxes={
-                  //   <Checkbox.Group
-                  //     onChange={onChange}
-                  //     value={selectedColumns}
-                  //   >
-                  //     {columnsKeys.map((column) => (
-                  //       <li>
-                  //         <Checkbox value={column} key={column}>
-                  //           {column}
-                  //         </Checkbox>
-                  //       </li>
-                  //     ))}
-                  //   </Checkbox.Group>
-                  // }
-                  /> */}
+                  
+                  <Leadlist_Icons
+                  datas={dailyexpenseList}
+                  columns={columns}
+                  items={data12}
+                  xlheading={OppHeads}
+                  filename="data.csv"
+                  chechboxes={
+                    <Checkbox.Group
+                      onChange={onChange}
+                      value={selectedColumns}
+                    >
+                      {columnsKeys.map((column) => (
+                        <li>
+                          <Checkbox value={column} key={column}>
+                            {column}
+                          </Checkbox>
+                        </li>
+                      ))}
+                    </Checkbox.Group>
+                  }
+                  />
                 </div>
                 <div className="row p-1" style={{ backgroundColor: "#f4f4f7" }}>
                   <div className="col-3">

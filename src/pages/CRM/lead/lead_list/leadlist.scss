@@ -14,30 +14,30 @@ $grey: #777777;
 .leadlist_icons_panel {
   list-style: none;
 }
-.icon-border {
-  display: inline-block;
-  border-radius: 50%;
-  border: 1px solid rgb(162, 162, 162);
-  margin: 4px;
-  color: $grey;
-  &:hover {
-    border-color: variables.$primary;
-  }
-}
-.icon {
-  color: rgb(136, 135, 135);
-  display: table-cell;
-  vertical-align: middle;
-  text-align: center;
-  text-decoration: none;
-  padding-bottom: 5px;
-  // height: 34px;
-  width: 37px;
-  font-size: 20px;
-  &:hover {
-    color: variables.$primary !important;
-  }
-}
+// .icon-border {
+//   display: inline-block;
+//   border-radius: 50%;
+//   border: 1px solid rgb(162, 162, 162);
+//   margin: 4px;
+//   color: $grey;
+//   &:hover {
+//     border-color: variables.$primary;
+//   }
+// }
+// .icon {
+//   color: rgb(136, 135, 135);
+//   display: table-cell;
+//   vertical-align: middle;
+//   text-align: center;
+//   text-decoration: none;
+//   padding-bottom: 5px;
+//   // height: 34px;
+//   width: 37px;
+//   font-size: 20px;
+//   &:hover {
+//     color: variables.$primary !important;
+//   }
+// }
 .ant-input-group .ant-input {
   border: none;
   height: 2.4rem;

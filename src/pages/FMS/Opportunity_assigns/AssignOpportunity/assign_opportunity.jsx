@@ -164,17 +164,11 @@ function Assign_opportunity() {
 
   return (
     <div>
-      <div className="container-fluid">
+      <div className="container-fluid lead_list my-1 px-4">
         <div>
-          <h5 className="lead_text">Assign Opportunity to Agents</h5>
-        </div>
-        <div
-          style={{ borderRadius: "8px" }}
-          className="card border-0 content-tabs  my-3 px-4"
-        >
-          <div className="container my-3">
-            <div className="my-3">
-              <h6 className="lead_text">Assign Opportunity</h6>
+          <div className="row">
+            <div className="col mt-4">
+              <h5 className="lead_text">Assign Opportunity to Agents</h5>
             </div>
 
             <Form

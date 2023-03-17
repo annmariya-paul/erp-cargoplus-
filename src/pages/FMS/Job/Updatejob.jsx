@@ -394,7 +394,21 @@ function Updatejob() {
                         </SelectBox>
                       </Form.Item>
                     </div>
-
+                    <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                      <label>Job No</label>
+                      <Form.Item
+                        name="jobno"
+                        rules={[
+                          {
+                            required: true,
+                            // pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                            message: "Please enter a Valid jobno",
+                          },
+                        ]}
+                      >
+                        <InputType disabled={disable} />
+                      </Form.Item>
+                    </div>
                     <div className="col-xl-4 col-sm-12 mt-2 px-3">
                       <label>Freight Type</label>
                       <Form.Item
@@ -429,7 +443,7 @@ function Updatejob() {
                       </Form.Item>
                     </div>
                     <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                      <label>Consignee</label>
+                      <label>Customer</label>
                       <Form.Item
                         name="consignee"
                         rules={[
@@ -480,22 +494,22 @@ function Updatejob() {
                         <InputType disabled={disable} />
                       </Form.Item>
                     </div>
-
                     <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                      <label>Job No</label>
+                      <label>Consignee</label>
                       <Form.Item
-                        name="jobno"
+                        // name="shipper"
                         rules={[
                           {
                             required: true,
-                            // pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                            message: "Please enter a Valid jobno",
+                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                            message: "Please enter a Valid shipper",
                           },
                         ]}
                       >
                         <InputType disabled={disable} />
                       </Form.Item>
                     </div>
+                  
                   </div>
                 </div>
               </div>
@@ -506,7 +520,7 @@ function Updatejob() {
                       <h5 className="lead_text">Transportation</h5>
                     </div>
 
-                    <div className="col-xl-6 col-sm-12 mt-2">
+                    <div className="col-xl-6 col-sm-12 mt-2" hidden>
                       <label>Mode</label>
                       <Form.Item
                         name="Mode"
@@ -605,7 +619,7 @@ function Updatejob() {
                         </SelectBox>
                       </Form.Item>
                     </div>
-                    <div className="col-xl-6 col-sm-12 mt-2">
+                    <div className="col-xl-6 col-sm-12 mt-2 mb-5 pb-5">
                       <label>Carrier</label>
                       <Form.Item
                         name="carrier"

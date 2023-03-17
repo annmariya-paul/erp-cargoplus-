@@ -13,21 +13,24 @@ import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import { ROUTES } from "../../../routes";
+import Custom_model from "../../../components/custom_modal/custom_model";
 
 const EditPayments = () => {
   const navigate = useNavigate();
   const [editForm] = Form.useForm();
   const [successPopup, setSuccessPopup] = useState(false);
-  const [autoPay, setAutoPay] = useState(false);
+  const [autoPay, setAutoPay] = useState(0);
   const [voucherNo, setVoucherNo] = useState();
   const [voucherDate, setVoucherDate] = useState();
   const [lead, setLead] = useState();
-  const [amount, setAmount] = useState();
+  const [amount, setAmount] = useState("");
   const [mode, setMode] = useState();
-  const [details, setDetails] = useState();
+  const [details, setDetails] = useState("");
   const [paymentModes, setPaymentModes] = useState([]);
   const { payment_id } = useParams();
   const [invoiceData, setInvoiceData] = useState([]);
+  const [initialInvoiceData, setInitialInvoiceData] = useState([]);
+  const [leadId, setLeadId] = useState();
   const columns = [
     {
       title: "Sl. No.",
@@ -80,9 +83,12 @@ const EditPayments = () => {
               key={index.index}
             >
               <Form.Item
-              //name={["quotation_details", index.key, "quotation_details_cost"]}
-              // name={`current_amount${index.key}`}
-              // name="invoiceData"
+                rules={[
+                  {
+                    pattern: /^\d*\.?\d*$/,
+                    message: "Should be  number",
+                  },
+                ]}
               >
                 <InputNumber
                   className="add_payments_input_box"
@@ -136,11 +142,22 @@ const EditPayments = () => {
       console.log("here is the response");
       console.log(res);
       if (res?.status === 200) {
+        console.log("voucher date====>", res.data.data.payment_date);
+        let date = moment(res.data.data.payment_date);
+        editForm.setFieldsValue({
+          voucher_no: res.data.data.payment_voucher_no,
+          voucher_date: date,
+          lead: res.data.data.crm_v1_leads.lead_customer_name,
+          amount: res.data.data.payment_amount,
+          mode: res.data.data.accounts_v1_payment_modes.pay_mode_name,
+          details: res.data.data.payment_details,
+        });
         setVoucherNo(res.data.data.payment_voucher_no);
         setAmount(res.data.data.payment_amount);
         setVoucherDate(res.data.data.payment_date);
-        setMode(res.data.data.accounts_v1_payment_modes.pay_mode_name);
+        setMode(res.data.data.accounts_v1_payment_modes.pay_mode_id);
         setLead(res.data.data.crm_v1_leads.lead_customer_name);
+        setLeadId(res.data.data.payment_lead_id);
         setDetails(res.data.data.payment_details);
         getInvoice(res.data.data.crm_v1_leads.lead_id);
       }
@@ -182,6 +199,7 @@ const EditPayments = () => {
         );
         console.log("here is the temp data", tempData);
         setInvoiceData(tempData);
+        setInitialInvoiceData(tempData);
       }
     } catch (error) {
       console.log("error while fetching invoices");
@@ -206,6 +224,8 @@ const EditPayments = () => {
 
   const saveEditPayment = async (value) => {
     console.log("inside save payment");
+    console.log(value.lead);
+    console.log("mode id ", value.mode);
     try {
       let invoice_accounts = [];
       for (let i = 0; i < invoiceData.length; i++) {
@@ -219,23 +239,27 @@ const EditPayments = () => {
           invoice_accounts.push(obj);
         }
       }
-      const res = await PublicFetch.post(`${ACCOUNTS}/payment`, {
-        payment_voucher_no: value.voucherNo,
-        payment_date: moment(voucherDate).format("DD/MM/YYYY"),
-        payment_pay_mode_id: value.mode,
-        payment_lead_id: value.lead,
+      console.log("Type of voucher number", typeof value.voucherNo);
+      console.log("voucher no.", value.voucher_no);
+      console.log("mode", mode);
+      const res = await PublicFetch.patch(`${ACCOUNTS}/payment/${payment_id}`, {
+        payment_voucher_no: value.voucher_no,
+        // payment_date: new Date(voucherDate),
+        payment_date: new Date(),
+        payment_pay_mode_id: mode,
+        payment_lead_id: leadId,
         payment_amount: parseFloat(value.amount),
         payment_details: value.details,
         payment_autopay: autoPay ? 1 : 0,
         invoice_accounts: invoice_accounts,
       });
       console.log("here is the response after posting", res);
-      if (res.status === 201) {
+      if (res.status === 200) {
         setSuccessPopup(true);
         close_modal(successPopup, 1200);
       }
     } catch (error) {
-      console.log("error occured", error);
+      console.log("error occured while posting", error);
     }
   };
 
@@ -313,36 +337,33 @@ const EditPayments = () => {
                 >
                   <div className="row ">
                     <div className="col-xl-4  my-2">
-                      <label>Voucher No : {voucherNo}</label>
-                      {/* <Form.Item>
-                        <InputType />
-                      </Form.Item> */}
+                      <label>Voucher No </label>
+                      <Form.Item name="voucher_no">
+                        <InputType value={voucherNo} disabled />
+                      </Form.Item>
                     </div>
                     <div className="col-xl-4 my-2">
-                      <label className="mb-2">
-                        Voucher Date :{" "}
-                        {moment(new Date(voucherDate)).format("DD/MM/YYYY")}
-                      </label>
-                      {/* <Form.Item>
-                        <DatePicker />
-                      </Form.Item> */}
+                      <label className="mb-2">Voucher Date :</label>
+                      <Form.Item name="voucher_date">
+                        <DatePicker format={"DD-MM-YYYY"} disabled />
+                      </Form.Item>
                     </div>
                     <div className="col-xl-4 my-2">
-                      <label>Lead : {lead}</label>
-                      {/* <Form.Item>
-                        <SelectBox>
+                      <label>Lead </label>
+                      <Form.Item name="lead">
+                        <SelectBox disabled={true}>
                           <Select.Option>Lead 1</Select.Option>
                           <Select.Option>Lead 2</Select.Option>
                           <Select.Option>Lead 3</Select.Option>
                         </SelectBox>
-                      </Form.Item> */}
+                      </Form.Item>
                     </div>
                     <div className="col-xl-4 my-2">
                       <label>Amount</label>
                       <Form.Item
                         rules={[
                           {
-                            pattern: /^[1-9]\d*$/,
+                            pattern: /^\d*\.?\d*$/,
                             message: "Should be whole number",
                           },
                         ]}
@@ -352,7 +373,7 @@ const EditPayments = () => {
                           value={amount}
                           onChange={(e) => {
                             console.log(e.target.value);
-                            //setAmount(e.target.value);
+                            setAmount(e.target.value);
                           }}
                           onBlur={() => {
                             if (autoPay) {
@@ -366,18 +387,13 @@ const EditPayments = () => {
                       <label>Mode</label>
                       <Form.Item name="mode">
                         <SelectBox
-                          value={mode}
-                          onChange={(e, key) => {
-                            console.log(key);
+                          onChange={(e) => {
                             setMode(e);
                           }}
                         >
                           {paymentModes.map((item, index) => {
                             return (
-                              <Select.Option
-                                value={item.pay_mode_name}
-                                key={item.pay_mode_id}
-                              >
+                              <Select.Option value={item.pay_mode_id}>
                                 {item.pay_mode_name}
                               </Select.Option>
                             );
@@ -392,6 +408,16 @@ const EditPayments = () => {
                           onChange={(e) => {
                             console.log(e.target);
                             setAutoPay(e.target.checked);
+                            if (amount && e.target.checked) {
+                              changeInvoiceTableData();
+                            } else if (amount && !e.target.checked) {
+                              console.log("inside else if");
+                              console.log(
+                                "initialInvoiceData",
+                                initialInvoiceData
+                              );
+                              setInvoiceData(initialInvoiceData);
+                            }
                           }}
                         />
                       </Form.Item>
@@ -427,6 +453,12 @@ const EditPayments = () => {
           </div>
         </div>
       </div>
+      <Custom_model
+        size={"sm"}
+        show={successPopup}
+        onHide={() => setSuccessPopup(false)}
+        success
+      />
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./AddPayments.scss";
-import { Checkbox, DatePicker, Form, InputNumber, Select } from "antd";
+import { Checkbox, DatePicker, Form, InputNumber, Select, message } from "antd";
 import TextArea from "../../../components/ InputType TextArea/TextArea";
 import Button from "../../../components/button/button";
 import InputType from "../../../components/Input Type textbox/InputType";
@@ -24,7 +24,7 @@ const AddPayments = () => {
   const [lead, setLead] = useState();
   const [paymentModes, setPaymentModes] = useState([]);
   const [voucherNo, setVoucherNo] = useState();
-  const [voucherDate, setVoucherDate] = useState();
+  const [voucherDate, setVoucherDate] = useState(new Date());
   const [mode, setMode] = useState();
   const [details, setDetails] = useState();
   const [initialInvoiceData, setInitialInvoiceData] = useState([]);
@@ -82,18 +82,19 @@ const AddPayments = () => {
               className="d-flex justify-content-center align-items-center tborder "
               key={index.index}
             >
-              <Form.Item
-              //name={["quotation_details", index.key, "quotation_details_cost"]}
-              // name={`current_amount${index.key}`}
-              // name="invoiceData"
-              >
+              <Form.Item>
                 <InputNumber
                   className="add_payments_input_box"
                   onChange={(e) => {
                     console.log("index", index);
                     console.log("inside input number table");
                     console.log(e);
+                    if (parseFloat(e) > amount) {
+                      console.log("greater ..............");
+                      message.error("some error");
+                    }
                     let due_amount = parseFloat(index.due_amount);
+
                     let balance_amount = due_amount - parseFloat(e);
                     index.balance_amount = balance_amount;
                     index.current_amount = e;
@@ -124,6 +125,7 @@ const AddPayments = () => {
     },
   ];
 
+  //function to close modal on submitting payment data
   const close_modal = (mShow, time) => {
     if (!mShow) {
       setTimeout(() => {
@@ -133,6 +135,7 @@ const AddPayments = () => {
     }
   };
 
+  //function to get all the leads
   const getAllLeads = async () => {
     try {
       const res = await PublicFetch.get(
@@ -149,35 +152,42 @@ const AddPayments = () => {
     }
   };
 
+  //function to get invoices of a particular lead
   const getInvoice = async (LeadId) => {
     console.log("LeadId", LeadId);
     //setLead(LeadId);
     try {
-      const res = await PublicFetch.get(
-        `${CRM_BASE_URL_FMS}/invoice/${LeadId}`
-      );
+      const res = await PublicFetch.get(`${CRM_BASE_URL}/lead/${LeadId}`);
+      console.log("here is the response after selecting lead");
+      console.log(res.data);
       if (res.status === 200) {
         let tempData = [];
-        res.data.data.fms_v1_jobs.accounts_v1_invoice_accounts.forEach(
-          (item, index) => {
-            let obj = {
-              index: index + 1,
-              invoice_no: item.invoice_accounts_no,
-              due_date: moment(new Date(item.invoice_accounts_due_date)).format(
-                "DD/MM/YYYY"
-              ),
-              amount: item.invoice_accounts_grand_total,
-              due_amount: item.invoice_accounts_due_amount,
-              current_amount: "",
-              balance_amount: "",
-              invoice_accounts_id: item.invoice_accounts_id,
-            };
-            if (amount) {
-              console.log("amount is present", amount);
-            }
-            tempData.push(obj);
+        res.data.data.fms_v1_jobs.forEach((item, index) => {
+          console.log("***********************");
+          console.log(item.accounts_v1_invoice_accounts[0]);
+          let obj = {
+            index: index + 1,
+            invoice_no:
+              item.accounts_v1_invoice_accounts[0].invoice_accounts_no,
+            due_date: moment(
+              new Date(
+                item.accounts_v1_invoice_accounts[0].invoice_accounts_due_date
+              )
+            ).format("DD/MM/YYYY"),
+            amount:
+              item.accounts_v1_invoice_accounts[0].invoice_accounts_grand_total,
+            due_amount:
+              item.accounts_v1_invoice_accounts[0].invoice_accounts_due_amount,
+            current_amount: "",
+            balance_amount: "",
+            invoice_accounts_id:
+              item.accounts_v1_invoice_accounts[0].invoice_accounts_invoice_id,
+          };
+          if (amount) {
+            console.log("amount is present", amount);
           }
-        );
+          tempData.push(obj);
+        });
         setInvoiceData(tempData);
         setInitialInvoiceData(tempData);
       }
@@ -187,6 +197,8 @@ const AddPayments = () => {
     }
     //const res = await PublicFetch.get(`${CRM_BASE_URL_FMS}`);
   };
+
+  //Api call function to get payment modes
   const getPaymentModes = async () => {
     try {
       const res = await PublicFetch.get(`${ACCOUNTS}/payment-modes`);
@@ -201,8 +213,11 @@ const AddPayments = () => {
     }
   };
 
+  //api to save payment after entering all the payment related data
   const savePayment = async (value) => {
     console.log("inside save payment");
+    console.log("voucher date", voucherDate);
+    console.log(invoiceData);
     try {
       let invoice_accounts = [];
       for (let i = 0; i < invoiceData.length; i++) {
@@ -218,7 +233,8 @@ const AddPayments = () => {
       }
       const res = await PublicFetch.post(`${ACCOUNTS}/payment`, {
         payment_voucher_no: value.voucherNo,
-        payment_date: moment(voucherDate).format("DD/MM/YYYY"),
+        // payment_date: moment(voucherDate).format("DD/MM/YYYY"),
+        payment_date: voucherDate,
         payment_pay_mode_id: value.mode,
         payment_lead_id: value.lead,
         payment_amount: parseFloat(value.amount),
@@ -232,9 +248,10 @@ const AddPayments = () => {
         close_modal(successPopup, 1200);
       }
     } catch (error) {
-      console.log("error occured", error);
+      console.log("error occured while adding payment", error);
     }
   };
+
   const changeInvoiceTableData = () => {
     console.log("inside change invoice table data");
     console.log("invoice data at start");
@@ -275,7 +292,6 @@ const AddPayments = () => {
     ]);
   };
 
-  const addPayment = async () => {};
   useEffect(() => {
     getAllLeads();
   }, []);

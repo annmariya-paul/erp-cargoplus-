@@ -120,10 +120,8 @@ export default function View_purchase() {
                     <div className="row mt-3 mb-3">
                       <h5 className="lead_text">Vendor details</h5>
                     </div>
-
                     <div className="col-6 d-flex">
                       <div className="col-4">
-                        {" "}
                         <p> Vendor</p>
                       </div>
                       <div className="col-1">:</div>

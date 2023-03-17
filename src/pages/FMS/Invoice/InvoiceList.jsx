@@ -219,7 +219,6 @@ function InvoiceList() {
       .then((res) => {
         setInvoiceData(res?.data?.data);
         console.log("response", res);
-
         if (res.data.success) {
           console.log("success of invoices", res.data.data);
           let temp = [];
@@ -255,7 +254,7 @@ function InvoiceList() {
         console.log("Error", err);
       });
   };
-
+  
   console.log("response to the point", AllinvoiceData);
 
   const cancelInvoice = (data) => {

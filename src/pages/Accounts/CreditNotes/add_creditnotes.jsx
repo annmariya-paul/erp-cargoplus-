@@ -50,14 +50,15 @@ function Addcredit_notes() {
       reader.onload = () => resolve(reader.result);
       reader.onerror = (error) => reject(error);
     });
-  const creditnote = async () => {
+  const creditnote = async (data) => {
     try {
       const addcreditnote = await PublicFetch.post(`${ACCOUNTS}/credit-note`, {
         credit_note_date: date,
-        credit_note_amount: amount,
-        credit_note_type_id: alltypes,
+        credit_note_amount: parseInt(amount),
+        credit_note_type_id:data?.type,
         credit_note_lead_id: customerid,
         credit_note_particulars: particulars,
+        credit_note_account_no :"acc001"
       });
       console.log("credit notes added successfully", addcreditnote);
     } catch (err) {
@@ -98,8 +99,8 @@ function Addcredit_notes() {
       );
       console.log("rese", getinvoice);
       if (getinvoice?.data.success) {
-        setallinvoiceno(getinvoice?.data?.data);
-        setinvoiceno(getinvoice?.data?.data.lead_id);
+        // setallinvoiceno(getinvoice?.data?.data);
+        // setinvoiceno(getinvoice?.data?.data.lead_id);
         console.log("oosss", getinvoice?.data?.data);
       }
     } catch (err) {
@@ -112,7 +113,7 @@ function Addcredit_notes() {
       console.log("response", gettype);
       if (gettype?.data.success) {
         setalltypes(gettype?.data?.data);
-        alltypesname(gettype?.data?.data.lead_id);
+        // alltypesname(gettype?.data?.data.lead_id);
         console.log("dds", gettype?.data?.data);
       }
     } catch (err) {
@@ -124,16 +125,49 @@ function Addcredit_notes() {
     console.log("dtaa",data);
     try{
       const getlead = await PublicFetch.get(`${CRM_BASE_URL}/lead/${data}`);
+      console.log("repose", getlead);
+      if (getlead?.data.success) {
+        let temp = []
+        getlead?.data?.data?.fms_v1_jobs?.forEach((item,index)=> {
+          item?.accounts_v1_invoice_accounts.forEach((invoice,inindex)=> {
+            temp.push(
+              invoice
+            )
+            
+          })
+          
+          console.log("ghdgh", temp);
+        })
+        setallinvoiceno(temp)
+
+        console.log("dds", getlead?.data?.data);
+      }
+
     }catch(err){
       console.log(err);
     }
-
-
-
   }
+
+console.log("invoice nio", allinvoiceno);
+
+  useEffect(()=> {
+    if(invoiceno){
+      allinvoiceno.map((item,index)=> {
+        if(invoiceno == item.invoice_accounts_invoice_id){
+          console.log("due amount", item.invoice_accounts_due_amount);
+          addForm.setFieldsValue({
+            dueamount: item?.invoice_accounts_due_amount,
+            invoiceamount: item.invoice_accounts_grand_total
+          })
+        }
+      })
+    }
+  }, [invoiceno])
+
   useEffect(() => {
     GetAllLeadData();
     getAllInvoices();
+    getonelead();
     gettypes();
   }, []);
   return (
@@ -149,7 +183,7 @@ function Addcredit_notes() {
               form={addForm}
               onFinish={(value) => {
                 console.log("valssss", value);
-                creditnote();
+                creditnote(value);
               }}
               onFinishFailed={(error) => {
                 console.log(error);
@@ -223,7 +257,7 @@ function Addcredit_notes() {
                     <SelectBox
                       showSearch={true}
                       allowClear
-                      value={invoiceno}
+                      // value={invoiceno}
                       optionFilterProp="children"
                       onChange={(e) => {
                         setinvoiceno(e);
@@ -235,11 +269,11 @@ function Addcredit_notes() {
                           console.log("mmm", item);
                           return (
                             <Select.Option
-                              key={item.invoice_id}
-                              id={item.invoice_id}
-                              value={item.invoice_id}
+                              key={item.invoice_accounts_invoice_id}
+                              id={item.invoice_accounts_invoice_id}
+                              value={item.invoice_accounts_invoice_id}
                             >
-                              {item.invoice_no}
+                              {item.invoice_accounts_no}
                             </Select.Option>
                           );
                         })}
@@ -338,7 +372,7 @@ function Addcredit_notes() {
                     <InputType
                       value={amount}
                       onChange={(e) => {
-                        setAmount(e);
+                        setAmount(e.target.value);
                       }}
                       min={0}
                       precision={2}

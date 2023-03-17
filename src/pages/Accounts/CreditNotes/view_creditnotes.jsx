@@ -6,18 +6,13 @@ import Button from "../../../components/button/button";
 import { DatePicker } from "antd";
 import CustomModel from "../../../components/custom_modal/custom_model";
 import ErrorMsg from "../../../components/error/ErrorMessage";
-
 import FileUpload from "../../../components/fileupload/fileUploader";
-
 import { useNavigate, useParams } from "react-router-dom";
 import { Form } from "antd";
 import { TreeSelect } from "antd";
 import TextArea from "../../../components/ InputType TextArea/TextArea";
-
 import InputType from "../../../components/Input Type textbox/InputType";
-
 import SelectBox from "../../../components/Select Box/SelectBox";
-
 import { ROUTES } from "../../../routes";
 
 function CreditnotesView() {
@@ -36,6 +31,16 @@ function CreditnotesView() {
       }, time);
     }
   };
+  const [viewcreditnote, setviewcreditnote] = useState({
+    id:"",
+    date: "",
+    customer: "",
+    invoice_no:"",
+    invoice_amount: "",
+    due_amount: "",
+
+  });
+const handleview = () => {}
 
   const getBase64 = (file) =>
     new Promise((resolve, reject) => {
@@ -47,13 +52,8 @@ function CreditnotesView() {
 
   return (
     <>
-      {/* <div className=" container-fluid view_quotation  p-3 px-4">
-      <div className="row"> */}
       <div className="container-fluid">
         <div className="row justify-content-md-center mb-2">
-          {/* <div className="col-xl-4 col-lg-4 col-md-4 col-sm-12">
-          <h5 className="lead_text">View Job</h5>
-        </div> */}
           <div className="content-tabs ">
             <div className="container-fluid ">
               <div className="row  mt-3 ">
@@ -76,7 +76,8 @@ function CreditnotesView() {
                         btnType="add_borderless"
                         className="edit_button rounded"
                         onClick={() => {
-                          // handleviewtoedit();
+                          handleview();
+                          console.log("view", viewcreditnote);
                           navigate(`${ROUTES.EDIT_CREDIT_NOTES}/${id}`);
                         }}
                       >
@@ -103,7 +104,9 @@ function CreditnotesView() {
                     <div className="col-1">:</div>
 
                     <div className="col-7">
-                      <p className="modal-view-data">12-3-23</p>
+                      <p className="modal-view-data">12-3-23
+                      {viewcreditnote.date}
+                      </p>
                     </div>
                   </div>
 
@@ -112,7 +115,10 @@ function CreditnotesView() {
                     <div className="col-1">:</div>
 
                     <div className="col-7">
-                      <p className="modal-view-data">Arun</p>
+                      <p className="modal-view-data">Arun
+                      {viewcreditnote.customer}
+
+                      </p>
                     </div>
                   </div>
                   <div className="col-xl-12 col-sm-12 d-flex">
@@ -120,7 +126,10 @@ function CreditnotesView() {
                     <div className="col-1">:</div>
 
                     <div className="col-7">
-                      <p className="modal-view-data">001</p>
+                      <p className="modal-view-data">001
+                      {viewcreditnote.customer}
+
+                      </p>
                     </div>
                   </div>
                   <div className="col-xl-12 col-sm-12 d-flex">
@@ -128,16 +137,22 @@ function CreditnotesView() {
                     <div className="col-1">:</div>
 
                     <div className="col-7">
-                      <p className="modal-view-data">10000</p>
+                      <p className="modal-view-data">10000
+                      {viewcreditnote.invoice_amount}
+
+                      </p>
                     </div>
                   </div>
 
                   <div className="col-xl-12 col-sm-12 d-flex">
-                    <div className="col-4 boldhd">Due Date</div>
+                    <div className="col-4 boldhd">Due Amount</div>
                     <div className="col-1">:</div>
 
                     <div className="col-7">
-                      <p className="modal-view-data">22-3-2023</p>
+                      <p className="modal-view-data">22-3-2023
+                      {viewcreditnote.due_amount}
+
+                      </p>
                     </div>
                   </div>
                 </div>

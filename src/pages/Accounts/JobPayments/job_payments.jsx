@@ -1,4 +1,4 @@
-import { Input, Select } from "antd";
+import { Input, Select,Checkbox } from "antd";
 import React, { useState } from "react";
 import moment from "moment";
 import { FaEdit, FaTrash } from "react-icons/fa";
@@ -11,11 +11,14 @@ import Custom_model from "../../../components/custom_modal/custom_model";
 import { ACCOUNTS } from "../../../api/bootapi";
 import { useEffect } from "react";
 import PublicFetch from "../../../utils/PublicFetch";
+import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
 
 export default function JobPayments() {
   const [serialNo, setserialNo] = useState(1);
   const [searchedText,setSearchedText] = useState();
   const [allJobPay,setAllJobPay] = useState();
+
+  const [jobpaymentList, setJobpaymentList] = useState([]);
 
   const getAllJobPayments = () => {
     PublicFetch.get(`${ACCOUNTS}/job-payments?startIndex=0&noOfItems=10`)
@@ -23,6 +26,7 @@ export default function JobPayments() {
         console.log("Response", res);
         if (res.data.success) {
           console.log("success of job", res.data.data);
+          setJobpaymentList(res.data.data)
           let temp = [];
           res.data.data.forEach((item, index) => {
             temp.push({
@@ -144,6 +148,36 @@ export default function JobPayments() {
       advance_amount:"1000",
     },
   ];
+
+
+  const columnsKeys = columns.map((column) => column.key);
+
+  const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
+  const filteredColumns = columns.filter((column) =>
+    selectedColumns.includes(column.key)
+  );
+  const data12 = jobpaymentList?.map((item) => [
+    item.action,
+    item.opportunity_type,
+    item.opportunity_from,
+    item.opportunity_lead_id,
+    item.opportunity_source,
+    item.opportunity_party,
+  ]);
+  const OppHeads = [
+    [
+      "opportunity_id",
+      "opportunity_type",
+      "opportunity_source",
+      "opportunity_validity",
+      "opportunity_description",
+      "opportunity_status",
+      "opportunity_amount",
+    ],
+  ];
+  const onChange = (checkedValues) => {
+    setSelectedColumns(checkedValues);
+  };
   return (
     <>
       <div className="container-fluid container_fms pt-3">
@@ -151,6 +185,25 @@ export default function JobPayments() {
           <div className="col">
             <h5 className="lead_text">Job Payments</h5>
           </div>
+         
+          <Leadlist_Icons
+            datas={jobpaymentList}
+            columns={columns}
+            items={data12}
+            xlheading={OppHeads}
+            filename="data.csv"
+            chechboxes={
+              <Checkbox.Group onChange={onChange} value={selectedColumns}>
+                {columnsKeys.map((column) => (
+                  <li>
+                    <Checkbox value={column} key={column}>
+                      {column}
+                    </Checkbox>
+                  </li>
+                ))}
+              </Checkbox.Group>
+            }
+          />
         </div>
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">

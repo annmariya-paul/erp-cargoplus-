@@ -17,6 +17,7 @@ import { NavLink } from "react-router-dom";
 import { ACCOUNTS, CRM_BASE_URL_PURCHASING } from "../../../../api/bootapi";
 import { useNavigate } from "react-router-dom";
 import PublicFetch from "../../../../utils/PublicFetch";
+import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
 
 export default function Purchase() {
   const [pageSize, setPageSize] = useState("25");
@@ -67,6 +68,7 @@ export default function Purchase() {
     due_date: "",
     status: "",
   });
+  const [dailyexpenseList, setDailyexpenseList] = useState([]);
 
   const handleupdate = () => {};
 
@@ -257,6 +259,36 @@ export default function Purchase() {
     },
   ];
 
+  const columnsKeys = columns.map((column) => column.key);
+
+  const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
+  const filteredColumns = columns.filter((column) =>
+    selectedColumns.includes(column.key)
+  );
+  const data12 = dailyexpenseList?.map((item) => [
+    item.action,
+    item.opportunity_type,
+    item.opportunity_from,
+    item.opportunity_lead_id,
+    item.opportunity_source,
+    item.opportunity_party,
+  ]);
+  const OppHeads = [
+    [
+      "opportunity_id",
+      "opportunity_type",
+      "opportunity_source",
+      "opportunity_validity",
+      "opportunity_description",
+      "opportunity_status",
+      "opportunity_amount",
+    ],
+  ];
+  const onChange = (checkedValues) => {
+    setSelectedColumns(checkedValues);
+  };
+
+
   return (
     <div>
       <div className="container-fluid container_fms pt-3">
@@ -264,6 +296,27 @@ export default function Purchase() {
           <div className="col">
             <h5 className="lead_text">Purchase</h5>
           </div>
+          <Leadlist_Icons
+                  datas={dailyexpenseList}
+                  columns={columns}
+                  items={data12}
+                  xlheading={OppHeads}
+                  filename="data.csv"
+                  chechboxes={
+                    <Checkbox.Group
+                      onChange={onChange}
+                      value={selectedColumns}
+                    >
+                      {columnsKeys.map((column) => (
+                        <li>
+                          <Checkbox value={column} key={column}>
+                            {column}
+                          </Checkbox>
+                        </li>
+                      ))}
+                    </Checkbox.Group>
+                  }
+                  />
         </div>
         <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">

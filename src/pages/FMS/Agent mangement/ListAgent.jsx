@@ -641,7 +641,9 @@ function ListAgent() {
                     <div className="row">
                       <div className="col-6 pb-2">
                         <div className="">
-                          <label>Vendor Id</label>
+                          
+                          <label>Vendor</label>
+                          <label style={{color:"red", fontWeight:"500",marginLeft:"2px"}}>*</label>
                           {/* <Form.Item
                                 name="employee_branch"
                                 rules={[
@@ -692,7 +694,7 @@ function ListAgent() {
                             rules={[
                               {
                                 required: true,
-                                message: "Employee agent is Required",
+                                message: "Please select vendor",
                               },
                             ]}
                             // validateStatus={uniqueName ? "success" : "error"}
@@ -779,7 +781,10 @@ function ListAgent() {
                         </div>
                       </div>
                     </div>
+                    <label style={{color:"red", fontWeight:"100",marginRight:"2px"}}>*</label>
+                  <label style={{marginRight:"2px" ,fontSize:"10px"}}>Indicates required field</label>
                   </Form>
+                
                 </div>
               </div>
             </>

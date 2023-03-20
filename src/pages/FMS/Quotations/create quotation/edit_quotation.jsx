@@ -1376,6 +1376,7 @@ export default function EditQuotation(
                       >
                         <SelectBox
                           allowClear
+                          disabled={true}
                           showSearch
                           optionFilterProp="children"
                         >
@@ -1404,7 +1405,7 @@ export default function EditQuotation(
                       <h5 className="lead_text">Transportation</h5>
                     </div>
 
-                    <div className="col-xl-6 col-sm-12 mt-2">
+                    <div className="col-xl-6 col-sm-12 mt-2" hidden>
                       <label>Mode</label>
                       <Form.Item
                         name="quotation_mode"
@@ -1752,7 +1753,7 @@ export default function EditQuotation(
                           align="right"
                           step={0.01}
                           min={0}
-                          precision={2}
+                          precision={4}
                           controlls={false}
                           // disabled={true}
                         />

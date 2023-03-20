@@ -49,7 +49,7 @@ export default function AgentReport() {
      .then((res) => {
        console.log("Response", res);
        if (res.data.success) {
-         console.log("Success Data", res.data.data);
+         console.log("Success Data", res.data.data.fms_v1_job_agents);
          //  setReportData(res.data.data);
          //  setSuccessPopup(true);
          //  close_modal(successPopup, 1200);
@@ -125,16 +125,7 @@ export default function AgentReport() {
       width: "16%",
     },
   ];
-  const data = [
-    {
-      job_no: "00111",
-      customer: "Test",
-      currency: "US Dollar",
-      totalcost_fx: "7675",
-      totalcost_lx: "9877",
-    },
-  ];
-
+  
 
 
   return (
@@ -163,11 +154,7 @@ export default function AgentReport() {
             <SelectBox
               showSearch={true}
               allowClear
-              //  value={vendortyp}
               optionFilterProp="children"
-              //  onChange={(e) => {
-              //    setvendortyp(e);
-              //  }}
               onChange={(e) => setSelectedAgent(e)}
             >
               {allagents &&

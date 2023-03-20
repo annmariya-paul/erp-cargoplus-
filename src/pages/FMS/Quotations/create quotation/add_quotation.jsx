@@ -248,6 +248,8 @@ export default function Add_Quotation() {
   const numofItemsTo = noofItems * current;
 
   const [frighttype, setFrighttype] = useState();
+
+
   const [currencydata, setCurrencydata] = useState();
   const [carrierdata, setCarrierdata] = useState();
   const [OpportunityList, setOpportunityList] = useState([]);
@@ -292,6 +294,7 @@ export default function Add_Quotation() {
       );
       console.log("Getting all frieght types : ", allfrighttypes.data.data);
       setFrighttype(allfrighttypes.data.data);
+      // setFrighttypemode(allfrighttypes.data.data.freight_type_mode);
     } catch (err) {
       console.log("Error in fetching fright types : ", err);
     }
@@ -332,8 +335,9 @@ export default function Add_Quotation() {
         console.log("currency current rate:", response);
         let a = response.data.rates[b];
         console.log("currency match", a);
-        setCurrencyRates(a);
-        addForm.setFieldValue("exchnagerate", a);
+        let rate=1/a;
+        setCurrencyRates(rate);
+        addForm.setFieldValue("exchnagerate", rate);
       })
       .catch(function (error) {
         console.log(error);
@@ -756,7 +760,10 @@ export default function Add_Quotation() {
   const [selectedOption, setSelectedOption] = useState("");
   const [oppnew, setOppnew] = useState([]);
   console.log("Opportunities are :::", oppnew);
-
+  const [frightmode,setFrightmode]= useState();
+  console.log("change",frightmode);
+  const [frighttypemode,setFrighttypemode]=useState();
+  console.log("frighttype mode ",frighttypemode);
   const [leadIdEnq, setLeadIdEnq] = useState("");
 
   console.log("Selected  enquiry lead id is ", leadIdEnq);
@@ -767,8 +774,32 @@ export default function Add_Quotation() {
   // const handleFirstDropdownChange = (event) => {
   //   setSelectedOption(event);
   // };
+  const mode = (e) => {
+   if(e)
+   { 
+    
+    {frighttype &&
+      frighttype.length > 0 &&
+      frighttype.map((item, index) => {
+   
+         if(item.freight_type_id === e)
 
+         {
+          console.log("reached",item.freight_type_mode);
+          setFrighttypemode(item.freight_type_mode);
+          locationBytype(item.freight_type_mode);
+         }else{
+          locationBytype();
+         }
+           
+        
+      })} }
+  }
   const [oppleadid, setOppleadid] = useState();
+  
+
+
+
   console.log("Opportunities lead id :::", oppleadid);
   const [numOfItems, setNumOfItems] = useState("25");
   const GetOpportunityData = () => {
@@ -953,7 +984,7 @@ export default function Add_Quotation() {
     formData.append("quotation_freight_type", data.freighttype);
     formData.append("quotation_cargo_type", data.cargotype);
     formData.append("quotation_carrier", data.carrier);
-    formData.append("quotation_mode", data.mode);
+    formData.append("quotation_mode",frighttypemode );
     formData.append("quotation_origin_id", data.corgin);
     // formData.append("quotation_origin", parseInt(data.corgin));
     formData.append("quotation_destination_id", data.cdest);
@@ -1119,6 +1150,11 @@ export default function Add_Quotation() {
                           allowClear
                           showSearch
                           optionFilterProp="children"
+                          onChange={(e) => {
+                            console.log("date mmm", e);
+                            setFrightmode(e);
+                            mode(e);
+                          }}
                         >
                           {frighttype &&
                             frighttype.length > 0 &&
@@ -1256,7 +1292,7 @@ export default function Add_Quotation() {
                       <h6 className="lead_text">Transportation</h6>
                     </div>
 
-                    <div className="col-xl-6 col-sm-12 mt-2">
+                    {/* <div className="col-xl-6 col-sm-12 mt-2" hidden>
                       <label>Mode</label>
                       <Form.Item
                         name="mode"
@@ -1280,7 +1316,7 @@ export default function Add_Quotation() {
                           <Select.Option value="Road">Road</Select.Option>
                         </SelectBox>
                       </Form.Item>
-                    </div>
+                    </div> */}
                     <div className="col-xl-6 col-sm-12 mt-2">
                       <label> Origin</label>
                       <Form.Item
@@ -1607,7 +1643,7 @@ export default function Add_Quotation() {
                           align="right"
                           // step={0.01}
                           min={0}
-                          precision={2}
+                          precision={4}
                           controlls={false}
                           // disabled={true}
                         />

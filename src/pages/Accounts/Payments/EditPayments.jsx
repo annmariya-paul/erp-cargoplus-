@@ -449,9 +449,9 @@ const EditPayments = () => {
                       <Button btnType="save" type="submit">
                         Save
                       </Button>
-                      <Button btnType="save" type="" className="ms-2">
+                      {/* <Button type="" className="ms-2">
                         Cancel
-                      </Button>
+                      </Button> */}
                     </div>
                   </div>
                 </Form>

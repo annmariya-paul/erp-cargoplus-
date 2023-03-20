@@ -152,7 +152,7 @@ const AddPayments = () => {
     }
   };
 
-  //function to get invoices of a particular lead
+  //API call function to get invoices of a particular lead
   const getInvoice = async (LeadId) => {
     console.log("LeadId", LeadId);
     //setLead(LeadId);

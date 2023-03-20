@@ -26,6 +26,7 @@ import crmIcon from "../../components/img/icons8-crm-58.png";
 import fmsIcon from "../../components/img/icons8-cargo-ship-50.png";
 import settingsicon from "../../components/img/icons8-gear-50.png";
 import { FaRegHandshake } from "react-icons/fa";
+import cargologo from "../../assets/logo/cargopluslogo1.png";
 
 export default function Sidebar({ showSidebar }) {
   // const [sidebar, setSidebar] = useState(true);
@@ -70,8 +71,22 @@ export default function Sidebar({ showSidebar }) {
           <i className="bi bimenu bi-list" onClick={showSidebar} />
         </div> */}
         <div>
+
+        
           <nav className={`nav-menu active  nav-menu`}>
+
             <ul className="nav-menu-items">
+            <li className="nav-text  mt-2 ">
+              <div className="logo_img">
+              <img
+                        src={cargologo}
+                        alt=""
+                        height={60}
+                        width={190}
+                        // className="mt-1 me-1"
+                      />
+              </div>
+              </li>
               <li className="navbar-toggle nav-close" onClick={showSidebar}>
                 <div to="" className="nav-link">
                   {" "}
@@ -84,7 +99,9 @@ export default function Sidebar({ showSidebar }) {
                   /> */}
                 </div>
               </li>
-              <li className="nav-text ">
+             
+
+              <li className="nav-text mt-4  ">
                 <NavLink
                   className={({ isActive }) =>
                     isActive ? "active-link" : "link"
@@ -133,8 +150,9 @@ export default function Sidebar({ showSidebar }) {
                   </div>
                 </Link>
               </li>
-              {HRMSopen ? (
+              {HRMSopen ?  (
                 <>
+                <div className="nav_active_color">
                   {checkPermission("branch") && (
                     <li className="nav-text ">
                       <NavLink
@@ -232,6 +250,7 @@ export default function Sidebar({ showSidebar }) {
                       </NavLink>
                     </li>
                   )}
+                  </div>
                 </>
               ) : (
                 ""

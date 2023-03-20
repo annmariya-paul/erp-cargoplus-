@@ -76,7 +76,7 @@ export default function AgentReport() {
             currency:
               isagents?.fms_v1_jobs.generalsettings_v1_currency.currency_name,
             totalcost_fx: totalCostFx,
-            totalcost_lx: converted_rate/totalCostFx,
+            totalcost_lx: converted_rate*totalCostFx,
           });
           setReportData(temp);
         }

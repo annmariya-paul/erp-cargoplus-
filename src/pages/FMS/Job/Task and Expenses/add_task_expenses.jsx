@@ -29,6 +29,7 @@ import Custom_model from "../../../../components/custom_modal/custom_model";
 
 import "../job.scss";
 import { ROUTES } from "../../../../routes";
+import { keyboard } from "@testing-library/user-event/dist/keyboard";
 
 export default function Taskexpenses() {
   const { id } = useParams();
@@ -41,6 +42,7 @@ export default function Taskexpenses() {
   const [currencyDefault, setCurrencyDefault] = useState();
   const [defaultCurrencydata, setDefaultCurrencyData] = useState();
   const [currencyRates, setCurrencyRates] = useState(0);
+  const [expenseAmount, setExpenseAmount] = useState(0);
 
   console.log("Servicesss are :::", services);
 
@@ -54,8 +56,8 @@ export default function Taskexpenses() {
       job_task_expense_cost_amountfx: "",
       job_task_expense_cost_taxfx: "",
       job_task_expense_cost_subtotalfx: "",
-      job_task_expense_exp_curr: "",
-      job_task_expense_exp_exch: "",
+      job_task_expense_exp_curr: defaultCurrencydata,
+      job_task_expense_exp_exch: currencyDefault,
       job_task_expense_exp_amountfx: "",
       job_task_expense_exp_amountlx: "",
       job_task_expense_id: "",
@@ -173,8 +175,14 @@ export default function Taskexpenses() {
 
   const handleInputChange = (e, key, col, tx) => {
     console.log("gai guys", e, tx);
+    let totalamount2 = 0;
+    if (e === null) {
+      e = 0;
+    }
 
-    if (tx && e) {
+    if (tx && e !== null) {
+      totalamount2 = e * currencyRates;
+
       let existingValues = addForm.getFieldsValue();
       console.log("existing form", existingValues);
       let { Job_quotation_details } = existingValues;
@@ -185,8 +193,8 @@ export default function Taskexpenses() {
       let totalAmount =
         assignValues["job_task_expense_exp_exch"] *
         assignValues["job_task_expense_exp_amountfx"];
-      console.log("total aount", totalAmount);
-      assignValues["job_task_expense_exp_amountlx"] = totalAmount;
+
+      assignValues["job_task_expense_exp_amountlx"] = totalamount2;
       console.log("quation deatils", Job_quotation_details);
       addForm.setFieldsValue({ Job_quotation_details });
       // setTotal(sum);
@@ -209,7 +217,7 @@ export default function Taskexpenses() {
             return {
               ...item,
               job_task_expense_exp_amountfx: e,
-              job_task_expense_exp_amountlx: totalAmount,
+              job_task_expense_exp_amountlx: totalamount2,
             };
           }
           return item;
@@ -221,7 +229,7 @@ export default function Taskexpenses() {
             return {
               ...item,
               job_task_expense_exp_amountfx: e,
-              job_task_expense_exp_amountlx: totalAmount,
+              job_task_expense_exp_amountlx: totalamount2,
             };
           }
           return item;
@@ -409,6 +417,7 @@ export default function Taskexpenses() {
           arr = item?.currency_code;
           setCurrencyDefault(arr);
           setDefaultCurrencyData(item.currency_id);
+          getCurrencyRate(item.currency_id, index);
         }
       });
     } catch (err) {
@@ -436,21 +445,22 @@ export default function Taskexpenses() {
         console.log("currency current rate:", response);
         let a = response.data.rates[b];
         console.log("currency match", a);
-        setCurrencyRates(a);
+        let c = 1 / a;
+        setCurrencyRates(c);
         let existingvalues = addForm.getFieldsValue();
         let { Job_quotation_details } = existingvalues;
         let assignValues = Job_quotation_details[key];
-        assignValues["job_task_expense_exp_exch"] = a;
+        assignValues["job_task_expense_exp_exch"] = c;
         addForm.setFieldsValue({ Job_quotation_details });
         console.log("form data s......", Job_quotation_details);
 
-        addForm.setFieldValue("job_task_expense_exp_exch", a);
+        addForm.setFieldValue("job_task_expense_exp_exch", c);
         setTableData(
           tableData.map((item, index) => {
             if (item.key === key) {
               return {
                 ...item,
-                job_task_expense_exp_exch: a,
+                job_task_expense_exp_exch: c,
                 job_task_expense_exp_curr: data,
               };
             }
@@ -462,7 +472,7 @@ export default function Taskexpenses() {
             if (item.key === key) {
               return {
                 ...item,
-                job_task_expense_exp_exch: a,
+                job_task_expense_exp_exch: c,
                 job_task_expense_exp_curr: data,
               };
             }
@@ -491,8 +501,8 @@ export default function Taskexpenses() {
           job_task_expense_cost_amountfx: "",
           job_task_expense_cost_taxfx: "",
           job_task_expense_cost_subtotalfx: "",
-          job_task_expense_exp_curr: "",
-          job_task_expense_exp_exch: "",
+          job_task_expense_exp_curr: defaultCurrencydata,
+          job_task_expense_exp_exch: currencyRates,
           job_task_expense_exp_amountfx: "",
           job_task_expense_exp_amountlx: "",
           job_task_expense_invoiceable: 0,
@@ -509,13 +519,15 @@ export default function Taskexpenses() {
           job_task_expense_cost_amountfx: "",
           job_task_expense_cost_taxfx: "",
           job_task_expense_cost_subtotalfx: "",
-          job_task_expense_exp_curr: "",
-          job_task_expense_exp_exch: "",
+          job_task_expense_exp_curr: defaultCurrencydata,
+          job_task_expense_exp_exch: currencyRates,
           job_task_expense_exp_amountfx: "",
           job_task_expense_exp_amountlx: "",
           job_task_expense_invoiceable: 0,
         },
       ]);
+
+      // handlecurrency(e, tableData.length + 1);
     }
     console.log("tabledata", tableData);
     // let sum = 0;
@@ -662,8 +674,8 @@ export default function Taskexpenses() {
           job_task_expense_cost_taxfx: item.job_task_expense_cost_taxfx,
           job_task_expense_cost_subtotalfx:
             item.job_task_expense_cost_subtotalfx,
-          job_task_expense_exp_curr: item.job_task_expense_exp_curr,
-          job_task_expense_exp_exch: item.job_task_expense_exp_exch,
+          job_task_expense_exp_curr: defaultCurrencydata,
+          job_task_expense_exp_exch: currencyRates,
           job_task_expense_exp_amountfx: item.job_task_expense_exp_amountfx,
           job_task_expense_exp_amountlx: item.job_task_expense_exp_amountlx,
           job_task_expense_agent_id: item.job_task_expense_agent_id,
@@ -680,7 +692,7 @@ export default function Taskexpenses() {
       addForm.setFieldsValue({ dataSource });
       setSampletable([...dataSource]);
     }
-  }, [tax]);
+  }, [tax, defaultCurrencydata, currencyRates]);
 
   console.log("is deafult is ", defaultCurrencydata);
 
@@ -793,7 +805,7 @@ export default function Taskexpenses() {
                 index.key,
                 "job_task_expense_task_id",
               ]}
-              // rules={[{ required: true, message: "Please select" }]}
+              rules={[{ required: true, message: "Please select" }]}
             >
               <Select
                 style={{ minWidth: "140px" }}
@@ -996,6 +1008,7 @@ export default function Taskexpenses() {
           className: "secondrow",
           render: (data, index) => {
             console.log("index is :", index);
+
             return (
               <div className="d-flex justify-content-center align-items-center tborder ">
                 <Form.Item
@@ -1004,7 +1017,12 @@ export default function Taskexpenses() {
                     index.key,
                     "job_task_expense_cost_amountfx",
                   ]}
-                  // rules={[{ required: true, message: "Required" }]}
+                  rules={[
+                    {
+                      required: true,
+                      message: "Required",
+                    },
+                  ]}
                 >
                   <InputNumber
                     bordered={false}
@@ -1140,12 +1158,12 @@ export default function Taskexpenses() {
             return (
               <div className="d-flex justify-content-center align-items-center tborder ">
                 <Form.Item
-                  name={[
-                    "Job_quotation_details",
-                    index.key,
-                    "job_task_expense_exp_curr",
-                  ]}
-                  // rules={[{ required: true, message: "Required" }]}
+                // name={[
+                //   "Job_quotation_details",
+                //   index.key,
+                //   "job_task_expense_exp_curr",
+                // ]}
+                // rules={[{ required: true, message: "Required" }]}
                 >
                   <Select
                     style={{ minWidth: "70px" }}
@@ -1155,11 +1173,12 @@ export default function Taskexpenses() {
                     showSearch
                     optionFilterProp="children"
                     className="selectwidthexp mb-2"
-                    value={index.job_task_expense_exp_curr}
+                    value={index?.job_task_expense_exp_curr}
                     onChange={(e) => {
                       console.log("ann", e);
                       getCurrencyRate(e, index.key);
                       setCurrency(e);
+                      setDefaultCurrencyData(e);
                     }}
                   >
                     {currencydata &&
@@ -1196,12 +1215,12 @@ export default function Taskexpenses() {
                 className="d-flex justify-content-center align-items-center tborder "
               >
                 <Form.Item
-                  name={[
-                    "Job_quotation_details",
-                    index.key,
-                    "job_task_expense_exp_exch",
-                  ]}
-                  // rules={[{ required: true, message: "Required" }]}
+                // name={[
+                //   "Job_quotation_details",
+                //   index.key,
+                //   "job_task_expense_exp_exch",
+                // ]}
+                // rules={[{ required: true, message: "Required" }]}
                 >
                   <InputNumber
                     // style={{ minWidth: "70px" }}
@@ -1213,6 +1232,7 @@ export default function Taskexpenses() {
                     onChange={(e) => {
                       handleChange(e);
                       setExchangeData(e);
+                      setCurrencyRates(e);
                     }}
                     // onChange={(value) => {
                     //   console.log(" input numberevent ", value, index.key);
@@ -1237,6 +1257,11 @@ export default function Taskexpenses() {
           className: "thirdrow",
           render: (data, index) => {
             console.log("index is :", index);
+            let isjob_task_expense_cost_amountfx = true;
+            if (index?.job_task_expense_cost_amountfx !== null && index?.key) {
+              isjob_task_expense_cost_amountfx = false;
+            }
+            console.log("if required", isjob_task_expense_cost_amountfx);
             return (
               <div className="d-flex justify-content-center align-items-center tborder ">
                 <Form.Item
@@ -1245,7 +1270,12 @@ export default function Taskexpenses() {
                     index.key,
                     "job_task_expense_exp_amountfx",
                   ]}
-                  // rules={[{ required: true, message: "Required" }]}
+                  rules={[
+                    {
+                      required: isjob_task_expense_cost_amountfx,
+                      message: "Required",
+                    },
+                  ]}
                 >
                   <InputNumber
                     bordered={false}
@@ -1258,6 +1288,7 @@ export default function Taskexpenses() {
                         "job_task_expense_exp_amountfx",
                         "tx"
                       );
+                      setExpenseAmount(e);
 
                       console.log(" input numberevent ", e, index.key);
                     }}
@@ -1294,7 +1325,7 @@ export default function Taskexpenses() {
                   <InputNumber
                     bordered={false}
                     className="input_bg"
-                    value={index.job_task_expense_exp_amountlx}
+                    value={index?.job_task_expense_exp_amountlx}
                     onChange={(value) => {
                       console.log(" input numberevent ", value, index.key);
                     }}
@@ -1359,19 +1390,6 @@ export default function Taskexpenses() {
       console.log("suceccss checked", e.target.checked);
       setIschecked(1);
     }
-  };
-
-  const handlecurrency = (e, key) => {
-    console.log("james bond", key);
-    let existingvalues = addForm.getFieldsValue();
-    let { Job_quotation_details } = existingvalues;
-    let assignValues = Job_quotation_details[key];
-    assignValues["job_task_expense_exp_curr"] = defaultCurrencydata;
-    assignValues["job_task_expense_exp_exch"] = currencyRates;
-    addForm.setFieldsValue({ Job_quotation_details });
-    console.log("form data s......", Job_quotation_details);
-
-    addForm.setFieldValue("job_task_expense_exp_exch", currencyRates);
   };
 
   console.log("abcdefg", isChecked);
@@ -1456,21 +1474,30 @@ export default function Taskexpenses() {
     }
   };
 
-  useEffect(() => {
-    let key = 0;
-    tableData.map((item, index) => {
-      key = item.key;
-    });
-    //  console.log("key ovf table", key);
-    if (defaultCurrencydata !== null) {
-      let existingvalues = addForm.getFieldsValue();
-      let { Job_quotation_details } = existingvalues;
-      let assignValues = Job_quotation_details[key];
-      assignValues["job_task_expense_exp_curr"] = defaultCurrencydata;
+  const handlecurrency = (e, key) => {
+    // let existingvalues = addForm.getFieldsValue();
+    // let { Job_quotation_details } = existingvalues;
+    // let assignValues = Job_quotation_details[key];
+    // assignValues["job_task_expense_exp_curr"] = defaultCurrencydata;
+    // assignValues["job_task_expense_exp_exch"] = currencyRates;
+    // addForm.setFieldsValue({ Job_quotation_details });
+    // console.log("form data s......", Job_quotation_details);
+    // addForm.setFieldValue("job_task_expense_exp_exch", currencyRates);
+  };
 
-      addForm.setFieldsValue({ Job_quotation_details });
-      getCurrencyRate(defaultCurrencydata, key);
-    }
+  useEffect(() => {
+    tableData.map((item, index) => {
+      console.log("key ovf table", item?.key);
+      if (defaultCurrencydata !== null) {
+        let existingvalues = addForm.getFieldsValue();
+        let { Job_quotation_details } = existingvalues;
+        let assignValues = Job_quotation_details[item?.key];
+        assignValues["job_task_expense_exp_curr"] = defaultCurrencydata;
+
+        addForm.setFieldsValue({ Job_quotation_details });
+        getCurrencyRate(defaultCurrencydata, item?.key);
+      }
+    });
   }, [defaultCurrencydata]);
 
   useEffect(() => {

@@ -133,6 +133,7 @@ import Editdebit_notes from "./pages/Accounts/DebitNotes/edit_debitnote";
 import Debit_notes from "./pages/Accounts/DebitNotes/list_debitnotes";
 import DebitnotesView from "./pages/Accounts/DebitNotes/view_debitnotes";
 import DailyExpenseReport from "./pages/Accounts/Reports/daily_expense_report";
+import CreatePurchase from "./pages/Accounts/settings/Purchase/purchaseAdd";
 
 function App() {
   return (
@@ -449,6 +450,9 @@ function App() {
             <Route path={ROUTES.PAYMEMENT_MODE} element={<ProtectedRoute />}>
               <Route index element={<Payment_mode />} />
             </Route>
+            <Route path={ROUTES.CREATE_PURCHASE} element={<ProtectedRoute />}>
+              <Route index element={<CreatePurchase />} />
+            </Route>
 
             <Route path={ROUTES.ADD_PURCHASE} element={<ProtectedRoute />}>
               <Route index element={<Add_purchase />} />
@@ -616,7 +620,10 @@ function App() {
             <Route path={ROUTES.BANK_DETAILS} element={<ProtectedRoute />}>
               <Route index element={<Bank />} />
             </Route>
-            <Route path={ROUTES.DAILY_EXPENSE_REPORT} element={<ProtectedRoute />}>
+            <Route
+              path={ROUTES.DAILY_EXPENSE_REPORT}
+              element={<ProtectedRoute />}
+            >
               <Route index element={<DailyExpenseReport />} />
             </Route>
 

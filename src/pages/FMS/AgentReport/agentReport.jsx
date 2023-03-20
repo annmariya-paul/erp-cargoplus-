@@ -1,5 +1,5 @@
 import "./agentReport.scss";
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { DatePicker, Input, Select } from "antd";
 import moment from "moment";
 import TableData from "../../../components/table/table_data";
@@ -11,13 +11,13 @@ import { FaFileExcel } from "react-icons/fa";
 
 export default function AgentReport() {
   const [serialNo, setserialNo] = useState(1);
-  const [allagents,setAllagents]= useState("")
-  const [selectedAgent,setSelectedAgent] = useState();
+  const [allagents, setAllagents] = useState("");
+  const [selectedAgent, setSelectedAgent] = useState();
   console.log("selectagent", selectedAgent);
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
-  const [reportData,setReportData] = useState();
-  console.log("dataaaa",reportData);
+  const [reportData, setReportData] = useState();
+  console.log("dataaaa", reportData);
 
   const getallagents = async () => {
     try {
@@ -25,58 +25,66 @@ export default function AgentReport() {
         `${process.env.REACT_APP_BASE_URL}/agents`
       );
       console.log("getting all agent details", allagents.data.data);
-      setAllagents(allagents.data.data)
-    
+      setAllagents(allagents.data.data);
     } catch (err) {
       console.log("error to agent details", err);
     }
   };
-
 
   useEffect(() => {
     getallagents();
     SearchBydate();
   }, []);
 
- const SearchBydate = () => {
-   let startdate = moment(startDate).format("MM-DD-YYYY");
-   let enddate = moment(endDate).format("MM-DD-YYYY");
-   PublicFetch.post(`${CRM_BASE_URL_FMS}/reports/agent`, {
-     agent_id: selectedAgent,
-     start_date: startdate,
-     end_date: enddate,
-   })
-     .then((res) => {
-       console.log("Response", res);
-       if (res.data.success) {
-         console.log("Success Data", res.data.data);
-         //  setReportData(res.data.data);
-         //  setSuccessPopup(true);
-         //  close_modal(successPopup, 1200);
-         //  addForm.resetFields();
-         //  setModalAddCurrency(false);
-         //  getAllCurrency();
-         let array = [];
-         res?.data?.data?.forEach((i, index) => {
-          i?.fms_v1_job_agents?.forEach((item,index)=>{
-          console.log("iii", item);
-           array.push({
-             job_no: item?.fms_v1_jobs.job_number,
-             customer: item?.fms_v1_jobs.crm_v1_leads.lead_customer_name,
-             currency:
-               item?.fms_v1_jobs.generalsettings_v1_currency.currency_name,
-             totalcost_fx: item?.fms_v1_jobs.job_total_cost_amountfx,
-             totalcost_lx: item?.fms_v1_jobs.job_total_exp_amountlx,
-           });
+  const SearchBydate = () => {
+    let startdate = moment(startDate).format("MM-DD-YYYY");
+    let enddate = moment(endDate).format("MM-DD-YYYY");
+    PublicFetch.post(`${CRM_BASE_URL_FMS}/reports/agent`, {
+      agent_id: selectedAgent,
+      start_date: startdate,
+      end_date: enddate,
+    })
+      .then((res) => {
+        console.log("Response", res);
+        if (res.data.success) {
+          console.log("Success Data", res.data.data.fms_v1_job_agents);
+          //  setReportData(res.data.data);
+          //  setSuccessPopup(true);
+          //  close_modal(successPopup, 1200);
+          //  addForm.resetFields();
+          //  setModalAddCurrency(false);
+          //  getAllCurrency();
+          let temp = [];
+          var totalCostFx = 0;
+          let converted_rate = "";
+          let isagents = "";
+          let isjob = "";
+          res?.data?.data?.forEach((i, index) => {
+            i?.fms_v1_job_agents?.forEach((item, index) => {
+              i?.fms_v1_job_task_expenses?.forEach((itm, index) => {
+                if (item?.fms_v1_jobs.job_id === itm?.job_task_expense_job_id)
+                totalCostFx += itm?.job_task_expense_cost_amountfx;
+                isagents = item;
+                isjob = itm;
+                converted_rate = itm?.job_task_expense_exp_exch;
+              });
+            });
           });
-         });
-         setReportData(array);
-       }
-     })
-     .catch((err) => {
-       console.log("Error", err);
-     });
- };
+          temp.push({
+            job_no: isagents?.fms_v1_jobs.job_number,
+            customer: isagents?.fms_v1_jobs.crm_v1_leads.lead_customer_name,
+            currency:
+              isagents?.fms_v1_jobs.generalsettings_v1_currency.currency_name,
+            totalcost_fx: totalCostFx,
+            totalcost_lx: converted_rate*totalCostFx,
+          });
+          setReportData(temp);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
 
   const columns = [
     {
@@ -125,17 +133,6 @@ export default function AgentReport() {
       width: "16%",
     },
   ];
-  const data = [
-    {
-      job_no: "00111",
-      customer: "Test",
-      currency: "US Dollar",
-      totalcost_fx: "7675",
-      totalcost_lx: "9877",
-    },
-  ];
-
-
 
   return (
     <>
@@ -163,11 +160,7 @@ export default function AgentReport() {
             <SelectBox
               showSearch={true}
               allowClear
-              //  value={vendortyp}
               optionFilterProp="children"
-              //  onChange={(e) => {
-              //    setvendortyp(e);
-              //  }}
               onChange={(e) => setSelectedAgent(e)}
             >
               {allagents &&

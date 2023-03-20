@@ -119,7 +119,7 @@ export default function EditJobPayment() {
   };
 
   useEffect(() => {
-    let conversion = advanceAmount / jobExchangeRate;
+    let conversion = advanceAmount * jobExchangeRate;
     editForm.setFieldsValue({
       advance_in: conversion.toFixed(2),
     });
@@ -265,7 +265,7 @@ export default function EditJobPayment() {
                 <Input_Number
                   className="text_right"
                   align="right"
-                  precision={2}
+                  precision={4}
                 />
               </Form.Item>
             </div>

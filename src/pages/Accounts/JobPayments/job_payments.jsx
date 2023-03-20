@@ -15,7 +15,7 @@ import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
 
 export default function JobPayments() {
   const [serialNo, setserialNo] = useState(1);
-  const [searchedText,setSearchedText] = useState();
+  const [searchedText,setSearchedText] = useState("");
   const [allJobPay,setAllJobPay] = useState();
 
   const [jobpaymentList, setJobpaymentList] = useState([]);
@@ -25,15 +25,14 @@ export default function JobPayments() {
       .then((res) => {
         console.log("Response", res);
         if (res.data.success) {
-          console.log("success of job", res.data.data);
-          setJobpaymentList(res.data.data.jobPayments)
+          console.log("success of job", res.data.data.jobPayments);
+          setJobpaymentList(res.data.data.jobPayments);
           let temp = [];
-          res.data.data.jobPayments.forEach((item, index) => {
-           
+          res?.data?.data?.jobPayments?.forEach((item, index) => {
             temp.push({
-              job_pay_id:item.job_pay_id,
+              job_pay_id: item.job_pay_id,
               job_pay_voucher_no: item.job_pay_voucher_no,
-              job_pay_voucher_date:item.job_pay_voucher_date,
+              job_pay_voucher_date: item.job_pay_voucher_date,
               job_no: item.fms_v1_jobs.job_number,
               job_pay_lead: item.crm_v1_leads.lead_customer_name,
               advance_amount: item.job_pay_advance_amount_fx.toFixed(2),

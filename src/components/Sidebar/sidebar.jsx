@@ -1177,6 +1177,18 @@ export default function Sidebar({ showSidebar }) {
                       </NavLink>
                     </li>
                   )}
+                  {checkPermission("payments") && (
+                    <li className="nav-text ">
+                      <NavLink
+                        className={({ isActive }) =>
+                          isActive ? "active-link" : "link"
+                        }
+                        to={ROUTES.PAYMENTS}
+                      >
+                        <div className="ms-4">Payments</div>
+                      </NavLink>
+                    </li>
+                  )}
                   {checkPermission("add_credit_notes") && (
                     <li className="nav-text ">
                       <NavLink
@@ -1230,21 +1242,24 @@ export default function Sidebar({ showSidebar }) {
                       </div>
                     </Link>
                   </li>
-                   {accountsReports ? (
+                  {accountsReports ? (
                     <>
-                    {checkPermission("daily_expense_report") && (
-                    <li className="nav-text ">
-                      <NavLink
-                        className={({ isActive }) =>
-                          isActive ? "active-link" : "link"
-                        }
-                        to={ROUTES.DAILY_EXPENSE_REPORT}
-                      >
-                        <div className=" ms-4">Daily Expense Report</div>
-                      </NavLink>
-                    </li>
+                      {checkPermission("daily_expense_report") && (
+                        <li className="nav-text ">
+                          <NavLink
+                            className={({ isActive }) =>
+                              isActive ? "active-link" : "link"
+                            }
+                            to={ROUTES.DAILY_EXPENSE_REPORT}
+                          >
+                            <div className=" ms-4">Daily Expense Report</div>
+                          </NavLink>
+                        </li>
+                      )}
+                    </>
+                  ) : (
+                    ""
                   )}
-                    </>):("")}
                 </>
               ) : (
                 ""

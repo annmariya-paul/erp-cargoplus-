@@ -1,7 +1,8 @@
 @use "../styles/variables.scss";
 
 .sidebarWrapper {
-  width: 220px;
+  // width: 220px;
+  width: 230px;
   transition: 850ms;
   
 }
@@ -11,7 +12,8 @@
 }
 
 .contentWrapper {
-  width: calc(100% - 220px);
+  // width: calc(100% - 220px);
+  width: calc(100% - 230px);
   transition: 850ms;
 }
 .menu_icon{
@@ -19,8 +21,8 @@
   font-size: 22px;
 }
 .header_layout{ 
-   background-image: linear-gradient(120deg, #daecff 0%, #eef6ff 100%);
-background-color: #a3cdfa;
+   background-image: linear-gradient(120deg, #fdfdfd 0%, #fdfeff 100%);
+// background-color: #a3cdfa;
 // background-image: linear-gradient(120deg, #f2fbff 0%, #f0fbfc 100%);
 // background-image: linear-gradient(140deg, #dcf5ff 0%, #e8f5f9 100%);
 // ###   background-image: linear-gradient(140deg, #b1e9fc 0%, #e0f3f8 100%);

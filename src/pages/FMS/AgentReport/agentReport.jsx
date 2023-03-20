@@ -56,7 +56,7 @@ export default function AgentReport() {
           //  getAllCurrency();
           let temp = [];
           var totalCostFx = 0;
-          let converted_rate = "";
+          let exchange_rate = "";
           let isagents = "";
           let isjob = "";
           res?.data?.data?.forEach((i, index) => {
@@ -66,17 +66,18 @@ export default function AgentReport() {
                 totalCostFx += itm?.job_task_expense_cost_amountfx;
                 isagents = item;
                 isjob = itm;
-                converted_rate = itm?.job_task_expense_exp_exch;
+                exchange_rate = item?.fms_v1_jobs?.job_total_cost_exch;
               });
             });
           });
+          var converted = totalCostFx / exchange_rate;
           temp.push({
             job_no: isagents?.fms_v1_jobs.job_number,
             customer: isagents?.fms_v1_jobs.crm_v1_leads.lead_customer_name,
             currency:
               isagents?.fms_v1_jobs.generalsettings_v1_currency.currency_name,
-            totalcost_fx: totalCostFx,
-            totalcost_lx: converted_rate*totalCostFx,
+            totalcost_fx: totalCostFx.toFixed(2),
+            totalcost_lx: converted.toFixed(2),
           });
           setReportData(temp);
         }
@@ -122,14 +123,14 @@ export default function AgentReport() {
       title: "TOTAL COST (Fx)",
       dataIndex: "totalcost_fx",
       key: "totalcost_fx",
-      align: "center",
+      align: "right",
       width: "16%",
     },
     {
       title: "TOTAL COST (Lx)",
       dataIndex: "totalcost_lx",
       key: "totalcost_lx",
-      align: "center",
+      align: "right",
       width: "16%",
     },
   ];

@@ -35,7 +35,7 @@ export default function AddJobPayments() {
   const [JobLeadId,setJobLeadId] = useState();
   const [currencyId,setCurrencyId] = useState();
   const [imageSize,setImageSize] = useState(false);
-console.log("jjj",JobLeadId);
+
   const close_modal = (mShow, time) => {
     if (!mShow) {
       setTimeout(() => {
@@ -92,7 +92,7 @@ console.log("jjj",JobLeadId);
   };
 
   useEffect(() => {
-    let conversion = advanceAmount / jobExchangeRate;
+    let conversion = advanceAmount * jobExchangeRate;
     addForm.setFieldsValue({
       advanceIn_DefCurrency: conversion.toFixed(2),
     });
@@ -276,8 +276,8 @@ console.log("jjj",JobLeadId);
                 <Input_Number
                   className="text_right"
                   align="right"
-                  min={2}
-                  precision={2}
+                 
+                  precision={4}
                 />
               </Form.Item>
             </div>
@@ -296,7 +296,7 @@ console.log("jjj",JobLeadId);
                 <Input_Number
                   className="text_right"
                   align="right"
-                  min={2}
+                  // min={2}
                   precision={2}
                 />
               </Form.Item>
@@ -313,8 +313,8 @@ console.log("jjj",JobLeadId);
                   className="text_right"
                   align="right"
                   disabled
-                  min={2}
-                  precision={2}
+                  // min={2}
+                  precision={6}
                 />
               </Form.Item>
             </div>

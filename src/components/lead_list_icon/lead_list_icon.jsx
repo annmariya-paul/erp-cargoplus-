@@ -10,7 +10,7 @@ import { CSVLink } from "react-csv";
 import * as XLSX from "xlsx/xlsx.js"; //for xl download
 import CopyToClipboard, { copyToClipboard } from "react-copy-to-clipboard"; //copy to clipboard
 import { Toaster, toast } from "react-hot-toast"; // copy to clip board
-
+import { Tooltip } from 'antd';
 const Leadlist_Icons = ({
   datas,
   columns,
@@ -172,14 +172,19 @@ const Leadlist_Icons = ({
               <a className="icon" href="#">
                 <CopyToClipboard text={JSON.stringify(datas)}>
                   {/* message.success(content, [duration], onClose) */}
+                  <Tooltip title="Copy to Clipboard">
                   <MdFileCopy onClick={() => alert("Text Copied")} />
+                  </Tooltip>
                 </CopyToClipboard>
               </a>
             </li>
             <li className="icon-border">
+            <Tooltip title="XLSX">
+  
               <a className="icon" href="#">
                 <FaFileExcel onClick={handleExport} />
               </a>
+              </Tooltip>
             </li>
             <li className="icon-border">
               <a className="icon" href="#">
@@ -188,20 +193,26 @@ const Leadlist_Icons = ({
                   data={datas}
                   filename={filename}
                 >
+                  <Tooltip title="CSV ">
                   <FaFileCsv />
+                  </Tooltip>
                 </CSVLink>
               </a>
             </li>
             <li className="icon-border">
+            <Tooltip title="PDF Download">
               <a className="icon" href="#">
                 <FaFilePdf onClick={exportPDF} />
                 {/* <CSVLink>export</CSVLink> */}
               </a>
+              </Tooltip>
             </li>
             <li className="icon-border">
+            <Tooltip title="Print">
               <a className="icon" href="#">
                 <AiFillPrinter />
               </a>
+              </Tooltip>
             </li>
             <li className="icon-border">
               <a className="icon" style={{ zIndex: "10" }} href="#">
@@ -216,7 +227,7 @@ const Leadlist_Icons = ({
                     border: "none",
                   }}
                 >
-                  <Dropdown.Toggle
+                  {/* <Dropdown.Toggle
                     style={{
                       borderRadius: "74%",
                       color: "grey",
@@ -224,9 +235,11 @@ const Leadlist_Icons = ({
                       zIndex: "9",
                       border: "none",
                     }}
-                  >
+                  > */}
+                        <Tooltip title="Print">
                     <FaBookOpen style={{ marginTop: "3px" }} />
-                  </Dropdown.Toggle>
+                    </Tooltip>
+                  {/* </Dropdown.Toggle> */}
 
                   <Dropdown.Menu style={{ backgroundColor: "white" }}>
                     {chechboxes}

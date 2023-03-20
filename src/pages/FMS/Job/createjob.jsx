@@ -40,6 +40,10 @@ function CreateJob() {
   const [successPopup, setSuccessPopup] = useState(false);
   const [date, setDate] = useState();
   const [addForm] = Form.useForm();
+  const [frightmode,setFrightmode]= useState();
+  console.log("change",frightmode);
+  const [frighttypemode,setFrighttypemode]=useState();
+  console.log("frighttype mode ",frighttypemode);
   const [currentcount, setCurrentcount] = useState();
   const [noofItems, setNoofItems] = useState(10000);
   const [current, setCurrent] = useState(1);
@@ -122,7 +126,7 @@ function CreateJob() {
             onequatation?.data?.data.quotation.quotation_gross_wt,
 
           job_shipper: onequatation?.data?.data.quotation.quotation_shipper,
-          job_consignee:
+          job_customer:
             onequatation?.data?.data.quotation.crm_v1_leads.lead_id,
 
           job_credit_days:
@@ -158,6 +162,7 @@ function CreateJob() {
             onequatation?.data?.data.quotation?.quotation_grand_total,
         });
         setGrandTotal(onequatation?.data?.data.quotation.quotation_grand_total);
+        setFrighttypemode(onequatation?.data?.data.quotation.quotation_mode);
       }
     } catch (err) {
       console.log("error to getting all freighttype", err);
@@ -271,17 +276,25 @@ function CreateJob() {
     const formData = new FormData();
 
     formData.append("job_date", date1);
+    formData.append("job_customer", data.job_customer);
     formData.append("job_consignee", data.job_consignee);
     if (data.quotationno) {
       formData.append("job_quotation", data.quotationno);
+    
     }
+     
+    
+    formData.append("job_mode",frighttypemode);
+  
     formData.append("job_shipper", data.job_shipper);
     formData.append("job_freight_type", data.job_freight_type);
     formData.append("job_cargo_type", data.job_cargo_type);
     formData.append("job_carrier", data.job_carrier);
     formData.append("job_awb_bl_no", data.job_awb);
-    formData.append("job_mode", data.job_mode);
+    
     formData.append("job_origin_id", data.job_origin_id);
+    
+    formData.append("job_customer", data.job_customer);
 
     formData.append("job_destination_id", data.job_destination_id);
 
@@ -320,6 +333,27 @@ function CreateJob() {
         setError(true);
       });
   };
+  const mode = (e) => {
+    if(e)
+    { 
+     
+     {frighttype &&
+       frighttype.length > 0 &&
+       frighttype.map((item, index) => {
+    
+          if(item.freight_type_id === e)
+ 
+          {
+           console.log("reached",item.freight_type_mode);
+           setFrighttypemode(item.freight_type_mode);
+           locationBytype(item.freight_type_mode);
+          }else{
+           locationBytype();
+          }
+            
+         
+       })} }
+   }
 
   const getallfrighttype = async () => {
     try {
@@ -581,6 +615,11 @@ function CreateJob() {
                           allowClear
                           showSearch
                           optionFilterProp="children"
+                          onChange={(e) => {
+                            console.log("date mmm", e);
+                            setFrightmode(e);
+                            mode(e);
+                          }}
                         >
                           {frighttype &&
                             frighttype.length > 0 &&
@@ -675,7 +714,7 @@ function CreateJob() {
                     <div className="row mt-3">
                       <h5 className="lead_text">Transportation</h5>
                     </div>
-                    <div className="col-xl-6 col-sm-12 mt-2" hidden>
+                    {/* <div className="col-xl-6 col-sm-12 mt-2" hidden>
                       <label>Mode</label>
                       <Form.Item
                         name="job_mode"
@@ -692,16 +731,14 @@ function CreateJob() {
                           showSearch
                           optionFilterProp="children"
                           disabled={disable}
-                          onChange={(e) => {
-                            locationBytype(e);
-                          }}
+                         value={frighttypemode}
                         >
                           <Select.Option value="Air">Air</Select.Option>
                           <Select.Option value="Sea">Sea</Select.Option>
                           <Select.Option value="Road">Road</Select.Option>
                         </SelectBox>
                       </Form.Item>
-                    </div>
+                    </div> */}
                     <div className="col-xl-6 col-sm-12 mt-2">
                       <label>Origin</label>
                       <Form.Item

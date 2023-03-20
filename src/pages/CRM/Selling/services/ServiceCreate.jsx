@@ -204,7 +204,7 @@ function ServiceCreate() {
               }}
             >
               <div className="row my-4">
-                <div className="col-4">
+                <div className="col-6">
                   <label>Name</label>
                   <Form.Item
                     name="servicename"
@@ -251,7 +251,7 @@ function ServiceCreate() {
                     ""
                   )}
                 </div>
-                <div className="col-4">
+                <div className="col-6">
                   <label>Code</label>
                   <Form.Item
                     name="code"
@@ -298,7 +298,7 @@ function ServiceCreate() {
                     ""
                   )}
                 </div>
-                <div className="col-4">
+                {/* <div className="col-4">
                   <label>Category</label>
                   <Form.Item
                     className="mt-2"
@@ -327,8 +327,39 @@ function ServiceCreate() {
                       onSelect={onSelect}
                     />
                   </Form.Item>
-                </div>
-                <div className="col-6 mt-2">
+                </div> */}
+
+<div className="col-6">
+<label>Category</label>
+                  <Form.Item
+                    className="mt-2"
+                    name="category"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please select a category",
+                      },
+                    ]}
+                  >
+                    <TreeSelect
+                      className="tree"
+                      name="tree"
+                      style={{ width: "100%" }}
+                      // value={category}
+                      // value={ setState.value}
+                      dropdownStyle={{
+                        maxHeight: 400,
+                        overflow: "auto",
+                      }}
+                      treeData={categoryTree}
+                      placeholder="Please select"
+                      treeDefaultExpandAll
+                      onChange={onChangetree}
+                      onSelect={onSelect}
+                    />
+                  </Form.Item>
+</div>
+                {/* <div className="col-6 mt-2">
                   <label>HSN</label>
                   <Form.Item
                     name="HSN"
@@ -365,8 +396,8 @@ function ServiceCreate() {
                   ) : (
                     ""
                   )}
-                </div>
-                <div className="col-6 mt-2">
+                </div> */}
+                <div className="col-6 mt-1">
                   <label className="">Tax Type</label>
                   <Form.Item
                     name="taxRate"

@@ -733,7 +733,7 @@ function Services() {
                     }}
                   >
                     <div className="row mt-4">
-                      <div className="col-4">
+                      <div className="col-6">
                         <label>Name</label>
                         <Form.Item
                           name="service_name"
@@ -761,7 +761,7 @@ function Services() {
                           />
                         </Form.Item>
                       </div>
-                      <div className="col-4">
+                      <div className="col-6">
                         <label>Code</label>
                         <Form.Item
                           name="serviceCode"
@@ -788,8 +788,9 @@ function Services() {
                           />
                         </Form.Item>
                       </div>
-                      <div className="col-4">
-                        <label className="py-1">Category</label>
+                     
+                      <div className="col-6 ">
+                      <label className="py-1">Category</label>
                         <Form.Item
                           name="serviceCategory"
                           rules={[
@@ -814,9 +815,7 @@ function Services() {
                             onSelect={onSelect}
                           />
                         </Form.Item>
-                      </div>
-                      <div className="col-6 ">
-                        <label>HSN</label>
+                        {/* <label>HSN</label>
                         <Form.Item
                           name="serviceHsn"
                           rules={[
@@ -832,7 +831,7 @@ function Services() {
                               setServiceHsn(e.target.value);
                             }}
                           />
-                        </Form.Item>
+                        </Form.Item> */}
                       </div>
                       <div className="col-6 ">
                         <label>Tax Type</label>

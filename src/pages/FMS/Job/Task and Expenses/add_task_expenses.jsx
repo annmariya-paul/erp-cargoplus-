@@ -43,6 +43,9 @@ export default function Taskexpenses() {
   const [defaultCurrencydata, setDefaultCurrencyData] = useState();
   const [currencyRates, setCurrencyRates] = useState(0);
   const [expenseAmount, setExpenseAmount] = useState(0);
+  const [iscostAmount, setIsCostAmount] = useState(false);
+  const [isExpenseAmount, setIsExpenseAmount] = useState(false);
+  const [costAmount, setCostAmount] = useState();
 
   console.log("Servicesss are :::", services);
 
@@ -348,7 +351,7 @@ export default function Taskexpenses() {
           let existingValues = addForm.getFieldsValue();
           let { Job_quotation_details } = existingValues;
           let assignValues = Job_quotation_details[key];
-          assignValues["job_task_expense_taxtype_id"] = item.service_taxtype;
+          assignValues["job_task_expense_taxtype_id"] = item?.service_taxtype;
           assignValues["job_task_expense_tax_perc"] =
             item?.fms_v1_tax_types?.tax_type_percentage;
 
@@ -526,6 +529,9 @@ export default function Taskexpenses() {
           job_task_expense_invoiceable: 0,
         },
       ]);
+      // tableData.map((item,index)=> {
+      // handleAmt(e, tabledata.length + 1, "jfhiefiefei");
+      // })
 
       // handlecurrency(e, tableData.length + 1);
     }
@@ -754,9 +760,47 @@ export default function Taskexpenses() {
   useEffect(() => {
     getAllservices();
     getAllTaxtype();
+    // handleAmt();
   }, [numOfItems, pageofIndex]);
 
   const tooltipcolor = ["#6c6d6f"];
+
+  // useEffect(() => {
+  //   tableData.map((item, index) => {
+  //     if (
+  //       item.job_task_expense_cost_amountfx === null ||
+  //       item.job_task_expense_exp_amountfx === null
+  //     ) {
+  //       setIsCostAmount(true);
+  //       setIsExpenseAmount(true);
+  //     } else if (item.job_task_expense_cost_amountfx !== null) {
+  //       setIsExpenseAmount(false);
+  //     } else if (item.job_task_expense_exp_amountfx !== null) {
+  //       setIsCostAmount(false);
+  //     }
+  //   });
+  //   // console.log("euwdu", isExpenseAmount, iscostAmount);
+  // }, [isExpenseAmount, iscostAmount]);
+
+  const handleAmt = (e, key, col) => {
+    // if (e && col && key) {
+    tableData.map((item, index) => {
+      if (item.key == key) {
+        if (costAmount) {
+          setIsExpenseAmount(false);
+          setIsCostAmount(false);
+        } else if (expenseAmount) {
+          setIsCostAmount(false);
+          setIsExpenseAmount(false);
+        }
+      }
+      if (e == null || e == 0) {
+        setIsExpenseAmount(true);
+        setIsCostAmount(true);
+      }
+    });
+    // }
+  };
 
   const columns = [
     {
@@ -821,6 +865,15 @@ export default function Taskexpenses() {
                   handleInputchange1(e, index.key, "job_task_expense_task_id");
                   setIsService(e);
                   console.log("servicess11123", e);
+                }}
+                onBlur={() => {
+                  if (isService) {
+                    handleInputChange2(
+                      taxType,
+                      index.key,
+                      "job_task_expense_cost_taxfx"
+                    );
+                  }
                 }}
               >
                 {services &&
@@ -1010,51 +1063,71 @@ export default function Taskexpenses() {
             console.log("index is :", index);
 
             return (
-              <div className="d-flex justify-content-center align-items-center tborder ">
-                <Form.Item
-                  name={[
-                    "Job_quotation_details",
-                    index.key,
-                    "job_task_expense_cost_amountfx",
-                  ]}
-                  rules={[
-                    {
-                      required: true,
-                      message: "Required",
-                    },
-                  ]}
-                >
-                  <InputNumber
-                    bordered={false}
-                    className=""
-                    value={index.job_task_expense_cost_amountfx}
-                    onChange={(e) => {
-                      if (isService) {
-                        handleInputChange(
-                          e,
+              <>
+                <div className="d-flex justify-content-center align-items-center tborder ">
+                  <Form.Item
+                    name={[
+                      "Job_quotation_details",
+                      index.key,
+                      "job_task_expense_cost_amountfx",
+                    ]}
+                    // rules={[
+                    //   {
+                    //     required: expenseAmount ? false : true,
+                    //     message: "Required",
+                    //   },
+                    // ]}
+                  >
+                    <InputNumber
+                      bordered={false}
+                      className=""
+                      value={index.job_task_expense_cost_amountfx}
+                      onChange={(e) => {
+                        if (isService) {
+                          handleInputChange(
+                            e,
+                            index.key,
+                            "job_task_expense_cost_amountfx"
+                          );
+                        }
+                        setCostAmount(e);
+                        handleAmt(e, index.key);
+
+                        console.log(" input numberevent ", e, index.key);
+                      }}
+                      align="right"
+                      min={0}
+                      precision={2}
+                      controlls={false}
+                      onBlur={() => {
+                        if (isService) {
+                          handleInputChange2(
+                            taxType,
+                            index.key,
+                            "job_task_expense_cost_taxfx"
+                          );
+                        }
+                        handleAmt(
+                          costAmount,
                           index.key,
                           "job_task_expense_cost_amountfx"
                         );
-                      }
-
-                      console.log(" input numberevent ", e, index.key);
-                    }}
-                    align="right"
-                    min={0}
-                    precision={2}
-                    controlls={false}
-                    onBlur={() => {
-                      if (isService) {
-                        handleInputChange2(
-                          taxType,
-                          index.key,
-                          "job_task_expense_cost_taxfx"
-                        );
-                      }
-                    }}
-                  />
-                </Form.Item>
-              </div>
+                      }}
+                    />
+                  </Form.Item>
+                </div>
+                <div>
+                  {iscostAmount ? (
+                    <>
+                      <div className="text-center">
+                        <label style={{ color: "red" }}>Required</label>
+                      </div>
+                    </>
+                  ) : (
+                    ""
+                  )}
+                </div>
+              </>
             );
           },
         },
@@ -1261,45 +1334,60 @@ export default function Taskexpenses() {
             if (index?.job_task_expense_cost_amountfx !== null && index?.key) {
               isjob_task_expense_cost_amountfx = false;
             }
-            console.log("if required", isjob_task_expense_cost_amountfx);
+            console.log("indexindex", index);
             return (
-              <div className="d-flex justify-content-center align-items-center tborder ">
-                <Form.Item
-                  name={[
-                    "Job_quotation_details",
-                    index.key,
-                    "job_task_expense_exp_amountfx",
-                  ]}
-                  rules={[
-                    {
-                      required: isjob_task_expense_cost_amountfx,
-                      message: "Required",
-                    },
-                  ]}
-                >
-                  <InputNumber
-                    bordered={false}
-                    // className="text_right"
-                    value={index.job_task_expense_exp_amountfx}
-                    onChange={(e) => {
-                      handleInputChange(
-                        e,
-                        index.key,
-                        "job_task_expense_exp_amountfx",
-                        "tx"
-                      );
-                      setExpenseAmount(e);
-
-                      console.log(" input numberevent ", e, index.key);
-                    }}
-                    align="right"
-                    // step={0.01}
-                    min={0}
-                    precision={2}
-                    controlls={false}
-                  />
-                </Form.Item>
-              </div>
+              <>
+                <div className="d-flex justify-content-center align-items-center tborder ">
+                  <Form.Item
+                    name={[
+                      "Job_quotation_details",
+                      index.key,
+                      "job_task_expense_exp_amountfx",
+                    ]}
+                    // rules={[
+                    //   {
+                    //     required: costAmount ? false : true,
+                    //     message: "Required",
+                    //   },
+                    // ]}
+                  >
+                    <InputNumber
+                      bordered={false}
+                      // className="text_right"
+                      value={index.job_task_expense_exp_amountfx}
+                      onChange={(e) => {
+                        handleInputChange(
+                          e,
+                          index.key,
+                          "job_task_expense_exp_amountfx",
+                          "tx"
+                        );
+                        setExpenseAmount(e);
+                        handleAmt(
+                          e,
+                          index.key,
+                          "job_task_expense_exp_amountfx"
+                        );
+                        console.log(" input numberevent ", e, index.key);
+                      }}
+                      align="right"
+                      // step={0.01}
+                      min={0}
+                      precision={2}
+                      controlls={false}
+                    />
+                  </Form.Item>
+                </div>
+                <div className="">
+                  {isExpenseAmount ? (
+                    <div className="text-center">
+                      <label style={{ color: "red" }}>Required</label>
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                </div>
+              </>
             );
           },
         },
@@ -1548,6 +1636,17 @@ export default function Taskexpenses() {
       ) {
         temp = true;
       }
+      if (
+        item.job_task_expense_cost_amountfxc === null &&
+        item.job_task_expense_exp_amountfx === null
+      ) {
+        setIsExpenseAmount(true);
+        setIsCostAmount(true);
+        temp = false;
+      } else {
+        setIsExpenseAmount(false);
+        setIsCostAmount(false);
+      }
     });
     console.log("Submitting data", tableData);
     if ((temp = true)) {
@@ -1583,9 +1682,15 @@ export default function Taskexpenses() {
             <Form
               name="addForm"
               form={addForm}
-              onFinish={(value) => {
+              onFinish={(value, index) => {
                 console.log("values iss", value);
+                // if (costAmount && expenseAmount) {
                 submitData(value);
+                // setIsCostAmount(true);
+                // setIsExpenseAmount(true);
+                // console.log("submmiittiing by me", value, index);
+                // handleAmt();
+                // }
               }}
               onFinishFailed={(error) => {
                 console.log(error);

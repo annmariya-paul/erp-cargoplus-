@@ -152,8 +152,7 @@ export default function LeadReport() {
                        lead_status: i?.name,
                        lead_type: t?.name,
                        lead_user_type: item?.lead_user_type,
-                     });
-                     
+                     });  
                    }
                  }
                });

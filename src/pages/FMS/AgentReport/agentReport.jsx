@@ -1,16 +1,23 @@
 import "./agentReport.scss";
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { DatePicker, Input, Select } from "antd";
+import moment from "moment";
 import TableData from "../../../components/table/table_data";
 import SelectBox from "../../../components/Select Box/SelectBox";
 import Button from "../../../components/button/button";
-import { ACCOUNTS } from "../../../api/bootapi";
+import { ACCOUNTS, CRM_BASE_URL_FMS } from "../../../api/bootapi";
 import PublicFetch from "../../../utils/PublicFetch";
 import { FaFileExcel } from "react-icons/fa";
 
 export default function AgentReport() {
   const [serialNo, setserialNo] = useState(1);
-  const [allagents,setAllagents]= useState("")
+  const [allagents, setAllagents] = useState("");
+  const [selectedAgent, setSelectedAgent] = useState();
+  console.log("selectagent", selectedAgent);
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
+  const [reportData, setReportData] = useState();
+  console.log("dataaaa", reportData);
 
   const getallagents = async () => {
     try {
@@ -18,19 +25,67 @@ export default function AgentReport() {
         `${process.env.REACT_APP_BASE_URL}/agents`
       );
       console.log("getting all agent details", allagents.data.data);
-      setAllagents(allagents.data.data)
-    
+      setAllagents(allagents.data.data);
     } catch (err) {
       console.log("error to agent details", err);
     }
   };
 
-
   useEffect(() => {
     getallagents();
+    SearchBydate();
   }, []);
 
-
+  const SearchBydate = () => {
+    let startdate = moment(startDate).format("MM-DD-YYYY");
+    let enddate = moment(endDate).format("MM-DD-YYYY");
+    PublicFetch.post(`${CRM_BASE_URL_FMS}/reports/agent`, {
+      agent_id: selectedAgent,
+      start_date: startdate,
+      end_date: enddate,
+    })
+      .then((res) => {
+        console.log("Response", res);
+        if (res.data.success) {
+          console.log("Success Data", res.data.data.fms_v1_job_agents);
+          //  setReportData(res.data.data);
+          //  setSuccessPopup(true);
+          //  close_modal(successPopup, 1200);
+          //  addForm.resetFields();
+          //  setModalAddCurrency(false);
+          //  getAllCurrency();
+          let temp = [];
+          var totalCostFx = 0;
+          let exchange_rate = "";
+          let isagents = "";
+          let isjob = "";
+          res?.data?.data?.forEach((i, index) => {
+            i?.fms_v1_job_agents?.forEach((item, index) => {
+              i?.fms_v1_job_task_expenses?.forEach((itm, index) => {
+                if (item?.fms_v1_jobs.job_id === itm?.job_task_expense_job_id)
+                totalCostFx += itm?.job_task_expense_cost_amountfx;
+                isagents = item;
+                isjob = itm;
+                exchange_rate = item?.fms_v1_jobs?.job_total_cost_exch;
+              });
+            });
+          });
+          var converted = totalCostFx / exchange_rate;
+          temp.push({
+            job_no: isagents?.fms_v1_jobs.job_number,
+            customer: isagents?.fms_v1_jobs.crm_v1_leads.lead_customer_name,
+            currency:
+              isagents?.fms_v1_jobs.generalsettings_v1_currency.currency_name,
+            totalcost_fx: totalCostFx.toFixed(2),
+            totalcost_lx: converted.toFixed(2),
+          });
+          setReportData(temp);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
 
   const columns = [
     {
@@ -68,43 +123,32 @@ export default function AgentReport() {
       title: "TOTAL COST (Fx)",
       dataIndex: "totalcost_fx",
       key: "totalcost_fx",
-      align: "center",
+      align: "right",
       width: "16%",
     },
     {
       title: "TOTAL COST (Lx)",
       dataIndex: "totalcost_lx",
       key: "totalcost_lx",
-      align: "center",
+      align: "right",
       width: "16%",
     },
   ];
-  const data = [
-    {
-      job_no: "00111",
-      customer: "Test",
-      currency: "US Dollar",
-      totalcost_fx: "7675",
-      totalcost_lx: "9877",
-    },
-  ];
-
-
 
   return (
     <>
       <div className="container-fluid container_agent_report py-3">
         <div className=" d-flex justify-content-between">
           <div>
-          <h5 className="lead_text">Agent Report</h5>
+            <h5 className="lead_text">Agent Report</h5>
           </div>
-         
+
           <div className="icon_margin">
             <li className="icon-border">
-            <a className="icon icon_color" href="#">
-              <FaFileExcel />
-            </a>
-          </li>
+              <a className="icon icon_color" href="#">
+                <FaFileExcel />
+              </a>
+            </li>
           </div>
         </div>
         <div className="row">
@@ -115,39 +159,38 @@ export default function AgentReport() {
                     // onChange={(e) => setName(e.target.value)}
                   > */}
             <SelectBox
-               showSearch={true}
-               allowClear
-              //  value={vendortyp}
-               optionFilterProp="children"
-              //  onChange={(e) => {
-              //    setvendortyp(e);
-              //  }}
+              showSearch={true}
+              allowClear
+              optionFilterProp="children"
+              onChange={(e) => setSelectedAgent(e)}
             >
-              {allagents && allagents.length>0 && 
-              allagents.map((itm,indx)=>{
-                console.log("agent namee",itm)
-               return(
-                
-                <Select.Option
-               key={itm.agent_id}
-               id={itm.agent_id}
-               value={itm.agent_id}
-                >
-                  {itm.crm_v1_vendors.vendor_name}
-                </Select.Option>
-               )
-              })}
-             
+              {allagents &&
+                allagents.length > 0 &&
+                allagents.map((itm, indx) => {
+                  console.log("agent namee", itm);
+                  return (
+                    <Select.Option
+                      key={itm.agent_id}
+                      id={itm.agent_id}
+                      value={itm.agent_id}
+                    >
+                      {itm.crm_v1_vendors.vendor_name}
+                    </Select.Option>
+                  );
+                })}
             </SelectBox>
             {/* </Form.Item> */}
           </div>
-         
+
           <div className="col-sm-3 col-6">
-            <label>
-              Date From
-            </label>
+            <label>Date From</label>
             <div className="mt-2">
-              <DatePicker></DatePicker>
+              <DatePicker
+                format={"DD-MM-YYYY"}
+                placeholder="Start Date"
+                value={startDate}
+                onChange={(e) => setStartDate(e)}
+              />
             </div>
           </div>
 
@@ -155,16 +198,22 @@ export default function AgentReport() {
           <div className="col-sm-3 col-6">
             <label>To</label>
             <div className="mt-2">
-              <DatePicker></DatePicker>
+              <DatePicker
+                format={"DD-MM-YYYY"}
+                placeholder="End Date"
+                value={endDate}
+                onChange={(e) => setEndDate(e)}
+              />
             </div>
           </div>
           <div className="col-sm-3 d-flex mt-4 pt-1 px-2 justify-content-center gap-3">
             <div>
-            <Button btnType="save" >Search</Button>
+              <Button btnType="save" onClick={SearchBydate}>
+                Search
+              </Button>
             </div>
-           
           </div>
-         
+
           {/* <div className="col-sm-1 mt-4  pt-3d-flex justify-content-center">
           <li className="icon-border">
             <a className="icon" href="#">
@@ -178,7 +227,7 @@ export default function AgentReport() {
         <div className="datatable">
           <TableData
             // data={getData(current, pageSize)}
-            data={data}
+            data={reportData}
             columns={columns}
             custom_table_css="table_lead_list"
           />

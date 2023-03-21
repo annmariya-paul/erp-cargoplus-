@@ -172,6 +172,11 @@ const ROUTES = {
   JOB_INVOICE_ID: "/job_invoice/:id",
   VENDOR_TYPE: "/vendor_type",
   VENDOR: "/vendor",
+
+  // CRM -> sales new page
+  SALE_ENQUIRY:"/sale_enquiry"
+
+
 };
 
 module.exports = { ROUTES };

@@ -134,6 +134,7 @@ import Debit_notes from "./pages/Accounts/DebitNotes/list_debitnotes";
 import DebitnotesView from "./pages/Accounts/DebitNotes/view_debitnotes";
 import DailyExpenseReport from "./pages/Accounts/Reports/daily_expense_report";
 import CreatePurchase from "./pages/Accounts/settings/Purchase/purchaseAdd";
+import Enquiry from "./pages/CRM/lead/enquiry/enquiry";
 
 function App() {
   return (
@@ -172,6 +173,11 @@ function App() {
             </Route>
             <Route path={ROUTES.OPPORTUNITY} element={<ProtectedRoute />}>
               <Route index element={<Opportunitylist />} />
+            </Route>
+           {/* sales - enquiries */}
+
+            <Route path={ROUTES.SALE_ENQUIRY} element={<ProtectedRoute />}>
+              <Route index element={<Enquiry />} />
             </Route>
 
             <Route

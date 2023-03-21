@@ -46,7 +46,7 @@ const LeadOrganization = [
 
 const Oppor_Status = [
   { id: "1", name: "Quotation", value: "1" },
-  { id: "2", name: "Interesrted", value: "2" },
+  { id: "2", name: "Interested", value: "2" },
   { id: "3", name: "Converted", value: "3" },
   { id: "4", name: "Lost", value: "4" },
   { id: "5", name: "DND", value: "5" },

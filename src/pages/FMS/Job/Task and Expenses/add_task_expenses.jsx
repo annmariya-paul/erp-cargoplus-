@@ -46,6 +46,7 @@ export default function Taskexpenses() {
   const [iscostAmount, setIsCostAmount] = useState(false);
   const [isExpenseAmount, setIsExpenseAmount] = useState(false);
   const [costAmount, setCostAmount] = useState();
+  const [currentKey, setCurrentKey] = useState();
 
   console.log("Servicesss are :::", services);
 
@@ -489,6 +490,7 @@ export default function Taskexpenses() {
   };
 
   const handleEnter = (e) => {
+    // setCurrentKey(currentKey + 1);
     console.log("Hello");
     console.log("Key ::::::: ", e.key);
 
@@ -529,9 +531,11 @@ export default function Taskexpenses() {
           job_task_expense_invoiceable: 0,
         },
       ]);
-      // tableData.map((item,index)=> {
-      // handleAmt(e, tabledata.length + 1, "jfhiefiefei");
-      // })
+
+      setCostAmount();
+      setExpenseAmount();
+
+      handleAmt(e, currentKey, "jfhiefiefei");
 
       // handlecurrency(e, tableData.length + 1);
     }
@@ -782,22 +786,49 @@ export default function Taskexpenses() {
   //   // console.log("euwdu", isExpenseAmount, iscostAmount);
   // }, [isExpenseAmount, iscostAmount]);
 
+  useEffect(() => {
+    console.log("constAmt", costAmount, expenseAmount);
+    if (costAmount || expenseAmount) {
+      setIsExpenseAmount(false);
+      setIsCostAmount(false);
+    } else {
+      setIsExpenseAmount(true);
+      setIsCostAmount(true);
+    }
+    handleAmt(1, 2, "");
+  }, [costAmount, expenseAmount]);
+
   const handleAmt = (e, key, col) => {
+    let values = addForm.getFieldsValue();
+    let { Job_quotation_details } = values;
+    console.log("job quotations lte", Job_quotation_details);
+    let cost = 0;
+    let assignValues = Job_quotation_details[key];
+    if (assignValues) {
+      costAmount &&
+        !expenseAmount &&
+        (assignValues["job_task_expense_exp_amountfx"] = cost);
+      !costAmount &&
+        expenseAmount &&
+        (assignValues["job_task_expense_cost_amountfx"] = cost);
+    }
+    // assignValues && (assignValues["job_task_expense_cost_amountfx"] = cost);
+    addForm.setFieldsValue({ Job_quotation_details });
+    if (costAmount || expenseAmount) {
+      setIsExpenseAmount(false);
+      setIsCostAmount(false);
+    } else {
+      setIsExpenseAmount(true);
+      setIsCostAmount(true);
+    }
     // if (e && col && key) {
+    console.log("keyOfTable", e, key);
     tableData.map((item, index) => {
-      if (item.key == key) {
-        if (costAmount) {
-          setIsExpenseAmount(false);
-          setIsCostAmount(false);
-        } else if (expenseAmount) {
-          setIsCostAmount(false);
-          setIsExpenseAmount(false);
-        }
-      }
-      if (e == null || e == 0) {
-        setIsExpenseAmount(true);
-        setIsCostAmount(true);
-      }
+      console.log("itemOfKey", item.key);
+      console.log("tableLEngth", tableData?.length);
+      // if (item.key == tableData?.length - 1) {
+      //   setCurrentKey(key);
+      // }
     });
     // }
   };
@@ -1071,12 +1102,12 @@ export default function Taskexpenses() {
                       index.key,
                       "job_task_expense_cost_amountfx",
                     ]}
-                    // rules={[
-                    //   {
-                    //     required: expenseAmount ? false : true,
-                    //     message: "Required",
-                    //   },
-                    // ]}
+                    rules={[
+                      {
+                        required: isExpenseAmount,
+                        message: "Required",
+                      },
+                    ]}
                   >
                     <InputNumber
                       bordered={false}
@@ -1117,7 +1148,7 @@ export default function Taskexpenses() {
                   </Form.Item>
                 </div>
                 <div>
-                  {iscostAmount ? (
+                  {/* {tableData?.length - 1 === index.key && iscostAmount ? (
                     <>
                       <div className="text-center">
                         <label style={{ color: "red" }}>Required</label>
@@ -1125,7 +1156,7 @@ export default function Taskexpenses() {
                     </>
                   ) : (
                     ""
-                  )}
+                  )} */}
                 </div>
               </>
             );
@@ -1344,12 +1375,12 @@ export default function Taskexpenses() {
                       index.key,
                       "job_task_expense_exp_amountfx",
                     ]}
-                    // rules={[
-                    //   {
-                    //     required: costAmount ? false : true,
-                    //     message: "Required",
-                    //   },
-                    // ]}
+                    rules={[
+                      {
+                        required: iscostAmount ? true : false,
+                        message: "Required",
+                      },
+                    ]}
                   >
                     <InputNumber
                       bordered={false}
@@ -1379,13 +1410,13 @@ export default function Taskexpenses() {
                   </Form.Item>
                 </div>
                 <div className="">
-                  {isExpenseAmount ? (
+                  {/* {tableData?.length - 1 === index.key && isExpenseAmount ? (
                     <div className="text-center">
                       <label style={{ color: "red" }}>Required</label>
                     </div>
                   ) : (
                     ""
-                  )}
+                  )} */}
                 </div>
               </>
             );
@@ -1480,7 +1511,8 @@ export default function Taskexpenses() {
     }
   };
 
-  console.log("abcdefg", isChecked);
+  console.log("isCostAmt", iscostAmount);
+  console.log("isExpAmt", isExpenseAmount);
 
   const [total, setTotal] = useState(0);
   const [leadId, setLeadId] = useState("");
@@ -1629,6 +1661,14 @@ export default function Taskexpenses() {
 
   const submitData = (data) => {
     let temp = false;
+    // if (costAmount || expenseAmount) {
+    //   setIsExpenseAmount(false);
+    //   setIsCostAmount(false);
+    // } else {
+    //   setIsExpenseAmount(true);
+    //   setIsCostAmount(true);
+    //   temp = false;
+    // }
     tableData.map((item, index) => {
       if (
         item.job_task_expense_cost_amountfx &&
@@ -1636,19 +1676,8 @@ export default function Taskexpenses() {
       ) {
         temp = true;
       }
-      if (
-        item.job_task_expense_cost_amountfxc === null &&
-        item.job_task_expense_exp_amountfx === null
-      ) {
-        setIsExpenseAmount(true);
-        setIsCostAmount(true);
-        temp = false;
-      } else {
-        setIsExpenseAmount(false);
-        setIsCostAmount(false);
-      }
     });
-    console.log("Submitting data", tableData);
+    console.log("costAmt", iscostAmount);
     if ((temp = true)) {
       PublicFetch.post(`${CRM_BASE_URL_FMS}/job-task-expenses/${id}`, {
         job_task_expense: tableData,

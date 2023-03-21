@@ -117,9 +117,10 @@ export default function Add_purchase() {
 
     console.log("aaa",a);
 
-    console.log("ddd", data);
+    console.log("dta", data);
     const formData = new FormData();
-    formData.append("purchase_po_no", purchasePoNo);
+    // formData.append("purchase_po_no", purchasePoNo);
+    formData.append("purchase_po_ref", purchasePoNo);
     formData.append("purchase_vendor_id", vendorid);
     formData.append("purchase_amount", amount);
     formData.append("purchase_purchase_date", purchase_date);
@@ -207,7 +208,7 @@ export default function Add_purchase() {
                       value={purchasePoNo}
                       onChange={(e) => {
                         setPurchasePoNo(e.target.value);
-                        console.log("purchasePoNo", purchasePoNo);
+                        console.log("purchasePoReference", purchasePoNo);
                       }}
                     />
                   </Form.Item>

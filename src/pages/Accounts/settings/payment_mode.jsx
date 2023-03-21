@@ -244,6 +244,7 @@ useEffect(() => {
       align: "center",
     },
   ];
+  
   // const data = [
   //   {
   //     sl_no: "1",

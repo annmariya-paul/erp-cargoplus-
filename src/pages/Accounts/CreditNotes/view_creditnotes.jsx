@@ -1,20 +1,12 @@
-import { Select } from "antd";
-import { Checkbox, Col, Row } from "antd";
 import React, { useState, useEffect } from "react";
 import { FiEdit } from "react-icons/fi";
 import Button from "../../../components/button/button";
-import { DatePicker } from "antd";
-import CustomModel from "../../../components/custom_modal/custom_model";
-import ErrorMsg from "../../../components/error/ErrorMessage";
-import FileUpload from "../../../components/fileupload/fileUploader";
 import { useNavigate, useParams } from "react-router-dom";
 import { Form } from "antd";
-import { TreeSelect } from "antd";
-import TextArea from "../../../components/ InputType TextArea/TextArea";
-import InputType from "../../../components/Input Type textbox/InputType";
-import SelectBox from "../../../components/Select Box/SelectBox";
 import { ROUTES } from "../../../routes";
-
+import PublicFetch from "../../../utils/PublicFetch";
+import { ACCOUNTS } from "../../../api/bootapi";
+import { NavLink } from "react-router-dom";
 function CreditnotesView() {
   const { id } = useParams();
   console.log("id :::::", id);
@@ -31,16 +23,20 @@ function CreditnotesView() {
       }, time);
     }
   };
-  const [viewcreditnote, setviewcreditnote] = useState({
-    id:"",
-    date: "",
-    customer: "",
-    invoice_no:"",
-    invoice_amount: "",
-    due_amount: "",
-
-  });
-const handleview = () => {}
+  const [viewcreditnote, setviewcreditnote] = useState();
+  console.log("viewcreditnote", viewcreditnote);
+  const getsingleCreditnote = () => {
+    PublicFetch.get(`${ACCOUNTS}/credit-note/${id}`)
+      .then((res) => {
+        console.log("rer", res);
+        if (res.data.success) {
+          setviewcreditnote(res?.data?.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
 
   const getBase64 = (file) =>
     new Promise((resolve, reject) => {
@@ -49,6 +45,11 @@ const handleview = () => {}
       reader.onload = () => resolve(reader.result);
       reader.onerror = (error) => reject(error);
     });
+  useEffect(() => {
+    if (id) {
+      getsingleCreditnote();
+    }
+  }, [id]);
 
   return (
     <>
@@ -72,18 +73,20 @@ const handleview = () => {}
                       </Button>
                     </div>
                     <div className="col-xl-2 col-lg-2 col-md-3 col-sm-12 mb-3 ">
-                      <Button
-                        btnType="add_borderless"
-                        className="edit_button rounded"
-                        onClick={() => {
-                          handleview();
-                          console.log("view", viewcreditnote);
-                          navigate(`${ROUTES.EDIT_CREDIT_NOTES}/${id}`);
-                        }}
+                      <NavLink
+                        className={({ isActive }) =>
+                          isActive ? "active-link" : "link"
+                        }
+                        to={`${ROUTES.EDIT_CREDIT_NOTES}/${viewcreditnote?.credit_note_id}`}
                       >
-                        Edit
-                        <FiEdit />
-                      </Button>
+                        <Button
+                          btnType="add_borderless"
+                          className="edit_button rounded"
+                        >
+                          Edit
+                          <FiEdit />
+                        </Button>
+                      </NavLink>
                     </div>
                   </div>
                 </div>
@@ -95,7 +98,9 @@ const handleview = () => {}
                     <div className="col-1">:</div>
 
                     <div className="col-7">
-                      <p className="modal-view-data">0004</p>
+                      <p className="modal-view-data">
+                        {viewcreditnote?.credit_note_voucher_no}
+                      </p>
                     </div>
                   </div>
 
@@ -104,8 +109,9 @@ const handleview = () => {}
                     <div className="col-1">:</div>
 
                     <div className="col-7">
-                      <p className="modal-view-data">12-3-23
-                      {viewcreditnote.date}
+                      <p className="modal-view-data">
+                        
+                        {viewcreditnote?.credit_note_date}
                       </p>
                     </div>
                   </div>
@@ -115,9 +121,9 @@ const handleview = () => {}
                     <div className="col-1">:</div>
 
                     <div className="col-7">
-                      <p className="modal-view-data">Arun
-                      {viewcreditnote.customer}
-
+                      <p className="modal-view-data">
+                    
+                        {viewcreditnote?.credit_note_lead_id}
                       </p>
                     </div>
                   </div>
@@ -126,9 +132,8 @@ const handleview = () => {}
                     <div className="col-1">:</div>
 
                     <div className="col-7">
-                      <p className="modal-view-data">001
-                      {viewcreditnote.customer}
-
+                      <p className="modal-view-data">
+                        {viewcreditnote?.accounts_v1_credit_note_invoices?.invoice_no}
                       </p>
                     </div>
                   </div>
@@ -137,9 +142,8 @@ const handleview = () => {}
                     <div className="col-1">:</div>
 
                     <div className="col-7">
-                      <p className="modal-view-data">10000
-                      {viewcreditnote.invoice_amount}
-
+                      <p className="modal-view-data">
+                        {viewcreditnote?.credit_note_amount}
                       </p>
                     </div>
                   </div>
@@ -149,9 +153,8 @@ const handleview = () => {}
                     <div className="col-1">:</div>
 
                     <div className="col-7">
-                      <p className="modal-view-data">22-3-2023
-                      {viewcreditnote.due_amount}
-
+                      <p className="modal-view-data">
+                        {viewcreditnote?.credit_due_amount}
                       </p>
                     </div>
                   </div>

@@ -63,7 +63,8 @@ function Custom_model({
             </div>
           </div>
         )}
-        {View_list && <div>{list_content}</div>}
+        {View_list && 
+        <div>{list_content}</div>}
       </Modal>
     </div>
   );

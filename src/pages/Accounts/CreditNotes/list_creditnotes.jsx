@@ -57,6 +57,7 @@ function Credit_notes() {
         console.log("oitm",item);
         let a =moment(item.credit_note_date).format("DD-MM-YYYY")
         temp.push({
+          credit_note_id: item.credit_note_id,
           accounts_v1_credit_note_invoices:item.accounts_v1_credit_note_invoices,
           credit_note_amount:item.credit_note_amount,
           credit_note_date:a,
@@ -183,12 +184,12 @@ function Credit_notes() {
               // }}
               className="actionEdit m-0 p-0"
             >
-              <Link to={`${ROUTES.EDIT_CREDIT_NOTES}/${index.id}`}>
+              <Link to={`${ROUTES.EDIT_CREDIT_NOTES}/${index.credit_note_id}`}>
                 <FiEdit fontSize={"12px"} />
               </Link>
             </div>
 
-            <Link to={`${ROUTES.VIEW_CREDIT_NOTES}/${index.id}`}>
+            <Link to={`${ROUTES.VIEW_CREDIT_NOTES}/${index.credit_note_id}`}>
               <div className="actionView m-0 p-0">
                 <MdPageview />
               </div>

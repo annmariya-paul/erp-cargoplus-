@@ -15,7 +15,9 @@ Button.btn-close {
 .modal-title,
 .success_msg {
   color: variables.$primary;
+  background-color: #0000ff;
 }
+
 .modal-footer {
   border-top: none;
   justify-content: center;
@@ -46,7 +48,8 @@ input[type='date']{
     outline:none;
 }
 .modal_window_style {
-  :global {
+  
+  
     .ant-modal-content {
       position: relative;
       background-color: #fff;
@@ -55,10 +58,11 @@ input[type='date']{
       border-radius: 15px;
       pointer-events: auto;
     }
-  }
+  
 }
 .ant-modal-centered .ant-modal {
-   top: 10%!important; }
+   top: 10%!important; 
+  }
 
    .modal_body{
     height: 500px;

@@ -1,31 +1,31 @@
 import { Select } from "antd";
-import { Checkbox, Col, Row } from "antd";
 import React, { useState, useEffect } from "react";
 import Button from "../../../components/button/button";
 import { DatePicker } from "antd";
 import CustomModel from "../../../components/custom_modal/custom_model";
 import ErrorMsg from "../../../components/error/ErrorMessage";
-import FileUpload from "../../../components/fileupload/fileUploader";
-import { useNavigate } from "react-router-dom";
 import { Form } from "antd";
-import { TreeSelect } from "antd";
 import TextArea from "../../../components/ InputType TextArea/TextArea";
 import moment from "moment";
 import InputType from "../../../components/Input Type textbox/InputType";
 import SelectBox from "../../../components/Select Box/SelectBox";
 import { ROUTES } from "../../../routes";
 import Input_Number from "../../../components/InputNumber/InputNumber";
+import PublicFetch from "../../../utils/PublicFetch";
+import { ACCOUNTS } from "../../../api/bootapi";
+import { useNavigate, useParams } from "react-router-dom";
+import { CRM_BASE_URL, CRM_BASE_URL_FMS } from "../../../api/bootapi";
 
 function Editcredit_notes() {
   const [successPopup, setSuccessPopup] = useState(false);
   const [error, setError] = useState(false);
-  const [addForm] = Form.useForm();
+  const [editForm] = Form.useForm();
   const navigate = useNavigate();
   const [current, setCurrent] = useState(1);
   const [pageSize, setPageSize] = useState("25");
   const [date, setDate] = useState("");
   const newDate = new Date();
-  const[editnote,setEditnote]=useState("");
+  const [editnote, setEditnote] = useState("");
   const [customerid, setcustomerid] = useState("");
   const [allcustomer, setAllCustomer] = useState();
   const [invoiceno, setinvoiceno] = useState();
@@ -36,6 +36,9 @@ function Editcredit_notes() {
   const [allinvoiceno, setallinvoiceno] = useState();
   const [dueamount, setdueamount] = useState();
   const [alltypesname, setalltypesname] = useState("");
+  const [credit_note_id, setcredit_note_id] = useState("");
+  const { id } = useParams();
+  const [viewcreditnote, setviewcreditnote] = useState("");
   const getData = (current, pageSize) => {
     return editnote?.slice((current - 1) * pageSize, current * pageSize);
   };
@@ -47,13 +50,112 @@ function Editcredit_notes() {
       }, time);
     }
   };
-  const handleUpdate = async (data) => {
-    try{
-      
-    }
+  const getonelead = async (data) => {
+    console.log("dtaa", data);
+    try {
+      const getlead = await PublicFetch.get(`${CRM_BASE_URL}/lead/${data}`);
+      console.log("repose", getlead);
+      if (getlead?.data.success) {
+        let temp = [];
+        getlead?.data?.data?.fms_v1_jobs?.forEach((item, index) => {
+          item?.accounts_v1_invoice_accounts.forEach((invoice, inindex) => {
+            temp.push(invoice);
+          });
 
-  }
-  const getonelead = async(data) => {}
+          console.log("ghdgh", temp);
+        });
+        setallinvoiceno(temp);
+
+        console.log("dds", getlead?.data?.data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const getAllInvoices = async () => {
+    try {
+      const getinvoice = await PublicFetch.get(`${CRM_BASE_URL_FMS}/invoice`);
+      console.log("rese", getinvoice);
+      if (getinvoice?.data.success) {
+        // setallinvoiceno(getinvoice?.data?.data);
+        // setinvoiceno(getinvoice?.data?.data.lead_id);
+        console.log("oosss", getinvoice?.data?.data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const gettypes = async () => {
+    try {
+      const gettype = await PublicFetch.get(`${ACCOUNTS}/credit-note-type`);
+      console.log("rese", gettype);
+      if (gettype?.data.success) {
+        setalltypes(gettype?.data?.data);
+        // alltypesname(gettype?.data?.data.lead_id);
+        console.log("dds", gettype?.data?.data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const getsingleCreditnote = () => {
+    PublicFetch.get(`${ACCOUNTS}/credit-note/${id}`)
+      .then((res) => {
+        console.log("reserr", res);
+        if (res.data.success) {
+          console.log("sscc", res.data.success);
+          let date = moment(res.data.data.credit_note_date);
+
+          setviewcreditnote(res?.data?.data);
+          editForm.setFieldsValue({
+            credit_note_voucher_no: res.data.data.credit_note_voucher_no,
+            credit_note_date: date,
+            credit_note_amount: res.data.data.credit_note_amount,
+            credit_note_type_id: res.data.data.credit_note_type_id,
+            credit_note_particulars: res.data.data.credit_note_particulars,
+            // credit_note_voucher_no:res.data.data.credit_note_voucher_no,
+            // credit_note_voucher_no:res.data.data.credit_note_voucher_no,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+  const handleUpdate = async (data) => {
+    console.log("ssssdd", data);
+
+    try {
+      const updated = await PublicFetch.patch(`${ACCOUNTS}/credit-note/${id}`, {
+        credit_note_amount: data.credit_note_amount,
+        credit_note_particulars: data.credit_note_particulars,
+      });
+      console.log("successfully updated.... ", updated);
+      if (updated.data.success) {
+        setSuccessPopup(true);
+        // setPaymentEditPopup(false);
+        // getnotes();
+        getsingleCreditnote();
+
+        close_modal(successPopup, 1000);
+      }
+    } catch (err) {
+      console.log("error to update payment", err);
+    }
+  };
+  useEffect(() => {
+    if (id) {
+      getsingleCreditnote();
+      gettypes();
+      getAllInvoices();
+      getonelead();
+    }
+  }, [id]);
+
   const getBase64 = (file) =>
     new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -70,11 +172,11 @@ function Editcredit_notes() {
               <h5 className="lead_text">Edit Credit Notes</h5>
             </div>
             <Form
-              name="addForm"
-              form={addForm}
+              name="editForm"
+              form={editForm}
               onFinish={(value) => {
                 console.log("vlzzz", value);
-                handleUpdate(value);
+                handleUpdate();
                 // console.log("");
               }}
               onFinishFailed={(error) => {
@@ -84,14 +186,14 @@ function Editcredit_notes() {
               <div className="row my-2">
                 <div className="col-xl-4 col-sm-12">
                   <label>Voucher No</label>
-                  <Form.Item>
+                  <Form.Item name="credit_note_voucher_no">
                     <InputType />
                   </Form.Item>
                 </div>
                 <div className="col-xl-4 col-sm-12">
                   <label>Date</label>
                   <Form.Item
-                    name="creditnote_date"
+                    name="credit_note_date"
                     className="mt-2"
                     rules={[
                       {
@@ -112,36 +214,40 @@ function Editcredit_notes() {
                 </div>
                 <div className="col-xl-4 col-sm-12">
                   <label>Customer</label>
-                  <Form.Item className="mt-2"
-                    name="customer"
+                  <Form.Item
+                    className="mt-2"
+                    name="credit_note_lead_id"
                     rules={[
                       {
                         required: true,
                         message: "Customer is Required",
                       },
-                    ]}>
+                    ]}
+                  >
                     <SelectBox
-                     showSearch={true}
-                     allowClear
-                     value={customerid}
-                     optionFilterProp="children"
-                     onChange={(e) => {
-                       setcustomerid(e);
-                       getonelead(e)
-                     }}>{allcustomer &&
-                      allcustomer.length > 0 &&
-                      allcustomer.map((item, index) => {
-                        console.log("itm", item);
-                        return (
-                          <Select.Option
-                            key={item.lead_id}
-                            id={item.lead_id}
-                            value={item.lead_id}
-                          >
-                            {item.lead_customer_name}
-                          </Select.Option>
-                        );
-                      })}</SelectBox>
+                      showSearch={true}
+                      allowClear
+                      value={customerid}
+                      optionFilterProp="children"
+                      onChange={(e) => {
+                        gettypes(e);
+                      }}
+                    >
+                      {allcustomer &&
+                        allcustomer.length > 0 &&
+                        allcustomer.map((item, index) => {
+                          console.log("itm", item);
+                          return (
+                            <Select.Option
+                              key={item.lead_id}
+                              id={item.lead_id}
+                              value={item.lead_id}
+                            >
+                              {item.lead_customer_name}
+                            </Select.Option>
+                          );
+                        })}
+                    </SelectBox>
                   </Form.Item>
                 </div>
                 <div className="col-xl-4 col-sm-12">
@@ -153,7 +259,7 @@ function Editcredit_notes() {
                       // value={invoiceno}
                       optionFilterProp="children"
                       onChange={(e) => {
-                        setinvoiceno(e);
+                        getAllInvoices(e);
                       }}
                     >
                       {allinvoiceno &&
@@ -175,12 +281,12 @@ function Editcredit_notes() {
                 </div>
                 <div className="col-xl-4 col-sm-12 mt-2">
                   <label>Invoice Amount</label>
-                  <Form.Item name="invoiceamount">
+                  <Form.Item name="credit_note_amount">
                     <Input_Number
                       value={invoiceamount}
-                      onChange={(value) => {
-                        setinvoiceamount(value);
-                      }}
+                      // onChange={(value) => {
+                      //   setinvoiceamount(value);
+                      // }}
                       min={0}
                       precision={2}
                       control={true}
@@ -189,12 +295,12 @@ function Editcredit_notes() {
                 </div>
                 <div className="col-xl-4 col-sm-12 mt-2">
                   <label>Due Amount</label>
-                  <Form.Item name="dueamount">
+                  <Form.Item name="credit_note_dueamount">
                     <Input_Number
                       value={dueamount}
-                      onChange={(value) => {
-                        setdueamount(value);
-                      }}
+                      // onChange={(value) => {
+                      //   setdueamount(value);
+                      // }}
                       min={0}
                       precision={2}
                       control={true}
@@ -207,10 +313,7 @@ function Editcredit_notes() {
                   <label>Particulars</label>
                   <Form.Item
                     className="mt-2"
-                    name="description"
-                    onChange={(e) => {
-                      setparticulars(e.target.value);
-                    }}
+                    name="credit_note_particulars"
                     rules={[
                       {
                         min: 2,
@@ -223,16 +326,18 @@ function Editcredit_notes() {
                       },
                     ]}
                   >
-                    <TextArea 
-                     value={particulars}
-                     onChange={(e) => {
-                       setparticulars(e.target.value);
-                     }}/>
+                    <TextArea
+                      value={particulars}
+                      onChange={(e) => {
+                        setparticulars(e.target.value);
+                        //  console.log("particulars",particulars);
+                      }}
+                    />
                   </Form.Item>
                 </div>
                 <div className="col-xl-4 col-sm-12 mt-2">
                   <label>Type</label>
-                  <Form.Item className="mt-2" name="type">
+                  <Form.Item className="mt-2" name="credit_note_type_id">
                     <SelectBox
                       showSearch={true}
                       allowClear
@@ -259,7 +364,7 @@ function Editcredit_notes() {
                     </SelectBox>
                   </Form.Item>
                   <label>Amount</label>
-                  <Form.Item name="amount">
+                  <Form.Item name="credit_note_amount">
                     <InputType
                       value={amount}
                       onChange={(e) => {

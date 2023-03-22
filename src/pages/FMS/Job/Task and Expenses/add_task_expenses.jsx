@@ -29,6 +29,7 @@ import Custom_model from "../../../../components/custom_modal/custom_model";
 
 import "../job.scss";
 import { ROUTES } from "../../../../routes";
+import { keyboard } from "@testing-library/user-event/dist/keyboard";
 
 export default function Taskexpenses() {
   const { id } = useParams();
@@ -39,6 +40,13 @@ export default function Taskexpenses() {
   const [services, setServices] = useState([]);
   const [isService, setIsService] = useState();
   const [currencyDefault, setCurrencyDefault] = useState();
+  const [defaultCurrencydata, setDefaultCurrencyData] = useState();
+  const [currencyRates, setCurrencyRates] = useState(0);
+  const [expenseAmount, setExpenseAmount] = useState(0);
+  const [iscostAmount, setIsCostAmount] = useState(false);
+  const [isExpenseAmount, setIsExpenseAmount] = useState(false);
+  const [costAmount, setCostAmount] = useState();
+  const [currentKey, setCurrentKey] = useState();
 
   console.log("Servicesss are :::", services);
 
@@ -52,8 +60,8 @@ export default function Taskexpenses() {
       job_task_expense_cost_amountfx: "",
       job_task_expense_cost_taxfx: "",
       job_task_expense_cost_subtotalfx: "",
-      job_task_expense_exp_curr: "",
-      job_task_expense_exp_exch: "",
+      job_task_expense_exp_curr: defaultCurrencydata,
+      job_task_expense_exp_exch: currencyDefault,
       job_task_expense_exp_amountfx: "",
       job_task_expense_exp_amountlx: "",
       job_task_expense_id: "",
@@ -171,8 +179,14 @@ export default function Taskexpenses() {
 
   const handleInputChange = (e, key, col, tx) => {
     console.log("gai guys", e, tx);
+    let totalamount2 = 0;
+    if (e === null) {
+      e = 0;
+    }
 
-    if (tx && e) {
+    if (tx && e !== null) {
+      totalamount2 = e * currencyRates;
+
       let existingValues = addForm.getFieldsValue();
       console.log("existing form", existingValues);
       let { Job_quotation_details } = existingValues;
@@ -183,8 +197,8 @@ export default function Taskexpenses() {
       let totalAmount =
         assignValues["job_task_expense_exp_exch"] *
         assignValues["job_task_expense_exp_amountfx"];
-      console.log("total aount", totalAmount);
-      assignValues["job_task_expense_exp_amountlx"] = totalAmount;
+
+      assignValues["job_task_expense_exp_amountlx"] = totalamount2;
       console.log("quation deatils", Job_quotation_details);
       addForm.setFieldsValue({ Job_quotation_details });
       // setTotal(sum);
@@ -207,7 +221,7 @@ export default function Taskexpenses() {
             return {
               ...item,
               job_task_expense_exp_amountfx: e,
-              job_task_expense_exp_amountlx: totalAmount,
+              job_task_expense_exp_amountlx: totalamount2,
             };
           }
           return item;
@@ -219,7 +233,7 @@ export default function Taskexpenses() {
             return {
               ...item,
               job_task_expense_exp_amountfx: e,
-              job_task_expense_exp_amountlx: totalAmount,
+              job_task_expense_exp_amountlx: totalamount2,
             };
           }
           return item;
@@ -338,7 +352,7 @@ export default function Taskexpenses() {
           let existingValues = addForm.getFieldsValue();
           let { Job_quotation_details } = existingValues;
           let assignValues = Job_quotation_details[key];
-          assignValues["job_task_expense_taxtype_id"] = item.service_taxtype;
+          assignValues["job_task_expense_taxtype_id"] = item?.service_taxtype;
           assignValues["job_task_expense_tax_perc"] =
             item?.fms_v1_tax_types?.tax_type_percentage;
 
@@ -393,6 +407,7 @@ export default function Taskexpenses() {
     // addForm.setFieldValue("quotation_details_tax_type", taxratee);
   };
   const [currencydata, setCurrencydata] = useState();
+
   const getallcurrency = async () => {
     try {
       const allcurrency = await PublicFetch.get(
@@ -405,17 +420,19 @@ export default function Taskexpenses() {
         if (item.currency_is_default === 1) {
           arr = item?.currency_code;
           setCurrencyDefault(arr);
+          setDefaultCurrencyData(item.currency_id);
+          getCurrencyRate(item.currency_id, index);
         }
       });
     } catch (err) {
       console.log("Error in getting currency : ", err);
     }
   };
+
   useEffect(() => {
     getallcurrency();
   }, []);
 
-  const [currencyRates, setCurrencyRates] = useState(0);
   console.log("ratesssss", currencyRates);
   let b;
   const getCurrencyRate = (data, key) => {
@@ -432,21 +449,22 @@ export default function Taskexpenses() {
         console.log("currency current rate:", response);
         let a = response.data.rates[b];
         console.log("currency match", a);
-        setCurrencyRates(a);
+        let c = 1 / a;
+        setCurrencyRates(c);
         let existingvalues = addForm.getFieldsValue();
         let { Job_quotation_details } = existingvalues;
         let assignValues = Job_quotation_details[key];
-        assignValues["job_task_expense_exp_exch"] = a;
+        assignValues["job_task_expense_exp_exch"] = c;
         addForm.setFieldsValue({ Job_quotation_details });
         console.log("form data s......", Job_quotation_details);
 
-        addForm.setFieldValue("job_task_expense_exp_exch", a);
+        addForm.setFieldValue("job_task_expense_exp_exch", c);
         setTableData(
           tableData.map((item, index) => {
             if (item.key === key) {
               return {
                 ...item,
-                job_task_expense_exp_exch: a,
+                job_task_expense_exp_exch: c,
                 job_task_expense_exp_curr: data,
               };
             }
@@ -458,7 +476,7 @@ export default function Taskexpenses() {
             if (item.key === key) {
               return {
                 ...item,
-                job_task_expense_exp_exch: a,
+                job_task_expense_exp_exch: c,
                 job_task_expense_exp_curr: data,
               };
             }
@@ -472,8 +490,10 @@ export default function Taskexpenses() {
   };
 
   const handleEnter = (e) => {
+    // setCurrentKey(currentKey + 1);
     console.log("Hello");
     console.log("Key ::::::: ", e.key);
+
     if (e.key === "Enter" || e.key === "Tab") {
       setTableData([
         ...tableData,
@@ -486,8 +506,8 @@ export default function Taskexpenses() {
           job_task_expense_cost_amountfx: "",
           job_task_expense_cost_taxfx: "",
           job_task_expense_cost_subtotalfx: "",
-          job_task_expense_exp_curr: "",
-          job_task_expense_exp_exch: "",
+          job_task_expense_exp_curr: defaultCurrencydata,
+          job_task_expense_exp_exch: currencyRates,
           job_task_expense_exp_amountfx: "",
           job_task_expense_exp_amountlx: "",
           job_task_expense_invoiceable: 0,
@@ -504,13 +524,20 @@ export default function Taskexpenses() {
           job_task_expense_cost_amountfx: "",
           job_task_expense_cost_taxfx: "",
           job_task_expense_cost_subtotalfx: "",
-          job_task_expense_exp_curr: "",
-          job_task_expense_exp_exch: "",
+          job_task_expense_exp_curr: defaultCurrencydata,
+          job_task_expense_exp_exch: currencyRates,
           job_task_expense_exp_amountfx: "",
           job_task_expense_exp_amountlx: "",
           job_task_expense_invoiceable: 0,
         },
       ]);
+
+      setCostAmount();
+      setExpenseAmount();
+
+      handleAmt(e, currentKey, "jfhiefiefei");
+
+      // handlecurrency(e, tableData.length + 1);
     }
     console.log("tabledata", tableData);
     // let sum = 0;
@@ -651,15 +678,14 @@ export default function Taskexpenses() {
         Job_quotation_details.push({
           key: index,
           job_task_expense_task_id: item.job_task_expense_task_id,
-
           job_task_expense_tax_perc: item.job_task_expense_tax_perc,
           job_task_expense_taxtype_id: item.job_task_expense_taxtype_id,
           job_task_expense_cost_amountfx: item.job_task_expense_cost_amountfx,
           job_task_expense_cost_taxfx: item.job_task_expense_cost_taxfx,
           job_task_expense_cost_subtotalfx:
             item.job_task_expense_cost_subtotalfx,
-          job_task_expense_exp_curr: item.job_task_expense_exp_curr,
-          job_task_expense_exp_exch: item.job_task_expense_exp_exch,
+          job_task_expense_exp_curr: defaultCurrencydata,
+          job_task_expense_exp_exch: currencyRates,
           job_task_expense_exp_amountfx: item.job_task_expense_exp_amountfx,
           job_task_expense_exp_amountlx: item.job_task_expense_exp_amountlx,
           job_task_expense_agent_id: item.job_task_expense_agent_id,
@@ -676,7 +702,9 @@ export default function Taskexpenses() {
       addForm.setFieldsValue({ dataSource });
       setSampletable([...dataSource]);
     }
-  }, [tax]);
+  }, [tax, defaultCurrencydata, currencyRates]);
+
+  console.log("is deafult is ", defaultCurrencydata);
 
   console.log("table inside data", tableData);
   useEffect(() => {
@@ -736,9 +764,74 @@ export default function Taskexpenses() {
   useEffect(() => {
     getAllservices();
     getAllTaxtype();
+    // handleAmt();
   }, [numOfItems, pageofIndex]);
 
   const tooltipcolor = ["#6c6d6f"];
+
+  // useEffect(() => {
+  //   tableData.map((item, index) => {
+  //     if (
+  //       item.job_task_expense_cost_amountfx === null ||
+  //       item.job_task_expense_exp_amountfx === null
+  //     ) {
+  //       setIsCostAmount(true);
+  //       setIsExpenseAmount(true);
+  //     } else if (item.job_task_expense_cost_amountfx !== null) {
+  //       setIsExpenseAmount(false);
+  //     } else if (item.job_task_expense_exp_amountfx !== null) {
+  //       setIsCostAmount(false);
+  //     }
+  //   });
+  //   // console.log("euwdu", isExpenseAmount, iscostAmount);
+  // }, [isExpenseAmount, iscostAmount]);
+
+  useEffect(() => {
+    console.log("constAmt", costAmount, expenseAmount);
+    if (costAmount || expenseAmount) {
+      setIsExpenseAmount(false);
+      setIsCostAmount(false);
+    } else {
+      setIsExpenseAmount(true);
+      setIsCostAmount(true);
+    }
+    handleAmt(1, 2, "");
+  }, [costAmount, expenseAmount]);
+
+  const handleAmt = (e, key, col) => {
+    let values = addForm.getFieldsValue();
+    let { Job_quotation_details } = values;
+    console.log("job quotations lte", Job_quotation_details);
+    let cost = 0;
+    let assignValues = Job_quotation_details[key];
+    if (assignValues) {
+      costAmount &&
+        !expenseAmount &&
+        (assignValues["job_task_expense_exp_amountfx"] = cost);
+      !costAmount &&
+        expenseAmount &&
+        (assignValues["job_task_expense_cost_amountfx"] = cost);
+    }
+    // assignValues && (assignValues["job_task_expense_cost_amountfx"] = cost);
+    addForm.setFieldsValue({ Job_quotation_details });
+    if (costAmount || expenseAmount) {
+      setIsExpenseAmount(false);
+      setIsCostAmount(false);
+    } else {
+      setIsExpenseAmount(true);
+      setIsCostAmount(true);
+    }
+    // if (e && col && key) {
+    console.log("keyOfTable", e, key);
+    tableData.map((item, index) => {
+      console.log("itemOfKey", item.key);
+      console.log("tableLEngth", tableData?.length);
+      // if (item.key == tableData?.length - 1) {
+      //   setCurrentKey(key);
+      // }
+    });
+    // }
+  };
 
   const columns = [
     {
@@ -803,6 +896,15 @@ export default function Taskexpenses() {
                   handleInputchange1(e, index.key, "job_task_expense_task_id");
                   setIsService(e);
                   console.log("servicess11123", e);
+                }}
+                onBlur={() => {
+                  if (isService) {
+                    handleInputChange2(
+                      taxType,
+                      index.key,
+                      "job_task_expense_cost_taxfx"
+                    );
+                  }
                 }}
               >
                 {services &&
@@ -901,7 +1003,7 @@ export default function Taskexpenses() {
                 index.key,
                 "job_task_expense_tax_perc",
               ]}
-              rules={[{ required: true, message: "Required" }]}
+              // rules={[{ required: true, message: "Required" }]}
             >
               <InputNumber
                 style={{ minWidth: "20px" }}
@@ -941,7 +1043,7 @@ export default function Taskexpenses() {
                 index.key,
                 "job_task_expense_agent_id",
               ]}
-              rules={[{ required: true, message: "Required" }]}
+              // rules={[{ required: true, message: "Required" }]}
             >
               <Select
                 className="w-100"
@@ -990,47 +1092,73 @@ export default function Taskexpenses() {
           className: "secondrow",
           render: (data, index) => {
             console.log("index is :", index);
+
             return (
-              <div className="d-flex justify-content-center align-items-center tborder ">
-                <Form.Item
-                  name={[
-                    "Job_quotation_details",
-                    index.key,
-                    "job_task_expense_cost_amountfx",
-                  ]}
-                  // rules={[{ required: true, message: "Required" }]}
-                >
-                  <InputNumber
-                    bordered={false}
-                    className=""
-                    value={index.job_task_expense_cost_amountfx}
-                    onChange={(e) => {
-                      if (isService) {
-                        handleInputChange(
-                          e,
+              <>
+                <div className="d-flex justify-content-center align-items-center tborder ">
+                  <Form.Item
+                    name={[
+                      "Job_quotation_details",
+                      index.key,
+                      "job_task_expense_cost_amountfx",
+                    ]}
+                    rules={[
+                      {
+                        required: isExpenseAmount,
+                        message: "Required",
+                      },
+                    ]}
+                  >
+                    <InputNumber
+                      bordered={false}
+                      className=""
+                      value={index.job_task_expense_cost_amountfx}
+                      onChange={(e) => {
+                        if (isService) {
+                          handleInputChange(
+                            e,
+                            index.key,
+                            "job_task_expense_cost_amountfx"
+                          );
+                        }
+                        setCostAmount(e);
+                        handleAmt(e, index.key);
+
+                        console.log(" input numberevent ", e, index.key);
+                      }}
+                      align="right"
+                      min={0}
+                      precision={2}
+                      controlls={false}
+                      onBlur={() => {
+                        if (isService) {
+                          handleInputChange2(
+                            taxType,
+                            index.key,
+                            "job_task_expense_cost_taxfx"
+                          );
+                        }
+                        handleAmt(
+                          costAmount,
                           index.key,
                           "job_task_expense_cost_amountfx"
                         );
-                      }
-
-                      console.log(" input numberevent ", e, index.key);
-                    }}
-                    align="right"
-                    min={0}
-                    precision={2}
-                    controlls={false}
-                    onBlur={() => {
-                      if (isService) {
-                        handleInputChange2(
-                          taxType,
-                          index.key,
-                          "job_task_expense_cost_taxfx"
-                        );
-                      }
-                    }}
-                  />
-                </Form.Item>
-              </div>
+                      }}
+                    />
+                  </Form.Item>
+                </div>
+                <div>
+                  {/* {tableData?.length - 1 === index.key && iscostAmount ? (
+                    <>
+                      <div className="text-center">
+                        <label style={{ color: "red" }}>Required</label>
+                      </div>
+                    </>
+                  ) : (
+                    ""
+                  )} */}
+                </div>
+              </>
             );
           },
         },
@@ -1134,12 +1262,12 @@ export default function Taskexpenses() {
             return (
               <div className="d-flex justify-content-center align-items-center tborder ">
                 <Form.Item
-                  name={[
-                    "Job_quotation_details",
-                    index.key,
-                    "job_task_expense_exp_curr",
-                  ]}
-                  rules={[{ required: true, message: "Required" }]}
+                // name={[
+                //   "Job_quotation_details",
+                //   index.key,
+                //   "job_task_expense_exp_curr",
+                // ]}
+                // rules={[{ required: true, message: "Required" }]}
                 >
                   <Select
                     style={{ minWidth: "70px" }}
@@ -1149,11 +1277,12 @@ export default function Taskexpenses() {
                     showSearch
                     optionFilterProp="children"
                     className="selectwidthexp mb-2"
-                    value={index.job_task_expense_exp_curr}
+                    value={index?.job_task_expense_exp_curr}
                     onChange={(e) => {
                       console.log("ann", e);
                       getCurrencyRate(e, index.key);
                       setCurrency(e);
+                      setDefaultCurrencyData(e);
                     }}
                   >
                     {currencydata &&
@@ -1190,12 +1319,12 @@ export default function Taskexpenses() {
                 className="d-flex justify-content-center align-items-center tborder "
               >
                 <Form.Item
-                  name={[
-                    "Job_quotation_details",
-                    index.key,
-                    "job_task_expense_exp_exch",
-                  ]}
-                  rules={[{ required: true, message: "Required" }]}
+                // name={[
+                //   "Job_quotation_details",
+                //   index.key,
+                //   "job_task_expense_exp_exch",
+                // ]}
+                // rules={[{ required: true, message: "Required" }]}
                 >
                   <InputNumber
                     // style={{ minWidth: "70px" }}
@@ -1207,6 +1336,7 @@ export default function Taskexpenses() {
                     onChange={(e) => {
                       handleChange(e);
                       setExchangeData(e);
+                      setCurrencyRates(e);
                     }}
                     // onChange={(value) => {
                     //   console.log(" input numberevent ", value, index.key);
@@ -1231,38 +1361,64 @@ export default function Taskexpenses() {
           className: "thirdrow",
           render: (data, index) => {
             console.log("index is :", index);
+            let isjob_task_expense_cost_amountfx = true;
+            if (index?.job_task_expense_cost_amountfx !== null && index?.key) {
+              isjob_task_expense_cost_amountfx = false;
+            }
+            console.log("indexindex", index);
             return (
-              <div className="d-flex justify-content-center align-items-center tborder ">
-                <Form.Item
-                  name={[
-                    "Job_quotation_details",
-                    index.key,
-                    "job_task_expense_exp_amountfx",
-                  ]}
-                  rules={[{ required: true, message: "Required" }]}
-                >
-                  <InputNumber
-                    bordered={false}
-                    // className="text_right"
-                    value={index.job_task_expense_exp_amountfx}
-                    onChange={(e) => {
-                      handleInputChange(
-                        e,
-                        index.key,
-                        "job_task_expense_exp_amountfx",
-                        "tx"
-                      );
-
-                      console.log(" input numberevent ", e, index.key);
-                    }}
-                    align="right"
-                    // step={0.01}
-                    min={0}
-                    precision={2}
-                    controlls={false}
-                  />
-                </Form.Item>
-              </div>
+              <>
+                <div className="d-flex justify-content-center align-items-center tborder ">
+                  <Form.Item
+                    name={[
+                      "Job_quotation_details",
+                      index.key,
+                      "job_task_expense_exp_amountfx",
+                    ]}
+                    rules={[
+                      {
+                        required: iscostAmount ? true : false,
+                        message: "Required",
+                      },
+                    ]}
+                  >
+                    <InputNumber
+                      bordered={false}
+                      // className="text_right"
+                      value={index.job_task_expense_exp_amountfx}
+                      onChange={(e) => {
+                        handleInputChange(
+                          e,
+                          index.key,
+                          "job_task_expense_exp_amountfx",
+                          "tx"
+                        );
+                        setExpenseAmount(e);
+                        handleAmt(
+                          e,
+                          index.key,
+                          "job_task_expense_exp_amountfx"
+                        );
+                        console.log(" input numberevent ", e, index.key);
+                      }}
+                      align="right"
+                      // step={0.01}
+                      min={0}
+                      precision={2}
+                      controlls={false}
+                    />
+                  </Form.Item>
+                </div>
+                <div className="">
+                  {/* {tableData?.length - 1 === index.key && isExpenseAmount ? (
+                    <div className="text-center">
+                      <label style={{ color: "red" }}>Required</label>
+                    </div>
+                  ) : (
+                    ""
+                  )} */}
+                </div>
+              </>
             );
           },
         },
@@ -1283,12 +1439,12 @@ export default function Taskexpenses() {
                     index.key,
                     "job_task_expense_exp_amountlx",
                   ]}
-                  rules={[{ required: true, message: "Required" }]}
+                  // rules={[{ required: true, message: "Required" }]}
                 >
                   <InputNumber
                     bordered={false}
                     className="input_bg"
-                    value={index.job_task_expense_exp_amountlx}
+                    value={index?.job_task_expense_exp_amountlx}
                     onChange={(value) => {
                       console.log(" input numberevent ", value, index.key);
                     }}
@@ -1336,7 +1492,10 @@ export default function Taskexpenses() {
                 }
               }}
               checked={index.job_task_expense_invoiceable == 1 ? true : false}
-              onKeyDown={(e) => handleEnter(e, index.key)}
+              onKeyDown={(e) => {
+                handleEnter(e, index.key);
+                handlecurrency(e, index.key);
+              }}
             />
           </div>
         );
@@ -1352,7 +1511,8 @@ export default function Taskexpenses() {
     }
   };
 
-  console.log("abcdefg", isChecked);
+  console.log("isCostAmt", iscostAmount);
+  console.log("isExpAmt", isExpenseAmount);
 
   const [total, setTotal] = useState(0);
   const [leadId, setLeadId] = useState("");
@@ -1434,6 +1594,32 @@ export default function Taskexpenses() {
     }
   };
 
+  const handlecurrency = (e, key) => {
+    // let existingvalues = addForm.getFieldsValue();
+    // let { Job_quotation_details } = existingvalues;
+    // let assignValues = Job_quotation_details[key];
+    // assignValues["job_task_expense_exp_curr"] = defaultCurrencydata;
+    // assignValues["job_task_expense_exp_exch"] = currencyRates;
+    // addForm.setFieldsValue({ Job_quotation_details });
+    // console.log("form data s......", Job_quotation_details);
+    // addForm.setFieldValue("job_task_expense_exp_exch", currencyRates);
+  };
+
+  useEffect(() => {
+    tableData.map((item, index) => {
+      console.log("key ovf table", item?.key);
+      if (defaultCurrencydata !== null) {
+        let existingvalues = addForm.getFieldsValue();
+        let { Job_quotation_details } = existingvalues;
+        let assignValues = Job_quotation_details[item?.key];
+        assignValues["job_task_expense_exp_curr"] = defaultCurrencydata;
+
+        addForm.setFieldsValue({ Job_quotation_details });
+        getCurrencyRate(defaultCurrencydata, item?.key);
+      }
+    });
+  }, [defaultCurrencydata]);
+
   useEffect(() => {
     getagents();
   }, []);
@@ -1474,22 +1660,41 @@ export default function Taskexpenses() {
   console.log("total cost ::", totalcost);
 
   const submitData = (data) => {
-    console.log("Submitting data", tableData);
-    PublicFetch.post(`${CRM_BASE_URL_FMS}/job-task-expenses/${id}`, {
-      job_task_expense: tableData,
-    })
-      .then((res) => {
-        console.log("Response", res);
-        if (res.data.success) {
-          console.log("success of submitting data", res.data.data);
-          setSuccessPopup(true);
-          close_modal(successPopup, 1200);
-          getSingleJob();
-        }
+    let temp = false;
+    // if (costAmount || expenseAmount) {
+    //   setIsExpenseAmount(false);
+    //   setIsCostAmount(false);
+    // } else {
+    //   setIsExpenseAmount(true);
+    //   setIsCostAmount(true);
+    //   temp = false;
+    // }
+    tableData.map((item, index) => {
+      if (
+        item.job_task_expense_cost_amountfx &&
+        item.job_task_expense_exp_amountfx !== null
+      ) {
+        temp = true;
+      }
+    });
+    console.log("costAmt", iscostAmount);
+    if ((temp = true)) {
+      PublicFetch.post(`${CRM_BASE_URL_FMS}/job-task-expenses/${id}`, {
+        job_task_expense: tableData,
       })
-      .catch((err) => {
-        console.log("Error", err);
-      });
+        .then((res) => {
+          console.log("Response", res);
+          if (res.data.success) {
+            console.log("success of submitting data", res.data.data);
+            setSuccessPopup(true);
+            close_modal(successPopup, 1200);
+            getSingleJob();
+          }
+        })
+        .catch((err) => {
+          console.log("Error", err);
+        });
+    }
   };
 
   return (
@@ -1506,9 +1711,15 @@ export default function Taskexpenses() {
             <Form
               name="addForm"
               form={addForm}
-              onFinish={(value) => {
+              onFinish={(value, index) => {
                 console.log("values iss", value);
+                // if (costAmount && expenseAmount) {
                 submitData(value);
+                // setIsCostAmount(true);
+                // setIsExpenseAmount(true);
+                // console.log("submmiittiing by me", value, index);
+                // handleAmt();
+                // }
               }}
               onFinishFailed={(error) => {
                 console.log(error);

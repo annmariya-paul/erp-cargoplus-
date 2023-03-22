@@ -203,7 +203,7 @@ export default function AddOpportunity(props) {
 
   return (
     <>
-      <Custom_model
+      {/* <Custom_model
         //  Adding_contents
         width={900}
         // Adding_contents
@@ -216,7 +216,9 @@ export default function AddOpportunity(props) {
         footer={false}
         View_list
         list_content={
-          <>
+          <> */}
+           <div className="container-fluid">
+        <div className="row justify-content-md-center">
             <Form form={form}>
               <div className="px-5">
                 <h5 className="lead_text">Add Opportunity</h5>
@@ -481,10 +483,10 @@ export default function AddOpportunity(props) {
                 </Button>
               </div>
             </Form>
-          </>
+          {/* </>
         }
         // {...props}
-      ></Custom_model>
+      ></Custom_model> */}
       <Custom_model
         size={`sm`}
         success
@@ -492,6 +494,8 @@ export default function AddOpportunity(props) {
         onHide={() => setModalShow(false)}
         footer={false}
       />
+       </div>
+      </div>
     </>
   );
 }

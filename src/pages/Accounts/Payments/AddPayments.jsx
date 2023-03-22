@@ -117,22 +117,22 @@ const AddPayments = () => {
                   //   console.log("new temp", temp);
                   //   setInvoiceData([...temp]);
                   // }}
-                  onBlur={(e) => {
-                    console.log("value inside onblur", e.target.value);
-                    if (e.target.value != "") {
-                      if (!isNaN(totalSum)) {
-                        totalSum = totalSum + parseFloat(e.target.value);
+                  // onBlur={(e) => {
+                  //   console.log("value inside onblur", e.target.value);
+                  //   if (e.target.value != "") {
+                  //     if (!isNaN(totalSum)) {
+                  //       totalSum = totalSum + parseFloat(e.target.value);
 
-                        console.log("total sumsum", totalSum);
-                        if (totalSum > amount) {
-                          message.error("Exceeded");
-                          setExceeded(true);
-                        }
-                      } else {
-                        totalSum = 0;
-                      }
-                    }
-                  }}
+                  //       console.log("total sumsum", totalSum);
+                  //       if (totalSum > amount) {
+                  //         message.error("Exceeded");
+                  //         setExceeded(true);
+                  //       }
+                  //     } else {
+                  //       totalSum = 0;
+                  //     }
+                  //   }
+                  // }}
                   width={100}
                   controlls={false}
                 />

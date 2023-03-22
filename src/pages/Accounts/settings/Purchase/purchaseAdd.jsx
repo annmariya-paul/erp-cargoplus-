@@ -1,6 +1,8 @@
+import "./purchase.scss";
 import React, { useEffect, useState } from "react";
-import { Form, Input, Select, DatePicker } from "antd";
+import { Form, Input, Select, DatePicker, Popconfirm } from "antd";
 import { useForm } from "react-hook-form";
+import { FaTrash } from "react-icons/fa";
 import InputType from "../../../../components/Input Type textbox/InputType";
 import SelectBox from "../../../../components/Select Box/SelectBox";
 import Button from "../../../../components/button/button";
@@ -10,58 +12,105 @@ import FileUpload from "../../../../components/fileupload/fileUploader";
 import TableData from "../../../../components/table/table_data";
 
 export default function CreatePurchase() {
-const [serialNo, setserialNo] = useState(1);
+  const [serialNo, setserialNo] = useState(1);
+  const [count, setCount] = useState(2);
+  const [sampletable, setSampletable] = useState( [
+    {
+      key:1,
+      awb_bl: "",
+      job_no: "",
+      amount:"",
+    },
+  ]);
+   
+  
+  const handleAdd = () => {
+    const newRow = {
+      key: count,
+      awb_bl: "",
+      job_no: "",
+      amount: "",
+    };
+    setSampletable(pre=>{
+      return [...pre, newRow]
+    })
+     setCount(count + 1);
+  };
 
- const columns = [
-   {
-     title: "Sl. No.",
-     key: "index",
-     width: "8%",
-     render: (value, item, index) => serialNo + index,
-     align: "center",
-   },
-   {
-     title: "AWB/BL",
-     dataIndex: "awb_bl",
-     key: "awb_bl",
-     width: "20%",
-     render: (data, index) => {
-       console.log("index is :", index);
-       return (
-         <div className="d-flex justify-content-center align-items-center tborder ">
-           <InputType />
-         </div>
-       );
-     },
-   },
-   {
-     title: "JOB NO",
-     dataIndex: "job_no",
-     key: "job_no",
-     width: "20%",
-   },
-   {
-     title: "AMOUNT",
-     dataIndex: "amount",
-     key: "amount",
-     align: "right",
-     width: "20%",
-     render: (data, index) => {
-       return (
-         <div className="d-flex justify-content-center align-items-center tborder ">
-           <Input_Number />
-         </div>
-       );
-     },
-   },
- ];
+   const handleDelete = (key) => {
+     const deleteData = sampletable.filter((item) => item.key !== key);
+     setSampletable(deleteData);
+   };
 
- const data = [
-   {
-     awb_bl: "",
-     job_no: "JAir-00002",
-   },
- ];
+  const columns = [
+    {
+      title: "Sl. No.",
+      key: "index",
+      width: "7%",
+      render: (value, item, index) => serialNo + index,
+      align: "center",
+    },
+    {
+      title: "AWB/BL",
+      dataIndex: "awb_bl",
+      key: "awb_bl",
+      width: "20%",
+      render: (data, index) => {
+        console.log("index is :", index);
+        return (
+          <div className="row">
+            <InputType className="input_bg table_input" />
+          </div>
+        );
+      },
+    },
+    {
+      title: "JOB NO",
+      dataIndex: "job_no",
+      key: "job_no",
+      width: "20%",
+      render: (data, index) => {
+        console.log("index is :", index);
+        return (
+          <div className="row pb-1">
+            <SelectBox className="input_bg table_input"></SelectBox>
+          </div>
+        );
+      },
+    },
+    {
+      title: "AMOUNT",
+      dataIndex: "amount",
+      key: "amount",
+      align: "right",
+      width: "20%",
+      render: (data, index) => {
+        return (
+          <div className="row">
+            <Input_Number className="input_bg table_input" precision={2} />
+          </div>
+        );
+      },
+    },
+    {
+      title: "ACTION",
+      dataIndex: "ACTION",
+      width: "7%",
+      align: "center",
+      render: (_, record) =>
+        sampletable.length >= 1 ? (
+          <Popconfirm
+            title="Sure to delete?"
+            onConfirm={() => handleDelete(record.key)}
+          >
+            <div className="deleteIcon m-0">
+              <FaTrash />
+            </div>
+          </Popconfirm>
+        ) : null,
+    },
+  ];
+
   return (
     <>
       <div className="container-fluid">
@@ -90,20 +139,14 @@ const [serialNo, setserialNo] = useState(1);
               </Form.Item>
             </div>
             <div className="col-sm-4 pt-3">
-              <label>PO Reference</label>
-              <Form.Item name="po_reference">
-                <InputType />
-              </Form.Item>
-            </div>
-            <div className="col-sm-4 pt-3">
               <label>Purchase Date</label>
-              <Form.Item name="purchase_date">
+              <Form.Item name="purchase_date" className="mt-2">
                 <DatePicker></DatePicker>
               </Form.Item>
             </div>
             <div className="col-sm-4 pt-3">
               <label>Due Date</label>
-              <Form.Item name="due_date">
+              <Form.Item name="due_date" className="mt-2">
                 <DatePicker></DatePicker>
               </Form.Item>
             </div>
@@ -113,66 +156,55 @@ const [serialNo, setserialNo] = useState(1);
                 <SelectBox></SelectBox>
               </Form.Item>
             </div>
-          </div>
-          <div className="row jobpay_cards mt-3 mx-0 px-2 py-3">
-            <div className="col-12">
-              <h5 className="lead_text">Payment Info</h5>
-            </div>
-            <div className="col-sm-6 pt-3">
-              <label>Payment Mode</label>
-              <Form.Item name="payment_mode">
-                <SelectBox></SelectBox>
-              </Form.Item>
-            </div>
-            <div className="col-sm-6 pt-3">
-              <label>Credit Days</label>
-              <Form.Item name="credit_days">
-                <InputType />
-              </Form.Item>
-            </div>
-            <div className="col-sm-6 pt-3 mb-4">
-              <label>Remarks</label>
-              <Form.Item name="remarks" className="mt-2">
-                <TextArea />
-              </Form.Item>
-            </div>
-            <div className="col-sm-6 pt-3">
-              <label>Attachments</label>
-              <Form.Item name="attachments" className="mt-2">
-                <FileUpload height={100} />
-              </Form.Item>
-            </div>
-          </div>
-          <div className="row jobpay_cards mt-3 mx-0 px-2 py-3">
-            <div className="col-12">
-              <h5 className="lead_text">AWB/NO Details</h5>
-            </div>
-            <div className="col-sm-6 pt-3">
-              <label>Bill No.</label>
+            <div className="col-sm-4 pt-3">
+              <label>Bill No</label>
               <Form.Item name="bill_no">
                 <InputType />
               </Form.Item>
             </div>
-            <div className="col-sm-6 pt-3">
-              <label>No. of AWB/BLN</label>
-              <Form.Item name="no_AWB_BLN">
+            <div className="col-sm-4 pt-3">
+              <label>Task</label>
+              <Form.Item name="task">
+                <SelectBox></SelectBox>
+              </Form.Item>
+            </div>
+            <div className="col-sm-4 pt-3">
+              <label>Currency</label>
+              <Form.Item name="currency">
+                <SelectBox></SelectBox>
+              </Form.Item>
+            </div>
+            <div className="col-sm-4 pt-3">
+              <label>Exchange Rate</label>
+              <Form.Item name="exchange_rate">
                 <InputType />
               </Form.Item>
             </div>
-            <div className="col-sm-12 pt-3">
+          </div>
+
+          <div className="row jobpay_cards mt-3 mx-0 px-2 py-3">
+            <div className="col-12">
+              <h5 className="lead_text">AWB/NO Details</h5>
+            </div>
+
+            <div className="col-sm-12">
+              <div className="d-flex justify-content-end">
+                <Button onClick={handleAdd} btnType="add_borderless">
+                  Add New Row
+                </Button>
+              </div>
               <div className="datatable">
                 <TableData
-                  data={data}
+                  data={sampletable}
                   columns={columns}
                   rowKey={(record) => record.key}
-                  bordered
-                  custom_table_css="table_qtn task_expense_table"
+                  custom_table_css="table_qtn qtn_table_brdr"
                 />
               </div>
             </div>
-            <div className=" col-12 d-flex justify-content-end mt-4 ps-5">
+            <div className=" col-12 d-flex justify-content-end mt-3 ps-5">
               <div className="col-lg-2 col-sm-4 col-xs-3 d-flex justify-content-end mt-3 me-3">
-                <p style={{ fontWeight: 600 }}>Grand Total :</p>
+                <p style={{ fontWeight: 600 }}>Total :</p>
               </div>
 
               <div className="col-lg-2 col-sm-6 col-xs-2 me-5">
@@ -188,9 +220,26 @@ const [serialNo, setserialNo] = useState(1);
                   />
                 </Form.Item>
               </div>
-              <div className="col-sm-1">
-                  <Button btnType="save">Submit</Button> 
-              </div>
+            </div>
+          </div>
+          <div className="row jobpay_cards mt-3 mx-0 px-2 py-3">
+            <div className="col-12">
+              <h5 className="lead_text">Attachments</h5>
+            </div>
+            <div className="col-sm-6 pt-3 mb-4">
+              <label>Remarks</label>
+              <Form.Item name="remarks" className="mt-2">
+                <TextArea />
+              </Form.Item>
+            </div>
+            <div className="col-sm-6 pt-3">
+              <label>Attachments</label>
+              <Form.Item name="attachments" className="mt-2">
+                <FileUpload height={100} />
+              </Form.Item>
+            </div>
+            <div className="col-12 d-flex justify-content-center">
+              <Button btnType="save">Submit</Button>
             </div>
           </div>
         </Form>

@@ -22,6 +22,7 @@ import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon
 export default function Purchase() {
   const [pageSize, setPageSize] = useState("25");
   const [purchase, setpurchase] = useState("");
+  console.log("purchase ",purchase);
   const [current, setCurrent] = useState(1);
   const [modalpurchase, setModalpurchase] = useState(false);
   const [successPopup, setSuccessPopup] = useState(false);
@@ -91,7 +92,7 @@ export default function Purchase() {
       console.log("getting all purchases", allpurchases);
       let temp=[]
 
-      allpurchases.data.data.forEach((item,index) =>{
+      allpurchases.data.data.purchases.forEach((item,index) =>{
         console.log("itemj",item);
         let datep = moment(item.purchase_purchase_date).format("DD-MM-YYYY")
         let datedue = moment(item.purchase_due_date).format("DD-MM-YYYY")
@@ -128,7 +129,7 @@ export default function Purchase() {
       align: "center",
     },
     {
-      title: "Po No",
+      title: "PO NO",
       dataIndex: "purchase_po_no",
       key: "purchase_po_no",
         filteredValue: [searchedText],

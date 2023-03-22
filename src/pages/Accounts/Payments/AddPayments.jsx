@@ -29,8 +29,10 @@ const AddPayments = () => {
   const [details, setDetails] = useState();
   const [initialInvoiceData, setInitialInvoiceData] = useState([]);
   const [successPopup, setSuccessPopup] = useState(false);
+  const [exceeded, setExceeded] = useState(false);
+  //const [totalSum, setTotalSum] = useState(parseFloat(0));
   const [addform] = Form.useForm();
-
+  var totalSum = 0;
   const columns = [
     {
       title: "Sl. No.",
@@ -82,27 +84,54 @@ const AddPayments = () => {
               className="d-flex justify-content-center align-items-center tborder "
               key={index.index}
             >
-              <Form.Item>
+              <Form.Item
+              // rules={[
+              //   {
+              //     required: exceeded,
+              //     message: "Current amount exceeded entered amount",
+              //   },
+              // ]}
+              >
                 <InputNumber
                   className="add_payments_input_box"
-                  onChange={(e) => {
-                    console.log("index", index);
-                    console.log("inside input number table");
-                    console.log(e);
-                    if (parseFloat(e) > amount) {
-                      console.log("greater ..............");
-                      message.error("some error");
-                    }
-                    let due_amount = parseFloat(index.due_amount);
+                  // onChange={(e) => {
+                  //   console.log("index", index);
+                  //   console.log("inside input number table");
+                  //   console.log("entered number", e);
+                  //   console.log("total sum", totalSum);
+                  //   setTotalSum(totalSum + parseFloat(e));
+                  //   if (totalSum > amount) {
+                  //     console.log("greater ..............");
+                  //     message.error(
+                  //       "Current Amount greater than amount entered"
+                  //     );
+                  //   }
+                  //   let due_amount = parseFloat(index.due_amount);
 
-                    let balance_amount = due_amount - parseFloat(e);
-                    index.balance_amount = balance_amount;
-                    index.current_amount = e;
-                    console.log("new index", index);
-                    let temp = [...invoiceData];
-                    temp[index.index - 1] = index;
-                    console.log("new temp", temp);
-                    setInvoiceData([...temp]);
+                  //   let balance_amount = due_amount - parseFloat(e);
+                  //   index.balance_amount = balance_amount;
+                  //   index.current_amount = e;
+                  //   console.log("new index", index);
+                  //   let temp = [...invoiceData];
+                  //   temp[index.index - 1] = index;
+                  //   console.log("new temp", temp);
+                  //   setInvoiceData([...temp]);
+                  // }}
+                  onBlur={(e) => {
+                    console.log("value inside onblur", e.target.value);
+                    if (e.target.value != "") {
+                      if (!isNaN(totalSum)) {
+                        totalSum = totalSum + parseFloat(e.target.value);
+
+                        console.log("total sumsum", totalSum);
+                        if (totalSum > amount) {
+                          message.error("Exceeded");
+                          setExceeded(true);
+                        }
+                      } else {
+                        totalSum = 0;
+                      }
+                    }
                   }}
                   width={100}
                   controlls={false}
@@ -498,6 +527,7 @@ const AddPayments = () => {
                       <Button
                         btnType="save"
                         type="submit"
+
                         // onClick={() => {
                         //   console.log("submitting form");
                         //   addform.submit();
@@ -505,7 +535,7 @@ const AddPayments = () => {
                       >
                         Save
                       </Button>
-                      <Button className="ms-2">Cancel</Button>
+                      {/* <Button className="ms-2">Cancel</Button> */}
                     </div>
                   </div>
                 </Form>

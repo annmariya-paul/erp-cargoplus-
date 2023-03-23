@@ -25,7 +25,7 @@ import SelectBox from "../../../../components/Select Box/SelectBox";
 // import ErrorMsg from "../../components/errormessage";
 import Custom_model from "../../../../components/custom_modal/custom_model";
 import Select from "rc-select";
-import "../lead.styles.scss"
+import "../lead.styles.scss";
 
 function LeadEdit() {
   // const history=useHistory();
@@ -55,7 +55,7 @@ function LeadEdit() {
   const [FileSizeError, setFileSizeError] = useState(false);
   const [sampledata, setsambpledata] = useState();
   const [organizationDisable, setOrganizationDisable] = useState();
-  const [leadcreditdays,setleadcreditdays]= useState()
+  const [leadcreditdays, setleadcreditdays] = useState();
 
   const [editForm] = Form.useForm();
   const [error, setError] = useState(false);
@@ -68,9 +68,9 @@ function LeadEdit() {
     navigate("/lead_list");
   };
 
-  const handleCancel=()=>{
-    navigate(ROUTES.LEADLIST)
-  }
+  const handleCancel = () => {
+    navigate(ROUTES.LEADLIST);
+  };
   console.log("lead attachment", leadAttachment);
 
   const getBase64 = (file) =>
@@ -127,7 +127,7 @@ function LeadEdit() {
             leadDescription: res?.data?.data?.lead_description,
             leadAttachment: res?.data?.data?.attachments,
             leadStatus: res?.data?.data?.lead_status,
-            creditdays:res?.data?.data?.lead_credit_days,
+            creditdays: res?.data?.data?.lead_credit_days,
           });
         } else {
           console.log("FAILED T LOAD DATA");
@@ -245,18 +245,16 @@ function LeadEdit() {
                         className="col-md-5 col-sm-6  d-flex justify-content-end"
                         // style={{ justifyContent: "center" }}
                       >
-
-
-{/* <Link
-                          to={`${ROUTES.OPPORTUNITY_LEAD}/${id}`}
+                        <Link
+                          to={`${ROUTES.ADD_OPPORTUNITY}`}
                           className="nav-link"
                         >
                           <Button btnType="add_borderless">
                             <BsPlusCircleFill style={{ fontSize: "16px" }} />{" "}
-                            View Opportunity
+                            New Opportunity
                           </Button>
-                        </Link> */}
-                        
+                        </Link>
+
                         {/* <Button
                           btnType="add_borderless"
                           onClick={() => setModalOpportunity(true)}
@@ -579,20 +577,20 @@ function LeadEdit() {
                       </Form.Item>
                     </div>
                     <div className=" d-flex justify-content-center gap-2 mt-4 pt-4">
-                        <Button type="submit" btnType="save">
-                          Update
-                        </Button>
-                        <Button
-                          as="input"
-                          type="reset"
-                          value="Reset"
-                          onClick={() => {
-                            handleCancel();
-                          }}
-                        >
-                          Cancel
-                        </Button>
-                  </div>
+                      <Button type="submit" btnType="save">
+                        Update
+                      </Button>
+                      <Button
+                        as="input"
+                        type="reset"
+                        value="Reset"
+                        onClick={() => {
+                          handleCancel();
+                        }}
+                      >
+                        Cancel
+                      </Button>
+                    </div>
                   </div>
                 </Form>
                 <Custom_model

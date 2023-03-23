@@ -25,7 +25,9 @@ const ROUTES = {
   UNIT_LIST: "/unit-list",
 
   ADD_UNIT: "/add-unit",
-
+  ADD_OPPORTUNITY :"/add-opportunity",
+  EDIT_OPPORTUNITY :"/edit-opportunity",
+  EDIT_OPPORTUNITY_ID :"/edit-opportunity/:id",
   BRANDCREATE: "/createbrand",
   PRODUCT: "/product",
   PRODUCTCREATE: "/create_product",

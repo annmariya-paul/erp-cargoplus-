@@ -526,7 +526,16 @@ function OpportunityLeadlist(props) {
         return (
           <div className="d-flex justify-content-center gap-2">
             <div className="editcolor">
-              <FaEdit onClick={() => handleEditedclick(index)} />
+
+            <Link
+                          to={`${ROUTES.EDIT_OPPORTUNITY}/${index.opportunity_Id}`}
+                         
+                        >
+                       
+                  <FaEdit />
+            
+                        </Link>
+              {/* <FaEdit onClick={() => handleEditedclick(index)} /> */}
             </div>
             <div className="editcolor">
               <MdPageview

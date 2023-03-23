@@ -246,7 +246,7 @@ function LeadEdit() {
                         // style={{ justifyContent: "center" }}
                       >
                         <Link
-                          to={`${ROUTES.ADD_OPPORTUNITY}`}
+                          to={`${ROUTES.ADD_OPPORTUNITY}/${id}`}
                           className="nav-link"
                         >
                           <Button btnType="add_borderless">

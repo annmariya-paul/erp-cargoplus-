@@ -44,6 +44,7 @@ function AddressTable(props) {
         console.log("Error while getting data", err);
       });
   };
+  console.log("Toggle state", props.toggle);
 
   // # funtion getcontacttable to fetch addresses - Noufal
   const getAllAddress = async () => {
@@ -63,13 +64,10 @@ function AddressTable(props) {
               address_pin: item?.address_pin,
               address_contact: item?.address_contact,
             });
-            setAddressTable(array);
-            if (props.lead && array?.length <= 0) {
-              setModalshowAdd(true);
-              console.log("this ais test", modelshowAdd);
-            }
           }
         });
+
+        setAddressTable(array);
       } else {
         message.error("fetch data error");
       }
@@ -153,6 +151,13 @@ function AddressTable(props) {
       key: "address_contact",
     },
   ];
+  console.log("address table", addressTable?.length);
+  useEffect(() => {
+    if (props.toggle == true && addressTable?.length <= 0) {
+      setModalshowAdd(true);
+      console.log("this ais test", modelshowAdd);
+    }
+  }, [props.toggle]);
   return (
     <div>
       <div className="row">
@@ -298,7 +303,6 @@ function AddressTable(props) {
           </>
         }
       />
-
       <Custom_model
         centered
         size={`sm`}

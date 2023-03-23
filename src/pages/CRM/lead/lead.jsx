@@ -56,6 +56,7 @@ function Lead({}) {
   const [leadcreditdays, setLeadcreditdays] = useState(10);
   const [uniqueCode, setuniqueCode] = useState();
   const [timeOut, setTimeOuts] = useState(false);
+  const [Toggle4, setToggle4] = useState(false);
   const [addForm] = Form.useForm();
 
   const [error, setError] = useState(false);
@@ -187,6 +188,13 @@ function Lead({}) {
     console.log("tempereay file", temp);
   };
 
+  const handleAddressTab = (e) => {
+    if (e) {
+      setToggle4(true);
+      toggleTab(3);
+    }
+  };
+
   useEffect(() => {
     if (leadId) {
       getallContacts();
@@ -239,7 +247,7 @@ function Lead({}) {
                     leadId == null ? errormessage() : toggleTab(4);
                   }}
                 >
-                  Location
+                  Accounting
                 </button>
               </div>
             </div>
@@ -696,7 +704,7 @@ function Lead({}) {
                     />
                   </div>
                   <div className="col mt-4">
-                    <Button btnType="save" onClick={() => toggleTab(3)}>
+                    <Button btnType="save" onClick={(e) => handleAddressTab(e)}>
                       Next
                     </Button>
                   </div>
@@ -720,6 +728,7 @@ function Lead({}) {
                   <div className="row mt-2 ms-2">
                     <AddressTable
                       lead={leadId}
+                      toggle={Toggle4}
                       // show={modalAddress}
                       // onHide={() => setModalAddress(false)}
                     />

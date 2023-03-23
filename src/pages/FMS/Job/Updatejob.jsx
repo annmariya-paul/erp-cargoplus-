@@ -699,6 +699,8 @@ function Updatejob() {
                             </p>
                           ) : null}
                     </div>
+
+
                   </div>
                 </div>
                 <div className="col-md-6 col-12 mt-3">
@@ -844,6 +846,8 @@ function Updatejob() {
                         />
                       </Form.Item>
                     </div>
+
+                    
                   </div>
                 </div>
               </div>

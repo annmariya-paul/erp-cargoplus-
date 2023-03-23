@@ -480,6 +480,9 @@ function Opportunitylist(props) {
         UpdatedFormdata
       );
 
+
+      
+
       console.log("editdataaa", editoppurtunity);
       if (editoppurtunity.data.success) {
         setShowEditModal(false);

@@ -245,7 +245,17 @@ function LeadEdit() {
                         className="col-md-5 col-sm-6  d-flex justify-content-end"
                         // style={{ justifyContent: "center" }}
                       >
-                        <Button
+                        <Link
+                          to={`${ROUTES.ADD_OPPORTUNITY}`}
+                          className="nav-link"
+                        >
+                          <Button btnType="add_borderless">
+                            <BsPlusCircleFill style={{ fontSize: "16px" }} />{" "}
+                            New Opportunity
+                          </Button>
+                        </Link>
+
+                        {/* <Button
                           btnType="add_borderless"
                           onClick={() => setModalOpportunity(true)}
                         >
@@ -256,7 +266,7 @@ function LeadEdit() {
                           modalOpportunity={modalOpportunity}
                           onCancel={() => setModalOpportunity(false)}
                           style="width:1250px"
-                        />
+                        /> */}
                       </div>
                       <div
                         className="col-md-6 col-sm-4  d-flex justify-content-end"

@@ -11,7 +11,7 @@ import TestPage from "./pages/testpage";
 import LeadReport from "./pages/CRM/lead/leadReport/leadReport";
 import Opportunitylist from "./pages/CRM/lead/opportunity_ List/opportunitylist";
 import Categorylist from "./pages/CRM/Selling/category/viewCategory";
-
+import EditOpportunity from "./pages/CRM/lead/modals/editopportunity";
 // import BrandsList from "./pages/CRM/lead/brands/BrandsList";
 // import OpportunityReport from "./pages/opportunityReport/OpportunityReport";
 // import Unitlist from "./pages/CRM/Selling/unit/Unitlist";
@@ -35,6 +35,7 @@ import ServiceCreate from "./pages/CRM/Selling/services/ServiceCreate";
 import Unitlist from "./pages/CRM/Selling/unit/Unitlist";
 import Addunit from "./pages/CRM/Selling/unit/Addunit";
 import Login from "./pages/Login/login";
+import AddOpportunity from "./pages/CRM/lead/modals/addopportunity";
 
 // {HRMS}
 import Branches from "./pages/HRMS/branches/branches";
@@ -306,6 +307,14 @@ function App() {
             <Route path={ROUTES.EMPLOYEEGRADE} element={<ProtectedRoute />}>
               <Route index element={<Employeegrade />} />
             </Route>
+
+            <Route path={ROUTES.ADD_OPPORTUNITY} element={<ProtectedRoute />}>
+              <Route index element={<AddOpportunity />} />
+            </Route>
+            <Route path={ROUTES.EDIT_OPPORTUNITY_ID} element={<ProtectedRoute />}>
+              <Route index element={<EditOpportunity />} />
+            </Route>
+
 
             {/* {FMS} */}
             <Route path={ROUTES.TRACK_ASSIGNMENTS} element={<ProtectedRoute />}>

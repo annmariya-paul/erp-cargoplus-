@@ -480,6 +480,9 @@ function Opportunitylist(props) {
         UpdatedFormdata
       );
 
+
+      
+
       console.log("editdataaa", editoppurtunity);
       if (editoppurtunity.data.success) {
         setShowEditModal(false);
@@ -774,8 +777,8 @@ function Opportunitylist(props) {
                 Generate XLS Report
               </button> */}
             </div>
-            <div className="col-4 searchnew">
-            <Input.Search
+            <div className="col-4 ">
+            <Input.Search className="searchnew"
               placeholder="Search "
              
               // value={searchedText}

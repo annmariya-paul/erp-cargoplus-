@@ -16,6 +16,8 @@ import moment from "moment";
 import SelectBox from "../../../../components/Select Box/SelectBox";
 import InputType from "../../../../components/Input Type textbox/InputType";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
+import { ROUTES } from "../../../../routes";
+import "../opportunity_ List/opportunitylist.scss";
 // export default function AddOpportunity(props) {
   export default function EditOpportunity() {
   const { id } = useParams();
@@ -37,7 +39,7 @@ import TextArea from "../../../../components/ InputType TextArea/TextArea";
   //     label: "maintenance",
   //   },
   // ];
-
+  const navigate = useNavigate();
   const today = new Date();
   const [EditForm] = Form.useForm();
   const [numOfItems, setNumOfItems] = useState("25");
@@ -51,7 +53,7 @@ import TextArea from "../../../../components/ InputType TextArea/TextArea";
   const [showViewModal, setShowViewModal] = useState(false); //oppertunity view modal
   const [ShowEditModal, setShowEditModal] = useState(false); //oppertunity edit modal
   const [showProgressModal, setShowProgresssModal] = useState(false); //Oppoertunity progress modal
-  const [successPopup, setSuccessPopup] = useState(false); //success popups
+
   const [date, setDate] = useState(); //for date
   const [showAddOpportunity, setShowAddOpportunity] = useState(false); //adding opportunity
   const [oppId, setOppID] = useState(parseInt(id));
@@ -65,6 +67,7 @@ import TextArea from "../../../../components/ InputType TextArea/TextArea";
   const [oppurtunityfrom, setOppurtunityfrom] = useState();
   const [oppurtunitysource, setOppurtunitysource] = useState();
   const [oppurtunityparty, setOppurtunityparty] = useState("");
+  console.log("opp party",oppurtunityparty);
   const [oppurtunityvalidity, setOppurtunityvalidity] = useState();
   console.log("opp validity", oppurtunityvalidity);
   const [oppurtunityamount, setOppurtunityamount] = useState("");
@@ -87,7 +90,7 @@ import TextArea from "../../../../components/ InputType TextArea/TextArea";
   const [editForm] = Form.useForm();
   const [serialNo, setserialNo] = useState(1);
   const componentRef = useRef();
-
+  const [successPopup, setSuccessPopup] = useState(false);
   //pdf file start
   // const exportPDF = () => {
   //   const unit = "pt";
@@ -216,14 +219,24 @@ import TextArea from "../../../../components/ InputType TextArea/TextArea";
   // get one oppurtunity
   const [oneoppurtunity, setOneoppurtunity] = useState();
 
+  
+useEffect(()=>{
+  if(id){
+    getoneoppurtunity();
+  }
+
+},[id])
+
   const getoneoppurtunity = async () => {
+  
     try {
       const oneoppurtunities = await PublicFetch.get(
-        `${CRM_BASE_URL}/opportunity/${viewoppurtunity.id}`
+        `${CRM_BASE_URL}/opportunity/${id}`
       );
-      console.log("one oppurtunitiesss::: ", oneoppurtunities.data.data);
+      console.log("one oppurtunitiesss::: ", oneoppurtunities?.data?.data);
+      let date = moment(oneoppurtunities?.data?.data.opportunity_validity);
 
-      setOneoppurtunity(oneoppurtunities.data.data);
+      setOneoppurtunity(oneoppurtunities.data?.data);
       // console.log("typeee:", oneoppurtunities.data?.data?.opportunity_type);
 
       setOppurtunityid(oneoppurtunities.data?.data?.opportunity_id);
@@ -231,7 +244,7 @@ import TextArea from "../../../../components/ InputType TextArea/TextArea";
       setoppurtunitytype(oneoppurtunities.data?.data?.opportunity_type);
       setOppurtunityfrom(oneoppurtunities.data?.data?.opportunity_from);
       setOppurtunitysource(oneoppurtunities.data?.data?.opportunity_source);
-      setOppurtunityvalidity(oneoppurtunities.data?.data?.opportunity_validity);
+      setOppurtunityvalidity(date);
       setOpportunitydescription(
         oneoppurtunities.data?.data?.opportunity_description
       );
@@ -247,9 +260,11 @@ import TextArea from "../../../../components/ InputType TextArea/TextArea";
         opportunity_number: oneoppurtunities.data?.data?.opportunity_number,
         opportunity_type: oneoppurtunities.data?.data?.opportunity_type,
         opportunity_from: oneoppurtunities.data?.data?.opportunity_from,
-        opportunity_party: oneoppurtunities.data?.data?.opportunity_party,
+        opportunity_party: oneoppurtunities.data?.data?.opportunity_party1,
+        // opportunity_party: item?.crm_v1_contacts?.contact_person_name,
+        // opportunity_party1: item?.crm_v1_contacts?.contact_id,
         opportunity_source: oneoppurtunities.data?.data?.opportunity_source,
-        opportunity_validity: oneoppurtunities.data?.data?.opportunity_validity,
+        opportunity_validity: date,
         opportunity_amount: oneoppurtunities.data?.data?.opportunity_amount,
         opportunity_description:
           oneoppurtunities.data?.data?.opportunity_description,
@@ -283,6 +298,7 @@ import TextArea from "../../../../components/ InputType TextArea/TextArea";
     if (!mShow) {
       setTimeout(() => {
         setSuccessPopup(false);
+        navigate(ROUTES.OPPORTUNITY);
       }, time);
     }
   };
@@ -301,30 +317,30 @@ import TextArea from "../../../../components/ InputType TextArea/TextArea";
 
   // function to view oppurtunity unnimaya
 
-  const Viewoppurtunties = (item) => {
-    console.log("view oppurtunity issss:", item);
-    setviewoppurtunity({
-      ...viewoppurtunity,
-      id: item?.opportunity_Id,
-      opportunity_number: item.opportunity_number,
-      opportunity_type: item.opportunity_type,
-      opportunity_from: item.opportunity_from,
-      convertedby: item.opportunity_created_by,
-      opportunity_source: item.opportunity_source,
-      opportunity_party: item.opportunity_party,
-      opportunity_validity: item.opportunity_validity,
-      opportunity_description: item.opportunity_description,
-      opportunity_amount: item.opportunity_amount,
-      opportunity_probability: item.opportunity_probability,
-      opportunity_status: item.opportunity_status,
-      opportunity_leadid: item.opportunity_lead_id,
-      opportunity_lead_name: item.opportunity_created_by,
-      opportunity_statusname: item.opportunity_statusname,
-    });
-    getOppurtunityProgress(item);
+  // const Viewoppurtunties = (item) => {
+  //   console.log("view oppurtunity issss:", item);
+  //   setviewoppurtunity({
+  //     ...viewoppurtunity,
+  //     id: item?.opportunity_Id,
+  //     opportunity_number: item.opportunity_number,
+  //     opportunity_type: item.opportunity_type,
+  //     opportunity_from: item.opportunity_from,
+  //     convertedby: item.opportunity_created_by,
+  //     opportunity_source: item.opportunity_source,
+  //     opportunity_party: item.opportunity_party,
+  //     opportunity_validity: item.opportunity_validity,
+  //     opportunity_description: item.opportunity_description,
+  //     opportunity_amount: item.opportunity_amount,
+  //     opportunity_probability: item.opportunity_probability,
+  //     opportunity_status: item.opportunity_status,
+  //     opportunity_leadid: item.opportunity_lead_id,
+  //     opportunity_lead_name: item.opportunity_created_by,
+  //     opportunity_statusname: item.opportunity_statusname,
+  //   });
+  //   getOppurtunityProgress(item);
 
-    setShowViewModal(true);
-  };
+  //   setShowViewModal(true);
+  // };
   // function to view progress
 
   const getOppurtunityProgress = async (viewoppurtunity) => {
@@ -440,6 +456,7 @@ import TextArea from "../../../../components/ InputType TextArea/TextArea";
     getAllContact();
     setShowEditModal(true);
   };
+
 
   const updatedOppurtunity = async (updatedData) => {
     const UpdatedFormdata = {
@@ -741,7 +758,7 @@ import TextArea from "../../../../components/ InputType TextArea/TextArea";
         list_content={
           <> */}
            <div className="container-fluid">
-        <div className="row justify-content-md-center">
+        <div className="row ">
         <div className="content-tabs">
         <Form
           form={editForm}
@@ -756,14 +773,15 @@ import TextArea from "../../../../components/ InputType TextArea/TextArea";
             console.log(error);
           }}
         >
-            <div className="px-5">
-                <h5 className="lead_text mt-3">Edit Opportunity</h5>
+            <div className="px-1">
+                <h5 className="lead_text mt-3 ms-4 mb-3">Edit Opportunity</h5>
                 <div className="row px-1">
           <div className="px-5">
             <div className="row px-1">
               <div className="col-sm-4 pt-2">
-                <label>Opportunity No.</label>
-                <input
+                <label>Opportunity No.<span className="required">*</span></label>
+                
+                <InputType
                   value={opportunityNum}
                   onChange={(e) => setOpportunityNum(e.target.value)}
                   className="input_number_style mt-2"
@@ -772,7 +790,7 @@ import TextArea from "../../../../components/ InputType TextArea/TextArea";
                 />
               </div>
               <div className="col-sm-4 pt-2">
-                <label>Lead Type</label>
+                <label>Lead Type<span className="required">*</span></label>
                 <Form.Item
                   name="opportunity_type"
                   rules={[
@@ -801,7 +819,7 @@ import TextArea from "../../../../components/ InputType TextArea/TextArea";
               <div className="col-sm-4 pt-2">
                 {/* <Form.Group className="mb-2" controlId="lead_customer_from"> */}
                 {/* <Form.Label>From</Form.Label> */}
-                <label>Lead From</label>
+                <label>Lead From<span className="required">*</span></label>
                 <Form.Item
                   name="opportunity_from"
                   rules={[
@@ -823,7 +841,7 @@ import TextArea from "../../../../components/ InputType TextArea/TextArea";
                 </Form.Item>
               </div>
 
-              <div className="col-sm-4 pt-2">
+              <div className="col-sm-4 pt-2 " hidden>
                 {/* <Form.Group
                   className="mb-2"
                   controlId="lead_customer_generated"
@@ -846,7 +864,7 @@ import TextArea from "../../../../components/ InputType TextArea/TextArea";
 
               <div className="col-sm-4 pt-2">
                 {/* <Form.Group className="mb-2" controlId="lead_source"> */}
-                <label>Source</label>
+                <label>Source<span className="required">*</span></label>
 
                 <Form.Item
                   name="opportunity_source"
@@ -876,7 +894,7 @@ import TextArea from "../../../../components/ InputType TextArea/TextArea";
               </div>
 
               <div className="col-sm-4 pt-2">
-                <label>Party</label>
+                <label>Party<span className="required">*</span></label>
                 <Form.Item
                   name={"opportunity_party"}
                   rules={[
@@ -924,7 +942,7 @@ import TextArea from "../../../../components/ InputType TextArea/TextArea";
                   format={dateFormat}
                 /> */}
                 {/* <Form.Group className="mb-2" controlId="lead_valid_up_to"> */}
-                <label>Valid Up to</label>
+                <label>Valid Up to<span className="required">*</span></label>
 
                 <Form.Item name="opportunity_validity" {...config}>
                   <DatePicker
@@ -942,35 +960,7 @@ import TextArea from "../../../../components/ InputType TextArea/TextArea";
                 {/* </Form.Group> */}
               </div>
 
-              <div className="col-sm-8 pt-3">
-                {/* <Form.Group className="mb-2" controlId="lead_details"> */}
-                <label>Details</label>
-                <Form.Item
-                  name={"opportunity_description"}
-                  rules={[
-                    {
-                      min: 3,
-                      message: "Please enter above 3 character",
-                    },
-                    {
-                      max: 100,
-                    },
-                  ]}
-                >
-                  {/* as="textarea"
-                    name="lead_details"
-                    rows={3}
-                    // className={`${errors.lead_details && "invalid"}`} */}
-
-                  <TextArea
-                    value={opportunitydescription}
-                    onChange={(e) => {
-                      setOpportunitydescription(e.target.value);
-                    }}
-                  />
-                </Form.Item>
-                {/* </Form.Group> */}
-              </div>
+             
 
               <div className="col-sm-4 pt-3">
                 {/* <label>Expecting Amount</label>
@@ -1002,7 +992,7 @@ import TextArea from "../../../../components/ InputType TextArea/TextArea";
 
               <div className="col-sm-4 pt-2">
                 {/* <Form.Group className="mb-2" controlId="lead_probability"> */}
-                <label>Probability of conversion</label>
+                <label>Probability of conversion<span className="required">*</span></label>
                 <Form.Item
                   name={"opportunity_probability"}
                   rules={[
@@ -1028,7 +1018,7 @@ import TextArea from "../../../../components/ InputType TextArea/TextArea";
 
               <div className="col-sm-4 pt-2">
                 {/* <Form.Group className="mb-2" controlId="lead_status"> */}
-                <label>Status</label>
+                <label>Status<span className="required">*</span></label>
                 <Form.Item
                   name={"opportunity_status"}
                   rules={[
@@ -1051,12 +1041,43 @@ import TextArea from "../../../../components/ InputType TextArea/TextArea";
                 </Form.Item>
                 {/* </Form.Group> */}
               </div>
+              <div className="col-sm-12 pt-3">
+                {/* <Form.Group className="mb-2" controlId="lead_details"> */}
+                <label>Details</label>
+                <Form.Item
+                  name={"opportunity_description"}
+                  rules={[
+                    {
+                      min: 3,
+                      message: "Please enter above 3 character",
+                    },
+                    {
+                      max: 100,
+                    },
+                  ]}
+                >
+                  {/* as="textarea"
+                    name="lead_details"
+                    rows={3}
+                    // className={`${errors.lead_details && "invalid"}`} */}
+
+                  <TextArea
+                    value={opportunitydescription}
+                    onChange={(e) => {
+                      setOpportunitydescription(e.target.value);
+                    }}
+                  />
+                </Form.Item>
+                {/* </Form.Group> */}
+              </div>
               </div>
               </div>
               <div className="col-12 d-flex justify-content-center my-2">
                 <Button
                   onClick={() => {
-                    // updatedOppurtunity();
+                    updatedOppurtunity();
+                   
+                    
                   }}
                   btnType="save"
                   type="submit"
@@ -1074,8 +1095,8 @@ import TextArea from "../../../../components/ InputType TextArea/TextArea";
       <Custom_model
         size={`sm`}
         success
-        // show={modalShow}
-        // onHide={() => setModalShow(false)}
+        show={successPopup}
+        onHide={() =>  setSuccessPopup(false)}
         footer={false}
       />
       </div>

@@ -18,7 +18,7 @@ import AddOpportunity from "../modals/addopportunity";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { LeadStatus } from "../../../../utils/SelectOptions";
 import { CRM_BASE_URL } from "../../../../api/bootapi";
-import Countrystate from "../location/countryselect";
+import Countrystate from "../accountings/Accounting";
 import InputType from "../../../../components/Input Type textbox/InputType";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
 import SelectBox from "../../../../components/Select Box/SelectBox";
@@ -246,7 +246,7 @@ function LeadEdit() {
                         // style={{ justifyContent: "center" }}
                       >
                         <Link
-                          to={`${ROUTES.ADD_OPPORTUNITY}`}
+                          to={`${ROUTES.ADD_OPPORTUNITY}/${id}`}
                           className="nav-link"
                         >
                           <Button btnType="add_borderless">

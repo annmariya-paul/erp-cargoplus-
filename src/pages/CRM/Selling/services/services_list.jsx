@@ -601,11 +601,12 @@ function Services() {
             </div>
           </div>
           <div className="row my-3">
-            <div className="col-4  px-3">
+            <div className="col-2 page_size_style px-3">
+              <div className="">
               <Select
                 // defaultValue={"25"}
                 bordered={false}
-                className=" page_size_style"
+                className=" "
                 value={noofitems}
                 // onChange={(e) => setNoofItems(e)}
                 onChange={(e, current) => {
@@ -646,7 +647,10 @@ function Services() {
                   </span>{" "}
                 </Select.Option>
               </Select>
+              <label>of 100</label>
+              </div>
             </div>
+            <div className="col-2"></div>
             <div className=" col-4 d-flex justify-content-center">
               {totalCount>0 && (
               <MyPagination

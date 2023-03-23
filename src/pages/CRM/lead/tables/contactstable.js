@@ -6,10 +6,11 @@ import Button from "../../../../components/button/button";
 import Custom_model from "../../../../components/custom_modal/custom_model";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { CRM_BASE_URL } from "../../../../api/bootapi";
-import { Form,message } from "antd";
+import { Form, message } from "antd";
 import InputType from "../../../../components/Input Type textbox/InputType";
 import PhoneNumber from "../../../../components/phone_number/phonenumber";
 import Phone_Input from "../../../../components/PhoneInput/phoneInput";
+import { AiOutlinePlus } from "react-icons/ai";
 
 function ContactTable(props) {
   const [contactTable, setContactTable] = useState();
@@ -20,7 +21,7 @@ function ContactTable(props) {
   const [mobile, setMobile] = useState("");
   const [designation, setDesignation] = useState("");
   const [serialNo, setserialNo] = useState(1);
-  const [modalShow, setModalShow] = useState(true);
+  const [modalShow, setModalShow] = useState(false);
   const [showSuccessMOdal, setShowSuccessModal] = useState(false);
   const [show, setShow] = useState(false);
   const [showError, setShowError] = useState(false);
@@ -30,8 +31,9 @@ function ContactTable(props) {
   const [LeadId, setLeadId] = useState();
   // {funtion to fetch each Lead data - Ann mariya (22/11/22) }
   console.log("hai halo", props.leadscontid);
+
   const GetLeadData = () => {
-    PublicFetch.get(`${CRM_BASE_URL}/lead/${props.leadscontid}`)
+    PublicFetch.get(`${CRM_BASE_URL}/lead/${props?.leadscontid}`)
       .then((res) => {
         if (res?.data?.success) {
           console.log("Unique Lead Id", res?.data?.data);
@@ -69,6 +71,10 @@ function ContactTable(props) {
               setContactTable([...array]);
             }
           });
+          if (props.leadscontid && array?.length <= 0) {
+            setModalShow(true);
+            console.log("this ais test", modalShow);
+          }
 
           // setContactTable(res.data.data);
         } else {
@@ -81,10 +87,18 @@ function ContactTable(props) {
   };
 
   useEffect(() => {
-    getcontacttable();
-    GetLeadData();
+    if (props.leadscontid) {
+      getcontacttable();
+      GetLeadData();
+    }
     // AddContact();
-  }, [LeadId]);
+  }, [LeadId, props.leadscontid]);
+
+  // const close_modal2 = (time) => {
+  //   setTimeout(() => {
+  //     getcontacttable();
+  //   });
+  // };
 
   const columns = [
     {
@@ -164,6 +178,13 @@ function ContactTable(props) {
 
   return (
     <div>
+      <div className="row">
+        <div className="col-12">
+          <Button btnType="add" onClick={() => setModalShow(true)}>
+            Add <AiOutlinePlus />
+          </Button>
+        </div>
+      </div>
       <div className="datatable">
         <TableData
           data={contactTable}
@@ -219,66 +240,6 @@ function ContactTable(props) {
                       onChange={(e) => setContactName(e.target.value)}
                     />
                   </Form.Item>
-
-                  <label>Email</label>
-                  <Form.Item
-                    name="email"
-                    rules={[
-                      {
-                        required: true,
-                        pattern: new RegExp(
-                          "^[A-Za-z0-9_!#$%&'*+/=?`{|}~^.-]+@[A-Za-z0-9.-]+$"
-                        ),
-                        message: "Please enter a Valid Email",
-                      },
-                    ]}
-                  >
-                    <InputType
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                    />
-                  </Form.Item>
-
-                  <label>Phone Primary</label>
-                  <Form.Item
-                    name="phone"
-                    className="mt-1"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please enter a valid phone number",
-                      },
-                    ]}
-                  >
-                    {/* <PhoneNumber
-                      defaultCountry={"IN"}
-                      value={phone}
-                      id="contact_phone_1"
-                      name="contact_phone_1"
-                      onChange={(value) => setPhone(value)}
-                    /> */}
-                    <Phone_Input
-                      countryCodeEditable={false}
-                      value={phone}
-                      onChange={(value) => setPhone(value)}
-                    />
-                  </Form.Item>
-
-                  <label>Phone Secondary</label>
-                  <Form.Item name="mobile" className="mt-1">
-                    {/* <PhoneNumber
-                      defaultCountry={"IN"}
-                      value={mobile}
-                      id="contact_phone_2"
-                      name="contact_phone_2"
-                      onChange={(value) => setMobile(value)}
-                    /> */}
-                    <Phone_Input
-                      value={mobile}
-                      onChange={(value) => setMobile(value)}
-                    />
-                  </Form.Item>
-
                   <label>Designation</label>
                   <Form.Item
                     name="designation"
@@ -307,8 +268,66 @@ function ContactTable(props) {
                       onChange={(e) => setDesignation(e.target.value)}
                     />
                   </Form.Item>
+                  <label className="mt-2">Phone </label>
+                  <Form.Item
+                    name="phone"
+                    className="mt-1"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please enter a valid phone number",
+                      },
+                    ]}
+                  >
+                    {/* <PhoneNumber
+                      defaultCountry={"IN"}
+                      value={phone}
+                      id="contact_phone_1"
+                      name="contact_phone_1"
+                      onChange={(value) => setPhone(value)}
+                    /> */}
+                    <Phone_Input
+                      countryCodeEditable={false}
+                      value={phone}
+                      onChange={(value) => setPhone(value)}
+                    />
+                  </Form.Item>
+
+                  <label className="mt-2">Mobile</label>
+                  <Form.Item name="mobile" className="mt-1">
+                    {/* <PhoneNumber
+                      defaultCountry={"IN"}
+                      value={mobile}
+                      id="contact_phone_2"
+                      name="contact_phone_2"
+                      onChange={(value) => setMobile(value)}
+                    /> */}
+                    <Phone_Input
+                      value={mobile}
+                      onChange={(value) => setMobile(value)}
+                    />
+                  </Form.Item>
+
+                  <label className="mt-2">Email</label>
+                  <Form.Item
+                    name="email"
+                    rules={[
+                      {
+                        required: true,
+                        pattern: new RegExp(
+                          "^[A-Za-z0-9_!#$%&'*+/=?`{|}~^.-]+@[A-Za-z0-9.-]+$"
+                        ),
+                        message: "Please enter a Valid Email",
+                      },
+                    ]}
+                  >
+                    <InputType
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                  </Form.Item>
                 </div>
-                <div className="d-flex justify-content-center mt-3">
+                <div className="d-flex justify-content-center mt-5">
                   <Button btnType="save">Save</Button>
                 </div>
               </div>

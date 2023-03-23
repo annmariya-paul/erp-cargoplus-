@@ -17,6 +17,7 @@ import SelectBox from "../../../../components/Select Box/SelectBox";
 import InputType from "../../../../components/Input Type textbox/InputType";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
 import { ROUTES } from "../../../../routes";
+import "../opportunity_ List/opportunitylist.scss";
 // export default function AddOpportunity(props) {
   export default function EditOpportunity() {
   const { id } = useParams();
@@ -778,8 +779,9 @@ useEffect(()=>{
           <div className="px-5">
             <div className="row px-1">
               <div className="col-sm-4 pt-2">
-                <label>Opportunity No.</label>
-                <input
+                <label>Opportunity No.<span className="required">*</span></label>
+                
+                <InputType
                   value={opportunityNum}
                   onChange={(e) => setOpportunityNum(e.target.value)}
                   className="input_number_style mt-2"
@@ -788,7 +790,7 @@ useEffect(()=>{
                 />
               </div>
               <div className="col-sm-4 pt-2">
-                <label>Lead Type</label>
+                <label>Lead Type<span className="required">*</span></label>
                 <Form.Item
                   name="opportunity_type"
                   rules={[
@@ -817,7 +819,7 @@ useEffect(()=>{
               <div className="col-sm-4 pt-2">
                 {/* <Form.Group className="mb-2" controlId="lead_customer_from"> */}
                 {/* <Form.Label>From</Form.Label> */}
-                <label>Lead From</label>
+                <label>Lead From<span className="required">*</span></label>
                 <Form.Item
                   name="opportunity_from"
                   rules={[
@@ -862,7 +864,7 @@ useEffect(()=>{
 
               <div className="col-sm-4 pt-2">
                 {/* <Form.Group className="mb-2" controlId="lead_source"> */}
-                <label>Source</label>
+                <label>Source<span className="required">*</span></label>
 
                 <Form.Item
                   name="opportunity_source"
@@ -892,7 +894,7 @@ useEffect(()=>{
               </div>
 
               <div className="col-sm-4 pt-2">
-                <label>Party</label>
+                <label>Party<span className="required">*</span></label>
                 <Form.Item
                   name={"opportunity_party"}
                   rules={[
@@ -940,7 +942,7 @@ useEffect(()=>{
                   format={dateFormat}
                 /> */}
                 {/* <Form.Group className="mb-2" controlId="lead_valid_up_to"> */}
-                <label>Valid Up to</label>
+                <label>Valid Up to<span className="required">*</span></label>
 
                 <Form.Item name="opportunity_validity" {...config}>
                   <DatePicker
@@ -990,7 +992,7 @@ useEffect(()=>{
 
               <div className="col-sm-4 pt-2">
                 {/* <Form.Group className="mb-2" controlId="lead_probability"> */}
-                <label>Probability of conversion</label>
+                <label>Probability of conversion<span className="required">*</span></label>
                 <Form.Item
                   name={"opportunity_probability"}
                   rules={[
@@ -1016,7 +1018,7 @@ useEffect(()=>{
 
               <div className="col-sm-4 pt-2">
                 {/* <Form.Group className="mb-2" controlId="lead_status"> */}
-                <label>Status</label>
+                <label>Status<span className="required">*</span></label>
                 <Form.Item
                   name={"opportunity_status"}
                   rules={[

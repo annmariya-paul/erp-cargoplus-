@@ -19,6 +19,10 @@ const Button = React.forwardRef((props, ref) => {
   if (btnType === "save") {
     classNames += "btn_save";
   }
+  if (btnType === "new_save") {
+    classNames += "new_btn";
+  }
+
   if (btnType === "add") {
     classNames += "btn_add";
   }

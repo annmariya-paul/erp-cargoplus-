@@ -14,6 +14,7 @@ import PublicFetch from "../../../utils/PublicFetch";
 import { CRM_BASE_URL_HRMS } from "../../../api/bootapi";
 import { UniqueErrorMsg } from "../../../ErrorMessages/UniqueErrorMessage";
 import CheckUnique from "../../../check Unique/CheckUnique";
+import "../departments/departments.scss";
 
 // { Add and list Departments - Ann mariya - 16/11/22 }
 export default function Departments(props) {
@@ -376,10 +377,11 @@ export default function Departments(props) {
         // {...props}
         View_list
         list_content={
-          <>
+          <div>
             <div className="row">
               <h5 className="lead_text">Add Department</h5>
             </div>
+    
             <Form
               name="addForm"
               form={addForm}
@@ -439,7 +441,6 @@ export default function Departments(props) {
                     </p>
                   ) : null}
                 </div>
-
                 <div className="col-12 pt-3">
                   <label htmlfor="dept_code">Department Code</label>
                   <Form.Item
@@ -488,8 +489,8 @@ export default function Departments(props) {
                   <Button btnType="save">Save</Button>
                 </div>
               </div>
-            </Form>
-          </>
+            </Form>          
+          </div>
         }
       ></Custom_model>
       <Custom_model

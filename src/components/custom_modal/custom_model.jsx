@@ -64,7 +64,7 @@ function Custom_model({
           </div>
         )}
         {View_list && 
-        <div>{list_content}</div>}
+        <div className="p-0 m-1">{list_content}</div>}
       </Modal>
     </div>
   );

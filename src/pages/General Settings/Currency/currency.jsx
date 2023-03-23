@@ -11,7 +11,7 @@ import { MdPageview } from "react-icons/md";
 import { Form, Input, Select, DatePicker } from "antd";
 import TableData from "../../../components/table/table_data";
 import { FaEdit, FaTrash } from "react-icons/fa";
-
+import "../Currency/currency.scss";
 import { FiEdit } from "react-icons/fi";
 import CustomModel from "../../../components/custom_modal/custom_model";
 import { GENERAL_SETTING_BASE_URL } from "../../../api/bootapi";
@@ -23,22 +23,16 @@ export default function Currency(props) {
   const [serialNo, setserialNo] = useState(1);
   const [error, setError] = useState(false);
   const [successPopup, setSuccessPopup] = useState(false);
-
   const [searchedText, setSearchedText] = useState("");
-
   const [modalAddCurrency, setModalAddCurrency] = useState(false);
-
   const [pageSize, setPageSize] = useState("25");
   const [current, setCurrent] = useState(1);
-
   const [CodeInput, setCodeInput] = useState();
   const [CountryInput, setCountryInput] = useState();
   const [SymbolInput, setSymbolInput] = useState();
-
   const [Errormsg, setErrormsg] = useState();
   const [NameInput, setNameInput] = useState();
   const [coinInput, setCoinInput] = useState();
-
   const [showViewModal, setShowViewModal] = useState(false);
   const [CurrencyEditPopup, setCurrencyEditPopup] = useState(false);
   const [AllCurrency, setAllCurrency] = useState();
@@ -49,7 +43,6 @@ export default function Currency(props) {
   const [currencyDefault, setCurrencyDefault] = useState();
   console.log("checkeeddd", currencyDefault);
   // const [editForm] = Form.useForm();
-
   const onChange = (e) => {
     console.log(`checked iss ${e.target.checked}`);
   };
@@ -422,8 +415,9 @@ export default function Currency(props) {
         list_content={
           <>
             <div className="row">
-              <h5 className="lead_text">Add Currency</h5>
+              <h5 className="currency_add_text">Add Currency</h5>
             </div>
+            <div className="currency">
             <Form
               form={addForm}
               onFinish={(data) => {
@@ -465,7 +459,7 @@ export default function Currency(props) {
                   </div>
                 </div>
 
-                <div className="col-6 pt-1">
+                <div className="col-5 pt-1">
                   <label>Currency Name</label>
                   <div>
                     <Form.Item
@@ -498,7 +492,7 @@ export default function Currency(props) {
                     </Form.Item>
                   </div>
                 </div>
-                <div className="col-6 pt-1">
+                <div className="col-5 pt-1">
                   <label>Code</label>
                   <div>
                     <Form.Item
@@ -514,7 +508,7 @@ export default function Currency(props) {
                     </Form.Item>
                   </div>
                 </div>
-                <div className="col-12 pt-1">
+                <div className="col-11 pt-1">
                   <label>Symbol</label>
                   <div>
                     <Form.Item
@@ -526,7 +520,7 @@ export default function Currency(props) {
                         },
                       ]}
                     >
-                      <InputType />
+                      <InputType/>
                     </Form.Item>
                   </div>
                 </div>
@@ -549,8 +543,8 @@ export default function Currency(props) {
                     </Form.Item>
                   </div>
                 </div>
-                <div className="col-12 d-flex justify-content-center mt-5 gap-2">
-                  <Button btnType="save">Save</Button>
+                <div className="col-12 d-flex justify-content-center mt-4 gap-2">
+                  <Button btnType="new_save">Save</Button>
                   <Button
                     btnType="cancel"
                     type="reset"
@@ -563,6 +557,7 @@ export default function Currency(props) {
                 </div>
               </div>
             </Form>
+            </div>
           </>
         }
       >
@@ -802,9 +797,7 @@ export default function Currency(props) {
                         cancel
                       </Button>
                     </div>
-                  </div>
-
-                 
+                  </div>                 
                 </Form>
               </div>
               {error ? (

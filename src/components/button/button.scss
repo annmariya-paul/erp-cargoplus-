@@ -1,5 +1,17 @@
 @use "../../styles/variables.scss";
+.new_btn{
+   background-color: #F68539;
+   border: none;
+   border-radius: 4px;
+   color: white;
+   padding: 0.4rem;
+   padding-inline: 40px;
+   &:hover {
+     background: variables.$button-hover !important;
+   }
+ 
 
+}
 .btn_save {
   border: none;
   border-radius: 4px;

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./branches.scss";
 import Button from "../../../components/button/button";
 import InputType from "../../../components/Input Type textbox/InputType";
-import ErrorMsg from "../../../components/error/ErrorMessage";
+// import ErrorMsg from "../../../components/error/ErrorMessage";
 import Custom_model from "../../../components/custom_modal/custom_model";
 import CustomModel from "../../../components/custom_modal/custom_model";
 import { Form, Input, Select } from "antd";
@@ -387,8 +387,9 @@ const [searchcodeText, setSearchcodeText] = useState("");
         list_content={
           <>
             <div className="row">
-              <h5 className="lead_text">Add Branch</h5>
+              <h5 className="addbranch_text">Add Branch</h5>
             </div>
+            <div className="fom">
             <Form
               form={addForm}
               onFinish={(data) => {
@@ -399,8 +400,9 @@ const [searchcodeText, setSearchcodeText] = useState("");
                 console.log(error);
               }}
             >
+
               <div className="row py-4">
-                <div className="col-12 pt-1">
+                <div className="col-9 pt-1">
                   <label>Branch Name</label>
                   <div>
                     <Form.Item
@@ -447,7 +449,7 @@ const [searchcodeText, setSearchcodeText] = useState("");
                   </div>
                 </div>
 
-                <div className="col-12 pt-1">
+                <div className="col-9 pt-1">
                   <label>Branch Code</label>
                   <Form.Item
                     name="branchcode"
@@ -490,12 +492,14 @@ const [searchcodeText, setSearchcodeText] = useState("");
                   ) : null}
                 </div>
               </div>
-              <div className="row justify-content-center ">
+              <div className="row justify-content-center pb-3">
                 <div className="col-auto">
-                  <Button btnType="save">Save</Button>
+                  <Button btnType="new_save">Save</Button>
                 </div>
               </div>
             </Form>
+            </div>
+
           </>
         }
       >
@@ -512,11 +516,12 @@ const [searchcodeText, setSearchcodeText] = useState("");
         View_list
         list_content={
           <div>
-            <div className="container-fluid px-4 my-3">
+            <div className="container-fluid px-3 my-4">
               <div>
-                <h5 className="lead_text">Edit Branch</h5>
+                <h5 className="editbranch_text">Edit Branch</h5>
               </div>
               <div className="row my-3 ">
+                <div className="for">
                 <Form
                   form={editForm}
                   onFinish={(values) => {
@@ -527,7 +532,7 @@ const [searchcodeText, setSearchcodeText] = useState("");
                     console.log(error);
                   }}
                 >
-                  <div className="col-12">
+                  <div className="col-9 mt-4">
                     <label>Name</label>
                     <Form.Item
                       name="NameInput"
@@ -574,7 +579,7 @@ const [searchcodeText, setSearchcodeText] = useState("");
                     ) : null}
                    
                   </div>
-                  <div className="col-12">
+                  <div className="col-9 mt-3">
                     <label>Code</label>
                     <Form.Item
                       name="CodeInput"
@@ -621,10 +626,11 @@ const [searchcodeText, setSearchcodeText] = useState("");
                    
                   </div>
 
-                  <div className="col-12 d-flex justify-content-center mt-5">
+                  <div className="col-12 d-flex justify-content-center mt-3 mb-3">
                     <Button className="save_button">Save</Button>
                   </div>
                 </Form>
+                </div>
               </div>
              
             </div>

@@ -5,3 +5,29 @@
   border-radius: 4px;
   box-shadow: 2px 2px 12px variables.$boxshadow;
 }
+.for{
+  background-color: white;
+  border-top-right-radius: 68px;
+  padding-left: 21px;
+  // padding: 5px;
+  // border-bottom-left-radius: 12px;
+  // border-bottom-right-radius: 12px;
+}
+.fom{
+  background-color: #ffffff;
+  border-top-right-radius: 68px;
+  padding-left: 21px;
+
+
+}
+.editbranch_text {
+  color: #0891d1;
+  font-weight: 499;
+  // padding-top: 9px;
+}
+.addbranch_text {
+  color: #ffffff;
+  font-weight: 499;
+  padding-left: 22px;
+  // padding-top: 9px;
+}

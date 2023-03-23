@@ -8,6 +8,7 @@ Button.btn-close {
   background-color: $bg_closebtn;
   font-size: 11px;
   opacity: 0.4;
+  color: white;
 }
 .modal-header {
   border-bottom: none;
@@ -15,7 +16,6 @@ Button.btn-close {
 .modal-title,
 .success_msg {
   color: variables.$primary;
-  background-color: #0000ff;
 }
 
 .modal-footer {
@@ -48,16 +48,36 @@ input[type='date']{
     outline:none;
 }
 .modal_window_style {
-  
-  
     .ant-modal-content {
       position: relative;
-      background-color: #fff;
+      background-color:#09345F;
       background-clip: padding-box;
       border: 0;
-      border-radius: 15px;
+      padding: 0px;
+      // border-radius: 15px;
       pointer-events: auto;
     }
+   .ant-modal-body {
+      font-size: 14px;
+      line-height: 1.5715;
+      word-wrap: break-word;
+      padding-right: 2px;
+      padding-left: 2px;
+      padding-top: 10px;
+      padding-bottom: 2px;
+  }
+  .ant-modal-close-x {
+    display: block;
+    width: 54px;
+    height: 54px;
+    font-size: 16px;
+    font-style: normal;
+    line-height: 54px;
+    text-align: center;
+    text-transform: none;
+    text-rendering: auto;
+    color: white;
+  }
   
 }
 .ant-modal-centered .ant-modal {

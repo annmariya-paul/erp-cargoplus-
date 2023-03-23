@@ -26,6 +26,7 @@ import InputType from "../../../components/Input Type textbox/InputType";
 import TextArea from "../../../components/ InputType TextArea/TextArea";
 import { UniqueErrorMsg } from "../../../ErrorMessages/UniqueErrorMessage";
 import CheckUnique from "../../../check Unique/CheckUnique";
+import Phone_Input from "../../../components/PhoneInput/phoneInput";
 // import { useForm } from "react-hook-form";
 // import {  message } from 'antd';
 
@@ -57,6 +58,7 @@ function Lead({}) {
   const [uniqueCode, setuniqueCode] = useState();
   const [timeOut, setTimeOuts] = useState(false);
   const [Toggle4, setToggle4] = useState(false);
+
   const [addForm] = Form.useForm();
 
   const [error, setError] = useState(false);
@@ -118,49 +120,79 @@ function Lead({}) {
       });
   };
 
-  const Submit = () => {
-    setFormSubmitted(true);
+  // const Submit = () => {         /// old lead api creating a lead
+  //   setFormSubmitted(true);
+  //   const formData = new FormData();
+  //   formData.append("lead_type", leadType);
+  //   formData.append("lead_customer_name", leadName);
+  //   formData.append("lead_user_type", leadUsertype);
+  //   formData.append("lead_organization", leadOrganization);
+  //   formData.append("lead_source", leadSource);
+  //   formData.append("lead_credit_days", leadcreditdays);
+  //   if (leadDescription) {
+  //     formData.append("lead_description", leadDescription);
+  //   }
+  //   formData.append("attachments", leadimg);
+  //   formData.append("lead_status", leadStatus);
+  //   //  console.log(data);
+  //   PublicFetch.post(`${CRM_BASE_URL}/lead`, formData, {
+  //     "Content-Type": "Multipart/form-Data",
+  //   })
+  //     .then(function (response) {
+  //       console.log("hello", response);
+  //       if (response.data.success) {
+  //         console.log("hello", response.data.data);
+  //         setLeadType();
+  //         setLeadName();
+  //         setLeadUsertype();
+  //         setLeadOrganization();
+  //         setLeadSource();
+  //         setLeadAttachment();
+  //         setLeadDescription();
+  //         setLeadStatus();
+  //         setModalShow(true);
+  //         close_modal(modalShow, 1000, response?.data?.data?.lead_id);
+  //         setModalContact(false);
+  //         let idoflead = response?.data?.data?.lead_id;
+  //         setLeadcreditdays();
+  //       } else {
+  //         console.log("Failed while adding data");
+  //       }
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error);
+  //     });
+  //   // }
+  // };
+
+  const createCustomer = (data) => {
     const formData = new FormData();
-    formData.append("lead_type", leadType);
-    formData.append("lead_customer_name", leadName);
-    formData.append("lead_user_type", leadUsertype);
-    formData.append("lead_organization", leadOrganization);
-    formData.append("lead_source", leadSource);
-    formData.append("lead_credit_days", leadcreditdays);
-    if (leadDescription) {
-      formData.append("lead_description", leadDescription);
+    formData.append(`customer_name`, data.customer_name);
+    formData.append(`customer_type`, data.customer_type);
+    formData.append(`customer_address`, data.customer_address);
+    formData.append(`customer_phone`, data.customer_phone);
+    formData.append(`customer_email`, data.customer_email);
+    formData.append(`customer_remarks`, data.customer_remarks);
+    formData.append(`customer_country`, data.customer_country);
+    formData.append(`customer_state`, data.customer_state);
+    formData.append(`customer_city`, data.customer_city);
+    if (leadimg) {
+      formData.append(`customer_logo`, leadimg);
     }
-    formData.append("attachments", leadimg);
-    formData.append("lead_status", leadStatus);
-    //  console.log(data);
-    PublicFetch.post(`${CRM_BASE_URL}/lead`, formData, {
+
+    PublicFetch.post(`${CRM_BASE_URL}/customer`, formData, {
       "Content-Type": "Multipart/form-Data",
     })
-      .then(function (response) {
-        console.log("hello", response);
-        if (response.data.success) {
-          console.log("hello", response.data.data);
-          setLeadType();
-          setLeadName();
-          setLeadUsertype();
-          setLeadOrganization();
-          setLeadSource();
-          setLeadAttachment();
-          setLeadDescription();
-          setLeadStatus();
-          setModalShow(true);
-          close_modal(modalShow, 1000, response?.data?.data?.lead_id);
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          close_modal(modalShow, 1000, res?.data?.data);
           setModalContact(false);
-          let idoflead = response?.data?.data?.lead_id;
-          setLeadcreditdays();
-        } else {
-          console.log("Failed while adding data");
         }
       })
-      .catch(function (error) {
-        console.log(error);
+      .catch((err) => {
+        console.log("Error", err);
       });
-    // }
   };
 
   const options = [
@@ -191,8 +223,22 @@ function Lead({}) {
   const handleAddressTab = (e) => {
     if (e) {
       setToggle4(true);
+      setTimeOuts(false);
       toggleTab(3);
     }
+  };
+  const handleContactTab = (e) => {
+    if (e) {
+      setTimeOuts(true);
+      setToggle4(false);
+      toggleTab(2);
+    }
+  };
+
+  const handleAccountingTab = () => {
+    toggleTab(4);
+    setTimeOuts(false);
+    setToggle4(false);
   };
 
   useEffect(() => {
@@ -213,7 +259,11 @@ function Lead({}) {
                 <button
                   id="button-tabs"
                   className={toggleState === 1 ? "tabs active-tabs " : "tabs "}
-                  onClick={() => toggleTab(1)}
+                  onClick={() => {
+                    toggleTab(1);
+                    setTimeOuts(false);
+                    setToggle4(false);
+                  }}
                 >
                   Basic Info
                 </button>
@@ -222,8 +272,8 @@ function Lead({}) {
                 <button
                   id="button-tabs"
                   className={toggleState === 2 ? "tabs active-tabs " : "tabs "}
-                  onClick={() => {
-                    leadId == null ? errormessage() : toggleTab(2);
+                  onClick={(e) => {
+                    leadId == null ? errormessage() : handleContactTab(e);
                   }}
                 >
                   Contacts
@@ -233,8 +283,8 @@ function Lead({}) {
                 <button
                   id="button-tabs"
                   className={toggleState === 3 ? "tabs active-tabs" : "tabs"}
-                  onClick={() => {
-                    leadId == null ? errormessage() : toggleTab(3);
+                  onClick={(e) => {
+                    leadId == null ? errormessage() : handleAddressTab(e);
                   }}
                 >
                   Address
@@ -243,8 +293,8 @@ function Lead({}) {
               <div className="col-xl-1 col-sm-2 pe-1">
                 <button
                   className={toggleState === 4 ? "tabs active-tabs" : "tabs"}
-                  onClick={() => {
-                    leadId == null ? errormessage() : toggleTab(4);
+                  onClick={(e) => {
+                    leadId == null ? errormessage() : handleAccountingTab(e);
                   }}
                 >
                   Accounting
@@ -295,7 +345,8 @@ function Lead({}) {
                   form={addForm}
                   onFinish={(value) => {
                     console.log("values111333", value);
-                    Submit();
+                    // Submit();
+                    createCustomer(value);
                   }}
                   onFinishFailed={(error) => {
                     console.log(error);
@@ -325,7 +376,7 @@ function Lead({}) {
                     <div className="col-sm-4 pt-2">
                       <label>Name</label>
                       <Form.Item
-                        name="leadcustomername"
+                        name="customer_name"
                         rules={[
                           {
                             required: true,
@@ -346,7 +397,7 @@ function Lead({}) {
                         ]}
                       >
                         <InputType
-                          value={leadName}
+                          // value={leadName}
                           onChange={(e) => {
                             setLeadName(e.target.value);
                             setuniqueCode(false);
@@ -373,7 +424,7 @@ function Lead({}) {
                     <div className="col-sm-4 pt-2">
                       <label>Customer Type</label>
                       <Form.Item
-                        // name="leadUsertype"
+                        name="customer_type"
                         rules={[
                           {
                             required: true,
@@ -387,15 +438,19 @@ function Lead({}) {
                             setOrganizationDisable(e);
                           }}
                         >
-                          <Select.Option value="O">Organisation</Select.Option>
-                          <Select.Option value="I">Indivdual</Select.Option>
+                          <Select.Option value="organization">
+                            Organisation
+                          </Select.Option>
+                          <Select.Option value="individual">
+                            Indivdual
+                          </Select.Option>
                         </SelectBox>
                       </Form.Item>
                     </div>
                     <div className="col-sm-4 pt-2">
                       <label>Address</label>
                       <Form.Item
-                        name="leadOrganization"
+                        name="customer_address"
                         rules={[
                           {
                             pattern: new RegExp("^[A-Za-z0-9 ]+$"),
@@ -413,7 +468,7 @@ function Lead({}) {
                         ]}
                       >
                         <TextArea
-                          disabled={organizationDisable === "I"}
+                          // disabled={organizationDisable === "I"}
                           value={leadOrganization}
                           onChange={(e) => setLeadOrganization(e.target.value)}
                         />
@@ -422,35 +477,37 @@ function Lead({}) {
                     <div className="col-sm-4 pt-2">
                       <label>Phone</label>
                       <Form.Item
-                        // name={leadSource}
+                        name="customer_phone"
                         rules={[
                           {
                             required: true,
                           },
                         ]}
                       >
-                        <InputType />
+                        <Phone_Input />
                       </Form.Item>
                     </div>
                     <div className="col-sm-4 pt-2">
                       <label>Email</label>
                       <Form.Item
-                        name="leadcreditdays"
-                        rules={[
-                          {
-                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                            message: "Special characters are not allowed",
-                          },
-                          // {
-                          //   min: 2,
-                          //   message: "organisation has at least 2 characters",
-                          // },
-                          // {
-                          //   max: 100,
-                          //   message:
-                          //     "organisation cannot be longer than 100 characters",
-                          // },
-                        ]}
+                        name="customer_email"
+                        rules={
+                          [
+                            // {
+                            //   // pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                            //   message: "Special characters are not allowed",
+                            // },
+                            // {
+                            //   min: 2,
+                            //   message: "organisation has at least 2 characters",
+                            // },
+                            // {
+                            //   max: 100,
+                            //   message:
+                            //     "organisation cannot be longer than 100 characters",
+                            // },
+                          ]
+                        }
                       >
                         <InputType
                           value={leadcreditdays}
@@ -459,24 +516,26 @@ function Lead({}) {
                       </Form.Item>
                     </div>
                     <div className="col-sm-4 pt-2">
-                      <label>WebSite</label>
+                      <label>Website</label>
                       <Form.Item
-                        name="leadcreditdays"
-                        rules={[
-                          {
-                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                            message: "Special characters are not allowed",
-                          },
-                          // {
-                          //   min: 2,
-                          //   message: "organisation has at least 2 characters",
-                          // },
-                          // {
-                          //   max: 100,
-                          //   message:
-                          //     "organisation cannot be longer than 100 characters",
-                          // },
-                        ]}
+                        name="customer_website"
+                        rules={
+                          [
+                            // {
+                            //   pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                            //   message: "Special characters are not allowed",
+                            // },
+                            // {
+                            //   min: 2,
+                            //   message: "organisation has at least 2 characters",
+                            // },
+                            // {
+                            //   max: 100,
+                            //   message:
+                            //     "organisation cannot be longer than 100 characters",
+                            // },
+                          ]
+                        }
                       >
                         <InputType
                           value={leadcreditdays}
@@ -487,47 +546,51 @@ function Lead({}) {
                     <div className="col-sm-4 pt-2">
                       <label>Country</label>
                       <Form.Item
-                        name="leadcreditdays"
-                        rules={[
-                          {
-                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                            message: "Special characters are not allowed",
-                          },
-                          // {
-                          //   min: 2,
-                          //   message: "organisation has at least 2 characters",
-                          // },
-                          // {
-                          //   max: 100,
-                          //   message:
-                          //     "organisation cannot be longer than 100 characters",
-                          // },
-                        ]}
+                        name="customer_country"
+                        rules={
+                          [
+                            // {
+                            //   pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                            //   message: "Special characters are not allowed",
+                            // },
+                            // {
+                            //   min: 2,
+                            //   message: "organisation has at least 2 characters",
+                            // },
+                            // {
+                            //   max: 100,
+                            //   message:
+                            //     "organisation cannot be longer than 100 characters",
+                            // },
+                          ]
+                        }
                       >
                         <SelectBox>
-                          <Select.Option></Select.Option>
+                          <Select.Option value="1">india</Select.Option>
                         </SelectBox>
                       </Form.Item>
                     </div>
                     <div className="col-sm-4 pt-2">
                       <label>State</label>
                       <Form.Item
-                        name="leadcreditdays"
-                        rules={[
-                          {
-                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                            message: "Special characters are not allowed",
-                          },
-                          // {
-                          //   min: 2,
-                          //   message: "organisation has at least 2 characters",
-                          // },
-                          // {
-                          //   max: 100,
-                          //   message:
-                          //     "organisation cannot be longer than 100 characters",
-                          // },
-                        ]}
+                        name="customer_state"
+                        rules={
+                          [
+                            // {
+                            //   pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                            //   message: "Special characters are not allowed",
+                            // },
+                            // {
+                            //   min: 2,
+                            //   message: "organisation has at least 2 characters",
+                            // },
+                            // {
+                            //   max: 100,
+                            //   message:
+                            //     "organisation cannot be longer than 100 characters",
+                            // },
+                          ]
+                        }
                       >
                         <InputType
                           value={leadcreditdays}
@@ -538,22 +601,24 @@ function Lead({}) {
                     <div className="col-sm-4 pt-2">
                       <label>City</label>
                       <Form.Item
-                        name="leadcreditdays"
-                        rules={[
-                          {
-                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                            message: "Special characters are not allowed",
-                          },
-                          // {
-                          //   min: 2,
-                          //   message: "organisation has at least 2 characters",
-                          // },
-                          // {
-                          //   max: 100,
-                          //   message:
-                          //     "organisation cannot be longer than 100 characters",
-                          // },
-                        ]}
+                        name="customer_city"
+                        rules={
+                          [
+                            // {
+                            //   pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                            //   message: "Special characters are not allowed",
+                            // },
+                            // {
+                            //   min: 2,
+                            //   message: "organisation has at least 2 characters",
+                            // },
+                            // {
+                            //   max: 100,
+                            //   message:
+                            //     "organisation cannot be longer than 100 characters",
+                            // },
+                          ]
+                        }
                       >
                         <InputType
                           value={leadcreditdays}
@@ -564,7 +629,7 @@ function Lead({}) {
 
                     <div className="col-sm-4 mt-4 py-2">
                       <div className="">
-                        <Form.Item name="new">
+                        <Form.Item name="customer_logo">
                           <FileUpload
                             multiple
                             filetype={"Accept only pdf and docs"}
@@ -610,7 +675,7 @@ function Lead({}) {
                     <div className="col-sm-12 pt-2">
                       <label className="mb-2">Remarks</label>
                       <Form.Item
-                        name="Description"
+                        name="customer_remarks"
                         rules={[
                           {
                             min: 5,
@@ -626,7 +691,7 @@ function Lead({}) {
                       >
                         <TextArea
                           className="descheight"
-                          value={leadDescription}
+                          // value={leadDescription}
                           onChange={(e) => setLeadDescription(e.target.value)}
                         />
                       </Form.Item>
@@ -701,6 +766,7 @@ function Lead({}) {
                       // onHide={() => setModalContact(false)}
                       // leads
                       leadscontid={leadId}
+                      toggle={timeOut}
                     />
                   </div>
                   <div className="col mt-4">

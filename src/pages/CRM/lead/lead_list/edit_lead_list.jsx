@@ -26,6 +26,7 @@ import SelectBox from "../../../../components/Select Box/SelectBox";
 import Custom_model from "../../../../components/custom_modal/custom_model";
 import Select from "rc-select";
 import "../lead.styles.scss";
+import Phone_Input from "../../../../components/PhoneInput/phoneInput";
 
 function LeadEdit() {
   // const history=useHistory();
@@ -56,6 +57,8 @@ function LeadEdit() {
   const [sampledata, setsambpledata] = useState();
   const [organizationDisable, setOrganizationDisable] = useState();
   const [leadcreditdays, setleadcreditdays] = useState();
+  const [toggle2, setToggel2] = useState(false);
+  const [toggle3, setToggle3] = useState(false);
 
   const [editForm] = Form.useForm();
   const [error, setError] = useState(false);
@@ -96,6 +99,7 @@ function LeadEdit() {
     if (!mShow) {
       setTimeout(() => {
         setModalShow(false);
+        // handletoggle2(time);
         goToLeadlist();
       }, time);
     }
@@ -183,6 +187,22 @@ function LeadEdit() {
       });
   };
 
+  const handletoggle2 = (e) => {
+    if (e) {
+      setToggel2(true);
+      setToggle3(false);
+      toggleTab(2);
+    }
+  };
+
+  const handletoggle3 = (e) => {
+    if (e) {
+      setToggle3(true);
+      setToggel2(false);
+      toggleTab(3);
+    }
+  };
+
   console.log("kkkkkk", leadDescription, leadName);
   const beforeUpload = (file, fileList) => {};
   return (
@@ -190,40 +210,47 @@ function LeadEdit() {
       <div className="container-fluid">
         <div className="lead_container">
           <div className="row justify-content-md-center">
+            <div className="mb-2">
+              <h5 class="lead_text"> Edit Customer ({leadName})</h5>
+            </div>
             <div className="bloc-tabs tabs-responsive">
-              <div className="col-sm-2">
+              <div className="col-xl-1 col-sm-2 pe-1">
                 <button
                   id="button-tabs"
                   className={toggleState === 1 ? "tabs active-tabs" : "tabs"}
-                  onClick={() => toggleTab(1)}
+                  onClick={() => {
+                    toggleTab(1);
+                    setToggel2(false);
+                    setToggle3(false);
+                  }}
                 >
                   Basic Info
                 </button>
               </div>
-              <div className="col-sm-2">
+              <div className="col-xl-1 col-sm-2 pe-1">
                 <button
                   id="button-tabs"
                   className={toggleState === 2 ? "tabs active-tabs" : "tabs"}
-                  onClick={() => toggleTab(2)}
+                  onClick={(e) => handletoggle2(e)}
                 >
                   Contacts
                 </button>
               </div>
-              <div className="col-sm-2">
+              <div className="col-xl-1 col-sm-2 pe-1">
                 <button
                   id="button-tabs"
                   className={toggleState === 3 ? "tabs active-tabs" : "tabs"}
-                  onClick={() => toggleTab(3)}
+                  onClick={(e) => handletoggle3(e)}
                 >
                   Address
                 </button>
               </div>
-              <div className="col-sm-2">
+              <div className="col-xl-1 col-sm-2 pe-1">
                 <button
                   className={toggleState === 4 ? "tabs active-tabs" : "tabs"}
                   onClick={() => toggleTab(4)}
                 >
-                  Location
+                  Accounting
                 </button>
               </div>
             </div>
@@ -237,7 +264,7 @@ function LeadEdit() {
                 {/* <div className="col-12"> */}
                 <div className="row mb-2 ">
                   <div class="col-md-7 col-sm-12">
-                    <h5 class="lead_text"> Edit Lead/Customer ({leadName})</h5>
+                    {/* <h5 class="lead_text"> Edit Customer ({leadName})</h5> */}
                   </div>
                   <div className="col-md-5 col-sm-12 ">
                     <div className="d-flex justify-content-end">
@@ -297,7 +324,7 @@ function LeadEdit() {
                   }}
                 >
                   <div className="row px-1">
-                    <div className="col-sm-4 pt-2">
+                    {/* <div className="col-sm-4 pt-2">
                       <label>Type</label>
                       <Form.Item
                         name="leadType"
@@ -316,7 +343,7 @@ function LeadEdit() {
                           <Select.Option value="C">Customer</Select.Option>
                         </SelectBox>
                       </Form.Item>
-                    </div>
+                    </div> */}
                     <div className="col-sm-4 pt-2">
                       <label>Name</label>
                       <Form.Item
@@ -345,7 +372,7 @@ function LeadEdit() {
                       </Form.Item>
                     </div>
                     <div className="col-sm-4 pt-2">
-                      <label>User Type</label>
+                      <label>Customer Type</label>
                       <Form.Item
                         // name="leadUsertype"
                         rules={[
@@ -368,7 +395,7 @@ function LeadEdit() {
                       </Form.Item>
                     </div>
                     <div className="col-sm-4 pt-2">
-                      <label>Organization</label>
+                      <label>Address</label>
                       <Form.Item
                         name="leadOrganization"
                         rules={[
@@ -391,7 +418,7 @@ function LeadEdit() {
                           },
                         ]}
                       >
-                        <InputType
+                        <TextArea
                           disabled={organizationDisable === "I"}
                           // value={leadOrganization}
                           onChange={(e) => setLeadOrganization(e.target.value)}
@@ -399,7 +426,62 @@ function LeadEdit() {
                       </Form.Item>
                     </div>
                     <div className="col-sm-4 pt-2">
-                      <label>Source</label>
+                      <label>Phone</label>
+                      <Form.Item
+                        name=""
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please select a Type",
+                          },
+                        ]}
+                      >
+                        <Phone_Input
+                          value={leadcreditdays}
+                          onChange={(value) => setleadcreditdays(value)}
+                        />
+                      </Form.Item>
+                    </div>
+                    <div className="col-sm-4 pt-2">
+                      <label>Email</label>
+                      <Form.Item
+                        name="creditdays"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please select a Type",
+                          },
+                        ]}
+                      >
+                        <InputType
+                          value={leadcreditdays}
+                          onChange={(e) => {
+                            setleadcreditdays(e.target.value);
+                          }}
+                        />
+                      </Form.Item>
+                    </div>
+                    <div className="col-sm-4 pt-2">
+                      <label>Website</label>
+                      <Form.Item
+                        name="creditdays"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please select a Type",
+                          },
+                        ]}
+                      >
+                        <InputType
+                          value={leadcreditdays}
+                          onChange={(e) => {
+                            setleadcreditdays(e.target.value);
+                          }}
+                        />
+                      </Form.Item>
+                    </div>
+                    <div className="col-sm-4 pt-2">
+                      <label>Country</label>
                       <Form.Item
                         name="leadSource"
                         rules={[
@@ -426,7 +508,7 @@ function LeadEdit() {
                       </Form.Item>
                     </div>
                     <div className="col-sm-4 pt-2">
-                      <label>Credit Days</label>
+                      <label>State</label>
                       <Form.Item
                         name="creditdays"
                         rules={[
@@ -444,72 +526,26 @@ function LeadEdit() {
                         />
                       </Form.Item>
                     </div>
-                    {/* <div className="col-12 mt-3">
-                      <Form.Item name="leadAttachment">
-                        <FileUpload
-                          multiple
-                          filetype={"Accept only pdf and docs"}
-                          listType="picture"
-                          accept=".pdf,.docs,"
-                          // onPreview={handlePreview}
-                          beforeUpload={beforeUpload}
-                          onChange={(file) => {
-                            console.log("Before upload", file.file);
-                            console.log(
-                              "Before upload file size",
-                              file.file.size
-                            );
-                            if (
-                              file.file.size > 1000 &&
-                              file.file.size < 500000
-                            ) {
-                              setLeadAttachment(file.file.originFileObj);
-                              setFileSizeError(false);
-                              console.log(
-                                "file greater than 1 kb and less than 500 kb"
-                              );
-                            } else {
-                              setFileSizeError(true);
-                              console.log("hgrtryyryr");
-                            }
-                          }}
-                        />
-                        {FileSizeError ? (
-                          <div>
-                            <label style={{ color: "red" }}>
-                              File size must be between 1kb and 500kb
-                            </label>
-                          </div>
-                        ) : (
-                          ""
-                        )}
-                      </Form.Item>
-                    </div> */}
                     <div className="col-sm-4 pt-2">
-                      <label>Description</label>
+                      <label>City</label>
                       <Form.Item
-                        name="leadDescription"
-                        className="py-2"
+                        name="creditdays"
                         rules={[
                           {
-                            min: 2,
-                            message:
-                              "Description must be at least 2 characters",
-                          },
-                          {
-                            max: 500,
-                            message:
-                              "Description cannot be longer than 500 characters",
+                            required: true,
+                            message: "Please select a Type",
                           },
                         ]}
                       >
-                        <TextArea
-                          // value={leadDescription}
-                          className="descheight"
-                          onChange={(e) => setLeadDescription(e.target.value)}
+                        <InputType
+                          value={leadcreditdays}
+                          onChange={(e) => {
+                            setleadcreditdays(e.target.value);
+                          }}
                         />
                       </Form.Item>
                     </div>
+
                     <div className="col-sm-4 pt-3 mt-3">
                       <Form.Item name="leadAttachment">
                         <FileUpload
@@ -551,29 +587,30 @@ function LeadEdit() {
                         )}
                       </Form.Item>
                     </div>
-                    <div className="col-sm-4 pt-1">
-                      <label>Lead Status</label>
+
+                    <div className="col-sm-12 pt-2">
+                      <label>Remarks</label>
                       <Form.Item
-                        name="leadStatus"
+                        name="leadDescription"
+                        className="py-2"
                         rules={[
                           {
-                            required: true,
-                            message: "Please select a Type",
+                            min: 2,
+                            message:
+                              "Description must be at least 2 characters",
+                          },
+                          {
+                            max: 500,
+                            message:
+                              "Description cannot be longer than 500 characters",
                           },
                         ]}
                       >
-                        <SelectBox
-                          // value={leadStatus}
-                          onChange={(e) => setLeadStatus(e)}
-                        >
-                          <Select.Option value={1}>Lead</Select.Option>
-                          <Select.Option value={2}>Opportunity</Select.Option>
-                          <Select.Option value={3}>Quotation</Select.Option>
-                          <Select.Option value={4}>Interested</Select.Option>
-                          <Select.Option value={5}>Converted</Select.Option>
-                          <Select.Option value={6}>Lost</Select.Option>
-                          <Select.Option value={7}>DND</Select.Option>
-                        </SelectBox>
+                        <TextArea
+                          // value={leadDescription}
+                          className="descheight"
+                          onChange={(e) => setLeadDescription(e.target.value)}
+                        />
                       </Form.Item>
                     </div>
                     <div className=" d-flex justify-content-center gap-2 mt-4 pt-4">
@@ -607,19 +644,27 @@ function LeadEdit() {
               >
                 <div className="row mt-2 ps-3" style={{ borderRadius: "3px" }}>
                   <div className="col-md-12">
-                    <Button btnType="add" onClick={() => setModalContact(true)}>
+                    {/* <Button btnType="add" onClick={() => setModalContact(true)}>
                       Add <AiOutlinePlus />
-                    </Button>
+                    </Button> */}
                   </div>
                   <div className="col-12 mt-2">
                     <EditContact
-                      show={modalContact}
-                      onHide={() => setModalContact(false)}
+                      // show={modalContact}
+                      // onHide={() => setModalContact(false)}
+                      toggle={toggle2}
                       leadid={id}
                     />
                   </div>
                   <div className="col mt-4">
-                    <Button btnType="save">Save</Button>
+                    <Button
+                      btnType="save"
+                      onClick={(e) => {
+                        handletoggle3(e);
+                      }}
+                    >
+                      Next
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -630,19 +675,22 @@ function LeadEdit() {
               >
                 <div className="row mt-2 ps-3" style={{ borderRadius: "3px" }}>
                   <div className="col-md-12">
-                    <Button btnType="add" onClick={() => setModalAddress(true)}>
+                    {/* <Button btnType="add" onClick={() => setModalAddress(true)}>
                       Add <AiOutlinePlus />
-                    </Button>
+                    </Button> */}
                   </div>
                   <div className="col-12 mt-2">
                     <Edit_Address
                       leadid={id}
-                      show={modalAddress}
-                      onHide={() => setModalAddress(false)}
+                      toggle={toggle3}
+                      // show={modalAddress}
+                      // onHide={() => setModalAddress(false)}
                     />
                   </div>
                   <div className="col mt-4">
-                    <Button btnType="save">Save</Button>
+                    <Button btnType="save" onClick={() => toggleTab(4)}>
+                      Next
+                    </Button>
                   </div>
                 </div>
               </div>

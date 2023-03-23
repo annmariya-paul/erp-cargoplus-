@@ -38,6 +38,10 @@ import { UniqueErrorMsg } from "../../../ErrorMessages/UniqueErrorMessage";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 
+/*
+Pagination to be added
+*/
+
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();

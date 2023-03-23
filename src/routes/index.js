@@ -84,6 +84,7 @@ const ROUTES = {
   AIRPORT: "/airport",
   SEAPORT: "/seaport",
   LOCATIONS: "/locations",
+  INCOTERM: "/incoterm",
   ASSIGN_QUOTATION: "/assign_quotation",
   ASSIGN_QUOTATION_ID: "/assign_quotation/:id",
   LIST_JOB: "/joblist",

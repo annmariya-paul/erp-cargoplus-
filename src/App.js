@@ -141,6 +141,7 @@ import ListBillPayment from "./pages/Accounts/Bill Payments/ListBillPayment";
 import EditBillPayment from "./pages/Accounts/Bill Payments/EditBillPayment";
 import ViewBillPayment from "./pages/Accounts/Bill Payments/ViewBillPayment";
 import Fmssettings from "./pages/General Settings/Fmssettings/fmssetting";
+import Incoterm from "./pages/FMS/settings/Incoterm/incoterm";
 
 function App() {
   return (
@@ -432,6 +433,9 @@ function App() {
 
             <Route path={ROUTES.LOCATIONS} element={<ProtectedRoute />}>
               <Route index element={<Locations />} />
+            </Route>
+            <Route path={ROUTES.INCOTERM} element={<ProtectedRoute />}>
+              <Route index element={<Incoterm />} />
             </Route>
 
             <Route

@@ -6,7 +6,10 @@ import { useForm } from "react-hook-form";
 import Custom_model from "../../../../components/custom_modal/custom_model";
 import axios from "axios";
 import PublicFetch from "../../../../utils/PublicFetch";
-import { CRM_BASE_URL, GENERAL_SETTING_BASE_URL } from "../../../../api/bootapi";
+import {
+  CRM_BASE_URL,
+  GENERAL_SETTING_BASE_URL,
+} from "../../../../api/bootapi";
 import SelectBox from "../../../../components/Select Box/SelectBox";
 import { Select } from "antd";
 import InputType from "../../../../components/Input Type textbox/InputType";
@@ -36,7 +39,7 @@ function Countrystate() {
     if (!mShow) {
       setTimeout(() => {
         setSuccessPopup(false);
-        navigate(ROUTES.LEADLIST)
+        navigate(ROUTES.LEADLIST);
       }, time);
     }
   };
@@ -56,26 +59,25 @@ function Countrystate() {
     getAllCountries();
   }, []);
 
-
-  const OnSubmit =  (data) => {
+  const OnSubmit = (data) => {
     PublicFetch.post(`${CRM_BASE_URL}/lead-location`, data)
-    .then((res) => {
-      console.log("Response", res);
-      if (res.data.success) {
-        console.log("success", res.data.data);
-        setSuccessPopup(true);
-        // getallPaymentTerms()
-        // close_modal(successPopup, 1200);
-       
-        addForm.resetFields();
-        close_modal(successPopup, 1000);
-        // setModalAddPayment(false);
-      }
-    })
-    .catch((err) => {
-      console.log("Error", err);
-    });
-};
+      .then((res) => {
+        console.log("Response", res);
+        if (res.data.success) {
+          console.log("success", res.data.data);
+          setSuccessPopup(true);
+          // getallPaymentTerms()
+          // close_modal(successPopup, 1200);
+
+          addForm.resetFields();
+          close_modal(successPopup, 1000);
+          // setModalAddPayment(false);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
   // const Submit = (data) => {
   //   console.log(data);
   //   if (data) {
@@ -120,65 +122,62 @@ function Countrystate() {
   // };
   return (
     <>
-
-      <Form  form={addForm}
-              onFinish={(values) => {
-                console.log("values iss", values);
-                OnSubmit(values);
-              }}
-              onFinishFailed={(error) => {
-                console.log(error);
-              }}>
+      <Form
+        form={addForm}
+        onFinish={(values) => {
+          console.log("values iss", values);
+          OnSubmit(values);
+        }}
+        onFinishFailed={(error) => {
+          console.log(error);
+        }}
+      >
         <div className="row py-5 px-1">
           <div className="col-sm-4">
-           
-              <label>Country</label>
-              <Form.Item
-             name="lead_location_country"
-              >
-                <SelectBox allowClear
-                          showSearch
-                          optionFilterProp="children"
-                        >
+            <label>Tax No</label>
+            <Form.Item name="lead_location_city">
+              <InputType />
+            </Form.Item>
+          </div>
+          <div className="col-sm-4">
+            <label>Credit Days</label>
+            <Form.Item name="lead_location_city">
+              <InputType />
+            </Form.Item>
+          </div>
+          <div className="col-sm-4">
+            <label>Credit Limit</label>
+            <Form.Item name="lead_location_city">
+              <InputType />
+            </Form.Item>
+          </div>
+          <div className="col-sm-4">
+            <label>Preferecd Freight Type</label>
+            <Form.Item name="lead_location_country">
+              <SelectBox allowClear showSearch optionFilterProp="children">
                 {countries &&
-                            countries.length > 0 &&
-                            countries.map((item, index) => {
-                              return (
-                                <Select.Option
-                                  key={item.country_id}
-                                  value={item.country_id}
-                                >
-                                  {item.country_name}
-                                </Select.Option>
-                              );
-                            })}
-            
+                  countries.length > 0 &&
+                  countries.map((item, index) => {
+                    return (
+                      <Select.Option
+                        key={item.country_id}
+                        value={item.country_id}
+                      >
+                        {item.country_name}
+                      </Select.Option>
+                    );
+                  })}
               </SelectBox>
-                      </Form.Item>
+            </Form.Item>
           </div>
-         
-        
+
           <div className="col-sm-4">
-           
-              <label>States</label>
-              <Form.Item
-             name="lead_location_state"
-              >
-            <InputType/>
-                      </Form.Item>
+            <label>Qtn validity Days</label>
+            <Form.Item name="lead_location_state">
+              <InputType />
+            </Form.Item>
           </div>
-        
-          <div className="col-sm-4">
-           
-              <label>City</label>
-              <Form.Item
-             name="lead_location_city"
-              >
-                 <InputType/>
-                      </Form.Item>
-          </div>
-         
-         
+
           <div className=" pt-4">
             {/* <Button
               btntype="submit"
@@ -187,24 +186,18 @@ function Countrystate() {
             >
               Save
             </Button> */}
-              <Button type="submit" className="qtn_save" btnType="save">
-                    Save
-                  </Button>
+            <Button type="submit" className="qtn_save" btnType="save">
+              Save
+            </Button>
             <Custom_model
               centered
               size={`sm`}
-          success
+              success
               show={successPopup}
               onHide={() => setSuccessPopup(false)}
             />
           </div>
         </div>
-         
-         
-     
-        
-       
-        
       </Form>
     </>
   );

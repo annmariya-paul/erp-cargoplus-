@@ -11,6 +11,7 @@ import Button from "../../../../components/button/button";
 import { useForm } from "react-hook-form";
 import Phone_Input from "../../../../components/PhoneInput/phoneInput";
 import Custom_model from "../../../../components/custom_modal/custom_model";
+import { AiOutlinePlus } from "react-icons/ai";
 
 function AddressTable(props) {
   const [value, setValue] = useState();
@@ -56,15 +57,17 @@ function AddressTable(props) {
         allAddress?.data?.data?.forEach((item, index) => {
           setAddressLeadId(item?.address_lead_id);
           if (props.lead === item?.address_lead_id) {
-            
-              array.push({
-                address_title: item?.address_title,
-                address_content: item?.address_content,
-                address_pin: item?.address_pin,
-                address_contact: item?.address_contact,
-              });
-              setAddressTable(array);
-            
+            array.push({
+              address_title: item?.address_title,
+              address_content: item?.address_content,
+              address_pin: item?.address_pin,
+              address_contact: item?.address_contact,
+            });
+            setAddressTable(array);
+            if (props.lead && array?.length <= 0) {
+              setModalshowAdd(true);
+              console.log("this ais test", modelshowAdd);
+            }
           }
         });
       } else {
@@ -77,9 +80,11 @@ function AddressTable(props) {
   };
 
   useEffect(() => {
-    getAllAddress();
-    GetLeadData();
-  }, [LeadId]);
+    if (props.lead) {
+      getAllAddress();
+      GetLeadData();
+    }
+  }, [LeadId, props.lead]);
   // { funtion to add address in lead edit - Ann mariya }
   const AddAddress = (data) => {
     PublicFetch.post(`${CRM_BASE_URL}/address`, {
@@ -150,6 +155,13 @@ function AddressTable(props) {
   ];
   return (
     <div>
+      <div className="row">
+        <div className="col-12">
+          <Button btnType="add" onClick={() => setModalshowAdd(true)}>
+            Add <AiOutlinePlus />
+          </Button>
+        </div>
+      </div>
       <div className="datatable">
         <TableData
           data={addressTable}
@@ -252,7 +264,7 @@ function AddressTable(props) {
                     />
                   </Form.Item>
 
-                  <label>Contact</label>
+                  <label>Mobile</label>
                   <Form.Item
                     name="phone"
                     rules={[

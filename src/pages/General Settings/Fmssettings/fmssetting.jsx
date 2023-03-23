@@ -1,8 +1,32 @@
 import { Form, Select, Input } from "antd";
+import { useEffect } from "react";
+import Button from "../../../components/button/button";
 import InputType from "../../../components/Input Type textbox/InputType";
 import SelectBox from "../../../components/Select Box/SelectBox";
+import PublicFetch from "../../../utils/PublicFetch";
+import { CRM_BASE_URL_FMS } from "../../../api/bootapi";
 
 function Fmssettings() {
+
+  const getAllincoterm = async () => {
+    try {
+      const allCountries = await PublicFetch.get(
+        `${CRM_BASE_URL_FMS}/incoterms?startIndex=0&noOfItems=10`
+      );
+      console.log("incotermss", allCountries.data.data);
+      // setGetCountries(allCountries.data.data);
+    } catch (err) {
+      console.log("error while getting the countries: ", err);
+    }
+  };
+
+ 
+  useEffect(() => {
+    getAllincoterm();
+  }, []);
+
+
+
   return (
     <>
       <div className="container-fluid">
@@ -48,6 +72,19 @@ function Fmssettings() {
                 </div>
                 
               </div>
+              <div className="col-12 d-flex justify-content-center mt-5 pt-4 gap-3 ">
+                  <Button className="save_button">Save</Button>{" "}
+                  <Button
+                    as="input"
+                    type="reset"
+                    value="Reset"
+                    // onClick={() => {
+                    //   handleCancel();
+                    // }}
+                  >
+                    Cancel
+                  </Button>
+                </div>
             </Form>
           </div>
         </div>

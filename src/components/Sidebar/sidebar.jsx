@@ -1734,6 +1734,19 @@ export default function Sidebar({ showSidebar }) {
                       </NavLink>
                     </li>
                   )}
+
+                  {checkPermission("fmssettings") && (
+                    <li className="nav-text ">
+                      <NavLink
+                        className={({ isActive }) =>
+                          isActive ? "active-link" : "link"
+                        }
+                        to={ROUTES.FMSSETTINGS}
+                      >
+                        <div className=" ms-4 subactivelink">Fms Settings</div>
+                      </NavLink>
+                    </li>
+                  )}
                   </div>
                 </>
               ) : (

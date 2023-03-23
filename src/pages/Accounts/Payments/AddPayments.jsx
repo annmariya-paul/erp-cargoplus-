@@ -29,8 +29,10 @@ const AddPayments = () => {
   const [details, setDetails] = useState();
   const [initialInvoiceData, setInitialInvoiceData] = useState([]);
   const [successPopup, setSuccessPopup] = useState(false);
+  const [exceeded, setExceeded] = useState(false);
+  //const [totalSum, setTotalSum] = useState(parseFloat(0));
   const [addform] = Form.useForm();
-
+  var totalSum = 0;
   const columns = [
     {
       title: "Sl. No.",
@@ -82,28 +84,55 @@ const AddPayments = () => {
               className="d-flex justify-content-center align-items-center tborder "
               key={index.index}
             >
-              <Form.Item>
+              <Form.Item
+              // rules={[
+              //   {
+              //     required: exceeded,
+              //     message: "Current amount exceeded entered amount",
+              //   },
+              // ]}
+              >
                 <InputNumber
                   className="add_payments_input_box"
-                  onChange={(e) => {
-                    console.log("index", index);
-                    console.log("inside input number table");
-                    console.log(e);
-                    if (parseFloat(e) > amount) {
-                      console.log("greater ..............");
-                      message.error("some error");
-                    }
-                    let due_amount = parseFloat(index.due_amount);
+                  // onChange={(e) => {
+                  //   console.log("index", index);
+                  //   console.log("inside input number table");
+                  //   console.log("entered number", e);
+                  //   console.log("total sum", totalSum);
+                  //   setTotalSum(totalSum + parseFloat(e));
+                  //   if (totalSum > amount) {
+                  //     console.log("greater ..............");
+                  //     message.error(
+                  //       "Current Amount greater than amount entered"
+                  //     );
+                  //   }
+                  //   let due_amount = parseFloat(index.due_amount);
 
-                    let balance_amount = due_amount - parseFloat(e);
-                    index.balance_amount = balance_amount;
-                    index.current_amount = e;
-                    console.log("new index", index);
-                    let temp = [...invoiceData];
-                    temp[index.index - 1] = index;
-                    console.log("new temp", temp);
-                    setInvoiceData([...temp]);
-                  }}
+                  //   let balance_amount = due_amount - parseFloat(e);
+                  //   index.balance_amount = balance_amount;
+                  //   index.current_amount = e;
+                  //   console.log("new index", index);
+                  //   let temp = [...invoiceData];
+                  //   temp[index.index - 1] = index;
+                  //   console.log("new temp", temp);
+                  //   setInvoiceData([...temp]);
+                  // }}
+                  // onBlur={(e) => {
+                  //   console.log("value inside onblur", e.target.value);
+                  //   if (e.target.value != "") {
+                  //     if (!isNaN(totalSum)) {
+                  //       totalSum = totalSum + parseFloat(e.target.value);
+
+                  //       console.log("total sumsum", totalSum);
+                  //       if (totalSum > amount) {
+                  //         message.error("Exceeded");
+                  //         setExceeded(true);
+                  //       }
+                  //     } else {
+                  //       totalSum = 0;
+                  //     }
+                  //   }
+                  // }}
                   width={100}
                   controlls={false}
                 />
@@ -152,7 +181,7 @@ const AddPayments = () => {
     }
   };
 
-  //function to get invoices of a particular lead
+  //API call function to get invoices of a particular lead
   const getInvoice = async (LeadId) => {
     console.log("LeadId", LeadId);
     //setLead(LeadId);
@@ -163,30 +192,34 @@ const AddPayments = () => {
       if (res.status === 200) {
         let tempData = [];
         res.data.data.fms_v1_jobs.forEach((item, index) => {
-          console.log("***********************");
-          console.log(item.accounts_v1_invoice_accounts[0]);
-          let obj = {
-            index: index + 1,
-            invoice_no:
-              item.accounts_v1_invoice_accounts[0].invoice_accounts_no,
-            due_date: moment(
-              new Date(
-                item.accounts_v1_invoice_accounts[0].invoice_accounts_due_date
-              )
-            ).format("DD/MM/YYYY"),
-            amount:
-              item.accounts_v1_invoice_accounts[0].invoice_accounts_grand_total,
-            due_amount:
-              item.accounts_v1_invoice_accounts[0].invoice_accounts_due_amount,
-            current_amount: "",
-            balance_amount: "",
-            invoice_accounts_id:
-              item.accounts_v1_invoice_accounts[0].invoice_accounts_invoice_id,
-          };
-          if (amount) {
-            console.log("amount is present", amount);
+          console.log(item.accounts_v1_invoice_accounts);
+          if (item.accounts_v1_invoice_accounts.length > 0) {
+            let obj = {
+              index: index + 1,
+              invoice_no:
+                item.accounts_v1_invoice_accounts[0]?.invoice_accounts_no,
+              due_date: moment(
+                new Date(
+                  item.accounts_v1_invoice_accounts[0]?.invoice_accounts_due_date
+                )
+              ).format("DD/MM/YYYY"),
+              amount:
+                item.accounts_v1_invoice_accounts[0]
+                  ?.invoice_accounts_grand_total,
+              due_amount:
+                item.accounts_v1_invoice_accounts[0]
+                  ?.invoice_accounts_due_amount,
+              current_amount: "",
+              balance_amount: "",
+              invoice_accounts_id:
+                item.accounts_v1_invoice_accounts[0]
+                  ?.invoice_accounts_invoice_id,
+            };
+            if (amount) {
+              console.log("amount is present", amount);
+            }
+            tempData.push(obj);
           }
-          tempData.push(obj);
         });
         setInvoiceData(tempData);
         setInitialInvoiceData(tempData);
@@ -371,6 +404,7 @@ const AddPayments = () => {
                       >
                         <SelectBox
                           onChange={(leadId) => {
+                            console.log("onchange lead id=", leadId);
                             getInvoice(leadId);
                             setLead(leadId);
                           }}
@@ -493,6 +527,7 @@ const AddPayments = () => {
                       <Button
                         btnType="save"
                         type="submit"
+
                         // onClick={() => {
                         //   console.log("submitting form");
                         //   addform.submit();
@@ -500,7 +535,7 @@ const AddPayments = () => {
                       >
                         Save
                       </Button>
-                      <Button className="ms-2">Cancel</Button>
+                      {/* <Button className="ms-2">Cancel</Button> */}
                     </div>
                   </div>
                 </Form>

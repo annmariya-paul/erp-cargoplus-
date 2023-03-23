@@ -11,10 +11,12 @@ import { CRM_BASE_URL } from "../../../../api/bootapi";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { message } from "antd";
 // import TextArea from "antd/lib/input/TextArea";
+import "../opportunity_ List/opportunitylist.scss";
 import SelectBox from "../../../../components/Select Box/SelectBox";
 import InputType from "../../../../components/Input Type textbox/InputType";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
-export default function AddOpportunity(props) {
+// export default function AddOpportunity(props) {
+  export default function AddOpportunity() {
   const { id } = useParams();
   console.log("ID is ...", id);
 
@@ -142,7 +144,7 @@ export default function AddOpportunity(props) {
           setShowEditModal(false);
           setSuccessPopup(true);
           close_modal(successPopup, 1200);
-          props.onCancel();
+          // props.onCancel();
           form.resetFields();
         } else {
           message.error("fetch data error");
@@ -203,7 +205,7 @@ export default function AddOpportunity(props) {
 
   return (
     <>
-      <Custom_model
+      {/* <Custom_model
         //  Adding_contents
         width={900}
         // Adding_contents
@@ -216,10 +218,13 @@ export default function AddOpportunity(props) {
         footer={false}
         View_list
         list_content={
-          <>
+          <> */}
+           <div className="container-fluid">
+        <div className="row justify-content-md-center">
+        <div className="content-tabs">
             <Form form={form}>
               <div className="px-5">
-                <h5 className="lead_text">Add Opportunity</h5>
+                <h5 className="lead_text mt-3">Add Opportunity</h5>
                 <div className="row px-1">
                   {/* <div className="col-sm-4 pt-2">
                     <label>Opportunity No.</label>
@@ -233,7 +238,7 @@ export default function AddOpportunity(props) {
                     </Form.Item>
                   </div> */}
                   <div className="col-sm-4 pt-2">
-                    <label>Type</label>
+                    <label>Type<span className="required">*</span></label>
                     <Form.Item
                       name="lead_type"
                       rules={[
@@ -258,7 +263,7 @@ export default function AddOpportunity(props) {
                   </div>
 
                   <div className="col-sm-4 pt-2">
-                    <label>From</label>
+                    <label>From<span className="required">*</span></label>
                     <Form.Item
                       name="lead_customer_from"
                       rules={[
@@ -302,7 +307,7 @@ export default function AddOpportunity(props) {
                   </div>
 
                   <div className="col-sm-4 pt-2">
-                    <label>Source</label>
+                    <label>Source<span className="required">*</span></label>
                     <Form.Item
                       name="lead_source"
                       rules={[
@@ -331,7 +336,7 @@ export default function AddOpportunity(props) {
                   </div>
 
                   <div className="col-sm-4 pt-2">
-                    <label>Party</label>
+                    <label>Party<span className="required">*</span></label>
                     <Form.Item
                       name="lead_party"
                       rules={[
@@ -365,7 +370,7 @@ export default function AddOpportunity(props) {
                   </div>
 
                   <div className="col-sm-4 pt-2">
-                    <label>Valid Up to</label>
+                    <label>Valid Up to<span className="required">*</span></label>
                     <Form.Item className="mt-2" name="lead_valid_up_to"  {...config}>
                 
                       {/* <SelectBox placeholder={"--Please Select--"} value={oppId}>
@@ -384,24 +389,7 @@ export default function AddOpportunity(props) {
                     </Form.Item>
                   </div>
 
-                  <div className="col-sm-4 pt-2">
-                    <label>Details</label>
-                    <Form.Item
-                      className="mt-2"
-                      name="lead_details"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please enter valid details",
-                        },
-                      ]}
-                    >
-                      <TextArea
-                        value={oppdescription}
-                        onChange={(e) => setOppDescription(e.target.value)}
-                      />
-                    </Form.Item>
-                  </div>
+                 
 
                   <div className="col-sm-4 pt-2">
                     <label>Expecting Amount</label>
@@ -427,7 +415,7 @@ export default function AddOpportunity(props) {
                   </div>
 
                   <div className="col-sm-4 pt-2">
-                    <label>Probability of conversion</label>
+                    <label>Probability of conversion<span className="required">*</span></label>
                     <Form.Item
                       name="lead_probability"
                       rules={[
@@ -449,7 +437,7 @@ export default function AddOpportunity(props) {
                     </Form.Item>
                   </div>
                   <div className="col-sm-4 pt-2">
-                    <label>Status</label>
+                    <label>Status<span className="required">*</span></label>
                     <Form.Item
                       name="lead_status"
                       rules={[
@@ -472,6 +460,25 @@ export default function AddOpportunity(props) {
                       </SelectBox>
                     </Form.Item>
                   </div>
+
+                  <div className="col-sm-12 pt-2">
+                    <label>Details<span className="required">*</span></label>
+                    <Form.Item
+                      className="mt-2"
+                      name="lead_details"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please enter valid details",
+                        },
+                      ]}
+                    >
+                      <TextArea
+                        value={oppdescription}
+                        onChange={(e) => setOppDescription(e.target.value)}
+                      />
+                    </Form.Item>
+                  </div>
                 </div>
               </div>
 
@@ -481,10 +488,10 @@ export default function AddOpportunity(props) {
                 </Button>
               </div>
             </Form>
-          </>
+          {/* </>
         }
         // {...props}
-      ></Custom_model>
+      ></Custom_model> */}
       <Custom_model
         size={`sm`}
         success
@@ -492,6 +499,9 @@ export default function AddOpportunity(props) {
         onHide={() => setModalShow(false)}
         footer={false}
       />
+      </div>
+       </div>
+      </div>
     </>
   );
 }

@@ -38,7 +38,9 @@
 
 // @media (min-width:1200px) {}
 
-
+.table_input{
+   height: 28px !important;
+}
 .vendordetails{
     height: 342px;;
  }
@@ -97,6 +99,7 @@
         .vendordetails{
              height: 544px;
         }
+       
         }
        
         @media (min-width: 820px) and (max-width: 1180px){
@@ -104,6 +107,11 @@
                height: 475px;
            }        
    
+        }
+        @media(max-width: 820px){
+          .table_input{
+         width:150px !important;
+        }
         }
 
 

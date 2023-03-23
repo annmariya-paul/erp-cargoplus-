@@ -20,12 +20,17 @@ import Input_Number from "../../../components/InputNumber/InputNumber";
 import moment from "moment";
 import Custom_model from "../../../components/custom_modal/custom_model";
 import { ROUTES } from "../../../routes";
+import CheckUnique from "../../../check Unique/CheckUnique";
+import { UniqueErrorMsg } from "../../../ErrorMessages/UniqueErrorMessage";
 
 function Updatejob() {
   const { id } = useParams();
   console.log("Response", id);
+  const [uniqueName, setUniqueName] = useState(false);
   const navigate = useNavigate();
+  const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
   const [editForm] = Form.useForm();
+  const [awbno,setAwbno]=useState();
   const [pageofIndex, setPageOfIndex] = useState(0);
   const [noofItems, setNoofItems] = useState(1000);
   const [JobList, setJobList] = useState();
@@ -56,7 +61,7 @@ function Updatejob() {
       .then((res) => {
         console.log("response", res);
         if (res.data.success) {
-          console.log("success", res.data.data);
+          console.log("success of job", res.data.data);
           setJobList(res.data.data);
           let date = moment(res.data.data.job_date);
           locationByMode(res.data.data.job_mode);
@@ -74,6 +79,7 @@ function Updatejob() {
             freighttype: res.data.data.job_freight_type,
             jobno: res.data.data.job_number,
             jobdate: date,
+            customer:res.data.data.job_customer,
             consignee: res.data.data.job_consignee,
             quotationno: quotationNo,
             shipper: res.data.data.job_shipper,
@@ -182,7 +188,8 @@ function Updatejob() {
         console.log("error", err);
       });
   };
-
+  const [currencyRates, setCurrencyRates] = useState(0);
+  console.log("ratesssss", currencyRates);
   let b;
   const getCurrencyRate = (data) => {
     const code = allCurrency?.filter((item) => {
@@ -199,7 +206,10 @@ function Updatejob() {
         let a = response.data.rates[b];
         console.log("currency match", a);
         // setCurrencyRates(a);
-        editForm.setFieldValue("exchangerate", a);
+        let rate=1/a;
+        setCurrencyRates(rate);
+        // addForm.setFieldValue("exchnagerate", rate)
+        editForm.setFieldValue("exchangerate", rate);
       })
       .catch(function (error) {
         console.log(error);
@@ -266,6 +276,7 @@ function Updatejob() {
     formData.append("job_date", data.jobdate);
     formData.append("job_consignee", data.consignee);
     formData.append("job_shipper", data.shipper);
+    formData.append("job_customer", data.customer);
     formData.append("job_freight_type", data.freighttype);
     formData.append("job_cargo_type", data.cargotype);
     formData.append("job_carrier", data.carrier);
@@ -445,7 +456,7 @@ function Updatejob() {
                     <div className="col-xl-4 col-sm-12 mt-2 px-3">
                       <label>Customer</label>
                       <Form.Item
-                        name="consignee"
+                        name="customer"
                         rules={[
                           {
                             required: true,
@@ -497,7 +508,7 @@ function Updatejob() {
                     <div className="col-xl-4 col-sm-12 mt-2 px-3">
                       <label>Consignee</label>
                       <Form.Item
-                        // name="shipper"
+                        name="consignee"
                         rules={[
                           {
                             required: true,
@@ -664,9 +675,32 @@ function Updatejob() {
                           },
                         ]}
                       >
-                        <InputType />
+                        <InputType 
+                            onChange={(e) => {
+                              setAwbno(e.target.value);
+                              setUniqueName(false);
+                            }}
+                            // onBlur={(e) => {
+                            //   checkemployeeCodeis();
+                            // }}
+                            onBlur={ async () => {
+                              
+                              let a = await CheckUnique({type:"jobawbblno",value:awbno})
+                              console.log("hai how are u", a)
+                              setUniqueName(a);
+                              
+                            }}
+                        
+                        />
                       </Form.Item>
+                      {uniqueName ? (
+                            <p style={{ color: "red"  }}>
+                         AWB/BL No{uniqueErrMsg.UniqueErrName}
+                            </p>
+                          ) : null}
                     </div>
+
+
                   </div>
                 </div>
                 <div className="col-md-6 col-12 mt-3">
@@ -812,6 +846,8 @@ function Updatejob() {
                         />
                       </Form.Item>
                     </div>
+
+                    
                   </div>
                 </div>
               </div>
@@ -906,13 +942,13 @@ function Updatejob() {
                       >
                         <Input_Number
                           className="text_right"
-                          // value={currencyRates}
+                          value={currencyRates}
                           // onChange={handleChange}
                           align="right"
                           // step={0.01}
-                          min={0}
-                          precision={2}
-                          controlls={false}
+                          // min={0}
+                          precision={4}
+                          // controlls={false}
                           // disabled={true}
                         />
                       </Form.Item>

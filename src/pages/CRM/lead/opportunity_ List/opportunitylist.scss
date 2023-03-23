@@ -43,3 +43,25 @@
   color: variables.$white;
   border-radius: 5px;
 }
+ .searchnew
+  {
+    .ant-input-group .ant-input{
+      border: 1px solid black!important;
+      border-right: none!important;
+      border-radius: 0px!important;
+    }
+   
+ .ant-input-group-addon:last-child {
+  border: 1px solid black!important;
+  border-left: none!important;
+  
+}
+
+  }
+  .required {
+    color: red;
+    margin-left: 5px;
+   font-weight: bolder;
+  }
+
+

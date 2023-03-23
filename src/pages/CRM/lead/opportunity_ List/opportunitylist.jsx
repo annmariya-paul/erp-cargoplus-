@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { CRM_BASE_URL } from "../../../../api/bootapi";
 import Dropdown from "react-bootstrap/Dropdown";
+import "../opportunity_ List/opportunitylist.scss";
 import { Oppor_Status, Prob_conversion } from "../../../../utils/SelectOptions";
 import {
   FaFileExcel,
@@ -42,7 +43,8 @@ import jsPDF from "jspdf";
 import ReactToPrint, { useReactToPrint } from "react-to-print";
 import "jspdf-autotable";
 import * as XLSX from "xlsx/xlsx.js"; //for xl download
-
+import { AudioOutlined } from '@ant-design/icons';
+import {  Space } from 'antd';
 import CopyToClipboard, { copyToClipboard } from "react-copy-to-clipboard"; //copy to clipboard
 import { Toaster, toast } from "react-hot-toast"; // copy to clip board
 
@@ -50,7 +52,8 @@ import { Toaster, toast } from "react-hot-toast"; // copy to clip board
 // import {useTable} from "react-table";
 
 function Opportunitylist(props) {
-  const { id } = useParams();
+  const { Search } = Input;
+  const {id} = useParams();
   console.log("ID is ...", id);
   const today = new Date();
   const [EditForm] = Form.useForm();
@@ -454,7 +457,7 @@ function Opportunitylist(props) {
     getAllContact();
     setShowEditModal(true);
   };
-
+  const onSearch = (value) => console.log(value);
   const updatedOppurtunity = async (updatedData) => {
     const UpdatedFormdata = {
       // id: viewoppurtunity.id,
@@ -476,6 +479,9 @@ function Opportunitylist(props) {
         `${CRM_BASE_URL}/opportunity/${oppurtunityid}`,
         UpdatedFormdata
       );
+
+
+      
 
       console.log("editdataaa", editoppurtunity);
       if (editoppurtunity.data.success) {
@@ -607,7 +613,15 @@ function Opportunitylist(props) {
         return (
           <div className="d-flex justify-content-center gap-2">
             <div className="editcolor">
-              <FaEdit onClick={() => handleEditedclick(index)} />
+              {/* <FaEdit onClick={() => handleEditedclick(index)} /> */}
+              <Link
+                          to={`${ROUTES.EDIT_OPPORTUNITY}/${index.opportunity_Id}`}
+                         
+                        >
+                          
+                  <FaEdit />
+              
+                        </Link>
             </div>
             <div className="editcolor">
               <MdPageview
@@ -744,8 +758,11 @@ function Opportunitylist(props) {
 
         <div>
           <div className="row flex-wrap">
-            <div className="col">
+            <div className="col-4">
               <h5 className="lead_text">Opportunities</h5>
+
+
+             
 
               {/* //for csv download */}
               {/* <CSVLink data={OpportunityList} filename="data.csv">
@@ -760,6 +777,22 @@ function Opportunitylist(props) {
                 Generate XLS Report
               </button> */}
             </div>
+            <div className="col-4 ">
+            <Input.Search className="searchnew"
+              placeholder="Search "
+             
+              // value={searchedText}
+              // onChange={(e) => {
+              //   setSearchedText(e.target.value ? [e.target.value] : []);
+              // }}
+              // onSearch={(value) => {
+              //   setSearchedText(value);
+              // }}
+            />
+          </div>
+          
+            
+
 
             <Leadlist_Icons
               datas={OpportunityList}
@@ -820,9 +853,9 @@ function Opportunitylist(props) {
             </CopyToClipboard> */}
             {/* <button onClick={handlePrint}>Print this out!</button> */}
           </div>
-          <div className="row pb-2" style={{ backgroundColor: "#f4f4f7" }}>
-            <div className="col-3">
-              <Select
+          {/* <div className="row pb-2" style={{ backgroundColor: "#f4f4f7" }}> */}
+            {/* <div className="col-3"> */}
+              {/* <Select
                 allowClear
                 showSearch
                 style={{ width: "100%", marginTop: "8px", borderRadius: "5px" }}
@@ -838,10 +871,10 @@ function Opportunitylist(props) {
                 <Select.Option value="online registration">
                   Online Registration
                 </Select.Option>
-              </Select>
-            </div>
-            <div className="col-3">
-              <Select
+              </Select> */}
+            {/* </div> */}
+            {/* <div className="col-3"> */}
+              {/* <Select
                 allowClear
                 showSearch
                 style={{ width: "100%", marginTop: "8px", borderRadius: "5px" }}
@@ -855,10 +888,10 @@ function Opportunitylist(props) {
                 <Select.Option value="sales">sales</Select.Option>
                 <Select.Option value="maintenance">Maintenance</Select.Option>
                 <Select.Option value="support">support</Select.Option>
-              </Select>
-            </div>
-            <div className="col-3">
-              <Select
+              </Select> */}
+            {/* </div>
+            <div className="col-3"> */}
+              {/* <Select
                 allowClear
                 showSearch
                 style={{ width: "100%", marginTop: "8px", borderRadius: "5px" }}
@@ -869,21 +902,11 @@ function Opportunitylist(props) {
                   setSearchType(event ? [event] : []);
                 }}
               >
-                {/* {LeadStatus &&
-                  LeadStatus.map((item, index) => {
-                    return (
-                      <Select.Option key={item.id} value={item.value}>
-                        {item.name}
-                      </Select.Option>
-                    );
-                  })} */}
-                {/* <Select.Option value="sales">sales</Select.Option> */}
-                {/* <Select.Option value="maintenance">Maintenance</Select.Option>
-                <Select.Option value="support">support</Select.Option> */}
-              </Select>
-            </div>
-            <div className="col-3">
-              <Select
+               
+              </Select> */}
+            {/* </div>
+            <div className="col-3"> */}
+              {/* <Select
                 allowClear
                 showSearch
                 style={{ width: "100%", marginTop: "8px", borderRadius: "5px" }}
@@ -894,23 +917,16 @@ function Opportunitylist(props) {
                   setSearchStatus(event ? [event] : []);
                 }}
               >
-                {/* {LeadStatus &&
-                  LeadStatus.map((item, index) => {
-                    return (
-                      <Select.Option key={item.id} value={item.value}>
-                        {item.name}
-                      </Select.Option>
-                    );
-                  })} */}
+              
                 <Select.Option value="L">Lead</Select.Option>
                 <Select.Option value="C">Customer</Select.Option>
-              </Select>
-            </div>
-          </div>
+              </Select> */}
+            {/* </div>
+          </div> */}
           <div className="row my-3">
             <div className="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-4  px-3">
               <Select
-                // defaultValue={"25"}
+               
                 bordered={false}
                 className=" page_size_style"
                 value={numOfItems}
@@ -966,7 +982,7 @@ function Opportunitylist(props) {
             {/* <div className="col-xl-6 col-lg-6 col-md-6 col-sm-8 col-12"></div> */}
             <div className="col-lg-4 col-lg-4 col-md-4 col-sm-12 col-4 d-flex justify-content-end">
               <Link to={ROUTES.LEADLIST}>
-                <Button btnType="add">Add Opportunity</Button>
+                <Button btnType="add">New Opportunity</Button>
               </Link>
             </div>
           </div>

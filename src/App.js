@@ -11,7 +11,7 @@ import TestPage from "./pages/testpage";
 import LeadReport from "./pages/CRM/lead/leadReport/leadReport";
 import Opportunitylist from "./pages/CRM/lead/opportunity_ List/opportunitylist";
 import Categorylist from "./pages/CRM/Selling/category/viewCategory";
-
+import EditOpportunity from "./pages/CRM/lead/modals/editopportunity";
 // import BrandsList from "./pages/CRM/lead/brands/BrandsList";
 // import OpportunityReport from "./pages/opportunityReport/OpportunityReport";
 // import Unitlist from "./pages/CRM/Selling/unit/Unitlist";
@@ -35,6 +35,7 @@ import ServiceCreate from "./pages/CRM/Selling/services/ServiceCreate";
 import Unitlist from "./pages/CRM/Selling/unit/Unitlist";
 import Addunit from "./pages/CRM/Selling/unit/Addunit";
 import Login from "./pages/Login/login";
+import AddOpportunity from "./pages/CRM/lead/modals/addopportunity";
 
 // {HRMS}
 import Branches from "./pages/HRMS/branches/branches";
@@ -134,6 +135,12 @@ import Debit_notes from "./pages/Accounts/DebitNotes/list_debitnotes";
 import DebitnotesView from "./pages/Accounts/DebitNotes/view_debitnotes";
 import DailyExpenseReport from "./pages/Accounts/Reports/daily_expense_report";
 import CreatePurchase from "./pages/Accounts/settings/Purchase/purchaseAdd";
+import Enquiry from "./pages/CRM/lead/enquiry/enquiry";
+import CreateBillPayment from "./pages/Accounts/Bill Payments/CreateBillPayment";
+import ListBillPayment from "./pages/Accounts/Bill Payments/ListBillPayment";
+import EditBillPayment from "./pages/Accounts/Bill Payments/EditBillPayment";
+import ViewBillPayment from "./pages/Accounts/Bill Payments/ViewBillPayment";
+import Fmssettings from "./pages/General Settings/Fmssettings/fmssetting";
 
 function App() {
   return (
@@ -172,6 +179,11 @@ function App() {
             </Route>
             <Route path={ROUTES.OPPORTUNITY} element={<ProtectedRoute />}>
               <Route index element={<Opportunitylist />} />
+            </Route>
+            {/* sales - enquiries */}
+
+            <Route path={ROUTES.SALE_ENQUIRY} element={<ProtectedRoute />}>
+              <Route index element={<Enquiry />} />
             </Route>
 
             <Route
@@ -295,6 +307,19 @@ function App() {
 
             <Route path={ROUTES.EMPLOYEEGRADE} element={<ProtectedRoute />}>
               <Route index element={<Employeegrade />} />
+            </Route>
+
+            <Route
+              path={ROUTES.ADD_OPPORTUNITY_ID}
+              element={<ProtectedRoute />}
+            >
+              <Route index element={<AddOpportunity />} />
+            </Route>
+            <Route
+              path={ROUTES.EDIT_OPPORTUNITY_ID}
+              element={<ProtectedRoute />}
+            >
+              <Route index element={<EditOpportunity />} />
             </Route>
 
             {/* {FMS} */}
@@ -524,6 +549,10 @@ function App() {
               <Route index element={<Companyinfo />} />
             </Route>
 
+            <Route path={ROUTES.FMSSETTINGS} element={<ProtectedRoute />}>
+              <Route index element={<Fmssettings />} />
+            </Route>
+
             <Route path={ROUTES.AGENT_REPORT} element={<ProtectedRoute />}>
               <Route index element={<AgentReport />} />
             </Route>
@@ -625,6 +654,27 @@ function App() {
               element={<ProtectedRoute />}
             >
               <Route index element={<DailyExpenseReport />} />
+            </Route>
+            <Route
+              path={ROUTES.CREATE_BILL_PAYMENT}
+              element={<ProtectedRoute />}
+            >
+              <Route index element={<CreateBillPayment />} />
+            </Route>
+            <Route path={ROUTES.BILL_PAYMENT_LIST} element={<ProtectedRoute />}>
+              <Route index element={<ListBillPayment />} />
+            </Route>
+            <Route
+              path={ROUTES.EDIT_BILL_PAYMENT_ID}
+              element={<ProtectedRoute />}
+            >
+              <Route index element={<EditBillPayment />} />
+            </Route>
+            <Route
+              path={ROUTES.VIEW_BILL_PAYMENT_ID}
+              element={<ProtectedRoute />}
+            >
+              <Route index element={<ViewBillPayment />} />
             </Route>
 
             {/* </Route> */}

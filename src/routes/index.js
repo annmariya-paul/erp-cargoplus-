@@ -25,7 +25,10 @@ const ROUTES = {
   UNIT_LIST: "/unit-list",
 
   ADD_UNIT: "/add-unit",
-
+  ADD_OPPORTUNITY: "/add-opportunity",
+  ADD_OPPORTUNITY_ID: "/add-opportunity/:id",
+  EDIT_OPPORTUNITY: "/edit-opportunity",
+  EDIT_OPPORTUNITY_ID: "/edit-opportunity/:id",
   BRANDCREATE: "/createbrand",
   PRODUCT: "/product",
   PRODUCTCREATE: "/create_product",
@@ -108,8 +111,8 @@ const ROUTES = {
   PAYMEMENT_MODE: "/payment_mode",
   ADD_PURCHASE: "/add_purchase",
   PURCHASE: "/purchase",
-  CREATE_PURCHASE:"/purchaseAdd",
-  
+  CREATE_PURCHASE: "/purchaseAdd",
+
   //  Accounts
   DAILY_EXPENSE: "/daily_expense",
   CREATE_EXPENSE: "/create_expense",
@@ -117,20 +120,19 @@ const ROUTES = {
   EDIT_EXPENSE: "/edit_expense",
   EDIT_EXPENSE_ID: "/edit_expense/:id",
 
-
   CREDIT_NOTES: "/credit_notes",
   ADD_CREDIT_NOTES: "/add_credit_notes",
-  EDIT_CREDIT_NOTES:"/edit_credit_notes",
-  EDIT_CREDIT_NOTES_ID:"/edit_credit_notes/:id",
-  VIEW_CREDIT_NOTES :"/view_credit_notes",
-  VIEW_CREDIT_NOTES_ID :"/view_credit_notes/:id",
+  EDIT_CREDIT_NOTES: "/edit_credit_notes",
+  EDIT_CREDIT_NOTES_ID: "/edit_credit_notes/:id",
+  VIEW_CREDIT_NOTES: "/view_credit_notes",
+  VIEW_CREDIT_NOTES_ID: "/view_credit_notes/:id",
 
   DEBIT_NOTES: "/debit_notes",
   ADD_DEBIT_NOTES: "/add_debit_notes",
-  EDIT_DEBIT_NOTES:"/edit_debit_notes",
-  EDIT_DEBIT_NOTES_ID:"/edit_debit_notes/:id",
-  VIEW_DEBIT_NOTES :"/view_debit_notes",
-  VIEW_DEBIT_NOTES_ID :"/view_debit_notes/:id",
+  EDIT_DEBIT_NOTES: "/edit_debit_notes",
+  EDIT_DEBIT_NOTES_ID: "/edit_debit_notes/:id",
+  VIEW_DEBIT_NOTES: "/view_debit_notes",
+  VIEW_DEBIT_NOTES_ID: "/view_debit_notes/:id",
 
   /*payments routes */
   PAYMENTS: "/payments",
@@ -150,7 +152,7 @@ const ROUTES = {
   JOB_PAYMENTS: "/job_payments",
   ADD_JOBPAYMENT: "/add_job_payment",
   EDIT_JOBPAYMENT: "/edit_job_payment",
-  EDIT_JOBPAYMENT_ID:"/edit_job_payment/:id",
+  EDIT_JOBPAYMENT_ID: "/edit_job_payment/:id",
   VIEW_JOBPAYMENT: "/view_job_payment",
   VIEW_JOBPAYMENT_ID: "/view_job_payment/:id",
 
@@ -159,7 +161,7 @@ const ROUTES = {
   BANK_DETAILS: "/list_bankdetails",
 
   // Accounts -> Reports
-  DAILY_EXPENSE_REPORT:"/daily_expense_report",
+  DAILY_EXPENSE_REPORT: "/daily_expense_report",
 
   // general settings
   CURRENCY: "/currency",
@@ -172,6 +174,18 @@ const ROUTES = {
   JOB_INVOICE_ID: "/job_invoice/:id",
   VENDOR_TYPE: "/vendor_type",
   VENDOR: "/vendor",
+  FMSSETTINGS:"/fmssettings",
+
+  // CRM -> sales new page
+  SALE_ENQUIRY: "/sale_enquiry",
+
+  // Accounts => Bill Payments
+  CREATE_BILL_PAYMENT: "/create_bill_payment",
+  EDIT_BILL_PAYMENT: "/edit_bill_payment",
+  EDIT_BILL_PAYMENT_ID: "/edit_bill_payment/:id",
+  BILL_PAYMENT_LIST: "/bill_payment_list",
+  VIEW_BILL_PAYMENT: "/bill_payment_view",
+  VIEW_BILL_PAYMENT_ID: "/bill_payment_view/:id",
 };
 
 module.exports = { ROUTES };

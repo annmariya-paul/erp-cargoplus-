@@ -27,9 +27,11 @@ $color_2: #eff4f7;
 }
 .tabs {
   font-size: 15px;
-  border: 1px solid variables.$primary;
+  border: 1px solid rgb(232, 232, 232);
+  // border-left: 1px solid whitesmoke;
+  // border-right: 1px solid whitesmoke;
   color: variables.$primary;
-  box-shadow: 2px 2px 12px variables.$boxshadow;
+  // box-shadow: 2px 2px 12px variables.$boxshadow;
   width: 100% !important;
   margin-inline: 0.5px !important;
   display: block;
@@ -38,7 +40,9 @@ $color_2: #eff4f7;
   padding-block: 7px;
   background: white;
   cursor: pointer;
-  border-radius: 20px;
+  // border-radius-top: 20px;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
   box-sizing: content-box;
   position: relative;
   //   outline: none;
@@ -48,9 +52,14 @@ $color_2: #eff4f7;
 }
 
 .active-tabs {
-  background: variables.$primary;
+  background: whitesmoke;
+
   // border: 1px solid variables.$primary;
-  color: variables.$white;
+  border-top: 1px solid lightgray !important;
+  border-left: 1px solid lightgray !important;
+  border-right: 1px solid lightgray !important;
+  border-bottom: none;
+  color: rgb(159, 159, 159);
   &::before {
     content: "";
     display: block;
@@ -59,7 +68,7 @@ $color_2: #eff4f7;
     background: #166ea4;
   }
   &:hover {
-    color: variables.$white;
+    color: variables.$primary;
   }
 }
 button {
@@ -113,8 +122,6 @@ button {
   }
 }
 
-
-
 // ######### media Query ##########
 
 @media screen and (max-width: 570px) {
@@ -136,12 +143,10 @@ button {
     column-width: 100vh;
   }
 }
-.descheight{
+.descheight {
   height: 155px !important;
 }
 // .porsave{
 //   margin-top: -4%;
 //     margin-left: 79%;
 // }
-
-

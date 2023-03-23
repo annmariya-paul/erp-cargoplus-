@@ -309,13 +309,18 @@ function App() {
               <Route index element={<Employeegrade />} />
             </Route>
 
-            <Route path={ROUTES.ADD_OPPORTUNITY} element={<ProtectedRoute />}>
+            <Route
+              path={ROUTES.ADD_OPPORTUNITY_ID}
+              element={<ProtectedRoute />}
+            >
               <Route index element={<AddOpportunity />} />
             </Route>
-            <Route path={ROUTES.EDIT_OPPORTUNITY_ID} element={<ProtectedRoute />}>
+            <Route
+              path={ROUTES.EDIT_OPPORTUNITY_ID}
+              element={<ProtectedRoute />}
+            >
               <Route index element={<EditOpportunity />} />
             </Route>
-
 
             {/* {FMS} */}
             <Route path={ROUTES.TRACK_ASSIGNMENTS} element={<ProtectedRoute />}>

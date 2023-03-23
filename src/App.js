@@ -140,6 +140,7 @@ import CreateBillPayment from "./pages/Accounts/Bill Payments/CreateBillPayment"
 import ListBillPayment from "./pages/Accounts/Bill Payments/ListBillPayment";
 import EditBillPayment from "./pages/Accounts/Bill Payments/EditBillPayment";
 import ViewBillPayment from "./pages/Accounts/Bill Payments/ViewBillPayment";
+import Fmssettings from "./pages/General Settings/Fmssettings/fmssetting";
 
 function App() {
   return (
@@ -308,13 +309,18 @@ function App() {
               <Route index element={<Employeegrade />} />
             </Route>
 
-            <Route path={ROUTES.ADD_OPPORTUNITY} element={<ProtectedRoute />}>
+            <Route
+              path={ROUTES.ADD_OPPORTUNITY_ID}
+              element={<ProtectedRoute />}
+            >
               <Route index element={<AddOpportunity />} />
             </Route>
-            <Route path={ROUTES.EDIT_OPPORTUNITY_ID} element={<ProtectedRoute />}>
+            <Route
+              path={ROUTES.EDIT_OPPORTUNITY_ID}
+              element={<ProtectedRoute />}
+            >
               <Route index element={<EditOpportunity />} />
             </Route>
-
 
             {/* {FMS} */}
             <Route path={ROUTES.TRACK_ASSIGNMENTS} element={<ProtectedRoute />}>
@@ -541,6 +547,10 @@ function App() {
 
             <Route path={ROUTES.COMPANYINFO} element={<ProtectedRoute />}>
               <Route index element={<Companyinfo />} />
+            </Route>
+
+            <Route path={ROUTES.FMSSETTINGS} element={<ProtectedRoute />}>
+              <Route index element={<Fmssettings />} />
             </Route>
 
             <Route path={ROUTES.AGENT_REPORT} element={<ProtectedRoute />}>

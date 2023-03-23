@@ -183,7 +183,7 @@ function Enquiry (){
 
                 </div>
                 </div>
-
+<div className="row">
                 <div className="col-3">
                   <label>Enquiry Status</label>
                   <Form.Item 
@@ -196,6 +196,15 @@ function Enquiry (){
                     </SelectBox>
                   </Form.Item>
                 </div>
+                <div className="col-3">
+                  <label>Default Incoterm</label>
+                  <Form.Item name="incoterm">
+                  <SelectBox></SelectBox>
+                    
+                  </Form.Item>
+                </div>
+                </div>
+                
                 </Form>
             </div>
             </div>

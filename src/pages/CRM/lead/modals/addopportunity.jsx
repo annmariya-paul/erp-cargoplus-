@@ -11,6 +11,7 @@ import { CRM_BASE_URL } from "../../../../api/bootapi";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { message } from "antd";
 // import TextArea from "antd/lib/input/TextArea";
+import "../opportunity_ List/opportunitylist.scss";
 import SelectBox from "../../../../components/Select Box/SelectBox";
 import InputType from "../../../../components/Input Type textbox/InputType";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
@@ -237,7 +238,7 @@ import TextArea from "../../../../components/ InputType TextArea/TextArea";
                     </Form.Item>
                   </div> */}
                   <div className="col-sm-4 pt-2">
-                    <label>Type</label>
+                    <label>Type<span className="required">*</span></label>
                     <Form.Item
                       name="lead_type"
                       rules={[
@@ -262,7 +263,7 @@ import TextArea from "../../../../components/ InputType TextArea/TextArea";
                   </div>
 
                   <div className="col-sm-4 pt-2">
-                    <label>From</label>
+                    <label>From<span className="required">*</span></label>
                     <Form.Item
                       name="lead_customer_from"
                       rules={[
@@ -306,7 +307,7 @@ import TextArea from "../../../../components/ InputType TextArea/TextArea";
                   </div>
 
                   <div className="col-sm-4 pt-2">
-                    <label>Source</label>
+                    <label>Source<span className="required">*</span></label>
                     <Form.Item
                       name="lead_source"
                       rules={[
@@ -335,7 +336,7 @@ import TextArea from "../../../../components/ InputType TextArea/TextArea";
                   </div>
 
                   <div className="col-sm-4 pt-2">
-                    <label>Party</label>
+                    <label>Party<span className="required">*</span></label>
                     <Form.Item
                       name="lead_party"
                       rules={[
@@ -369,7 +370,7 @@ import TextArea from "../../../../components/ InputType TextArea/TextArea";
                   </div>
 
                   <div className="col-sm-4 pt-2">
-                    <label>Valid Up to</label>
+                    <label>Valid Up to<span className="required">*</span></label>
                     <Form.Item className="mt-2" name="lead_valid_up_to"  {...config}>
                 
                       {/* <SelectBox placeholder={"--Please Select--"} value={oppId}>
@@ -388,24 +389,7 @@ import TextArea from "../../../../components/ InputType TextArea/TextArea";
                     </Form.Item>
                   </div>
 
-                  <div className="col-sm-4 pt-2">
-                    <label>Details</label>
-                    <Form.Item
-                      className="mt-2"
-                      name="lead_details"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please enter valid details",
-                        },
-                      ]}
-                    >
-                      <TextArea
-                        value={oppdescription}
-                        onChange={(e) => setOppDescription(e.target.value)}
-                      />
-                    </Form.Item>
-                  </div>
+                 
 
                   <div className="col-sm-4 pt-2">
                     <label>Expecting Amount</label>
@@ -431,7 +415,7 @@ import TextArea from "../../../../components/ InputType TextArea/TextArea";
                   </div>
 
                   <div className="col-sm-4 pt-2">
-                    <label>Probability of conversion</label>
+                    <label>Probability of conversion<span className="required">*</span></label>
                     <Form.Item
                       name="lead_probability"
                       rules={[
@@ -453,7 +437,7 @@ import TextArea from "../../../../components/ InputType TextArea/TextArea";
                     </Form.Item>
                   </div>
                   <div className="col-sm-4 pt-2">
-                    <label>Status</label>
+                    <label>Status<span className="required">*</span></label>
                     <Form.Item
                       name="lead_status"
                       rules={[
@@ -474,6 +458,25 @@ import TextArea from "../../../../components/ InputType TextArea/TextArea";
                         <Select.Option value={4}>lost</Select.Option>
                         <Select.Option value={5}>DND</Select.Option>
                       </SelectBox>
+                    </Form.Item>
+                  </div>
+
+                  <div className="col-sm-12 pt-2">
+                    <label>Details<span className="required">*</span></label>
+                    <Form.Item
+                      className="mt-2"
+                      name="lead_details"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please enter valid details",
+                        },
+                      ]}
+                    >
+                      <TextArea
+                        value={oppdescription}
+                        onChange={(e) => setOppDescription(e.target.value)}
+                      />
                     </Form.Item>
                   </div>
                 </div>

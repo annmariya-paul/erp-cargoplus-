@@ -1032,6 +1032,14 @@ function CreateJob() {
                         />
                       </Form.Item>
                     </div>
+
+                    <div className="col-xl-6 col-sm-12 mt-2">
+                    <label>Default Incoterm</label>
+                  <Form.Item name="incoterm">
+                  <SelectBox></SelectBox>
+                    
+                  </Form.Item>
+                    </div>
                   </div>
                 </div>
               </div>

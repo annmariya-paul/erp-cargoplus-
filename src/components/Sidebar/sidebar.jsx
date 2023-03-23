@@ -76,21 +76,18 @@ export default function Sidebar({ showSidebar }) {
           <i className="bi bimenu bi-list" onClick={showSidebar} />
         </div> */}
         <div>
-
-        
           <nav className={`nav-menu active  nav-menu `}>
             <ul className="nav-menu-items p-0 ">
-           
-            <li className="nav-text  mt-2 ps-3">
-              <div className="logo_img">
-              <img
-                        src={cargologo}
-                        alt=""
-                        height={70}
-                        width={210}
-                        // className="mt-1 me-1"
-                      />
-              </div>
+              <li className="nav-text  mt-2 ps-3">
+                <div className="logo_img">
+                  <img
+                    src={cargologo}
+                    alt=""
+                    height={70}
+                    width={210}
+                    // className="mt-1 me-1"
+                  />
+                </div>
               </li>
               <li className="navbar-toggle nav-close" onClick={showSidebar}>
                 <div to="" className="nav-link">
@@ -104,7 +101,6 @@ export default function Sidebar({ showSidebar }) {
                   /> */}
                 </div>
               </li>
-             
 
               <li className="nav-text mt-4  ps-2">
                 <NavLink
@@ -125,7 +121,6 @@ export default function Sidebar({ showSidebar }) {
                   HRMSopen
                     ? "nav-text  items_hrms open ps-2"
                     : "nav-text  items_hrms  ps-2"
-                    
                 }
               >
                 <Link
@@ -156,108 +151,114 @@ export default function Sidebar({ showSidebar }) {
                   </div>
                 </Link>
               </li>
-              {HRMSopen ?  ( 
+              {HRMSopen ? (
                 <>
-                <div className="nav_active_color ">
-                  {checkPermission("branch") && (
-                    <li className="nav-text ">
-                      <NavLink
-                        className={({ isActive }) =>
-                          isActive ? "active-link" : "link"
-                        }
-                        to={ROUTES.BRANCHES}
-                      >
-                        <div className=" ms-4 subactivelink">Branches</div>
-                      </NavLink>
-                    </li>
-                  )}
-                  {checkPermission("department") && (
-                    <li className="nav-text ">
-                      <NavLink
-                        className={({ isActive }) =>
-                          isActive ? "active-link" : "link"
-                        }
-                        to={ROUTES.DEPARTMENTS}
-                      >
-                        <div className=" ms-4 subactivelink">Departments</div>
-                      </NavLink>
-                    </li>
-                  )}
-                  {checkPermission("designation") && (
-                    <li className="nav-text ">
-                      <NavLink
-                        className={({ isActive }) =>
-                          isActive ? "active-link" : "link"
-                        }
-                        to={ROUTES.DESIGNATION}
-                      >
-                        <div className=" ms-4 subactivelink">Designation</div>
-                      </NavLink>
-                    </li>
-                  )}
-                  {checkPermission("employment type") && (
-                    <li className="nav-text ">
-                      <NavLink
-                        className={({ isActive }) =>
-                          isActive ? "active-link" : "link"
-                        }
-                        to={ROUTES.EMPLOYMENT_TYPE}
-                      >
-                        <div className=" ms-4 subactivelink">Employee Type</div>
-                      </NavLink>
-                    </li>
-                  )}
+                  <div className="nav_active_color ">
+                    {checkPermission("branch") && (
+                      <li className="nav-text ">
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.BRANCHES}
+                        >
+                          <div className=" ms-4 subactivelink">Branches</div>
+                        </NavLink>
+                      </li>
+                    )}
+                    {checkPermission("department") && (
+                      <li className="nav-text ">
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.DEPARTMENTS}
+                        >
+                          <div className=" ms-4 subactivelink">Departments</div>
+                        </NavLink>
+                      </li>
+                    )}
+                    {checkPermission("designation") && (
+                      <li className="nav-text ">
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.DESIGNATION}
+                        >
+                          <div className=" ms-4 subactivelink">Designation</div>
+                        </NavLink>
+                      </li>
+                    )}
+                    {checkPermission("employment type") && (
+                      <li className="nav-text ">
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.EMPLOYMENT_TYPE}
+                        >
+                          <div className=" ms-4 subactivelink">
+                            Employee Type
+                          </div>
+                        </NavLink>
+                      </li>
+                    )}
 
-                  {checkPermission("employee grade") && (
-                    <li className="nav-text ">
-                      <NavLink
-                        className={({ isActive }) =>
-                          isActive ? "active-link" : "link"
-                        }
-                        to={ROUTES.EMPLOYEEGRADE}
-                      >
-                        <div className=" ms-4 subactivelink">Employee grade</div>
-                      </NavLink>
-                    </li>
-                  )}
-                  {checkPermission("roles") && (
-                    <li className="nav-text ">
-                      <NavLink
-                        className={({ isActive }) =>
-                          isActive ? "active-link" : "link"
-                        }
-                        to={ROUTES.ROLES_SCREEN}
-                      >
-                        <div className=" ms-4  subactivelink">Roles</div>
-                      </NavLink>
-                    </li>
-                  )}
-                  {checkPermission("assign permission") && (
-                    <li className="nav-text ">
-                      <NavLink
-                        className={({ isActive }) =>
-                          isActive ? "active-link" : "link"
-                        }
-                        to={ROUTES.PERMISSIONS}
-                      >
-                        <div className=" ms-4 subactivelink">Assign Permissions</div>
-                      </NavLink>
-                    </li>
-                  )}
-                  {checkPermission("employee") && (
-                    <li className="nav-text ">
-                      <NavLink
-                        className={({ isActive }) =>
-                          isActive ? "active-link" : "link"
-                        }
-                        to={ROUTES.EMPLOYEES}
-                      >
-                        <div className=" ms-4  subactivelink">Employees</div>
-                      </NavLink>
-                    </li>
-                  )}
+                    {checkPermission("employee grade") && (
+                      <li className="nav-text ">
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.EMPLOYEEGRADE}
+                        >
+                          <div className=" ms-4 subactivelink">
+                            Employee grade
+                          </div>
+                        </NavLink>
+                      </li>
+                    )}
+                    {checkPermission("roles") && (
+                      <li className="nav-text ">
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.ROLES_SCREEN}
+                        >
+                          <div className=" ms-4  subactivelink">Roles</div>
+                        </NavLink>
+                      </li>
+                    )}
+                    {checkPermission("assign permission") && (
+                      <li className="nav-text ">
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.PERMISSIONS}
+                        >
+                          <div className=" ms-4 subactivelink">
+                            Assign Permissions
+                          </div>
+                        </NavLink>
+                      </li>
+                    )}
+                    {checkPermission("employee") && (
+                      <li className="nav-text ">
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.EMPLOYEES}
+                        >
+                          <div className=" ms-4  subactivelink">Employees</div>
+                        </NavLink>
+                      </li>
+                    )}
                   </div>
-                </> 
+                </>
               ) : (
                 ""
               )}
@@ -331,7 +332,7 @@ export default function Sidebar({ showSidebar }) {
                       </div>
                     </Link>
                   </li> */}
-                  
+
                   {/* {Saleopen ? (
                     <>
                     <div className="nav_active_color ">
@@ -449,7 +450,6 @@ export default function Sidebar({ showSidebar }) {
                     </Link>
                   </li> */}
 
-                  
                   {/* {CRMselling ? (
                     <>
                        <div className="nav_active_color ">
@@ -533,61 +533,58 @@ export default function Sidebar({ showSidebar }) {
                     ""
                   )} */}
 
-{/* changes sidebar */}
+                  {/* changes sidebar */}
                   <div className="nav_active_color ">
-                  {checkPermission("lead") && (
-                        <li className="nav-text ">
-                          <NavLink
-                            className={({ isActive }) =>
-                              isActive ? "active-link" : "link"
-                            }
-                            to={ROUTES.LEADLIST}
-                          >
-                          
-                            <div className="ms-4 subactivelink"> Customer</div>
-                          </NavLink>
-                        </li>
-                      )}
-                       {checkPermission("vendor") && (
-                        <li className="nav-text">
-                          <NavLink
-                            className={({ isActive }) =>
-                              isActive ? "active-link" : "link"
-                            }
-                            to={ROUTES.VENDOR}
-                          >
-                            <div className=" ms-4 subactivelink">Vendor</div>
-                          </NavLink>
-                        </li>
-                      )}
-                       {checkPermission("sale_enquiry") && (
-                        <li className="nav-text">
-                          <NavLink
-                            className={({ isActive }) =>
-                              isActive ? "active-link" : "link"
-                            }
-                            to={ROUTES.SALE_ENQUIRY}
-                          >
-                            <div className=" ms-4 subactivelink">Enquiry</div>
-                          </NavLink>
-                        </li>
-                      )}
-                       {checkPermission("opportunity") && (
-                        <li className="nav-text">
-                          <NavLink
-                            className={({ isActive }) =>
-                              isActive ? "active-link" : "link"
-                            }
-                            to={ROUTES.OPPORTUNITY}
-                          >
-                          
-                            <div className="subactivelink ms-4">Opportunity</div>
-                          </NavLink>
-                        </li>
-                      )}
-
+                    {checkPermission("lead") && (
+                      <li className="nav-text ">
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.LEADLIST}
+                        >
+                          <div className="ms-4 subactivelink"> Customer</div>
+                        </NavLink>
+                      </li>
+                    )}
+                    {checkPermission("vendor") && (
+                      <li className="nav-text">
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.VENDOR}
+                        >
+                          <div className=" ms-4 subactivelink">Vendor</div>
+                        </NavLink>
+                      </li>
+                    )}
+                    {checkPermission("sale_enquiry") && (
+                      <li className="nav-text">
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.SALE_ENQUIRY}
+                        >
+                          <div className=" ms-4 subactivelink">Enquiry</div>
+                        </NavLink>
+                      </li>
+                    )}
+                    {checkPermission("opportunity") && (
+                      <li className="nav-text">
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.OPPORTUNITY}
+                        >
+                          <div className="subactivelink ms-4">Opportunity</div>
+                        </NavLink>
+                      </li>
+                    )}
                   </div>
-                  
+
                   <li
                     className={
                       CRMpurchasing
@@ -616,33 +613,29 @@ export default function Sidebar({ showSidebar }) {
                       </div>
                     </Link>
                   </li>
-                 
+
                   {CRMpurchasing ? (
                     <>
                       <div className="nav_active_color ">
-                      {checkPermission("vendor") && (
-                        <li className="nav-text">
-                          <NavLink
-                            className={({ isActive }) =>
-                              isActive ? "active-link" : "link"
-                            }
-                            to={ROUTES.VENDOR_TYPE}
-                          >
-                            <div className=" ms-4 subactivelink">Vendor Type</div>
-                          </NavLink>
-                        </li>
-                      )}
-                     
+                        {checkPermission("vendor") && (
+                          <li className="nav-text">
+                            <NavLink
+                              className={({ isActive }) =>
+                                isActive ? "active-link" : "link"
+                              }
+                              to={ROUTES.VENDOR_TYPE}
+                            >
+                              <div className=" ms-4 subactivelink">
+                                Vendor Type
+                              </div>
+                            </NavLink>
+                          </li>
+                        )}
                       </div>
                     </>
                   ) : (
                     ""
                   )}
-
-          
-
-                 
-                
 
                   {/* <li
                     className={
@@ -705,13 +698,12 @@ export default function Sidebar({ showSidebar }) {
                   ) : (
                     ""
                   )} */}
-                
                 </>
               ) : (
                 ""
               )}
 
-{/* product */}
+              {/* product */}
 
               <li
                 className={
@@ -727,11 +719,9 @@ export default function Sidebar({ showSidebar }) {
                 >
                   <div className="d-flex justify-content-between gap-5">
                     <div className="d-flex">
-                      
-                      <GrProductHunt className="sidebar_icons pt-1"
-                      />
+                      <GrProductHunt className="sidebar_icons pt-1" />
                       <div style={{ width: "120px" }} className="">
-                      PRODUCT
+                        PRODUCT
                       </div>
                     </div>
 
@@ -746,25 +736,22 @@ export default function Sidebar({ showSidebar }) {
 
               {CRMproduct ? (
                 <>
-               <div className="nav_active_color ">
-                  {checkPermission("lead") && (
-                        <li className="nav-text ">
-                          <NavLink
-                            className={({ isActive }) =>
-                              isActive ? "active-link" : "link"
-                            }
-                            to={ROUTES.PRODUCT}
-                          >
-                          
-                            <div className="ms-4 subactivelink"> Product</div>
-                          </NavLink>
-                        </li>
-                      )}
-                      </div>
+                  <div className="nav_active_color ">
+                    {checkPermission("lead") && (
+                      <li className="nav-text ">
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.PRODUCT}
+                        >
+                          <div className="ms-4 subactivelink"> Product</div>
+                        </NavLink>
+                      </li>
+                    )}
+                  </div>
 
-
-
-                      <li
+                  <li
                     className={
                       CRMproductmaster
                         ? "nav-text  items_hrms open"
@@ -793,72 +780,76 @@ export default function Sidebar({ showSidebar }) {
                     </Link>
                   </li>
 
-
                   {CRMproductmaster ? (
                     <>
                       <div className="nav_active_color ">
-                      {checkPermission("category") && (
-                        <li className="nav-text">
-                          <NavLink
-                            className={({ isActive }) =>
-                              isActive ? "active-link" : "link"
-                            }
-                            to={ROUTES.CATEGORY_LIST}
-                          >
-                            <div className=" ms-4 subactivelink">Category</div>
-                          </NavLink>
-                        </li>
-                      )}
+                        {checkPermission("category") && (
+                          <li className="nav-text">
+                            <NavLink
+                              className={({ isActive }) =>
+                                isActive ? "active-link" : "link"
+                              }
+                              to={ROUTES.CATEGORY_LIST}
+                            >
+                              <div className=" ms-4 subactivelink">
+                                Category
+                              </div>
+                            </NavLink>
+                          </li>
+                        )}
 
-                      {checkPermission("brands") && (
-                        <li className="nav-text">
-                          <NavLink
-                            className={({ isActive }) =>
-                              isActive ? "active-link" : "link"
-                            }
-                            to={ROUTES.BRANDS }
-                          >
-                            <div className=" ms-4 subactivelink">Brands</div>
-                          </NavLink>
-                        </li>
-                      )}
+                        {checkPermission("brands") && (
+                          <li className="nav-text">
+                            <NavLink
+                              className={({ isActive }) =>
+                                isActive ? "active-link" : "link"
+                              }
+                              to={ROUTES.BRANDS}
+                            >
+                              <div className=" ms-4 subactivelink">Brands</div>
+                            </NavLink>
+                          </li>
+                        )}
 
-                      {checkPermission("attributes") && (
-                        <li className="nav-text">
-                          <NavLink
-                            className={({ isActive }) =>
-                              isActive ? "active-link" : "link"
-                            }
-                            to={ROUTES.ATTRIBUTES }
-                          >
-                            <div className=" ms-4 subactivelink">Attributes</div>
-                          </NavLink>
-                        </li>
-                      )}
-                         {checkPermission("unitandMeasurement") && (
-                        <li className="nav-text">
-                          <NavLink
-                            className={({ isActive }) =>
-                              isActive ? "active-link" : "link"
-                            }
-                            to={ROUTES.UNIT_LIST }
-                          >
-                            <div className=" ms-4 subactivelink">Unit And Measurements</div>
-                          </NavLink>
-                        </li>
-                      )}
-                     
+                        {checkPermission("attributes") && (
+                          <li className="nav-text">
+                            <NavLink
+                              className={({ isActive }) =>
+                                isActive ? "active-link" : "link"
+                              }
+                              to={ROUTES.ATTRIBUTES}
+                            >
+                              <div className=" ms-4 subactivelink">
+                                Attributes
+                              </div>
+                            </NavLink>
+                          </li>
+                        )}
+                        {checkPermission("unitandMeasurement") && (
+                          <li className="nav-text">
+                            <NavLink
+                              className={({ isActive }) =>
+                                isActive ? "active-link" : "link"
+                              }
+                              to={ROUTES.UNIT_LIST}
+                            >
+                              <div className=" ms-4 subactivelink">
+                                Unit And Measurements
+                              </div>
+                            </NavLink>
+                          </li>
+                        )}
                       </div>
                     </>
                   ) : (
                     ""
                   )}
                 </>
-                  ) : (
-                    ""
-                  )}
+              ) : (
+                ""
+              )}
 
-{/* servicess */}
+              {/* servicess */}
 
               <li
                 className={
@@ -876,10 +867,9 @@ export default function Sidebar({ showSidebar }) {
                     <div className="d-flex">
                       {/* <RiTeamFill className="sidebar_icons" />
                        */}
-                      <GrServices className="sidebar_icons pt-1"
-                      />
+                      <GrServices className="sidebar_icons pt-1" />
                       <div style={{ width: "120px" }} className="">
-                     SERVICES
+                        SERVICES
                       </div>
                     </div>
 
@@ -892,28 +882,24 @@ export default function Sidebar({ showSidebar }) {
                 </Link>
               </li>
 
-
               {CRMservice ? (
                 <>
-               <div className="nav_active_color ">
-                  {checkPermission("lead") && (
-                        <li className="nav-text ">
-                          <NavLink
-                            className={({ isActive }) =>
-                              isActive ? "active-link" : "link"
-                            }
-                            to={ROUTES.SERVICES}
-                          >
-                          
-                            <div className="ms-4 subactivelink"> Service</div>
-                          </NavLink>
-                        </li>
-                      )}
-                      </div>
+                  <div className="nav_active_color ">
+                    {checkPermission("lead") && (
+                      <li className="nav-text ">
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.SERVICES}
+                        >
+                          <div className="ms-4 subactivelink"> Service</div>
+                        </NavLink>
+                      </li>
+                    )}
+                  </div>
 
-
-
-                      <li
+                  <li
                     className={
                       CRMservicemaster
                         ? "nav-text  items_hrms open"
@@ -942,34 +928,30 @@ export default function Sidebar({ showSidebar }) {
                     </Link>
                   </li>
 
-
                   {CRMservicemaster ? (
                     <>
                       <div className="nav_active_color ">
-                      {checkPermission("category") && (
-                        <li className="nav-text">
-                          <NavLink
-                            className={({ isActive }) =>
-                              isActive ? "active-link" : "link"
-                            }
-                            to={ROUTES.TAXTYPE}
-                          >
-                            <div className=" ms-4 subactivelink">TaxType</div>
-                          </NavLink>
-                        </li>
-                      )}
-
-
-                    
+                        {checkPermission("category") && (
+                          <li className="nav-text">
+                            <NavLink
+                              className={({ isActive }) =>
+                                isActive ? "active-link" : "link"
+                              }
+                              to={ROUTES.TAXTYPE}
+                            >
+                              <div className=" ms-4 subactivelink">TaxType</div>
+                            </NavLink>
+                          </li>
+                        )}
                       </div>
                     </>
                   ) : (
                     ""
                   )}
                 </>
-                  ) : (
-                    ""
-                  )}
+              ) : (
+                ""
+              )}
               {/* ##########  FMS  ######## */}
 
               <li
@@ -1037,56 +1019,55 @@ export default function Sidebar({ showSidebar }) {
               )} */}
               {FMSOpen ? (
                 <>
-
-<div className="nav_active_color ">
-                  {checkPermission("opportunity assign") && (
-                    <li className="nav-text ">
-                      <NavLink
-                        className={({ isActive }) =>
-                          isActive ? "active-link" : "link"
-                        }
-                        to={ROUTES.ENQUIRIES}
-                      >
-                        <div className=" ms-4 subactivelink">Enquiry</div>
-                      </NavLink>
-                    </li>
-                  )}
-                  {checkPermission("quotation") && (
-                    <li className="nav-text " style={{ marginLeft: "" }}>
-                      <NavLink
-                        className={({ isActive }) =>
-                          isActive ? "active-link" : "link"
-                        }
-                        to={ROUTES.QUATATIONS}
-                      >
-                        <div className=" ms-4 subactivelink">Quotation</div>
-                      </NavLink>
-                    </li>
-                  )}
-                  {checkPermission("opportunity assign") && (
-                    <li className="nav-text ">
-                      <NavLink
-                        className={({ isActive }) =>
-                          isActive ? "active-link" : "link"
-                        }
-                        to={ROUTES.LIST_JOB}
-                      >
-                        <div className=" ms-4 subactivelink">Job</div>
-                      </NavLink>
-                    </li>
-                  )}
-                  {checkPermission("invoice") && (
-                    <li className="nav-text ">
-                      <NavLink
-                        className={({ isActive }) =>
-                          isActive ? "active-link" : "link"
-                        }
-                        to={ROUTES.INVOICE_LIST}
-                      >
-                        <div className=" ms-4 subactivelink">Invoice</div>
-                      </NavLink>
-                    </li>
-                  )}
+                  <div className="nav_active_color ">
+                    {checkPermission("opportunity assign") && (
+                      <li className="nav-text ">
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.ENQUIRIES}
+                        >
+                          <div className=" ms-4 subactivelink">Enquiry</div>
+                        </NavLink>
+                      </li>
+                    )}
+                    {checkPermission("quotation") && (
+                      <li className="nav-text " style={{ marginLeft: "" }}>
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.QUATATIONS}
+                        >
+                          <div className=" ms-4 subactivelink">Quotation</div>
+                        </NavLink>
+                      </li>
+                    )}
+                    {checkPermission("opportunity assign") && (
+                      <li className="nav-text ">
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.LIST_JOB}
+                        >
+                          <div className=" ms-4 subactivelink">Job</div>
+                        </NavLink>
+                      </li>
+                    )}
+                    {checkPermission("invoice") && (
+                      <li className="nav-text ">
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.INVOICE_LIST}
+                        >
+                          <div className=" ms-4 subactivelink">Invoice</div>
+                        </NavLink>
+                      </li>
+                    )}
                   </div>
 
                   <li
@@ -1105,7 +1086,7 @@ export default function Sidebar({ showSidebar }) {
                         <div className="d-flex">
                           <MdSettingsInputComponent className="sidebar_icons ms-1 pt-1 " />
                           <div style={{ width: "90px" }} className="">
-                          Masters
+                            Masters
                           </div>
                         </div>
 
@@ -1120,80 +1101,100 @@ export default function Sidebar({ showSidebar }) {
                   {FMSSettingsopen ? (
                     <>
                       <div className="nav_active_color ">
-                      {checkPermission("freight type") && (
-                        <li className="nav-text">
-                          <NavLink
-                            className={({ isActive }) =>
-                              isActive ? "active-link" : "link"
-                            }
-                            to={ROUTES.FRIGHTLIST}
-                          >
-                            <div className=" ms-5 subactivelink">Freight types</div>
-                          </NavLink>
-                        </li>
-                      )}
-                      {checkPermission("carrier") && (
-                        <li className="nav-text">
-                          <NavLink
-                            className={({ isActive }) =>
-                              isActive ? "active-link" : "link"
-                            }
-                            to={ROUTES.CARRIER}
-                          >
-                            <div className=" ms-5 subactivelink">Carrier</div>
-                          </NavLink>
-                        </li>
-                      )}
-                      {checkPermission("terms of shipment") && (
-                        <li className="nav-text">
-                          <NavLink
-                            className={({ isActive }) =>
-                              isActive ? "active-link" : "link"
-                            }
-                            to={ROUTES.TERMS_OF_PAYMENT}
-                          >
-                            <div className=" ms-5 subactivelink">Payment Terms</div>
-                          </NavLink>
-                        </li>
-                      )}
+                        {checkPermission("freight type") && (
+                          <li className="nav-text">
+                            <NavLink
+                              className={({ isActive }) =>
+                                isActive ? "active-link" : "link"
+                              }
+                              to={ROUTES.FRIGHTLIST}
+                            >
+                              <div className=" ms-5 subactivelink">
+                                Freight types
+                              </div>
+                            </NavLink>
+                          </li>
+                        )}
+                        {checkPermission("carrier") && (
+                          <li className="nav-text">
+                            <NavLink
+                              className={({ isActive }) =>
+                                isActive ? "active-link" : "link"
+                              }
+                              to={ROUTES.CARRIER}
+                            >
+                              <div className=" ms-5 subactivelink">Carrier</div>
+                            </NavLink>
+                          </li>
+                        )}
+                        {checkPermission("incoterm") && (
+                          <li className="nav-text">
+                            <NavLink
+                              className={({ isActive }) =>
+                                isActive ? "active-link" : "link"
+                              }
+                              to={ROUTES.INCOTERM}
+                            >
+                              <div className=" ms-5 subactivelink">Incoterm</div>
+                            </NavLink>
+                          </li>
+                        )}
+                        {checkPermission("terms of shipment") && (
+                          <li className="nav-text">
+                            <NavLink
+                              className={({ isActive }) =>
+                                isActive ? "active-link" : "link"
+                              }
+                              to={ROUTES.TERMS_OF_PAYMENT}
+                            >
+                              <div className=" ms-5 subactivelink">
+                                Payment Terms
+                              </div>
+                            </NavLink>
+                          </li>
+                        )}
 
-                      {checkPermission("tax type") && (
-                        <li className="nav-text">
-                          <NavLink
-                            className={({ isActive }) =>
-                              isActive ? "active-link" : "link"
-                            }
-                            to={ROUTES.TAXTYPE}
-                          >
-                            <div className=" ms-5 subactivelink">Tax Type</div>
-                          </NavLink>
-                        </li>
-                      )}
-                      {checkPermission("job tasks") && (
-                        <li className="nav-text">
-                          <NavLink
-                            className={({ isActive }) =>
-                              isActive ? "active-link" : "link"
-                            }
-                            to={ROUTES.LISTAGENT}
-                          >
-                            <div className=" ms-5 subactivelink">Agents</div>
-                          </NavLink>
-                        </li>
-                      )}
-                      {checkPermission("job tasks") && (
-                        <li className="nav-text">
-                          <NavLink
-                            className={({ isActive }) =>
-                              isActive ? "active-link" : "link"
-                            }
-                            to={ROUTES.LOCATIONS}
-                          >
-                            <div className=" ms-5 subactivelink">Location</div>
-                          </NavLink>
-                        </li>
-                      )}
-                      {/* {checkPermission("airport") && (
+                        {checkPermission("tax type") && (
+                          <li className="nav-text">
+                            <NavLink
+                              className={({ isActive }) =>
+                                isActive ? "active-link" : "link"
+                              }
+                              to={ROUTES.TAXTYPE}
+                            >
+                              <div className=" ms-5 subactivelink">
+                                Tax Type
+                              </div>
+                            </NavLink>
+                          </li>
+                        )}
+                        {checkPermission("job tasks") && (
+                          <li className="nav-text">
+                            <NavLink
+                              className={({ isActive }) =>
+                                isActive ? "active-link" : "link"
+                              }
+                              to={ROUTES.LISTAGENT}
+                            >
+                              <div className=" ms-5 subactivelink">Agents</div>
+                            </NavLink>
+                          </li>
+                        )}
+                        {checkPermission("job tasks") && (
+                          <li className="nav-text">
+                            <NavLink
+                              className={({ isActive }) =>
+                                isActive ? "active-link" : "link"
+                              }
+                              to={ROUTES.LOCATIONS}
+                            >
+                              <div className=" ms-5 subactivelink">
+                                Location
+                              </div>
+                            </NavLink>
+                          </li>
+                        )}
+                        {/* {checkPermission("airport") && (
                         <li className="nav-text">
                           <NavLink
                             className={({ isActive }) =>
@@ -1207,7 +1208,7 @@ export default function Sidebar({ showSidebar }) {
                         </li>
                       )} */}
 
-                      {/* {checkPermission("seaport") && (
+                        {/* {checkPermission("seaport") && (
                         <li className="nav-text">
                           <NavLink
                             className={({ isActive }) =>
@@ -1220,7 +1221,7 @@ export default function Sidebar({ showSidebar }) {
                           </NavLink>
                         </li>
                       )} */}
-                      {/* {checkPermission("mode") && (
+                        {/* {checkPermission("mode") && (
                         <li className="nav-text">
                           <NavLink
                             className={({ isActive }) =>
@@ -1238,7 +1239,7 @@ export default function Sidebar({ showSidebar }) {
                   ) : (
                     ""
                   )}
-                 
+
                   {/* {track assignment link is commented and hidden in sidebar} */}
                   {/* {checkPermission("track assignment") && (
                         <li className="nav-text">
@@ -1283,20 +1284,22 @@ export default function Sidebar({ showSidebar }) {
                   </li>
                   {fmsReport ? (
                     <>
-                    <div className="nav_active_color ">
-                      {checkPermission("agent_report") && (
-                        <>
-                          <li className="nav-text ">
-                            <NavLink
-                              className={({ isActive }) =>
-                                isActive ? "active-link" : "link"
-                              }
-                              to={ROUTES.AGENT_REPORT}
-                            >
-                              <div className="ms-4 subactivelink">Agent Report</div>
-                            </NavLink>
-                          </li>
-                          {/* <li className="nav-text ">
+                      <div className="nav_active_color ">
+                        {checkPermission("agent_report") && (
+                          <>
+                            <li className="nav-text ">
+                              <NavLink
+                                className={({ isActive }) =>
+                                  isActive ? "active-link" : "link"
+                                }
+                                to={ROUTES.AGENT_REPORT}
+                              >
+                                <div className="ms-4 subactivelink">
+                                  Agent Report
+                                </div>
+                              </NavLink>
+                            </li>
+                            {/* <li className="nav-text ">
                             <NavLink
                               className={({ isActive }) =>
                                 isActive ? "active-link" : "link"
@@ -1308,54 +1311,62 @@ export default function Sidebar({ showSidebar }) {
                               </div>
                             </NavLink>
                           </li> */}
+                            <li className="nav-text ">
+                              <NavLink
+                                className={({ isActive }) =>
+                                  isActive ? "active-link" : "link"
+                                }
+                                to={ROUTES.MONTHLY_REPORT}
+                              >
+                                <div className="ms-4 subactivelink">
+                                  Monthly Report
+                                </div>
+                              </NavLink>
+                            </li>
+                          </>
+                        )}
+                        {checkPermission("cost_and_expense") && (
                           <li className="nav-text ">
                             <NavLink
                               className={({ isActive }) =>
                                 isActive ? "active-link" : "link"
                               }
-                              to={ROUTES.MONTHLY_REPORT}
+                              to={ROUTES.COST_AND_EXPENSE_REPORT}
                             >
-                              <div className="ms-4 subactivelink">Monthly Report</div>
+                              <div className="ms-4 subactivelink">
+                                Cost And Expense Report
+                              </div>
                             </NavLink>
                           </li>
-                        </>
-                      )}
-                      {checkPermission("cost_and_expense") && (
-                        <li className="nav-text ">
-                          <NavLink
-                            className={({ isActive }) =>
-                              isActive ? "active-link" : "link"
-                            }
-                            to={ROUTES.COST_AND_EXPENSE_REPORT}
-                          >
-                            <div className="ms-4 subactivelink">Cost And Expense Report</div>
-                          </NavLink>
-                        </li>
-                      )}
-                      {checkPermission("enquiry_report") && (
-                        <li className="nav-text ">
-                          <NavLink
-                            className={({ isActive }) =>
-                              isActive ? "active-link" : "link"
-                            }
-                            to={ROUTES.ENQUIRY_REPORT}
-                          >
-                            <div className=" ms-4 subactivelink">Enquiry Report</div>
-                          </NavLink>
-                        </li>
-                      )}
-                      {checkPermission("invoice_report") && (
-                        <li className="nav-text ">
-                          <NavLink
-                            className={({ isActive }) =>
-                              isActive ? "active-link" : "link"
-                            }
-                            to={ROUTES.INVOICE_REPORT}
-                          >
-                            <div className=" ms-4 subactivelink">Invoice Report</div>
-                          </NavLink>
-                        </li>
-                      )}
+                        )}
+                        {checkPermission("enquiry_report") && (
+                          <li className="nav-text ">
+                            <NavLink
+                              className={({ isActive }) =>
+                                isActive ? "active-link" : "link"
+                              }
+                              to={ROUTES.ENQUIRY_REPORT}
+                            >
+                              <div className=" ms-4 subactivelink">
+                                Enquiry Report
+                              </div>
+                            </NavLink>
+                          </li>
+                        )}
+                        {checkPermission("invoice_report") && (
+                          <li className="nav-text ">
+                            <NavLink
+                              className={({ isActive }) =>
+                                isActive ? "active-link" : "link"
+                              }
+                              to={ROUTES.INVOICE_REPORT}
+                            >
+                              <div className=" ms-4 subactivelink">
+                                Invoice Report
+                              </div>
+                            </NavLink>
+                          </li>
+                        )}
                       </div>
                     </>
                   ) : (
@@ -1436,20 +1447,22 @@ export default function Sidebar({ showSidebar }) {
                   </li>
                   {accountsSettings ? (
                     <>
-                     <div className="nav_active_color ">
-                      {checkPermission("daily_expence") && (
-                        <li className="nav-text ">
-                          <NavLink
-                            className={({ isActive }) =>
-                              isActive ? "active-link" : "link"
-                            }
-                            to={ROUTES.EXPENSE_CATEGORY}
-                          >
-                            <div className=" ms-5 subactivelink">Expense Category</div>
-                          </NavLink>
-                        </li>
-                      )}
-                      {/* {checkPermission("credit_note_type") && (
+                      <div className="nav_active_color ">
+                        {checkPermission("daily_expence") && (
+                          <li className="nav-text ">
+                            <NavLink
+                              className={({ isActive }) =>
+                                isActive ? "active-link" : "link"
+                              }
+                              to={ROUTES.EXPENSE_CATEGORY}
+                            >
+                              <div className=" ms-5 subactivelink">
+                                Expense Category
+                              </div>
+                            </NavLink>
+                          </li>
+                        )}
+                        {/* {checkPermission("credit_note_type") && (
                         <li className="nav-text ">
                           <NavLink
                             className={({ isActive }) =>
@@ -1461,19 +1474,21 @@ export default function Sidebar({ showSidebar }) {
                           </NavLink>
                         </li>
                       )} */}
-                      {checkPermission("paymentmode") && (
-                        <li className="nav-text ">
-                          <NavLink
-                            className={({ isActive }) =>
-                              isActive ? "active-link" : "link"
-                            }
-                            to={ROUTES.PAYMEMENT_MODE}
-                          >
-                            <div className=" ms-5 subactivelink">Payment Mode</div>
-                          </NavLink>
-                        </li>
-                      )}
-                      {/* {checkPermission("add_purchase") && (
+                        {checkPermission("paymentmode") && (
+                          <li className="nav-text ">
+                            <NavLink
+                              className={({ isActive }) =>
+                                isActive ? "active-link" : "link"
+                              }
+                              to={ROUTES.PAYMEMENT_MODE}
+                            >
+                              <div className=" ms-5 subactivelink">
+                                Payment Mode
+                              </div>
+                            </NavLink>
+                          </li>
+                        )}
+                        {/* {checkPermission("add_purchase") && (
                     <li className="nav-text">
                       <NavLink
                         className={({ isActive }) =>
@@ -1486,7 +1501,7 @@ export default function Sidebar({ showSidebar }) {
                     </li>
                     )} */}
 
-                      {/* {checkPermission("purchase") && (
+                        {/* {checkPermission("purchase") && (
                         <li className="nav-text">
                           <NavLink
                             className={({ isActive }) =>
@@ -1499,110 +1514,116 @@ export default function Sidebar({ showSidebar }) {
                         </li>
                       )} */}
 
-                      {checkPermission("bankdetails") && (
-                        <li className="nav-text">
-                          <NavLink
-                            className={({ isActive }) =>
-                              isActive ? "active-link" : "link"
-                            }
-                            to={ROUTES.BANK_DETAILS}
-                          >
-                            <div className=" ms-5 subactivelink">Bank Details</div>
-                          </NavLink>
-                        </li>
-                      )}
-                      {checkPermission("credit_note_type") && (
-                        <li className="nav-text ">
-                          <NavLink
-                            className={({ isActive }) =>
-                              isActive ? "active-link" : "link"
-                            }
-                            to={ROUTES.CREDIT_NOTE_TYPE}
-                          >
-                            <div className=" ms-5 subactivelink">Credit Note Type</div>
-                          </NavLink>
-                        </li>
-                      )}
+                        {checkPermission("bankdetails") && (
+                          <li className="nav-text">
+                            <NavLink
+                              className={({ isActive }) =>
+                                isActive ? "active-link" : "link"
+                              }
+                              to={ROUTES.BANK_DETAILS}
+                            >
+                              <div className=" ms-5 subactivelink">
+                                Bank Details
+                              </div>
+                            </NavLink>
+                          </li>
+                        )}
+                        {checkPermission("credit_note_type") && (
+                          <li className="nav-text ">
+                            <NavLink
+                              className={({ isActive }) =>
+                                isActive ? "active-link" : "link"
+                              }
+                              to={ROUTES.CREDIT_NOTE_TYPE}
+                            >
+                              <div className=" ms-5 subactivelink">
+                                Credit Note Type
+                              </div>
+                            </NavLink>
+                          </li>
+                        )}
                       </div>
                     </>
                   ) : (
                     ""
                   )}
                   <div className="nav_active_color ">
-                  {checkPermission("purchase") && (
-                    <li className="nav-text">
-                      <NavLink
-                        className={({ isActive }) =>
-                          isActive ? "active-link" : "link"
-                        }
-                        to={ROUTES.PURCHASE}
-                      >
-                        <div className="ms-4 subactivelink">Purchase</div>
-                      </NavLink>
-                    </li>
-                  )}
+                    {checkPermission("purchase") && (
+                      <li className="nav-text">
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.PURCHASE}
+                        >
+                          <div className="ms-4 subactivelink">Purchase</div>
+                        </NavLink>
+                      </li>
+                    )}
 
-                  {checkPermission("daily_expence") && (
-                    <li className="nav-text ">
-                      <NavLink
-                        className={({ isActive }) =>
-                          isActive ? "active-link" : "link"
-                        }
-                        to={ROUTES.DAILY_EXPENSE}
-                      >
-                        <div className="ms-4 subactivelink">Daily Expense</div>
-                      </NavLink>
-                    </li>
-                  )}
+                    {checkPermission("daily_expence") && (
+                      <li className="nav-text ">
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.DAILY_EXPENSE}
+                        >
+                          <div className="ms-4 subactivelink">
+                            Daily Expense
+                          </div>
+                        </NavLink>
+                      </li>
+                    )}
 
-                  {checkPermission("job_payments") && (
-                    <li className="nav-text ">
-                      <NavLink
-                        className={({ isActive }) =>
-                          isActive ? "active-link" : "link"
-                        }
-                        to={ROUTES.JOB_PAYMENTS}
-                      >
-                        <div className="ms-4 subactivelink">Job Payments</div>
-                      </NavLink>
-                    </li>
-                  )}
-                  {checkPermission("payments") && (
-                    <li className="nav-text ">
-                      <NavLink
-                        className={({ isActive }) =>
-                          isActive ? "active-link" : "link"
-                        }
-                        to={ROUTES.PAYMENTS}
-                      >
-                        <div className="ms-4 subactivelink">Payments</div>
-                      </NavLink>
-                    </li>
-                  )}
-                  {checkPermission("add_credit_notes") && (
-                    <li className="nav-text ">
-                      <NavLink
-                        className={({ isActive }) =>
-                          isActive ? "active-link" : "link"
-                        }
-                        to={ROUTES.CREDIT_NOTES}
-                      >
-                        <div className="ms-4 subactivelink">Credit Notes</div>
-                      </NavLink>
-                    </li>
-                  )}
-                  {checkPermission("add_debit_notes") && (
-                    <li className="nav-text ">
-                      <NavLink
-                        className={({ isActive }) =>
-                          isActive ? "active-link" : "link"
-                        }
-                        to={ROUTES.DEBIT_NOTES}
-                      >
-                        <div className=" ms-4 subactivelink">Debit Notes</div>
-                      </NavLink>
-                    </li>
-                  )}
+                    {checkPermission("job_payments") && (
+                      <li className="nav-text ">
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.JOB_PAYMENTS}
+                        >
+                          <div className="ms-4 subactivelink">Job Payments</div>
+                        </NavLink>
+                      </li>
+                    )}
+                    {checkPermission("payments") && (
+                      <li className="nav-text ">
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.PAYMENTS}
+                        >
+                          <div className="ms-4 subactivelink">Payments</div>
+                        </NavLink>
+                      </li>
+                    )}
+                    {checkPermission("add_credit_notes") && (
+                      <li className="nav-text ">
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.CREDIT_NOTES}
+                        >
+                          <div className="ms-4 subactivelink">Credit Notes</div>
+                        </NavLink>
+                      </li>
+                    )}
+                    {checkPermission("add_debit_notes") && (
+                      <li className="nav-text ">
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.DEBIT_NOTES}
+                        >
+                          <div className=" ms-4 subactivelink">Debit Notes</div>
+                        </NavLink>
+                      </li>
+                    )}
                   </div>
 
                   <li
@@ -1696,53 +1717,65 @@ export default function Sidebar({ showSidebar }) {
               </li>
               {GeneralSettingsopen ? (
                 <>
-                <div className="nav_active_color ">
-                  {checkPermission("country") && (
-                    <li className="nav-text">
-                      <NavLink
-                        className={({ isActive }) =>
-                          isActive ? "active-link" : "link"
-                        }
-                        to={ROUTES.COUNTRYSELECT}
-                      >
-                        <div className=" ms-4 subactivelink">Countries</div>
-                      </NavLink>
-                    </li>
-                  )}
-                  {checkPermission("currency") && (
-                    <li className="nav-text ">
-                      <NavLink
-                        className={({ isActive }) =>
-                          isActive ? "active-link" : "link"
-                        }
-                        to={ROUTES.CURRENCY}
-                      >
-                        <div className=" ms-4 subactivelink">Currency</div>
-                      </NavLink>
-                    </li>
-                  )}
+                  <div className="nav_active_color ">
+                    {checkPermission("country") && (
+                      <li className="nav-text">
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.COUNTRYSELECT}
+                        >
+                          <div className=" ms-4 subactivelink">Countries</div>
+                        </NavLink>
+                      </li>
+                    )}
+                    {checkPermission("currency") && (
+                      <li className="nav-text ">
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.CURRENCY}
+                        >
+                          <div className=" ms-4 subactivelink">Currency</div>
+                        </NavLink>
+                      </li>
+                    )}
 
-                  {checkPermission("companyinfo") && (
-                    <li className="nav-text ">
-                      <NavLink
-                        className={({ isActive }) =>
-                          isActive ? "active-link" : "link"
-                        }
-                        to={ROUTES.COMPANYINFO}
-                      >
-                        <div className=" ms-4 subactivelink">CompanyInfo</div>
-                      </NavLink>
-                    </li>
-                  )}
+                    {checkPermission("companyinfo") && (
+                      <li className="nav-text ">
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.COMPANYINFO}
+                        >
+                          <div className=" ms-4 subactivelink">CompanyInfo</div>
+                        </NavLink>
+                      </li>
+                    )}
+
+                    {checkPermission("fmssettings") && (
+                      <li className="nav-text ">
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.FMSSETTINGS}
+                        >
+                          <div className=" ms-4 subactivelink">
+                            Fms Settings
+                          </div>
+                        </NavLink>
+                      </li>
+                    )}
                   </div>
                 </>
               ) : (
                 ""
               )}
-             
             </ul>
-           
-
           </nav>
         </div>
       </div>

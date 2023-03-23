@@ -84,6 +84,7 @@ const ROUTES = {
   AIRPORT: "/airport",
   SEAPORT: "/seaport",
   LOCATIONS: "/locations",
+  INCOTERM: "/incoterm",
   ASSIGN_QUOTATION: "/assign_quotation",
   ASSIGN_QUOTATION_ID: "/assign_quotation/:id",
   LIST_JOB: "/joblist",
@@ -174,6 +175,7 @@ const ROUTES = {
   JOB_INVOICE_ID: "/job_invoice/:id",
   VENDOR_TYPE: "/vendor_type",
   VENDOR: "/vendor",
+  FMSSETTINGS:"/fmssettings",
 
   // CRM -> sales new page
   SALE_ENQUIRY: "/sale_enquiry",

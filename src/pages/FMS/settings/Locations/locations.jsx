@@ -35,10 +35,10 @@ export default function Locations() {
   const [successPopup, setSuccessPopup] = useState(false);
   const [locationType, setLocationType] = useState("");
   const [selectCountry, setSelectCountry] = useState("");
-  console.log("select Country",selectCountry);
+  console.log("select Country", selectCountry);
   const [allLocations, setAllLocations] = useState();
   const [locationId, setLocationId] = useState();
-  const [totallocation,settotallocation]= useState()
+  const [totallocation, settotallocation] = useState();
 
   const close_modal = (mShow, time) => {
     if (!mShow) {
@@ -70,10 +70,10 @@ export default function Locations() {
     try {
       const locations = await PublicFetch.get(`${CRM_BASE_URL_FMS}/locations`);
       console.log("all locations are", locations.data.data);
-      settotallocation(locations.data.data)
+      settotallocation(locations.data.data);
       // setAllLocations(locations.data.data);
       let temp = [];
-      locations.data.data.forEach((item,index)=>{
+      locations.data.data.forEach((item, index) => {
         temp.push({
           location_id: item.location_id,
           location_code: item.location_code,
@@ -83,7 +83,7 @@ export default function Locations() {
           location_countryname: item.countries.country_name,
         });
         setAllLocations(temp);
-      })
+      });
     } catch (err) {
       console.log("error while getting the locations: ", err);
     }
@@ -124,7 +124,7 @@ export default function Locations() {
       location_name: item.location_name,
       location_type: item.location_type,
       location_country: item.location_country,
-      location_countryname:item.location_countryname,
+      location_countryname: item.location_countryname,
     });
     setmodalViewLocation(true);
   };
@@ -184,12 +184,12 @@ export default function Locations() {
       render: (value, item, index) => serialNo + index,
       align: "center",
     },
-   
+
     {
       title: "CODE",
       dataIndex: "location_code",
       key: "location_code",
-      width:"13%",
+      width: "13%",
       // filteredValue: [searchCode],
       // onFilter: (value, record) => {
       //   return String(record.location_code)
@@ -204,15 +204,17 @@ export default function Locations() {
       key: "location_name",
       filteredValue: [searchCode],
       onFilter: (value, record) => {
-        return String(record.location_name)
-          .toLowerCase()
-          .includes(value.toLowerCase()) ||
+        return (
+          String(record.location_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
           String(record.location_code)
-          .toLowerCase()
-          .includes(value.toLowerCase()) ||
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
           String(record.location_countryname)
-          .toLowerCase()
-          .includes(value.toLowerCase())
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
       },
       align: "left",
     },
@@ -220,7 +222,7 @@ export default function Locations() {
       title: "TYPE",
       dataIndex: "location_type",
       key: "location_type",
-      width:"17%",
+      width: "17%",
       filteredValue: [searchbyType],
       onFilter: (value, record) => {
         return String(record.location_type)
@@ -275,7 +277,6 @@ export default function Locations() {
           <div className="col-4">
             <Input.Search
               placeholder="Search"
-            
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchCode}
               onChange={(e) => {
@@ -300,22 +301,22 @@ export default function Locations() {
             />
           </div> */}
           <div className="col-4">
-              <Select
-                allowClear
-                showSearch
-                style={{ width: "100%", marginTop: "8px", borderRadius: "5px" }}
-                placeholder="Search by Type"
-                className="select_search"
-                optionFilterProp="children"
-                onChange={(event) => {
-                  setSearchbyType(event ? [event] : []);
-                }}
-              >
-                <Select.Option value="Airport">Airport</Select.Option>
-                <Select.Option value="Seaport">Seaport</Select.Option>
-                <Select.Option value="City">City</Select.Option>
-              </Select>
-            </div>
+            <Select
+              allowClear
+              showSearch
+              style={{ width: "100%", marginTop: "8px", borderRadius: "5px" }}
+              placeholder="Search by Type"
+              className="select_search"
+              optionFilterProp="children"
+              onChange={(event) => {
+                setSearchbyType(event ? [event] : []);
+              }}
+            >
+              <Select.Option value="Airport">Airport</Select.Option>
+              <Select.Option value="Seaport">Seaport</Select.Option>
+              <Select.Option value="City">City</Select.Option>
+            </Select>
+          </div>
         </div>
         <div className="row my-3">
           <div className="col-4 px-3">
@@ -341,25 +342,30 @@ export default function Locations() {
                 <span className="sizes ms-1">100</span>
               </Select.Option>
             </Select>
-            
           </div>
 
           <div className=" col-4 d-flex align-items-center justify-content-center">
-          {totallocation?.length >0 &&(
-            <MyPagination
-              total={parseInt(totallocation?.length)}
-              current={current}
-              showSizeChanger={true}
-              pageSize={pageSize}
-              onChange={(current, pageSize) => {
-                setCurrent(current);
-                setPageSize(pageSize);
-              }}
-            />
-          )}
+            {totallocation?.length > 0 && (
+              <MyPagination
+                total={parseInt(totallocation?.length)}
+                current={current}
+                showSizeChanger={true}
+                pageSize={pageSize}
+                onChange={(current, pageSize) => {
+                  setCurrent(current);
+                  setPageSize(pageSize);
+                }}
+              />
+            )}
           </div>
           <div className="col-4 d-flex justify-content-end">
-            <Button btnType="add" onClick={() => setModalAddLocation(true)}>
+            <Button
+              btnType="add"
+              onClick={() => {
+                setModalAddLocation(true);
+                addForm.resetFields();
+              }}
+            >
               Add Location
             </Button>
           </div>
@@ -373,7 +379,7 @@ export default function Locations() {
           />
         </div>
         <div className="d-flex mt-4 justify-content-center">
-          {totallocation?.length >0 &&(
+          {totallocation?.length > 0 && (
             <MyPagination
               total={parseInt(totallocation?.length)}
               current={current}
@@ -384,8 +390,8 @@ export default function Locations() {
                 setPageSize(pageSize);
               }}
             />
-            )  }
-          </div>
+          )}
+        </div>
       </div>
 
       {/* {add location modal - Ann} */}

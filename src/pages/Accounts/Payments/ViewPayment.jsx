@@ -132,30 +132,33 @@ const ViewPayment = () => {
       if (res.status === 200) {
         let tempData = [];
         res.data.data.fms_v1_jobs.forEach((item, index) => {
-          console.log("***********************");
-          console.log(item.accounts_v1_invoice_accounts[0]);
-          let obj = {
-            index: index + 1,
-            invoice_no:
-              item.accounts_v1_invoice_accounts[0].invoice_accounts_no,
-            due_date: moment(
-              new Date(
-                item.accounts_v1_invoice_accounts[0].invoice_accounts_due_date
-              )
-            ).format("DD/MM/YYYY"),
-            amount:
-              item.accounts_v1_invoice_accounts[0].invoice_accounts_grand_total,
-            due_amount:
-              item.accounts_v1_invoice_accounts[0].invoice_accounts_due_amount,
-            current_amount: "",
-            balance_amount: "",
-            invoice_accounts_id:
-              item.accounts_v1_invoice_accounts[0].invoice_accounts_invoice_id,
-          };
-          if (amount) {
-            console.log("amount is present", amount);
+          if (item.accounts_v1_invoice_accounts.length > 0) {
+            let obj = {
+              index: index + 1,
+              invoice_no:
+                item.accounts_v1_invoice_accounts[0]?.invoice_accounts_no,
+              due_date: moment(
+                new Date(
+                  item.accounts_v1_invoice_accounts[0]?.invoice_accounts_due_date
+                )
+              ).format("DD/MM/YYYY"),
+              amount:
+                item.accounts_v1_invoice_accounts[0]
+                  ?.invoice_accounts_grand_total,
+              due_amount:
+                item.accounts_v1_invoice_accounts[0]
+                  ?.invoice_accounts_due_amount,
+              current_amount: "",
+              balance_amount: "",
+              invoice_accounts_id:
+                item.accounts_v1_invoice_accounts[0]
+                  ?.invoice_accounts_invoice_id,
+            };
+            if (amount) {
+              console.log("amount is present", amount);
+            }
+            tempData.push(obj);
           }
-          tempData.push(obj);
         });
         setInvoiceData(tempData);
       }

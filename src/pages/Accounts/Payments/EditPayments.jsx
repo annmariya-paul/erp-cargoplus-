@@ -8,7 +8,7 @@ import Input_Number from "../../../components/InputNumber/InputNumber";
 import SelectBox from "../../../components/Select Box/SelectBox";
 import TableData from "../../../components/table/table_data";
 import PublicFetch from "../../../utils/PublicFetch";
-import { ACCOUNTS, CRM_BASE_URL_FMS } from "../../../api/bootapi";
+import { ACCOUNTS, CRM_BASE_URL, CRM_BASE_URL_FMS } from "../../../api/bootapi";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
@@ -170,34 +170,41 @@ const EditPayments = () => {
     console.log("LeadId", LeadId);
     //setLead(LeadId);
     try {
-      const res = await PublicFetch.get(
-        `${CRM_BASE_URL_FMS}/invoice/${LeadId}`
-      );
-      console.log(
-        "here is the invoice response",
-        res.data.data.fms_v1_jobs.accounts_v1_invoice_accounts
-      );
+      const res = await PublicFetch.get(`${CRM_BASE_URL}/lead/${LeadId}`);
+      console.log("here is the response after selecting lead");
+      console.log(res.data);
       if (res.status === 200) {
         let tempData = [];
-        res.data.data.fms_v1_jobs.accounts_v1_invoice_accounts.forEach(
-          (item, index) => {
+        res.data.data.fms_v1_jobs.forEach((item, index) => {
+          console.log(item.accounts_v1_invoice_accounts[0]);
+          if (item.accounts_v1_invoice_accounts.length > 0) {
             let obj = {
               index: index + 1,
-              invoice_no: item.invoice_accounts_no,
-              due_date: moment(new Date(item.invoice_accounts_due_date)).format(
-                "DD/MM/YYYY"
-              ),
-              amount: item.invoice_accounts_grand_total,
-              due_amount: item.invoice_accounts_due_amount,
+              invoice_no:
+                item.accounts_v1_invoice_accounts[0]?.invoice_accounts_no,
+              due_date: moment(
+                new Date(
+                  item.accounts_v1_invoice_accounts[0]?.invoice_accounts_due_date
+                )
+              ).format("DD/MM/YYYY"),
+              amount:
+                item.accounts_v1_invoice_accounts[0]
+                  ?.invoice_accounts_grand_total,
+              due_amount:
+                item.accounts_v1_invoice_accounts[0]
+                  ?.invoice_accounts_due_amount,
               current_amount: "",
               balance_amount: "",
-              invoice_accounts_id: item.invoice_accounts_id,
+              invoice_accounts_id:
+                item.accounts_v1_invoice_accounts[0]
+                  ?.invoice_accounts_invoice_id,
             };
-
+            if (amount) {
+              console.log("amount is present", amount);
+            }
             tempData.push(obj);
           }
-        );
-        console.log("here is the temp data", tempData);
+        });
         setInvoiceData(tempData);
         setInitialInvoiceData(tempData);
       }
@@ -442,9 +449,9 @@ const EditPayments = () => {
                       <Button btnType="save" type="submit">
                         Save
                       </Button>
-                      <Button btnType="save" type="" className="ms-2">
+                      {/* <Button type="" className="ms-2">
                         Cancel
-                      </Button>
+                      </Button> */}
                     </div>
                   </div>
                 </Form>

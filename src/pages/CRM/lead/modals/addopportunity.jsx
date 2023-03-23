@@ -14,7 +14,8 @@ import { message } from "antd";
 import SelectBox from "../../../../components/Select Box/SelectBox";
 import InputType from "../../../../components/Input Type textbox/InputType";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
-export default function AddOpportunity(props) {
+// export default function AddOpportunity(props) {
+  export default function AddOpportunity() {
   const { id } = useParams();
   console.log("ID is ...", id);
 
@@ -142,7 +143,7 @@ export default function AddOpportunity(props) {
           setShowEditModal(false);
           setSuccessPopup(true);
           close_modal(successPopup, 1200);
-          props.onCancel();
+          // props.onCancel();
           form.resetFields();
         } else {
           message.error("fetch data error");
@@ -203,7 +204,7 @@ export default function AddOpportunity(props) {
 
   return (
     <>
-      <Custom_model
+      {/* <Custom_model
         //  Adding_contents
         width={900}
         // Adding_contents
@@ -216,10 +217,13 @@ export default function AddOpportunity(props) {
         footer={false}
         View_list
         list_content={
-          <>
+          <> */}
+           <div className="container-fluid">
+        <div className="row justify-content-md-center">
+        <div className="content-tabs">
             <Form form={form}>
               <div className="px-5">
-                <h5 className="lead_text">Add Opportunity</h5>
+                <h5 className="lead_text mt-3">Add Opportunity</h5>
                 <div className="row px-1">
                   {/* <div className="col-sm-4 pt-2">
                     <label>Opportunity No.</label>
@@ -481,10 +485,10 @@ export default function AddOpportunity(props) {
                 </Button>
               </div>
             </Form>
-          </>
+          {/* </>
         }
         // {...props}
-      ></Custom_model>
+      ></Custom_model> */}
       <Custom_model
         size={`sm`}
         success
@@ -492,6 +496,9 @@ export default function AddOpportunity(props) {
         onHide={() => setModalShow(false)}
         footer={false}
       />
+      </div>
+       </div>
+      </div>
     </>
   );
 }

@@ -22,6 +22,8 @@ import { CRM_BASE_URL_FMS } from "../../../api/bootapi";
 import Custom_model from "../../../components/custom_modal/custom_model";
 import Input_Number from "../../../components/InputNumber/InputNumber";
 import axios from "axios";
+import CheckUnique from "../../../check Unique/CheckUnique";
+import { UniqueErrorMsg } from "../../../ErrorMessages/UniqueErrorMessage";
 
 function CreateJob() {
   const [AllQuotations, setAllQuotations] = useState();
@@ -35,6 +37,7 @@ function CreateJob() {
   const [Errormsg, setErrormsg] = useState();
   const [error, setError] = useState(false);
   const [filenew, setFilenew] = useState();
+  const [uniqueName, setUniqueName] = useState(false);
   const [leadId, setLeadId] = useState("");
   console.log("qto idd id : ", leadId);
   const [successPopup, setSuccessPopup] = useState(false);
@@ -43,6 +46,7 @@ function CreateJob() {
   const [frightmode,setFrightmode]= useState();
   console.log("change",frightmode);
   const [frighttypemode,setFrighttypemode]=useState();
+  const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
   console.log("frighttype mode ",frighttypemode);
   const [currentcount, setCurrentcount] = useState();
   const [noofItems, setNoofItems] = useState(10000);
@@ -64,6 +68,7 @@ function CreateJob() {
   const [allCurrency, setAllCurreny] = useState();
   const [currencyDefault, setCurrencyDefault] = useState();
   const [grandTotal, setGrandTotal] = useState();
+  const [awbno,setAwbno]=useState();
 
   const getBase64 = (file) =>
     new Promise((resolve, reject) => {
@@ -290,7 +295,7 @@ function CreateJob() {
     formData.append("job_freight_type", data.job_freight_type);
     formData.append("job_cargo_type", data.job_cargo_type);
     formData.append("job_carrier", data.job_carrier);
-    formData.append("job_awb_bl_no", data.job_awb);
+    formData.append("job_awb_bl_no", awbno);
     
     formData.append("job_origin_id", data.job_origin_id);
     
@@ -443,6 +448,8 @@ function CreateJob() {
         console.log("Error", err);
       });
   };
+  const [currencyRates, setCurrencyRates] = useState(0);
+  console.log("ratesssss", currencyRates);
   let b;
   const getCurrencyRate = (data) => {
     const code = allCurrency?.filter((item) => {
@@ -459,7 +466,10 @@ function CreateJob() {
         let a = response.data.rates[b];
         console.log("currency match", a);
         // setCurrencyRates(a);
-        addForm.setFieldValue("exchnagerate", a);
+        let rate=1/a;
+        setCurrencyRates(rate);
+
+        addForm.setFieldValue("exchnagerate", rate);
       })
       .catch(function (error) {
         console.log(error);
@@ -852,8 +862,28 @@ function CreateJob() {
                           },
                         ]}
                       >
-                        <InputType />
+                        <InputType 
+                           onChange={(e) => {
+                            setAwbno(e.target.value);
+                            setUniqueName(false);
+                          }}
+                          // onBlur={(e) => {
+                          //   checkemployeeCodeis();
+                          // }}
+                          onBlur={ async () => {
+                            
+                            let a = await CheckUnique({type:"jobawbblno",value:awbno})
+                            console.log("hai how are u", a)
+                            setUniqueName(a);
+                            
+                          }}
+                        />
                       </Form.Item>
+                      {uniqueName ? (
+                            <p style={{ color: "red"  }}>
+                         AWB/BL No{uniqueErrMsg.UniqueErrName}
+                            </p>
+                          ) : null}
                     </div>
                   </div>
                 </div>

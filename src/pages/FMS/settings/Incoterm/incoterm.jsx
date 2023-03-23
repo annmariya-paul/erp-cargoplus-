@@ -18,7 +18,7 @@ import PublicFetch from "../../../../utils/PublicFetch";
 export default function Incoterm() {
   const [addForm] = Form.useForm();
   const [serialNo, setserialNo] = useState(1);
-  const [searchAny,setSearchAny] = useState();
+  const [searchAny, setSearchAny] = useState("");
   const [successPopup, setSuccessPopup] = useState(false);
   const [modalAddIncoterm, setModalAddIncoterm] = useState(false);
   const [modalViewIncoterm, setmodalViewIncoterm] = useState(false);
@@ -86,7 +86,7 @@ export default function Incoterm() {
 
   // {function to repopulate data to view->edit - Ann - 23/3/23}
   const IncotermViewToEdit = (e) => {
-   setIncotermId(e.incoterm_id);
+    setIncotermId(e.incoterm_id);
     addForm.setFieldsValue({
       Incoterm_id: e.incoterm_id,
       Inco_shortName: e.incoterm_short_name,
@@ -178,7 +178,12 @@ export default function Incoterm() {
         console.log("index is :", index);
         return (
           <div className="d-flex justify-content-center align-items-center gap-2">
-            <div className="editIcon m-0" onClick={() => IncotermEdit(index)}>
+            <div
+              className="editIcon m-0"
+              onClick={() => {
+                IncotermEdit(index);
+              }}
+            >
               <FaEdit />
             </div>
             <div
@@ -258,7 +263,13 @@ export default function Incoterm() {
           </div>
 
           <div className="col-4">
-            <Button btnType="add" onClick={() => setModalAddIncoterm(true)}>
+            <Button
+              btnType="add"
+              onClick={() => {
+                setModalAddIncoterm(true);
+                addForm.resetFields();
+              }}
+            >
               New Incoterm
             </Button>
           </div>
@@ -296,48 +307,41 @@ export default function Incoterm() {
               >
                 <div className="row py-4">
                   <div className="col-12 col-sm-6 pt-1">
-                    <label>Short Name</label>
+                    <label>
+                      Short Name<span className="req_star">*</span>
+                    </label>
                     <Form.Item
                       name="incoterm_short_name"
-                      // rules={[
-                      //   {
-                      //     required: true,
-                      //     pattern: new RegExp("^[A-Za-z ]+$"),
-                      //     message: "Please enter a Valid  Name",
-                      //   },
-                      // ]}
+                      rules={[
+                        {
+                          required: true,
+                          // pattern: new RegExp("^[A-Za-z ]+$"),
+                          message: "Please enter a Valid Short Name",
+                        },
+                      ]}
                     >
                       <InputType />
                     </Form.Item>
                   </div>
                   <div className="col-12 col-sm-6 pt-1">
-                    <label>Full Name</label>
+                    <label>
+                      Full Name<span className="req_star">*</span>
+                    </label>
                     <Form.Item
                       name="incoterm_full_name"
-                      // rules={[
-                      //   {
-                      //     required: true,
-                      //     pattern: new RegExp("^[A-Za-z ]+$"),
-                      //     message: "Please enter a Valid  Name",
-                      //   },
-                      // ]}
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please enter a Valid Full Name",
+                        },
+                      ]}
                     >
                       <InputType />
                     </Form.Item>
                   </div>
                   <div className="col-12 pt-1">
                     <label>Description</label>
-                    <Form.Item
-                      className="mt-2"
-                      name="incoterm_description"
-                      // rules={[
-                      //   {
-                      //     required: true,
-                      //     pattern: new RegExp("^[A-Za-z ]+$"),
-                      //     message: "Please enter a Valid  Name",
-                      //   },
-                      // ]}
-                    >
+                    <Form.Item className="mt-2" name="incoterm_description">
                       <TextArea />
                     </Form.Item>
                   </div>
@@ -384,48 +388,42 @@ export default function Incoterm() {
               >
                 <div className="row py-4">
                   <div className="col-12 col-sm-6 pt-1">
-                    <label>Short Name</label>
+                    <label>
+                      Short Name<span className="req_star">*</span>
+                    </label>
                     <Form.Item
                       name="Inco_shortName"
-                      // rules={[
-                      //   {
-                      //     required: true,
-                      //     pattern: new RegExp("^[A-Za-z ]+$"),
-                      //     message: "Please enter a Valid  Name",
-                      //   },
-                      // ]}
+                      rules={[
+                        {
+                          required: true,
+                          // pattern: new RegExp("^[A-Za-z ]+$"),
+                          message: "Please enter a Valid  Name",
+                        },
+                      ]}
                     >
                       <InputType />
                     </Form.Item>
                   </div>
                   <div className="col-12 col-sm-6 pt-1">
-                    <label>Full Name</label>
+                    <label>
+                      Full Name<span className="req_star">*</span>
+                    </label>
                     <Form.Item
                       name="Inco_fullName"
-                      // rules={[
-                      //   {
-                      //     required: true,
-                      //     pattern: new RegExp("^[A-Za-z ]+$"),
-                      //     message: "Please enter a Valid  Name",
-                      //   },
-                      // ]}
+                      rules={[
+                        {
+                          required: true,
+                          // pattern: new RegExp("^[A-Za-z ]+$"),
+                          message: "Please enter a Valid  Name",
+                        },
+                      ]}
                     >
                       <InputType />
                     </Form.Item>
                   </div>
                   <div className="col-12 pt-1">
                     <label>Description</label>
-                    <Form.Item
-                      className="mt-2"
-                      name="Inco_description"
-                      // rules={[
-                      //   {
-                      //     required: true,
-                      //     pattern: new RegExp("^[A-Za-z ]+$"),
-                      //     message: "Please enter a Valid  Name",
-                      //   },
-                      // ]}
-                    >
+                    <Form.Item className="mt-2" name="Inco_description">
                       <TextArea />
                     </Form.Item>
                   </div>

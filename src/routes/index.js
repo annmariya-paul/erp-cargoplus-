@@ -40,6 +40,8 @@ const ROUTES = {
 
   SERVICES: "/services",
   SERVICECREATE: "/create_service",
+  SERVICE_EDIT:"/edit_service",
+  SERVICE_EDIT_ID:"/edit_service/:id",
 
   BRANCHES: "/branches",
 

@@ -466,13 +466,18 @@ function Services() {
         return (
           <div className="d-flex justify-content-center align-items-center gap-3">
             <div
-              onClick={() => {
-                console.log("tb dataa", index);
-                handleEditclick(index);
-              }}
+              // onClick={() => {
+              //   console.log("tb dataa", index);
+              //   handleEditclick(index);
+              // }}
               className="actionEdit m-0 p-0"
             >
+              <Link  
+               to={`${ROUTES.SERVICE_EDIT}/${index.service_id}`}
+               className="editcolor"
+              >
               <FaEdit />
+              </Link>
             </div>
             <Link to={ROUTES.SERVICEDETAILS}>
               <div

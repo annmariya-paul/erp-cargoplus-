@@ -14,7 +14,7 @@ import { AiOutlinePlus } from "react-icons/ai";
 
 function ContactTable(props) {
   const [contactTable, setContactTable] = useState();
-  const [contactLeadId, setContactLeadId] = useState();
+  const [contactCustomerId, setContactCustomerId] = useState();
   const [ContactName, setContactName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -28,17 +28,17 @@ function ContactTable(props) {
   const [addForm] = Form.useForm();
 
   const [oneLeadData, setOneLeadData] = useState();
-  const [LeadId, setLeadId] = useState();
+  const [CustomerId, setCustomerId] = useState();
   // {funtion to fetch each Lead data - Ann mariya (22/11/22) }
-  console.log("hai halo", props.leadscontid);
+  console.log("hai halo", props.customer);
 
   const GetLeadData = () => {
-    PublicFetch.get(`${CRM_BASE_URL}/lead/${props?.leadscontid}`)
+    PublicFetch.get(`${CRM_BASE_URL}/customer/${props?.customer}`)
       .then((res) => {
         if (res?.data?.success) {
           console.log("Unique Lead Id", res?.data?.data);
           setOneLeadData(res?.data?.data);
-          setLeadId(res?.data?.data?.lead_id);
+          setCustomerId(res?.data?.data?.customer_id);
         } else {
           console.log("FAILED TO LOAD DATA");
         }
@@ -57,9 +57,9 @@ function ContactTable(props) {
           // # array to set contacts of corresponding Lead Id - Ann Mariya
           let array = [];
           res?.data?.data?.forEach((item, index) => {
-            setContactLeadId(item?.contact_lead_id);
-            console.log("Lead Id : ", LeadId);
-            if (props.leadscontid === item?.contact_lead_id) {
+            setContactCustomerId(item?.contact_lead_id);
+            console.log("Lead Id : ", CustomerId);
+            if (props.customer === item?.contact_customer_id) {
               console.log("Insie if", item);
               array.push({
                 contact_person_name: item?.contact_person_name,
@@ -83,12 +83,12 @@ function ContactTable(props) {
   };
 
   useEffect(() => {
-    if (props.leadscontid) {
+    if (props.customer) {
       getcontacttable();
       GetLeadData();
     }
     // AddContact();
-  }, [LeadId, props.leadscontid]);
+  }, [CustomerId, props.customer]);
 
   // const close_modal2 = (time) => {
   //   setTimeout(() => {
@@ -133,7 +133,7 @@ function ContactTable(props) {
   // # function AddContact to add contacts - Noufal
   const AddContact = () => {
     PublicFetch.post(`${CRM_BASE_URL}/contact`, {
-      contact_lead_id: parseInt(props.leadscontid),
+      contact_customer_id: parseInt(props.customer),
       contact_person_name: ContactName,
       contact_email: email,
       contact_phone_1: phone,

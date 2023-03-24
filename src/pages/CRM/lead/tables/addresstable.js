@@ -30,12 +30,12 @@ function AddressTable(props) {
   const [LeadId, setLeadId] = useState();
   // {funtion to fetch each Lead data - Ann mariya }
   const GetLeadData = () => {
-    PublicFetch.get(`${CRM_BASE_URL}/lead/${props.lead}`)
+    PublicFetch.get(`${CRM_BASE_URL}/customer/${props.customer}`)
       .then((res) => {
         if (res?.data?.success) {
           console.log("Unique Lead Id", res?.data?.data);
           setOneLeadData(res?.data?.data);
-          setLeadId(res?.data?.data?.lead_id);
+          setLeadId(res?.data?.data?.customer_id);
         } else {
           console.log("FAILED TO LOAD DATA");
         }
@@ -57,7 +57,7 @@ function AddressTable(props) {
         let array = [];
         allAddress?.data?.data?.forEach((item, index) => {
           setAddressLeadId(item?.address_lead_id);
-          if (props.lead === item?.address_lead_id) {
+          if (props.customer === item?.address_customer_id) {
             array.push({
               address_title: item?.address_title,
               address_content: item?.address_content,
@@ -78,15 +78,15 @@ function AddressTable(props) {
   };
 
   useEffect(() => {
-    if (props.lead) {
+    if (props.customer) {
       getAllAddress();
       GetLeadData();
     }
-  }, [LeadId, props.lead]);
+  }, [LeadId, props.customer]);
   // { funtion to add address in lead edit - Ann mariya }
   const AddAddress = (data) => {
     PublicFetch.post(`${CRM_BASE_URL}/address`, {
-      address_lead_id: parseInt(props.lead),
+      address_customer_id: parseInt(props.customer),
       address_title: title,
       address_content: address_data,
       address_pin: pincode,

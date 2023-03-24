@@ -8,6 +8,7 @@ import axios from "axios";
 import PublicFetch from "../../../../utils/PublicFetch";
 import {
   CRM_BASE_URL,
+  CRM_BASE_URL_FMS,
   GENERAL_SETTING_BASE_URL,
 } from "../../../../api/bootapi";
 import SelectBox from "../../../../components/Select Box/SelectBox";
@@ -25,7 +26,9 @@ function Countrystate() {
   const [getCity, setCity] = useState([]);
   const [countries, setCountries] = useState("");
   const [addForm] = Form.useForm();
+  const [frighttype, setFrighttype] = useState();
   const [successPopup, setSuccessPopup] = useState(false);
+
   const navigate = useNavigate();
   const {
     register,
@@ -55,7 +58,21 @@ function Countrystate() {
     }
   };
 
+  const getallfrighttype = async () => {
+    try {
+      const allfrighttypes = await PublicFetch.get(
+        `${CRM_BASE_URL_FMS}/freightTypes`
+      );
+      console.log("Getting all frieght types : ", allfrighttypes.data.data);
+      setFrighttype(allfrighttypes.data.data);
+      // setFrighttypemode(allfrighttypes.data.data.freight_type_mode);
+    } catch (err) {
+      console.log("Error in fetching fright types : ", err);
+    }
+  };
+
   useEffect(() => {
+    getallfrighttype();
     getAllCountries();
   }, []);
 
@@ -155,15 +172,15 @@ function Countrystate() {
             <label>Preferecd Freight Type</label>
             <Form.Item name="lead_location_country">
               <SelectBox allowClear showSearch optionFilterProp="children">
-                {countries &&
-                  countries.length > 0 &&
-                  countries.map((item, index) => {
+                {frighttype &&
+                  frighttype.length > 0 &&
+                  frighttype.map((item, index) => {
                     return (
                       <Select.Option
-                        key={item.country_id}
-                        value={item.country_id}
+                        key={item.freight_type_id}
+                        value={item.freight_type_id}
                       >
-                        {item.country_name}
+                        {item.freight_type_name}
                       </Select.Option>
                     );
                   })}

@@ -16,8 +16,9 @@ import { Select } from "antd";
 import InputType from "../../../../components/Input Type textbox/InputType";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../../routes";
+import Input_Number from "../../../../components/InputNumber/InputNumber";
 
-function Countrystate() {
+function Countrystate(props) {
   const [modalShow, setModalShow] = useState(false);
   const [data, setData] = useState([]);
   const [getCountry, setCountry] = useState();
@@ -46,6 +47,7 @@ function Countrystate() {
       }, time);
     }
   };
+
   const getAllCountries = async () => {
     try {
       const allCountries = await PublicFetch.get(
@@ -70,14 +72,79 @@ function Countrystate() {
       console.log("Error in fetching fright types : ", err);
     }
   };
+  console.log("customer id", props.customerId, props.customer_id);
+
+  const getAccounts = () => {
+    PublicFetch.get(
+      `${CRM_BASE_URL}/customer-accounting?startIndex=0&noOfItems=10`
+    )
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          console.log("success of accounts", res.data.data.customerAccounting);
+          let temp = [];
+          res?.data?.data?.customerAccounting?.forEach((item, index) => {
+            // console.log("acounts of custiomer", item);
+
+            if (props?.customerId == item?.customer_accounting_customer_id) {
+              console.log("acounts of custiomer", item);
+              temp.push({
+                customer_accounting_id: item.customer_accounting_id,
+                customer_accounting_credit_days:
+                  item.customer_accounting_credit_days,
+                customer_accounting_preferred_freight_type:
+                  item.customer_accounting_preferred_freight_type,
+                customer_accounting_qtn_validity_days:
+                  item.customer_accounting_qtn_validity_days,
+                customer_accounting_credit_limit:
+                  item.customer_accounting_credit_limit,
+                customer_accounting_tax_no: item.customer_accounting_tax_no,
+                customer_accounting_customer_id:
+                  item.customer_accounting_customer_id,
+              });
+              addForm.setFieldsValue({
+                customer_accounting_id: item.customer_accounting_id,
+                customer_accounting_credit_days:
+                  item.customer_accounting_credit_days,
+                customer_accounting_preferred_freight_type:
+                  item.customer_accounting_preferred_freight_type,
+                customer_accounting_qtn_validity_days:
+                  item.customer_accounting_qtn_validity_days,
+                customer_accounting_credit_limit:
+                  item.customer_accounting_credit_limit,
+                customer_accounting_tax_no: item.customer_accounting_tax_no,
+                customer_accounting_customer_id:
+                  item.customer_accounting_customer_id,
+              });
+            }
+          });
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
 
   useEffect(() => {
+    if (props.customerId) {
+      getAccounts();
+    }
     getallfrighttype();
     getAllCountries();
-  }, []);
+  }, [props.customerId]);
 
-  const OnSubmit = (data) => {
-    PublicFetch.post(`${CRM_BASE_URL}/lead-location`, data)
+  const OnSubmit = (value) => {
+    const data = {
+      customer_accounting_tax_no: value.customer_accounting_tax_no,
+      customer_accounting_customer_id: props?.customer_id,
+      customer_accounting_credit_days: value.customer_accounting_credit_days,
+      customer_accounting_preferred_freight_type:
+        value.customer_accounting_preferred_freight_type,
+      customer_accounting_qtn_validity_days:
+        value.customer_accounting_qtn_validity_days,
+      customer_accounting_credit_limit: value.customer_accounting_credit_limit,
+    };
+    PublicFetch.post(`${CRM_BASE_URL}/customer-accounting`, data)
       .then((res) => {
         console.log("Response", res);
         if (res.data.success) {
@@ -152,25 +219,25 @@ function Countrystate() {
         <div className="row py-5 px-1">
           <div className="col-sm-4">
             <label>Tax No</label>
-            <Form.Item name="lead_location_city">
+            <Form.Item name="customer_accounting_tax_no">
               <InputType />
             </Form.Item>
           </div>
           <div className="col-sm-4">
             <label>Credit Days</label>
-            <Form.Item name="lead_location_city">
-              <InputType />
+            <Form.Item name="customer_accounting_credit_days">
+              <Input_Number />
             </Form.Item>
           </div>
           <div className="col-sm-4">
             <label>Credit Limit</label>
-            <Form.Item name="lead_location_city">
-              <InputType />
+            <Form.Item name="customer_accounting_credit_limit">
+              <Input_Number />
             </Form.Item>
           </div>
           <div className="col-sm-4">
             <label>Preferecd Freight Type</label>
-            <Form.Item name="lead_location_country">
+            <Form.Item name="customer_accounting_preferred_freight_type">
               <SelectBox allowClear showSearch optionFilterProp="children">
                 {frighttype &&
                   frighttype.length > 0 &&
@@ -190,8 +257,8 @@ function Countrystate() {
 
           <div className="col-sm-4">
             <label>Qtn validity Days</label>
-            <Form.Item name="lead_location_state">
-              <InputType />
+            <Form.Item name="customer_accounting_qtn_validity_days">
+              <Input_Number />
             </Form.Item>
           </div>
 

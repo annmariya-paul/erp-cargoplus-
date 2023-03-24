@@ -57,7 +57,7 @@ function ContactTable(props) {
           // # array to set contacts of corresponding Lead Id - Ann Mariya
           let array = [];
           res?.data?.data?.forEach((item, index) => {
-            setContactCustomerId(item?.contact_lead_id);
+            setContactCustomerId(item?.contact_customer_id);
             console.log("Lead Id : ", CustomerId);
             if (props.customer === item?.contact_customer_id) {
               console.log("Insie if", item);

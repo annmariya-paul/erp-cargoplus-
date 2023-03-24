@@ -90,7 +90,7 @@ export default function LeadList() {
         if (res?.data?.success) {
           console.log("All lead data", res?.data?.data);
           // setAllLeadList(res?.data?.data?.leads);
-          setTotalcount(res?.data?.data?.totalCount);
+          setTotalcount(res?.data?.data?.total);
           setCurrentcount(res?.data?.data?.currentCount);
           let array = [];
           res?.data?.data?.customers?.forEach((item, index) => {
@@ -221,9 +221,9 @@ export default function LeadList() {
     },
 
     {
-      title: "ORGANIZATION",
-      dataIndex: "customer_type",
-      key: "customer_type",
+      title: "EMAIL",
+      dataIndex: "customer_email",
+      key: "customer_email",
       // width: "23%",
       align: "ledt",
     },
@@ -287,7 +287,7 @@ export default function LeadList() {
           <div className="d-flex justify-content-center align-items-center gap-2">
             <div className="m-0">
               <Link
-                to={`${ROUTES.LEAD_EDIT}/${index.customer_id}`}
+                to={`${ROUTES.CUSTOMER_EDIT}/${index.customer_id}`}
                 className="editcolor"
               >
                 <FaEdit />
@@ -491,12 +491,12 @@ export default function LeadList() {
               />
             </div>
             <div className="col-4 d-flex justify-content-end">
-              <Link to={ROUTES.LEAD}>
+              <Link to={ROUTES.CUSTOMER}>
                 <Button
                   btnType="add"
                   // className="add_opportunity"
                 >
-                  Add Lead
+                  Add Customer
                 </Button>
               </Link>
             </div>

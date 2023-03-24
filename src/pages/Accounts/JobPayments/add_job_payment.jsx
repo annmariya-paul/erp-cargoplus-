@@ -256,6 +256,7 @@ export default function AddJobPayments() {
                 <InputType disabled />
               </Form.Item>
             </div>
+
           </div>
           <div className="row jobpay_cards mt-3 mx-0 px-2 py-3">
             <div className="col-12">
@@ -318,6 +319,7 @@ export default function AddJobPayments() {
                 />
               </Form.Item>
             </div>
+
           </div>
           <div className="row jobpay_cards mt-3 mx-0 px-2 py-3">
             <div className="col-12">
@@ -365,6 +367,7 @@ export default function AddJobPayments() {
                 )}
               </Form.Item>
             </div>
+            
           </div>
           <div className="col-12 d-flex justify-content-center mt-4 gap-3">
             <Button btnType="save" className="save_button">

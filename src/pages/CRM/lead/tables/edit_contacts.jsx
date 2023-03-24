@@ -11,6 +11,7 @@ import Custom_model from "../../../../components/custom_modal/custom_model";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { CRM_BASE_URL } from "../../../../api/bootapi";
 import Phone_Input from "../../../../components/PhoneInput/phoneInput";
+import { AiOutlinePlus } from "react-icons/ai";
 
 function EditContact(props) {
   const [contactTable, setContactTable] = useState();
@@ -22,15 +23,15 @@ function EditContact(props) {
   const [mobile, setMobile] = useState("");
   const [designation, setDesignation] = useState("");
   const [editContactModal, setEditContactModel] = useState(false);
-  const [modalShow, setModalShow] = useState(true);
+  const [modalShow, setModalShow] = useState(false);
   const [showSuccessMOdal, setShowSuccessModal] = useState(false);
   const [serialNo, setserialNo] = useState(1);
-  const [editcontacts,setEditContacts] = useState({
-  editName:"",
-  editEmail:"",
-  editPhone:"",
-  editMobile:"",
-  editDesignation:"",
+  const [editcontacts, setEditContacts] = useState({
+    editName: "",
+    editEmail: "",
+    editPhone: "",
+    editMobile: "",
+    editDesignation: "",
   });
   const [addForm] = Form.useForm();
   const [editForm] = Form.useForm();
@@ -62,23 +63,22 @@ function EditContact(props) {
         if (res.data.success) {
           console.log("all contacts", res?.data?.data);
           // {array to set contacts for corresponding lead id}
-          let array = [];
+          let temp = [];
           res?.data?.data?.forEach((item, index) => {
-            setContactLeadId(item?.contact_lead_id);
-            if (LeadId === item?.contact_lead_id) {
-              {
-                array.push({
-                  contact_id: item?.contact_id,
-                  contact_person_name: item?.contact_person_name,
-                  contact_email: item?.contact_email,
-                  contact_phone_1: item?.contact_phone_1,
-                  contact_phone_2: item?.contact_phone_2,
-                  contact_designation: item?.contact_designation,
-                });
-                setContactTable(array);
-              }
+            if (props?.leadid == item?.contact_lead_id) {
+              setContactLeadId(item?.contact_lead_id);
+              console.log("single contact by lead", item);
+              temp.push({
+                contact_id: item?.contact_id,
+                contact_person_name: item?.contact_person_name,
+                contact_email: item?.contact_email,
+                contact_phone_1: item?.contact_phone_1,
+                contact_phone_2: item?.contact_phone_2,
+                contact_designation: item?.contact_designation,
+              });
             }
           });
+          setContactTable(temp);
         } else {
           console.log("Failed to fetch data");
         }
@@ -89,9 +89,11 @@ function EditContact(props) {
   };
 
   useEffect(() => {
-    getContacts();
-    GetLeadData();
-  }, [LeadId]);
+    if (props.leadid) {
+      getContacts();
+      GetLeadData();
+    }
+  }, [props.leadid]);
 
   const handleEditedclick = (i) => {
     console.log("edit in list...", i);
@@ -186,6 +188,7 @@ function EditContact(props) {
 
   console.log(editcontacts.editPhone);
   console.log(editcontacts.editMobile);
+  console.log("toggle state", props.toggle);
   const columns = [
     {
       title: "No.",
@@ -238,8 +241,24 @@ function EditContact(props) {
       key: "contact_designation",
     },
   ];
+
+  useEffect(() => {
+    if (props.toggle == true && contactTable?.length <= 0) {
+      setModalShow(true);
+    }
+  }, [props.toggle, contactTable?.length]);
+
+  console.log("Contacttable data", contactTable?.length);
+
   return (
     <div>
+      <div className="row">
+        <div className="col-12">
+          <Button btnType="add" onClick={() => setModalShow(true)}>
+            Add <AiOutlinePlus />
+          </Button>
+        </div>
+      </div>
       <div className="datatable">
         <TableData
           data={contactTable}
@@ -298,51 +317,6 @@ function EditContact(props) {
                       onChange={(e) => setContactName(e.target.value)}
                     />
                   </Form.Item>
-
-                  <label>Email</label>
-                  <Form.Item
-                    name="email"
-                    rules={[
-                      {
-                        required: true,
-                        pattern: new RegExp(
-                          "^[A-Za-z0-9_!#$%&'*+/=?`{|}~^.-]+@[A-Za-z0-9.-]+$"
-                        ),
-                        message: "Please enter a Valid Email",
-                      },
-                    ]}
-                  >
-                    <InputType
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                    />
-                  </Form.Item>
-
-                  <label>Phone Primary</label>
-                  <Form.Item
-                    name="phone"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please enter a Valid Phone number",
-                      },
-                    ]}
-                  >
-                    <Phone_Input
-                      countryCodeEditable={false}
-                      value={phone}
-                      onChange={(value) => setPhone(value)}
-                    />
-                  </Form.Item>
-
-                  <label>Phone Secondary</label>
-                  <Form.Item name="mobile">
-                    <Phone_Input
-                      value={mobile}
-                      onChange={(value) => setMobile(value)}
-                    />
-                  </Form.Item>
-
                   <label>Designation</label>
                   <Form.Item
                     name="designation"
@@ -367,6 +341,49 @@ function EditContact(props) {
                     <InputType
                       value={designation}
                       onChange={(e) => setDesignation(e.target.value)}
+                    />
+                  </Form.Item>
+                  <label>Phone</label>
+                  <Form.Item
+                    name="phone"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please enter a Valid Phone number",
+                      },
+                    ]}
+                  >
+                    <Phone_Input
+                      countryCodeEditable={false}
+                      value={phone}
+                      onChange={(value) => setPhone(value)}
+                    />
+                  </Form.Item>
+
+                  <label>Mobile</label>
+                  <Form.Item name="mobile">
+                    <Phone_Input
+                      value={mobile}
+                      onChange={(value) => setMobile(value)}
+                    />
+                  </Form.Item>
+
+                  <label>Email</label>
+                  <Form.Item
+                    name="email"
+                    rules={[
+                      {
+                        required: true,
+                        pattern: new RegExp(
+                          "^[A-Za-z0-9_!#$%&'*+/=?`{|}~^.-]+@[A-Za-z0-9.-]+$"
+                        ),
+                        message: "Please enter a Valid Email",
+                      },
+                    ]}
+                  >
+                    <InputType
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                     />
                   </Form.Item>
                 </div>
@@ -436,66 +453,6 @@ function EditContact(props) {
                       value={editcontacts.editName}
                     />
                   </Form.Item>
-
-                  <label>Email</label>
-                  <Form.Item
-                    name="editEmail"
-                    rules={[
-                      {
-                        required: true,
-                        pattern: new RegExp(
-                          "^[A-Za-z0-9_!#$%&'*+/=?`{|}~^.-]+@[A-Za-z0-9.-]+$"
-                        ),
-                        message: "Please enter a Valid Email",
-                      },
-                    ]}
-                  >
-                    <InputType
-                      onChange={(e) =>
-                        setEditContacts({
-                          ...editcontacts,
-                          editEmail: e.target.value,
-                        })
-                      }
-                      value={editcontacts.editEmail}
-                    />
-                  </Form.Item>
-
-                  <label>Phone Primary</label>
-                  <Form.Item
-                    name="editPhone"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please enter a Valid Phone number",
-                      },
-                    ]}
-                  >
-                    <Phone_Input
-                      countryCodeEditable={false}
-                      value={editcontacts.editPhone}
-                      onChange={(value) =>
-                        setEditContacts({
-                          ...editcontacts,
-                          editPhone: value,
-                        })
-                      }
-                    />
-                  </Form.Item>
-
-                  <label>Phone Secondary</label>
-                  <Form.Item name="editMobile">
-                    <Phone_Input
-                      value={editcontacts.editMobile}
-                      onChange={(value) =>
-                        setEditContacts({
-                          ...editcontacts,
-                          editMobile: value,
-                        })
-                      }
-                    />
-                  </Form.Item>
-
                   <label>Designation</label>
                   <Form.Item
                     name="editDesignation"
@@ -527,6 +484,64 @@ function EditContact(props) {
                         })
                       }
                       value={editcontacts.editDesignation}
+                    />
+                  </Form.Item>
+
+                  <label>Phone </label>
+                  <Form.Item
+                    name="editPhone"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please enter a Valid Phone number",
+                      },
+                    ]}
+                  >
+                    <Phone_Input
+                      countryCodeEditable={false}
+                      value={editcontacts.editPhone}
+                      onChange={(value) =>
+                        setEditContacts({
+                          ...editcontacts,
+                          editPhone: value,
+                        })
+                      }
+                    />
+                  </Form.Item>
+
+                  <label>Mobile</label>
+                  <Form.Item name="editMobile">
+                    <Phone_Input
+                      value={editcontacts.editMobile}
+                      onChange={(value) =>
+                        setEditContacts({
+                          ...editcontacts,
+                          editMobile: value,
+                        })
+                      }
+                    />
+                  </Form.Item>
+                  <label>Email</label>
+                  <Form.Item
+                    name="editEmail"
+                    rules={[
+                      {
+                        required: true,
+                        pattern: new RegExp(
+                          "^[A-Za-z0-9_!#$%&'*+/=?`{|}~^.-]+@[A-Za-z0-9.-]+$"
+                        ),
+                        message: "Please enter a Valid Email",
+                      },
+                    ]}
+                  >
+                    <InputType
+                      onChange={(e) =>
+                        setEditContacts({
+                          ...editcontacts,
+                          editEmail: e.target.value,
+                        })
+                      }
+                      value={editcontacts.editEmail}
                     />
                   </Form.Item>
                 </div>

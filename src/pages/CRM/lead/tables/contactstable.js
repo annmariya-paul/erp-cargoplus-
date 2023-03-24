@@ -60,7 +60,7 @@ function ContactTable(props) {
             setContactLeadId(item?.contact_lead_id);
             console.log("Lead Id : ", LeadId);
             if (props.leadscontid === item?.contact_lead_id) {
-              console.log("Insie if");
+              console.log("Insie if", item);
               array.push({
                 contact_person_name: item?.contact_person_name,
                 contact_email: item?.contact_email,
@@ -68,13 +68,9 @@ function ContactTable(props) {
                 contact_phone_2: item?.contact_phone_2,
                 contact_designation: item?.contact_designation,
               });
-              setContactTable([...array]);
             }
           });
-          if (props.leadscontid && array?.length <= 0) {
-            setModalShow(true);
-            console.log("this ais test", modalShow);
-          }
+          setContactTable([...array]);
 
           // setContactTable(res.data.data);
         } else {
@@ -175,6 +171,13 @@ function ContactTable(props) {
       }, time);
     }
   };
+
+  useEffect(() => {
+    if (props.toggle == true && contactTable?.length <= 0) {
+      setModalShow(true);
+      console.log("this ais test", modalShow);
+    }
+  }, [props.toggle, contactTable?.length]);
 
   return (
     <div>

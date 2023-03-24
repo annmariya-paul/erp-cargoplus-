@@ -11,11 +11,12 @@ import TextArea from "../../../../components/ InputType TextArea/TextArea";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import Button from "../../../../components/button/button";
 import Custom_model from "../../../../components/custom_modal/custom_model";
+import { AiOutlinePlus } from "react-icons/ai";
 
 function Edit_Address(props) {
   const [value, setValue] = useState();
   const [modalShow, setModalShow] = useState(false);
-  const [modelshowAdd, setModalshowAdd] = useState(true);
+  const [modelshowAdd, setModalshowAdd] = useState(false);
   const [editAddressModal, setEditAddressModel] = useState(false);
   const [title, setTitle] = useState();
   const [address_data, setAddress_data] = useState();
@@ -61,19 +62,17 @@ function Edit_Address(props) {
         let array = [];
         allAddress?.data?.data?.forEach((item, index) => {
           setAddressLeadId(item?.address_lead_id);
-          if (LeadId === item?.address_lead_id) {
-            {
-              array.push({
-                address_id: item?.address_id,
-                address_title: item?.address_title,
-                address_content: item?.address_content,
-                address_pin: item?.address_pin,
-                address_contact: item?.address_contact,
-              });
-              setAddressTable(array);
-            }
+          if (props?.leadid == item?.address_lead_id) {
+            array.push({
+              address_id: item?.address_id,
+              address_title: item?.address_title,
+              address_content: item?.address_content,
+              address_pin: item?.address_pin,
+              address_contact: item?.address_contact,
+            });
           }
         });
+        setAddressTable(array);
       } else {
         message.error("fetch data error");
       }
@@ -84,9 +83,11 @@ function Edit_Address(props) {
   };
 
   useEffect(() => {
-    getAddresses();
-    GetLeadData();
-  }, [LeadId]);
+    if (props.leadid) {
+      getAddresses();
+      GetLeadData();
+    }
+  }, [props.leadid]);
 
   // {function to show data in input fields -  Ann mariya (23-11-22)}
   const handleEditedclick = (i) => {
@@ -156,7 +157,7 @@ function Edit_Address(props) {
           setTitle();
           setModalshowAdd(false);
           setModalShow(true);
-           addForm.resetFields();
+          addForm.resetFields();
           close_modal(modalShow, 1200);
           props.onHide();
         } else {
@@ -223,8 +224,20 @@ function Edit_Address(props) {
       key: "address_contact",
     },
   ];
+  useEffect(() => {
+    if (props.toggle == true && addressTable?.length <= 0) {
+      setModalshowAdd(true);
+    }
+  }, [props.toggle, addressTable?.length]);
   return (
     <div>
+      <div className="row">
+        <div className="col-12">
+          <Button btnType="add" onClick={() => setModalshowAdd(true)}>
+            Add <AiOutlinePlus />
+          </Button>
+        </div>
+      </div>
       <div className="datatable">
         <TableData
           data={addressTable}

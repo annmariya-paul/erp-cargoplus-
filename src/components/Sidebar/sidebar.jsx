@@ -40,10 +40,10 @@ export default function Sidebar({ showSidebar }) {
   const [CRMpurchasing, setCRMpurchasing] = useState(false);
   const [ACCOUNTSopen, setACCOUNTSopen] = useState(false);
 
-  const [CRMproductmaster,setCRMproductmaster]= useState(false)
-  const [CRMservicemaster,setCRMservicemaster]= useState(false)
-  const [CRMproduct,setCRMproduct] = useState(false)
-  const [CRMservice,setCRMservice] = useState(false)
+  const [CRMproductmaster, setCRMproductmaster] = useState(false);
+  const [CRMservicemaster, setCRMservicemaster] = useState(false);
+  const [CRMproduct, setCRMproduct] = useState(false);
+  const [CRMservice, setCRMservice] = useState(false);
 
   const [CRMgeneral, setCRMgeneral] = useState(false);
   const [FMSOpen, setFMSOpen] = useState(false);
@@ -541,7 +541,7 @@ export default function Sidebar({ showSidebar }) {
                           className={({ isActive }) =>
                             isActive ? "active-link" : "link"
                           }
-                          to={ROUTES.LEADLIST}
+                          to={ROUTES.CUSTOMER_LIST}
                         >
                           <div className="ms-4 subactivelink"> Customer</div>
                         </NavLink>
@@ -1135,7 +1135,9 @@ export default function Sidebar({ showSidebar }) {
                               }
                               to={ROUTES.INCOTERM}
                             >
-                              <div className=" ms-5 subactivelink">Incoterm</div>
+                              <div className=" ms-5 subactivelink">
+                                Incoterm
+                              </div>
                             </NavLink>
                           </li>
                         )}

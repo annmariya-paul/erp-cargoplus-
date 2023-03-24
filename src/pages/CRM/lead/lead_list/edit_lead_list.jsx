@@ -45,7 +45,7 @@ function LeadEdit() {
   const [modalAddress, setModalAddress] = useState(false);
   const [modalOpportunity, setModalOpportunity] = useState(false);
   const [leadType, setLeadType] = useState("");
-  const [leadName, setLeadName] = useState("");
+  const [CustomerName, setCustomerName] = useState("");
   const [leadUsertype, setLeadUsertype] = useState("");
   const [leadOrganization, setLeadOrganization] = useState("");
   const [leadSource, setLeadSource] = useState("");
@@ -72,11 +72,11 @@ function LeadEdit() {
   const navigate = useNavigate();
 
   const goToLeadlist = () => {
-    navigate("/lead_list");
+    navigate(ROUTES.CUSTOMER_LIST);
   };
 
   const handleCancel = () => {
-    navigate(ROUTES.LEADLIST);
+    navigate(ROUTES.CUSTOMER_LIST);
   };
   console.log("lead attachment", leadAttachment);
 
@@ -111,13 +111,13 @@ function LeadEdit() {
   const [oneLeadData, setOneLeadData] = useState();
 
   const GetLeadData = () => {
-    PublicFetch.get(`${CRM_BASE_URL}/lead/${id}`)
+    PublicFetch.get(`${CRM_BASE_URL}/customer/${id}`)
       .then((res) => {
         if (res?.data?.success) {
           console.log("Unique Lead Id data", res?.data?.data);
           setOneLeadData(res?.data?.data);
           setLeadType(res?.data?.data?.lead_type);
-          setLeadName(res?.data?.data?.lead_customer_name);
+          setCustomerName(res?.data?.data?.customer_name);
           setLeadUsertype(res?.data?.data?.lead_user_type);
           setLeadOrganization(res?.data?.data?.lead_organization);
           setLeadSource(res?.data?.data?.lead_source);
@@ -127,15 +127,17 @@ function LeadEdit() {
           setLeadStatus(res?.data?.data?.lead_status);
           setleadcreditdays(res?.data?.data?.lead_credit_days);
           editForm.setFieldsValue({
-            leadType: res?.data?.data?.lead_type,
-            leadName: res?.data?.data?.lead_customer_name,
-            leadUsertype: res?.data?.data?.lead_user_type,
-            leadSource: res?.data?.data?.lead_source,
-            leadOrganization: res?.data?.data?.lead_organization,
-            leadDescription: res?.data?.data?.lead_description,
-            leadAttachment: res?.data?.data?.attachments,
-            leadStatus: res?.data?.data?.lead_status,
-            creditdays: res?.data?.data?.lead_credit_days,
+            customer_type: res?.data?.data?.customer_type,
+            customer_name: res?.data?.data?.customer_name,
+            customer_address: res?.data?.data?.customer_address,
+            customer_phone: res?.data?.data?.customer_phone,
+            customer_email: res?.data?.data?.customer_email,
+            customer_website: res?.data?.data?.customer_website,
+            customer_logo: res?.data?.data?.customer_logo,
+            customer_remarks: res?.data?.data?.customer_remarks,
+            customer_country: res?.data?.data?.customer_country,
+            customer_state: res?.data?.data?.customer_state,
+            customer_city: res?.data?.data?.customer_city,
           });
         } else {
           console.log("FAILED T LOAD DATA");
@@ -225,6 +227,8 @@ function LeadEdit() {
       .then((res) => {
         console.log("response", res);
         if (res.data.success) {
+          setModalShow(true);
+
           close_modal(modalShow, 1000, res?.data?.data);
           setModalContact(false);
         }
@@ -250,7 +254,7 @@ function LeadEdit() {
     }
   };
 
-  console.log("kkkkkk", leadDescription, leadName);
+  console.log("kkkkkk", leadDescription, CustomerName);
   const beforeUpload = (file, fileList) => {};
   return (
     <>
@@ -258,7 +262,7 @@ function LeadEdit() {
         <div className="lead_container">
           <div className="row justify-content-md-center">
             <div className="mb-2">
-              <h5 class="lead_text"> Edit Customer ({leadName})</h5>
+              <h5 class="lead_text"> Edit Customer ({CustomerName})</h5>
             </div>
             <div className="bloc-tabs tabs-responsive">
               <div className="col-xl-1 col-sm-2 pe-1">
@@ -419,7 +423,7 @@ function LeadEdit() {
                       >
                         <InputType
                           // value={leadName}
-                          onChange={(e) => setLeadName(e.target.value)}
+                          onChange={(e) => setCustomerName(e.target.value)}
                         />
                       </Form.Item>
                     </div>
@@ -471,7 +475,7 @@ function LeadEdit() {
                         ]}
                       >
                         <TextArea
-                          disabled={organizationDisable === "I"}
+                          // disabled={organizationDisable === "I"}
                           // value={leadOrganization}
                           onChange={(e) => setLeadOrganization(e.target.value)}
                         />
@@ -708,7 +712,7 @@ function LeadEdit() {
                       // show={modalContact}
                       // onHide={() => setModalContact(false)}
                       toggle={toggle2}
-                      leadid={id}
+                      Customerid={id}
                     />
                   </div>
                   <div className="col mt-4">
@@ -736,7 +740,7 @@ function LeadEdit() {
                   </div>
                   <div className="col-12 mt-2">
                     <Edit_Address
-                      leadid={id}
+                      Customerid={id}
                       toggle={toggle3}
                       // show={modalAddress}
                       // onHide={() => setModalAddress(false)}
@@ -755,15 +759,15 @@ function LeadEdit() {
                 }
               >
                 <div className="col-lg" style={{ borderRadius: "3px" }}>
-                  <Countrystate />
+                  <Countrystate customerId={id} />
                 </div>
               </div>{" "}
-              <Custom_model
+              {/* <Custom_model
                 size={`sm`}
                 success
                 show={modalShow}
                 onHide={() => setModalShow(false)}
-              />
+              /> */}
             </div>
           </div>
         </div>

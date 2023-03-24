@@ -160,15 +160,15 @@ function App() {
             <Route path={ROUTES.COUNTRYSELECT} element={<ProtectedRoute />}>
               <Route index element={<SelectCountry />} />
             </Route>
-            <Route path={ROUTES.LEAD} element={<ProtectedRoute />}>
+            <Route path={ROUTES.CUSTOMER} element={<ProtectedRoute />}>
               <Route index element={<Lead />} />
             </Route>
 
-            <Route path={ROUTES.LEADLIST} element={<ProtectedRoute />}>
+            <Route path={ROUTES.CUSTOMER_LIST} element={<ProtectedRoute />}>
               <Route index element={<LeadList />} />
             </Route>
 
-            <Route path={ROUTES.LEAD} element={<ProtectedRoute />}>
+            <Route path={ROUTES.CUSTOMER} element={<ProtectedRoute />}>
               <Route index element={<Lead />} />
             </Route>
 
@@ -203,7 +203,7 @@ function App() {
               <Route index element={<LeadReport />} />
             </Route>
 
-            <Route path={ROUTES.LEAD_EDIT_ID} element={<ProtectedRoute />}>
+            <Route path={ROUTES.LEAD_CUSTOMER_ID} element={<ProtectedRoute />}>
               <Route index element={<LeadEdit />} />
             </Route>
 

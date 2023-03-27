@@ -11,6 +11,8 @@ import Button from "../../../../components/button/button";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
 import SelectBox from "../../../../components/Select Box/SelectBox";
 import PublicFetch from "../../../../utils/PublicFetch";
+import {ROUTES} from "../../../../routes";
+import { Link, useNavigate } from "react-router-dom";
 import {
   CRM_BASE_URL_PURCHASING,
   GENERAL_SETTING_BASE_URL,
@@ -512,7 +514,7 @@ function Vendor() {
             />
           </div>
 
-          <div className="col-4 ">
+          {/* <div className="col-4 ">
             <Button
               btnType="add"
               onClick={() => {
@@ -521,6 +523,13 @@ function Vendor() {
             >
               Add Vendor
             </Button>
+          </div> */}
+           <div className="col-4 d-flex justify-content-end">
+            <div className="col mb-2 px-4">
+              <Link to={ROUTES.ADDVENDOR} style={{ color: "white" }}>
+                <Button btnType="add">Add Vendor</Button>
+              </Link>
+            </div>
           </div>
         </div>
         <div className="datatable">
@@ -544,7 +553,7 @@ function Vendor() {
           />
         </div>
       </div>
-
+{/* 
       <CustomModel
         show={modalvendor}
         onHide={() => setModalvendor(false)}
@@ -569,7 +578,7 @@ function Vendor() {
             >
               <div className="row px-4">
                 <div className="col-4 pt-1">
-                  <label> Name</label>
+                  <label> Nameeeeee</label>
                   <div>
                     <Form.Item
                       name="vendorname"
@@ -837,7 +846,7 @@ function Vendor() {
           onHide={() => setSuccessPopup(false)}
           success
         />
-      </CustomModel>
+      </CustomModel> */}
 
       <CustomModel
         show={showViewModal}

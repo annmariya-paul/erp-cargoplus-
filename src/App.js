@@ -63,6 +63,7 @@ import ViewQuotation from "./pages/FMS/Quotations/create quotation/view_quotatio
 import Carrierlist from "./pages/FMS/settings/Carrier/carrier";
 import ListAgent from "./pages/FMS/Agent mangement/ListAgent";
 import UpdateAgent from "./pages/FMS/Agent mangement/Updateagent";
+import Addvendor from "./pages/CRM/Purchase/vendor/addvendor";
 
 import Enquiries from "./pages/FMS/Opportunity_assigns/Enquiries/Enquiries";
 import Agent_Response from "./pages/FMS/Opportunity_assigns/Enquiries/agent_response";
@@ -347,6 +348,8 @@ function App() {
               path={ROUTES.ASSIGN_OPPORTUNITIES_ID}
               element={<ProtectedRoute />}
             >
+
+        
               <Route index element={<Assign_opportunity />} />
             </Route>
 
@@ -359,6 +362,10 @@ function App() {
 
             <Route path={ROUTES.CREATEAGENT} element={<ProtectedRoute />}>
               <Route index element={<CreateAgent />} />
+            </Route>
+
+            <Route path={ROUTES.ADDVENDOR} element={<ProtectedRoute />}>
+              <Route index element={<Addvendor />} />
             </Route>
 
             {/* <Route

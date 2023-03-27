@@ -1,20 +1,18 @@
-import { Form, Checkbox, DatePicker, Select } from "antd";
+import { DatePicker, Form, Select } from "antd";
 import React, { useEffect, useState } from "react";
+import { BsPlusCircleFill } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
+import { CRM_BASE_URL } from "../../../../api/bootapi";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
+import Button from "../../../../components/button/button";
+import CustomModel from "../../../../components/custom_modal/custom_model";
 import FileUpload from "../../../../components/fileupload/fileUploader";
 import InputType from "../../../../components/Input Type textbox/InputType";
 import SelectBox from "../../../../components/Select Box/SelectBox";
 import { ROUTES } from "../../../../routes";
-import { useNavigate, useParams } from "react-router-dom";
-import Button from "../../../../components/button/button";
-import { BsPlusCircleFill } from "react-icons/bs";
-import "../enquiry/enquiry.scss";
-import CustomModel from "../../../../components/custom_modal/custom_model";
-
-import Custom_model from "../../../../components/custom_modal/custom_model";
 import PublicFetch from "../../../../utils/PublicFetch";
-import { CRM_BASE_URL } from "../../../../api/bootapi";
-function Enquiry() {
+
+function EditEnquiry() {
   const [addForm] = Form.useForm();
   const [SuccessPopup, setSuccessPopup] = useState(false);
   const [img, setImg] = useState([]);
@@ -41,7 +39,7 @@ function Enquiry() {
     GetAllCustomers();
   }, []);
   return (
-    <>
+    <div>
       <div className="container-fluid">
         <Form
           name="addForm"
@@ -363,15 +361,14 @@ function Enquiry() {
               </Form>
             </>
           }
-        >
-          <Custom_model
-            size={"sm"}
-            // show={successPopup}
-            onHide={() => setSuccessPopup(false)}
-            success
-          />
-        </CustomModel>
-        <Custom_model
+        ></CustomModel>
+        {/* <Custom_model
+          size={"sm"}
+          // show={successPopup}
+          onHide={() => setSuccessPopup(false)}
+          success
+        /> */}
+        <CustomModel
           success
           show={SuccessPopup}
           onHide={() => {
@@ -379,7 +376,8 @@ function Enquiry() {
           }}
         />
       </div>
-    </>
+    </div>
   );
 }
-export default Enquiry;
+
+export default EditEnquiry;

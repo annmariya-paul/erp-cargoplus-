@@ -340,7 +340,7 @@ function Updatevendor(){
         >
 
 
-<div className="row px-1 pt-2">
+<div className="row px-1 ">
             <h5 className="lead_text">Update Vendor</h5>
           </div>
           <div className="row jobpay_cards mt-3 mx-0 px-2 py-3">

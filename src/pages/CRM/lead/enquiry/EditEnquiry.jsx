@@ -355,19 +355,16 @@ function EditEnquiry() {
                 </div>
                 <div className="row justify-content-center ">
                   <div className="col-auto">
-                    <Button btnType="save">Save</Button>
+                    <Button btnType="save" type="submit">
+                      Save
+                    </Button>
                   </div>
                 </div>
               </Form>
             </>
           }
         ></CustomModel>
-        {/* <Custom_model
-          size={"sm"}
-          // show={successPopup}
-          onHide={() => setSuccessPopup(false)}
-          success
-        /> */}
+
         <CustomModel
           success
           show={SuccessPopup}

@@ -177,11 +177,14 @@ const ROUTES = {
   JOB_INVOICE_ID: "/job_invoice/:id",
   VENDOR_TYPE: "/vendor_type",
   VENDOR: "/vendor",
-  ADDVENDOR:"/add_vendor",
+  ADDVENDOR: "/add_vendor",
   FMSSETTINGS: "/fmssettings",
 
-  // CRM -> sales new page
-  SALE_ENQUIRY: "/sale_enquiry",
+  // CRM -> sales => Enquiry
+  CREATE_ENQUIRY: "/create_enquiry",
+  ENQUIRY_LIST: "/enquiry_list",
+  EDIT_ENQUIRY: "/edit_enquiry",
+  VIEW_ENQUIRY: "/view_enquiry",
 
   // Accounts => Bill Payments
   CREATE_BILL_PAYMENT: "/create_bill_payment",

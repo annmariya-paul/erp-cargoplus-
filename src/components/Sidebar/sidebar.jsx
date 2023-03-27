@@ -565,7 +565,7 @@ export default function Sidebar({ showSidebar }) {
                           className={({ isActive }) =>
                             isActive ? "active-link" : "link"
                           }
-                          to={ROUTES.SALE_ENQUIRY}
+                          to={ROUTES.ENQUIRY_LIST}
                         >
                           <div className=" ms-4 subactivelink">Enquiry</div>
                         </NavLink>

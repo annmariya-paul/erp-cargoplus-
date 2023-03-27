@@ -160,15 +160,15 @@ function EnquiryList() {
   ];
 
   return (
-    <div className="container">
+    <div className="container-fluid">
       <div className="row">
         <div className="col-12">
           <div className=" ">
             <div className="row flex-wrap">
               <div className="col">
-                <h5 className="lead_text">Customer</h5>
+                <h5 className="lead_text">Enquiry</h5>
               </div>
-              <Leadlist_Icons
+              {/* <Leadlist_Icons
               // datas={allLeadList}
               // columns={filteredColumns}
               // items={data12}
@@ -185,7 +185,7 @@ function EnquiryList() {
               //     ))}
               //   </Checkbox.Group>
               // }
-              />
+              /> */}
             </div>
             <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
               <div className="col-4">
@@ -233,14 +233,14 @@ function EnquiryList() {
                     setSearchStatus(event ? [event] : []);
                   }}
                 >
-                  {LeadStatus &&
+                  {/* {LeadStatus &&
                     LeadStatus.map((item, index) => {
                       return (
                         <Select.Option key={item.id} value={item.name}>
                           {item.name}
                         </Select.Option>
                       );
-                    })}
+                    })} */}
                 </Select>
               </div>
             </div>
@@ -315,12 +315,12 @@ function EnquiryList() {
                 />
               </div>
               <div className="col-4 d-flex justify-content-end">
-                <Link to={ROUTES.CUSTOMER}>
+                <Link to={ROUTES.CREATE_ENQUIRY}>
                   <Button
                     btnType="add"
                     // className="add_opportunity"
                   >
-                    Add Customer
+                    Add Enquiry
                   </Button>
                 </Link>
               </div>

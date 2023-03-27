@@ -1009,6 +1009,10 @@ function Services() {
                 <div className=" d-flex justify-content-between">
                   <h5 className="lead_text">Services</h5>
                   <div className="">
+                  <Link  
+                 to={`${ROUTES.SERVICE_EDIT}/${viewservices.id}`}
+
+                   >
                     <Button
                       style={{
                         backgroundColor: "white",
@@ -1019,13 +1023,20 @@ function Services() {
                       <span
                         className="d-flex align-items-center justify-content-between gap-1  p-1 button_span"
                         style={{ fontSize: "13px" }}
-                        onClick={() => {
-                          handleEditfromview(viewservices);
-                        }}
+                        // onClick={() => {
+                        //   handleEditfromview(viewservices);
+                        // }}
                       >
-                        Edit <FiEdit fontSize={"12px"} />
+                        Edit 
+                        
+             
+             
+             <FiEdit fontSize={"12px"} />
+             
+                       
                       </span>
                     </Button>
+                    </Link>
                   </div>
                 </div>
                 <div className="row my-3">

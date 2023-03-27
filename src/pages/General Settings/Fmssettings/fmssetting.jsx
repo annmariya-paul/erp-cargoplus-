@@ -36,7 +36,7 @@ function Fmssettings() {
         >
           <div className="container my-3">
             <div>
-              <h5 className="modal-title w-100">Add Fmssettings</h5>
+              <h5 className="modal-title w-100">New FMS settings</h5>
             </div>
 
             <Form
@@ -51,15 +51,15 @@ function Fmssettings() {
               }}
             >
               <div className="row my-4">
-                <div className="col-3">
+                <div className="col-6">
                   <label>Default Incoterm</label>
                   <Form.Item name="incoterm">
                   <SelectBox></SelectBox>
                     
                   </Form.Item>
                 </div>
-                <div className="col-3">
-                  <label>Quatation Validity</label>
+                <div className="col-6">
+                  <label>Quotation Validity</label>
                   <Form.Item name="Date" className="">
                   <InputType
                     //   value={purchasePoNo}

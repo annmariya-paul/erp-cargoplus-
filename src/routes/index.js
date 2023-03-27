@@ -178,6 +178,10 @@ const ROUTES = {
   VENDOR_TYPE: "/vendor_type",
   VENDOR: "/vendor",
   ADDVENDOR: "/add_vendor",
+  UPDATE_VENDOR:"/update_vendor",
+  UPDATE_VENDOR_ID:"/update_vendor/:id",
+  VIEW_VENDOR:"/view_vendor",
+  VIEW_VENDOR_ID:"/view_vendor/:id",
   FMSSETTINGS: "/fmssettings",
 
   // CRM -> sales => Enquiry

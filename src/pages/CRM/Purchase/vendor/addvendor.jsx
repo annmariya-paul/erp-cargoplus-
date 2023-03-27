@@ -135,7 +135,7 @@ function Addvendor(){
     if (!mShow) {
       setTimeout(() => {
         setSuccessPopup(false);
-        // navigate(ROUTES.ATTRIBUTES);
+        navigate(`${ROUTES.VENDOR}`);
       }, time);
     }
   };
@@ -204,7 +204,7 @@ function Addvendor(){
             <div className="col-sm-4 pt-2 ">
              
           
-                  <label> Name</label>
+                  <label> Name<span className="required">*</span></label>
                  
                     <Form.Item
                       name="vendorname"
@@ -227,7 +227,7 @@ function Addvendor(){
                 </div>
 
                 <div className="col-sm-4 pt-2">
-                  <label> Organisation Type</label>
+                  <label> Organisation Type<span className="required">*</span></label>
                   
                     <Form.Item
                       name="vendorOrganisation"
@@ -257,7 +257,7 @@ function Addvendor(){
                 </div>
 
                 <div className="col-sm-4 pt-2">
-                  <label>Type</label>
+                  <label>Type<span className="required">*</span></label>
                   
                     <Form.Item
                       name="vendortype"
@@ -324,7 +324,7 @@ function Addvendor(){
               
                 </div>
                 <div className="col-sm-4 pt-2">
-                  <label>Country</label>
+                  <label>Country<span className="required">*</span></label>
                 
                     <Form.Item
                       name="vendorcountry"
@@ -371,7 +371,7 @@ function Addvendor(){
 
               <div className="col-sm-4 pt-3">
              
-                  <label> Email</label>
+                  <label> Email<span className="required">*</span></label>
                 
                     <Form.Item
                       name="vendoremail"
@@ -394,7 +394,7 @@ function Addvendor(){
                 </div>
 
                 <div className="col-sm-4 pt-3">
-                  <label> Contact</label>
+                  <label> Contact<span className="required">*</span></label>
                   
                     <Form.Item
                       name="vendorcontact"

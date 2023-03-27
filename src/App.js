@@ -147,7 +147,7 @@ import Incoterm from "./pages/FMS/settings/Incoterm/incoterm";
 import EnquiryList from "./pages/CRM/lead/enquiry/EnquiryList";
 import EditEnquiry from "./pages/CRM/lead/enquiry/EditEnquiry";
 import ViewEnquiry from "./pages/CRM/lead/enquiry/ViewEnquiry";
-
+import Viewvendor from "./pages/CRM/Purchase/vendor/viewvendor";
 function App() {
   return (
     <div className="App">
@@ -379,6 +379,9 @@ function App() {
             </Route>
             <Route path={ROUTES.UPDATE_VENDOR_ID} element={<ProtectedRoute />}>
               <Route index element={<Updatevendor />} />
+            </Route>
+            <Route path={ROUTES.VIEW_VENDOR_ID} element={<ProtectedRoute />}>
+              <Route index element={<Viewvendor />} />
             </Route>
 
             {/* <Route

@@ -22,12 +22,12 @@ function EditEnquiry() {
   const [AllCustomers, setAllCustomers] = useState();
 
   const GetAllCustomers = () => {
-    PublicFetch.get(`${CRM_BASE_URL}/customer?startIndex=0&noOfItems=1000`)
+    PublicFetch.get(`${CRM_BASE_URL}/customer/minimal`)
       .then((res) => {
         console.log("Response", res);
         if (res.data.success) {
           console.log("Success og gettimg customers", res?.data?.data);
-          setAllCustomers(res?.data?.data?.customers);
+          setAllCustomers(res?.data?.data);
         }
       })
       .catch((err) => {
@@ -53,7 +53,7 @@ function EditEnquiry() {
           }}
         >
           <div className="row px-1 pt-2">
-            <h5 className="lead_text">Add Enquiry</h5>
+            <h5 className="lead_text">Edit Enquiry</h5>
           </div>
 
           <div className="row jobpay_cards mt-3 mx-0 px-2 py-3">
@@ -295,7 +295,7 @@ function EditEnquiry() {
         </Form>
 
         {/* Modal for add Customer */}
-        <CustomModel
+        {/* <CustomModel
           show={modalAddCustomer}
           onHide={() => setModalAddCustomer(false)}
           header="Add Customer"
@@ -305,7 +305,7 @@ function EditEnquiry() {
           list_content={
             <>
               <div className="row">
-                <h5 className="lead_text">Add Customer</h5>
+                <h5 className="lead_text">Edit Customer</h5>
               </div>
               <Form
                 // form={addForm}
@@ -363,7 +363,7 @@ function EditEnquiry() {
               </Form>
             </>
           }
-        ></CustomModel>
+        ></CustomModel> */}
 
         <CustomModel
           success

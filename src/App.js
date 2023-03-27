@@ -144,6 +144,9 @@ import ViewBillPayment from "./pages/Accounts/Bill Payments/ViewBillPayment";
 import Fmssettings from "./pages/General Settings/Fmssettings/fmssetting";
 import ServiceEdit from "./pages/CRM/Selling/services/ServiceEdit";
 import Incoterm from "./pages/FMS/settings/Incoterm/incoterm";
+import EnquiryList from "./pages/CRM/lead/enquiry/EnquiryList";
+import EditEnquiry from "./pages/CRM/lead/enquiry/EditEnquiry";
+import ViewEnquiry from "./pages/CRM/lead/enquiry/ViewEnquiry";
 
 function App() {
   return (
@@ -185,8 +188,17 @@ function App() {
             </Route>
             {/* sales - enquiries */}
 
-            <Route path={ROUTES.SALE_ENQUIRY} element={<ProtectedRoute />}>
+            <Route path={ROUTES.CREATE_ENQUIRY} element={<ProtectedRoute />}>
               <Route index element={<Enquiry />} />
+            </Route>
+            <Route path={ROUTES.ENQUIRY_LIST} element={<ProtectedRoute />}>
+              <Route index element={<EnquiryList />} />
+            </Route>
+            <Route path={ROUTES.EDIT_ENQUIRY} element={<ProtectedRoute />}>
+              <Route index element={<EditEnquiry />} />
+            </Route>
+            <Route path={ROUTES.VIEW_ENQUIRY} element={<ProtectedRoute />}>
+              <Route index element={<ViewEnquiry />} />
             </Route>
 
             <Route
@@ -348,8 +360,6 @@ function App() {
               path={ROUTES.ASSIGN_OPPORTUNITIES_ID}
               element={<ProtectedRoute />}
             >
-
-        
               <Route index element={<Assign_opportunity />} />
             </Route>
 

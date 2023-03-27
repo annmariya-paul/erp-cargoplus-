@@ -415,7 +415,7 @@ function Enquiry() {
               type="reset"
               value="Reset"
               onClick={() => {
-                navigate(ROUTES.LIST_JOB);
+                navigate(ROUTES.ENQUIRY_LIST);
               }}
             >
               Cancel
@@ -424,80 +424,7 @@ function Enquiry() {
         </Form>
 
         {/* Modal for add Customer */}
-        <CustomModel
-          show={modalAddCustomer}
-          onHide={() => setModalAddCustomer(false)}
-          header="Add Customer"
-          footer={false}
-          // {...props}
-          View_list
-          list_content={
-            <>
-              <div className="row">
-                <h5 className="lead_text">Add Customer</h5>
-              </div>
-              <Form
-                // form={addForm}
-                onFinish={(data) => {
-                  console.log("valuezzzzzzz", data);
-                }}
-                onFinishFailed={(error) => {
-                  console.log(error);
-                }}
-              >
-                <div className="row py-4">
-                  <div className="col-6 pt-1">
-                    <label>
-                      Customer Name<span className="required">*</span>
-                    </label>
-                    <div>
-                      <Form.Item name="customername">
-                        <InputType />
-                      </Form.Item>
-                    </div>
-                  </div>
 
-                  <div className="col-6 pt-1">
-                    <label>
-                      Contact Person<span className="required">*</span>
-                    </label>
-                    <Form.Item name="contactperson">
-                      <InputType />
-                    </Form.Item>
-                  </div>
-                  <div className="col-6 pt-1">
-                    <label>
-                      Email<span className="required">*</span>
-                    </label>
-                    <Form.Item name="email">
-                      <InputType />
-                    </Form.Item>
-                  </div>
-                  <div className="col-6 pt-1">
-                    <label>
-                      Phone<span className="required">*</span>
-                    </label>
-                    <Form.Item name="phone">
-                      <InputType />
-                    </Form.Item>
-                  </div>
-                </div>
-                <div className="row justify-content-center ">
-                  <div className="col-auto">
-                    <Button btnType="save">Save</Button>
-                  </div>
-                </div>
-              </Form>
-            </>
-          }
-        >
-          <Custom_model
-            size={"sm"}
-            // show={successPopup}
-            onHide={() => setSuccessPopup(false)}
-            success
-          />
-        </CustomModel>
         <Custom_model
           success
           show={SuccessPopup}

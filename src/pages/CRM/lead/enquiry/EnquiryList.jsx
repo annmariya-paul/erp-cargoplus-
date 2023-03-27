@@ -2,7 +2,7 @@ import { Checkbox, Input, Select } from "antd";
 import React, { useEffect, useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { MdPageview } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { CRM_BASE_URL_FMS } from "../../../../api/bootapi";
 import Button from "../../../../components/button/button";
 import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
@@ -18,6 +18,7 @@ import {
 import moment from "moment";
 
 function EnquiryList() {
+  const navigate = useNavigate();
   const [searchedText, setSearchedText] = useState("");
   const [searchType, setSearchType] = useState("");
   const [searchStatus, setSearchStatus] = useState("");
@@ -37,7 +38,6 @@ function EnquiryList() {
       render: (value, item, index) => serialNo + index,
       align: "center",
     },
-
     {
       title: "ENQUIRY NO",
       dataIndex: "enquiry_no",
@@ -140,7 +140,7 @@ function EnquiryList() {
           <div className="d-flex justify-content-center align-items-center gap-2">
             <div className="m-0">
               <Link
-                to={`${ROUTES.ED}/${index.customer_id}`}
+                to={`${ROUTES.EDIT_ENQUIRY}/${index.enquiry_id}`}
                 className="editcolor"
               >
                 <FaEdit />
@@ -151,7 +151,9 @@ function EnquiryList() {
               <div
                 className="editcolor"
                 onClick={
-                  () => {}
+                  () => {
+                    navigate(`${ROUTES.VIEW_ENQUIRY}/${index.enquiry_id}`);
+                  }
                   //   handleViewData(index)
                 }
               >

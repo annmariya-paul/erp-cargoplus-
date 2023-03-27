@@ -84,45 +84,47 @@ export default function LeadList() {
 
   const GetAllLeadData = () => {
     PublicFetch.get(
-      `${CRM_BASE_URL}/lead?startIndex=${pageofIndex}&noOfItems=${noofItems}`
+      `${CRM_BASE_URL}/customer?startIndex=${pageofIndex}&noOfItems=${noofItems}`
     )
       .then((res) => {
         if (res?.data?.success) {
           console.log("All lead data", res?.data?.data);
           // setAllLeadList(res?.data?.data?.leads);
-          setTotalcount(res?.data?.data?.totalCount);
+          setTotalcount(res?.data?.data?.total);
           setCurrentcount(res?.data?.data?.currentCount);
           let array = [];
-          res?.data?.data?.leads?.forEach((item, index) => {
-            ldStatus.forEach((i, index) => {
-              ldType.forEach((t, index) => {
-                ldUserType.forEach((usrtyp, index) => {
-                  var leadStat = parseInt(i.value);
-                  if (
-                    leadStat === item.lead_status &&
-                    t.value === item.lead_type &&
-                    usrtyp.value === item.lead_user_type
-                  ) {
-                    {
-                      array.push({
-                        lead_id: item?.lead_id,
-                        lead_type: t?.name,
-                        lead_customer_name: item?.lead_customer_name,
-                        lead_user_type: usrtyp?.name,
-                        lead_organization: item?.lead_organization,
-                        lead_source: item?.lead_source,
-                        lead_description: item?.lead_description,
-                        attachments: item?.attachments,
-                        lead_status: i?.name,
-                        lead_creditdays: item?.lead_credit_days,
-                      });
-                      setAllLeadList(array);
-                    }
-                  }
-                });
-              });
+          res?.data?.data?.customers?.forEach((item, index) => {
+            // ldStatus.forEach((i, index) => {
+            //   ldType.forEach((t, index) => {
+            //     ldUserType.forEach((usrtyp, index) => {
+            //       var leadStat = parseInt(i.value);
+            //       if (
+            //         leadStat === item.customer_status &&
+            //         t.value === item.customer_type &&
+            //         usrtyp.value === item.customer_type
+            //       ) {
+            array.push({
+              customer_id: item?.customer_id,
+              customer_type: item?.customer_type,
+              customer_name: item?.customer_name,
+              customer_address: item?.customer_address,
+              customer_phone: item?.customer_phone,
+              customer_website: item?.customer_website,
+              customer_email: item?.customer_email,
+              customer_logo: item?.customer_logo,
+              customer_remarks: item?.customer_remarks,
+              customer_credit_days: item?.customer_credit_days,
+              customer_country: item.customer_country,
+              customer_state: item.customer_state,
+              customer_city: item.customer_city,
+              customer_status: item.customer_status,
             });
+            //       }
+            //     });
+            //   });
+            // });
           });
+          setAllLeadList(array);
         } else {
           console.log("FAILED T LOAD DATA");
         }
@@ -187,21 +189,21 @@ export default function LeadList() {
 
     {
       title: "NAME",
-      dataIndex: "lead_customer_name",
-      key: "NAME",
-      width: "23%",
+      dataIndex: "customer_name",
+      key: "customer_name",
+      // width: "23%",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.lead_customer_name)
+        return String(record.customer_name)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
       align: "left",
     },
     {
-      title: "TYPE",
-      dataIndex: "lead_type",
-      key: "TYPE",
+      title: "CONTACT PERSON",
+      dataIndex: "contact_person",
+      key: "contact_person",
       filteredValue: [searchType],
       onFilter: (value, record) => {
         return String(record.lead_type)
@@ -210,30 +212,26 @@ export default function LeadList() {
       },
       align: "left",
     },
-
     {
-      title: "ORGANIZATION",
-      dataIndex: "lead_organization",
-      key: "ORGANIZATION",
-      width: "23%",
-      align: "ledt",
-    },
-    {
-      title: "STATUS",
-      dataIndex: "lead_status",
-      key: "STATUS",
-      filteredValue: [searchStatus],
-      onFilter: (value, record) => {
-        return String(record.lead_status)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
+      title: "PHONE",
+      dataIndex: "customer_phone",
+      key: "customer_phone",
+      // width: "23%",
       align: "left",
     },
+
+    {
+      title: "EMAIL",
+      dataIndex: "customer_email",
+      key: "customer_email",
+      // width: "23%",
+      align: "ledt",
+    },
+
     {
       title: "CREDIT DAYS",
-      dataIndex: "lead_creditdays",
-      key: "STATUS",
+      dataIndex: "customer_credit_days",
+      key: "customer_credit_days",
       // filteredValue: [searchStatus],
       // onFilter: (value, record) => {
       //   return String(record.lead_status)
@@ -243,10 +241,45 @@ export default function LeadList() {
       align: "center",
     },
     {
+      title: "OPPORTUNITY",
+      dataIndex: "opportunity",
+      key: "opportunity",
+      filteredValue: [searchStatus],
+      onFilter: (value, record) => {
+        return String(record.lead_status)
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      },
+      align: "left",
+    },
+
+    {
+      title: "JOBS",
+      dataIndex: "jobs",
+      key: "jobs",
+      // width: "23%",
+      align: "ledt",
+    },
+
+    {
+      title: "INVOICE AMT",
+      dataIndex: "invoice_amt",
+      key: "invoice_amt",
+      // width: "23%",
+      align: "ledt",
+    },
+    {
+      title: "DUE AMOUNT",
+      dataIndex: "due_amt",
+      key: "due_amt",
+      // width: "23%",
+      align: "ledt",
+    },
+    {
       title: "ACTION",
       dataIndex: "action",
       key: "ACTION",
-      width: "14%",
+      // width: "14%",
 
       render: (data, index) => {
         // console.log("id is : ",index.lead_id);
@@ -254,7 +287,7 @@ export default function LeadList() {
           <div className="d-flex justify-content-center align-items-center gap-2">
             <div className="m-0">
               <Link
-                to={`${ROUTES.LEAD_EDIT}/${index.lead_id}`}
+                to={`${ROUTES.CUSTOMER_EDIT}/${index.customer_id}`}
                 className="editcolor"
               >
                 <FaEdit />
@@ -313,7 +346,7 @@ export default function LeadList() {
         <div className=" ">
           <div className="row flex-wrap">
             <div className="col">
-              <h5 className="lead_text">Lead</h5>
+              <h5 className="lead_text">Customer</h5>
             </div>
             <Leadlist_Icons
               datas={allLeadList}
@@ -348,7 +381,7 @@ export default function LeadList() {
                 }}
               />
             </div>
-            <div className="col-4">
+            {/* <div className="col-4">
               <Select
                 allowClear
                 showSearch
@@ -363,7 +396,7 @@ export default function LeadList() {
                 <Select.Option value="L">Lead</Select.Option>
                 <Select.Option value="C">Customer</Select.Option>
               </Select>
-            </div>
+            </div> */}
             <div className="col-4">
               <Select
                 allowClear
@@ -458,12 +491,12 @@ export default function LeadList() {
               />
             </div>
             <div className="col-4 d-flex justify-content-end">
-              <Link to={ROUTES.LEAD}>
+              <Link to={ROUTES.CUSTOMER}>
                 <Button
                   btnType="add"
                   // className="add_opportunity"
                 >
-                  Add Lead
+                  Add Customer
                 </Button>
               </Link>
             </div>

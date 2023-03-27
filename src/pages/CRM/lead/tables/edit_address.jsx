@@ -37,12 +37,12 @@ function Edit_Address(props) {
   const [LeadId, setLeadId] = useState();
   // {funtion to fetch each Lead data - Ann mariya (22/11/22) }
   const GetLeadData = () => {
-    PublicFetch.get(`${CRM_BASE_URL}/lead/${props.leadid}`)
+    PublicFetch.get(`${CRM_BASE_URL}/customer/${props.Customerid}`)
       .then((res) => {
         if (res?.data?.success) {
           console.log("Unique Lead Id", res?.data?.data);
           setOneLeadData(res?.data?.data);
-          setLeadId(res?.data?.data?.lead_id);
+          setLeadId(res?.data?.data?.customer_id);
         } else {
           console.log("FAILED TO LOAD DATA");
         }
@@ -61,8 +61,8 @@ function Edit_Address(props) {
         // {array to set addresses of corresponding lead id}
         let array = [];
         allAddress?.data?.data?.forEach((item, index) => {
-          setAddressLeadId(item?.address_lead_id);
-          if (props?.leadid == item?.address_lead_id) {
+          setAddressLeadId(item?.address_customer_id);
+          if (props?.Customerid == item?.address_customer_id) {
             array.push({
               address_id: item?.address_id,
               address_title: item?.address_title,
@@ -83,11 +83,11 @@ function Edit_Address(props) {
   };
 
   useEffect(() => {
-    if (props.leadid) {
+    if (props.Customerid) {
       getAddresses();
       GetLeadData();
     }
-  }, [props.leadid]);
+  }, [props.Customerid]);
 
   // {function to show data in input fields -  Ann mariya (23-11-22)}
   const handleEditedclick = (i) => {
@@ -111,7 +111,7 @@ function Edit_Address(props) {
   // {function to edit address - Ann mariya(25-11-22)}
   const EditAddress = () => {
     PublicFetch.patch(`${CRM_BASE_URL}/address/${addressId}`, {
-      address_lead_id: parseInt(props.leadid),
+      address_customer_id: parseInt(props.Customerid),
       address_title: editTitle,
       address_content: editAddressData,
       address_pin: editPin,
@@ -141,7 +141,7 @@ function Edit_Address(props) {
   // { funtion to add address in lead edit - Ann mariya (25-11-22)}
   const AddAddress = () => {
     PublicFetch.post(`${CRM_BASE_URL}/address`, {
-      address_lead_id: parseInt(props.leadid),
+      address_customer_id: parseInt(props.Customerid),
       address_title: title,
       address_content: address_data,
       address_pin: pincode,

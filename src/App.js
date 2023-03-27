@@ -141,6 +141,7 @@ import ListBillPayment from "./pages/Accounts/Bill Payments/ListBillPayment";
 import EditBillPayment from "./pages/Accounts/Bill Payments/EditBillPayment";
 import ViewBillPayment from "./pages/Accounts/Bill Payments/ViewBillPayment";
 import Fmssettings from "./pages/General Settings/Fmssettings/fmssetting";
+import ServiceEdit from "./pages/CRM/Selling/services/ServiceEdit";
 import Incoterm from "./pages/FMS/settings/Incoterm/incoterm";
 
 function App() {
@@ -159,15 +160,15 @@ function App() {
             <Route path={ROUTES.COUNTRYSELECT} element={<ProtectedRoute />}>
               <Route index element={<SelectCountry />} />
             </Route>
-            <Route path={ROUTES.LEAD} element={<ProtectedRoute />}>
+            <Route path={ROUTES.CUSTOMER} element={<ProtectedRoute />}>
               <Route index element={<Lead />} />
             </Route>
 
-            <Route path={ROUTES.LEADLIST} element={<ProtectedRoute />}>
+            <Route path={ROUTES.CUSTOMER_LIST} element={<ProtectedRoute />}>
               <Route index element={<LeadList />} />
             </Route>
 
-            <Route path={ROUTES.LEAD} element={<ProtectedRoute />}>
+            <Route path={ROUTES.CUSTOMER} element={<ProtectedRoute />}>
               <Route index element={<Lead />} />
             </Route>
 
@@ -202,7 +203,7 @@ function App() {
               <Route index element={<LeadReport />} />
             </Route>
 
-            <Route path={ROUTES.LEAD_EDIT_ID} element={<ProtectedRoute />}>
+            <Route path={ROUTES.LEAD_CUSTOMER_ID} element={<ProtectedRoute />}>
               <Route index element={<LeadEdit />} />
             </Route>
 
@@ -272,6 +273,10 @@ function App() {
 
             <Route path={ROUTES.SERVICECREATE} element={<ProtectedRoute />}>
               <Route index element={<ServiceCreate />} />
+            </Route>
+
+            <Route path={ROUTES.SERVICE_EDIT_ID} element={<ProtectedRoute />}>
+              <Route index element={<ServiceEdit />} />
             </Route>
 
             <Route path={ROUTES.BRANCHES} element={<ProtectedRoute />}>

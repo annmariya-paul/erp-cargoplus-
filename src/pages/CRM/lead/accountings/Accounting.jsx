@@ -8,6 +8,7 @@ import axios from "axios";
 import PublicFetch from "../../../../utils/PublicFetch";
 import {
   CRM_BASE_URL,
+  CRM_BASE_URL_FMS,
   GENERAL_SETTING_BASE_URL,
 } from "../../../../api/bootapi";
 import SelectBox from "../../../../components/Select Box/SelectBox";
@@ -15,8 +16,9 @@ import { Select } from "antd";
 import InputType from "../../../../components/Input Type textbox/InputType";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../../routes";
+import Input_Number from "../../../../components/InputNumber/InputNumber";
 
-function Countrystate() {
+function Countrystate(props) {
   const [modalShow, setModalShow] = useState(false);
   const [data, setData] = useState([]);
   const [getCountry, setCountry] = useState();
@@ -25,7 +27,9 @@ function Countrystate() {
   const [getCity, setCity] = useState([]);
   const [countries, setCountries] = useState("");
   const [addForm] = Form.useForm();
+  const [frighttype, setFrighttype] = useState();
   const [successPopup, setSuccessPopup] = useState(false);
+
   const navigate = useNavigate();
   const {
     register,
@@ -43,6 +47,7 @@ function Countrystate() {
       }, time);
     }
   };
+
   const getAllCountries = async () => {
     try {
       const allCountries = await PublicFetch.get(
@@ -55,12 +60,91 @@ function Countrystate() {
     }
   };
 
-  useEffect(() => {
-    getAllCountries();
-  }, []);
+  const getallfrighttype = async () => {
+    try {
+      const allfrighttypes = await PublicFetch.get(
+        `${CRM_BASE_URL_FMS}/freightTypes`
+      );
+      console.log("Getting all frieght types : ", allfrighttypes.data.data);
+      setFrighttype(allfrighttypes.data.data);
+      // setFrighttypemode(allfrighttypes.data.data.freight_type_mode);
+    } catch (err) {
+      console.log("Error in fetching fright types : ", err);
+    }
+  };
+  console.log("customer id", props.customerId, props.customer_id);
 
-  const OnSubmit = (data) => {
-    PublicFetch.post(`${CRM_BASE_URL}/lead-location`, data)
+  const getAccounts = () => {
+    PublicFetch.get(
+      `${CRM_BASE_URL}/customer-accounting?startIndex=0&noOfItems=10`
+    )
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          console.log("success of accounts", res.data.data.customerAccounting);
+          let temp = [];
+          res?.data?.data?.customerAccounting?.forEach((item, index) => {
+            // console.log("acounts of custiomer", item);
+
+            if (props?.customerId == item?.customer_accounting_customer_id) {
+              console.log("acounts of custiomer", item);
+              temp.push({
+                customer_accounting_id: item.customer_accounting_id,
+                customer_accounting_credit_days:
+                  item.customer_accounting_credit_days,
+                customer_accounting_preferred_freight_type:
+                  item.customer_accounting_preferred_freight_type,
+                customer_accounting_qtn_validity_days:
+                  item.customer_accounting_qtn_validity_days,
+                customer_accounting_credit_limit:
+                  item.customer_accounting_credit_limit,
+                customer_accounting_tax_no: item.customer_accounting_tax_no,
+                customer_accounting_customer_id:
+                  item.customer_accounting_customer_id,
+              });
+              addForm.setFieldsValue({
+                customer_accounting_id: item.customer_accounting_id,
+                customer_accounting_credit_days:
+                  item.customer_accounting_credit_days,
+                customer_accounting_preferred_freight_type:
+                  item.customer_accounting_preferred_freight_type,
+                customer_accounting_qtn_validity_days:
+                  item.customer_accounting_qtn_validity_days,
+                customer_accounting_credit_limit:
+                  item.customer_accounting_credit_limit,
+                customer_accounting_tax_no: item.customer_accounting_tax_no,
+                customer_accounting_customer_id:
+                  item.customer_accounting_customer_id,
+              });
+            }
+          });
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+  useEffect(() => {
+    if (props.customerId) {
+      getAccounts();
+    }
+    getallfrighttype();
+    getAllCountries();
+  }, [props.customerId]);
+
+  const OnSubmit = (value) => {
+    const data = {
+      customer_accounting_tax_no: value.customer_accounting_tax_no,
+      customer_accounting_customer_id: props?.customer_id,
+      customer_accounting_credit_days: value.customer_accounting_credit_days,
+      customer_accounting_preferred_freight_type:
+        value.customer_accounting_preferred_freight_type,
+      customer_accounting_qtn_validity_days:
+        value.customer_accounting_qtn_validity_days,
+      customer_accounting_credit_limit: value.customer_accounting_credit_limit,
+    };
+    PublicFetch.post(`${CRM_BASE_URL}/customer-accounting`, data)
       .then((res) => {
         console.log("Response", res);
         if (res.data.success) {
@@ -135,35 +219,35 @@ function Countrystate() {
         <div className="row py-5 px-1">
           <div className="col-sm-4">
             <label>Tax No</label>
-            <Form.Item name="lead_location_city">
+            <Form.Item name="customer_accounting_tax_no">
               <InputType />
             </Form.Item>
           </div>
           <div className="col-sm-4">
             <label>Credit Days</label>
-            <Form.Item name="lead_location_city">
-              <InputType />
+            <Form.Item name="customer_accounting_credit_days">
+              <Input_Number />
             </Form.Item>
           </div>
           <div className="col-sm-4">
             <label>Credit Limit</label>
-            <Form.Item name="lead_location_city">
-              <InputType />
+            <Form.Item name="customer_accounting_credit_limit">
+              <Input_Number />
             </Form.Item>
           </div>
           <div className="col-sm-4">
             <label>Preferecd Freight Type</label>
-            <Form.Item name="lead_location_country">
+            <Form.Item name="customer_accounting_preferred_freight_type">
               <SelectBox allowClear showSearch optionFilterProp="children">
-                {countries &&
-                  countries.length > 0 &&
-                  countries.map((item, index) => {
+                {frighttype &&
+                  frighttype.length > 0 &&
+                  frighttype.map((item, index) => {
                     return (
                       <Select.Option
-                        key={item.country_id}
-                        value={item.country_id}
+                        key={item.freight_type_id}
+                        value={item.freight_type_id}
                       >
-                        {item.country_name}
+                        {item.freight_type_name}
                       </Select.Option>
                     );
                   })}
@@ -173,8 +257,8 @@ function Countrystate() {
 
           <div className="col-sm-4">
             <label>Qtn validity Days</label>
-            <Form.Item name="lead_location_state">
-              <InputType />
+            <Form.Item name="customer_accounting_qtn_validity_days">
+              <Input_Number />
             </Form.Item>
           </div>
 

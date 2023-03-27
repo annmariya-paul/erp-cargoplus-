@@ -16,7 +16,7 @@ import AddContact from "./modals/addcontact";
 import AddOpportunity from "./modals/addopportunity";
 import PublicFetch from "../../../utils/PublicFetch";
 import { LeadStatus } from "../../../utils/SelectOptions";
-import { CRM_BASE_URL } from "../../../api/bootapi";
+import { CRM_BASE_URL, GENERAL_SETTING_BASE_URL } from "../../../api/bootapi";
 // import ErrorMsg from "../../components/errormessage";
 import Countrystate from "./accountings/Accounting";
 import Custom_model from "../../../components/custom_modal/custom_model";
@@ -48,7 +48,7 @@ function Lead({}) {
   const [leadDescription, setLeadDescription] = useState("");
   const [leadAttachment, setLeadAttachment] = useState();
   const [leadStatus, setLeadStatus] = useState("4");
-  const [leadId, setLeadId] = useState();
+  const [CustomerId, setCustomerId] = useState();
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
@@ -58,6 +58,7 @@ function Lead({}) {
   const [uniqueCode, setuniqueCode] = useState();
   const [timeOut, setTimeOuts] = useState(false);
   const [Toggle4, setToggle4] = useState(false);
+  const [countries, setCountries] = useState("");
 
   const [addForm] = Form.useForm();
 
@@ -92,12 +93,12 @@ function Lead({}) {
     );
   };
 
-  const close_modal = (mShow, time, customer_id) => {
+  const close_modal = (mShow, time, customer) => {
     if (!mShow) {
       setTimeout(() => {
         setModalShow(false);
         setTimeOuts(true);
-        setLeadId(customer_id);
+        setCustomerId(customer?.customer_id);
         toggleTab(2);
       }, time);
     }
@@ -109,7 +110,7 @@ function Lead({}) {
         console.log("Contact table data".res);
         if (res.data.success) {
           res?.data?.data?.forEach((item, index) => {
-            if (leadId == item.contact_lead_id) {
+            if (CustomerId == item.contact_customer_id) {
               console.log("ys its contatact of customer");
             }
           });
@@ -120,6 +121,17 @@ function Lead({}) {
       });
   };
 
+  const getAllCountries = async () => {
+    try {
+      const allCountries = await PublicFetch.get(
+        `${GENERAL_SETTING_BASE_URL}/country`
+      );
+      console.log("countries are", allCountries.data.data);
+      setCountries(allCountries.data.data);
+    } catch (err) {
+      console.log("error while getting the countries: ", err);
+    }
+  };
   // const Submit = () => {         /// old lead api creating a lead
   //   setFormSubmitted(true);
   //   const formData = new FormData();
@@ -172,6 +184,7 @@ function Lead({}) {
     formData.append(`customer_address`, data.customer_address);
     formData.append(`customer_phone`, data.customer_phone);
     formData.append(`customer_email`, data.customer_email);
+    formData.append(`customer_website`, data.customer_website);
     formData.append(`customer_remarks`, data.customer_remarks);
     formData.append(`customer_country`, data.customer_country);
     formData.append(`customer_state`, data.customer_state);
@@ -206,7 +219,7 @@ function Lead({}) {
     },
   ];
 
-  console.log("lead id::", leadId);
+  console.log("lead id::", CustomerId);
 
   // console.log("leadd id iss", leadType.leadtypes.options[0]);
   const beforeUpload = (file, fileList) => {};
@@ -242,10 +255,11 @@ function Lead({}) {
   };
 
   useEffect(() => {
-    if (leadId) {
+    if (CustomerId) {
       getallContacts();
     }
-  }, [leadId]);
+    getAllCountries();
+  }, [CustomerId]);
 
   return (
     <>
@@ -273,7 +287,7 @@ function Lead({}) {
                   id="button-tabs"
                   className={toggleState === 2 ? "tabs active-tabs " : "tabs "}
                   onClick={(e) => {
-                    leadId == null ? errormessage() : handleContactTab(e);
+                    CustomerId !== null ? errormessage() : handleContactTab(e);
                   }}
                 >
                   Contacts
@@ -284,7 +298,7 @@ function Lead({}) {
                   id="button-tabs"
                   className={toggleState === 3 ? "tabs active-tabs" : "tabs"}
                   onClick={(e) => {
-                    leadId == null ? errormessage() : handleAddressTab(e);
+                    CustomerId !== null ? errormessage() : handleAddressTab(e);
                   }}
                 >
                   Address
@@ -294,7 +308,10 @@ function Lead({}) {
                 <button
                   className={toggleState === 4 ? "tabs active-tabs" : "tabs"}
                   onClick={(e) => {
-                    leadId == null ? errormessage() : handleAccountingTab(e);
+                    // CustomerId !== null
+                    //   ? errormessage()
+                    //   :
+                    handleAccountingTab(e);
                   }}
                 >
                   Accounting
@@ -404,7 +421,7 @@ function Lead({}) {
                           }}
                           onBlur={async () => {
                             let a = await CheckUnique({
-                              type: "leadcustomername",
+                              type: "customername",
                               value: leadName,
                             });
                             setuniqueCode(a);
@@ -414,7 +431,7 @@ function Lead({}) {
                       {uniqueCode ? (
                         <div>
                           <label style={{ color: "red" }}>
-                            lead name {UniqueErrorMsg.UniqueErrName}
+                            Customer name {UniqueErrorMsg.UniqueErrName}
                           </label>
                         </div>
                       ) : (
@@ -566,7 +583,18 @@ function Lead({}) {
                         }
                       >
                         <SelectBox>
-                          <Select.Option value="1">india</Select.Option>
+                          {countries &&
+                            countries.length > 0 &&
+                            countries.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  key={item.country_id}
+                                  value={item.country_id}
+                                >
+                                  {item.country_name}
+                                </Select.Option>
+                              );
+                            })}
                         </SelectBox>
                       </Form.Item>
                     </div>
@@ -765,7 +793,7 @@ function Lead({}) {
                       // show={modalContact}
                       // onHide={() => setModalContact(false)}
                       // leads
-                      leadscontid={leadId}
+                      customer={CustomerId}
                       toggle={timeOut}
                     />
                   </div>
@@ -793,7 +821,7 @@ function Lead({}) {
                   </div>
                   <div className="row mt-2 ms-2">
                     <AddressTable
-                      lead={leadId}
+                      customer={CustomerId}
                       toggle={Toggle4}
                       // show={modalAddress}
                       // onHide={() => setModalAddress(false)}
@@ -812,7 +840,7 @@ function Lead({}) {
                 }
               >
                 <div className="col-lg" style={{ borderRadius: "3px" }}>
-                  <Countrystate />
+                  <Countrystate customer_id={CustomerId} />
                 </div>
               </div>{" "}
               <Custom_model

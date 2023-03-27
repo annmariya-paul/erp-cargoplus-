@@ -3,21 +3,21 @@ const ROUTES = {
   LAYOUT: "/layout",
   SIDEBAR: "/sidebar",
   DASHBOARD: "dashboard",
-  LEAD: "/lead",
-  LEADLIST: "/lead_list",
+  CUSTOMER: "/customer",
+  CUSTOMER_LIST: "/customer_list",
   CATEGORY: "/category",
   TEST_PAGE: "/test-page",
   OPPORTUNITY: "/opportunity",
 
   CATEGORY_LIST: "/categorylist",
-  LEAD_REPORT: "/leadReport",
-  LEAD_EDIT: "/edit_lead_list",
+  LEAD_REPORT: "/Customer_Report",
+  CUSTOMER_EDIT: "/edit_customer_list",
 
   OPPORTUNITY_REPORT: "/opportunity-report",
   OPPORTUNITY_LEAD_ID: "/opportunity_lead/:id",
   OPPORTUNITY_LEAD: "/opportunity_lead",
 
-  LEAD_EDIT_ID: "/edit_lead_list/:id",
+  LEAD_CUSTOMER_ID: "/edit_customer_list/:id",
   COUNTRYSELECT: "/CountrySelect",
   BRANDS: "/brands",
   ATTRIBUTES: "/attributes",
@@ -40,6 +40,8 @@ const ROUTES = {
 
   SERVICES: "/services",
   SERVICECREATE: "/create_service",
+  SERVICE_EDIT: "/edit_service",
+  SERVICE_EDIT_ID: "/edit_service/:id",
 
   BRANCHES: "/branches",
 
@@ -175,7 +177,7 @@ const ROUTES = {
   JOB_INVOICE_ID: "/job_invoice/:id",
   VENDOR_TYPE: "/vendor_type",
   VENDOR: "/vendor",
-  FMSSETTINGS:"/fmssettings",
+  FMSSETTINGS: "/fmssettings",
 
   // CRM -> sales new page
   SALE_ENQUIRY: "/sale_enquiry",

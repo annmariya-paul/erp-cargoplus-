@@ -17,7 +17,10 @@ import AddressTable from "../tables/contactstable";
 import AddOpportunity from "../modals/addopportunity";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { LeadStatus } from "../../../../utils/SelectOptions";
-import { CRM_BASE_URL } from "../../../../api/bootapi";
+import {
+  CRM_BASE_URL,
+  GENERAL_SETTING_BASE_URL,
+} from "../../../../api/bootapi";
 import Countrystate from "../accountings/Accounting";
 import InputType from "../../../../components/Input Type textbox/InputType";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
@@ -42,7 +45,7 @@ function LeadEdit() {
   const [modalAddress, setModalAddress] = useState(false);
   const [modalOpportunity, setModalOpportunity] = useState(false);
   const [leadType, setLeadType] = useState("");
-  const [leadName, setLeadName] = useState("");
+  const [CustomerName, setCustomerName] = useState("");
   const [leadUsertype, setLeadUsertype] = useState("");
   const [leadOrganization, setLeadOrganization] = useState("");
   const [leadSource, setLeadSource] = useState("");
@@ -59,6 +62,7 @@ function LeadEdit() {
   const [leadcreditdays, setleadcreditdays] = useState();
   const [toggle2, setToggel2] = useState(false);
   const [toggle3, setToggle3] = useState(false);
+  const [countries, setCountries] = useState("");
 
   const [editForm] = Form.useForm();
   const [error, setError] = useState(false);
@@ -68,11 +72,11 @@ function LeadEdit() {
   const navigate = useNavigate();
 
   const goToLeadlist = () => {
-    navigate("/lead_list");
+    navigate(ROUTES.CUSTOMER_LIST);
   };
 
   const handleCancel = () => {
-    navigate(ROUTES.LEADLIST);
+    navigate(ROUTES.CUSTOMER_LIST);
   };
   console.log("lead attachment", leadAttachment);
 
@@ -107,13 +111,13 @@ function LeadEdit() {
   const [oneLeadData, setOneLeadData] = useState();
 
   const GetLeadData = () => {
-    PublicFetch.get(`${CRM_BASE_URL}/lead/${id}`)
+    PublicFetch.get(`${CRM_BASE_URL}/customer/${id}`)
       .then((res) => {
         if (res?.data?.success) {
           console.log("Unique Lead Id data", res?.data?.data);
           setOneLeadData(res?.data?.data);
           setLeadType(res?.data?.data?.lead_type);
-          setLeadName(res?.data?.data?.lead_customer_name);
+          setCustomerName(res?.data?.data?.customer_name);
           setLeadUsertype(res?.data?.data?.lead_user_type);
           setLeadOrganization(res?.data?.data?.lead_organization);
           setLeadSource(res?.data?.data?.lead_source);
@@ -123,15 +127,17 @@ function LeadEdit() {
           setLeadStatus(res?.data?.data?.lead_status);
           setleadcreditdays(res?.data?.data?.lead_credit_days);
           editForm.setFieldsValue({
-            leadType: res?.data?.data?.lead_type,
-            leadName: res?.data?.data?.lead_customer_name,
-            leadUsertype: res?.data?.data?.lead_user_type,
-            leadSource: res?.data?.data?.lead_source,
-            leadOrganization: res?.data?.data?.lead_organization,
-            leadDescription: res?.data?.data?.lead_description,
-            leadAttachment: res?.data?.data?.attachments,
-            leadStatus: res?.data?.data?.lead_status,
-            creditdays: res?.data?.data?.lead_credit_days,
+            customer_type: res?.data?.data?.customer_type,
+            customer_name: res?.data?.data?.customer_name,
+            customer_address: res?.data?.data?.customer_address,
+            customer_phone: res?.data?.data?.customer_phone,
+            customer_email: res?.data?.data?.customer_email,
+            customer_website: res?.data?.data?.customer_website,
+            customer_logo: res?.data?.data?.customer_logo,
+            customer_remarks: res?.data?.data?.customer_remarks,
+            customer_country: res?.data?.data?.customer_country,
+            customer_state: res?.data?.data?.customer_state,
+            customer_city: res?.data?.data?.customer_city,
           });
         } else {
           console.log("FAILED T LOAD DATA");
@@ -141,8 +147,20 @@ function LeadEdit() {
         console.log("Errror while getting data", err);
       });
   };
+  const getAllCountries = async () => {
+    try {
+      const allCountries = await PublicFetch.get(
+        `${GENERAL_SETTING_BASE_URL}/country`
+      );
+      console.log("countries are", allCountries.data.data);
+      setCountries(allCountries.data.data);
+    } catch (err) {
+      console.log("error while getting the countries: ", err);
+    }
+  };
 
   useEffect(() => {
+    getAllCountries();
     GetLeadData();
   }, [id]);
 
@@ -150,40 +168,73 @@ function LeadEdit() {
   const uploaad = `${process.env.REACT_APP_BASE_URL}/${sampledata}`;
   console.log("uploads11", uploaad);
 
-  const updateUser = (event) => {
-    setFormSubmitted(true);
+  // const updateUser = (event) => {             //// old lead api for updating a lead
+  //   setFormSubmitted(true);
+  //   const formData = new FormData();
+  //   formData.append("lead_type", leadType);
+  //   formData.append("lead_customer_name", leadName);
+  //   formData.append("lead_user_type", leadUsertype);
+  //   formData.append("lead_organization", leadOrganization);
+  //   formData.append("lead_source", leadSource);
+  //   formData.append("lead_credit_days", leadcreditdays);
+  //   if (leadDescription) {
+  //     formData.append("lead_description", leadDescription);
+  //   }
+  //   if (leadAttachment) {
+  //     formData.append("attachments", leadAttachment);
+  //   }
+
+  //   formData.append("lead_status", leadStatus);
+
+  //   PublicFetch.patch(`${CRM_BASE_URL}/lead/${id}`, formData, {
+  //     "Content-Type": "Multipart/form-Data",
+  //   })
+  //     .then(function (response) {
+  //       console.log("hellooooooo", response);
+
+  //       if (response.data.success) {
+  //         console.log("hello", response.data.data);
+  //         setModalShow(true);
+  //         close_modal(modalShow, 1200);
+  //       } else {
+  //         console.log("Failed while adding data");
+  //       }
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error);
+  //     });
+  // };
+
+  const UpdateCustomer = (data) => {
     const formData = new FormData();
-    formData.append("lead_type", leadType);
-    formData.append("lead_customer_name", leadName);
-    formData.append("lead_user_type", leadUsertype);
-    formData.append("lead_organization", leadOrganization);
-    formData.append("lead_source", leadSource);
-    formData.append("lead_credit_days", leadcreditdays);
-    if (leadDescription) {
-      formData.append("lead_description", leadDescription);
-    }
+    formData.append(`customer_name`, data.customer_name);
+    formData.append(`customer_type`, data.customer_type);
+    formData.append(`customer_address`, data.customer_address);
+    formData.append(`customer_phone`, data.customer_phone);
+    formData.append(`customer_email`, data.customer_email);
+    formData.append(`customer_website`, data.customer_website);
+    formData.append(`customer_remarks`, data.customer_remarks);
+    formData.append(`customer_country`, data.customer_country);
+    formData.append(`customer_state`, data.customer_state);
+    formData.append(`customer_city`, data.customer_city);
     if (leadAttachment) {
-      formData.append("attachments", leadAttachment);
+      formData.append(`customer_logo`, leadAttachment);
     }
 
-    formData.append("lead_status", leadStatus);
-
-    PublicFetch.patch(`${CRM_BASE_URL}/lead/${id}`, formData, {
+    PublicFetch.patch(`${CRM_BASE_URL}/customer/${id}`, formData, {
       "Content-Type": "Multipart/form-Data",
     })
-      .then(function (response) {
-        console.log("hellooooooo", response);
-
-        if (response.data.success) {
-          console.log("hello", response.data.data);
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
           setModalShow(true);
-          close_modal(modalShow, 1200);
-        } else {
-          console.log("Failed while adding data");
+
+          close_modal(modalShow, 1000, res?.data?.data);
+          setModalContact(false);
         }
       })
-      .catch(function (error) {
-        console.log(error);
+      .catch((err) => {
+        console.log("Error", err);
       });
   };
 
@@ -203,7 +254,7 @@ function LeadEdit() {
     }
   };
 
-  console.log("kkkkkk", leadDescription, leadName);
+  console.log("kkkkkk", leadDescription, CustomerName);
   const beforeUpload = (file, fileList) => {};
   return (
     <>
@@ -211,7 +262,7 @@ function LeadEdit() {
         <div className="lead_container">
           <div className="row justify-content-md-center">
             <div className="mb-2">
-              <h5 class="lead_text"> Edit Customer ({leadName})</h5>
+              <h5 class="lead_text"> Edit Customer ({CustomerName})</h5>
             </div>
             <div className="bloc-tabs tabs-responsive">
               <div className="col-xl-1 col-sm-2 pe-1">
@@ -248,7 +299,11 @@ function LeadEdit() {
               <div className="col-xl-1 col-sm-2 pe-1">
                 <button
                   className={toggleState === 4 ? "tabs active-tabs" : "tabs"}
-                  onClick={() => toggleTab(4)}
+                  onClick={() => {
+                    toggleTab(4);
+                    setToggel2(false);
+                    setToggle3(false);
+                  }}
                 >
                   Accounting
                 </button>
@@ -317,7 +372,8 @@ function LeadEdit() {
                   form={editForm}
                   onFinish={(values) => {
                     console.log("values iss", values);
-                    updateUser();
+                    // updateUser();
+                    UpdateCustomer(values);
                   }}
                   onFinishFailed={(error) => {
                     console.log(error);
@@ -347,7 +403,7 @@ function LeadEdit() {
                     <div className="col-sm-4 pt-2">
                       <label>Name</label>
                       <Form.Item
-                        name="leadName"
+                        name="customer_name"
                         rules={[
                           {
                             required: true,
@@ -367,14 +423,14 @@ function LeadEdit() {
                       >
                         <InputType
                           // value={leadName}
-                          onChange={(e) => setLeadName(e.target.value)}
+                          onChange={(e) => setCustomerName(e.target.value)}
                         />
                       </Form.Item>
                     </div>
                     <div className="col-sm-4 pt-2">
                       <label>Customer Type</label>
                       <Form.Item
-                        // name="leadUsertype"
+                        name="customer_type"
                         rules={[
                           {
                             required: true,
@@ -397,7 +453,7 @@ function LeadEdit() {
                     <div className="col-sm-4 pt-2">
                       <label>Address</label>
                       <Form.Item
-                        name="leadOrganization"
+                        name="customer_address"
                         rules={[
                           {
                             pattern: new RegExp("^[A-Za-z0-9 ]+$"),
@@ -419,7 +475,7 @@ function LeadEdit() {
                         ]}
                       >
                         <TextArea
-                          disabled={organizationDisable === "I"}
+                          // disabled={organizationDisable === "I"}
                           // value={leadOrganization}
                           onChange={(e) => setLeadOrganization(e.target.value)}
                         />
@@ -428,7 +484,7 @@ function LeadEdit() {
                     <div className="col-sm-4 pt-2">
                       <label>Phone</label>
                       <Form.Item
-                        name=""
+                        name="customer_phone"
                         rules={[
                           {
                             required: true,
@@ -445,7 +501,7 @@ function LeadEdit() {
                     <div className="col-sm-4 pt-2">
                       <label>Email</label>
                       <Form.Item
-                        name="creditdays"
+                        name="customer_email"
                         rules={[
                           {
                             required: true,
@@ -464,7 +520,7 @@ function LeadEdit() {
                     <div className="col-sm-4 pt-2">
                       <label>Website</label>
                       <Form.Item
-                        name="creditdays"
+                        name="customer_website"
                         rules={[
                           {
                             required: true,
@@ -483,7 +539,7 @@ function LeadEdit() {
                     <div className="col-sm-4 pt-2">
                       <label>Country</label>
                       <Form.Item
-                        name="leadSource"
+                        name="customer_country"
                         rules={[
                           {
                             required: true,
@@ -495,22 +551,25 @@ function LeadEdit() {
                           // value={leadSource}
                           onChange={(e) => setLeadSource(e)}
                         >
-                          <Select.Option value="reference">
-                            Reference
-                          </Select.Option>
-                          <Select.Option value="direct visit">
-                            Direct Visit
-                          </Select.Option>
-                          <Select.Option value="online registration">
-                            Online Registration
-                          </Select.Option>
+                          {countries &&
+                            countries.length > 0 &&
+                            countries.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  key={item.country_id}
+                                  value={item.country_id}
+                                >
+                                  {item.country_name}
+                                </Select.Option>
+                              );
+                            })}
                         </SelectBox>
                       </Form.Item>
                     </div>
                     <div className="col-sm-4 pt-2">
                       <label>State</label>
                       <Form.Item
-                        name="creditdays"
+                        name="customer_state"
                         rules={[
                           {
                             required: true,
@@ -529,7 +588,7 @@ function LeadEdit() {
                     <div className="col-sm-4 pt-2">
                       <label>City</label>
                       <Form.Item
-                        name="creditdays"
+                        name="customer_city"
                         rules={[
                           {
                             required: true,
@@ -547,7 +606,7 @@ function LeadEdit() {
                     </div>
 
                     <div className="col-sm-4 pt-3 mt-3">
-                      <Form.Item name="leadAttachment">
+                      <Form.Item name="customer_logo">
                         <FileUpload
                           multiple
                           filetype={"Accept only pdf and docs"}
@@ -591,7 +650,7 @@ function LeadEdit() {
                     <div className="col-sm-12 pt-2">
                       <label>Remarks</label>
                       <Form.Item
-                        name="leadDescription"
+                        name="customer_remarks"
                         className="py-2"
                         rules={[
                           {
@@ -653,7 +712,7 @@ function LeadEdit() {
                       // show={modalContact}
                       // onHide={() => setModalContact(false)}
                       toggle={toggle2}
-                      leadid={id}
+                      Customerid={id}
                     />
                   </div>
                   <div className="col mt-4">
@@ -681,7 +740,7 @@ function LeadEdit() {
                   </div>
                   <div className="col-12 mt-2">
                     <Edit_Address
-                      leadid={id}
+                      Customerid={id}
                       toggle={toggle3}
                       // show={modalAddress}
                       // onHide={() => setModalAddress(false)}
@@ -700,15 +759,15 @@ function LeadEdit() {
                 }
               >
                 <div className="col-lg" style={{ borderRadius: "3px" }}>
-                  <Countrystate />
+                  <Countrystate customerId={id} />
                 </div>
               </div>{" "}
-              <Custom_model
+              {/* <Custom_model
                 size={`sm`}
                 success
                 show={modalShow}
                 onHide={() => setModalShow(false)}
-              />
+              /> */}
             </div>
           </div>
         </div>

@@ -75,6 +75,10 @@ function Vendor() {
     vendor_country_id: "",
   });
 
+
+
+
+
   const handleViewClick = (item) => {
     console.log("view a vendor", item);
     setViewvendor({
@@ -422,7 +426,9 @@ function Vendor() {
             </div>
             <div
               className="viewIcon m-0"
-              onClick={() => handleViewClick(index)}
+              onClick={() => {
+                navigate(`${ROUTES.VIEW_VENDOR}/${index.vender_id}`);
+              }}
             >
               <MdPageview style={{ marginLeft: 15, marginRight: 15 }} />
             </div>

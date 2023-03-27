@@ -194,10 +194,10 @@ function App() {
             <Route path={ROUTES.ENQUIRY_LIST} element={<ProtectedRoute />}>
               <Route index element={<EnquiryList />} />
             </Route>
-            <Route path={ROUTES.EDIT_ENQUIRY} element={<ProtectedRoute />}>
+            <Route path={ROUTES.EDIT_ENQUIRY_ID} element={<ProtectedRoute />}>
               <Route index element={<EditEnquiry />} />
             </Route>
-            <Route path={ROUTES.VIEW_ENQUIRY} element={<ProtectedRoute />}>
+            <Route path={ROUTES.VIEW_ENQUIRY_ID} element={<ProtectedRoute />}>
               <Route index element={<ViewEnquiry />} />
             </Route>
 
@@ -373,7 +373,7 @@ function App() {
             <Route path={ROUTES.CREATEAGENT} element={<ProtectedRoute />}>
               <Route index element={<CreateAgent />} />
             </Route>
-            
+
             <Route path={ROUTES.ADDVENDOR} element={<ProtectedRoute />}>
               <Route index element={<Addvendor />} />
             </Route>

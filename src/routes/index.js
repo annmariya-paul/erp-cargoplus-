@@ -178,17 +178,19 @@ const ROUTES = {
   VENDOR_TYPE: "/vendor_type",
   VENDOR: "/vendor",
   ADDVENDOR: "/add_vendor",
-  UPDATE_VENDOR:"/update_vendor",
-  UPDATE_VENDOR_ID:"/update_vendor/:id",
-  VIEW_VENDOR:"/view_vendor",
-  VIEW_VENDOR_ID:"/view_vendor/:id",
+  UPDATE_VENDOR: "/update_vendor",
+  UPDATE_VENDOR_ID: "/update_vendor/:id",
+  VIEW_VENDOR: "/view_vendor",
+  VIEW_VENDOR_ID: "/view_vendor/:id",
   FMSSETTINGS: "/fmssettings",
 
   // CRM -> sales => Enquiry
   CREATE_ENQUIRY: "/create_enquiry",
   ENQUIRY_LIST: "/enquiry_list",
   EDIT_ENQUIRY: "/edit_enquiry",
+  EDIT_ENQUIRY_ID: "/edit_enquiry/:id",
   VIEW_ENQUIRY: "/view_enquiry",
+  VIEW_ENQUIRY_ID: "/view_enquiry/:id",
 
   // Accounts => Bill Payments
   CREATE_BILL_PAYMENT: "/create_bill_payment",

@@ -308,10 +308,9 @@ function Lead({}) {
                 <button
                   className={toggleState === 4 ? "tabs active-tabs" : "tabs"}
                   onClick={(e) => {
-                    // CustomerId !== null
-                    //   ? errormessage()
-                    //   :
-                    handleAccountingTab(e);
+                    CustomerId !== null
+                      ? errormessage()
+                      : handleAccountingTab(e);
                   }}
                 >
                   Accounting
@@ -391,7 +390,10 @@ function Lead({}) {
                       </Form.Item>
                     </div> */}
                     <div className="col-sm-4 pt-2">
-                      <label>Name</label>
+                      <label>
+                        Name<span className="required">*</span>
+                      </label>
+
                       <Form.Item
                         name="customer_name"
                         rules={[

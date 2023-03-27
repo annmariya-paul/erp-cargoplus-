@@ -527,7 +527,7 @@ function CreateJob() {
               <h5 className="lead_text">Create Job</h5>
             </div>
           </div> */}
-          <div className="content-tabs">
+        
             <Form
               form={addForm}
               onFinish={(values) => {
@@ -1246,7 +1246,7 @@ function CreateJob() {
               onHide={() => setSuccessPopup(false)}
               success
             />
-          </div>
+          
         </div>
       </div>
     </>

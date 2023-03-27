@@ -1,99 +1,35 @@
 import React, { useEffect, useState } from "react";
-import CustomModel from "../../../../components/custom_modal/custom_model";
-import MyPagination from "../../../../components/Pagination/MyPagination";
-import TableData from "../../../../components/table/table_data";
-import { MdPageview } from "react-icons/md";
+
 import { FiEdit } from "react-icons/fi";
-import { Form, Input, Select, DatePicker } from "antd";
-import { FaEdit, FaTrash } from "react-icons/fa";
-import InputType from "../../../../components/Input Type textbox/InputType";
+
 import Button from "../../../../components/button/button";
-import TextArea from "../../../../components/ InputType TextArea/TextArea";
-import SelectBox from "../../../../components/Select Box/SelectBox";
+
 import PublicFetch from "../../../../utils/PublicFetch";
-import {ROUTES} from "../../../../routes";
-import moment from "moment";
-import Custom_model from "../../../../components/custom_modal/custom_model";
-import { Link, useNavigate,useParams } from "react-router-dom";
-import {
-  CRM_BASE_URL_PURCHASING,
-  GENERAL_SETTING_BASE_URL,
-} from "../../../../api/bootapi";
-import { vendor_Organisation } from "../../../../utils/SelectOptions";
+import { ROUTES } from "../../../../routes";
 
-
-
-
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { CRM_BASE_URL_PURCHASING } from "../../../../api/bootapi";
 
 export default function Viewvendor() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [jobPayData, setJobPayData] = useState();
-   const [currencyDefault, setCurrencyDefault] = useState();
 
-   const CurrencyData = () => {
-     PublicFetch.get(`${GENERAL_SETTING_BASE_URL}/currency`)
-       .then((res) => {
-         console.log("response", res);
-         if (res.data.success) {
-           console.log("success", res.data.data);
-           let arr = [];
-           res?.data?.data?.forEach((item, index) => {
-             if (item.currency_is_default === 1) {
-               arr = item?.currency_code;
-               setCurrencyDefault(arr);
-             }
-           });
-         }
-       })
-       .catch((err) => {
-         console.log("Error", err);
-       });
-   };
+  const [allvendor, setAllvendor] = useState();
 
-//   // {function to fetch one Job Payment data - Ann - 13/3/23}
-//   const getOneJobPayment = () => {
-//     PublicFetch.get(`${ACCOUNTS}/job-payments/${id}`)
-//       .then((res) => {
-//         console.log("single brand value", res);
-
-//         if (res.data.success) {
-//           console.log("success job pay", res.data);
-//           setJobPayData(res?.data?.data);
-//         }
-//       })
-//       .catch((err) => {
-//         console.log("Error", err);
-//       });
-//   };
-//   useEffect(() => {
-//     getOneJobPayment();
-//     CurrencyData();
-//   }, []);
-
-
-
-const [allvendor,setAllvendor]=useState();
-
-console.log("all vendor : ",allvendor?.vendor_name);
-const getSinglevendor = () => {
+  console.log("all vendor : ", allvendor);
+  const getSinglevendor = () => {
     PublicFetch.get(`${CRM_BASE_URL_PURCHASING}/vendors/${id}`)
       .then((res) => {
         console.log("response of vendor", res);
         if (res.data.success) {
           console.log("Success of vendor", res.data.data);
           setAllvendor(res?.data?.data);
-
-      
-         
-         
         }
       })
       .catch((err) => {
         console.log("Error", err);
       });
   };
-
 
   useEffect(() => {
     if (id) {
@@ -123,100 +59,88 @@ const getSinglevendor = () => {
           </div>
         </div>
         <div className="row mt-3">
-          <div className="col-sm-6 d-flex">
-            <div className="col-4 boldhd">Vendor Name</div>
-            <div className="col-1">:</div>
-            <div className="col-7">
-              <p className="modal-view-data">
-             { allvendor?.vendor_name}              </p>
-            </div>
+          <div className="col-4">
+            <p> Vendor Name</p>
+          </div>
+          <div className="col-1">:</div>
+          <div className="col-6 justify-content-start">
+            <p className="modal-view-data">{allvendor?.vendor_name}</p>
           </div>
         </div>
-        {/* <div className="col-sm-6 d-flex">
-          <div className="col-4 boldhd">Voucher Date</div>
+
+        <div className="row mt-2">
+          <div className="col-4">
+            <p> Organisation Type</p>
+          </div>
           <div className="col-1">:</div>
-          <div className="col-7">
+          <div className="col-6 justify-content-start">
+            <p className="modal-view-data">{allvendor?.vendor_org_type}</p>
+          </div>
+        </div>
+
+        <div className="row mt-2">
+          <div className="col-4">
+            <p> Type</p>
+          </div>
+          <div className="col-1">:</div>
+          <div className="col-6 justify-content-start">
             <p className="modal-view-data">
-              {moment(jobPayData?.job_pay_voucher_date).format("DD-MM-YYYY")}
+              {allvendor?.crm_v1_vendor_types?.vendor_type_name}
             </p>
           </div>
         </div>
-        <div className="col-sm-6 d-flex">
-          <div className="col-4 boldhd">Job No</div>
+
+        <div className="row mt-2">
+          <div className="col-4">
+            <p>Email</p>
+          </div>
           <div className="col-1">:</div>
-          <div className="col-7">
+          <div className="col-6 justify-content-start">
+            <p className="modal-view-data">{allvendor?.vendor_email}</p>
+          </div>
+        </div>
+
+        <div className="row mt-2">
+          <div className="col-4">
+            <p> Contact </p>
+          </div>
+          <div className="col-1">:</div>
+          <div className="col-6 justify-content-start">
+            <p className="modal-view-data">{allvendor?.vendor_contact} </p>
+          </div>
+        </div>
+
+        <div className="row mt-2">
+          <div className="col-4">
+            <p>Tax No</p>
+          </div>
+          <div className="col-1">:</div>
+          <div className="col-6 justify-content-start">
+            <p className="modal-view-data">{allvendor?.vendor_tax_no}</p>
+          </div>
+        </div>
+
+        <div className="row mt-2">
+          <div className="col-4">
+            <p> Country</p>
+          </div>
+          <div className="col-1">:</div>
+          <div className="col-6 justify-content-start">
             <p className="modal-view-data">
-              {jobPayData?.fms_v1_jobs.job_number}
+              {allvendor?.countries?.country_name}
             </p>
           </div>
         </div>
-        <div className="col-sm-6 d-flex">
-          <div className="col-4 boldhd">Lead</div>
+
+        <div className="row mt-2">
+          <div className="col-4">
+            <p> Vendortype Description</p>
+          </div>
           <div className="col-1">:</div>
-          <div className="col-7">
-            <p className="modal-view-data">
-              {jobPayData?.crm_v1_leads.lead_customer_name}
-            </p>
+          <div className="col-6 justify-content-start">
+            <p className="modal-view-data">{allvendor?.vendor_desc}</p>
           </div>
         </div>
-        <div className="col-sm-6 d-flex">
-          <div className="col-4 boldhd">Currency</div>
-          <div className="col-1">:</div>
-          <div className="col-7">
-            <p className="modal-view-data">
-              {jobPayData?.generalsettings_v1_currency.currency_name}
-            </p>
-          </div>
-        </div>
-        <div className="col-sm-6 d-flex">
-          <div className="col-4 boldhd">Exchange Rate</div>
-          <div className="col-1">:</div>
-          <div className="col-7">
-            <p className="modal-view-data">
-              {jobPayData?.job_pay_exchange_rate}
-            </p>
-          </div>
-        </div>
-        <div className="col-sm-6 d-flex">
-          <div className="col-4 boldhd">Job Amount</div>
-          <div className="col-1">:</div>
-          <div className="col-7">
-            <p className="modal-view-data">{jobPayData?.job_pay_job_amount}</p>
-          </div>
-        </div>
-        <div className="col-sm-6 d-flex">
-          <div className="col-4 boldhd">Advance Amount</div>
-          <div className="col-1">:</div>
-          <div className="col-7">
-            <p className="modal-view-data">
-              {jobPayData?.job_pay_advance_amount_fx}
-            </p>
-          </div>
-        </div>
-        <div className="col-sm-6 d-flex">
-          <div className="col-4 boldhd">Advance in ({currencyDefault})</div>
-          <div className="col-1">:</div>
-          <div className="col-7">
-            <p className="modal-view-data">
-              {" "}
-              {jobPayData?.job_pay_advance_amount_lx}
-            </p>
-          </div>
-        </div>
-        <div className="col-sm-6 d-flex">
-          <div className="col-4 boldhd">Remarks</div>
-          <div className="col-1">:</div>
-          <div className="col-7">
-            <p className="modal-view-data">{jobPayData?.job_pay_remarks}</p>
-          </div>
-        </div>
-        <div className="col-sm-6 d-flex">
-          <div className="col-4 boldhd">Attachments</div>
-          <div className="col-1">:</div>
-          <div className="col-7">
-            <p className="modal-view-data">{jobPayData?.job_pay_docs}</p>
-          </div>
-        </div> */}
       </div>
     </>
   );

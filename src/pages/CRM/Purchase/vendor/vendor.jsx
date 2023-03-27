@@ -413,7 +413,7 @@ function Vendor() {
             <div
               className="editIcon m-0 "
               onClick={() => {
-                navigate(`${ROUTES.UPDATEVENDOR}/${index.vendor_id}`);
+                navigate(`${ROUTES.UPDATE_VENDOR}/${index.vender_id}`);
               }}
             >
               <Link>

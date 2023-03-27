@@ -48,7 +48,7 @@ import Roles_and_Screen from "./pages/HRMS/Roles and screen/roles_and_screen";
 import Employees from "./pages/HRMS/employees/employees";
 import CreateEmployee from "./pages/HRMS/employees/CreateEmployee";
 import Employeegrade from "./pages/HRMS/employeegrade/employeegrade";
-
+import Updatevendor from "./pages/CRM/Purchase/vendor/updatevendor";
 // {FMS}
 import Assign_opportunity from "./pages/FMS/Opportunity_assigns/AssignOpportunity/assign_opportunity";
 import Track_assignments from "./pages/FMS/Opportunity_assigns/Track_assignments/track_opportunity_assigns";
@@ -373,9 +373,12 @@ function App() {
             <Route path={ROUTES.CREATEAGENT} element={<ProtectedRoute />}>
               <Route index element={<CreateAgent />} />
             </Route>
-
+            
             <Route path={ROUTES.ADDVENDOR} element={<ProtectedRoute />}>
               <Route index element={<Addvendor />} />
+            </Route>
+            <Route path={ROUTES.UPDATE_VENDOR_ID} element={<ProtectedRoute />}>
+              <Route index element={<Updatevendor />} />
             </Route>
 
             {/* <Route

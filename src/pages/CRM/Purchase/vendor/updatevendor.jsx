@@ -12,9 +12,9 @@ import TextArea from "../../../../components/ InputType TextArea/TextArea";
 import SelectBox from "../../../../components/Select Box/SelectBox";
 import PublicFetch from "../../../../utils/PublicFetch";
 import {ROUTES} from "../../../../routes";
-
+import { useNavigate, useParams, Link } from "react-router-dom";
 import Custom_model from "../../../../components/custom_modal/custom_model";
-import { Link, useNavigate } from "react-router-dom";
+
 import {
   CRM_BASE_URL_PURCHASING,
   GENERAL_SETTING_BASE_URL,
@@ -182,29 +182,30 @@ function Updatevendor(){
       setVendorEditPopup(true);
     };
   
-    const handleupdate = async () => {
+    const submitForm = async (data) => {
       try {
         const updated = await PublicFetch.patch(
           `${CRM_BASE_URL_PURCHASING}/vendors/${id}`,
           {
-            name: editvendorname,
-            org_type: editvendorOrganisation,
-            vendor_type: editvendortyp,
-            email: editvendoremail,
-            contact: editvendorcontact,
-            country_id: editcountry,
-            city: editvendorcity,
-            address: editvendoraddress,
-            desc: editvendordescription,
-            tax_no: editvendortaxno,
+            name: data.vendor_name,
+            org_type: data.vendor_Organisation,
+            vendor_type: data.vendor_type,
+            email: data.vendor_email,
+            contact: data.vendor_contact,
+            country_id: data.vendor_country,
+            city: data.vendor_city,
+            address: data.vendor_address,
+            desc: data.vendor_description,
+            tax_no: data.vender_taxno,
           }
         );
         console.log("successfully updated ", updated);
         if (updated.data.success) {
           setSuccessPopup(true);
-          setVendorEditPopup(false);
+       
           getallvendors();
           close_modal(successPopup, 1000);
+         
         }
       } catch (err) {
         console.log("error to update vendor");
@@ -222,10 +223,38 @@ function Updatevendor(){
         console.log("error to fetching  vendortypes", err);
       }
     };
-  
+    const [vendorList, setVendorList] = useState();
     const getData = (current, pageSize) => {
       return allvendor?.slice((current - 1) * pageSize, current * pageSize);
     };
+    const Onevendor = () => {
+        PublicFetch.get(`${CRM_BASE_URL_PURCHASING}/vendors/${id}`)
+          .then((res) => {
+            console.log("response", res);
+            if (res.data.success) {
+              console.log("success of vendors", res.data.data);
+              setVendorList(res.data.data);
+              editForm.setFieldsValue({
+                vendor_name: res.data.data.vendor_name,
+                vendor_Organisation: res.data.data.vendor_org_type,
+                vendor_email: res.data.data.vendor_email,
+                vendor_contact: res.data.data.vendor_contact,
+                vendor_city: res.data.data.vendor_city,
+                vendor_taxno: res.data.data.vendor_tax_no,
+                vendor_address: res.data.data.vendor_address,
+                vendor_description: res.data.data.vendor_desc,
+          
+                vendor_country: res.data.data.vendor_country_id,
+                vendor_type: res.data.data.vendor_type_id,
+              });
+           
+           
+            }
+          })
+          .catch((err) => {
+            console.log("Error", err);
+          });
+      };
   
     const getallvendors = async () => {
       try {
@@ -276,46 +305,23 @@ function Updatevendor(){
       if (!mShow) {
         setTimeout(() => {
           setSuccessPopup(false);
-          // navigate(ROUTES.ATTRIBUTES);
+          navigate(`${ROUTES.VENDOR}`);
         }, time);
       }
     };
   
-    const createvendor = async () => {
-      try {
-        const addvendor = await PublicFetch.post(
-          `${CRM_BASE_URL_PURCHASING}/vendors`,
-          {
-            name: vendorname,
-            org_type: vendorOrganisation,
-            vendor_type: vendortyp,
-            email: vendoremail,
-            contact: vendorcontact,
-            country_id: countryis,
-            city: vendorcity,
-            address: vendoraddress,
-            desc: vendordescription,
-            tax_no: vendortaxno,
-          }
-        );
-        console.log("vendors added successfully", addvendor);
-        if (addvendor.data.success) {
-          setSuccessPopup(true);
-          getallvendors();
-          addForm.resetFields();
-          setModalvendor(false);
-          close_modal(successPopup, 1000);
-        }
-      } catch (err) {
-        console.log("err to add the vendors", err);
-      }
-    };
-  
+ 
     useEffect(() => {
       getallvendortype();
       getallvendors();
       getCountry();
+      Onevendor();
     }, []);
+
+
+
+
+
     return(
         <>
 
@@ -326,7 +332,7 @@ function Updatevendor(){
           onFinish={(values) => {
             console.log("values iss", values);
             // handleupdate()
-            handleupdate();
+            submitForm(values);    
           }}
           onFinishFailed={(error) => {
             console.log(error);
@@ -343,7 +349,7 @@ function Updatevendor(){
             </div>
 
             <div className="col-sm-4 pt-2 ">
-              <label> Name</label>
+              <label> Name<span className="required">*</span></label>
               
                 <Form.Item
                   name="vendor_name"
@@ -369,7 +375,7 @@ function Updatevendor(){
             </div>
 
             <div className="col-sm-4 pt-2 ">
-              <label> Organisation Type</label>
+              <label> Organisation Type<span className="required">*</span></label>
               
                 <Form.Item
                   name="vendor_Organisation"
@@ -400,7 +406,7 @@ function Updatevendor(){
             </div>
 
             <div className="col-sm-4 pt-2 ">
-              <label>Type</label>
+              <label>Type<span className="required">*</span></label>
             
                 <Form.Item
                   name="vendor_type"
@@ -441,7 +447,7 @@ function Updatevendor(){
             </div>
 
             <div className="col-sm-4 pt-2 ">
-              <label>Country</label>
+              <label>Country<span className="required">*</span></label>
               
                 <Form.Item
                   name="vendor_country"
@@ -483,8 +489,8 @@ function Updatevendor(){
             </div>
 
             
-          <div className="row">
-            <div className="col-4 pt-1">
+        
+            <div className="col-sm-4 pt-2 ">
               <label>City</label>
               <div>
                 <Form.Item
@@ -501,7 +507,7 @@ function Updatevendor(){
               </div>
             </div>
 
-            <div className="col-4 pt-1">
+            <div className="col-sm-4 pt-2 ">
               <label>Tax No</label>
               
                 <Form.Item
@@ -519,7 +525,7 @@ function Updatevendor(){
             </div>
 
 
-          </div>
+          
 
           </div>
 
@@ -530,7 +536,7 @@ function Updatevendor(){
 
 
             <div className="col-sm-4 pt-3">
-              <label> Email</label>
+              <label> Email<span className="required">*</span></label>
               
                 <Form.Item
                   name="vendor_email"
@@ -556,7 +562,7 @@ function Updatevendor(){
             </div>
 
             <div className="col-sm-4 pt-3">
-              <label> Contact</label>
+              <label> Contact<span className="required">*</span></label>
               
                 <Form.Item
                   name="vendor_contact"

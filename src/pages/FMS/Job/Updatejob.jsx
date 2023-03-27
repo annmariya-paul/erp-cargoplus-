@@ -328,14 +328,14 @@ function Updatejob() {
 
   return (
     <>
-      <div className="container-fluid">
+      <div className="container-fluid ">
         <div className="row justify-content-md-center">
           {/* <div className="row flex-wrap">
             <div className="col-6 ">
               <h5 className="lead_text"></h5>
             </div>
           </div> */}
-          <div className="content-tabs">
+      
             <Form
               form={editForm}
               onFinish={(values) => {
@@ -1036,7 +1036,7 @@ function Updatejob() {
                 setSuccessPopup(false);
               }}
             />
-          </div>
+        
         </div>
       </div>
     </>

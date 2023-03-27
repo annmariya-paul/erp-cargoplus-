@@ -147,7 +147,7 @@ import Incoterm from "./pages/FMS/settings/Incoterm/incoterm";
 import EnquiryList from "./pages/CRM/lead/enquiry/EnquiryList";
 import EditEnquiry from "./pages/CRM/lead/enquiry/EditEnquiry";
 import ViewEnquiry from "./pages/CRM/lead/enquiry/ViewEnquiry";
-
+import Viewvendor from "./pages/CRM/Purchase/vendor/viewvendor";
 function App() {
   return (
     <div className="App">
@@ -194,10 +194,10 @@ function App() {
             <Route path={ROUTES.ENQUIRY_LIST} element={<ProtectedRoute />}>
               <Route index element={<EnquiryList />} />
             </Route>
-            <Route path={ROUTES.EDIT_ENQUIRY} element={<ProtectedRoute />}>
+            <Route path={ROUTES.EDIT_ENQUIRY_ID} element={<ProtectedRoute />}>
               <Route index element={<EditEnquiry />} />
             </Route>
-            <Route path={ROUTES.VIEW_ENQUIRY} element={<ProtectedRoute />}>
+            <Route path={ROUTES.VIEW_ENQUIRY_ID} element={<ProtectedRoute />}>
               <Route index element={<ViewEnquiry />} />
             </Route>
 
@@ -373,12 +373,15 @@ function App() {
             <Route path={ROUTES.CREATEAGENT} element={<ProtectedRoute />}>
               <Route index element={<CreateAgent />} />
             </Route>
-            
+
             <Route path={ROUTES.ADDVENDOR} element={<ProtectedRoute />}>
               <Route index element={<Addvendor />} />
             </Route>
             <Route path={ROUTES.UPDATE_VENDOR_ID} element={<ProtectedRoute />}>
               <Route index element={<Updatevendor />} />
+            </Route>
+            <Route path={ROUTES.VIEW_VENDOR_ID} element={<ProtectedRoute />}>
+              <Route index element={<Viewvendor />} />
             </Route>
 
             {/* <Route

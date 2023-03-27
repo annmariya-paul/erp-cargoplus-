@@ -1,20 +1,24 @@
 import { Checkbox, Input, Select } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { MdPageview } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { CRM_BASE_URL_FMS } from "../../../../api/bootapi";
 import Button from "../../../../components/button/button";
 import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
 import MyPagination from "../../../../components/Pagination/MyPagination";
 import TableData from "../../../../components/table/table_data";
 import { ROUTES } from "../../../../routes";
+import PublicFetch from "../../../../utils/PublicFetch";
 import {
   LeadType,
   LeadStatus,
   LeadOrganization,
 } from "../../../../utils/SelectOptions";
+import moment from "moment";
 
 function EnquiryList() {
+  const navigate = useNavigate();
   const [searchedText, setSearchedText] = useState("");
   const [searchType, setSearchType] = useState("");
   const [searchStatus, setSearchStatus] = useState("");
@@ -24,6 +28,7 @@ function EnquiryList() {
   const [current, setCurrent] = useState(1);
   const [allLeadList, setAllLeadList] = useState([]);
   const [serialNo, setserialNo] = useState(1);
+  const [AllEnquiries, setAllnquires] = useState();
 
   const columns = [
     {
@@ -33,15 +38,36 @@ function EnquiryList() {
       render: (value, item, index) => serialNo + index,
       align: "center",
     },
-
     {
-      title: "NAME",
-      dataIndex: "customer_name",
-      key: "customer_name",
+      title: "ENQUIRY NO",
+      dataIndex: "enquiry_no",
+      key: "enquiry_no",
       // width: "23%",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.customer_name)
+        return String(record.enquiry_no)
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      },
+      align: "left",
+    },
+    {
+      title: "DATE",
+      dataIndex: "enquiry_date",
+      key: "enquiry_date",
+      // width: "23%",
+      align: "ledt",
+      render: (data, index) => {
+        return <div>{moment(index.enquiry_date).format("DD-MM-YYYY")}</div>;
+      },
+    },
+    {
+      title: "CUSTOMER",
+      dataIndex: "enquiry_customer_name",
+      key: "enquiry_customer_name",
+      filteredValue: [searchType],
+      onFilter: (value, record) => {
+        return String(record.enquiry_customer_name)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
@@ -49,36 +75,24 @@ function EnquiryList() {
     },
     {
       title: "CONTACT PERSON",
-      dataIndex: "contact_person",
-      key: "contact_person",
-      filteredValue: [searchType],
-      onFilter: (value, record) => {
-        return String(record.lead_type)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
-      align: "left",
-    },
-    {
-      title: "PHONE",
-      dataIndex: "customer_phone",
-      key: "customer_phone",
+      dataIndex: "enquiry_contact_person_name",
+      key: "enquiry_contact_person_name",
       // width: "23%",
       align: "left",
     },
 
     {
-      title: "EMAIL",
-      dataIndex: "customer_email",
-      key: "customer_email",
+      title: "SOURCE",
+      dataIndex: "enquiry_source",
+      key: "enquiry_source",
       // width: "23%",
       align: "ledt",
     },
 
     {
-      title: "CREDIT DAYS",
-      dataIndex: "customer_credit_days",
-      key: "customer_credit_days",
+      title: "CUSTOMER REFERENCE",
+      dataIndex: "enquiry_customer_ref",
+      key: "enquiry_customer_ref",
       // filteredValue: [searchStatus],
       // onFilter: (value, record) => {
       //   return String(record.lead_status)
@@ -87,41 +101,33 @@ function EnquiryList() {
       // },
       align: "center",
     },
-    {
-      title: "OPPORTUNITY",
-      dataIndex: "opportunity",
-      key: "opportunity",
-      filteredValue: [searchStatus],
-      onFilter: (value, record) => {
-        return String(record.lead_status)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
-      align: "left",
-    },
+    // {
+    //   title: "OPPORTUNITY",
+    //   dataIndex: "opportunity",
+    //   key: "opportunity",
+    //   filteredValue: [searchStatus],
+    //   onFilter: (value, record) => {
+    //     return String(record.lead_status)
+    //       .toLowerCase()
+    //       .includes(value.toLowerCase());
+    //   },
+    //   align: "left",
+    // },
 
-    {
-      title: "JOBS",
-      dataIndex: "jobs",
-      key: "jobs",
-      // width: "23%",
-      align: "ledt",
-    },
-
-    {
-      title: "INVOICE AMT",
-      dataIndex: "invoice_amt",
-      key: "invoice_amt",
-      // width: "23%",
-      align: "ledt",
-    },
-    {
-      title: "DUE AMOUNT",
-      dataIndex: "due_amt",
-      key: "due_amt",
-      // width: "23%",
-      align: "ledt",
-    },
+    // {
+    //   title: "INVOICE AMT",
+    //   dataIndex: "invoice_amt",
+    //   key: "invoice_amt",
+    //   // width: "23%",
+    //   align: "ledt",
+    // },
+    // {
+    //   title: "DUE AMOUNT",
+    //   dataIndex: "due_amt",
+    //   key: "due_amt",
+    //   // width: "23%",
+    //   align: "ledt",
+    // },
     {
       title: "ACTION",
       dataIndex: "action",
@@ -134,7 +140,7 @@ function EnquiryList() {
           <div className="d-flex justify-content-center align-items-center gap-2">
             <div className="m-0">
               <Link
-                to={`${ROUTES.CUSTOMER_EDIT}/${index.customer_id}`}
+                to={`${ROUTES.EDIT_ENQUIRY}/${index.enquiry_id}`}
                 className="editcolor"
               >
                 <FaEdit />
@@ -145,7 +151,9 @@ function EnquiryList() {
               <div
                 className="editcolor"
                 onClick={
-                  () => {}
+                  () => {
+                    navigate(`${ROUTES.VIEW_ENQUIRY}/${index.enquiry_id}`);
+                  }
                   //   handleViewData(index)
                 }
               >
@@ -158,6 +166,40 @@ function EnquiryList() {
       align: "center",
     },
   ];
+
+  const GetAllEnquiries = () => {
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/enquiries`)
+      .then((res) => {
+        console.log("Response ", res);
+        if (res.data.success) {
+          console.log("Success of all enquiries", res.data.data);
+          let temp = [];
+          res?.data?.data?.forEach((item, index) => {
+            temp.push({
+              enquiry_contact_person_id: item.enquiry_contact_person_id,
+              enquiry_contact_person_name:
+                item.crm_v1_contacts?.contact_person_name,
+              enquiry_customer_id: item.enquiry_customer_id,
+              enquiry_customer_name: item?.crm_v1_customer?.customer_name,
+              enquiry_customer_ref: item?.enquiry_customer_ref,
+              enquiry_date: item.enquiry_date,
+              enquiry_id: item.enquiry_id,
+              enquiry_no: item.enquiry_no,
+              enquiry_remarks: item.enquiry_remarks,
+              enquiry_source: item.enquiry_source,
+            });
+          });
+          setAllnquires(temp);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+  useEffect(() => {
+    GetAllEnquiries();
+  }, []);
 
   return (
     <div className="container-fluid">
@@ -328,7 +370,7 @@ function EnquiryList() {
             <div className="datatable">
               <TableData
                 // data={getData(numofItemsTo, pageofIndex)}
-                data={allLeadList}
+                data={AllEnquiries}
                 columns={columns}
                 custom_table_css="table_lead_list"
               />

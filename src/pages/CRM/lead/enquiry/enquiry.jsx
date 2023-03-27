@@ -13,7 +13,8 @@ import CustomModel from "../../../../components/custom_modal/custom_model";
 
 import Custom_model from "../../../../components/custom_modal/custom_model";
 import PublicFetch from "../../../../utils/PublicFetch";
-import { CRM_BASE_URL } from "../../../../api/bootapi";
+import { CRM_BASE_URL, CRM_BASE_URL_FMS } from "../../../../api/bootapi";
+import moment from "moment";
 function Enquiry() {
   const [addForm] = Form.useForm();
   const [SuccessPopup, setSuccessPopup] = useState(false);
@@ -22,14 +23,116 @@ function Enquiry() {
   const [modalAddCustomer, setModalAddCustomer] = useState(false);
   const [imgSizeError, setImgSizeError] = useState(false);
   const [AllCustomers, setAllCustomers] = useState();
+  const [AllContacts, setAllContacts] = useState();
+  const [Customer_Id, setCustomer_Id] = useState();
+
+  const close_modal = (mShow, time) => {
+    if (!mShow) {
+      setTimeout(() => {
+        setSuccessPopup(false);
+        navigate(`${ROUTES.ENQUIRY_LIST}`);
+      }, time);
+    }
+  };
+
+  // api call starts !!
 
   const GetAllCustomers = () => {
-    PublicFetch.get(`${CRM_BASE_URL}/customer?startIndex=0&noOfItems=1000`)
+    PublicFetch.get(`${CRM_BASE_URL}/customer/minimal`)
       .then((res) => {
         console.log("Response", res);
         if (res.data.success) {
           console.log("Success og gettimg customers", res?.data?.data);
-          setAllCustomers(res?.data?.data?.customers);
+          setAllCustomers(res?.data?.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+  const GetAllContacts = (e) => {
+    PublicFetch.get(`${CRM_BASE_URL}/contact`)
+      .then((res) => {
+        console.log("Response", res);
+        if (res.data.success) {
+          console.log("success of contact", res.data.data);
+          // setAllContacts(res.data.data);
+          let temp = [];
+          res.data.data.forEach((item, index) => {
+            if (e == item.contact_customer_id) {
+              temp.push(item);
+            }
+          });
+          setAllContacts(temp);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+  const GetSingleCustomer = (e) => {
+    PublicFetch.get(`${CRM_BASE_URL}/customer/${e}`)
+      .then((res) => {
+        console.log("Response from single customer", res);
+        if (res.data.success) {
+          console.log("Success from single customer", res.data.data);
+          console.log("contact data", res.data.data.crm_v1_contacts[0]);
+          let a = res.data.data.crm_v1_contacts[0];
+          addForm.setFieldsValue({
+            contactperson: a.contact_id,
+            contactemail: a.contact_email,
+            contactphone: a.contact_phone_1,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+  const GetSingleContact = (e) => {
+    PublicFetch.get(`${CRM_BASE_URL}/contact/${e}`)
+      .then((res) => {
+        console.log("Response from single contact", res);
+        if (res.data.success) {
+          console.log("success from single contact", res.data.data);
+          addForm.setFieldsValue({
+            contactemail: res.data.data.contact_email,
+            contactphone: res.data.data.contact_phone_1,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+  // create a enquiry !!
+
+  const CreateEnquiry = (data) => {
+    let enquiry_date = moment(data.date);
+    const formData = new FormData();
+    formData.append("enquiry_customer_id", data.customer);
+    formData.append("enquiry_source", data.source);
+    formData.append("enquiry_date", enquiry_date);
+    formData.append("enquiry_customer_ref", data.reference);
+    formData.append("enquiry_contact_person_id", data.contactperson);
+    formData.append("enquiry_remarks", data.purchasePoRef);
+    if (img) {
+      formData.append("attachments", img);
+    }
+
+    PublicFetch.post(`${CRM_BASE_URL_FMS}/enquiries`, formData, {
+      "Content-Type": "Multipart/form-Data",
+    })
+      .then((res) => {
+        console.log("response of create", res);
+        if (res.data.success) {
+          setSuccessPopup(true);
+          addForm.resetFields();
+          close_modal(SuccessPopup, 1200);
         }
       })
       .catch((err) => {
@@ -39,16 +142,23 @@ function Enquiry() {
 
   useEffect(() => {
     GetAllCustomers();
+    // GetAllContacts();
+    let today = new Date();
+    let todayDate = moment(today);
+    addForm.setFieldsValue({
+      date: todayDate,
+    });
   }, []);
   return (
     <>
       <div className="container-fluid">
         <Form
           name="addForm"
-          //   form={addform}
+          form={addForm}
           onFinish={(data) => {
-            // console.log("val", data);
+            console.log("val", data);
             // createPurchase(data);
+            CreateEnquiry(data);
           }}
           onFinishFailed={(error) => {
             console.log(error);
@@ -77,7 +187,13 @@ function Enquiry() {
                     },
                   ]}
                 >
-                  <SelectBox>
+                  <SelectBox
+                    onChange={(e) => {
+                      setCustomer_Id(e);
+                      GetAllContacts(e);
+                      GetSingleCustomer(e);
+                    }}
+                  >
                     {AllCustomers &&
                       AllCustomers.length > 0 &&
                       AllCustomers.map((item, index) => {
@@ -131,14 +247,14 @@ function Enquiry() {
               <label>
                 Date<span className="required">*</span>
               </label>
-              <Form.Item name="Date" className="mt-2">
+              <Form.Item name="date" className="mt-2">
                 <DatePicker
-                //   format={"DD-MM-YYYY"}
-                //   defaultValue={moment(newDate)}
-                //   value={purchase_date}
-                //   onChange={(e) => {
-                //     setPurchasedate(e);
-                //   }}
+                  format={"DD-MM-YYYY"}
+                  //   defaultValue={moment(newDate)}
+                  //   value={purchase_date}
+                  //   onChange={(e) => {
+                  //     setPurchasedate(e);
+                  //   }}
                 />
               </Form.Item>
             </div>
@@ -183,19 +299,30 @@ function Enquiry() {
 
             <div className="col-sm-4 pt-3">
               <label>Contact Person</label>
-              <Form.Item name="contctperson">
-                <InputType
-                //   value={purchasePoNo}
-                //   onChange={(e) => {
-                //     setPurchasePoNo(e.target.value);
-                //     console.log("purchasePoNo", purchasePoNo);
-                //   }}
-                />
+              <Form.Item name="contactperson">
+                <SelectBox
+                  onChange={(e) => {
+                    GetSingleContact(e);
+                  }}
+                >
+                  {AllContacts &&
+                    AllContacts.length > 0 &&
+                    AllContacts.map((item, index) => {
+                      return (
+                        <Select.Option
+                          key={item.contact_id}
+                          value={item.contact_id}
+                        >
+                          {item.contact_person_name}
+                        </Select.Option>
+                      );
+                    })}
+                </SelectBox>
               </Form.Item>
             </div>
             <div className="col-sm-4 pt-3">
               <label>Email</label>
-              <Form.Item name="contctemail">
+              <Form.Item name="contactemail">
                 <InputType
                 //   value={purchasePoNo}
                 //   onChange={(e) => {
@@ -207,7 +334,7 @@ function Enquiry() {
             </div>
             <div className="col-sm-4 pt-3">
               <label>Phone</label>
-              <Form.Item name="contctemail">
+              <Form.Item name="contactphone">
                 <InputType
                 //   value={purchasePoNo}
                 //   onChange={(e) => {
@@ -254,8 +381,8 @@ function Enquiry() {
                   name="attachments"
                   //   value={attachments}
                   multiple
-                  listType="picture"
-                  accept=".png,.jpg,.jpeg"
+                  listType="file"
+                  accept=".pdf,.doc,.zip"
                   height={100}
                   // onPreview={handlePreview}
                   beforeUpload={false}
@@ -288,7 +415,7 @@ function Enquiry() {
               type="reset"
               value="Reset"
               onClick={() => {
-                navigate(ROUTES.LIST_JOB);
+                navigate(ROUTES.ENQUIRY_LIST);
               }}
             >
               Cancel
@@ -297,80 +424,7 @@ function Enquiry() {
         </Form>
 
         {/* Modal for add Customer */}
-        <CustomModel
-          show={modalAddCustomer}
-          onHide={() => setModalAddCustomer(false)}
-          header="Add Customer"
-          footer={false}
-          // {...props}
-          View_list
-          list_content={
-            <>
-              <div className="row">
-                <h5 className="lead_text">Add Customer</h5>
-              </div>
-              <Form
-                // form={addForm}
-                onFinish={(data) => {
-                  console.log("valuezzzzzzz", data);
-                }}
-                onFinishFailed={(error) => {
-                  console.log(error);
-                }}
-              >
-                <div className="row py-4">
-                  <div className="col-6 pt-1">
-                    <label>
-                      Customer Name<span className="required">*</span>
-                    </label>
-                    <div>
-                      <Form.Item name="customername">
-                        <InputType />
-                      </Form.Item>
-                    </div>
-                  </div>
 
-                  <div className="col-6 pt-1">
-                    <label>
-                      Contact Person<span className="required">*</span>
-                    </label>
-                    <Form.Item name="contactperson">
-                      <InputType />
-                    </Form.Item>
-                  </div>
-                  <div className="col-6 pt-1">
-                    <label>
-                      Email<span className="required">*</span>
-                    </label>
-                    <Form.Item name="email">
-                      <InputType />
-                    </Form.Item>
-                  </div>
-                  <div className="col-6 pt-1">
-                    <label>
-                      Phone<span className="required">*</span>
-                    </label>
-                    <Form.Item name="phone">
-                      <InputType />
-                    </Form.Item>
-                  </div>
-                </div>
-                <div className="row justify-content-center ">
-                  <div className="col-auto">
-                    <Button btnType="save">Save</Button>
-                  </div>
-                </div>
-              </Form>
-            </>
-          }
-        >
-          <Custom_model
-            size={"sm"}
-            // show={successPopup}
-            onHide={() => setSuccessPopup(false)}
-            success
-          />
-        </CustomModel>
         <Custom_model
           success
           show={SuccessPopup}

@@ -177,6 +177,7 @@ const ROUTES = {
   JOB_INVOICE_ID: "/job_invoice/:id",
   VENDOR_TYPE: "/vendor_type",
   VENDOR: "/vendor",
+  ADDVENDOR:"/add_vendor",
   FMSSETTINGS: "/fmssettings",
 
   // CRM -> sales new page

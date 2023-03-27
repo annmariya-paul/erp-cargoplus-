@@ -12,12 +12,14 @@ import { CRM_BASE_URL } from "../../../../api/bootapi";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { message } from "antd";
 import moment from "moment";
+import { AiOutlinePlusCircle } from "react-icons/ai";
 // import TextArea from "antd/lib/input/TextArea";
 import SelectBox from "../../../../components/Select Box/SelectBox";
 import InputType from "../../../../components/Input Type textbox/InputType";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
 import { ROUTES } from "../../../../routes";
 import "../opportunity_ List/opportunitylist.scss";
+import FileUpload from "../../../../components/fileupload/fileUploader";
 // export default function AddOpportunity(props) {
   export default function EditOpportunity() {
   const { id } = useParams();
@@ -743,23 +745,7 @@ useEffect(()=>{
 
   return (
     <>
-      {/* <Custom_model
-        //  Adding_contents
-        width={900}
-        // Adding_contents
-        // visible={props.modalOpportunity}
-        show={props.modalOpportunity}
-        onHide={props.onCancel}
-        // header="Add Opportunity"
-        header="Add Opportunity"
-        centered
-        footer={false}
-        View_list
-        list_content={
-          <> */}
-           <div className="container-fluid">
-        <div className="row ">
-        <div className="content-tabs">
+      <div className="container-fluid">
         <Form
           form={editForm}
           onFinish={(value) => {
@@ -773,334 +759,437 @@ useEffect(()=>{
             console.log(error);
           }}
         >
-            <div className="px-1">
-                <h5 className="lead_text mt-3 ms-4 mb-3">Edit Opportunity</h5>
-                <div className="row px-1">
-          <div className="px-5">
-            <div className="row px-1">
-              <div className="col-sm-4 pt-2">
-                <label>Opportunity No.<span className="required">*</span></label>
-                
-                <InputType
-                  value={opportunityNum}
-                  onChange={(e) => setOpportunityNum(e.target.value)}
-                  className="input_number_style mt-2"
-                  style={{ width: "100%" }}
-                  readOnly
-                />
-              </div>
-              <div className="col-sm-4 pt-2">
-                <label>Lead Type<span className="required">*</span></label>
+          <div className="row pt-2">
+            <h5 className="lead_text">Edit Opportunity</h5>
+          </div>
+          <div className="row crm_cards mt-2 mx-0 px-2 py-3">
+            <div className="col-12">
+              <h5 className="lead_text">Basic Info</h5>
+            </div>
+            <div className="col-sm-4 pt-2">
+              <label>
+                Enquiry No.<span className="req_star">*</span>
+              </label>
+              <Form.Item
+                name="enquiryNumber"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please Select an Enquiry Number",
+                  },
+                ]}
+              >
+                <SelectBox
+                  placeholder={"--Please Select--"}
+                  // value={oppoNumber}
+                  // onChange={(e) => setOppoNumber(e.target.value)}
+                >
+                  <Select.Option>ENQ-0001</Select.Option>
+                </SelectBox>
+              </Form.Item>
+            </div>
+            <div className="col-sm-4 pt-2 d-flex">
+              <div className="col-11">
+                <label>
+                  Customer<span className="req_star">*</span>
+                </label>
                 <Form.Item
-                  name="opportunity_type"
+                  name="customer"
                   rules={[
                     {
                       required: true,
-                      message: "Please select a Type",
+                      message: "Please Select a Customer",
                     },
                   ]}
                 >
                   <SelectBox
-                    value={oppurtunitytype}
-                    onChange={(e) => {
-                      setoppurtunitytype(e);
-                    }}
+                    placeholder={"--Please Select--"}
+                    // value={opptype}
+                    // onChange={(e) => setOppType(e)}
                   >
-                    <Select.Option value="sales">Sales</Select.Option>
-                    <Select.Option value="support">Support</Select.Option>
-                    <Select.Option value="maintenance">
-                      Maintenance
-                    </Select.Option>
-                  </SelectBox>
-                </Form.Item>
-                {/* </Form.Group> */}
-              </div>
-
-              <div className="col-sm-4 pt-2">
-                {/* <Form.Group className="mb-2" controlId="lead_customer_from"> */}
-                {/* <Form.Label>From</Form.Label> */}
-                <label>Lead From<span className="required">*</span></label>
-                <Form.Item
-                  name="opportunity_from"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please select a From",
-                    },
-                  ]}
-                >
-                  <SelectBox
-                    value={oppurtunityfrom}
-                    onChange={(e) => {
-                      setOppurtunityfrom(e);
-                    }}
-                  >
-                    <Select.Option value="lead">Lead</Select.Option>
-                    <Select.Option value="customer">Customer</Select.Option>
+                    <Select.Option value="sales">Test</Select.Option>
                   </SelectBox>
                 </Form.Item>
               </div>
-
-              <div className="col-sm-4 pt-2 " hidden>
-                {/* <Form.Group
-                  className="mb-2"
-                  controlId="lead_customer_generated"
-                > */}
-                <label>Generated/Converted by</label>
-                <Form.Item
-                  name={"opportunity_lead_id"}
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please Enter a Lead Id",
-                    },
-                  ]}
-                >
-                  <InputType value={oppurtunitylead} disabled={true} />
-                </Form.Item>
-
-                {/* </Form.Group> */}
-              </div>
-
-              <div className="col-sm-4 pt-2">
-                {/* <Form.Group className="mb-2" controlId="lead_source"> */}
-                <label>Source<span className="required">*</span></label>
-
-                <Form.Item
-                  name="opportunity_source"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please select a Source",
-                    },
-                  ]}
-                >
-                  <SelectBox
-                    value={oppurtunitysource}
-                    onChange={(e) => {
-                      setOppurtunitysource(e);
-                    }}
-                  >
-                    <Select.Option value="reference">Reference</Select.Option>
-                    <Select.Option value="direct visit">
-                      Direct Visit
-                    </Select.Option>
-                    <Select.Option value="online registration">
-                      Online Registration
-                    </Select.Option>
-                  </SelectBox>
-                </Form.Item>
-                {/* </Form.Group> */}
-              </div>
-
-              <div className="col-sm-4 pt-2">
-                <label>Party<span className="required">*</span></label>
-                <Form.Item
-                  name={"opportunity_party"}
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please select a Valid Party",
-                    },
-                  ]}
-                >
-                  <SelectBox
-                    value={oppurtunityparty}
-                    onChange={(e) => {
-                      setOppurtunityparty(parseInt(e.target.value));
-                    }}
-                    // value={item?.contact_person_name}
-
-                    // value={ oppurtunityparty ===item?.contact_lead_id ? item.contact_person_name:"" }
-                  >
-                    {contact &&
-                      contact.length > 0 &&
-                      contact.map((item, index) => {
-                        console.log("item innn", item);
-                        if (oppurtunitylead == item.contact_lead_id) {
-                          return (
-                            <Select.Option
-                              key={item.contact_id}
-                              value={item.contact_id}
-                            >
-                              {item.contact_person_name}
-                            </Select.Option>
-                          );
-                        }
-                        //  else{
-                        //   <Select.Option></Select.Option>
-                        //  }
-                      })}
-                  </SelectBox>
-                </Form.Item>
-              </div>
-
-              <div className=" col-4 col-sm-4  pt-2">
-                {/* <label>Valid Up To</label>
-                <DatePicker
-                  defaultValue={moment("10-09-2022", dateFormat)}
-                  format={dateFormat}
-                /> */}
-                {/* <Form.Group className="mb-2" controlId="lead_valid_up_to"> */}
-                <label>Valid Up to<span className="required">*</span></label>
-
-                <Form.Item name="opportunity_validity" {...config}>
-                  <DatePicker
-                    style={{ borderWidth: 0, marginTop: 10 }}
-                    initialValues={oppurtunityvalidity}
-                    format={dateFormatList}
-                    // disabledDate={(d) => !d || d.isBefore(today)}
-                    onChange={(e) => {
-                      console.log("date mmm", e);
-                      setOppurtunityvalidity(e);
-                    }}
-                  />
-                </Form.Item>
-
-                {/* </Form.Group> */}
-              </div>
-
-             
-
-              <div className="col-sm-4 pt-3">
-                {/* <label>Expecting Amount</label>
-                  <Form.Item
-                    // type="text"
-                    name="lead_expecting_amt"
-                  >
-                  <InputType value={oppurtunityamount} />
-                  </Form.Item> */}
-
-                <label>Expecting Amount</label>
-                <Form.Item
-                  name={"opportunity_amount"}
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please enter Amount",
-                    },
-                  ]}
-                >
-                  <InputType
-                    value={oppurtunityamount}
-                    onChange={(e) => {
-                      setOppurtunityamount(e.target.value);
-                    }}
-                  />
-                </Form.Item>
-              </div>
-
-              <div className="col-sm-4 pt-2">
-                {/* <Form.Group className="mb-2" controlId="lead_probability"> */}
-                <label>Probability of conversion<span className="required">*</span></label>
-                <Form.Item
-                  name={"opportunity_probability"}
-                  rules={[
-                    {
-                      required: true,
-                      message: "please select valid Name",
-                    },
-                  ]}
-                >
-                  <SelectBox
-                    value={oppurtunityprobability}
-                    onChange={(e) => {
-                      setOppurtunityProbability(e);
-                    }}
-                  >
-                    <Select.Option value="L">low</Select.Option>
-                    <Select.Option value="M">medium</Select.Option>
-                    <Select.Option value="H">high</Select.Option>
-                  </SelectBox>
-                </Form.Item>
-                {/* </Form.Group> */}
-              </div>
-
-              <div className="col-sm-4 pt-2">
-                {/* <Form.Group className="mb-2" controlId="lead_status"> */}
-                <label>Status<span className="required">*</span></label>
-                <Form.Item
-                  name={"opportunity_status"}
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please select a Status",
-                    },
-                  ]}
-                >
-                  <SelectBox
-                    value={oppurtunitystatus}
-                    onChange={(e) => setOppurtunitystatus(e)}
-                  >
-                    <Select.Option value={1}>Quotation</Select.Option>
-                    <Select.Option value={2}>Interested</Select.Option>
-                    <Select.Option value={3}>Converted</Select.Option>
-                    <Select.Option value={4}>Lost</Select.Option>
-                    <Select.Option value={5}>DND</Select.Option>
-                  </SelectBox>
-                </Form.Item>
-                {/* </Form.Group> */}
-              </div>
-              <div className="col-sm-12 pt-3">
-                {/* <Form.Group className="mb-2" controlId="lead_details"> */}
-                <label>Details</label>
-                <Form.Item
-                  name={"opportunity_description"}
-                  rules={[
-                    {
-                      min: 3,
-                      message: "Please enter above 3 character",
-                    },
-                    {
-                      max: 100,
-                    },
-                  ]}
-                >
-                  {/* as="textarea"
-                    name="lead_details"
-                    rows={3}
-                    // className={`${errors.lead_details && "invalid"}`} */}
-
-                  <TextArea
-                    value={opportunitydescription}
-                    onChange={(e) => {
-                      setOpportunitydescription(e.target.value);
-                    }}
-                  />
-                </Form.Item>
-                {/* </Form.Group> */}
-              </div>
-              </div>
-              </div>
-              <div className="col-12 d-flex justify-content-center my-2">
-                <Button
-                  onClick={() => {
-                    updatedOppurtunity();
-                   
-                    
-                  }}
-                  btnType="save"
-                  type="submit"
-                >
-                  Save
+              <div className="col-1 mt-4 pt-2 ps-1">
+                <Button btnType="add_borderless" type="button">
+                  <AiOutlinePlusCircle style={{ fontSize: "25px" }} />
                 </Button>
+              </div>
+            </div>
+            <div className="col-sm-4 pt-2">
+              <label>
+                Opportunity No.<span className="req_star">*</span>
+              </label>
+              <InputType
+                value={opportunityNum}
+                onChange={(e) => setOpportunityNum(e.target.value)}
+                className="input_number_style mt-2"
+                style={{ width: "100%" }}
+                readOnly
+              />
+            </div>
+            <div className="col-sm-4 pt-2">
+              <label>Date</label>
+              <Form.Item
+                name="date"
+                // rules={[
+                //   {
+                //     required: true,
+                //     message: "Please select an option",
+                //   },
+                // ]}
+              >
+                <DatePicker style={{ borderWidth: 0, marginTop: 11 }} />
+              </Form.Item>
+            </div>
+            <div className="col-sm-4 pt-2">
+              <label>
+                Source<span className="req_star">*</span>
+              </label>
+              <Form.Item
+                name="opportunity_source"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please select a Source",
+                  },
+                ]}
+              >
+                <SelectBox
+                  value={oppurtunitysource}
+                  onChange={(e) => {
+                    setOppurtunitysource(e);
+                  }}
+                >
+                  <Select.Option value="reference">Reference</Select.Option>
+                  <Select.Option value="direct visit">
+                    Direct Visit
+                  </Select.Option>
+                  <Select.Option value="online registration">
+                    Online Registration
+                  </Select.Option>
+                </SelectBox>
+              </Form.Item>
+            </div>
+            <div className="col-sm-4 pt-2">
+              <label>
+                Customer Reference<span className="req_star">*</span>
+              </label>
+              <Form.Item
+                name="customer_reference"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter a valid Customer Reference",
+                  },
+                ]}
+              >
+                <InputType />
+              </Form.Item>
+            </div>
+          </div>
+          <div className="row crm_cards mt-3 mx-0 px-2 py-3">
+            <div className="col-12">
+              <h5 className="lead_text">Contact Details</h5>
+            </div>
+            <div className="col-sm-4 pt-2">
+              <label>
+                Contact Person<span className="req_star">*</span>
+              </label>
+              <Form.Item
+                name="contact_person"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please Select a value",
+                  },
+                ]}
+              >
+                <SelectBox
+                  placeholder={"--Please Select--"}
+                  // value={oppprobability}
+                  // onChange={(e) => setOppProbaility(e)}
+                >
+                  <Select.Option value="L">test</Select.Option>
+                </SelectBox>
+              </Form.Item>
+            </div>
+            <div className="col-sm-4 pt-2">
+              <label>Email</label>
+              <Form.Item
+                name="email"
+                rules={[
+                  {
+                    message: "Please enter a valid email",
+                  },
+                ]}
+              >
+                <InputType
+                  disabled
+                  // value={oppamount}
+                  // onChange={(e) =>
+                  //   setOppAmount(parseFloat(e.target.value).toFixed(2))
+                  // }
+                />
+              </Form.Item>
+            </div>
+            <div className="col-sm-4 pt-2">
+              <label>Phone</label>
+              <Form.Item
+                name="phone"
+                rules={[
+                  {
+                    message: "Please enter a valid phone number",
+                  },
+                ]}
+              >
+                <InputType
+                  disabled
+                  // value={oppamount}
+                  // onChange={(e) =>
+                  //   setOppAmount(parseFloat(e.target.value).toFixed(2))
+                  // }
+                />
+              </Form.Item>
+            </div>
+          </div>
+          <div className="row crm_cards mt-3 mx-0 px-2 py-3">
+            <div className="col-12">
+              <h5 className="lead_text">Extra Info</h5>
+            </div>
+            <div className="col-sm-4 pt-2">
+              <label>
+                Opportunity Type<span className="req_star">*</span>
+              </label>
+              <Form.Item
+                name="opportunity_type"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please select a Type",
+                  },
+                ]}
+              >
+                <SelectBox
+                  value={oppurtunitytype}
+                  onChange={(e) => {
+                    setoppurtunitytype(e);
+                  }}
+                >
+                  <Select.Option value="sales">Sales</Select.Option>
+                  <Select.Option value="support">Support</Select.Option>
+                  <Select.Option value="maintenance">Maintenance</Select.Option>
+                </SelectBox>
+              </Form.Item>
+            </div>
+            <div className="col-4 col-sm-4  pt-2">
+              <label>
+                Valid Up to<span className="req_star">*</span>
+              </label>
+              <Form.Item name="opportunity_validity" {...config}>
+                <DatePicker
+                  style={{ borderWidth: 0, marginTop: 10 }}
+                  initialValues={oppurtunityvalidity}
+                  format={dateFormatList}
+                  // disabledDate={(d) => !d || d.isBefore(today)}
+                  onChange={(e) => {
+                    console.log("date mmm", e);
+                    setOppurtunityvalidity(e);
+                  }}
+                />
+              </Form.Item>
+            </div>
+            <div className="col-sm-4 pt-3">
+              <label>Expecting Amount</label>
+              <Form.Item
+                name={"opportunity_amount"}
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter Amount",
+                  },
+                ]}
+              >
+                <InputType
+                  value={oppurtunityamount}
+                  onChange={(e) => {
+                    setOppurtunityamount(e.target.value);
+                  }}
+                />
+              </Form.Item>
+            </div>
+            <div className="col-sm-4 pt-2">
+              {/* <Form.Group className="mb-2" controlId="lead_probability"> */}
+              <label>
+                Probability of conversion
+                <span className="req_star">*</span>
+              </label>
+              <Form.Item
+                name={"opportunity_probability"}
+                rules={[
+                  {
+                    required: true,
+                    message: "please select valid Name",
+                  },
+                ]}
+              >
+                <SelectBox
+                  value={oppurtunityprobability}
+                  onChange={(e) => {
+                    setOppurtunityProbability(e);
+                  }}
+                >
+                  <Select.Option value="L">low</Select.Option>
+                  <Select.Option value="M">medium</Select.Option>
+                  <Select.Option value="H">high</Select.Option>
+                </SelectBox>
+              </Form.Item>
+            </div>
+            <div className="col-sm-4 pt-2">
+              <label>
+                Incoterm<span className="req_star">*</span>
+              </label>
+              <Form.Item
+                name="incoterm"
+                rules={[
+                  {
+                    required: true,
+                    message: "please select an incoterm",
+                  },
+                ]}
+              >
+                <SelectBox
+                // value={oppurtunityprobability}
+                // onChange={(e) => {
+                //   setOppurtunityProbability(e);
+                // }}
+                >
+                  <Select.Option value="EXW">EXW</Select.Option>
+                </SelectBox>
+              </Form.Item>
+            </div>
+            <div className="col-sm-4 pt-2">
+              <label>
+                Status<span className="req_star">*</span>
+              </label>
+              <Form.Item
+                name={"opportunity_status"}
+                rules={[
+                  {
+                    required: true,
+                    message: "Please select a Status",
+                  },
+                ]}
+              >
+                <SelectBox
+                  value={oppurtunitystatus}
+                  onChange={(e) => setOppurtunitystatus(e)}
+                >
+                  <Select.Option value={1}>Quotation</Select.Option>
+                  <Select.Option value={2}>Interested</Select.Option>
+                  <Select.Option value={3}>Converted</Select.Option>
+                  <Select.Option value={4}>Lost</Select.Option>
+                  <Select.Option value={5}>DND</Select.Option>
+                </SelectBox>
+              </Form.Item>
+            </div>
+            <div className="col-sm-6 pt-3">
+              <label>Remarks</label>
+              <Form.Item
+                name={"opportunity_description"}
+                rules={[
+                  {
+                    min: 3,
+                    message: "Please enter above 3 character",
+                  },
+                  {
+                    max: 100,
+                  },
+                ]}
+              >
+                <TextArea
+                  value={opportunitydescription}
+                  onChange={(e) => {
+                    setOpportunitydescription(e.target.value);
+                  }}
+                />
+              </Form.Item>
+            </div>
+            <div className="col-sm-6 mt-2 mb-4">
+              <label>Attachments</label>
+              <Form.Item name="attachment" className="mt-2">
+                <FileUpload
+                  multiple
+                  listType="picture"
+                  accept=".pdf,.docx,.zip"
+                  height={100}
+                  // beforeUpload={beforeUpload}
+                  // onChange={(file) => {
+                  //   console.log("Before upload file size", file.file.size);
+                  //   if (file.file.size > 2000 && file.file.size < 500000) {
+                  //     setFileAttach(file.file.originFileObj);
+                  //     setImageSize(false);
+                  //     console.log("select imaggg", file.file.originFileObj);
+                  //     console.log(
+                  //       "image is greater than 2 kb and less than 500 kb"
+                  //     );
+                  //   } else {
+                  //     setImageSize(true);
+                  //     console.log("Error in image upload");
+                  //   }
+                  // }}
+                />
+                {/* {imageSize ? (
+                <p style={{ color: "red" }}>
+                  Upload File size between 1 kb and 500 kb
+                </p>
+              ) : (
+                ""
+              )} */}
+              </Form.Item>
+            </div>
+          </div>
+          <div className="col-12 d-flex justify-content-center my-3">
+            <Button
+              onClick={() => {
+                updatedOppurtunity();
+              }}
+              btnType="save"
+              type="submit"
+            >
+              Save
+            </Button>
+            <Button
+              as="input"
+              type="reset"
+              value="Reset"
+              onClick={() => {
+                navigate(ROUTES.OPPORTUNITY);
+              }}
+            >
+              Cancel
+            </Button>
+          </div>
+          <div className="px-1">
+            <div className="row px-1">
+              <div className="px-5">
+                <div className="row px-1"></div>
               </div>
             </div>
           </div>
         </Form>
-          {/* </>
+        {/* </>
         }
         // {...props}
       ></Custom_model> */}
-      <Custom_model
-        size={`sm`}
-        success
-        show={successPopup}
-        onHide={() =>  setSuccessPopup(false)}
-        footer={false}
-      />
-      </div>
-       </div>
+        <Custom_model
+          size={`sm`}
+          success
+          show={successPopup}
+          onHide={() => setSuccessPopup(false)}
+          footer={false}
+        />
       </div>
     </>
   );

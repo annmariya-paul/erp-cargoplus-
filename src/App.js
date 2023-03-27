@@ -48,7 +48,7 @@ import Roles_and_Screen from "./pages/HRMS/Roles and screen/roles_and_screen";
 import Employees from "./pages/HRMS/employees/employees";
 import CreateEmployee from "./pages/HRMS/employees/CreateEmployee";
 import Employeegrade from "./pages/HRMS/employeegrade/employeegrade";
-
+import Updatevendor from "./pages/CRM/Purchase/vendor/updatevendor";
 // {FMS}
 import Assign_opportunity from "./pages/FMS/Opportunity_assigns/AssignOpportunity/assign_opportunity";
 import Track_assignments from "./pages/FMS/Opportunity_assigns/Track_assignments/track_opportunity_assigns";
@@ -63,6 +63,7 @@ import ViewQuotation from "./pages/FMS/Quotations/create quotation/view_quotatio
 import Carrierlist from "./pages/FMS/settings/Carrier/carrier";
 import ListAgent from "./pages/FMS/Agent mangement/ListAgent";
 import UpdateAgent from "./pages/FMS/Agent mangement/Updateagent";
+import Addvendor from "./pages/CRM/Purchase/vendor/addvendor";
 
 import Enquiries from "./pages/FMS/Opportunity_assigns/Enquiries/Enquiries";
 import Agent_Response from "./pages/FMS/Opportunity_assigns/Enquiries/agent_response";
@@ -143,6 +144,9 @@ import ViewBillPayment from "./pages/Accounts/Bill Payments/ViewBillPayment";
 import Fmssettings from "./pages/General Settings/Fmssettings/fmssetting";
 import ServiceEdit from "./pages/CRM/Selling/services/ServiceEdit";
 import Incoterm from "./pages/FMS/settings/Incoterm/incoterm";
+import EnquiryList from "./pages/CRM/lead/enquiry/EnquiryList";
+import EditEnquiry from "./pages/CRM/lead/enquiry/EditEnquiry";
+import ViewEnquiry from "./pages/CRM/lead/enquiry/ViewEnquiry";
 
 function App() {
   return (
@@ -160,15 +164,15 @@ function App() {
             <Route path={ROUTES.COUNTRYSELECT} element={<ProtectedRoute />}>
               <Route index element={<SelectCountry />} />
             </Route>
-            <Route path={ROUTES.LEAD} element={<ProtectedRoute />}>
+            <Route path={ROUTES.CUSTOMER} element={<ProtectedRoute />}>
               <Route index element={<Lead />} />
             </Route>
 
-            <Route path={ROUTES.LEADLIST} element={<ProtectedRoute />}>
+            <Route path={ROUTES.CUSTOMER_LIST} element={<ProtectedRoute />}>
               <Route index element={<LeadList />} />
             </Route>
 
-            <Route path={ROUTES.LEAD} element={<ProtectedRoute />}>
+            <Route path={ROUTES.CUSTOMER} element={<ProtectedRoute />}>
               <Route index element={<Lead />} />
             </Route>
 
@@ -184,8 +188,17 @@ function App() {
             </Route>
             {/* sales - enquiries */}
 
-            <Route path={ROUTES.SALE_ENQUIRY} element={<ProtectedRoute />}>
+            <Route path={ROUTES.CREATE_ENQUIRY} element={<ProtectedRoute />}>
               <Route index element={<Enquiry />} />
+            </Route>
+            <Route path={ROUTES.ENQUIRY_LIST} element={<ProtectedRoute />}>
+              <Route index element={<EnquiryList />} />
+            </Route>
+            <Route path={ROUTES.EDIT_ENQUIRY} element={<ProtectedRoute />}>
+              <Route index element={<EditEnquiry />} />
+            </Route>
+            <Route path={ROUTES.VIEW_ENQUIRY} element={<ProtectedRoute />}>
+              <Route index element={<ViewEnquiry />} />
             </Route>
 
             <Route
@@ -203,7 +216,7 @@ function App() {
               <Route index element={<LeadReport />} />
             </Route>
 
-            <Route path={ROUTES.LEAD_EDIT_ID} element={<ProtectedRoute />}>
+            <Route path={ROUTES.LEAD_CUSTOMER_ID} element={<ProtectedRoute />}>
               <Route index element={<LeadEdit />} />
             </Route>
 
@@ -359,6 +372,13 @@ function App() {
 
             <Route path={ROUTES.CREATEAGENT} element={<ProtectedRoute />}>
               <Route index element={<CreateAgent />} />
+            </Route>
+            
+            <Route path={ROUTES.ADDVENDOR} element={<ProtectedRoute />}>
+              <Route index element={<Addvendor />} />
+            </Route>
+            <Route path={ROUTES.UPDATE_VENDOR_ID} element={<ProtectedRoute />}>
+              <Route index element={<Updatevendor />} />
             </Route>
 
             {/* <Route

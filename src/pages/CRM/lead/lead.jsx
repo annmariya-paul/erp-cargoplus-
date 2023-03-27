@@ -287,7 +287,7 @@ function Lead({}) {
                   id="button-tabs"
                   className={toggleState === 2 ? "tabs active-tabs " : "tabs "}
                   onClick={(e) => {
-                    CustomerId == null ? errormessage() : handleContactTab(e);
+                    CustomerId !== null ? errormessage() : handleContactTab(e);
                   }}
                 >
                   Contacts
@@ -298,7 +298,7 @@ function Lead({}) {
                   id="button-tabs"
                   className={toggleState === 3 ? "tabs active-tabs" : "tabs"}
                   onClick={(e) => {
-                    CustomerId == null ? errormessage() : handleAddressTab(e);
+                    CustomerId !== null ? errormessage() : handleAddressTab(e);
                   }}
                 >
                   Address
@@ -308,7 +308,7 @@ function Lead({}) {
                 <button
                   className={toggleState === 4 ? "tabs active-tabs" : "tabs"}
                   onClick={(e) => {
-                    CustomerId == null
+                    CustomerId !== null
                       ? errormessage()
                       : handleAccountingTab(e);
                   }}
@@ -390,7 +390,10 @@ function Lead({}) {
                       </Form.Item>
                     </div> */}
                     <div className="col-sm-4 pt-2">
-                      <label>Name</label>
+                      <label>
+                        Name<span className="required">*</span>
+                      </label>
+
                       <Form.Item
                         name="customer_name"
                         rules={[
@@ -420,7 +423,7 @@ function Lead({}) {
                           }}
                           onBlur={async () => {
                             let a = await CheckUnique({
-                              type: "leadcustomername",
+                              type: "customername",
                               value: leadName,
                             });
                             setuniqueCode(a);
@@ -430,7 +433,7 @@ function Lead({}) {
                       {uniqueCode ? (
                         <div>
                           <label style={{ color: "red" }}>
-                            lead name {UniqueErrorMsg.UniqueErrName}
+                            Customer name {UniqueErrorMsg.UniqueErrName}
                           </label>
                         </div>
                       ) : (
@@ -839,7 +842,7 @@ function Lead({}) {
                 }
               >
                 <div className="col-lg" style={{ borderRadius: "3px" }}>
-                  <Countrystate />
+                  <Countrystate customer_id={CustomerId} />
                 </div>
               </div>{" "}
               <Custom_model

@@ -39,14 +39,14 @@ function EditContact(props) {
   const [oneLeadData, setOneLeadData] = useState();
   const [LeadId, setLeadId] = useState();
   // {funtion to fetch each Lead data - Ann mariya (22/11/22) }
-  console.log("hai halo", props.leadid);
+  console.log("hai halo", props.Customerid);
   const GetLeadData = () => {
-    PublicFetch.get(`${CRM_BASE_URL}/lead/${props.leadid}`)
+    PublicFetch.get(`${CRM_BASE_URL}/customer/${props.Customerid}`)
       .then((res) => {
         if (res?.data?.success) {
           console.log("Unique Lead Id", res?.data?.data);
           setOneLeadData(res?.data?.data);
-          setLeadId(res?.data?.data?.lead_id);
+          setLeadId(res?.data?.data?.customer_id);
         } else {
           console.log("FAILED TO LOAD DATA");
         }
@@ -65,8 +65,8 @@ function EditContact(props) {
           // {array to set contacts for corresponding lead id}
           let temp = [];
           res?.data?.data?.forEach((item, index) => {
-            if (props?.leadid == item?.contact_lead_id) {
-              setContactLeadId(item?.contact_lead_id);
+            if (props?.Customerid == item?.contact_customer_id) {
+              setContactLeadId(item?.contact_customer_id);
               console.log("single contact by lead", item);
               temp.push({
                 contact_id: item?.contact_id,
@@ -89,11 +89,11 @@ function EditContact(props) {
   };
 
   useEffect(() => {
-    if (props.leadid) {
+    if (props.Customerid) {
       getContacts();
       GetLeadData();
     }
-  }, [props.leadid]);
+  }, [props.Customerid]);
 
   const handleEditedclick = (i) => {
     console.log("edit in list...", i);
@@ -117,7 +117,7 @@ function EditContact(props) {
   // {function to edit contact - Ann mariya(24-11-22)}
   const EditContact = () => {
     PublicFetch.patch(`${CRM_BASE_URL}/contact/${contactId}`, {
-      contact_lead_id: parseInt(props.leadid),
+      contact_customer_id: parseInt(props.Customerid),
       contact_person_name: editcontacts.editName,
       contact_email: editcontacts.editEmail,
       contact_phone_1: editcontacts.editPhone,
@@ -149,7 +149,7 @@ function EditContact(props) {
   // # funtion to add contact in lead edit - Ann mariya (24-11-22)
   const AddContact = () => {
     PublicFetch.post(`${CRM_BASE_URL}/contact`, {
-      contact_lead_id: parseInt(props.leadid),
+      contact_customer_id: parseInt(props.Customerid),
       contact_person_name: contactName,
       contact_email: email,
       contact_phone_1: phone,

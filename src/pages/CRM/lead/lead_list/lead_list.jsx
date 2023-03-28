@@ -182,13 +182,13 @@ export default function LeadList() {
     {
       title: "Sl. No.",
       key: "index",
-      width: "7%",
+      width: "4%",
       render: (value, item, index) => serialNo + index,
       align: "center",
     },
 
     {
-      title: "NAME",
+      title: "CUSTOMER NAME",
       dataIndex: "customer_name",
       key: "customer_name",
       // width: "23%",
@@ -201,7 +201,7 @@ export default function LeadList() {
       align: "left",
     },
     {
-      title: "CONTACT PERSON",
+      title: "CONTACT ",
       dataIndex: "contact_person",
       key: "contact_person",
       filteredValue: [searchType],
@@ -269,7 +269,7 @@ export default function LeadList() {
       align: "ledt",
     },
     {
-      title: "DUE AMOUNT",
+      title: "DUE AMT",
       dataIndex: "due_amt",
       key: "due_amt",
       // width: "23%",

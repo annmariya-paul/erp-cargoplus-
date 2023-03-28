@@ -439,6 +439,19 @@ function Lead({}) {
                       ) : (
                         ""
                       )}
+                      <div className="mt-2">
+                        <label>Phone</label>
+                        <Form.Item
+                          name="customer_phone"
+                          rules={[
+                            {
+                              required: true,
+                            },
+                          ]}
+                        >
+                          <Phone_Input />
+                        </Form.Item>
+                      </div>
                     </div>
                     <div className="col-sm-4 pt-2">
                       <label>Customer Type</label>
@@ -465,6 +478,34 @@ function Lead({}) {
                           </Select.Option>
                         </SelectBox>
                       </Form.Item>
+                      <div className="mt-2">
+                        <label>Email</label>
+                        <Form.Item
+                          name="customer_email"
+                          rules={
+                            [
+                              // {
+                              //   // pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                              //   message: "Special characters are not allowed",
+                              // },
+                              // {
+                              //   min: 2,
+                              //   message: "organisation has at least 2 characters",
+                              // },
+                              // {
+                              //   max: 100,
+                              //   message:
+                              //     "organisation cannot be longer than 100 characters",
+                              // },
+                            ]
+                          }
+                        >
+                          <InputType
+                            value={leadcreditdays}
+                            onChange={(e) => setLeadcreditdays(e.target.value)}
+                          />
+                        </Form.Item>
+                      </div>
                     </div>
                     <div className="col-sm-4 pt-2">
                       <label>Address</label>
@@ -488,52 +529,16 @@ function Lead({}) {
                       >
                         <TextArea
                           // disabled={organizationDisable === "I"}
+                          style={{ minHeight: "100px" }}
                           value={leadOrganization}
                           onChange={(e) => setLeadOrganization(e.target.value)}
                         />
                       </Form.Item>
                     </div>
-                    <div className="col-sm-4 pt-2">
-                      <label>Phone</label>
-                      <Form.Item
-                        name="customer_phone"
-                        rules={[
-                          {
-                            required: true,
-                          },
-                        ]}
-                      >
-                        <Phone_Input />
-                      </Form.Item>
-                    </div>
-                    <div className="col-sm-4 pt-2">
-                      <label>Email</label>
-                      <Form.Item
-                        name="customer_email"
-                        rules={
-                          [
-                            // {
-                            //   // pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                            //   message: "Special characters are not allowed",
-                            // },
-                            // {
-                            //   min: 2,
-                            //   message: "organisation has at least 2 characters",
-                            // },
-                            // {
-                            //   max: 100,
-                            //   message:
-                            //     "organisation cannot be longer than 100 characters",
-                            // },
-                          ]
-                        }
-                      >
-                        <InputType
-                          value={leadcreditdays}
-                          onChange={(e) => setLeadcreditdays(e.target.value)}
-                        />
-                      </Form.Item>
-                    </div>
+                    {/* <div className="col-sm-4 pt-2">
+                     
+                    </div> */}
+
                     <div className="col-sm-4 pt-2">
                       <label>Website</label>
                       <Form.Item
@@ -561,6 +566,34 @@ function Lead({}) {
                           onChange={(e) => setLeadcreditdays(e.target.value)}
                         />
                       </Form.Item>
+                      <div className="mt-2">
+                        <label>State</label>
+                        <Form.Item
+                          name="customer_state"
+                          rules={
+                            [
+                              // {
+                              //   pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                              //   message: "Special characters are not allowed",
+                              // },
+                              // {
+                              //   min: 2,
+                              //   message: "organisation has at least 2 characters",
+                              // },
+                              // {
+                              //   max: 100,
+                              //   message:
+                              //     "organisation cannot be longer than 100 characters",
+                              // },
+                            ]
+                          }
+                        >
+                          <InputType
+                            value={leadcreditdays}
+                            onChange={(e) => setLeadcreditdays(e.target.value)}
+                          />
+                        </Form.Item>
+                      </div>
                     </div>
                     <div className="col-sm-4 pt-2">
                       <label>Country</label>
@@ -599,62 +632,34 @@ function Lead({}) {
                             })}
                         </SelectBox>
                       </Form.Item>
-                    </div>
-                    <div className="col-sm-4 pt-2">
-                      <label>State</label>
-                      <Form.Item
-                        name="customer_state"
-                        rules={
-                          [
-                            // {
-                            //   pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                            //   message: "Special characters are not allowed",
-                            // },
-                            // {
-                            //   min: 2,
-                            //   message: "organisation has at least 2 characters",
-                            // },
-                            // {
-                            //   max: 100,
-                            //   message:
-                            //     "organisation cannot be longer than 100 characters",
-                            // },
-                          ]
-                        }
-                      >
-                        <InputType
-                          value={leadcreditdays}
-                          onChange={(e) => setLeadcreditdays(e.target.value)}
-                        />
-                      </Form.Item>
-                    </div>
-                    <div className="col-sm-4 pt-2">
-                      <label>City</label>
-                      <Form.Item
-                        name="customer_city"
-                        rules={
-                          [
-                            // {
-                            //   pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                            //   message: "Special characters are not allowed",
-                            // },
-                            // {
-                            //   min: 2,
-                            //   message: "organisation has at least 2 characters",
-                            // },
-                            // {
-                            //   max: 100,
-                            //   message:
-                            //     "organisation cannot be longer than 100 characters",
-                            // },
-                          ]
-                        }
-                      >
-                        <InputType
-                          value={leadcreditdays}
-                          onChange={(e) => setLeadcreditdays(e.target.value)}
-                        />
-                      </Form.Item>
+                      <div className="mt-2 pt-2">
+                        <label className="">City</label>
+                        <Form.Item
+                          name="customer_city"
+                          rules={
+                            [
+                              // {
+                              //   pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                              //   message: "Special characters are not allowed",
+                              // },
+                              // {
+                              //   min: 2,
+                              //   message: "organisation has at least 2 characters",
+                              // },
+                              // {
+                              //   max: 100,
+                              //   message:
+                              //     "organisation cannot be longer than 100 characters",
+                              // },
+                            ]
+                          }
+                        >
+                          <InputType
+                            value={leadcreditdays}
+                            onChange={(e) => setLeadcreditdays(e.target.value)}
+                          />
+                        </Form.Item>
+                      </div>
                     </div>
 
                     <div className="col-sm-4 mt-4 py-2">
@@ -662,6 +667,7 @@ function Lead({}) {
                         <Form.Item name="customer_logo">
                           <FileUpload
                             multiple
+                            style={{ height: "50px" }}
                             filetype={"Accept only pdf and docs"}
                             listType="picture"
                             accept=".pdf,.docs,"

@@ -70,6 +70,9 @@ function CreateJob() {
   const [grandTotal, setGrandTotal] = useState();
   const [awbno,setAwbno]=useState();
 
+  const[allincoterms,setallincoterms]=useState("")
+  const [defaultincoterm,setdefaultincoterm] = useState("")
+
   const getBase64 = (file) =>
     new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -213,8 +216,40 @@ function CreateJob() {
       });
   };
 
+  const getfmssettings = async () => {
+    try {
+      const allfmssetting = await PublicFetch.get(
+        `${GENERAL_SETTING_BASE_URL}/fms`
+      );
+      console.log("all fmssettinggg", allfmssetting.data);
+      setdefaultincoterm(allfmssetting.data.data.fms_settings_incorterm)
+     
+
+      addForm.setFieldsValue({
+        incoterm: allfmssetting.data.data.fms_settings_incorterm,
+      });
+    } catch (err) {
+      console.log("error while getting the fmssettinggg: ", err);
+    }
+  };
+
+  const getAllincoterm = async () => {
+    try {
+      const allCountries = await PublicFetch.get(
+        `${CRM_BASE_URL_FMS}/incoterms/minimal`
+      );
+      console.log("all incotermss", allCountries.data.data);
+      setallincoterms(allCountries.data.data)
+      // setGetCountries(allCountries.data.data);
+    } catch (err) {
+      console.log("error while getting the countries: ", err);
+    }
+  };
+
   useEffect(() => {
     getAllQuotation();
+    getfmssettings()
+    getAllincoterm()
   }, []);
 
   const handleLeadIdEnq = (e) => {
@@ -311,6 +346,8 @@ function CreateJob() {
     formData.append("job_total_cost_currency", data.job_currency);
     formData.append("job_total_cost_exch", data.exchnagerate);
     formData.append("job_credit_days", data.job_credit_days);
+    formData.append("job_incoterm_id", data.incoterm);
+    
     // formData.append("job_total_cost_amountlx", grandTotal);
     // formData.append("job_currency_rate", data.job_currency);
     // formData.append("job_exchange_rate", data.exchnagerate);
@@ -1034,9 +1071,29 @@ function CreateJob() {
                     </div>
 
                     <div className="col-xl-6 col-sm-12 mt-2">
-                    <label>Default Incoterm</label>
+                    <label> Incoterm</label>
                   <Form.Item name="incoterm">
-                  <SelectBox></SelectBox>
+                  <SelectBox  
+                   value={defaultincoterm}
+                   onChange={(e) => {
+                     console.log("select the brandss", e);
+                     setdefaultincoterm(parseInt(e));
+                   }}
+                  >
+                  {allincoterms &&
+                        allincoterms.length > 0 &&
+                        allincoterms.map((item, index) => {
+                          console.log("njd",item)
+                          return (
+                            <Select.Option
+                              key={item.incoterm_id}
+                              value={item.incoterm_id}
+                            >
+                              {item.incoterm_full_name}
+                            </Select.Option>
+                          );
+                        })}
+                  </SelectBox>
                     
                   </Form.Item>
                     </div>

@@ -109,6 +109,8 @@ const ROUTES = {
   MONTHLY_REPORT: "/monthly_report",
   INVOICE_REPORT: "/invoice_report",
   ENQUIRY_REPORT: "/enquiry_report",
+  // masters fms
+  CONTAINER_TYPES:"/container_type",
 
   // Accounts
   PAYMEMENT_MODE: "/payment_mode",

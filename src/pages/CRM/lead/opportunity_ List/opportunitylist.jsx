@@ -43,8 +43,8 @@ import jsPDF from "jspdf";
 import ReactToPrint, { useReactToPrint } from "react-to-print";
 import "jspdf-autotable";
 import * as XLSX from "xlsx/xlsx.js"; //for xl download
-import { AudioOutlined } from '@ant-design/icons';
-import {  Space } from 'antd';
+import { AudioOutlined } from "@ant-design/icons";
+import { Space } from "antd";
 import CopyToClipboard, { copyToClipboard } from "react-copy-to-clipboard"; //copy to clipboard
 import { Toaster, toast } from "react-hot-toast"; // copy to clip board
 
@@ -53,7 +53,7 @@ import { Toaster, toast } from "react-hot-toast"; // copy to clip board
 
 function Opportunitylist(props) {
   const { Search } = Input;
-  const {id} = useParams();
+  const { id } = useParams();
   console.log("ID is ...", id);
   const today = new Date();
   const [EditForm] = Form.useForm();
@@ -480,9 +480,6 @@ function Opportunitylist(props) {
         UpdatedFormdata
       );
 
-
-      
-
       console.log("editdataaa", editoppurtunity);
       if (editoppurtunity.data.success) {
         setShowEditModal(false);
@@ -614,14 +611,9 @@ function Opportunitylist(props) {
           <div className="d-flex justify-content-center gap-2">
             <div className="editcolor">
               {/* <FaEdit onClick={() => handleEditedclick(index)} /> */}
-              <Link
-                          to={`${ROUTES.EDIT_OPPORTUNITY}/${index.opportunity_Id}`}
-                         
-                        >
-                          
-                  <FaEdit />
-              
-                        </Link>
+              <Link to={`${ROUTES.EDIT_OPPORTUNITY}/${index.opportunity_Id}`}>
+                <FaEdit />
+              </Link>
             </div>
             <div className="editcolor">
               <MdPageview
@@ -761,9 +753,6 @@ function Opportunitylist(props) {
             <div className="col-4">
               <h5 className="lead_text">Opportunities</h5>
 
-
-             
-
               {/* //for csv download */}
               {/* <CSVLink data={OpportunityList} filename="data.csv">
                 Export userdata
@@ -778,21 +767,19 @@ function Opportunitylist(props) {
               </button> */}
             </div>
             <div className="col-4 ">
-            <Input.Search className="searchnew"
-              placeholder="Search "
-             
-              // value={searchedText}
-              // onChange={(e) => {
-              //   setSearchedText(e.target.value ? [e.target.value] : []);
-              // }}
-              // onSearch={(value) => {
-              //   setSearchedText(value);
-              // }}
-            />
-          </div>
-          
-            
+              <Input.Search
+                className="searchnew"
+                placeholder="Search "
 
+                // value={searchedText}
+                // onChange={(e) => {
+                //   setSearchedText(e.target.value ? [e.target.value] : []);
+                // }}
+                // onSearch={(value) => {
+                //   setSearchedText(value);
+                // }}
+              />
+            </div>
 
             <Leadlist_Icons
               datas={OpportunityList}
@@ -854,8 +841,8 @@ function Opportunitylist(props) {
             {/* <button onClick={handlePrint}>Print this out!</button> */}
           </div>
           {/* <div className="row pb-2" style={{ backgroundColor: "#f4f4f7" }}> */}
-            {/* <div className="col-3"> */}
-              {/* <Select
+          {/* <div className="col-3"> */}
+          {/* <Select
                 allowClear
                 showSearch
                 style={{ width: "100%", marginTop: "8px", borderRadius: "5px" }}
@@ -872,9 +859,9 @@ function Opportunitylist(props) {
                   Online Registration
                 </Select.Option>
               </Select> */}
-            {/* </div> */}
-            {/* <div className="col-3"> */}
-              {/* <Select
+          {/* </div> */}
+          {/* <div className="col-3"> */}
+          {/* <Select
                 allowClear
                 showSearch
                 style={{ width: "100%", marginTop: "8px", borderRadius: "5px" }}
@@ -889,9 +876,9 @@ function Opportunitylist(props) {
                 <Select.Option value="maintenance">Maintenance</Select.Option>
                 <Select.Option value="support">support</Select.Option>
               </Select> */}
-            {/* </div>
+          {/* </div>
             <div className="col-3"> */}
-              {/* <Select
+          {/* <Select
                 allowClear
                 showSearch
                 style={{ width: "100%", marginTop: "8px", borderRadius: "5px" }}
@@ -904,9 +891,9 @@ function Opportunitylist(props) {
               >
                
               </Select> */}
-            {/* </div>
+          {/* </div>
             <div className="col-3"> */}
-              {/* <Select
+          {/* <Select
                 allowClear
                 showSearch
                 style={{ width: "100%", marginTop: "8px", borderRadius: "5px" }}
@@ -921,12 +908,11 @@ function Opportunitylist(props) {
                 <Select.Option value="L">Lead</Select.Option>
                 <Select.Option value="C">Customer</Select.Option>
               </Select> */}
-            {/* </div>
+          {/* </div>
           </div> */}
           <div className="row my-3">
             <div className="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-4  px-3">
               <Select
-               
                 bordered={false}
                 className=" page_size_style"
                 value={numOfItems}
@@ -981,7 +967,7 @@ function Opportunitylist(props) {
             </div>
             {/* <div className="col-xl-6 col-lg-6 col-md-6 col-sm-8 col-12"></div> */}
             <div className="col-lg-4 col-lg-4 col-md-4 col-sm-12 col-4 d-flex justify-content-end">
-              <Link to={ROUTES.LEADLIST}>
+              <Link to={ROUTES.CUSTOMER_LIST}>
                 <Button btnType="add">New Opportunity</Button>
               </Link>
             </div>

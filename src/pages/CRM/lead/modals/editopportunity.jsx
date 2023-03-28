@@ -1,6 +1,6 @@
 //Opportunity adding model created 14.10.22 shahida
 
-import React, { useState, useEffect,useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Oppor_Status } from "../../../../utils/SelectOptions";
 import { useNavigate, useParams } from "react-router-dom";
 // import { Form } from "react-bootstrap";
@@ -8,7 +8,7 @@ import { DatePicker, Form, Select } from "antd";
 import Button from "../../../../components/button/button";
 import { useForm } from "react-hook-form";
 import Custom_model from "../../../../components/custom_modal/custom_model";
-import { CRM_BASE_URL } from "../../../../api/bootapi";
+import { CRM_BASE_URL, CRM_BASE_URL_HRMS } from "../../../../api/bootapi";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { message } from "antd";
 import moment from "moment";
@@ -21,10 +21,10 @@ import { ROUTES } from "../../../../routes";
 import "../opportunity_ List/opportunitylist.scss";
 import FileUpload from "../../../../components/fileupload/fileUploader";
 // export default function AddOpportunity(props) {
-  export default function EditOpportunity() {
+export default function EditOpportunity() {
   const { id } = useParams();
   console.log("ID is ...", id);
-  
+
   const [form] = Form.useForm();
 
   // const typevalues = [
@@ -69,7 +69,7 @@ import FileUpload from "../../../../components/fileupload/fileUploader";
   const [oppurtunityfrom, setOppurtunityfrom] = useState();
   const [oppurtunitysource, setOppurtunitysource] = useState();
   const [oppurtunityparty, setOppurtunityparty] = useState("");
-  console.log("opp party",oppurtunityparty);
+  console.log("opp party", oppurtunityparty);
   const [oppurtunityvalidity, setOppurtunityvalidity] = useState();
   console.log("opp validity", oppurtunityvalidity);
   const [oppurtunityamount, setOppurtunityamount] = useState("");
@@ -93,6 +93,8 @@ import FileUpload from "../../../../components/fileupload/fileUploader";
   const [serialNo, setserialNo] = useState(1);
   const componentRef = useRef();
   const [successPopup, setSuccessPopup] = useState(false);
+  const [allSalesPerson, setAllSalesPerson] = useState();
+
   //pdf file start
   // const exportPDF = () => {
   //   const unit = "pt";
@@ -221,16 +223,13 @@ import FileUpload from "../../../../components/fileupload/fileUploader";
   // get one oppurtunity
   const [oneoppurtunity, setOneoppurtunity] = useState();
 
-  
-useEffect(()=>{
-  if(id){
-    getoneoppurtunity();
-  }
-
-},[id])
+  useEffect(() => {
+    if (id) {
+      getoneoppurtunity();
+    }
+  }, [id]);
 
   const getoneoppurtunity = async () => {
-  
     try {
       const oneoppurtunities = await PublicFetch.get(
         `${CRM_BASE_URL}/opportunity/${id}`
@@ -458,7 +457,6 @@ useEffect(()=>{
     getAllContact();
     setShowEditModal(true);
   };
-
 
   const updatedOppurtunity = async (updatedData) => {
     const UpdatedFormdata = {
@@ -742,6 +740,23 @@ useEffect(()=>{
     return yyyy + "-" + mm + "-" + dd;
   };
 
+  const GetSalesPersons = () => {
+    PublicFetch.get(`${CRM_BASE_URL_HRMS}/employees/salesexecutive`)
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          console.log("Success from sales person", res.data.data);
+          setAllSalesPerson(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+  useEffect(() => {
+    GetSalesPersons();
+  }, []);
 
   return (
     <>
@@ -886,6 +901,35 @@ useEffect(()=>{
                 ]}
               >
                 <InputType />
+              </Form.Item>
+            </div>
+            <div className="col-sm-4 pt-2">
+              <label>
+                Sale Person<span className="required">*</span>
+              </label>
+              <Form.Item
+                name="sales_person"
+                rules={[
+                  {
+                    required: true,
+                    message: "Sales Person is Required",
+                  },
+                ]}
+              >
+                <SelectBox>
+                  {allSalesPerson &&
+                    allSalesPerson.length > 0 &&
+                    allSalesPerson.map((item, index) => {
+                      return (
+                        <Select.Option
+                          key={item.employee_id}
+                          value={item.employee_id}
+                        >
+                          {item.employee_name}
+                        </Select.Option>
+                      );
+                    })}
+                </SelectBox>
               </Form.Item>
             </div>
           </div>

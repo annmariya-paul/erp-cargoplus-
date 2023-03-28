@@ -11,6 +11,7 @@ import Custom_model from "../../../../components/custom_modal/custom_model";
 import {
   CRM_BASE_URL,
   CRM_BASE_URL_FMS,
+  CRM_BASE_URL_HRMS,
   GENERAL_SETTING_BASE_URL,
 } from "../../../../api/bootapi";
 import PublicFetch from "../../../../utils/PublicFetch";
@@ -74,6 +75,7 @@ export default function AddOpportunity() {
   // console.log(typeof oppstatus);
   const [imageSize, setImageSize] = useState(false);
   const [fileAttach, setFileAttach] = useState();
+  const [allSalesPerson, setAllSalesPerson] = useState();
 
   const GetLeadData = () => {
     PublicFetch.get(`${CRM_BASE_URL}/lead/${id}`)
@@ -183,7 +185,7 @@ export default function AddOpportunity() {
 
   const oppdata = (data) => {
     console.log("addcreditdata", data);
-     const date = moment(data.oppor_date);
+    const date = moment(data.oppor_date);
     const formData = new FormData();
     formData.append("opportunity_date", date);
     formData.append("opportunity_customer_id", data.oppo_customer);
@@ -240,7 +242,6 @@ export default function AddOpportunity() {
         setValue(allNames.data.data);
         console.log("hello data names new add content", allNames.data.data);
         let temp = [];
-        
       } else {
         message.error("fetch data error");
       }
@@ -257,6 +258,24 @@ export default function AddOpportunity() {
       }, time);
     }
   };
+
+  const GetSalesPersons = () => {
+    PublicFetch.get(`${CRM_BASE_URL_HRMS}/employees/salesexecutive`)
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          console.log("Success from sales person", res.data.data);
+          setAllSalesPerson(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+  useEffect(() => {
+    GetSalesPersons();
+  }, []);
 
   const beforeUpload = (file, fileList) => {};
 
@@ -453,6 +472,35 @@ export default function AddOpportunity() {
                       }
                     })}
                 </SelectBox> */}
+              </Form.Item>
+            </div>
+            <div className="col-sm-4 pt-2">
+              <label>
+                Sale Person<span className="required">*</span>
+              </label>
+              <Form.Item
+                name="sales_person"
+                rules={[
+                  {
+                    required: true,
+                    message: "Sales Person is Required",
+                  },
+                ]}
+              >
+                <SelectBox>
+                  {allSalesPerson &&
+                    allSalesPerson.length > 0 &&
+                    allSalesPerson.map((item, index) => {
+                      return (
+                        <Select.Option
+                          key={item.employee_id}
+                          value={item.employee_id}
+                        >
+                          {item.employee_name}
+                        </Select.Option>
+                      );
+                    })}
+                </SelectBox>
               </Form.Item>
             </div>
           </div>

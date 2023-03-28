@@ -13,7 +13,11 @@ import CustomModel from "../../../../components/custom_modal/custom_model";
 
 import Custom_model from "../../../../components/custom_modal/custom_model";
 import PublicFetch from "../../../../utils/PublicFetch";
-import { CRM_BASE_URL, CRM_BASE_URL_FMS } from "../../../../api/bootapi";
+import {
+  CRM_BASE_URL,
+  CRM_BASE_URL_FMS,
+  CRM_BASE_URL_HRMS,
+} from "../../../../api/bootapi";
 import moment from "moment";
 function Enquiry() {
   const [addForm] = Form.useForm();
@@ -25,6 +29,7 @@ function Enquiry() {
   const [AllCustomers, setAllCustomers] = useState();
   const [AllContacts, setAllContacts] = useState();
   const [Customer_Id, setCustomer_Id] = useState();
+  const [allSalesPerson, setAllSalesPerson] = useState();
 
   const close_modal = (mShow, time) => {
     if (!mShow) {
@@ -139,6 +144,23 @@ function Enquiry() {
         console.log("Error", err);
       });
   };
+  const GetSalesPersons = () => {
+    PublicFetch.get(`${CRM_BASE_URL_HRMS}/employees/salesexecutive`)
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          console.log("Success from sales person", res.data.data);
+          setAllSalesPerson(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+  useEffect(() => {
+    GetSalesPersons();
+  }, []);
 
   useEffect(() => {
     GetAllCustomers();
@@ -329,7 +351,20 @@ function Enquiry() {
                   },
                 ]}
               >
-                <SelectBox></SelectBox>
+                <SelectBox>
+                  {allSalesPerson &&
+                    allSalesPerson.length > 0 &&
+                    allSalesPerson.map((item, index) => {
+                      return (
+                        <Select.Option
+                          key={item.employee_id}
+                          value={item.employee_id}
+                        >
+                          {item.employee_name}
+                        </Select.Option>
+                      );
+                    })}
+                </SelectBox>
               </Form.Item>
             </div>
           </div>

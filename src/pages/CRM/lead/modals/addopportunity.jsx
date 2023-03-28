@@ -11,6 +11,7 @@ import Custom_model from "../../../../components/custom_modal/custom_model";
 import {
   CRM_BASE_URL,
   CRM_BASE_URL_FMS,
+  CRM_BASE_URL_HRMS,
   GENERAL_SETTING_BASE_URL,
 } from "../../../../api/bootapi";
 import PublicFetch from "../../../../utils/PublicFetch";
@@ -74,6 +75,7 @@ export default function AddOpportunity() {
   // console.log(typeof oppstatus);
   const [imageSize, setImageSize] = useState(false);
   const [fileAttach, setFileAttach] = useState();
+  const [allSalesPerson, setAllSalesPerson] = useState();
 
   const GetLeadData = () => {
     PublicFetch.get(`${CRM_BASE_URL}/lead/${id}`)
@@ -256,6 +258,24 @@ export default function AddOpportunity() {
       }, time);
     }
   };
+
+  const GetSalesPersons = () => {
+    PublicFetch.get(`${CRM_BASE_URL_HRMS}/employees/salesexecutive`)
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          console.log("Success from sales person", res.data.data);
+          setAllSalesPerson(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+  useEffect(() => {
+    GetSalesPersons();
+  }, []);
 
   const beforeUpload = (file, fileList) => {};
 
@@ -467,7 +487,20 @@ export default function AddOpportunity() {
                   },
                 ]}
               >
-                <SelectBox></SelectBox>
+                <SelectBox>
+                  {allSalesPerson &&
+                    allSalesPerson.length > 0 &&
+                    allSalesPerson.map((item, index) => {
+                      return (
+                        <Select.Option
+                          key={item.employee_id}
+                          value={item.employee_id}
+                        >
+                          {item.employee_name}
+                        </Select.Option>
+                      );
+                    })}
+                </SelectBox>
               </Form.Item>
             </div>
           </div>

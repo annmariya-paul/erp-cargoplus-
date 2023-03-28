@@ -8,7 +8,7 @@ import { DatePicker, Form, Select } from "antd";
 import Button from "../../../../components/button/button";
 import { useForm } from "react-hook-form";
 import Custom_model from "../../../../components/custom_modal/custom_model";
-import { CRM_BASE_URL } from "../../../../api/bootapi";
+import { CRM_BASE_URL, CRM_BASE_URL_HRMS } from "../../../../api/bootapi";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { message } from "antd";
 import moment from "moment";
@@ -93,6 +93,8 @@ export default function EditOpportunity() {
   const [serialNo, setserialNo] = useState(1);
   const componentRef = useRef();
   const [successPopup, setSuccessPopup] = useState(false);
+  const [allSalesPerson, setAllSalesPerson] = useState();
+
   //pdf file start
   // const exportPDF = () => {
   //   const unit = "pt";
@@ -738,6 +740,24 @@ export default function EditOpportunity() {
     return yyyy + "-" + mm + "-" + dd;
   };
 
+  const GetSalesPersons = () => {
+    PublicFetch.get(`${CRM_BASE_URL_HRMS}/employees/salesexecutive`)
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          console.log("Success from sales person", res.data.data);
+          setAllSalesPerson(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+  useEffect(() => {
+    GetSalesPersons();
+  }, []);
+
   return (
     <>
       <div className="container-fluid">
@@ -896,7 +916,20 @@ export default function EditOpportunity() {
                   },
                 ]}
               >
-                <SelectBox></SelectBox>
+                <SelectBox>
+                  {allSalesPerson &&
+                    allSalesPerson.length > 0 &&
+                    allSalesPerson.map((item, index) => {
+                      return (
+                        <Select.Option
+                          key={item.employee_id}
+                          value={item.employee_id}
+                        >
+                          {item.employee_name}
+                        </Select.Option>
+                      );
+                    })}
+                </SelectBox>
               </Form.Item>
             </div>
           </div>

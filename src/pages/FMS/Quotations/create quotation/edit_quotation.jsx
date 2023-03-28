@@ -1205,18 +1205,73 @@ export default function EditQuotation(
           >
             <div className="container-fluid ms-0 me-2">
               <div className="row mt-3">
-                <h4 className="lead_text">Edit Quotation</h4>
+                <h5 className="lead_text">Edit Quotation</h5>
               </div>
               {/* <div className="containerdesig "> */}
 
-              <div className="row  me-3">
-                <div className="content-tabs-new row justify-content m-3">
+              <div className="row  mt-1">
+                <div className="content-tabs-new row justify-content mx-1 mb-3">
                   <div className="row mt-3 ">
-                    <h5 className="lead_text">Basic Info</h5>
+                    <h6 className="lead_text">Basic Info</h6>
                   </div>
-                  <div className="row mb-2  ">
+                  {/* <div className="row mb-2  "> */}
+
+
+                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                      <label>Customer<span className="required">*</span></label>
+                      <Form.Item
+                        name="customer"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please select Customer",
+                          },
+                        ]}
+                      >
+                        <SelectBox
+                         
+                        >
+                       
+                        </SelectBox>
+                      </Form.Item>
+                    </div>
+
+
                     <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                      <label>Quotation No</label>
+                      <label>Freight Type<span className="required">*</span></label>
+                      <Form.Item
+                        name="freight_type"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please select a Type",
+                          },
+                        ]}
+                      >
+                        <SelectBox
+                          allowClear
+                          disabled={true}
+                          showSearch
+                          optionFilterProp="children"
+                        >
+                          {frighttype &&
+                            frighttype.length > 0 &&
+                            frighttype.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  key={item.freight_type_id}
+                                  value={item.freight_type_id}
+                                >
+                                  {item.freight_type_name}
+                                </Select.Option>
+                              );
+                            })}
+                        </SelectBox>
+                      </Form.Item>
+                    </div>
+
+                    <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                      <label>Quotation No<span className="required">*</span></label>
                       <Form.Item
                         name="quotation_no"
                         // rules={[
@@ -1231,7 +1286,7 @@ export default function EditQuotation(
                       </Form.Item>
                     </div>
                     <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                      <label>Quotation date</label>
+                      <label>Quotation date<span className="required">*</span></label>
                       <Form.Item
                         name="quotationdate"
                         rules={[
@@ -1255,7 +1310,7 @@ export default function EditQuotation(
                       </Form.Item>
                     </div>
                     <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                      <label>Validity date</label>
+                      <label>Validity<span className="required">*</span> </label>
                       <Form.Item
                         name="validity_date"
                         rules={[
@@ -1278,6 +1333,29 @@ export default function EditQuotation(
                         />
                       </Form.Item>
                     </div>
+
+                    
+                    <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                      <label>Sales Person<span className="required">*</span></label>
+                      <Form.Item name="salesperson"
+                       rules={[
+                        {
+                          required: true,
+
+                          message: "Please select sales person",
+                        },
+                      ]}
+                      
+                      >
+                        <SelectBox
+                         
+                        >
+                         
+                        </SelectBox>
+                      </Form.Item>
+                    </div>
+
+
                     <div className="col-xl-4 col-sm-12 mt-2 px-3">
                       <label>Enquiry No</label>
                       <Form.Item
@@ -1314,6 +1392,26 @@ export default function EditQuotation(
                         </SelectBox>
                       </Form.Item>
                     </div>
+
+
+
+
+
+
+
+                 
+                   
+                  {/* </div> */}
+                </div>
+              </div>
+              <div className="row  mt-1 ">
+                {/* <div className="col-md-6 col-12"> */}
+                  <div className="content-tabs-new row justify-content mx-1 mb-3">
+                    <div className="row mt-3">
+                      <h6 className="lead_text">Transportation</h6>
+                    </div>
+
+
 
                     <div className="col-xl-4 col-sm-12 mt-2 px-3">
                       <label>Consignee</label>
@@ -1363,10 +1461,11 @@ export default function EditQuotation(
                         <InputType value={quotshipper} />
                       </Form.Item>
                     </div>
+
                     <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                      <label>Freight Type</label>
+                      <label>Carrier<span className="required">*</span></label>
                       <Form.Item
-                        name="freight_type"
+                        name="quotation_carrier"
                         rules={[
                           {
                             required: true,
@@ -1376,62 +1475,27 @@ export default function EditQuotation(
                       >
                         <SelectBox
                           allowClear
-                          disabled={true}
                           showSearch
                           optionFilterProp="children"
                         >
-                          {frighttype &&
-                            frighttype.length > 0 &&
-                            frighttype.map((item, index) => {
+                          {carrierdata &&
+                            carrierdata.length > 0 &&
+                            carrierdata.map((item, index) => {
                               return (
                                 <Select.Option
-                                  key={item.freight_type_id}
-                                  value={item.freight_type_id}
+                                  value={item.carrier_id}
+                                  key={item.carrier_id}
                                 >
-                                  {item.freight_type_name}
+                                  {item.carrier_name}
                                 </Select.Option>
                               );
                             })}
                         </SelectBox>
                       </Form.Item>
                     </div>
-                  </div>
-                </div>
-              </div>
-              <div className="row  mt-3 ">
-                <div className="col-md-6 col-12">
-                  <div className="content-tabs-new row justify-content mx-1 mb-3">
-                    <div className="row mt-3">
-                      <h5 className="lead_text">Transportation</h5>
-                    </div>
 
-                    <div className="col-xl-6 col-sm-12 mt-2" hidden>
-                      <label>Mode</label>
-                      <Form.Item
-                        name="quotation_mode"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please select a mode",
-                          },
-                        ]}
-                      >
-                        <SelectBox
-                          allowClear
-                          showSearch
-                          optionFilterProp="children"
-                          onChange={(e) => {
-                            locationBytype(e);
-                          }}
-                        >
-                          <Select.Option value="Air">Air</Select.Option>
-                          <Select.Option value="Sea">Sea</Select.Option>
-                          <Select.Option value="Road">Road</Select.Option>
-                        </SelectBox>
-                      </Form.Item>
-                    </div>
-                    <div className="col-xl-6 col-sm-12 mt-2">
-                      <label>Origin</label>
+                    <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                      <label>Origin<span className="required">*</span></label>
                       <Form.Item
                         name="quotation_origin"
                         rules={[
@@ -1461,8 +1525,35 @@ export default function EditQuotation(
                         </SelectBox>
                       </Form.Item>
                     </div>
-                    <div className="col-xl-6 col-sm-12 mt-2">
-                      <label>Destination</label>
+
+                    <div className="col-xl-4 col-sm-12 mt-2 px-3" hidden>
+                      <label>Mode</label>
+                      <Form.Item
+                        name="quotation_mode"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please select a mode",
+                          },
+                        ]}
+                      >
+                        <SelectBox
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
+                          onChange={(e) => {
+                            locationBytype(e);
+                          }}
+                        >
+                          <Select.Option value="Air">Air</Select.Option>
+                          <Select.Option value="Sea">Sea</Select.Option>
+                          <Select.Option value="Road">Road</Select.Option>
+                        </SelectBox>
+                      </Form.Item>
+                    </div>
+                
+                    <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                      <label>Destination<span className="required">*</span></label>
                       <Form.Item
                         name="quotation_destination"
                         rules={[
@@ -1493,46 +1584,33 @@ export default function EditQuotation(
                       </Form.Item>
                     </div>
 
-                    <div className="col-xl-6 col-sm-12 mt-2 mb-5 pb-5">
-                      <label>Carrier</label>
+                    <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                      <label>Container Type<span className="required">*</span></label>
                       <Form.Item
-                        name="quotation_carrier"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please select a Type",
-                          },
-                        ]}
+                        name="container_type"
+                        // rules={[
+                        //   {
+                        //     required: true,
+                        //     message: "Please select Container Type",
+                        //   },
+                        // ]}
                       >
                         <SelectBox
-                          allowClear
-                          showSearch
-                          optionFilterProp="children"
+                        
                         >
-                          {carrierdata &&
-                            carrierdata.length > 0 &&
-                            carrierdata.map((item, index) => {
-                              return (
-                                <Select.Option
-                                  value={item.carrier_id}
-                                  key={item.carrier_id}
-                                >
-                                  {item.carrier_name}
-                                </Select.Option>
-                              );
-                            })}
+                       
                         </SelectBox>
                       </Form.Item>
                     </div>
                   </div>
-                </div>
-                <div className="col-md-6 col-12">
+                {/* </div> */}
+                {/* <div className="col-md-6 col-12"> */}
                   <div className="content-tabs-new row justify-content mx-1 mb-3 ">
                     <div className="row mt-3">
-                      <h5 className="lead_text">Shipment Details</h5>
+                      <h6 className="lead_text">Shipment Details</h6>
                     </div>
-                    <div className="col-xl-6 col-sm-12 mt-2">
-                      <label>Cargo Type</label>
+                    <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                      <label>Cargo Type<span className="required">*</span></label>
                       <Form.Item
                         name="quotation_cargotype"
                         rules={[
@@ -1560,8 +1638,8 @@ export default function EditQuotation(
                       </Form.Item>
                     </div>
 
-                    <div className="col-xl-6 col-sm-12  mt-2">
-                      <label>Number of pieces</label>
+                    <div className="col-xl-4 col-sm-12  mt-2 px-3">
+                      <label>Number of pieces<span className="required">*</span></label>
                       <Form.Item
                         name="quot_npieces"
                         rules={[
@@ -1577,8 +1655,8 @@ export default function EditQuotation(
                         />
                       </Form.Item>
                     </div>
-                    <div className="col-xl-6 col-sm-12 mt-2">
-                      <label>UOM</label>
+                    <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                      <label>UOM<span className="required">*</span></label>
                       <Form.Item
                         name="quotation_units"
                         rules={[
@@ -1609,9 +1687,72 @@ export default function EditQuotation(
                         </SelectBox>
                       </Form.Item>
                     </div>
+                    
+                    <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                      <label>Length</label>
+                      <Form.Item
+                        name="length"
+                        // rules={[
+                        //   {
+                        //     required: true,
+                        //     pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                        //     message: "Please enter length",
+                        //   },
+                        // ]}
+                      >
+                        <Input_Number />
+                      </Form.Item>
+                    </div>
 
-                    <div className="col-xl-6 col-sm-12 mt-2">
-                      <label>Gross Weight</label>
+                    <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                      <label>Breadth</label>
+                      <Form.Item
+                        name="breadth"
+                        // rules={[
+                        //   {
+                        //     required: true,
+                        //     pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                        //     message: "Please enter breadth",
+                        //   },
+                        // ]}
+                      >
+                        <Input_Number />
+                      </Form.Item>
+                    </div>
+                    <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                      <label>Height</label>
+                      <Form.Item
+                        name="height"
+                        // rules={[
+                        //   {
+                        //     required: true,
+                        //     pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                        //     message: "Please enter height",
+                        //   },
+                        // ]}
+                      >
+                        <Input_Number />
+                      </Form.Item>
+                    </div>
+
+                    <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                      <label>Volume</label>
+                      <Form.Item
+                        name="volume"
+                        // rules={[
+                        //   {
+                        //     required: true,
+                        //     pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                        //     message: "Please enter volume",
+                        //   },
+                        // ]}
+                      >
+                        <Input_Number />
+                      </Form.Item>
+                    </div>
+
+                    <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                      <label>Gross Weight<span className="required">*</span></label>
                       <Form.Item
                         name="gross_wt"
                         rules={[
@@ -1635,8 +1776,8 @@ export default function EditQuotation(
                       </Form.Item>
                     </div>
 
-                    <div className="col-xl-6 col-sm-12 mt-2">
-                      <label>Chargeable Weight</label>
+                    <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                      <label>Chargeable Weight<span className="required">*</span></label>
                       <Form.Item
                         name="chargeable_wt"
                         rules={[
@@ -1659,18 +1800,35 @@ export default function EditQuotation(
                         />
                       </Form.Item>
                     </div>
+                    <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                    <label>Incoterm<span className="required">*</span></label>
+                  <Form.Item name="incoterm"
+                
+                  rules={[
+                    {
+                      required: true,
+
+                      message: "Please select validity date",
+                    },
+                  ]}
+                  
+                  >
+                  <SelectBox></SelectBox>
+                    
+                  </Form.Item>
+                    </div>
                   </div>
-                </div>
+                {/* </div> */}
               </div>
-              <div className="row mt-4 ">
+              <div className="row mt-1 justify-content-between ">
                 <div className="col-md-6 col-12 ">
-                  <div className="content-tabs-new row justify-content mx-1 mb-3">
-                    <div className="row mt-3">
-                      <h5 className="lead_text">Payment Info</h5>
+                  <div className="row content-tabs-new  justify-content  mb-3">
+                    <div className="row mt-2">
+                      <h6 className="lead_text">Payment Info</h6>
                     </div>
 
                     <div className="col-xl-6 col-sm-12 mt-2">
-                      <label>Terms</label>
+                      <label>Terms<span className="required">*</span></label>
                       <Form.Item
                         name="quotation_terms"
                         rules={[
@@ -1702,7 +1860,7 @@ export default function EditQuotation(
                     </div>
 
                     <div className="col-xl-6 col-sm-12 mt-2">
-                      <label>Currency</label>
+                      <label>Currency<span className="required">*</span></label>
                       <Form.Item
                         name="currency"
                         rules={[
@@ -1734,8 +1892,8 @@ export default function EditQuotation(
                       </Form.Item>
                     </div>
 
-                    <div className="col-xl-6 col-sm-12 mt-2 pb-4">
-                      <label>Exchange Rate</label>
+                    <div className="col-xl-6 col-sm-12 mt-2 mb-4">
+                      <label>Exchange Rate<span className="required">*</span></label>
                       <Form.Item
                         name="exchnagerate"
                         rules={[
@@ -1762,9 +1920,9 @@ export default function EditQuotation(
                   </div>
                 </div>
                 <div className="col-md-6 col-12">
-                  <div className="content-tabs-new row justify-content mx-1 mb-1">
-                    <div className="row mt-3">
-                      <h5 className="lead_text">Attachments</h5>
+                  <div className="content-tabs-new row justify-content ms-1 mb-3">
+                    <div className="row mt-2">
+                      <h6 className="lead_text">Attachments</h6>
                     </div>
                     <div className="col-xl-12 col-sm-12 mt-2">
                       <Form.Item className="mt-2" name="new">
@@ -1806,10 +1964,10 @@ export default function EditQuotation(
                 </div>
               </div>
 
-              <div className="row mt-3 me-2 ">
-                <div className="content-tabs-tablenew row justify-content m-3">
-                  <div className="row mt-3">
-                    <h5 className="lead_text">Task & Description</h5>
+              <div className="row mt-1 ">
+                <div className="content-tabs-tablenew row justify-content mx-1 mb-3">
+                  <div className="row mt-2">
+                    <h6 className="lead_text">Task & Description</h6>
                   </div>
                   <div className="datatable">
                     <TableData

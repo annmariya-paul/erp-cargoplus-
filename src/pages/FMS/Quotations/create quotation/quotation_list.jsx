@@ -106,24 +106,32 @@ export default function Quotations(props) {
       align: "center",
     },
     {
-      title: "CONSIGNEE",
-      dataIndex: "consignee_name",
-      key: "consignee_name",
+      title: "CUSTOMER",
+      dataIndex: "customer",
+      key: "customer",
       width: "18%",
       // align: "center",
     },
     {
-      title: "SHIPPER",
-      dataIndex: "quotation_shipper",
-      key: "quotation_shipper",
+      title: "CONSIGNEE",
+      dataIndex: "consignee_name",
+      key: "consignee_name",
       width: "15%",
       // align: "center",
     },
+   
+    // {
+    //   title: "SHIPPER",
+    //   dataIndex: "quotation_shipper",
+    //   key: "quotation_shipper",
+    //   width: "15%",
+    //   // align: "center",
+    // },
     {
       title: "STATUS",
       dataIndex: "quotation_status",
       key: "quotation_status",
-      width: "12%",
+      width: "7%",
       // align: "center",
     },
 
@@ -131,20 +139,20 @@ export default function Quotations(props) {
       title: "ACTION",
       dataIndex: "action",
       key: "key",
-      width: "10%",
+      width: "6%",
       render: (data, index) => {
         console.log("index is :", index);
         return (
           <div className="d-flex justify-content-center align-items-center">
             <div
-              className="editIcon m-0 "
+              className="editIcon ms-3 "
               // onClick={() => {
               //   navigate(`/edit_quotation`);
               // }}
             >
               <Link to={`${ROUTES.EDIT_QUOTATION}/${index.quotation_id}`}>
                 {/* <FaEdit style={{ marginLeft: 15 }} /> */}
-                <div className="actioneditdelete">
+                <div className="actioneditdelete ms-3">
                   <FaEdit />
                 </div>
               </Link>
@@ -161,7 +169,7 @@ export default function Quotations(props) {
               <MdPageview style={{ marginLeft: 15, marginRight: 15 }} />
             </div>
             <div className="deleteIcon m-0">
-              <FaTrash />
+              <FaTrash style={{  marginRight: 18 }}/>
             </div>
           </div>
         );
@@ -172,15 +180,15 @@ export default function Quotations(props) {
       title: "",
       dataIndex: "assign",
       key: "assign",
-      width: "9%",
+      width: "6%",
       align: "center",
       render: (data, index) => {
         return (
           <>
-            <div className="row justify-content-center">
+            <div className="row justify-content">
               {index.fms_v1_quotation_agents &&
               index.fms_v1_quotation_agents.length > 0 ? (
-                <div className="col-2 d-flex justify-content-center">
+                <div className="col-2 d-flex">
                   <Button
                     btnType="add"
                     className="me-1 view_btn"
@@ -194,7 +202,7 @@ export default function Quotations(props) {
                   </Button>
                 </div>
               ) : (
-                <div className="col-2 d-flex justify-content-center">
+                <div className="col-2 d-flex ">
                   <Button
                     btnType="add"
                     className="me-1 assign_btn"
@@ -316,10 +324,31 @@ console.log("quott",AllQuotations)
   return (
     <>
       <div className="container-fluid container2 ">
-        <div className="row flex-wrap">
-          <div className="col">
+        <div className="row">
+          <div className="col-3 d-flex justify-content-start">
+           
             <h5 className="lead_text mt-3">Quotations</h5>
+            </div>
+            
+       
+          <div className="col-5  d-flex justify-content-start">
+       
+          <Input.Search
+              placeholder="Search"
+              style={{ margin: "5px", borderRadius: "5px",boxShadow:"0.5px 0px 2px lightgrey" }}
+              value={searchedText}
+              onChange={(e) => {
+                setSearchedText(e.target.value ? [e.target.value] : []);
+              }}
+              onSearch={(value) => {
+                setSearchedText(value);
+              }}
+            />
+        
           </div>
+          
+          <div className="col-4 d-flex justify-content-end ">
+
           {AllQuotations && (
             <Leadlist_Icons
             datas={data12}
@@ -340,23 +369,15 @@ console.log("quott",AllQuotations)
             }
           />
           )}
+          </div>
+        
           
         </div>
-        <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
+        {/* <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
-            <Input.Search
-              placeholder="Search"
-              style={{ margin: "5px", borderRadius: "5px" }}
-              value={searchedText}
-              onChange={(e) => {
-                setSearchedText(e.target.value ? [e.target.value] : []);
-              }}
-              onSearch={(value) => {
-                setSearchedText(value);
-              }}
-            />
+          
           </div>
-        </div>
+        </div> */}
         <div className="row my-3">
           <div className="col-4  px-3">
             <Select
@@ -401,10 +422,10 @@ console.log("quott",AllQuotations)
             />
             ) }
           </div>
-          <div className="col-4 d-flex justify-content-end">
-            <div className="col mb-2 px-4">
+          <div className="col-4 d-flex justify-content-end ">
+            <div className="col me-1">
               <Link to={ROUTES.ADD_QUOTATION} style={{ color: "white" }}>
-                <Button btnType="add">Add Quotation</Button>
+                <Button btnType="add">New Quotation</Button>
               </Link>
             </div>
           </div>

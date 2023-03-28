@@ -337,11 +337,11 @@ th {
   text-align: left;
 }
 .content-tabs-new {
-  border-radius: 16px;
+  border-radius: 8px;
   // min-height: 20rem;
-  padding: 18px;
+  padding: 1px;
   // flex-grow: 1;
-  box-shadow: 0.5px 1px 8px variables.$boxshadow;
+  box-shadow: 0.5px 1px 4px variables.$boxshadow;
 }
 .content-tabs-tablenew{
   border-radius: 16px;

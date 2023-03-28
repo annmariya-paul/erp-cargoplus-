@@ -1,6 +1,6 @@
 //Opportunity adding model created 14.10.22 shahida
 
-import React, { useState, useEffect,useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Oppor_Status } from "../../../../utils/SelectOptions";
 import { useNavigate, useParams } from "react-router-dom";
 // import { Form } from "react-bootstrap";
@@ -21,10 +21,10 @@ import { ROUTES } from "../../../../routes";
 import "../opportunity_ List/opportunitylist.scss";
 import FileUpload from "../../../../components/fileupload/fileUploader";
 // export default function AddOpportunity(props) {
-  export default function EditOpportunity() {
+export default function EditOpportunity() {
   const { id } = useParams();
   console.log("ID is ...", id);
-  
+
   const [form] = Form.useForm();
 
   // const typevalues = [
@@ -69,7 +69,7 @@ import FileUpload from "../../../../components/fileupload/fileUploader";
   const [oppurtunityfrom, setOppurtunityfrom] = useState();
   const [oppurtunitysource, setOppurtunitysource] = useState();
   const [oppurtunityparty, setOppurtunityparty] = useState("");
-  console.log("opp party",oppurtunityparty);
+  console.log("opp party", oppurtunityparty);
   const [oppurtunityvalidity, setOppurtunityvalidity] = useState();
   console.log("opp validity", oppurtunityvalidity);
   const [oppurtunityamount, setOppurtunityamount] = useState("");
@@ -221,16 +221,13 @@ import FileUpload from "../../../../components/fileupload/fileUploader";
   // get one oppurtunity
   const [oneoppurtunity, setOneoppurtunity] = useState();
 
-  
-useEffect(()=>{
-  if(id){
-    getoneoppurtunity();
-  }
-
-},[id])
+  useEffect(() => {
+    if (id) {
+      getoneoppurtunity();
+    }
+  }, [id]);
 
   const getoneoppurtunity = async () => {
-  
     try {
       const oneoppurtunities = await PublicFetch.get(
         `${CRM_BASE_URL}/opportunity/${id}`
@@ -458,7 +455,6 @@ useEffect(()=>{
     getAllContact();
     setShowEditModal(true);
   };
-
 
   const updatedOppurtunity = async (updatedData) => {
     const UpdatedFormdata = {
@@ -742,7 +738,6 @@ useEffect(()=>{
     return yyyy + "-" + mm + "-" + dd;
   };
 
-
   return (
     <>
       <div className="container-fluid">
@@ -886,6 +881,22 @@ useEffect(()=>{
                 ]}
               >
                 <InputType />
+              </Form.Item>
+            </div>
+            <div className="col-sm-4 pt-2">
+              <label>
+                Sale Person<span className="required">*</span>
+              </label>
+              <Form.Item
+                name="sales_person"
+                rules={[
+                  {
+                    required: true,
+                    message: "Sales Person is Required",
+                  },
+                ]}
+              >
+                <SelectBox></SelectBox>
               </Form.Item>
             </div>
           </div>

@@ -270,7 +270,16 @@ function EditEnquiry() {
               <label>
                 Date<span className="required">*</span>
               </label>
-              <Form.Item name="date" className="mt-2">
+              <Form.Item
+                name="date"
+                className="mt-2"
+                rules={[
+                  {
+                    required: true,
+                    message: "Date is Required",
+                  },
+                ]}
+              >
                 <DatePicker
                 //   format={"DD-MM-YYYY"}
                 //   defaultValue={moment(newDate)}
@@ -286,7 +295,16 @@ function EditEnquiry() {
               <label>
                 Source<span className="required">*</span>
               </label>
-              <Form.Item name="source" className="">
+              <Form.Item
+                name="source"
+                className=""
+                rules={[
+                  {
+                    required: true,
+                    message: "Source is Required",
+                  },
+                ]}
+              >
                 <SelectBox>
                   <Select.Option value="reference">Reference</Select.Option>
                   <Select.Option value="direct visit">
@@ -303,7 +321,15 @@ function EditEnquiry() {
               <label>
                 Customer Reference<span className="required">*</span>
               </label>
-              <Form.Item name="reference">
+              <Form.Item
+                name="reference"
+                rules={[
+                  {
+                    required: true,
+                    message: "Customer Reference is Required",
+                  },
+                ]}
+              >
                 <InputType
                 //   value={purchasePoNo}
                 //   onChange={(e) => {
@@ -311,6 +337,22 @@ function EditEnquiry() {
                 //     console.log("purchasePoNo", purchasePoNo);
                 //   }}
                 />
+              </Form.Item>
+            </div>
+            <div className="col-sm-4 pt-2">
+              <label>
+                Sale Person<span className="required">*</span>
+              </label>
+              <Form.Item
+                name="sales_person"
+                rules={[
+                  {
+                    required: true,
+                    message: "Sales Person is Required",
+                  },
+                ]}
+              >
+                <SelectBox></SelectBox>
               </Form.Item>
             </div>
           </div>

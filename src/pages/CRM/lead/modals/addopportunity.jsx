@@ -183,7 +183,7 @@ export default function AddOpportunity() {
 
   const oppdata = (data) => {
     console.log("addcreditdata", data);
-     const date = moment(data.oppor_date);
+    const date = moment(data.oppor_date);
     const formData = new FormData();
     formData.append("opportunity_date", date);
     formData.append("opportunity_customer_id", data.oppo_customer);
@@ -240,7 +240,6 @@ export default function AddOpportunity() {
         setValue(allNames.data.data);
         console.log("hello data names new add content", allNames.data.data);
         let temp = [];
-        
       } else {
         message.error("fetch data error");
       }
@@ -453,6 +452,22 @@ export default function AddOpportunity() {
                       }
                     })}
                 </SelectBox> */}
+              </Form.Item>
+            </div>
+            <div className="col-sm-4 pt-2">
+              <label>
+                Sale Person<span className="required">*</span>
+              </label>
+              <Form.Item
+                name="sales_person"
+                rules={[
+                  {
+                    required: true,
+                    message: "Sales Person is Required",
+                  },
+                ]}
+              >
+                <SelectBox></SelectBox>
               </Form.Item>
             </div>
           </div>

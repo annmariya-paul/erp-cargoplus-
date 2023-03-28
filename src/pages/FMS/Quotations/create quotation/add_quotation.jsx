@@ -41,6 +41,10 @@ export default function Add_Quotation() {
   const [currencyDefault, setCurrencyDefault] = useState();
   console.log("curencydefault", currencyDefault);
 
+  const[allincoterms,setallincoterms]=useState("")
+  const [defaultincoterm,setdefaultincoterm] = useState("")
+
+
   const [addForm] = Form.useForm();
   const navigate = useNavigate();
   const dateFormatList = ["DD-MM-YYYY", "DD-MM-YY"];
@@ -139,6 +143,7 @@ export default function Add_Quotation() {
       }
     });
   };
+
   useEffect(() => {
     let grandTotal = 0;
     tableData?.map((item, index) => {
@@ -300,6 +305,37 @@ export default function Add_Quotation() {
     }
   };
 
+  const getfmssettings = async () => {
+    try {
+      const allfmssetting = await PublicFetch.get(
+        `${GENERAL_SETTING_BASE_URL}/fms`
+      );
+      console.log("all fmssettinggg", allfmssetting.data);
+      setdefaultincoterm(allfmssetting.data.data.fms_settings_incorterm)
+     
+
+      addForm.setFieldsValue({
+        incoterm: allfmssetting.data.data.fms_settings_incorterm,
+      });
+    } catch (err) {
+      console.log("error while getting the fmssettinggg: ", err);
+    }
+  };
+
+  const getAllincoterm = async () => {
+    try {
+      const allCountries = await PublicFetch.get(
+        `${CRM_BASE_URL_FMS}/incoterms/minimal`
+      );
+      console.log("all incotermss", allCountries.data.data);
+      setallincoterms(allCountries.data.data)
+      // setGetCountries(allCountries.data.data);
+    } catch (err) {
+      console.log("error while getting the countries: ", err);
+    }
+  };
+
+
   // const gatallTaxType= ()=> {
   //   PublicFetch.get(`${CRM_BASE_URL_FMS}/tax-types?startIndex=${pageofIndex}&noOfItems=${noofItems}`).then((res)=> {
   //     console.
@@ -352,6 +388,8 @@ export default function Add_Quotation() {
     getallcurrency();
     getallcarrier();
     getallPaymentTerms();
+    getfmssettings()
+    getAllincoterm()
   }, []);
 
   const handleDelete = (key) => {
@@ -997,6 +1035,8 @@ export default function Add_Quotation() {
     formData.append("quotation_currency", data.currency);
     formData.append("quotation_exchange_rate", data.exchnagerate);
     formData.append("quotation_grand_total", data.grandtotal);
+    formData.append("incoterm_id", data.incoterm);
+    
     if (filenew) {
       formData.append("attachments", filenew);
     }
@@ -1546,9 +1586,29 @@ export default function Add_Quotation() {
                       </Form.Item>
                     </div>
                     <div className="col-xl-6 col-sm-12 mt-2">
-                    <label>Default Incoterm</label>
+                    <label> Incoterm</label>
                   <Form.Item name="incoterm">
-                  <SelectBox></SelectBox>
+                  <SelectBox  
+                   value={defaultincoterm}
+                   onChange={(e) => {
+                     console.log("select the brandss", e);
+                     setdefaultincoterm(parseInt(e));
+                   }}
+                  >
+                  {allincoterms &&
+                        allincoterms.length > 0 &&
+                        allincoterms.map((item, index) => {
+                          console.log("njd",item)
+                          return (
+                            <Select.Option
+                              key={item.incoterm_id}
+                              value={item.incoterm_id}
+                            >
+                              {item.incoterm_full_name}
+                            </Select.Option>
+                          );
+                        })}
+                  </SelectBox>
                     
                   </Form.Item>
                     </div>

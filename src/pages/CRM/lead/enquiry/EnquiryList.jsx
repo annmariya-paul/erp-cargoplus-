@@ -82,17 +82,17 @@ function EnquiryList() {
     },
 
     {
-      title: "SOURCE",
-      dataIndex: "enquiry_source",
-      key: "enquiry_source",
+      title: "EMAIL",
+      dataIndex: "contact_email",
+      key: "contact_email",
       // width: "23%",
       align: "ledt",
     },
 
     {
-      title: "CUSTOMER REFERENCE",
-      dataIndex: "enquiry_customer_ref",
-      key: "enquiry_customer_ref",
+      title: "PHONE",
+      dataIndex: "contact_phone_1",
+      key: "contact_phone_1",
       // filteredValue: [searchStatus],
       // onFilter: (value, record) => {
       //   return String(record.lead_status)
@@ -187,6 +187,8 @@ function EnquiryList() {
               enquiry_no: item.enquiry_no,
               enquiry_remarks: item.enquiry_remarks,
               enquiry_source: item.enquiry_source,
+              contact_email: item?.crm_v1_contacts?.contact_email,
+              contact_phone_1: item?.crm_v1_contacts?.contact_phone_1,
             });
           });
           setAllnquires(temp);
@@ -202,8 +204,8 @@ function EnquiryList() {
   }, []);
 
   return (
-    <div className="container-fluid">
-      <div className="row">
+    <div className="container-fluid ">
+      <div className="row shadow-sm">
         <div className="col-12">
           <div className=" ">
             <div className="row flex-wrap">
@@ -341,20 +343,22 @@ function EnquiryList() {
                 </Select>
               </div>
               <div className="col-4 d-flex py-2 justify-content-center">
-                <MyPagination
-                  total={parseInt(totalCount)}
-                  current={current}
-                  pageSize={noofItems}
-                  // defaultPageSize={noofItems}
-                  showSizeChanger={false}
-                  onChange={(current, pageSize) => {
-                    console.log("page index isss", pageSize);
-                    setCurrent(current);
-                    // setPageSize(pageSize);
-                    // setNoofItems(pageSize);
-                    // setCurrent(noofItems !== pageSize ? 0 : current);
-                  }}
-                />
+                {AllEnquiries?.length > 0 && (
+                  <MyPagination
+                    total={AllEnquiries?.length}
+                    current={current}
+                    pageSize={noofItems}
+                    // defaultPageSize={noofItems}
+                    showSizeChanger={false}
+                    onChange={(current, pageSize) => {
+                      console.log("page index isss", pageSize);
+                      setCurrent(current);
+                      // setPageSize(pageSize);
+                      // setNoofItems(pageSize);
+                      // setCurrent(noofItems !== pageSize ? 0 : current);
+                    }}
+                  />
+                )}
               </div>
               <div className="col-4 d-flex justify-content-end">
                 <Link to={ROUTES.CREATE_ENQUIRY}>
@@ -376,9 +380,9 @@ function EnquiryList() {
               />
             </div>
             <div className="d-flex py-2 justify-content-center">
-              {totalCount > 0 && (
+              {AllEnquiries?.length > 0 && (
                 <MyPagination
-                  total={parseInt(totalCount)}
+                  total={AllEnquiries?.length}
                   current={current}
                   pageSize={noofItems}
                   // defaultPageSize={noofItems}

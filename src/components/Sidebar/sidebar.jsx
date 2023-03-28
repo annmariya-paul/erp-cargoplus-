@@ -22,7 +22,7 @@ import { NavLink } from "react-router-dom";
 import { FiSettings } from "react-icons/fi";
 import { checkPermission } from "../../utils/check_permission";
 import hrmsIcon from "../../components/img/human-resources-icon-png-12.jpg";
-import crmIcon from "../../components/img/icons8-crm-58.png";
+import crmIcon from "../../components/img/118211.png";
 import fmsIcon from "../../components/img/icons8-cargo-ship-50.png";
 import settingsicon from "../../components/img/icons8-gear-50.png";
 import { FaRegHandshake } from "react-icons/fa";
@@ -721,7 +721,7 @@ export default function Sidebar({ showSidebar }) {
                     <div className="d-flex">
                       <GrProductHunt className="sidebar_icons pt-1" />
                       <div style={{ width: "120px" }} className="">
-                        PRODUCT
+                        Product
                       </div>
                     </div>
 
@@ -869,7 +869,7 @@ export default function Sidebar({ showSidebar }) {
                        */}
                       <GrServices className="sidebar_icons pt-1" />
                       <div style={{ width: "120px" }} className="">
-                        SERVICES
+                        Services
                       </div>
                     </div>
 

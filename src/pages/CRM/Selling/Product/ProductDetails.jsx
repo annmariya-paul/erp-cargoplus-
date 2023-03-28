@@ -408,37 +408,33 @@ function ProductDetails() {
 
   return (
     <div>
-      <div className="container">
-        <div className="row">
-          <div className="col-sm-4">
-            <div className="report_bloc-tabs tabs-responsive">
+      <div className="container-fluid">
+        <div className="row bloc-tabs tabs-responsive">
+          <div className="col-xl-2 col-sm-2 me-0  pe-1">
+            <div className="">
               <button
                 id="button-tabs"
-                className={
-                  toggleState === 1
-                    ? "report-tabs active-report-tabs"
-                    : "report-tabs"
-                }
+                className={toggleState === 1 ? "tabs active-tabs " : "tabs "}
                 onClick={() => toggleTab(1)}
               >
                 Product Details
               </button>
+            </div>
+          </div>{" "}
+          <div className="col-xl-2 col-sm-2 ms-0 ps-0 pe-1">
+            <div className="">
               <button
                 id="button-tabs"
-                className={
-                  toggleState === 2
-                    ? "report-tabs active-report-tabs"
-                    : "report-tabs"
-                }
+                className={toggleState === 2 ? "tabs active-tabs " : "tabs "}
                 onClick={() => toggleTab(2)}
               >
                 Product Variants
               </button>
             </div>
-          </div>{" "}
+          </div>
         </div>
         <div>
-          <div className="container ps-4  py-3 shadow-sm">
+          <div className="container-fluid ps-4  py-3 shadow-sm">
             <div className="report-content-tabs">
               <div
                 className={

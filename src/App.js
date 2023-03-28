@@ -148,6 +148,7 @@ import EnquiryList from "./pages/CRM/lead/enquiry/EnquiryList";
 import EditEnquiry from "./pages/CRM/lead/enquiry/EditEnquiry";
 import ViewEnquiry from "./pages/CRM/lead/enquiry/ViewEnquiry";
 import Viewvendor from "./pages/CRM/Purchase/vendor/viewvendor";
+import Containertypes from "./pages/FMS/settings/containertypes/containertypes";
 function App() {
   return (
     <div className="App">
@@ -465,6 +466,11 @@ function App() {
             <Route path={ROUTES.INCOTERM} element={<ProtectedRoute />}>
               <Route index element={<Incoterm />} />
             </Route>
+
+            <Route path={ROUTES.CONTAINER_TYPES} element={<ProtectedRoute />}>
+              <Route index element={<Containertypes />} />
+            </Route>
+
 
             <Route
               path={ROUTES.ASSIGN_QUOTATION_ID}

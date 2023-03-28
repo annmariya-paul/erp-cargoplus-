@@ -33,7 +33,7 @@ function ViewEnquiry() {
   }, [id]);
   return (
     <div className="container-fluid p-4">
-      <div className="row">
+      <div className="row report-content-tabs shadow-sm p-3">
         <div className="col-12">
           <div className="row">
             <div className="col-4">
@@ -60,7 +60,7 @@ function ViewEnquiry() {
                   <tr>
                     <td>
                       <p
-                        style={{ color: "black", fontWeight: "700" }}
+                        style={{ color: "black", fontWeight: "500" }}
                         className=""
                       >
                         {" "}
@@ -77,7 +77,7 @@ function ViewEnquiry() {
                     </td>
                   </tr>
                   <tr>
-                    <td style={{ color: "black", fontWeight: "700" }}>
+                    <td style={{ color: "black", fontWeight: "500" }}>
                       <p className="">Customer Name</p>
                     </td>
                     <td>
@@ -91,7 +91,7 @@ function ViewEnquiry() {
                     </td>
                   </tr>
                   <tr>
-                    <td style={{ color: "black", fontWeight: "700" }}>
+                    <td style={{ color: "black", fontWeight: "500" }}>
                       <p className=""> Contact Person Name</p>
                     </td>
                     <td>
@@ -104,6 +104,34 @@ function ViewEnquiry() {
                       </p>
                     </td>
                   </tr>
+                  <tr>
+                    <td style={{ color: "black", fontWeight: "500" }}>
+                      <p className="">Source</p>
+                    </td>
+                    <td>
+                      {" "}
+                      <p>:</p>
+                    </td>
+                    <td>
+                      <p className="modal_view_p_sub">
+                        {AllEnquiries?.enquiry_source}
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style={{ color: "black", fontWeight: "500" }}>
+                      <p className="">Remarks</p>
+                    </td>
+                    <td>
+                      {" "}
+                      <p>:</p>
+                    </td>
+                    <td>
+                      <p className="modal_view_p_sub">
+                        {AllEnquiries?.enquiry_remarks}
+                      </p>
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -111,7 +139,7 @@ function ViewEnquiry() {
               <table>
                 <tbody>
                   <tr>
-                    <td style={{ color: "black", fontWeight: "700" }}>
+                    <td style={{ color: "black", fontWeight: "500" }}>
                       <p className=""> Enquiry Date</p>
                     </td>
                     <td>
@@ -127,7 +155,7 @@ function ViewEnquiry() {
                     </td>
                   </tr>
                   <tr>
-                    <td style={{ color: "black", fontWeight: "700" }}>
+                    <td style={{ color: "black", fontWeight: "500" }}>
                       <p className=""> Email</p>
                     </td>
                     <td>
@@ -141,7 +169,7 @@ function ViewEnquiry() {
                     </td>
                   </tr>
                   <tr>
-                    <td style={{ color: "black", fontWeight: "700" }}>
+                    <td style={{ color: "black", fontWeight: "500" }}>
                       <p className=""> Phone</p>
                     </td>
                     <td>
@@ -151,6 +179,34 @@ function ViewEnquiry() {
                     <td>
                       <p className="modal_view_p_sub">
                         {AllEnquiries?.crm_v1_contacts?.contact_phone_1}
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style={{ color: "black", fontWeight: "500" }}>
+                      <p className="">Customer Reference</p>
+                    </td>
+                    <td>
+                      {" "}
+                      <p>:</p>
+                    </td>
+                    <td>
+                      <p className="modal_view_p_sub">
+                        {AllEnquiries?.enquiry_customer_ref}
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style={{ color: "black", fontWeight: "500" }}>
+                      <p className="">Attachments</p>
+                    </td>
+                    <td>
+                      {" "}
+                      <p>:</p>
+                    </td>
+                    <td>
+                      <p className="modal_view_p_sub">
+                        {AllEnquiries?.enquiry_docs}
                       </p>
                     </td>
                   </tr>

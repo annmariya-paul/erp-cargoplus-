@@ -1,40 +1,41 @@
 @use "../../../../styles/variables.scss";
 
 // ######## First Container - Date Criteria #########
-.report_container1{
-   display: flex;
+.report_container1 {
+  display: flex;
   flex-direction: column;
   position: relative;
   width: 60%;
-  padding:18px;
+  padding: 18px;
   box-shadow: 2px 2px 12px variables.$boxshadow;
 }
 
- .report_container1 .ant-select-selector,.ant-picker
- ,.ant-picker:hover{
- background-color: variables.$inputfield !important;
+.report_container1 .ant-select-selector,
+.ant-picker,
+.ant-picker:hover {
+  background-color: variables.$inputfield !important;
   border-color: variables.$inputfield !important;
-  border-radius: 3px; 
-  width:100%;
+  border-radius: 3px;
+  width: 100%;
 }
-.ant-picker{
-  height:34px;
+.ant-picker {
+  height: 34px;
 }
- .select_box{
+.select_box {
   margin-top: -8px;
- }
+}
 
 // ######## Second Container #########
-.report_content{
+.report_content {
   display: flex;
   flex-direction: column;
   position: relative;
   width: 100%;
-  height:40rem;
+  height: 40rem;
   box-shadow: -1px 2px 6px variables.$boxshadow;
   // margin: 0px auto 0;
   // margin-right:-10px;
-  padding-inline:0px;
+  padding-inline: 0px;
 }
 .report_heading {
   color: variables.$primary;
@@ -48,7 +49,7 @@
 }
 .report-tabs {
   font-size: 15px;
-  color:variables.$primary;
+  color: variables.$primary;
   box-shadow: 2px 2px 12px variables.$boxshadow;
   width: 100% !important;
   margin-inline: 0.5px !important;
@@ -68,10 +69,10 @@
 }
 
 .active-report-tabs {
-  background:variables.$primary;
+  background: variables.$primary;
   border: 1px solid variables.$primary;
   color: white;
-  
+
   &::before {
     content: "";
     display: block;
@@ -91,7 +92,7 @@
   flex-grow: 1;
 }
 .report-content {
-height: 610px;
+  height: 610px;
   background: white;
   padding-inline: 12px;
   display: none;
@@ -100,15 +101,14 @@ height: 610px;
   height: 610px;
   display: block;
 }
-.table_report_list
-{
+.table_report_list {
   height: 381px !important;
   overflow-y: auto !important;
 }
 
 @media screen and (max-width: 500px) {
-  .report_container1{
-    width:100%;
+  .report_container1 {
+    width: 100%;
   }
   // .report-content,.active-report-content{height: fit-content !important;}
   // .report-content-tabs{min-height: 50rem;}

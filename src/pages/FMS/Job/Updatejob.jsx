@@ -47,6 +47,9 @@ function Updatejob() {
   const [disable, setDisable] = useState(false);
   const [quotationdisable, setQuotationDisable] = useState(true);
 
+
+  const[allincoterms,setallincoterms]=useState("")
+  const [defaultincoterm,setdefaultincoterm] = useState("")
   const close_modal = (mShow, time) => {
     if (!mShow) {
       setTimeout(() => {
@@ -312,6 +315,35 @@ function Updatejob() {
       });
   };
 
+// incoterm add
+
+// const getfmssettings = async () => {
+//   try {
+//     const allfmssetting = await PublicFetch.get(
+//       `${GENERAL_SETTING_BASE_URL}/fms`
+//     );
+//     console.log("all fmssettinggg", allfmssetting.data);
+//     setdefaultincoterm(allfmssetting.data.data.fms_settings_incorterm)
+   
+//   } catch (err) {
+//     console.log("error while getting the fmssettinggg: ", err);
+//   }
+// };
+
+const getAllincoterm = async () => {
+  try {
+    const allincoterm = await PublicFetch.get(
+      `${CRM_BASE_URL_FMS}/incoterms/minimal`
+    );
+    console.log("all incotermss", allincoterm.data.data);
+    setallincoterms(allincoterm.data.data)
+    // setGetCountries(allCountries.data.data);
+  } catch (err) {
+    console.log("error while getting the countries: ", err);
+  }
+};
+
+
   useEffect(() => {
     if (id) {
       OneJobList();
@@ -323,6 +355,7 @@ function Updatejob() {
     Uom();
     currencys();
     allQuotations();
+    getAllincoterm()
   }, [id, pageofIndex, noofItems]);
   const beforeUpload = (file, fileList) => {};
 
@@ -847,6 +880,33 @@ function Updatejob() {
                       </Form.Item>
                     </div>
 
+                    <div className="col-xl-6 col-sm-12 mt-2 pb-2">
+                    <label> Incoterm</label>
+                  <Form.Item name="incoterm">
+                  <SelectBox  
+                   value={defaultincoterm}
+                   onChange={(e) => {
+                     console.log("select the brandss", e);
+                     setdefaultincoterm(parseInt(e));
+                   }}
+                  >
+                  {allincoterms &&
+                        allincoterms.length > 0 &&
+                        allincoterms.map((item, index) => {
+                          console.log("njd",item)
+                          return (
+                            <Select.Option
+                              key={item.incoterm_id}
+                              value={item.incoterm_id}
+                            >
+                              {item.incoterm_full_name}
+                            </Select.Option>
+                          );
+                        })}
+                  </SelectBox>
+                    
+                  </Form.Item>
+                    </div>
                     
                   </div>
                 </div>

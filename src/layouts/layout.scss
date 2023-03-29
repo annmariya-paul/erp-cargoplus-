@@ -1,8 +1,8 @@
 @use "../styles/variables.scss";
 
 .sidebarWrapper {
-  // width: 220px;
-  width: 230px;
+  width: 220px;
+  // width: 230px;
   transition: 850ms;
   
 }
@@ -12,8 +12,8 @@
 }
 
 .contentWrapper {
-  // width: calc(100% - 220px);
-  width: calc(100% - 230px);
+  width: calc(100% - 220px);
+  // width: calc(100% - 230px);
   transition: 850ms;
 }
 .menu_icon{

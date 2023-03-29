@@ -594,26 +594,120 @@ function CreateJob() {
                     <h5 className="lead_text">Basic Info</h5>
                   </div>
                   <div className="col-xl-4 col-sm-12 mt-2 px-3 ">
-                    <label>Job Date</label>
+                  <label>Customer</label>
                     <Form.Item
-                      name="jobdate"
+                      name="job_customer"
                       rules={[
                         {
                           required: true,
-                          // pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid date",
+                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                          message: "Please enter a Valid  customer",
                         },
                       ]}
                     >
-                      <DatePicker
-                        style={{ borderWidth: 0, marginTop: 10 }}
-                        defaultValue={moment(date)}
-                        format={dateFormatList}
-                      />
+                      <SelectBox
+                        onChange={(e) => {
+                          handleLeadId(e);
+                          getCreditdays(e);
+                        }}
+                        allowClear
+                        showSearch
+                        optionFilterProp="children"
+                      >
+                        {allLeadList &&
+                          allLeadList.length > 0 &&
+                          allLeadList.map((item, index) => {
+                            return (
+                              <Select.Option
+                                key={item.lead_id}
+                                value={item.lead_id}
+                              >
+                                {item.lead_customer_name}
+                              </Select.Option>
+                            );
+                          })}
+                      </SelectBox>
                     </Form.Item>
+
+                  
                   </div>
                   <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                    <label>Quotation No</label>
+
+
+                  <label>Freight Type</label>
+                    <Form.Item
+                      name="job_freight_type"
+                      rules={[
+                        {
+                          required: true,
+                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                          message: "Please enter a Valid freight type",
+                        },
+                      ]}
+                    >
+                      <SelectBox
+                        disabled={disable}
+                        allowClear
+                        showSearch
+                        optionFilterProp="children"
+                        onChange={(e) => {
+                          console.log("date mmm", e);
+                          setFrightmode(e);
+                          mode(e);
+                        }}
+                      >
+                        {frighttype &&
+                          frighttype.length > 0 &&
+                          frighttype.map((item, index) => {
+                            return (
+                              <Select.Option
+                                key={item.freight_type_id}
+                                value={item.freight_type_id}
+                              >
+                                {item.freight_type_name}
+                              </Select.Option>
+                            );
+                          })}
+                      </SelectBox>
+                    </Form.Item>
+
+                    {/* <label>Quotation No</label>
+                    <Form.Item
+                      name="quotationno"
+                      
+                    >
+                      <SelectBox
+                        onChange={(e) => {
+                          if (e) {
+                            handleLeadIdEnq(e);
+                            setDisable(true);
+                          } else {
+                            addForm.resetFields();
+                            setDisable(false);
+                          }
+                        }}
+                        allowClear
+                        showSearch
+                        optionFilterProp="children"
+                      >
+                        {AllQuotations &&
+                          AllQuotations.length > 0 &&
+                          AllQuotations.map((item, index) => {
+                            return (
+                              <Select.Option
+                                key={item.quotation_id}
+                                value={item.quotation_id}
+                              >
+                                {item.quotation_no}
+                              </Select.Option>
+                            );
+                          })}
+                      </SelectBox>
+                    </Form.Item> */}
+                  </div>
+
+                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                  <label>Job No</label>
                     <Form.Item
                       name="quotationno"
                       // rules={[
@@ -652,86 +746,66 @@ function CreateJob() {
                           })}
                       </SelectBox>
                     </Form.Item>
+
                   </div>
 
                   <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                    <label>Freight Type</label>
+                  <label>Job Date</label>
                     <Form.Item
-                      name="job_freight_type"
+                      name="jobdate"
                       rules={[
                         {
                           required: true,
-                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid freight type",
+                          // pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                          message: "Please enter a Valid date",
                         },
                       ]}
                     >
-                      <SelectBox
-                        disabled={disable}
-                        allowClear
-                        showSearch
-                        optionFilterProp="children"
-                        onChange={(e) => {
-                          console.log("date mmm", e);
-                          setFrightmode(e);
-                          mode(e);
-                        }}
-                      >
-                        {frighttype &&
-                          frighttype.length > 0 &&
-                          frighttype.map((item, index) => {
-                            return (
-                              <Select.Option
-                                key={item.freight_type_id}
-                                value={item.freight_type_id}
-                              >
-                                {item.freight_type_name}
-                              </Select.Option>
-                            );
-                          })}
-                      </SelectBox>
+                      <DatePicker
+                        style={{ borderWidth: 0, marginTop: 10 }}
+                        defaultValue={moment(date)}
+                        format={dateFormatList}
+                      />
                     </Form.Item>
+
                   </div>
 
                   <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                    <label>Customer</label>
+                  <label>Quotation No</label>
                     <Form.Item
-                      name="job_customer"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid  customer",
-                        },
-                      ]}
+                      name="quotationno"
+                      
                     >
                       <SelectBox
                         onChange={(e) => {
-                          handleLeadId(e);
-                          getCreditdays(e);
+                          if (e) {
+                            handleLeadIdEnq(e);
+                            setDisable(true);
+                          } else {
+                            addForm.resetFields();
+                            setDisable(false);
+                          }
                         }}
                         allowClear
                         showSearch
                         optionFilterProp="children"
                       >
-                        {allLeadList &&
-                          allLeadList.length > 0 &&
-                          allLeadList.map((item, index) => {
+                        {AllQuotations &&
+                          AllQuotations.length > 0 &&
+                          AllQuotations.map((item, index) => {
                             return (
                               <Select.Option
-                                key={item.lead_id}
-                                value={item.lead_id}
+                                key={item.quotation_id}
+                                value={item.quotation_id}
                               >
-                                {item.lead_customer_name}
+                                {item.quotation_no}
                               </Select.Option>
                             );
                           })}
                       </SelectBox>
                     </Form.Item>
-                  </div>
 
-                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                    <label>Consignee</label>
+                    {/* <label>Consignee</label>
                     <Form.Item
                       name="job_consignee"
                       rules={[
@@ -743,25 +817,10 @@ function CreateJob() {
                       ]}
                     >
                       <InputType />
-                    </Form.Item>
+                    </Form.Item> */}
                   </div>
                   <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                    <label>Shipper</label>
-                    <Form.Item
-                      name="job_shipper"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid shipper",
-                        },
-                      ]}
-                    >
-                      <InputType disabled={disable} />
-                    </Form.Item>
-                  </div>
-                  <div className="col-sm-4 pt-2">
-                    <label>
+                  <label>
                       Sale Person<span className="required">*</span>
                     </label>
                     <Form.Item
@@ -788,12 +847,54 @@ function CreateJob() {
                           })}
                       </SelectBox>
                     </Form.Item>
+                    {/* <label>Shipper</label>
+                    <Form.Item
+                      name="job_shipper"
+                      rules={[
+                        {
+                          required: true,
+                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                          message: "Please enter a Valid shipper",
+                        },
+                      ]}
+                    >
+                      <InputType disabled={disable} />
+                    </Form.Item> */}
+                  </div>
+                  <div className="col-sm-4 pt-2">
+                    {/* <label>
+                      Sale Person<span className="required">*</span>
+                    </label>
+                    <Form.Item
+                      name="sales_person"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Sales Person is Required",
+                        },
+                      ]}
+                    >
+                      <SelectBox>
+                        {allSalesPerson &&
+                          allSalesPerson.length > 0 &&
+                          allSalesPerson.map((item, index) => {
+                            return (
+                              <Select.Option
+                                key={item.employee_id}
+                                value={item.employee_id}
+                              >
+                                {item.employee_name}
+                              </Select.Option>
+                            );
+                          })}
+                      </SelectBox>
+                    </Form.Item> */}
                   </div>
                 </div>
               </div>
             </div>
             <div className="row  mt-3 px-1 ">
-              <div className="col-md-6 col-12 mt-3">
+              <div className=" col-12 mt-3">
                 <div className="content-tabs-new row justify-content mx-1 mb-3">
                   <div className="row mt-3">
                     <h5 className="lead_text">Transportation</h5>
@@ -823,7 +924,40 @@ function CreateJob() {
                         </SelectBox>
                       </Form.Item>
                     </div> */}
-                  <div className="col-xl-6 col-sm-12 mt-2">
+
+<div className="col-xl-4 col-sm-12 mt-2">
+                    <label>Consignee</label>
+                    <Form.Item
+                      name="job_consignee"
+                      rules={[
+                        {
+                          required: true,
+                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                          message: "Please enter a Valid consignee",
+                        },
+                      ]}
+                    >
+                      <InputType />
+                    </Form.Item>
+                  </div>
+                  <div className="col-xl-4 col-sm-12 mt-2">
+                   <label>Shipper</label>
+                    <Form.Item
+                      name="job_shipper"
+                      rules={[
+                        {
+                          required: true,
+                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                          message: "Please enter a Valid shipper",
+                        },
+                      ]}
+                    >
+                      <InputType disabled={disable} />
+                    </Form.Item>
+   </div>
+          
+
+                  <div className="col-xl-4 col-sm-12 mt-2">
                     <label>Origin</label>
                     <Form.Item
                       name="job_origin_id"
@@ -857,7 +991,7 @@ function CreateJob() {
                     </Form.Item>
                   </div>
 
-                  <div className="col-xl-6 col-sm-12 mt-2">
+                  <div className="col-xl-4 col-sm-12 mt-2">
                     <label>Destination</label>
                     <Form.Item
                       name="job_destination_id"
@@ -891,7 +1025,7 @@ function CreateJob() {
                     </Form.Item>
                   </div>
 
-                  <div className="col-xl-6 col-sm-12 mt-4  mb-5 pb-4">
+                  <div className="col-xl-4 col-sm-12 mt-2  ">
                     <label>Carrier</label>
                     <Form.Item
                       name="job_carrier"
@@ -924,7 +1058,7 @@ function CreateJob() {
                       </SelectBox>
                     </Form.Item>
                   </div>
-                  <div className="col-xl-6 col-sm-12 mt-4 mb-2">
+                  <div className="col-xl-4 col-sm-12 mt-2 mb-2">
                     <label>AWB/BL No</label>
                     <Form.Item
                       name="job_awb"
@@ -960,15 +1094,48 @@ function CreateJob() {
                       </p>
                     ) : null}
                   </div>
+                  <div className="col-xl-4 col-sm-12 ">
+                    <label>Container Type</label>
+                    <Form.Item
+                      name="job_containertype"
+                      rules={[
+                        {
+                          required: true,
+                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                          message: "Please enter a Valid carrier",
+                        },
+                      ]}
+                    >
+                      <SelectBox
+                        allowClear
+                        showSearch
+                        optionFilterProp="children"
+                        disabled={disable}
+                      >
+                        {/* {carrierdata &&
+                          carrierdata.length > 0 &&
+                          carrierdata.map((item, index) => {
+                            return (
+                              <Select.Option
+                                value={item.carrier_id}
+                                key={item.carrier_id}
+                              >
+                                {item.carrier_name}
+                              </Select.Option>
+                            );
+                          })} */}
+                      </SelectBox>
+                    </Form.Item>
+                  </div>
                 </div>
               </div>
 
-              <div className="col-md-6 col-12 mt-3 pb-1">
+              <div className=" col-12 mt-3 pb-1">
                 <div className="content-tabs-new row justify-content mx-1 mb-3 me-3">
                   <div className="row mt-3">
                     <h5 className="lead_text">Shipment Details</h5>
                   </div>
-                  <div className="col-xl-6 col-sm-12 mt-2">
+                  <div className="col-xl-4 col-sm-12 mt-2">
                     <label>Cargo Type</label>
                     <Form.Item
                       name="job_cargo_type"
@@ -998,7 +1165,7 @@ function CreateJob() {
                       </SelectBox>
                     </Form.Item>
                   </div>
-                  <div className="col-xl-6 col-sm-12 mt-2">
+                  <div className="col-xl-4 col-sm-12 mt-2">
                     <label>No of pieces</label>
                     <Form.Item
                       name="job_no_of_pieces"
@@ -1023,7 +1190,7 @@ function CreateJob() {
                       />
                     </Form.Item>
                   </div>
-                  <div className="col-xl-6 col-sm-12 mt-2">
+                  <div className="col-xl-4 col-sm-12 mt-2">
                     <label>UOM</label>
                     <Form.Item
                       name="job_uom"
@@ -1057,7 +1224,110 @@ function CreateJob() {
                     </Form.Item>
                   </div>
 
-                  <div className="col-xl-6 col-sm-12 mt-2">
+                  <div className="col-xl-4 col-sm-12 mt-2">
+                    <label>Length</label>
+                    <Form.Item
+                      name="job_grossweight"
+                      rules={[
+                        {
+                          required: true,
+                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                          message: "Please enter a Valid gross wt",
+                        },
+                      ]}
+                    >
+                      <Input_Number
+                        className="text_right"
+                        // value={currencyRates}
+                        // onChange={handleChange}
+                        align="right"
+                        // step={0.01}
+                        min={0}
+                        precision={2}
+                        controlls={false}
+                        disabled={disable}
+                      />
+                    </Form.Item>
+                  </div>
+
+                  <div className="col-xl-4 col-sm-12 mt-2">
+                    <label>Breadth</label>
+                    <Form.Item
+                      name="job_grossweight"
+                      rules={[
+                        {
+                          required: true,
+                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                          message: "Please enter a Valid gross wt",
+                        },
+                      ]}
+                    >
+                      <Input_Number
+                        className="text_right"
+                        // value={currencyRates}
+                        // onChange={handleChange}
+                        align="right"
+                        // step={0.01}
+                        min={0}
+                        precision={2}
+                        controlls={false}
+                        disabled={disable}
+                      />
+                    </Form.Item>
+                  </div>
+
+                  <div className="col-xl-4 col-sm-12 mt-2">
+                    <label>Height</label>
+                    <Form.Item
+                      name="job_grossweight"
+                      rules={[
+                        {
+                          required: true,
+                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                          message: "Please enter a Valid gross wt",
+                        },
+                      ]}
+                    >
+                      <Input_Number
+                        className="text_right"
+                        // value={currencyRates}
+                        // onChange={handleChange}
+                        align="right"
+                        // step={0.01}
+                        min={0}
+                        precision={2}
+                        controlls={false}
+                        disabled={disable}
+                      />
+                    </Form.Item>
+                  </div>
+                  <div className="col-xl-4 col-sm-12 mt-2">
+                    <label>Volume</label>
+                    <Form.Item
+                      name="job_grossweight"
+                      rules={[
+                        {
+                          required: true,
+                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                          message: "Please enter a Valid gross wt",
+                        },
+                      ]}
+                    >
+                      <Input_Number
+                        className="text_right"
+                        // value={currencyRates}
+                        // onChange={handleChange}
+                        align="right"
+                        // step={0.01}
+                        min={0}
+                        precision={2}
+                        controlls={false}
+                        disabled={disable}
+                      />
+                    </Form.Item>
+                  </div>
+
+                  <div className="col-xl-4 col-sm-12 mt-2">
                     <label>Gross wt</label>
                     <Form.Item
                       name="job_grossweight"
@@ -1082,7 +1352,7 @@ function CreateJob() {
                       />
                     </Form.Item>
                   </div>
-                  <div className="col-xl-6 col-sm-12 mt-2">
+                  <div className="col-xl-4 col-sm-12 mt-2">
                     <label>Chargeable wt</label>
                     <Form.Item
                       name="job_chargable_weight"
@@ -1108,7 +1378,7 @@ function CreateJob() {
                     </Form.Item>
                   </div>
 
-                  <div className="col-xl-6 col-sm-12 mt-2">
+                  <div className="col-xl-4 col-sm-12 mt-2">
                     <label> Incoterm</label>
                     <Form.Item name="incoterm">
                       <SelectBox

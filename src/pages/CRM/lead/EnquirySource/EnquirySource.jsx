@@ -1,8 +1,9 @@
 import { Form, Input, Select } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { MdPageview } from "react-icons/md";
 import { Link } from "react-router-dom";
+import { CRM_BASE_URL } from "../../../../api/bootapi";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
 import Button from "../../../../components/button/button";
 import CustomModel from "../../../../components/custom_modal/custom_model";
@@ -10,8 +11,10 @@ import InputType from "../../../../components/Input Type textbox/InputType";
 import MyPagination from "../../../../components/Pagination/MyPagination";
 import TableData from "../../../../components/table/table_data";
 import { ROUTES } from "../../../../routes";
+import PublicFetch from "../../../../utils/PublicFetch";
 
 function EnquirySource() {
+  const [addForm] = Form.useForm();
   const [serialNo, setserialNo] = useState(1);
   const [pageSize, setPageSize] = useState("25");
   const [current, setCurrent] = useState(1);
@@ -21,20 +24,23 @@ function EnquirySource() {
   const [EditModalSource, setEditModalSource] = useState(false);
   const [SuccessPopup, setSuccessPopup] = useState(false);
   const [ViewModalSource, setViewModalSource] = useState(false);
+  const [AllEnquirySource, setAllEnquirySource] = useState();
+  const [EnquirySourceId, setEnquirySourceId] = useState();
+  const [EnquirySourceData, setEnquirySourceData] = useState();
 
   const columns = [
     {
       title: "Sl. No.",
       key: "index",
-      width: "7%",
+      width: "5%",
       render: (value, item, index) => serialNo + index,
       align: "center",
     },
 
     {
-      title: "Voucher No.",
-      dataIndex: "voucehr_no",
-      key: "voucehr_no",
+      title: "NAME",
+      dataIndex: "enq_source_name",
+      key: "enq_source_name",
       width: "25%",
       align: "center",
       // filteredValue: [searchedText],
@@ -48,9 +54,9 @@ function EnquirySource() {
     },
     // Table.EXPAND_COLUMN,
     {
-      title: "Date",
-      dataIndex: "date",
-      key: "date",
+      title: "DESCRIPTION",
+      dataIndex: "enq_source_description",
+      key: "enq_source_description",
       width: "11%",
       align: "center",
       //   filteredValue: [searchCode],
@@ -61,51 +67,51 @@ function EnquirySource() {
       //       .includes(value.toLowerCase());
       //   },
     },
-    {
-      title: "Lead",
-      dataIndex: "lead",
-      key: "lead",
-      width: "20%",
-      align: "center",
-      //   filteredValue: [searchStatus],
-      //   onFilter: (value, record) => {
-      //     return String(record.category_parent_id)
-      //       .toLowerCase()
-      //       .includes(value.toLowerCase());
-      //   },
-    },
-    {
-      title: "Amount",
-      dataIndex: "amount",
-      key: "amount",
-      width: "14%",
-      align: "right",
-    },
-    {
-      title: "Mode",
-      dataIndex: "mode",
-      key: "mode",
-      width: "12%",
-      //   render: (data, index) => {
-      //     return (
-      //       <div className=" d-flex justify-content-center align-items-center gap-3">
-      //         <div
-      //           className="actionEdit"
-      //           onClick={() => handleEditPayment(index)}
-      //         >
-      //           <FaEdit />
-      //         </div>
-      //         <div
-      //           className="actionEdit"
-      //           onClick={() => handleViewCategory(index)}
-      //         >
-      //           <MdPageview />
-      //         </div>
-      //       </div>
-      //     );
-      //   },
-      align: "center",
-    },
+    // {
+    //   title: "Lead",
+    //   dataIndex: "lead",
+    //   key: "lead",
+    //   width: "20%",
+    //   align: "center",
+    //   //   filteredValue: [searchStatus],
+    //   //   onFilter: (value, record) => {
+    //   //     return String(record.category_parent_id)
+    //   //       .toLowerCase()
+    //   //       .includes(value.toLowerCase());
+    //   //   },
+    // },
+    // {
+    //   title: "Amount",
+    //   dataIndex: "amount",
+    //   key: "amount",
+    //   width: "14%",
+    //   align: "right",
+    // },
+    // {
+    //   title: "Mode",
+    //   dataIndex: "mode",
+    //   key: "mode",
+    //   width: "12%",
+    //   //   render: (data, index) => {
+    //   //     return (
+    //   //       <div className=" d-flex justify-content-center align-items-center gap-3">
+    //   //         <div
+    //   //           className="actionEdit"
+    //   //           onClick={() => handleEditPayment(index)}
+    //   //         >
+    //   //           <FaEdit />
+    //   //         </div>
+    //   //         <div
+    //   //           className="actionEdit"
+    //   //           onClick={() => handleViewCategory(index)}
+    //   //         >
+    //   //           <MdPageview />
+    //   //         </div>
+    //   //       </div>
+    //   //     );
+    //   //   },
+    //   align: "center",
+    // },
     {
       title: "Action",
       dataIndex: "action",
@@ -117,23 +123,17 @@ function EnquirySource() {
           <div className=" d-flex justify-content-center align-items-center gap-3">
             <div
               className="actionEdit"
-              onClick={
-                () => {
-                  setEditModalSource(true);
-                }
-                //   handleEditPayment(index)
-              }
+              onClick={() => {
+                handleEditenquirySource(index);
+              }}
             >
               <FaEdit />
             </div>
             <div
               className="actionEdit"
-              onClick={
-                () => {
-                  setViewModalSource(true);
-                }
-                //    handleViewPayment(index)
-              }
+              onClick={() => {
+                handleViewEnquirySource(index);
+              }}
             >
               <MdPageview />
             </div>
@@ -145,8 +145,87 @@ function EnquirySource() {
 
   const data = [];
 
+  const handleEditenquirySource = (data) => {
+    if (data) {
+      setEditModalSource(true);
+      setViewModalSource(true);
+      addForm.setFieldsValue({
+        enq_source_name1: data.enq_source_name,
+        enq_source_description1: data.enq_source_description,
+      });
+      setEnquirySourceId(data?.enq_source_id);
+    }
+  };
+
+  const handleViewEnquirySource = (data) => {
+    setViewModalSource(true);
+    setEnquirySourceData(data);
+  };
+
+  const close_modal = (mShow, time) => {
+    if (!mShow) {
+      setTimeout(() => {
+        setSuccessPopup(false);
+      }, time);
+    }
+  };
+
+  const CreateEnquirySource = (data) => {
+    PublicFetch.post(`${CRM_BASE_URL}/enquiry_source`, data)
+      .then((res) => {
+        console.log("Response", res);
+        if (res.data.success) {
+          console.log("Success of res", res.data.data);
+          setSuccessPopup(true);
+          close_modal(SuccessPopup, 1200);
+          SetAddModalSource(false);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+  const GetAllEnquirySource = () => {
+    PublicFetch.get(`${CRM_BASE_URL}/enquiry_source`)
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          console.log("success of data", res.data.data);
+          setAllEnquirySource(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+  const UpdateEnquirySource = (data) => {
+    PublicFetch.patch(`${CRM_BASE_URL}/enquiry_source/${EnquirySourceId}`, {
+      enq_source_name: data.enq_source_name1,
+      enq_source_description: data.enq_source_description1,
+    })
+      .then((res) => {
+        console.log("response");
+        if (res.data.success) {
+          console.log("successs");
+          GetAllEnquirySource();
+          setEditModalSource(false);
+          setSuccessPopup(true);
+          close_modal(SuccessPopup, 1200);
+        }
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+  };
+
+  useEffect(() => {
+    GetAllEnquirySource();
+  }, []);
+
   return (
-    <div className="container">
+    <div className="container-fluid">
       <div className="row">
         <div className="col-12">
           <div>
@@ -228,7 +307,7 @@ function EnquirySource() {
               </div>
               <div className="col-4 d-flex align-items-center justify-content-center">
                 <MyPagination
-                  total={data?.length}
+                  total={AllEnquirySource?.length}
                   current={current}
                   showSizeChanger={true}
                   pageSize={pageSize}
@@ -252,7 +331,7 @@ function EnquirySource() {
             <div className="datatable">
               <TableData
                 //data={getData(current, pageSize)}
-                data={data}
+                data={AllEnquirySource}
                 columns={columns}
                 custom_table_css="table_lead_list"
                 expandable
@@ -261,7 +340,7 @@ function EnquirySource() {
             </div>
             <div className="d-flex py-2 justify-content-center">
               <MyPagination
-                total={data?.length}
+                total={AllEnquirySource?.length}
                 current={current}
                 showSizeChanger={true}
                 pageSize={pageSize}
@@ -282,22 +361,33 @@ function EnquirySource() {
           list_content={
             <>
               <div className="container">
-                <Form>
+                <Form
+                  form={addForm}
+                  onFinish={(value) => {
+                    console.log("submitted add value", value);
+                    CreateEnquirySource(value);
+                  }}
+                >
                   <div className="row">
                     <div className="col-12">
-                      <h4>Enquiry Source</h4>
+                      <h4 className="lead_text">Enquiry Source</h4>
                     </div>
                     <div className="col-12">
                       <label>Name</label>
-                      <Form.Item>
+                      <Form.Item name="enq_source_name">
                         <InputType />
                       </Form.Item>
                     </div>
                     <div className="col-12">
                       <label>Description</label>
-                      <Form.Item>
+                      <Form.Item name="enq_source_description">
                         <TextArea />
                       </Form.Item>
+                    </div>
+                    <div className="col-12 mt-3 d-flex justify-content-center">
+                      <Button btnType="save" type="submit">
+                        Save
+                      </Button>
                     </div>
                   </div>
                 </Form>
@@ -314,22 +404,33 @@ function EnquirySource() {
           list_content={
             <>
               <div className="container">
-                <Form>
+                <Form
+                  form={addForm}
+                  onFinish={(value) => {
+                    console.log("edit data", value);
+                    UpdateEnquirySource(value);
+                  }}
+                >
                   <div className="row">
                     <div className="col-12">
-                      <h4>Enquiry Source</h4>
+                      <h4 className="lead_text">Enquiry Source</h4>
                     </div>
                     <div className="col-12">
                       <label>Name</label>
-                      <Form.Item>
+                      <Form.Item name="enq_source_name1">
                         <InputType />
                       </Form.Item>
                     </div>
                     <div className="col-12">
                       <label>Description</label>
-                      <Form.Item>
+                      <Form.Item name="enq_source_description1">
                         <TextArea />
                       </Form.Item>
+                    </div>
+                    <div className="col-12 mt-3 d-flex justify-content-center">
+                      <Button btnType="save" type="submit">
+                        Save
+                      </Button>
                     </div>
                   </div>
                 </Form>
@@ -346,22 +447,49 @@ function EnquirySource() {
           list_content={
             <>
               <div className="container">
-                <div className="row">
-                  <div className="col-12">
-                    <h4>Enquiry Source</h4>
+                <div className="row p-3">
+                  <div className="col-6">
+                    <h4 className="lead_text">Enquiry Source</h4>
                   </div>
-                  <div className="col-12">
+                  <div className="col-6 d-flex justify-content-end">
+                    <Button
+                      onClick={() => {
+                        handleEditenquirySource(EnquirySourceData);
+                      }}
+                      btnType="add_borderless"
+                      className="edit_button"
+                    >
+                      Edit <FaEdit />
+                    </Button>
+                  </div>
+                  <div className="col-12 p-3">
                     <table>
                       <tbody>
-                        <tr>
-                          <td>Name</td>
-                          <td>:</td>
-                          <td></td>
+                        <tr className="mt-3">
+                          <td>
+                            <p>Name</p>
+                          </td>
+                          <td>
+                            <p>:</p>
+                          </td>
+                          <td>
+                            <p className="modal_view_p_sub">
+                              {EnquirySourceData?.enq_source_name}
+                            </p>
+                          </td>
                         </tr>
-                        <tr>
-                          <td>Description</td>
-                          <td>:</td>
-                          <td></td>
+                        <tr className="mt-3">
+                          <td>
+                            <p> Description</p>
+                          </td>
+                          <td>
+                            <p>:</p>
+                          </td>
+                          <td>
+                            <p className="modal_view_p_sub">
+                              {EnquirySourceData?.enq_source_description}
+                            </p>{" "}
+                          </td>
                         </tr>
                       </tbody>
                     </table>

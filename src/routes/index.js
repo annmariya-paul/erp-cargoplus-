@@ -110,7 +110,7 @@ const ROUTES = {
   INVOICE_REPORT: "/invoice_report",
   ENQUIRY_REPORT: "/enquiry_report",
   // masters fms
-  CONTAINER_TYPES:"/container_type",
+  CONTAINER_TYPES: "/container_type",
 
   // Accounts
   PAYMEMENT_MODE: "/payment_mode",
@@ -193,6 +193,7 @@ const ROUTES = {
   EDIT_ENQUIRY_ID: "/edit_enquiry/:id",
   VIEW_ENQUIRY: "/view_enquiry",
   VIEW_ENQUIRY_ID: "/view_enquiry/:id",
+  ENQUIRY_SOURCE: "/enquiry_source",
 
   // Accounts => Bill Payments
   CREATE_BILL_PAYMENT: "/create_bill_payment",

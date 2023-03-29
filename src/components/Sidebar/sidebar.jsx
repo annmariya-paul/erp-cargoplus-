@@ -1690,7 +1690,7 @@ export default function Sidebar({ showSidebar }) {
               >
                 <Link
                   className={GeneralSettingsopen ? "active-link_main" : "link"}
-                  style={{ fontSize: 16 }}
+                  // style={{ fontSize: 16 }}
                   // to="/"
                   onClick={() => setGeneralSettingsopen(!GeneralSettingsopen)}
                 >

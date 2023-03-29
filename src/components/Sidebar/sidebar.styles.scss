@@ -63,7 +63,7 @@
   padding-bottom: 10px;
   a {
     text-decoration: none;
-    color: #09345f;
+    color: #1c2d79;
     // font-size: 16px;
     font-size: 14px;
     font-family: 'Poppins', sans-serif;
@@ -220,4 +220,7 @@ a.dropdown-item {
 .subactivelink{
   color: white;
   padding-left: 5px;
+}
+.nav_unactive_color{
+  background-color: none !important;
 }

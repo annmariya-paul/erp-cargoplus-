@@ -162,7 +162,7 @@ export default function ViewQuotation() {
           </div> */}
           {/* <div className="content-tabs "> */}
           <div className="container-fluid ms-0 me-2">
-            <div className="row  mt-3 ms-3 ">
+            <div className="row  mt-3  ">
               <div className="col-xl-6 col-lg-2 col-md-3 col-sm-12 mt-4 ">
                 <h5 className="lead_text">View Quotation</h5>
               </div>
@@ -204,13 +204,13 @@ export default function ViewQuotation() {
               </div>
             </div>
 
-            <div className="row me-3 mb-3 ms-1">
-              <div className="content-tabs-new row justify-content mx-3 ">
-                <div className="row ">
+            <div className="row mt-1 mx-2">
+              <div className="content-tabs-new row justify-content  mx-1 mb-3 ">
+                <div className="row mt-3">
                   <h6 className="lead_text">Basic Info</h6>
                 </div>
 
-                <div className="col-xl-4 col-sm-12 d-flex">
+                <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
                   {/* <div className=" row mt-3">
           <div className="col-6 d-flex"> */}
                   <div className="col-5">Customer</div>
@@ -221,7 +221,7 @@ export default function ViewQuotation() {
                   </div>
                 </div>
 
-                <div className="col-xl-4 col-sm-12 d-flex">
+                <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
                   <div className="col-5">Freight type</div>
                   <div className="col-1">:</div>
 
@@ -232,7 +232,7 @@ export default function ViewQuotation() {
                   </div>
                 </div>
 
-                <div className="col-xl-4 col-sm-12 d-flex ">
+                <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3 ">
                   {/* <div className=" row mt-3">
           <div className="col-6 d-flex"> */}
                   <div className="col-5">Quotation No</div>
@@ -245,7 +245,7 @@ export default function ViewQuotation() {
                   </div>
                 </div>
 
-                <div className="col-xl-4 col-sm-12 d-flex">
+                <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
                   <div className="col-5">Quotation Date</div>
                   <div className="col-1">:</div>
 
@@ -258,7 +258,7 @@ export default function ViewQuotation() {
                   </div>
                 </div>
 
-                <div className="col-xl-4 col-sm-12 d-flex">
+                <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
                   <div className="col-5">validity </div>
                   <div className="col-1">:</div>
 
@@ -270,7 +270,7 @@ export default function ViewQuotation() {
                     </p>
                   </div>
                 </div>
-                <div className="col-xl-4 col-sm-12 d-flex">
+                <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
                   <div className="col-5">Sales Person</div>
                   <div className="col-1">:</div>
 
@@ -282,13 +282,13 @@ export default function ViewQuotation() {
             </div>
           </div>
 
-          <div className="row  mb-3 me-3 ms-1">
+          <div className="row  mt-1 mx-1">
             {/* <div className="col-md-6 col-12 mt-1"> */}
-            <div className="content-tabs-new row justify-content mx-3 ">
-              <div className="row mt-2">
+            <div className="content-tabs-new row justify-content mx-1 mb-3">
+              <div className="row mt-3">
                 <h6 className="lead_text">Transportation</h6>
               </div>
-              <div className="col-xl-4 col-sm-12 d-flex">
+              <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
                 <div className="col-5">Consignee</div>
                 <div className="col-1">:</div>
 
@@ -299,7 +299,7 @@ export default function ViewQuotation() {
                 </div>
               </div>
 
-              <div className="col-xl-4 col-sm-12 d-flex">
+              <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
                 <div className="col-5">Shipper</div>
                 <div className="col-1">:</div>
 
@@ -309,7 +309,7 @@ export default function ViewQuotation() {
                   </p>
                 </div>
               </div>
-              <div className="col-xl-4 col-sm-12 d-flex">
+              <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
                 <div className="col-5">Mode</div>
                 <div className="col-1">:</div>
 
@@ -320,7 +320,7 @@ export default function ViewQuotation() {
                 </div>
               </div>
 
-              <div className="col-xl-4 col-sm-12 d-flex">
+              <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
                 <div className="col-5">Carrier</div>
                 <div className="col-1">:</div>
 
@@ -330,7 +330,7 @@ export default function ViewQuotation() {
                   </p>
                 </div>
               </div>
-              <div className="col-xl-4 col-sm-12 d-flex">
+              <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
                 <div className="col-5">Origin</div>
                 <div className="col-1">:</div>
 
@@ -345,7 +345,7 @@ export default function ViewQuotation() {
                 </div>
               </div>
 
-              <div className="col-xl-4 col-sm-12 d-flex">
+              <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
                 <div className="col-5">Destination</div>
                 <div className="col-1">:</div>
 
@@ -359,7 +359,7 @@ export default function ViewQuotation() {
                   </p>
                 </div>
               </div>
-              <div className="col-xl-4 col-sm-12 d-flex">
+              <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
                 <div className="col-5">Container Type</div>
                 <div className="col-1">:</div>
 
@@ -370,13 +370,13 @@ export default function ViewQuotation() {
             </div>
           </div>
           {/* </div> */}
-          <div className="row  ms-1 mb-3">
+          <div className="content-tabs-new row justify-content me-4 ms-3 mb-3 ">
             {/* <div className="col-md-6 col-12 mt-1"> */}
-            <div className="content-tabs-new row justify-content mx-1 ">
-              <div className="row mt-2">
+            {/* <div className="content-tabs-new row justify-content mx-1 "> */}
+              <div className="row mt-3">
                 <h6 className="lead_text">Shipment Details</h6>
               </div>
-              <div className="col-xl-4 col-sm-12 d-flex">
+              <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
                 <div className="col-4">Cargo Type</div>
                 <div className="col-1">:</div>
 
@@ -387,7 +387,7 @@ export default function ViewQuotation() {
                 </div>
               </div>
 
-              <div className="col-xl-4 col-sm-12 d-flex">
+              <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
                 <div className="col-4">No of pieces </div>
                 <div className="col-1">:</div>
 
@@ -398,7 +398,7 @@ export default function ViewQuotation() {
                 </div>
               </div>
 
-              <div className="col-xl-4 col-sm-12 d-flex">
+              <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
                 <div className="col-4">UOM</div>
                 <div className="col-1">:</div>
 
@@ -409,7 +409,7 @@ export default function ViewQuotation() {
                 </div>
               </div>
 
-              <div className="col-xl-4 col-sm-12 d-flex">
+              <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
                 <div className="col-4">Length</div>
                 <div className="col-1">:</div>
 
@@ -418,7 +418,7 @@ export default function ViewQuotation() {
                 </div>
               </div>
 
-              <div className="col-xl-4 col-sm-12 d-flex">
+              <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
                 <div className="col-4">Breadth</div>
                 <div className="col-1">:</div>
                 50
@@ -427,7 +427,7 @@ export default function ViewQuotation() {
                 </div>
               </div>
 
-              <div className="col-xl-4 col-sm-12 d-flex">
+              <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
                 <div className="col-4">Height</div>
                 <div className="col-1">:</div>
                 100
@@ -436,7 +436,7 @@ export default function ViewQuotation() {
                 </div>
               </div>
 
-              <div className="col-xl-4 col-sm-12 d-flex">
+              <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
                 <div className="col-4">Volume</div>
                 <div className="col-1">:</div>
 
@@ -445,7 +445,7 @@ export default function ViewQuotation() {
                 </div>
               </div>
 
-              <div className="col-xl-4 col-sm-12 d-flex">
+              <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
                 <div className="col-4">Gross wt </div>
                 <div className="col-1">:</div>
 
@@ -456,7 +456,7 @@ export default function ViewQuotation() {
                 </div>
               </div>
 
-              <div className="col-xl-4 col-sm-12 d-flex">
+              <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
                 <div className="col-4">Chargeable wt </div>
                 <div className="col-1">:</div>
 
@@ -466,7 +466,7 @@ export default function ViewQuotation() {
                   </p>
                 </div>
               </div>
-              <div className="col-xl-4 col-sm-12 d-flex">
+              <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
                 <div className="col-4">Incoterm</div>
                 <div className="col-1">:</div>
 
@@ -476,11 +476,11 @@ export default function ViewQuotation() {
                   </p>
                 </div>
               </div>
-            </div>
+            {/* </div> */}
             {/* </div> */}
           </div>
 
-          <div className="row  mt-1 justify-content-between ms-2 ">
+          <div className="row  mt-1 justify-content-between  ">
             <div className="col-md-6 col-12 ">
               <div className="row content-tabs-new  justify-content mb-3">
                 <div className="row mt-2">
@@ -541,9 +541,9 @@ export default function ViewQuotation() {
             </div>
           </div>
 
-          <div className="row me-4 mb-1 ms-4 ">
-            <div className="content-tabs-tablenew row justify-content ms-2 ">
-              <div className="mt-2">
+          <div className="row mt-1 ">
+            <div className="content-tabs-tablenew row justify-content  mx-1 mb-3">
+              <div className="row mt-2">
                 <Collapse
                   defaultActiveKey={["1"]}
                   onChange={onChange}

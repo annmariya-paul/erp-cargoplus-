@@ -30,11 +30,12 @@ function EnquiryList() {
   const [serialNo, setserialNo] = useState(1);
   const [AllEnquiries, setAllnquires] = useState();
 
+
   const columns = [
     {
-      title: "Sl. No.",
+      title: "#",
       key: "index",
-      width: "7%",
+      width: "4%",
       render: (value, item, index) => serialNo + index,
       align: "center",
     },
@@ -42,7 +43,7 @@ function EnquiryList() {
       title: "ENQUIRY NO",
       dataIndex: "enquiry_no",
       key: "enquiry_no",
-      // width: "23%",
+      width: "10%",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
         return String(record.enquiry_no)
@@ -55,8 +56,8 @@ function EnquiryList() {
       title: "DATE",
       dataIndex: "enquiry_date",
       key: "enquiry_date",
-      // width: "23%",
-      align: "ledt",
+      width: "8%",
+      align: "left",
       render: (data, index) => {
         return <div>{moment(index.enquiry_date).format("DD-MM-YYYY")}</div>;
       },
@@ -65,6 +66,7 @@ function EnquiryList() {
       title: "CUSTOMER",
       dataIndex: "enquiry_customer_name",
       key: "enquiry_customer_name",
+      width: "22%",
       filteredValue: [searchType],
       onFilter: (value, record) => {
         return String(record.enquiry_customer_name)
@@ -77,7 +79,7 @@ function EnquiryList() {
       title: "CONTACT PERSON",
       dataIndex: "enquiry_contact_person_name",
       key: "enquiry_contact_person_name",
-      // width: "23%",
+      // width: "13%",
       align: "left",
     },
 
@@ -85,7 +87,7 @@ function EnquiryList() {
       title: "EMAIL",
       dataIndex: "contact_email",
       key: "contact_email",
-      // width: "23%",
+      width: "20%",
       align: "ledt",
     },
 
@@ -93,6 +95,7 @@ function EnquiryList() {
       title: "PHONE",
       dataIndex: "contact_phone_1",
       key: "contact_phone_1",
+       width: "5%",
       // filteredValue: [searchStatus],
       // onFilter: (value, record) => {
       //   return String(record.lead_status)
@@ -114,13 +117,13 @@ function EnquiryList() {
     //   align: "left",
     // },
 
-    // {
-    //   title: "INVOICE AMT",
-    //   dataIndex: "invoice_amt",
-    //   key: "invoice_amt",
-    //   // width: "23%",
-    //   align: "ledt",
-    // },
+    {
+      title: "STATUS",
+      dataIndex: "status",
+      key: "status",
+      // width: "23%",
+      align: "left",
+    },
     // {
     //   title: "DUE AMOUNT",
     //   dataIndex: "due_amt",
@@ -167,6 +170,45 @@ function EnquiryList() {
     },
   ];
 
+
+
+  const columnsKeys = columns.map((column) => column.key);
+  const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
+  const filteredColumns = columns.filter((column) =>
+    selectedColumns.includes(column.key)
+  );
+
+  const onChange = (checkedValues) => {
+    setSelectedColumns(checkedValues);
+  };
+
+  
+
+    const data12 = AllEnquiries?.map((item) => [
+    // item.action,
+    item.sl_no,
+    item.enquiry_no,
+    item.enquiry_date,
+    item.enquiry_customer_name,
+    item.enquiry_contact_person_name,
+    item.contact_email,
+    item.quotation_status,
+  ]);
+
+  const EnquiryHeads = [
+    [
+       "sl_no",
+      "enquiry_no",
+      "enquiry_date",
+      "enquiry_customer_name",
+      "enquiry_contact_person_name",
+      "contact_email",
+      "contact_phone_1",
+     
+    ],
+  ];
+
+
   const GetAllEnquiries = () => {
     PublicFetch.get(`${CRM_BASE_URL_FMS}/enquiries`)
       .then((res) => {
@@ -208,34 +250,15 @@ function EnquiryList() {
       <div className="row shadow-sm">
         <div className="col-12">
           <div className=" ">
-            <div className="row flex-wrap">
-              <div className="col">
-                <h5 className="lead_text">Enquiry</h5>
+            <div className="row ">
+              <div className="col-4 d-flex justify-content-start">
+                <h5 className="lead_text mt-3">Enquiry</h5>
               </div>
-              {/* <Leadlist_Icons
-              // datas={allLeadList}
-              // columns={filteredColumns}
-              // items={data12}
-              // xlheading={LeadHeads}
-              // filename="data.csv"
-              // chechboxes={
-              //   <Checkbox.Group onChange={onChange} value={selectedColumns}>
-              //     {columnsKeys.map((column) => (
-              //       <li>
-              //         <Checkbox value={column} key={column}>
-              //           {column}
-              //         </Checkbox>
-              //       </li>
-              //     ))}
-              //   </Checkbox.Group>
-              // }
-              /> */}
-            </div>
-            <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
-              <div className="col-4">
-                <Input.Search
+              <div className="col-4  d-flex justify-content-start">
+               <div className="col-1">
+               {/* <Input.Search
                   placeholder="Search by Name"
-                  style={{ margin: "5px", borderRadius: "5px" }}
+                  style={{ margin: "5px", borderRadius: "5px",boxShadow:"0.5px 0px 2px lightgrey" }}
                   value={searchedText}
                   onChange={(e) => {
                     setSearchedText(e.target.value ? [e.target.value] : []);
@@ -243,34 +266,21 @@ function EnquiryList() {
                   onSearch={(value) => {
                     setSearchedText(value);
                   }}
-                />
-              </div>
-              {/* <div className="col-4">
-              <Select
-                allowClear
-                showSearch
-                style={{ width: "100%", marginTop: "8px", borderRadius: "5px" }}
-                placeholder="Search by Type"
-                className="select_search"
-                optionFilterProp="children"
-                onChange={(event) => {
-                  setSearchType(event ? [event] : []);
-                }}
-              >
-                <Select.Option value="L">Lead</Select.Option>
-                <Select.Option value="C">Customer</Select.Option>
-              </Select>
-            </div> */}
-              <div className="col-4">
-                <Select
+                /> */}
+               </div>
+               <div className="col-11 ms-3">
+
+               <Select
                   allowClear
                   showSearch
                   style={{
                     width: "100%",
                     marginTop: "8px",
+                   
                     borderRadius: "5px",
+                    boxShadow:"0.5px 0px 2px lightgrey"
                   }}
-                  placeholder="Search by status"
+                  placeholder="Search "
                   className="select_search"
                   optionFilterProp="children"
                   onChange={(event) => {
@@ -286,8 +296,34 @@ function EnquiryList() {
                       );
                     })} */}
                 </Select>
+
+               </div>
+             
+                </div>
+                <div className="col-4 d-flex justify-content-end ">
+              {AllEnquiries && (
+              <Leadlist_Icons
+               datas={allLeadList}
+              columns={filteredColumns}
+              items={data12}
+              xlheading={EnquiryHeads}
+               filename="data.csv"
+               chechboxes={
+                <Checkbox.Group onChange={onChange} value={selectedColumns}>
+                 {columnsKeys.map((column) => (
+                   <li>
+                      <Checkbox value={column} key={column}>
+                      {column}
+                       </Checkbox>
+                    </li>
+                  ))}
+                </Checkbox.Group>
+              }
+              />
+              )}
               </div>
             </div>
+         
             <div className="row my-3">
               <div className="col-4 px-3">
                 <Select
@@ -366,7 +402,7 @@ function EnquiryList() {
                     btnType="add"
                     // className="add_opportunity"
                   >
-                    Add Enquiry
+                    New Enquiry
                   </Button>
                 </Link>
               </div>

@@ -29,7 +29,12 @@ function EditEnquiry() {
   const [AllContacts, setAllContacts] = useState();
   const [Customer_Id, setCustomer_Id] = useState();
   const [allSalesPerson, setAllSalesPerson] = useState();
-
+  const [frighttype, setFrighttype] = useState();
+  const [frightmode, setFrightmode] = useState();
+  console.log("change", frightmode);
+  const [frighttypemode, setFrighttypemode] = useState();
+  const [allLocations, setAllLocations] = useState();
+  const [locationType, setLocationType] = useState();
   const close_modal = (mShow, time) => {
     if (!mShow) {
       setTimeout(() => {
@@ -39,6 +44,49 @@ function EditEnquiry() {
     }
   };
 
+  const locationBytype = (data) => {
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/locations/type-location/${data}`)
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          console.log("success of location type", res.data, data);
+          setLocationType(res.data.data.location_type);
+          let temp = [];
+          res.data.data.forEach((item, index) => {
+            temp.push({
+              location_id: item.location_id,
+              location_code: item.location_code,
+              location_name: item.location_name,
+              location_type: item.location_type,
+              location_country: item.location_country,
+            });
+            setAllLocations(temp);
+          });
+        }
+      })
+      .catch((err) => {
+        console.log("Error of location type", err);
+      });
+  };
+
+
+  const mode = (e) => {
+    if (e) {
+      {
+        frighttype &&
+          frighttype.length > 0 &&
+          frighttype.map((item, index) => {
+            if (item.freight_type_id === e) {
+              console.log("reached", item.freight_type_mode);
+              setFrighttypemode(item.freight_type_mode);
+              locationBytype(item.freight_type_mode);
+            } else {
+              locationBytype();
+            }
+          });
+      }
+    }
+  };
   const GetAllCustomers = () => {
     PublicFetch.get(`${CRM_BASE_URL}/customer/minimal`)
       .then((res) => {
@@ -273,6 +321,45 @@ function EditEnquiry() {
               </div>
             </div>
 
+            <div className="col-sm-4 pt-2 ">
+                    <label>Freight Type</label>
+                    <Form.Item
+                      name="job_freight_type"
+                      rules={[
+                        {
+                          required: true,
+                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                          message: "Please enter a Valid freight type",
+                        },
+                      ]}
+                    >
+                      <SelectBox
+                       
+                        allowClear
+                        showSearch
+                        optionFilterProp="children"
+                        onChange={(e) => {
+                          console.log("date mmm", e);
+                          setFrightmode(e);
+                          mode(e);
+                        }}
+                      >
+                        {frighttype &&
+                          frighttype.length > 0 &&
+                          frighttype.map((item, index) => {
+                            return (
+                              <Select.Option
+                                key={item.freight_type_id}
+                                value={item.freight_type_id}
+                              >
+                                {item.freight_type_name}
+                              </Select.Option>
+                            );
+                          })}
+                      </SelectBox>
+                    </Form.Item>
+                  </div>
+
             <div className="col-sm-4 pt-2">
               <label>
                 Enquiry No<span className="required">*</span>
@@ -315,17 +402,17 @@ function EditEnquiry() {
 
             <div className="col-sm-4 pt-2">
               <label>
-                Source<span className="required">*</span>
+                Source
               </label>
               <Form.Item
                 name="source"
                 className=""
-                rules={[
-                  {
-                    required: true,
-                    message: "Source is Required",
-                  },
-                ]}
+                // rules={[
+                //   {
+                //     required: true,
+                //     message: "Source is Required",
+                //   },
+                // ]}
               >
                 <SelectBox>
                   <Select.Option value="reference">Reference</Select.Option>
@@ -341,16 +428,16 @@ function EditEnquiry() {
 
             <div className="col-sm-4 pt-2">
               <label>
-                Customer Reference<span className="required">*</span>
+                Customer Reference
               </label>
               <Form.Item
                 name="reference"
-                rules={[
-                  {
-                    required: true,
-                    message: "Customer Reference is Required",
-                  },
-                ]}
+                // rules={[
+                //   {
+                //     required: true,
+                //     message: "Customer Reference is Required",
+                //   },
+                // ]}
               >
                 <InputType
                 //   value={purchasePoNo}

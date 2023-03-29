@@ -352,3 +352,8 @@ th {
   // flex-grow: 1;
   box-shadow: 0.5px 1px 8px variables.$boxshadow;
 }
+
+.fms_cards{
+  border-radius: 6px;
+  box-shadow: 2px 2px 12px variables.$boxshadow;
+}

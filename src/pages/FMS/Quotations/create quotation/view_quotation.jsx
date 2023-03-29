@@ -155,426 +155,403 @@ export default function ViewQuotation() {
       {/* <div className=" container-fluid view_quotation  p-3 px-4"> */}
       {/* <div className="print-header">Header</div> */}
 
-      <div className="container-fluid">
-        <div className="row justify-content-md-center mb-2">
-          {/* <div className="col-6">
+      <div className="container-fluid mb-4">
+        <div className="row mt-1">
+          <div className="col-sm-5 col-12 mt-4 ">
             <h5 className="lead_text">View Quotation</h5>
-          </div> */}
-          {/* <div className="content-tabs "> */}
-          <div className="container-fluid ms-0 me-2">
-            <div className="row  mt-3 ms-3 ">
-              <div className="col-xl-6 col-lg-2 col-md-3 col-sm-12 mt-4 ">
-                <h5 className="lead_text">View Quotation</h5>
-              </div>
-              <div className="col-xl-6 col-md-12">
-                <div className="row justify-content-end mx-2 py-3">
-                  <div className="col-xl-2 col-lg-2 col-md-3 col-sm-12  mb-1">
-                    {/* <div className="col-6 d-flex justify-content-end mt-2">
-            <div className="col-2"> */}
-                    <Button
-                      btnType="add_borderless"
-                      className="edit_button"
-                      // onClick={handlePrint}
-                      onClick={() => {
-                        // handleviewtoedit();
-                        // navigate(`${ROUTES.QUATATION_INVOICE}/${id}`);
-                        window.open(
-                          `http://localhost:3000/quatation_invoice/${id}`,
-                          `_blank`
-                        );
-                      }}
-                    >
-                      Print
-                    </Button>
-                  </div>
-                  <div className="col-xl-2 col-lg-2 col-md-3 col-sm-12 mb-3 ">
-                    <Button
-                      btnType="add_borderless"
-                      className="edit_button"
-                      onClick={() => {
-                        // handleviewtoedit();
-                        navigate(`${ROUTES.EDIT_QUOTATION}/${id}`);
-                      }}
-                    >
-                      Edit
-                      <FiEdit />
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="row me-3 mb-3 ms-1">
-              <div className="content-tabs-new row justify-content mx-3 ">
-                <div className="row ">
-                  <h6 className="lead_text">Basic Info</h6>
-                </div>
-
-                <div className="col-xl-4 col-sm-12 d-flex">
-                  {/* <div className=" row mt-3">
-          <div className="col-6 d-flex"> */}
-                  <div className="col-5">Customer</div>
-                  <div className="col-1">:</div>
-
-                  <div className="col-6">
-                    <p className="modal-view-data"></p>
-                  </div>
-                </div>
-
-                <div className="col-xl-4 col-sm-12 d-flex">
-                  <div className="col-5">Freight type</div>
-                  <div className="col-1">:</div>
-
-                  <div className="col-6">
-                    <p className="modal-view-data">
-                      {allqoutation?.fms_v1_freight_types?.freight_type_name}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="col-xl-4 col-sm-12 d-flex ">
-                  {/* <div className=" row mt-3">
-          <div className="col-6 d-flex"> */}
-                  <div className="col-5">Quotation No</div>
-                  <div className="col-1">:</div>
-
-                  <div className="col-6 ml-5">
-                    <p className="modal-view-data">
-                      {allqoutation?.quotation_no}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="col-xl-4 col-sm-12 d-flex">
-                  <div className="col-5">Quotation Date</div>
-                  <div className="col-1">:</div>
-
-                  <div className="col-6">
-                    <p className="modal-view-data">
-                      {moment(allqoutation?.quotation_date).format(
-                        "DD-MM-YYYY"
-                      )}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="col-xl-4 col-sm-12 d-flex">
-                  <div className="col-5">validity </div>
-                  <div className="col-1">:</div>
-
-                  <div className="col-6">
-                    <p className="modal-view-data">
-                      {moment(allqoutation?.quotation_validity).format(
-                        "DD-MM-YYYY"
-                      )}
-                    </p>
-                  </div>
-                </div>
-                <div className="col-xl-4 col-sm-12 d-flex">
-                  <div className="col-5">Sales Person</div>
-                  <div className="col-1">:</div>
-
-                  <div className="col-6">
-                    <p className="modal-view-data"></p>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
-
-          <div className="row  mb-3 me-3 ms-1">
-            {/* <div className="col-md-6 col-12 mt-1"> */}
-            <div className="content-tabs-new row justify-content mx-3 ">
-              <div className="row mt-2">
-                <h6 className="lead_text">Transportation</h6>
-              </div>
-              <div className="col-xl-4 col-sm-12 d-flex">
-                <div className="col-5">Consignee</div>
-                <div className="col-1">:</div>
-
-                <div className="col-6">
-                  <p className="modal-view-data">
-                    {allqoutation?.crm_v1_leads?.lead_customer_name}
-                  </p>
-                </div>
-              </div>
-
-              <div className="col-xl-4 col-sm-12 d-flex">
-                <div className="col-5">Shipper</div>
-                <div className="col-1">:</div>
-
-                <div className="col-6">
-                  <p className="modal-view-data">
-                    {allqoutation?.quotation_shipper}
-                  </p>
-                </div>
-              </div>
-              <div className="col-xl-4 col-sm-12 d-flex">
-                <div className="col-5">Mode</div>
-                <div className="col-1">:</div>
-
-                <div className="col-6">
-                  <p className="modal-view-data">
-                    {allqoutation?.quotation_mode}
-                  </p>
-                </div>
-              </div>
-
-              <div className="col-xl-4 col-sm-12 d-flex">
-                <div className="col-5">Carrier</div>
-                <div className="col-1">:</div>
-
-                <div className="col-6">
-                  <p className="modal-view-data">
-                    {allqoutation?.fms_v1_carrier.carrier_name}
-                  </p>
-                </div>
-              </div>
-              <div className="col-xl-4 col-sm-12 d-flex">
-                <div className="col-5">Origin</div>
-                <div className="col-1">:</div>
-
-                <div className="col-6">
-                  <p className="modal-view-data">
-                    {
-                      allqoutation
-                        ?.fms_v1_locations_fms_v1_quotation_quotation_origin_idTofms_v1_locations
-                        .location_name
-                    }
-                  </p>
-                </div>
-              </div>
-
-              <div className="col-xl-4 col-sm-12 d-flex">
-                <div className="col-5">Destination</div>
-                <div className="col-1">:</div>
-
-                <div className="col-6">
-                  <p className="modal-view-data">
-                    {
-                      allqoutation
-                        ?.fms_v1_locations_fms_v1_quotation_quotation_destination_idTofms_v1_locations
-                        .location_name
-                    }
-                  </p>
-                </div>
-              </div>
-              <div className="col-xl-4 col-sm-12 d-flex">
-                <div className="col-5">Container Type</div>
-                <div className="col-1">:</div>
-
-                <div className="col-6">
-                  <p className="modal-view-data"></p>
-                </div>
-              </div>
-            </div>
-          </div>
-          {/* </div> */}
-          <div className="row  ms-1 mb-3">
-            {/* <div className="col-md-6 col-12 mt-1"> */}
-            <div className="content-tabs-new row justify-content mx-1 ">
-              <div className="row mt-2">
-                <h6 className="lead_text">Shipment Details</h6>
-              </div>
-              <div className="col-xl-4 col-sm-12 d-flex">
-                <div className="col-4">Cargo Type</div>
-                <div className="col-1">:</div>
-
-                <div className="col-7">
-                  <p className="modal-view-data">
-                    {allqoutation?.quotation_cargo_type}
-                  </p>
-                </div>
-              </div>
-
-              <div className="col-xl-4 col-sm-12 d-flex">
-                <div className="col-4">No of pieces </div>
-                <div className="col-1">:</div>
-
-                <div className="col-7">
-                  <p className="modal-view-data">
-                    {allqoutation?.quotation_no_of_pieces}
-                  </p>
-                </div>
-              </div>
-
-              <div className="col-xl-4 col-sm-12 d-flex">
-                <div className="col-4">UOM</div>
-                <div className="col-1">:</div>
-
-                <div className="col-7">
-                  <p className="modal-view-data">
-                    {allqoutation?.crm_v1_units?.unit_name}
-                  </p>
-                </div>
-              </div>
-
-              <div className="col-xl-4 col-sm-12 d-flex">
-                <div className="col-4">Length</div>
-                <div className="col-1">:</div>
-
-                <div className="col-7">
-                  <p className="modal-view-data">100</p>
-                </div>
-              </div>
-
-              <div className="col-xl-4 col-sm-12 d-flex">
-                <div className="col-4">Breadth</div>
-                <div className="col-1">:</div>
-                50
-                <div className="col-7">
-                  <p className="modal-view-data"></p>
-                </div>
-              </div>
-
-              <div className="col-xl-4 col-sm-12 d-flex">
-                <div className="col-4">Height</div>
-                <div className="col-1">:</div>
-                100
-                <div className="col-7">
-                  <p className="modal-view-data"></p>
-                </div>
-              </div>
-
-              <div className="col-xl-4 col-sm-12 d-flex">
-                <div className="col-4">Volume</div>
-                <div className="col-1">:</div>
-
-                <div className="col-7">
-                  <p className="modal-view-data"></p>
-                </div>
-              </div>
-
-              <div className="col-xl-4 col-sm-12 d-flex">
-                <div className="col-4">Gross wt </div>
-                <div className="col-1">:</div>
-
-                <div className="col-7">
-                  <p className="modal-view-data">
-                    {allqoutation?.quotation_gross_wt}
-                  </p>
-                </div>
-              </div>
-
-              <div className="col-xl-4 col-sm-12 d-flex">
-                <div className="col-4">Chargeable wt </div>
-                <div className="col-1">:</div>
-
-                <div className="col-7">
-                  <p className="modal-view-data">
-                    {allqoutation?.quotation_chargeable_wt}
-                  </p>
-                </div>
-              </div>
-              <div className="col-xl-4 col-sm-12 d-flex">
-                <div className="col-4">Incoterm</div>
-                <div className="col-1">:</div>
-
-                <div className="col-7">
-                  <p className="modal-view-data">
-                    {allqoutation?.quotation_chargeable_wt}
-                  </p>
-                </div>
-              </div>
-            </div>
-            {/* </div> */}
-          </div>
-
-          <div className="row  mt-1 justify-content-between ms-2 ">
-            <div className="col-md-6 col-12 ">
-              <div className="row content-tabs-new  justify-content mb-3">
-                <div className="row mt-2">
-                  <h6 className="lead_text">Payment Info</h6>
-                </div>
-
-                <div className="col-12 d-flex">
-                  <div className="col-4">Payment Terms</div>
-                  <div className="col-1">:</div>
-
-                  <div className="col-7">
-                    <p className="modal-view-data">
-                      {allqoutation?.fms_v1_payment_terms?.payment_term_name}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="col-12 d-flex">
-                  <div className="col-4">Currency</div>
-                  <div className="col-1">:</div>
-
-                  <div className="col-7">
-                    <p className="modal-view-data">
-                      {allqoutation?.generalsettings_v1_currency?.currency_name}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="col-12 d-flex">
-                  <div className="col-4">Exchange Rate</div>
-                  <div className="col-1">:</div>
-
-                  <div className="col-7">
-                    <p className="modal-view-data">
-                      {allqoutation?.quotation_exchange_rate.toFixed(2)}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="col-md-6 col-12 ">
-              <div className="content-tabs-new  justify-content  ms-1 mb-3 me-1">
-                <div className="row mt-2">
-                  <h6 className="lead_text">Attachments</h6>
-                </div>
-                <div className="col-12 d-flex pb-5 mb-4">
-                  <div className="col-4">Attachments</div>
-                  <div className="col-1">:</div>
-
-                  <div className="col-7">
-                    <p className="modal-view-data">
-                      {allqoutation?.quotation_docs}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="row me-4 mb-1 ms-4 ">
-            <div className="content-tabs-tablenew row justify-content ms-2 ">
-              <div className="mt-2">
-                <Collapse
-                  defaultActiveKey={["1"]}
-                  onChange={onChange}
-                  expandIconPosition={"end"}
+          <div className="col-sm-7 col-12">
+            <div className="d-flex justify-content-end py-3">
+              <div className="col-xl-2 col-md-3 col-4 d-flex justify-content-end mb-3">
+                <Button
+                  btnType="add_borderless"
+                  className="edit_button"
+                  // onClick={handlePrint}
+                  onClick={() => {
+                    // handleviewtoedit();
+                    // navigate(`${ROUTES.QUATATION_INVOICE}/${id}`);
+                    window.open(
+                      `http://localhost:3000/quatation_invoice/${id}`,
+                      `_blank`
+                    );
+                  }}
                 >
-                  <Panel header="TASK DETAILS" key="1">
-                    <div>
-                      {" "}
-                      <TableData
-                        columns={progress}
-                        data={tabledata}
-                        bordered
-                        custom_table_css="table_job_list"
-                      />
-                    </div>
-                    <div className="d-flex justify-content-end  mx-3 ">
-                      <div className="col-lg-2 col-sm-4 col-xs-3 d-flex justify-content-end mt-3 me-2">
-                        <p style={{ fontWeight: 500 }}>Grand Total : </p>
-                      </div>
-                      {/* <div className="col-1">:</div> */}
-                      <div className="col-lg-2 col-sm-2 col-xs-2 mt-3">
-                        <p>{allqoutation?.quotation_grand_total.toFixed(2)}</p>
-                      </div>
-                    </div>
-                  </Panel>
-                </Collapse>
+                  Print
+                </Button>
               </div>
+              <div className="col-xl-2 col-md-3 col-4 d-flex justify-content-end mb-3 ">
+                <Button
+                  btnType="add_borderless"
+                  className="edit_button"
+                  onClick={() => {
+                    // handleviewtoedit();
+                    navigate(`${ROUTES.EDIT_QUOTATION}/${id}`);
+                  }}
+                >
+                  Edit
+                  <FiEdit />
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="row fms_cards mx-0 px-2 py-3">
+          {/* <div className="content-tabs-new row justify-content  mx-1 mb-3 "> */}
+          <div className="col-12">
+            <h6 className="lead_text">Basic Info</h6>
+          </div>
+
+          <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
+            {/* <div className=" row mt-3">
+                        <div className="col-6 d-flex"> */}
+            <div className="col-5">Customer</div>
+            <div className="col-1">:</div>
+
+            <div className="col-6">
+              <p className="modal-view-data"></p>
+            </div>
+          </div>
+
+          <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
+            <div className="col-5">Freight type</div>
+            <div className="col-1">:</div>
+
+            <div className="col-6">
+              <p className="modal-view-data">
+                {allqoutation?.fms_v1_freight_types?.freight_type_name}
+              </p>
+            </div>
+          </div>
+
+          <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3 ">
+            {/* <div className=" row mt-3">
+                  <div className="col-6 d-flex"> */}
+            <div className="col-5">Quotation No</div>
+            <div className="col-1">:</div>
+
+            <div className="col-6 ml-5">
+              <p className="modal-view-data">{allqoutation?.quotation_no}</p>
+            </div>
+          </div>
+
+          <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
+            <div className="col-5">Quotation Date</div>
+            <div className="col-1">:</div>
+
+            <div className="col-6">
+              <p className="modal-view-data">
+                {moment(allqoutation?.quotation_date).format("DD-MM-YYYY")}
+              </p>
+            </div>
+          </div>
+
+          <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
+            <div className="col-5">validity </div>
+            <div className="col-1">:</div>
+
+            <div className="col-6">
+              <p className="modal-view-data">
+                {moment(allqoutation?.quotation_validity).format("DD-MM-YYYY")}
+              </p>
+            </div>
+          </div>
+          <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
+            <div className="col-5">Sales Person</div>
+            <div className="col-1">:</div>
+
+            <div className="col-6">
+              <p className="modal-view-data"></p>
             </div>
           </div>
           {/* </div> */}
         </div>
+
+        <div className="row fms_cards mt-3 mx-0 px-2 py-3">
+          {/* <div className="col-md-6 col-12 mt-1"> */}
+          {/* <div className="content-tabs-new row justify-content mx-1 mb-3"> */}
+          <div className="col-12">
+            <h6 className="lead_text">Transportation</h6>
+          </div>
+          <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
+            <div className="col-5">Consignee</div>
+            <div className="col-1">:</div>
+
+            <div className="col-6">
+              <p className="modal-view-data">
+                {allqoutation?.crm_v1_leads?.lead_customer_name}
+              </p>
+            </div>
+          </div>
+
+          <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
+            <div className="col-5">Shipper</div>
+            <div className="col-1">:</div>
+
+            <div className="col-6">
+              <p className="modal-view-data">
+                {allqoutation?.quotation_shipper}
+              </p>
+            </div>
+          </div>
+          <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
+            <div className="col-5">Mode</div>
+            <div className="col-1">:</div>
+
+            <div className="col-6">
+              <p className="modal-view-data">{allqoutation?.quotation_mode}</p>
+            </div>
+          </div>
+
+          <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
+            <div className="col-5">Carrier</div>
+            <div className="col-1">:</div>
+
+            <div className="col-6">
+              <p className="modal-view-data">
+                {allqoutation?.fms_v1_carrier.carrier_name}
+              </p>
+            </div>
+          </div>
+          <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
+            <div className="col-5">Origin</div>
+            <div className="col-1">:</div>
+
+            <div className="col-6">
+              <p className="modal-view-data">
+                {
+                  allqoutation
+                    ?.fms_v1_locations_fms_v1_quotation_quotation_origin_idTofms_v1_locations
+                    .location_name
+                }
+              </p>
+            </div>
+          </div>
+
+          <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
+            <div className="col-5">Destination</div>
+            <div className="col-1">:</div>
+
+            <div className="col-6">
+              <p className="modal-view-data">
+                {
+                  allqoutation
+                    ?.fms_v1_locations_fms_v1_quotation_quotation_destination_idTofms_v1_locations
+                    .location_name
+                }
+              </p>
+            </div>
+          </div>
+          <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
+            <div className="col-5">Container Type</div>
+            <div className="col-1">:</div>
+
+            <div className="col-6">
+              <p className="modal-view-data"></p>
+            </div>
+          </div>
+          {/* </div> */}
+        </div>
+
+        {/* </div> */}
+        <div className="row fms_cards mt-3 mx-0 px-2 py-3">
+          {/* <div className="col-md-6 col-12 mt-1"> */}
+          {/* <div className="content-tabs-new row justify-content mx-1 "> */}
+          <div className="row mt-3">
+            <h6 className="lead_text">Shipment Details</h6>
+          </div>
+          <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
+            <div className="col-4">Cargo Type</div>
+            <div className="col-1">:</div>
+
+            <div className="col-7">
+              <p className="modal-view-data">
+                {allqoutation?.quotation_cargo_type}
+              </p>
+            </div>
+          </div>
+
+          <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
+            <div className="col-4">No of pieces </div>
+            <div className="col-1">:</div>
+
+            <div className="col-7">
+              <p className="modal-view-data">
+                {allqoutation?.quotation_no_of_pieces}
+              </p>
+            </div>
+          </div>
+
+          <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
+            <div className="col-4">UOM</div>
+            <div className="col-1">:</div>
+
+            <div className="col-7">
+              <p className="modal-view-data">
+                {allqoutation?.crm_v1_units?.unit_name}
+              </p>
+            </div>
+          </div>
+
+          <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
+            <div className="col-4">Length</div>
+            <div className="col-1">:</div>
+
+            <div className="col-7">
+              <p className="modal-view-data">100</p>
+            </div>
+          </div>
+
+          <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
+            <div className="col-4">Breadth</div>
+            <div className="col-1">:</div>
+            50
+            <div className="col-7">
+              <p className="modal-view-data"></p>
+            </div>
+          </div>
+
+          <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
+            <div className="col-4">Height</div>
+            <div className="col-1">:</div>
+            100
+            <div className="col-7">
+              <p className="modal-view-data"></p>
+            </div>
+          </div>
+
+          <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
+            <div className="col-4">Volume</div>
+            <div className="col-1">:</div>
+
+            <div className="col-7">
+              <p className="modal-view-data"></p>
+            </div>
+          </div>
+
+          <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
+            <div className="col-4">Gross wt </div>
+            <div className="col-1">:</div>
+
+            <div className="col-7">
+              <p className="modal-view-data">
+                {allqoutation?.quotation_gross_wt}
+              </p>
+            </div>
+          </div>
+
+          <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
+            <div className="col-4">Chargeable wt </div>
+            <div className="col-1">:</div>
+
+            <div className="col-7">
+              <p className="modal-view-data">
+                {allqoutation?.quotation_chargeable_wt}
+              </p>
+            </div>
+          </div>
+          <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
+            <div className="col-4">Incoterm</div>
+            <div className="col-1">:</div>
+
+            <div className="col-7">
+              <p className="modal-view-data">
+                {allqoutation?.quotation_chargeable_wt}
+              </p>
+            </div>
+          </div>
+          {/* </div> */}
+          {/* </div> */}
+        </div>
+
+        <div className="row justify-content-between">
+          <div className="col-xl-6 col-12 ">
+            <div className="row fms_cards mt-3 mx-0 px-2 py-3">
+              <div className="col-12">
+                <h6 className="lead_text">Payment Info</h6>
+              </div>
+
+              <div className="col-12 d-flex">
+                <div className="col-4">Payment Terms</div>
+                <div className="col-1">:</div>
+
+                <div className="col-7">
+                  <p className="modal-view-data">
+                    {allqoutation?.fms_v1_payment_terms?.payment_term_name}
+                  </p>
+                </div>
+              </div>
+
+              <div className="col-12 d-flex">
+                <div className="col-4">Currency</div>
+                <div className="col-1">:</div>
+
+                <div className="col-7">
+                  <p className="modal-view-data">
+                    {allqoutation?.generalsettings_v1_currency?.currency_name}
+                  </p>
+                </div>
+              </div>
+
+              <div className="col-12 d-flex">
+                <div className="col-4">Exchange Rate</div>
+                <div className="col-1">:</div>
+
+                <div className="col-7">
+                  <p className="modal-view-data">
+                    {allqoutation?.quotation_exchange_rate.toFixed(2)}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="col-xl-6 col-12">
+            <div className="row fms_cards mt-3 mx-0 px-2 py-3">
+              <div className="col-12">
+                <h6 className="lead_text">Attachments</h6>
+              </div>
+              <div className="col-12 d-flex" style={{ marginBottom: "85px" }}>
+                <div className="col-4">Attachments</div>
+                <div className="col-1">:</div>
+
+                <div className="col-7">
+                  <p className="modal-view-data">
+                    {allqoutation?.quotation_docs}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="row fms_cards mt-3 mx-0 px-2 py-3">
+            <Collapse
+              defaultActiveKey={["1"]}
+              onChange={onChange}
+              expandIconPosition={"end"}
+            >
+              <Panel header="TASK DETAILS" key="1">
+                <div>
+                  {" "}
+                  <TableData
+                    columns={progress}
+                    data={tabledata}
+                    bordered
+                    custom_table_css="table_job_list"
+                  />
+                </div>
+                <div className="d-flex justify-content-end  mx-3 ">
+                  <div className="col-lg-2 col-sm-4 col-xs-3 d-flex justify-content-end mt-3 me-2">
+                    <p style={{ fontWeight: 500 }}>Grand Total : </p>
+                  </div>
+                  <div className="col-lg-2 col-sm-2 col-xs-2 mt-3">
+                    <p>{allqoutation?.quotation_grand_total.toFixed(2)}</p>
+                  </div>
+                </div>
+              </Panel>
+            </Collapse>
+          </div>
       </div>
     </>
   );

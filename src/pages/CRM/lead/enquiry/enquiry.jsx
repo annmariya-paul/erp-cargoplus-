@@ -19,7 +19,11 @@ import {
   CRM_BASE_URL_HRMS,
 } from "../../../../api/bootapi";
 import moment from "moment";
+<<<<<<< HEAD
+import CustomerModal from "../../../../components/CustomerModal.jsx/CustomerModal";
+=======
 import Button from "../../../../components/button/button";
+>>>>>>> bc3efc1c68eebb4135c4de9943b398c38e11fd7d
 function Enquiry() {
   const [addForm] = Form.useForm();
   const [SuccessPopup, setSuccessPopup] = useState(false);
@@ -616,6 +620,12 @@ function Enquiry() {
         </Form>
 
         {/* Modal for add Customer */}
+        <CustomerModal
+          show={modalAddCustomer}
+          onHide={() => {
+            setModalAddCustomer(false);
+          }}
+        />
 
         <Custom_model
           success

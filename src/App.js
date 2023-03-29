@@ -149,6 +149,7 @@ import EditEnquiry from "./pages/CRM/lead/enquiry/EditEnquiry";
 import ViewEnquiry from "./pages/CRM/lead/enquiry/ViewEnquiry";
 import Viewvendor from "./pages/CRM/Purchase/vendor/viewvendor";
 import Containertypes from "./pages/FMS/settings/containertypes/containertypes";
+import EnquirySource from "./pages/CRM/lead/EnquirySource/EnquirySource";
 function App() {
   return (
     <div className="App">
@@ -200,6 +201,9 @@ function App() {
             </Route>
             <Route path={ROUTES.VIEW_ENQUIRY_ID} element={<ProtectedRoute />}>
               <Route index element={<ViewEnquiry />} />
+            </Route>
+            <Route path={ROUTES.ENQUIRY_SOURCE} element={<ProtectedRoute />}>
+              <Route index element={<EnquirySource />} />
             </Route>
 
             <Route
@@ -470,7 +474,6 @@ function App() {
             <Route path={ROUTES.CONTAINER_TYPES} element={<ProtectedRoute />}>
               <Route index element={<Containertypes />} />
             </Route>
-
 
             <Route
               path={ROUTES.ASSIGN_QUOTATION_ID}

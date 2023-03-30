@@ -1,0 +1,158 @@
+@use "../../../../styles/variables.scss";
+
+$radiobutton: #6e6e6e;
+$color_2: #eff4f7;
+
+/* ########## Tabs ######### */
+
+*,
+::before,
+::after {
+  box-sizing: border-box;
+  // margin: 0;
+  padding: 0;
+}
+
+.lead_container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+  // margin: 0px auto 0 ;
+}
+
+.bloc-tabs {
+  display: flex;
+  padding: 0px;
+}
+.tabs {
+  font-size: 15px;
+  border: 1px solid rgb(232, 232, 232);
+  // border-left: 1px solid whitesmoke;
+  // border-right: 1px solid whitesmoke;
+  color: variables.$primary;
+  // box-shadow: 2px 2px 12px variables.$boxshadow;
+  width: 100% !important;
+  margin-inline: 0.5px !important;
+  display: block;
+  flex: 1;
+  text-align: center;
+  padding-block: 7px;
+  background: white;
+  cursor: pointer;
+  // border-radius-top: 20px;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+  box-sizing: content-box;
+  position: relative;
+  //   outline: none;
+  &:hover {
+    color: variables.$primary;
+  }
+}
+
+.active-tabs {
+  background: whitesmoke;
+
+  // border: 1px solid variables.$primary;
+  border-top: 1px solid lightgray !important;
+  border-left: 1px solid lightgray !important;
+  border-right: 1px solid lightgray !important;
+  border-bottom: none;
+  color: rgb(159, 159, 159);
+  &::before {
+    content: "";
+    display: block;
+    position: absolute;
+    // left: 50%;
+    background: #166ea4;
+  }
+  &:hover {
+    color: variables.$primary;
+  }
+}
+button {
+  border: none;
+}
+.content-tabs {
+  border-radius: 3px;
+  min-height: 38rem;
+  flex-grow: 1;
+  box-shadow: 2px 2px 12px variables.$boxshadow;
+}
+.content {
+  background: white;
+  padding: 15px;
+  display: none;
+}
+.active-content {
+  display: block;
+}
+
+// ###### Form ######
+
+.form-control,
+.form-select {
+  background-color: variables.$inputfield !important;
+  border-color: variables.$inputfield !important;
+  border-radius: 3px;
+  width: 100% !important;
+  outline: none !important;
+  &:focus {
+    box-shadow: none !important;
+  }
+}
+
+.form-label,
+.para {
+  font-size: 15px;
+}
+.form-check-label {
+  color: $radiobutton !important;
+  font-size: 15px !important;
+}
+.form-check-input[type="radio"] {
+  color: $radiobutton !important;
+  font-size: 15px !important;
+}
+.form-check-input {
+  &:checked {
+    background-color: variables.$primary;
+    border-color: variables.$primary;
+  }
+}
+
+.crm_cards{box-shadow: 2px 2px 12px variables.$boxshadow;}
+// ######### media Query ##########
+
+@media screen and (max-width: 570px) {
+  .content-tabs {
+    height: fit-content;
+  }
+  .tabs {
+    font-size: 15px;
+  }
+  .content {
+    padding-inline: 2px;
+  }
+  .bloc-tabs {
+    display: flex;
+    flex-direction: column;
+  }
+  .lead_container {
+    margin: 4px;
+    column-width: 100vh;
+  }
+}
+.descheight {
+  height: 155px !important;
+}
+// .porsave{
+//   margin-top: -4%;
+//     margin-left: 79%;
+// }
+
+
+.address_height{
+    height: 140px !important;
+}

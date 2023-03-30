@@ -25,6 +25,7 @@ import "./vendor.scss";
 import Accounting from "./Accountings/Accountings";
 import Bankdetails from "./bankdetails/bankdetails";
 import ContactTable from "../../lead/tables/contactstable";
+import { Radio } from 'antd';
 
 function Addvendor() {
   const [addForm] = Form.useForm();
@@ -56,6 +57,7 @@ function Addvendor() {
 
   const [timeOut, setTimeOuts] = useState(false);
   const [Toggle4, setToggle4] = useState(false);
+  const [organisationradio,setorganisationradio]= useState()
 
   const beforeUpload = (file, fileList) => {};
 
@@ -200,6 +202,11 @@ function Addvendor() {
     // setTimeOuts(false);
     // setToggle4(false);
   };
+  const handlechangeradio =(e)=>{
+ console.log("dnj",e.target.value)
+ setorganisationradio(e.target.value)
+   }
+  
   return (
     <>
      <h5 className="lead_text">Add Vendor</h5>
@@ -310,23 +317,30 @@ function Addvendor() {
               </Form.Item>
             </div>
 
-            <div className="col-sm-4 pt-2">
-              <label>
+            <div className="col-sm-4 pt-2 mt-2">
+              {/* <label>
                 {" "}
                 Organisation Type<span className="required">*</span>
-              </label>
+              </label> */}
+              <div className="d-flex justify-content-around">
+              <Radio.Group onChange={handlechangeradio}  >
+        <Radio value={1}>Organisation</Radio>
+        <Radio value={2}>Individual</Radio>
+      </Radio.Group>
+
+              </div>
 
               <Form.Item
                 name="vendorOrganisation"
-                rules={[
-                  {
-                    required: true,
-                    // pattern: new RegExp("^[A-Za-z ]+$"),
-                    message: "Please enter a Valid organisation",
-                  },
-                ]}
+                // rules={[
+                //   {
+                //     required: true,
+                //     // pattern: new RegExp("^[A-Za-z ]+$"),
+                //     message: "Please enter a Valid organisation",
+                //   },
+                // ]}
               >
-                <SelectBox
+                {/* <SelectBox
                   showSearch={true}
                   allowClear
                   optionFilterProp="children"
@@ -338,7 +352,7 @@ function Addvendor() {
                 >
                   <Select.Option value="ORG">Organisation</Select.Option>
                   <Select.Option value="IND">Indivdual</Select.Option>
-                </SelectBox>
+                </SelectBox> */}
               </Form.Item>
             </div>
 

@@ -148,7 +148,7 @@ function EnquirySource() {
   const handleEditenquirySource = (data) => {
     if (data) {
       setEditModalSource(true);
-      setViewModalSource(true);
+      setViewModalSource(false);
       addForm.setFieldsValue({
         enq_source_name1: data.enq_source_name,
         enq_source_description1: data.enq_source_description,
@@ -226,19 +226,17 @@ function EnquirySource() {
 
   return (
     <div className="container-fluid">
-      <div className="row">
+      <div className="row shadow-sm p-2">
         <div className="col-12">
           <div>
             <div className="row flex-wrap">
-              <div className="col">
+              <div className="col-4">
                 <h5 className="lead_text">Enquiry Source</h5>
               </div>
-              <div className="col-auto" style={{}}>
-                {/* <Leadlist_Icons /> */}
-              </div>
-            </div>
-            <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
-              <div className="col-4">
+              <div
+                // style={{ backgroundColor: "rgb(233, 233, 233)", width: "fit-content"}}
+                className="col-4  shadow-sm"
+              >
                 <Input.Search
                   placeholder="Search by Name"
                   style={{ margin: "5px", borderRadius: "5px" }}
@@ -251,8 +249,27 @@ function EnquirySource() {
                   }}
                 />
               </div>
-              <div className="col-4">
+              <div className="col-auto" style={{}}>
+                {/* <Leadlist_Icons /> */}
+              </div>
+            </div>
+            <div className="row py-1">
+              <div className="col-4"></div>
+              {/* <div className="col-4">
                 <Input.Search
+                  placeholder="Search by Name"
+                  style={{ margin: "5px", borderRadius: "5px" }}
+                  value={searchedText}
+                  onChange={(e) => {
+                    setSearchedText(e.target.value ? [e.target.value] : []);
+                  }}
+                  onSearch={(value) => {
+                    setSearchedText(value);
+                  }}
+                />
+              </div> */}
+              <div className="col-4">
+                {/* <Input.Search
                   placeholder="Search by code"
                   style={{ margin: "5px", borderRadius: "5px" }}
                   value={searchCode}
@@ -262,7 +279,7 @@ function EnquirySource() {
                   onSearch={(value) => {
                     setSearchCode(value);
                   }}
-                />
+                /> */}
               </div>
             </div>
             <div className="row my-3">
@@ -324,7 +341,7 @@ function EnquirySource() {
                     SetAddModalSource(true);
                   }}
                 >
-                  Add Payment
+                  Add Enquiry Source
                 </Button>
               </div>
             </div>
@@ -370,15 +387,25 @@ function EnquirySource() {
                 >
                   <div className="row">
                     <div className="col-12">
-                      <h4 className="lead_text">Enquiry Source</h4>
+                      <h5 className="lead_text">Enquiry Source</h5>
                     </div>
-                    <div className="col-12">
-                      <label>Name</label>
-                      <Form.Item name="enq_source_name">
+                    <div className="col-12 mt-2">
+                      <label>
+                        Name<span className="required">*</span>
+                      </label>
+                      <Form.Item
+                        name="enq_source_name"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Name is Required",
+                          },
+                        ]}
+                      >
                         <InputType />
                       </Form.Item>
                     </div>
-                    <div className="col-12">
+                    <div className="col-12 mt-3">
                       <label>Description</label>
                       <Form.Item name="enq_source_description">
                         <TextArea />
@@ -413,15 +440,25 @@ function EnquirySource() {
                 >
                   <div className="row">
                     <div className="col-12">
-                      <h4 className="lead_text">Enquiry Source</h4>
+                      <h5 className="lead_text">Enquiry Source</h5>
                     </div>
-                    <div className="col-12">
-                      <label>Name</label>
-                      <Form.Item name="enq_source_name1">
+                    <div className="col-12 mt-2">
+                      <label>
+                        Name<span className="required">*</span>
+                      </label>
+                      <Form.Item
+                        name="enq_source_name1"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Name is Required",
+                          },
+                        ]}
+                      >
                         <InputType />
                       </Form.Item>
                     </div>
-                    <div className="col-12">
+                    <div className="col-12 mt-3">
                       <label>Description</label>
                       <Form.Item name="enq_source_description1">
                         <TextArea />

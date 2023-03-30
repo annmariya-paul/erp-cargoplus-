@@ -19,11 +19,8 @@ import {
   CRM_BASE_URL_HRMS,
 } from "../../../../api/bootapi";
 import moment from "moment";
-<<<<<<< HEAD
 import CustomerModal from "../../../../components/CustomerModal.jsx/CustomerModal";
-=======
 import Button from "../../../../components/button/button";
->>>>>>> bc3efc1c68eebb4135c4de9943b398c38e11fd7d
 function Enquiry() {
   const [addForm] = Form.useForm();
   const [SuccessPopup, setSuccessPopup] = useState(false);
@@ -36,7 +33,7 @@ function Enquiry() {
   const [Customer_Id, setCustomer_Id] = useState();
   const [allSalesPerson, setAllSalesPerson] = useState();
 
-  console.log("sales person ",allSalesPerson);
+  console.log("sales person ", allSalesPerson);
   const [frighttype, setFrighttype] = useState();
   const [frightmode, setFrightmode] = useState();
   console.log("change", frightmode);
@@ -67,11 +64,9 @@ function Enquiry() {
   useEffect(() => {
     // getallunits();
     // getAllLocations();
-   
-    getallfrighttype();
-   
-  }, []);
 
+    getallfrighttype();
+  }, []);
 
   const mode = (e) => {
     if (e) {
@@ -116,10 +111,7 @@ function Enquiry() {
       });
   };
 
-
   // api call starts !!
-
-  
 
   const GetAllCustomers = () => {
     PublicFetch.get(`${CRM_BASE_URL}/customer/minimal`)
@@ -330,43 +322,42 @@ function Enquiry() {
             </div>
 
             <div className="col-sm-4 pt-2 ">
-                    <label>Freight Type</label>
-                    <Form.Item
-                      name="job_freight_type"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid freight type",
-                        },
-                      ]}
-                    >
-                      <SelectBox
-                       
-                        allowClear
-                        showSearch
-                        optionFilterProp="children"
-                        onChange={(e) => {
-                          console.log("date mmm", e);
-                          setFrightmode(e);
-                          mode(e);
-                        }}
-                      >
-                        {frighttype &&
-                          frighttype.length > 0 &&
-                          frighttype.map((item, index) => {
-                            return (
-                              <Select.Option
-                                key={item.freight_type_id}
-                                value={item.freight_type_id}
-                              >
-                                {item.freight_type_name}
-                              </Select.Option>
-                            );
-                          })}
-                      </SelectBox>
-                    </Form.Item>
-                  </div>
+              <label>Freight Type</label>
+              <Form.Item
+                name="job_freight_type"
+                rules={[
+                  {
+                    required: true,
+                    pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                    message: "Please enter a Valid freight type",
+                  },
+                ]}
+              >
+                <SelectBox
+                  allowClear
+                  showSearch
+                  optionFilterProp="children"
+                  onChange={(e) => {
+                    console.log("date mmm", e);
+                    setFrightmode(e);
+                    mode(e);
+                  }}
+                >
+                  {frighttype &&
+                    frighttype.length > 0 &&
+                    frighttype.map((item, index) => {
+                      return (
+                        <Select.Option
+                          key={item.freight_type_id}
+                          value={item.freight_type_id}
+                        >
+                          {item.freight_type_name}
+                        </Select.Option>
+                      );
+                    })}
+                </SelectBox>
+              </Form.Item>
+            </div>
 
             <div className="col-sm-4 pt-2">
               <label>
@@ -409,9 +400,7 @@ function Enquiry() {
             </div>
 
             <div className="col-sm-4 pt-2">
-              <label>
-                Source
-              </label>
+              <label>Source</label>
               <Form.Item
                 name="source"
                 className=""
@@ -435,9 +424,7 @@ function Enquiry() {
             </div>
 
             <div className="col-sm-4 pt-2">
-              <label>
-                Customer Reference
-              </label>
+              <label>Customer Reference</label>
               <Form.Item
                 name="reference"
                 // rules={[
@@ -602,7 +589,7 @@ function Enquiry() {
           </div>
 
           <div className="col-12 d-flex justify-content-center my-4 gap-3">
-            <Button  type="submit" btnType="save" >
+            <Button type="submit" btnType="save">
               Save
             </Button>
             <Button

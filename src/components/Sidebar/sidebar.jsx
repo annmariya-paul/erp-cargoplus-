@@ -1196,6 +1196,20 @@ export default function Sidebar({ showSidebar }) {
                             </NavLink>
                           </li>
                         )}
+                         {checkPermission("containertype") && (
+                          <li className="nav-text">
+                            <NavLink
+                              className={({ isActive }) =>
+                                isActive ? "active-link" : "link"
+                              }
+                              to={ROUTES.CONTAINER_TYPES}
+                            >
+                              <div className=" ms-5 subactivelink">
+                               Container Types
+                              </div>
+                            </NavLink>
+                          </li>
+                        )}
                         {/* {checkPermission("airport") && (
                         <li className="nav-text">
                           <NavLink

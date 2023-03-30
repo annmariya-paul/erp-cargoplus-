@@ -1229,28 +1229,28 @@ export default function Sidebar({ showSidebar }) {
                   <li
                     className={
                       fmsReport
-                        ? "nav-text  items_hrms open"
-                        : "nav-text  items_hrms "
+                        ? "nav-text  items_hrms nav_active_color open"
+                        : "nav-text  items_hrms nav_active_color"
                     }
                   >
                     <Link
-                      className={fmsReport ? "active-link" : "link"}
+                      className="link"
                       // to="/"
                       onClick={() => setFmsReport(!fmsReport)}
                     >
-                      <div className="d-flex justify-content-between gap-5 ms-2">
+                      <div className="d-flex justify-content-between gap-5 ms-3">
                         <div className="d-flex">
-                          <TbReport className="sidebar_icons ms-1 pt-1 " />
-                          <div style={{ width: "90px" }} className="">
+                          {/* <TbReport className="sidebar_icons ms-1 pt-1 " /> */}
+                          <div
+                            style={{ width: "90px" }}
+                            className="subactivelink"
+                          >
                             Report
                           </div>
                         </div>
-
-                        <div className="  ">
                           <div className="text-right ">
-                            <AiOutlineCaretDown className="toggle_btn " />
+                            <AiOutlineCaretDown className="toggle_btn subactivelink" />
                           </div>
-                        </div>
                       </div>
                     </Link>
                   </li>
@@ -1266,7 +1266,7 @@ export default function Sidebar({ showSidebar }) {
                                 }
                                 to={ROUTES.AGENT_REPORT}
                               >
-                                <div className="ms-4 subactivelink">
+                                <div className="ms-4 ps-2 subactivelink">
                                   Agent Report
                                 </div>
                               </NavLink>
@@ -1290,7 +1290,7 @@ export default function Sidebar({ showSidebar }) {
                                 }
                                 to={ROUTES.MONTHLY_REPORT}
                               >
-                                <div className="ms-4 subactivelink">
+                                <div className="ms-4 ps-2 subactivelink">
                                   Monthly Report
                                 </div>
                               </NavLink>
@@ -1305,7 +1305,7 @@ export default function Sidebar({ showSidebar }) {
                               }
                               to={ROUTES.COST_AND_EXPENSE_REPORT}
                             >
-                              <div className="ms-4 subactivelink">
+                              <div className="ms-4 ps-2 subactivelink">
                                 Cost And Expense Report
                               </div>
                             </NavLink>
@@ -1319,7 +1319,7 @@ export default function Sidebar({ showSidebar }) {
                               }
                               to={ROUTES.ENQUIRY_REPORT}
                             >
-                              <div className=" ms-4 subactivelink">
+                              <div className="ms-4 ps-2 subactivelink">
                                 Enquiry Report
                               </div>
                             </NavLink>
@@ -1333,7 +1333,7 @@ export default function Sidebar({ showSidebar }) {
                               }
                               to={ROUTES.INVOICE_REPORT}
                             >
-                              <div className=" ms-4 subactivelink">
+                              <div className="ms-4 ps-2 subactivelink">
                                 Invoice Report
                               </div>
                             </NavLink>
@@ -1428,7 +1428,7 @@ export default function Sidebar({ showSidebar }) {
                               }
                               to={ROUTES.EXPENSE_CATEGORY}
                             >
-                              <div className="ms-3 ps-3 subactivelink">
+                              <div className="ms-4 ps-3 subactivelink">
                                 Expense Category
                               </div>
                             </NavLink>
@@ -1454,7 +1454,7 @@ export default function Sidebar({ showSidebar }) {
                               }
                               to={ROUTES.PAYMEMENT_MODE}
                             >
-                              <div className=" ms-3 ps-3 subactivelink">
+                              <div className="ms-4 ps-3 subactivelink">
                                 Payment Mode
                               </div>
                             </NavLink>
@@ -1494,7 +1494,7 @@ export default function Sidebar({ showSidebar }) {
                               }
                               to={ROUTES.BANK_DETAILS}
                             >
-                              <div className="ms-3 ps-3 subactivelink">
+                              <div className="ms-4 ps-3 subactivelink">
                                 Bank Details
                               </div>
                             </NavLink>
@@ -1508,7 +1508,7 @@ export default function Sidebar({ showSidebar }) {
                               }
                               to={ROUTES.CREDIT_NOTE_TYPE}
                             >
-                              <div className="ms-3 ps-3 subactivelink">
+                              <div className="ms-4 ps-3 subactivelink">
                                 Credit Note Type
                               </div>
                             </NavLink>
@@ -1646,7 +1646,7 @@ export default function Sidebar({ showSidebar }) {
                             }
                             to={ROUTES.DAILY_EXPENSE_REPORT}
                           >
-                            <div className="subactivelink ms-4 ps-2">
+                            <div className="subactivelink ms-4 ps-3">
                               Daily Expense Report
                             </div>
                           </NavLink>

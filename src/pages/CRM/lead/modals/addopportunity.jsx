@@ -655,14 +655,14 @@ export default function AddOpportunity() {
               </Form.Item>
             </div>
 
-            <div className="col-sm-6 mt-2 mb-4">
+            <div className="col-sm-6 mt-2">
               <label>Attachments</label>
               <Form.Item name="attachment" className="mt-2">
                 <FileUpload
                   multiple
                   listType="picture"
                   accept=".pdf,.docx,.jpeg"
-                  height={100}
+                  height={120}
                   beforeUpload={beforeUpload}
                   onChange={(file) => {
                     console.log("Before upload file size", file.file.size);

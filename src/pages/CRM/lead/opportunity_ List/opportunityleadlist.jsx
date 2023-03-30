@@ -93,6 +93,7 @@ function OpportunityLeadlist(props) {
   const [tableprogress, setTableprogress] = useState("");
   const [count, setcount] = useState(0);
   const [editForm] = Form.useForm();
+  const [serialNo, setserialNo] = useState(1);
 
   // view oppurtunity
   const [viewoppurtunity, setviewoppurtunity] = useState({
@@ -517,35 +518,10 @@ function OpportunityLeadlist(props) {
 
   const columns = [
     {
-      title: "ACTION",
-      dataIndex: "action",
-      key: "action",
-      width: "15%",
-      render: (data, index) => {
-        console.log("indexxx", index);
-        return (
-          <div className="d-flex justify-content-center gap-2">
-            <div className="editcolor">
-
-            <Link
-                          to={`${ROUTES.EDIT_OPPORTUNITY}/${index.opportunity_Id}`}
-                         
-                        >
-                       
-                  <FaEdit />
-            
-                        </Link>
-              {/* <FaEdit onClick={() => handleEditedclick(index)} /> */}
-            </div>
-            <div className="editcolor">
-              <MdPageview
-                // onClick={()=>viewprogressoppurtunity(index)}
-                onClick={() => Viewoppurtunties(index)}
-              />
-            </div>
-          </div>
-        );
-      },
+      title: "Sl.No.",
+      key: "index",
+      width: "4%",
+      render: (value, item, index) => serialNo + index,
       align: "center",
     },
     {
@@ -595,6 +571,38 @@ function OpportunityLeadlist(props) {
       title: "PARTY",
       dataIndex: "opportunity_party",
       key: "opportunity_party",
+      align: "center",
+    },
+    {
+      title: "ACTION",
+      dataIndex: "action",
+      key: "action",
+      width: "15%",
+      render: (data, index) => {
+        console.log("indexxx", index);
+        return (
+          <div className="d-flex justify-content-center gap-2">
+            <div className="editcolor">
+
+            <Link
+                          to={`${ROUTES.EDIT_OPPORTUNITY}/${index.opportunity_Id}`}
+                         
+                        >
+                       
+                  <FaEdit />
+            
+                        </Link>
+              {/* <FaEdit onClick={() => handleEditedclick(index)} /> */}
+            </div>
+            <div className="editcolor">
+              <MdPageview
+                // onClick={()=>viewprogressoppurtunity(index)}
+                onClick={() => Viewoppurtunties(index)}
+              />
+            </div>
+          </div>
+        );
+      },
       align: "center",
     },
   ];

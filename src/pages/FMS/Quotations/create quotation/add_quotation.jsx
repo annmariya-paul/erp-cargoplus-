@@ -43,7 +43,7 @@ export default function Add_Quotation() {
 
   const[allincoterms,setallincoterms]=useState("")
   const [defaultincoterm,setdefaultincoterm] = useState("")
-
+  const [allcontainertype, setallcontainertype] = useState("");
 
   const [addForm] = Form.useForm();
   const navigate = useNavigate();
@@ -380,6 +380,18 @@ export default function Add_Quotation() {
       });
   };
 
+  const getallcontainertype = async () => {
+    try {
+      const allcontainertype = await PublicFetch.get(
+        `${CRM_BASE_URL_FMS}/container_type`
+      );
+      console.log("getting all containertype", allcontainertype);
+      setallcontainertype(allcontainertype.data.data);
+    } catch (err) {
+      console.log("error to fetching  containertypes", err);
+    }
+  };
+
   useEffect(() => {
     getAllTaxTypes();
   }, []);
@@ -390,6 +402,7 @@ export default function Add_Quotation() {
     getallPaymentTerms();
     getfmssettings()
     getAllincoterm()
+    getallcontainertype()
   }, []);
 
   const handleDelete = (key) => {
@@ -1511,9 +1524,24 @@ export default function Add_Quotation() {
                         ]}
                       >
                         <SelectBox
-                        
+                          allowClear
+                          showSearch
+                          optionFilterProp="children"
+                          // disabled={disable}
                         >
-                       
+                       {allcontainertype &&
+                          allcontainertype.length > 0 &&
+                          allcontainertype.map((item, index) => {
+                            console.log("datass",item)
+                            return (
+                              <Select.Option
+                                value={item.container_type_id}
+                                key={item.container_type_id}
+                              >
+                                {item.container_type_shortname}
+                              </Select.Option>
+                            );
+                          })}
                         </SelectBox>
                       </Form.Item>
                     </div>

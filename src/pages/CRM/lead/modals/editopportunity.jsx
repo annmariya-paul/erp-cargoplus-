@@ -1141,6 +1141,7 @@ export default function EditOpportunity() {
             <div className="col-sm-6 pt-3">
               <label>Remarks</label>
               <Form.Item
+                className="mt-2"
                 name={"opportunity_description"}
                 rules={[
                   {
@@ -1160,14 +1161,14 @@ export default function EditOpportunity() {
                 />
               </Form.Item>
             </div>
-            <div className="col-sm-6 mt-2 mb-4">
+            <div className="col-sm-6 pt-3">
               <label>Attachments</label>
               <Form.Item name="attachment" className="mt-2">
                 <FileUpload
                   multiple
                   listType="picture"
                   accept=".pdf,.docx,.zip"
-                  height={100}
+                  height={120}
                   // beforeUpload={beforeUpload}
                   // onChange={(file) => {
                   //   console.log("Before upload file size", file.file.size);
@@ -1194,7 +1195,7 @@ export default function EditOpportunity() {
               </Form.Item>
             </div>
           </div>
-          <div className="col-12 d-flex justify-content-center my-3">
+          <div className="col-12 d-flex justify-content-center my-3 gap-3">
             <Button
               onClick={() => {
                 updatedOppurtunity();

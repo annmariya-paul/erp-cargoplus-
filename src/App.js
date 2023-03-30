@@ -150,6 +150,7 @@ import ViewEnquiry from "./pages/CRM/lead/enquiry/ViewEnquiry";
 import Viewvendor from "./pages/CRM/Purchase/vendor/viewvendor";
 import Containertypes from "./pages/FMS/settings/containertypes/containertypes";
 import EnquirySource from "./pages/CRM/lead/EnquirySource/EnquirySource";
+import TaxGroup from "./pages/FMS/settings/TaxGroup/TaxGroup";
 function App() {
   return (
     <div className="App">
@@ -204,6 +205,11 @@ function App() {
             </Route>
             <Route path={ROUTES.ENQUIRY_SOURCE} element={<ProtectedRoute />}>
               <Route index element={<EnquirySource />} />
+            </Route>
+
+            {/* / FMS => MASTER => TAX GROUP */}
+            <Route path={ROUTES.TAX_GROUP} element={<ProtectedRoute />}>
+              <Route index element={<TaxGroup />} />
             </Route>
 
             <Route

@@ -8,6 +8,7 @@ import TextArea from "../../../../components/ InputType TextArea/TextArea";
 import Button from "../../../../components/button/button";
 import CustomModel from "../../../../components/custom_modal/custom_model";
 import InputType from "../../../../components/Input Type textbox/InputType";
+import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
 import MyPagination from "../../../../components/Pagination/MyPagination";
 import TableData from "../../../../components/table/table_data";
 import { ROUTES } from "../../../../routes";
@@ -220,6 +221,23 @@ function EnquirySource() {
       });
   };
 
+  const getData = (current, pageSize) => {
+    return AllEnquirySource?.slice(
+      (current - 1) * pageSize,
+      current * pageSize
+    );
+  };
+
+  const data12 = AllEnquirySource?.map((item) => [
+    item?.action,
+    item?.enq_source_name,
+    item?.enq_source_description,
+  ]);
+
+  const TaxGroupHeads = [
+    ["enquiry_source_id", "enquiry_source_name", "enquiry_source_description"],
+  ];
+
   useEffect(() => {
     GetAllEnquirySource();
   }, []);
@@ -249,8 +267,16 @@ function EnquirySource() {
                   }}
                 />
               </div>
-              <div className="col-auto" style={{}}>
-                {/* <Leadlist_Icons /> */}
+              <div className="col-4 d-flex justify-content-end" style={{}}>
+                {AllEnquirySource && (
+                  <Leadlist_Icons
+                    datas={data12}
+                    columns={columns}
+                    items={data12}
+                    xlheading={TaxGroupHeads}
+                    filename="data.csv"
+                  />
+                )}
               </div>
             </div>
             <div className="row py-1">
@@ -347,8 +373,8 @@ function EnquirySource() {
             </div>
             <div className="datatable">
               <TableData
-                //data={getData(current, pageSize)}
-                data={AllEnquirySource}
+                data={getData(current, pageSize)}
+                // data={AllEnquirySource}
                 columns={columns}
                 custom_table_css="table_lead_list"
                 expandable

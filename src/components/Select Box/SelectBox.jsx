@@ -15,6 +15,8 @@ function SelectBox({
   optionFilterProp,
   disabled,
   onBlur,
+  mode,
+  maxTagCount,
 }) {
   return (
     <div>
@@ -37,6 +39,8 @@ function SelectBox({
           optionFilterProp={optionFilterProp}
           disabled={disabled}
           onBlur={onBlur}
+          mode={mode}
+          maxTagCount={maxTagCount}
         >
           {children}
         </Select>

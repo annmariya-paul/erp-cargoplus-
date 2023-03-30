@@ -202,13 +202,11 @@ function Addvendor() {
   };
   return (
     <>
-     <h5 className="lead_text">Add Vendor</h5>
-          <div className="container-fluid">
+      <h5 className="lead_text">Add Vendor</h5>
+      <div className="container-fluid">
         <div className="lead_container">
           <div className="row justify-content-md-center">
-           
-
-          <div className="bloc-tabs tabs-responsive">
+            <div className="bloc-tabs tabs-responsive">
               <div className="col-xl-1 col-sm-2 pe-1">
                 <button
                   id="button-tabs"
@@ -227,7 +225,7 @@ function Addvendor() {
                   id="button-tabs"
                   className={toggleState === 2 ? "tabs active-tabs " : "tabs "}
                   onClick={(e) => {
-                    handleContactTab(e)
+                    handleContactTab(e);
                     // CustomerId !== null ? errormessage() : handleContactTab(e);
                   }}
                 >
@@ -239,7 +237,7 @@ function Addvendor() {
                   id="button-tabs"
                   className={toggleState === 3 ? "tabs active-tabs" : "tabs"}
                   onClick={(e) => {
-                    handleAccountingTab(e)
+                    handleAccountingTab(e);
                     // CustomerId !== null ? errormessage() : handleAddressTab(e);
                   }}
                 >
@@ -250,7 +248,7 @@ function Addvendor() {
                 <button
                   className={toggleState === 4 ? "tabs active-tabs" : "tabs"}
                   onClick={(e) => {
-                    handleBankTab(e)
+                    handleBankTab(e);
                     // CustomerId !== null
                     //   ? errormessage()
                     //   : handleAccountingTab(e);
@@ -259,293 +257,295 @@ function Addvendor() {
                   Bank Details
                 </button>
               </div>
-          </div>
-          <div className="content-tabs">
-          <div
+            </div>
+            <div className="content-tabs">
+              <div
                 className={
                   toggleState === 1 ? "content  active-content" : "content"
                 }
               >
-        <Form
-          form={addForm}
-          onFinish={(data) => {
-            console.log("valuezzzzzzz", data);
-            createvendor();
-          }}
-          onFinishFailed={(error) => {
-            console.log(error);
-          }}
-        >
-          {/* <div className="row px-1 pt-2">
+                <Form
+                  form={addForm}
+                  onFinish={(data) => {
+                    console.log("valuezzzzzzz", data);
+                    createvendor();
+                  }}
+                  onFinishFailed={(error) => {
+                    console.log(error);
+                  }}
+                >
+                  {/* <div className="row px-1 pt-2">
             <h5 className="lead_text">Add Vendor</h5>
           </div> */}
 
-          <div className="row jobpay_cards mt-3 mx-0 px-2 py-3">
-            {/* <div className="col-12">
+                  <div className="row jobpay_cards mt-3 mx-0 px-2 py-3">
+                    {/* <div className="col-12">
               <h5 className="lead_text">Basic Info</h5>
             </div> */}
 
-            <div className="col-sm-4 pt-2 ">
-              <label>
-                {" "}
-                Name<span className="required">*</span>
-              </label>
+                    <div className="col-sm-4 pt-2 ">
+                      <label>
+                        {" "}
+                        Name<span className="required">*</span>
+                      </label>
 
-              <Form.Item
-                name="vendorname"
-                rules={[
-                  {
-                    required: true,
-                    pattern: new RegExp("^[A-Za-z ]+$"),
-                    message: "Please enter a Valid vendor Name",
-                  },
-                ]}
-              >
-                <InputType
-                  value={vendorname}
-                  onChange={(e) => {
-                    setvendorname(e.target.value);
-                  }}
-                />
-              </Form.Item>
-            </div>
+                      <Form.Item
+                        name="vendorname"
+                        rules={[
+                          {
+                            required: true,
+                            pattern: new RegExp("^[A-Za-z ]+$"),
+                            message: "Please enter a Valid vendor Name",
+                          },
+                        ]}
+                      >
+                        <InputType
+                          value={vendorname}
+                          onChange={(e) => {
+                            setvendorname(e.target.value);
+                          }}
+                        />
+                      </Form.Item>
+                    </div>
 
-            <div className="col-sm-4 pt-2">
-              <label>
-                {" "}
-                Organisation Type<span className="required">*</span>
-              </label>
+                    <div className="col-sm-4 pt-2">
+                      <label>
+                        {" "}
+                        Organisation Type<span className="required">*</span>
+                      </label>
 
-              <Form.Item
-                name="vendorOrganisation"
-                rules={[
-                  {
-                    required: true,
-                    // pattern: new RegExp("^[A-Za-z ]+$"),
-                    message: "Please enter a Valid organisation",
-                  },
-                ]}
-              >
-                <SelectBox
-                  showSearch={true}
-                  allowClear
-                  optionFilterProp="children"
-                  value={vendorOrganisation}
-                  onChange={(e) => {
-                    setvendorOrganisation(e);
-                    // setOrganizationDisable(e);
-                  }}
-                >
-                  <Select.Option value="ORG">Organisation</Select.Option>
-                  <Select.Option value="IND">Indivdual</Select.Option>
-                </SelectBox>
-              </Form.Item>
-            </div>
-
-            <div className="col-sm-4 pt-2">
-              <label>
-                Vendor Type<span className="required">*</span>
-              </label>
-
-              <Form.Item
-                name="vendortype"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter a Valid vendortype",
-                  },
-                ]}
-              >
-                <SelectBox
-                  showSearch={true}
-                  allowClear
-                  value={vendortyp}
-                  optionFilterProp="children"
-                  onChange={(e) => {
-                    setvendortyp(e);
-                  }}
-                >
-                  {vendortypes &&
-                    vendortypes.length > 0 &&
-                    vendortypes.map((item, index) => {
-                      return (
-                        <Select.Option
-                          key={item.vendor_type_id}
-                          id={item.vendor_type_id}
-                          value={item.vendor_type_id}
+                      <Form.Item
+                        name="vendorOrganisation"
+                        rules={[
+                          {
+                            required: true,
+                            // pattern: new RegExp("^[A-Za-z ]+$"),
+                            message: "Please enter a Valid organisation",
+                          },
+                        ]}
+                      >
+                        <SelectBox
+                          showSearch={true}
+                          allowClear
+                          optionFilterProp="children"
+                          value={vendorOrganisation}
+                          onChange={(e) => {
+                            setvendorOrganisation(e);
+                            // setOrganizationDisable(e);
+                          }}
                         >
-                          {item.vendor_type_name}
-                        </Select.Option>
-                      );
-                    })}
-                </SelectBox>
-              </Form.Item>
-            </div>
+                          <Select.Option value="ORG">
+                            Organisation
+                          </Select.Option>
+                          <Select.Option value="IND">Indivdual</Select.Option>
+                        </SelectBox>
+                      </Form.Item>
+                    </div>
 
-            <div className="col-sm-6 pt-2">
-              <label> Address</label>
-              <div>
-                <Form.Item className="py-1" name="vendordescription">
-                  <TextArea
-                    // value={vendordescription}
-                    // onChange={(e) => {
-                    //   setvendordescription(e.target.value);
-                    // }}
-                    className="address_height"
-                  />
-                </Form.Item>
-              </div>
-            </div>
-            <div className="col-sm-6 pt-2">
-              <label> Attachments</label>
-              <div>
-                <Form.Item className="py-1" name="vendordescription">
-                  <FileUpload
-                    beforeUpload={beforeUpload}
-                    multiple
-                    //  filetype={"Accept only pdf and docs"}
-                    listType="picture"
-                    accept=".pdf,.docs,"
-                  />
-                </Form.Item>
-              </div>
-            </div>
-          </div>
+                    <div className="col-sm-4 pt-2">
+                      <label>
+                        Vendor Type<span className="required">*</span>
+                      </label>
 
-          <div className="row jobpay_cards mt-3 mx-0 px-2 py-3">
-            <div className="col-12">
-              <h5 className="lead_text">Contact Details</h5>
-            </div>
-
-            <div className="col-sm-4 pt-3">
-              <label>
-                {" "}
-                Phone<span className="required">*</span>
-              </label>
-
-              <Form.Item
-                name="vendorcontact"
-                rules={[
-                  {
-                    required: true,
-
-                    message: "Please enter a Valid contact",
-                  },
-
-                  // {
-                  //   min: 3,
-                  //   message: "Name must be atleast 3 characters",
-                  // },
-                  // {
-                  //   max: 100,
-                  //   message: " Name cannot be longer than 100 characters",
-                  // },
-                ]}
-              >
-                <InputType
-                  value={vendorcontact}
-                  onChange={(e) => {
-                    setvendorcontact(e.target.value);
-                  }}
-                />
-              </Form.Item>
-            </div>
-            <div className="col-sm-4 pt-3">
-              <label>
-                {" "}
-                Email<span className="required">*</span>
-              </label>
-
-              <Form.Item
-                name="vendoremail"
-                rules={[
-                  {
-                    required: true,
-                    // pattern: new RegExp("^[A-Za-z ]+$"),
-                    message: "Please enter a Valid email",
-                  },
-                ]}
-              >
-                <InputType
-                  value={vendoremail}
-                  onChange={(e) => {
-                    setvendoremail(e.target.value);
-                  }}
-                />
-              </Form.Item>
-            </div>
-
-            <div className="col-sm-4 pt-3">
-              <label>
-                {" "}
-                Website<span className="required">*</span>
-              </label>
-
-              <Form.Item
-                name="vendorcontact"
-                rules={[
-                  {
-                    required: true,
-
-                    message: "Please enter a Valid contact",
-                  },
-
-                  // {
-                  //   min: 3,
-                  //   message: "Name must be atleast 3 characters",
-                  // },
-                  // {
-                  //   max: 100,
-                  //   message: " Name cannot be longer than 100 characters",
-                  // },
-                ]}
-              >
-                <InputType
-                  value={vendorcontact}
-                  onChange={(e) => {
-                    setvendorcontact(e.target.value);
-                  }}
-                />
-              </Form.Item>
-            </div>
-
-            <div className="col-sm-4 pt-2">
-              <label>
-                Country<span className="required">*</span>
-              </label>
-
-              <Form.Item
-                name="vendorcountry"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter a Valid country",
-                  },
-                ]}
-              >
-                <SelectBox
-                  showSearch={true}
-                  allowClear
-                  // value={countryis}
-                  optionFilterProp="children"
-                  onChange={handleChange}
-                >
-                  {allCountries &&
-                    allCountries.length > 0 &&
-                    allCountries.map((item, index) => {
-                      return (
-                        <Select.Option
-                          key={item.country_id}
-                          id={item.country_id}
-                          value={item.country_id}
+                      <Form.Item
+                        name="vendortype"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please enter a Valid vendortype",
+                          },
+                        ]}
+                      >
+                        <SelectBox
+                          showSearch={true}
+                          allowClear
+                          value={vendortyp}
+                          optionFilterProp="children"
+                          onChange={(e) => {
+                            setvendortyp(e);
+                          }}
                         >
-                          {item.country_name}
-                        </Select.Option>
-                      );
-                    })}
-                </SelectBox>
-              </Form.Item>
-              {/* <label>City</label>
+                          {vendortypes &&
+                            vendortypes.length > 0 &&
+                            vendortypes.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  key={item.vendor_type_id}
+                                  id={item.vendor_type_id}
+                                  value={item.vendor_type_id}
+                                >
+                                  {item.vendor_type_name}
+                                </Select.Option>
+                              );
+                            })}
+                        </SelectBox>
+                      </Form.Item>
+                    </div>
+
+                    <div className="col-sm-6 pt-2">
+                      <label> Address</label>
+                      <div>
+                        <Form.Item className="py-1" name="vendordescription">
+                          <TextArea
+                            // value={vendordescription}
+                            // onChange={(e) => {
+                            //   setvendordescription(e.target.value);
+                            // }}
+                            className="address_height"
+                          />
+                        </Form.Item>
+                      </div>
+                    </div>
+                    <div className="col-sm-6 pt-2">
+                      <label> Attachments</label>
+                      <div>
+                        <Form.Item className="py-1" name="vendordescription">
+                          <FileUpload
+                            beforeUpload={beforeUpload}
+                            multiple
+                            height={120}
+                            listType="picture"
+                            accept=".pdf,.docs,"
+                          />
+                        </Form.Item>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="row jobpay_cards mt-3 mx-0 px-2 py-3">
+                    <div className="col-12">
+                      <h5 className="lead_text">Contact Details</h5>
+                    </div>
+
+                    <div className="col-sm-4 pt-3">
+                      <label>
+                        {" "}
+                        Phone<span className="required">*</span>
+                      </label>
+
+                      <Form.Item
+                        name="vendorcontact"
+                        rules={[
+                          {
+                            required: true,
+
+                            message: "Please enter a Valid contact",
+                          },
+
+                          // {
+                          //   min: 3,
+                          //   message: "Name must be atleast 3 characters",
+                          // },
+                          // {
+                          //   max: 100,
+                          //   message: " Name cannot be longer than 100 characters",
+                          // },
+                        ]}
+                      >
+                        <InputType
+                          value={vendorcontact}
+                          onChange={(e) => {
+                            setvendorcontact(e.target.value);
+                          }}
+                        />
+                      </Form.Item>
+                    </div>
+                    <div className="col-sm-4 pt-3">
+                      <label>
+                        {" "}
+                        Email<span className="required">*</span>
+                      </label>
+
+                      <Form.Item
+                        name="vendoremail"
+                        rules={[
+                          {
+                            required: true,
+                            // pattern: new RegExp("^[A-Za-z ]+$"),
+                            message: "Please enter a Valid email",
+                          },
+                        ]}
+                      >
+                        <InputType
+                          value={vendoremail}
+                          onChange={(e) => {
+                            setvendoremail(e.target.value);
+                          }}
+                        />
+                      </Form.Item>
+                    </div>
+
+                    <div className="col-sm-4 pt-3">
+                      <label>
+                        {" "}
+                        Website<span className="required">*</span>
+                      </label>
+
+                      <Form.Item
+                        name="vendorcontact"
+                        rules={[
+                          {
+                            required: true,
+
+                            message: "Please enter a Valid contact",
+                          },
+
+                          // {
+                          //   min: 3,
+                          //   message: "Name must be atleast 3 characters",
+                          // },
+                          // {
+                          //   max: 100,
+                          //   message: " Name cannot be longer than 100 characters",
+                          // },
+                        ]}
+                      >
+                        <InputType
+                          value={vendorcontact}
+                          onChange={(e) => {
+                            setvendorcontact(e.target.value);
+                          }}
+                        />
+                      </Form.Item>
+                    </div>
+
+                    <div className="col-sm-4 pt-2">
+                      <label>
+                        Country<span className="required">*</span>
+                      </label>
+
+                      <Form.Item
+                        name="vendorcountry"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please enter a Valid country",
+                          },
+                        ]}
+                      >
+                        <SelectBox
+                          showSearch={true}
+                          allowClear
+                          // value={countryis}
+                          optionFilterProp="children"
+                          onChange={handleChange}
+                        >
+                          {allCountries &&
+                            allCountries.length > 0 &&
+                            allCountries.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  key={item.country_id}
+                                  id={item.country_id}
+                                  value={item.country_id}
+                                >
+                                  {item.country_name}
+                                </Select.Option>
+                              );
+                            })}
+                        </SelectBox>
+                      </Form.Item>
+                      {/* <label>City</label>
                 
                     <Form.Item name="vendorcity">
                       <InputType
@@ -555,20 +555,20 @@ function Addvendor() {
                         }}
                       />
                     </Form.Item> */}
-            </div>
+                    </div>
 
-            <div className="col-sm-4 pt-2">
-              <label>State</label>
+                    <div className="col-sm-4 pt-2">
+                      <label>State</label>
 
-              <Form.Item name="vendorstate">
-                <InputType
-                // value={vendorcity}
-                // onChange={(e) => {
-                //   setvendorcity(e.target.value);
-                // }}
-                />
-              </Form.Item>
-              {/* <label>Tax No</label>
+                      <Form.Item name="vendorstate">
+                        <InputType
+                        // value={vendorcity}
+                        // onChange={(e) => {
+                        //   setvendorcity(e.target.value);
+                        // }}
+                        />
+                      </Form.Item>
+                      {/* <label>Tax No</label>
                 
                     <Form.Item name="vendortaxno">
                       <InputType
@@ -578,41 +578,41 @@ function Addvendor() {
                         }}
                       />
                     </Form.Item> */}
-            </div>
-            <div className="col-sm-4 pt-2">
-              <label>City</label>
+                    </div>
+                    <div className="col-sm-4 pt-2">
+                      <label>City</label>
 
-              <Form.Item name="vendorcity">
-                <InputType
-                  value={vendorcity}
-                  onChange={(e) => {
-                    setvendorcity(e.target.value);
-                  }}
-                />
-              </Form.Item>
-            </div>
-          </div>
+                      <Form.Item name="vendorcity">
+                        <InputType
+                          value={vendorcity}
+                          onChange={(e) => {
+                            setvendorcity(e.target.value);
+                          }}
+                        />
+                      </Form.Item>
+                    </div>
+                  </div>
 
-          <div className="row jobpay_cards mt-3 mx-0 px-2 py-5">
-            <div className="col-12">
-              <h5 className="lead_text">Extra Info</h5>
-            </div>
+                  <div className="row jobpay_cards mt-3 mx-0 px-2 py-5">
+                    <div className="col-12">
+                      <h5 className="lead_text">Extra Info</h5>
+                    </div>
 
-            <div className="col-sm-12 pt-2">
-              <label> Remarks</label>
-              <div>
-                <Form.Item className="py-1" name="vendoraddress">
-                  <TextArea
-                    value={vendoraddress}
-                    onChange={(e) => {
-                      setvendoraddress(e.target.value);
-                    }}
-                  />
-                </Form.Item>
-              </div>
-            </div>
+                    <div className="col-sm-12 pt-2">
+                      <label> Remarks</label>
+                      <div>
+                        <Form.Item className="py-1" name="vendoraddress">
+                          <TextArea
+                            value={vendoraddress}
+                            onChange={(e) => {
+                              setvendoraddress(e.target.value);
+                            }}
+                          />
+                        </Form.Item>
+                      </div>
+                    </div>
 
-            {/* <div className="col-sm-6 pt-2">
+                    {/* <div className="col-sm-6 pt-2">
             
                   <label> Description</label>
                   <div>
@@ -628,41 +628,37 @@ function Addvendor() {
                     </Form.Item>
                   </div>
                 </div> */}
-          </div>
+                  </div>
 
-          <div className="col-12 d-flex justify-content-center my-4 gap-3">
-            <Button className="save_button" btnType="save">
-              Save
-            </Button>
-            <Button
-              as="input"
-              type="reset"
-              value="Reset"
-              onClick={() => {
-                navigate(`${ROUTES.VENDOR}`);
-              }}
-              // className="qtn_save"
-              // btnType="save"
-            >
-              Cancel
-            </Button>
-          </div>
-        </Form>
-          </div>
+                  <div className="col-12 d-flex justify-content-center my-4 gap-3">
+                    <Button className="save_button" btnType="save">
+                      Save
+                    </Button>
+                    <Button
+                      as="input"
+                      type="reset"
+                      value="Reset"
+                      onClick={() => {
+                        navigate(`${ROUTES.VENDOR}`);
+                      }}
+                      // className="qtn_save"
+                      // btnType="save"
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                </Form>
+              </div>
 
-          <div
+              <div
                 className={
                   toggleState === 2 ? "content  active-content" : "content"
                 }
               >
                 <div className="row mt-3 px-1" style={{ borderRadius: "3px" }}>
-                  <div className="col-md-12">
-                    
-                  </div>
+                  <div className="col-md-12"></div>
                   <div className="col-12 mt-2">
-                   <ContactTable
-                    toggle={timeOut}
-                   />
+                    <ContactTable toggle={timeOut} />
                   </div>
                   <div className="col mt-4">
                     {/* <Button btnType="save" onClick={(e) => handleAddressTab(e)}>
@@ -672,21 +668,15 @@ function Addvendor() {
                 </div>
               </div>
 
-
-          <div
+              <div
                 className={
                   toggleState === 3 ? "content  active-content" : "content"
                 }
               >
                 <div className="row mt-3 px-1" style={{ borderRadius: "3px" }}>
-                  <div className="col-md-12">
-                    
-                  </div>
+                  <div className="col-md-12"></div>
                   <div className="col-12 mt-2">
-                    <Accounting
-                      
-                      toggle={timeOut}
-                    />
+                    <Accounting toggle={timeOut} />
                   </div>
                   <div className="col mt-4">
                     {/* <Button btnType="save" onClick={(e) => handleAddressTab(e)}>
@@ -694,21 +684,17 @@ function Addvendor() {
                     </Button> */}
                   </div>
                 </div>
-          </div>
+              </div>
 
-          <div
+              <div
                 className={
                   toggleState === 4 ? "content  active-content" : "content"
                 }
               >
                 <div className="row mt-3 px-1" style={{ borderRadius: "3px" }}>
-                  <div className="col-md-12">
-                    
-                  </div>
+                  <div className="col-md-12"></div>
                   <div className="col-12 mt-2">
-                    <Bankdetails  
-                      toggle={timeOut}
-                    />
+                    <Bankdetails toggle={timeOut} />
                   </div>
                   <div className="col mt-4">
                     {/* <Button btnType="save" onClick={(e) => handleAddressTab(e)}>
@@ -716,36 +702,22 @@ function Addvendor() {
                     </Button> */}
                   </div>
                 </div>
-          </div>
-
-          </div>
-
-
-
-
-
               </div>
+            </div>
+          </div>
 
+          {/* <div className="container-fluid "> */}
 
-              {/* <div className="container-fluid "> */}
-       
+          <Custom_model
+            size={"sm"}
+            show={successPopup}
+            onHide={() => setSuccessPopup(false)}
+            success
+          />
 
-        <Custom_model
-          size={"sm"}
-          show={successPopup}
-          onHide={() => setSuccessPopup(false)}
-          success
-        />
-
-
-          
-
-      {/* </div> */}
+          {/* </div> */}
+        </div>
       </div>
-
-</div>
-
-     
     </>
   );
 }

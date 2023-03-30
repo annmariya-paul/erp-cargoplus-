@@ -43,14 +43,14 @@ function EnquirySource() {
       key: "enq_source_name",
       width: "25%",
       align: "center",
-      // filteredValue: [searchedText],
-      //   onFilter: (value, record) => {
-      //     // console.log("hai how are", record.children);
+      filteredValue: [searchedText],
+      onFilter: (value, record) => {
+        // console.log("hai how are", record.children);
 
-      //     return String(record.category_name || nameSearch)
-      //       .toLowerCase()
-      //       .includes(value.toLowerCase());
-      //   },
+        return String(record.enq_source_name)
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      },
     },
     // Table.EXPAND_COLUMN,
     {

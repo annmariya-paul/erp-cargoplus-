@@ -1043,7 +1043,7 @@ export default function Sidebar({ showSidebar }) {
                           }
                           to={ROUTES.ENQUIRIES}
                         >
-                          <div className=" ms-4 subactivelink">Enquiry</div>
+                          <div className=" ms-4 subactivelink">Oppurtunity</div>
                         </NavLink>
                       </li>
                     )}

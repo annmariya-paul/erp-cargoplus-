@@ -74,7 +74,7 @@ function CreateJob() {
   const [allincoterms, setallincoterms] = useState("");
   const [defaultincoterm, setdefaultincoterm] = useState("");
   const [allSalesPerson, setAllSalesPerson] = useState();
-
+  const [allcontainertype, setallcontainertype] = useState("");
   const getBase64 = (file) =>
     new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -479,6 +479,21 @@ function CreateJob() {
         console.log("Error", err);
       });
   };
+
+  const getallcontainertype = async () => {
+    try {
+      const allcontainertype = await PublicFetch.get(
+        `${CRM_BASE_URL_FMS}/container_type`
+      );
+      console.log("getting all containertype", allcontainertype);
+      setallcontainertype(allcontainertype.data.data);
+    } catch (err) {
+      console.log("error to fetching  containertypes", err);
+    }
+  };
+
+
+
   const [currencyRates, setCurrencyRates] = useState(0);
   console.log("ratesssss", currencyRates);
   let b;
@@ -561,6 +576,7 @@ function CreateJob() {
     getallfrighttype();
     CuurencyDatas();
     GetSalesPersons();
+    getallcontainertype()
   }, []);
   const beforeUpload = (file, fileList) => {};
 
@@ -1112,18 +1128,19 @@ function CreateJob() {
                         optionFilterProp="children"
                         disabled={disable}
                       >
-                        {/* {carrierdata &&
-                          carrierdata.length > 0 &&
-                          carrierdata.map((item, index) => {
+                        {allcontainertype &&
+                          allcontainertype.length > 0 &&
+                          allcontainertype.map((item, index) => {
+                            console.log("datass",item)
                             return (
                               <Select.Option
-                                value={item.carrier_id}
-                                key={item.carrier_id}
+                                value={item.container_type_id}
+                                key={item.container_type_id}
                               >
-                                {item.carrier_name}
+                                {item.container_type_shortname}
                               </Select.Option>
                             );
-                          })} */}
+                          })}
                       </SelectBox>
                     </Form.Item>
                   </div>

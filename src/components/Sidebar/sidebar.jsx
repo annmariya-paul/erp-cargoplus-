@@ -631,6 +631,21 @@ export default function Sidebar({ showSidebar }) {
                             </NavLink>
                           </li>
                         )}
+
+                         {checkPermission("enquirysource") && (
+                          <li className="nav-text">
+                            <NavLink
+                              className={({ isActive }) =>
+                                isActive ? "active-link" : "link"
+                              }
+                              to={ROUTES.ENQUIRY_SOURCE}
+                            >
+                              <div className=" ms-4 subactivelink">
+                               Enquiry Source
+                              </div>
+                            </NavLink>
+                          </li>
+                        )}
                       </div>
                     </>
                   ) : (

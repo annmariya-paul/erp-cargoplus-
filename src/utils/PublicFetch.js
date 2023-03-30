@@ -18,8 +18,8 @@ const PublicFetch = axios.create({
 
 PublicFetch.interceptors.request.use(
   (config) => {
-    console.log(config,"Config");
-    console.log(localStorage.getItem("UserToken", "userPermissions")); 
+    console.log(config, "Config");
+    console.log(localStorage.getItem("UserToken", "userPermissions"));
     // config.headers.Authorization="Bearer"+ " " + token?.accessToken
     if (!config.headers.Authorization) {
       config.headers.Authorization = `Bearer ${JSON.parse(

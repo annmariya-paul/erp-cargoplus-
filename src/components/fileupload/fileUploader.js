@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { Form, Button, Modal } from "react-bootstrap";
 import { message, Upload } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
+import { MdUploadFile } from "react-icons/md";
 
 const { Dragger } = Upload;
 export default function FileUpload({
@@ -17,6 +18,7 @@ export default function FileUpload({
   filetype,
   fileList,
   beforeUpload,
+  style,
 }) {
   // const [files, setFiles] = useState([]);
 
@@ -69,6 +71,7 @@ export default function FileUpload({
     <>
       <Dragger
         // fileList={[]}
+        // style={style}
         action={async () => await customAction()}
         multiple={multiple}
         listType={listType}
@@ -92,12 +95,19 @@ export default function FileUpload({
                       <p className="ant-upload-hint">
                         Support for a single or bulk upload.
                       </p> */}
-        <p className="dropzone-content">
-          <i className="bi5 bi-file-earmark-arrow-up-fill" />
-          <br />
-          Drop Your Files
-        </p>
-        <small className="filetype_text">{filetype}</small>
+        <>
+          {" "}
+          <div style={style} className="">
+            <label className=" p-0 m-0">
+              {/* <i className="bi5 bi-file-earmark-arrow-up-fill" /> */}
+              <MdUploadFile style={{ color: "#9ccde8" }} fontSize={50} />
+            </label>
+          </div>
+          <div className="">
+            <label>Drop Your Files</label>
+          </div>
+          <small className="filetype_text">{filetype}</small>
+        </>
       </Dragger>
 
       {/* <div className="row ">

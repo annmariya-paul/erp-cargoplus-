@@ -426,6 +426,23 @@ function LeadEdit() {
                           onChange={(e) => setCustomerName(e.target.value)}
                         />
                       </Form.Item>
+                      <div className=" mt-2">
+                        <label>Phone</label>
+                        <Form.Item
+                          name="customer_phone"
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please select a Type",
+                            },
+                          ]}
+                        >
+                          <Phone_Input
+                            value={leadcreditdays}
+                            onChange={(value) => setleadcreditdays(value)}
+                          />
+                        </Form.Item>
+                      </div>
                     </div>
                     <div className="col-sm-4 pt-2">
                       <label>Customer Type</label>
@@ -449,6 +466,25 @@ function LeadEdit() {
                           <Select.Option value="I">Individual</Select.Option>
                         </SelectBox>
                       </Form.Item>
+                      <div className="mt-2">
+                        <label>Email</label>
+                        <Form.Item
+                          name="customer_email"
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please select a Type",
+                            },
+                          ]}
+                        >
+                          <InputType
+                            value={leadcreditdays}
+                            onChange={(e) => {
+                              setleadcreditdays(e.target.value);
+                            }}
+                          />
+                        </Form.Item>
+                      </div>
                     </div>
                     <div className="col-sm-4 pt-2">
                       <label>Address</label>
@@ -481,42 +517,7 @@ function LeadEdit() {
                         />
                       </Form.Item>
                     </div>
-                    <div className="col-sm-4 pt-2">
-                      <label>Phone</label>
-                      <Form.Item
-                        name="customer_phone"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please select a Type",
-                          },
-                        ]}
-                      >
-                        <Phone_Input
-                          value={leadcreditdays}
-                          onChange={(value) => setleadcreditdays(value)}
-                        />
-                      </Form.Item>
-                    </div>
-                    <div className="col-sm-4 pt-2">
-                      <label>Email</label>
-                      <Form.Item
-                        name="customer_email"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please select a Type",
-                          },
-                        ]}
-                      >
-                        <InputType
-                          value={leadcreditdays}
-                          onChange={(e) => {
-                            setleadcreditdays(e.target.value);
-                          }}
-                        />
-                      </Form.Item>
-                    </div>
+
                     <div className="col-sm-4 pt-2">
                       <label>Website</label>
                       <Form.Item
@@ -535,6 +536,25 @@ function LeadEdit() {
                           }}
                         />
                       </Form.Item>
+                      <div className="mt-2">
+                        <label>State</label>
+                        <Form.Item
+                          name="customer_state"
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please select a Type",
+                            },
+                          ]}
+                        >
+                          <InputType
+                            value={leadcreditdays}
+                            onChange={(e) => {
+                              setleadcreditdays(e.target.value);
+                            }}
+                          />
+                        </Form.Item>
+                      </div>
                     </div>
                     <div className="col-sm-4 pt-2">
                       <label>Country</label>
@@ -565,44 +585,25 @@ function LeadEdit() {
                             })}
                         </SelectBox>
                       </Form.Item>
-                    </div>
-                    <div className="col-sm-4 pt-2">
-                      <label>State</label>
-                      <Form.Item
-                        name="customer_state"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please select a Type",
-                          },
-                        ]}
-                      >
-                        <InputType
-                          value={leadcreditdays}
-                          onChange={(e) => {
-                            setleadcreditdays(e.target.value);
-                          }}
-                        />
-                      </Form.Item>
-                    </div>
-                    <div className="col-sm-4 pt-2">
-                      <label>City</label>
-                      <Form.Item
-                        name="customer_city"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please select a Type",
-                          },
-                        ]}
-                      >
-                        <InputType
-                          value={leadcreditdays}
-                          onChange={(e) => {
-                            setleadcreditdays(e.target.value);
-                          }}
-                        />
-                      </Form.Item>
+                      <div className="mt-2">
+                        <label>City</label>
+                        <Form.Item
+                          name="customer_city"
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please select a Type",
+                            },
+                          ]}
+                        >
+                          <InputType
+                            value={leadcreditdays}
+                            onChange={(e) => {
+                              setleadcreditdays(e.target.value);
+                            }}
+                          />
+                        </Form.Item>
+                      </div>
                     </div>
 
                     <div className="col-sm-4 pt-3 mt-3">

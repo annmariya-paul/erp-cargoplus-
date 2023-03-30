@@ -333,10 +333,7 @@ function App() {
               <Route index element={<Employeegrade />} />
             </Route>
 
-            <Route
-              path={ROUTES.ADD_OPPORTUNITY_ID}
-              element={<ProtectedRoute />}
-            >
+            <Route path={ROUTES.ADD_OPPORTUNITY} element={<ProtectedRoute />}>
               <Route index element={<AddOpportunity />} />
             </Route>
             <Route

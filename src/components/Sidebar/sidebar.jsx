@@ -631,6 +631,21 @@ export default function Sidebar({ showSidebar }) {
                             </NavLink>
                           </li>
                         )}
+
+                         {checkPermission("enquirysource") && (
+                          <li className="nav-text">
+                            <NavLink
+                              className={({ isActive }) =>
+                                isActive ? "active-link" : "link"
+                              }
+                              to={ROUTES.ENQUIRY_SOURCE}
+                            >
+                              <div className=" ms-4 subactivelink">
+                               Enquiry Source
+                              </div>
+                            </NavLink>
+                          </li>
+                        )}
                       </div>
                     </>
                   ) : (
@@ -1028,7 +1043,7 @@ export default function Sidebar({ showSidebar }) {
                           }
                           to={ROUTES.ENQUIRIES}
                         >
-                          <div className=" ms-4 subactivelink">Enquiry</div>
+                          <div className=" ms-4 subactivelink">Oppurtunity</div>
                         </NavLink>
                       </li>
                     )}
@@ -1192,6 +1207,20 @@ export default function Sidebar({ showSidebar }) {
                             >
                               <div className=" ms-5 subactivelink">
                                 Location
+                              </div>
+                            </NavLink>
+                          </li>
+                        )}
+                         {checkPermission("containertype") && (
+                          <li className="nav-text">
+                            <NavLink
+                              className={({ isActive }) =>
+                                isActive ? "active-link" : "link"
+                              }
+                              to={ROUTES.CONTAINER_TYPES}
+                            >
+                              <div className=" ms-5 subactivelink">
+                               Container Types
                               </div>
                             </NavLink>
                           </li>
@@ -1690,7 +1719,7 @@ export default function Sidebar({ showSidebar }) {
               >
                 <Link
                   className={GeneralSettingsopen ? "active-link_main" : "link"}
-                  style={{ fontSize: 16 }}
+                  // style={{ fontSize: 16 }}
                   // to="/"
                   onClick={() => setGeneralSettingsopen(!GeneralSettingsopen)}
                 >

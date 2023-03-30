@@ -967,7 +967,7 @@ function Opportunitylist(props) {
             </div>
             {/* <div className="col-xl-6 col-lg-6 col-md-6 col-sm-8 col-12"></div> */}
             <div className="col-lg-4 col-lg-4 col-md-4 col-sm-12 col-4 d-flex justify-content-end">
-              <Link to={ROUTES.CUSTOMER_LIST}>
+              <Link to={ROUTES.ADD_OPPORTUNITY}>
                 <Button btnType="add">New Opportunity</Button>
               </Link>
             </div>

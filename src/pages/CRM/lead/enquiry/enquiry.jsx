@@ -6,7 +6,7 @@ import InputType from "../../../../components/Input Type textbox/InputType";
 import SelectBox from "../../../../components/Select Box/SelectBox";
 import { ROUTES } from "../../../../routes";
 import { useNavigate, useParams } from "react-router-dom";
-import Button from "../../../../components/button/button";
+
 import { BsPlusCircleFill } from "react-icons/bs";
 import "../enquiry/enquiry.scss";
 import CustomModel from "../../../../components/custom_modal/custom_model";
@@ -19,6 +19,11 @@ import {
   CRM_BASE_URL_HRMS,
 } from "../../../../api/bootapi";
 import moment from "moment";
+<<<<<<< HEAD
+import CustomerModal from "../../../../components/CustomerModal.jsx/CustomerModal";
+=======
+import Button from "../../../../components/button/button";
+>>>>>>> bc3efc1c68eebb4135c4de9943b398c38e11fd7d
 function Enquiry() {
   const [addForm] = Form.useForm();
   const [SuccessPopup, setSuccessPopup] = useState(false);
@@ -30,6 +35,8 @@ function Enquiry() {
   const [AllContacts, setAllContacts] = useState();
   const [Customer_Id, setCustomer_Id] = useState();
   const [allSalesPerson, setAllSalesPerson] = useState();
+
+  console.log("sales person ",allSalesPerson);
   const [frighttype, setFrighttype] = useState();
   const [frightmode, setFrightmode] = useState();
   console.log("change", frightmode);
@@ -595,13 +602,14 @@ function Enquiry() {
           </div>
 
           <div className="col-12 d-flex justify-content-center my-4 gap-3">
-            <Button className="save_button" btnType="save">
+            <Button  type="submit" btnType="save" >
               Save
             </Button>
             <Button
               as="input"
               type="reset"
               value="Reset"
+              className="btn_cancel"
               onClick={() => {
                 navigate(ROUTES.ENQUIRY_LIST);
               }}
@@ -612,6 +620,12 @@ function Enquiry() {
         </Form>
 
         {/* Modal for add Customer */}
+        <CustomerModal
+          show={modalAddCustomer}
+          onHide={() => {
+            setModalAddCustomer(false);
+          }}
+        />
 
         <Custom_model
           success

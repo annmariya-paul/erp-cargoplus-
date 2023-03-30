@@ -1,5 +1,4 @@
-
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
 import Button from "../../../../components/button/button";
 import InputType from "../../../../components/Input Type textbox/InputType";
@@ -8,109 +7,224 @@ import { Input, Select, Checkbox, Form } from "antd";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { MdPageview } from "react-icons/md";
 import Custom_model from "../../../../components/custom_modal/custom_model";
+import { CRM_BASE_URL_FMS } from "../../../../api/bootapi";
+import PublicFetch from "../../../../utils/PublicFetch";
 
-function Containertypes(){
+function Containertypes() {
+  const [addForm] = Form.useForm();
+  const [serialNo, setserialNo] = useState(1);
+  const [searchAny, setSearchAny] = useState("");
+  const [successPopup, setSuccessPopup] = useState(false);
 
-    const [addForm] = Form.useForm();
-    const [serialNo, setserialNo] = useState(1);
-    const [searchAny, setSearchAny] = useState("");
-    const [successPopup, setSuccessPopup] = useState(false);
+  const [pageSize, setPageSize] = useState("25");
+  const [current, setCurrent] = useState(1);
+  const [modalAddContainertype, setModalAddContainertype] = useState(false);
+  const [modalViewContainertype, setmodalViewContainertype] = useState(false);
+  const [modalEditContainertype, setModalEditContainertype] = useState(false);
 
-    const [modalAddContainertype, setModalAddContainertype] = useState(false);
-    const [modalViewContainertype, setmodalViewContainertype] = useState(false);
-    const [modalEditContainertype, setModalEditContainertype] = useState(false);
+  const [allcontainertype, setallcontainertype] = useState("");
+  const [containertypeid, setcontainertypeid] = useState("");
 
+  const getData = (current, pageSize) => {
+    return allcontainertype?.slice(
+      (current - 1) * pageSize,
+      current * pageSize
+    );
+  };
 
-    const columns = [
-        {
-          title: "Sl. No.",
-          key: "index",
-          width: "8%",
-          render: (value, item, index) => serialNo + index,
-          align: "center",
-        },
-        {
-          title: "SHORT NAME",
-          dataIndex: "incoterm_short_name",
-          key: "incoterm_short_name",
-          width: "13%",
-          filteredValue: [searchAny],
-          onFilter: (value, record) => {
-            return (
-              String(record.incoterm_short_name)
-                .toLowerCase()
-                .includes(value.toLowerCase()) ||
-              String(record.incoterm_full_name)
-                .toLowerCase()
-                .includes(value.toLowerCase()) ||
-              String(record.incoterm_description)
-                .toLowerCase()
-                .includes(value.toLowerCase())
-            );
-          },
-        },
-        // {
-        //   title: "FULL NAME",
-        //   dataIndex: "incoterm_full_name",
-        //   key: "incoterm_full_name",
-        //   width: "20%",
-        // },
-        {
-          title: "DESCRIPTION",
-          dataIndex: "incoterm_description",
-          key: "incoterm_description",
-          width: "25%",
-        },
-        {
-          title: "ACTION",
-          dataIndex: "action",
-          key: "key",
-          width: "15%",
-          render: (data, index) => {
-            console.log("index is :", index);
-            return (
-              <div className="d-flex justify-content-center align-items-center gap-2">
-                <div
-                  className="editIcon m-0"
-                  // onClick={() => {
-                  //   IncotermEdit(index);
-                  // }}
-                  onClick={() => setModalEditContainertype(true)}
-                >
-                  <FaEdit />
-                </div>
-                <div
-                  className="viewIcon m-0"
-                  // onClick={() => handleViewClick(index)}
-                  onClick={() => setmodalViewContainertype(true)}
-                >
-                  <MdPageview style={{ marginLeft: 15, marginRight: 15 }} />
-                </div>
-                <div className="deleteIcon m-0">
-                  <FaTrash />
-                </div>
-              </div>
-            );
-          },
-          align: "center",
-        },
-      ];
-      const data = [
-        {
-          key: '1',
-          incoterm_short_name: 'Mike',
-          incoterm_description: "chdbjd",
-        },
-        {
-          key: '2',
-          incoterm_short_name: 'Mike',
-          incoterm_description: "chdbjd",
-        },
-      ];
-    return(
-        <>
+  const close_modal = (mShow, time) => {
+    if (!mShow) {
+      setTimeout(() => {
+        setSuccessPopup(false);
+      }, time);
+    }
+  };
 
-        <div className="container-fluid container_fms pt-3">
+  const [viewcontainertype, setViewcontainertype] = useState({});
+  const handleViewClick = (item) => {
+    console.log("view containertype", item);
+    setViewcontainertype({
+      ...viewcontainertype,
+      containertype_id: item.container_type_id,
+      containertype_shortname: item.container_type_shortname,
+      containertype_description: item.container_type_description,
+    });
+    setmodalViewContainertype(true);
+  };
+
+  const handleViewToEdit = (e) => {
+    console.log("viewtoeditt",e)
+    setcontainertypeid(e.containertype_id);
+    addForm.setFieldsValue({
+      // Incoterm_id: e.incoterm_id,
+      editcontainertype_shortName: e.containertype_shortname,
+      editcontainertype_description: e.containertype_description,
+    });
+    setModalEditContainertype(true);
+  };
+
+  const getallcontainertype = async () => {
+    try {
+      const allcontainertype = await PublicFetch.get(
+        `${CRM_BASE_URL_FMS}/container_type`
+      );
+      console.log("getting all containertype", allcontainertype);
+      setallcontainertype(allcontainertype.data.data);
+    } catch (err) {
+      console.log("error to fetching  airports", err);
+    }
+  };
+  const createcontainertype = async (data) => {
+    try {
+      const addcontainertype = await PublicFetch.post(
+        `${CRM_BASE_URL_FMS}/container_type`,
+        {
+          container_type_shortname: data.containertype_short_name,
+          container_type_description: data.containertype_description,
+        }
+      );
+      console.log("containertype added successfully", addcontainertype);
+      if (addcontainertype.data.success) {
+        setModalAddContainertype(false);
+        addForm.resetFields();
+        getallcontainertype();
+        setSuccessPopup(true);
+        close_modal(successPopup, 1000);
+      } else if (addcontainertype.data.success === false) {
+        alert(addcontainertype.data.data);
+      }
+    } catch (err) {
+      console.log("err to add the containertype", err);
+    }
+  };
+
+  const handleEditclick = (e) => {
+    console.log("handleclick editt", e);
+    setcontainertypeid(e.container_type_id);
+    addForm.setFieldsValue({
+      Incoterm_id: e.incoterm_id,
+      editcontainertype_shortName: e.container_type_shortname,
+      editcontainertype_description: e.container_type_description,
+    });
+    setModalEditContainertype(true);
+  };
+
+  const updatecontainertype = async (data) => {
+    try {
+      const updatecontainertype = await PublicFetch.patch(
+        `${CRM_BASE_URL_FMS}/container_type/${containertypeid}`,
+        {
+          container_type_shortname: data.editcontainertype_shortName,
+          container_type_description: data.editcontainertype_description,
+        }
+      );
+      console.log("containertype updated successfully", updatecontainertype);
+      if (updatecontainertype.data.success) {
+        setModalEditContainertype(false);
+        addForm.resetFields();
+        getallcontainertype();
+        setSuccessPopup(true);
+        close_modal(successPopup, 1000);
+      } else if (updatecontainertype.data.success === false) {
+        alert(updatecontainertype.data.data);
+      }
+    } catch (err) {
+      console.log("err to add the containertype", err);
+    }
+  };
+
+  useEffect(() => {
+    getallcontainertype();
+  }, []);
+
+  const columns = [
+    {
+      title: "Sl. No.",
+      key: "index",
+      width: "8%",
+      render: (value, item, index) => serialNo + index,
+      align: "center",
+    },
+    {
+      title: "SHORT NAME",
+      dataIndex: "container_type_shortname",
+      key: "container_type_shortname",
+      width: "13%",
+      filteredValue: [searchAny],
+      onFilter: (value, record) => {
+        return (
+          String(record.incoterm_short_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.incoterm_full_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.incoterm_description)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
+      },
+    },
+    // {
+    //   title: "FULL NAME",
+    //   dataIndex: "incoterm_full_name",
+    //   key: "incoterm_full_name",
+    //   width: "20%",
+    // },
+    {
+      title: "DESCRIPTION",
+      dataIndex: "container_type_description",
+      key: "container_type_description",
+      width: "25%",
+    },
+    {
+      title: "ACTION",
+      dataIndex: "action",
+      key: "key",
+      width: "15%",
+      render: (data, index) => {
+        console.log("index is :", index);
+        return (
+          <div className="d-flex justify-content-center align-items-center gap-2">
+            <div
+              className="editIcon m-0"
+              onClick={() => {
+                handleEditclick(index);
+              }}
+            >
+              <FaEdit />
+            </div>
+            <div
+              className="viewIcon m-0"
+              onClick={() => handleViewClick(index)}
+              // onClick={() => setmodalViewContainertype(true)}
+            >
+              <MdPageview style={{ marginLeft: 15, marginRight: 15 }} />
+            </div>
+            <div className="deleteIcon m-0">
+              <FaTrash />
+            </div>
+          </div>
+        );
+      },
+      align: "center",
+    },
+  ];
+  const data = [
+    {
+      key: "1",
+      incoterm_short_name: "Mike",
+      incoterm_description: "chdbjd",
+    },
+    {
+      key: "2",
+      incoterm_short_name: "Mike",
+      incoterm_description: "chdbjd",
+    },
+  ];
+  return (
+    <>
+      <div className="container-fluid container_fms pt-3">
         <div className="row flex-wrap">
           <div className="col">
             <h5 className="lead_text">Container Types</h5>
@@ -176,15 +290,13 @@ function Containertypes(){
                 addForm.resetFields();
               }}
             >
-             New ContainerTypes
+              New ContainerTypes
             </Button>
           </div>
         </div>
         <div className="datatable">
-           
           <TableData
-            // data={getData(current, pageSize)}
-            data={data}
+            data={getData(current, pageSize)}
             columns={columns}
             custom_table_css="table_lead_list"
           />
@@ -206,7 +318,7 @@ function Containertypes(){
                 form={addForm}
                 onFinish={(data) => {
                   console.log("valuezzzzzzz", data);
-                //   AddIntercorm(data);
+                  createcontainertype(data);
                 }}
                 onFinishFailed={(error) => {
                   console.log(error);
@@ -218,7 +330,7 @@ function Containertypes(){
                       Short Name<span className="req_star">*</span>
                     </label>
                     <Form.Item
-                      name="incoterm_short_name"
+                      name="containertype_short_name"
                       rules={[
                         {
                           required: true,
@@ -230,10 +342,13 @@ function Containertypes(){
                       <InputType />
                     </Form.Item>
                   </div>
-                 
+
                   <div className="col-12 pt-1">
                     <label>Description</label>
-                    <Form.Item className="mt-2" name="incoterm_description">
+                    <Form.Item
+                      className="mt-2"
+                      name="containertype_description"
+                    >
                       <TextArea />
                     </Form.Item>
                   </div>
@@ -242,9 +357,9 @@ function Containertypes(){
                     <Button
                       btnType="cancel"
                       type="reset"
-                    //   onClick={() => {
-                    //     setModalAddIncoterm(false);
-                    //   }}
+                      //   onClick={() => {
+                      //     setModalAddIncoterm(false);
+                      //   }}
                     >
                       cancel
                     </Button>
@@ -272,19 +387,19 @@ function Containertypes(){
                 form={addForm}
                 onFinish={(data) => {
                   console.log("valuezzzzzzz", data);
-                //   updateIncoterm(data);
+                  updatecontainertype(data);
                 }}
                 onFinishFailed={(error) => {
                   console.log(error);
                 }}
               >
                 <div className="row py-4">
-                  <div className="col-12 col-sm-6 pt-1">
+                  <div className="col-12  pt-1">
                     <label>
                       Short Name<span className="req_star">*</span>
                     </label>
                     <Form.Item
-                      name="Inco_shortName"
+                      name="editcontainertype_shortName"
                       rules={[
                         {
                           required: true,
@@ -296,28 +411,13 @@ function Containertypes(){
                       <InputType />
                     </Form.Item>
                   </div>
-                  <div className="col-12 col-sm-6 pt-1">
-                    <label>
-                      Full Name<span className="req_star">*</span>
-                    </label>
-                    <Form.Item
-                      name="Inco_fullName"
-                      rules={[
-                        {
-                          required: true,
-                          // pattern: new RegExp("^[A-Za-z ]+$"),
-                          message: "Please enter a Valid  Name",
-                        },
-                      ]}
-                    >
-                       
-                      <InputType />
-                    </Form.Item>
-                  </div>
+
                   <div className="col-12 pt-1">
                     <label>Description</label>
-                    <Form.Item className="mt-2" name="Inco_description">
-                       
+                    <Form.Item
+                      className="mt-2"
+                      name="editcontainertype_description"
+                    >
                       <TextArea />
                     </Form.Item>
                   </div>
@@ -326,9 +426,9 @@ function Containertypes(){
                     <Button
                       btnType="cancel"
                       type="reset"
-                    //   onClick={() => {
-                    //     setModalEditIncoterm(false);
-                    //   }}
+                      //   onClick={() => {
+                      //     setModalEditIncoterm(false);
+                      //   }}
                     >
                       cancel
                     </Button>
@@ -339,7 +439,6 @@ function Containertypes(){
           }
         />
 
-       
         <Custom_model
           show={modalViewContainertype}
           onHide={() => setmodalViewContainertype(false)}
@@ -355,8 +454,8 @@ function Containertypes(){
                     btnType="add_borderless"
                     className="edit_button"
                     onClick={() => {
-                      setModalEditContainertype(true)
-                      // IncotermViewToEdit(viewIncoterm);
+                      handleViewToEdit(viewcontainertype)
+                      // setModalEditContainertype(true);
                       setmodalViewContainertype(false);
                     }}
                   >
@@ -374,18 +473,7 @@ function Containertypes(){
                 <div className="col-1">:</div>
                 <div className="col-6 ">
                   <p className="modal-view-data">
-                    {/* {viewIncoterm.incoterm_short_name} */}
-                  </p>
-                </div>
-              </div>
-              <div className="row mt-3">
-                <div className="col-4 boldhd">
-                  <p>Full Name</p>
-                </div>
-                <div className="col-1">:</div>
-                <div className="col-6 ">
-                  <p className="modal-view-data">
-                    {/* {viewIncoterm.incoterm_full_name} */}
+                    {viewcontainertype.containertype_shortname }
                   </p>
                 </div>
               </div>
@@ -396,15 +484,22 @@ function Containertypes(){
                 <div className="col-1">:</div>
                 <div className="col-6 ">
                   <p className="modal-view-data">
-                    {/* {viewIncoterm.incoterm_description} */}
+                    {viewcontainertype.containertype_description}
                   </p>
                 </div>
               </div>
             </div>
           }
         />
+
+        <Custom_model
+          size={"sm"}
+          show={successPopup}
+          onHide={() => setSuccessPopup(false)}
+          success
+        />
       </div>
-        </>
-    )
+    </>
+  );
 }
- export default Containertypes;
+export default Containertypes;

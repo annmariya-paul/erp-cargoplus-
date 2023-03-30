@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./lead.styles.scss";
 import { Link } from "react-router-dom";
 // import { Form } from "react-bootstrap";
-import { Form, Input } from "antd";
+import { Form, Input, Radio } from "antd";
 import Button from "../../../components/button/button";
 import { ROUTES } from "../../../routes";
 import { useForm } from "react-hook-form";
@@ -41,7 +41,7 @@ function Lead({}) {
   const [leadType, setLeadType] = useState("C");
   const [FileSizeError, setFileSizeError] = useState(false);
   const [leadName, setLeadName] = useState();
-  const [leadUsertype, setLeadUsertype] = useState("O");
+  const [leadUsertype, setLeadUsertype] = useState("organization");
   const [organizationDisable, setOrganizationDisable] = useState();
   const [leadOrganization, setLeadOrganization] = useState("");
   const [leadSource, setLeadSource] = useState("online registration");
@@ -395,6 +395,7 @@ function Lead({}) {
                       </label>
 
                       <Form.Item
+                        className="mt-2"
                         name="customer_name"
                         rules={[
                           {
@@ -439,9 +440,10 @@ function Lead({}) {
                       ) : (
                         ""
                       )}
-                      <div className="mt-2">
+                      <div className="mt-4">
                         <label>Phone</label>
                         <Form.Item
+                          className="mt-2"
                           name="customer_phone"
                           rules={[
                             {
@@ -456,6 +458,7 @@ function Lead({}) {
                     <div className="col-sm-4 pt-2">
                       <label>Customer Type</label>
                       <Form.Item
+                        className="my-2 pb-3"
                         name="customer_type"
                         rules={[
                           {
@@ -463,7 +466,18 @@ function Lead({}) {
                           },
                         ]}
                       >
-                        <SelectBox
+                        <Radio.Group
+                          value={leadUsertype}
+                          onChange={(e) => {
+                            setLeadUsertype(e);
+                            // setOrganizationDisable(e);
+                          }}
+                          defaultValue="organization"
+                        >
+                          <Radio value="organization">Organization</Radio>
+                          <Radio value="individual">Individual</Radio>
+                        </Radio.Group>
+                        {/* <SelectBox
                           value={leadUsertype}
                           onChange={(e) => {
                             setLeadUsertype(e);
@@ -476,11 +490,12 @@ function Lead({}) {
                           <Select.Option value="individual">
                             Indivdual
                           </Select.Option>
-                        </SelectBox>
+                        </SelectBox> */}
                       </Form.Item>
                       <div className="mt-2">
                         <label>Email</label>
                         <Form.Item
+                          className="mt-2"
                           name="customer_email"
                           rules={
                             [
@@ -508,7 +523,20 @@ function Lead({}) {
                       </div>
                     </div>
                     <div className="col-sm-4 pt-2">
-                      <label>Address</label>
+                      <label>
+                        <SelectBox
+                          defaultValue="Billing Address"
+                          className="address_label"
+                        >
+                          <Select.Option value="billing">
+                            Billing Address
+                          </Select.Option>
+                          <Select.Option value="shipping">
+                            Shipping Address
+                          </Select.Option>
+                        </SelectBox>
+                      </label>
+
                       <Form.Item
                         name="customer_address"
                         rules={[
@@ -542,6 +570,7 @@ function Lead({}) {
                     <div className="col-sm-4 pt-2">
                       <label>Website</label>
                       <Form.Item
+                        className="mt-2"
                         name="customer_website"
                         rules={
                           [
@@ -566,9 +595,10 @@ function Lead({}) {
                           onChange={(e) => setLeadcreditdays(e.target.value)}
                         />
                       </Form.Item>
-                      <div className="mt-2">
+                      <div className="mt-3">
                         <label>State</label>
                         <Form.Item
+                          className="mt-2"
                           name="customer_state"
                           rules={
                             [
@@ -635,6 +665,7 @@ function Lead({}) {
                       <div className="mt-2 pt-2">
                         <label className="">City</label>
                         <Form.Item
+                          className="mt-2"
                           name="customer_city"
                           rules={
                             [

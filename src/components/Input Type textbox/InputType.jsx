@@ -31,7 +31,7 @@ function InputType({
           onKeyDown={onKeyDown}
           disabled={disabled}
           style={{ backgroundColor: "#f4f4f7" }}
-          className={`input_type_style w-100 my-2 pb-2 ${className}`}
+          className={`input_type_style w-100  pb-2 ${className}`}
           type="text"
         />
       </div>

@@ -202,6 +202,9 @@ const ROUTES = {
   BILL_PAYMENT_LIST: "/bill_payment_list",
   VIEW_BILL_PAYMENT: "/bill_payment_view",
   VIEW_BILL_PAYMENT_ID: "/bill_payment_view/:id",
+
+  //FMS => master => Tax Group
+  TAX_GROUP: "/tax_groups",
 };
 
 module.exports = { ROUTES };

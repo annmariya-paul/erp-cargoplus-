@@ -79,26 +79,31 @@ export default function Sidebar({ showSidebar }) {
           <nav className={`nav-menu active  nav-menu `}>
             <ul className="nav-menu-items p-0 ">
               <li className="nav-text  mt-2 ps-3">
-                <div className="logo_img">
-                  <img
-                    src={cargologo}
-                    alt=""
-                    height={70}
-                    width={210}
-                    // className="mt-1 me-1"
-                  />
-                </div>
-              </li>
-              <li className="navbar-toggle nav-close" onClick={showSidebar}>
-                <div to="" className="nav-link">
-                  {" "}
-                  <AiOutlineMenu
-                    style={{ fontSize: "25px", color: "#16528d" }}
-                  />
-                  {/* <i
+                <div className="d-flex">
+                  <div className="logo_img">
+                    <img
+                      src={cargologo}
+                      alt=""
+                      height={50}
+                      width={150}
+                      // className="mt-1 me-1"
+                    />
+                  </div>
+                  <div
+                    to=""
+                    // className=""
+                    className="nav-link navbar-toggle nav-close"
+                    onClick={showSidebar}
+                  >
+                    {" "}
+                    <AiOutlineMenu
+                      style={{ fontSize: "25px", color: "#16528d" }}
+                    />
+                    {/* <i
                     className=""
                     style={{ fontSize: "25px", color: "white" }}
                   /> */}
+                  </div>
                 </div>
               </li>
 
@@ -109,7 +114,7 @@ export default function Sidebar({ showSidebar }) {
                   }
                   to={ROUTES.DASHBOARD}
                 >
-                  <AiOutlineAppstore className="sidebar_icons" />
+                  {/* <AiOutlineAppstore className="sidebar_icons" /> */}
                   Dashboard
                 </NavLink>
               </li>
@@ -130,14 +135,7 @@ export default function Sidebar({ showSidebar }) {
                 >
                   <div className="d-flex justify-content-between gap-5 ">
                     <div className="d-flex">
-                      <RiTeamFill className="sidebar_icons" />
-                      {/* <img
-                        src={hrmsIcon}
-                        alt
-                        height={15}
-                        width={15}
-                        className="mt-1 me-1"
-                      /> */}
+                      {/* <RiTeamFill className="sidebar_icons" /> */}
                       <div style={{ width: "120px" }} className="">
                         HRMS
                       </div>
@@ -281,13 +279,13 @@ export default function Sidebar({ showSidebar }) {
                     <div className="d-flex">
                       {/* <RiTeamFill className="sidebar_icons" />
                        */}
-                      <img
+                      {/* <img
                         src={crmIcon}
                         alt=""
                         height={15}
                         width={15}
                         className="mt-1 me-1"
-                      />
+                      /> */}
                       <div style={{ width: "120px" }} className="">
                         CRM
                       </div>
@@ -502,30 +500,6 @@ export default function Sidebar({ showSidebar }) {
                           </NavLink>
                         </li>
                       )}
-                      {checkPermission("product") && (
-                        <li className="nav-text">
-                          <NavLink
-                            className={({ isActive }) =>
-                              isActive ? "active-link" : "link"
-                            }
-                            to={ROUTES.PRODUCT}
-                          >
-                            <div className=" ms-4  subactivelink">Products</div>
-                          </NavLink>
-                        </li>
-                      )}
-                      {checkPermission("service") && (
-                        <li className="nav-text">
-                          <NavLink
-                            className={({ isActive }) =>
-                              isActive ? "active-link" : "link"
-                            }
-                            to={ROUTES.SERVICES}
-                          >
-                            <div className="ms-4 subactivelink">Services</div>
-                          </NavLink>
-                        </li>
-                      )}
                      
                       </div>
                     </>
@@ -543,7 +517,10 @@ export default function Sidebar({ showSidebar }) {
                           }
                           to={ROUTES.CUSTOMER_LIST}
                         >
-                          <div className="ms-4 subactivelink"> Customer</div>
+                          <div className="ms-3 ps-1 subactivelink">
+                            {" "}
+                            Customer
+                          </div>
                         </NavLink>
                       </li>
                     )}
@@ -555,7 +532,7 @@ export default function Sidebar({ showSidebar }) {
                           }
                           to={ROUTES.VENDOR}
                         >
-                          <div className=" ms-4 subactivelink">Vendor</div>
+                          <div className="ms-3 ps-1  subactivelink">Vendor</div>
                         </NavLink>
                       </li>
                     )}
@@ -567,7 +544,7 @@ export default function Sidebar({ showSidebar }) {
                           }
                           to={ROUTES.ENQUIRY_LIST}
                         >
-                          <div className=" ms-4 subactivelink">Enquiry</div>
+                          <div className="ms-3 ps-1 subactivelink">Enquiry</div>
                         </NavLink>
                       </li>
                     )}
@@ -579,7 +556,9 @@ export default function Sidebar({ showSidebar }) {
                           }
                           to={ROUTES.OPPORTUNITY}
                         >
-                          <div className="subactivelink ms-4">Opportunity</div>
+                          <div className="subactivelink ms-3 ps-1">
+                            Opportunity
+                          </div>
                         </NavLink>
                       </li>
                     )}
@@ -588,27 +567,27 @@ export default function Sidebar({ showSidebar }) {
                   <li
                     className={
                       CRMpurchasing
-                        ? "nav-text  items_hrms open"
-                        : "nav-text  items_hrms "
+                        ? "nav-text  items_hrms nav_active_color open"
+                        : "nav-text  items_hrms nav_active_color"
                     }
                   >
                     <Link
-                      className={CRMpurchasing ? "active-link" : "link"}
+                      className="link"
                       // to="/"
                       onClick={() => setCRMpurchasing(!CRMpurchasing)}
                     >
-                      <div className="d-flex justify-content-between gap-5 ms-2">
+                      <div className="d-flex justify-content-between gap-5 ms-3">
                         <div className="d-flex">
-                          <FaRegHandshake className="sidebar_icons pt-1" />
-                          <div style={{ width: "100px" }} className="">
+                          {/* <FaRegHandshake className="sidebar_icons pt-1" /> */}
+                          <div
+                            style={{ width: "100px" }}
+                            className="subactivelink"
+                          >
                             Masters
                           </div>
                         </div>
-
-                        <div className="  ">
-                          <div className="text-right ">
-                            <AiOutlineCaretDown className="toggle_btn " />
-                          </div>
+                        <div className="text-right ">
+                          <AiOutlineCaretDown className="toggle_btn subactivelink" />
                         </div>
                       </div>
                     </Link>
@@ -616,7 +595,7 @@ export default function Sidebar({ showSidebar }) {
 
                   {CRMpurchasing ? (
                     <>
-                      <div className="nav_active_color ">
+                      <div className="nav_active_color">
                         {checkPermission("vendor") && (
                           <li className="nav-text">
                             <NavLink
@@ -625,14 +604,14 @@ export default function Sidebar({ showSidebar }) {
                               }
                               to={ROUTES.VENDOR_TYPE}
                             >
-                              <div className=" ms-4 subactivelink">
+                              <div className="ms-4 ps-2 subactivelink">
                                 Vendor Type
                               </div>
                             </NavLink>
                           </li>
                         )}
 
-                         {checkPermission("enquirysource") && (
+                        {checkPermission("enquirysource") && (
                           <li className="nav-text">
                             <NavLink
                               className={({ isActive }) =>
@@ -640,8 +619,8 @@ export default function Sidebar({ showSidebar }) {
                               }
                               to={ROUTES.ENQUIRY_SOURCE}
                             >
-                              <div className=" ms-4 subactivelink">
-                               Enquiry Source
+                              <div className="ms-4 ps-2 subactivelink">
+                                Enquiry Source
                               </div>
                             </NavLink>
                           </li>
@@ -734,7 +713,7 @@ export default function Sidebar({ showSidebar }) {
                 >
                   <div className="d-flex justify-content-between gap-5">
                     <div className="d-flex">
-                      <GrProductHunt className="sidebar_icons pt-1" />
+                      {/* <GrProductHunt className="sidebar_icons pt-1" /> */}
                       <div style={{ width: "120px" }} className="">
                         Product
                       </div>
@@ -760,7 +739,7 @@ export default function Sidebar({ showSidebar }) {
                           }
                           to={ROUTES.PRODUCT}
                         >
-                          <div className="ms-4 subactivelink"> Product</div>
+                          <div className="ms-3 ps-1 subactivelink">Product</div>
                         </NavLink>
                       </li>
                     )}
@@ -769,27 +748,28 @@ export default function Sidebar({ showSidebar }) {
                   <li
                     className={
                       CRMproductmaster
-                        ? "nav-text  items_hrms open"
-                        : "nav-text  items_hrms "
+                        ? "nav-text  items_hrms nav_active_color open"
+                        : "nav-text  items_hrms nav_active_color"
                     }
                   >
                     <Link
-                      className={CRMproductmaster ? "active-link" : "link"}
+                      className="link"
                       // to="/"
                       onClick={() => setCRMproductmaster(!CRMproductmaster)}
                     >
                       <div className="d-flex justify-content-between gap-5 ms-2">
                         <div className="d-flex">
-                          <FaRegHandshake className="sidebar_icons pt-1" />
-                          <div style={{ width: "100px" }} className="">
+                          {/* <FaRegHandshake className="sidebar_icons pt-1" /> */}
+                          <div
+                            style={{ width: "100px" }}
+                            className="subactivelink ms-2 ps-1"
+                          >
                             Masters
                           </div>
                         </div>
 
-                        <div className="  ">
-                          <div className="text-right ">
-                            <AiOutlineCaretDown className="toggle_btn " />
-                          </div>
+                        <div className="text-right">
+                          <AiOutlineCaretDown className="toggle_btn subactivelink" />
                         </div>
                       </div>
                     </Link>
@@ -806,7 +786,7 @@ export default function Sidebar({ showSidebar }) {
                               }
                               to={ROUTES.CATEGORY_LIST}
                             >
-                              <div className=" ms-4 subactivelink">
+                              <div className="ms-4 ps-2 subactivelink">
                                 Category
                               </div>
                             </NavLink>
@@ -821,7 +801,9 @@ export default function Sidebar({ showSidebar }) {
                               }
                               to={ROUTES.BRANDS}
                             >
-                              <div className=" ms-4 subactivelink">Brands</div>
+                              <div className=" ms-4 ps-2 subactivelink">
+                                Brands
+                              </div>
                             </NavLink>
                           </li>
                         )}
@@ -834,7 +816,7 @@ export default function Sidebar({ showSidebar }) {
                               }
                               to={ROUTES.ATTRIBUTES}
                             >
-                              <div className=" ms-4 subactivelink">
+                              <div className=" ms-4 ps-2 subactivelink">
                                 Attributes
                               </div>
                             </NavLink>
@@ -848,7 +830,7 @@ export default function Sidebar({ showSidebar }) {
                               }
                               to={ROUTES.UNIT_LIST}
                             >
-                              <div className=" ms-4 subactivelink">
+                              <div className="ms-4 ps-2 subactivelink">
                                 Unit And Measurements
                               </div>
                             </NavLink>
@@ -882,7 +864,7 @@ export default function Sidebar({ showSidebar }) {
                     <div className="d-flex">
                       {/* <RiTeamFill className="sidebar_icons" />
                        */}
-                      <GrServices className="sidebar_icons pt-1" />
+                      {/* <GrServices className="sidebar_icons pt-1" /> */}
                       <div style={{ width: "120px" }} className="">
                         Services
                       </div>
@@ -913,56 +895,6 @@ export default function Sidebar({ showSidebar }) {
                       </li>
                     )}
                   </div>
-
-                  <li
-                    className={
-                      CRMservicemaster
-                        ? "nav-text  items_hrms open"
-                        : "nav-text  items_hrms "
-                    }
-                  >
-                    <Link
-                      className={CRMservicemaster ? "active-link" : "link"}
-                      // to="/"
-                      onClick={() => setCRMservicemaster(!CRMservicemaster)}
-                    >
-                      <div className="d-flex justify-content-between gap-5 ms-2">
-                        <div className="d-flex">
-                          <FaRegHandshake className="sidebar_icons pt-1" />
-                          <div style={{ width: "100px" }} className="">
-                            Masters
-                          </div>
-                        </div>
-
-                        <div className="  ">
-                          <div className="text-right ">
-                            <AiOutlineCaretDown className="toggle_btn " />
-                          </div>
-                        </div>
-                      </div>
-                    </Link>
-                  </li>
-
-                  {CRMservicemaster ? (
-                    <>
-                      <div className="nav_active_color ">
-                        {checkPermission("category") && (
-                          <li className="nav-text">
-                            <NavLink
-                              className={({ isActive }) =>
-                                isActive ? "active-link" : "link"
-                              }
-                              to={ROUTES.TAXTYPE}
-                            >
-                              <div className=" ms-4 subactivelink">TaxType</div>
-                            </NavLink>
-                          </li>
-                        )}
-                      </div>
-                    </>
-                  ) : (
-                    ""
-                  )}
                 </>
               ) : (
                 ""
@@ -983,7 +915,7 @@ export default function Sidebar({ showSidebar }) {
                 >
                   <div className="d-flex justify-content-between gap-5">
                     <div className="d-flex">
-                      <GiCargoShip className="sidebar_icons" />
+                      {/* <GiCargoShip className="sidebar_icons" /> */}
                       {/* <img
                         src={fmsIcon}
                         alt=""
@@ -1043,7 +975,9 @@ export default function Sidebar({ showSidebar }) {
                           }
                           to={ROUTES.ENQUIRIES}
                         >
-                          <div className=" ms-4 subactivelink">Oppurtunity</div>
+                          <div className="ms-3 ps-1 subactivelink">
+                            Opportunity
+                          </div>
                         </NavLink>
                       </li>
                     )}
@@ -1055,7 +989,9 @@ export default function Sidebar({ showSidebar }) {
                           }
                           to={ROUTES.QUATATIONS}
                         >
-                          <div className=" ms-4 subactivelink">Quotation</div>
+                          <div className="ms-3 ps-1 subactivelink">
+                            Quotation
+                          </div>
                         </NavLink>
                       </li>
                     )}
@@ -1067,7 +1003,7 @@ export default function Sidebar({ showSidebar }) {
                           }
                           to={ROUTES.LIST_JOB}
                         >
-                          <div className=" ms-4 subactivelink">Job</div>
+                          <div className="ms-3 ps-1 subactivelink">Job</div>
                         </NavLink>
                       </li>
                     )}
@@ -1079,7 +1015,7 @@ export default function Sidebar({ showSidebar }) {
                           }
                           to={ROUTES.INVOICE_LIST}
                         >
-                          <div className=" ms-4 subactivelink">Invoice</div>
+                          <div className="ms-3 ps-1 subactivelink">Invoice</div>
                         </NavLink>
                       </li>
                     )}
@@ -1088,34 +1024,35 @@ export default function Sidebar({ showSidebar }) {
                   <li
                     className={
                       FMSSettingsopen
-                        ? "nav-text  items_hrms open"
-                        : "nav-text  items_hrms "
+                        ? "nav-text  items_hrms nav_active_color open"
+                        : "nav-text  items_hrms nav_active_color"
                     }
                   >
                     <Link
-                      className={FMSSettingsopen ? "active-link" : "link"}
+                      // className={FMSSettingsopen ? "active-link" : "link"}
+                      className="link"
                       // to="/"
                       onClick={() => setFMSSettingsopen(!FMSSettingsopen)}
                     >
-                      <div className="d-flex justify-content-between gap-5 ms-2">
+                      <div className="d-flex justify-content-between gap-5 ms-3">
                         <div className="d-flex">
-                          <MdSettingsInputComponent className="sidebar_icons ms-1 pt-1 " />
-                          <div style={{ width: "90px" }} className="">
+                          {/* <MdSettingsInputComponent className="sidebar_icons ms-1 pt-1 " /> */}
+                          <div
+                            style={{ width: "90px" }}
+                            className="subactivelink"
+                          >
                             Masters
                           </div>
                         </div>
-
-                        <div className="  ">
-                          <div className="text-right ">
-                            <AiOutlineCaretDown className="toggle_btn " />
-                          </div>
+                        <div className="text-right ">
+                          <AiOutlineCaretDown className="toggle_btn subactivelink" />
                         </div>
                       </div>
                     </Link>
                   </li>
                   {FMSSettingsopen ? (
                     <>
-                      <div className="nav_active_color ">
+                      <div className="nav_active_color">
                         {checkPermission("freight type") && (
                           <li className="nav-text">
                             <NavLink
@@ -1124,7 +1061,7 @@ export default function Sidebar({ showSidebar }) {
                               }
                               to={ROUTES.FRIGHTLIST}
                             >
-                              <div className=" ms-5 subactivelink">
+                              <div className="ms-4 ps-3 subactivelink">
                                 Freight types
                               </div>
                             </NavLink>
@@ -1138,7 +1075,9 @@ export default function Sidebar({ showSidebar }) {
                               }
                               to={ROUTES.CARRIER}
                             >
-                              <div className=" ms-5 subactivelink">Carrier</div>
+                              <div className="ms-4 ps-3 subactivelink">
+                                Carrier
+                              </div>
                             </NavLink>
                           </li>
                         )}
@@ -1150,7 +1089,7 @@ export default function Sidebar({ showSidebar }) {
                               }
                               to={ROUTES.INCOTERM}
                             >
-                              <div className=" ms-5 subactivelink">
+                              <div className="ms-4 ps-3 subactivelink">
                                 Incoterm
                               </div>
                             </NavLink>
@@ -1164,7 +1103,7 @@ export default function Sidebar({ showSidebar }) {
                               }
                               to={ROUTES.TERMS_OF_PAYMENT}
                             >
-                              <div className=" ms-5 subactivelink">
+                              <div className="ms-4 ps-3 subactivelink">
                                 Payment Terms
                               </div>
                             </NavLink>
@@ -1179,7 +1118,7 @@ export default function Sidebar({ showSidebar }) {
                               }
                               to={ROUTES.TAXTYPE}
                             >
-                              <div className=" ms-5 subactivelink">
+                              <div className="ms-4 ps-3 subactivelink">
                                 Tax Type
                               </div>
                             </NavLink>
@@ -1193,7 +1132,9 @@ export default function Sidebar({ showSidebar }) {
                               }
                               to={ROUTES.LISTAGENT}
                             >
-                              <div className=" ms-5 subactivelink">Agents</div>
+                              <div className="ms-4 ps-3 subactivelink">
+                                Agents
+                              </div>
                             </NavLink>
                           </li>
                         )}
@@ -1205,13 +1146,13 @@ export default function Sidebar({ showSidebar }) {
                               }
                               to={ROUTES.LOCATIONS}
                             >
-                              <div className=" ms-5 subactivelink">
+                              <div className="ms-4 ps-3 subactivelink">
                                 Location
                               </div>
                             </NavLink>
                           </li>
                         )}
-                         {checkPermission("containertype") && (
+                        {checkPermission("containertype") && (
                           <li className="nav-text">
                             <NavLink
                               className={({ isActive }) =>
@@ -1219,8 +1160,8 @@ export default function Sidebar({ showSidebar }) {
                               }
                               to={ROUTES.CONTAINER_TYPES}
                             >
-                              <div className=" ms-5 subactivelink">
-                               Container Types
+                              <div className="ms-4 ps-3 subactivelink">
+                                Container Types
                               </div>
                             </NavLink>
                           </li>
@@ -1288,28 +1229,28 @@ export default function Sidebar({ showSidebar }) {
                   <li
                     className={
                       fmsReport
-                        ? "nav-text  items_hrms open"
-                        : "nav-text  items_hrms "
+                        ? "nav-text  items_hrms nav_active_color open"
+                        : "nav-text  items_hrms nav_active_color"
                     }
                   >
                     <Link
-                      className={fmsReport ? "active-link" : "link"}
+                      className="link"
                       // to="/"
                       onClick={() => setFmsReport(!fmsReport)}
                     >
-                      <div className="d-flex justify-content-between gap-5 ms-2">
+                      <div className="d-flex justify-content-between gap-5 ms-3">
                         <div className="d-flex">
-                          <TbReport className="sidebar_icons ms-1 pt-1 " />
-                          <div style={{ width: "90px" }} className="">
+                          {/* <TbReport className="sidebar_icons ms-1 pt-1 " /> */}
+                          <div
+                            style={{ width: "90px" }}
+                            className="subactivelink"
+                          >
                             Report
                           </div>
                         </div>
-
-                        <div className="  ">
                           <div className="text-right ">
-                            <AiOutlineCaretDown className="toggle_btn " />
+                            <AiOutlineCaretDown className="toggle_btn subactivelink" />
                           </div>
-                        </div>
                       </div>
                     </Link>
                   </li>
@@ -1325,7 +1266,7 @@ export default function Sidebar({ showSidebar }) {
                                 }
                                 to={ROUTES.AGENT_REPORT}
                               >
-                                <div className="ms-4 subactivelink">
+                                <div className="ms-4 ps-2 subactivelink">
                                   Agent Report
                                 </div>
                               </NavLink>
@@ -1349,7 +1290,7 @@ export default function Sidebar({ showSidebar }) {
                                 }
                                 to={ROUTES.MONTHLY_REPORT}
                               >
-                                <div className="ms-4 subactivelink">
+                                <div className="ms-4 ps-2 subactivelink">
                                   Monthly Report
                                 </div>
                               </NavLink>
@@ -1364,7 +1305,7 @@ export default function Sidebar({ showSidebar }) {
                               }
                               to={ROUTES.COST_AND_EXPENSE_REPORT}
                             >
-                              <div className="ms-4 subactivelink">
+                              <div className="ms-4 ps-2 subactivelink">
                                 Cost And Expense Report
                               </div>
                             </NavLink>
@@ -1378,7 +1319,7 @@ export default function Sidebar({ showSidebar }) {
                               }
                               to={ROUTES.ENQUIRY_REPORT}
                             >
-                              <div className=" ms-4 subactivelink">
+                              <div className="ms-4 ps-2 subactivelink">
                                 Enquiry Report
                               </div>
                             </NavLink>
@@ -1392,7 +1333,7 @@ export default function Sidebar({ showSidebar }) {
                               }
                               to={ROUTES.INVOICE_REPORT}
                             >
-                              <div className=" ms-4 subactivelink">
+                              <div className="ms-4 ps-2 subactivelink">
                                 Invoice Report
                               </div>
                             </NavLink>
@@ -1424,7 +1365,7 @@ export default function Sidebar({ showSidebar }) {
                 >
                   <div className="d-flex justify-content-between gap-5">
                     <div className="d-flex">
-                      <RiTeamFill className="sidebar_icons" />
+                      {/* <RiTeamFill className="sidebar_icons" /> */}
                       {/* <img
                         src={hrmsIcon}
                         alt
@@ -1451,27 +1392,27 @@ export default function Sidebar({ showSidebar }) {
                   <li
                     className={
                       accountsSettings
-                        ? "nav-text  items_hrms open "
-                        : "nav-text  items_hrms "
+                        ? "nav-text  items_hrms nav_active_color open "
+                        : "nav-text  items_hrms nav_active_color"
                     }
                   >
                     <Link
-                      className={accountsSettings ? "active-link" : "link"}
+                      className="link"
                       // to="/"
                       onClick={() => setAccountsSettings(!accountsSettings)}
                     >
-                      <div className="d-flex justify-content-between gap-5 ms-2">
+                      <div className="d-flex justify-content-between gap-5 ms-3">
                         <div className="d-flex">
-                          <MdSettingsInputComponent className="sidebar_icons ms-1 pt-1 " />
-                          <div style={{ width: "90px" }} className="">
+                          {/* <MdSettingsInputComponent className="sidebar_icons ms-1 pt-1 " /> */}
+                          <div
+                            style={{ width: "90px" }}
+                            className="subactivelink"
+                          >
                             Settings
                           </div>
                         </div>
-
-                        <div className="  ">
-                          <div className="text-right ">
-                            <AiOutlineCaretDown className="toggle_btn " />
-                          </div>
+                        <div className="text-right ">
+                          <AiOutlineCaretDown className="toggle_btn subactivelink" />
                         </div>
                       </div>
                     </Link>
@@ -1487,7 +1428,7 @@ export default function Sidebar({ showSidebar }) {
                               }
                               to={ROUTES.EXPENSE_CATEGORY}
                             >
-                              <div className=" ms-5 subactivelink">
+                              <div className="ms-4 ps-3 subactivelink">
                                 Expense Category
                               </div>
                             </NavLink>
@@ -1513,7 +1454,7 @@ export default function Sidebar({ showSidebar }) {
                               }
                               to={ROUTES.PAYMEMENT_MODE}
                             >
-                              <div className=" ms-5 subactivelink">
+                              <div className="ms-4 ps-3 subactivelink">
                                 Payment Mode
                               </div>
                             </NavLink>
@@ -1527,7 +1468,7 @@ export default function Sidebar({ showSidebar }) {
                         }
                         to={ROUTES.ADD_PURCHASE}
                       >
-                        <div className=" ms-5">Add Purchase</div>
+                        <div className=" ms-3 ps-3">Add Purchase</div>
                       </NavLink>
                     </li>
                     )} */}
@@ -1540,7 +1481,7 @@ export default function Sidebar({ showSidebar }) {
                             }
                             to={ROUTES.PURCHASE}
                           >
-                            <div className=" ms-5">Purchase</div>
+                            <div className=" ms-3 ps-3">Purchase</div>
                           </NavLink>
                         </li>
                       )} */}
@@ -1553,7 +1494,7 @@ export default function Sidebar({ showSidebar }) {
                               }
                               to={ROUTES.BANK_DETAILS}
                             >
-                              <div className=" ms-5 subactivelink">
+                              <div className="ms-4 ps-3 subactivelink">
                                 Bank Details
                               </div>
                             </NavLink>
@@ -1567,7 +1508,7 @@ export default function Sidebar({ showSidebar }) {
                               }
                               to={ROUTES.CREDIT_NOTE_TYPE}
                             >
-                              <div className=" ms-5 subactivelink">
+                              <div className="ms-4 ps-3 subactivelink">
                                 Credit Note Type
                               </div>
                             </NavLink>
@@ -1578,7 +1519,7 @@ export default function Sidebar({ showSidebar }) {
                   ) : (
                     ""
                   )}
-                  <div className="nav_active_color ">
+                  <div className="nav_active_color">
                     {checkPermission("purchase") && (
                       <li className="nav-text">
                         <NavLink
@@ -1587,7 +1528,9 @@ export default function Sidebar({ showSidebar }) {
                           }
                           to={ROUTES.PURCHASE}
                         >
-                          <div className="ms-4 subactivelink">Purchase</div>
+                          <div className="ms-3 ps-1 subactivelink">
+                            Purchase
+                          </div>
                         </NavLink>
                       </li>
                     )}
@@ -1600,7 +1543,7 @@ export default function Sidebar({ showSidebar }) {
                           }
                           to={ROUTES.DAILY_EXPENSE}
                         >
-                          <div className="ms-4 subactivelink">
+                          <div className="ms-3 ps-1 subactivelink">
                             Daily Expense
                           </div>
                         </NavLink>
@@ -1615,7 +1558,9 @@ export default function Sidebar({ showSidebar }) {
                           }
                           to={ROUTES.JOB_PAYMENTS}
                         >
-                          <div className="ms-4 subactivelink">Job Payments</div>
+                          <div className="ms-3 ps-1 subactivelink">
+                            Job Payments
+                          </div>
                         </NavLink>
                       </li>
                     )}
@@ -1627,7 +1572,9 @@ export default function Sidebar({ showSidebar }) {
                           }
                           to={ROUTES.PAYMENTS}
                         >
-                          <div className="ms-4 subactivelink">Payments</div>
+                          <div className="ms-3 ps-1 subactivelink">
+                            Payments
+                          </div>
                         </NavLink>
                       </li>
                     )}
@@ -1639,7 +1586,9 @@ export default function Sidebar({ showSidebar }) {
                           }
                           to={ROUTES.CREDIT_NOTES}
                         >
-                          <div className="ms-4 subactivelink">Credit Notes</div>
+                          <div className="ms-3 ps-1 subactivelink">
+                            Credit Notes
+                          </div>
                         </NavLink>
                       </li>
                     )}
@@ -1651,7 +1600,9 @@ export default function Sidebar({ showSidebar }) {
                           }
                           to={ROUTES.DEBIT_NOTES}
                         >
-                          <div className=" ms-4 subactivelink">Debit Notes</div>
+                          <div className="ms-3 ps-1 subactivelink">
+                            Debit Notes
+                          </div>
                         </NavLink>
                       </li>
                     )}
@@ -1660,27 +1611,27 @@ export default function Sidebar({ showSidebar }) {
                   <li
                     className={
                       accountsReports
-                        ? "nav-text  items_hrms open"
-                        : "nav-text  items_hrms "
+                        ? "nav-text  items_hrms nav_active_color open"
+                        : "nav-text  items_hrms nav_active_color"
                     }
                   >
                     <Link
-                      className={accountsReports ? "active-link" : "link"}
+                      className="link"
                       // to="/"
                       onClick={() => setAccountsReports(!accountsReports)}
                     >
-                      <div className="d-flex justify-content-between gap-5 ms-2">
+                      <div className="d-flex justify-content-between gap-5 ms-3">
                         <div className="d-flex">
-                          <TbReport className="sidebar_icons ms-1 pt-1 " />
-                          <div style={{ width: "90px" }} className="">
+                          {/* <TbReport className="sidebar_icons ms-1 pt-1 " /> */}
+                          <div
+                            style={{ width: "90px" }}
+                            className="subactivelink"
+                          >
                             Reports
                           </div>
                         </div>
-
-                        <div className="  ">
-                          <div className="text-right ">
-                            <AiOutlineCaretDown className="toggle_btn " />
-                          </div>
+                        <div className="text-right ">
+                          <AiOutlineCaretDown className="toggle_btn subactivelink" />
                         </div>
                       </div>
                     </Link>
@@ -1688,14 +1639,16 @@ export default function Sidebar({ showSidebar }) {
                   {accountsReports ? (
                     <>
                       {checkPermission("daily_expense_report") && (
-                        <li className="nav-text ">
+                        <li className="nav-text nav_active_color">
                           <NavLink
                             className={({ isActive }) =>
                               isActive ? "active-link" : "link"
                             }
                             to={ROUTES.DAILY_EXPENSE_REPORT}
                           >
-                            <div className=" ms-4">Daily Expense Report</div>
+                            <div className="subactivelink ms-4 ps-3">
+                              Daily Expense Report
+                            </div>
                           </NavLink>
                         </li>
                       )}
@@ -1725,14 +1678,7 @@ export default function Sidebar({ showSidebar }) {
                 >
                   <div className="d-flex justify-content-between gap-5">
                     <div className="d-flex">
-                      <FiSettings className="sidebar_icons pt-1" />
-                      {/* <img
-                        src={settingsicon}
-                        alt=""
-                        height={15}
-                        width={15}
-                        className="mt-1 me-1 "
-                      /> */}
+                      {/* <FiSettings className="sidebar_icons pt-1" /> */}
                       <div style={{ width: "120px" }} className=" d-flex">
                         General Settings
                       </div>
@@ -1757,7 +1703,9 @@ export default function Sidebar({ showSidebar }) {
                           }
                           to={ROUTES.COUNTRYSELECT}
                         >
-                          <div className=" ms-4 subactivelink">Countries</div>
+                          <div className="ms-3 ps-1 subactivelink">
+                            Countries
+                          </div>
                         </NavLink>
                       </li>
                     )}
@@ -1769,7 +1717,9 @@ export default function Sidebar({ showSidebar }) {
                           }
                           to={ROUTES.CURRENCY}
                         >
-                          <div className=" ms-4 subactivelink">Currency</div>
+                          <div className="ms-3 ps-1 subactivelink">
+                            Currency
+                          </div>
                         </NavLink>
                       </li>
                     )}
@@ -1782,7 +1732,9 @@ export default function Sidebar({ showSidebar }) {
                           }
                           to={ROUTES.COMPANYINFO}
                         >
-                          <div className=" ms-4 subactivelink">CompanyInfo</div>
+                          <div className="ms-3 ps-1 subactivelink">
+                            CompanyInfo
+                          </div>
                         </NavLink>
                       </li>
                     )}
@@ -1795,7 +1747,7 @@ export default function Sidebar({ showSidebar }) {
                           }
                           to={ROUTES.FMSSETTINGS}
                         >
-                          <div className=" ms-4 subactivelink">
+                          <div className="ms-3 ps-1 subactivelink">
                             Fms Settings
                           </div>
                         </NavLink>

@@ -217,7 +217,7 @@ function Countrystate(props) {
         }}
       >
         <div className="row py-5 px-1">
-          <div className="col-sm-4">
+          <div className="col-sm-4 mt-2">
             <label>Tax No</label>
             <Form.Item name="customer_accounting_tax_no">
               <InputType />
@@ -235,7 +235,7 @@ function Countrystate(props) {
               <Input_Number />
             </Form.Item>
           </div>
-          <div className="col-sm-4">
+          {/* <div className="col-sm-4">
             <label>Preferred Freight Type</label>
             <Form.Item name="customer_accounting_preferred_freight_type">
               <SelectBox allowClear showSearch optionFilterProp="children">
@@ -253,14 +253,14 @@ function Countrystate(props) {
                   })}
               </SelectBox>
             </Form.Item>
-          </div>
+          </div> */}
 
-          <div className="col-sm-4">
+          {/* <div className="col-sm-4">
             <label>Qtn validity Days</label>
             <Form.Item name="customer_accounting_qtn_validity_days">
               <Input_Number />
             </Form.Item>
-          </div>
+          </div> */}
 
           <div className=" pt-4">
             {/* <Button

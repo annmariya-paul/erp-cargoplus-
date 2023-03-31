@@ -236,7 +236,7 @@ function Countrystate(props) {
             </Form.Item>
           </div>
           <div className="col-sm-4">
-            <label>Preferecd Freight Type</label>
+            <label>Preferred Freight Type</label>
             <Form.Item name="customer_accounting_preferred_freight_type">
               <SelectBox allowClear showSearch optionFilterProp="children">
                 {frighttype &&

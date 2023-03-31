@@ -17,6 +17,7 @@ import TextArea from "../../../../components/ InputType TextArea/TextArea";
 import MyPagination from "../../../../components/Pagination/MyPagination";
 import CheckUnique from "../../../../check Unique/CheckUnique";
 import { UniqueErrorMsg } from "../../../../ErrorMessages/UniqueErrorMessage";
+import SelectBox from "../../../../components/Select Box/SelectBox";
 
 export default function TaxType() {
   const [searchedText, setSearchedText] = useState("");
@@ -40,6 +41,7 @@ export default function TaxType() {
   const [uniqueEditName, setUniqueEditName] = useState(false);
   const [editUniqueName, setEditUniqueName] = useState();
   const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
+  const [taxGroups, setTaxGroups] = useState();
 
   const [taxTypes, setTaxTypes] = useState();
   const [addForm] = Form.useForm();
@@ -67,8 +69,23 @@ export default function TaxType() {
     }
   };
 
+  const GetTaxGroups = () => {
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/tax_group`)
+      .then((res) => {
+        console.log("Response");
+        if (res.data.success) {
+          console.log("Success ");
+          setTaxGroups(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
   useEffect(() => {
     getAllTaxTypes();
+    GetTaxGroups();
   }, []);
 
   // { function to add a tax type - Ann - 19/1/23}
@@ -173,22 +190,24 @@ export default function TaxType() {
       render: (value, item, index) => serialNo + index,
       align: "center",
     },
- 
+
     {
       title: "TAX TYPE NAME",
       dataIndex: "tax_type_name",
       key: "tax_type_name",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.tax_type_name)
-          .toLowerCase()
-          .includes(value.toLowerCase()) ||
+        return (
+          String(record.tax_type_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
           String(record.tax_type_percentage)
-          .toLowerCase()
-          .includes(value.toLowerCase()) ||
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
           String(record.tax_type_description)
-          .toLowerCase()
-          .includes(value.toLowerCase())
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
       },
       align: "left",
     },
@@ -288,17 +307,17 @@ export default function TaxType() {
             </Select>
           </div>
           <div className="col-4  d-flex align-items-center justify-content-center">
-            {taxTypes &&(
-          <MyPagination
-            total={parseInt(taxTypes?.length)}
-            current={current}
-            pageSize={numOfItems}
-            onChange={(current, pageSize) => {
-              setCurrent(current);
-            }} 
-          />
-          )}
-        </div>
+            {taxTypes && (
+              <MyPagination
+                total={parseInt(taxTypes?.length)}
+                current={current}
+                pageSize={numOfItems}
+                onChange={(current, pageSize) => {
+                  setCurrent(current);
+                }}
+              />
+            )}
+          </div>
           <div className="col-4 d-flex justify-content-end">
             <Button
               btnType="add"
@@ -320,17 +339,16 @@ export default function TaxType() {
           />
         </div>{" "}
         <div className="d-flex mt-4 justify-content-center">
-          {taxTypes &&(
-          <MyPagination
-            total={parseInt(taxTypes?.length)}
-            current={current}
-            pageSize={numOfItems}
-            onChange={(current, pageSize) => {
-              setCurrent(current);
-            }}
-            
-          />
-          ) }
+          {taxTypes && (
+            <MyPagination
+              total={parseInt(taxTypes?.length)}
+              current={current}
+              pageSize={numOfItems}
+              onChange={(current, pageSize) => {
+                setCurrent(current);
+              }}
+            />
+          )}
         </div>
       </div>
 
@@ -414,6 +432,25 @@ export default function TaxType() {
                       />
                     </Form.Item>
                   </div>
+                </div>
+                <div className="col-12 pt-1">
+                  <label>Tax Group</label>
+                  <Form.Item name="tax_type_tax_group">
+                    <SelectBox>
+                      {taxGroups &&
+                        taxGroups.length > 0 &&
+                        taxGroups.map((item, index) => {
+                          return (
+                            <Select.Option
+                              key={item.tax_group_id}
+                              value={item.tax_group_id}
+                            >
+                              {item.tax_group_name}
+                            </Select.Option>
+                          );
+                        })}
+                    </SelectBox>
+                  </Form.Item>
                 </div>
                 <div className="col-12 pt-1">
                   <label>Description</label>
@@ -514,6 +551,25 @@ export default function TaxType() {
                       />
                     </Form.Item>
                   </div>
+                </div>
+                <div className="col-12 pt-1">
+                  <label>Tax Group</label>
+                  <Form.Item name="tax_type_tax_group">
+                    <SelectBox>
+                      {taxGroups &&
+                        taxGroups.length > 0 &&
+                        taxGroups.map((item, index) => {
+                          return (
+                            <Select.Option
+                              key={item.tax_group_id}
+                              value={item.tax_group_id}
+                            >
+                              {item.tax_group_name}
+                            </Select.Option>
+                          );
+                        })}
+                    </SelectBox>
+                  </Form.Item>
                 </div>
                 <div className="col-12 pt-1">
                   <label>Description</label>

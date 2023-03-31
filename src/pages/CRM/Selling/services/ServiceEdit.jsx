@@ -8,191 +8,201 @@ import TextArea from "../../../../components/ InputType TextArea/TextArea";
 import SelectBox from "../../../../components/Select Box/SelectBox";
 import FileUpload from "../../../../components/fileupload/fileUploader";
 import ErrorMsg from "../../../../components/error/ErrorMessage";
-import { CRM_BASE_URL_FMS, CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
+import {
+  CRM_BASE_URL_FMS,
+  CRM_BASE_URL_SELLING,
+} from "../../../../api/bootapi";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { useNavigate, useParams } from "react-router-dom";
 // import { Navigate, useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../../routes";
-function ServiceEdit(){
-    const [successPopup, setSuccessPopup] = useState(false);
-    const [error, setError] = useState(false);
-    const [img, setImg] = useState([]);
-    const [previewVisible, setPreviewVisible] = useState(false);
-    const [previewImage, setPreviewImage] = useState("");
-    const [previewTitle, setPreviewTitle] = useState("");
-    const [imageSize, setImageSize] = useState();
+function ServiceEdit() {
+  const [successPopup, setSuccessPopup] = useState(false);
+  const [error, setError] = useState(false);
+  const [img, setImg] = useState([]);
+  const [previewVisible, setPreviewVisible] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+  const [previewTitle, setPreviewTitle] = useState("");
+  const [imageSize, setImageSize] = useState();
 
-   
-    const [alltaxtype, setalltaxtype] = useState("");
+  const [alltaxtype, setalltaxtype] = useState("");
 
-    const [numOfItems, setNumOfItems] = useState("25");
-    const [current, setCurrent] = useState(1);
-    const pageofIndex = numOfItems * (current - 1) - 1 + 1;
+  const [numOfItems, setNumOfItems] = useState("25");
+  const [current, setCurrent] = useState(1);
+  const pageofIndex = numOfItems * (current - 1) - 1 + 1;
 
-    const [TreeData, setTreeData] = useState();
-    const [categoryTree, setCategoryTree] = useState([]);
+  const [TreeData, setTreeData] = useState();
+  const [categoryTree, setCategoryTree] = useState([]);
+  const [TaxGroups, setTaxGroups] = useState();
 
-    const[servicename,setservicename]= useState("")
-    const[servicecode,setservicecode]= useState("")
-    const[servicecategory,setservicecategory]= useState("")
-    const[servicepicture,setservicepicture]= useState("")
-    const[servicedescription,setservicedescription]= useState("")
+  const [servicename, setservicename] = useState("");
+  const [servicecode, setservicecode] = useState("");
+  const [servicecategory, setservicecategory] = useState("");
+  const [servicepicture, setservicepicture] = useState("");
+  const [servicedescription, setservicedescription] = useState("");
 
-    const [taxRate, setTaxRate] = useState("");
+  const [taxRate, setTaxRate] = useState("");
 
-    const { id } = useParams();
-    const [editForm] = Form.useForm();
-    const navigate = useNavigate();
+  const { id } = useParams();
+  const [editForm] = Form.useForm();
+  const navigate = useNavigate();
 
+  const handleCancel = () => {
+    navigate(ROUTES.SERVICES);
+  };
+  const close_modal = (mShow, time) => {
+    if (!mShow) {
+      setTimeout(() => {
+        setSuccessPopup(false);
+        navigate(ROUTES.SERVICES);
+      }, time);
+    }
+  };
 
-    const handleCancel = () => {
-      navigate(ROUTES.SERVICES);
-    };
-    const close_modal = (mShow, time) => {
-      if (!mShow) {
-        setTimeout(() => {
-          setSuccessPopup(false);
-          navigate(ROUTES.SERVICES)
-        }, time);
-      }
-    };
+  const getAllTaxTypes = async () => {
+    try {
+      const allTxTypes = await PublicFetch.get(
+        `${CRM_BASE_URL_FMS}/tax-types/minimal`
+      );
+      console.log("all taxtype are", allTxTypes.data.data);
+      setalltaxtype(allTxTypes.data.data);
+      // setTaxTypes(allTxTypes.data.data);
+    } catch (err) {
+      console.log("error while getting the tax types: ", err);
+    }
+  };
 
-    const getAllTaxTypes = async () => {
-      try {
-        const allTxTypes = await PublicFetch.get(
-          `${CRM_BASE_URL_FMS}/tax-types/minimal`
-        );
-        console.log("all taxtype are", allTxTypes.data.data);
-        setalltaxtype(allTxTypes.data.data);
-        // setTaxTypes(allTxTypes.data.data);
-      } catch (err) {
-        console.log("error while getting the tax types: ", err);
-      }
-    };
-
-      const getCategorydata = () => {
-        PublicFetch.get(`${CRM_BASE_URL_SELLING}/category`)
-          .then((res) => {
-            console.log("response Data", res);
-            if (res.data.success) {
-              setTreeData(res.data.data);
-              // getTreeData(res.data.data);
-              let d = structureTreeData(res.data.data);
-              console.log("Structured Tree : ", d);
-              setCategoryTree(d);
-              console.log("all data", res.data.data);
-            }
-          })
-          .catch((err) => {
-            console.log("Error", err);
-          });
-      };
-
-      const onChangetree = (value) => {
-        console.log("Change service catid", value);
-        
-        setservicecategory(parseInt(value));
-      };
-      const onSelect = (value) => {
-        console.log("Select the category :", value);
-      };
-
-      const structureTreeData = (categories) => {
-        let treeStructure = [];
-        if (categories && Array.isArray(categories) && categories.length > 0) {
-          categories.forEach((category, categoryIndex) => {
-            // if (category?.other_crm_v1_categories?.length > 0) {
-            let ch = structureTreeData(category?.other_crm_v1_categories);
-            treeStructure.push({
-              value: category?.category_id,
-              title: category?.category_name,
-              children: ch,
-            });
-            // }
-          });
+  const getCategorydata = () => {
+    PublicFetch.get(`${CRM_BASE_URL_SELLING}/category`)
+      .then((res) => {
+        console.log("response Data", res);
+        if (res.data.success) {
+          setTreeData(res.data.data);
+          // getTreeData(res.data.data);
+          let d = structureTreeData(res.data.data);
+          console.log("Structured Tree : ", d);
+          setCategoryTree(d);
+          console.log("all data", res.data.data);
         }
-        return treeStructure;
-        // console.log("Tree structure : ", treeStructure);
-      };
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
 
-      const getoneservice = async () => {
-        try {
-          const oneservice = await PublicFetch.get(
-            `${CRM_BASE_URL_SELLING}/service/${id}`
-          );
-          console.log("one service details iss", oneservice.data.data);
-          // setalltaxtype(oneservice.data.data);
-        
-          setservicename(oneservice.data.data.service_name)
-          setservicecode(oneservice.data.data.service_code)
-          setservicecategory(oneservice.data.data.crm_v1_categories.category_id)
-          setTaxRate(oneservice.data.data.fms_v1_tax_types.tax_type_id)
-          setservicedescription(oneservice.data.data.service_description)
-          setservicepicture(oneservice.data.data.service_pic)
-          editForm.setFieldsValue({
-            servicename: oneservice.data.data.service_name,
-            code: oneservice.data.data.service_code,
-            category: oneservice.data.data.crm_v1_categories.category_id,
-            taxRate: oneservice.data.data.fms_v1_tax_types.tax_type_id,
-            serviceimg: oneservice.data.data.service_pic,
-            description:oneservice.data.data.service_description,
-            
-          });
-          console.log("one service name",oneservice.data.data.service_name )
-        } catch (err) {
-          console.log("error while getting the tax types: ", err);
-        }
-      };
+  const onChangetree = (value) => {
+    console.log("Change service catid", value);
 
-      const handleUpdate = () => {
-        // console.log("edit data", e);
-        const formData = new FormData();
-    
-        formData.append("service_name", servicename.trim(" "));
-        formData.append("service_code", servicecode);
-        formData.append("service_category_id", servicecategory);
-        // if (serviceImg && serviceImg !== 0) {
-        //   formData.append("service_pic", serviceImg);
+    setservicecategory(parseInt(value));
+  };
+  const onSelect = (value) => {
+    console.log("Select the category :", value);
+  };
+
+  const structureTreeData = (categories) => {
+    let treeStructure = [];
+    if (categories && Array.isArray(categories) && categories.length > 0) {
+      categories.forEach((category, categoryIndex) => {
+        // if (category?.other_crm_v1_categories?.length > 0) {
+        let ch = structureTreeData(category?.other_crm_v1_categories);
+        treeStructure.push({
+          value: category?.category_id,
+          title: category?.category_name,
+          children: ch,
+        });
         // }
-        formData.append("service_pic", img);
-        formData.append("service_taxtype", taxRate);
-        formData.append("service_description", servicedescription);
-    
-        PublicFetch.patch(
-          `${CRM_BASE_URL_SELLING}/service/${id}`,
-          formData,
-          {
-            "Content-Type": "Multipart/form-Data",
-          }
-        )
-          .then((res) => {
-            console.log("data edited successfully", res);
-            if (res.data.success) {
-              console.log("successDataa", res.data.data);
-              // setShowServiceEditModal(false);
-              setSuccessPopup(true);
-              close_modal(successPopup, 1000);
-              // setBrandEditPopup(false);
-              editForm.resetFields();
-            }
-          })
-          .catch((err) => {
-            console.log("Error", err);
-            setError(true);
-          });
-      };
-      
+      });
+    }
+    return treeStructure;
+    // console.log("Tree structure : ", treeStructure);
+  };
 
-      useEffect(() => {
-        getAllTaxTypes();
-        getCategorydata();
-        getoneservice();
-      }, []);
+  const getoneservice = async () => {
+    try {
+      const oneservice = await PublicFetch.get(
+        `${CRM_BASE_URL_SELLING}/service/${id}`
+      );
+      console.log("one service details iss", oneservice.data.data);
+      // setalltaxtype(oneservice.data.data);
 
-    const beforeUpload = (file, fileList) => {};
-    return(
-        <>
-           <div className="container-fluid">
+      setservicename(oneservice.data.data.service_name);
+      setservicecode(oneservice.data.data.service_code);
+      setservicecategory(oneservice.data.data.crm_v1_categories.category_id);
+      setTaxRate(oneservice.data.data.fms_v1_tax_types.tax_type_id);
+      setservicedescription(oneservice.data.data.service_description);
+      setservicepicture(oneservice.data.data.service_pic);
+      editForm.setFieldsValue({
+        servicename: oneservice.data.data.service_name,
+        code: oneservice.data.data.service_code,
+        category: oneservice.data.data.crm_v1_categories.category_id,
+        taxRate: oneservice.data.data.fms_v1_tax_types.tax_type_id,
+        serviceimg: oneservice.data.data.service_pic,
+        description: oneservice.data.data.service_description,
+      });
+      console.log("one service name", oneservice.data.data.service_name);
+    } catch (err) {
+      console.log("error while getting the tax types: ", err);
+    }
+  };
+
+  const handleUpdate = () => {
+    // console.log("edit data", e);
+    const formData = new FormData();
+
+    formData.append("service_name", servicename.trim(" "));
+    formData.append("service_code", servicecode);
+    formData.append("service_category_id", servicecategory);
+    // if (serviceImg && serviceImg !== 0) {
+    //   formData.append("service_pic", serviceImg);
+    // }
+    formData.append("service_pic", img);
+    formData.append("service_taxtype", taxRate);
+    formData.append("service_description", servicedescription);
+
+    PublicFetch.patch(`${CRM_BASE_URL_SELLING}/service/${id}`, formData, {
+      "Content-Type": "Multipart/form-Data",
+    })
+      .then((res) => {
+        console.log("data edited successfully", res);
+        if (res.data.success) {
+          console.log("successDataa", res.data.data);
+          // setShowServiceEditModal(false);
+          setSuccessPopup(true);
+          close_modal(successPopup, 1000);
+          // setBrandEditPopup(false);
+          editForm.resetFields();
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+        setError(true);
+      });
+  };
+
+  const getTaxGroup = () => {
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/tax_group`)
+      .then((res) => {
+        console.log("response");
+        if (res.data.success) {
+          console.log("Success");
+          setTaxGroups(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+  useEffect(() => {
+    getAllTaxTypes();
+    getCategorydata();
+    getoneservice();
+  }, []);
+
+  const beforeUpload = (file, fileList) => {};
+  return (
+    <>
+      <div className="container-fluid">
         <div
           style={{ borderRadius: "8px" }}
           className="card border-0 content-tabs px-2"
@@ -207,7 +217,7 @@ function ServiceEdit(){
               form={editForm}
               onFinish={(value) => {
                 console.log("values111333", value);
-                handleUpdate()
+                handleUpdate();
               }}
               onFinishFailed={(error) => {
                 console.log(error);
@@ -234,22 +244,21 @@ function ServiceEdit(){
                       },
                     ]}
                   >
-                   
                     <InputType
                       value={servicename}
                       onChange={(e) => {
                         setservicename(e.target.value);
                         // setuniqueCode(false);
                       }}
-                    //   onBlur={async () => {
-                    //     // checkAttributeNameis();
-                    //     let a = await CheckUnique({
-                    //       type: "servicename",
-                    //       value: serviceName,
-                    //     });
-                    //     console.log("hai how are u", a);
-                    //     setuniqueCode(a);
-                    //   }}
+                      //   onBlur={async () => {
+                      //     // checkAttributeNameis();
+                      //     let a = await CheckUnique({
+                      //       type: "servicename",
+                      //       value: serviceName,
+                      //     });
+                      //     console.log("hai how are u", a);
+                      //     setuniqueCode(a);
+                      //   }}
                     />
                   </Form.Item>
                   {/* {uniqueCode ? (
@@ -288,15 +297,15 @@ function ServiceEdit(){
                         setservicecode(e.target.value);
                         // setuniqueserCode(false);
                       }}
-                    //   onBlur={async () => {
-                    //     // checkAttributeNameis();
-                    //     let a = await CheckUnique({
-                    //       type: "servicecode",
-                    //       value: servicecode,
-                    //     });
-                    //     console.log("hai how are u", a);
-                    //     setuniqueserCode(a);
-                    //   }}
+                      //   onBlur={async () => {
+                      //     // checkAttributeNameis();
+                      //     let a = await CheckUnique({
+                      //       type: "servicecode",
+                      //       value: servicecode,
+                      //     });
+                      //     console.log("hai how are u", a);
+                      //     setuniqueserCode(a);
+                      //   }}
                     />
                   </Form.Item>
                   {/* {uniqueserCode ? (
@@ -309,10 +318,9 @@ function ServiceEdit(){
                     ""
                   )} */}
                 </div>
-              
 
-<div className="col-6">
-<label>Category</label>
+                <div className="col-6">
+                  <label>Category</label>
 
                   <Form.Item
                     className="mt-2"
@@ -324,7 +332,6 @@ function ServiceEdit(){
                       },
                     ]}
                   >
-                   
                     <TreeSelect
                       className="tree"
                       name="tree"
@@ -342,8 +349,8 @@ function ServiceEdit(){
                       onSelect={onSelect}
                     />
                   </Form.Item>
-</div>
-                
+                </div>
+
                 <div className="col-6 mt-1">
                   <label className="">Tax Type</label>
                   <Form.Item
@@ -359,7 +366,6 @@ function ServiceEdit(){
                       },
                     ]}
                   >
-                    
                     <SelectBox
                       placeholder={"--Please Select--"}
                       value={taxRate}
@@ -383,12 +389,58 @@ function ServiceEdit(){
                     </SelectBox>
                   </Form.Item>
                 </div>
-
+                <div className="col-6 mt-1">
+                  <label className="">Tax Groups</label>
+                  <Form.Item
+                    name="taxRate"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please enter a Valid Tax Rate",
+                      },
+                      {
+                        pattern: new RegExp("^[0-9]+$"),
+                        message: "Please enter zero or Postive integers",
+                      },
+                    ]}
+                  >
+                    {/* <InputNumber
+                      style={{
+                        border: "0",
+                        backgroundColor: "whitesmoke",
+                        width: "100%",
+                        paddingBlock: "2px",
+                        boxShadow: "none",
+                      }}
+                      value={taxRate}
+                      onChange={(e) => setTaxRate(e.target.value)}
+                    /> */}
+                    <SelectBox
+                      placeholder={"--Please Select--"}
+                      // value={taxRate}
+                      onChange={(e) => {
+                        console.log("select the brandss", e);
+                        setTaxRate(parseInt(e));
+                      }}
+                    >
+                      {TaxGroups &&
+                        TaxGroups.length > 0 &&
+                        TaxGroups.map((item, index) => {
+                          return (
+                            <Select.Option
+                              key={item.tax_group_id}
+                              value={item.tax_group_id}
+                            >
+                              {item.tax_group_name}
+                            </Select.Option>
+                          );
+                        })}
+                    </SelectBox>
+                  </Form.Item>
+                </div>
                 <div className="col-6 mt-2">
                   <label>Display Picture</label>
-                  <Form.Item 
-                  name="serviceimg" 
-                  className="mt-2">
+                  <Form.Item name="serviceimg" className="mt-2">
                     <FileUpload
                       multiple
                       listType="picture"
@@ -421,10 +473,10 @@ function ServiceEdit(){
                   </Form.Item>
 
                   <img
-                          src={`${process.env.REACT_APP_BASE_URL}/${servicepicture}`}
-                          height="40px"
-                          width={"40px"}
-                        />
+                    src={`${process.env.REACT_APP_BASE_URL}/${servicepicture}`}
+                    height="40px"
+                    width={"40px"}
+                  />
                 </div>
                 <div className="col-6 mt-2">
                   <label>Description</label>
@@ -451,7 +503,7 @@ function ServiceEdit(){
                 </div>
                 <div className="col-12 d-flex justify-content-center mt-5 pt-4 gap-3 ">
                   <Button className="save_button">Save</Button>
-                  
+
                   <Button
                     as="input"
                     type="reset"
@@ -476,8 +528,7 @@ function ServiceEdit(){
         show={successPopup}
         onHide={() => setSuccessPopup(false)}
       />
-
-        </>
-    )
+    </>
+  );
 }
 export default ServiceEdit;

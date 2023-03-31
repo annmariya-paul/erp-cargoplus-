@@ -4,7 +4,7 @@ import MyPagination from "../../../../components/Pagination/MyPagination";
 import TableData from "../../../../components/table/table_data";
 import { MdPageview } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
-import { Form, Input, Select, DatePicker } from "antd";
+import { Form, Input, Select, DatePicker,Radio } from "antd";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import InputType from "../../../../components/Input Type textbox/InputType";
 import Button from "../../../../components/button/button";
@@ -324,7 +324,18 @@ function Addvendor() {
                           },
                         ]}
                       >
-                        <SelectBox
+                        <Radio.Group
+                         value={vendorOrganisation}
+                         onChange={(e) => {
+                           setvendorOrganisation(e);
+                           // setOrganizationDisable(e);
+                         }}
+                          defaultValue="organization"
+                        >
+                          <Radio value="organization">Organization</Radio>
+                          <Radio value="individual">Individual</Radio>
+                        </Radio.Group>
+                        {/* <SelectBox
                           showSearch={true}
                           allowClear
                           optionFilterProp="children"
@@ -338,7 +349,7 @@ function Addvendor() {
                             Organisation
                           </Select.Option>
                           <Select.Option value="IND">Indivdual</Select.Option>
-                        </SelectBox>
+                        </SelectBox> */}
                       </Form.Item>
                     </div>
 

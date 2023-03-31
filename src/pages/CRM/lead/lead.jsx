@@ -27,6 +27,7 @@ import TextArea from "../../../components/ InputType TextArea/TextArea";
 import { UniqueErrorMsg } from "../../../ErrorMessages/UniqueErrorMessage";
 import CheckUnique from "../../../check Unique/CheckUnique";
 import Phone_Input from "../../../components/PhoneInput/phoneInput";
+import Moreinfo from "./accountings/MoreInfo";
 // import { useForm } from "react-hook-form";
 // import {  message } from 'antd';
 
@@ -254,6 +255,12 @@ function Lead({}) {
     setToggle4(false);
   };
 
+  const handleMoreinfoTab = () => {
+    toggleTab(5);
+    // setTimeOuts(false);
+    // setToggle4(false);
+  };
+
   useEffect(() => {
     if (CustomerId) {
       getallContacts();
@@ -314,6 +321,17 @@ function Lead({}) {
                   }}
                 >
                   Accounting
+                </button>
+              </div>
+              <div className="col-xl-1 col-sm-2 pe-1">
+                <button
+                  className={toggleState === 5 ? "tabs active-tabs" : "tabs"}
+                  onClick={(e) => {
+                    // CustomerId !== null ? errormessage(): handleAccountingTab(e);
+                    handleMoreinfoTab()
+                   }}
+                >
+                  MoreInfo
                 </button>
               </div>
             </div>
@@ -441,7 +459,7 @@ function Lead({}) {
                         ""
                       )}
                       <div className="mt-4">
-                        <label>Phone</label>
+                        <label>Phone <span className="required">*</span></label>
                         <Form.Item
                           className="mt-2"
                           name="customer_phone"
@@ -456,7 +474,7 @@ function Lead({}) {
                       </div>
                     </div>
                     <div className="col-sm-4 pt-2">
-                      <label>Customer Type</label>
+                      <label>Customer Type<span className="required">*</span></label>
                       <Form.Item
                         className="my-2 pb-3"
                         name="customer_type"
@@ -493,27 +511,15 @@ function Lead({}) {
                         </SelectBox> */}
                       </Form.Item>
                       <div className="mt-2">
-                        <label>Email</label>
+                        <label>Email <span className="required">*</span></label>
                         <Form.Item
                           className="mt-2"
                           name="customer_email"
-                          rules={
-                            [
-                              // {
-                              //   // pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                              //   message: "Special characters are not allowed",
-                              // },
-                              // {
-                              //   min: 2,
-                              //   message: "organisation has at least 2 characters",
-                              // },
-                              // {
-                              //   max: 100,
-                              //   message:
-                              //     "organisation cannot be longer than 100 characters",
-                              // },
-                            ]
-                          }
+                          rules={[
+                            {
+                              required: true,
+                            },
+                          ]}
                         >
                           <InputType
                             value={leadcreditdays}
@@ -882,6 +888,19 @@ function Lead({}) {
                   <Countrystate customer_id={CustomerId} />
                 </div>
               </div>{" "}
+
+              <div
+                className={
+                  toggleState === 5 ? "content  active-content" : "content"
+                }
+              >
+                <div className="col-lg" style={{ borderRadius: "3px" }}>
+                  <Moreinfo 
+                  // customer_id={CustomerId}
+                   />
+                </div>
+              </div>
+
               <Custom_model
                 size={`sm`}
                 success

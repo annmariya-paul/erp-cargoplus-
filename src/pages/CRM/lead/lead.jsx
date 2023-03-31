@@ -294,7 +294,7 @@ function Lead({}) {
                   id="button-tabs"
                   className={toggleState === 2 ? "tabs active-tabs " : "tabs "}
                   onClick={(e) => {
-                    CustomerId !== null ? errormessage() : handleContactTab(e);
+                    CustomerId == null ? errormessage() : handleContactTab(e);
                   }}
                 >
                   Contacts
@@ -305,7 +305,7 @@ function Lead({}) {
                   id="button-tabs"
                   className={toggleState === 3 ? "tabs active-tabs" : "tabs"}
                   onClick={(e) => {
-                    CustomerId !== null ? errormessage() : handleAddressTab(e);
+                    CustomerId == null ? errormessage() : handleAddressTab(e);
                   }}
                 >
                   Address
@@ -315,7 +315,7 @@ function Lead({}) {
                 <button
                   className={toggleState === 4 ? "tabs active-tabs" : "tabs"}
                   onClick={(e) => {
-                    CustomerId !== null
+                    CustomerId == null
                       ? errormessage()
                       : handleAccountingTab(e);
                   }}

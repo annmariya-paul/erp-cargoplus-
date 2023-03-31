@@ -122,7 +122,7 @@ function Vendor() {
 
   const columns = [
     {
-      title: "Sl. No.",
+      title: "Sl.No.",
       key: "index",
       render: (value, item, index) => serialNo + index,
       align: "center",
@@ -142,6 +142,30 @@ function Vendor() {
       align: "left",
     },
     {
+      title: "CONTACT",
+      dataIndex: "vendor_email",
+      key: "freight_type_prefix",
+      width: "10%",
+      onFilter: (value, record) => {
+        return String(record.freight_type_prefix)
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      },
+      align: "left",
+    },
+    {
+      title: "PHONE",
+      dataIndex: "vendor_email",
+      key: "freight_type_prefix",
+      width: "10%",
+      onFilter: (value, record) => {
+        return String(record.freight_type_prefix)
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      },
+      align: "left",
+    },
+    {
       title: "EMAIL",
       dataIndex: "vendor_email",
       key: "freight_type_prefix",
@@ -154,7 +178,7 @@ function Vendor() {
       align: "left",
     },
     {
-      title: "ORGANISATION TYPE",
+      title: "VENDOR TYPE",
       dataIndex: "vendor_org_type",
       key: "freight_type_prefix",
       width: "18%",
@@ -165,19 +189,19 @@ function Vendor() {
       },
       align: "left",
     },
-    {
-      title: "COUNTRY",
+    // {
+    //   title: "COUNTRY",
 
-      dataIndex: "vendor_country",
-      key: "freight_type_prefix",
-      width: "12%",
-      onFilter: (value, record) => {
-        return String(record.freight_type_prefix)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
-      align: "left",
-    },
+    //   dataIndex: "vendor_country",
+    //   key: "freight_type_prefix",
+    //   width: "12%",
+    //   onFilter: (value, record) => {
+    //     return String(record.freight_type_prefix)
+    //       .toLowerCase()
+    //       .includes(value.toLowerCase());
+    //   },
+    //   align: "left",
+    // },
     {
       title: "ACTION",
       dataIndex: "action",

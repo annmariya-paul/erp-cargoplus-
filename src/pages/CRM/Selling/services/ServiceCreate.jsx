@@ -412,7 +412,7 @@ function ServiceCreate() {
                     ""
                   )}
                 </div> */}
-                <div className="col-6 mt-1">
+                {/* <div className="col-6 mt-1">
                   <label className="">Tax Type</label>
                   <Form.Item
                     name="taxRate"
@@ -427,17 +427,7 @@ function ServiceCreate() {
                       },
                     ]}
                   >
-                    {/* <InputNumber
-                      style={{
-                        border: "0",
-                        backgroundColor: "whitesmoke",
-                        width: "100%",
-                        paddingBlock: "2px",
-                        boxShadow: "none",
-                      }}
-                      value={taxRate}
-                      onChange={(e) => setTaxRate(e.target.value)}
-                    /> */}
+                    
                     <SelectBox
                       placeholder={"--Please Select--"}
                       value={taxRate}
@@ -460,7 +450,7 @@ function ServiceCreate() {
                         })}
                     </SelectBox>
                   </Form.Item>
-                </div>
+                </div> */}
                 <div className="col-6 mt-1">
                   <label className="">Tax Groups</label>
                   <Form.Item
@@ -517,7 +507,8 @@ function ServiceCreate() {
                       multiple
                       listType="picture"
                       accept=".png,.jpeg"
-                      height={100}
+                      // height={100}
+                      style={{ height: "65px" }}
                       // onPreview={handlePreview}
                       beforeUpload={beforeUpload}
                       onChange={(file) => {

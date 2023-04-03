@@ -43,7 +43,7 @@ function Productlist() {
   const [productid, setProductID] = useState();
   console.log("pr id from state", productid);
 
-  const [productpic,setproductpic]=useState()
+  const [productpic, setproductpic] = useState();
   // const  [productname, setProductName] = useState();
   // const  [productcode, setProductCode] = useState();
   // const  [productcatid, setProductcatid] = useState();
@@ -130,7 +130,6 @@ function Productlist() {
               catgeory_name: item.crm_v1_categories?.category_name,
               product_code: item?.product_code,
               product_pic: item?.product_pic,
-
             });
           });
 
@@ -189,16 +188,17 @@ function Productlist() {
 
       align: "center",
       render: (theImageURL, records) => (
-       <>
-       {theImageURL ?(
-         <img
-          src={`${process.env.REACT_APP_BASE_URL}/${theImageURL}`}
-          height="20px"
-          width={"20px"}
-        />
-        ):""}
-       </>
-        
+        <>
+          {theImageURL ? (
+            <img
+              src={`${process.env.REACT_APP_BASE_URL}/${theImageURL}`}
+              height="20px"
+              width={"20px"}
+            />
+          ) : (
+            ""
+          )}
+        </>
       ),
     },
     {
@@ -207,9 +207,17 @@ function Productlist() {
       key: "NAME",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.product_name)
-          .toLowerCase()
-          .includes(value.toLowerCase());
+        return (
+          String(record.product_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.product_code)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.catgeory_name)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
       },
       align: "left",
       width: "23%",
@@ -223,9 +231,17 @@ function Productlist() {
       align: "left",
       filteredValue: [searchType],
       onFilter: (value, record) => {
-        return String(record.product_code)
-          .toLowerCase()
-          .includes(value.toLowerCase());
+        return (
+          String(record.product_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.product_code)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.catgeory_name)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
       },
     },
     {
@@ -236,10 +252,18 @@ function Productlist() {
       align: "left",
       filteredValue: [searchCategory],
       onFilter: (value, record) => {
-        console.log("prrrr",record)
-        return String(record.catgeory_name)
-          .toLowerCase()
-          .includes(value.toLowerCase());
+        console.log("prrrr", record);
+        return (
+          String(record.product_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.product_code)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.catgeory_name)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
       },
     },
     {
@@ -307,38 +331,53 @@ function Productlist() {
     setSelectedColumns(checkedValues);
   };
 
-
-  console.log("cattt",products)
+  console.log("cattt", products);
   return (
     <div>
       <div className="container-fluid lead_list my-3 py-3">
         <div>
           {/* {product listing starts section one} */}
           <div className="row flex-wrap">
-            <div className="col">
+            <div className="col-4 pt-2">
               <h5 className="lead_text">Products</h5>
             </div>
+            <div className="col-4 ">
+              <Input.Search
+                className="inputSearch"
+                placeholder="Search by Name"
+                style={{ borderRadius: "5px" }}
+                value={searchedText}
+                onChange={(e) => {
+                  setSearchedText(e.target.value ? [e.target.value] : []);
+                }}
+                onSearch={(value) => {
+                  setSearchedText(value);
+                }}
+              />
+            </div>
             {/* <Leadlist_Icons /> */}
-            <Leadlist_Icons
-              datas={products}
-              columns={filteredColumns}
-              items={data12}
-              xlheading={ProductHeads}
-              filename="data.csv"
-              chechboxes={
-                <Checkbox.Group onChange={onChange} value={selectedColumns}>
-                  {columnsKeys.map((column) => (
-                    <li>
-                      <Checkbox value={column} key={column}>
-                        {column}
-                      </Checkbox>
-                    </li>
-                  ))}
-                </Checkbox.Group>
-              }
-            />
+            <div className="col-4 d-flex justify-content-end">
+              <Leadlist_Icons
+                datas={products}
+                columns={filteredColumns}
+                items={data12}
+                xlheading={ProductHeads}
+                filename="data.csv"
+                chechboxes={
+                  <Checkbox.Group onChange={onChange} value={selectedColumns}>
+                    {columnsKeys.map((column) => (
+                      <li>
+                        <Checkbox value={column} key={column}>
+                          {column}
+                        </Checkbox>
+                      </li>
+                    ))}
+                  </Checkbox.Group>
+                }
+              />
+            </div>
           </div>
-          <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
+          {/* <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
             <div className="col-4">
               <Input.Search
                 placeholder="Search by Name"
@@ -383,18 +422,20 @@ function Productlist() {
               >
                 {products &&
                   products.map((item, index) => {
-                    console.log("catvaluess",item)
+                    console.log("catvaluess", item);
                     return (
-                      <Select.Option key={item.product_id} value={item.catgeory_name}>
+                      <Select.Option
+                        key={item.product_id}
+                        value={item.catgeory_name}
+                      >
                         {item.catgeory_name}
                       </Select.Option>
                     );
                   })}
-                {/* <Select.Option value="Watch">watch</Select.Option>
-                <Select.Option value="cookware">cookware</Select.Option> */}
+                
               </Select>
             </div>
-          </div>
+          </div> */}
           <div className="row my-3">
             <div className="col-4  px-3">
               <Select
@@ -444,17 +485,17 @@ function Productlist() {
               </Select>
             </div>
             <div className=" col-4 d-flex align-items-center justify-content-center">
-              {totalCount>0 &&(
-            <MyPagination
-              total={parseInt(totalCount)}
-              current={current}
-              pageSize={numOfItems}
-              onChange={(current, pageSize) => {
-                setCurrent(current);
-              }}
-            />
-            )}
-          </div>
+              {totalCount > 0 && (
+                <MyPagination
+                  total={parseInt(totalCount)}
+                  current={current}
+                  pageSize={numOfItems}
+                  onChange={(current, pageSize) => {
+                    setCurrent(current);
+                  }}
+                />
+              )}
+            </div>
             <div className="col-4 d-flex justify-content-end">
               <Button
                 //   onClick={() => setShowAddOpportunity(true)}
@@ -482,16 +523,15 @@ function Productlist() {
             />
           </div>
           <div className="d-flex py-2 justify-content-center">
-            {totalCount>0 &&(
-            <MyPagination
-           
-              total={parseInt(totalCount)}
-              current={current}
-              pageSize={numOfItems}
-              onChange={(current, pageSize) => {
-                setCurrent(current);
-              }}
-            />
+            {totalCount > 0 && (
+              <MyPagination
+                total={parseInt(totalCount)}
+                current={current}
+                pageSize={numOfItems}
+                onChange={(current, pageSize) => {
+                  setCurrent(current);
+                }}
+              />
             )}
           </div>
           {/* {"mcncncncncncncnc"}  {product listing ends } */}

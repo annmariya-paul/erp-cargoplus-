@@ -65,7 +65,7 @@ function Categorylist(props) {
   const [ViewingData, setViewingDAta] = useState();
   const [categoryId, setCategory] = useState();
   const [OldData, setOldData] = useState();
-  const [CategoryImg,setCategoryImg] = useState();
+  const [CategoryImg, setCategoryImg] = useState();
   const [c_code, setCcode] = useState();
   const [cName, setCname] = useState();
   const [cPic, setCpic] = useState();
@@ -96,7 +96,7 @@ function Categorylist(props) {
           key: category?.category_id,
           category_name: category?.category_name,
           category_parent_id: category?.category_parent_id,
-          category_parent_name:category?.category_parent_name,
+          category_parent_name: category?.category_parent_name,
           category_code: category?.category_code,
           category_description: category?.category_description,
           category_pic: category?.category_pic,
@@ -315,9 +315,20 @@ function Categorylist(props) {
       onFilter: (value, record) => {
         // console.log("hai how are", record.children);
 
-        return String(record.category_name || nameSearch)
-          .toLowerCase()
-          .includes(value.toLowerCase());
+        return (
+          String(record.category_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.category_code)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.category_parent_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.category_description)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
       },
     },
     // Table.EXPAND_COLUMN,
@@ -326,12 +337,24 @@ function Categorylist(props) {
       dataIndex: "category_code",
       key: "category_code",
       width: "11%",
-      filteredValue: [searchCode],
+      filteredValue: [searchedText],
       onFilter: (value, record) => {
-        console.log("dfhasasswww12", record);
-        return String(record.category_code)
-          .toLowerCase()
-          .includes(value.toLowerCase());
+        // console.log("hai how are", record.children);
+
+        return (
+          String(record.category_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.category_code)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.category_parent_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.category_description)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
       },
     },
     {
@@ -339,11 +362,24 @@ function Categorylist(props) {
       dataIndex: "category_parent_name",
       key: "category_parent_name",
       width: "20%",
-      filteredValue: [searchStatus],
+      filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.category_parent_id)
-          .toLowerCase()
-          .includes(value.toLowerCase());
+        // console.log("hai how are", record.children);
+
+        return (
+          String(record.category_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.category_code)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.category_parent_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.category_description)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
       },
     },
     {
@@ -351,6 +387,25 @@ function Categorylist(props) {
       dataIndex: "category_description",
       key: "category_description",
       width: "24%",
+      filteredValue: [searchedText],
+      onFilter: (value, record) => {
+        // console.log("hai how are", record.children);
+
+        return (
+          String(record.category_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.category_code)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.category_parent_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.category_description)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
+      },
     },
     {
       title: "ACTIONS",
@@ -414,7 +469,7 @@ function Categorylist(props) {
         category_name: e.category_name,
         category_code: e.category_code,
         category_parent_id: e.category_parent_id,
-        category_parent_name:e.category_parent_name,
+        category_parent_name: e.category_parent_name,
         category_description: e.category_description,
         category_pic: e.category_pic,
       });
@@ -528,13 +583,9 @@ function Categorylist(props) {
             <div className="col">
               <h5 className="lead_text">Category</h5>
             </div>
-            <div className="col-auto" style={{}}>
-              {/* <Leadlist_Icons /> */}
-            </div>
-          </div>
-          <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
             <div className="col-4">
               <Input.Search
+                className="inputSearch"
                 placeholder="Search by Name"
                 style={{ margin: "5px", borderRadius: "5px" }}
                 value={searchedText}
@@ -546,6 +597,12 @@ function Categorylist(props) {
                 }}
               />
             </div>
+            <div className="col-4" style={{}}>
+              {/* <Leadlist_Icons /> */}
+            </div>
+          </div>
+          {/* <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
+           
             <div className="col-4">
               <Input.Search
                 placeholder="Search by code"
@@ -559,7 +616,7 @@ function Categorylist(props) {
                 }}
               />
             </div>
-          </div>
+          </div> */}
           <div className="row my-3">
             <div className="col-4  ">
               <Select
@@ -812,7 +869,6 @@ function Categorylist(props) {
                             overflow: "auto",
                           }}
                           treeData={CategoryTree}
-                         
                           // disabled={}
                           placeholder="Please select"
                           treeDefaultExpandAll

@@ -39,12 +39,12 @@ export default function Attribute(props) {
   const [attriName, setAttriName] = useState();
 
   const [saveSuccess, setSaveSuccess] = useState(false);
-  const [showModaladd,setShowModaladd]= useState(false);
-  const[addattributename,setaddattributename] =useState("")
-  const[addattributedesc,setaddattributedesc] =useState("")
+  const [showModaladd, setShowModaladd] = useState(false);
+  const [addattributename, setaddattributename] = useState("");
+  const [addattributedesc, setaddattributedesc] = useState("");
   const [serialNo, setserialNo] = useState(1);
   const [addForm] = Form.useForm();
-  const [editForm]= Form.useForm()
+  const [editForm] = Form.useForm();
   const [viewattributes, setViewAttributes] = useState({
     id: "",
     attributename: "",
@@ -84,7 +84,6 @@ export default function Attribute(props) {
     });
     setShowModalEdit(true);
     setuniqueCode(false);
-
   };
 
   const handleEditclick = (e) => {
@@ -100,7 +99,6 @@ export default function Attribute(props) {
     });
     setShowModalEdit(true);
     setuniqueCode(false);
-
   };
 
   const handleupdate = async () => {
@@ -118,7 +116,7 @@ export default function Attribute(props) {
         setSaveSuccess(true);
         close_modal(saveSuccess, 1000);
         getallattributes();
-      } 
+      }
     } catch (err) {
       console.log("error to update attributes");
     }
@@ -132,31 +130,31 @@ export default function Attribute(props) {
       }, time);
     }
   };
-    // function to create attributes
+  // function to create attributes
 
-    const createAttributes = async () => {
-      try {
-        const addattributes = await PublicFetch.post(
-          `${CRM_BASE_URL_SELLING}/attribute`,
-          {
-            attribute_name: addattributename,
-            attribute_description: addattributedesc,
-          }
-        );
-        console.log("attributes added successfully", addattributes);
-        if (addattributes.data.success) {
-          setShowModaladd(false)
-          addForm.resetFields()
-          getallattributes()
-          setSaveSuccess(true);
-          close_modal(saveSuccess, 1000);
-        } else if (addattributes.data.success === false) {
-          alert(addattributes.data.data);
+  const createAttributes = async () => {
+    try {
+      const addattributes = await PublicFetch.post(
+        `${CRM_BASE_URL_SELLING}/attribute`,
+        {
+          attribute_name: addattributename,
+          attribute_description: addattributedesc,
         }
-      } catch (err) {
-        console.log("err to add the attributes", err);
+      );
+      console.log("attributes added successfully", addattributes);
+      if (addattributes.data.success) {
+        setShowModaladd(false);
+        addForm.resetFields();
+        getallattributes();
+        setSaveSuccess(true);
+        close_modal(saveSuccess, 1000);
+      } else if (addattributes.data.success === false) {
+        alert(addattributes.data.data);
       }
-    };
+    } catch (err) {
+      console.log("err to add the attributes", err);
+    }
+  };
 
   // function to getting attributes  unnimaya 11/11/22
   const getallattributes = async () => {
@@ -189,13 +187,12 @@ export default function Attribute(props) {
   ];
 
   const columns = [
-  
     {
       title: "Sl. No",
       key: "index",
       render: (value, item, index) => serialNo + index,
       align: "center",
-      width:"10%"
+      width: "10%",
     },
 
     {
@@ -281,32 +278,13 @@ export default function Attribute(props) {
     <>
       <div className="container-fluid attribute_list pt-3">
         <div className="row flex-wrap">
-          <div className="col">
+          <div className="col-4">
             <h5 className="lead_text">Attributes</h5>
           </div>
-          <Leadlist_Icons
-            datas={attributes}
-            columns={filteredColumns}
-            items={data12}
-            xlheading={AttributeHeads}
-            filename="data.csv"
-            chechboxes={
-              <Checkbox.Group onChange={onChange} value={selectedColumns}>
-                {columnsKeys.map((column) => (
-                  <li>
-                    <Checkbox value={column} key={column}>
-                      {column}
-                    </Checkbox>
-                  </li>
-                ))}
-              </Checkbox.Group>
-            }
-          />
-        </div>
-        <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
-              placeholder="Search by Name and Description "
+              className="inputSearch"
+              placeholder="Search  "
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
               onChange={(e) => {
@@ -317,7 +295,30 @@ export default function Attribute(props) {
               }}
             />
           </div>
+          <div className="col-4 d-flex justify-content-end">
+            <Leadlist_Icons
+              datas={attributes}
+              columns={filteredColumns}
+              items={data12}
+              xlheading={AttributeHeads}
+              filename="data.csv"
+              chechboxes={
+                <Checkbox.Group onChange={onChange} value={selectedColumns}>
+                  {columnsKeys.map((column) => (
+                    <li>
+                      <Checkbox value={column} key={column}>
+                        {column}
+                      </Checkbox>
+                    </li>
+                  ))}
+                </Checkbox.Group>
+              }
+            />
+          </div>
         </div>
+        {/* <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
+          
+        </div> */}
         <div className="row my-3">
           <div className="col-4 px-3 ">
             <Select
@@ -344,25 +345,30 @@ export default function Attribute(props) {
             </Select>
           </div>
           <div className=" col-4 d-flex align-items-center justify-content-center">
-            {attributes&& (
-          <MyPagination
-            total={attributes?.length}
-            current={current}
-            showSizeChanger={true}
-            pageSize={pageSize}
-            onChange={(current, pageSize) => {
-              setCurrent(current);
-              setPageSize(pageSize);
-            }}
-          />
-          )}
-        </div>
+            {attributes && (
+              <MyPagination
+                total={attributes?.length}
+                current={current}
+                showSizeChanger={true}
+                pageSize={pageSize}
+                onChange={(current, pageSize) => {
+                  setCurrent(current);
+                  setPageSize(pageSize);
+                }}
+              />
+            )}
+          </div>
 
           <div className="col-4 mb-2 px-4">
             {/* <Link to={ROUTES.ADD_ATTRIBUTES} style={{ color: "white" }}> */}
-              <Button btnType="add" onClick={()=>{
-                setShowModaladd(true)
-              }} >Add Attribute</Button>
+            <Button
+              btnType="add"
+              onClick={() => {
+                setShowModaladd(true);
+              }}
+            >
+              Add Attribute
+            </Button>
             {/* </Link> */}
           </div>
         </div>
@@ -375,17 +381,17 @@ export default function Attribute(props) {
           />
         </div>
         <div className="d-flex py-2 justify-content-center">
-          {attributes &&(
-          <MyPagination
-            total={attributes?.length}
-            current={current}
-            showSizeChanger={true}
-            pageSize={pageSize}
-            onChange={(current, pageSize) => {
-              setCurrent(current);
-              setPageSize(pageSize);
-            }}
-          />
+          {attributes && (
+            <MyPagination
+              total={attributes?.length}
+              current={current}
+              showSizeChanger={true}
+              pageSize={pageSize}
+              onChange={(current, pageSize) => {
+                setCurrent(current);
+                setPageSize(pageSize);
+              }}
+            />
           )}
         </div>
 
@@ -409,7 +415,7 @@ export default function Attribute(props) {
                 form={addForm}
                 onFinish={(values) => {
                   console.log("values iss", values);
-                  createAttributes()
+                  createAttributes();
                   // handleupdate();
                 }}
                 onFinishFailed={(error) => {
@@ -465,8 +471,8 @@ export default function Attribute(props) {
                       ""
                     )}
                   </div>
-                  </div>
-                  <div className="row">
+                </div>
+                <div className="row">
                   <div className="col-12 pt-3">
                     <label>Description</label>
                     <Form.Item
@@ -492,21 +498,17 @@ export default function Attribute(props) {
                     >
                       <TextArea
                         value={addattributedesc}
-                        onChange={(e) =>
-                          setaddattributedesc(e.target.value)
-                        }
+                        onChange={(e) => setaddattributedesc(e.target.value)}
                       />
                     </Form.Item>
                   </div>
-                  </div>
+                </div>
                 <div className="row justify-content-center mt-5">
                   <div className="col-1">
                     <Button btnType="save">Save</Button>
                   </div>
                 </div>
               </Form>
-
-             
             </div>
           }
         />
@@ -564,7 +566,7 @@ export default function Attribute(props) {
           }
         />
 
-<Custom_model
+        <Custom_model
           size={"sm"}
           show={saveSuccess}
           onHide={() => setSaveSuccess(false)}
@@ -645,8 +647,8 @@ export default function Attribute(props) {
                       ""
                     )}
                   </div>
-                  </div>
-                  <div className="row">
+                </div>
+                <div className="row">
                   <div className="col-12 pt-3">
                     <label>Description</label>
                     <Form.Item
@@ -678,15 +680,13 @@ export default function Attribute(props) {
                       />
                     </Form.Item>
                   </div>
-                  </div>
+                </div>
                 <div className="row justify-content-center align-items-center mt-5">
                   <div className="col-1">
                     <Button btnType="save">Save</Button>
                   </div>
                 </div>
               </Form>
-
-             
             </div>
           }
         />

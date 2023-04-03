@@ -186,7 +186,7 @@ export default function TaxType() {
     {
       title: "SI.NO",
       key: "index",
-      width: "13%",
+      width: "5%",
       render: (value, item, index) => serialNo + index,
       align: "center",
     },
@@ -206,6 +206,9 @@ export default function TaxType() {
             .includes(value.toLowerCase()) ||
           String(record.tax_type_description)
             .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.tax_type_tax_group)
+            .toLowerCase()
             .includes(value.toLowerCase())
         );
       },
@@ -216,12 +219,69 @@ export default function TaxType() {
       dataIndex: "tax_type_percentage",
       key: "tax_type_percentage",
       align: "center",
+      filteredValue: [searchedText],
+      onFilter: (value, record) => {
+        return (
+          String(record.tax_type_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.tax_type_percentage)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.tax_type_description)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.tax_type_tax_group)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
+      },
+    },
+    {
+      title: "TAX GROUP",
+      dataIndex: "tax_type_tax_group",
+      key: "tax_type_tax_group",
+      align: "left",
+      filteredValue: [searchedText],
+      onFilter: (value, record) => {
+        return (
+          String(record.tax_type_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.tax_type_percentage)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.tax_type_description)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.tax_type_tax_group)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
+      },
     },
     {
       title: "DESCRIPTION",
       dataIndex: "tax_type_description",
       key: "tax_type_description",
       align: "left",
+      filteredValue: [searchedText],
+      onFilter: (value, record) => {
+        return (
+          String(record.tax_type_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.tax_type_percentage)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.tax_type_description)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.tax_type_tax_group)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
+      },
     },
     {
       title: "ACTION",
@@ -261,16 +321,14 @@ export default function TaxType() {
     <>
       <div className="container-fluid container_fms pt-3">
         <div className="row flex-wrap">
-          <div className="col">
+          <div className="col-4 pt-2">
             <h5 className="lead_text">Tax Types</h5>
           </div>
-          {/* <Leadlist_Icons /> */}
-        </div>
-        <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
-          <div className="col-4">
+          <div className="col-4 mb-3">
             <Input.Search
+              className="inputSearch"
               placeholder="Search"
-              style={{ margin: "5px", borderRadius: "5px" }}
+              style={{ borderRadius: "5px" }}
               value={searchedText}
               onChange={(e) => {
                 setSearchedText(e.target.value ? [e.target.value] : []);
@@ -280,6 +338,8 @@ export default function TaxType() {
               }}
             />
           </div>
+          <div className="col-4"></div>
+          {/* <Leadlist_Icons /> */}
         </div>
         <div className="row my-3">
           <div className="col-4 px-3">

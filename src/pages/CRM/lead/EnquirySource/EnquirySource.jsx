@@ -13,7 +13,7 @@ import MyPagination from "../../../../components/Pagination/MyPagination";
 import TableData from "../../../../components/table/table_data";
 import { ROUTES } from "../../../../routes";
 import PublicFetch from "../../../../utils/PublicFetch";
-
+import "./enquirySource.scss";
 function EnquirySource() {
   const [addForm] = Form.useForm();
   const [serialNo, setserialNo] = useState(1);
@@ -48,9 +48,14 @@ function EnquirySource() {
       onFilter: (value, record) => {
         // console.log("hai how are", record.children);
 
-        return String(record.enq_source_name)
-          .toLowerCase()
-          .includes(value.toLowerCase());
+        return (
+          String(record.enq_source_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.enq_source_description)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
       },
     },
     // Table.EXPAND_COLUMN,
@@ -60,13 +65,19 @@ function EnquirySource() {
       key: "enq_source_description",
       width: "11%",
       align: "center",
-      //   filteredValue: [searchCode],
-      //   onFilter: (value, record) => {
-      //     console.log("dfhasasswww12", record);
-      //     return String(record.category_code)
-      //       .toLowerCase()
-      //       .includes(value.toLowerCase());
-      //   },
+      filteredValue: [searchedText],
+      onFilter: (value, record) => {
+        // console.log("hai how are", record.children);
+
+        return (
+          String(record.enq_source_description)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.enq_source_name)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
+      },
     },
     // {
     //   title: "Lead",
@@ -248,16 +259,21 @@ function EnquirySource() {
         <div className="col-12">
           <div>
             <div className="row flex-wrap">
-              <div className="col-4">
+              <div className="col-4 pt-2">
                 <h5 className="lead_text">Enquiry Source</h5>
               </div>
               <div
                 // style={{ backgroundColor: "rgb(233, 233, 233)", width: "fit-content"}}
-                className="col-4  shadow-sm"
+                className="col-4 mb-3 "
               >
                 <Input.Search
-                  placeholder="Search by Name"
-                  style={{ margin: "5px", borderRadius: "5px" }}
+                  placeholder="Search "
+                  style={{
+                    // margin: "5px",
+                    borderRadius: "5px",
+                    backgroundColor: "whitesmoke",
+                  }}
+                  className="inputSearch"
                   value={searchedText}
                   onChange={(e) => {
                     setSearchedText(e.target.value ? [e.target.value] : []);

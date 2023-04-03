@@ -288,9 +288,14 @@ function BrandsList() {
       key: "NAME",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.brand_name)
-          .toLowerCase()
-          .includes(value.toLowerCase());
+        return (
+          String(record.brand_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.brand_description)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
       },
       align: "center",
       width: "23%",
@@ -350,31 +355,12 @@ function BrandsList() {
 
           <div>
             <div className="row flex-wrap">
-              <div className="col">
+              <div className="col-4 pt-2">
                 <h5 className="lead_text">Brands</h5>
               </div>
-              <Leadlist_Icons
-                datas={brands}
-                columns={filteredColumns}
-                items={data12}
-                xlheading={BrandHeads}
-                filename="data.csv"
-                chechboxes={
-                  <Checkbox.Group onChange={onChange} value={selectedColumns}>
-                    {columnsKeys.map((column) => (
-                      <li>
-                        <Checkbox value={column} key={column}>
-                          {column}
-                        </Checkbox>
-                      </li>
-                    ))}
-                  </Checkbox.Group>
-                }
-              />
-            </div>
-            <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
               <div className="col-4">
                 <Input.Search
+                  className="inputSearch"
                   placeholder="Search by Name"
                   style={{ margin: "5px", borderRadius: "5px" }}
                   value={searchedText}
@@ -386,7 +372,30 @@ function BrandsList() {
                   }}
                 />
               </div>
+              <div className="col-4 d-flex justify-content-end">
+                <Leadlist_Icons
+                  datas={brands}
+                  columns={filteredColumns}
+                  items={data12}
+                  xlheading={BrandHeads}
+                  filename="data.csv"
+                  chechboxes={
+                    <Checkbox.Group onChange={onChange} value={selectedColumns}>
+                      {columnsKeys.map((column) => (
+                        <li>
+                          <Checkbox value={column} key={column}>
+                            {column}
+                          </Checkbox>
+                        </li>
+                      ))}
+                    </Checkbox.Group>
+                  }
+                />
+              </div>
             </div>
+            {/* <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
+              
+            </div> */}
             <div className="row my-3">
               <div className="col-4  px-3">
                 <Select

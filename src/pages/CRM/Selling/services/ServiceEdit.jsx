@@ -351,7 +351,7 @@ function ServiceEdit() {
                   </Form.Item>
                 </div>
 
-                <div className="col-6 mt-1">
+                {/* <div className="col-6 mt-1">
                   <label className="">Tax Type</label>
                   <Form.Item
                     name="taxRate"
@@ -388,11 +388,11 @@ function ServiceEdit() {
                         })}
                     </SelectBox>
                   </Form.Item>
-                </div>
+                </div> */}
                 <div className="col-6 mt-1">
                   <label className="">Tax Groups</label>
                   <Form.Item
-                    name="taxRate"
+                    name="taxGroup"
                     rules={[
                       {
                         required: true,
@@ -445,7 +445,8 @@ function ServiceEdit() {
                       multiple
                       listType="picture"
                       accept=".png,.jpeg"
-                      height={100}
+                      // height={100}
+                      style={{ height: "65px" }}
                       // onPreview={handlePreview}
                       beforeUpload={beforeUpload}
                       onChange={(file) => {

@@ -13,6 +13,7 @@ import CustomModal from "../../../../components/custom_modal/custom_model";
 import { CRM_BASE_URL_FMS } from "../../../../api/bootapi";
 import { useEffect } from "react";
 import PublicFetch from "../../../../utils/PublicFetch";
+import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
 // import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
 
 export default function Incoterm() {
@@ -202,18 +203,37 @@ export default function Incoterm() {
     },
   ];
 
+  const columnsKeys = columns.map((column) => column.key);
+
+  const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
+  const filteredColumns = columns.filter((column) =>
+    selectedColumns.includes(column.key)
+  );
+  console.log("filtered columns::", filteredColumns);
+  const onChange = (checkedValues) => {
+    setSelectedColumns(checkedValues);
+  };
+
+  //for Xlsx data
+  const UnitHeads = [["Slno", "SHORT NAME", "FULL NAME", "DESCRIPTION"]];
+  //for pdf download
+  const data12 = allIncoterms?.map((item, index) => [
+    index + serialNo,
+    item.incoterm_short_name,
+    item.incoterm_full_name,
+    item.incoterm_description,
+  ]);
+
   return (
     <>
       <div className="container-fluid container_fms pt-3">
         <div className="row flex-wrap">
-          <div className="col">
+          <div className="col-4 pt-2">
             <h5 className="lead_text">Incoterm</h5>
           </div>
-        </div>
-
-        <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
+              className="inputSearch"
               placeholder="Search"
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchAny}
@@ -225,7 +245,22 @@ export default function Incoterm() {
               }}
             />
           </div>
+          <div className="col-4 d-flex justify-content-end">
+            {data12 && (
+              <Leadlist_Icons
+                datas={data12}
+                columns={filteredColumns}
+                items={data12}
+                xlheading={UnitHeads}
+                filename="data.csv"
+              />
+            )}
+          </div>
         </div>
+
+        {/* <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
+         
+        </div> */}
 
         <div className="row my-3">
           <div className="col-4 ">

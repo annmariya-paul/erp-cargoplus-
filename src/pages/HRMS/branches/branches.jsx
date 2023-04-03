@@ -13,6 +13,7 @@ import PublicFetch from "../../../utils/PublicFetch";
 import { UniqueErrorMsg } from "../../../ErrorMessages/UniqueErrorMessage";
 import CheckUnique from "../../../check Unique/CheckUnique";
 import MyPagination from "../../../components/Pagination/MyPagination";
+import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
 
 // { Add and list Branches - Ann - 16/11/22 }
 export default function Branches(props) {
@@ -20,12 +21,12 @@ export default function Branches(props) {
   const [addForm] = Form.useForm();
   const [error, setError] = useState(false);
   const [successPopup, setSuccessPopup] = useState(false);
- const [searchedText, setSearchedText] = useState("");
-const [modalAddBranch, setModalAddBranch] = useState(false);
+  const [searchedText, setSearchedText] = useState("");
+  const [modalAddBranch, setModalAddBranch] = useState(false);
 
-const [pageSize, setPageSize] = useState("25");
-const [current, setCurrent] = useState(1);
-const [serialNo, setserialNo] = useState(1);
+  const [pageSize, setPageSize] = useState("25");
+  const [current, setCurrent] = useState(1);
+  const [serialNo, setserialNo] = useState(1);
   const [branches, setBranches] = useState();
   const [Errormsg, setErrormsg] = useState();
   const [NameInput, setNameInput] = useState();
@@ -38,15 +39,14 @@ const [serialNo, setserialNo] = useState(1);
   const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
   const [editUniqueName, setEditUniqueName] = useState();
   const [editUniqueCode, setEditUniqueCode] = useState();
-const [editForm] = Form.useForm();
-const [BranchError, setBranchError] = useState();
-const [branchcode, setBranchcode] = useState();
-const [branchname, setBranchname] = useState();
+  const [editForm] = Form.useForm();
+  const [BranchError, setBranchError] = useState();
+  const [branchcode, setBranchcode] = useState();
+  const [branchname, setBranchname] = useState();
 
-const [searchcodeText, setSearchcodeText] = useState("");
+  const [searchcodeText, setSearchcodeText] = useState("");
 
-
-//close modal for  success pop up 
+  //close modal for  success pop up
   const close_modal = (mShow, time) => {
     if (!mShow) {
       setTimeout(() => {
@@ -76,10 +76,7 @@ const [searchcodeText, setSearchcodeText] = useState("");
     getallbranches();
   }, []);
 
-
- 
-
-//For Edit Branch
+  //For Edit Branch
   const BranchEdit = (e) => {
     console.log("Branch edit", e);
     setNameInput(e.branch_name);
@@ -91,7 +88,7 @@ const [searchcodeText, setSearchcodeText] = useState("");
       branch_id: e.branch_id,
       NameInput: e.branch_name,
       CodeInput: e.branch_code,
-   });
+    });
     setBranchEditPopup(true);
   };
 
@@ -99,11 +96,11 @@ const [searchcodeText, setSearchcodeText] = useState("");
   const handleUpdate = (e) => {
     console.log("edit data", e);
     const formData = new FormData();
-  let data = {
+    let data = {
       branch_name: NameInput,
       branch_code: CodeInput,
     };
-   PublicFetch.patch(`${CRM_BASE_URL_HRMS}/branch/${branch_id}`, data)
+    PublicFetch.patch(`${CRM_BASE_URL_HRMS}/branch/${branch_id}`, data)
       .then((res) => {
         console.log("success branch edit", res);
         if (res.data.success) {
@@ -122,8 +119,7 @@ const [searchcodeText, setSearchcodeText] = useState("");
       });
   };
 
-
-//columns
+  //columns
   const columns = [
     {
       title: "SI.NO",
@@ -132,7 +128,7 @@ const [searchcodeText, setSearchcodeText] = useState("");
       render: (value, item, index) => serialNo + index,
       align: "center",
     },
-   
+
     {
       title: "BRANCH NAME",
       dataIndex: "branch_name",
@@ -140,12 +136,12 @@ const [searchcodeText, setSearchcodeText] = useState("");
       width: "30%",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.branch_name)
-          .toLowerCase()
-          .includes(value.toLowerCase()) ||
-          String(record.branch_code)
-          .toLowerCase()
-          .includes(value.toLowerCase())
+        return (
+          String(record.branch_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.branch_code).toLowerCase().includes(value.toLowerCase())
+        );
       },
       align: "left",
     },
@@ -190,8 +186,7 @@ const [searchcodeText, setSearchcodeText] = useState("");
     },
   ];
 
- 
-//API for create Branches
+  //API for create Branches
   const createBranches = async () => {
     try {
       const addbranches = await PublicFetch.post(
@@ -213,7 +208,6 @@ const [searchcodeText, setSearchcodeText] = useState("");
       console.log("err to add the branches", err);
     }
   };
-
 
   // const checkEditBranchNameis = (data) => {
   //   if (editUniqueName !== NameInput) {
@@ -259,19 +253,51 @@ const [searchcodeText, setSearchcodeText] = useState("");
   //   }
   // };
 
+  const columnsKeys = columns.map((column) => column.key);
+
+  const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
+  const filteredColumns = columns.filter((column) =>
+    selectedColumns.includes(column.key)
+  );
+  console.log("filtered columns::", filteredColumns);
+  const onChange1 = (checkedValues) => {
+    setSelectedColumns(checkedValues);
+  };
+
+  //for Xlsx data
+  const UnitHeads = [
+    [
+      "Slno",
+      "BRANCH NAME",
+      "BRANCH CODE",
+      // "CUSTOMER",
+      // "COST",
+      // "EXPENSE",
+      // "PROFIT/LOSS",
+    ],
+  ];
+  //for pdf download
+  const data12 = branches?.map((item, index) => [
+    index + serialNo,
+    item.branch_name,
+    item.branch_code,
+    // item.lead,
+    // item.cost,
+    // item.expense,
+    // item.profit,
+  ]);
+
   console.log("data", branchname, branchcode);
   return (
     <>
       <div className="container-fluid container_hrms pt-3">
-        <div className="row flex-wrap">
-          <div className="col">
+        <div className="row flex-wrap align-items-center">
+          <div className="col-4">
             <h5 className="lead_text">Branches</h5>
           </div>
-          {/* <Leadlist_Icons /> */}
-        </div>
-        <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-sm-4">
             <Input.Search
+              className="inputSearch"
               placeholder="Search "
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
@@ -283,7 +309,21 @@ const [searchcodeText, setSearchcodeText] = useState("");
               }}
             />
           </div>
-          {/* <div className="col-sm-4">
+          <div className="col-4 d-flex justify-content-end">
+            {data12 && (
+              <Leadlist_Icons
+                datas={data12}
+                columns={filteredColumns}
+                items={data12}
+                xlheading={UnitHeads}
+                filename="data.csv"
+              />
+            )}
+          </div>
+          {/* <Leadlist_Icons /> */}
+        </div>
+        {/* <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}> */}
+        {/* <div className="col-sm-4">
             <Input.Search
               placeholder="Search by Branch Code"
               style={{ margin: "5px", borderRadius: "5px" }}
@@ -296,7 +336,7 @@ const [searchcodeText, setSearchcodeText] = useState("");
               }}
             />
           </div> */}
-        </div>
+        {/* </div> */}
         <div className="row my-3">
           <div className="col-sm-4 px-3">
             <Select
@@ -305,9 +345,9 @@ const [searchcodeText, setSearchcodeText] = useState("");
               value={pageSize}
               onChange={(e) => {
                 setCurrent(1);
-                setPageSize(e)}}
+                setPageSize(e);
+              }}
             >
-               
               <Select.Option value="25">
                 Show
                 <span className="vertical ms-1">|</span>
@@ -326,57 +366,57 @@ const [searchcodeText, setSearchcodeText] = useState("");
             </Select>
           </div>
           <div className="col-sm-4 d-flex align-items-center justify-content-center">
-              <MyPagination
-                total={branches?.length}
-                current={current}
-                showSizeChanger={true}
-                pageSize={pageSize}
-                onChange={(current, pageSize) => {
-                  console.log("ggdhffs", current, pageSize);
-                  setCurrent(current);
-                  setPageSize(pageSize);
-                }}
-              />
-            </div>
+            <MyPagination
+              total={branches?.length}
+              current={current}
+              showSizeChanger={true}
+              pageSize={pageSize}
+              onChange={(current, pageSize) => {
+                console.log("ggdhffs", current, pageSize);
+                setCurrent(current);
+                setPageSize(pageSize);
+              }}
+            />
+          </div>
           <div className="col-sm-4 d-flex justify-content-end">
-            <Button btnType="add" onClick={() =>
-              {
+            <Button
+              btnType="add"
+              onClick={() => {
                 setModalAddBranch(true);
-              setUniqueCode(false);
-              setUniqueName(false);
-              addForm.resetFields();
-              }
-              }
-             >
-              Add Branch
+                setUniqueCode(false);
+                setUniqueName(false);
+                addForm.resetFields();
+              }}
+            >
+              New Branch
             </Button>
           </div>
         </div>
         <div className="datatable">
           <TableData
-                data={getData(current, pageSize)}
+            data={getData(current, pageSize)}
             // data={branches}
             columns={columns}
             custom_table_css="table_lead_list"
           />
         </div>
-        
+
         <div className="d-flex py-2 justify-content-center">
-              <MyPagination
-                total={branches?.length}
-                current={current}
-                showSizeChanger={true}
-                pageSize={pageSize}
-                onChange={(current, pageSize) => {
-                  console.log("ggdhffs", current, pageSize);
-                  setCurrent(current);
-                  setPageSize(pageSize);
-                }}
-              />
-            </div>
+          <MyPagination
+            total={branches?.length}
+            current={current}
+            showSizeChanger={true}
+            pageSize={pageSize}
+            onChange={(current, pageSize) => {
+              console.log("ggdhffs", current, pageSize);
+              setCurrent(current);
+              setPageSize(pageSize);
+            }}
+          />
+        </div>
       </div>
 
-{/* Modal for add Branch */}
+      {/* Modal for add Branch */}
       <CustomModel
         show={modalAddBranch}
         onHide={() => setModalAddBranch(false)}
@@ -553,17 +593,16 @@ const [searchcodeText, setSearchcodeText] = useState("");
                           setNameInput(e.target.value);
                           setErrormsg("");
                           setUniqueEditName(false);
-                          
                         }}
-                       
-                        onBlur={ async () => {
-                         
+                        onBlur={async () => {
                           if (editUniqueName !== NameInput) {
-                            let a = await CheckUnique({type:"branchname",value:NameInput})
-                         
+                            let a = await CheckUnique({
+                              type: "branchname",
+                              value: NameInput,
+                            });
+
                             setUniqueEditName(a);
                           }
-                       
                         }}
                       />
                     </Form.Item>{" "}
@@ -572,7 +611,6 @@ const [searchcodeText, setSearchcodeText] = useState("");
                         Branch Name {uniqueErrMsg.UniqueErrName}
                       </p>
                     ) : null}
-                   
                   </div>
                   <div className="col-12">
                     <label>Code</label>
@@ -601,15 +639,14 @@ const [searchcodeText, setSearchcodeText] = useState("");
                           setErrormsg("");
                           setUniqueEditCode(false);
                         }}
-                       
-                        onBlur={ async () => {
-                         
-                           if(editUniqueCode !== CodeInput){
-                            let a = await CheckUnique({type:"branchcode",value:CodeInput})
+                        onBlur={async () => {
+                          if (editUniqueCode !== CodeInput) {
+                            let a = await CheckUnique({
+                              type: "branchcode",
+                              value: CodeInput,
+                            });
                             setUniqueEditCode(a);
-                           
                           }
-                       
                         }}
                       />
                     </Form.Item>
@@ -618,7 +655,6 @@ const [searchcodeText, setSearchcodeText] = useState("");
                         Branch code {uniqueErrMsg.UniqueErrName}
                       </p>
                     ) : null}
-                   
                   </div>
 
                   <div className="col-12 d-flex justify-content-center mt-5">
@@ -626,7 +662,6 @@ const [searchcodeText, setSearchcodeText] = useState("");
                   </div>
                 </Form>
               </div>
-             
             </div>
           </div>
         }

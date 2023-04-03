@@ -466,7 +466,7 @@ function BrandsList() {
                         color: "white",
                       }}
                     > */}
-                  Add Brand
+                  New Brand
                   {/* </span> */}
                   {/* </Link> */}
                 </Button>

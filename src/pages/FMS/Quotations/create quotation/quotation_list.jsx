@@ -16,7 +16,6 @@ import { FiEdit } from "react-icons/fi";
 import CustomModel from "../../../../components/custom_modal/custom_model";
 import moment from "moment";
 
-
 import { CRM_BASE_URL_HRMS, CRM_BASE_URL_FMS } from "../../../../api/bootapi";
 import MyPagination from "../../../../components/Pagination/MyPagination";
 
@@ -41,7 +40,7 @@ export default function Quotations(props) {
   const [noofItems, setNoofItems] = useState("25");
   const [current, setCurrent] = useState(1);
 
-  const[totalquotation,settotalquotation]= useState("")
+  const [totalquotation, settotalquotation] = useState("");
 
   const [quatationList, setQuatationList] = useState([]);
 
@@ -86,6 +85,16 @@ export default function Quotations(props) {
             .includes(value.toLowerCase()) ||
           String(record.quotation_shipper)
             .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.quotation_date)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.quotation_validity)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.customer).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.quotation_status)
+            .toLowerCase()
             .includes(value.toLowerCase())
         );
       },
@@ -119,7 +128,7 @@ export default function Quotations(props) {
       width: "15%",
       // align: "center",
     },
-   
+
     // {
     //   title: "SHIPPER",
     //   dataIndex: "quotation_shipper",
@@ -169,7 +178,7 @@ export default function Quotations(props) {
               <MdPageview style={{ marginLeft: 15, marginRight: 15 }} />
             </div>
             <div className="deleteIcon m-0">
-              <FaTrash style={{  marginRight: 18 }}/>
+              <FaTrash style={{ marginRight: 18 }} />
             </div>
           </div>
         );
@@ -241,25 +250,26 @@ export default function Quotations(props) {
       consignee: "xyz",
       shipper: "new",
       status: "data",
-
       key: "2",
     },
   ];
 
   const getAllQuotation = () => {
-    PublicFetch.get(`${CRM_BASE_URL_FMS}/quotation?startIndex=${pageofIndex}&noOfItems=${noofItems}`)
+    PublicFetch.get(
+      `${CRM_BASE_URL_FMS}/quotation?startIndex=${pageofIndex}&noOfItems=${noofItems}`
+    )
       .then((res) => {
         console.log("Response", res);
         if (res.data.success) {
           console.log("success of quatation", res.data.data);
-          settotalquotation(res.data.data.totalCount)
-          setQuatationList(res.data.data.quotations)
+          settotalquotation(res.data.data.totalCount);
+          setQuatationList(res.data.data.quotations);
           let temp = [];
           res.data.data.quotations.forEach((item, index) => {
             let date = moment(item.quotation_date).format("DD-MM-YYYY");
             let validity = moment(item.quotation_validity).format("DD-MM-YYYY");
             temp.push({
-              sl_no:index+1,
+              sl_no: index + 1,
               quotation_cargo_type: item.quotation_cargo_type,
               quotation_carrier: item.quotation_carrier,
               quotation_id: item.quotation_id,
@@ -299,17 +309,16 @@ export default function Quotations(props) {
   ]);
   const OppHeads = [
     [
-       "sl_no",
+      "sl_no",
       "quotation_no",
       "quotation_date",
       "quotation_validity",
       "consignee_name",
       "quotation_shipper",
       "quotation_status",
-     
     ],
   ];
-console.log("quott",AllQuotations)
+  console.log("quott", AllQuotations);
 
   const onChange = (checkedValues) => {
     setSelectedColumns(checkedValues);
@@ -318,24 +327,26 @@ console.log("quott",AllQuotations)
   useEffect(() => {
     getAllQuotation();
   }, []);
-  console.log("quottation",OppHeads)
+  console.log("quottation", OppHeads);
   console.log("data12", data12);
 
   return (
     <>
-      <div className="container-fluid container2 ">
+      <div className="container-fluid container2 py-3 ">
         <div className="row">
-          <div className="col-3 d-flex justify-content-start">
-           
-            <h5 className="lead_text mt-3">Quotations</h5>
-            </div>
-            
-       
-          <div className="col-5  d-flex justify-content-start">
-       
-          <Input.Search
+          <div className="col-4 d-flex justify-content-start">
+            <h5 className="lead_text mt-2">Quotations</h5>
+          </div>
+
+          <div className="col-4  d-flex justify-content-start">
+            <Input.Search
+              className="inputSearch"
               placeholder="Search"
-              style={{ margin: "5px", borderRadius: "5px",boxShadow:"0.5px 0px 2px lightgrey" }}
+              style={{
+                // margin: "5px",
+                borderRadius: "5px",
+                // boxShadow: "0.5px 0px 2px lightgrey",
+              }}
               value={searchedText}
               onChange={(e) => {
                 setSearchedText(e.target.value ? [e.target.value] : []);
@@ -344,34 +355,30 @@ console.log("quott",AllQuotations)
                 setSearchedText(value);
               }}
             />
-        
           </div>
-          
-          <div className="col-4 d-flex justify-content-end ">
 
-          {AllQuotations && (
-            <Leadlist_Icons
-            datas={data12}
-            columns={filteredColumns}
-            items={data12}
-            xlheading={OppHeads}
-            filename="data.csv"
-            chechboxes={
-              <Checkbox.Group onChange={onChange} value={selectedColumns}>
-                {columnsKeys.map((column) => (
-                  <li>
-                    <Checkbox value={column} key={column}>
-                      {column}
-                    </Checkbox>
-                  </li>
-                ))}
-              </Checkbox.Group>
-            }
-          />
-          )}
+          <div className="col-4 d-flex justify-content-end ">
+            {AllQuotations && (
+              <Leadlist_Icons
+                datas={data12}
+                columns={filteredColumns}
+                items={data12}
+                xlheading={OppHeads}
+                filename="data.csv"
+                chechboxes={
+                  <Checkbox.Group onChange={onChange} value={selectedColumns}>
+                    {columnsKeys.map((column) => (
+                      <li>
+                        <Checkbox value={column} key={column}>
+                          {column}
+                        </Checkbox>
+                      </li>
+                    ))}
+                  </Checkbox.Group>
+                }
+              />
+            )}
           </div>
-        
-          
         </div>
         {/* <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
@@ -403,24 +410,24 @@ console.log("quott",AllQuotations)
               </Select.Option>
             </Select>
           </div>
-         
+
           <div className="col-4 d-flex py-2 justify-content-center">
-            {totalquotation>0 &&(
-            <MyPagination
-              total={parseInt(totalquotation)}
-              current={current}
-              pageSize={noofItems}
-              // defaultPageSize={noofItems}
-              showSizeChanger={false}
-              onChange={(current, pageSize) => {
-                console.log("page index isss", pageSize);
-                setCurrent(current);
-                // setPageSize(pageSize);
-                // setNoofItems(pageSize);
-                // setCurrent(noofItems !== pageSize ? 0 : current);
-              }}
-            />
-            ) }
+            {totalquotation > 0 && (
+              <MyPagination
+                total={parseInt(totalquotation)}
+                current={current}
+                pageSize={noofItems}
+                // defaultPageSize={noofItems}
+                showSizeChanger={false}
+                onChange={(current, pageSize) => {
+                  console.log("page index isss", pageSize);
+                  setCurrent(current);
+                  // setPageSize(pageSize);
+                  // setNoofItems(pageSize);
+                  // setCurrent(noofItems !== pageSize ? 0 : current);
+                }}
+              />
+            )}
           </div>
           <div className="col-4 d-flex justify-content-end ">
             <div className="col me-1">
@@ -440,8 +447,8 @@ console.log("quott",AllQuotations)
           />
         </div>
         <div className="d-flex justify-content-center ">
-          {totalquotation>0 &&(
-        <MyPagination
+          {totalquotation > 0 && (
+            <MyPagination
               total={parseInt(totalquotation)}
               current={current}
               pageSize={noofItems}
@@ -450,13 +457,10 @@ console.log("quott",AllQuotations)
               onChange={(current, pageSize) => {
                 console.log("page index isss", pageSize);
                 setCurrent(current);
-              
               }}
             />
-            )}
+          )}
         </div>
-        
-       
       </div>
       {/* <CustomModel
         show={showViewModal}

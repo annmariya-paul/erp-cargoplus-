@@ -10,6 +10,7 @@ import { CRM_BASE_URL_HRMS } from "../../../api/bootapi";
 import { UniqueErrorMsg } from "../../../ErrorMessages/UniqueErrorMessage";
 import CheckUnique from "../../../check Unique/CheckUnique";
 import MyPagination from "../../../components/Pagination/MyPagination";
+import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
 
 function Employeegrade() {
   const [searchedText, setSearchedText] = useState("");
@@ -19,7 +20,7 @@ function Employeegrade() {
   const [editShow, setEditShow] = useState(false);
   const [newName, setNewName] = useState();
   const [uniqueeditCode, setuniqueeditCode] = useState(false);
-  const [employeegradedata, setemployeegradedata] = useState("");
+  const [employeegradedata, setemployeegradedata] = useState();
   const [editempgradename, seteditempgradename] = useState("");
 
   const [editempgradeid, seteditempgradeid] = useState();
@@ -30,7 +31,7 @@ function Employeegrade() {
   const [employeeGrade, setEmployeeGrade] = useState();
   const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
 
-  const[addmodalshow,setAddmodalshow] =useState(false)
+  const [addmodalshow, setAddmodalshow] = useState(false);
 
   const close_modal = (mShow, time) => {
     if (!mShow) {
@@ -47,14 +48,13 @@ function Employeegrade() {
     );
   };
 
-
   const getallempgrade = async () => {
     try {
       const allemptype = await PublicFetch.get(
         `${CRM_BASE_URL_HRMS}/employee-grades`
       );
       console.log("all empolymntgrades are ::", allemptype?.data?.data);
-     
+
       setemployeegradedata(allemptype?.data?.data);
     } catch (err) {
       console.log("error to getting all employmntgrade", err);
@@ -65,7 +65,6 @@ function Employeegrade() {
     getallempgrade();
   }, []);
 
- 
   const submitaddemp = async () => {
     try {
       const addemployegrade = await PublicFetch.post(
@@ -77,13 +76,12 @@ function Employeegrade() {
       console.log("employegrade data is added ", addemployegrade);
       if (addemployegrade.data.success) {
         getallempgrade();
-        setAddmodalshow(false)
+        setAddmodalshow(false);
         setSuccessModal(true);
         addForm.resetFields();
         setSaveSuccess(true);
         close_modal(saveSuccess, 1000);
       }
-
     } catch (err) {
       console.log("err to add the employee Grade", err);
     }
@@ -131,7 +129,7 @@ function Employeegrade() {
       render: (value, item, index) => serialNo + index,
       align: "center",
     },
- 
+
     {
       title: "EMPLOYEE GRADE NAME",
       dataIndex: "employee_grade_name",
@@ -162,7 +160,6 @@ function Employeegrade() {
                   addForm.resetFields();
                   setuniqueCode(false);
                 }}
-               
               >
                 <FaEdit />
               </div>
@@ -174,21 +171,50 @@ function Employeegrade() {
     },
   ];
 
- 
+  const columnsKeys = columns.map((column) => column.key);
+
+  const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
+  const filteredColumns = columns.filter((column) =>
+    selectedColumns.includes(column.key)
+  );
+  console.log("filtered columns::", filteredColumns);
+  const onChange1 = (checkedValues) => {
+    setSelectedColumns(checkedValues);
+  };
+
+  //for Xlsx data
+  const UnitHeads = [
+    [
+      "Slno",
+      "EMPLOYEE GRADE NAME",
+      //  "DESIGNATION CODE",
+      // "CUSTOMER",
+      // "COST",
+      // "EXPENSE",
+      // "PROFIT/LOSS",
+    ],
+  ];
+  //for pdf download
+  const data12 = employeegradedata?.map((item, index) => [
+    index + serialNo,
+    item.employee_grade_name,
+    //  item.designation_code,
+    // item.lead,
+    // item.cost,
+    // item.expense,
+    // item.profit,
+  ]);
+
   return (
     <>
-   
-     
       <div className="container-fluid container2 pt-3">
-        <div className="row flex-wrap">
-          <div className="col">
+        <div className="row flex-wrap align-items-center">
+          <div className="col-4">
             <h5 className="lead_text">Employee Grade</h5>
           </div>
-      
-        </div>
-        <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
+              className="inputSearch"
               placeholder="Search"
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
@@ -200,7 +226,19 @@ function Employeegrade() {
               }}
             />
           </div>
+          <div className="col-4 d-flex justify-content-end">
+            {data12 && (
+              <Leadlist_Icons
+                datas={data12}
+                columns={filteredColumns}
+                items={data12}
+                xlheading={UnitHeads}
+                filename="data.csv"
+              />
+            )}
+          </div>
         </div>
+        {/* <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}></div> */}
         <div className="row my-3">
           <div className="col-4 px-3">
             <Select
@@ -208,10 +246,10 @@ function Employeegrade() {
               className="page_size_style"
               value={pageSize}
               onChange={(e) => {
-                setCurrent(1)
-                setPageSize(e)}}
+                setCurrent(1);
+                setPageSize(e);
+              }}
             >
-              
               <Select.Option value="25">
                 Show
                 <span className="vertical ms-1">|</span>
@@ -230,49 +268,47 @@ function Employeegrade() {
             </Select>
           </div>
           <div className="col-4 d-flex py-2 justify-content-center">
-              <MyPagination
-                total={employeegradedata?.length}
-                current={current}
-                showSizeChanger={true}
-                pageSize={pageSize}
-                onChange={(current, pageSize) => {
-                  console.log("ggdhffs", current, pageSize);
-                  setCurrent(current);
-                  setPageSize(pageSize);
-                }}
-              />
-            </div>
-            <div className="col-4">
+            <MyPagination
+              total={employeegradedata?.length}
+              current={current}
+              showSizeChanger={true}
+              pageSize={pageSize}
+              onChange={(current, pageSize) => {
+                console.log("ggdhffs", current, pageSize);
+                setCurrent(current);
+                setPageSize(pageSize);
+              }}
+            />
+          </div>
+          <div className="col-4">
             <Button btnType="add" onClick={() => setAddmodalshow(true)}>
-              Add Employee Grade
+              New Employee Grade
             </Button>
-            </div>
+          </div>
         </div>
         <div className="datatable">
           <TableData
-           data={getData(current, pageSize)}
-
+            data={getData(current, pageSize)}
             columns={columns}
             custom_table_css="table_lead_list"
           />
         </div>
-       
+
         <div className="d-flex py-0 justify-content-center">
-              <MyPagination
-                total={employeegradedata?.length}
-                current={current}
-                showSizeChanger={true}
-                pageSize={pageSize}
-                onChange={(current, pageSize) => {
-                  console.log("ggdhffs", current, pageSize);
-                  setCurrent(current);
-                  setPageSize(pageSize);
-                }}
-              />
-            </div>
+          <MyPagination
+            total={employeegradedata?.length}
+            current={current}
+            showSizeChanger={true}
+            pageSize={pageSize}
+            onChange={(current, pageSize) => {
+              console.log("ggdhffs", current, pageSize);
+              setCurrent(current);
+              setPageSize(pageSize);
+            }}
+          />
+        </div>
 
-
-          <Custom_model
+        <Custom_model
           size={"sm"}
           show={addmodalshow}
           onHide={() => {
@@ -283,85 +319,85 @@ function Employeegrade() {
             <>
               <h6 className="lead_text">Add Employee Grade</h6>
               <div className="container-fluid px-2 my-4 ">
-              <Form
-              name="addForm"
-              form={addForm}
-              onFinish={(value) => {
-                console.log("valuezzzzzzz", value);
-                submitaddemp();
-               
-              }}
-              onFinishFailed={(error) => {
-                console.log(error);
-              }}
-            >
-              <div className="row flex-wrap pt-1">
-                <div className="row ms-0 py-1">
-                  <div className="col-12 pt-3">
-                    <label htmlfor="emp_type_name">Employee grade Name</label>
-                    <Form.Item
-                      name="Employment_grade_name"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z ]+$"),
-                          message: "Please enter a valid Employee Grade Name",
-                        },
-                        {
-                          min: 2,
-                          message: "Name must be at least 2 characters",
-                        },
-                        {
-                          max: 100,
-                          message: "Name cannot be longer than 100 characters",
-                        },
-                      ]}
-                    >
-                      <InputType
-                        onChange={(e) => {
-                          setEmployeeGrade(e.target.value);
-                          setuniqueCode(false);
-                        }}
-                       
-                        onBlur={ async () => {
-                        
-                          let a = await CheckUnique({type:"employmentgradename",value:employeeGrade})
-                          console.log("hai how are u", a)
-                          setuniqueCode(a);
-                          
-                        }}
-                      
-                      />
-                    </Form.Item>
-                    {uniqueCode ? (
-                      <p style={{ color: "red" }}>
-                        Employement Grade Name {uniqueErrMsg.UniqueErrName}
-                      </p>
-                    ) : null}
+                <Form
+                  name="addForm"
+                  form={addForm}
+                  onFinish={(value) => {
+                    console.log("valuezzzzzzz", value);
+                    submitaddemp();
+                  }}
+                  onFinishFailed={(error) => {
+                    console.log(error);
+                  }}
+                >
+                  <div className="row flex-wrap pt-1">
+                    <div className="row ms-0 py-1">
+                      <div className="col-12 pt-3">
+                        <label htmlfor="emp_type_name">
+                          Employee grade Name
+                        </label>
+                        <Form.Item
+                          name="Employment_grade_name"
+                          rules={[
+                            {
+                              required: true,
+                              pattern: new RegExp("^[A-Za-z ]+$"),
+                              message:
+                                "Please enter a valid Employee Grade Name",
+                            },
+                            {
+                              min: 2,
+                              message: "Name must be at least 2 characters",
+                            },
+                            {
+                              max: 100,
+                              message:
+                                "Name cannot be longer than 100 characters",
+                            },
+                          ]}
+                        >
+                          <InputType
+                            onChange={(e) => {
+                              setEmployeeGrade(e.target.value);
+                              setuniqueCode(false);
+                            }}
+                            onBlur={async () => {
+                              let a = await CheckUnique({
+                                type: "employmentgradename",
+                                value: employeeGrade,
+                              });
+                              console.log("hai how are u", a);
+                              setuniqueCode(a);
+                            }}
+                          />
+                        </Form.Item>
+                        {uniqueCode ? (
+                          <p style={{ color: "red" }}>
+                            Employement Grade Name {uniqueErrMsg.UniqueErrName}
+                          </p>
+                        ) : null}
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-              <div className="row justify-content-center">
-                <div className="col-auto">
-                  <Button type="submit" className="p-2 save_button_style">
-                    Save
-                  </Button>
-                </div>
-              </div>
-            </Form>
-
+                  <div className="row justify-content-center">
+                    <div className="col-auto">
+                      <Button type="submit" className="p-2 save_button_style">
+                        Save
+                      </Button>
+                    </div>
+                  </div>
+                </Form>
               </div>
             </>
           }
         />
 
-
-            <Custom_model
-              size={"sm"}
-              show={saveSuccess}
-              onHide={() => setSaveSuccess(false)}
-              success
-            />
+        <Custom_model
+          size={"sm"}
+          show={saveSuccess}
+          onHide={() => setSaveSuccess(false)}
+          success
+        />
 
         <Custom_model
           size={"sm"}
@@ -379,7 +415,6 @@ function Employeegrade() {
                   onFinish={(value) => {
                     console.log("the formvaluess iss", value);
                     updateClick();
-                  
                   }}
                   onFinishFailed={(error) => {
                     console.log(error);
@@ -394,8 +429,7 @@ function Employeegrade() {
                           {
                             required: true,
                             pattern: new RegExp("^[A-Za-z ]+$"),
-                            message:
-                              "Please enter a valid Employee Grade Name",
+                            message: "Please enter a valid Employee Grade Name",
                           },
                           {
                             min: 2,
@@ -407,28 +441,23 @@ function Employeegrade() {
                               "Name cannot be longer than 100 characters",
                           },
                         ]}
-                       
                       >
                         <InputType
                           value={employeeGrade}
                           onChange={(e) => {
                             setEmployeeGrade(e.target.value);
                             setuniqueeditCode(false);
-
                           }}
-                         
-
-                          onBlur={ async () => {
-                            
-                            if (newName !== employeeGrade){
-                              let a = await CheckUnique({type:"employmentgradename",value:employeeGrade})
-                              console.log("hai how are u", a)
+                          onBlur={async () => {
+                            if (newName !== employeeGrade) {
+                              let a = await CheckUnique({
+                                type: "employmentgradename",
+                                value: employeeGrade,
+                              });
+                              console.log("hai how are u", a);
                               setuniqueeditCode(a);
-                             
                             }
-                            
                           }}
-                         
                         />
                       </Form.Item>
                       {uniqueeditCode ? (

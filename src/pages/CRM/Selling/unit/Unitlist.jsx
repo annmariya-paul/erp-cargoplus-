@@ -487,7 +487,7 @@ function Unitlist() {
                   setaddmodalShow(true);
                 }}
               >
-                Add Unit
+                New Unit
               </Button>
               {/* </Link> */}
             </div>

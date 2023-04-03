@@ -72,11 +72,34 @@ function InvoiceList() {
       dataIndex: "invoice_job_no",
       key: "invoice_job_no",
       width: "15%",
-      //  filteredValue: [searchLead],
+      filteredValue: [searchSource],
       onFilter: (value, record) => {
-        return String(record.opportunity_from)
-          .toLowerCase()
-          .includes(value.toLowerCase());
+        return (
+          String(record.opportunity_from)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.opportunity_source)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.invoice_job_consignee)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.invoice_job_shipper)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.invoice_status)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.invoice_status)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.invoice_no)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.invoice_date)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
       },
     },
 
@@ -86,11 +109,11 @@ function InvoiceList() {
       key: "invoice_job_consignee",
       width: "15%",
       //  filteredValue: [searchSource],
-      onFilter: (value, record) => {
-        return String(record.opportunity_source)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
+      // onFilter: (value, record) => {
+      //   return String(record.opportunity_source)
+      //     .toLowerCase()
+      //     .includes(value.toLowerCase());
+      // },
     },
     {
       title: "SHIPPER",
@@ -332,38 +355,13 @@ function InvoiceList() {
               {/* invoice listing section One */}
 
               <div>
-                <div className="row flex-wrap">
-                  <div className="col">
+                <div className="row flex-wrap align-items-center">
+                  <div className="col-4">
                     <h5 className="lead_text">Invoices</h5>
                   </div>
-                  {AllinvoiceData && (
-                    <Leadlist_Icons
-                      datas={data12}
-                      columns={filteredColumns}
-                      items={data12}
-                      xlheading={Invoice_header}
-                      filename="data.csv"
-                      chechboxes={
-                        <Checkbox.Group
-                          onChange={onChange}
-                          value={selectedColumns}
-                        >
-                          {columnsKeys.map((column) => (
-                            <li>
-                              <Checkbox value={column} key={column}>
-                                {column}
-                              </Checkbox>
-                            </li>
-                          ))}
-                        </Checkbox.Group>
-                      }
-                      name="Invoice"
-                    />
-                  )}
-                </div>
-                <div className="row p-1" style={{ backgroundColor: "#f4f4f7" }}>
-                  <div className="col-3">
+                  <div className="col-4">
                     <Input.Search
+                      className="inputSearch"
                       placeholder="Search by "
                       style={{ margin: "5px", borderRadius: "5px" }}
                       value={searchSource}
@@ -375,7 +373,36 @@ function InvoiceList() {
                       }}
                     />
                   </div>
+                  <div className="col-4 d-flex justify-content-end">
+                    {AllinvoiceData && (
+                      <Leadlist_Icons
+                        datas={data12}
+                        columns={filteredColumns}
+                        items={data12}
+                        xlheading={Invoice_header}
+                        filename="data.csv"
+                        chechboxes={
+                          <Checkbox.Group
+                            onChange={onChange}
+                            value={selectedColumns}
+                          >
+                            {columnsKeys.map((column) => (
+                              <li>
+                                <Checkbox value={column} key={column}>
+                                  {column}
+                                </Checkbox>
+                              </li>
+                            ))}
+                          </Checkbox.Group>
+                        }
+                        name="Invoice"
+                      />
+                    )}
+                  </div>
                 </div>
+                {/* <div className="row p-1" style={{ backgroundColor: "#f4f4f7" }}>
+                 
+                </div> */}
                 <div className="row my-3">
                   <div className="col-4   px-3">
                     <Select

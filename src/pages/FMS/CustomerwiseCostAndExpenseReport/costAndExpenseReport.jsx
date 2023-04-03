@@ -8,19 +8,20 @@ import styles from "./cstexp.module.scss";
 import moment from "moment";
 import { FaFileExcel } from "react-icons/fa";
 import * as XLSX from "xlsx/xlsx.js"; //for xl download
+import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
 
 const CostAndExpenseReport = () => {
   const { Option } = Select;
-  const [startDate, setStartDate] = useState(moment().startOf('month'));
-  const [endDate, setEndDate ] = useState(moment());
+  const [startDate, setStartDate] = useState(moment().startOf("month"));
+  const [endDate, setEndDate] = useState(moment());
   const [serialNo, setserialNo] = useState(1);
   const [customerList, setCustomerList] = useState();
   const [selectedCustomer, setSelectedCustomer] = useState();
   const [jobList, setJobList] = useState();
-  const [selectedJob,setSelectedJob] = useState();
+  const [selectedJob, setSelectedJob] = useState();
   const [reportData, setReportData] = useState();
   // console.log(moment(new Date()).format("YYYY-MM-DD"))
-  console.log(moment(new Date()).format("YYYY-MM-DD"),"New Date Details")
+  console.log(moment(new Date()).format("YYYY-MM-DD"), "New Date Details");
   const columns = [
     {
       title: "Sl. No.",
@@ -85,12 +86,13 @@ const CostAndExpenseReport = () => {
 
   const handleExport = () => {
     var wb = XLSX.utils.book_new();
-    
+
     var ws = XLSX.utils.json_to_sheet(datas);
     XLSX.utils.book_append_sheet(wb, ws, "Reports");
     XLSX.utils.sheet_add_aoa(
-      ws,xlheading,
-     
+      ws,
+      xlheading,
+
       { origin: "A1" }
     );
     // ws["!cols"] = [{ wch: 15 }];
@@ -122,7 +124,7 @@ const CostAndExpenseReport = () => {
       { wch: 15 },
     ];
     ws["!cols"] = wscols;
-   
+
     XLSX.writeFile(wb, "Student Report.xlsx");
     console.log("xlsx data", ws);
     return addStyle();
@@ -131,17 +133,9 @@ const CostAndExpenseReport = () => {
     console.log("xlsx downloaded");
   };
 
-  const datas= reportData;
+  const datas = reportData;
 
-  const xlheading = [
-    [
-      "job_no",
-      "customer",
-      "cost",
-      "expense",
-      "profit_loss",
-    ],
-  ];
+  const xlheading = [["job_no", "customer", "cost", "expense", "profit_loss"]];
 
   const getCustomerList = async () => {
     try {
@@ -157,12 +151,12 @@ const CostAndExpenseReport = () => {
   };
 
   const getJobList = async (e) => {
-    if(e === "null") e=null;
+    if (e === "null") e = null;
     try {
       const jobList = await PublicFetch.post(
         `${process.env.REACT_APP_BASE_URL}/freightManagement/v1/reports/cost-expense-report/jobs`,
         {
-          customerId: e
+          customerId: e,
         }
       );
       if (jobList?.status === 200) {
@@ -175,7 +169,7 @@ const CostAndExpenseReport = () => {
   };
 
   const Searchbydate = async () => {
-    if(!startDate || !endDate) {
+    if (!startDate || !endDate) {
       message.error("All input feilds are required");
       return;
     }
@@ -183,54 +177,97 @@ const CostAndExpenseReport = () => {
       const searchData = await PublicFetch.post(
         `${process.env.REACT_APP_BASE_URL}/freightManagement/v1/reports/cost-expense-report/report`,
         {
-          customerId: selectedCustomer?Number(selectedCustomer):null,
-          jobId: selectedJob?Number(selectedJob):null,
+          customerId: selectedCustomer ? Number(selectedCustomer) : null,
+          jobId: selectedJob ? Number(selectedJob) : null,
           dateFrom: moment(startDate).format("YYYY-MM-DD"),
-          dateTo: moment(endDate).format("YYYY-MM-DD")
+          dateTo: moment(endDate).format("YYYY-MM-DD"),
         }
-      )
-      if(searchData?.status === 200) {
+      );
+      if (searchData?.status === 200) {
         let temp = [];
-        searchData?.data.data.map((item)=> {
+        searchData?.data.data.map((item) => {
           temp.push({
             job_no: item.job_number,
             customer: item.customer.lead_customer_name,
-            cost: item.cost != null?(item.cost).toFixed(2):"",
-            expense: item.expense != null?(item.expense).toFixed(2):"",
-            profit_loss: item.profitLoss != null?(item.profitLoss).toFixed(2):"",
-          })
-        })
-        setReportData(temp)
+            cost: item.cost != null ? item.cost.toFixed(2) : "",
+            expense: item.expense != null ? item.expense.toFixed(2) : "",
+            profit_loss:
+              item.profitLoss != null ? item.profitLoss.toFixed(2) : "",
+          });
+        });
+        setReportData(temp);
       }
-     } catch (err) {
+    } catch (err) {
       console.log("Error while searching data");
     }
-  }
+  };
 
   useEffect(() => {
     getCustomerList();
     getJobList(null);
   }, []);
 
+  const columnsKeys = columns.map((column) => column.key);
+
+  const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
+  const filteredColumns = columns.filter((column) =>
+    selectedColumns.includes(column.key)
+  );
+  console.log("filtered columns::", filteredColumns);
+  const onChange = (checkedValues) => {
+    setSelectedColumns(checkedValues);
+  };
+
+  //for Xlsx data
+  const UnitHeads = [
+    [
+      "Slno",
+      "JOB NO",
+      "CUSTOMER",
+      "TOTAL COST	",
+      "TOTAL EXPENSE",
+      "TOTAL PROFIT/LOSS",
+    ],
+  ];
+  //for pdf download
+  const data12 = reportData?.map((item, index) => [
+    index + serialNo,
+    item.job_no,
+    item.customer,
+    item.cost,
+    item.expense,
+    item.profit_loss,
+  ]);
+
   return (
     <div className="container-fluid">
-      <div className="row">
+      <div className="row ">
         <div className="col">
-          <div className={`${styles.card} card`}>
-            <div className="d-flex justify-content-between px-4 ,t-">
-              <div className="">
-            <h5 className={styles.heading}>
-              Customerwise Cost And Expense Report
-            </h5>
+          <div className={`${styles.card} card p-3`}>
+            <div className="row align-items-center">
+              <div className="col-4">
+                <h5 className={styles.heading}>
+                  Customerwise Cost And Expense Report
+                </h5>
+              </div>
+              <div className="col-4"></div>
+              <div className={` col-4 d-flex justify-content-end `}>
+                {data12 && (
+                  <Leadlist_Icons
+                    datas={data12}
+                    columns={filteredColumns}
+                    items={data12}
+                    xlheading={UnitHeads}
+                    filename="data.csv"
+                  />
+                )}
+              </div>
+              {/* <li className="icon-border">
+                <a className={`${styles.icon_color} icon  `} href="#">
+                  <FaFileExcel onClick={handleExport} />
+                </a>
+              </li> */}
             </div>
-            <div className={`  `} >
-            <li className="icon-border">
-            <a className= {`${styles.icon_color} icon  `} href="#">
-              <FaFileExcel onClick={handleExport} />
-            </a>
-          </li>
-          </div>
-          </div>
 
             <div className="row">
               <div className="col-md-6">
@@ -249,9 +286,8 @@ const CostAndExpenseReport = () => {
                       onChange={(e) => {
                         setSelectedJob("null");
                         setSelectedCustomer(e);
-                        getJobList(e)
-                      }
-                      }
+                        getJobList(e);
+                      }}
                     >
                       <Option value="null">All</Option>
                       {customerList?.map((item) => {
@@ -278,8 +314,10 @@ const CostAndExpenseReport = () => {
                       onChange={(e) => setSelectedJob(e)}
                     >
                       <Option value="null">All</Option>
-                      {jobList?.map((item)=> {
-                        return <Option value={item.job_id}>{item.job_number}</Option>;
+                      {jobList?.map((item) => {
+                        return (
+                          <Option value={item.job_id}>{item.job_number}</Option>
+                        );
                       })}
                     </SelectBox>
                   </div>
@@ -291,7 +329,7 @@ const CostAndExpenseReport = () => {
                   <p className="mt-4">Date From</p>
                   <div className={styles.datepicker_wrapper}>
                     <DatePicker
-                    // defaultValue={moment(new Date()).format("YYYY-MM-DD")}
+                      // defaultValue={moment(new Date()).format("YYYY-MM-DD")}
                       format={"DD-MM-YYYY"}
                       placeholder="From"
                       value={startDate}
@@ -312,14 +350,10 @@ const CostAndExpenseReport = () => {
               </div>
               <div className={`${styles.saveBtn} mt-4 mb-3 gap-3 `}>
                 <div className="p-0 m-0">
-                <Button
-                  btnType="save"
-                  onClick={Searchbydate}
-                >
-                  Search
-                </Button>
+                  <Button btnType="save" onClick={Searchbydate}>
+                    Search
+                  </Button>
                 </div>
-               
               </div>
             </div>
           </div>

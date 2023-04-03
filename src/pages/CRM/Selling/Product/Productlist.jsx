@@ -507,7 +507,7 @@ function Productlist() {
                       color: "white",
                     }}
                   >
-                    Add Product
+                    New Product
                   </span>
                 </Link>
               </Button>

@@ -48,7 +48,10 @@ export default function Departments(props) {
   };
 
   const getData = (current, pageSize) => {
-    return alldepartmentdata?.slice((current - 1) * pageSize, current * pageSize);
+    return alldepartmentdata?.slice(
+      (current - 1) * pageSize,
+      current * pageSize
+    );
   };
 
   useEffect(() => {
@@ -75,7 +78,6 @@ export default function Departments(props) {
           getAllDepartments();
           close_modal(successModal, 1000);
           setModalAddDept(false);
-          
         }
       })
       .catch((err) => {
@@ -108,10 +110,10 @@ export default function Departments(props) {
       setEditUniqueCode(data?.department_code);
       setShowEditModal(true);
       setDepartment_id(data.department_id);
-       editForm.setFieldsValue({
-         dept_code: data.department_code,
-         dept_name: data.department_name,
-       });
+      editForm.setFieldsValue({
+        dept_code: data.department_code,
+        dept_name: data.department_name,
+      });
     }
   };
 
@@ -180,7 +182,6 @@ export default function Departments(props) {
   //   }
   // };
 
-
   const columns = [
     {
       title: "SI.NO",
@@ -189,19 +190,21 @@ export default function Departments(props) {
       render: (value, item, index) => serialNo + index,
       align: "center",
     },
-   
+
     {
       title: "DEPARTMENT NAME",
       dataIndex: "department_name",
       key: "department_name",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.department_name)
-          .toLowerCase()
-          .includes(value.toLowerCase())||
+        return (
+          String(record.department_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
           String(record.department_code)
-          .toLowerCase()
-          .includes(value.toLowerCase())
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
       },
       align: "left",
     },
@@ -262,18 +265,50 @@ export default function Departments(props) {
     },
   ];
 
+  const columnsKeys = columns.map((column) => column.key);
+
+  const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
+  const filteredColumns = columns.filter((column) =>
+    selectedColumns.includes(column.key)
+  );
+  console.log("filtered columns::", filteredColumns);
+  const onChange1 = (checkedValues) => {
+    setSelectedColumns(checkedValues);
+  };
+
+  //for Xlsx data
+  const UnitHeads = [
+    [
+      "Slno",
+      "DEPARTMENT NAME",
+      "DEPARTMENT CODE",
+      // "CUSTOMER",
+      // "COST",
+      // "EXPENSE",
+      // "PROFIT/LOSS",
+    ],
+  ];
+  //for pdf download
+  const data12 = alldepartmentdata?.map((item, index) => [
+    index + serialNo,
+    item.department_name,
+    item.department_code,
+    // item.lead,
+    // item.cost,
+    // item.expense,
+    // item.profit,
+  ]);
+
   return (
     <>
       <div className="container-fluid container_hrms pt-3">
-        <div className="row flex-wrap">
-          <div className="col">
+        <div className="row flex-wrap align-items-center">
+          <div className="col-4">
             <h5 className="lead_text">Departments</h5>
           </div>
-          {/* <Leadlist_Icons /> */}
-        </div>
-        <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
+              className="inputSearch"
               placeholder="Search"
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
@@ -285,7 +320,21 @@ export default function Departments(props) {
               }}
             />
           </div>
-          {/* <div className="col-4">
+          <div className="col-4 d-flex justify-content-end">
+            {data12 && (
+              <Leadlist_Icons
+                datas={data12}
+                columns={filteredColumns}
+                items={data12}
+                xlheading={UnitHeads}
+                filename="data.csv"
+              />
+            )}
+          </div>
+          {/* <Leadlist_Icons /> */}
+        </div>
+        {/* <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}> */}
+        {/* <div className="col-4">
             <Input.Search
               placeholder="Search by Department Code"
               style={{ margin: "5px", borderRadius: "5px" }}
@@ -298,7 +347,7 @@ export default function Departments(props) {
               }}
             />
           </div> */}
-        </div>
+        {/* </div> */}
         <div className="row my-3">
           <div className="col-4 px-3">
             <Select
@@ -307,9 +356,9 @@ export default function Departments(props) {
               value={pageSize}
               onChange={(e) => {
                 setCurrent(1);
-                setPageSize(e)}}
+                setPageSize(e);
+              }}
             >
-               
               <Select.Option value="25">
                 Show
                 <span className="vertical ms-1">|</span>
@@ -328,21 +377,21 @@ export default function Departments(props) {
             </Select>
           </div>
           <div className=" col-4 d-flex justify-content-center">
-          <MyPagination
-           total={alldepartmentdata?.length}
-           current={current}
-           showSizeChanger={true}
-           pageSize={pageSize}
-           onChange={(current, pageSize) => {
-             console.log("ggdhffs", current, pageSize);
-             setCurrent(current);
-             setPageSize(pageSize);
-           }}
-          />
-        </div>
+            <MyPagination
+              total={alldepartmentdata?.length}
+              current={current}
+              showSizeChanger={true}
+              pageSize={pageSize}
+              onChange={(current, pageSize) => {
+                console.log("ggdhffs", current, pageSize);
+                setCurrent(current);
+                setPageSize(pageSize);
+              }}
+            />
+          </div>
           <div className="col-4 d-flex justify-content-end">
             <Button btnType="add" onClick={() => setModalAddDept(true)}>
-              Add Department
+              New Department
             </Button>
           </div>
         </div>
@@ -356,15 +405,15 @@ export default function Departments(props) {
         </div>
         <div className="d-flex py-2 justify-content-center">
           <MyPagination
-           total={alldepartmentdata?.length}
-           current={current}
-           showSizeChanger={true}
-           pageSize={pageSize}
-           onChange={(current, pageSize) => {
-             console.log("ggdhffs", current, pageSize);
-             setCurrent(current);
-             setPageSize(pageSize);
-           }}
+            total={alldepartmentdata?.length}
+            current={current}
+            showSizeChanger={true}
+            pageSize={pageSize}
+            onChange={(current, pageSize) => {
+              console.log("ggdhffs", current, pageSize);
+              setCurrent(current);
+              setPageSize(pageSize);
+            }}
           />
         </div>
       </div>
@@ -591,12 +640,12 @@ export default function Departments(props) {
                       }}
                       onBlur={async () => {
                         if (editUniqueCode !== deptCode) {
-                        let c = await CheckUnique({
-                          type: "departmentcode",
-                          value: deptCode,
-                        });
-                        setUniqueEditCode(c);
-                      }
+                          let c = await CheckUnique({
+                            type: "departmentcode",
+                            value: deptCode,
+                          });
+                          setUniqueEditCode(c);
+                        }
                       }}
                     />
                   </Form.Item>

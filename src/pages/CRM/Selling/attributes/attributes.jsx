@@ -367,7 +367,7 @@ export default function Attribute(props) {
                 setShowModaladd(true);
               }}
             >
-              Add Attribute
+              New Attribute
             </Button>
             {/* </Link> */}
           </div>

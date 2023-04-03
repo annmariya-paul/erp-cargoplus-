@@ -878,7 +878,7 @@ function ProductDetails() {
                                 color: "#0891d1",
                               }}
                             >
-                              <BsPlusCircleFill fontSize={18} /> Add
+                              <BsPlusCircleFill fontSize={18} /> New
                             </span>
                           </Link>
                         </Button>

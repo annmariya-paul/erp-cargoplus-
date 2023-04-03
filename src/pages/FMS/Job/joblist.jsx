@@ -21,12 +21,12 @@ function Listjob() {
   // const [searchedText, setSearchedText] = useState("");
   const [searchName, setSearchName] = useState("");
   const [searchStatus, setSearchStatus] = useState("");
-  const [jobStatus,setJobStatus] = useState(JobStatus);
+  const [jobStatus, setJobStatus] = useState(JobStatus);
 
   const [noofItems, setNoofItems] = useState("25");
   const [current, setCurrent] = useState(1);
 
-  const[totaljob,settotaljob]= useState("")
+  const [totaljob, settotaljob] = useState("");
   const [serialNo, setserialNo] = useState(1);
 
   const [quatationList, setQuatationList] = useState([]);
@@ -191,42 +191,43 @@ function Listjob() {
     },
   ];
 
-
   const [AllJobs, setAllJobs] = useState();
   const getAllJobs = () => {
-    PublicFetch.get(`${CRM_BASE_URL_FMS}/job?startIndex=${pageofIndex}&noOfItems=${noofItems}`)
+    PublicFetch.get(
+      `${CRM_BASE_URL_FMS}/job?startIndex=${pageofIndex}&noOfItems=${noofItems}`
+    )
       .then((res) => {
         console.log("Response", res);
         if (res.data.success) {
           console.log("success of job", res.data.data);
-          settotaljob(res.data.data.totalCount)
+          settotaljob(res.data.data.totalCount);
           let temp = [];
           res.data.data.job.forEach((item, index) => {
             let date = moment(item.job_date).format("DD-MM-YYYY");
-           jobStatus.forEach((status, index) => {
-           var jobsts = parseInt(status.value);
-           if (jobsts === item.job_status){
-             temp.push({
-               job_number: item.job_number,
-               // quotation_carrier: item.quotation_carrier,
-               job_id: item.job_id,
-               job_consignee: item.job_consignee,
-               job_consignee_name: item.crm_v1_leads.lead_customer_name,
-               job_date: date,
-               job_shipper: item.job_shipper,
-               job_freight_type: item.job_freight_type,
-               job_cargo_type: item.job_cargo_type,
-               job_carrier: item.job_carrier,
-               job_awb_bl_no: item.job_awb_bl_no,
-               job_mode: item.job_mode,
-               job_origin_id: item.job_origin_id,
-               job_destination_id: item.job_destination_id,
-               job_no_of_pieces: item.job_no_of_pieces,
-               job_uom: item.job_uom,
-               job_status: status.name,
-             });
-            }
-          });
+            jobStatus.forEach((status, index) => {
+              var jobsts = parseInt(status.value);
+              if (jobsts === item.job_status) {
+                temp.push({
+                  job_number: item.job_number,
+                  // quotation_carrier: item.quotation_carrier,
+                  job_id: item.job_id,
+                  job_consignee: item.job_consignee,
+                  job_consignee_name: item.crm_v1_leads.lead_customer_name,
+                  job_date: date,
+                  job_shipper: item.job_shipper,
+                  job_freight_type: item.job_freight_type,
+                  job_cargo_type: item.job_cargo_type,
+                  job_carrier: item.job_carrier,
+                  job_awb_bl_no: item.job_awb_bl_no,
+                  job_mode: item.job_mode,
+                  job_origin_id: item.job_origin_id,
+                  job_destination_id: item.job_destination_id,
+                  job_no_of_pieces: item.job_no_of_pieces,
+                  job_uom: item.job_uom,
+                  job_status: status.name,
+                });
+              }
+            });
           });
           setAllJobs(temp);
         }
@@ -273,32 +274,12 @@ function Listjob() {
     <>
       <div className="container-fluid container2 pt-3">
         <div className="row flex-wrap">
-          <div className="col">
+          <div className="col-4">
             <h5 className="lead_text">Job</h5>
           </div>
-         
-          <Leadlist_Icons
-            datas={quatationList}
-            columns={columns}
-            items={data12}
-            xlheading={OppHeads}
-            filename="data.csv"
-            chechboxes={
-              <Checkbox.Group onChange={onChange} value={selectedColumns}>
-                {columnsKeys.map((column) => (
-                  <li>
-                    <Checkbox value={column} key={column}>
-                      {column}
-                    </Checkbox>
-                  </li>
-                ))}
-              </Checkbox.Group>
-            }
-          />
-        </div>
-        <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
+              className="inputSearch"
               placeholder="Search"
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
@@ -310,7 +291,30 @@ function Listjob() {
               }}
             />
           </div>
-          {/* <div className="col-4">
+          <div className="col-4 d-flex justify-content-end">
+            <Leadlist_Icons
+              datas={quatationList}
+              columns={columns}
+              items={data12}
+              xlheading={OppHeads}
+              filename="data.csv"
+              chechboxes={
+                <Checkbox.Group onChange={onChange} value={selectedColumns}>
+                  {columnsKeys.map((column) => (
+                    <li>
+                      <Checkbox value={column} key={column}>
+                        {column}
+                      </Checkbox>
+                    </li>
+                  ))}
+                </Checkbox.Group>
+              }
+            />
+          </div>
+        </div>
+        {/* <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}> */}
+
+        {/* <div className="col-4">
             <Input.Search
               placeholder="Search by AWB/BL Number"
               style={{ margin: "5px", borderRadius: "5px" }}
@@ -336,7 +340,7 @@ function Listjob() {
               }}
             />
           </div> */}
-        </div>
+        {/* </div> */}
         <div className="row my-3">
           <div className="col-4">
             <Select
@@ -362,29 +366,29 @@ function Listjob() {
               </Select.Option>
             </Select>
           </div>
-        
+
           <div className="col-4 d-flex py-2 justify-content-center">
-            {totaljob>0 &&(
-          <MyPagination
-              total={parseInt(totaljob)}
-              current={current}
-              pageSize={noofItems}
-              // defaultPageSize={noofItems}
-              showSizeChanger={false}
-              onChange={(current, pageSize) => {
-                console.log("page index isss", pageSize);
-                setCurrent(current);
-                // setPageSize(pageSize);
-                // setNoofItems(pageSize);
-                // setCurrent(noofItems !== pageSize ? 0 : current);
-              }}
-            />
+            {totaljob > 0 && (
+              <MyPagination
+                total={parseInt(totaljob)}
+                current={current}
+                pageSize={noofItems}
+                // defaultPageSize={noofItems}
+                showSizeChanger={false}
+                onChange={(current, pageSize) => {
+                  console.log("page index isss", pageSize);
+                  setCurrent(current);
+                  // setPageSize(pageSize);
+                  // setNoofItems(pageSize);
+                  // setCurrent(noofItems !== pageSize ? 0 : current);
+                }}
+              />
             )}
           </div>
           <div className="col-4 d-flex justify-content-end">
             <div className="col mb-2 px-4">
               <Link to={ROUTES.CREATEJOB} style={{ color: "white" }}>
-                <Button btnType="add">Add Job</Button>
+                <Button btnType="add">New Job</Button>
               </Link>
             </div>
           </div>
@@ -400,8 +404,8 @@ function Listjob() {
         </div>
 
         <div className="d-flex justify-content-center ">
-          {totaljob>0 &&(
-        <MyPagination
+          {totaljob > 0 && (
+            <MyPagination
               total={parseInt(totaljob)}
               current={current}
               pageSize={noofItems}
@@ -410,10 +414,9 @@ function Listjob() {
               onChange={(current, pageSize) => {
                 console.log("page index isss", pageSize);
                 setCurrent(current);
-              
               }}
             />
-            )}
+          )}
         </div>
       </div>
     </>

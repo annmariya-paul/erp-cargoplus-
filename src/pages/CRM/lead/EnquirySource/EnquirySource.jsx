@@ -383,7 +383,7 @@ function EnquirySource() {
                     SetAddModalSource(true);
                   }}
                 >
-                  Add Enquiry Source
+                  New Enquiry Source
                 </Button>
               </div>
             </div>

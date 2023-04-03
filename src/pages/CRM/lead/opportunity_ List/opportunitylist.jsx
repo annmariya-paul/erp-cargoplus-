@@ -554,11 +554,28 @@ function Opportunitylist(props) {
       dataIndex: "opportunity_type",
       key: "TYPE",
 
-      filteredValue: [searchType],
+      filteredValue: [searchSource],
       onFilter: (value, record) => {
-        return String(record.opportunity_type)
-          .toLowerCase()
-          .includes(value.toLowerCase());
+        return (
+          String(record.opportunity_type)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.opportunity_source)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.opportunity_from)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.opportunity_party)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.opportunity_created_by)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.opportunity_number)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
       },
       align: "left",
     },
@@ -566,12 +583,12 @@ function Opportunitylist(props) {
       title: "FROM",
       dataIndex: "opportunity_from",
       key: "FROM",
-      filteredValue: [searchStatus],
-      onFilter: (value, record) => {
-        return String(record.opportunity_from)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
+      // filteredValue: [searchStatus],
+      // onFilter: (value, record) => {
+      //   return String(record.opportunity_from)
+      //     .toLowerCase()
+      //     .includes(value.toLowerCase());
+      // },
       align: "left",
     },
 
@@ -587,12 +604,12 @@ function Opportunitylist(props) {
       dataIndex: "opportunity_source",
       key: "SOURCE",
       align: "left",
-      filteredValue: [searchSource],
-      onFilter: (value, record) => {
-        return String(record.opportunity_source)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
+      // filteredValue: [searchSource],
+      // onFilter: (value, record) => {
+      //   return String(record.opportunity_source)
+      //     .toLowerCase()
+      //     .includes(value.toLowerCase());
+      // },
     },
     {
       title: "PARTY",
@@ -768,37 +785,37 @@ function Opportunitylist(props) {
             </div>
             <div className="col-4 ">
               <Input.Search
-                className="searchnew"
+                className="inputSearch"
                 placeholder="Search "
-
-                // value={searchedText}
-                // onChange={(e) => {
-                //   setSearchedText(e.target.value ? [e.target.value] : []);
-                // }}
-                // onSearch={(value) => {
-                //   setSearchedText(value);
-                // }}
+                value={searchSource}
+                onChange={(e) => {
+                  setSearchSource(e.target.value ? [e.target.value] : []);
+                }}
+                onSearch={(value) => {
+                  setSearchSource(value);
+                }}
               />
             </div>
-
-            <Leadlist_Icons
-              datas={OpportunityList}
-              columns={columns}
-              items={data12}
-              xlheading={OppHeads}
-              filename="data.csv"
-              chechboxes={
-                <Checkbox.Group onChange={onChange} value={selectedColumns}>
-                  {columnsKeys.map((column) => (
-                    <li>
-                      <Checkbox value={column} key={column}>
-                        {column}
-                      </Checkbox>
-                    </li>
-                  ))}
-                </Checkbox.Group>
-              }
-            />
+            <div className="col-4 d-flex justify-content-end">
+              <Leadlist_Icons
+                datas={OpportunityList}
+                columns={columns}
+                items={data12}
+                xlheading={OppHeads}
+                filename="data.csv"
+                chechboxes={
+                  <Checkbox.Group onChange={onChange} value={selectedColumns}>
+                    {columnsKeys.map((column) => (
+                      <li>
+                        <Checkbox value={column} key={column}>
+                          {column}
+                        </Checkbox>
+                      </li>
+                    ))}
+                  </Checkbox.Group>
+                }
+              />
+            </div>
             {/* //show or hide columns */}
             {/* <Checkbox.Group onChange={onChange} value={selectedColumns}>
            

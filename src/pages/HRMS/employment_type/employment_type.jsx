@@ -11,30 +11,30 @@ import PublicFetch from "../../../utils/PublicFetch";
 import { UniqueErrorMsg } from "../../../ErrorMessages/UniqueErrorMessage";
 import CheckUnique from "../../../check Unique/CheckUnique";
 import MyPagination from "../../../components/Pagination/MyPagination";
+import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
 
 // { Add and list Employment Type - Ann mariya - 16/11/22 }
 export default function EmploymentType() {
   const [error, setError] = useState(false);
- const [searchedText, setSearchedText] = useState("");
+  const [searchedText, setSearchedText] = useState("");
   const [pageSize, setPageSize] = useState("25");
   const [editShow, setEditShow] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [addemploytypename, setaddemploytypename] = useState("");
-  const [emptypedata, setemptypedata] = useState("");
+  const [emptypedata, setemptypedata] = useState();
   const [editemptypename, seteditemptypename] = useState("");
   const [current, setCurrent] = useState(1);
   const [emptypeid, setemptypeid] = useState();
-  const [newName,setNewName]=useState();
+  const [newName, setNewName] = useState();
   const [addForm] = Form.useForm();
   const [editForm] = Form.useForm();
   const [employeeTName, setEmployeeTName] = useState();
-const [uniqueCode, setuniqueCode] = useState(false);
-const [uniqueeditCode, setuniqueeditCode] = useState(false);
+  const [uniqueCode, setuniqueCode] = useState(false);
+  const [uniqueeditCode, setuniqueeditCode] = useState(false);
   const [employeeType, setEmployeeType] = useState();
   const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
 
-  const[addshowmodal,setaddshowmodal]= useState(false)
-  
+  const [addshowmodal, setaddshowmodal] = useState(false);
 
   const getData = (current, pageSize) => {
     return emptypedata?.slice((current - 1) * pageSize, current * pageSize);
@@ -66,7 +66,6 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
       );
       console.log("all emptypess are ::", allemptype?.data?.data);
       setemptypedata(allemptype?.data?.data);
-    
     } catch (err) {
       console.log("error to getting all Employee Type", err);
     }
@@ -77,19 +76,18 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
       const addemptype = await PublicFetch.post(
         `${CRM_BASE_URL_HRMS}/employment-types`,
         {
-          employment_type_name: addemploytypename.trim(" ")
+          employment_type_name: addemploytypename.trim(" "),
         }
       );
       console.log(" data is added  successfully", addemptype);
       if (addemptype.data.success) {
         getallemptype();
-        setaddshowmodal(false)
+        setaddshowmodal(false);
         setSaveSuccess(true);
         getallemptype();
         addForm.resetFields();
         close_modal(saveSuccess, 1000);
       }
-     
     } catch (err) {
       console.log("err to add the emp  Type", err);
     }
@@ -104,13 +102,13 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
         }
       );
       console.log("editedd data is", updating);
-      if(updating.data.success){
-       console.log("successfully updating ")
-     
-    getallemptype();
-       setEditShow(false);
-       setSaveSuccess(true)
-       close_modal(saveSuccess, 1200);
+      if (updating.data.success) {
+        console.log("successfully updating ");
+
+        getallemptype();
+        setEditShow(false);
+        setSaveSuccess(true);
+        close_modal(saveSuccess, 1200);
       }
     } catch (err) {
       console.log("error to getting all emp type", err);
@@ -119,10 +117,7 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
 
   useEffect(() => {
     getallemptype();
-
-   
   }, []);
- 
 
   const [serialNo, setserialNo] = useState(1);
   const columns = [
@@ -133,7 +128,7 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
       render: (value, item, index) => serialNo + index,
       align: "center",
     },
-  
+
     {
       title: "EMPLOYEE TYPE NAME",
       dataIndex: "employment_type_name",
@@ -160,11 +155,10 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
                 className="editIcon m-0"
                 onClick={() => {
                   handleEditclick(index);
-                   setuniqueeditCode(false);
-                   addForm.resetFields();
-                   setuniqueCode(false);
+                  setuniqueeditCode(false);
+                  addForm.resetFields();
+                  setuniqueCode(false);
                 }}
-               
               >
                 <FaEdit />
               </div>
@@ -175,10 +169,40 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
       align: "center",
     },
   ];
- 
 
+  const columnsKeys = columns.map((column) => column.key);
 
+  const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
+  const filteredColumns = columns.filter((column) =>
+    selectedColumns.includes(column.key)
+  );
+  console.log("filtered columns::", filteredColumns);
+  const onChange1 = (checkedValues) => {
+    setSelectedColumns(checkedValues);
+  };
 
+  //for Xlsx data
+  const UnitHeads = [
+    [
+      "Slno",
+      "EMPLOYEE TYPE NAME",
+      //  "DESIGNATION CODE",
+      // "CUSTOMER",
+      // "COST",
+      // "EXPENSE",
+      // "PROFIT/LOSS",
+    ],
+  ];
+  //for pdf download
+  const data12 = emptypedata?.map((item, index) => [
+    index + serialNo,
+    item.employment_type_name,
+    //  item.designation_code,
+    // item.lead,
+    // item.cost,
+    // item.expense,
+    // item.profit,
+  ]);
 
   return (
     <>
@@ -260,15 +284,13 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
       </div> */}
 
       <div className="container-fluid container2 pt-3">
-        <div className="row flex-wrap">
-          <div className="col">
+        <div className="row flex-wrap align-items-center">
+          <div className="col-4">
             <h5 className="lead_text">Employee Types</h5>
           </div>
-          {/* <Leadlist_Icons /> */}
-        </div>
-        <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
+              className="inputSearch"
               placeholder="Search"
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
@@ -280,7 +302,20 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
               }}
             />
           </div>
+          <div className="col-4 d-flex justify-content-end">
+            {data12 && (
+              <Leadlist_Icons
+                datas={data12}
+                columns={filteredColumns}
+                items={data12}
+                xlheading={UnitHeads}
+                filename="data.csv"
+              />
+            )}
+          </div>
+          {/* <Leadlist_Icons /> */}
         </div>
+        {/* <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}></div> */}
         <div className="row my-3">
           <div className="col-4 px-3">
             <Select
@@ -288,8 +323,9 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
               className="page_size_style"
               value={pageSize}
               onChange={(e) => {
-                setCurrent(1)
-                setPageSize(e)}}
+                setCurrent(1);
+                setPageSize(e);
+              }}
             >
               <Select.Option value="25">
                 Show
@@ -309,48 +345,47 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
             </Select>
           </div>
           <div className="col-4  d-flex align-items-center justify-content-center">
-              <MyPagination
-                total={emptypedata?.length}
-                current={current}
-                showSizeChanger={true}
-                pageSize={pageSize}
-                onChange={(current, pageSize) => {
-                  console.log("ggdhffs", current, pageSize);
-                  setCurrent(current);
-                  setPageSize(pageSize);
-                }}
-              />
-            </div>
-            <div className="col-4">
+            <MyPagination
+              total={emptypedata?.length}
+              current={current}
+              showSizeChanger={true}
+              pageSize={pageSize}
+              onChange={(current, pageSize) => {
+                console.log("ggdhffs", current, pageSize);
+                setCurrent(current);
+                setPageSize(pageSize);
+              }}
+            />
+          </div>
+          <div className="col-4">
             <Button btnType="add" onClick={() => setaddshowmodal(true)}>
-              Add Employee Type
+              New Employee Type
             </Button>
-            </div>
+          </div>
         </div>
         <div className="datatable">
           <TableData
-           
             data={getData(current, pageSize)}
             columns={columns}
             custom_table_css="table_lead_list"
           />
         </div>
-        
-        <div className="d-flex py-2 justify-content-center">
-              <MyPagination
-                total={emptypedata?.length}
-                current={current}
-                showSizeChanger={true}
-                pageSize={pageSize}
-                onChange={(current, pageSize) => {
-                  console.log("ggdhffs", current, pageSize);
-                  setCurrent(current);
-                  setPageSize(pageSize);
-                }}
-              />
-            </div>
 
-            <Custom_model
+        <div className="d-flex py-2 justify-content-center">
+          <MyPagination
+            total={emptypedata?.length}
+            current={current}
+            showSizeChanger={true}
+            pageSize={pageSize}
+            onChange={(current, pageSize) => {
+              console.log("ggdhffs", current, pageSize);
+              setCurrent(current);
+              setPageSize(pageSize);
+            }}
+          />
+        </div>
+
+        <Custom_model
           size={"sm"}
           show={addshowmodal}
           onHide={() => {
@@ -361,74 +396,79 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
             <>
               <h6 className="lead_text mb-2">Add Employee Type</h6>
               <div className="container-fluid px-4 my-4 ">
-              <Form
-              name="addForm"
-              form={addForm}
-              onFinish={(value) => {
-                console.log("values", value);
-                submitemptype();
-              }}
-              onFinishFailed={(error) => {
-                console.log(error);
-              }}
-            >
-              <div className="row flex-wrap pt-1">
-                <div className="row ms-0 py-1">
-                  <div className="col-12 pt-3">
-                    <label htmlfor="emp_type_name">Employee Type Name</label>
-                    <Form.Item
-                      name="Employment Type Name"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z ]+$"),
-                          message: "Please enter a valid Employee Type Name",
-                        },
-                        {
-                          min: 2,
-                          message: "Branch Name must be at least 2 characters",
-                        },
-                        {
-                          max: 100,
-                          message:
-                            "Branch Name cannot be longer than 100 characters",
-                        },
-                      ]}
-                      onChange={(e) => setaddemploytypename(e.target.value)}
-                    >
-                      <InputType
-                        onChange={(e) => {
-                          setEmployeeType(e.target.value);
-                          setuniqueCode(false);
-                        }}
-                     
-                        onBlur={ async () => {
-                        
-                          let a = await CheckUnique({type:"employmenttypename",value:employeeType})
-                          
-                          setuniqueCode(a)
-                        }}
-                      />
-                    </Form.Item>
-                    {uniqueCode ? (
-                      <p style={{ color: "red" }}>
-                        Employee Type {uniqueErrMsg.UniqueErrName}
-                      </p>
-                    ) : null}
+                <Form
+                  name="addForm"
+                  form={addForm}
+                  onFinish={(value) => {
+                    console.log("values", value);
+                    submitemptype();
+                  }}
+                  onFinishFailed={(error) => {
+                    console.log(error);
+                  }}
+                >
+                  <div className="row flex-wrap pt-1">
+                    <div className="row ms-0 py-1">
+                      <div className="col-12 pt-3">
+                        <label htmlfor="emp_type_name">
+                          Employee Type Name
+                        </label>
+                        <Form.Item
+                          name="Employment Type Name"
+                          rules={[
+                            {
+                              required: true,
+                              pattern: new RegExp("^[A-Za-z ]+$"),
+                              message:
+                                "Please enter a valid Employee Type Name",
+                            },
+                            {
+                              min: 2,
+                              message:
+                                "Branch Name must be at least 2 characters",
+                            },
+                            {
+                              max: 100,
+                              message:
+                                "Branch Name cannot be longer than 100 characters",
+                            },
+                          ]}
+                          onChange={(e) => setaddemploytypename(e.target.value)}
+                        >
+                          <InputType
+                            onChange={(e) => {
+                              setEmployeeType(e.target.value);
+                              setuniqueCode(false);
+                            }}
+                            onBlur={async () => {
+                              let a = await CheckUnique({
+                                type: "employmenttypename",
+                                value: employeeType,
+                              });
+
+                              setuniqueCode(a);
+                            }}
+                          />
+                        </Form.Item>
+                        {uniqueCode ? (
+                          <p style={{ color: "red" }}>
+                            Employee Type {uniqueErrMsg.UniqueErrName}
+                          </p>
+                        ) : null}
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-              <div className="row justify-content-center">
-                <div className="col-auto">
-                  <Button btnType="save">Save</Button>
-                </div>
-              </div>
-            </Form>
+                  <div className="row justify-content-center">
+                    <div className="col-auto">
+                      <Button btnType="save">Save</Button>
+                    </div>
+                  </div>
+                </Form>
               </div>
             </>
           }
         />
- <Custom_model
+        <Custom_model
           size={"sm"}
           show={saveSuccess}
           onHide={() => setSaveSuccess(false)}
@@ -483,22 +523,20 @@ const [uniqueeditCode, setuniqueeditCode] = useState(false);
                         ]}
                       >
                         <InputType
-                          
                           value={employeeTName}
                           onChange={(e) => {
                             setEmployeeTName(e.target.value);
                             setuniqueeditCode(false);
                           }}
-                         
-                          onBlur={ async () => {
-                           
-                            if (newName !== employeeTName){
-                              let a = await CheckUnique({type:"employmenttypename",value:employeeTName})
-                             setuniqueeditCode(a)
+                          onBlur={async () => {
+                            if (newName !== employeeTName) {
+                              let a = await CheckUnique({
+                                type: "employmenttypename",
+                                value: employeeTName,
+                              });
+                              setuniqueeditCode(a);
                             }
-                         
                           }}
-
                         />
                       </Form.Item>
                       {uniqueeditCode ? (

@@ -747,7 +747,7 @@ function Services() {
                       color: "white",
                     }}
                   >
-                    Add Service
+                    New Service
                   </span>
                 </Link>
               </Button>

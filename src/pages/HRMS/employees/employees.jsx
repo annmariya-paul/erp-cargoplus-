@@ -12,6 +12,7 @@ import InputType from "../../../components/Input Type textbox/InputType";
 import SelectBox from "../../../components/Select Box/SelectBox";
 import CheckUnique from "../../../check Unique/CheckUnique";
 import { UniqueErrorMsg } from "../../../ErrorMessages/UniqueErrorMessage";
+import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
 
 function Employees() {
   const [editForm] = Form.useForm();
@@ -365,18 +366,52 @@ function Employees() {
     }
   };
 
+  const columnsKeys = columns.map((column) => column.key);
+
+  const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
+  const filteredColumns = columns.filter((column) =>
+    selectedColumns.includes(column.key)
+  );
+  console.log("filtered columns::", filteredColumns);
+  const onChange1 = (checkedValues) => {
+    setSelectedColumns(checkedValues);
+  };
+
+  //for Xlsx data
+  const UnitHeads = [
+    [
+      "Slno",
+      "EMPLOYEE NAME",
+      "EMPLOYEE CODE",
+      "EMPLOYEE BRANCH",
+      "EMPLOYEE DEPARTMENT",
+      "EMPLOYEE DESIGNATION",
+      "EMPLOYEE TYPE",
+      "EMPLOYEE GRADE",
+    ],
+  ];
+  //for pdf download
+  const data12 = allEmployees?.map((item, index) => [
+    index + serialNo,
+    item.employee_name,
+    item.employee_code,
+    item.employee_branch,
+    item.employee_department,
+    item.employee_designation,
+    item.employee_type,
+    item.employee_grade,
+  ]);
+
   return (
     <div>
       <div className="container-fluid container2 pt-3">
-        <div className="row flex-wrap">
-          <div className="col">
+        <div className="row flex-wrap align-items-center">
+          <div className="col-4">
             <h5 className="lead_text">Employees</h5>
           </div>
-          {/* <Leadlist_Icons /> */}
-        </div>
-        <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
+              className="inputSearch"
               placeholder="Search"
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
@@ -388,7 +423,20 @@ function Employees() {
               }}
             />
           </div>
+          <div className="col-4 d-flex justify-content-end">
+            {data12 && (
+              <Leadlist_Icons
+                datas={data12}
+                columns={filteredColumns}
+                items={data12}
+                xlheading={UnitHeads}
+                filename="data.csv"
+              />
+            )}
+          </div>
+          {/* <Leadlist_Icons /> */}
         </div>
+        {/* <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}></div> */}
         <div className="row my-3">
           <div className="col-4 px-3">
             <Select
@@ -432,7 +480,7 @@ function Employees() {
 
           <div className="col-4 d-flex justify-content-end">
             <Link to="/createemployee">
-              <Button btnType="add">Add Employee</Button>
+              <Button btnType="add">New Employee</Button>
             </Link>
           </div>
         </div>

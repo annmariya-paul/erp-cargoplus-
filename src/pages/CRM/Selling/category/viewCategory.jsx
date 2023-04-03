@@ -671,7 +671,7 @@ function Categorylist(props) {
             </div>
             <div className="col-4 d-flex justify-content-end" style={{}}>
               <Link to={ROUTES.CATEGORY}>
-                <Button btnType="add">Add Category</Button>
+                <Button btnType="add">New Category</Button>
               </Link>
             </div>
           </div>

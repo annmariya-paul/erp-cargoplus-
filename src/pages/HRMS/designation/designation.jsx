@@ -26,7 +26,7 @@ export default function Designation() {
   const [designationList, setDesignationList] = useState();
   const [searchedText, setSearchedText] = useState("");
   const [pageSize, setPageSize] = useState("25");
-  const [desigtiondata, setdesigtiondata] = useState("");
+  const [desigtiondata, setdesigtiondata] = useState();
   const [current, setCurrent] = useState(1);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [designationname, setDesignationname] = useState("");
@@ -43,7 +43,7 @@ export default function Designation() {
   const [editUniqueCode, setEditUniqueCode] = useState();
   const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
 
-  const [addshow,setAddshow]= useState(false)
+  const [addshow, setAddshow] = useState(false);
 
   const [editForm] = Form.useForm();
 
@@ -162,12 +162,14 @@ export default function Designation() {
       width: "25%",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.designation_name)
-          .toLowerCase()
-          .includes(value.toLowerCase())||
+        return (
+          String(record.designation_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
           String(record.designation_code)
             .toLowerCase()
             .includes(value.toLowerCase())
+        );
       },
       align: "left",
     },
@@ -219,20 +221,51 @@ export default function Designation() {
       key: "3",
     },
   ];
+
+  const columnsKeys = columns.map((column) => column.key);
+
+  const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
+  const filteredColumns = columns.filter((column) =>
+    selectedColumns.includes(column.key)
+  );
+  console.log("filtered columns::", filteredColumns);
+  const onChange1 = (checkedValues) => {
+    setSelectedColumns(checkedValues);
+  };
+
+  //for Xlsx data
+  const UnitHeads = [
+    [
+      "Slno",
+      "DESIGNATION NAME",
+      "DESIGNATION CODE",
+      // "CUSTOMER",
+      // "COST",
+      // "EXPENSE",
+      // "PROFIT/LOSS",
+    ],
+  ];
+  //for pdf download
+  const data12 = desigtiondata?.map((item, index) => [
+    index + serialNo,
+    item.designation_name,
+    item.designation_code,
+    // item.lead,
+    // item.cost,
+    // item.expense,
+    // item.profit,
+  ]);
+
   return (
     <>
-      
-
       <div className="container-fluid container2 pt-3">
-        <div className="row flex-wrap">
-          <div className="col">
+        <div className="row flex-wrap align-items-center">
+          <div className="col-4">
             <h5 className="lead_text">Designation</h5>
           </div>
-          {/* <Leadlist_Icons /> */}
-        </div>
-        <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
+              className="inputSearch"
               placeholder="Search "
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
@@ -244,7 +277,20 @@ export default function Designation() {
               }}
             />
           </div>
+          <div className="col-4 d-flex justify-content-end">
+            {data12 && (
+              <Leadlist_Icons
+                datas={data12}
+                columns={filteredColumns}
+                items={data12}
+                xlheading={UnitHeads}
+                filename="data.csv"
+              />
+            )}
+          </div>
+          {/* <Leadlist_Icons /> */}
         </div>
+        {/* <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}></div> */}
         <div className="row my-3">
           <div className="col-4 px-3">
             <Select
@@ -252,10 +298,10 @@ export default function Designation() {
               className="page_size_style"
               value={pageSize}
               onChange={(e) => {
-                setCurrent(1)
-                setPageSize(e)}}
+                setCurrent(1);
+                setPageSize(e);
+              }}
             >
-              
               <Select.Option value="25">
                 Show
                 <span className="vertical ms-1">|</span>
@@ -274,23 +320,23 @@ export default function Designation() {
             </Select>
           </div>
           <div className="col-4 d-flex  justify-content-center">
-              <MyPagination
-                total={desigtiondata?.length}
-                current={current}
-                showSizeChanger={true}
-                pageSize={pageSize}
-                onChange={(current, pageSize) => {
-                  console.log("ggdhffs", current, pageSize);
-                  setCurrent(current);
-                  setPageSize(pageSize);
-                }}
-              />
-            </div>
-            <div className="col-4">
+            <MyPagination
+              total={desigtiondata?.length}
+              current={current}
+              showSizeChanger={true}
+              pageSize={pageSize}
+              onChange={(current, pageSize) => {
+                console.log("ggdhffs", current, pageSize);
+                setCurrent(current);
+                setPageSize(pageSize);
+              }}
+            />
+          </div>
+          <div className="col-4">
             <Button btnType="add" onClick={() => setAddshow(true)}>
-              Add Designation
+              New Designation
             </Button>
-            </div>
+          </div>
         </div>
         <div className="datatable">
           <TableData
@@ -302,20 +348,20 @@ export default function Designation() {
           />
         </div>
         <div className="d-flex py-2 justify-content-center">
-              <MyPagination
-                total={desigtiondata?.length}
-                current={current}
-                showSizeChanger={true}
-                pageSize={pageSize}
-                onChange={(current, pageSize) => {
-                  console.log("ggdhffs", current, pageSize);
-                  setCurrent(current);
-                  setPageSize(pageSize);
-                }}
-              />
-            </div>
+          <MyPagination
+            total={desigtiondata?.length}
+            current={current}
+            showSizeChanger={true}
+            pageSize={pageSize}
+            onChange={(current, pageSize) => {
+              console.log("ggdhffs", current, pageSize);
+              setCurrent(current);
+              setPageSize(pageSize);
+            }}
+          />
+        </div>
 
-            <Custom_model
+        <Custom_model
           size={"sm"}
           show={addshow}
           onHide={() => {
@@ -326,101 +372,98 @@ export default function Designation() {
             <div className="container-fluid px-4 my-4 ">
               <h6 className="lead_text">Add Designation</h6>
               <Form
-              name="addForm"
-              form={addForm}
-              onFinish={(value) => {
-                console.log("valuezzzzzzz", value);
-                // Submit()
-                submitaddunit();
-              }}
-              onFinishFailed={(error) => {
-                console.log(error);
-              }}
-            >
-              <div className="row flex-wrap pt-1">
-                <div className="row ms-0 py-1">
-                  <div className="col-12 pt-3">
-                    <label htmlfor="designation">Designation Name</label>
-                    <Form.Item
-                      name="Designation name"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z ]+$"),
-                          message: "Please enter a valid Designation Name",
-                        },
-                      ]}
-                     
-                    >
-                      <InputType
-                        value={designationname}
-                        onChange={(e) => {
-                          setDesignationname(e.target.value);
-                          setUniqueName(false);
-                        }}
-                        onBlur={async () => {
-                          let n = await CheckUnique({
-                            type: "designationname",
-                            value: designationname,
-                          });
-                          setUniqueName(n);
-                        }}
-                      />
-                    </Form.Item>
-                    {uniqueName ? (
-                      <p style={{ color: "red" }}>
-                        Designation Name {uniqueErrMsg.UniqueErrName}
-                      </p>
-                    ) : null}
+                name="addForm"
+                form={addForm}
+                onFinish={(value) => {
+                  console.log("valuezzzzzzz", value);
+                  // Submit()
+                  submitaddunit();
+                }}
+                onFinishFailed={(error) => {
+                  console.log(error);
+                }}
+              >
+                <div className="row flex-wrap pt-1">
+                  <div className="row ms-0 py-1">
+                    <div className="col-12 pt-3">
+                      <label htmlfor="designation">Designation Name</label>
+                      <Form.Item
+                        name="Designation name"
+                        rules={[
+                          {
+                            required: true,
+                            pattern: new RegExp("^[A-Za-z ]+$"),
+                            message: "Please enter a valid Designation Name",
+                          },
+                        ]}
+                      >
+                        <InputType
+                          value={designationname}
+                          onChange={(e) => {
+                            setDesignationname(e.target.value);
+                            setUniqueName(false);
+                          }}
+                          onBlur={async () => {
+                            let n = await CheckUnique({
+                              type: "designationname",
+                              value: designationname,
+                            });
+                            setUniqueName(n);
+                          }}
+                        />
+                      </Form.Item>
+                      {uniqueName ? (
+                        <p style={{ color: "red" }}>
+                          Designation Name {uniqueErrMsg.UniqueErrName}
+                        </p>
+                      ) : null}
+                    </div>
                   </div>
-                </div>
 
-                <div className="row ms-0 py-1">
-                  <div className="col-12 ">
-                    <label htmlfor="designation">Designation Code</label>
-                    <Form.Item
-                      name="Designation code"
-                      rules={[
-                        {
-                          required: true,
-                          // pattern: new RegExp("^[A-Za-z]+$"),
-                          message: "Please enter a valid Designation Name",
-                        },
-                      ]}
-                    >
-                      <InputType
-                        onChange={(e) => {
-                          setDesignationcode(e.target.value);
-                          setUniqueCode(false);
-                        }}
-                        onBlur={async () => {
-                          let c = await CheckUnique({
-                            type: "designationcode",
-                            value: designationcode,
-                          });
-                          setUniqueCode(c);
-                        }}
-                      />
-                    </Form.Item>
-                    {uniqueCode ? (
-                      <p style={{ color: "red" }}>
-                        Designation Name {uniqueErrMsg.UniqueErrName}
-                      </p>
-                    ) : null}
+                  <div className="row ms-0 py-1">
+                    <div className="col-12 ">
+                      <label htmlfor="designation">Designation Code</label>
+                      <Form.Item
+                        name="Designation code"
+                        rules={[
+                          {
+                            required: true,
+                            // pattern: new RegExp("^[A-Za-z]+$"),
+                            message: "Please enter a valid Designation Name",
+                          },
+                        ]}
+                      >
+                        <InputType
+                          onChange={(e) => {
+                            setDesignationcode(e.target.value);
+                            setUniqueCode(false);
+                          }}
+                          onBlur={async () => {
+                            let c = await CheckUnique({
+                              type: "designationcode",
+                              value: designationcode,
+                            });
+                            setUniqueCode(c);
+                          }}
+                        />
+                      </Form.Item>
+                      {uniqueCode ? (
+                        <p style={{ color: "red" }}>
+                          Designation Name {uniqueErrMsg.UniqueErrName}
+                        </p>
+                      ) : null}
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="row justify-content-center">
-                <div className="col-auto">
-                  <Button btnType="save">Save</Button>
+                <div className="row justify-content-center">
+                  <div className="col-auto">
+                    <Button btnType="save">Save</Button>
+                  </div>
                 </div>
-              </div>
-            </Form>
+              </Form>
             </div>
           }
         />
-
-
 
         <Custom_model
           size={"sm"}

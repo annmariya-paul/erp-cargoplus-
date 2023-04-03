@@ -8,6 +8,7 @@ import Button from "../../../components/button/button";
 import { ACCOUNTS, CRM_BASE_URL_FMS } from "../../../api/bootapi";
 import PublicFetch from "../../../utils/PublicFetch";
 import { FaFileExcel } from "react-icons/fa";
+import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
 
 export default function AgentReport() {
   const [serialNo, setserialNo] = useState(1);
@@ -63,7 +64,7 @@ export default function AgentReport() {
             i?.fms_v1_job_agents?.forEach((item, index) => {
               i?.fms_v1_job_task_expenses?.forEach((itm, index) => {
                 if (item?.fms_v1_jobs.job_id === itm?.job_task_expense_job_id)
-                totalCostFx += itm?.job_task_expense_cost_amountfx;
+                  totalCostFx += itm?.job_task_expense_cost_amountfx;
                 isagents = item;
                 isjob = itm;
                 exchange_rate = item?.fms_v1_jobs?.job_total_cost_exch;
@@ -135,6 +136,38 @@ export default function AgentReport() {
     },
   ];
 
+  const columnsKeys = columns.map((column) => column.key);
+
+  const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
+  const filteredColumns = columns.filter((column) =>
+    selectedColumns.includes(column.key)
+  );
+  console.log("filtered columns::", filteredColumns);
+  const onChange = (checkedValues) => {
+    setSelectedColumns(checkedValues);
+  };
+
+  //for Xlsx data
+  const UnitHeads = [
+    [
+      "Slno",
+      "JOB NO",
+      "CUSTOMER",
+      "CURRENCY",
+      "TOTAL COST (Fx)",
+      "TOTAL COST (Lx)",
+    ],
+  ];
+  //for pdf download
+  const data12 = reportData?.map((item, index) => [
+    index + serialNo,
+    item.job_no,
+    item.customer,
+    item.currency,
+    item.totalcost_fx,
+    item.totalcost_lx,
+  ]);
+
   return (
     <>
       <div className="container-fluid container_agent_report py-3">
@@ -143,13 +176,22 @@ export default function AgentReport() {
             <h5 className="lead_text">Agent Report</h5>
           </div>
 
-          <div className="icon_margin">
-            <li className="icon-border">
-              <a className="icon icon_color" href="#">
-                <FaFileExcel />
-              </a>
-            </li>
+          <div className="icon_margin1">
+            {data12 && (
+              <Leadlist_Icons
+                datas={data12}
+                columns={filteredColumns}
+                items={data12}
+                xlheading={UnitHeads}
+                filename="data.csv"
+              />
+            )}
           </div>
+          {/* <li className="icon-border">
+            <a className="icon icon_color" href="#">
+              <FaFileExcel />
+            </a>
+          </li> */}
         </div>
         <div className="row">
           <div className="col-sm-3 col-12">

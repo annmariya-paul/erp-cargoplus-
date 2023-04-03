@@ -36,7 +36,7 @@ function ListAgent() {
   const [pageSize, setPageSize] = useState("25");
   const [current, setCurrent] = useState(1);
 
-  const [agentdata, setAgentdata] = useState("");
+  const [agentdata, setAgentdata] = useState();
   console.log("agent data", agentdata);
   const [inpiutId, setinpiutId] = useState();
   console.log("input name :", inpiutId);
@@ -479,38 +479,38 @@ function ListAgent() {
       console.log("err to add the unit", err);
     }
   };
+
+  const columnsKeys = columns.map((column) => column.key);
+
+  const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
+  const filteredColumns = columns.filter((column) =>
+    selectedColumns.includes(column.key)
+  );
+  console.log("filtered columns::", filteredColumns);
+  const onChange = (checkedValues) => {
+    setSelectedColumns(checkedValues);
+  };
+
+  //for Xlsx data
+  const UnitHeads = [["Slno", "NAME", "COUNTRY", "COMMISSIONS"]];
+  //for pdf download
+  const data12 = agentdata?.map((item, index) => [
+    index + serialNo,
+    item.agent_name,
+    item.agent_country,
+    item.agent_commission_details,
+  ]);
   console.log("country", agentdata);
   return (
     <>
       <div className="container-fluid container_fms pt-3">
-        <div className="row flex-wrap">
-          <div className="col">
+        <div className="row flex-wrap align-items-center">
+          <div className="col-4">
             <h5 className="lead_text">List Agent</h5>
           </div>
-
-          {/* <Leadlist_Icons
-              datas={attributes}
-              columns={filteredColumns}
-              items={data12}
-              xlheading={AttributeHeads}
-              filename="data.csv"
-            
-              chechboxes={
-                <Checkbox.Group onChange={onChange} value={selectedColumns}>
-                  {columnsKeys.map((column) => (
-                    <li>
-                      <Checkbox value={column} key={column}>
-                        {column}
-                      </Checkbox>
-                    </li>
-                  ))}
-                </Checkbox.Group>
-              }
-               /> */}
-        </div>
-        <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
+              className="inputSearch"
               placeholder="Search  "
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
@@ -522,7 +522,21 @@ function ListAgent() {
               }}
             />
           </div>
-          {/* <div className="col-4">
+          <div className="col-4 d-flex justify-content-end">
+            {data12 && (
+              <Leadlist_Icons
+                datas={data12}
+                columns={filteredColumns}
+                items={data12}
+                xlheading={UnitHeads}
+                filename="data.csv"
+              />
+            )}
+          </div>
+        </div>
+        {/* <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}> */}
+
+        {/* <div className="col-4">
             <Input.Search
               placeholder="Search by Employee Code"
               style={{ margin: "5px", borderRadius: "5px" }}
@@ -535,7 +549,7 @@ function ListAgent() {
               }}
             />
           </div> */}
-        </div>
+        {/* </div> */}
         <div className="row my-3">
           <div className="col-4 px-3 ">
             <Select
@@ -584,7 +598,7 @@ function ListAgent() {
                 addForm.resetFields();
               }}
             >
-              Add Agent
+              New Agent
             </Button>
             {/* </Link> */}
           </div>
@@ -641,9 +655,16 @@ function ListAgent() {
                     <div className="row">
                       <div className="col-6 pb-2">
                         <div className="">
-                          
                           <label>Vendor</label>
-                          <label style={{color:"red", fontWeight:"500",marginLeft:"2px"}}>*</label>
+                          <label
+                            style={{
+                              color: "red",
+                              fontWeight: "500",
+                              marginLeft: "2px",
+                            }}
+                          >
+                            *
+                          </label>
                           {/* <Form.Item
                                 name="employee_branch"
                                 rules={[
@@ -781,10 +802,19 @@ function ListAgent() {
                         </div>
                       </div>
                     </div>
-                    <label style={{color:"red", fontWeight:"100",marginRight:"2px"}}>*</label>
-                  <label style={{marginRight:"2px" ,fontSize:"10px"}}>Indicates required field</label>
+                    <label
+                      style={{
+                        color: "red",
+                        fontWeight: "100",
+                        marginRight: "2px",
+                      }}
+                    >
+                      *
+                    </label>
+                    <label style={{ marginRight: "2px", fontSize: "10px" }}>
+                      Indicates required field
+                    </label>
                   </Form>
-                
                 </div>
               </div>
             </>

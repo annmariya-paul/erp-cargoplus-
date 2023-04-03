@@ -1,4 +1,4 @@
- import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../../../../components/button/button";
 import InputType from "../../../../components/Input Type textbox/InputType";
 import ErrorMsg from "../../../../components/error/ErrorMessage";
@@ -17,6 +17,7 @@ import { CRM_BASE_URL_FMS } from "../../../../api/bootapi";
 import CheckUnique from "../../../../check Unique/CheckUnique";
 import { UniqueErrorMsg } from "../../../../ErrorMessages/UniqueErrorMessage";
 import MyPagination from "../../../../components/Pagination/MyPagination";
+import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
 
 export default function Carrierlist(props) {
   const [addForm] = Form.useForm();
@@ -29,19 +30,17 @@ export default function Carrierlist(props) {
   const [searchType, setSearchType] = useState("");
   const [modalAddCarrier, setModalAddCarrier] = useState(false);
 
-
-
   const [showViewModal, setShowViewModal] = useState(false);
   const [CarrierEditPopup, setCarrierEditPopup] = useState(false);
-  const [carrierdata,setcarrierdata] = useState()
-  const [addcarriername,setAddcarriername] = useState()
-  const [addcarriercode,setAddcarriercode] = useState()
-  const [addcarriertype,setAddcarriertype] = useState()
+  const [carrierdata, setcarrierdata] = useState();
+  const [addcarriername, setAddcarriername] = useState();
+  const [addcarriercode, setAddcarriercode] = useState();
+  const [addcarriertype, setAddcarriertype] = useState();
 
   const [editcarriercode, setEditcarriercode] = useState();
   const [editcarriertype, setEditcarriertype] = useState();
   const [editcarriername, setEditcarriername] = useState();
-  const [editcarrierid,seteditcarrierid] =useState();
+  const [editcarrierid, seteditcarrierid] = useState();
   const [uniqueCode, setuniqueCode] = useState(false);
   const [pageSize, setPageSize] = useState("25");
   const [current, setCurrent] = useState(1);
@@ -60,14 +59,11 @@ export default function Carrierlist(props) {
     return carrierdata?.slice((current - 1) * pageSize, current * pageSize);
   };
 
-
   const getallcarrier = async () => {
     try {
-      const allcarrier = await PublicFetch.get(
-        `${CRM_BASE_URL_FMS}/carrier`
-      );
+      const allcarrier = await PublicFetch.get(`${CRM_BASE_URL_FMS}/carrier`);
       console.log("getting all carrier", allcarrier);
-      setcarrierdata(allcarrier.data.data)
+      setcarrierdata(allcarrier.data.data);
       // setAllairports(allairports.data.data)
       // setAttributes(allattributes.data.data);
     } catch (err) {
@@ -82,23 +78,19 @@ export default function Carrierlist(props) {
   const [nameSearch, setNamesearch] = useState();
   const createcarrier = async () => {
     try {
-      const addcarrier = await PublicFetch.post(
-        `${CRM_BASE_URL_FMS}/carrier`,
-        {
-          carrier_name: addcarriername,
-          carrier_code: addcarriercode,
-          carrier_type: addcarriertype,
-        }
-      );
+      const addcarrier = await PublicFetch.post(`${CRM_BASE_URL_FMS}/carrier`, {
+        carrier_name: addcarriername,
+        carrier_code: addcarriercode,
+        carrier_type: addcarriertype,
+      });
       console.log("airports added successfully", addcarrier);
       if (addcarrier.data.success) {
         setSuccessPopup(true);
-        getallcarrier()
-     addForm.resetFields();
+        getallcarrier();
+        addForm.resetFields();
         setModalAddCarrier(false);
         close_modal(successPopup, 1000);
-      } 
-      else if (addcarrier.data.success === false) {
+      } else if (addcarrier.data.success === false) {
         // alert(addcarrier.data.data);
       }
     } catch (err) {
@@ -120,18 +112,17 @@ export default function Carrierlist(props) {
       if (updated.data.success) {
         setSuccessPopup(true);
         setCarrierEditPopup(false);
-        getallcarrier()
+        getallcarrier();
         close_modal(successPopup, 1000);
-      } 
+      }
     } catch (err) {
       console.log("error to update carrier");
     }
   };
 
-
   const carrierEdit = (e) => {
     console.log("carrier edit", e);
-    seteditcarrierid(e.carrier_id)
+    seteditcarrierid(e.carrier_id);
     setEditcarriername(e.carrier_name);
     setEditcarriercode(e.carrier_code);
     setEditcarriertype(e.carrier_type);
@@ -168,8 +159,8 @@ export default function Carrierlist(props) {
     console.log("editing data iss", i);
     seteditcarrierid(i.id);
     setEditcarriername(i.carrierviewname);
-    setEditcarriercode(i.carrierviewcode)
-    setEditcarriertype(i.carrierviewtype)
+    setEditcarriercode(i.carrierviewcode);
+    setEditcarriertype(i.carrierviewtype);
 
     editForm.setFieldsValue({
       // unitid: e.unit_id,
@@ -182,27 +173,32 @@ export default function Carrierlist(props) {
   };
 
   const [serialNo, setserialNo] = useState(1);
- const columns = [
-   {
-     title: "SI.NO",
-     key: "index",
-     width: "13%",
-     render: (value, item, index) => serialNo + index,
-     align: "center",
-   },
-   
+  const columns = [
+    {
+      title: "SI.NO",
+      key: "index",
+      width: "13%",
+      render: (value, item, index) => serialNo + index,
+      align: "center",
+    },
+
     {
       title: "CARRIER NAME",
       dataIndex: "carrier_name",
       key: "carrier_name",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.carrier_name)
-          .toLowerCase()
-          .includes(value.toLowerCase()) || 
-          String(record.carrier_code )
-          .toLowerCase()
-          .includes(value.toLowerCase())
+        return (
+          String(record.carrier_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.carrier_code)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.carrier_type)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
       },
       align: "left",
     },
@@ -222,12 +218,10 @@ export default function Carrierlist(props) {
       title: "CARRIER TYPE",
       dataIndex: "carrier_type",
       key: "carrier_type",
-      filteredValue: [searchType],
-      onFilter: (value, record) => {
-        return String(record.carrier_type)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
+      // filteredValue: [searchType],
+      // onFilter: (value, record) => {
+      //   return ;
+      // },
       align: "left",
     },
     {
@@ -258,29 +252,42 @@ export default function Carrierlist(props) {
     },
   ];
 
- 
-
   const [carriername, setCarriername] = useState();
   const [carrier_id, setCarrier_id] = useState();
 
+  const columnsKeys = columns.map((column) => column.key);
 
+  const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
+  const filteredColumns = columns.filter((column) =>
+    selectedColumns.includes(column.key)
+  );
+  console.log("filtered columns::", filteredColumns);
+  const onChange = (checkedValues) => {
+    setSelectedColumns(checkedValues);
+  };
 
-
-
+  //for Xlsx data
+  const UnitHeads = [["Slno", "CARRIER NAME", "CARRIER CODE", "	CARRIER TYPE"]];
+  //for pdf download
+  const data12 = carrierdata?.map((item, index) => [
+    index + serialNo,
+    item.carrier_name,
+    item.carrier_code,
+    item.carrier_type,
+  ]);
+  //heder icons end
 
   return (
     <>
       <div className="container-fluid container2 pt-3">
         <div className="row flex-wrap">
-          <div className="col">
+          <div className="col-4">
             <h5 className="lead_text">Carriers</h5>
           </div>
-          {/* <Leadlist_Icons /> */}
-        </div>
-        <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
-              placeholder="Search by Carrier Name / Carrier Code"
+              className="inputSearch"
+              placeholder="Search "
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
               onChange={(e) => {
@@ -291,6 +298,19 @@ export default function Carrierlist(props) {
               }}
             />
           </div>
+          <div className="col-4 d-flex justify-content-end">
+            {data12 && (
+              <Leadlist_Icons
+                datas={data12}
+                columns={filteredColumns}
+                items={data12}
+                xlheading={UnitHeads}
+                filename="data.csv"
+              />
+            )}
+          </div>
+        </div>
+        {/* <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Select
               allowClear
@@ -308,20 +328,8 @@ export default function Carrierlist(props) {
               <Select.Option value="Road">Road</Select.Option>
             </Select>
           </div>
-          {/* <div className="col-4">
-            <Input.Search
-              placeholder="Search by Carrier Code"
-              style={{ margin: "5px", borderRadius: "5px" }}
-              value={searchedCode}
-              onChange={(e) => {
-                setSearchedCode(e.target.value ? [e.target.value] : []);
-              }}
-              onSearch={(value) => {
-                setSearchedCode(value);
-              }}
-            />
-          </div> */}
-        </div>
+
+        </div> */}
         <div className="row my-3">
           <div className="col-4 px-3">
             <Select
@@ -348,22 +356,22 @@ export default function Carrierlist(props) {
             </Select>
           </div>
           <div className=" col-4 d-flex  align-items-center justify-content-center">
-              {carrierdata &&(
-            <MyPagination
-              total={parseInt(carrierdata?.length)}
-              current={current}
-              showSizeChanger={true}
-              pageSize={pageSize}
-              onChange={(current, pageSize) => {
-                setCurrent(current);
-                setPageSize(pageSize);
-              }}
-            />
-            ) }
+            {carrierdata && (
+              <MyPagination
+                total={parseInt(carrierdata?.length)}
+                current={current}
+                showSizeChanger={true}
+                pageSize={pageSize}
+                onChange={(current, pageSize) => {
+                  setCurrent(current);
+                  setPageSize(pageSize);
+                }}
+              />
+            )}
           </div>
           <div className="col-4 d-flex justify-content-end">
             <Button btnType="add" onClick={() => setModalAddCarrier(true)}>
-              Add Carrier 
+              New Carrier
             </Button>
           </div>
         </div>
@@ -377,17 +385,17 @@ export default function Carrierlist(props) {
         </div>
         <div className="d-flex py-2 justify-content-center">
           {carrierdata && (
-          <MyPagination
-            total={parseInt(carrierdata?.length)}
-            current={current}
-            showSizeChanger={true}
-            pageSize={pageSize}
-            onChange={(current, pageSize) => {
-              setCurrent(current);
-              setPageSize(pageSize);
-            }}
-          />
-          ) }
+            <MyPagination
+              total={parseInt(carrierdata?.length)}
+              current={current}
+              showSizeChanger={true}
+              pageSize={pageSize}
+              onChange={(current, pageSize) => {
+                setCurrent(current);
+                setPageSize(pageSize);
+              }}
+            />
+          )}
         </div>
       </div>
 
@@ -512,7 +520,7 @@ export default function Carrierlist(props) {
                       >
                         <Select.Option value="Airline">Airline</Select.Option>
                         <Select.Option value="Shipping line">
-                        Shipping Line 
+                          Shipping Line
                         </Select.Option>
                         <Select.Option value="Road">Road</Select.Option>
                       </SelectBox>
@@ -675,20 +683,20 @@ export default function Carrierlist(props) {
                           }}
                           onBlur={async () => {
                             if (editUniqueCode !== editcarriercode) {
-                            let c = await CheckUnique({
-                              type: "carriercode",
-                              value: editcarriercode,
-                            });
-                            setUniqueEditCode(c);
-                          }
-                        }}
+                              let c = await CheckUnique({
+                                type: "carriercode",
+                                value: editcarriercode,
+                              });
+                              setUniqueEditCode(c);
+                            }
+                          }}
                         />
                       </Form.Item>
                       {uniqueEditCode ? (
-                    <p style={{ color: "red" }}>
-                     Carrier code {uniqueErrMsg.UniqueErrName}
-                    </p>
-                  ) : null}
+                        <p style={{ color: "red" }}>
+                          Carrier code {uniqueErrMsg.UniqueErrName}
+                        </p>
+                      ) : null}
                     </div>
                   </div>
                   <div className="col-12 pt-1">

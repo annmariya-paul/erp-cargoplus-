@@ -317,6 +317,30 @@ export default function TaxType() {
     },
   ];
 
+  const columnsKeys = columns.map((column) => column.key);
+
+  const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
+  const filteredColumns = columns.filter((column) =>
+    selectedColumns.includes(column.key)
+  );
+  console.log("filtered columns::", filteredColumns);
+  const onChange = (checkedValues) => {
+    setSelectedColumns(checkedValues);
+  };
+
+  //for Xlsx data
+  const UnitHeads = [
+    ["Slno", "TAX TYPE NAME", "TAX PERCENTAGE", "TAX GROUP", "DESCRIPTION"],
+  ];
+  //for pdf download
+  const data12 = taxTypes?.map((item, index) => [
+    index + serialNo,
+    item.tax_type_name,
+    item.tax_type_percentage,
+    item.tax_type_taxGroup,
+    item.tax_type_description,
+  ]);
+
   return (
     <>
       <div className="container-fluid container_fms pt-3">
@@ -338,7 +362,17 @@ export default function TaxType() {
               }}
             />
           </div>
-          <div className="col-4"></div>
+          <div className="col-4 d-flex justify-content-end">
+            {data12 && (
+              <Leadlist_Icons
+                datas={data12}
+                columns={filteredColumns}
+                items={data12}
+                xlheading={UnitHeads}
+                filename="data.csv"
+              />
+            )}
+          </div>
           {/* <Leadlist_Icons /> */}
         </div>
         <div className="row my-3">
@@ -387,7 +421,7 @@ export default function TaxType() {
                 addForm.resetFields();
               }}
             >
-              Add Tax Type
+              New Tax Type
             </Button>
           </div>
         </div>

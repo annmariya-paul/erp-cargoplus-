@@ -207,7 +207,7 @@ function TaxGroup() {
 
   return (
     <div className="container-fluid shadow-sm p-3">
-      <div className="row  ">
+      <div className="row align-items-center ">
         <div className="col-4">
           <h5 className="lead_text">Tax Groups</h5>
         </div>
@@ -308,7 +308,7 @@ function TaxGroup() {
                 SetAddModal(true);
               }}
             >
-              Add Tax Group
+              New Tax Group
             </Button>
           </div>
         </div>

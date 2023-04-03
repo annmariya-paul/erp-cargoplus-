@@ -17,6 +17,7 @@ import {
   GENERAL_SETTING_BASE_URL,
 } from "../../../../api/bootapi";
 import { vendor_Organisation } from "../../../../utils/SelectOptions";
+import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
 
 function Vendor() {
   const [successPopup, setSuccessPopup] = useState(false);
@@ -25,10 +26,10 @@ function Vendor() {
   const [pageSize, setPageSize] = useState("25");
   const [current, setCurrent] = useState(1);
 
-  const [allvendor, setAllvendor] = useState("");
+  const [allvendor, setAllvendor] = useState();
   const [allCountries, setAllCountries] = useState("");
 
-  const [vendortypes, setvendortypes] = useState("");
+  const [vendortypes, setvendortypes] = useState();
 
   const navigate = useNavigate();
 
@@ -77,14 +78,14 @@ function Vendor() {
       allvendor.data.data.map((i, indx) => {
         vendor_Organisation.forEach((itm, index) => {
           console.log("vndr", itm);
-          if (itm.value === i.vendor_org_type) {
+          if (itm.value == i.vendor_org_type) {
             arry.push({
               vendor_name: i.vendor_name,
               vendor_email: i.vendor_email,
               vendor_org_type: itm.name,
               vendor_country: i.countries.country_name,
               vendor_country_id: i.vendor_country_id,
-              vendor_contact: i.vendor_contact,
+              vendor_contact: i.vendor_phone,
               vendor_city: i.vendor_city,
               vendor_address: i.vendor_address,
               vendor_description: i.vendor_desc,
@@ -135,34 +136,46 @@ function Vendor() {
       width: "18%",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.vendor_name)
-          .toLowerCase()
-          .includes(value.toLowerCase());
+        return (
+          String(record.vendor_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.vendor_contact)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.vendor_phone)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.vendor_email)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.vendor_org_type)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
       },
       align: "left",
     },
     {
       title: "CONTACT",
-      dataIndex: "vendor_email",
+      dataIndex: "vendor_contact",
       key: "freight_type_prefix",
       width: "10%",
-      onFilter: (value, record) => {
-        return String(record.freight_type_prefix)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
+      // onFilter: (value, record) => {
+      //   return ;
+      // },
       align: "left",
     },
     {
       title: "PHONE",
-      dataIndex: "vendor_email",
+      dataIndex: "vendor_contact",
       key: "freight_type_prefix",
       width: "10%",
-      onFilter: (value, record) => {
-        return String(record.freight_type_prefix)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
+      // onFilter: (value, record) => {
+      //   return String(record.freight_type_prefix)
+      //     .toLowerCase()
+      //     .includes(value.toLowerCase());
+      // },
       align: "left",
     },
     {
@@ -170,11 +183,11 @@ function Vendor() {
       dataIndex: "vendor_email",
       key: "freight_type_prefix",
       width: "18%",
-      onFilter: (value, record) => {
-        return String(record.freight_type_prefix)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
+      // onFilter: (value, record) => {
+      //   return String(record.freight_type_prefix)
+      //     .toLowerCase()
+      //     .includes(value.toLowerCase());
+      // },
       align: "left",
     },
     {
@@ -256,19 +269,52 @@ function Vendor() {
       vendor_country: "1",
     },
   ];
+
+  const columnsKeys = columns.map((column) => column.key);
+
+  const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
+  const filteredColumns = columns.filter((column) =>
+    selectedColumns.includes(column.key)
+  );
+  console.log("filtered columns::", filteredColumns);
+  const onChange1 = (checkedValues) => {
+    setSelectedColumns(checkedValues);
+  };
+
+  //for Xlsx data
+  const UnitHeads = [
+    [
+      "Slno",
+      "VENDOR",
+      "CONTACT",
+      "PHONE",
+      "EMAIL",
+      "VENDOR TYPE",
+      // "PROFIT/LOSS",
+    ],
+  ];
+  //for pdf download
+  const data12 = allvendor?.map((item, index) => [
+    index + serialNo,
+    item.vendor_name,
+    item.vendor_contact,
+    item.vendor_contact,
+    item.vendor_email,
+    item.vendor_org_type,
+    // item.profit,
+  ]);
+
   return (
     <>
       <div className="container-fluid container_fms pt-3">
-        <div className="row flex-wrap ">
-          <div className="col">
+        <div className="row flex-wrap align-items-center ">
+          <div className="col-4">
             <h5 className="lead_text">Vendor</h5>
           </div>
-          {/* <Leadlist_Icons /> */}
-        </div>
-        <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
-              placeholder="Search by Vendor Name"
+              className="inputSearch"
+              placeholder="Search"
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
               onChange={(e) => {
@@ -279,7 +325,20 @@ function Vendor() {
               }}
             />
           </div>
+          <div className="col-4 d-flex justify-content-end">
+            {data12 && (
+              <Leadlist_Icons
+                datas={data12}
+                columns={filteredColumns}
+                items={data12}
+                xlheading={UnitHeads}
+                filename="data.csv"
+              />
+            )}
+          </div>
+          {/* <Leadlist_Icons /> */}
         </div>
+        {/* <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}></div> */}
         <div className="row my-3">
           <div className="col-4 ">
             <Select

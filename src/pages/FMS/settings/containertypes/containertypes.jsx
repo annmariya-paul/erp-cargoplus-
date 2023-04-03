@@ -9,6 +9,7 @@ import { MdPageview } from "react-icons/md";
 import Custom_model from "../../../../components/custom_modal/custom_model";
 import { CRM_BASE_URL_FMS } from "../../../../api/bootapi";
 import PublicFetch from "../../../../utils/PublicFetch";
+import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
 
 function Containertypes() {
   const [addForm] = Form.useForm();
@@ -22,7 +23,7 @@ function Containertypes() {
   const [modalViewContainertype, setmodalViewContainertype] = useState(false);
   const [modalEditContainertype, setModalEditContainertype] = useState(false);
 
-  const [allcontainertype, setallcontainertype] = useState("");
+  const [allcontainertype, setallcontainertype] = useState();
   const [containertypeid, setcontainertypeid] = useState("");
 
   const getData = (current, pageSize) => {
@@ -53,7 +54,7 @@ function Containertypes() {
   };
 
   const handleViewToEdit = (e) => {
-    console.log("viewtoeditt",e)
+    console.log("viewtoeditt", e);
     setcontainertypeid(e.containertype_id);
     addForm.setFieldsValue({
       // Incoterm_id: e.incoterm_id,
@@ -69,7 +70,7 @@ function Containertypes() {
         `${CRM_BASE_URL_FMS}/container_type`
       );
       console.log("getting all containertype", allcontainertype);
-      setallcontainertype(allcontainertype.data.data);
+      setallcontainertype(allcontainertype?.data?.data);
     } catch (err) {
       console.log("error to fetching  airports", err);
     }
@@ -222,18 +223,37 @@ function Containertypes() {
       incoterm_description: "chdbjd",
     },
   ];
+
+  const columnsKeys = columns.map((column) => column.key);
+
+  const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
+  const filteredColumns = columns.filter((column) =>
+    selectedColumns.includes(column.key)
+  );
+  console.log("filtered columns::", filteredColumns);
+  const onChange = (checkedValues) => {
+    setSelectedColumns(checkedValues);
+  };
+
+  //for Xlsx data
+  const UnitHeads = [["Slno", "SHORT NAME", "DESCRIPTION"]];
+  //for pdf download
+  const data12 = allcontainertype?.map((item, index) => [
+    index + serialNo,
+    item.container_type_shortname,
+    item.container_type_description,
+    // item.unit_description,
+  ]);
   return (
     <>
       <div className="container-fluid container_fms pt-3">
         <div className="row flex-wrap">
-          <div className="col">
+          <div className="col-4">
             <h5 className="lead_text">Container Types</h5>
           </div>
-        </div>
-
-        <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
+              className="inputSearch"
               placeholder="Search"
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchAny}
@@ -245,7 +265,20 @@ function Containertypes() {
               }}
             />
           </div>
+          <div className="col-4 d-flex justify-content-end">
+            {data12 && (
+              <Leadlist_Icons
+                datas={data12}
+                columns={filteredColumns}
+                items={data12}
+                xlheading={UnitHeads}
+                filename="data.csv"
+              />
+            )}
+          </div>
         </div>
+
+        {/* <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}></div> */}
 
         <div className="row my-3">
           <div className="col-4 ">
@@ -454,7 +487,7 @@ function Containertypes() {
                     btnType="add_borderless"
                     className="edit_button"
                     onClick={() => {
-                      handleViewToEdit(viewcontainertype)
+                      handleViewToEdit(viewcontainertype);
                       // setModalEditContainertype(true);
                       setmodalViewContainertype(false);
                     }}
@@ -473,7 +506,7 @@ function Containertypes() {
                 <div className="col-1">:</div>
                 <div className="col-6 ">
                   <p className="modal-view-data">
-                    {viewcontainertype.containertype_shortname }
+                    {viewcontainertype.containertype_shortname}
                   </p>
                 </div>
               </div>

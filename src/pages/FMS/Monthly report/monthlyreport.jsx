@@ -5,6 +5,7 @@ import PublicFetch from "../../../utils/PublicFetch";
 import { DatePicker, Select, message } from "antd";
 import moment from "moment";
 import Button from "../../../components/button/button";
+import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
 
 export default function Monthly_report() {
   const [pageSize, setPageSize] = useState("");
@@ -109,9 +110,8 @@ export default function Monthly_report() {
         });
         if (MonthlySearchData.data.data.responseData.length != 0) {
           setTotalSummary(temp2);
-        }
-        else {
-          setTotalSummary("null")
+        } else {
+          setTotalSummary("null");
         }
         setMonthlyReportData(temp);
       }
@@ -120,11 +120,59 @@ export default function Monthly_report() {
     }
   };
 
+  const columnsKeys = columns.map((column) => column.key);
+
+  const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
+  const filteredColumns = columns.filter((column) =>
+    selectedColumns.includes(column.key)
+  );
+  console.log("filtered columns::", filteredColumns);
+  const onChange1 = (checkedValues) => {
+    setSelectedColumns(checkedValues);
+  };
+
+  //for Xlsx data
+  const UnitHeads = [
+    [
+      "Slno",
+      "JOB NO",
+      "JOB DATE",
+      "CUSTOMER",
+      "COST",
+      "EXPENSE",
+      "PROFIT/LOSS",
+    ],
+  ];
+  //for pdf download
+  const data12 = monthlyReportData?.map((item, index) => [
+    index + serialNo,
+    item.job_no,
+    item.job_date,
+    item.lead,
+    item.cost,
+    item.expense,
+    item.profit,
+  ]);
+
   return (
     <>
       <div className="container-fluid container_monthly_report py-3">
-        <div className="col">
-          <h5 className="lead_text">Monthly Reports</h5>
+        <div className="row">
+          <div className="col-4">
+            <h5 className="lead_text">Monthly Reports</h5>
+          </div>
+          <div className="col-4"></div>
+          <div className="col-4 d-flex justify-content-end">
+            {data12 && (
+              <Leadlist_Icons
+                datas={data12}
+                columns={filteredColumns}
+                items={data12}
+                xlheading={UnitHeads}
+                filename="data.csv"
+              />
+            )}
+          </div>
         </div>
         <div className="row">
           <div className="col-3">

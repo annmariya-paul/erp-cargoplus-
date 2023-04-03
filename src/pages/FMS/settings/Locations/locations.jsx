@@ -213,6 +213,9 @@ export default function Locations() {
             .includes(value.toLowerCase()) ||
           String(record.location_countryname)
             .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.location_type)
+            .toLowerCase()
             .includes(value.toLowerCase())
         );
       },
@@ -223,12 +226,12 @@ export default function Locations() {
       dataIndex: "location_type",
       key: "location_type",
       width: "17%",
-      filteredValue: [searchbyType],
-      onFilter: (value, record) => {
-        return String(record.location_type)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
+      // filteredValue: [searchbyType],
+      // onFilter: (value, record) => {
+      //   return String(record.location_type)
+      //     .toLowerCase()
+      //     .includes(value.toLowerCase());
+      // },
       align: "left",
     },
     {
@@ -264,18 +267,38 @@ export default function Locations() {
     },
   ];
 
+  const columnsKeys = columns.map((column) => column.key);
+
+  const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
+  const filteredColumns = columns.filter((column) =>
+    selectedColumns.includes(column.key)
+  );
+  console.log("filtered columns::", filteredColumns);
+  const onChange = (checkedValues) => {
+    setSelectedColumns(checkedValues);
+  };
+
+  //for Xlsx data
+  const UnitHeads = [["Slno", "CODE", "NAME", "TYPE", "COUNTRY"]];
+  //for pdf download
+  const data12 = allLocations?.map((item, index) => [
+    index + serialNo,
+    item.location_code,
+    item.location_name,
+    item.location_type,
+    item.location_countryname,
+  ]);
+
   return (
     <>
       <div className="container-fluid container_fms pt-3">
         <div className="row flex-wrap">
-          <div className="col">
+          <div className="col-4">
             <h5 className="lead_text">Locations</h5>
           </div>
-          {/* <Leadlist_Icons /> */}
-        </div>
-        <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
+              className="inputSearch"
               placeholder="Search"
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchCode}
@@ -287,19 +310,21 @@ export default function Locations() {
               }}
             />
           </div>
-          {/* <div className="col-4">
-            <Input.Search
-              placeholder="Search by Name"
-              style={{ margin: "5px", borderRadius: "5px" }}
-              value={searchName}
-              onChange={(e) => {
-                setSearchName(e.target.value ? [e.target.value] : []);
-              }}
-              onSearch={(value) => {
-                setSearchName(value);
-              }}
-            />
-          </div> */}
+          <div className="col-4 d-flex justify-content-end">
+            {data12 && (
+              <Leadlist_Icons
+                datas={data12}
+                columns={filteredColumns}
+                items={data12}
+                xlheading={UnitHeads}
+                filename="data.csv"
+              />
+            )}
+          </div>
+          {/* <Leadlist_Icons /> */}
+        </div>
+        {/* <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
+          
           <div className="col-4">
             <Select
               allowClear
@@ -317,7 +342,7 @@ export default function Locations() {
               <Select.Option value="City">City</Select.Option>
             </Select>
           </div>
-        </div>
+        </div> */}
         <div className="row my-3">
           <div className="col-4 px-3">
             <Select
@@ -366,7 +391,7 @@ export default function Locations() {
                 addForm.resetFields();
               }}
             >
-              Add Location
+              New Location
             </Button>
           </div>
         </div>

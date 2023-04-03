@@ -1,4 +1,4 @@
-import { Input, Select,Checkbox } from "antd";
+import { Input, Select, Checkbox } from "antd";
 import React, { useEffect, useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { MdPageview } from "react-icons/md";
@@ -53,8 +53,10 @@ function DailyExpence() {
       key: "daily_expense_voucher_no",
       width: "12%",
       // align: "center",
-       render: (record) => {
-        return <div>{moment(record?.daily_expense_date).format("DD-MM-YYYY")}</div>
+      render: (record) => {
+        return (
+          <div>{moment(record?.daily_expense_date).format("DD-MM-YYYY")}</div>
+        );
       },
     },
     {
@@ -71,11 +73,25 @@ function DailyExpence() {
       dataIndex: "daily_expense_bill_no",
       key: "daily_expense_bill_no",
       width: "15%",
-      //  filteredValue: [searchLead],
+      filteredValue: [searchSource],
       onFilter: (value, record) => {
-        return String(record.opportunity_from)
-          .toLowerCase()
-          .includes(value.toLowerCase());
+        return (
+          String(record.daily_expense_voucher_no)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.daily_expense_date)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.daily_expense_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.daily_expense_bill_no)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.daily_expense_party)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
       },
     },
 
@@ -201,7 +217,6 @@ function DailyExpence() {
   const pagesizecount = Math.ceil(totalCount / numOfItems);
 
   const getDailyExpense = () => {
-   
     PublicFetch.get(
       `${ACCOUNTS}/daily-expense?startIndex=${pageofIndex}&noOfItems=${numOfItems}`
     )
@@ -210,14 +225,13 @@ function DailyExpence() {
         if (res.data.success) {
           setAllExpenseData(res.data.data.dailyExpenses);
           setTotalcount(res.data.data.total);
-setDailyexpenseList(res.data.data.dailyExpenses)
+          setDailyexpenseList(res.data.data.dailyExpenses);
         }
       })
       .catch((err) => {
         console.log("Error", err);
       });
-  }
-
+  };
 
   const handleView = (data) => {
     if (data) {
@@ -269,36 +283,13 @@ setDailyexpenseList(res.data.data.dailyExpenses)
               {/* invoice listing section One */}
 
               <div>
-                <div className="row flex-wrap">
-                  <div className="col">
+                <div className="row flex-wrap align-items-center">
+                  <div className="col-4">
                     <h5 className="lead_text">Daily Expense</h5>
                   </div>
-                  
-                  <Leadlist_Icons
-                  datas={dailyexpenseList}
-                  columns={columns}
-                  items={data12}
-                  xlheading={OppHeads}
-                  filename="data.csv"
-                  chechboxes={
-                    <Checkbox.Group
-                      onChange={onChange}
-                      value={selectedColumns}
-                    >
-                      {columnsKeys.map((column) => (
-                        <li>
-                          <Checkbox value={column} key={column}>
-                            {column}
-                          </Checkbox>
-                        </li>
-                      ))}
-                    </Checkbox.Group>
-                  }
-                  />
-                </div>
-                <div className="row p-1" style={{ backgroundColor: "#f4f4f7" }}>
-                  <div className="col-3">
+                  <div className="col-4">
                     <Input.Search
+                      className="inputSearch"
                       placeholder="Search by "
                       style={{ margin: "5px", borderRadius: "5px" }}
                       value={searchSource}
@@ -310,7 +301,33 @@ setDailyexpenseList(res.data.data.dailyExpenses)
                       }}
                     />
                   </div>
+                  <div className="col-4 d-flex justify-content-end">
+                    <Leadlist_Icons
+                      datas={dailyexpenseList}
+                      columns={columns}
+                      items={data12}
+                      xlheading={OppHeads}
+                      filename="data.csv"
+                      chechboxes={
+                        <Checkbox.Group
+                          onChange={onChange}
+                          value={selectedColumns}
+                        >
+                          {columnsKeys.map((column) => (
+                            <li>
+                              <Checkbox value={column} key={column}>
+                                {column}
+                              </Checkbox>
+                            </li>
+                          ))}
+                        </Checkbox.Group>
+                      }
+                    />
+                  </div>
                 </div>
+                {/* <div className="row p-1" style={{ backgroundColor: "#f4f4f7" }}>
+                  
+                </div> */}
                 <div className="row my-3 ">
                   <div className="col-4 ">
                     <Select
@@ -746,6 +763,5 @@ setDailyexpenseList(res.data.data.dailyExpenses)
     </div>
   );
 }
-
 
 export default DailyExpence;

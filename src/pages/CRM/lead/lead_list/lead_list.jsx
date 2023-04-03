@@ -496,7 +496,7 @@ export default function LeadList() {
                   btnType="add"
                   // className="add_opportunity"
                 >
-                  Add Customer
+                  New Customer
                 </Button>
               </Link>
             </div>

@@ -4,7 +4,7 @@ import MyPagination from "../../../../components/Pagination/MyPagination";
 import TableData from "../../../../components/table/table_data";
 import { MdPageview } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
-import { Form, Input, Select, DatePicker } from "antd";
+import { Form, Input, Select, DatePicker,Radio } from "antd";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import InputType from "../../../../components/Input Type textbox/InputType";
 import Button from "../../../../components/button/button";
@@ -20,6 +20,10 @@ import {
   GENERAL_SETTING_BASE_URL,
 } from "../../../../api/bootapi";
 import { vendor_Organisation } from "../../../../utils/SelectOptions";
+import ContactTable from "../../lead/tables/contactstable";
+import Accounting from "./Accountings/Accountings";
+import Bankdetails from "./bankdetails/bankdetails";
+import FileUpload from "../../../../components/fileupload/fileUploader";
 
 function Updatevendor(){
     const { id } = useParams();
@@ -64,6 +68,13 @@ function Updatevendor(){
     const [totalvendor,settotalvendor] =useState("")
     const [vendor_org,setvendor_org]= useState(vendor_Organisation );
     const [serialNo, setserialNo] = useState(1);
+
+    const [toggleState, setToggleState] = useState(1);
+
+    const [timeOut, setTimeOuts] = useState(false);
+    const [Toggle4, setToggle4] = useState(false);
+
+    const beforeUpload = (file, fileList) => {};
     const [viewvendor, setViewvendor] = useState({
       id: "",
       vendor_name: "",
@@ -103,6 +114,8 @@ function Updatevendor(){
       setCountryis(e);
     };
   
+
+    
     const getCountry = () => {
       PublicFetch.get(`${GENERAL_SETTING_BASE_URL}/country`)
         .then((res) => {
@@ -318,7 +331,31 @@ function Updatevendor(){
       Onevendor();
     }, []);
 
-
+    const toggleTab = (index) => {
+      setToggleState(index);
+  
+    };
+  
+  
+    const handleContactTab = (e) => {
+      if (e) {
+        setTimeOuts(true);
+        setToggle4(false);
+        toggleTab(2);
+      }
+    };
+  
+    const handleAccountingTab = () => {
+      toggleTab(3);
+      // setTimeOuts(false);
+      // setToggle4(false);
+    };
+  
+    const handleBankTab = () => {
+      toggleTab(4);
+      // setTimeOuts(false);
+      // setToggle4(false);
+    };
 
 
 
@@ -326,8 +363,70 @@ function Updatevendor(){
         <>
 
 
-<div className="container-fluid ">
-        <Form
+<h5 className="lead_text">Edit Vendor</h5>
+      <div className="container-fluid">
+        <div className="lead_container">
+          <div className="row justify-content-md-center">
+          <div className="bloc-tabs tabs-responsive">
+              <div className="col-xl-1 col-sm-2 pe-1">
+                <button
+                  id="button-tabs"
+                  className={toggleState === 1 ? "tabs active-tabs " : "tabs "}
+                  onClick={() => {
+                    toggleTab(1);
+                    setTimeOuts(false);
+                    setToggle4(false);
+                  }}
+                >
+                  Basic Info
+                </button>
+              </div>
+              <div className="col-xl-1 col-sm-2 pe-1">
+                <button
+                  id="button-tabs"
+                  className={toggleState === 2 ? "tabs active-tabs " : "tabs "}
+                  onClick={(e) => {
+                    handleContactTab(e);
+                    // CustomerId !== null ? errormessage() : handleContactTab(e);
+                  }}
+                >
+                  Contacts
+                </button>
+              </div>
+              <div className="col-xl-1 col-sm-2 pe-1">
+                <button
+                  id="button-tabs"
+                  className={toggleState === 3 ? "tabs active-tabs" : "tabs"}
+                  onClick={(e) => {
+                    handleAccountingTab(e);
+                    // CustomerId !== null ? errormessage() : handleAddressTab(e);
+                  }}
+                >
+                  Accounting
+                </button>
+              </div>
+              <div className="col-xl-1 col-sm-2 pe-1">
+                <button
+                  className={toggleState === 4 ? "tabs active-tabs" : "tabs"}
+                  onClick={(e) => {
+                    handleBankTab(e);
+                    // CustomerId !== null
+                    //   ? errormessage()
+                    //   : handleAccountingTab(e);
+                  }}
+                >
+                  Bank Details
+                </button>
+              </div>
+            </div>
+
+            <div className="content-tabs">
+              <div
+                className={
+                  toggleState === 1 ? "content  active-content" : "content"
+                }
+              >
+          <Form
           form={editForm}
           onFinish={(values) => {
             console.log("values iss", values);
@@ -341,7 +440,7 @@ function Updatevendor(){
 
 
 <div className="row px-1 ">
-            <h5 className="lead_text">Update Vendor</h5>
+            {/* <h5 className="lead_text">Update Vendor</h5> */}
           </div>
           <div className="row jobpay_cards mt-3 mx-0 px-2 py-3">
             <div className="col-12">
@@ -389,7 +488,18 @@ function Updatevendor(){
                   
                   ]}
                 >
-                  <SelectBox
+                   <Radio.Group
+                         value={editvendorOrganisation}
+                         onChange={(e) => {
+                          seteditvendorOrganisation(e);
+                           // setOrganizationDisable(e);
+                         }}
+                          defaultValue="organization"
+                        >
+                          <Radio value="organization">Organization</Radio>
+                          <Radio value="individual">Individual</Radio>
+                        </Radio.Group>
+                  {/* <SelectBox
                     value={editvendorOrganisation}
                     onChange={(e) => {
                       seteditvendorOrganisation(e);
@@ -400,13 +510,13 @@ function Updatevendor(){
                       Organisation
                     </Select.Option>
                     <Select.Option value="IND">Indivdual</Select.Option>
-                  </SelectBox>
+                  </SelectBox> */}
                 </Form.Item>
               
             </div>
 
             <div className="col-sm-4 pt-2 ">
-              <label>Type<span className="required">*</span></label>
+              <label>Vendor Type<span className="required">*</span></label>
             
                 <Form.Item
                   name="vendor_type"
@@ -445,6 +555,131 @@ function Updatevendor(){
                 </Form.Item>
             
             </div>
+
+            <div className="col-sm-6 pt-2">
+                      <label> Address</label>
+                      <div>
+                        <Form.Item className="py-1" name="vendordescription">
+                          <TextArea
+                            // value={vendordescription}
+                            // onChange={(e) => {
+                            //   setvendordescription(e.target.value);
+                            // }}
+                            className="address_height"
+                          />
+                        </Form.Item>
+                      </div>
+                    </div>
+                    <div className="col-sm-6 pt-2">
+                      <label> Attachments</label>
+                      <div>
+                        <Form.Item className="py-1" name="vendordescription">
+                          <FileUpload
+                            beforeUpload={beforeUpload}
+                            multiple
+                            height={120}
+                            listType="picture"
+                            accept=".pdf,.docs,"
+                          />
+                        </Form.Item>
+                      </div>
+                    </div>
+
+          
+
+          </div>
+
+          <div className="row jobpay_cards mt-3 mx-0 px-2 py-3">
+            <div className="col-12">
+              <h5 className="lead_text">Contact Details</h5>
+            </div>
+
+
+            <div className="col-sm-4 pt-3">
+              <label> Phone<span className="required">*</span></label>
+              
+                <Form.Item
+                  name="vendor_contact"
+                  rules={[
+                    {
+                      required: true,
+                      // pattern: new RegExp("^[A-Za-z ]+$"),
+                      message: "Please enter a Valid contact",
+                    },
+
+                    
+                  ]}
+                >
+                  <InputType
+                    value={editvendorcontact}
+                    onChange={(e) => {
+                      seteditvendorcontact(e.target.value);
+                    }}
+                  />
+                </Form.Item>
+              
+            </div>
+            <div className="col-sm-4 pt-3">
+              <label> Email<span className="required">*</span></label>
+              
+                <Form.Item
+                  name="vendor_email"
+                  rules={[
+                    {
+                      required: true,
+                      // pattern: new RegExp("^[A-Za-z ]+$"),
+                      message: "Please enter a Valid email",
+                    },
+
+                  
+                  ]}
+               
+                >
+                  <InputType
+                    value={editvendoremail}
+                    onChange={(e) => {
+                      seteditvendoremail(e.target.value);
+                    }}
+                  />
+                </Form.Item>
+              
+            </div>
+
+            <div className="col-sm-4 pt-3">
+                      <label>
+                        {" "}
+                        Website<span className="required">*</span>
+                      </label>
+
+                      <Form.Item
+                        name="vendorcontact"
+                        rules={[
+                          {
+                            required: true,
+
+                            message: "Please enter a Valid contact",
+                          },
+
+                          // {
+                          //   min: 3,
+                          //   message: "Name must be atleast 3 characters",
+                          // },
+                          // {
+                          //   max: 100,
+                          //   message: " Name cannot be longer than 100 characters",
+                          // },
+                        ]}
+                      >
+                        <InputType
+                          // value={vendorcontact}
+                          // onChange={(e) => {
+                          //   setvendorcontact(e.target.value);
+                          // }}
+                        />
+                      </Form.Item>
+                    </div>
+
+
 
             <div className="col-sm-4 pt-2 ">
               <label>Country<span className="required">*</span></label>
@@ -488,7 +723,22 @@ function Updatevendor(){
               
             </div>
 
-            
+            <div className="col-sm-4 pt-2 ">
+              <label>State</label>
+              
+                <Form.Item
+                  name="vendor_taxno"
+                  
+                >
+                  <InputType
+                    // value={editvendortaxno}
+                    // onChange={(e) => {
+                    //   seteditvendortaxno(e.target.value);
+                    // }}
+                  />
+                </Form.Item>
+              
+            </div>
         
             <div className="col-sm-4 pt-2 ">
               <label>City</label>
@@ -507,85 +757,7 @@ function Updatevendor(){
               </div>
             </div>
 
-            <div className="col-sm-4 pt-2 ">
-              <label>Tax No</label>
-              
-                <Form.Item
-                  name="vendor_taxno"
-                  
-                >
-                  <InputType
-                    value={editvendortaxno}
-                    onChange={(e) => {
-                      seteditvendortaxno(e.target.value);
-                    }}
-                  />
-                </Form.Item>
-              
-            </div>
-
-
-          
-
-          </div>
-
-          <div className="row jobpay_cards mt-3 mx-0 px-2 py-3">
-            <div className="col-12">
-              <h5 className="lead_text">Contact Details</h5>
-            </div>
-
-
-            <div className="col-sm-4 pt-3">
-              <label> Email<span className="required">*</span></label>
-              
-                <Form.Item
-                  name="vendor_email"
-                  rules={[
-                    {
-                      required: true,
-                      // pattern: new RegExp("^[A-Za-z ]+$"),
-                      message: "Please enter a Valid email",
-                    },
-
-                  
-                  ]}
-               
-                >
-                  <InputType
-                    value={editvendoremail}
-                    onChange={(e) => {
-                      seteditvendoremail(e.target.value);
-                    }}
-                  />
-                </Form.Item>
-              
-            </div>
-
-            <div className="col-sm-4 pt-3">
-              <label> Contact<span className="required">*</span></label>
-              
-                <Form.Item
-                  name="vendor_contact"
-                  rules={[
-                    {
-                      required: true,
-                      // pattern: new RegExp("^[A-Za-z ]+$"),
-                      message: "Please enter a Valid contact",
-                    },
-
-                    
-                  ]}
-                >
-                  <InputType
-                    value={editvendorcontact}
-                    onChange={(e) => {
-                      seteditvendorcontact(e.target.value);
-                    }}
-                  />
-                </Form.Item>
-              
-            </div>
-
+           
          
           </div>
     <div className="row jobpay_cards mt-3 mx-0 px-2 py-5">
@@ -593,11 +765,11 @@ function Updatevendor(){
               <h5 className="lead_text">Extra Info</h5>
             </div>
 
-            <div className="col-sm-6 pt-2">
-              <label> Address</label>
+            <div className="col-sm-12 pt-2">
+              <label> Remarks</label>
               
                 <Form.Item
-                  name="vendor_address"
+                  name="remarkss"
                   className="mt-1"
                 >
                   <TextArea
@@ -610,22 +782,7 @@ function Updatevendor(){
               
             </div>
           
-            <div className="col-sm-6 pt-2">
-              <label> Description</label>
-              
-                <Form.Item
-                  name="vendor_description"
-                  className="mt-1"
-                >
-                  <TextArea
-                    value={editvendordescription}
-                    onChange={(e) => {
-                      seteditvendordescription(e.target.value);
-                    }}
-                  />
-                </Form.Item>
-              
-            </div>
+           
           </div>
 
          
@@ -646,15 +803,77 @@ function Updatevendor(){
            </Button>
          
          </div>
-       </Form>  
+       </Form> 
+              </div>
 
-      <Custom_model
-              size={"sm"}
-              show={successPopup}
-              onHide={() => setSuccessPopup(false)}
-              success
-            />     
-        </div>
+              <div
+                className={
+                  toggleState === 2 ? "content  active-content" : "content"
+                }
+              >
+                <div className="row mt-3 px-1" style={{ borderRadius: "3px" }}>
+                  <div className="col-md-12"></div>
+                  <div className="col-12 mt-2">
+                    <ContactTable toggle={timeOut} />
+                  </div>
+                  <div className="col mt-4">
+                    {/* <Button btnType="save" onClick={(e) => handleAddressTab(e)}>
+                      Next
+                    </Button> */}
+                  </div>
+                </div>
+              </div>
+
+              <div
+                className={
+                  toggleState === 3 ? "content  active-content" : "content"
+                }
+              >
+                <div className="row mt-3 px-1" style={{ borderRadius: "3px" }}>
+                  <div className="col-md-12"></div>
+                  <div className="col-12 mt-2">
+                    <Accounting toggle={timeOut} />
+                  </div>
+                  <div className="col mt-4">
+                    {/* <Button btnType="save" onClick={(e) => handleAddressTab(e)}>
+                      Next
+                    </Button> */}
+                  </div>
+                </div>
+              </div>
+
+              <div
+                className={
+                  toggleState === 4 ? "content  active-content" : "content"
+                }
+              >
+                <div className="row mt-3 px-1" style={{ borderRadius: "3px" }}>
+                  <div className="col-md-12"></div>
+                  <div className="col-12 mt-2">
+                    <Bankdetails toggle={timeOut} />
+                  </div>
+                  <div className="col mt-4">
+                    {/* <Button btnType="save" onClick={(e) => handleAddressTab(e)}>
+                      Next
+                    </Button> */}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+
+
+</div>
+
+
+</div>
+</div>
+
+
+
+
+        
        </> 
     )
 }

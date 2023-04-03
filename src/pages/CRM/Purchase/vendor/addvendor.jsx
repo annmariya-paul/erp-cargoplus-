@@ -4,7 +4,7 @@ import MyPagination from "../../../../components/Pagination/MyPagination";
 import TableData from "../../../../components/table/table_data";
 import { MdPageview } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
-import { Form, Input, Select, DatePicker } from "antd";
+import { Form, Input, Select, DatePicker,Radio } from "antd";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import InputType from "../../../../components/Input Type textbox/InputType";
 import Button from "../../../../components/button/button";
@@ -25,6 +25,7 @@ import "./vendor.scss";
 import Accounting from "./Accountings/Accountings";
 import Bankdetails from "./bankdetails/bankdetails";
 import ContactTable from "../../lead/tables/contactstable";
+import Moreinfo from "./Moreinfo/moreinfo";
 
 function Addvendor() {
   const [addForm] = Form.useForm();
@@ -200,6 +201,13 @@ function Addvendor() {
     // setTimeOuts(false);
     // setToggle4(false);
   };
+  const handleMoreinfoTab = () => {
+    toggleTab(5);
+    // setTimeOuts(false);
+    // setToggle4(false);
+  };
+
+
   return (
     <>
       <h5 className="lead_text">Add Vendor</h5>
@@ -257,6 +265,20 @@ function Addvendor() {
                   Bank Details
                 </button>
               </div>
+              <div className="col-xl-1 col-sm-2 pe-1">
+                <button
+                  className={toggleState === 5 ? "tabs active-tabs" : "tabs"}
+                  onClick={(e) => {
+                    handleMoreinfoTab(e);
+                    // CustomerId !== null
+                    //   ? errormessage()
+                    //   : handleAccountingTab(e);
+                  }}
+                >
+                  More Info
+                </button>
+              </div>
+
             </div>
             <div className="content-tabs">
               <div
@@ -278,7 +300,7 @@ function Addvendor() {
             <h5 className="lead_text">Add Vendor</h5>
           </div> */}
 
-                  <div className="row jobpay_cards mt-3 mx-0 px-2 py-3">
+                  <div className="row  mt-3 mx-0 px-2 py-1">
                     {/* <div className="col-12">
               <h5 className="lead_text">Basic Info</h5>
             </div> */}
@@ -324,7 +346,18 @@ function Addvendor() {
                           },
                         ]}
                       >
-                        <SelectBox
+                        <Radio.Group
+                         value={vendorOrganisation}
+                         onChange={(e) => {
+                           setvendorOrganisation(e);
+                           // setOrganizationDisable(e);
+                         }}
+                          defaultValue="organization"
+                        >
+                          <Radio value="organization">Organization</Radio>
+                          <Radio value="individual">Individual</Radio>
+                        </Radio.Group>
+                        {/* <SelectBox
                           showSearch={true}
                           allowClear
                           optionFilterProp="children"
@@ -338,7 +371,7 @@ function Addvendor() {
                             Organisation
                           </Select.Option>
                           <Select.Option value="IND">Indivdual</Select.Option>
-                        </SelectBox>
+                        </SelectBox> */}
                       </Form.Item>
                     </div>
 
@@ -382,7 +415,7 @@ function Addvendor() {
                       </Form.Item>
                     </div>
 
-                    <div className="col-sm-6 pt-2">
+                    <div className="col-sm-6 pt-1">
                       <label> Address</label>
                       <div>
                         <Form.Item className="py-1" name="vendordescription">
@@ -396,7 +429,7 @@ function Addvendor() {
                         </Form.Item>
                       </div>
                     </div>
-                    <div className="col-sm-6 pt-2">
+                    <div className="col-sm-6 pt-1">
                       <label> Attachments</label>
                       <div>
                         <Form.Item className="py-1" name="vendordescription">
@@ -412,10 +445,10 @@ function Addvendor() {
                     </div>
                   </div>
 
-                  <div className="row jobpay_cards mt-3 mx-0 px-2 py-3">
-                    <div className="col-12">
+                  <div className="row  mt-1 mx-0 px-2 py-1">
+                    {/* <div className="col-12">
                       <h5 className="lead_text">Contact Details</h5>
-                    </div>
+                    </div> */}
 
                     <div className="col-sm-4 pt-3">
                       <label>
@@ -557,7 +590,7 @@ function Addvendor() {
                     </Form.Item> */}
                     </div>
 
-                    <div className="col-sm-4 pt-2">
+                    <div className="col-sm-4 pt-3">
                       <label>State</label>
 
                       <Form.Item name="vendorstate">
@@ -579,7 +612,7 @@ function Addvendor() {
                       />
                     </Form.Item> */}
                     </div>
-                    <div className="col-sm-4 pt-2">
+                    <div className="col-sm-4 pt-3">
                       <label>City</label>
 
                       <Form.Item name="vendorcity">
@@ -593,12 +626,12 @@ function Addvendor() {
                     </div>
                   </div>
 
-                  <div className="row jobpay_cards mt-3 mx-0 px-2 py-5">
-                    <div className="col-12">
+                  <div className="row  mt-1 mx-0 px-2 py-1">
+                    {/* <div className="col-12">
                       <h5 className="lead_text">Extra Info</h5>
-                    </div>
+                    </div> */}
 
-                    <div className="col-sm-12 pt-2">
+                    <div className="col-sm-12 pt-1">
                       <label> Remarks</label>
                       <div>
                         <Form.Item className="py-1" name="vendoraddress">
@@ -608,6 +641,7 @@ function Addvendor() {
                               setvendoraddress(e.target.value);
                             }}
                           />
+
                         </Form.Item>
                       </div>
                     </div>
@@ -703,6 +737,25 @@ function Addvendor() {
                   </div>
                 </div>
               </div>
+              <div
+                className={
+                  toggleState === 5 ? "content  active-content" : "content"
+                }
+              >
+                <div className="row mt-3 px-1" style={{ borderRadius: "3px" }}>
+                  <div className="col-md-12"></div>
+                  <div className="col-12 mt-2">
+                    <Moreinfo toggle={timeOut} />
+                  </div>
+                  <div className="col mt-4">
+                    {/* <Button btnType="save" onClick={(e) => handleAddressTab(e)}>
+                      Next
+                    </Button> */}
+                  </div>
+                </div>
+              </div>
+
+
             </div>
           </div>
 

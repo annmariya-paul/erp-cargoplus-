@@ -4,7 +4,7 @@ import TableData from "../../../../components/table/table_data";
 import { CRM_BASE_URL } from "../../../../api/bootapi";
 import PublicFetch from "../../../../utils/PublicFetch";
 import PhoneNumber from "../../../../components/phone_number/phonenumber";
-import { Form, message } from "antd";
+import { Form, message,Select } from "antd";
 import InputType from "../../../../components/Input Type textbox/InputType";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
 import Button from "../../../../components/button/button";
@@ -12,6 +12,7 @@ import { useForm } from "react-hook-form";
 import Phone_Input from "../../../../components/PhoneInput/phoneInput";
 import Custom_model from "../../../../components/custom_modal/custom_model";
 import { AiOutlinePlus } from "react-icons/ai";
+import SelectBox from "../../../../components/Select Box/SelectBox";
 
 function AddressTable(props) {
   const [value, setValue] = useState();
@@ -163,7 +164,7 @@ function AddressTable(props) {
       <div className="row">
         <div className="col-12">
           <Button btnType="add" onClick={() => setModalshowAdd(true)}>
-            Add <AiOutlinePlus />
+            New Address <AiOutlinePlus />
           </Button>
         </div>
       </div>
@@ -217,10 +218,14 @@ function AddressTable(props) {
                       },
                     ]}
                   >
-                    <InputType
+                   <SelectBox>
+                   <Select.Option value="billing">Billing Address</Select.Option>
+                   <Select.Option value="shipping">Shipping Address</Select.Option>
+                   </SelectBox>
+                    {/* <InputType
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
-                    />
+                    /> */}
                   </Form.Item>
 
                   <label>Address</label>

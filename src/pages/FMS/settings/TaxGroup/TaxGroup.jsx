@@ -46,9 +46,14 @@ function TaxGroup() {
       onFilter: (value, record) => {
         // console.log("hai how are", record.children);
 
-        return String(record.tax_group_name)
-          .toLowerCase()
-          .includes(value.toLowerCase());
+        return (
+          String(record.tax_group_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.tax_group_description)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
       },
     },
     // Table.EXPAND_COLUMN,
@@ -58,6 +63,19 @@ function TaxGroup() {
       key: "tax_group_description",
       width: "11%",
       align: "center",
+      filteredValue: [searchedText],
+      onFilter: (value, record) => {
+        // console.log("hai how are", record.children);
+
+        return (
+          String(record.tax_group_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.tax_group_description)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
+      },
     },
 
     {
@@ -193,10 +211,11 @@ function TaxGroup() {
         <div className="col-4">
           <h5 className="lead_text">Tax Groups</h5>
         </div>
-        <div className="col-4 shadow-sm">
+        <div className="col-4 ">
           <Input.Search
+            className="inputSearch"
             placeholder="Search by Name"
-            style={{ margin: "5px", borderRadius: "5px" }}
+            style={{ borderRadius: "5px" }}
             value={searchedText}
             onChange={(e) => {
               setSearchedText(e.target.value ? [e.target.value] : []);

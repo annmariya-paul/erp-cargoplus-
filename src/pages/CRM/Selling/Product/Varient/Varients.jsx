@@ -367,15 +367,11 @@ function Varients() {
       <div className="container-fluid">
         <div className="">
           <div className="row">
-            <div className="col-sm-5 ">
-              <div className="bloc-tabs tabs-responsive">
+            <div className="col-sm-5">
+              <div className="bloc-tabs tabs-responsive gap-1">
                 <button
                   id="button-tabs"
-                  className={
-                    toggleState === 1
-                      ? "report-tabs active-report-tabs"
-                      : "report-tabs"
-                  }
+                  className={toggleState === 1 ? "tabs active-tabs " : "tabs "}
                   onClick={() => toggleTab(1)}
                 >
                   Add Variants Details
@@ -383,11 +379,7 @@ function Varients() {
 
                 <button
                   id="button-tabs "
-                  className={
-                    toggleState === 2
-                      ? "report-tabs active-report-tabs"
-                      : "report-tabs"
-                  }
+                  className={toggleState === 2 ? "tabs active-tabs " : "tabs "}
                   onClick={() => toggleTab(2)}
                 >
                   Add Variants Attributes

@@ -411,9 +411,20 @@ function Services() {
       key: "key",
       filteredValue: [searchedName],
       onFilter: (value, record) => {
-        return String(record.service_name)
-          .toLowerCase()
-          .includes(value.toLowerCase());
+        return (
+          String(record.service_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.service_code)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.service_category_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.service_taxtype_name)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
       },
       align: "left",
       width: "23%",
@@ -427,9 +438,20 @@ function Services() {
       align: "left",
       filteredValue: [searchCode],
       onFilter: (value, record) => {
-        return String(record.service_code)
-          .toLowerCase()
-          .includes(value.toLowerCase());
+        return (
+          String(record.service_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.service_code)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.service_category_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.service_taxtype_name)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
       },
     },
     {
@@ -440,9 +462,20 @@ function Services() {
       align: "left",
       filteredValue: [searchCategory],
       onFilter: (value, record) => {
-        return String(record.service_category_name)
-          .toLowerCase()
-          .includes(value.toLowerCase());
+        return (
+          String(record.service_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.service_code)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.service_category_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.service_taxtype_name)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
       },
     },
     {
@@ -453,7 +486,20 @@ function Services() {
       align: "left",
 
       onFilter: (value, record) => {
-        return String(record.code).toLowerCase().includes(value.toLowerCase());
+        return (
+          String(record.service_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.service_code)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.service_category_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.service_taxtype_name)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
       },
     },
     {
@@ -472,11 +518,11 @@ function Services() {
               // }}
               className="actionEdit m-0 p-0"
             >
-              <Link  
-               to={`${ROUTES.SERVICE_EDIT}/${index.service_id}`}
-               className="editcolor"
+              <Link
+                to={`${ROUTES.SERVICE_EDIT}/${index.service_id}`}
+                className="editcolor"
               >
-              <FaEdit />
+                <FaEdit />
               </Link>
             </div>
             <Link to={ROUTES.SERVICEDETAILS}>
@@ -506,9 +552,31 @@ function Services() {
         <div>
           {/* {service listing starts section one} */}
           <div className="row flex-wrap">
-            <div className="col">
+            <div className="col-4 pt-3">
               <h5 className="lead_text">Services</h5>
             </div>
+            <div
+              // style={{ backgroundColor: "rgb(233, 233, 233)", width: "fit-content"}}
+              className="col-4 pb-2 "
+            >
+              <Input.Search
+                placeholder="Search "
+                style={{
+                  margin: "5px",
+                  borderRadius: "5px",
+                  backgroundColor: "whitesmoke",
+                }}
+                className="inputSearch"
+                value={searchedName}
+                onChange={(e) => {
+                  setSearchedName(e.target.value ? [e.target.value] : []);
+                }}
+                onSearch={(value) => {
+                  setSearchedName(value);
+                }}
+              />
+            </div>
+            <div className="col-4"></div>
             {/* <Leadlist_Icons 
               datas={attributes}
               columns={filteredColumns}
@@ -528,8 +596,8 @@ function Services() {
                 </Checkbox.Group>
               } /> */}
           </div>
-          <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
-            <div className="col-4">
+          {/* <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}> */}
+          {/* <div className="col-4">
               <Input.Search
                 placeholder="Search by Name"
                 style={{ margin: "5px", borderRadius: "5px" }}
@@ -554,7 +622,7 @@ function Services() {
                   setSearchCode(value);
                 }}
               />
-              {/* <Select
+              <Select
                 allowClear
                 showSearch
                 style={{
@@ -572,7 +640,7 @@ function Services() {
                 <Select.Option value="sales">sales</Select.Option>
                 <Select.Option value="maintenance">Maintenance</Select.Option>
                 <Select.Option value="support">support</Select.Option>
-              </Select> */}
+              </Select>
             </div>
             <div className="col-4 ">
               <Select
@@ -603,72 +671,72 @@ function Services() {
                     );
                   })}
               </Select>
-            </div>
-          </div>
+            </div> */}
+          {/* </div> */}
           <div className="row my-3">
             <div className="col-2 page_size_style px-3">
               <div className="">
-              <Select
-                // defaultValue={"25"}
-                bordered={false}
-                className=" "
-                value={noofitems}
-                // onChange={(e) => setNoofItems(e)}
-                onChange={(e, current) => {
-                  console.log("On page size selected : ", e);
-                  console.log("nfjnjfv", current);
-                  setNoofItems(e);
-                  setCurrent(1);
-                }}
-              >
-                {/* <Select.Option value="5">5 | pages</Select.Option> */}
-                <Select.Option value="25">
-                  Show{" "}
-                  <span style={{ color: "lightgray" }} className="ms-1">
-                    |
-                  </span>
-                  <span style={{ color: "#2f6b8f" }} className="ms-2">
-                    25
-                  </span>{" "}
-                </Select.Option>
-                <Select.Option value="50">
-                  {" "}
-                  Show{" "}
-                  <span style={{ color: "lightgray" }} className="ms-1">
-                    |
-                  </span>
-                  <span style={{ color: "#2f6b8f" }} className="ms-2">
-                    50
-                  </span>{" "}
-                </Select.Option>
-                <Select.Option value="100">
-                  {" "}
-                  Show{" "}
-                  <span style={{ color: "lightgray" }} className="ms-1">
-                    |
-                  </span>
-                  <span style={{ color: "#2f6b8f" }} className="ms-2">
-                    100
-                  </span>{" "}
-                </Select.Option>
-              </Select>
-              <label>of 100</label>
+                <Select
+                  // defaultValue={"25"}
+                  bordered={false}
+                  className=" "
+                  value={noofitems}
+                  // onChange={(e) => setNoofItems(e)}
+                  onChange={(e, current) => {
+                    console.log("On page size selected : ", e);
+                    console.log("nfjnjfv", current);
+                    setNoofItems(e);
+                    setCurrent(1);
+                  }}
+                >
+                  {/* <Select.Option value="5">5 | pages</Select.Option> */}
+                  <Select.Option value="25">
+                    Show{" "}
+                    <span style={{ color: "lightgray" }} className="ms-1">
+                      |
+                    </span>
+                    <span style={{ color: "#2f6b8f" }} className="ms-2">
+                      25
+                    </span>{" "}
+                  </Select.Option>
+                  <Select.Option value="50">
+                    {" "}
+                    Show{" "}
+                    <span style={{ color: "lightgray" }} className="ms-1">
+                      |
+                    </span>
+                    <span style={{ color: "#2f6b8f" }} className="ms-2">
+                      50
+                    </span>{" "}
+                  </Select.Option>
+                  <Select.Option value="100">
+                    {" "}
+                    Show{" "}
+                    <span style={{ color: "lightgray" }} className="ms-1">
+                      |
+                    </span>
+                    <span style={{ color: "#2f6b8f" }} className="ms-2">
+                      100
+                    </span>{" "}
+                  </Select.Option>
+                </Select>
+                <label>of 100</label>
               </div>
             </div>
             <div className="col-2"></div>
             <div className=" col-4 d-flex justify-content-center">
-              {totalCount>0 && (
-              <MyPagination
-                total={parseInt(totalCount)}
-                current={current}
-                pageSize={noofitems}
-                // defaultPageSize={noofItems}
-                showSizeChanger={false}
-                onChange={(current, pageSize) => {
-                  console.log("page index isss", pageSize);
-                  setCurrent(current);
-                }}
-              />
+              {totalCount > 0 && (
+                <MyPagination
+                  total={parseInt(totalCount)}
+                  current={current}
+                  pageSize={noofitems}
+                  // defaultPageSize={noofItems}
+                  showSizeChanger={false}
+                  onChange={(current, pageSize) => {
+                    console.log("page index isss", pageSize);
+                    setCurrent(current);
+                  }}
+                />
               )}
             </div>
             <div className="col-4 d-flex justify-content-end">
@@ -695,26 +763,26 @@ function Services() {
             />
           </div>
           <div className="d-flex py-2 justify-content-center">
-            {totalCount>0 && (
-            <MyPagination
-              total={parseInt(totalCount)}
-              // current={current}
-              // showSizeChanger={true}
-              // pageSize={pageSize}
-              // onChange={(current, pageSize) => {
-              //   setCurrent(current);
-              //   setPageSize(pageSize);
-              // }}
-              current={current}
-              pageSize={noofitems}
-              // defaultPageSize={noofItems}
-              showSizeChanger={false}
-              onChange={(current, pageSize) => {
-                console.log("page index isss", pageSize);
-                setCurrent(current);
-              }}
-            />
-            ) }
+            {totalCount > 0 && (
+              <MyPagination
+                total={parseInt(totalCount)}
+                // current={current}
+                // showSizeChanger={true}
+                // pageSize={pageSize}
+                // onChange={(current, pageSize) => {
+                //   setCurrent(current);
+                //   setPageSize(pageSize);
+                // }}
+                current={current}
+                pageSize={noofitems}
+                // defaultPageSize={noofItems}
+                showSizeChanger={false}
+                onChange={(current, pageSize) => {
+                  console.log("page index isss", pageSize);
+                  setCurrent(current);
+                }}
+              />
+            )}
           </div>
         </div>
         {/* {section Two service Edit modal starts} */}
@@ -797,9 +865,9 @@ function Services() {
                           />
                         </Form.Item>
                       </div>
-                     
+
                       <div className="col-6 ">
-                      <label className="py-1">Category</label>
+                        <label className="py-1">Category</label>
                         <Form.Item
                           name="serviceCategory"
                           rules={[
@@ -1009,33 +1077,25 @@ function Services() {
                 <div className=" d-flex justify-content-between">
                   <h5 className="lead_text">Services</h5>
                   <div className="">
-                  <Link  
-                 to={`${ROUTES.SERVICE_EDIT}/${viewservices.id}`}
-
-                   >
-                    <Button
-                      style={{
-                        backgroundColor: "white",
-                        color: "#0092ce",
-                      }}
-                      className="d-flex justify-content-end"
-                    >
-                      <span
-                        className="d-flex align-items-center justify-content-between gap-1  p-1 button_span"
-                        style={{ fontSize: "13px" }}
-                        // onClick={() => {
-                        //   handleEditfromview(viewservices);
-                        // }}
+                    <Link to={`${ROUTES.SERVICE_EDIT}/${viewservices.id}`}>
+                      <Button
+                        style={{
+                          backgroundColor: "white",
+                          color: "#0092ce",
+                        }}
+                        className="d-flex justify-content-end"
                       >
-                        Edit 
-                        
-             
-             
-             <FiEdit fontSize={"12px"} />
-             
-                       
-                      </span>
-                    </Button>
+                        <span
+                          className="d-flex align-items-center justify-content-between gap-1  p-1 button_span"
+                          style={{ fontSize: "13px" }}
+                          // onClick={() => {
+                          //   handleEditfromview(viewservices);
+                          // }}
+                        >
+                          Edit
+                          <FiEdit fontSize={"12px"} />
+                        </span>
+                      </Button>
                     </Link>
                   </div>
                 </div>

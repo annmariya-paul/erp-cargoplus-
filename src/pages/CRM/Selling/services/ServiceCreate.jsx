@@ -48,7 +48,7 @@ function ServiceCreate() {
   const [uniqueCode, setuniqueCode] = useState();
   const [uniqueserCode, setuniqueserCode] = useState();
   const [uniqueHsnCode, setuniqueHsnCode] = useState();
-
+  const [TaxGroups, setTaxGroups] = useState();
   const [numOfItems, setNumOfItems] = useState("25");
   const [current, setCurrent] = useState(1);
   const pageofIndex = numOfItems * (current - 1) - 1 + 1;
@@ -175,7 +175,22 @@ function ServiceCreate() {
     }
   };
 
+  const getTaxGroup = () => {
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/tax_group`)
+      .then((res) => {
+        console.log("response");
+        if (res.data.success) {
+          console.log("Success");
+          setTaxGroups(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
   useEffect(() => {
+    getTaxGroup();
     getAllTaxTypes();
   }, []);
   const beforeUpload = (file, fileList) => {};
@@ -329,8 +344,8 @@ function ServiceCreate() {
                   </Form.Item>
                 </div> */}
 
-<div className="col-6">
-<label>Category</label>
+                <div className="col-6">
+                  <label>Category</label>
                   <Form.Item
                     className="mt-2"
                     name="category"
@@ -358,7 +373,7 @@ function ServiceCreate() {
                       onSelect={onSelect}
                     />
                   </Form.Item>
-</div>
+                </div>
                 {/* <div className="col-6 mt-2">
                   <label>HSN</label>
                   <Form.Item
@@ -397,8 +412,47 @@ function ServiceCreate() {
                     ""
                   )}
                 </div> */}
-                <div className="col-6 mt-1">
+                {/* <div className="col-6 mt-1">
                   <label className="">Tax Type</label>
+                  <Form.Item
+                    name="taxRate"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please enter a Valid Tax Rate",
+                      },
+                      {
+                        pattern: new RegExp("^[0-9]+$"),
+                        message: "Please enter zero or Postive integers",
+                      },
+                    ]}
+                  >
+                    
+                    <SelectBox
+                      placeholder={"--Please Select--"}
+                      value={taxRate}
+                      onChange={(e) => {
+                        console.log("select the brandss", e);
+                        setTaxRate(parseInt(e));
+                      }}
+                    >
+                      {alltaxtype &&
+                        alltaxtype.length > 0 &&
+                        alltaxtype.map((item, index) => {
+                          return (
+                            <Select.Option
+                              key={item.tax_type_id}
+                              value={item.tax_type_id}
+                            >
+                              {item.tax_type_name}
+                            </Select.Option>
+                          );
+                        })}
+                    </SelectBox>
+                  </Form.Item>
+                </div> */}
+                <div className="col-6 mt-1">
+                  <label className="">Tax Groups</label>
                   <Form.Item
                     name="taxRate"
                     rules={[
@@ -425,28 +479,27 @@ function ServiceCreate() {
                     /> */}
                     <SelectBox
                       placeholder={"--Please Select--"}
-                      value={taxRate}
+                      // value={taxRate}
                       onChange={(e) => {
                         console.log("select the brandss", e);
                         setTaxRate(parseInt(e));
                       }}
                     >
-                      {alltaxtype &&
-                        alltaxtype.length > 0 &&
-                        alltaxtype.map((item, index) => {
+                      {TaxGroups &&
+                        TaxGroups.length > 0 &&
+                        TaxGroups.map((item, index) => {
                           return (
                             <Select.Option
-                              key={item.tax_type_id}
-                              value={item.tax_type_id}
+                              key={item.tax_group_id}
+                              value={item.tax_group_id}
                             >
-                              {item.tax_type_name}
+                              {item.tax_group_name}
                             </Select.Option>
                           );
                         })}
                     </SelectBox>
                   </Form.Item>
                 </div>
-
                 <div className="col-6 mt-2">
                   <label>Display Picture</label>
                   <Form.Item name="new" className="mt-2">
@@ -454,7 +507,8 @@ function ServiceCreate() {
                       multiple
                       listType="picture"
                       accept=".png,.jpeg"
-                      height={100}
+                      // height={100}
+                      style={{ height: "65px" }}
                       // onPreview={handlePreview}
                       beforeUpload={beforeUpload}
                       onChange={(file) => {

@@ -31,196 +31,185 @@ function Unitlist() {
   const [editShow, setEditShow] = useState(false);
   const [viewUnitModal, setViewUnitModal] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
- const [allunit,setAllunit]=useState([]);
- const[unitTable,setunitTable]=useState("");
-const [unitName,setUnitName]= useState("");
-const [unitcode,setUnitCode]=useState("");
-const [unitDescription,setUnitDescription]= useState("");
-const[unitid,setUnitid]=useState();
+  const [allunit, setAllunit] = useState([]);
+  const [unitTable, setunitTable] = useState("");
+  const [unitName, setUnitName] = useState("");
+  const [unitcode, setUnitCode] = useState("");
+  const [unitDescription, setUnitDescription] = useState("");
+  const [unitid, setUnitid] = useState();
 
-const [addmodalShow, setaddmodalShow] = useState(false);
+  const [addmodalShow, setaddmodalShow] = useState(false);
 
-const [addunitName,setaddunitName]= useState("")
-const [addunitCode,setaddunitCode]= useState("")
-const [addunitDesc,setaddunitDesc]= useState("")
+  const [addunitName, setaddunitName] = useState("");
+  const [addunitCode, setaddunitCode] = useState("");
+  const [addunitDesc, setaddunitDesc] = useState("");
 
-const [uniqueCode, setuniqueCode] = useState();
-const [uniqueName, setuniqueName] = useState();
+  const [uniqueCode, setuniqueCode] = useState();
+  const [uniqueName, setuniqueName] = useState();
 
-const [serialNo, setserialNo] = useState(1);
-const [addForm]= Form.useForm();
-const [editForm]= Form.useForm();
+  const [serialNo, setserialNo] = useState(1);
+  const [addForm] = Form.useForm();
+  const [editForm] = Form.useForm();
 
- const getData = (current, pageSize) => {
-  return allunit?.slice((current - 1) * pageSize, current * pageSize);
-};
+  const getData = (current, pageSize) => {
+    return allunit?.slice((current - 1) * pageSize, current * pageSize);
+  };
 
-const [viewUnit, setViewUnit]=useState({
-  id:"",
-  unitname:"",
-  unitcode:"",
-  unitdescription:"",
-  unit_status:"",
-  
-})
-
-// const [editunit,setEditunit]= useState({
-//   unitid:"",
-//   units_name:"",
-//   units_code:"",
-//   units_description:""
-// })
-
-// function to view units
-
-const handleViewClick=(item)=>{
-console.log("view units iss",item)
-setViewUnit({
-  ...viewUnit,
-  id:item.unit_id,
-  unitname:item?.unit_name,
-  unitcode:item?.unit_code,
-  unitdescription:item?.unit_description,
-  
-})
-
-}
-
-const handleEditonViewpage=(e)=>{
-  console.log("editing unitss iss",e)
-  setUnitid(e.id)
-  setUnitName(e.unitname)
-  setUnitCode(e.unitcode)
-  setUnitDescription(e.unitdescription)
- 
-  setViewUnitModal(false);
-  editForm.setFieldsValue({
-    // unitid: e.unit_id,
-    unit_name: e.unitname,
-    unit_code: e.unitcode,
-    unit_description: e.unitdescription,
+  const [viewUnit, setViewUnit] = useState({
+    id: "",
+    unitname: "",
+    unitcode: "",
+    unitdescription: "",
+    unit_status: "",
   });
-  setEditShow(true);
-}
-// function to editunits
 
-const handleEditclick=(item)=>{
-  console.log("editt valuesss",item)
-setUnitid(item?.unit_id)  
-setUnitName(item?.unit_name)
-setUnitCode(item?.unit_code)
-setUnitDescription(item?.unit_description)
- editForm.setFieldsValue({
-  //  unitid: item.unit_id,
-  unit_name: item.unit_name,
-  unit_code: item.unit_code,
-  unit_description: item.unit_description,
- });
- setEditShow(true);
-}
+  // const [editunit,setEditunit]= useState({
+  //   unitid:"",
+  //   units_name:"",
+  //   units_code:"",
+  //   units_description:""
+  // })
 
- const close_modal = (mShow, time) => {
-   if (!mShow) {
-     setTimeout(() => {
-       setSaveSuccess(false);
-     }, time);
-   }
- };
+  // function to view units
 
-const updateClick=async (id)=>{
-try{
-const updating= await PublicFetch.patch(
-  `${CRM_BASE_URL_SELLING}/unit/${unitid}`,{
-    unit_name:unitName,
-    unit_code:unitcode,
-    unit_description:unitDescription
-  })
-  console.log("editedd data is",updating)
-  if(updating.data.success){
-   console.log("successfully updating ")
-   setViewUnitModal(false)
-   getallunits()
-   setEditShow(false);
-   setSaveSuccess(true)
-   close_modal(saveSuccess, 1200);
-  }
-}
-catch(err) {
-      console.log("error to getting all units",err)
+  const handleViewClick = (item) => {
+    console.log("view units iss", item);
+    setViewUnit({
+      ...viewUnit,
+      id: item.unit_id,
+      unitname: item?.unit_name,
+      unitcode: item?.unit_code,
+      unitdescription: item?.unit_description,
+    });
+  };
+
+  const handleEditonViewpage = (e) => {
+    console.log("editing unitss iss", e);
+    setUnitid(e.id);
+    setUnitName(e.unitname);
+    setUnitCode(e.unitcode);
+    setUnitDescription(e.unitdescription);
+
+    setViewUnitModal(false);
+    editForm.setFieldsValue({
+      // unitid: e.unit_id,
+      unit_name: e.unitname,
+      unit_code: e.unitcode,
+      unit_description: e.unitdescription,
+    });
+    setEditShow(true);
+  };
+  // function to editunits
+
+  const handleEditclick = (item) => {
+    console.log("editt valuesss", item);
+    setUnitid(item?.unit_id);
+    setUnitName(item?.unit_name);
+    setUnitCode(item?.unit_code);
+    setUnitDescription(item?.unit_description);
+    editForm.setFieldsValue({
+      //  unitid: item.unit_id,
+      unit_name: item.unit_name,
+      unit_code: item.unit_code,
+      unit_description: item.unit_description,
+    });
+    setEditShow(true);
+  };
+
+  const close_modal = (mShow, time) => {
+    if (!mShow) {
+      setTimeout(() => {
+        setSaveSuccess(false);
+      }, time);
     }
-}
+  };
 
-// function to delete unit
+  const updateClick = async (id) => {
+    try {
+      const updating = await PublicFetch.patch(
+        `${CRM_BASE_URL_SELLING}/unit/${unitid}`,
+        {
+          unit_name: unitName,
+          unit_code: unitcode,
+          unit_description: unitDescription,
+        }
+      );
+      console.log("editedd data is", updating);
+      if (updating.data.success) {
+        console.log("successfully updating ");
+        setViewUnitModal(false);
+        getallunits();
+        setEditShow(false);
+        setSaveSuccess(true);
+        close_modal(saveSuccess, 1200);
+      }
+    } catch (err) {
+      console.log("error to getting all units", err);
+    }
+  };
 
-// const handleDeleteClick = async()=>{
-// try{
-// const deleting= await PublicFetch.delete(
-//   `${CRM_BASE_URL_SELLING}/unit/`
-// )
-// }
-// catch{
+  // function to delete unit
 
-// }
+  // const handleDeleteClick = async()=>{
+  // try{
+  // const deleting= await PublicFetch.delete(
+  //   `${CRM_BASE_URL_SELLING}/unit/`
+  // )
+  // }
+  // catch{
 
-// }
+  // }
 
+  // }
 
+  const getallunits = async () => {
+    try {
+      const allunits = await PublicFetch.get(`${CRM_BASE_URL_SELLING}/unit`);
+      console.log("all units are ::", allunits?.data?.data);
 
-const getallunits=async ()=>{
-try{
-const  allunits =await PublicFetch.get(
-  `${CRM_BASE_URL_SELLING}/unit`)
-  console.log("all units are ::",allunits?.data?.data)
+      // if(allunits?.data.success){}
+      setAllunit(allunits?.data?.data);
+      setunitTable(allunits?.data?.data);
+    } catch (err) {
+      console.log("error to getting all units", err);
+    }
+  };
 
-  // if(allunits?.data.success){}
-  setAllunit(allunits?.data?.data)
-  setunitTable(allunits?.data?.data)
-}
-catch(err) {
-console.log("error to getting all units",err)
-}
+  useEffect(() => {
+    getallunits();
+  }, []);
 
-}
+  const submitaddunit = async () => {
+    try {
+      const addunit = await PublicFetch.post(`${CRM_BASE_URL_SELLING}/unit`, {
+        unit_name: addunitName,
+        unit_code: addunitCode,
+        unit_description: addunitDesc,
+      });
+      console.log("unit data is added ", addunit);
 
-useEffect(()=>{
-  getallunits()
-},[])
+      if (addunit.data.success) {
+        setaddmodalShow(false);
+        addForm.resetFields();
+        getallunits();
+        setSaveSuccess(true);
+        close_modal(saveSuccess, 1000);
+      } else if (addunit.data.success === false) {
+        alert(addunit.data.data);
+      }
+    } catch (err) {
+      console.log("err to add the unit", err);
+    }
+  };
 
-const submitaddunit=async()=>{
-  try{
-  const addunit= await PublicFetch.post(
-    `${CRM_BASE_URL_SELLING}/unit`,{
-      unit_name:addunitName,
-      unit_code:addunitCode,
-      unit_description:addunitDesc
-      
-    })
-   console.log("unit data is added ",addunit)
- 
-  if (addunit.data.success) {
-    setaddmodalShow(false)
-    addForm.resetFields()
-    getallunits()
-    setSaveSuccess(true);
-    close_modal(saveSuccess, 1000);
-  } else if (addunit.data.success === false) {
-    alert(addunit.data.data);
-  }
-  }
-  catch(err) {
-   console.log("err to add the unit",err)
-  }
-  
-  }
-
-const confirm = (e) => {
-  console.log(e);
-  message.success('Click on Yes');
-};
-const cancel = (e) => {
-  console.log(e);
-  message.error('Click on No');
-};
+  const confirm = (e) => {
+    console.log(e);
+    message.success("Click on Yes");
+  };
+  const cancel = (e) => {
+    console.log(e);
+    message.error("Click on No");
+  };
 
   const unitdata = [
     {
@@ -257,11 +246,14 @@ const cancel = (e) => {
       title: "NAME",
       dataIndex: "unit_name",
       key: "NAME",
-      filteredValue: [searchType],
+      filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.unit_name)
-          .toLowerCase()
-          .includes(value.toLowerCase());
+        return (
+          String(record.unit_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.unit_code).toLowerCase().includes(value.toLowerCase())
+        );
       },
       align: "left",
       width: "23%",
@@ -271,12 +263,12 @@ const cancel = (e) => {
       dataIndex: "unit_code",
       key: "CODE",
       width: "23%",
-      filteredValue: [searchedText],
-      onFilter: (value, record) => {
-        return String(record.unit_code)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
+      // filteredValue: [searchedText],
+      // onFilter: (value, record) => {
+      //   return String(record.unit_code)
+      //     .toLowerCase()
+      //     .includes(value.toLowerCase());
+      // },
       align: "left",
     },
     {
@@ -295,17 +287,19 @@ const cancel = (e) => {
         return (
           <div className="d-flex  gap-2">
             <span
-              onClick={() =>{ 
-                handleEditclick(index)
-                setEditShow(true)}}
+              onClick={() => {
+                handleEditclick(index);
+                setEditShow(true);
+              }}
               className="actioneditdelete"
             >
               <FaEdit />
             </span>
             <span
               onClick={() => {
-                handleViewClick(index)
-                setViewUnitModal(true)}}
+                handleViewClick(index);
+                setViewUnitModal(true);
+              }}
               className="actioneditdelete"
             >
               <RiFileSearchFill />
@@ -316,15 +310,15 @@ const cancel = (e) => {
               <MdDelete />
             </span> */}
             <span className="actioneditdelete">
-            <Popconfirm
-             title="Are you sure to delete the units?"
-            //  onConfirm={handleDeleteClick(index)}
-             onCancel={cancel}
-             okText="Yes"
-             cancelText="No"
-             >
-            <MdDelete />
-            </Popconfirm>
+              <Popconfirm
+                title="Are you sure to delete the units?"
+                //  onConfirm={handleDeleteClick(index)}
+                onCancel={cancel}
+                okText="Yes"
+                cancelText="No"
+              >
+                <MdDelete />
+              </Popconfirm>
             </span>
           </div>
         );
@@ -335,46 +329,51 @@ const cancel = (e) => {
 
   //heder icons starts --Shahida 25.11.22
 
-  //for show or hide colums 
+  //for show or hide colums
   const columnsKeys = columns.map((column) => column.key);
 
   const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
   const filteredColumns = columns.filter((column) =>
     selectedColumns.includes(column.key)
   );
-console.log("filtered columns::",filteredColumns);
+  console.log("filtered columns::", filteredColumns);
   const onChange = (checkedValues) => {
     setSelectedColumns(checkedValues);
   };
 
   //for Xlsx data
-  const UnitHeads = 
-  [
-    [
-      "unit_id",
-      "unit_name",
-      "unit_code",
-      "unit_description",
-     
-
-    ],
-  ]
+  const UnitHeads = [["unit_id", "unit_name", "unit_code", "unit_description"]];
   //for pdf download
   const data12 = allunit?.map((item) => [
     item.action,
     item.unit_name,
     item.unit_code,
     item.unit_description,
-    
   ]);
   //heder icons end
 
   return (
     <>
       <div className="container-fluid lead_list py-3">
-        <div className=" d-flex justify-content-between">
-          <h6 className="lead_text">UNITS AND MEASUREMENTS</h6>
-          <div>
+        <div className="row">
+          <div className="col-4">
+            <h5 className="lead_text">Units And Measurements</h5>
+          </div>
+          <div className="col-4">
+            <Input.Search
+              className="inputSearch"
+              placeholder="Search"
+              style={{ margin: "5px", borderRadius: "5px" }}
+              value={searchedText}
+              onChange={(e) => {
+                setSearchedText(e.target.value ? [e.target.value] : []);
+              }}
+              onSearch={(value) => {
+                setSearchedText(value);
+              }}
+            />
+          </div>
+          <div className="col-4 d-flex justify-content-end">
             <Leadlist_Icons
               datas={allunit}
               columns={filteredColumns}
@@ -396,7 +395,7 @@ console.log("filtered columns::",filteredColumns);
           </div>
         </div>
 
-        <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
+        {/* <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
               placeholder="Search by Name"
@@ -410,39 +409,8 @@ console.log("filtered columns::",filteredColumns);
               }}
             />
           </div>
-          <div className="col-4">
-            <Input.Search
-              placeholder="Search by code"
-              style={{ margin: "5px", borderRadius: "5px" }}
-              value={searchedText}
-              onChange={(e) => {
-                setSearchedText(e.target.value ? [e.target.value] : []);
-              }}
-              onSearch={(value) => {
-                setSearchedText(value);
-              }}
-            />
-            {/* <Select
-              allowClear
-              showSearch
-              style={{
-                width: "100%",
-                marginTop: "8px",
-                borderRadius: "5px",
-              }}
-              placeholder="Search by Code"
-              className="select_search"
-              optionFilterProp="children"
-              onChange={(event) => {
-                setSearchType(event ? [event] : []);
-              }}
-            >
-              <Select.Option value="sales">sales</Select.Option>
-              <Select.Option value="maintenance">Maintenance</Select.Option>
-              <Select.Option value="support">support</Select.Option>
-            </Select> */}
-          </div>
-        </div>
+          
+        </div> */}
 
         <div className="row my-3">
           <div className="col-xl-4 col-lg-4  col-sm-6 col-12  px-3">
@@ -453,7 +421,8 @@ console.log("filtered columns::",filteredColumns);
               value={pageSize}
               onChange={(e) => {
                 setCurrent(1);
-                setPageSize(e)}}
+                setPageSize(e);
+              }}
             >
               {/* <Select.Option value="5">5 | pages</Select.Option> */}
               {/* <Select.Option value="5">
@@ -498,25 +467,28 @@ console.log("filtered columns::",filteredColumns);
           </div>
           {/* <div className="col-xl-6 col-lg-6 col-md-5  col-12"></div> */}
           <div className="col-xl-4 col-lg-4  col-sm-6 col-12  d-flex py-2 justify-content-center">
-          <MyPagination
-            total={allunit?.length}
-            current={current}
-            showSizeChanger={true}
-            pageSize={pageSize}
-            onChange={(current, pageSize) => {
-              setCurrent(current);
-              setPageSize(pageSize);
-            }}
-          />
-        </div>
+            <MyPagination
+              total={allunit?.length}
+              current={current}
+              showSizeChanger={true}
+              pageSize={pageSize}
+              onChange={(current, pageSize) => {
+                setCurrent(current);
+                setPageSize(pageSize);
+              }}
+            />
+          </div>
           <div className="col-xl-4 col-lg-4   col-sm-12 col-12  ">
             <div className="d-flex justify-content-end">
               {/* <Link to={ROUTES.ADD_UNIT}> */}
-                <Button btnType="save"
-                onClick={()=>{
-                  setaddmodalShow(true)
+              <Button
+                btnType="save"
+                onClick={() => {
+                  setaddmodalShow(true);
                 }}
-                >Add Unit</Button>
+              >
+                Add Unit
+              </Button>
               {/* </Link> */}
             </div>
           </div>
@@ -538,8 +510,6 @@ console.log("filtered columns::",filteredColumns);
             setViewUnitModal(false);
           }}
           View_list
-         
-         
           list_content={
             <div className="">
               <div className="d-flex justify-content-between my-1">
@@ -588,7 +558,7 @@ console.log("filtered columns::",filteredColumns);
           }
         />
 
-<Custom_model
+        <Custom_model
           size={"sm"}
           show={addmodalShow}
           onHide={() => {
@@ -636,27 +606,29 @@ console.log("filtered columns::",filteredColumns);
                       <InputType
                         value={addunitName}
                         onChange={(e) => {
-                          setaddunitName(e.target.value)
-                          setuniqueName(false)
+                          setaddunitName(e.target.value);
+                          setuniqueName(false);
                         }}
-                        onBlur={ async () => {
+                        onBlur={async () => {
                           // checkAttributeNameis();
-                          let a = await CheckUnique({type:"unitname",value:addunitName})
-                          console.log("hai how are u", a)
-                          setuniqueName(a)
+                          let a = await CheckUnique({
+                            type: "unitname",
+                            value: addunitName,
+                          });
+                          console.log("hai how are u", a);
+                          setuniqueName(a);
                         }}
-                        
                       />
                     </Form.Item>
                     {uniqueName ? (
-                <div>
-                  <label style={{ color: "red" }}>
-                    unit Name {UniqueErrorMsg.UniqueErrName}
-                  </label>
-                </div>
-              ) : (
-                ""
-              )}
+                      <div>
+                        <label style={{ color: "red" }}>
+                          unit Name {UniqueErrorMsg.UniqueErrName}
+                        </label>
+                      </div>
+                    ) : (
+                      ""
+                    )}
                   </div>
                   <div className="col-12 py-2">
                     <label>Code</label>
@@ -682,26 +654,29 @@ console.log("filtered columns::",filteredColumns);
                       <InputType
                         value={addunitCode}
                         onChange={(e) => {
-                        setaddunitCode(e.target.value)
-                        setuniqueCode(false)
-                      }}
-                      onBlur={ async () => {
-                        // checkAttributeNameis();
-                        let a = await CheckUnique({type:"unitcode",value:addunitCode})
-                        console.log("hai how are u", a)
-                        setuniqueCode(a)
-                      }}
+                          setaddunitCode(e.target.value);
+                          setuniqueCode(false);
+                        }}
+                        onBlur={async () => {
+                          // checkAttributeNameis();
+                          let a = await CheckUnique({
+                            type: "unitcode",
+                            value: addunitCode,
+                          });
+                          console.log("hai how are u", a);
+                          setuniqueCode(a);
+                        }}
                       />
                     </Form.Item>
                     {uniqueCode ? (
-                <div>
-                  <label style={{ color: "red" }}>
-                    unit code {UniqueErrorMsg.UniqueErrName}
-                  </label>
-                </div>
-              ) : (
-                ""
-              )}
+                      <div>
+                        <label style={{ color: "red" }}>
+                          unit code {UniqueErrorMsg.UniqueErrName}
+                        </label>
+                      </div>
+                    ) : (
+                      ""
+                    )}
                   </div>
                   <div className="col-12 py-2">
                     <label>Description</label>

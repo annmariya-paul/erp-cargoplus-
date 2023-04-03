@@ -358,9 +358,23 @@ function ProductDetails() {
       key: "NAME",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.lead_type)
-          .toLowerCase()
-          .includes(value.toLowerCase());
+        return (
+          String(record.variant_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.variant_code)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.variant_unit)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.variant_quantity)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.variant_taxrate)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
       },
       align: "center",
       width: "23%",
@@ -372,11 +386,25 @@ function ProductDetails() {
       key: "CODE",
       //   width: "23%",
       align: "center",
-      filteredValue: [searchType],
+      filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.lead_organization)
-          .toLowerCase()
-          .includes(value.toLowerCase());
+        return (
+          String(record.variant_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.variant_code)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.variant_unit)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.variant_quantity)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.variant_taxrate)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
       },
     },
     {
@@ -385,11 +413,25 @@ function ProductDetails() {
       key: "UNIT",
       width: "14%",
       align: "center",
-      filteredValue: [searchStatus],
+      filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.action)
-          .toLowerCase()
-          .includes(value.toLowerCase());
+        return (
+          String(record.variant_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.variant_code)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.variant_unit)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.variant_quantity)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.variant_taxrate)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
       },
     },
     {
@@ -397,12 +439,52 @@ function ProductDetails() {
       dataIndex: "variant_quantity",
       key: "QUANTITY",
       align: "center",
+      filteredValue: [searchedText],
+      onFilter: (value, record) => {
+        return (
+          String(record.variant_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.variant_code)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.variant_unit)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.variant_quantity)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.variant_taxrate)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
+      },
     },
     {
       title: "TAX RATE",
       dataIndex: "variant_taxrate",
       key: "TAX RATE",
       align: "center",
+      filteredValue: [searchedText],
+      onFilter: (value, record) => {
+        return (
+          String(record.variant_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.variant_code)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.variant_unit)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.variant_quantity)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.variant_taxrate)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
+      },
     },
   ];
 
@@ -641,15 +723,21 @@ function ProductDetails() {
                     </div>
                     <div
                       className="row py-1"
-                      style={{
-                        backgroundColor: "#f4f4f7",
-                      }}
+                      style={
+                        {
+                          // backgroundColor: "#f4f4f7",
+                        }
+                      }
                     >
                       <div className="col-4">
+                        <h5 className="lead_text">Product Variants</h5>
+                      </div>
+                      <div className="col-4">
                         <Input.Search
+                          className="inputSearch"
                           placeholder="Search by Name"
                           style={{
-                            margin: "5px",
+                            // margin: "5px",
                             borderRadius: "5px",
                           }}
                           value={searchedText}
@@ -663,7 +751,8 @@ function ProductDetails() {
                           }}
                         />
                       </div>
-                      <div className="col-4 ">
+                      <div className="col-4"></div>
+                      {/* <div className="col-4 ">
                         <Input.Search
                           placeholder="Search by Code"
                           style={{
@@ -680,8 +769,8 @@ function ProductDetails() {
                             setSearchType(value);
                           }}
                         />
-                      </div>
-                      <div className="col-4 ">
+                      </div> */}
+                      {/* <div className="col-4 ">
                         <Select
                           allowClear
                           showSearch
@@ -703,7 +792,7 @@ function ProductDetails() {
                             Third Test
                           </Select.Option>
                         </Select>
-                      </div>
+                      </div> */}
                     </div>
                     <div className="row my-3">
                       <div className="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-12  px-3">

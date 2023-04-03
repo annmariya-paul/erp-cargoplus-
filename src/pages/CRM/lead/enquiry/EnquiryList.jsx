@@ -30,7 +30,6 @@ function EnquiryList() {
   const [serialNo, setserialNo] = useState(1);
   const [AllEnquiries, setAllnquires] = useState();
 
-
   const columns = [
     {
       title: "#",
@@ -46,9 +45,23 @@ function EnquiryList() {
       width: "10%",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.enquiry_no)
-          .toLowerCase()
-          .includes(value.toLowerCase());
+        return (
+          String(record.enquiry_no)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.enquiry_customer_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.enquiry_contact_person_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.contact_email)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.contact_phone_1)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
       },
       align: "left",
     },
@@ -69,9 +82,23 @@ function EnquiryList() {
       width: "22%",
       filteredValue: [searchType],
       onFilter: (value, record) => {
-        return String(record.enquiry_customer_name)
-          .toLowerCase()
-          .includes(value.toLowerCase());
+        return (
+          String(record.enquiry_no)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.enquiry_customer_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.enquiry_contact_person_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.contact_email)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.contact_phone_1)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
       },
       align: "left",
     },
@@ -81,6 +108,26 @@ function EnquiryList() {
       key: "enquiry_contact_person_name",
       // width: "13%",
       align: "left",
+      filteredValue: [searchType],
+      onFilter: (value, record) => {
+        return (
+          String(record.enquiry_no)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.enquiry_customer_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.enquiry_contact_person_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.contact_email)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.contact_phone_1)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
+      },
     },
 
     {
@@ -89,33 +136,55 @@ function EnquiryList() {
       key: "contact_email",
       width: "20%",
       align: "ledt",
+      filteredValue: [searchType],
+      onFilter: (value, record) => {
+        return (
+          String(record.enquiry_no)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.enquiry_customer_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.enquiry_contact_person_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.contact_email)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.contact_phone_1)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
+      },
     },
 
     {
       title: "PHONE",
       dataIndex: "contact_phone_1",
       key: "contact_phone_1",
-       width: "5%",
-      // filteredValue: [searchStatus],
-      // onFilter: (value, record) => {
-      //   return String(record.lead_status)
-      //     .toLowerCase()
-      //     .includes(value.toLowerCase());
-      // },
+      width: "5%",
       align: "center",
+      filteredValue: [searchType],
+      onFilter: (value, record) => {
+        return (
+          String(record.enquiry_no)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.enquiry_customer_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.enquiry_contact_person_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.contact_email)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.contact_phone_1)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
+      },
     },
-    // {
-    //   title: "OPPORTUNITY",
-    //   dataIndex: "opportunity",
-    //   key: "opportunity",
-    //   filteredValue: [searchStatus],
-    //   onFilter: (value, record) => {
-    //     return String(record.lead_status)
-    //       .toLowerCase()
-    //       .includes(value.toLowerCase());
-    //   },
-    //   align: "left",
-    // },
 
     {
       title: "STATUS",
@@ -124,13 +193,7 @@ function EnquiryList() {
       // width: "23%",
       align: "left",
     },
-    // {
-    //   title: "DUE AMOUNT",
-    //   dataIndex: "due_amt",
-    //   key: "due_amt",
-    //   // width: "23%",
-    //   align: "ledt",
-    // },
+
     {
       title: "ACTION",
       dataIndex: "action",
@@ -170,8 +233,6 @@ function EnquiryList() {
     },
   ];
 
-
-
   const columnsKeys = columns.map((column) => column.key);
   const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
   const filteredColumns = columns.filter((column) =>
@@ -182,9 +243,7 @@ function EnquiryList() {
     setSelectedColumns(checkedValues);
   };
 
-  
-
-    const data12 = AllEnquiries?.map((item) => [
+  const data12 = AllEnquiries?.map((item) => [
     // item.action,
     item.sl_no,
     item.enquiry_no,
@@ -197,17 +256,15 @@ function EnquiryList() {
 
   const EnquiryHeads = [
     [
-       "sl_no",
+      "sl_no",
       "enquiry_no",
       "enquiry_date",
       "enquiry_customer_name",
       "enquiry_contact_person_name",
       "contact_email",
       "contact_phone_1",
-     
     ],
   ];
-
 
   const GetAllEnquiries = () => {
     PublicFetch.get(`${CRM_BASE_URL_FMS}/enquiries`)
@@ -254,11 +311,18 @@ function EnquiryList() {
               <div className="col-4 d-flex justify-content-start">
                 <h5 className="lead_text mt-3">Enquiry</h5>
               </div>
-              <div className="col-4  d-flex justify-content-start">
-               <div className="col-1">
-               {/* <Input.Search
-                  placeholder="Search by Name"
-                  style={{ margin: "5px", borderRadius: "5px",boxShadow:"0.5px 0px 2px lightgrey" }}
+              <div
+                // style={{ backgroundColor: "rgb(233, 233, 233)", width: "fit-content"}}
+                className="col-4 mb-3 "
+              >
+                <Input.Search
+                  placeholder="Search "
+                  style={{
+                    // margin: "5px",
+                    borderRadius: "5px",
+                    backgroundColor: "whitesmoke",
+                  }}
+                  className="inputSearch"
                   value={searchedText}
                   onChange={(e) => {
                     setSearchedText(e.target.value ? [e.target.value] : []);
@@ -266,64 +330,35 @@ function EnquiryList() {
                   onSearch={(value) => {
                     setSearchedText(value);
                   }}
-                /> */}
-               </div>
-               <div className="col-11 ms-3">
-
-               <Select
-                  allowClear
-                  showSearch
-                  style={{
-                    width: "100%",
-                    marginTop: "8px",
-                   
-                    borderRadius: "5px",
-                    boxShadow:"0.5px 0px 2px lightgrey"
-                  }}
-                  placeholder="Search "
-                  className="select_search"
-                  optionFilterProp="children"
-                  onChange={(event) => {
-                    setSearchStatus(event ? [event] : []);
-                  }}
-                >
-                  {/* {LeadStatus &&
-                    LeadStatus.map((item, index) => {
-                      return (
-                        <Select.Option key={item.id} value={item.name}>
-                          {item.name}
-                        </Select.Option>
-                      );
-                    })} */}
-                </Select>
-
-               </div>
-             
-                </div>
-                <div className="col-4 d-flex justify-content-end ">
-              {AllEnquiries && (
-              <Leadlist_Icons
-               datas={allLeadList}
-              columns={filteredColumns}
-              items={data12}
-              xlheading={EnquiryHeads}
-               filename="data.csv"
-               chechboxes={
-                <Checkbox.Group onChange={onChange} value={selectedColumns}>
-                 {columnsKeys.map((column) => (
-                   <li>
-                      <Checkbox value={column} key={column}>
-                      {column}
-                       </Checkbox>
-                    </li>
-                  ))}
-                </Checkbox.Group>
-              }
-              />
-              )}
+                />
+              </div>
+              <div className="col-4 d-flex justify-content-end ">
+                {AllEnquiries && (
+                  <Leadlist_Icons
+                    datas={allLeadList}
+                    columns={filteredColumns}
+                    items={data12}
+                    xlheading={EnquiryHeads}
+                    filename="data.csv"
+                    chechboxes={
+                      <Checkbox.Group
+                        onChange={onChange}
+                        value={selectedColumns}
+                      >
+                        {columnsKeys.map((column) => (
+                          <li>
+                            <Checkbox value={column} key={column}>
+                              {column}
+                            </Checkbox>
+                          </li>
+                        ))}
+                      </Checkbox.Group>
+                    }
+                  />
+                )}
               </div>
             </div>
-         
+
             <div className="row my-3">
               <div className="col-4 px-3">
                 <Select

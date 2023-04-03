@@ -151,6 +151,7 @@ import Viewvendor from "./pages/CRM/Purchase/vendor/viewvendor";
 import Containertypes from "./pages/FMS/settings/containertypes/containertypes";
 import EnquirySource from "./pages/CRM/lead/EnquirySource/EnquirySource";
 import TaxGroup from "./pages/FMS/settings/TaxGroup/TaxGroup";
+import AwbblReport from "./pages/FMS/Awb_bl_report/awb_bl_report";
 function App() {
   return (
     <div className="App">
@@ -225,6 +226,9 @@ function App() {
 
             <Route path={ROUTES.LEAD_REPORT} element={<ProtectedRoute />}>
               <Route index element={<LeadReport />} />
+            </Route>
+            <Route path={ROUTES.AWBBL_REPORT} element={<ProtectedRoute />}>
+              <Route index element={<AwbblReport />} />
             </Route>
 
             <Route path={ROUTES.LEAD_CUSTOMER_ID} element={<ProtectedRoute />}>

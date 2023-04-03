@@ -205,6 +205,7 @@ const ROUTES = {
 
   //FMS => master => Tax Group
   TAX_GROUP: "/tax_groups",
+  AWBBL_REPORT:"/awb_bl_report",
 };
 
 module.exports = { ROUTES };

@@ -11,7 +11,7 @@ import TableData from "../../../../components/table/table_data";
 import Custom_model from "../../../../components/custom_modal/custom_model";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { ACCOUNTS } from "../../../../api/bootapi";
-
+import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
 export default function CreditNoteType() {
   const [addForm] = Form.useForm();
   const [editForm] = Form.useForm();
@@ -25,7 +25,7 @@ export default function CreditNoteType() {
   const[credit_note_name,setCredit_note_name]=useState("");
   const[credit_note_desc,setCredit_note_desc]=useState("");
   const[allnotes,setallnotes]=useState("");
-  const [creditnote,setcreditnote] = useState("")
+  const [creditnote,setcreditnote] = useState();
 
   const [successPopup, setSuccessPopup] = useState(false);
 
@@ -137,8 +137,11 @@ useEffect(() => {
       filteredValue: [searchedText],
       onFilter: (value, record) => {
         return String(record.credit_note_type_name)
-        .toLowerCase()
-          .includes(value.toLowerCase());
+          .toLowerCase()
+          .includes(value.toLowerCase()) || 
+          String(record.credit_note_type_description )
+          .toLowerCase()
+          .includes(value.toLowerCase())
       },
       align: "left",
 
@@ -181,22 +184,74 @@ useEffect(() => {
   const data = [
     { credit_note_name: "Test name", description: "test Description" },
   ];
+
+  const columnsKeys = columns.map((column) => column.key);
+
+  const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
+  const filteredColumns = columns.filter((column) =>
+    selectedColumns.includes(column.key)
+  );
+  console.log("filtered columns::", filteredColumns);
+  const onChange1 = (checkedValues) => {
+    setSelectedColumns(checkedValues);
+  };
+
+  //for Xlsx data
+  const UnitHeads = [
+    [
+      "Slno",
+     
+      " NAME",
+      "DESCRIPTION",
+   
+    ],
+  ];
+  //for pdf download
+  const data12 = creditnote?.map((item, index) => [
+    index + serialNo,
+    item.credit_note_type_name,
+    item.credit_note_type_description,
+  
+   
+  ]);
+
+
+
   return (
     <>
       <div className="container-fluid container_fms pt-3">
-        <div className="row flex-wrap">
-          <div className="col">
+        <div className="row flex-wrap align-items-center">
+          <div className="col-4">
             <h5 className="lead_text">Credit Note Type</h5>
           </div>
-        </div>
-        <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
-          <div className="col-4">
+          <div className="col-sm-4">
             <Input.Search
+              className="inputSearch"
               placeholder="Search"
               style={{ margin: "5px", borderRadius: "5px" }}
+              value={searchedText}
+              onChange={(e) => {
+                setSearchedText(e.target.value ? [e.target.value] : []);
+              }}
+              onSearch={(value) => {
+                setSearchedText(value);
+              }}
             />
           </div>
+          <div className="col-4 d-flex justify-content-end">
+            {data12 && (
+              <Leadlist_Icons
+                datas={data12}
+                columns={filteredColumns}
+                items={data12}
+                xlheading={UnitHeads}
+                filename="data.csv"
+              />
+            )}
+          </div>
+
         </div>
+      
         <div className="row my-3">
           <div className="col-4 ">
             <Select

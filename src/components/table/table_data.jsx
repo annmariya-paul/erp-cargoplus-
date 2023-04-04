@@ -15,7 +15,8 @@ export default function TableData({
   bordered,
   rowKey,
   footer,
-  totalSummary
+  totalSummary,
+  // rowClassName
 }) {
   const { Text } = Typography;
   return (
@@ -32,6 +33,7 @@ export default function TableData({
           bordered={bordered}
           rowKey={rowKey}
           footer={footer}
+          rowClassName={(record, index) => index % 2 === 0 ? 'table-row-light' :  'table-row-dark'}
           summary={() => {
             if(totalSummary){
               return (

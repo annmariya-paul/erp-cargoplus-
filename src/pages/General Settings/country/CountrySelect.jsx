@@ -9,7 +9,7 @@ import { countryList } from "../../../utils/countries";
 import CustomModel from "../../../components/custom_modal/custom_model";
 import SelectBox from "../../../components/Select Box/SelectBox";
 import MyPagination from "../../../components/Pagination/MyPagination";
-
+import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
 export default function SelectCountry() {
   const [addForm] = Form.useForm();
   const [serialNo, setserialNo] = useState(1);
@@ -88,7 +88,7 @@ export default function SelectCountry() {
       // width: "70%",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.countries)
+        return String(record.country_name)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
@@ -117,19 +117,55 @@ export default function SelectCountry() {
     },
   ];
 
+
+  const columnsKeys = columns.map((column) => column.key);
+
+  const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
+  const filteredColumns = columns.filter((column) =>
+    selectedColumns.includes(column.key)
+  );
+  console.log("filtered columns::", filteredColumns);
+  const onChange1 = (checkedValues) => {
+    setSelectedColumns(checkedValues);
+  };
+
+   //for Xlsx data
+   const UnitHeads = [
+    [
+      "Slno",
+      "COUNTRY NAME",
+      // "BRANCH CODE",
+      // "CUSTOMER",
+      // "COST",
+      // "EXPENSE",
+      // "PROFIT/LOSS",
+    ],
+  ];
+
+  const data12 = getCountries?.map((item, index) => [
+    index + serialNo,
+    item.country_name,
+    // item.branch_code,
+    // item.lead,
+    // item.cost,
+    // item.expense,
+    // item.profit,
+  ]);
+
   return (
     <>
-      <div className="container-fluid container2 mt-3">
-        <div className="row flex-wrap">
-          <div className="col">
-            <h5 className="lead_text my-2">Countries</h5>
+      <div className="container-fluid container_hrms pt-3">
+        <div className="row flex-wrap align-items-center">
+          <div className="col-4">
+            <h5 className="lead_text ">Countries</h5>
           </div>
           {/* <Leadlist_Icons /> */}
-        </div>
-        <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
-          <div className="col-4">
+        
+        {/* <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}> */}
+          <div className="col-sm-4">
             <Input.Search
-              placeholder="Search by Countries"
+            className="inputSearch"
+              placeholder="Search"
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
               onChange={(e) => {
@@ -140,7 +176,19 @@ export default function SelectCountry() {
               }}
             />
           </div>
-        </div>
+          <div className="col-4 d-flex justify-content-end">
+            {data12 && (
+              <Leadlist_Icons
+                datas={data12}
+                columns={filteredColumns}
+                items={data12}
+                xlheading={UnitHeads}
+                filename="data.csv"
+              />
+            )}
+          </div>
+          </div>
+       
         <div className="row my-3">
           <div className="col-4 px-3">
             <Select

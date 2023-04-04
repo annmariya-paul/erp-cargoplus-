@@ -3,6 +3,7 @@ import Button from "../../../components/button/button";
 import Custom_model from "../../../components/custom_modal/custom_model";
 import InputType from "../../../components/Input Type textbox/InputType";
 import { FiEdit } from "react-icons/fi";
+import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
 import { Form, Input, Select, DatePicker } from "antd";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import TableData from "../../../components/table/table_data";
@@ -18,6 +19,7 @@ import { UniqueErrorMsg } from "../../../ErrorMessages/UniqueErrorMessage";
 export default function Payment_mode() {
   const [paymentmode, setpaymentmode] = useState("");
   const [current, setCurrent] = useState(1);
+  
   const [pageSize, setPageSize] = useState("25");
   const [modalpaymentmode, setModalpaymentmode] = useState(false);
   const [name, setName] = useState("");
@@ -32,7 +34,7 @@ export default function Payment_mode() {
   const [editpaymentmodeid,seteditpaymentmodeid]= useState("")
   const [editpaymentmodename, seteditpaymentmodename] = useState("");
   const [editpaymentmodedesc, seteditpaymentmodedesc] = useState("");
-  const [payments,setpayments] = useState("")
+  const [payments,setpayments] = useState();
   const [serialNo, setserialNo] = useState(1);
   const [editUniqueName, setEditUniqueName] = useState();
   const [adForm] = Form.useForm();
@@ -194,7 +196,10 @@ useEffect(() => {
         onFilter: (value, record) => {
           return String(record.pay_mode_name)
           .toLowerCase()
-            .includes(value.toLowerCase());
+            .includes(value.toLowerCase()) || 
+            String(record.pay_mode_desc )
+            .toLowerCase()
+            .includes(value.toLowerCase())
         },
       align: "left",
     },
@@ -247,20 +252,53 @@ useEffect(() => {
   //     description: "cod cod",
   //   },
   // ];
+  const columnsKeys = columns.map((column) => column.key);
 
+  const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
+  const filteredColumns = columns.filter((column) =>
+    selectedColumns.includes(column.key)
+  );
+  console.log("filtered columns::", filteredColumns);
+  const onChange1 = (checkedValues) => {
+    setSelectedColumns(checkedValues);
+  };
+
+  //for Xlsx data
+  const UnitHeads = [
+    [
+      "Slno",
+      "PAYMENT MODE",
+      "DESCRIPTION",
+     
+      // "PROFIT/LOSS",
+    ],
+  ];
+  //for pdf download
+  const data12 = payments?.map((item, index) => [
+    item + serialNo,
+    item.pay_mode_name,
+    item.pay_mode_desc,
+  
+    // item.currency_coin,
+    // item.currency_code,
+    // item.currency_symbol,
+    // item.lead,
+    // item.cost,
+    // item.expense,
+    // item.profit,
+  ]);
 
   return (
     <>
-      <div className="container-fluid container_fms pt-3">
-        <div className="row flex-wrap">
-          <div className="col">
+      <div className="container-fluid container_hrms pt-3">
+        <div className="row flex-wrap align-items-center">
+          <div className="col-4">
             <h5 className="lead_text">Payment Mode</h5>
           </div>
           {/* <Leadlist_Icons /> */}
-        </div>
-        <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
-          <div className="col-4">
+          <div className="col-sm-4">
             <Input.Search
+             className="inputSearch"
               placeholder="Search"
               value={searchedText}
               onChange={(e) => {
@@ -272,7 +310,19 @@ useEffect(() => {
               style={{ margin: "5px", borderRadius: "5px" }}
             />
           </div>
+          <div className="col-4 d-flex justify-content-end">
+            {data12 && (
+              <Leadlist_Icons
+                datas={data12}
+                columns={filteredColumns}
+                items={data12}
+                xlheading={UnitHeads}
+                filename="data.csv"
+              />
+             )} 
+          </div>
         </div>
+     
         <div className="row my-3">
           <div className="col-4 ">
             <Select

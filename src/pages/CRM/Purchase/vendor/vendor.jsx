@@ -381,7 +381,7 @@ function Vendor() {
           <div className="col-4 d-flex justify-content-end">
             <div className="col mb-2 px-4">
               <Link to={ROUTES.ADDVENDOR} style={{ color: "white" }}>
-                <Button btnType="add">Add Vendor</Button>
+                <Button btnType="add">New Vendor</Button>
               </Link>
             </div>
           </div>

@@ -8,24 +8,23 @@ import {
   FaEdit,
 } from "react-icons/fa";
 
-
-
 import { FiEdit } from "react-icons/fi";
 import { AiFillPrinter } from "react-icons/ai";
 import { MdFileCopy, MdPageview } from "react-icons/md";
 import { CRM_BASE_URL } from "../../../api/bootapi";
 import { Link } from "react-router-dom";
 import Button from "../../../components/button/button";
-import {ROUTES} from "../../../routes";
+import { ROUTES } from "../../../routes";
 import TableData from "../../../components/table/table_data";
 import logo from "../../../components/img/logo192.png";
 import MyPagination from "../../../components/Pagination/MyPagination";
-
+import { ACCOUNTS } from "../../../api/bootapi";
+import moment from "moment";
 import ErrorMsg from "../../../components/error/ErrorMessage";
 import PublicFetch from "../../../utils/PublicFetch";
 import FileUpload from "../../../components/fileupload/fileUploader";
 import CustomModel from "../../../components/custom_modal/custom_model";
-
+import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
 
 function Credit_notes() {
   const [numOfItems, setNumOfItems] = useState("25");
@@ -38,17 +37,45 @@ function Credit_notes() {
   const [productView, setProductView] = useState(false);
   const [successPopup, setSuccessPopup] = useState(false);
   const [error, setError] = useState(false);
- 
+
+  const [listnote, setlistnote] = useState();
   const [modalOpportunity, setModalOpportunity] = useState(false);
   const [productid, setProductID] = useState();
   console.log("pr id from state", productid);
   const [serialNo, setserialNo] = useState(1);
- 
+  const [notes, setnotes] = useState();
+  const getData = (current, pageSize) => {
+    return listnote?.slice((current - 1) * pageSize, current * pageSize);
+  };
+  const getallnotes = async () => {
+    try {
+      const creditnotes = await PublicFetch.get(`${ACCOUNTS}/credit-note`);
+      console.log("getting all notes", creditnotes);
+      let temp = [];
+      creditnotes.data.data.forEach((item, index) => {
+        console.log("oitm", item);
+        let a = moment(item.credit_note_date).format("DD-MM-YYYY");
+        temp.push({
+          credit_note_id: item.credit_note_id,
+          accounts_v1_credit_note_invoices:
+            item.accounts_v1_credit_note_invoices,
+          credit_note_amount: item.credit_note_amount,
+          credit_note_date: a,
+          credit_note_lead_id: item.credit_note_lead_id,
+          credit_note_particulars: item.credit_note_particulars,
+          credit_note_type_id: item.credit_note_type_id,
+          credit_note_voucher_no: item.credit_note_voucher_no,
+        });
+      });
+      setnotes(temp);
+    } catch (err) {
+      console.log("error to fetching  notes", err);
+    }
+  };
+  useEffect(() => {
+    getallnotes();
+  }, []);
 
-
-        
-
- 
   const columns = [
     {
       title: "Sl. No.",
@@ -59,8 +86,8 @@ function Credit_notes() {
     },
     {
       title: "VOUCHER NO",
-      dataIndex: "voucher_no",
-      key: "voucher_no",
+      dataIndex: "credit_note_voucher_no",
+      key: "credit_note_voucher_no",
       width: "13%",
       // filteredValue: [searchStatus],
       // onFilter: (value, record) => {
@@ -70,17 +97,14 @@ function Credit_notes() {
       // },
 
       align: "left",
-     
     },
     {
       title: "DATE",
-      dataIndex: "date",
-      key: "date",
+      dataIndex: "credit_note_date",
+      key: "credit_note_date",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.date)
-          .toLowerCase()
-          .includes(value.toLowerCase());
+        return String(record.date).toLowerCase().includes(value.toLowerCase());
       },
       align: "left",
       width: "10%",
@@ -88,9 +112,9 @@ function Credit_notes() {
 
     {
       title: "CUSTOMER",
-      dataIndex: "customer",
-      key: "customer",
-        width: "15%",
+      dataIndex: "credit_note_lead_id",
+      key: "credit_note_lead_id",
+      width: "15%",
       align: "left",
       filteredValue: [searchType],
       onFilter: (value, record) => {
@@ -101,13 +125,13 @@ function Credit_notes() {
     },
     {
       title: "INVOICE NO",
-      dataIndex: "invoice_no",
-      key: "invoice_no",
+      // dataIndex: "accounts_v1_credit_note_invoices",
+      // key: "accounts_v1_credit_note_invoices",
       width: "12%",
       align: "left",
       filteredValue: [searchCategory],
       onFilter: (value, record) => {
-        console.log("prrrr",record)
+        console.log("prrrr", record);
         return String(record.invoice_no)
           .toLowerCase()
           .includes(value.toLowerCase());
@@ -115,13 +139,13 @@ function Credit_notes() {
     },
     {
       title: "AMOUNT",
-      dataIndex: "amount",
-      key: "amount",
+      dataIndex: "credit_note_amount",
+      key: "credit_note_amount",
       width: "10%",
       align: "left",
       filteredValue: [searchCategory],
       onFilter: (value, record) => {
-        console.log("prrrr",record)
+        console.log("prrrr", record);
         return String(record.amount)
           .toLowerCase()
           .includes(value.toLowerCase());
@@ -129,16 +153,14 @@ function Credit_notes() {
     },
     {
       title: "TYPE",
-      dataIndex: "type",
-      key: "type",
+      dataIndex: "credit_note_type_id",
+      key: "credit_note_type_id",
       width: "10%",
       align: "left",
       filteredValue: [searchCategory],
       onFilter: (value, record) => {
-        console.log("prrrr",record)
-        return String(record.type)
-          .toLowerCase()
-          .includes(value.toLowerCase());
+        console.log("prrrr", record);
+        return String(record.type).toLowerCase().includes(value.toLowerCase());
       },
     },
     {
@@ -159,12 +181,12 @@ function Credit_notes() {
               // }}
               className="actionEdit m-0 p-0"
             >
-               <Link to={`${ROUTES.EDIT_CREDIT_NOTES}/${index.id}`}>
-              <FiEdit fontSize={"12px"} />
+              <Link to={`${ROUTES.EDIT_CREDIT_NOTES}/${index.credit_note_id}`}>
+                <FiEdit fontSize={"12px"} />
               </Link>
             </div>
 
-            <Link to={`${ROUTES.VIEW_CREDIT_NOTES}/${index.id}`}>
+            <Link to={`${ROUTES.VIEW_CREDIT_NOTES}/${index.credit_note_id}`}>
               <div className="actionView m-0 p-0">
                 <MdPageview />
               </div>
@@ -182,24 +204,62 @@ function Credit_notes() {
     //   align: "center",
     // },
   ];
-const data=[{  voucher_no:"0001",date:"12-2-2023",customer:"Arun",invoice_no:"0033",amount:"1000",type:"data"}
+  // const data = [
+  //   {
+  //     voucher_no: "0001",
+  //     date: "12-2-2023",
+  //     customer: "Arun",
+  //     invoice_no: "0033",
+  //     amount: "1000",
+  //     type: "data",
+  //   },
+  // ];
 
-]
+  const columnsKeys = columns.map((column) => column.key);
+
+  const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
+  const filteredColumns = columns.filter((column) =>
+    selectedColumns.includes(column.key)
+  );
+  console.log("filtered columns::", filteredColumns);
+  const onChange1 = (checkedValues) => {
+    setSelectedColumns(checkedValues);
+  };
+
+  //for Xlsx data
+  const UnitHeads = [
+    [
+      "Slno",
+      "VENDOR",
+      "CONTACT",
+      "PHONE",
+      "EMAIL",
+      "VENDOR TYPE",
+      // "PROFIT/LOSS",
+    ],
+  ];
+  //for pdf download
+  const data12 = notes?.map((item, index) => [
+    index + serialNo,
+    item.vendor_name,
+    item.vendor_contact,
+    item.vendor_contact,
+    item.vendor_email,
+    item.vendor_org_type,
+    // item.profit,
+  ]);
 
   return (
     <div>
       <div className="container-fluid lead_list  py-3">
         <div>
-         
-          <div className="row flex-wrap">
-            <div className="col">
+          <div className="row flex-wrap align-items-center">
+            <div className="col-4">
               <h5 className="lead_text">Credit Notes</h5>
             </div>
-         
-          </div>
-          <div className="row " style={{ backgroundColor: "#f4f4f7" }}>
             <div className="col-4">
               <Input.Search
+                className="inputSearch"
                 placeholder="Search "
                 style={{ margin: "5px", borderRadius: "5px" }}
                 value={searchedText}
@@ -211,39 +271,19 @@ const data=[{  voucher_no:"0001",date:"12-2-2023",customer:"Arun",invoice_no:"00
                 }}
               />
             </div>
-            {/* <div className="col-4 ">
-              <Input.Search
-                placeholder="Search by Code"
-                style={{ margin: "5px", borderRadius: "5px" }}
-                value={searchType}
-                onChange={(e) => {
-                  setSearchType(e.target.value ? [e.target.value] : []);
-                }}
-                onSearch={(value) => {
-                  setSearchType(value);
-                }}
-              />
+            <div className="col-4 d-flex justify-content-end">
+              {data12 && (
+                <Leadlist_Icons
+                  datas={data12}
+                  columns={filteredColumns}
+                  items={data12}
+                  xlheading={UnitHeads}
+                  filename="data.csv"
+                />
+              )}
             </div>
-            <div className="col-4 ">
-              <Select
-                allowClear
-                showSearch
-                style={{
-                  width: "100%",
-                  marginTop: "8px",
-                  borderRadius: "5px",
-                }}
-                placeholder="Search by Category"
-                className="select_search"
-                optionFilterProp="children"
-                onChange={(event) => {
-                  setSearchCategory(event ? [event] : []);
-                }}
-              >
-              
-              </Select>
-            </div> */}
           </div>
+          {/* <div className="row " style={{ backgroundColor: "#f4f4f7" }}></div> */}
           <div className="row my-3">
             <div className="col-4  px-3">
               <Select
@@ -260,7 +300,6 @@ const data=[{  voucher_no:"0001",date:"12-2-2023",customer:"Arun",invoice_no:"00
                   setCurrent(1);
                 }}
               >
-                {/* <Select.Option value="5">5 | pages</Select.Option> */}
                 <Select.Option value="25">
                   Show{" "}
                   <span style={{ color: "lightgray" }} className="ms-1">
@@ -292,18 +331,7 @@ const data=[{  voucher_no:"0001",date:"12-2-2023",customer:"Arun",invoice_no:"00
                 </Select.Option>
               </Select>
             </div>
-            <div className=" col-4 d-flex align-items-center justify-content-center">
-              {/* {totalCount>0 &&(
-            <MyPagination
-              total={parseInt(totalCount)}
-              current={current}
-              pageSize={numOfItems}
-              onChange={(current, pageSize) => {
-                setCurrent(current);
-              }}
-            />
-            )} */}
-          </div>
+            <div className=" col-4 d-flex align-items-center justify-content-center"></div>
             <div className="col-4 d-flex justify-content-end">
               <Button
                 //   onClick={() => setShowAddOpportunity(true)}
@@ -324,8 +352,8 @@ const data=[{  voucher_no:"0001",date:"12-2-2023",customer:"Arun",invoice_no:"00
           <div className="datatable">
             <TableData
               // data={getData(current,numOfItems, pageSize)}
+              data={notes}
               // data={data}
-                data={data}
               columns={columns}
               custom_table_css="table_lead_list"
             />
@@ -346,7 +374,6 @@ const data=[{  voucher_no:"0001",date:"12-2-2023",customer:"Arun",invoice_no:"00
           {/* {"mcncncncncncncnc"}  {product listing ends } */}
         </div>
         {/* {section Two Product Edit modal starts} */}
-
 
         {/* <CustomModel
           Adding_contents
@@ -529,8 +556,8 @@ const data=[{  voucher_no:"0001",date:"12-2-2023",customer:"Arun",invoice_no:"00
                         className="d-flex align-items-center justify-content-between gap-1  p-1 button_span"
                         style={{ fontSize: "13px" }}
                         onClick={() => {
-                          setShowProductEditModal(true);
-                          setProductView(false);
+                          // setShowProductEditModal(true);
+                          // setProductView(false);
                         }}
                       >
                         Edit <FiEdit fontSize={"12px"} />

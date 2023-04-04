@@ -1,4 +1,4 @@
-import { Input, Select,Checkbox } from "antd";
+import { Input, Select, Checkbox } from "antd";
 import React, { useState } from "react";
 import moment from "moment";
 import { FaEdit, FaTrash } from "react-icons/fa";
@@ -15,8 +15,8 @@ import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
 
 export default function JobPayments() {
   const [serialNo, setserialNo] = useState(1);
-  const [searchedText,setSearchedText] = useState("");
-  const [allJobPay,setAllJobPay] = useState();
+  const [searchedText, setSearchedText] = useState("");
+  const [allJobPay, setAllJobPay] = useState();
 
   const [jobpaymentList, setJobpaymentList] = useState([]);
 
@@ -37,7 +37,7 @@ export default function JobPayments() {
               job_pay_lead: item.crm_v1_leads.lead_customer_name,
               advance_amount: item.job_pay_advance_amount_fx.toFixed(2),
             });
-            console.log("foerr",temp)
+            console.log("foerr", temp);
           });
           setAllJobPay(temp);
         }
@@ -47,7 +47,9 @@ export default function JobPayments() {
       });
   };
 
-  useEffect(()=>{getAllJobPayments();},[])
+  useEffect(() => {
+    getAllJobPayments();
+  }, []);
 
   const columns = [
     {
@@ -87,6 +89,12 @@ export default function JobPayments() {
             .toLowerCase()
             .includes(value.toLowerCase()) ||
           String(record.job_pay_voucher_no)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.job_pay_voucher_date)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.advance_amount)
             .toLowerCase()
             .includes(value.toLowerCase())
         );
@@ -146,10 +154,9 @@ export default function JobPayments() {
       voucher_date: "01-01-2023",
       job_no: "job001",
       lead: "Test name",
-      advance_amount:"1000",
+      advance_amount: "1000",
     },
   ];
-
 
   const columnsKeys = columns.map((column) => column.key);
 
@@ -182,33 +189,13 @@ export default function JobPayments() {
   return (
     <>
       <div className="container-fluid container_fms pt-3">
-        <div className="row flex-wrap">
-          <div className="col">
+        <div className="row flex-wrap align-items-center">
+          <div className="col-4">
             <h5 className="lead_text">Job Payments</h5>
           </div>
-         
-          <Leadlist_Icons
-            datas={jobpaymentList}
-            columns={columns}
-            items={data12}
-            xlheading={OppHeads}
-            filename="data.csv"
-            chechboxes={
-              <Checkbox.Group onChange={onChange} value={selectedColumns}>
-                {columnsKeys.map((column) => (
-                  <li>
-                    <Checkbox value={column} key={column}>
-                      {column}
-                    </Checkbox>
-                  </li>
-                ))}
-              </Checkbox.Group>
-            }
-          />
-        </div>
-        <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
+              className="inputSearch"
               placeholder="Search"
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
@@ -220,7 +207,28 @@ export default function JobPayments() {
               }}
             />
           </div>
+          <div className="col-4 d-flex justify-content-end">
+            <Leadlist_Icons
+              datas={jobpaymentList}
+              columns={columns}
+              items={data12}
+              xlheading={OppHeads}
+              filename="data.csv"
+              chechboxes={
+                <Checkbox.Group onChange={onChange} value={selectedColumns}>
+                  {columnsKeys.map((column) => (
+                    <li>
+                      <Checkbox value={column} key={column}>
+                        {column}
+                      </Checkbox>
+                    </li>
+                  ))}
+                </Checkbox.Group>
+              }
+            />
+          </div>
         </div>
+        {/* <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}></div> */}
         <div className="row my-3">
           <div className="col-4 ">
             <Select

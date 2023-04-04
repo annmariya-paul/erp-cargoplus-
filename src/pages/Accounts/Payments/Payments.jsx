@@ -163,23 +163,29 @@ function Payments(props) {
     },
 
     {
-      title: "Voucher No.",
+      title: "VOUCHER NO.",
       dataIndex: "voucehr_no",
       key: "voucehr_no",
       width: "25%",
       align: "center",
-      // filteredValue: [searchedText],
-      //   onFilter: (value, record) => {
-      //     // console.log("hai how are", record.children);
+      filteredValue: [searchedText],
+      onFilter: (value, record) => {
+        // console.log("hai how are", record.children);
 
-      //     return String(record.category_name || nameSearch)
-      //       .toLowerCase()
-      //       .includes(value.toLowerCase());
-      //   },
+        return (
+          String(record.voucehr_no)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.date).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.lead).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.amount).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.mode).toLowerCase().includes(value.toLowerCase())
+        );
+      },
     },
     // Table.EXPAND_COLUMN,
     {
-      title: "Date",
+      title: "DATE",
       dataIndex: "date",
       key: "date",
       width: "11%",
@@ -193,7 +199,7 @@ function Payments(props) {
       //   },
     },
     {
-      title: "Lead",
+      title: "CUSTOMER",
       dataIndex: "lead",
       key: "lead",
       width: "20%",
@@ -206,14 +212,14 @@ function Payments(props) {
       //   },
     },
     {
-      title: "Amount",
+      title: "AMOUNT",
       dataIndex: "amount",
       key: "amount",
       width: "14%",
       align: "right",
     },
     {
-      title: "Mode",
+      title: "MODE",
       dataIndex: "mode",
       key: "mode",
       width: "12%",
@@ -238,7 +244,7 @@ function Payments(props) {
       align: "center",
     },
     {
-      title: "Action",
+      title: "ACTION",
       dataIndex: "action",
       key: "action",
       width: "24%",
@@ -275,21 +281,51 @@ function Payments(props) {
     navigate(`${ROUTES.EDIT_PAYMENTS_INDEX}/${e.payment_id}`);
   };
 
+  const columnsKeys = columns.map((column) => column.key);
+
+  const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
+  const filteredColumns = columns.filter((column) =>
+    selectedColumns.includes(column.key)
+  );
+  console.log("filtered columns::", filteredColumns);
+  const onChange1 = (checkedValues) => {
+    setSelectedColumns(checkedValues);
+  };
+
+  //for Xlsx data
+  const UnitHeads = [
+    [
+      "Slno",
+      "VOUCHER NO",
+      "DATE",
+      "CUSTOMER",
+      "AMOUNT",
+      "MODE ",
+      // "PROFIT/LOSS",
+    ],
+  ];
+  //for pdf download
+  const data12 = paymentsTableData?.map((item, index) => [
+    index + serialNo,
+    item.voucehr_no,
+    item.date,
+    item.lead,
+    item.amount,
+    item.mode,
+    // item.profit,
+  ]);
+
   return (
     <div>
       <div className="container-fluid lead_list  my-3 py-3">
         <div>
-          <div className="row flex-wrap">
-            <div className="col">
+          <div className="row flex-wrap align-items-center">
+            <div className="col-4">
               <h5 className="lead_text">Payments</h5>
             </div>
-            <div className="col-auto" style={{}}>
-              {/* <Leadlist_Icons /> */}
-            </div>
-          </div>
-          <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
             <div className="col-4">
               <Input.Search
+                className="inputSearch"
                 placeholder="Search by Name"
                 style={{ margin: "5px", borderRadius: "5px" }}
                 value={searchedText}
@@ -301,6 +337,19 @@ function Payments(props) {
                 }}
               />
             </div>
+            <div className="col-4 d-flex justify-content-end">
+              {data12 && (
+                <Leadlist_Icons
+                  datas={data12}
+                  columns={filteredColumns}
+                  items={data12}
+                  xlheading={UnitHeads}
+                  filename="data.csv"
+                />
+              )}
+            </div>
+          </div>
+          {/* <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
             <div className="col-4">
               <Input.Search
                 placeholder="Search by code"
@@ -314,7 +363,7 @@ function Payments(props) {
                 }}
               />
             </div>
-          </div>
+          </div> */}
           <div className="row my-3">
             <div className="col-4  ">
               <Select
@@ -369,7 +418,7 @@ function Payments(props) {
             </div>
             <div className="col-4 d-flex justify-content-end" style={{}}>
               <Link to={ROUTES.ADD_PAYMENTS}>
-                <Button btnType="add">Add Payment</Button>
+                <Button btnType="add">New Payment</Button>
               </Link>
             </div>
           </div>

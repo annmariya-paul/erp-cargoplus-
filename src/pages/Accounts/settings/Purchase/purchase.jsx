@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Input, Select, DatePicker, Checkbox } from "antd";
 import MyPagination from "../../../../components/Pagination/MyPagination";
 import Button from "../../../../components/button/button";
@@ -22,7 +22,7 @@ import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon
 export default function Purchase() {
   const [pageSize, setPageSize] = useState("25");
   const [purchase, setpurchase] = useState("");
-  console.log("purchase ",purchase);
+  console.log("purchase ", purchase);
   const [current, setCurrent] = useState(1);
   const [modalpurchase, setModalpurchase] = useState(false);
   const [successPopup, setSuccessPopup] = useState(false);
@@ -42,7 +42,6 @@ export default function Purchase() {
   const [showViewModal, setShowViewModal] = useState(false);
   const [serialNo, setserialNo] = useState(1);
 
-
   const [editpurchasebillno, seteditpurchasebillno] = useState("");
   const [editpurchasedate, seteditpurchasedate] = useState("");
   const [editpurchaseduedate, seteditpurchaseduedate] = useState("");
@@ -59,6 +58,7 @@ export default function Purchase() {
   const [editpurchaseamount, seteditpurchaseamount] = useState("");
   const [editpurchasetaxamount, seteditpurchasetaxamount] = useState("");
   const [searchedText, setSearchedText] = useState("");
+  const [searchSource, setSearchSource] = useState(""); // search by text input
 
   const [viewpurchasemode, setViewpurchasemode] = useState({
     po_no: "",
@@ -90,35 +90,33 @@ export default function Purchase() {
         `${ACCOUNTS}/purchase?startIndex=0&noOfItems=100`
       );
       console.log("getting all purchases", allpurchases);
-      let temp=[]
+      let temp = [];
 
-      allpurchases.data.data.purchases.forEach((item,index) =>{
-        console.log("itemj",item);
-        let datep = moment(item.purchase_purchase_date).format("DD-MM-YYYY")
-        let datedue = moment(item.purchase_due_date).format("DD-MM-YYYY")
-        let total = parseInt(item?.purchase_total_amount)
+      allpurchases.data.data.purchases.forEach((item, index) => {
+        console.log("itemj", item);
+        let datep = moment(item.purchase_purchase_date).format("DD-MM-YYYY");
+        let datedue = moment(item.purchase_due_date).format("DD-MM-YYYY");
+        let total = parseInt(item?.purchase_total_amount);
         temp.push({
-          purchase_vendor_id:item.purchase_vendor_id,
-          purchase_id:item.purchase_id,
-          vendor_name:item.crm_v1_vendors.vendor_name,
-          purchase_po_no:item.purchase_po_no,
-          purchase_bill_no:item.purchase_bill_no,
-          purchase_total_amount:total.toFixed(2),
-          purchase_status:item.purchase_status,
-          purchase_purchase_date:datep,
-          purchase_due_date:datedue,
-        })
-      })
+          purchase_vendor_id: item.purchase_vendor_id,
+          purchase_id: item.purchase_id,
+          vendor_name: item.crm_v1_vendors.vendor_name,
+          purchase_po_no: item.purchase_po_no,
+          purchase_bill_no: item.purchase_bill_no,
+          purchase_total_amount: total.toFixed(2),
+          purchase_status: item.purchase_status,
+          purchase_purchase_date: datep,
+          purchase_due_date: datedue,
+        });
+      });
       setpurchase(temp);
-
     } catch (err) {
       console.log("error to fetching  purchases", err);
     }
   };
   useEffect(() => {
     getallpurchase();
-  },[])
-
+  }, []);
 
   const columns = [
     {
@@ -132,12 +130,32 @@ export default function Purchase() {
       title: "PO NO",
       dataIndex: "purchase_po_no",
       key: "purchase_po_no",
-        filteredValue: [searchedText],
-        // onFilter: (value, record) => {
-      //     return String(record.freight_type_name  || nameSearch)
-      //       .toLowerCase()
-      //       .includes(value.toLowerCase());
-      //   },
+      filteredValue: [searchSource],
+      onFilter: (value, record) => {
+        return (
+          String(record.purchase_po_no)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.purchase_purchase_date)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.vendor_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.purchase_bill_no)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.purchase_total_amount)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.purchase_due_date)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.purchase_status)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
+      },
       align: "left",
     },
     {
@@ -289,44 +307,51 @@ export default function Purchase() {
     setSelectedColumns(checkedValues);
   };
 
-
   return (
     <div>
       <div className="container-fluid container_fms pt-3">
-        <div className="row flex-wrap">
-          <div className="col">
+        <div className="row flex-wrap align-items-center">
+          <div className="col-4">
             <h5 className="lead_text">Purchase</h5>
           </div>
-          <Leadlist_Icons
-                  datas={dailyexpenseList}
-                  columns={columns}
-                  items={data12}
-                  xlheading={OppHeads}
-                  filename="data.csv"
-                  chechboxes={
-                    <Checkbox.Group
-                      onChange={onChange}
-                      value={selectedColumns}
-                    >
-                      {columnsKeys.map((column) => (
-                        <li>
-                          <Checkbox value={column} key={column}>
-                            {column}
-                          </Checkbox>
-                        </li>
-                      ))}
-                    </Checkbox.Group>
-                  }
-                  />
-        </div>
-        <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
           <div className="col-4">
             <Input.Search
               placeholder="Search"
               style={{ margin: "5px", borderRadius: "5px" }}
+              className="inputSearch"
+              value={searchSource}
+              onChange={(e) => {
+                setSearchSource(e.target.value ? [e.target.value] : []);
+              }}
+              onSearch={(value) => {
+                setSearchSource(value);
+              }}
+            />
+          </div>
+          <div className="col-4 d-flex justify-content-end">
+            <Leadlist_Icons
+              datas={dailyexpenseList}
+              columns={columns}
+              items={data12}
+              xlheading={OppHeads}
+              filename="data.csv"
+              chechboxes={
+                <Checkbox.Group onChange={onChange} value={selectedColumns}>
+                  {columnsKeys.map((column) => (
+                    <li>
+                      <Checkbox value={column} key={column}>
+                        {column}
+                      </Checkbox>
+                    </li>
+                  ))}
+                </Checkbox.Group>
+              }
             />
           </div>
         </div>
+        {/* <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
+          
+        </div> */}
         <div className="row my-3">
           <div className="col-4 ">
             <Select
@@ -367,11 +392,7 @@ export default function Purchase() {
               className={({ isActive }) => (isActive ? "active-link" : "link")}
               to={ROUTES.ADD_PURCHASE}
             >
-              <Button
-                btnType="add"
-              >
-                Add Purchase
-              </Button>
+              <Button btnType="add">Add Purchase</Button>
             </NavLink>
           </div>
         </div>
@@ -392,10 +413,6 @@ export default function Purchase() {
           />
         </div>
       </div>
-
-
-
-
     </div>
   );
 }

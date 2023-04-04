@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useMemo } from "react";
 // import Button from "../../../../components/button/button";
 import { getData, getNameList } from "country-list";
+import "./currency.scss";
 import Button from "../../../components/button/button";
 import InputType from "../../../components/Input Type textbox/InputType";
 import ErrorMsg from "../../../components/error/ErrorMessage";
@@ -11,7 +12,7 @@ import { MdPageview } from "react-icons/md";
 import { Form, Input, Select, DatePicker } from "antd";
 import TableData from "../../../components/table/table_data";
 import { FaEdit, FaTrash } from "react-icons/fa";
-
+import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
 import { FiEdit } from "react-icons/fi";
 import CustomModel from "../../../components/custom_modal/custom_model";
 import { GENERAL_SETTING_BASE_URL } from "../../../api/bootapi";
@@ -149,7 +150,16 @@ export default function Currency(props) {
             .includes(value.toLowerCase()) ||
           String(record.currency_code)
             .toLowerCase()
-            .includes(value.toLowerCase())
+            .includes(value.toLowerCase())  ||
+            String(record.country_name)
+              .toLowerCase()
+              .includes(value.toLowerCase())  ||
+              String(record.currency_coin)
+                .toLowerCase()
+                .includes(value.toLowerCase())  ||
+                String(record.currency_symbol)
+                  .toLowerCase()
+                  .includes(value.toLowerCase()) 
         );
       },
     },
@@ -319,19 +329,59 @@ export default function Currency(props) {
     getAllCountries();
   }, []);
 
+
+  const columnsKeys = columns.map((column) => column.key);
+
+  const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
+  const filteredColumns = columns.filter((column) =>
+    selectedColumns.includes(column.key)
+  );
+  console.log("filtered columns::", filteredColumns);
+  const onChange1 = (checkedValues) => {
+    setSelectedColumns(checkedValues);
+  };
+
+  //for Xlsx data
+  const UnitHeads = [
+    [
+      "Slno",
+      "COUNTRY",
+      "COUNTRY NAME",
+      "COIN",
+      "CODE",
+      "SYMBOL",
+      // "PROFIT/LOSS",
+    ],
+  ];
+  //for pdf download
+  const data12 = AllCurrency?.map((item, index) => [
+    index + serialNo,
+    item.country_name,
+    item.currency_name,
+  
+    item.currency_coin,
+    item.currency_code,
+    item.currency_symbol,
+    // item.lead,
+    // item.cost,
+    // item.expense,
+    // item.profit,
+  ]);
+
   return (
     <>
-      <div className="container-fluid container2 pt-3">
-        <div className="row flex-wrap">
-          <div className="col">
+      <div className="container-fluid container_hrms pt-3">
+        <div className="row flex-wrap align-items-center">
+          <div className="col-4">
             <h5 className="lead_text">Currency</h5>
           </div>
           {/* <Leadlist_Icons /> */}
-        </div>
-        <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
-          <div className="col-4">
+        {/* </div> */}
+        {/* <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}> */}
+        <div className="col-sm-4">
             <Input.Search
-              placeholder="Search by Currency Name or Code"
+             className="inputSearch"
+              placeholder="Search"
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
               onChange={(e) => {
@@ -342,7 +392,19 @@ export default function Currency(props) {
               }}
             />
           </div>
-        </div>
+          <div className="col-4 d-flex justify-content-end">
+            {data12 && (
+              <Leadlist_Icons
+                datas={data12}
+                columns={filteredColumns}
+                items={data12}
+                xlheading={UnitHeads}
+                filename="data.csv"
+              />
+            )}
+          </div>
+          </div>
+        {/* </div> */}
         <div className="row my-3">
           <div className="col-4 px-3">
             <Select
@@ -387,12 +449,14 @@ export default function Currency(props) {
               Add Currency
             </Button>
           </div>
+          
         </div>
         <div className="datatable">
           <TableData
             data={getData(current, pageSize)}
             // data={AllCurrency}
             columns={columns}
+            
             custom_table_css="table_lead_list"
           />
         </div>

@@ -511,7 +511,7 @@ function LeadEdit() {
                           </Select.Option>
                         </SelectBox> */}
                       </Form.Item>
-                      <div className="mt-2">
+                      <div className="">
                         <label>
                           Email<span className="required">*</span>
                         </label>

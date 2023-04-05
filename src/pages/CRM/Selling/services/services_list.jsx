@@ -98,6 +98,7 @@ function Services() {
     serviceimage: "",
     servicecat_id: "",
     servicetaxtype_id: "",
+    serviceTaxGroup: "",
   });
 
   const handlePreview = async (file) => {
@@ -141,8 +142,8 @@ function Services() {
               service_taxrate: item?.service_taxrate,
               service_description: item?.service_description,
               service_category_name: item?.crm_v1_categories?.category_name,
-              service_taxtype_name: item?.fms_v1_tax_types?.tax_type_name,
-              service_taxtype_id: item?.fms_v1_tax_types?.tax_type_id,
+              service_taxgroup_name: item?.fms_v1_tax_groups?.tax_group_name,
+              service_taxgroup: item?.service_taxgroup,
             });
             // console.log("taxtype service is",item?.fms_v1_tax_types?.tax_type_name)
           });
@@ -196,6 +197,7 @@ function Services() {
       serviceimage: item.service_pic,
       servicecat_id: item.service_category_id,
       servicetaxtype_id: item.service_taxtype_id,
+      serviceTaxGroup: item.service_taxgroup_name,
     });
     setServiceView(true);
   };
@@ -480,7 +482,7 @@ function Services() {
     },
     {
       title: "TAX TYPE NAME",
-      dataIndex: "service_taxtype_name",
+      dataIndex: "service_taxgroup_name",
       key: "key",
 
       align: "left",
@@ -496,7 +498,7 @@ function Services() {
           String(record.service_category_name)
             .toLowerCase()
             .includes(value.toLowerCase()) ||
-          String(record.service_taxtype_name)
+          String(record.service_taxgroup_name)
             .toLowerCase()
             .includes(value.toLowerCase())
         );
@@ -1194,6 +1196,22 @@ function Services() {
                       <div className="col-6 justify-content-start">
                         <p className="modal_view_p_sub">
                           {viewservices.servicetaxrate}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="row mt-2">
+                      <div className="col-5">
+                        <p
+                          style={{ color: "#000" }}
+                          className="modal_view_p_style"
+                        >
+                          Tax Group
+                        </p>
+                      </div>
+                      <div className="col-1">:</div>
+                      <div className="col-6 justify-content-start">
+                        <p className="modal_view_p_sub">
+                          {viewservices.serviceTaxGroup}
                         </p>
                       </div>
                     </div>

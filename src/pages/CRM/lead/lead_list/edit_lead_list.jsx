@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {} from "react-bootstrap";
-import { message } from "antd";
+import { message, Radio } from "antd";
 // import "./lead.styles.scss";
 import { Link } from "react-router-dom";
 import Button from "../../../../components/button/button";
@@ -400,8 +400,10 @@ function LeadEdit() {
                         </SelectBox>
                       </Form.Item>
                     </div> */}
-                    <div className="col-sm-4 pt-2">
-                      <label>Name</label>
+                    <div className="col-sm-4 pt-2 ">
+                      <label>
+                        Name<span className="required">*</span>
+                      </label>
                       <Form.Item
                         name="customer_name"
                         rules={[
@@ -426,14 +428,16 @@ function LeadEdit() {
                           onChange={(e) => setCustomerName(e.target.value)}
                         />
                       </Form.Item>
-                      <div className=" mt-2">
-                        <label>Phone</label>
+                      <div className=" mt-2 pt-3">
+                        <label>
+                          Phone<span className="required">*</span>
+                        </label>
                         <Form.Item
                           name="customer_phone"
                           rules={[
                             {
                               required: true,
-                              message: "Please select a Type",
+                              message: "Please enter a valid Phone number",
                             },
                           ]}
                         >
@@ -445,35 +449,56 @@ function LeadEdit() {
                       </div>
                     </div>
                     <div className="col-sm-4 pt-2">
-                      <label>Customer Type</label>
+                      <label>
+                        Customer Type<span className="required">*</span>
+                      </label>
                       <Form.Item
+                        className="my-2 pb-3"
                         name="customer_type"
                         rules={[
                           {
                             required: true,
-                            message: "Please select a Type",
+                            message: "Please select Customer Type",
                           },
                         ]}
                       >
-                        <SelectBox
+                        <Radio.Group
+                          value={leadUsertype}
+                          onChange={(e) => {
+                            setLeadUsertype(e);
+
+                            // setOrganizationDisable(e);
+                          }}
+                          defaultValue="organization"
+                        >
+                          <Radio value="organization">Organization</Radio>
+                          <Radio value="individual">Individual</Radio>
+                        </Radio.Group>
+                        {/* <SelectBox
                           value={leadUsertype}
                           onChange={(e) => {
                             setLeadUsertype(e);
                             setOrganizationDisable(e);
                           }}
                         >
-                          <Select.Option value="O">Organisation</Select.Option>
-                          <Select.Option value="I">Individual</Select.Option>
-                        </SelectBox>
+                          <Select.Option value="organization">
+                            Organisation
+                          </Select.Option>
+                          <Select.Option value="individual">
+                            Indivdual
+                          </Select.Option>
+                        </SelectBox> */}
                       </Form.Item>
                       <div className="mt-2">
-                        <label>Email</label>
+                        <label>
+                          Email<span className="required">*</span>
+                        </label>
                         <Form.Item
                           name="customer_email"
                           rules={[
                             {
                               required: true,
-                              message: "Please select a Type",
+                              message: "Please Enter Valid Email",
                             },
                           ]}
                         >
@@ -522,12 +547,12 @@ function LeadEdit() {
                       <label>Website</label>
                       <Form.Item
                         name="customer_website"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please select a Type",
-                          },
-                        ]}
+                        // rules={[
+                        //   {
+                        //     required: true,
+                        //     message: "Please select a Type",
+                        //   },
+                        // ]}
                       >
                         <InputType
                           value={leadcreditdays}
@@ -560,12 +585,12 @@ function LeadEdit() {
                       <label>Country</label>
                       <Form.Item
                         name="customer_country"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please select a Type",
-                          },
-                        ]}
+                        // rules={[
+                        //   {
+                        //     required: true,
+                        //     message: "Please select a Type",
+                        //   },
+                        // ]}
                       >
                         <SelectBox
                           // value={leadSource}
@@ -589,12 +614,12 @@ function LeadEdit() {
                         <label>City</label>
                         <Form.Item
                           name="customer_city"
-                          rules={[
-                            {
-                              required: true,
-                              message: "Please select a Type",
-                            },
-                          ]}
+                          // rules={[
+                          //   {
+                          //     required: true,
+                          //     message: "Please select a Type",
+                          //   },
+                          // ]}
                         >
                           <InputType
                             value={leadcreditdays}

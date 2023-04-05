@@ -4,7 +4,7 @@ import TableData from "../../../../components/table/table_data";
 import { CRM_BASE_URL } from "../../../../api/bootapi";
 import PublicFetch from "../../../../utils/PublicFetch";
 import PhoneNumber from "../../../../components/phone_number/phonenumber";
-import { Form, message,Select } from "antd";
+import { Form, message, Select } from "antd";
 import InputType from "../../../../components/Input Type textbox/InputType";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
 import Button from "../../../../components/button/button";
@@ -88,7 +88,7 @@ function AddressTable(props) {
   const AddAddress = (data) => {
     PublicFetch.post(`${CRM_BASE_URL}/address`, {
       address_customer_id: parseInt(props.customer),
-      address_title: title,
+      address_title: data.title,
       address_content: address_data,
       address_pin: pincode,
       address_contact: phone,
@@ -188,7 +188,7 @@ function AddressTable(props) {
               form={addForm}
               onFinish={(values) => {
                 console.log("values iss", values);
-                AddAddress();
+                AddAddress(values);
               }}
               onFinishFailed={(error) => {
                 console.log(error);
@@ -199,7 +199,7 @@ function AddressTable(props) {
               </div>
               <div className="row mt-3">
                 <div className="px-3">
-                  <label>Title</label>
+                  <label className="mt-3">Title</label>
                   <Form.Item
                     name="title"
                     rules={[
@@ -218,17 +218,21 @@ function AddressTable(props) {
                       },
                     ]}
                   >
-                   <SelectBox>
-                   <Select.Option value="billing">Billing Address</Select.Option>
-                   <Select.Option value="shipping">Shipping Address</Select.Option>
-                   </SelectBox>
+                    <SelectBox>
+                      <Select.Option value="billing">
+                        Billing Address
+                      </Select.Option>
+                      <Select.Option value="shipping">
+                        Shipping Address
+                      </Select.Option>
+                    </SelectBox>
                     {/* <InputType
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
                     /> */}
                   </Form.Item>
 
-                  <label>Address</label>
+                  <label className="mt-3">Address</label>
                   <Form.Item
                     className="mt-2"
                     name="address"
@@ -256,7 +260,7 @@ function AddressTable(props) {
                     />
                   </Form.Item>
 
-                  <label>PIN</label>
+                  <label className="mt-3">PIN</label>
                   <Form.Item
                     value={pincode}
                     name="pin"
@@ -274,7 +278,7 @@ function AddressTable(props) {
                     />
                   </Form.Item>
 
-                  <label>Mobile</label>
+                  <label className="mt-3">Mobile</label>
                   <Form.Item
                     name="phone"
                     rules={[

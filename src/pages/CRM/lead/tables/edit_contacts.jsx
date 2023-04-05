@@ -317,7 +317,7 @@ function EditContact(props) {
                       onChange={(e) => setContactName(e.target.value)}
                     />
                   </Form.Item>
-                  <label>Designation</label>
+                  <label className="mt-3">Designation</label>
                   <Form.Item
                     name="designation"
                     rules={[
@@ -343,7 +343,7 @@ function EditContact(props) {
                       onChange={(e) => setDesignation(e.target.value)}
                     />
                   </Form.Item>
-                  <label>Phone</label>
+                  <label className="mt-3">Phone</label>
                   <Form.Item
                     name="phone"
                     rules={[
@@ -360,7 +360,7 @@ function EditContact(props) {
                     />
                   </Form.Item>
 
-                  <label>Mobile</label>
+                  <label className="mt-3">Mobile</label>
                   <Form.Item name="mobile">
                     <Phone_Input
                       value={mobile}
@@ -368,7 +368,7 @@ function EditContact(props) {
                     />
                   </Form.Item>
 
-                  <label>Email</label>
+                  <label className="mt-3">Email</label>
                   <Form.Item
                     name="email"
                     rules={[
@@ -421,7 +421,7 @@ function EditContact(props) {
 
               <div className="row mt-3">
                 <div className="px-3">
-                  <label>Name</label>
+                  <label className="mt-3">Name</label>
                   <Form.Item
                     name="editName"
                     rules={[
@@ -453,7 +453,7 @@ function EditContact(props) {
                       value={editcontacts.editName}
                     />
                   </Form.Item>
-                  <label>Designation</label>
+                  <label className="mt-3">Designation</label>
                   <Form.Item
                     name="editDesignation"
                     rules={[
@@ -487,7 +487,7 @@ function EditContact(props) {
                     />
                   </Form.Item>
 
-                  <label>Phone </label>
+                  <label className="mt-3">Phone </label>
                   <Form.Item
                     name="editPhone"
                     rules={[
@@ -509,7 +509,7 @@ function EditContact(props) {
                     />
                   </Form.Item>
 
-                  <label>Mobile</label>
+                  <label className="mt-3">Mobile</label>
                   <Form.Item name="editMobile">
                     <Phone_Input
                       value={editcontacts.editMobile}
@@ -521,7 +521,7 @@ function EditContact(props) {
                       }
                     />
                   </Form.Item>
-                  <label>Email</label>
+                  <label className="mt-3">Email</label>
                   <Form.Item
                     name="editEmail"
                     rules={[

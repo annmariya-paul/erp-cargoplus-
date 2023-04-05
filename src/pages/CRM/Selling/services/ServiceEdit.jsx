@@ -125,27 +125,27 @@ function ServiceEdit() {
       console.log("one service details iss", oneservice.data.data);
       // setalltaxtype(oneservice.data.data);
 
+      editForm.setFieldsValue({
+        servicename: oneservice?.data?.data?.service_name,
+        code: oneservice?.data?.data?.service_code,
+        category: oneservice?.data?.data?.crm_v1_categories?.category_id,
+        taxGroup: oneservice?.data?.data?.service_taxgroup,
+        serviceimg: oneservice.data.data.service_pic,
+        description: oneservice.data.data.service_description,
+      });
       setservicename(oneservice.data.data.service_name);
       setservicecode(oneservice.data.data.service_code);
       setservicecategory(oneservice.data.data.crm_v1_categories.category_id);
       setTaxRate(oneservice.data.data.fms_v1_tax_types.tax_type_id);
       setservicedescription(oneservice.data.data.service_description);
       setservicepicture(oneservice.data.data.service_pic);
-      editForm.setFieldsValue({
-        servicename: oneservice.data.data.service_name,
-        code: oneservice.data.data.service_code,
-        category: oneservice.data.data.crm_v1_categories.category_id,
-        taxRate: oneservice.data.data.fms_v1_tax_types.tax_type_id,
-        serviceimg: oneservice.data.data.service_pic,
-        description: oneservice.data.data.service_description,
-      });
       console.log("one service name", oneservice.data.data.service_name);
     } catch (err) {
       console.log("error while getting the tax types: ", err);
     }
   };
 
-  const handleUpdate = () => {
+  const handleUpdate = (data) => {
     // console.log("edit data", e);
     const formData = new FormData();
 
@@ -156,7 +156,7 @@ function ServiceEdit() {
     //   formData.append("service_pic", serviceImg);
     // }
     formData.append("service_pic", img);
-    formData.append("service_taxtype", taxRate);
+    formData.append("service_taxgroup", data.taxGroup);
     formData.append("service_description", servicedescription);
 
     PublicFetch.patch(`${CRM_BASE_URL_SELLING}/service/${id}`, formData, {
@@ -197,6 +197,7 @@ function ServiceEdit() {
     getAllTaxTypes();
     getCategorydata();
     getoneservice();
+    getTaxGroup();
   }, []);
 
   const beforeUpload = (file, fileList) => {};
@@ -217,7 +218,7 @@ function ServiceEdit() {
               form={editForm}
               onFinish={(value) => {
                 console.log("values111333", value);
-                handleUpdate();
+                handleUpdate(value);
               }}
               onFinishFailed={(error) => {
                 console.log(error);

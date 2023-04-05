@@ -139,7 +139,7 @@ function ServiceCreate() {
     formData.append("service_category_id", State);
     formData.append("service_hsn", Hsn);
     formData.append("service_pic", img);
-    formData.append("service_taxtype", taxRate);
+    formData.append("service_taxgroup", taxRate);
     formData.append("service_description", description);
 
     PublicFetch.post(`${CRM_BASE_URL_SELLING}/service`, formData, {

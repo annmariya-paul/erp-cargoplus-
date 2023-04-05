@@ -205,7 +205,10 @@ const ROUTES = {
 
   //FMS => master => Tax Group
   TAX_GROUP: "/tax_groups",
-  AWBBL_REPORT:"/awb_bl_report",
+  AWBBL_REPORT: "/awb_bl_report",
+
+  // ACCOUNTS => master => Legder
+  LEDGER: "/ledger",
 };
 
 module.exports = { ROUTES };

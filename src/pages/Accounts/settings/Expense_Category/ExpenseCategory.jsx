@@ -38,8 +38,8 @@ function ExpenseCategory() {
   const [successPopup, setSuccessPopup] = useState(false);
   const [slno, setSlNo] = useState(1);
   const [category_id, setCategory_Id] = useState();
-  const [editcategoryid,seteditcategoryid] =useState();
-  const[totallocation,settotallocation]=useState();
+  const [editcategoryid, seteditcategoryid] = useState();
+  const [totallocation, settotallocation] = useState();
   const [uniqueName, setUniqueName] = useState(false);
   const [categoryName, setCategoryName] = useState(false);
   const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
@@ -65,12 +65,14 @@ function ExpenseCategory() {
       width: "8%",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.expense_category_name)
-          .toLowerCase()
-          .includes(value.toLowerCase()) || 
-          String(record.expense_category_description )
-          .toLowerCase()
-          .includes(value.toLowerCase())
+        return (
+          String(record.expense_category_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.expense_category_description)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
       },
       // align: "center",
     },
@@ -93,21 +95,18 @@ function ExpenseCategory() {
             {/* <div className="editcolor "> */}
             <FaEdit
               fontSize={17}
-              onClick={() => { expEdit(index)
-                setUniqueEditName(false);}
-               
-
-              }   // handleEditedclick(index);
+              onClick={() => {
+                expEdit(index);
+                setUniqueEditName(false);
+              }} // handleEditedclick(index);
             />
-              <div
+            <div
               className="viewIcon m-0"
-              onClick={() => handleViewClick(index)
-              }
+              onClick={() => handleViewClick(index)}
             >
               <MdPageview style={{ marginLeft: 15, marginRight: 15 }} />
             </div>
 
-        
             {/* </div> */}
             {/* <div className="editcolor">
               <MdDelete />
@@ -117,11 +116,6 @@ function ExpenseCategory() {
       },
       align: "center",
     },
-  
- 
-   
-   
-
   ];
 
   // const data = [
@@ -146,7 +140,7 @@ function ExpenseCategory() {
         console.log("Error", err);
       });
   };
- 
+
   const close_modal = (mShow, time) => {
     if (!mShow) {
       setTimeout(() => {
@@ -155,12 +149,10 @@ function ExpenseCategory() {
     }
   };
 
-
   const [viewexp, setViewExp] = useState({
     id: "",
     name: "",
-   description: "",
-   
+    description: "",
   });
   const handleViewClick = (item) => {
     console.log("view all ", item);
@@ -169,7 +161,6 @@ function ExpenseCategory() {
       id: item.expense_category_id,
       expense_category_name: item.expense_category_name,
       expense_category_description: item.expense_category_description,
-     
     });
 
     setViewPopup(true);
@@ -185,7 +176,7 @@ function ExpenseCategory() {
         if (res.data.success) {
           console.log("success of create", res.data.data);
           setSuccessPopup(true);
-          getAllExpenseCategory()
+          getAllExpenseCategory();
           editForm.resetFields();
           setAddPopup(false);
           close_modal(successPopup, 1000);
@@ -219,9 +210,10 @@ function ExpenseCategory() {
 
   const handleupdate = async () => {
     try {
-      const updated = await PublicFetch.patch(`${ACCOUNTS}/expense-category/${editcategoryid}`,
+      const updated = await PublicFetch.patch(
+        `${ACCOUNTS}/expense-category/${editcategoryid}`,
         {
-          expense_category_name:  editexpname,
+          expense_category_name: editexpname,
           expense_category_description: editexpdescription,
         }
       );
@@ -233,53 +225,44 @@ function ExpenseCategory() {
         getAllExpenseCategory();
         // getallcarrier()
         close_modal(successPopup, 1000);
-      } 
+      }
     } catch (err) {
       console.log("error to update carrier");
     }
   };
 
-
-
-
-
-
   useEffect(() => {
     getAllExpenseCategory();
   }, []);
 
-  const expEdit= (e) => {
+  const expEdit = (e) => {
     console.log("exp edit", e);
-    seteditcategoryid(e.expense_category_id)
-   setEditexpname(e.expense_category_name);
-   setEditexpdescription(e.expense_category_description);
+    seteditcategoryid(e.expense_category_id);
+    setEditexpname(e.expense_category_name);
+    setEditexpdescription(e.expense_category_description);
 
     // setCarrier_id(e.carrier_id);
     editForm.setFieldsValue({
       category_id: e.expense_category_id,
       expname: e.expense_category_name,
       expdescription: e.expense_category_description,
-      
     });
- setEditPopup(true);
+    setEditPopup(true);
   };
   const handleviewtoedit = (i) => {
     console.log("editing data iss", i);
     seteditcategoryid(i.id);
     setEditexpname(i.expense_category_name);
-    setEditexpdescription(i.expense_category_description)
-   
+    setEditexpdescription(i.expense_category_description);
 
     editForm.setFieldsValue({
       // unitid: e.unit_id,
       // carrier: i.carrierviewname,
       expense_category_name: i.expense_category_name,
       expense_category_description: i.expense_category_description,
-    
     });
     setEditPopup(true);
   };
-
 
   const columnsKeys = columns.map((column) => column.key);
 
@@ -293,22 +276,12 @@ function ExpenseCategory() {
   };
 
   //for Xlsx data
-  const UnitHeads = [
-    [
-      "Slno",
-     
-      "COUNTRY NAME",
-      "DESCRIPTION",
-   
-    ],
-  ];
+  const UnitHeads = [["Slno", "COUNTRY NAME", "DESCRIPTION"]];
   //for pdf download
   const data12 = AllcategoryData?.map((item, index) => [
     index + serialNo,
     item.expense_category_name,
     item.expense_category_description,
-  
-   
   ]);
   return (
     <div>
@@ -316,16 +289,16 @@ function ExpenseCategory() {
         <div className="row flex-wrap align-items-center">
           <div className="col-4">
             {/* <div className="container-fluid lead_list  my-3 py-3"> */}
-              {/* invoice listing section One */}
+            {/* invoice listing section One */}
 
-              {/* <div> */}
-                {/* <div className="row flex-wrap"> */}
-                  {/* <div className="col"> */}
-                    <h5 className="lead_text">Expense Category</h5>
-                  </div>
-                  <div className="col-sm-4">
+            {/* <div> */}
+            {/* <div className="row flex-wrap"> */}
+            {/* <div className="col"> */}
+            <h5 className="lead_text">Expense Category</h5>
+          </div>
+          <div className="col-sm-4">
             <Input.Search
-             className="inputSearch"
+              className="inputSearch"
               placeholder="Search"
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
@@ -348,9 +321,9 @@ function ExpenseCategory() {
               />
             )}
           </div>
-          </div>
+        </div>
 
-                  {/* <Leadlist_Icons
+        {/* <Leadlist_Icons
                   // datas={OpportunityList}
                   // columns={columns}
                   // items={data12}
@@ -371,8 +344,8 @@ function ExpenseCategory() {
                   //   </Checkbox.Group>
                   // }
                   /> */}
-                {/* </div> */}
-                {/* <div className="row p-1" style={{ backgroundColor: "#f4f4f7" }}>
+        {/* </div> */}
+        {/* <div className="row p-1" style={{ backgroundColor: "#f4f4f7" }}>
                   <div className="col-3">
                     <Input.Search
                       placeholder="Search by "
@@ -387,98 +360,96 @@ function ExpenseCategory() {
                     />
                   </div>
                 </div> */}
-                <div className="row my-3 ">
-                  <div className="col-4 px-3">
-                    <Select
-                      // defaultValue={"25"}
-                      bordered={false}
-                      className=" page_size_style"
-                      value={numOfItems}
-                      onChange={(e) => {
-                        setNumOfItems(e);
-                        setCurrent(1);
-                      }}
-                    >
-                      <Select.Option value="25">
-                        Show{" "}
-                        <span style={{ color: "lightgray" }} className="ms-1">
-                          |
-                        </span>
-                        <span style={{ color: "#2f6b8f" }} className="ms-2">
-                          25
-                        </span>{" "}
-                      </Select.Option>
-                      <Select.Option value="50">
-                        {" "}
-                        Show{" "}
-                        <span style={{ color: "lightgray" }} className="ms-1">
-                          |
-                        </span>
-                        <span style={{ color: "#2f6b8f" }} className="ms-2">
-                          50
-                        </span>{" "}
-                      </Select.Option>
-                      <Select.Option value="100">
-                        {" "}
-                        Show{" "}
-                        <span style={{ color: "lightgray" }} className="ms-1">
-                          |
-                        </span>
-                        <span style={{ color: "#2f6b8f" }} className="ms-2">
-                          100
-                        </span>{" "}
-                      </Select.Option>
-                    </Select>
-                  </div>
-
-                  <div className="col-4 d-flex   align-items-center justify-content-center">
-                  {totallocation?.length >0 &&(
-            <MyPagination
-              total={parseInt(totallocation?.length)}
-              current={current}
-              showSizeChanger={true}
-              pageSize={pageSize}
-              onChange={(current, pageSize) => {
-                setCurrent(current);
-                setPageSize(pageSize);
+        <div className="row my-3 ">
+          <div className="col-4 px-3">
+            <Select
+              // defaultValue={"25"}
+              bordered={false}
+              className=" page_size_style"
+              value={numOfItems}
+              onChange={(e) => {
+                setNumOfItems(e);
+                setCurrent(1);
               }}
-            />
-            )  }
-                    
-                  </div>
-                  {/* <div className="col-xl-6 col-lg-6 col-md-6 col-sm-8 col-12"></div> */}
-                  <div className="col-4 d-flex justify-content-end">
-                    {/* <div className=""> */}
-                      {/* <Link style={{ color: "white" }}> */}
-                      <Button
-                        onClick={() => {
-                          setAddPopup(true);
-                          setUniqueName(false);
-                          // setInvoice_id(index.invoice_id);
-                          AddForm.resetFields();
-                        }}
-                        btnType="save"
-                      >
-                        Add Expense Category
-                      </Button>
-                      {/* </Link> */}
-                    </div>
+            >
+              <Select.Option value="25">
+                Show{" "}
+                <span style={{ color: "lightgray" }} className="ms-1">
+                  |
+                </span>
+                <span style={{ color: "#2f6b8f" }} className="ms-2">
+                  25
+                </span>{" "}
+              </Select.Option>
+              <Select.Option value="50">
+                {" "}
+                Show{" "}
+                <span style={{ color: "lightgray" }} className="ms-1">
+                  |
+                </span>
+                <span style={{ color: "#2f6b8f" }} className="ms-2">
+                  50
+                </span>{" "}
+              </Select.Option>
+              <Select.Option value="100">
+                {" "}
+                Show{" "}
+                <span style={{ color: "lightgray" }} className="ms-1">
+                  |
+                </span>
+                <span style={{ color: "#2f6b8f" }} className="ms-2">
+                  100
+                </span>{" "}
+              </Select.Option>
+            </Select>
+          </div>
 
-                  </div>
-                {/* </div> */}
-                <div className="datatable">
-                  {/* {AllinvoiceData && ( */}
-                  <TableData
-                    data={AllcategoryData}
-                    // data={allLeadList}
-                    // data={OpportunityList}
-                    columns={columns}
-                    custom_table_css="table_lead_list"
-                  />
-                  {/* )} */}
-                </div>
-                <div className="d-flex py-2 justify-content-center">
-                  {/* <MyPagination
+          <div className="col-4 d-flex   align-items-center justify-content-center">
+            {totallocation?.length > 0 && (
+              <MyPagination
+                total={parseInt(totallocation?.length)}
+                current={current}
+                showSizeChanger={true}
+                pageSize={pageSize}
+                onChange={(current, pageSize) => {
+                  setCurrent(current);
+                  setPageSize(pageSize);
+                }}
+              />
+            )}
+          </div>
+          {/* <div className="col-xl-6 col-lg-6 col-md-6 col-sm-8 col-12"></div> */}
+          <div className="col-4 d-flex justify-content-end">
+            {/* <div className=""> */}
+            {/* <Link style={{ color: "white" }}> */}
+            <Button
+              onClick={() => {
+                setAddPopup(true);
+                setUniqueName(false);
+                // setInvoice_id(index.invoice_id);
+                AddForm.resetFields();
+              }}
+              btnType="save"
+            >
+              New Expense Category
+            </Button>
+            {/* </Link> */}
+          </div>
+        </div>
+        {/* </div> */}
+        <div className="datatable">
+          {/* {AllinvoiceData && ( */}
+          <TableData
+            data={AllcategoryData}
+            // data={allLeadList}
+            // data={OpportunityList}
+            columns={columns}
+            custom_table_css="table_lead_list"
+          />
+          {/* )} */}
+        </div>
+        <div className="d-flex py-2 justify-content-center">
+          {/* <MyPagination
                     total={parseInt(totalCount)}
                     current={current}
                     pageSize={numOfItems}
@@ -486,248 +457,236 @@ function ExpenseCategory() {
                       setCurrent(current);
                     }}
                   /> */}
-                </div>
-              </div>
-            {/* </div> */}
-            <CustomModel
-              show={AddPopup}
-              onHide={() => {
-                setAddPopup(false);
-              }}
-              centered
-              View_list
-              list_content={
-                <div>
-                  <div className="container">
-                    <h4 style={{ color: "#0891d1" }}>Create Expense Category</h4>
-                    <Form
-                      form={AddForm}
-                      onFinish={(value) => {
-                        console.log("On finishing", value);
-                        createExpenseCategory(value)
-                      }}
-                    >
-                      <div className="row">
-                        <div className="col-12">
-                          <div className="col-12">
-                            <div className="">
-                              <div className="">
-                                <label>Category Name</label>
-                                <Form.Item
-                                  rules={[
-                                    {
-                                      required: true,
-                                      message: "Category Name is Required",
-                                    },
-                                  ]}
-                                  name="name"
-                                >
-                                  <InputType 
-                                   onChange={(e) => {
+        </div>
+      </div>
+      {/* </div> */}
+      <CustomModel
+        show={AddPopup}
+        onHide={() => {
+          setAddPopup(false);
+        }}
+        centered
+        View_list
+        list_content={
+          <div>
+            <div className="container">
+              <h4 style={{ color: "#0891d1" }}>Create Expense Category</h4>
+              <Form
+                form={AddForm}
+                onFinish={(value) => {
+                  console.log("On finishing", value);
+                  createExpenseCategory(value);
+                }}
+              >
+                <div className="row">
+                  <div className="col-12">
+                    <div className="col-12">
+                      <div className="">
+                        <div className="">
+                          <label>Category Name</label>
+                          <Form.Item
+                            rules={[
+                              {
+                                required: true,
+                                message: "Category Name is Required",
+                              },
+                            ]}
+                            name="name"
+                          >
+                            <InputType
+                              onChange={(e) => {
+                                setCategoryName(e.target.value);
 
-                                    setCategoryName(e.target.value);
-                                  
-                                    setUniqueName(false);
-                                  }}
-                                  onBlur={async () => {
-                                    let n = await CheckUnique({
-                                      type: "expensecategoryname",
-                                      value: categoryName,
-                                    });
-                                    setUniqueName(n);
-                                  }}
-                                  
-                                  
-                                  />
-                                </Form.Item>
-                                {uniqueName ? (
-                      <p style={{ color: "red" }}>
-                      Expense category name {uniqueErrMsg.UniqueErrName}
-                      </p>
-                    ) : null}
-                              </div>
-                            </div>
-                          </div>
-                          <div className="col-12">
-                            <lable>Description</lable>
-                            <Form.Item
-                              rules={[
-                                {
-                                  min: 5,
-                                  message: "Required minimum 5 Letter",
-                                },
-                              ]}
-                              name="description"
-                            >
-                              <TextArea />
-                            </Form.Item>
-                          </div>
-                          <div className="col-12 d-flex justify-content-center">
-                            <Button btnType="save" type="submit">
-                              Save
-                            </Button>
-                          </div>
+                                setUniqueName(false);
+                              }}
+                              onBlur={async () => {
+                                let n = await CheckUnique({
+                                  type: "expensecategoryname",
+                                  value: categoryName,
+                                });
+                                setUniqueName(n);
+                              }}
+                            />
+                          </Form.Item>
+                          {uniqueName ? (
+                            <p style={{ color: "red" }}>
+                              Expense category name {uniqueErrMsg.UniqueErrName}
+                            </p>
+                          ) : null}
                         </div>
                       </div>
-                    </Form>
+                    </div>
+                    <div className="col-12">
+                      <lable>Description</lable>
+                      <Form.Item
+                        rules={[
+                          {
+                            min: 5,
+                            message: "Required minimum 5 Letter",
+                          },
+                        ]}
+                        name="description"
+                      >
+                        <TextArea />
+                      </Form.Item>
+                    </div>
+                    <div className="col-12 d-flex justify-content-center">
+                      <Button btnType="save" type="submit">
+                        Save
+                      </Button>
+                    </div>
                   </div>
                 </div>
-              }
-              
-            >
-              <Custom_model
+              </Form>
+            </div>
+          </div>
+        }
+      >
+        <Custom_model
           size={"sm"}
           show={successPopup}
           onHide={() => setSuccessPopup(false)}
           success
         />
-              </CustomModel>
+      </CustomModel>
 
-            <CustomModel
-              show={editPopup}
-              onHide={() => {
-                setEditPopup(false);
-              }}
-              // centered
-              View_list
-              list_content={
-                <div>
-                  <div className="container">
-                    <h4 style={{ color: "#0891d1" }}>Edit Expense Category</h4>
-                    <Form
-                      form={editForm}
-                      onFinish={(value) => {
-                        console.log("On finishing", value);
-                     handleupdate();
-                      }}
-                      onFinishFailed={(error) => {
-                        console.log(error);
-                      }}
-                    >
-                      <div className="row">
-                        <div className="col-12">
-                          <div className="col-12">
-                            <div className="">
-                              <div className="">
-                                <label>Category Name</label>
-                                <Form.Item
-                                  name="expname"
-                                  rules={[
-                                    {
-                                      required: true,
-                                      message: "Category Name is Required",
-                                    },
-                                  ]}
-                                
-                                >
-                                  <InputType value={editexpname}
-                                  onChange={(e) => {
-                                    setEditexpname(e.target.value);
-                                    setUniqueEditName(false);
-                          
-                                  }}
-                                  
-                                  onBlur={ async () => {
-                         
-                                    if (editUniqueName !== editexpname) {
-                                      let a = await CheckUnique({type:"expensecategoryname",value:editexpname})
-                                   
-                                      setUniqueEditName(a);
-                                    }
-                                 
-                                  }}
-                                  
-                                  
-                                  />
-                                </Form.Item>
-
-                                {uniqueEditName ? (
-                      <p style={{ color: "red" }}>
-                       Expense category name {uniqueErrMsg.UniqueErrName}
-                      </p>
-                    ) : null}
-                   
-
-                              </div>
-                            </div>
-                          </div>
-                          <div className="col-12">
-                            <lable>Description</lable>
-                            <Form.Item
-                             name="expdescription"
-                              rules={[
-                                {
-                                  min: 5,
-                                  message: "Required minimum 5 Letter",
-                                },
-                              ]}
-                             
-                            >
-                              <TextArea 
-                              
-                              value={editexpdescription}
+      <CustomModel
+        show={editPopup}
+        onHide={() => {
+          setEditPopup(false);
+        }}
+        // centered
+        View_list
+        list_content={
+          <div>
+            <div className="container">
+              <h4 style={{ color: "#0891d1" }}>Edit Expense Category</h4>
+              <Form
+                form={editForm}
+                onFinish={(value) => {
+                  console.log("On finishing", value);
+                  handleupdate();
+                }}
+                onFinishFailed={(error) => {
+                  console.log(error);
+                }}
+              >
+                <div className="row">
+                  <div className="col-12">
+                    <div className="col-12">
+                      <div className="">
+                        <div className="">
+                          <label>Category Name</label>
+                          <Form.Item
+                            name="expname"
+                            rules={[
+                              {
+                                required: true,
+                                message: "Category Name is Required",
+                              },
+                            ]}
+                          >
+                            <InputType
+                              value={editexpname}
                               onChange={(e) => {
-                                setEditexpdescription(e.target.value);
-                             
+                                setEditexpname(e.target.value);
+                                setUniqueEditName(false);
                               }}
-                              />
-                            </Form.Item>
-                          </div>
-                          <div className="col-12 d-flex justify-content-center">
-                          <Button className="save_button">Save</Button>
-                          </div>
+                              onBlur={async () => {
+                                if (editUniqueName !== editexpname) {
+                                  let a = await CheckUnique({
+                                    type: "expensecategoryname",
+                                    value: editexpname,
+                                  });
+
+                                  setUniqueEditName(a);
+                                }
+                              }}
+                            />
+                          </Form.Item>
+
+                          {uniqueEditName ? (
+                            <p style={{ color: "red" }}>
+                              Expense category name {uniqueErrMsg.UniqueErrName}
+                            </p>
+                          ) : null}
                         </div>
                       </div>
-                    </Form>
+                    </div>
+                    <div className="col-12">
+                      <lable>Description</lable>
+                      <Form.Item
+                        name="expdescription"
+                        rules={[
+                          {
+                            min: 5,
+                            message: "Required minimum 5 Letter",
+                          },
+                        ]}
+                      >
+                        <TextArea
+                          value={editexpdescription}
+                          onChange={(e) => {
+                            setEditexpdescription(e.target.value);
+                          }}
+                        />
+                      </Form.Item>
+                    </div>
+                    <div className="col-12 d-flex justify-content-center">
+                      <Button className="save_button">Save</Button>
+                    </div>
                   </div>
                 </div>
-              }
-            /><CustomModel
-            size={"sm"}
-            show={successPopup}
-            onHide={() => setSuccessPopup(false)}
-            success
-          />
-         
+              </Form>
+            </div>
+          </div>
+        }
+      />
+      <CustomModel
+        size={"sm"}
+        show={successPopup}
+        onHide={() => setSuccessPopup(false)}
+        success
+      />
 
-            <CustomModel
-              show={viewPopup}
-              onHide={() => {
-                setViewPopup(false);
-              }}
-              //   centered
-              View_list
-              list_content={
-                <>
-                  <div className="container p-3">
-                    <div className="row mt-3">
-                      <div className="col-12 ">
-                        <div className="d-flex justify-content-between ">
-                          <h4 className="lead_text">Expense Category</h4>
-                          <div className="">
-                            <Button
-                              btnType="add_borderless"
-                              className="edit_button"
-                              onClick={() => {
-                                // handleEditedclick();
-                                // handleupdate();
-                                handleviewtoedit(viewexp);
-                                setUniqueEditName(false);
-                                setViewPopup(false);
-                              }}
-                            >
-                              Edit
-                              <FiEdit
-                                style={{
-                                  marginBottom: "4px",
-                                  marginInline: "3px",
-                                }}
-                              />
-                            </Button>
-                          </div>
-                        </div>
+      <CustomModel
+        show={viewPopup}
+        onHide={() => {
+          setViewPopup(false);
+        }}
+        //   centered
+        View_list
+        list_content={
+          <>
+            <div className="container p-3">
+              <div className="row mt-3">
+                <div className="col-12 ">
+                  <div className="d-flex justify-content-between ">
+                    <h4 className="lead_text">Expense Category</h4>
+                    <div className="">
+                      <Button
+                        btnType="add_borderless"
+                        className="edit_button"
+                        onClick={() => {
+                          // handleEditedclick();
+                          // handleupdate();
+                          handleviewtoedit(viewexp);
+                          setUniqueEditName(false);
+                          setViewPopup(false);
+                        }}
+                      >
+                        Edit
+                        <FiEdit
+                          style={{
+                            marginBottom: "4px",
+                            marginInline: "3px",
+                          }}
+                        />
+                      </Button>
+                    </div>
+                  </div>
 
-                        {/* <div className="row my-3">
+                  {/* <div className="row my-3">
                           <div className="col-12">
                             <table>
                               <tbody>
@@ -749,43 +708,42 @@ function ExpenseCategory() {
                             </table>
                           </div>
                         </div> */}
-                          <div className="row mt-4">
-              <div className="col-4">
-                <p>Category Name</p>
-              </div>
-              <div className="col-1">:</div>
-              <div className="col-6 justify-content-start">
-                <p className="modal-view-data">
-                {viewexp?.expense_category_name}{" "}
-                </p>
-              </div>
-            </div>
-            <div className="row mt-4">
-              <div className="col-4">
-                <p> Category Description</p>
-              </div>
-              <div className="col-1">:</div>
-              <div className="col-6 justify-content-start">
-                <p className="modal-view-data">
-                {viewexp?.expense_category_description}{" "}
-                </p>
-              </div>
-            </div>
-                      </div>
+                  <div className="row mt-4">
+                    <div className="col-4">
+                      <p>Category Name</p>
+                    </div>
+                    <div className="col-1">:</div>
+                    <div className="col-6 justify-content-start">
+                      <p className="modal-view-data">
+                        {viewexp?.expense_category_name}{" "}
+                      </p>
                     </div>
                   </div>
-                </>
-              }
-            />
-            <CustomModel
-              success
-              show={successPopup}
-              onHide={() => {
-                setSuccessPopup(false);
-              }}
-            />
+                  <div className="row mt-4">
+                    <div className="col-4">
+                      <p> Category Description</p>
+                    </div>
+                    <div className="col-1">:</div>
+                    <div className="col-6 justify-content-start">
+                      <p className="modal-view-data">
+                        {viewexp?.expense_category_description}{" "}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-         
+          </>
+        }
+      />
+      <CustomModel
+        success
+        show={successPopup}
+        onHide={() => {
+          setSuccessPopup(false);
+        }}
+      />
+    </div>
   );
 }
 

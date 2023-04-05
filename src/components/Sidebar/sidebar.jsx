@@ -1109,7 +1109,7 @@ export default function Sidebar({ showSidebar }) {
                             </NavLink>
                           </li>
                         )}
-  {checkPermission("tax type") && (
+                        {checkPermission("tax type") && (
                           <li className="nav-text">
                             <NavLink
                               className={({ isActive }) =>
@@ -1261,9 +1261,9 @@ export default function Sidebar({ showSidebar }) {
                             Report
                           </div>
                         </div>
-                          <div className="text-right ">
-                            <AiOutlineCaretDown className="toggle_btn subactivelink" />
-                          </div>
+                        <div className="text-right ">
+                          <AiOutlineCaretDown className="toggle_btn subactivelink" />
+                        </div>
                       </div>
                     </Link>
                   </li>
@@ -1352,7 +1352,7 @@ export default function Sidebar({ showSidebar }) {
                             </NavLink>
                           </li>
                         )}
-                          {checkPermission("invoice_report") && (
+                        {checkPermission("invoice_report") && (
                           <li className="nav-text ">
                             <NavLink
                               className={({ isActive }) =>
@@ -1361,7 +1361,7 @@ export default function Sidebar({ showSidebar }) {
                               to={ROUTES.AWBBL_REPORT}
                             >
                               <div className="ms-4 ps-2 subactivelink">
-                              AWB/BL Report
+                                AWB/BL Report
                               </div>
                             </NavLink>
                           </li>
@@ -1537,6 +1537,20 @@ export default function Sidebar({ showSidebar }) {
                             >
                               <div className="ms-4 ps-3 subactivelink">
                                 Credit Note Type
+                              </div>
+                            </NavLink>
+                          </li>
+                        )}
+                        {checkPermission("ledger") && (
+                          <li className="nav-text ">
+                            <NavLink
+                              className={({ isActive }) =>
+                                isActive ? "active-link" : "link"
+                              }
+                              to={ROUTES.LEDGER}
+                            >
+                              <div className="ms-4 ps-3 subactivelink">
+                                Ledger
                               </div>
                             </NavLink>
                           </li>

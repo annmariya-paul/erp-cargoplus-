@@ -365,7 +365,7 @@ function AccGroup() {
                             rules={[
                               {
                                 required: true,
-                                message: "Ledger code is Required",
+                                message: "Group code is Required",
                               },
                             ]}
                             name="acc_group_code"
@@ -402,7 +402,7 @@ function AccGroup() {
                             rules={[
                               {
                                 required: true,
-                                message: "Ledger Name is Required",
+                                message: "Group Name is Required",
                               },
                             ]}
                             name="acc_group_name"
@@ -430,9 +430,7 @@ function AccGroup() {
                       </div>
                     </div>
                     <div className="col-12 py-2">
-                      <label>
-                        Parent Group<span className="required">*</span>
-                      </label>
+                      <label>Parent Group</label>
                       <Form.Item name="acc_group_parent_id">
                         <SelectBox>
                           <Select.Option></Select.Option>
@@ -505,7 +503,7 @@ function AccGroup() {
                             rules={[
                               {
                                 required: true,
-                                message: "Ledger code is Required",
+                                message: "Group code is Required",
                               },
                             ]}
                             name="acc_group_code1"
@@ -542,7 +540,7 @@ function AccGroup() {
                             rules={[
                               {
                                 required: true,
-                                message: "Ledger Name is Required",
+                                message: "Group Name is Required",
                               },
                             ]}
                             name="acc_group_name1"
@@ -570,9 +568,7 @@ function AccGroup() {
                       </div>
                     </div>
                     <div className="col-12 py-2">
-                      <label>
-                        Parent Group<span className="required">*</span>
-                      </label>
+                      <label>Parent Group</label>
                       <Form.Item name="acc_group_parent_id1">
                         <SelectBox>
                           <Select.Option></Select.Option>

@@ -30,6 +30,7 @@ import Custom_model from "../../../../components/custom_modal/custom_model";
 import Select from "rc-select";
 import "../lead.styles.scss";
 import Phone_Input from "../../../../components/PhoneInput/phoneInput";
+import EditMoreinfo from "../editmoreinfo/EditMoreinfo";
 
 function LeadEdit() {
   // const history=useHistory();
@@ -254,6 +255,14 @@ function LeadEdit() {
     }
   };
 
+  // const handletoggle5 = (e) => {
+  //   if (e) {
+  //     // setToggle3(true);
+  //     // setToggel2(false);
+  //     toggleTab(4);
+  //   }
+  // };
+
   console.log("kkkkkk", leadDescription, CustomerName);
   const beforeUpload = (file, fileList) => {};
   return (
@@ -262,7 +271,7 @@ function LeadEdit() {
         <div className="lead_container">
           <div className="row justify-content-md-center">
             <div className="mb-2">
-              <h5 class="lead_text"> Edit Customer ({CustomerName})</h5>
+              <h5 class="lead_text"> Edit Customer </h5>
             </div>
             <div className="bloc-tabs tabs-responsive">
               <div className="col-xl-1 col-sm-2 pe-1">
@@ -308,6 +317,19 @@ function LeadEdit() {
                   Accounting
                 </button>
               </div>
+              <div className="col-xl-1 col-sm-2 pe-1">
+                <button
+                  className={toggleState === 5 ? "tabs active-tabs" : "tabs"}
+                  onClick={() => {
+                    toggleTab(5);
+                    // setToggel2(false);
+                    // setToggle3(false);
+                  }}
+                >
+                  MoreInfo
+                </button>
+              </div>
+
             </div>
 
             <div className="content-tabs">
@@ -788,6 +810,16 @@ function LeadEdit() {
                   <Countrystate customerId={id} />
                 </div>
               </div>{" "}
+
+              <div
+                className={
+                  toggleState === 5 ? "content  active-content" : "content"
+                }
+              >
+                <div className="col-lg" style={{ borderRadius: "3px" }}>
+                  <EditMoreinfo customerId={id} />
+                </div>
+              </div>
               {/* <Custom_model
                 size={`sm`}
                 success

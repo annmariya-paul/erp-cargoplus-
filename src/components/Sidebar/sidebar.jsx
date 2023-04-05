@@ -1541,6 +1541,20 @@ export default function Sidebar({ showSidebar }) {
                             </NavLink>
                           </li>
                         )}
+                         {checkPermission("gl_type") && (
+                          <li className="nav-text ">
+                            <NavLink
+                              className={({ isActive }) =>
+                                isActive ? "active-link" : "link"
+                              }
+                              to={ROUTES.GL_TYPE}
+                            >
+                              <div className="ms-4 ps-3 subactivelink">
+                                GL Type
+                              </div>
+                            </NavLink>
+                          </li>
+                        )}
                         {checkPermission("ledger") && (
                           <li className="nav-text ">
                             <NavLink

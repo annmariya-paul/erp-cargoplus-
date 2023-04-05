@@ -4,9 +4,9 @@ import InputType from "../../../../components/Input Type textbox/InputType";
 import ErrorMsg from "../../../../components/error/ErrorMessage";
 import Custom_model from "../../../../components/custom_modal/custom_model";
 import CustomModel from "../../../../components/custom_modal/custom_model";
-
+import { MdPageview } from "react-icons/md";
 import { Form, Input, Select } from "antd";
-import { FaEdit } from "react-icons/fa";
+import { FaEdit, FaTrash } from "react-icons/fa";
 import TableData from "../../../../components/table/table_data";
 import { CRM_BASE_URL_HRMS } from "../../../../api/bootapi";
 import PublicFetch from "../../../../utils/PublicFetch";
@@ -14,6 +14,7 @@ import { UniqueErrorMsg } from "../../../../ErrorMessages/UniqueErrorMessage";
 import CheckUnique from "../../../../check Unique/CheckUnique";
 import MyPagination from "../../../../components/Pagination/MyPagination";
 import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
+import TextArea from "../../../../components/ InputType TextArea/TextArea";
 
 
 
@@ -31,6 +32,7 @@ export default function Gltypes(props) {
   const [branches, setBranches] = useState();
   const [Errormsg, setErrormsg] = useState();
   const [NameInput, setNameInput] = useState();
+  const [DesInput, setDesInput] = useState();
   const [CodeInput, setCodeInput] = useState();
   const [BranchEditPopup, setBranchEditPopup] = useState(false);
   const [uniqueCode, setUniqueCode] = useState(false);
@@ -42,8 +44,9 @@ export default function Gltypes(props) {
   const [editUniqueCode, setEditUniqueCode] = useState();
   const [editForm] = Form.useForm();
   const [BranchError, setBranchError] = useState();
-  const [branchcode, setBranchcode] = useState();
-  const [branchname, setBranchname] = useState();
+  const [glname, setglname] = useState();
+  const [gldescription,setGldescription]= useState();
+  const [code, setCode] = useState();
 
   const [searchcodeText, setSearchcodeText] = useState("");
 
@@ -125,16 +128,31 @@ export default function Gltypes(props) {
     {
       title: "SI.NO",
       key: "index",
-      width: "20%",
+      width: "10%",
       render: (value, item, index) => serialNo + index,
       align: "center",
     },
 
     {
+        title: "NAME",
+        dataIndex: "acc_gl_type_name",
+        key: "acc_gl_type_name",
+        align: "left",
+        width: "20%",
+        filteredValue: [searchcodeText],
+        onFilter: (value, record) => {
+          return String(record.acc_gl_type_name)
+            .toLowerCase()
+            .includes(value.toLowerCase());
+        },
+        align: "left",
+      },
+
+    {
       title: "CODE",
       dataIndex: "acc_gl_type_code",
       key: "acc_gl_type_code",
-      width: "30%",
+      width: "20%",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
         return (
@@ -146,24 +164,12 @@ export default function Gltypes(props) {
       },
       align: "left",
     },
-    {
-      title: "NAME",
-      dataIndex: "acc_gl_type_name",
-      key: "acc_gl_type_name",
-      align: "center",
-      filteredValue: [searchcodeText],
-      onFilter: (value, record) => {
-        return String(record.acc_gl_type_name)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
-      align: "left",
-    },
+  
     {
         title: "DESCRIPTION",
         dataIndex: "acc_gl_type_description",
         key: "acc_gl_type_description",
-        align: "center",
+        align: "left",
         filteredValue: [searchcodeText],
         onFilter: (value, record) => {
           return String(record.acc_gl_type_description)
@@ -181,7 +187,7 @@ export default function Gltypes(props) {
         console.log("index is :", index);
         return (
           <div className="d-flex justify-content-center align-items-center gap-2">
-            <div className="m-0">
+           
               <div
                 className="editIcon m-0"
                 onClick={() => {
@@ -192,7 +198,16 @@ export default function Gltypes(props) {
               >
                 <FaEdit />
               </div>
+              <div
+              className="viewIcon m-0"
+            //   onClick={() => handleViewClick(index)}
+            >
+              <MdPageview style={{ marginLeft: 15, marginRight: 15 }} />
             </div>
+            <div className="deleteIcon m-0">
+              <FaTrash />
+            </div>
+            
           </div>
         );
       },
@@ -201,71 +216,30 @@ export default function Gltypes(props) {
   ];
 
   //API for create Branches
-  const createBranches = async () => {
-    try {
-      const addbranches = await PublicFetch.post(
-        `${CRM_BASE_URL_HRMS}/branch`,
-        {
-          branch_name: branchname,
-          branch_code: branchcode,
-        }
-      );
-      console.log("branch added successfully", addbranches);
-      if (addbranches.data.success) {
-        setSuccessPopup(true);
-        getallbranches();
-        addForm.resetFields();
-        setModalAddBranch(false);
-        close_modal(successPopup, 1000);
-      }
-    } catch (err) {
-      console.log("err to add the branches", err);
-    }
-  };
+//   const createBranches = async () => {
+//     try {
+//       const addbranches = await PublicFetch.post(
+//         `${CRM_BASE_URL_HRMS}/branch`,
+//         {
+//           branch_name: branchname,
+//           branch_code: branchcode,
+//         }
+//       );
+//       console.log("branch added successfully", addbranches);
+//       if (addbranches.data.success) {
+//         setSuccessPopup(true);
+//         getallbranches();
+//         addForm.resetFields();
+//         setModalAddBranch(false);
+//         close_modal(successPopup, 1000);
+//       }
+//     } catch (err) {
+//       console.log("err to add the branches", err);
+//     }
+//   };
 
-  // const checkEditBranchNameis = (data) => {
-  //   if (editUniqueName !== NameInput) {
-  //     PublicFetch.get(
-  //       `${process.env.REACT_APP_BASE_URL}/misc?type=branchname&value=${NameInput}`
-  //     )
-  //       .then((res) => {
-  //         console.log("Response", res);
-  //         if (res.data.success) {
-  //           console.log("Success", res.data.data);
-  //           if (res.data.data.exist) {
-  //             setUniqueEditName(true);
-  //           } else {
-  //             setUniqueEditName(false);
-  //           }
-  //         }
-  //       })
-  //       .catch((err) => {
-  //         console.log("Error", err);
-  //       });
-  //   }
-  // };
 
-  // const checkEditBranchCodeis = (data) => {
-  //   if (editUniqueCode !== CodeInput) {
-  //     PublicFetch.get(
-  //       `${process.env.REACT_APP_BASE_URL}/misc?type=branchcode&value=${CodeInput}`
-  //     )
-  //       .then((res) => {
-  //         console.log("Response", res);
-  //         if (res.data.success) {
-  //           console.log("Success", res.data.data);
-  //           if (res.data.data.exist) {
-  //             setUniqueEditCode(true);
-  //           } else {
-  //             setUniqueEditCode(false);
-  //           }
-  //         }
-  //       })
-  //       .catch((err) => {
-  //         console.log("Error", err);
-  //       });
-  //   }
-  // };
+
 
   const columnsKeys = columns.map((column) => column.key);
 
@@ -301,13 +275,13 @@ export default function Gltypes(props) {
     // item.profit,
   ]);
 
-  console.log("data", branchname, branchcode);
+ 
   return (
     <>
       <div className="container-fluid container_hrms pt-3">
         <div className="row flex-wrap align-items-center">
           <div className="col-4">
-            <h5 className="lead_text">Branches</h5>
+            <h5 className="lead_text">GL Types</h5>
           </div>
           <div className="col-sm-4">
             <Input.Search
@@ -402,7 +376,7 @@ export default function Gltypes(props) {
                 addForm.resetFields();
               }}
             >
-              New Branch
+              New GL Type
             </Button>
           </div>
         </div>
@@ -434,20 +408,20 @@ export default function Gltypes(props) {
       <CustomModel
         show={modalAddBranch}
         onHide={() => setModalAddBranch(false)}
-        header="Add Branch"
+        header="New GL Type"
         footer={false}
         // {...props}
         View_list
         list_content={
           <>
             <div className="row">
-              <h5 className="lead_text">Add Branch</h5>
+              <h5 className="lead_text">New GL Type</h5>
             </div>
             <Form
               form={addForm}
               onFinish={(data) => {
                 console.log("valuezzzzzzz", data);
-                createBranches();
+                // createBranches();
               }}
               onFinishFailed={(error) => {
                 console.log(error);
@@ -455,93 +429,122 @@ export default function Gltypes(props) {
             >
               <div className="row py-4">
                 <div className="col-12 pt-1">
-                  <label>Branch Name</label>
+                  <label>CODE</label>
                   <div>
                     <Form.Item
-                      name="branchname"
+                      name="code"
                       rules={[
                         {
                           required: true,
                           pattern: new RegExp("^[A-Za-z ]+$"),
-                          message: "Please enter a Valid Branch Name",
+                          message: "Please enter a Valid code",
                         },
 
                         {
                           min: 3,
-                          message: "Branch Name must be at least 3 characters",
+                          message: "code must be at least 3 characters",
                         },
                         {
                           max: 100,
                           message:
-                            "Branch Name cannot be longer than 100 characters",
+                            "Code cannot be longer than 100 characters",
                         },
                       ]}
                     >
                       <InputType
-                        value={branchname}
+                        value={code}
                         onChange={(e) => {
-                          setBranchname(e.target.value);
+                          setCode(e.target.value);
                           setBranchError("");
                           setUniqueName(false);
                         }}
-                        onBlur={async () => {
-                          let n = await CheckUnique({
-                            type: "branchname",
-                            value: branchname,
-                          });
-                          setUniqueName(n);
-                        }}
+                        // onBlur={async () => {
+                        //   let n = await CheckUnique({
+                        //     type: "branchname",
+                        //     value: branchname,
+                        //   });
+                        //   setUniqueName(n);
+                        // }}
                       />
                     </Form.Item>
-                    {uniqueName ? (
+                    {/* {uniqueName ? (
                       <p style={{ color: "red" }}>
                         Branch Name {uniqueErrMsg.UniqueErrName}
                       </p>
-                    ) : null}
+                    ) : null} */}
                   </div>
                 </div>
 
                 <div className="col-12 pt-1">
-                  <label>Branch Code</label>
+                  <label>Name</label>
                   <Form.Item
-                    name="branchcode"
+                    name="name"
                     rules={[
                       {
                         required: true,
                         pattern: new RegExp("^[A-Za-z0-9]+$"),
-                        message: "Please enter a Valid Branch Code",
+                        message: "Please enter a Valid Name",
                       },
                       {
                         min: 3,
-                        message: "Branch Code must be atleast 3 characters",
+                        message: "Name must be atleast 3 characters",
                       },
                       {
                         max: 15,
                         message:
-                          "Branch code cannot be longer than 15 characters",
+                          "Name cannot be longer than 15 characters",
                       },
                     ]}
                   >
                     <InputType
-                      value={branchcode}
+                      value={glname}
                       onChange={(e) => {
-                        setBranchcode(e.target.value);
-                        setUniqueCode(false);
+                        setglname(e.target.value);
+                        // setUniqueCode(false);
                       }}
-                      onBlur={async () => {
-                        let a = await CheckUnique({
-                          type: "branchcode",
-                          value: branchcode,
-                        });
-                        setUniqueCode(a);
-                      }}
+                    //   onBlur={async () => {
+                    //     let a = await CheckUnique({
+                    //       type: "branchcode",
+                    //       value: branchcode,
+                    //     });
+                    //     setUniqueCode(a);
+                    //   }}
                     />
                   </Form.Item>
-                  {uniqueCode ? (
+                  {/* {uniqueCode ? (
                     <p style={{ color: "red" }}>
                       Branch code {uniqueErrMsg.UniqueErrName}
                     </p>
-                  ) : null}
+                  ) : null} */}
+                </div>
+                <div className="col-12 pt-1">
+                  <label>Description</label>
+                  <Form.Item
+                    name="description"
+                    rules={[
+                      {
+                        required: true,
+                        pattern: new RegExp("^[A-Za-z0-9]+$"),
+                        message: "Please enter description",
+                      },
+                      
+                    ]}
+                  >
+                  <TextArea 
+                    //   onBlur={async () => {
+                    //     let a = await CheckUnique({
+                    //       type: "branchcode",
+                    //       value: branchcode,
+                    //     });
+                    //     setUniqueCode(a);
+                    //   }}
+                    />
+                  </Form.Item>
+                  {/* {uniqueCode ? (
+                    <p style={{ color: "red" }}>
+                      Branch code {uniqueErrMsg.UniqueErrName}
+                    </p>
+                  ) : null} */}
                 </div>
               </div>
               <div className="row justify-content-center ">
@@ -568,19 +571,64 @@ export default function Gltypes(props) {
           <div>
             <div className="container-fluid px-4 my-3">
               <div>
-                <h5 className="lead_text">Edit Branch</h5>
+                <h5 className="lead_text">Edit GL Type</h5>
               </div>
               <div className="row my-3 ">
                 <Form
                   form={editForm}
                   onFinish={(values) => {
                     console.log("values iss", values);
-                    handleUpdate();
+                    // handleUpdate();
                   }}
                   onFinishFailed={(error) => {
                     console.log(error);
                   }}
                 >
+                  <div className="col-12">
+                    <label>Code</label>
+                    <Form.Item
+                      name="CodeInput"
+                      rules={[
+                        {
+                          required: true,
+                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                          message: "Please enter a Valid Code",
+                        },
+                        {
+                          min: 2,
+                          message: "Code must be at least 2 characters",
+                        },
+                        {
+                          max: 100,
+                          message: "Code cannot be longer than 100 characters",
+                        },
+                      ]}
+                    >
+                      <InputType
+                        value={CodeInput}
+                        onChange={(e) => {
+                          setCodeInput(e.target.value);
+                        //   setErrormsg("");
+                        //   setUniqueEditName(false);
+                        }}
+                        // onBlur={async () => {
+                        //   if (editUniqueName !== NameInput) {
+                        //     let a = await CheckUnique({
+                        //       type: "branchname",
+                        //       value: NameInput,
+                        //     });
+
+                        //     setUniqueEditName(a);
+                        //   }
+                        // }}
+                      />
+                    </Form.Item>{" "}
+                    {/* {uniqueEditName ? (
+                      <p style={{ color: "red" }}>
+                        Branch Name {uniqueErrMsg.UniqueErrName}
+                      </p>
+                    ) : null} */}
+                  </div>
                   <div className="col-12">
                     <label>Name</label>
                     <Form.Item
@@ -589,7 +637,7 @@ export default function Gltypes(props) {
                         {
                           required: true,
                           pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid Branch Name",
+                          message: "Please enter a Valid Name",
                         },
                         {
                           min: 2,
@@ -605,70 +653,47 @@ export default function Gltypes(props) {
                         value={NameInput}
                         onChange={(e) => {
                           setNameInput(e.target.value);
-                          setErrormsg("");
-                          setUniqueEditName(false);
+                        //   setErrormsg("");
+                        //   setUniqueEditCode(false);
                         }}
-                        onBlur={async () => {
-                          if (editUniqueName !== NameInput) {
-                            let a = await CheckUnique({
-                              type: "branchname",
-                              value: NameInput,
-                            });
-
-                            setUniqueEditName(a);
-                          }
-                        }}
+                        // onBlur={async () => {
+                        //   if (editUniqueCode !== CodeInput) {
+                        //     let a = await CheckUnique({
+                        //       type: "branchcode",
+                        //       value: CodeInput,
+                        //     });
+                        //     setUniqueEditCode(a);
+                        //   }
+                        // }}
                       />
-                    </Form.Item>{" "}
-                    {uniqueEditName ? (
-                      <p style={{ color: "red" }}>
-                        Branch Name {uniqueErrMsg.UniqueErrName}
+                    </Form.Item>
+                    {/* {uniqueEditCode ? (
+                      <p style={{ color: "red", marginTop: "-24px" }}>
+                        Branch code {uniqueErrMsg.UniqueErrName}
                       </p>
-                    ) : null}
+                    ) : null} */}
                   </div>
+
                   <div className="col-12">
-                    <label>Code</label>
+                    <label>Description</label>
                     <Form.Item
-                      name="CodeInput"
+                      name="DesInput"
                       rules={[
                         {
                           required: true,
                           pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid Branch Name",
+                          message: "Please enter a Valid Description",
                         },
-                        {
-                          min: 2,
-                          message: "Name must be at least 2 characters",
-                        },
-                        {
-                          max: 100,
-                          message: "Name cannot be longer than 100 characters",
-                        },
+                       
                       ]}
                     >
-                      <InputType
-                        value={CodeInput}
-                        onChange={(e) => {
-                          setCodeInput(e.target.value);
-                          setErrormsg("");
-                          setUniqueEditCode(false);
-                        }}
-                        onBlur={async () => {
-                          if (editUniqueCode !== CodeInput) {
-                            let a = await CheckUnique({
-                              type: "branchcode",
-                              value: CodeInput,
-                            });
-                            setUniqueEditCode(a);
-                          }
-                        }}
-                      />
+                     <TextArea />
                     </Form.Item>
-                    {uniqueEditCode ? (
+                    {/* {uniqueEditCode ? (
                       <p style={{ color: "red", marginTop: "-24px" }}>
                         Branch code {uniqueErrMsg.UniqueErrName}
                       </p>
-                    ) : null}
+                    ) : null} */}
                   </div>
 
                   <div className="col-12 d-flex justify-content-center mt-5">

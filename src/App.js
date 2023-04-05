@@ -153,6 +153,7 @@ import EnquirySource from "./pages/CRM/lead/EnquirySource/EnquirySource";
 import TaxGroup from "./pages/FMS/settings/TaxGroup/TaxGroup";
 import AwbblReport from "./pages/FMS/Awb_bl_report/awb_bl_report";
 import Ledger from "./pages/Accounts/settings/Ledger/Ledger";
+import Gltypes from "./pages/Accounts/settings/GLType/gl_type";
 function App() {
   return (
     <div className="App">
@@ -649,6 +650,9 @@ function App() {
 
             <Route path={ROUTES.PAYMEMENT_MODE} element={<ProtectedRoute />}>
               <Route index element={<Payment_mode />} />
+            </Route>
+            <Route path={ROUTES.GL_TYPE} element={<ProtectedRoute />}>
+              <Route index element={<Gltypes />} />
             </Route>
 
             <Route path={ROUTES.ADD_PURCHASE} element={<ProtectedRoute />}>

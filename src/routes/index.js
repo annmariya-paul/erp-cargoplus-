@@ -209,6 +209,7 @@ const ROUTES = {
 
   // ACCOUNTS => master => Legder
   LEDGER: "/ledger",
+  GL_TYPE:"/gl_type",
 };
 
 module.exports = { ROUTES };

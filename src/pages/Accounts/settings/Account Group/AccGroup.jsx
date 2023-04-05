@@ -41,7 +41,7 @@ function AccGroup() {
       },
     },
     {
-      title: "LEDGER CODE",
+      title: "GROUP CODE",
       dataIndex: "acc_group_code",
       key: "acc_group_code",
       width: "8%",
@@ -202,7 +202,7 @@ function AccGroup() {
     item.acc_group_head,
   ]);
   return (
-    <div className="container-fluid">
+    <div className="container-fluid shadow-sm p-3">
       <div className="row align-items-center">
         <div className="col-xl-4">
           <h5 className="lead_text">Account Groups</h5>

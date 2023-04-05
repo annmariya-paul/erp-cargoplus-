@@ -154,6 +154,7 @@ import TaxGroup from "./pages/FMS/settings/TaxGroup/TaxGroup";
 import AwbblReport from "./pages/FMS/Awb_bl_report/awb_bl_report";
 import Ledger from "./pages/Accounts/settings/Ledger/Ledger";
 import Gltypes from "./pages/Accounts/settings/GLType/gl_type";
+import AccGroup from "./pages/Accounts/settings/Account Group/AccGroup";
 function App() {
   return (
     <div className="App">
@@ -218,6 +219,11 @@ function App() {
             {/* {ACCOUNTS => MASTER => LEDGER } */}
             <Route path={ROUTES.LEDGER} element={<ProtectedRoute />}>
               <Route index element={<Ledger />} />
+            </Route>
+
+            {/* {ACCOUNT => MASTER => ACCOUNT GROUP} */}
+            <Route path={ROUTES.ACC_GROUP} element={<ProtectedRoute />}>
+              <Route index element={<AccGroup />} />
             </Route>
 
             <Route

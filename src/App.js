@@ -152,6 +152,7 @@ import Containertypes from "./pages/FMS/settings/containertypes/containertypes";
 import EnquirySource from "./pages/CRM/lead/EnquirySource/EnquirySource";
 import TaxGroup from "./pages/FMS/settings/TaxGroup/TaxGroup";
 import AwbblReport from "./pages/FMS/Awb_bl_report/awb_bl_report";
+import Ledger from "./pages/Accounts/settings/Ledger/Ledger";
 function App() {
   return (
     <div className="App">
@@ -211,6 +212,11 @@ function App() {
             {/* / FMS => MASTER => TAX GROUP */}
             <Route path={ROUTES.TAX_GROUP} element={<ProtectedRoute />}>
               <Route index element={<TaxGroup />} />
+            </Route>
+
+            {/* {ACCOUNTS => MASTER => LEDGER } */}
+            <Route path={ROUTES.LEDGER} element={<ProtectedRoute />}>
+              <Route index element={<Ledger />} />
             </Route>
 
             <Route

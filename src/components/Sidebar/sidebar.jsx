@@ -1339,6 +1339,20 @@ export default function Sidebar({ showSidebar }) {
                             </NavLink>
                           </li>
                         )}
+                        {checkPermission("awb_bl_report") && (
+                          <li className="nav-text ">
+                            <NavLink
+                              className={({ isActive }) =>
+                                isActive ? "active-link" : "link"
+                              }
+                              to={ROUTES.AWBBL_REPORT}
+                            >
+                              <div className="ms-4 ps-2 subactivelink">
+                                AWBBL Report
+                              </div>
+                            </NavLink>
+                          </li>
+                        )}
                       </div>
                     </>
                   ) : (

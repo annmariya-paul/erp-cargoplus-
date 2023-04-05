@@ -414,7 +414,7 @@ function Lead({}) {
                       </label>
 
                       <Form.Item
-                        className="mt-2"
+                       
                         name="customer_name"
                         rules={[
                           {
@@ -464,7 +464,7 @@ function Lead({}) {
                           Phone <span className="required">*</span>
                         </label>
                         <Form.Item
-                          className="mt-2"
+                         
                           name="customer_phone"
                           rules={[
                             {
@@ -517,12 +517,12 @@ function Lead({}) {
                           </Select.Option>
                         </SelectBox> */}
                       </Form.Item>
-                      <div className="mt-2">
+                      <div className="mt-1">
                         <label>
                           Email <span className="required">*</span>
                         </label>
                         <Form.Item
-                          className="mt-2"
+                         
                           name="customer_email"
                           rules={[
                             {
@@ -539,7 +539,7 @@ function Lead({}) {
                       </div>
                     </div>
                     <div className="col-sm-4 pt-2">
-                      <label className="pb-3">Address</label>
+                      <label className="">Address</label>
                       <Form.Item
                         name="customer_address"
                         rules={[
@@ -573,7 +573,7 @@ function Lead({}) {
                     <div className="col-sm-4 pt-2">
                       <label>Website</label>
                       <Form.Item
-                        className="mt-2"
+                    
                         name="customer_website"
                         rules={
                           [
@@ -601,7 +601,7 @@ function Lead({}) {
                       <div className="mt-3">
                         <label>State</label>
                         <Form.Item
-                          className="mt-2"
+                         
                           name="customer_state"
                           rules={
                             [
@@ -668,7 +668,7 @@ function Lead({}) {
                       <div className="mt-2 pt-2">
                         <label className="">City</label>
                         <Form.Item
-                          className="mt-2"
+                        
                           name="customer_city"
                           rules={
                             [
@@ -743,7 +743,7 @@ function Lead({}) {
                       </div>
                     </div>
                     <div className="col-sm-12 pt-2">
-                      <label className="mb-2">Remarks</label>
+                      <label className="">Remarks</label>
                       <Form.Item
                         name="customer_remarks"
                         rules={[

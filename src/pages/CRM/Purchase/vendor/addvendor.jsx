@@ -520,7 +520,7 @@ function Addvendor() {
                           {
                             required: true,
 
-                            message: "Please enter a Valid contact",
+                            message: "Please enter a Valid Website",
                           },
 
                           // {

@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Form } from "antd";
 import { useForm } from "react-hook-form";
-import Button from "../../../../components/button/button";
-import InputType from "../../../../components/Input Type textbox/InputType";
-import Custom_model from "../../../../components/custom_modal/custom_model";
-import SelectBox from "../../../../components/Select Box/SelectBox";
-
-function EditMoreinfo(){
+import InputType from "../../../../../components/Input Type textbox/InputType";
+import SelectBox from "../../../../../components/Select Box/SelectBox";
+import Custom_model from "../../../../../components/custom_modal/custom_model";
+import Button from "../../../../../components/button/button";
+function Editmoreinfo(){
     const [successPopup, setSuccessPopup] = useState(false);
     const [addForm] = Form.useForm();
     return(
@@ -22,27 +21,24 @@ function EditMoreinfo(){
           console.log(error);
         }}
       >
-        <div className="row py-5 ">
-          <div className="col-sm-4">
-            <label>Preferred Freight Type</label>
+        <div className="row py-5 px-1">
+          <div className="col-sm-6">
+            <label>Preferred Freight Type </label>
             <Form.Item name="customer_accounting_tax_no">
               
-            <SelectBox></SelectBox>
+              <SelectBox></SelectBox>
             </Form.Item>
           </div>
-          <div className="col-sm-4 ">
-            <label>Qtn validity Days</label>
+          <div className="col-sm-6 ">
+            <label>Incoterms</label>
             <Form.Item 
-            name="customer_accounting_credit_days"
-           
-            >
-            <InputType />
+            
+            name="customer_accounting_credit_days">
+             <SelectBox></SelectBox>
             </Form.Item>
           </div>
          
-          
-
-        
+      
 
           <div className=" pt-4">
             {/* <Button
@@ -69,4 +65,4 @@ function EditMoreinfo(){
         </>
     )
 }
-export default EditMoreinfo;
+export default Editmoreinfo;

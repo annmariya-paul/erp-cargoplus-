@@ -5,13 +5,75 @@ import InputType from "../../../../../components/Input Type textbox/InputType";
 import SelectBox from "../../../../../components/Select Box/SelectBox";
 import Custom_model from "../../../../../components/custom_modal/custom_model";
 import Button from "../../../../../components/button/button";
+import TableData from "../../../../../components/table/table_data";
+import { AiOutlinePlus } from "react-icons/ai";
 function Bankdetails(){
     const [successPopup, setSuccessPopup] = useState(false);
     const [addForm] = Form.useForm();
+    const [serialNo, setserialNo] = useState(1);
+    const [modalShow, setModalShow] = useState(false);
+
+    const columns = [
+      {
+        title: "Sl. No.",
+        key: "index",
+        render: (value, item, index) => serialNo + index,
+        align: "center",
+      },
+      {
+        title: " ACCOUNT NAME",
+        dataIndex: "contact_person_name",
+        key: "contact_email",
+      },
+      {
+        title: "ACCOUNT NO",
+        dataIndex: "contact_email",
+        key: "contact_email",
+      },
+      {
+        title: "BANK NAME",
+        dataIndex: "contact_phone_1",
+        key: "contact_phone_1",
+      },
+      {
+        title: "IBAN NO",
+        dataIndex: "contact_phone_2",
+        key: "contact_phone_2",
+      },
+     
+    ];
+
+
     return(
         <>
+ <div className="row">
+        <div className="col-12">
+          <Button btnType="add" onClick={() => setModalShow(true)}>
+            New Bank Details <AiOutlinePlus />
+          </Button>
+        </div>
+      </div>
+      <div className="datatable">
+        <TableData
+          // data={contactTable}
+          columns={columns}
+          custom_table_css="contact_table"
+        />
+      </div>
 
-       <Form
+<Custom_model
+ bodyStyle={{ height: 580, overflowY: "auto" }}
+ show={modalShow}
+ onHide={() => setModalShow(false)}
+ View_list
+ footer={false}
+//  {...props}
+ list_content={
+  <>
+  <div className="row ">
+              <h5 className="lead_text">New Bank Details </h5>
+            </div>
+         <Form
         form={addForm}
         onFinish={(values) => {
           console.log("values iss", values);
@@ -72,14 +134,7 @@ function Bankdetails(){
                       </div>
                     </div>
 
-          <div className=" pt-4">
-            {/* <Button
-              btntype="submit"
-              className="btn_save"
-              // onClick={() => setModalShow(true)}
-            >
-              Save
-            </Button> */}
+          <div className=" pt-4 d-flex justify-content-center">
           
             <Button type="submit" className="qtn_save" btnType="save">
               Save
@@ -94,6 +149,11 @@ function Bankdetails(){
           </div>
         </div>
       </Form>
+  </>
+ }
+/>
+
+      
         </>
     )
 }

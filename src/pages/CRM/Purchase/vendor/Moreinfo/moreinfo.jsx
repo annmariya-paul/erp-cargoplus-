@@ -29,10 +29,10 @@ function Moreinfo(){
               <SelectBox></SelectBox>
             </Form.Item>
           </div>
-          <div className="col-sm-6 mt-1">
+          <div className="col-sm-6 ">
             <label>Incoterms</label>
             <Form.Item 
-            className="mt-1"
+            
             name="customer_accounting_credit_days">
             <InputType />
             </Form.Item>

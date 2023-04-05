@@ -119,11 +119,9 @@ export default function AddOpportunity() {
   };
 
   useEffect(() => {
-    if (id) {
       getAllEnquiry();
       getCustomers();
       GetLeadData();
-    }
   }, [id]);
 
   // { function to add opportunity - Ann - 29/3/23}
@@ -407,12 +405,12 @@ export default function AddOpportunity() {
               </label>
               <Form.Item
                 name="oppo_customer_ref"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter a valid Customer Reference",
-                  },
-                ]}
+                // rules={[
+                //   {
+                //     required: true,
+                //     message: "Please enter a valid Customer Reference",
+                //   },
+                // ]}
               >
                 <InputType />
               </Form.Item>

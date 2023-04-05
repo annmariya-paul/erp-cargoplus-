@@ -30,11 +30,11 @@ function Moreinfo(){
             <SelectBox></SelectBox>
             </Form.Item>
           </div>
-          <div className="col-sm-4 mt-1">
+          <div className="col-sm-4 ">
             <label>Qtn validity Days</label>
             <Form.Item 
             name="customer_accounting_credit_days"
-            className="mt-1"
+           
             >
             <InputType />
             </Form.Item>

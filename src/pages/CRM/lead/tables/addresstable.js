@@ -195,7 +195,7 @@ function AddressTable(props) {
               }}
             >
               <div className="row">
-                <h5 className="lead_text">Add Address</h5>
+                <h5 className="lead_text">New Address</h5>
               </div>
               <div className="row mt-3">
                 <div className="px-3">
@@ -264,13 +264,13 @@ function AddressTable(props) {
                   <Form.Item
                     value={pincode}
                     name="pin"
-                    rules={[
-                      {
-                        required: true,
-                        pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                        message: "Please enter a Valid PIN",
-                      },
-                    ]}
+                    // rules={[
+                    //   {
+                    //     required: true,
+                    //     pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                    //     message: "Please enter a Valid PIN",
+                    //   },
+                    // ]}
                   >
                     <InputType
                       value={pincode}

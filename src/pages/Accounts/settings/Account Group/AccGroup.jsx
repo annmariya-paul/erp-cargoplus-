@@ -42,40 +42,57 @@ function AccGroup() {
     },
     {
       title: "LEDGER CODE",
-      dataIndex: "acc_ledger_code",
-      key: "acc_ledger_code",
+      dataIndex: "acc_group_code",
+      key: "acc_group_code",
       width: "8%",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
         return (
-          String(record.acc_ledger_code)
+          String(record.acc_group_code)
             .toLowerCase()
             .includes(value.toLowerCase()) ||
-          String(record.acc_ledger_name)
+          String(record.acc_group_name)
             .toLowerCase()
             .includes(value.toLowerCase()) ||
-          String(record.acc_ledger_group_name)
+          String(record.acc_group_parent_name)
             .toLowerCase()
             .includes(value.toLowerCase()) ||
-          String(record.acc_ledger_description)
+          String(record.acc_group_description)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.acc_group_head)
             .toLowerCase()
             .includes(value.toLowerCase())
         );
       },
       // align: "center",
     },
+    {
+      title: "GROUP Name",
+      dataIndex: "acc_group_name",
+      key: "acc_group_name",
+      width: "15%",
+      //   filteredValue: [searchSource],
+    },
+    {
+      title: "GROUP PARENT",
+      dataIndex: "acc_group_parent_name",
+      key: "acc_group_parent_name",
+      width: "15%",
+      //   filteredValue: [searchSource],
+    },
 
     {
-      title: "LEDGER GROUP",
-      dataIndex: "acc_ledger_group_name",
-      key: "acc_ledger_group_name",
+      title: "GROUP HEAD",
+      dataIndex: "acc_group_head",
+      key: "acc_group_head",
       width: "15%",
       //   filteredValue: [searchSource],
     },
     {
       title: "DESCRIPTION",
-      dataIndex: "acc_ledger_description",
-      key: "acc_ledger_description",
+      dataIndex: "acc_group_description",
+      key: "acc_group_description",
       width: "15%",
       //   filteredValue: [searchSource],
     },
@@ -117,10 +134,10 @@ function AccGroup() {
 
   const data = [
     {
-      acc_ledger_description: "lorem ispum",
-      acc_ledger_code: 100,
-      acc_ledger_name: "Test Ledger",
-      acc_ledger_group_name: "Test Group",
+      acc_group_description: "lorem ispum",
+      acc_group_code: 100,
+      acc_group_parent_name: "Test Ledger",
+      acc_group_name: "Test Group",
     },
   ];
 
@@ -129,10 +146,10 @@ function AccGroup() {
     if (data) {
       setEditPopup(true);
       AddForm.setFieldsValue({
-        acc_ledger_code1: data.acc_ledger_code,
-        acc_ledger_group_name1: data.acc_ledger_group_name,
-        acc_ledger_name1: data.acc_ledger_name,
-        acc_ledger_description1: data.acc_ledger_description,
+        acc_group_code1: data.acc_group_code,
+        acc_group_name1: data.acc_group_name,
+        acc_group_parent_id1: data.acc_group_parent_id,
+        acc_group_description1: data.acc_group_description,
       });
       setViewPopup(false);
     }
@@ -168,19 +185,21 @@ function AccGroup() {
   const UnitHeads = [
     [
       "Slno",
-      "LEDGER CODE",
-      "LEDGER NAME",
-      "LEDGER GROUP",
+      "GROUP CODE",
+      "GROUP NAME",
+      "PARENT GROUP",
+      "GROUP HEAD",
       "LEDGER DESCRIPTION",
     ],
   ];
   //for pdf download
   const data12 = data?.map((item, index) => [
     index + slno,
-    item.acc_ledger_code,
-    item.acc_ledger_group_name,
-    item.acc_ledger_name,
-    item.acc_ledger_description,
+    item.acc_group_code,
+    item.acc_group_name,
+    item.acc_group_parent,
+    item.acc_group_description,
+    item.acc_group_head,
   ]);
   return (
     <div className="container-fluid">

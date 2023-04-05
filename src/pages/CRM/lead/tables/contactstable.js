@@ -205,7 +205,7 @@ function ContactTable(props) {
         list_content={
           <>
             <div className="row ">
-              <h5 className="lead_text">Add Contact</h5>
+              <h5 className="lead_text">New Contact</h5>
             </div>
             <Form
               form={addForm}

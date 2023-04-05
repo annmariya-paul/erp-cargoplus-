@@ -1435,7 +1435,7 @@ export default function Sidebar({ showSidebar }) {
                             style={{ width: "90px" }}
                             className="subactivelink"
                           >
-                            Settings
+                            Masters
                           </div>
                         </div>
                         <div className="text-right ">

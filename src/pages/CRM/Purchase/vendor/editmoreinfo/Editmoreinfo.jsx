@@ -5,7 +5,7 @@ import InputType from "../../../../../components/Input Type textbox/InputType";
 import SelectBox from "../../../../../components/Select Box/SelectBox";
 import Custom_model from "../../../../../components/custom_modal/custom_model";
 import Button from "../../../../../components/button/button";
-function Moreinfo(){
+function Editmoreinfo(){
     const [successPopup, setSuccessPopup] = useState(false);
     const [addForm] = Form.useForm();
     return(
@@ -34,7 +34,7 @@ function Moreinfo(){
             <Form.Item 
             
             name="customer_accounting_credit_days">
-            <InputType />
+             <SelectBox></SelectBox>
             </Form.Item>
           </div>
          
@@ -65,4 +65,4 @@ function Moreinfo(){
         </>
     )
 }
-export default Moreinfo;
+export default Editmoreinfo;

@@ -24,6 +24,7 @@ import ContactTable from "../../lead/tables/contactstable";
 import Accounting from "./Accountings/Accountings";
 import Bankdetails from "./bankdetails/bankdetails";
 import FileUpload from "../../../../components/fileupload/fileUploader";
+import Editmoreinfo from "./editmoreinfo/Editmoreinfo";
 
 function Updatevendor(){
     const { id } = useParams();
@@ -357,6 +358,12 @@ function Updatevendor(){
       // setToggle4(false);
     };
 
+    const handleMoreinfoTab = () => {
+      toggleTab(5);
+      // setTimeOuts(false);
+      // setToggle4(false);
+    };
+
 
 
     return(
@@ -418,6 +425,19 @@ function Updatevendor(){
                   Bank Details
                 </button>
               </div>
+              <div className="col-xl-1 col-sm-2 pe-1">
+                <button
+                  className={toggleState === 5 ? "tabs active-tabs" : "tabs"}
+                  onClick={(e) => {
+                    handleMoreinfoTab(e);
+                    // CustomerId !== null
+                    //   ? errormessage()
+                    //   : handleAccountingTab(e);
+                  }}
+                >
+                  MoreInfo
+                </button>
+              </div>
             </div>
 
             <div className="content-tabs">
@@ -439,13 +459,13 @@ function Updatevendor(){
         >
 
 
-<div className="row px-1 ">
+           <div className="row px-1 ">
             {/* <h5 className="lead_text">Update Vendor</h5> */}
           </div>
-          <div className="row jobpay_cards mt-3 mx-0 px-2 py-3">
-            <div className="col-12">
+          <div className="row mt-3 mx-0 px-2 ">
+            {/* <div className="col-12">
               <h5 className="lead_text">Basic Info</h5>
-            </div>
+            </div> */}
 
             <div className="col-sm-4 pt-2 ">
               <label> Name<span className="required">*</span></label>
@@ -589,13 +609,13 @@ function Updatevendor(){
 
           </div>
 
-          <div className="row jobpay_cards mt-3 mx-0 px-2 py-3">
-            <div className="col-12">
+          <div className="row  mt-3 mx-0 px-2 ">
+            {/* <div className="col-12">
               <h5 className="lead_text">Contact Details</h5>
-            </div>
+            </div> */}
 
 
-            <div className="col-sm-4 pt-3">
+            <div className="col-sm-4 ">
               <label> Phone<span className="required">*</span></label>
               
                 <Form.Item
@@ -619,7 +639,7 @@ function Updatevendor(){
                 </Form.Item>
               
             </div>
-            <div className="col-sm-4 pt-3">
+            <div className="col-sm-4 ">
               <label> Email<span className="required">*</span></label>
               
                 <Form.Item
@@ -645,19 +665,19 @@ function Updatevendor(){
               
             </div>
 
-            <div className="col-sm-4 pt-3">
+            <div className="col-sm-4 ">
                       <label>
                         {" "}
                         Website<span className="required">*</span>
                       </label>
 
                       <Form.Item
-                        name="vendorcontact"
+                        name="vendorwebsite"
                         rules={[
                           {
                             required: true,
 
-                            message: "Please enter a Valid contact",
+                            message: "Please enter a Valid website",
                           },
 
                           // {
@@ -760,10 +780,10 @@ function Updatevendor(){
            
          
           </div>
-    <div className="row jobpay_cards mt-3 mx-0 px-2 py-5">
-            <div className="col-12">
+    <div className="row  mt-3 mx-0 px-2 ">
+            {/* <div className="col-12">
               <h5 className="lead_text">Extra Info</h5>
-            </div>
+            </div> */}
 
             <div className="col-sm-12 pt-2">
               <label> Remarks</label>
@@ -859,6 +879,25 @@ function Updatevendor(){
                   </div>
                 </div>
               </div>
+
+              <div
+                className={
+                  toggleState === 5 ? "content  active-content" : "content"
+                }
+              >
+                <div className="row mt-3 px-1" style={{ borderRadius: "3px" }}>
+                  <div className="col-md-12"></div>
+                  <div className="col-12 mt-2">
+                    <Editmoreinfo toggle={timeOut} />
+                  </div>
+                  <div className="col mt-4">
+                    {/* <Button btnType="save" onClick={(e) => handleAddressTab(e)}>
+                      Next
+                    </Button> */}
+                  </div>
+                </div>
+              </div>
+
             </div>
 
 

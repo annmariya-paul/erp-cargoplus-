@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { FiEdit } from "react-icons/fi";
 import { MdPageview } from "react-icons/md";
+import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
 import { Link, useNavigate } from "react-router-dom";
 import { ACCOUNTS } from "../../../../api/bootapi";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
@@ -19,6 +20,7 @@ import { UniqueErrorMsg } from "../../../../ErrorMessages/UniqueErrorMessage";
 function ExpenseCategory() {
   const [AddForm] = Form.useForm();
   const [editForm] = Form.useForm();
+  const [serialNo, setserialNo] = useState(1);
   const navigate = useNavigate();
   const [oppnew, setOppnew] = useState([]);
   const [numOfItems, setNumOfItems] = useState("25");
@@ -41,6 +43,7 @@ function ExpenseCategory() {
   const [uniqueName, setUniqueName] = useState(false);
   const [categoryName, setCategoryName] = useState(false);
   const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
+  const [searchedText, setSearchedText] = useState("");
   const columns = [
     {
       title: "Slno",
@@ -60,7 +63,7 @@ function ExpenseCategory() {
       dataIndex: "expense_category_name",
       key: "expense_category_name",
       width: "8%",
-      filteredValue: [searchSource],
+      filteredValue: [searchedText],
       onFilter: (value, record) => {
         return String(record.expense_category_name)
           .toLowerCase()
@@ -278,19 +281,74 @@ function ExpenseCategory() {
   };
 
 
+  const columnsKeys = columns.map((column) => column.key);
+
+  const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
+  const filteredColumns = columns.filter((column) =>
+    selectedColumns.includes(column.key)
+  );
+  console.log("filtered columns::", filteredColumns);
+  const onChange1 = (checkedValues) => {
+    setSelectedColumns(checkedValues);
+  };
+
+  //for Xlsx data
+  const UnitHeads = [
+    [
+      "Slno",
+     
+      "COUNTRY NAME",
+      "DESCRIPTION",
+   
+    ],
+  ];
+  //for pdf download
+  const data12 = AllcategoryData?.map((item, index) => [
+    index + serialNo,
+    item.expense_category_name,
+    item.expense_category_description,
+  
+   
+  ]);
   return (
     <div>
-      <div className="container-fluid">
-        <div className="row">
-          <div className="col-12">
-            <div className="container-fluid lead_list  my-3 py-3">
+      <div className="container-fluid container_hrms pt-3">
+        <div className="row flex-wrap align-items-center">
+          <div className="col-4">
+            {/* <div className="container-fluid lead_list  my-3 py-3"> */}
               {/* invoice listing section One */}
 
-              <div>
-                <div className="row flex-wrap">
-                  <div className="col">
+              {/* <div> */}
+                {/* <div className="row flex-wrap"> */}
+                  {/* <div className="col"> */}
                     <h5 className="lead_text">Expense Category</h5>
                   </div>
+                  <div className="col-sm-4">
+            <Input.Search
+             className="inputSearch"
+              placeholder="Search"
+              style={{ margin: "5px", borderRadius: "5px" }}
+              value={searchedText}
+              onChange={(e) => {
+                setSearchedText(e.target.value ? [e.target.value] : []);
+              }}
+              onSearch={(value) => {
+                setSearchedText(value);
+              }}
+            />
+          </div>
+          <div className="col-4 d-flex justify-content-end">
+            {data12 && (
+              <Leadlist_Icons
+                datas={data12}
+                columns={filteredColumns}
+                items={data12}
+                xlheading={UnitHeads}
+                filename="data.csv"
+              />
+            )}
+          </div>
+          </div>
 
                   {/* <Leadlist_Icons
                   // datas={OpportunityList}
@@ -313,8 +371,8 @@ function ExpenseCategory() {
                   //   </Checkbox.Group>
                   // }
                   /> */}
-                </div>
-                <div className="row p-1" style={{ backgroundColor: "#f4f4f7" }}>
+                {/* </div> */}
+                {/* <div className="row p-1" style={{ backgroundColor: "#f4f4f7" }}>
                   <div className="col-3">
                     <Input.Search
                       placeholder="Search by "
@@ -328,9 +386,9 @@ function ExpenseCategory() {
                       }}
                     />
                   </div>
-                </div>
+                </div> */}
                 <div className="row my-3 ">
-                  <div className="col-4 ">
+                  <div className="col-4 px-3">
                     <Select
                       // defaultValue={"25"}
                       bordered={false}
@@ -373,7 +431,7 @@ function ExpenseCategory() {
                     </Select>
                   </div>
 
-                  <div className="col-4 d-flex  justify-content-center align-items-center">
+                  <div className="col-4 d-flex   align-items-center justify-content-center">
                   {totallocation?.length >0 &&(
             <MyPagination
               total={parseInt(totallocation?.length)}
@@ -389,8 +447,8 @@ function ExpenseCategory() {
                     
                   </div>
                   {/* <div className="col-xl-6 col-lg-6 col-md-6 col-sm-8 col-12"></div> */}
-                  <div className="col-xl-4 col-lg-4 col-md-3 col-sm-12 col-12 d-flex justify-content-end">
-                    <div className="">
+                  <div className="col-4 d-flex justify-content-end">
+                    {/* <div className=""> */}
                       {/* <Link style={{ color: "white" }}> */}
                       <Button
                         onClick={() => {
@@ -405,8 +463,9 @@ function ExpenseCategory() {
                       </Button>
                       {/* </Link> */}
                     </div>
+
                   </div>
-                </div>
+                {/* </div> */}
                 <div className="datatable">
                   {/* {AllinvoiceData && ( */}
                   <TableData
@@ -429,7 +488,7 @@ function ExpenseCategory() {
                   /> */}
                 </div>
               </div>
-            </div>
+            {/* </div> */}
             <CustomModel
               show={AddPopup}
               onHide={() => {
@@ -725,10 +784,8 @@ function ExpenseCategory() {
                 setSuccessPopup(false);
               }}
             />
-          </div>
-        </div>
-      </div>
-    </div>
+            </div>
+         
   );
 }
 

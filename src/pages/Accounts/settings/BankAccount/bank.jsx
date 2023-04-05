@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { MdPageview } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
+import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
 import { Form, Input, Select, DatePicker } from "antd";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import MyPagination from "../../../../components/Pagination/MyPagination";
@@ -26,7 +27,7 @@ function Bank(){
     const [vendorEditPopup, setVendorEditPopup] = useState(false);
     const [editForm] = Form.useForm();
     const [serialNo, setserialNo] = useState(1);
-    const [allbankdetails,setAllbankdetails] =useState("")
+    const [allbankdetails,setAllbankdetails] =useState()
 
     const [bankaccname,setbankaccname]= useState("")
     const [bankaccno,setbankaccno]= useState("")
@@ -251,7 +252,14 @@ function Bank(){
           onFilter: (value, record) => {
             return String(record.bank_name)
               .toLowerCase()
-              .includes(value.toLowerCase());
+              .includes(value.toLowerCase()) ||
+              String(record.bank_branch)
+              .toLowerCase()
+              .includes(value.toLowerCase())  ||
+              String(record.bank_account_name)
+              .toLowerCase()
+              .includes(value.toLowerCase())
+
           },
           align: "left",
         },
@@ -327,20 +335,50 @@ function Bank(){
      
       ];
 
+      const columnsKeys = columns.map((column) => column.key);
+
+      const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
+      const filteredColumns = columns.filter((column) =>
+        selectedColumns.includes(column.key)
+      );
+      console.log("filtered columns::", filteredColumns);
+      const onChange1 = (checkedValues) => {
+        setSelectedColumns(checkedValues);
+      };
+    
+      //for Xlsx data
+      const UnitHeads = [
+        [
+          "Slno",
+         
+          "NAME",
+          "BANK NAME",
+          "BRANCH",
+       
+        ],
+      ];
+      //for pdf download
+      const data12 = allbankdetails?.map((item, index) => [
+        index + serialNo,
+        item.bank_account_name,
+        item.bank_name,
+        item.bank_branch,
+      
+       
+      ]);
+
     return(
         <>
 
 <div className="container-fluid container_fms pt-3">
-        <div className="row flex-wrap ">
-          <div className="col">
+        <div className="row flex-wrap align-items-center ">
+          <div className="col-4">
             <h5 className="lead_text">Bank Details</h5>
           </div>
-          {/* <Leadlist_Icons /> */}
-        </div>
-        <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
-          <div className="col-4">
+          <div className="col-sm-4">
             <Input.Search
-              placeholder="Search by Bank Name"
+             className="inputSearch"
+              placeholder="Search"
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
               onChange={(e) => {
@@ -351,7 +389,20 @@ function Bank(){
               }}
             />
           </div>
+          {/* <Leadlist_Icons /> */}
+          <div className="col-4 d-flex justify-content-end">
+            {data12 && (
+              <Leadlist_Icons
+                datas={data12}
+                columns={filteredColumns}
+                items={data12}
+                xlheading={UnitHeads}
+                filename="data.csv"
+              />
+            )}
+          </div>
         </div>
+      
         <div className="row my-3">
           <div className="col-4 ">
             <Select

@@ -196,25 +196,7 @@ function EditContact(props) {
       render: (value, item, index) => serialNo + index,
       align: "center",
     },
-    {
-      title: "ACTION",
-      dataIndex: "action",
-      key: "action",
-      width: "15%",
-      render: (data, index) => {
-        return (
-          <div className="d-flex justify-content-center gap-2">
-            <div className="editcolor">
-              <FaEdit onClick={() => handleEditedclick(index)} />
-            </div>
-            <div className="editcolor">
-              <FaTrash />
-            </div>
-          </div>
-        );
-      },
-      align: "center",
-    },
+  
     {
       title: "NAME",
       dataIndex: "contact_person_name",
@@ -240,6 +222,25 @@ function EditContact(props) {
       dataIndex: "contact_designation",
       key: "contact_designation",
     },
+    {
+      title: "ACTION",
+      dataIndex: "action",
+      key: "action",
+      width: "15%",
+      render: (data, index) => {
+        return (
+          <div className="d-flex justify-content-center gap-2">
+            <div className="editcolor">
+              <FaEdit onClick={() => handleEditedclick(index)} />
+            </div>
+            <div className="editcolor">
+              <FaTrash />
+            </div>
+          </div>
+        );
+      },
+      align: "center",
+    },
   ];
 
   useEffect(() => {
@@ -255,7 +256,8 @@ function EditContact(props) {
       <div className="row">
         <div className="col-12">
           <Button btnType="add" onClick={() => setModalShow(true)}>
-            Add <AiOutlinePlus />
+            {/* Add <AiOutlinePlus /> */}
+            New Contact
           </Button>
         </div>
       </div>
@@ -277,7 +279,7 @@ function EditContact(props) {
         list_content={
           <>
             <div className="row">
-              <h5 className="lead_text">Add Contact</h5>
+              <h5 className="lead_text">New Contact</h5>
             </div>
             <Form
               form={addForm}

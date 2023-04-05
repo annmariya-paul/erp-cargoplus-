@@ -12,10 +12,10 @@ import MyPagination from "../../../../components/Pagination/MyPagination";
 import SelectBox from "../../../../components/Select Box/SelectBox";
 import TableData from "../../../../components/table/table_data";
 
-function Ledger() {
+function AccGroup() {
   const [AddForm] = Form.useForm();
   const [searchedText, setSearchedText] = useState("");
-  const [totalledger, setTotalLedger] = useState();
+  const [totalAccGroup, setTotalAccGroup] = useState();
   const [numOfItems, setNumOfItems] = useState("25");
   const [current, setCurrent] = useState(1);
   const [pageSize, setPageSize] = useState("25");
@@ -24,7 +24,7 @@ function Ledger() {
   const [editPopup, setEditPopup] = useState(false);
   const [viewPopup, setViewPopup] = useState(false);
   const [successPopup, setSuccessPopup] = useState(false);
-  const [LedgerData, setLedgerData] = useState();
+  const [AccGroupData, setAccGroupData] = useState();
 
   const columns = [
     {
@@ -41,41 +41,58 @@ function Ledger() {
       },
     },
     {
-      title: "LEDGER CODE",
-      dataIndex: "acc_ledger_code",
-      key: "acc_ledger_code",
+      title: "GROUP CODE",
+      dataIndex: "acc_group_code",
+      key: "acc_group_code",
       width: "8%",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
         return (
-          String(record.acc_ledger_code)
+          String(record.acc_group_code)
             .toLowerCase()
             .includes(value.toLowerCase()) ||
-          String(record.acc_ledger_name)
+          String(record.acc_group_name)
             .toLowerCase()
             .includes(value.toLowerCase()) ||
-          String(record.acc_ledger_group_name)
+          String(record.acc_group_parent_name)
             .toLowerCase()
             .includes(value.toLowerCase()) ||
-          String(record.acc_ledger_description)
+          String(record.acc_group_description)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.acc_group_head)
             .toLowerCase()
             .includes(value.toLowerCase())
         );
       },
       // align: "center",
     },
+    {
+      title: "GROUP Name",
+      dataIndex: "acc_group_name",
+      key: "acc_group_name",
+      width: "15%",
+      //   filteredValue: [searchSource],
+    },
+    {
+      title: "GROUP PARENT",
+      dataIndex: "acc_group_parent_name",
+      key: "acc_group_parent_name",
+      width: "15%",
+      //   filteredValue: [searchSource],
+    },
 
     {
-      title: "LEDGER GROUP",
-      dataIndex: "acc_ledger_group_name",
-      key: "acc_ledger_group_name",
+      title: "GROUP HEAD",
+      dataIndex: "acc_group_head",
+      key: "acc_group_head",
       width: "15%",
       //   filteredValue: [searchSource],
     },
     {
       title: "DESCRIPTION",
-      dataIndex: "acc_ledger_description",
-      key: "acc_ledger_description",
+      dataIndex: "acc_group_description",
+      key: "acc_group_description",
       width: "15%",
       //   filteredValue: [searchSource],
     },
@@ -117,10 +134,10 @@ function Ledger() {
 
   const data = [
     {
-      acc_ledger_description: "lorem ispum",
-      acc_ledger_code: 100,
-      acc_ledger_name: "Test Ledger",
-      acc_ledger_group_name: "Test Group",
+      acc_group_description: "lorem ispum",
+      acc_group_code: 100,
+      acc_group_parent_name: "Test Ledger",
+      acc_group_name: "Test Group",
     },
   ];
 
@@ -129,10 +146,10 @@ function Ledger() {
     if (data) {
       setEditPopup(true);
       AddForm.setFieldsValue({
-        acc_ledger_code1: data.acc_ledger_code,
-        acc_ledger_group_name1: data.acc_ledger_group_name,
-        acc_ledger_name1: data.acc_ledger_name,
-        acc_ledger_description1: data.acc_ledger_description,
+        acc_group_code1: data.acc_group_code,
+        acc_group_name1: data.acc_group_name,
+        acc_group_parent_id1: data.acc_group_parent_id,
+        acc_group_description1: data.acc_group_description,
       });
       setViewPopup(false);
     }
@@ -141,7 +158,7 @@ function Ledger() {
   const handleViewClick = (data) => {
     if (data) {
       setViewPopup(true);
-      setLedgerData(data);
+      setAccGroupData(data);
     }
   };
 
@@ -168,26 +185,27 @@ function Ledger() {
   const UnitHeads = [
     [
       "Slno",
-      "LEDGER CODE",
-      "LEDGER NAME",
-      "LEDGER GROUP",
+      "GROUP CODE",
+      "GROUP NAME",
+      "PARENT GROUP",
+      "GROUP HEAD",
       "LEDGER DESCRIPTION",
     ],
   ];
   //for pdf download
   const data12 = data?.map((item, index) => [
     index + slno,
-    item.acc_ledger_code,
-    item.acc_ledger_group_name,
-    item.acc_ledger_name,
-    item.acc_ledger_description,
+    item.acc_group_code,
+    item.acc_group_name,
+    item.acc_group_parent,
+    item.acc_group_description,
+    item.acc_group_head,
   ]);
-
   return (
     <div className="container-fluid shadow-sm p-3">
       <div className="row align-items-center">
         <div className="col-xl-4">
-          <h5 className="lead_text">Ledger</h5>
+          <h5 className="lead_text">Account Groups</h5>
         </div>
         <div className="col-xl-4">
           <Input.Search
@@ -260,9 +278,9 @@ function Ledger() {
         </div>
 
         <div className="col-4 d-flex   align-items-center justify-content-center">
-          {totalledger?.length > 0 && (
+          {totalAccGroup?.length > 0 && (
             <MyPagination
-              total={parseInt(totalledger?.length)}
+              total={parseInt(totalAccGroup?.length)}
               current={current}
               showSizeChanger={true}
               pageSize={pageSize}
@@ -286,7 +304,7 @@ function Ledger() {
             }}
             btnType="save"
           >
-            New Ledger
+            New Account Group
           </Button>
           {/* </Link> */}
         </div>
@@ -304,9 +322,9 @@ function Ledger() {
           </div>
         </div>
         <div className="col-12 d-flex justify-content-center mt-3">
-          {totalledger?.length > 0 && (
+          {totalAccGroup?.length > 0 && (
             <MyPagination
-              total={parseInt(totalledger?.length)}
+              total={parseInt(totalAccGroup?.length)}
               current={current}
               showSizeChanger={true}
               pageSize={pageSize}
@@ -329,7 +347,7 @@ function Ledger() {
         list_content={
           <div>
             <div className="container">
-              <h4 style={{ color: "#0891d1" }}>Ledger</h4>
+              <h4 style={{ color: "#0891d1" }}>Account Group</h4>
               <Form
                 form={AddForm}
                 onFinish={(value) => {
@@ -342,15 +360,15 @@ function Ledger() {
                     <div className="col-12 py-2">
                       <div className="">
                         <div className="">
-                          <label>Ledger Code</label>
+                          <label>Group Code</label>
                           <Form.Item
                             rules={[
                               {
                                 required: true,
-                                message: "Ledger code is Required",
+                                message: "Group code is Required",
                               },
                             ]}
-                            name="acc_ledger_code"
+                            name="acc_group_code"
                           >
                             <InputType
                               onChange={(e) => {
@@ -378,16 +396,16 @@ function Ledger() {
                       <div className="">
                         <div className="">
                           <label>
-                            Ledger Name<span className="required">*</span>
+                            Group Name<span className="required">*</span>
                           </label>
                           <Form.Item
                             rules={[
                               {
                                 required: true,
-                                message: "Ledger Name is Required",
+                                message: "Group Name is Required",
                               },
                             ]}
-                            name="acc_ledger_name"
+                            name="acc_group_name"
                           >
                             <InputType
                               onChange={(e) => {
@@ -412,10 +430,18 @@ function Ledger() {
                       </div>
                     </div>
                     <div className="col-12 py-2">
+                      <label>Parent Group</label>
+                      <Form.Item name="acc_group_parent_id">
+                        <SelectBox>
+                          <Select.Option></Select.Option>
+                        </SelectBox>
+                      </Form.Item>
+                    </div>
+                    <div className="col-12 py-2">
                       <label>
-                        Ledger Group<span className="required">*</span>
+                        Account Head<span className="required">*</span>
                       </label>
-                      <Form.Item name="acc_ledger_group">
+                      <Form.Item name="acc_group_head">
                         <SelectBox>
                           <Select.Option></Select.Option>
                         </SelectBox>
@@ -430,7 +456,7 @@ function Ledger() {
                             message: "Required minimum 5 Letter",
                           },
                         ]}
-                        name="acc_ledger_description"
+                        name="acc_group_description"
                       >
                         <TextArea />
                       </Form.Item>
@@ -459,7 +485,7 @@ function Ledger() {
         list_content={
           <div>
             <div className="container">
-              <h4 style={{ color: "#0891d1" }}>Ledger</h4>
+              <h4 style={{ color: "#0891d1" }}>Account Group</h4>
               <Form
                 form={AddForm}
                 onFinish={(value) => {
@@ -472,15 +498,15 @@ function Ledger() {
                     <div className="col-12 py-2">
                       <div className="">
                         <div className="">
-                          <label>Ledger Code</label>
+                          <label>Group Code</label>
                           <Form.Item
                             rules={[
                               {
                                 required: true,
-                                message: "Ledger code is Required",
+                                message: "Group code is Required",
                               },
                             ]}
-                            name="acc_ledger_code1"
+                            name="acc_group_code1"
                           >
                             <InputType
                               onChange={(e) => {
@@ -508,16 +534,16 @@ function Ledger() {
                       <div className="">
                         <div className="">
                           <label>
-                            Ledger Name<span className="required">*</span>
+                            Group Name<span className="required">*</span>
                           </label>
                           <Form.Item
                             rules={[
                               {
                                 required: true,
-                                message: "Ledger Name is Required",
+                                message: "Group Name is Required",
                               },
                             ]}
-                            name="acc_ledger_name1"
+                            name="acc_group_name1"
                           >
                             <InputType
                               onChange={(e) => {
@@ -542,10 +568,18 @@ function Ledger() {
                       </div>
                     </div>
                     <div className="col-12 py-2">
+                      <label>Parent Group</label>
+                      <Form.Item name="acc_group_parent_id1">
+                        <SelectBox>
+                          <Select.Option></Select.Option>
+                        </SelectBox>
+                      </Form.Item>
+                    </div>
+                    <div className="col-12 py-2">
                       <label>
-                        Ledger Group<span className="required">*</span>
+                        Account Head<span className="required">*</span>
                       </label>
-                      <Form.Item name="acc_ledger_group1">
+                      <Form.Item name="acc_group_head1">
                         <SelectBox>
                           <Select.Option></Select.Option>
                         </SelectBox>
@@ -560,7 +594,7 @@ function Ledger() {
                             message: "Required minimum 5 Letter",
                           },
                         ]}
-                        name="acc_ledger_description1"
+                        name="acc_group_description1"
                       >
                         <TextArea />
                       </Form.Item>
@@ -592,7 +626,7 @@ function Ledger() {
               <div className="row mt-3">
                 <div className="col-12 ">
                   <div className="d-flex justify-content-between ">
-                    <h4 className="lead_text">Ledger</h4>
+                    <h4 className="lead_text">Account Group</h4>
                     <div className="">
                       <Button
                         btnType="add_borderless"
@@ -601,7 +635,7 @@ function Ledger() {
                           // handleupdate();
                           //   handleviewtoedit(viewexp);
                           //   setUniqueEditName(false);
-                          handleEditClick(LedgerData);
+                          handleEditClick(AccGroupData);
                         }}
                       >
                         Edit
@@ -639,45 +673,56 @@ function Ledger() {
                         </div> */}
                   <div className="row mt-4">
                     <div className="col-4">
-                      <p>Ledger Code</p>
+                      <p>Group Code</p>
                     </div>
                     <div className="col-1">:</div>
                     <div className="col-6 justify-content-start">
                       <p className="modal-view-data">
-                        {LedgerData?.acc_ledger_code}{" "}
+                        {AccGroupData?.acc_ledger_code}{" "}
                       </p>
                     </div>
                   </div>
                   <div className="row mt-4">
                     <div className="col-4">
-                      <p>Ledger Name</p>
+                      <p>Group Name</p>
                     </div>
                     <div className="col-1">:</div>
                     <div className="col-6 justify-content-start">
                       <p className="modal-view-data">
-                        {LedgerData?.acc_ledger_name}{" "}
+                        {AccGroupData?.acc_ledger_name}{" "}
                       </p>
                     </div>
                   </div>
                   <div className="row mt-4">
                     <div className="col-4">
-                      <p>Ledger Group</p>
+                      <p>Parent Group</p>
                     </div>
                     <div className="col-1">:</div>
                     <div className="col-6 justify-content-start">
                       <p className="modal-view-data">
-                        {LedgerData?.acc_ledger_group_name}{" "}
+                        {AccGroupData?.acc_ledger_group_name}{" "}
                       </p>
                     </div>
                   </div>
                   <div className="row mt-4">
                     <div className="col-4">
-                      <p>Ledger Description</p>
+                      <p>Account Head</p>
                     </div>
                     <div className="col-1">:</div>
                     <div className="col-6 justify-content-start">
                       <p className="modal-view-data">
-                        {LedgerData?.acc_ledger_description}{" "}
+                        {AccGroupData?.acc_ledger_group_name}{" "}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="row mt-4">
+                    <div className="col-4">
+                      <p> Description</p>
+                    </div>
+                    <div className="col-1">:</div>
+                    <div className="col-6 justify-content-start">
+                      <p className="modal-view-data">
+                        {AccGroupData?.acc_ledger_description}{" "}
                       </p>
                     </div>
                   </div>
@@ -697,4 +742,4 @@ function Ledger() {
   );
 }
 
-export default Ledger;
+export default AccGroup;

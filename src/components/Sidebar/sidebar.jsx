@@ -1248,9 +1248,9 @@ export default function Sidebar({ showSidebar }) {
                             Report
                           </div>
                         </div>
-                          <div className="text-right ">
-                            <AiOutlineCaretDown className="toggle_btn subactivelink" />
-                          </div>
+                        <div className="text-right ">
+                          <AiOutlineCaretDown className="toggle_btn subactivelink" />
+                        </div>
                       </div>
                     </Link>
                   </li>
@@ -1335,6 +1335,20 @@ export default function Sidebar({ showSidebar }) {
                             >
                               <div className="ms-4 ps-2 subactivelink">
                                 Invoice Report
+                              </div>
+                            </NavLink>
+                          </li>
+                        )}
+                        {checkPermission("awb_bl_report") && (
+                          <li className="nav-text ">
+                            <NavLink
+                              className={({ isActive }) =>
+                                isActive ? "active-link" : "link"
+                              }
+                              to={ROUTES.AWBBL_REPORT}
+                            >
+                              <div className="ms-4 ps-2 subactivelink">
+                                AWBBL Report
                               </div>
                             </NavLink>
                           </li>
@@ -1514,7 +1528,7 @@ export default function Sidebar({ showSidebar }) {
                             </NavLink>
                           </li>
                         )}
-                         {checkPermission("gl_type") && (
+                        {checkPermission("gl_type") && (
                           <li className="nav-text ">
                             <NavLink
                               className={({ isActive }) =>
@@ -1524,6 +1538,20 @@ export default function Sidebar({ showSidebar }) {
                             >
                               <div className="ms-4 ps-3 subactivelink">
                                 GL Type
+                              </div>
+                            </NavLink>
+                          </li>
+                        )}
+                        {checkPermission("accGroup") && (
+                          <li className="nav-text ">
+                            <NavLink
+                              className={({ isActive }) =>
+                                isActive ? "active-link" : "link"
+                              }
+                              to={ROUTES.ACC_GROUP}
+                            >
+                              <div className="ms-4 ps-3 subactivelink">
+                                Account Group
                               </div>
                             </NavLink>
                           </li>

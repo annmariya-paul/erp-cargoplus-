@@ -209,7 +209,10 @@ const ROUTES = {
 
   // ACCOUNTS => master => Legder
   LEDGER: "/ledger",
-  GL_TYPE:"/gl_type",
+  GL_TYPE: "/gl_type",
+
+  // ACCOUNTS => Master => Account Group
+  ACC_GROUP: "/account_groups",
 };
 
 module.exports = { ROUTES };

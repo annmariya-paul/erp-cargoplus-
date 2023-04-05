@@ -185,25 +185,7 @@ function Edit_Address(props) {
       render: (value, item, index) => serialNo + index,
       align: "center",
     },
-    {
-      title: "ACTION",
-      dataIndex: "action",
-      key: "action",
-      width: "15%",
-      render: (data, index) => {
-        return (
-          <div className="d-flex justify-content-center gap-2">
-            <div className="editcolor">
-              <FaEdit onClick={() => handleEditedclick(index)} />
-            </div>
-            <div className="editcolor">
-              <FaTrash />
-            </div>
-          </div>
-        );
-      },
-      align: "center",
-    },
+    
     {
       title: "TITLE",
       dataIndex: "address_title",
@@ -224,6 +206,25 @@ function Edit_Address(props) {
       dataIndex: "address_contact",
       key: "address_contact",
     },
+    {
+      title: "ACTION",
+      dataIndex: "action",
+      key: "action",
+      width: "15%",
+      render: (data, index) => {
+        return (
+          <div className="d-flex justify-content-center gap-2">
+            <div className="editcolor">
+              <FaEdit onClick={() => handleEditedclick(index)} />
+            </div>
+            <div className="editcolor">
+              <FaTrash />
+            </div>
+          </div>
+        );
+      },
+      align: "center",
+    },
   ];
   useEffect(() => {
     if (props.toggle == true && addressTable?.length <= 0) {
@@ -235,7 +236,7 @@ function Edit_Address(props) {
       <div className="row">
         <div className="col-12">
           <Button btnType="add" onClick={() => setModalshowAdd(true)}>
-            Add <AiOutlinePlus />
+            {/* Add <AiOutlinePlus /> */}New Address
           </Button>
         </div>
       </div>
@@ -266,7 +267,7 @@ function Edit_Address(props) {
               }}
             >
               <div className="row">
-                <h5 className="lead_text">Add Address</h5>
+                <h5 className="lead_text">New Address</h5>
               </div>
               <div className="row mt-3">
                 <div className="px-3">
@@ -335,11 +336,11 @@ function Edit_Address(props) {
                     value={pincode}
                     name="pin"
                     rules={[
-                      {
-                        required: true,
-                        pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                        message: "Please enter a Valid PIN",
-                      },
+                      // {
+                      //   required: true,
+                      //   pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                      //   message: "Please enter a Valid PIN",
+                      // },
                     ]}
                   >
                     <InputType

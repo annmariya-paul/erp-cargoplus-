@@ -1109,20 +1109,7 @@ export default function Sidebar({ showSidebar }) {
                             </NavLink>
                           </li>
                         )}
-                        {checkPermission("tax type") && (
-                          <li className="nav-text">
-                            <NavLink
-                              className={({ isActive }) =>
-                                isActive ? "active-link" : "link"
-                              }
-                              to={ROUTES.TAX_GROUP}
-                            >
-                              <div className="ms-4 ps-3 subactivelink">
-                                Tax Group
-                              </div>
-                            </NavLink>
-                          </li>
-                        )}
+
                         {checkPermission("tax type") && (
                           <li className="nav-text">
                             <NavLink
@@ -1261,9 +1248,9 @@ export default function Sidebar({ showSidebar }) {
                             Report
                           </div>
                         </div>
-                        <div className="text-right ">
-                          <AiOutlineCaretDown className="toggle_btn subactivelink" />
-                        </div>
+                          <div className="text-right ">
+                            <AiOutlineCaretDown className="toggle_btn subactivelink" />
+                          </div>
                       </div>
                     </Link>
                   </li>
@@ -1352,20 +1339,6 @@ export default function Sidebar({ showSidebar }) {
                             </NavLink>
                           </li>
                         )}
-                        {checkPermission("invoice_report") && (
-                          <li className="nav-text ">
-                            <NavLink
-                              className={({ isActive }) =>
-                                isActive ? "active-link" : "link"
-                              }
-                              to={ROUTES.AWBBL_REPORT}
-                            >
-                              <div className="ms-4 ps-2 subactivelink">
-                                AWB/BL Report
-                              </div>
-                            </NavLink>
-                          </li>
-                        )}
                       </div>
                     </>
                   ) : (
@@ -1435,7 +1408,7 @@ export default function Sidebar({ showSidebar }) {
                             style={{ width: "90px" }}
                             className="subactivelink"
                           >
-                            Settings
+                            Masters
                           </div>
                         </div>
                         <div className="text-right ">
@@ -1537,6 +1510,20 @@ export default function Sidebar({ showSidebar }) {
                             >
                               <div className="ms-4 ps-3 subactivelink">
                                 Credit Note Type
+                              </div>
+                            </NavLink>
+                          </li>
+                        )}
+                         {checkPermission("gl_type") && (
+                          <li className="nav-text ">
+                            <NavLink
+                              className={({ isActive }) =>
+                                isActive ? "active-link" : "link"
+                              }
+                              to={ROUTES.GL_TYPE}
+                            >
+                              <div className="ms-4 ps-3 subactivelink">
+                                GL Type
                               </div>
                             </NavLink>
                           </li>

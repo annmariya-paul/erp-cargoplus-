@@ -20,7 +20,7 @@ function SelectBox({
 }) {
   return (
     <div>
-      <div className="mt-2">
+      <div className="">
         <Select
           style={{
             backgroundColor: "whitesmoke",

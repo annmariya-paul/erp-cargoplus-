@@ -5,13 +5,14 @@ import TableData from "../../../../components/table/table_data";
 import { CRM_BASE_URL } from "../../../../api/bootapi";
 import PublicFetch from "../../../../utils/PublicFetch";
 import Phone_Input from "../../../../components/PhoneInput/phoneInput";
-import { Form, message } from "antd";
+import { Form, message, Select } from "antd";
 import InputType from "../../../../components/Input Type textbox/InputType";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import Button from "../../../../components/button/button";
 import Custom_model from "../../../../components/custom_modal/custom_model";
 import { AiOutlinePlus } from "react-icons/ai";
+import SelectBox from "../../../../components/Select Box/SelectBox";
 
 function Edit_Address(props) {
   const [value, setValue] = useState();
@@ -109,10 +110,10 @@ function Edit_Address(props) {
   };
 
   // {function to edit address - Ann mariya(25-11-22)}
-  const EditAddress = () => {
+  const EditAddress = (data) => {
     PublicFetch.patch(`${CRM_BASE_URL}/address/${addressId}`, {
       address_customer_id: parseInt(props.Customerid),
-      address_title: editTitle,
+      address_title: data.editTitle,
       address_content: editAddressData,
       address_pin: editPin,
       address_contact: editPhone,
@@ -139,10 +140,10 @@ function Edit_Address(props) {
   };
 
   // { funtion to add address in lead edit - Ann mariya (25-11-22)}
-  const AddAddress = () => {
+  const AddAddress = (data) => {
     PublicFetch.post(`${CRM_BASE_URL}/address`, {
       address_customer_id: parseInt(props.Customerid),
-      address_title: title,
+      address_title: data.title,
       address_content: address_data,
       address_pin: pincode,
       address_contact: addphone,
@@ -258,7 +259,7 @@ function Edit_Address(props) {
               form={addForm}
               onFinish={(values) => {
                 console.log("values iss", values);
-                AddAddress();
+                AddAddress(values);
               }}
               onFinishFailed={(error) => {
                 console.log(error);
@@ -269,7 +270,7 @@ function Edit_Address(props) {
               </div>
               <div className="row mt-3">
                 <div className="px-3">
-                  <label>Title</label>
+                  <label className="mt-3">Title</label>
                   <Form.Item
                     name="title"
                     rules={[
@@ -279,24 +280,30 @@ function Edit_Address(props) {
                         message: "Please enter a Valid title",
                       },
                       {
-                        whitespace: true,
-                      },
-                      {
                         min: 2,
                         message: "Title must be atleast 2 characters",
                       },
                       {
                         max: 100,
+                        message: "Title cannot be longer than 100 characters",
                       },
                     ]}
                   >
-                    <InputType
+                    <SelectBox>
+                      <Select.Option value="billing">
+                        Billing Address
+                      </Select.Option>
+                      <Select.Option value="shipping">
+                        Shipping Address
+                      </Select.Option>
+                    </SelectBox>
+                    {/* <InputType
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
-                    />
+                    /> */}
                   </Form.Item>
 
-                  <label>Address</label>
+                  <label className="mt-3">Address</label>
                   <Form.Item
                     className="mt-2"
                     name="address"
@@ -323,7 +330,7 @@ function Edit_Address(props) {
                     />
                   </Form.Item>
 
-                  <label>PIN</label>
+                  <label className="mt-3">PIN</label>
                   <Form.Item
                     value={pincode}
                     name="pin"
@@ -341,7 +348,7 @@ function Edit_Address(props) {
                     />
                   </Form.Item>
 
-                  <label>Mobile</label>
+                  <label className="mt-3">Mobile</label>
                   <Form.Item
                     name="addphone"
                     rules={[
@@ -377,7 +384,7 @@ function Edit_Address(props) {
               form={editForm}
               onFinish={(values) => {
                 console.log("values iss", values);
-                EditAddress();
+                EditAddress(values);
               }}
               onFinishFailed={(error) => {
                 console.log(error);
@@ -388,7 +395,7 @@ function Edit_Address(props) {
               </div>
               <div className="row mt-3">
                 <div className="px-3">
-                  <label>Title</label>
+                  <label className="mt-3">Title</label>
                   <Form.Item
                     name="editTitle"
                     rules={[
@@ -398,11 +405,8 @@ function Edit_Address(props) {
                         message: "Please enter a Valid title",
                       },
                       {
-                        whitespace: true,
-                      },
-                      {
                         min: 2,
-                        message: "Title must be at least 2 characters",
+                        message: "Title must be atleast 2 characters",
                       },
                       {
                         max: 100,
@@ -410,12 +414,20 @@ function Edit_Address(props) {
                       },
                     ]}
                   >
-                    <InputType
-                      value={editTitle}
-                      onChange={(e) => setEditTitle(e.target.value)}
-                    />
+                    <SelectBox>
+                      <Select.Option value="billing">
+                        Billing Address
+                      </Select.Option>
+                      <Select.Option value="shipping">
+                        Shipping Address
+                      </Select.Option>
+                    </SelectBox>
+                    {/* <InputType
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                    /> */}
                   </Form.Item>
-                  <label>Address</label>
+                  <label className="mt-3">Address</label>
                   <Form.Item
                     name="editAddressData"
                     rules={[
@@ -441,7 +453,7 @@ function Edit_Address(props) {
                       onChange={(e) => setEditAddressData(e.target.value)}
                     />
                   </Form.Item>
-                  <label>PIN</label>
+                  <label className="mt-3">PIN</label>
                   <Form.Item
                     name="editPin"
                     rules={[
@@ -458,7 +470,7 @@ function Edit_Address(props) {
                     />
                   </Form.Item>
 
-                  <label for="phone" className="form-label">
+                  <label for="phone" className="form-label mt-3">
                     Mobile
                   </label>
                   <Form.Item name="editPhone">

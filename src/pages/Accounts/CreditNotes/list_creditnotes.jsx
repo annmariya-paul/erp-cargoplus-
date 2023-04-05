@@ -55,15 +55,19 @@ function Credit_notes() {
       creditnotes.data.data.forEach((item, index) => {
         console.log("oitm", item);
         let a = moment(item.credit_note_date).format("DD-MM-YYYY");
+        let invoice_no = [];
+        item.accounts_v1_credit_note_invoices.forEach((itm, index) => {
+          invoice_no.push(itm.invoice_accounts_no);
+        });
         temp.push({
           credit_note_id: item.credit_note_id,
-          accounts_v1_credit_note_invoices:
-            item.accounts_v1_credit_note_invoices,
+          credit_note_account_invoice_id: invoice_no,
           credit_note_amount: item.credit_note_amount,
           credit_note_date: a,
           credit_note_lead_id: item.credit_note_lead_id,
           credit_note_particulars: item.credit_note_particulars,
-          credit_note_type_id: item.credit_note_type_id,
+          credaccounts_v1_credit_note_invoicesit_note_type_id:
+            item.credit_note_type_id,
           credit_note_voucher_no: item.credit_note_voucher_no,
         });
       });
@@ -104,7 +108,26 @@ function Credit_notes() {
       key: "credit_note_date",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.date).toLowerCase().includes(value.toLowerCase());
+        return (
+          String(record.credit_note_voucher_no)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.credit_note_date)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.credit_note_lead_id)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.credit_note_account_invoice_id)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.credit_note_amount)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.credit_note_type_id)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
       },
       align: "left",
       width: "10%",
@@ -116,26 +139,26 @@ function Credit_notes() {
       key: "credit_note_lead_id",
       width: "15%",
       align: "left",
-      filteredValue: [searchType],
-      onFilter: (value, record) => {
-        return String(record.customer)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
+      // filteredValue: [searchType],
+      // onFilter: (value, record) => {
+      //   return String(record.customer)
+      //     .toLowerCase()
+      //     .includes(value.toLowerCase());
+      // },
     },
     {
       title: "INVOICE NO",
-      // dataIndex: "accounts_v1_credit_note_invoices",
-      // key: "accounts_v1_credit_note_invoices",
+      dataIndex: "credit_note_account_invoice_id",
+      key: "credit_note_account_invoice_id",
       width: "12%",
       align: "left",
-      filteredValue: [searchCategory],
-      onFilter: (value, record) => {
-        console.log("prrrr", record);
-        return String(record.invoice_no)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
+      // filteredValue: [searchCategory],
+      // onFilter: (value, record) => {
+      //   console.log("prrrr", record);
+      //   return String(record.invoice_no)
+      //     .toLowerCase()
+      //     .includes(value.toLowerCase());
+      // },
     },
     {
       title: "AMOUNT",
@@ -143,13 +166,13 @@ function Credit_notes() {
       key: "credit_note_amount",
       width: "10%",
       align: "left",
-      filteredValue: [searchCategory],
-      onFilter: (value, record) => {
-        console.log("prrrr", record);
-        return String(record.amount)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
+      // filteredValue: [searchCategory],
+      // onFilter: (value, record) => {
+      //   console.log("prrrr", record);
+      //   return String(record.amount)
+      //     .toLowerCase()
+      //     .includes(value.toLowerCase());
+      // },
     },
     {
       title: "TYPE",
@@ -343,7 +366,7 @@ function Credit_notes() {
                       color: "white",
                     }}
                   >
-                    Add Credit Note
+                    New Credit Note
                   </span>
                 </Link>
               </Button>

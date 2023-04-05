@@ -8,15 +8,13 @@ import {
   FaEdit,
 } from "react-icons/fa";
 
-
-
 import { FiEdit } from "react-icons/fi";
 import { AiFillPrinter } from "react-icons/ai";
 import { MdFileCopy, MdPageview } from "react-icons/md";
 import { CRM_BASE_URL } from "../../../api/bootapi";
 import { Link } from "react-router-dom";
 import Button from "../../../components/button/button";
-import {ROUTES} from "../../../routes";
+import { ROUTES } from "../../../routes";
 import TableData from "../../../components/table/table_data";
 import logo from "../../../components/img/logo192.png";
 import MyPagination from "../../../components/Pagination/MyPagination";
@@ -26,7 +24,6 @@ import PublicFetch from "../../../utils/PublicFetch";
 import FileUpload from "../../../components/fileupload/fileUploader";
 import CustomModel from "../../../components/custom_modal/custom_model";
 import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
-
 
 function Debit_notes() {
   const [numOfItems, setNumOfItems] = useState("25");
@@ -39,17 +36,14 @@ function Debit_notes() {
   const [productView, setProductView] = useState(false);
   const [successPopup, setSuccessPopup] = useState(false);
   const [error, setError] = useState(false);
- 
+
   const [modalOpportunity, setModalOpportunity] = useState(false);
   const [productid, setProductID] = useState();
   console.log("pr id from state", productid);
   const [serialNo, setserialNo] = useState(1);
- 
 
   const [dailyexpenseList, setDailyexpenseList] = useState([]);
-        
 
- 
   const columns = [
     {
       title: "Sl. No.",
@@ -71,18 +65,12 @@ function Debit_notes() {
       // },
 
       align: "left",
-     
     },
     {
       title: "DATE",
       dataIndex: "date",
       key: "date",
-      filteredValue: [searchedText],
-      onFilter: (value, record) => {
-        return String(record.date)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
+
       align: "left",
       width: "10%",
     },
@@ -91,13 +79,24 @@ function Debit_notes() {
       title: "PURCHASE NO",
       dataIndex: "purchase_no",
       key: "purchase_no",
-        width: "15%",
+      width: "15%",
       align: "left",
-      filteredValue: [searchType],
+      filteredValue: [searchedText],
       onFilter: (value, record) => {
-        return String(record.customer)
-          .toLowerCase()
-          .includes(value.toLowerCase());
+        return (
+          String(record.voucher_no)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.date).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.purchase_no)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.purchase_amount)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.amount).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.type).toLowerCase().includes(value.toLowerCase())
+        );
       },
     },
     {
@@ -106,13 +105,13 @@ function Debit_notes() {
       key: "purchase_amount",
       width: "12%",
       align: "left",
-      filteredValue: [searchCategory],
-      onFilter: (value, record) => {
-        console.log("prrrr",record)
-        return String(record.invoice_no)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
+      // filteredValue: [searchCategory],
+      // onFilter: (value, record) => {
+      //   console.log("prrrr", record);
+      //   return String(record.invoice_no)
+      //     .toLowerCase()
+      //     .includes(value.toLowerCase());
+      // },
     },
     {
       title: "AMOUNT",
@@ -120,13 +119,13 @@ function Debit_notes() {
       key: "amount",
       width: "10%",
       align: "left",
-      filteredValue: [searchCategory],
-      onFilter: (value, record) => {
-        console.log("prrrr",record)
-        return String(record.amount)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
+      // filteredValue: [searchCategory],
+      // onFilter: (value, record) => {
+      //   console.log("prrrr", record);
+      //   return String(record.amount)
+      //     .toLowerCase()
+      //     .includes(value.toLowerCase());
+      // },
     },
     {
       title: "TYPE",
@@ -134,13 +133,11 @@ function Debit_notes() {
       key: "type",
       width: "10%",
       align: "left",
-      filteredValue: [searchCategory],
-      onFilter: (value, record) => {
-        console.log("prrrr",record)
-        return String(record.type)
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      },
+      // filteredValue: [searchCategory],
+      // onFilter: (value, record) => {
+      //   console.log("prrrr", record);
+      //   return String(record.type).toLowerCase().includes(value.toLowerCase());
+      // },
     },
     {
       title: "ACTION",
@@ -160,8 +157,8 @@ function Debit_notes() {
               // }}
               className="actionEdit m-0 p-0"
             >
-               <Link to={`${ROUTES.EDIT_DEBIT_NOTES}/${index.id}`}>
-              <FiEdit fontSize={"12px"} />
+              <Link to={`${ROUTES.EDIT_DEBIT_NOTES}/${index.id}`}>
+                <FiEdit fontSize={"12px"} />
               </Link>
             </div>
 
@@ -183,74 +180,57 @@ function Debit_notes() {
     //   align: "center",
     // },
   ];
-const data=[{  voucher_no:"0001",date:"12-2-2023",purchase_no:"0043",purchase_amount:"10000",amount:"1000",type:"data"}
+  const data = [
+    {
+      voucher_no: "0001",
+      date: "12-2-2023",
+      purchase_no: "0043",
+      purchase_amount: "10000",
+      amount: "1000",
+      type: "data",
+    },
+  ];
 
-]
+  const columnsKeys = columns.map((column) => column.key);
 
-const columnsKeys = columns.map((column) => column.key);
-
-const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
-const filteredColumns = columns.filter((column) =>
-  selectedColumns.includes(column.key)
-);
-const data12 = dailyexpenseList?.map((item) => [
-  item.action,
-  item.opportunity_type,
-  item.opportunity_from,
-  item.opportunity_lead_id,
-  item.opportunity_source,
-  item.opportunity_party,
-]);
-const OppHeads = [
-  [
-    "opportunity_id",
-    "opportunity_type",
-    "opportunity_source",
-    "opportunity_validity",
-    "opportunity_description",
-    "opportunity_status",
-    "opportunity_amount",
-  ],
-];
-const onChange = (checkedValues) => {
-  setSelectedColumns(checkedValues);
-};
+  const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
+  const filteredColumns = columns.filter((column) =>
+    selectedColumns.includes(column.key)
+  );
+  const data12 = dailyexpenseList?.map((item) => [
+    item.action,
+    item.opportunity_type,
+    item.opportunity_from,
+    item.opportunity_lead_id,
+    item.opportunity_source,
+    item.opportunity_party,
+  ]);
+  const OppHeads = [
+    [
+      "opportunity_id",
+      "opportunity_type",
+      "opportunity_source",
+      "opportunity_validity",
+      "opportunity_description",
+      "opportunity_status",
+      "opportunity_amount",
+    ],
+  ];
+  const onChange = (checkedValues) => {
+    setSelectedColumns(checkedValues);
+  };
 
   return (
     <div>
       <div className="container-fluid lead_list  py-3">
         <div>
-         
-          <div className="row flex-wrap">
-            <div className="col">
+          <div className="row flex-wrap align-items-center">
+            <div className="col-4">
               <h5 className="lead_text">Debit Notes</h5>
             </div>
-           
-            <Leadlist_Icons
-                  datas={dailyexpenseList}
-                  columns={columns}
-                  items={data12}
-                  xlheading={OppHeads}
-                  filename="data.csv"
-                  chechboxes={
-                    <Checkbox.Group
-                      onChange={onChange}
-                      value={selectedColumns}
-                    >
-                      {columnsKeys.map((column) => (
-                        <li>
-                          <Checkbox value={column} key={column}>
-                            {column}
-                          </Checkbox>
-                        </li>
-                      ))}
-                    </Checkbox.Group>
-                  }
-                  />
-          </div>
-          <div className="row " style={{ backgroundColor: "#f4f4f7" }}>
             <div className="col-4">
               <Input.Search
+                className="inputSearch"
                 placeholder="Search "
                 style={{ margin: "5px", borderRadius: "5px" }}
                 value={searchedText}
@@ -262,7 +242,29 @@ const onChange = (checkedValues) => {
                 }}
               />
             </div>
-            {/* <div className="col-4 ">
+            <div className="col-4 d-flex justify-content-end">
+              <Leadlist_Icons
+                datas={dailyexpenseList}
+                columns={columns}
+                items={data12}
+                xlheading={OppHeads}
+                filename="data.csv"
+                chechboxes={
+                  <Checkbox.Group onChange={onChange} value={selectedColumns}>
+                    {columnsKeys.map((column) => (
+                      <li>
+                        <Checkbox value={column} key={column}>
+                          {column}
+                        </Checkbox>
+                      </li>
+                    ))}
+                  </Checkbox.Group>
+                }
+              />
+            </div>
+          </div>
+          {/* <div className="row " style={{ backgroundColor: "#f4f4f7" }}> */}
+          {/* <div className="col-4 ">
               <Input.Search
                 placeholder="Search by Code"
                 style={{ margin: "5px", borderRadius: "5px" }}
@@ -294,7 +296,7 @@ const onChange = (checkedValues) => {
               
               </Select>
             </div> */}
-          </div>
+          {/* </div> */}
           <div className="row my-3">
             <div className="col-4  px-3">
               <Select
@@ -354,7 +356,7 @@ const onChange = (checkedValues) => {
               }}
             />
             )} */}
-          </div>
+            </div>
             <div className="col-4 d-flex justify-content-end">
               <Button
                 //   onClick={() => setShowAddOpportunity(true)}
@@ -376,7 +378,7 @@ const onChange = (checkedValues) => {
             <TableData
               // data={getData(current,numOfItems, pageSize)}
               // data={data}
-                data={data}
+              data={data}
               columns={columns}
               custom_table_css="table_lead_list"
             />
@@ -397,7 +399,6 @@ const onChange = (checkedValues) => {
           {/* {"mcncncncncncncnc"}  {product listing ends } */}
         </div>
         {/* {section Two Product Edit modal starts} */}
-
 
         {/* <CustomModel
           Adding_contents

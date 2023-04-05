@@ -262,6 +262,7 @@ function Lead({}) {
   };
 
   useEffect(() => {
+    addForm.setFieldsValue({ customer_type: "organization" });
     if (CustomerId) {
       getallContacts();
     }
@@ -328,8 +329,8 @@ function Lead({}) {
                   className={toggleState === 5 ? "tabs active-tabs" : "tabs"}
                   onClick={(e) => {
                     // CustomerId !== null ? errormessage(): handleAccountingTab(e);
-                    handleMoreinfoTab()
-                   }}
+                    handleMoreinfoTab();
+                  }}
                 >
                   MoreInfo
                 </button>
@@ -459,13 +460,16 @@ function Lead({}) {
                         ""
                       )}
                       <div className="mt-4">
-                        <label>Phone <span className="required">*</span></label>
+                        <label>
+                          Phone <span className="required">*</span>
+                        </label>
                         <Form.Item
                           className="mt-2"
                           name="customer_phone"
                           rules={[
                             {
                               required: true,
+                              message: "Please enter a valid Phone Number",
                             },
                           ]}
                         >
@@ -474,13 +478,16 @@ function Lead({}) {
                       </div>
                     </div>
                     <div className="col-sm-4 pt-2">
-                      <label>Customer Type<span className="required">*</span></label>
+                      <label>
+                        Customer Type<span className="required">*</span>
+                      </label>
                       <Form.Item
                         className="my-2 pb-3"
                         name="customer_type"
                         rules={[
                           {
                             required: true,
+                            message: "Please select Customer Type",
                           },
                         ]}
                       >
@@ -511,13 +518,16 @@ function Lead({}) {
                         </SelectBox> */}
                       </Form.Item>
                       <div className="mt-2">
-                        <label>Email <span className="required">*</span></label>
+                        <label>
+                          Email <span className="required">*</span>
+                        </label>
                         <Form.Item
                           className="mt-2"
                           name="customer_email"
                           rules={[
                             {
                               required: true,
+                              message: "Please enter a valid Email",
                             },
                           ]}
                         >
@@ -529,20 +539,7 @@ function Lead({}) {
                       </div>
                     </div>
                     <div className="col-sm-4 pt-2">
-                      <label>
-                        <SelectBox
-                          defaultValue="Billing Address"
-                          className="address_label"
-                        >
-                          <Select.Option value="billing">
-                            Billing Address
-                          </Select.Option>
-                          <Select.Option value="shipping">
-                            Shipping Address
-                          </Select.Option>
-                        </SelectBox>
-                      </label>
-
+                      <label className="pb-3">Address</label>
                       <Form.Item
                         name="customer_address"
                         rules={[
@@ -888,19 +885,17 @@ function Lead({}) {
                   <Countrystate customer_id={CustomerId} />
                 </div>
               </div>{" "}
-
               <div
                 className={
                   toggleState === 5 ? "content  active-content" : "content"
                 }
               >
                 <div className="col-lg" style={{ borderRadius: "3px" }}>
-                  <Moreinfo 
+                  <Moreinfo
                   // customer_id={CustomerId}
-                   />
+                  />
                 </div>
               </div>
-
               <Custom_model
                 size={`sm`}
                 success

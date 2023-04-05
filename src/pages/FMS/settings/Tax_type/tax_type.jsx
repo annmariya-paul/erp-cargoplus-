@@ -64,6 +64,19 @@ export default function TaxType() {
       );
       console.log("all taxtype are", allTxTypes.data.data);
       setTaxTypes(allTxTypes.data.data);
+      let temp = [];
+      allTxTypes.data.data.forEach((item, index) => {
+        temp.push({
+          tax_type_id: item.tax_type_id,
+          tax_type_description: item.tax_type_description,
+          tax_type_name: item.tax_type_name,
+          tax_type_percentage: item.tax_type_percentage,
+          tax_type_status: item.tax_type_status,
+          tax_type_tax_group_id: item.tax_type_tax_group_id,
+          // tax_type_tax_group_name: item.fms_v1_tax_group.tax_group_name,
+        });
+      });
+      console.log("tax group array", temp);
     } catch (err) {
       console.log("error while getting the tax types: ", err);
     }
@@ -89,7 +102,7 @@ export default function TaxType() {
   }, []);
 
   // { function to add a tax type - Ann - 19/1/23}
-  const createTaxTypes = async () => {
+  const createTaxTypes = async (data) => {
     try {
       const addtaxtypes = await PublicFetch.post(
         `${CRM_BASE_URL_FMS}/tax-types`,
@@ -97,6 +110,7 @@ export default function TaxType() {
           tax_type_name: taxTypeName.trim(" "),
           tax_type_percentage: parseInt(taxPercent),
           tax_type_description: taxDescription,
+          tax_type_tax_group_id: data.tax_type_tax_group,
         }
       );
       console.log("fright added successfully", addtaxtypes);
@@ -159,13 +173,14 @@ export default function TaxType() {
   };
 
   // { function to update a tax type - Ann - 19/1/23}
-  const taxTypeUpdate = async () => {
+  const taxTypeUpdate = async (data) => {
     try {
       const updated = await PublicFetch.patch(
         `${CRM_BASE_URL_FMS}/tax-types/${taxtype_id}`,
         {
           tax_type_name: editName.trim(" "),
           tax_type_percentage: parseInt(taxEditPercent),
+          tax_type_tax_group_id: data.tax_type_tax_group,
           tax_type_description: editDescription,
         }
       );
@@ -462,7 +477,7 @@ export default function TaxType() {
               form={addForm}
               onFinish={(data) => {
                 console.log("valuezzzz", data);
-                createTaxTypes();
+                createTaxTypes(data);
               }}
               onFinishFailed={(error) => {
                 console.log(error);
@@ -580,7 +595,7 @@ export default function TaxType() {
               form={editForm}
               onFinish={(data) => {
                 console.log("valuezzzzzzz", data);
-                taxTypeUpdate();
+                taxTypeUpdate(data);
               }}
               onFinishFailed={(error) => {
                 console.log(error);

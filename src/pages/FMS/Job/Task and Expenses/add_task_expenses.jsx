@@ -54,7 +54,7 @@ export default function Taskexpenses() {
     {
       key: 1,
       job_task_expense_task_id: "",
-      job_task_expense_taxtype_id: "",
+      job_task_expense_taxgroup_id: "",
       job_task_expense_tax_perc: "",
       job_task_expense_agent_id: "",
       job_task_expense_cost_amountfx: "",
@@ -175,7 +175,7 @@ export default function Taskexpenses() {
     }
     addForm.setFieldsValue({ grandtotal: grandTotal });
   };
-  const [taxType, setTaxtype] = useState();
+  const [taxGroup, setTaxGroup] = useState();
 
   const handleInputChange = (e, key, col, tx) => {
     console.log("gai guys", e, tx);
@@ -275,12 +275,12 @@ export default function Taskexpenses() {
   const handleInputChange2 = (e, key, col) => {
     console.log("Tax amount to be clacilated", e, key, col);
     let taxpercentage = "";
-    taxtypes.map((item, index) => {
+    taxgroups.map((item, index) => {
       if (col && e === item.tax_type_id) {
         let existingValues = addForm.getFieldsValue();
         let { Job_quotation_details } = existingValues;
         let assignValues = Job_quotation_details[key];
-        assignValues["job_task_expense_taxtype_id"] = item.tax_type_id;
+        assignValues["job_task_expense_taxgroup_id"] = item.tax_type_id;
         assignValues["job_task_expense_tax_perc"] = item?.tax_type_percentage;
         taxpercentage = item?.tax_type_percentage;
         let taxAmount =
@@ -299,7 +299,7 @@ export default function Taskexpenses() {
             if (item.key === key) {
               return {
                 ...item,
-                job_task_expense_taxtype_id: e,
+                job_task_expense_taxgroup_id: e,
                 job_task_expense_cost_taxfx: taxAmount,
                 job_task_expense_tax_perc: taxpercentage,
                 job_task_expense_cost_subtotalfx: totalAmount,
@@ -313,7 +313,7 @@ export default function Taskexpenses() {
             if (item.key === key) {
               return {
                 ...item,
-                job_task_expense_taxtype_id: e,
+                job_task_expense_taxgroup_id: e,
                 job_task_expense_tax_perc: taxpercentage,
                 job_task_expense_cost_taxfx: taxAmount,
                 job_task_expense_cost_subtotalfx: totalAmount,
@@ -348,11 +348,11 @@ export default function Taskexpenses() {
       console.log("hai everybody", e, col);
       allservices.map((item, index) => {
         if (e === item.service_id) {
-          setTaxtype(item.service_taxtype);
+          setTaxGroup(item.service_taxgroup);
           let existingValues = addForm.getFieldsValue();
           let { Job_quotation_details } = existingValues;
           let assignValues = Job_quotation_details[key];
-          assignValues["job_task_expense_taxtype_id"] = item?.service_taxtype;
+          assignValues["job_task_expense_taxgroup_id"] = item?.service_taxgroup;
           assignValues["job_task_expense_tax_perc"] =
             item?.fms_v1_tax_types?.tax_type_percentage;
 
@@ -500,7 +500,7 @@ export default function Taskexpenses() {
         {
           key: tableData.length + 1,
           job_task_expense_task_id: "",
-          job_task_expense_taxtype_id: "",
+          job_task_expense_taxgroup_id: "",
           job_task_expense_tax_perc: "",
           job_task_expense_agent_id: "",
           job_task_expense_cost_amountfx: "",
@@ -518,7 +518,7 @@ export default function Taskexpenses() {
         {
           key: sampletable.length + 1,
           job_task_expense_task_id: "",
-          job_task_expense_taxtype_id: "",
+          job_task_expense_taxgroup_id: "",
           job_task_expense_tax_perc: "",
           job_task_expense_agent_id: "",
           job_task_expense_cost_amountfx: "",
@@ -566,7 +566,7 @@ export default function Taskexpenses() {
   const [sampletable, setSampletable] = useState(dataSource);
   const [currency, setCurrency] = useState();
   const [exchangedata, setExchangeData] = useState();
-  const [taxtypes, setAlltaxtypes] = useState();
+  const [taxgroups, setAlltaxGroup] = useState();
   const [isChecked, setIschecked] = useState(0);
 
   const getSingleJob = () => {
@@ -588,7 +588,7 @@ export default function Taskexpenses() {
               job_task_expense_task_id: item.crm_v1_services.service_id,
               job_task_expense_cost_amountfx:
                 item.job_task_expense_cost_amountfx,
-              job_task_expense_taxtype_id: item.fms_v1_tax_types.tax_type_id,
+              job_task_expense_taxgroup_id: item.fms_v1_tax_group.tax_group_id,
               job_task_expense_taxtype_name:
                 item.fms_v1_tax_types.tax_type_name,
               job_task_expense_tax_perc:
@@ -679,7 +679,7 @@ export default function Taskexpenses() {
           key: index,
           job_task_expense_task_id: item.job_task_expense_task_id,
           job_task_expense_tax_perc: item.job_task_expense_tax_perc,
-          job_task_expense_taxtype_id: item.job_task_expense_taxtype_id,
+          job_task_expense_taxgroup_id: item.job_task_expense_taxgroup_id,
           job_task_expense_cost_amountfx: item.job_task_expense_cost_amountfx,
           job_task_expense_cost_taxfx: item.job_task_expense_cost_taxfx,
           job_task_expense_cost_subtotalfx:
@@ -747,13 +747,27 @@ export default function Taskexpenses() {
         console.log("Errror while getting data", err);
       });
   };
+
+  const GetAllTaxGroups = () => {
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/tax_group`)
+      .then((res) => {
+        console.log("Response");
+        if (res.data.success) {
+          console.log("Success");
+          setAlltaxGroup(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
   const getAllTaxtype = () => {
     PublicFetch.get(`${CRM_BASE_URL_FMS}/tax-types/Minimal`)
       .then((res) => {
         console.log("response", res);
         if (res.data.success) {
           console.log("success of tax type", res.data.data);
-          setAlltaxtypes(res.data.data);
+          // setAlltaxtypes(res.data.data);
         }
       })
       .catch((err) => {
@@ -764,6 +778,7 @@ export default function Taskexpenses() {
   useEffect(() => {
     getAllservices();
     getAllTaxtype();
+    GetAllTaxGroups();
     // handleAmt();
   }, [numOfItems, pageofIndex]);
 
@@ -900,7 +915,7 @@ export default function Taskexpenses() {
                 onBlur={() => {
                   if (isService) {
                     handleInputChange2(
-                      taxType,
+                      taxGroup,
                       index.key,
                       "job_task_expense_cost_taxfx"
                     );
@@ -927,8 +942,8 @@ export default function Taskexpenses() {
     },
     {
       title: "Tax Type",
-      dataIndex: "job_task_expense_taxtype_id",
-      key: "job_task_expense_taxtype_id",
+      dataIndex: "job_task_expense_taxgroup_id",
+      key: "job_task_expense_taxgroup_id",
       width: "3%",
       className: "firstrow",
       render: (data, index) => {
@@ -940,7 +955,7 @@ export default function Taskexpenses() {
               name={[
                 "Job_quotation_details",
                 index.key,
-                "job_task_expense_taxtype_id",
+                "job_task_expense_taxgroup_id",
               ]}
               // rules={[{ required: true, message: "Required" }]}
             >
@@ -952,7 +967,7 @@ export default function Taskexpenses() {
                 showSearch
                 optionFilterProp="children"
                 className="selectwidthexp mb-2"
-                value={index.job_task_expense_taxtype_id}
+                value={index.job_task_expense_taxgroup_id}
                 onChange={(e) => {
                   console.log("servicess11123", e);
                   // handleInputchange1(e, index.key, "job_task_expense_task_id");
@@ -965,15 +980,15 @@ export default function Taskexpenses() {
                 }}
                 disabled={true}
               >
-                {taxtypes &&
-                  taxtypes.length > 0 &&
-                  taxtypes.map((item, index) => {
+                {taxgroups &&
+                  taxgroups.length > 0 &&
+                  taxgroups.map((item, index) => {
                     return (
                       <Select.Option
-                        key={item.tax_type_id}
-                        value={item.tax_type_id}
+                        key={item.tax_group_id}
+                        value={item.tax_group_id}
                       >
-                        {item.tax_type_name}
+                        {item.tax_group_name}
                       </Select.Option>
                     );
                   })}
@@ -1133,7 +1148,7 @@ export default function Taskexpenses() {
                       onBlur={() => {
                         if (isService) {
                           handleInputChange2(
-                            taxType,
+                            taxGroup,
                             index.key,
                             "job_task_expense_cost_taxfx"
                           );

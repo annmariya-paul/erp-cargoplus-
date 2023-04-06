@@ -314,6 +314,7 @@ export default function Locations() {
             {data12 && (
               <Leadlist_Icons
                 datas={data12}
+                name="location"
                 columns={filteredColumns}
                 items={data12}
                 xlheading={UnitHeads}

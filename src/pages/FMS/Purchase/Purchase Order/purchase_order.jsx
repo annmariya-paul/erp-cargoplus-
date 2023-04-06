@@ -4,10 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import { cargo_typeoptions } from "../../../../utils/SelectOptions";
 import { DragOutlined, FontColorsOutlined } from "@ant-design/icons";
 import dragula from "dragula";
-import {
-  CRM_BASE_URL_HRMS,
-  CRM_BASE_URL_SELLING,
-} from "../../../../api/bootapi";
+import { CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
 import "dragula/dist/dragula.css";
 import { CRM_BASE_URL } from "../../../../api/bootapi";
 import TableData from "../../../../components/table/table_data";
@@ -16,7 +13,7 @@ import { CRM_BASE_URL_FMS } from "../../../../api/bootapi";
 import { useNavigate } from "react-router-dom";
 import { GENERAL_SETTING_BASE_URL } from "../../../../api/bootapi";
 import FileUpload from "../../../../components/fileupload/fileUploader";
-import { Form, InputNumber } from "antd";
+import { Checkbox, Form, InputNumber } from "antd";
 import Button from "../../../../components/button/button";
 import PublicFetch from "../../../../utils/PublicFetch";
 import InputType from "../../../../components/Input Type textbox/InputType";
@@ -24,13 +21,15 @@ import { Select, Popconfirm } from "antd";
 import Custom_model from "../../../../components/custom_modal/custom_model";
 import SelectBox from "../../../../components/Select Box/SelectBox";
 import { DatePicker } from "antd";
-import "./quotation.scss";
+// import "../../Quotations/create quotation/quotation.scss";
+import "./purchaseorder.scss";
 import { ROUTES } from "../../../../routes";
 import Input_Number from "../../../../components/InputNumber/InputNumber";
 import moment from "moment";
 import axios from "axios";
+import TextArea from "../../../../components/ InputType TextArea/TextArea";
 
-export default function Add_Quotation() {
+export default function Purchaseorder() {
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [successPopup, setSuccessPopup] = useState(false);
   const [error, setError] = useState(false);
@@ -43,9 +42,9 @@ export default function Add_Quotation() {
   const [taxGroup, setTaxGroup] = useState();
   const [currencyDefault, setCurrencyDefault] = useState();
   console.log("curencydefault", currencyDefault);
-
+  const [imgSizeError, setImgSizeError] = useState(false);
+  const [img, setImg] = useState([]);
   const [allincoterms, setallincoterms] = useState("");
-  const [AllSalesPersons, setAllSalesPersons] = useState();
   const [defaultincoterm, setdefaultincoterm] = useState("");
   const [allcontainertype, setallcontainertype] = useState("");
 
@@ -82,17 +81,9 @@ export default function Add_Quotation() {
     console.log("gai guys", e, col, tx);
     // setSampleid(e)
     taxGroups.map((item, index) => {
-      console.log("jhdew", item);
-      let tax_percnt = 0;
-      let totalTax_percent = 0;
-      if (tx && e === item?.tax_group_id) {
-        if (col && key && tx && e === item?.tax_group_id) {
-          item?.fms_v1_tax_types?.forEach((taxType, taxIndex) => {
-            console.log("tax types", taxType);
-            tax_percnt = taxType?.tax_type_percentage;
-            setTaxRatee(taxType?.tax_type_percentage);
-          });
-          totalTax_percent += tax_percnt;
+      if (tx && e === item.tax_type_id) {
+        if (col && key && tx && e === item.tax_type_id) {
+          setTaxRatee(item.tax_type_percentage);
           // let hai = item.tax_type_percentage;
 
           let existingValues = addForm.getFieldsValue();
@@ -101,7 +92,9 @@ export default function Add_Quotation() {
           let assignValues = quotation_details[key];
 
           let taxamount =
-            (assignValues["quotation_details_cost"] * totalTax_percent) / 100;
+            (assignValues["quotation_details_cost"] *
+              item.tax_type_percentage) /
+            100;
           console.log("sum of tax", taxamount);
           assignValues["quotation_details_tax_amount"] = taxamount;
 
@@ -210,22 +203,20 @@ export default function Add_Quotation() {
   };
 
   const handleEnter = (e) => {
-    console.log("Hello");
-    console.log("Key ::::::: ", e.key);
-    if (e.key === "Enter" || e.key === "Tab") {
+   
       setTableData([
         ...tableData,
         {
           // key: `${tableData.length + 1}`,
           key: uuidv4(),
           quotation_details_service_id: "",
-          quotation_details_cost: "",
-          quotation_details_tax_group: "",
-          quotation_details_tax_amount: "",
-          quotation_details_total: "",
+        //   quotation_details_cost: "",
+        //   quotation_details_tax_group: "",
+        //   quotation_details_tax_amount: "",
+        //   quotation_details_total: "",
         },
       ]);
-    }
+    
   };
 
   const handleReorder = (dragIndex, draggedIndex) => {
@@ -272,8 +263,8 @@ export default function Add_Quotation() {
   const [currentcount, setCurrentcount] = useState();
   const [locationType, setLocationType] = useState();
 
-  const [allCustomerList, setAllCustomerList] = useState([]);
-  console.log("Lead names :", allCustomerList);
+  const [allLeadList, setAllLeadList] = useState([]);
+  console.log("Lead names :", allLeadList);
   const getallcarrier = async () => {
     try {
       const getcarrier = await PublicFetch.get(`${CRM_BASE_URL_FMS}/carrier`);
@@ -301,19 +292,6 @@ export default function Add_Quotation() {
     } catch (err) {
       console.log("Error in getting currency : ", err);
     }
-  };
-
-  const GetAllSalesPersons = () => {
-    PublicFetch.get(`${CRM_BASE_URL_HRMS}/employees/salesexecutive`)
-      .then((res) => {
-        console.log("Response");
-        if (res.data.success) {
-          setAllSalesPersons(res.data.data);
-        }
-      })
-      .catch((err) => {
-        console.log("Error", err);
-      });
   };
 
   const getallfrighttype = async () => {
@@ -430,7 +408,6 @@ export default function Add_Quotation() {
 
   useEffect(() => {
     getAllTaxTypes();
-    GetAllSalesPersons();
   }, []);
   useEffect(() => {
     getallfrighttype();
@@ -469,31 +446,38 @@ export default function Add_Quotation() {
   //         formData.append(`quotation_details[${index}][quotation_details_tax_amount] `,item.taxamount);
   //         formData.append(`quotation_details[${index}][quotation_details_total] `, item.totalamount);
   //       })
-
+  const [serialNo, setserialNo] = useState(1);
   const columns = [
+    // {
+    //   title: "Action",
+    //   dataIndex: "action",
+    //   key: "action",
+    //   className: "drag-visible",
+    //   render: (data, record, index) => {
+    //     return (
+    //       <div className="d-flex justify-content-center align-items-center gap-2">
+    //         <div className="actionEdit m-0 p-0">
+    //           <DragOutlined className="draggable" type="swap" />
+    //         </div>
+    //         <Popconfirm
+    //           title="Sure to delete?"
+    //           onConfirm={() => handleDelete(record.key)}
+    //         >
+    //           <div className="deleteIcon m-0">
+    //             <FaTrash />
+    //           </div>
+    //         </Popconfirm>
+    //       </div>
+    //     );
+    //   },
+    // },
     {
-      title: "Action",
-      dataIndex: "action",
-      key: "action",
-      className: "drag-visible",
-      render: (data, record, index) => {
-        return (
-          <div className="d-flex justify-content-center align-items-center gap-2">
-            <div className="actionEdit m-0 p-0">
-              <DragOutlined className="draggable" type="swap" />
-            </div>
-            <Popconfirm
-              title="Sure to delete?"
-              onConfirm={() => handleDelete(record.key)}
-            >
-              <div className="deleteIcon m-0">
-                <FaTrash />
-              </div>
-            </Popconfirm>
-          </div>
-        );
+        title: "Slno",
+        key: "index",
+        width: "2%",
+        render: (value, item, index) => serialNo + index,
+        align: "center",
       },
-    },
     // {
     //   title: "",
     //   dataIndex: "operation",
@@ -513,8 +497,7 @@ export default function Add_Quotation() {
       title: "TASKS",
       dataIndex: "quotation_details_service_id",
       key: "quotation_details_service_id",
-      width: "30%",
-
+      
       render: (data, index) => {
         console.log("index is :", index);
         return (
@@ -532,7 +515,7 @@ export default function Add_Quotation() {
                 showArrow={false}
                 showSearch
                 optionFilterProp="children"
-                className="selwidth input_bg"
+                className="selwidthnew input_bg"
                 value={index.quotation_details_service_id}
                 onChange={(e) => {
                   console.log("servicess11123", e);
@@ -564,11 +547,11 @@ export default function Add_Quotation() {
       align: "center",
     },
     {
-      title: "COST",
+      title: "AWB/BL NO",
       dataIndex: "quotation_details_cost",
       key: "quotation_details_cost",
-      width: "10%",
-
+     
+      align: "left",
       render: (data, index) => {
         console.log("index is :", index);
         return (
@@ -581,44 +564,27 @@ export default function Add_Quotation() {
               // rules={[{ required: true, message: "Required" }]}
             >
               <Input_Number
-                className="text_right input_bg selwidthcost"
-                value={index.quotation_details_cost}
-                onChange={(value) => {
-                  handleInputchange1(
-                    value,
-                    index.key,
-                    "quotation_details_cost",
-                    "tr"
-                  );
-                  console.log(" input numberevent ", value, index.key);
-                }}
+                className="text_right input_bg selwidthcostnew"
+               
                 align="right"
                 // step={0.01}
                 min={0}
                 precision={2}
                 controlls={false}
-                onBlur={() => {
-                  handleInputChange(
-                    taxGroup,
-                    index.key,
-                    "quotation_details_tax_group",
-                    "tx"
-                  );
-                }}
-                onKeyDown={(e) => handleEnter(e, index.key)}
+              
               />
             </Form.Item>
           </div>
         );
       },
 
-      align: "right",
+    
     },
     {
-      title: "TAX GROUP",
+      title: "JOB NO",
       dataIndex: "quotation_details_tax_group",
       key: "quotation_details_tax_group",
-
+      align: "left",
       render: (data, index) => {
         console.log("index is 112:", index.quotation_details_tax_group);
         return (
@@ -666,13 +632,13 @@ export default function Add_Quotation() {
           </div>
         );
       },
-      align: "right",
+     
     },
     {
-      title: "TAX AMOUNT",
+      title: "AMOUNT",
       dataIndex: "quotation_details_tax_amount",
       key: "quotation_details_tax_amount",
-
+      align: "right",
       render: (data, index) => {
         console.log("index is :", index);
         return (
@@ -686,7 +652,7 @@ export default function Add_Quotation() {
               // rules={[{ required: true, message: 'Please input the name' }]}
             >
               <Input_Number
-                className="text_right input_bg selectwidthtaxamt"
+                className="text_right input_bg "
                 // value={index.taxamount}
                 onChange={(e) =>
                   handleInputchange1(
@@ -710,10 +676,11 @@ export default function Add_Quotation() {
       align: "right",
     },
     {
-      title: "TOTAL AMOUNT",
+      title: "TAX",
       dataIndex: "quotation_details_total",
       key: "quotation_details_total",
-
+      align: "left",
+      width:"5%",
       render: (data, index) => {
         console.log("index is :", index);
         return (
@@ -723,7 +690,7 @@ export default function Add_Quotation() {
               // rules={[{ required: true, message: 'Please input the name' }]}
             >
               <Input_Number
-                className="text_right input_bg selectwidthtot"
+                className=" input_bg "
                 // value={    index.totalamount=(index.cost + index.taxamount)
                 // }
                 value={
@@ -733,7 +700,7 @@ export default function Add_Quotation() {
                 onChange={(e) =>
                   handleInputChange2(e, index, "quotation_details_total")
                 }
-                align="right"
+                // align="right"
                 // step={0.01}
                 min={0}
                 precision={2}
@@ -756,8 +723,144 @@ export default function Add_Quotation() {
         );
       },
 
-      align: "right",
+    
     },
+    {
+        title: "TAX %",
+        dataIndex: "quotation_details_total",
+        key: "quotation_details_total",
+        align: "center",
+        // width:"10%",
+        render: (data, index) => {
+          console.log("index is :", index);
+          return (
+            <div className="d-flex justify-content-center align-items-center tborder ">
+              <Form.Item
+                name={["quotation_details", index.key, "quotation_details_total"]}
+                // rules={[{ required: true, message: 'Please input the name' }]}
+              >
+                <Input_Number
+                 className="input_bg"
+                //   className="text_right input_bg selectwidthtotneww"
+                  // value={    index.totalamount=(index.cost + index.taxamount)
+                  // }
+                 
+                />
+              </Form.Item>
+              {/* <div className="">
+                {index.quotation_details_total &&
+                index.quotation_details_total ? (
+                  <></>
+                ) : (
+                  <>
+                    <label>Total is required</label>
+                  </>
+                )}
+              </div> */}
+            </div>
+          );
+        },
+  
+        align: "right",
+      },
+      {
+        title: "TAX AMT",
+        dataIndex: "quotation_details_total",
+        key: "quotation_details_total",
+
+        render: (data, index) => {
+          console.log("index is :", index);
+          return (
+            <div className="d-flex justify-content-center align-items-center tborder ">
+              <Form.Item
+                name={["quotation_details", index.key, "quotation_details_total"]}
+                // rules={[{ required: true, message: 'Please input the name' }]}
+              >
+                <Input_Number
+                  className="text_right input_bg selectwidthtotnew"
+                  // value={    index.totalamount=(index.cost + index.taxamount)
+                  // }
+                  value={
+                    index.quotation_details_cost +
+                    index.quotation_details_tax_amount
+                  }
+                  onChange={(e) =>
+                    handleInputChange2(e, index, "quotation_details_total")
+                  }
+                  align="right"
+                  // step={0.01}
+                  min={0}
+                  precision={2}
+                  controlls={false}
+                  disabled={true}
+                  // onKeyDown={(e) => handleEnter(e, index.key)}
+                />
+              </Form.Item>
+              {/* <div className="">
+                {index.quotation_details_total &&
+                index.quotation_details_total ? (
+                  <></>
+                ) : (
+                  <>
+                    <label>Total is required</label>
+                  </>
+                )}
+              </div> */}
+            </div>
+          );
+        },
+  
+        align: "right",
+      },
+      {
+        title: "TOTAL AMOUNT",
+        dataIndex: "quotation_details_total",
+        key: "quotation_details_total",
+  
+        render: (data, index) => {
+          console.log("index is :", index);
+          return (
+            <div className="d-flex justify-content-center align-items-center tborder ">
+              <Form.Item
+                name={["quotation_details", index.key, "quotation_details_total"]}
+                // rules={[{ required: true, message: 'Please input the name' }]}
+              >
+                <Input_Number
+                  className="text_right input_bg selectwidthtotnewww"
+                  // value={    index.totalamount=(index.cost + index.taxamount)
+                  // }
+                  value={
+                    index.quotation_details_cost +
+                    index.quotation_details_tax_amount
+                  }
+                  onChange={(e) =>
+                    handleInputChange2(e, index, "quotation_details_total")
+                  }
+                  align="right"
+                  // step={0.01}
+                  min={0}
+                  precision={2}
+                  controlls={false}
+                  disabled={true}
+                  // onKeyDown={(e) => handleEnter(e, index.key)}
+                />
+              </Form.Item>
+              {/* <div className="">
+                {index.quotation_details_total &&
+                index.quotation_details_total ? (
+                  <></>
+                ) : (
+                  <>
+                    <label>Total is required</label>
+                  </>
+                )}
+              </div> */}
+            </div>
+          );
+        },
+  
+        align: "right",
+      },
   ];
 
   const [total, setTotal] = useState(0);
@@ -770,14 +873,14 @@ export default function Add_Quotation() {
 
   console.log("total ", total);
   const GetAllLeadData = () => {
-    PublicFetch.get(`${CRM_BASE_URL}/customer/minimal`)
+    PublicFetch.get(`${CRM_BASE_URL}/lead/Minimal`)
       .then((res) => {
         if (res?.data?.success) {
           console.log("All lead data", res?.data?.data);
           // setAllLeadList(res?.data?.data?.leads);
           setTotalcount(res?.data?.data?.totalCount);
           setCurrentcount(res?.data?.data?.currentCount);
-          setAllCustomerList(res?.data?.data);
+          setAllLeadList(res?.data?.data);
 
           let array = [];
           res?.data?.data?.leads?.forEach((item, index) => {
@@ -1165,7 +1268,7 @@ export default function Add_Quotation() {
           >
             <div className="container-fluid ms-0 me-2 ">
               <div className="row  mt-3">
-                <h5 className="lead_text"> New Quotation</h5>
+                <h5 className="lead_text"> New Purchase Order</h5>
               </div>
               <div className="row mt-1">
                 <div className="content-tabs-new row justify-content mx-1 mb-3">
@@ -1177,48 +1280,33 @@ export default function Add_Quotation() {
                   {/* <div className="row"> */}
 
                   <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                    <label>
-                      Customer<span className="required">*</span>
+                    <label>Vendor<span className="required">*</span>
                     </label>
                     <Form.Item
-                      name="customer"
+                      name="vendor"
                       rules={[
                         {
                           required: true,
-                          message: "Please select Customer",
+                          message: "Please select Vendor",
                         },
                       ]}
                     >
-                      <SelectBox>
-                        {allCustomerList &&
-                          allCustomerList.length > 0 &&
-                          allCustomerList.map((item, index) => {
-                            return (
-                              <Select.Option
-                                key={item.customer_id}
-                                value={item.customer_id}
-                              >
-                                {item.customer_name}{" "}
-                              </Select.Option>
-                            );
-                          })}
-                      </SelectBox>
+                      <SelectBox></SelectBox>
                     </Form.Item>
                   </div>
                   <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                    <label>
-                      Freight Type<span className="required">*</span>
+                    <label>PO No<span className="required">*</span>
                     </label>
                     <Form.Item
-                      name="freighttype"
+                      name="pono"
                       rules={[
                         {
                           required: true,
-                          message: "Please select a Freight Type",
+                          message: "Please select a PO No",
                         },
                       ]}
                     >
-                      <SelectBox
+                      {/* <SelectBox
                         allowClear
                         showSearch
                         optionFilterProp="children"
@@ -1240,639 +1328,78 @@ export default function Add_Quotation() {
                               </Select.Option>
                             );
                           })}
-                      </SelectBox>
+                      </SelectBox> */}
+                      <InputType/>
                     </Form.Item>
                   </div>
 
-                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                    <label>
-                      Quotation No<span className="required">*</span>
+                  <div className="col-xl-4 col-sm-12 ">
+                    <label>Purchase Date<span className="required">*</span>
                     </label>
-                    <Form.Item name="qno">
-                      <SelectBox></SelectBox>
-                    </Form.Item>
-                  </div>
-
-                  <div className="col-xl-4 col-sm-12 mt-2 px-3 ">
-                    <label>
-                      Quotation date<span className="required">*</span>
-                    </label>
-
-                    <Form.Item
-                      name="qdate"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please select quotation date",
-                        },
-                      ]}
-                    >
-                      <DatePicker
-                        style={{ borderWidth: 0, marginTop: 10 }}
+                    <Form.Item name="purchasedate">
+                    <DatePicker
+                        style={{ borderWidth: 0, marginTop: 7 }}
                         defaultValue={moment(date)}
                         format={dateFormatList}
                       />
                     </Form.Item>
                   </div>
-                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                    <label>
-                      Validity <span className="required">*</span>
+
+                  <div className="col-xl-4 col-sm-12 mt-2 px-3 ">
+                    <label>Due date
                     </label>
+
                     <Form.Item
-                      name="vdate"
+                      name="duedate"
                       rules={[
                         {
                           required: true,
-
-                          message: "Please select validity date",
+                          message: "Please select due date",
                         },
                       ]}
                     >
                       <DatePicker
-                        style={{ borderWidth: 0, marginTop: 10 }}
-                        disabledDate={(d) => !d || d.isBefore(today)}
+                        style={{ borderWidth: 0, marginTop: 3 }}
+                        // defaultValue={moment(date)}
                         format={dateFormatList}
-                        onChange={(e) => {
-                          console.log("date mmm", e);
-                          setDate(e);
-                        }}
-                      />
-                    </Form.Item>
-                  </div>
-
-                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                    <label>
-                      Sales Person<span className="required">*</span>
-                    </label>
-                    <Form.Item
-                      name="salesperson"
-                      rules={[
-                        {
-                          required: true,
-
-                          message: "Please select sales person",
-                        },
-                      ]}
-                    >
-                      <SelectBox>
-                        {AllSalesPersons &&
-                          AllSalesPersons.length > 0 &&
-                          AllSalesPersons.map((item, index) => {
-                            return (
-                              <Select.Option
-                                key={item.employee_id}
-                                value={item.employee_id}
-                              >
-                                {item.employee_name}{" "}
-                              </Select.Option>
-                            );
-                          })}
-                      </SelectBox>
-                    </Form.Item>
-                  </div>
-
-                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                    <label>Enquiry No</label>
-                    <Form.Item name="eno">
-                      <SelectBox
-                        onChange={(e) => handleLeadIdEnq(e)}
-                        allowClear
-                        showSearch
-                        optionFilterProp="children"
-                      >
-                        {oppnew &&
-                          oppnew.length > 0 &&
-                          oppnew.map((item, index) => {
-                            return (
-                              <Select.Option
-                                key={item.opportunity_id}
-                                value={item.opportunity_id}
-                              >
-                                {item.opportunity_number}
-                              </Select.Option>
-                            );
-                          })}
-                      </SelectBox>
-                    </Form.Item>
-                  </div>
-
-                  {/* </div> */}
-                  {/* </div> */}
-                  {/* </div> */}
-                </div>
-              </div>
-              <div className="row  mt-1 ">
-                {/* <div className="col-md-6 col-12"> */}
-                <div className="content-tabs-new row justify-content mx-1 mb-3">
-                  <div className="row mt-3">
-                    <h6 className="lead_text">Transportation</h6>
-                  </div>
-                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                    <label>Consignee</label>
-                    <Form.Item
-                      name="consignee"
-                      // rules={[
-                      //   {
-                      //     required: true,
-                      //     message: "Please select Consignee",
-                      //   },
-                      // ]}
-                    >
-                      {/* <SelectBox
-                          onChange={(e) => handleLeadId(e)}
-                          allowClear
-                          showSearch
-                          optionFilterProp="children"
-                        >
-                          {allLeadList &&
-                            allLeadList.length > 0 &&
-                            allLeadList.map((item, index) => {
-                              // console.log("lead id ddd:",item.lead_id)
-
-                              //  if( leadIdEnq && leadIdEnq === leadId){
-
-                              //   return (
-                              //     <Select.Option
-                              //       key={item.lead_id}
-                              //       value={item.lead_id}
-                              //     >
-                              //       {item.lead_customer_name}
-                              //     </Select.Option>
-                              //   );
-
-                              //  }else{
-                              //   return (
-                              //     <Select.Option
-                              //       key={item.lead_id}
-                              //       value={item.lead_id}
-                              //     >
-                              //       {item.lead_customer_name}
-                              //     </Select.Option>
-                              //   );
-                              //  }
-                              if (leadIdEnq && leadIdEnq === item.lead_id) {
-                                return (
-                                  <Select.Option
-                                    key={item.lead_id}
-                                    value={item.lead_id}
-                                  >
-                                    {item.lead_customer_name}
-                                  </Select.Option>
-                                );
-                              } else if (leadIdEnq === undefined) {
-                                return (
-                                  <Select.Option
-                                    key={item.lead_id}
-                                    value={item.lead_id}
-                                  >
-                                    {item.lead_customer_name}
-                                  </Select.Option>
-                                );
-                              }
-                              // return null;
-                            })}
-                        </SelectBox> */}
-                      <InputType />
-                    </Form.Item>
-                  </div>
-
-                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                    <label>Shipper</label>
-                    <Form.Item
-                      name="shipper"
-                      // rules={[
-                      //   {
-                      //     required: true,
-
-                      //     message: "Please enter shipper name",
-                      //   },
-                      // ]}
-                    >
-                      <InputType />
-                    </Form.Item>
-                  </div>
-
-                  <div className="col-xl-4 col-sm-12 mt-2 px-3 ">
-                    <label>
-                      Carrier<span className="required">*</span>
-                    </label>
-                    <Form.Item
-                      name="carrier"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please select Carrier",
-                        },
-                      ]}
-                    >
-                      <SelectBox
-                        allowClear
-                        showSearch
-                        optionFilterProp="children"
-                      >
-                        {carrierdata &&
-                          carrierdata.length > 0 &&
-                          carrierdata.map((item, index) => {
-                            return (
-                              <Select.Option
-                                value={item.carrier_id}
-                                key={item.carrier_id}
-                              >
-                                {item.carrier_name}
-                              </Select.Option>
-                            );
-                          })}
-                      </SelectBox>
-                    </Form.Item>
-                  </div>
-
-                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                    <label>
-                      {" "}
-                      Origin<span className="required">*</span>
-                    </label>
-                    <Form.Item
-                      name="corgin"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please select origin",
-                        },
-                      ]}
-                    >
-                      <SelectBox
-                        allowClear
-                        showSearch
-                        optionFilterProp="children"
-                      >
-                        {allLocations &&
-                          allLocations.length > 0 &&
-                          allLocations.map((item, index) => {
-                            return (
-                              <Select.Option
-                                value={item.location_id}
-                                key={item.location_id}
-                              >
-                                {item.location_name}
-                              </Select.Option>
-                            );
-                          })}
-                      </SelectBox>
-                    </Form.Item>
-                  </div>
-                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                    <label>
-                      {" "}
-                      Destination<span className="required">*</span>
-                    </label>
-                    <Form.Item
-                      name="cdest"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please select destination",
-                        },
-                      ]}
-                    >
-                      <SelectBox
-                        allowClear
-                        showSearch
-                        optionFilterProp="children"
-                      >
-                        {allLocations &&
-                          allLocations.length > 0 &&
-                          allLocations.map((item, index) => {
-                            return (
-                              <Select.Option
-                                value={item.location_id}
-                                key={item.location_id}
-                              >
-                                {item.location_name}
-                              </Select.Option>
-                            );
-                          })}
-                      </SelectBox>
-                    </Form.Item>
-                  </div>
-                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                    <label>
-                      Container Type<span className="required">*</span>
-                    </label>
-                    <Form.Item
-                      name="container_type"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please select Container Type",
-                        },
-                      ]}
-                    >
-                      <SelectBox
-                        allowClear
-                        showSearch
-                        optionFilterProp="children"
-                        // disabled={disable}
-                      >
-                        {allcontainertype &&
-                          allcontainertype.length > 0 &&
-                          allcontainertype.map((item, index) => {
-                            console.log("datass", item);
-                            return (
-                              <Select.Option
-                                value={item.container_type_id}
-                                key={item.container_type_id}
-                              >
-                                {item.container_type_shortname}
-                              </Select.Option>
-                            );
-                          })}
-                      </SelectBox>
-                    </Form.Item>
-                  </div>
-                </div>
-                {/* </div> */}
-
-                {/* <div className="col-md-6 col-12"> */}
-                <div className="content-tabs-new row justify-content mx-1 mb-3  ">
-                  <div className="row mt-3">
-                    <h6 className="lead_text">Shipment Details</h6>
-                  </div>
-                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                    <label>
-                      Cargo Type<span className="required">*</span>
-                    </label>
-                    <Form.Item
-                      name="cargotype"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please select a Cargo Type",
-                        },
-                      ]}
-                    >
-                      <SelectBox
-                        allowClear
-                        showSearch
-                        optionFilterProp="children"
-                      >
-                        {cargooptions &&
-                          cargooptions.length > 0 &&
-                          cargooptions.map((item, index) => {
-                            return (
-                              <Select.Option key={item.id} value={item.value}>
-                                {item.name}
-                              </Select.Option>
-                            );
-                          })}
-                      </SelectBox>
-                    </Form.Item>
-                  </div>
-
-                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                    <label>
-                      Number of pieces<span className="required">*</span>
-                    </label>
-                    <Form.Item
-                      name="npieces"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter Number of pieces",
-                        },
-                      ]}
-                    >
-                      <Input_Number />
-                    </Form.Item>
-                  </div>
-
-                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                    <label>
-                      UOM<span className="required">*</span>
-                    </label>
-                    <Form.Item
-                      name="uom"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please select UOM",
-                        },
-                      ]}
-                    >
-                      <SelectBox
-                        allowClear
-                        showSearch
-                        optionFilterProp="children"
-                      >
-                        {allunit &&
-                          allunit.length > 0 &&
-                          allunit.map((item, index) => {
-                            return (
-                              <Select.Option
-                                value={item.unit_id}
-                                key={item.unit_id}
-                              >
-                                {item.unit_name}
-                              </Select.Option>
-                            );
-                          })}
-                      </SelectBox>
-                    </Form.Item>
-                  </div>
-
-                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                    <label>Length</label>
-                    <Form.Item
-                      name="length"
-                      // rules={[
-                      //   {
-                      //     required: true,
-                      //     pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                      //     message: "Please enter length",
-                      //   },
-                      // ]}
-                    >
-                      <Input_Number />
-                    </Form.Item>
-                  </div>
-
-                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                    <label>Breadth</label>
-                    <Form.Item
-                      name="breadth"
-                      // rules={[
-                      //   {
-                      //     required: true,
-                      //     pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                      //     message: "Please enter breadth",
-                      //   },
-                      // ]}
-                    >
-                      <Input_Number />
-                    </Form.Item>
-                  </div>
-                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                    <label>Height</label>
-                    <Form.Item
-                      name="height"
-                      // rules={[
-                      //   {
-                      //     required: true,
-                      //     pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                      //     message: "Please enter height",
-                      //   },
-                      // ]}
-                    >
-                      <Input_Number />
-                    </Form.Item>
-                  </div>
-
-                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                    <label>Volume</label>
-                    <Form.Item
-                      name="volume"
-                      // rules={[
-                      //   {
-                      //     required: true,
-                      //     pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                      //     message: "Please enter volume",
-                      //   },
-                      // ]}
-                    >
-                      <Input_Number />
-                    </Form.Item>
-                  </div>
-
-                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                    <label>
-                      Gross Weight<span className="required">*</span>
-                    </label>
-                    <Form.Item
-                      name="gweight"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid value",
-                        },
-                      ]}
-                    >
-                      <Input_Number
-                        className="text_right"
-                        // value={amount}
-                        // onChange={handleChange}
-                        align="right"
-                        // step={0.01}
-                        min={0}
-                        precision={2}
-                        controlls={false}
-                      />
-                    </Form.Item>
-                  </div>
-
-                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                    <label>
-                      Chargeable Weight<span className="required">*</span>
-                    </label>
-                    <Form.Item
-                      name="weight"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid value",
-                        },
-                      ]}
-                    >
-                      <Input_Number
-                        className="text_right"
-                        // value={amount}
-                        // onChange={handleChange}
-                        align="right"
-                        // step={0.01}
-                        min={0}
-                        precision={2}
-                        controlls={false}
                       />
                     </Form.Item>
                   </div>
                   <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                    <label>
-                      Incoterm<span className="required">*</span>
+                    <label>Bill No <span className="required">*</span>
                     </label>
                     <Form.Item
-                      name="incoterm"
+                      name="billno"
                       rules={[
                         {
                           required: true,
 
-                          message: "Please select validity date",
+                          message: "Please select bill no",
                         },
                       ]}
                     >
-                      <SelectBox>
-                        {allincoterms &&
-                          allincoterms.length > 0 &&
-                          allincoterms.map((item, index) => {
-                            return (
-                              <Select.Option
-                                key={item.incoterm_id}
-                                value={item.incoterm_id}
-                              >
-                                {item.incoterm_short_name}{" "}
-                              </Select.Option>
-                            );
-                          })}
-                      </SelectBox>
+                     <InputType/>
                     </Form.Item>
                   </div>
-                </div>
-                {/* </div> */}
-              </div>
-              <div className="row mt-1 justify-content-between ">
-                <div className=" col-md-6 col-12 ">
-                  <div className="row content-tabs-new justify-content  mb-3">
-                    <div className="row mt-2">
-                      <h6 className="lead_text">Payment Info</h6>
-                    </div>
 
-                    <div className="col-xl-6 col-sm-12 mt-2">
-                      <label>
-                        Terms<span className="required">*</span>
-                      </label>
-                      <Form.Item
-                        name="terms"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please select Terms",
-                          },
-                        ]}
-                      >
-                        <SelectBox
-                          allowClear
-                          showSearch
-                          optionFilterProp="children"
-                        >
-                          {allPaymentTerms &&
-                            allPaymentTerms.length > 0 &&
-                            allPaymentTerms.map((item, index) => {
-                              return (
-                                <Select.Option
-                                  key={item.payment_term_id}
-                                  value={item.payment_term_id}
-                                >
-                                  {item.payment_term_name}
-                                </Select.Option>
-                              );
-                            })}
-                        </SelectBox>
-                      </Form.Item>
-                    </div>
+                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                    <label>Job expense </label>
+                    <Form.Item
+                      name="jobexpense"
+                      rules={[
+                        {
+                          required: true,
 
-                    <div className="col-xl-6 col-sm-12 mt-2">
-                      <label>
+                          message: "Please select job expense",
+                        },
+                      ]}
+                    >
+                     <Checkbox/>
+                    </Form.Item>
+                  </div>
+
+                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                      <label className="mb-2">
                         Currency<span className="required">*</span>
                       </label>
                       <Form.Item
@@ -1910,7 +1437,7 @@ export default function Add_Quotation() {
                       </Form.Item>
                     </div>
 
-                    <div className="col-xl-6 col-sm-12 mt-2 mb-4">
+                    <div className="col-xl-4 col-sm-12 mt-2 px-3">
                       <label>
                         Exchange Rate<span className="required">*</span>
                       </label>
@@ -1937,60 +1464,31 @@ export default function Add_Quotation() {
                         />
                       </Form.Item>
                     </div>
-                  </div>
-                </div>
 
-                <div className=" col-md-6 col-12">
-                  <div className="content-tabs-new row justify-content ms-1 mb-3">
-                    <div className="row mt-2">
-                      <h6 className="lead_text">Attachments</h6>
-                    </div>
-                    <div className="col-xl-12 col-sm-12 mt-2">
-                      <Form.Item className="mt-2" name="new">
-                        <FileUpload
-                          multiple
-                          filetype={"Accept only pdf and docs"}
-                          // height={188}
-                          listType="picture"
-                          accept=".pdf,.docs,"
-                          // aceept=".jpeg,.jpg,.png"
-                          onPreview={handlePreview}
-                          beforeUpload={beforeUpload}
-                          // value={leadAttachment}
-                          // onChange={(e) => setLeadAttachment(e.target.value)}
-                          onChange={(file) => {
-                            console.log("Before upload", file.file);
-                            console.log(
-                              "Before upload file size",
-                              file.file.size
-                            );
-                            setFilenew(file.file.originFileObj);
 
-                            // if (
-                            //   file.file.size > 1000 &&
-                            //   file.file.size < 500000
-                            // ) {
-                            //   // setLeadimg(file.file.originFileObj);
-                            //   // setFileSizeError(false);
-                            //   console.log(
-                            //     "file greater than 1 kb and less than 500 kb"
-                            //   );
-                            // } else {
-                            //   // setFileSizeError(true);
-                            //   console.log("hgrtryyryr");
-                            // }
-                          }}
-                        />
-                      </Form.Item>
-                    </div>
-                  </div>
+                
+
+                  {/* </div> */}
+                  {/* </div> */}
+                  {/* </div> */}
                 </div>
               </div>
               <div className="row mt-1  ">
                 <div className="content-tabs-tablenew row justify-content mx-1 mb-3">
                   <div className="row mt-2">
-                    <h6 className="lead_text">Task & Description</h6>
+                    <div className="col-9">  <h6 className="lead_text">AWB/BL Details</h6></div>
+                    <div  className="col-3 d-flex justify-content-end"> <Button
+              btnType="add_borderless"
+              
+              onClick={() => {
+               handleEnter()
+              }}
+            >
+             Add New Row
+            </Button></div>
                   </div>
+          
+                  
                   <div className="datatable">
                     <TableData
                       data={tableData}
@@ -2002,7 +1500,7 @@ export default function Add_Quotation() {
 
                   <div className="d-flex justify-content-end mt-4 ms-5">
                     <div className="col-lg-2 col-sm-4 col-xs-3 d-flex justify-content-end mt-3 me-3">
-                      <p style={{ fontWeight: 600 }}>Grand Total :</p>
+                      <p style={{ fontWeight: 600 }}>Total :</p>
                     </div>
 
                     <div className="col-lg-2 col-sm-6 col-xs-2 me-5">
@@ -2021,6 +1519,59 @@ export default function Add_Quotation() {
                   </div>
                 </div>
               </div>
+
+              <div className="row  mt-1 ">
+                {/* <div className="col-md-6 col-12"> */}
+                <div className="content-tabs-new row justify-content mx-1 mb-3">
+                  <div className="row mt-3">
+                    <h6 className="lead_text">Attachments</h6>
+                  </div>
+                  <div className="col-sm-6 pt-2">
+              <label>Remarks</label>
+              <Form.Item name="purchasePoRef">
+                <TextArea />
+              </Form.Item>
+            </div>
+
+            <div className="col-sm-6 pt-2">
+              <label>Attachments</label>
+              <Form.Item name="attachments" className="">
+                <FileUpload
+                  name="attachments"
+                  //   value={attachments}
+                  multiple
+                  listType="file"
+                  accept=".pdf,.doc,.zip"
+                  height={100}
+                  // onPreview={handlePreview}
+                  beforeUpload={false}
+                  onChange={(file) => {
+                    console.log("Before upload", file.file);
+                    console.log("Before upload file size", file.file.size);
+
+                    if (file.file.size > 1000 && file.file.size < 500000) {
+                      setImg(file.file.originFileObj);
+                      setImgSizeError(false);
+                      console.log(
+                        "Image must be greater than 1 kb and less than 500 kb"
+                      );
+                    } else {
+                      console.log("failed beacuse of large size");
+                      setImgSizeError(true);
+                    }
+                  }}
+                />
+              </Form.Item>
+            </div>
+                 
+                </div>
+                {/* </div> */}
+
+           
+                {/* </div> */}
+              </div>
+          
+             
             </div>
             {/* <div className="row justify-content-center">
              

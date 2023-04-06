@@ -276,16 +276,23 @@ export default function Taskexpenses() {
     console.log("Tax amount to be clacilated", e, key, col);
     let taxpercentage = "";
     taxgroups.map((item, index) => {
-      if (col && e === item.tax_type_id) {
+      let tax_percnt = 0;
+      let totalTax_percent = 0;
+      if (col && e === item?.tax_group_id) {
+        item?.fms_v1_tax_types?.forEach((taxtype, typeindex) => {
+          tax_percnt = taxtype?.tax_type_percentage;
+          console.log("tax type percentage", taxtype?.tax_type_percentage);
+        });
+        totalTax_percent += tax_percnt;
+        console.log("Total tax percentage", totalTax_percent);
         let existingValues = addForm.getFieldsValue();
         let { Job_quotation_details } = existingValues;
         let assignValues = Job_quotation_details[key];
-        assignValues["job_task_expense_taxgroup_id"] = item.tax_type_id;
-        assignValues["job_task_expense_tax_perc"] = item?.tax_type_percentage;
-        taxpercentage = item?.tax_type_percentage;
+        assignValues["job_task_expense_taxgroup_id"] = item.tax_group_id;
+        assignValues["job_task_expense_tax_perc"] = totalTax_percent;
+        taxpercentage = totalTax_percent;
         let taxAmount =
-          (assignValues["job_task_expense_cost_amountfx"] *
-            item?.tax_type_percentage) /
+          (assignValues["job_task_expense_cost_amountfx"] * totalTax_percent) /
           100;
         assignValues["job_task_expense_cost_taxfx"] = taxAmount;
         let totalAmount =
@@ -353,8 +360,8 @@ export default function Taskexpenses() {
           let { Job_quotation_details } = existingValues;
           let assignValues = Job_quotation_details[key];
           assignValues["job_task_expense_taxgroup_id"] = item?.service_taxgroup;
-          assignValues["job_task_expense_tax_perc"] =
-            item?.fms_v1_tax_types?.tax_type_percentage;
+          // assignValues["job_task_expense_tax_perc"] =
+          //   item?.fms_v1_tax_types?.tax_type_percentage;
 
           // let taxAmount =
           //   (assignValues["job_task_expense_cost_amountfx"] *
@@ -568,6 +575,9 @@ export default function Taskexpenses() {
   const [exchangedata, setExchangeData] = useState();
   const [taxgroups, setAlltaxGroup] = useState();
   const [isChecked, setIschecked] = useState(0);
+  const [allExpenseData, setAllExpenseData] = useState();
+  const [AllQuotationNo, setAllQuotationNo] = useState();
+  console.log("All expense data", allExpenseData);
 
   const getSingleJob = () => {
     PublicFetch.get(`${CRM_BASE_URL_FMS}/job/${id}`)
@@ -576,38 +586,43 @@ export default function Taskexpenses() {
         if (res.data.success) {
           console.log("Success of job", res.data.data);
           let newdatas = [];
+          let servdata = [];
+
           res.data.data.fms_v1_quotation_jobs.forEach((item, index) => {
             newdatas.push(item.fms_v1_quotation.quotation_no);
             setQtnno(newdatas);
           });
+          console.log("temperary", servdata);
+          // setTax(servdata);
+          setAllExpenseData(res?.data?.data?.fms_v1_job_task_expenses);
+          setAllQuotationNo(res?.data?.data?.fms_v1_quotation_jobs);
 
-          let servdata = [];
-          res?.data?.data?.fms_v1_job_task_expenses?.forEach((item, index) => {
-            console.log("Set for diplaying data", item);
-            servdata.push({
-              job_task_expense_task_id: item.crm_v1_services.service_id,
-              job_task_expense_cost_amountfx:
-                item.job_task_expense_cost_amountfx,
-              job_task_expense_taxgroup_id: item.fms_v1_tax_group.tax_group_id,
-              job_task_expense_taxtype_name:
-                item.fms_v1_tax_types.tax_type_name,
-              job_task_expense_tax_perc:
-                item.fms_v1_tax_types.tax_type_percentage,
-              job_task_expense_cost_taxfx: item.job_task_expense_cost_taxfx,
-              job_task_expense_cost_subtotalfx:
-                item.job_task_expense_cost_subtotalfx,
-              job_task_expense_agent_id: item.job_task_expense_agent_id,
-              job_task_expense_exp_amountfx: item.job_task_expense_exp_amountfx,
-              job_task_expense_exp_amountlx: item.job_task_expense_exp_amountlx,
-              job_task_expense_exp_curr: item.job_task_expense_exp_curr,
-              job_task_expense_exp_exch: item.job_task_expense_exp_exch,
-              job_task_expense_id: item.job_task_expense_id,
-              job_task_expense_invoiceable: item.job_task_expense_invoiceable,
-              job_task_expense_job_id: item.job_task_expense_job_id,
-            });
+          // res?.data?.data?.fms_v1_job_task_expenses?.forEach((item, index) => {
+          //   console.log("Set for diplaying data", item);
+          //   servdata?.push({
+          //     job_task_expense_task_id: item?.crm_v1_services.service_id,
+          //     job_task_expense_cost_amountfx:
+          //       item?.job_task_expense_cost_amountfx,
+          //     job_task_expense_taxgroup_id:
+          //       item?.fms_v1_tax_groups?.tax_group_id,
+          //     job_task_expense_taxgroup_name:
+          //       item?.fms_v1_tax_taxgroups?.tax_group_name,
+          //     job_task_expense_tax_perc:
+          //       item.fms_v1_tax_types.tax_type_percentage,
+          //     job_task_expense_cost_taxfx: item.job_task_expense_cost_taxfx,
+          //     job_task_expense_cost_subtotalfx:
+          //       item.job_task_expense_cost_subtotalfx,
+          //     job_task_expense_agent_id: item.job_task_expense_agent_id,
+          //     job_task_expense_exp_amountfx: item.job_task_expense_exp_amountfx,
+          //     job_task_expense_exp_amountlx: item.job_task_expense_exp_amountlx,
+          //     job_task_expense_exp_curr: item.job_task_expense_exp_curr,
+          //     job_task_expense_exp_exch: item.job_task_expense_exp_exch,
+          //     job_task_expense_id: item.job_task_expense_id,
+          //     job_task_expense_invoiceable: item.job_task_expense_invoiceable,
+          //     job_task_expense_job_id: item.job_task_expense_job_id,
+          //   });
+          // });
 
-            setTax(servdata);
-          });
           // setGrandTotal(item.fms_v1_quotation.quotation_grand_total);
 
           let temp = "";
@@ -671,6 +686,37 @@ export default function Taskexpenses() {
         console.log("Error", err);
       });
   };
+
+  useEffect(() => {
+    let newdatas = [];
+    let servdata = [];
+    allExpenseData?.forEach((item, index) => {
+      console.log("Set for diplaying data", item);
+      servdata?.push({
+        job_task_expense_task_id: item?.crm_v1_services.service_id,
+        job_task_expense_cost_amountfx: item?.job_task_expense_cost_amountfx,
+        job_task_expense_taxgroup_id: item?.fms_v1_tax_groups?.tax_group_id,
+        job_task_expense_tax_perc: item?.job_task_expense_tax_perc,
+        // job_task_expense_tax_perc: item.fms_v1_tax_types.tax_type_percentage,
+        job_task_expense_cost_taxfx: item.job_task_expense_cost_taxfx,
+        job_task_expense_cost_subtotalfx: item.job_task_expense_cost_subtotalfx,
+        job_task_expense_agent_id: item.job_task_expense_agent_id,
+        job_task_expense_exp_amountfx: item.job_task_expense_exp_amountfx,
+        job_task_expense_exp_amountlx: item.job_task_expense_exp_amountlx,
+        job_task_expense_exp_curr: item.job_task_expense_exp_curr,
+        job_task_expense_exp_exch: item.job_task_expense_exp_exch,
+        job_task_expense_id: item.job_task_expense_id,
+        job_task_expense_invoiceable: item.job_task_expense_invoiceable,
+        job_task_expense_job_id: item.job_task_expense_job_id,
+      });
+    });
+    setTax(servdata);
+    AllQuotationNo?.forEach((item, index) => {
+      newdatas.push(item?.fms_v1_quotation?.quotation_no);
+      setQtnno(newdatas);
+    });
+  }, [allExpenseData]);
+
   useEffect(() => {
     let Job_quotation_details = [];
     tax &&

@@ -306,17 +306,26 @@ function Productlist() {
     // },
   ];
 
+  // const ProductHeads = [
+  //   [
+  //     "product_id",
+  //     "product_name",
+  //     "product_code",
+  //     "product_category_id",
+  //     "product_brand_id",
+  //     "product_unit_id",
+  //     "product_pic",
+  //     "product_attributes",
+  //     "product_description",
+  //   ],
+  // ];
+
   const ProductHeads = [
     [
-      "product_id",
-      "product_name",
-      "product_code",
-      "product_category_id",
-      "product_brand_id",
-      "product_unit_id",
-      "product_pic",
-      "product_attributes",
-      "product_description",
+      "SL.NO",
+      "PRODUCT NAME",
+      "PRODUCT CODE",
+      "PRODUCT CATEGORY",
     ],
   ];
   //for show or hide colums start-- shahida
@@ -358,6 +367,7 @@ function Productlist() {
             {/* <Leadlist_Icons /> */}
             <div className="col-4 d-flex justify-content-end">
               <Leadlist_Icons
+                name={"product"}
                 datas={products}
                 columns={filteredColumns}
                 items={data12}

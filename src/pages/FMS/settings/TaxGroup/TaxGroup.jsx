@@ -229,6 +229,7 @@ function TaxGroup() {
           {AllTaxGroup && (
             <Leadlist_Icons
               datas={data12}
+              name="taxgroup"
               columns={columns}
               items={data12}
               xlheading={TaxGroupHeads}

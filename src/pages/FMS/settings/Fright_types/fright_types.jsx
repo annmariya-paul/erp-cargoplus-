@@ -411,6 +411,7 @@ export default function Frightlist(props) {
             {data12 && (
               <Leadlist_Icons
                 datas={data12}
+                name="freight"
                 columns={filteredColumns}
                 items={data12}
                 xlheading={UnitHeads}

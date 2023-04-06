@@ -330,6 +330,7 @@ export default function Gltypes(props) {
             {data12 && (
               <Leadlist_Icons
                 datas={data12}
+                name="Gltypes"
                 columns={filteredColumns}
                 items={data12}
                 xlheading={UnitHeads}

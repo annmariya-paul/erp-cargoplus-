@@ -798,6 +798,7 @@ function Opportunitylist(props) {
             </div>
             <div className="col-4 d-flex justify-content-end">
               <Leadlist_Icons
+              name={"Oppurtunity"}
                 datas={OpportunityList}
                 columns={columns}
                 items={data12}

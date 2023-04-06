@@ -155,11 +155,15 @@ function Enquiry() {
         if (res.data.success) {
           console.log("Success from single customer", res.data.data);
           console.log("contact data", res.data.data.crm_v1_contacts[0]);
+          console.log("accounts data",res.data.data.crm_v1_customer_accounting[0])
           let a = res.data.data.crm_v1_contacts[0];
+          let b =res.data.data.crm_v1_customer_accounting[0];
           addForm.setFieldsValue({
-            contactperson: a.contact_id,
-            contactemail: a.contact_email,
-            contactphone: a.contact_phone_1,
+            contactperson: a?.contact_id,
+            contactemail: a?.contact_email,
+            contactphone: a?.contact_phone_1,
+            customerfrighttype: b?.customer_accounting_preferred_freight_type,
+            
           });
         }
       })
@@ -184,8 +188,33 @@ function Enquiry() {
         console.log("Error", err);
       });
   };
+  // const [items, setItems] = useState();
+  // console.log("user id ",items)
 
+  // useEffect(() => {
+  //   const items = JSON.parse(localStorage.getItem('UserID'));
+  //   if (items) {
+  //    setItems(items);
+    
+  //     addForm.setFieldValue({
+  //       salesperson:items,
+  //     })
+    
+  //   }
+  // }, []);
   // create a enquiry !!
+//   const [name, setName] = useState('');
+// console.log("userid",name);
+  // useEffect(() => {
+  //   const personName = localStorage.getItem('UserID');
+  //   // if(personName){
+
+  //   // }
+  //   addForm.setFieldsValue({
+  //     salesperson : personName,
+  //   });
+  // }, []);
+
 
   const CreateEnquiry = (data) => {
     let enquiry_date = moment(data.date);
@@ -216,12 +245,24 @@ function Enquiry() {
       });
   };
   const GetSalesPersons = () => {
+
     PublicFetch.get(`${CRM_BASE_URL_HRMS}/employees/salesexecutive`)
       .then((res) => {
         console.log("response", res);
         if (res.data.success) {
+         
           console.log("Success from sales person", res.data.data);
           setAllSalesPerson(res.data.data);
+    const personName = localStorage.getItem('UserID');
+    res.data.data.forEach((item,index)=> {
+      if(personName == item.employee_id){
+        addForm.setFieldsValue({
+          salesperson: item.employee_id
+        })
+      }
+    })
+
+
         }
       })
       .catch((err) => {
@@ -242,6 +283,10 @@ function Enquiry() {
       date: todayDate,
     });
   }, []);
+
+  const handleclick = (e) => {
+    GetSingleCustomer(e);
+  };
   return (
     <>
       <div className="container-fluid">
@@ -258,7 +303,7 @@ function Enquiry() {
           }}
         >
           <div className="row px-1 pt-2">
-            <h5 className="lead_text">Add Enquiry</h5>
+            <h5 className="lead_text">New Enquiry</h5>
           </div>
 
           <div className="row jobpay_cards mt-3 mx-0 px-2 py-3">
@@ -284,7 +329,9 @@ function Enquiry() {
                     onChange={(e) => {
                       setCustomer_Id(e);
                       GetAllContacts(e);
-                      GetSingleCustomer(e);
+                    // addForm.resetFields();
+                    handleclick(e);
+                     
                     }}
                   >
                     {AllCustomers &&
@@ -324,7 +371,7 @@ function Enquiry() {
             <div className="col-sm-4 pt-2 ">
               <label>Freight Type</label>
               <Form.Item
-                name="job_freight_type"
+                name="customerfrighttype"
                 rules={[
                   {
                     required: true,
@@ -448,7 +495,7 @@ function Enquiry() {
                 Sale Person<span className="required">*</span>
               </label>
               <Form.Item
-                name="sales_person"
+                name="salesperson"
                 rules={[
                   {
                     required: true,

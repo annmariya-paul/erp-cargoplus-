@@ -28,9 +28,11 @@ function Login() {
       ).then((res) => {
         localStorage.setItem("user", JSON.stringify(res.data.data));
         localStorage.setItem("UserToken", JSON.stringify(res.data.data.token));
+        localStorage.setItem("UserID", JSON.stringify(res.data.data.employeeId));
         PublicFetch.get(
           `${process.env.REACT_APP_BASE_URL}/permissions/${res?.data?.data?.role}`
         ).then((res) => {
+          console.log("response: ",res)
           if (res?.data?.success && res.data.data.length > 0) {
             let userPermissions = [];
 
@@ -40,7 +42,7 @@ function Login() {
                 permissions: item?.action,
               });
             });
-            // console.log("Permissions : ", userPermissions);
+            console.log("Permissions : ", userPermissions);
             localStorage.setItem(
               "userPermissions",
               JSON.stringify(userPermissions)

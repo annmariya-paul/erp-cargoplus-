@@ -25,6 +25,7 @@ import InputType from "../../../../components/Input Type textbox/InputType";
 import {
   CRM_BASE_URL,
   CRM_BASE_URL_FMS,
+  CRM_BASE_URL_HRMS,
   CRM_BASE_URL_SELLING,
   GENERAL_SETTING_BASE_URL,
 } from "../../../../api/bootapi";
@@ -91,8 +92,10 @@ export default function EditQuotation(
   const [allservices, setAllservices] = useState();
   const [unitdata, setUnitdata] = useState();
   const [isService, setIsService] = useState();
-  const [allLeadList, setAllLeadList] = useState([]);
+  const [allCustomerList, setAllCustomerList] = useState([]);
   // const [tableData, setTableData] = useState();
+  const [allincoterms, setallincoterms] = useState("");
+  const [AllSalesPersons, setAllSalesPersons] = useState();
 
   const dataSource = [
     {
@@ -231,9 +234,16 @@ export default function EditQuotation(
     console.log("gai guys", e, col, tx);
     // setSampleid(e)
     taxGroups.map((item, index) => {
-      if (tx && e === item.tax_type_id) {
-        if (col && key && tx && e === item.tax_type_id) {
-          setTaxRatee(item.tax_type_percentage);
+      let tax_percnt = 0;
+      let totalTax_percent = 0;
+      if (tx && e === item?.tax_group_id) {
+        if (col && key && tx && e === item?.tax_group_id) {
+          item?.fms_v1_tax_types?.forEach((taxType, taxIndex) => {
+            console.log("tax types", taxType);
+            tax_percnt = taxType?.tax_type_percentage;
+            setTaxRatee(taxType?.tax_type_percentage);
+          });
+          totalTax_percent += tax_percnt;
           // let hai = item.tax_type_percentage;
 
           let existingValues = editForm.getFieldsValue();
@@ -242,9 +252,7 @@ export default function EditQuotation(
           let assignValues = quotation_details[key];
 
           let taxamount =
-            (assignValues["quotation_details_cost"] *
-              item.tax_type_percentage) /
-            100;
+            (assignValues["quotation_details_cost"] * totalTax_percent) / 100;
           console.log("sum of tax", taxamount);
           assignValues["quotation_details_tax_amount"] = taxamount;
 
@@ -328,6 +336,7 @@ export default function EditQuotation(
     // }
     editForm.setFieldsValue({ gtotal: grandTotal });
   }, [tableData]);
+
   const handleInputchange1 = (e, key, col) => {
     setTableData(
       tableData.map((item) => {
@@ -347,8 +356,8 @@ export default function EditQuotation(
     );
     if (e && col === "quotation_details_service_id") {
       allservices.map((item, index) => {
-        if (e === item.service_id) {
-          setTaxtype(item.service_taxtype);
+        if (e === item?.service_id) {
+          setTaxtype(item.service_taxgroup);
           let existingValues = editForm.getFieldsValue();
           let { quotation_details } = existingValues;
           let assignValues = quotation_details[key];
@@ -781,14 +790,14 @@ export default function EditQuotation(
   };
 
   const GetAllLeadData = () => {
-    PublicFetch.get(`${CRM_BASE_URL}/lead/Minimal`)
+    PublicFetch.get(`${CRM_BASE_URL}/customer/minimal`)
       .then((res) => {
         if (res?.data?.success) {
           console.log("All lead data", res?.data?.data);
           // setAllLeadList(res?.data?.data?.leads);
           setTotalcount(res?.data?.data?.totalCount);
           // setCurrentcount(res?.data?.data?.currentCount);
-          setAllLeadList(res?.data?.data);
+          setAllCustomerList(res?.data?.data);
           let array = [];
           res?.data?.data?.leads?.forEach((item, index) => {
             array.push({
@@ -1186,13 +1195,41 @@ export default function EditQuotation(
     }
   };
 
+  const getAllincoterm = async () => {
+    try {
+      const allCountries = await PublicFetch.get(
+        `${CRM_BASE_URL_FMS}/incoterms/minimal`
+      );
+      console.log("all incotermss", allCountries.data.data);
+      setallincoterms(allCountries.data.data);
+      // setGetCountries(allCountries.data.data);
+    } catch (err) {
+      console.log("error while getting the countries: ", err);
+    }
+  };
+
+  const GetAllSalesPersons = () => {
+    PublicFetch.get(`${CRM_BASE_URL_HRMS}/employees/salesexecutive`)
+      .then((res) => {
+        console.log("Response");
+        if (res.data.success) {
+          setAllSalesPersons(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
   useEffect(() => {
+    GetAllSalesPersons();
     getAllTaxGroups();
     getallfrighttype();
     getallPaymentTerms();
     getallunits();
     getallcarrier();
     getallcurrency();
+    getAllincoterm();
     if (id) {
       getonequatation();
     }
@@ -1245,7 +1282,20 @@ export default function EditQuotation(
                         },
                       ]}
                     >
-                      <SelectBox></SelectBox>
+                      <SelectBox>
+                        {allCustomerList &&
+                          allCustomerList.length > 0 &&
+                          allCustomerList.map((item, index) => {
+                            return (
+                              <Select.Option
+                                key={item.customer_id}
+                                value={item.customer_id}
+                              >
+                                {item.customer_name}{" "}
+                              </Select.Option>
+                            );
+                          })}
+                      </SelectBox>
                     </Form.Item>
                   </div>
 
@@ -1368,7 +1418,20 @@ export default function EditQuotation(
                         },
                       ]}
                     >
-                      <SelectBox></SelectBox>
+                      <SelectBox>
+                        {AllSalesPersons &&
+                          AllSalesPersons.length > 0 &&
+                          AllSalesPersons.map((item, index) => {
+                            return (
+                              <Select.Option
+                                key={item.employee_id}
+                                value={item.employee_id}
+                              >
+                                {item.employee_name}{" "}
+                              </Select.Option>
+                            );
+                          })}
+                      </SelectBox>
                     </Form.Item>
                   </div>
 
@@ -1436,9 +1499,9 @@ export default function EditQuotation(
                         optionFilterProp="children"
                         disabled={true}
                       >
-                        {allLeadList &&
-                          allLeadList.length > 0 &&
-                          allLeadList.map((item, index) => {
+                        {allCustomerList &&
+                          allCustomerList.length > 0 &&
+                          allCustomerList.map((item, index) => {
                             return (
                               <Select.Option
                                 key={item.lead_id}
@@ -1834,7 +1897,20 @@ export default function EditQuotation(
                         },
                       ]}
                     >
-                      <SelectBox></SelectBox>
+                      <SelectBox>
+                        {allincoterms &&
+                          allincoterms.length > 0 &&
+                          allincoterms.map((item, index) => {
+                            return (
+                              <Select.Option
+                                key={item.incoterm_id}
+                                value={item.incoterm_id}
+                              >
+                                {item.incoterm_short_name}{" "}
+                              </Select.Option>
+                            );
+                          })}
+                      </SelectBox>
                     </Form.Item>
                   </div>
                 </div>

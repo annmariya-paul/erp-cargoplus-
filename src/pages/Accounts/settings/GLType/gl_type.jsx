@@ -400,8 +400,8 @@ export default function Gltypes(props) {
               btnType="add"
               onClick={() => {
                 setModalAddGltype(true);
-                // setUniqueCode(false);
-                // setUniqueName(false);
+                setUniqueCode(false);
+                setUniqueName(false);
                 addForm.resetFields();
               }}
             >

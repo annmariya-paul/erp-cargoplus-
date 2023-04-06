@@ -302,6 +302,7 @@ export default function Carrierlist(props) {
             {data12 && (
               <Leadlist_Icons
                 datas={data12}
+                name="carrier"
                 columns={filteredColumns}
                 items={data12}
                 xlheading={UnitHeads}

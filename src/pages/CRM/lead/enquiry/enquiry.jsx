@@ -360,7 +360,7 @@ function Enquiry() {
                   <BsPlusCircleFill
                     style={{
                       fontSize: "21px",
-                      marginTop: "30px",
+                      marginTop: "20px",
                       marginLeft: "10px",
                     }}
                   />{" "}
@@ -427,7 +427,7 @@ function Enquiry() {
               </label>
               <Form.Item
                 name="date"
-                className="mt-2"
+                className="mt-1"
                 rules={[
                   {
                     required: true,
@@ -447,7 +447,7 @@ function Enquiry() {
             </div>
 
             <div className="col-sm-4 pt-2">
-              <label>Source</label>
+              <label className="mb-1">Source</label>
               <Form.Item
                 name="source"
                 className=""
@@ -471,7 +471,7 @@ function Enquiry() {
             </div>
 
             <div className="col-sm-4 pt-2">
-              <label>Customer Reference</label>
+              <label className="mb-1">Customer Reference</label>
               <Form.Item
                 name="reference"
                 // rules={[

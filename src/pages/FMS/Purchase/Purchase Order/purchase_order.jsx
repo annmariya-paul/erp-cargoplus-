@@ -551,7 +551,7 @@ export default function Purchaseorder() {
       dataIndex: "quotation_details_cost",
       key: "quotation_details_cost",
      
-      align: "center",
+      align: "left",
       render: (data, index) => {
         console.log("index is :", index);
         return (
@@ -578,13 +578,13 @@ export default function Purchaseorder() {
         );
       },
 
-      align: "right",
+    
     },
     {
       title: "JOB NO",
       dataIndex: "quotation_details_tax_group",
       key: "quotation_details_tax_group",
-      align: "center",
+      align: "left",
       render: (data, index) => {
         console.log("index is 112:", index.quotation_details_tax_group);
         return (
@@ -632,13 +632,13 @@ export default function Purchaseorder() {
           </div>
         );
       },
-      align: "right",
+     
     },
     {
       title: "AMOUNT",
       dataIndex: "quotation_details_tax_amount",
       key: "quotation_details_tax_amount",
-      align: "center",
+      align: "right",
       render: (data, index) => {
         console.log("index is :", index);
         return (
@@ -652,7 +652,7 @@ export default function Purchaseorder() {
               // rules={[{ required: true, message: 'Please input the name' }]}
             >
               <Input_Number
-                className="text_right input_bg selectwidthtaxamt"
+                className="text_right input_bg "
                 // value={index.taxamount}
                 onChange={(e) =>
                   handleInputchange1(
@@ -679,7 +679,8 @@ export default function Purchaseorder() {
       title: "TAX",
       dataIndex: "quotation_details_total",
       key: "quotation_details_total",
-      align: "center",
+      align: "left",
+      width:"5%",
       render: (data, index) => {
         console.log("index is :", index);
         return (
@@ -689,7 +690,7 @@ export default function Purchaseorder() {
               // rules={[{ required: true, message: 'Please input the name' }]}
             >
               <Input_Number
-                className="text_right input_bg selectwidthtotneww"
+                className=" input_bg "
                 // value={    index.totalamount=(index.cost + index.taxamount)
                 // }
                 value={
@@ -699,7 +700,7 @@ export default function Purchaseorder() {
                 onChange={(e) =>
                   handleInputChange2(e, index, "quotation_details_total")
                 }
-                align="right"
+                // align="right"
                 // step={0.01}
                 min={0}
                 precision={2}
@@ -722,13 +723,14 @@ export default function Purchaseorder() {
         );
       },
 
-      align: "right",
+    
     },
     {
         title: "TAX %",
         dataIndex: "quotation_details_total",
         key: "quotation_details_total",
         align: "center",
+        // width:"10%",
         render: (data, index) => {
           console.log("index is :", index);
           return (
@@ -738,7 +740,8 @@ export default function Purchaseorder() {
                 // rules={[{ required: true, message: 'Please input the name' }]}
               >
                 <Input_Number
-                  className="text_right input_bg selectwidthtotneww"
+                 className="input_bg"
+                //   className="text_right input_bg selectwidthtotneww"
                   // value={    index.totalamount=(index.cost + index.taxamount)
                   // }
                  
@@ -761,7 +764,7 @@ export default function Purchaseorder() {
         align: "right",
       },
       {
-        title: "TAX AMOUNT",
+        title: "TAX AMT",
         dataIndex: "quotation_details_total",
         key: "quotation_details_total",
 
@@ -774,7 +777,7 @@ export default function Purchaseorder() {
                 // rules={[{ required: true, message: 'Please input the name' }]}
               >
                 <Input_Number
-                  className="text_right input_bg selectwidthtotneww"
+                  className="text_right input_bg selectwidthtotnew"
                   // value={    index.totalamount=(index.cost + index.taxamount)
                   // }
                   value={
@@ -1330,12 +1333,12 @@ export default function Purchaseorder() {
                     </Form.Item>
                   </div>
 
-                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                  <div className="col-xl-4 col-sm-12 ">
                     <label>Purchase Date<span className="required">*</span>
                     </label>
                     <Form.Item name="purchasedate">
                     <DatePicker
-                        style={{ borderWidth: 0, marginTop: 10 }}
+                        style={{ borderWidth: 0, marginTop: 7 }}
                         defaultValue={moment(date)}
                         format={dateFormatList}
                       />
@@ -1343,7 +1346,7 @@ export default function Purchaseorder() {
                   </div>
 
                   <div className="col-xl-4 col-sm-12 mt-2 px-3 ">
-                    <label>Due date<span className="required">*</span>
+                    <label>Due date
                     </label>
 
                     <Form.Item
@@ -1356,8 +1359,8 @@ export default function Purchaseorder() {
                       ]}
                     >
                       <DatePicker
-                        style={{ borderWidth: 0, marginTop: 10 }}
-                        defaultValue={moment(date)}
+                        style={{ borderWidth: 0, marginTop: 3 }}
+                        // defaultValue={moment(date)}
                         format={dateFormatList}
                       />
                     </Form.Item>
@@ -1380,8 +1383,7 @@ export default function Purchaseorder() {
                   </div>
 
                   <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                    <label>Job expense<span className="required">*</span>
-                    </label>
+                    <label>Job expense </label>
                     <Form.Item
                       name="jobexpense"
                       rules={[
@@ -1397,7 +1399,7 @@ export default function Purchaseorder() {
                   </div>
 
                   <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                      <label>
+                      <label className="mb-2">
                         Currency<span className="required">*</span>
                       </label>
                       <Form.Item

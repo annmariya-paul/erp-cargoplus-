@@ -380,7 +380,9 @@ export default function TaxType() {
           <div className="col-4 d-flex justify-content-end">
             {data12 && (
               <Leadlist_Icons
+            
                 datas={data12}
+                name="taxtype"
                 columns={filteredColumns}
                 items={data12}
                 xlheading={UnitHeads}

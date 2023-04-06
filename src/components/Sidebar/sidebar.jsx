@@ -1041,6 +1041,63 @@ export default function Sidebar({ showSidebar }) {
                             style={{ width: "90px" }}
                             className="subactivelink"
                           >
+                            Purchase
+                          </div>
+                        </div>
+                        <div className="text-right ">
+                          <AiOutlineCaretDown className="toggle_btn subactivelink" />
+                        </div>
+                      </div>
+                    </Link>
+                  </li>
+                  {FMSSettingsopen ? (
+                    <>
+                      <div className="nav_active_color">
+                        {checkPermission("freight type") && (
+                          <li className="nav-text">
+                            <NavLink
+                              className={({ isActive }) =>
+                                isActive ? "active-link" : "link"
+                              }
+                              to={ROUTES.PURCHASEORDER}
+                            >
+                              <div className="ms-4 ps-3 subactivelink">
+                                Purchase Order
+                              </div>
+                            </NavLink>
+                          </li>
+                        )}
+                    
+                       
+
+                     
+                     
+                      </div>
+                    </>
+                  ) : (
+                    ""
+                  )}
+
+                  <li
+                    className={
+                      FMSSettingsopen
+                        ? "nav-text  items_hrms nav_active_color open"
+                        : "nav-text  items_hrms nav_active_color"
+                    }
+                  >
+                    <Link
+                      // className={FMSSettingsopen ? "active-link" : "link"}
+                      className="link"
+                      // to="/"
+                      onClick={() => setFMSSettingsopen(!FMSSettingsopen)}
+                    >
+                      <div className="d-flex justify-content-between gap-5 ms-3">
+                        <div className="d-flex">
+                          {/* <MdSettingsInputComponent className="sidebar_icons ms-1 pt-1 " /> */}
+                          <div
+                            style={{ width: "90px" }}
+                            className="subactivelink"
+                          >
                             Masters
                           </div>
                         </div>
@@ -1348,7 +1405,7 @@ export default function Sidebar({ showSidebar }) {
                               to={ROUTES.AWBBL_REPORT}
                             >
                               <div className="ms-4 ps-2 subactivelink">
-                                AWBBL Report
+                                AWB/BL Report
                               </div>
                             </NavLink>
                           </li>

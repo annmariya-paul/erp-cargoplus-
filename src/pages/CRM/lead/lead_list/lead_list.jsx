@@ -347,17 +347,33 @@ export default function LeadList() {
     item.lead_status,
   ]);
 
+  // const LeadHeads = [
+  //   [
+  //     "lead_id",
+  //     "lead_type",
+  //     "lead_customer_name",
+  //     "lead_user_type",
+  //     "lead_organization",
+  //     "lead_source",
+  //     "lead_description",
+
+  //     "lead_status",
+  //   ],
+  // ];
+  
   const LeadHeads = [
     [
-      "lead_id",
-      "lead_type",
-      "lead_customer_name",
-      "lead_user_type",
-      "lead_organization",
-      "lead_source",
-      "lead_description",
+      "SL.NO",
+      "CUSTOMER NAME",
+      "CONTACT",
+      "PHONE",
+      "EMAIL",
+      "CREDIT DAYS",
+      "OPPURTUNITY",
+      "JOBS",
+      "INVOICE AMT",
+      "DUE AMT",
 
-      "lead_status",
     ],
   ];
 
@@ -385,6 +401,7 @@ export default function LeadList() {
             </div>
             <div className="col-4 d-flex justify-content-end">
               <Leadlist_Icons
+                name={"customer"}
                 datas={allLeadList}
                 columns={filteredColumns}
                 items={data12}

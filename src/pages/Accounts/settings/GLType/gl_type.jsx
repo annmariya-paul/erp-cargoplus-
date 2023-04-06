@@ -29,6 +29,7 @@ export default function Gltypes(props) {
   const [modalAddGltype, setModalAddGltype] = useState(false);
   const [showViewModal, setShowViewModal] = useState(false);
   const [pageSize, setPageSize] = useState("25");
+  const [newname,setnewname]=useState();
   const [current, setCurrent] = useState(1);
   const [serialNo, setserialNo] = useState(1);
   const [GLEditPopup, setGLEditPopup] = useState(false);
@@ -50,7 +51,7 @@ export default function Gltypes(props) {
   const [gltype_id,setGltype_id]=useState();
   const [Errormsg, setErrormsg] = useState();
   const [descriptionInput,setDescriptionInput]= useState();
-
+  const [payunique, setpaynameunique] = useState();
   const [searchcodeText, setSearchcodeText] = useState("");
 
   //close modal for  success pop up
@@ -399,8 +400,8 @@ export default function Gltypes(props) {
               btnType="add"
               onClick={() => {
                 setModalAddGltype(true);
-                // setUniqueCode(false);
-                // setUniqueName(false);
+                setUniqueCode(false);
+                setUniqueName(false);
                 addForm.resetFields();
               }}
             >
@@ -483,23 +484,25 @@ export default function Gltypes(props) {
                         value={code}
                         onChange={(e) => {
                           setCode(e.target.value);
-                          setBranchError("");
+                        //   setpaynameunique(e.target.value);
+                        //   setBranchError("");
                           setUniqueName(false);
                         }}
-                        // onBlur={async () => {
-                        //   let n = await CheckUnique({
-                        //     type: "branchname",
-                        //     value: branchname,
-                        //   });
-                        //   setUniqueName(n);
-                        // }}
+                        onBlur={async () => {
+                          let n = await CheckUnique({
+                            type:"gltypecode",
+                            value: code,
+                          });
+                          console.log("hai how are u", n);
+                          setUniqueName(n);
+                        }}
                       />
                     </Form.Item>
-                    {/* {uniqueName ? (
+                    {uniqueName ? (
                       <p style={{ color: "red" }}>
-                        Branch Name {uniqueErrMsg.UniqueErrName}
+                        GL Type code {uniqueErrMsg.UniqueErrName}
                       </p>
-                    ) : null} */}
+                    ) : null}
                   </div>
                 </div>
 
@@ -523,27 +526,29 @@ export default function Gltypes(props) {
                           "Name cannot be longer than 15 characters",
                       },
                     ]}
+                    // onChange={(e) => setnewname(e.target.value)}
+
                   >
                     <InputType
                       value={glname}
                       onChange={(e) => {
                         setglname(e.target.value);
-                        // setUniqueCode(false);
+                        setUniqueCode(false);
                       }}
-                    //   onBlur={async () => {
-                    //     let a = await CheckUnique({
-                    //       type: "branchcode",
-                    //       value: branchcode,
-                    //     });
-                    //     setUniqueCode(a);
-                    //   }}
+                      onBlur={async () => {
+                        let a = await CheckUnique({
+                          type: "gltypename",
+                          value: glname,
+                        });
+                        setUniqueCode(a);
+                      }}
                     />
                   </Form.Item>
-                  {/* {uniqueCode ? (
+                  {uniqueCode ? (
                     <p style={{ color: "red" }}>
-                      Branch code {uniqueErrMsg.UniqueErrName}
+                    GL Type name {uniqueErrMsg.UniqueErrName}
                     </p>
-                  ) : null} */}
+                  ) : null}
                 </div>
                 <div className="col-12 pt-1">
                   <label>Description</label>

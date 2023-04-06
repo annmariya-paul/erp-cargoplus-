@@ -777,7 +777,7 @@ export default function EditOpportunity() {
           <div className="row pt-2">
             <h5 className="lead_text">Edit Opportunity</h5>
           </div>
-          <div className="row crm_cards mt-2 mx-0 px-2 py-3">
+          <div className="row crm_cards mt-2 mx-0 px-2 py-4">
             <div className="col-12">
               <h5 className="lead_text">Basic Info</h5>
             </div>
@@ -826,7 +826,7 @@ export default function EditOpportunity() {
                   </SelectBox>
                 </Form.Item>
               </div>
-              <div className="col-1 mt-4 pt-2 ps-1">
+              <div className="col-1 mt-4 ps-1">
                 <Button btnType="add_borderless" type="button">
                   <AiOutlinePlusCircle style={{ fontSize: "25px" }} />
                 </Button>
@@ -839,9 +839,9 @@ export default function EditOpportunity() {
               <InputType
                 value={opportunityNum}
                 onChange={(e) => setOpportunityNum(e.target.value)}
-                className="input_number_style mt-2"
+                className="input_number_style"
                 style={{ width: "100%" }}
-                readOnly
+                disabled
               />
             </div>
             <div className="col-sm-4 pt-2">
@@ -855,7 +855,7 @@ export default function EditOpportunity() {
                 //   },
                 // ]}
               >
-                <DatePicker style={{ borderWidth: 0, marginTop: 11 }} />
+                <DatePicker style={{ borderWidth: 0, marginTop: 2 }} />
               </Form.Item>
             </div>
             <div className="col-sm-4 pt-2">
@@ -933,7 +933,7 @@ export default function EditOpportunity() {
               </Form.Item>
             </div>
           </div>
-          <div className="row crm_cards mt-3 mx-0 px-2 py-3">
+          <div className="row crm_cards mt-3 mx-0 px-2 py-4">
             <div className="col-12">
               <h5 className="lead_text">Contact Details</h5>
             </div>
@@ -998,7 +998,7 @@ export default function EditOpportunity() {
               </Form.Item>
             </div>
           </div>
-          <div className="row crm_cards mt-3 mx-0 px-2 py-3">
+          <div className="row crm_cards mt-3 mx-0 px-2 py-4">
             <div className="col-12">
               <h5 className="lead_text">Extra Info</h5>
             </div>

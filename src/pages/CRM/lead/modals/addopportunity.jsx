@@ -35,7 +35,7 @@ export default function AddOpportunity() {
   const [modalOpportunity, setModalOpportunity] = useState(true);
   const [modalShow, setModalShow] = useState(false);
   const [date, setDate] = useState();
-  console.log(date);
+  const [validityDate,setValidityDate]= useState();
   const [name, setName] = useState();
 
   const [value, setValue] = useState([]);
@@ -68,10 +68,51 @@ export default function AddOpportunity() {
   const [oppdescription, setOppDescription] = useState();
   const [oppstatus, setOppStatus] = useState();
   const [leadName, setLeadName] = useState("");
-
+  const [opporFrom,setOpporFrom] = useState("customer");
+  const [previewVisible, setPreviewVisible] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+  const [previewTitle, setPreviewTitle] = useState("");
   const [imageSize, setImageSize] = useState(false);
-  const [fileAttach, setFileAttach] = useState();
+  const [fileAttach, setFileAttach] = useState([]);
   const [allSalesPerson, setAllSalesPerson] = useState();
+  const [selectedValues, setSelectedValues] = useState([]);
+
+
+   const handleMultiSelectChange = (event) => {
+     const values = Array.from(
+       event.target.selectedOptions,
+       (option) => option.value
+     );
+     setSelectedValues(values);
+   };
+
+    const getBase64 = (file) =>
+      new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = (error) => reject(error);
+      });
+
+    const handlePreview = async (file) => {
+      if (!file.url && !file.preview) {
+        file.preview = await getBase64(file.originFileObj);
+      }
+      setPreviewImage(file.url || file.preview);
+      setPreviewVisible(true);
+      setPreviewTitle(
+        file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
+      );
+    };
+
+    const handleAddImage = (e) => {
+      console.log("handleAddImage", e);
+      let temp = [];
+      e?.fileList?.forEach((item, index) => {
+        temp.push(item?.originFileObj);
+      });
+      console.log("tempereay file", temp);
+    };
 
   const GetLeadData = () => {
     PublicFetch.get(`${CRM_BASE_URL}/lead/${id}`)
@@ -123,22 +164,25 @@ export default function AddOpportunity() {
       getCustomers();
       GetLeadData();
   }, [id]);
-
+  
   // { function to add opportunity - Ann - 29/3/23}
   const newDate = new Date();
   const thisDate = moment(newDate);
   addForm.setFieldValue("oppor_date", thisDate);
+  addForm.setFieldValue("oppo_validity", thisDate);
 
   const oppdata = (data) => {
-    console.log("addcreditdata", data);
-    const date = moment(data.oppor_date);
-    const validityDate = moment(data.oppo_validity);
+
+    const date = moment(data.oppor_date).format("MM/DD/YYYY");
+    const validityDate = moment(data.oppo_validity).format("MM/DD/YYYY");
     const formData = new FormData();
     formData.append("opportunity_date", date);
     formData.append("opportunity_customer_id", data.oppo_customer);
+    formData.append("opportunity_from", opporFrom);
     formData.append("opportunity_customer_ref", data.oppo_customer_ref);
     formData.append("opportunity_source", data.oppo_source);
     formData.append("opportunity_contact_id", data.contact_person);
+    formData.append("opportunity_party", data.contact_person);
     formData.append("opportunity_type", data.oppo_type);
     formData.append("opportunity_incoterm_id", data.oppo_incoterm);
     formData.append("opportunity_validity", validityDate);
@@ -146,10 +190,13 @@ export default function AddOpportunity() {
     formData.append("opportunity_probability", data.oppo_probability);
     formData.append("opportunity_description", data.oppo_description);
     formData.append("opportunity_status", data.oppo_status);
-    formData.append("opportunity_enquiries", data.oppo_enquiries);
-    formData.append("opportunity_enquiries[1]", data.oppo_enquiries);
+    formData.append("opportunity_enquiries[0]", data.oppo_enquiries);
+    // selectedValues.forEach((value) => {
+    //   formData.append("opportunity_enquiries", value);
+    // });
+
     if (fileAttach) {
-      formData.append("attachments", fileAttach);
+      formData.append(`attachments`, fileAttach);
     }
     PublicFetch.post(`${CRM_BASE_URL}/opportunity`, formData, {
       "Content-Type": "Multipart/form-Data",
@@ -172,11 +219,6 @@ export default function AddOpportunity() {
       });
   };
 
-  // useEffect(() => {
-  //   oppdata();
-  // }, []);
-
-  //API added
   useEffect(() => {
     handleJobNo();
   }, []);
@@ -270,7 +312,7 @@ export default function AddOpportunity() {
             <h5 className="lead_text">New Opportunity</h5>
           </div>
 
-          <div className="row crm_cards mt-2 mx-0 px-2 py-3">
+          <div className="row crm_cards mt-2 mx-0 px-2 py-4">
             <div className="col-12">
               <h5 className="lead_text">Basic Info</h5>
             </div>
@@ -291,6 +333,8 @@ export default function AddOpportunity() {
                   placeholder={"--Please Select--"}
                   mode="multiple"
                   maxTagCount="responsive"
+                  value={selectedValues}
+                  onChange={handleMultiSelectChange}
                   // value={oppoNumber}
                   // onChange={(e) => setOppoNumber(e.target.value)}
                 >
@@ -343,7 +387,7 @@ export default function AddOpportunity() {
                   </SelectBox>
                 </Form.Item>
               </div>
-              <div className="col-1 mt-4 pt-2 ps-1">
+              <div className="col-1 mt-4 ps-1">
                 <Button btnType="add_borderless" type="button">
                   {" "}
                   <AiOutlinePlusCircle style={{ fontSize: "25px" }} />
@@ -363,12 +407,32 @@ export default function AddOpportunity() {
                 // ]}
               >
                 <DatePicker
-                  style={{ borderWidth: 0, marginTop: 11 }}
+                  style={{ borderWidth: 0, marginTop: 2 }}
                   format={"DD-MM-YYYY"}
                   defaultValue={moment(date)}
                 />
               </Form.Item>
             </div>
+
+            {/* <div className="col-sm-4 pt-2">
+              <label>
+                From<span className="req_star">*</span>
+              </label>
+              <Form.Item
+                name="oppo_from"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please Select a value",
+                  },
+                ]}
+              >
+                <SelectBox placeholder={"--Please Select--"}>
+                  <Select.Option value="customer">Customer</Select.Option>
+                  <Select.Option value="lead">Lead</Select.Option>
+                </SelectBox>
+              </Form.Item>
+            </div> */}
 
             <div className="col-sm-4 pt-2">
               <label>
@@ -445,7 +509,7 @@ export default function AddOpportunity() {
               </Form.Item>
             </div>
           </div>
-          <div className="row crm_cards mt-3 mx-0 px-2 py-3">
+          <div className="row crm_cards mt-3 mx-0 px-2 py-4">
             <div className="col-12">
               <h5 className="lead_text">Contact Details</h5>
             </div>
@@ -485,20 +549,20 @@ export default function AddOpportunity() {
 
             <div className="col-sm-4 pt-2">
               <label>Email</label>
-              <div className="mt-2 pt-1 ps-2 text_contact">
+              <div className="pt-1 ps-2 text_contact">
                 <p>{contactdetail?.contact_email}</p>
               </div>
               {/* <InputType disabled value={contactdetail?.contact_email} /> */}
             </div>
             <div className="col-sm-4 pt-2">
               <label>Phone</label>
-              <div className="mt-2 pt-1 ps-2 text_contact">
+              <div className="pt-1 ps-2 text_contact">
                 <p>{contactdetail?.contact_phone_1}</p>
               </div>
               {/* <InputType disabled value={contactdetail?.contact_phone_1} /> */}
             </div>
           </div>
-          <div className="row crm_cards mt-3 mx-0 px-2 py-3">
+          <div className="row crm_cards mt-3 mx-0 px-2 py-4">
             <div className="col-12">
               <h5 className="lead_text">Extra Info</h5>
             </div>
@@ -533,7 +597,9 @@ export default function AddOpportunity() {
               </label>
               <Form.Item name="oppo_validity" {...config}>
                 <DatePicker
-                  style={{ borderWidth: 0, marginTop: 11 }}
+                  style={{ borderWidth: 0, marginTop: 2 }}
+                  format={"DD-MM-YYYY"}
+                  defaultValue={moment(validityDate)}
                   // initialValues={oppurtunityvalidity}
                   // format={dateFormatList}
                   // disabledDate={(d) => !d || d.isBefore(today)}
@@ -544,7 +610,7 @@ export default function AddOpportunity() {
                 />
               </Form.Item>
             </div>
-            <div className="col-sm-4 pt-3">
+            <div className="col-sm-4 pt-2">
               <label>Expecting Amount</label>
               <Form.Item
                 name="oppo_amount"
@@ -602,7 +668,7 @@ export default function AddOpportunity() {
                 //   setOppurtunityProbability(e);
                 // }}
                 >
-                  <Select.Option value="1">EXW</Select.Option>
+                  <Select.Option value={1}>EXW</Select.Option>
                 </SelectBox>
               </Form.Item>
             </div>
@@ -655,11 +721,12 @@ export default function AddOpportunity() {
 
             <div className="col-sm-6 mt-2">
               <label>Attachments</label>
-              <Form.Item name="attachment" className="mt-2">
+              <Form.Item name="attachments" className="mt-2">
                 <FileUpload
                   multiple
+                  filetype={"Accept only pdf, docx and zip"}
                   listType="picture"
-                  accept=".pdf,.docx,.jpeg"
+                  accept=".pdf,.docx,.zip"
                   height={120}
                   beforeUpload={beforeUpload}
                   onChange={(file) => {
@@ -679,7 +746,7 @@ export default function AddOpportunity() {
                 />
                 {imageSize ? (
                   <p style={{ color: "red" }}>
-                    Upload File size between 1 kb and 500 kb
+                    Upload File size between 2 kb and 500 kb
                   </p>
                 ) : (
                   ""

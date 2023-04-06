@@ -4,7 +4,10 @@ import { v4 as uuidv4 } from "uuid";
 import { cargo_typeoptions } from "../../../../utils/SelectOptions";
 import { DragOutlined, FontColorsOutlined } from "@ant-design/icons";
 import dragula from "dragula";
-import { CRM_BASE_URL_SELLING } from "../../../../api/bootapi";
+import {
+  CRM_BASE_URL_HRMS,
+  CRM_BASE_URL_SELLING,
+} from "../../../../api/bootapi";
 import "dragula/dist/dragula.css";
 import { CRM_BASE_URL } from "../../../../api/bootapi";
 import TableData from "../../../../components/table/table_data";
@@ -42,6 +45,7 @@ export default function Add_Quotation() {
   console.log("curencydefault", currencyDefault);
 
   const [allincoterms, setallincoterms] = useState("");
+  const [AllSalesPersons, setAllSalesPersons] = useState();
   const [defaultincoterm, setdefaultincoterm] = useState("");
   const [allcontainertype, setallcontainertype] = useState("");
 
@@ -78,9 +82,17 @@ export default function Add_Quotation() {
     console.log("gai guys", e, col, tx);
     // setSampleid(e)
     taxGroups.map((item, index) => {
-      if (tx && e === item.tax_type_id) {
-        if (col && key && tx && e === item.tax_type_id) {
-          setTaxRatee(item.tax_type_percentage);
+      console.log("jhdew", item);
+      let tax_percnt = 0;
+      let totalTax_percent = 0;
+      if (tx && e === item?.tax_group_id) {
+        if (col && key && tx && e === item?.tax_group_id) {
+          item?.fms_v1_tax_types?.forEach((taxType, taxIndex) => {
+            console.log("tax types", taxType);
+            tax_percnt = taxType?.tax_type_percentage;
+            setTaxRatee(taxType?.tax_type_percentage);
+          });
+          totalTax_percent += tax_percnt;
           // let hai = item.tax_type_percentage;
 
           let existingValues = addForm.getFieldsValue();
@@ -89,9 +101,7 @@ export default function Add_Quotation() {
           let assignValues = quotation_details[key];
 
           let taxamount =
-            (assignValues["quotation_details_cost"] *
-              item.tax_type_percentage) /
-            100;
+            (assignValues["quotation_details_cost"] * totalTax_percent) / 100;
           console.log("sum of tax", taxamount);
           assignValues["quotation_details_tax_amount"] = taxamount;
 
@@ -262,8 +272,8 @@ export default function Add_Quotation() {
   const [currentcount, setCurrentcount] = useState();
   const [locationType, setLocationType] = useState();
 
-  const [allLeadList, setAllLeadList] = useState([]);
-  console.log("Lead names :", allLeadList);
+  const [allCustomerList, setAllCustomerList] = useState([]);
+  console.log("Lead names :", allCustomerList);
   const getallcarrier = async () => {
     try {
       const getcarrier = await PublicFetch.get(`${CRM_BASE_URL_FMS}/carrier`);
@@ -291,6 +301,19 @@ export default function Add_Quotation() {
     } catch (err) {
       console.log("Error in getting currency : ", err);
     }
+  };
+
+  const GetAllSalesPersons = () => {
+    PublicFetch.get(`${CRM_BASE_URL_HRMS}/employees/salesexecutive`)
+      .then((res) => {
+        console.log("Response");
+        if (res.data.success) {
+          setAllSalesPersons(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
   };
 
   const getallfrighttype = async () => {
@@ -407,6 +430,7 @@ export default function Add_Quotation() {
 
   useEffect(() => {
     getAllTaxTypes();
+    GetAllSalesPersons();
   }, []);
   useEffect(() => {
     getallfrighttype();
@@ -746,14 +770,14 @@ export default function Add_Quotation() {
 
   console.log("total ", total);
   const GetAllLeadData = () => {
-    PublicFetch.get(`${CRM_BASE_URL}/lead/Minimal`)
+    PublicFetch.get(`${CRM_BASE_URL}/customer/minimal`)
       .then((res) => {
         if (res?.data?.success) {
           console.log("All lead data", res?.data?.data);
           // setAllLeadList(res?.data?.data?.leads);
           setTotalcount(res?.data?.data?.totalCount);
           setCurrentcount(res?.data?.data?.currentCount);
-          setAllLeadList(res?.data?.data);
+          setAllCustomerList(res?.data?.data);
 
           let array = [];
           res?.data?.data?.leads?.forEach((item, index) => {
@@ -1165,7 +1189,20 @@ export default function Add_Quotation() {
                         },
                       ]}
                     >
-                      <SelectBox></SelectBox>
+                      <SelectBox>
+                        {allCustomerList &&
+                          allCustomerList.length > 0 &&
+                          allCustomerList.map((item, index) => {
+                            return (
+                              <Select.Option
+                                key={item.customer_id}
+                                value={item.customer_id}
+                              >
+                                {item.customer_name}{" "}
+                              </Select.Option>
+                            );
+                          })}
+                      </SelectBox>
                     </Form.Item>
                   </div>
                   <div className="col-xl-4 col-sm-12 mt-2 px-3">
@@ -1277,7 +1314,20 @@ export default function Add_Quotation() {
                         },
                       ]}
                     >
-                      <SelectBox></SelectBox>
+                      <SelectBox>
+                        {AllSalesPersons &&
+                          AllSalesPersons.length > 0 &&
+                          AllSalesPersons.map((item, index) => {
+                            return (
+                              <Select.Option
+                                key={item.employee_id}
+                                value={item.employee_id}
+                              >
+                                {item.employee_name}{" "}
+                              </Select.Option>
+                            );
+                          })}
+                      </SelectBox>
                     </Form.Item>
                   </div>
 
@@ -1761,7 +1811,20 @@ export default function Add_Quotation() {
                         },
                       ]}
                     >
-                      <SelectBox></SelectBox>
+                      <SelectBox>
+                        {allincoterms &&
+                          allincoterms.length > 0 &&
+                          allincoterms.map((item, index) => {
+                            return (
+                              <Select.Option
+                                key={item.incoterm_id}
+                                value={item.incoterm_id}
+                              >
+                                {item.incoterm_short_name}{" "}
+                              </Select.Option>
+                            );
+                          })}
+                      </SelectBox>
                     </Form.Item>
                   </div>
                 </div>

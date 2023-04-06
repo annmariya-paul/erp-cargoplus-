@@ -335,6 +335,7 @@ function EnquiryList() {
               <div className="col-4 d-flex justify-content-end ">
                 {AllEnquiries && (
                   <Leadlist_Icons
+                  name={"Enquiry"}
                     datas={allLeadList}
                     columns={filteredColumns}
                     items={data12}

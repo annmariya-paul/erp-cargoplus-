@@ -277,6 +277,7 @@ function Vendortype() {
           <div className="col-4 d-flex justify-content-end">
             {data12 && (
               <Leadlist_Icons
+                name={"vendortype"}
                 datas={data12}
                 columns={filteredColumns}
                 items={data12}

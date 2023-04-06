@@ -328,6 +328,7 @@ function Vendor() {
           <div className="col-4 d-flex justify-content-end">
             {data12 && (
               <Leadlist_Icons
+              name={"vendor"}
                 datas={data12}
                 columns={filteredColumns}
                 items={data12}

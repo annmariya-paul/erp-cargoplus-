@@ -1348,7 +1348,7 @@ export default function Sidebar({ showSidebar }) {
                               to={ROUTES.AWBBL_REPORT}
                             >
                               <div className="ms-4 ps-2 subactivelink">
-                                AWBBL Report
+                                AWB/BL Report
                               </div>
                             </NavLink>
                           </li>

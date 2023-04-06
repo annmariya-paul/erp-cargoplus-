@@ -1,0 +1,361 @@
+@use "../../../../styles/variables.scss";
+
+.edit_quotation {
+  height: 32rem;
+  border-radius: 4px;
+  box-shadow: 2px 2px 12px variables.$boxshadow;
+}
+// .view_quotation{
+//   width:1100px ;
+//   border-radius: 4px;
+//   box-shadow: 2px 2px 12px variables.$boxshadow;
+// }
+.qtn_save {
+  // padding-inline: 20px!important;
+  margin-left: 4px;
+}
+tbody,
+tfoot,
+th,
+thead,
+tr {
+  padding-block: 8px;
+
+  position: sticky;
+  top: 0;
+  // text-align: center;
+  .hiddenid {
+    display: none;
+    visibility: hidden;
+  }
+  .tablewidth {
+    padding-block: 1px;
+  }
+}
+.table_qtn {
+  // height: 300px !important;
+  overflow-y: scroll !important;
+}
+.ant-form-item {
+  margin-bottom: 0 !important;
+}
+// .tborder {
+//   border: 1px solid rgb(212, 208, 208);
+//   // padding-block: 1px;
+// }
+.table_data tbody tr td {
+  padding-block: 0;
+  // width: 90px;
+  // overflow-x: scroll;
+}
+.qtable_data {
+  // height: 445px !important;
+  // overflow-y: auto !important;
+  thead {
+    z-index: 1;
+    background-color: rgb(240, 248, 254);
+    font-size: 0.8rem;
+    // padding: px;
+    position: sticky;
+    top: 0;
+  }
+  tbody {
+    tr {
+      border-color: rgb(237, 239, 240);
+      td {
+        // font-size: 0.8rem;
+        padding-inline: 5px;
+        margin-block: -5px;
+      }
+    }
+  }
+}
+th {
+  text-align: center;
+  font-weight: 500;
+}
+
+.qtn_table_brdr {
+  // border-collapse:collapse;
+  thead {
+    tr {
+      th {
+        z-index: 1;
+        background-color: rgb(240, 248, 254);
+        position: sticky;
+        border: 1px solid #b1afaf;
+        top: 0;
+      }
+      .tborder {
+        border: none !important;
+      }
+    }
+  }
+  tbody {
+    tr {
+      td {
+        padding-inline: 5px;
+        margin-block: -5px;
+        border: 1px solid #b1afaf;
+      }
+    }
+  }
+}
+.qtn_table_brdr {
+  .ant-table table {
+    border-collapse: collapse;
+  }
+}
+.text_right {
+  text-align: right;
+  padding-right: 10px;
+}
+.grandtotal,
+.input_bg {
+  background-color: white !important;
+}
+.grandtotal {
+  .ant-input-number-input {
+    font-weight: 600;
+  }
+}
+.tablecontainer {
+  overflow-y: scroll;
+}
+
+.selwidthnew{
+  width:200px!important;
+}
+.selwidthcostnew{
+  width:100px!important;
+}
+.selectwidthtaxtype{
+  width:130px!important;
+}
+.selectwidthtaxamt{
+  width:130px!important;
+}
+.selectwidthtotneww{
+  width:100px!important;
+}
+.selectwidthtotnewww{
+    width:150px!important;
+  }
+@media (min-width: 800px) {
+  .selectwidth {
+    width: 450px !important;
+  }
+  .selectwidthnew {
+    width: 100px !important;
+  }
+}
+.ant-collapse-header-text {
+  font-weight: 500;
+}
+.ant-table {
+  line-height: 2;
+}
+// @media print {
+//   :not(#printable-div) {
+//     display: none;
+//   }
+// }
+// @media print {
+//   @page {
+//     size: A 4px;;
+
+//     padding: 2cm;
+//     width: 100%;
+//     height: 100%;
+//     transform: rotate(90deg);
+//   }
+// }
+.ant-input-number-input {
+  padding-right: 13px!important;
+}
+
+@media print {
+  .sidebarWrapper {
+    display: none;
+  }
+}
+
+@media print {
+  .view_quotation {
+    box-shadow: none;
+  }
+}
+
+@media print {
+  .edit_button {
+    display: none;
+  }
+}
+@media print {
+  .quotation_heading {
+    display: none;
+  }
+}
+
+// @media print {
+//   @page {
+//     size: auto;
+//     margin: 0;
+//   }
+// }
+
+.ant-table-row .draggable {
+  cursor: move;
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+  font-size: 1.1rem;
+  transform: rotate(90deg);
+}
+
+.gu-mirror {
+  background-color: rgba(16, 142, 233, 0.15);
+  cursor: grabbing;
+  cursor: -moz-grabbing;
+  cursor: -webkit-grabbing;
+}
+
+.print-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50px;
+  display: none;
+  /* other styles */
+}
+@media print {
+  .print-header {
+    display: block;
+  }
+}
+
+.print-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50px;
+  /* other styles */
+}
+@media screen and (max-width: 570px) {
+  .content-tabs {
+    height: fit-content;
+  }
+}
+
+.assign_btn {
+  padding-inline: 5px !important;
+  padding-block: 2px !important;
+  margin: 1px;
+}
+.view_btn {
+  padding-inline: 10px !important;
+  padding-block: 2px !important;
+  margin: 1px;
+}
+.view_quotation {
+  // width: 1100px !important;
+  border-radius: 4px;
+  box-shadow: 2px 2px 12px variables.$boxshadow;
+}
+
+// @page {
+//   size: A4;
+//   margin: 0;
+// }
+@media print {
+  .view_quotation {
+    // width: 210mm !important;
+    // height: 297mm;
+    // margin: 10mm;
+
+    margin-left: auto;
+    margin-right: auto;
+    // box-shadow: none;
+    border: solid 1px black;
+  }
+  .imgquotation {
+    margin-top: 25px;
+    margin-left: 35px;
+  }
+}
+
+// page[size="A4"] {
+//   width: 21cm;
+//   height: 29.7cm;
+//   padding: 5rem;
+// }
+
+.ant-input-number-input {
+  color: black;
+}
+
+.quotation_border {
+  // width: 21cm;
+  // height: 29.7cm;
+  border: solid 1px black;
+}
+.quotation_p_name {
+  font-weight: bold;
+  color: black;
+}
+// .quotation_heading{
+//   color: brown;
+//   font-weight: 700;
+// }
+.headcolorquot {
+  color: brown;
+  font-weight: 700;
+}
+.quotation_border_bottom {
+  // border-left: none;
+  // border-right: none;
+  border-bottom: solid 1px black;
+}
+.tr_bgcolor {
+  background-color: rgb(211, 218, 224);
+  border-bottom: black;
+}
+.font_weight_qt {
+  font-weight: 900;
+  color: black;
+}
+.task_width {
+  width: 30%;
+}
+.border_right {
+  border-right: 1px solid;
+}
+.text_align_number {
+  text-align: right;
+}
+.text_align_words {
+  text-align: left;
+}
+.content-tabs-new {
+  border-radius: 8px;
+  // min-height: 20rem;
+  padding: 1px;
+  // flex-grow: 1;
+  box-shadow: 0.5px 1px 4px variables.$boxshadow;
+}
+.content-tabs-tablenew{
+  border-radius: 16px;
+  // min-height: 20rem;
+  padding: 12px;
+  margin-left: -15px;
+  margin-right: 16px;
+  // flex-grow: 1;
+  box-shadow: 0.5px 1px 8px variables.$boxshadow;
+}
+
+.fms_cards{
+  border-radius: 6px;
+  box-shadow: 2px 2px 12px variables.$boxshadow;
+}

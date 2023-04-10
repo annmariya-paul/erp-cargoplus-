@@ -7,11 +7,140 @@ import Custom_model from "../../../../../components/custom_modal/custom_model";
 import Button from "../../../../../components/button/button";
 import TableData from "../../../../../components/table/table_data";
 import { AiOutlinePlus } from "react-icons/ai";
-function Bankdetails(){
+import { CRM_BASE_URL_PURCHASING } from "../../../../../api/bootapi";
+import PublicFetch from "../../../../../utils/PublicFetch";
+import { FaEdit, FaTrash } from "react-icons/fa";
+function Bankdetails( {vendor} ){
     const [successPopup, setSuccessPopup] = useState(false);
     const [addForm] = Form.useForm();
     const [serialNo, setserialNo] = useState(1);
     const [modalShow, setModalShow] = useState(false);
+    const [vendorId, setvendorId] = useState();
+    const [bnkdetails,setbnkdetails]= useState()
+
+    const [editForm] = Form.useForm();
+    const [editmodalShow, seteditModalShow] = useState(false);
+    const[bnkdetailid,setbnkdetailid]= useState("")
+
+    const Getvendordata = () => {
+      PublicFetch.get(`${CRM_BASE_URL_PURCHASING}/vendors/${vendor?.vendor_id}`)
+        .then((res) => {
+          if (res?.data?.success) {
+            console.log("one vendor dataa bnk", res?.data?.data);
+            // setOneLeadData(res?.data?.data);
+            setvendorId(res?.data?.data?.vendor_id);
+          } else {
+            console.log("FAILED TO LOAD DATA");
+          }
+        })
+        .catch((err) => {
+          console.log("Error while getting data", err);
+        });
+    };
+    console.log("bnkkkvendeor id iss",vendor?.vendor_id)
+  
+
+    const close_modal = (mShow, time ) => {
+      if (!mShow) {
+        setTimeout(() => {
+          setSuccessPopup(false);
+          // setTimeOuts(true);
+          // console.log("ediittt",venderdata)
+          // setVendorId(venderdata);
+        }, time);
+      }
+    };
+    const getvendorbankdetails = async () => {
+      try {
+        const allvendortypes = await PublicFetch.get(
+          `${process.env.REACT_APP_BASE_URL}/crm/purchase/v1/vendor-bank-details`
+        );
+        console.log("getting all  vendorbankdetails", allvendortypes);
+        if(allvendortypes.data.success){
+
+          let array = [];
+          allvendortypes?.data?.data?.forEach((item, index) => {
+            // setContactCustomerId(item?.contact_customer_id);
+            // console.log("Lead Id : ", CustomerId);
+            if (vendor?.vendor_id === item?.ven_bank_det_vendor_id) {
+              console.log("bank in one vendorr", item);
+              array.push({
+                vend_account_name: item?.ven_bank_det_account_name,
+                vend_account_no: item?.ven_bank_det_account_no,
+                vend_account_bnk: item?.ven_bank_det_bank,
+                vend_account_iban: item?.ven_bank_det_IBAN,
+                vend_bankdetail_id:item?.ven_bank_det_id,
+                vend_branchname:item?.ven_bank_det_branch
+              });
+            }
+          });
+          setbnkdetails([...array])
+
+        }
+        // setvendortypes(allvendortypes.data.data);
+      } catch (err) {
+        console.log("error to fetching  vendorbankdetails", err);
+      }
+    };
+
+    const  createvendorbankdetails = async (data) => {
+      try {
+        const addvendorbnkdetails = await PublicFetch.post(
+          `${process.env.REACT_APP_BASE_URL}/crm/purchase/v1/vendor-bank-details`,
+          {
+            ven_bank_det_account_name:data.vend_accname,
+            ven_bank_det_account_no: data.vend_accno,
+            ven_bank_det_bank: data.vend_bankname,
+            ven_bank_det_IBAN: data.vend_ibanno,
+            ven_bank_det_branch: data.vend_branchname,
+            ven_bank_det_default: data.vend_defaultbnk,
+            ven_bank_det_vendor_id: vendor?.vendor_id,
+
+          }
+        );
+        console.log("successfully add vendorbankdetails", addvendorbnkdetails);
+        if (addvendorbnkdetails.data.success) {
+           getvendorbankdetails()
+           setModalShow(false)
+           addForm.resetFields()
+          setSuccessPopup(true);
+          close_modal(successPopup, 1000);
+
+        }
+        // setvendortypes(allvendortypes.data.data);
+      } catch (err) {
+        console.log("error to fetching  vendorbankdetails", err);
+      }
+    };
+
+    const  updatevendorbankdetails = async (data) => {
+      try {
+        const addvendorbnkdetails = await PublicFetch.patch(
+          `${process.env.REACT_APP_BASE_URL}/crm/purchase/v1/vendor-bank-details/${bnkdetailid}`,
+          {
+            ven_bank_det_account_name:data.editvend_accname,
+            ven_bank_det_account_no: data.editvend_accno,
+            ven_bank_det_bank: data.editvend_bankname,
+            ven_bank_det_IBAN: data.editvend_ibanno,
+            ven_bank_det_branch: data.editvend_branchname,
+            ven_bank_det_default: data.editvend_defaultbnk,
+            // ven_bank_det_vendor_id: vendor?.vendor_id,
+          }
+        );
+        console.log("successfully add vendorbankdetails", addvendorbnkdetails);
+        if (addvendorbnkdetails.data.success) {
+           getvendorbankdetails()
+           setModalShow(false)
+          //  addForm.resetFields()
+          setSuccessPopup(true);
+          close_modal(successPopup, 1000);
+
+        }
+        // setvendortypes(allvendortypes.data.data);
+      } catch (err) {
+        console.log("error to fetching  vendorbankdetails", err);
+      }
+    };
 
     const columns = [
       {
@@ -22,31 +151,77 @@ function Bankdetails(){
       },
       {
         title: " ACCOUNT NAME",
-        dataIndex: "contact_person_name",
+        dataIndex: "vend_account_name",
         key: "contact_email",
       },
       {
         title: "ACCOUNT NO",
-        dataIndex: "contact_email",
+        dataIndex: "vend_account_no",
         key: "contact_email",
       },
       {
         title: "BANK NAME",
-        dataIndex: "contact_phone_1",
+        dataIndex: "vend_account_bnk",
         key: "contact_phone_1",
       },
       {
         title: "IBAN NO",
-        dataIndex: "contact_phone_2",
+        dataIndex: "vend_account_iban",
         key: "contact_phone_2",
+      },
+      {
+        title: "ACTION",
+        dataIndex: "action",
+        key: "action",
+        width: "15%",
+        render: (data, index) => {
+          return (
+            <div className="d-flex justify-content-center gap-2">
+              <div className="editcolor">
+                <FaEdit 
+                onClick={() => handleEditedclick(index)} 
+                />
+              </div>
+              <div className="editcolor">
+                <FaTrash />
+              </div>
+            </div>
+          );
+        },
+        align: "center",
       },
      
     ];
+    const handleEditedclick =(e)=>{
+      console.log("bankdataa",e)
+      setbnkdetailid(e.vend_bankdetail_id)
+      editForm.setFieldsValue({
+        editvend_accname:e.vend_account_name,
+        editvend_bankname:e.vend_account_bnk,
+        editvend_accno:e.vend_account_no,
+        editvend_branchname:e.vend_branchname,
+        editvend_ibanno:e.vend_account_iban
+       
+      })
+      seteditModalShow(true)
+    }
 
 
+  
+    useEffect(() => {
+      getvendorbankdetails()
+      if (vendor?.vendor_id) {
+        // getallvendorbankdetails();
+        Getvendordata()
+      }
+    }, [vendorId, vendor?.vendor_id]);
+
+
+console.log("vendorbankk id iss",vendor?.vendor_id)
     return(
         <>
  <div className="row">
+
         <div className="col-12">
           <Button btnType="add" onClick={() => setModalShow(true)}>
             New Bank Details <AiOutlinePlus />
@@ -55,7 +230,7 @@ function Bankdetails(){
       </div>
       <div className="datatable">
         <TableData
-          // data={contactTable}
+          data={bnkdetails}
           columns={columns}
           custom_table_css="contact_table"
         />
@@ -77,7 +252,7 @@ function Bankdetails(){
         form={addForm}
         onFinish={(values) => {
           console.log("values iss", values);
-        //   OnSubmit(values);
+          createvendorbankdetails(values)
         }}
         onFinishFailed={(error) => {
           console.log(error);
@@ -86,20 +261,20 @@ function Bankdetails(){
         <div className="row py-5 px-1">
           <div className="col-sm-6 pb-2 ">
             <label>Account Name</label>
-            <Form.Item name="customer_accounting_tax_no">
+            <Form.Item name="vend_accname">
               
               <InputType />
             </Form.Item>
           </div>
           <div className="col-sm-6 pb-2">
             <label>Account No</label>
-            <Form.Item name="customer_accounting_credit_days">
+            <Form.Item name="vend_accno">
             <InputType />
             </Form.Item>
           </div>
           <div className="col-sm-6 pb-2  mt-2">
             <label>Bank Name</label>
-            <Form.Item name="customer_accounting_credit_limit">
+            <Form.Item name="vend_bankname">
             <InputType />
             </Form.Item>
           </div>
@@ -107,13 +282,13 @@ function Bankdetails(){
 
           <div className="col-sm-6 pb-2 mt-2">
             <label>Branch Name</label>
-            <Form.Item name="customer_accounting_qtn_validity_days">
+            <Form.Item name="vend_branchname">
                <InputType />
             </Form.Item>
           </div>
           <div className="col-sm-6 pb-2 mt-2">
             <label>IBAN No</label>
-            <Form.Item name="customer_accounting_qtn_validity_days">
+            <Form.Item name="vend_ibanno">
                <InputType />
             </Form.Item>
           </div>
@@ -121,7 +296,7 @@ function Bankdetails(){
                       <label>Default Bank</label>
                       <div>
                         <Form.Item
-                          name="editdefaultbnk"
+                          name="vend_defaultbnk"
                         
                         >
                          
@@ -153,6 +328,97 @@ function Bankdetails(){
  }
 />
 
+<Custom_model
+ bodyStyle={{ height: 580, overflowY: "auto" }}
+ show={editmodalShow}
+ onHide={() => seteditModalShow(false)}
+ View_list
+ footer={false}
+//  {...props}
+ list_content={
+  <>
+  <div className="row ">
+              <h5 className="lead_text">New Bank Details </h5>
+            </div>
+         <Form
+        form={editForm}
+        onFinish={(values) => {
+          console.log("values iss", values);
+          updatevendorbankdetails(values)
+        }}
+        onFinishFailed={(error) => {
+          console.log(error);
+        }}
+      >
+        <div className="row py-5 px-1">
+          <div className="col-sm-6 pb-2 ">
+            <label>Account Name</label>
+            <Form.Item name="editvend_accname">
+              
+              <InputType />
+            </Form.Item>
+          </div>
+          <div className="col-sm-6 pb-2">
+            <label>Account No</label>
+            <Form.Item name="editvend_accno">
+            <InputType />
+            </Form.Item>
+          </div>
+          <div className="col-sm-6 pb-2  mt-2">
+            <label>Bank Name</label>
+            <Form.Item name="editvend_bankname">
+            <InputType />
+            </Form.Item>
+          </div>
+          
+
+          <div className="col-sm-6 pb-2 mt-2">
+            <label>Branch Name</label>
+            <Form.Item name="editvend_branchname">
+               <InputType />
+            </Form.Item>
+          </div>
+          <div className="col-sm-6 pb-2 mt-2">
+            <label>IBAN No</label>
+            <Form.Item name="editvend_ibanno">
+               <InputType />
+            </Form.Item>
+          </div>
+          <div className="col-6 pt-2 pb-2 mt-2">
+                      <label>Default Bank</label>
+                      <div>
+                        <Form.Item
+                          name="editvend_defaultbnk"
+                        
+                        >
+                         
+                          <Checkbox
+                            // value={currencyDefault}
+                            // onChange={handleCheckededit}
+                            // checked={editdefaultbank == 1 ? true : false}
+                          ></Checkbox>
+                        </Form.Item>
+                      </div>
+                    </div>
+
+          <div className=" pt-4 d-flex justify-content-center">
+          
+            <Button type="submit" className="qtn_save" btnType="save">
+              Save
+            </Button>
+            <Custom_model
+              centered
+              size={`sm`}
+              success
+              show={successPopup}
+              onHide={() => setSuccessPopup(false)}
+            />
+          </div>
+        </div>
+      </Form>
+  </>
+ }
+/>
       
         </>
     )

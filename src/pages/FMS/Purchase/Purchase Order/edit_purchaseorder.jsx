@@ -30,7 +30,8 @@ import axios from "axios";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
 import { CRM_BASE_URL_PURCHASING } from "../../../../api/bootapi";
  import { vendor_Organisation } from "../../../../utils/SelectOptions";
-export default function Purchaseorder() {
+
+export default function EditPurchaseorder() {
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [successPopup, setSuccessPopup] = useState(false);
   const [error, setError] = useState(false);
@@ -1312,7 +1313,7 @@ export default function Purchaseorder() {
           >
             <div className="container-fluid ms-0 me-2 ">
               <div className="row  mt-3">
-                <h5 className="lead_text"> New Purchase Order</h5>
+                <h5 className="lead_text">Edit Purchase Order</h5>
               </div>
               <div className="row mt-1">
                 <div className="content-tabs-new row justify-content mx-1 mb-3">
@@ -1562,14 +1563,13 @@ export default function Purchaseorder() {
                       custom_table_css="table_qtn qtn_table_brdr"
                     />
                   </div>
-
-                  <div className="row">
-                  <div className="d-flex justify-content-end mt-3 ms-5">
+<div className="row">
+                  <div className="d-flex justify-content-end mt-4 ms-5">
                     <div className="col-xl-11 col-lg-2 col-sm-8 col-xs-3 d-flex justify-content-end mt-3">
                       <p style={{ fontWeight: 600 }}>Total :</p>
                     </div>
 
-                    <div className="col-xl-1 col-lg-2 col-sm-2 col-xs-2 me-5 mt-1">
+                    <div className="col-xl-1 col-lg-2 col-sm-2 col-xs-2 me-5 mt-1" >
                       <Form.Item name="grandtotal">
                         <Input_Number
                           className="text_right grandtotal"
@@ -1584,9 +1584,8 @@ export default function Purchaseorder() {
                     </div>
                   </div>
                 </div>
-                </div>
               </div>
-
+              </div>
               <div className="row  mt-1 ">
                 {/* <div className="col-md-6 col-12"> */}
                 <div className="content-tabs-new row justify-content mx-1 mb-3">

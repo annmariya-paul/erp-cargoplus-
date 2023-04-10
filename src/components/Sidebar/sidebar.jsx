@@ -27,6 +27,8 @@ import fmsIcon from "../../components/img/icons8-cargo-ship-50.png";
 import settingsicon from "../../components/img/icons8-gear-50.png";
 import { FaRegHandshake } from "react-icons/fa";
 import cargologo from "../../assets/logo/cargopluslogo1.png";
+import Purchaseorder from "../../pages/FMS/Purchase/Purchase Order/purchase_order";
+import ListpurchaseOrder from "../../pages/FMS/Purchase/Purchase Order/purchase_orderlist";
 
 export default function Sidebar({ showSidebar }) {
   // const [sidebar, setSidebar] = useState(true);
@@ -1053,13 +1055,13 @@ export default function Sidebar({ showSidebar }) {
                   {FMSSettingsopen ? (
                     <>
                       <div className="nav_active_color">
-                        {checkPermission("freight type") && (
+                        {checkPermission("purchase_order_list") && (
                           <li className="nav-text">
                             <NavLink
                               className={({ isActive }) =>
                                 isActive ? "active-link" : "link"
                               }
-                              to={ROUTES.PURCHASEORDER}
+                              to={ROUTES.PUCHASE_ORDER_LIST}
                             >
                               <div className="ms-4 ps-3 subactivelink">
                                 Purchase Order

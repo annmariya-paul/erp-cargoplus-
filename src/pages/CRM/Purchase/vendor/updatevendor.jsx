@@ -72,6 +72,8 @@ function Updatevendor(){
 
     const [toggleState, setToggleState] = useState(1);
 
+    const[vendorId,setVendorId] = useState()
+
     const [timeOut, setTimeOuts] = useState(false);
     const [Toggle4, setToggle4] = useState(false);
 
@@ -196,36 +198,77 @@ function Updatevendor(){
       setVendorEditPopup(true);
     };
   
-    const submitForm = async (data) => {
-      try {
-        const updated = await PublicFetch.patch(
-          `${CRM_BASE_URL_PURCHASING}/vendors/${id}`,
-          {
-            name: data.vendor_name,
-            org_type: data.vendor_Organisation,
-            vendor_type: data.vendor_type,
-            email: data.vendor_email,
-            contact: data.vendor_contact,
-            country_id: data.vendor_country,
-            city: data.vendor_city,
-            address: data.vendor_address,
-            desc: data.vendor_description,
-            tax_no: data.vender_taxno,
-          }
-        );
-        console.log("successfully updated ", updated);
-        if (updated.data.success) {
-          setSuccessPopup(true);
+    // const submitForm = async (data) => {
+    //   try {
+    //     const updated = await PublicFetch.patch(
+    //       `${CRM_BASE_URL_PURCHASING}/vendors/${id}`,
+    //       {
+    //         name: data.vendor_name,
+    //         org_type: data.vendor_Organisation,
+    //         vendor_type: data.vendor_type,
+    //         email: data.vendor_email,
+    //         contact: data.vendor_contact,
+    //         country_id: data.vendor_country,
+    //         city: data.vendor_city,
+    //         address: data.vendor_address,
+    //         desc: data.vendor_description,
+    //         tax_no: data.vender_taxno,
+    //       }
+    //     );
+    //     console.log("successfully updated ", updated);
+    //     if (updated.data.success) {
+    //       setSuccessPopup(true);
        
-          getallvendors();
-          close_modal(successPopup, 1000);
+    //       getallvendors();
+    //       close_modal(successPopup, 1000);
          
-        }
-      } catch (err) {
-        console.log("error to update vendor");
-      }
-    };
+    //     }
+    //   } catch (err) {
+    //     console.log("error to update vendor");
+    //   }
+    // };
   
+
+    const submitForm = (data) => {
+      const formData = new FormData();
+      formData.append(`name`, data.vendor_name);
+      formData.append(`org_type`, data.vendor_Organisation);
+      formData.append(`vendor_type`, data.vendor_type);
+      formData.append(`email`, data.vendor_email);
+      formData.append(`contact`, data.vendor_contact);
+      formData.append(`country_id`, data.vendor_country);
+      formData.append(`city`, data.vendorcity);
+      formData.append(`website`, data.vendorwebsite);
+      formData.append(`state`, data.vendorstate);
+      formData.append(`address`, data.vendoraddress);
+      formData.append(`remarks`, data.vendorremarks);
+     
+      if (data.vendor_attachments) {
+        formData.append(`attachments`, data.vendor_attachments);
+        // formData.append(`customer_logo`, leadimg);
+      }
+  
+      PublicFetch.patch(`${CRM_BASE_URL_PURCHASING}/vendors/${id}`, formData, {
+        "Content-Type": "Multipart/form-Data",
+      })
+        .then((res) => {
+          console.log("successfully updated", res);
+          if (res.data.success) {
+
+            setSuccessPopup(true);
+            // editForm.resetFields();
+            close_modal(successPopup, 1000,res?.data?.data);
+  
+          }
+        })
+        .catch((err) => {
+          console.log("Error", err);
+        });
+    };
+
+
+
+
     const getallvendortype = async () => {
       try {
         const allvendortypes = await PublicFetch.get(
@@ -244,7 +287,7 @@ function Updatevendor(){
     const Onevendor = () => {
         PublicFetch.get(`${CRM_BASE_URL_PURCHASING}/vendors/${id}`)
           .then((res) => {
-            console.log("response", res);
+            console.log("one vendor details", res);
             if (res.data.success) {
               console.log("success of vendors", res.data.data);
               setVendorList(res.data.data);
@@ -252,12 +295,13 @@ function Updatevendor(){
                 vendor_name: res.data.data.vendor_name,
                 vendor_Organisation: res.data.data.vendor_org_type,
                 vendor_email: res.data.data.vendor_email,
-                vendor_contact: res.data.data.vendor_contact,
-                vendor_city: res.data.data.vendor_city,
-                vendor_taxno: res.data.data.vendor_tax_no,
-                vendor_address: res.data.data.vendor_address,
-                vendor_description: res.data.data.vendor_desc,
-          
+                vendor_contact: res.data.data.vendor_phone,
+                // vendor_taxno: res.data.data.vendor_tax_no,
+                vendoraddress: res.data.data.vendor_address,
+                vendorcity: res.data.data.vendor_city,
+                // vendor_description: res.data.data.vendor_desc,
+                vendorwebsite:res.data.data.vendor_website,
+                vendorstate:res.data.data.vendor_state,
                 vendor_country: res.data.data.vendor_country_id,
                 vendor_type: res.data.data.vendor_type_id,
               });
@@ -315,15 +359,18 @@ function Updatevendor(){
       }
     };
   
-    const close_modal = (mShow, time) => {
+    const close_modal = (mShow, time,venderdata ) => {
       if (!mShow) {
         setTimeout(() => {
           setSuccessPopup(false);
-          navigate(`${ROUTES.VENDOR}`);
+          setTimeOuts(true);
+          console.log("ediittt",venderdata)
+          setVendorId(venderdata);
         }, time);
       }
     };
   
+    console.log("updateee iddd",vendorId)
  
     useEffect(() => {
       getallvendortype();
@@ -508,16 +555,11 @@ function Updatevendor(){
                   
                   ]}
                 >
-                   <Radio.Group
-                         value={editvendorOrganisation}
-                         onChange={(e) => {
-                          seteditvendorOrganisation(e);
-                           // setOrganizationDisable(e);
-                         }}
-                          defaultValue="organization"
+                     <Radio.Group
+                          // defaultValue="ORG"
                         >
-                          <Radio value="organization">Organization</Radio>
-                          <Radio value="individual">Individual</Radio>
+                          <Radio value="ORG">Organization</Radio>
+                          <Radio value="IND">Individual</Radio>
                         </Radio.Group>
                   {/* <SelectBox
                     value={editvendorOrganisation}
@@ -579,7 +621,8 @@ function Updatevendor(){
             <div className="col-sm-6 pt-2">
                       <label> Address</label>
                       <div>
-                        <Form.Item className="py-1" name="vendordescription">
+                        <Form.Item className="py-1" 
+                        name="vendoraddress">
                           <TextArea
                             // value={vendordescription}
                             // onChange={(e) => {
@@ -593,7 +636,7 @@ function Updatevendor(){
                     <div className="col-sm-6 pt-2">
                       <label> Attachments</label>
                       <div>
-                        <Form.Item className="py-1" name="vendordescription">
+                        <Form.Item className="py-1" name="vendor_attachments">
                           <FileUpload
                             beforeUpload={beforeUpload}
                             multiple
@@ -747,7 +790,7 @@ function Updatevendor(){
               <label>State</label>
               
                 <Form.Item
-                  name="vendor_taxno"
+                  name="vendorstate"
                   
                 >
                   <InputType
@@ -764,7 +807,7 @@ function Updatevendor(){
               <label>City</label>
               <div>
                 <Form.Item
-                  name="vendor_city"
+                  name="vendorcity"
                  
                 >
                   <InputType
@@ -789,7 +832,7 @@ function Updatevendor(){
               <label> Remarks</label>
               
                 <Form.Item
-                  name="remarkss"
+                  name="vendorremarks"
                   className="mt-1"
                 >
                   <TextArea
@@ -852,7 +895,9 @@ function Updatevendor(){
                 <div className="row mt-3 px-1" style={{ borderRadius: "3px" }}>
                   <div className="col-md-12"></div>
                   <div className="col-12 mt-2">
-                    <Accounting toggle={timeOut} />
+                    <Accounting 
+                    vendor={vendorList}
+                    toggle={timeOut} />
                   </div>
                   <div className="col mt-4">
                     {/* <Button btnType="save" onClick={(e) => handleAddressTab(e)}>
@@ -870,7 +915,9 @@ function Updatevendor(){
                 <div className="row mt-3 px-1" style={{ borderRadius: "3px" }}>
                   <div className="col-md-12"></div>
                   <div className="col-12 mt-2">
-                    <Bankdetails toggle={timeOut} />
+                    <Bankdetails
+                     vendor={vendorList}
+                    toggle={timeOut} />
                   </div>
                   <div className="col mt-4">
                     {/* <Button btnType="save" onClick={(e) => handleAddressTab(e)}>
@@ -888,7 +935,9 @@ function Updatevendor(){
                 <div className="row mt-3 px-1" style={{ borderRadius: "3px" }}>
                   <div className="col-md-12"></div>
                   <div className="col-12 mt-2">
-                    <Editmoreinfo toggle={timeOut} />
+                    <Editmoreinfo 
+                      vendor={vendorId}
+                    toggle={timeOut} />
                   </div>
                   <div className="col mt-4">
                     {/* <Button btnType="save" onClick={(e) => handleAddressTab(e)}>
@@ -901,6 +950,12 @@ function Updatevendor(){
             </div>
 
 
+            <Custom_model
+            size={"sm"}
+            show={successPopup}
+            onHide={() => setSuccessPopup(false)}
+            success
+          />
 
 
 </div>

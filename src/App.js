@@ -54,6 +54,7 @@ import Assign_opportunity from "./pages/FMS/Opportunity_assigns/AssignOpportunit
 import Track_assignments from "./pages/FMS/Opportunity_assigns/Track_assignments/track_opportunity_assigns";
 import UpdateAssignOppurtunity from "./pages/FMS/Opportunity_assigns/update_oppo_assignment/update_oppo_assignment";
 import CreateAgent from "./pages/FMS/Agent mangement/CreateAgent";
+import Purchaseorder from "./pages/FMS/Purchase/Purchase Order/purchase_order";
 // import SelectCountry from "./pages/CRM/General/CountrySelect";
 import Frightlist from "./pages/FMS/settings/Fright_types/fright_types";
 import Quotations from "./pages/FMS/Quotations/create quotation/quotation_list";
@@ -373,6 +374,10 @@ function App() {
 
             <Route path={ROUTES.LISTAGENT} element={<ProtectedRoute />}>
               <Route index element={<ListAgent />} />
+            </Route>
+           
+            <Route path={ROUTES. PURCHASEORDER} element={<ProtectedRoute />}>
+              <Route index element={<Purchaseorder />} />
             </Route>
 
             {/* <Route  path={ROUTES.UPDATEAGENT}

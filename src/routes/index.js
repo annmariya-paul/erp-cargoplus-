@@ -72,6 +72,7 @@ const ROUTES = {
   ADD_QUOTATION: "/add_quotation",
   EDIT_QUOTATION: "/edit_quotation",
   EDIT_QUOTATION_ID: "/edit_quotation/:id",
+  PURCHASEORDER:"/purchase_order",
 
   VIEW_QUOTATION: "/view_quotation",
   ENQUIRIES: "/enquiries",

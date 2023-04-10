@@ -330,6 +330,7 @@ export default function Gltypes(props) {
             {data12 && (
               <Leadlist_Icons
                 datas={data12}
+                name="Gltypes"
                 columns={filteredColumns}
                 items={data12}
                 xlheading={UnitHeads}
@@ -400,8 +401,8 @@ export default function Gltypes(props) {
               btnType="add"
               onClick={() => {
                 setModalAddGltype(true);
-                // setUniqueCode(false);
-                // setUniqueName(false);
+                setUniqueCode(false);
+                setUniqueName(false);
                 addForm.resetFields();
               }}
             >

@@ -345,6 +345,7 @@ export default function PaymentTerms(props) {
             {data12 && (
               <Leadlist_Icons
                 datas={data12}
+                name="paymentterms"
                 columns={filteredColumns}
                 items={data12}
                 xlheading={UnitHeads}

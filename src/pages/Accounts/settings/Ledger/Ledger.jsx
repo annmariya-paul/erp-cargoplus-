@@ -1,8 +1,9 @@
 import { Form, Input, Select } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { FiEdit } from "react-icons/fi";
 import { MdPageview } from "react-icons/md";
+import { ACCOUNTS } from "../../../../api/bootapi";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
 import Button from "../../../../components/button/button";
 import CustomModel from "../../../../components/custom_modal/custom_model";
@@ -11,6 +12,7 @@ import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon
 import MyPagination from "../../../../components/Pagination/MyPagination";
 import SelectBox from "../../../../components/Select Box/SelectBox";
 import TableData from "../../../../components/table/table_data";
+import PublicFetch from "../../../../utils/PublicFetch";
 
 function Ledger() {
   const [AddForm] = Form.useForm();
@@ -25,6 +27,7 @@ function Ledger() {
   const [viewPopup, setViewPopup] = useState(false);
   const [successPopup, setSuccessPopup] = useState(false);
   const [LedgerData, setLedgerData] = useState();
+  const [AllLegderData, setAllLedgerData] = useState();
 
   const columns = [
     {
@@ -115,6 +118,21 @@ function Ledger() {
     },
   ];
 
+  const GetallLedgers = () => {
+    PublicFetch.get(`${ACCOUNTS}/acc_ledger`)
+      .then((res) => {
+        console.log("Response");
+        if (res.data.success) {
+          console.log("Success", res?.data?.data);
+          setAllLedgerData(res.data.data);
+          totalledger(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
   const data = [
     {
       acc_ledger_description: "lorem ispum",
@@ -182,6 +200,14 @@ function Ledger() {
     item.acc_ledger_name,
     item.acc_ledger_description,
   ]);
+
+  const getData = (current, pageSize) => {
+    return AllLegderData?.slice((current - 1) * pageSize, current * pageSize);
+  };
+
+  useEffect(() => {
+    GetallLedgers();
+  }, []);
 
   return (
     <div className="container-fluid shadow-sm p-3">
@@ -294,8 +320,8 @@ function Ledger() {
           <div className="datatable">
             {/* {AllinvoiceData && ( */}
             <TableData
-              data={data}
-              // data={allLeadList}
+              // data={AllLegderData}
+              data={getData(current, pageSize)}
               // data={OpportunityList}
               columns={columns}
               custom_table_css="table_lead_list"

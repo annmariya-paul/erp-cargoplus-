@@ -93,6 +93,7 @@ export default function LeadList() {
           setTotalcount(res?.data?.data?.total);
           setCurrentcount(res?.data?.data?.currentCount);
           let array = [];
+
           res?.data?.data?.customers?.forEach((item, index) => {
             // ldStatus.forEach((i, index) => {
             //   ldType.forEach((t, index) => {
@@ -113,11 +114,15 @@ export default function LeadList() {
               customer_email: item?.customer_email,
               customer_logo: item?.customer_logo,
               customer_remarks: item?.customer_remarks,
-              customer_credit_days: item?.customer_credit_days,
+              customer_credit_days:
+                item?.crm_v1_customer_accounting
+                  ?.customer_accounting_credit_days,
               customer_country: item.customer_country,
               customer_state: item.customer_state,
               customer_city: item.customer_city,
               customer_status: item.customer_status,
+              customer_jobs_no: item?.fms_v1_jobs?.length,
+              customer_opportunity_no: item?.crm_v1_opportunities?.length,
             });
             //       }
             //     });
@@ -210,7 +215,7 @@ export default function LeadList() {
           String(record.customer_credit_days)
             .toLowerCase()
             .includes(value.toLowerCase()) ||
-          String(record.customer_credit_days)
+          String(record.customer_jobs_no)
             .toLowerCase()
             .includes(value.toLowerCase()) ||
           String(record.invoice_amt)
@@ -231,14 +236,14 @@ export default function LeadList() {
       //     .toLowerCase()
       //     .includes(value.toLowerCase());
       // },
-      align: "left",
+      align: "right",
     },
     {
       title: "PHONE",
       dataIndex: "customer_phone",
       key: "customer_phone",
       // width: "23%",
-      align: "left",
+      align: "right",
     },
 
     {
@@ -246,7 +251,7 @@ export default function LeadList() {
       dataIndex: "customer_email",
       key: "customer_email",
       // width: "23%",
-      align: "ledt",
+      align: "left",
     },
 
     {
@@ -259,27 +264,27 @@ export default function LeadList() {
       //     .toLowerCase()
       //     .includes(value.toLowerCase());
       // },
-      align: "center",
+      align: "right",
     },
     {
       title: "OPPORTUNITY",
-      dataIndex: "opportunity",
-      key: "opportunity",
+      dataIndex: "customer_opportunity_no",
+      key: "customer_opportunity_no",
       // filteredValue: [searchStatus],
       // onFilter: (value, record) => {
       //   return String(record.lead_status)
       //     .toLowerCase()
       //     .includes(value.toLowerCase());
       // },
-      align: "left",
+      align: "right",
     },
 
     {
       title: "JOBS",
-      dataIndex: "jobs",
-      key: "jobs",
+      dataIndex: "customer_jobs_no",
+      key: "customer_jobs_no",
       // width: "23%",
-      align: "ledt",
+      align: "right",
     },
 
     {
@@ -287,14 +292,14 @@ export default function LeadList() {
       dataIndex: "invoice_amt",
       key: "invoice_amt",
       // width: "23%",
-      align: "ledt",
+      align: "right",
     },
     {
       title: "DUE AMT",
       dataIndex: "due_amt",
       key: "due_amt",
       // width: "23%",
-      align: "ledt",
+      align: "right",
     },
     {
       title: "ACTION",
@@ -360,7 +365,7 @@ export default function LeadList() {
   //     "lead_status",
   //   ],
   // ];
-  
+
   const LeadHeads = [
     [
       "SL.NO",
@@ -373,7 +378,6 @@ export default function LeadList() {
       "JOBS",
       "INVOICE AMT",
       "DUE AMT",
-
     ],
   ];
 

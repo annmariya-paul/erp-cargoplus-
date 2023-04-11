@@ -197,7 +197,7 @@ function Listjob() {
       `${CRM_BASE_URL_FMS}/job?startIndex=${pageofIndex}&noOfItems=${noofItems}`
     )
       .then((res) => {
-        console.log("Response", res);
+        console.log("Responseeee", res);
         if (res.data.success) {
           console.log("success of job", res.data.data);
           settotaljob(res.data.data.totalCount);
@@ -239,7 +239,7 @@ function Listjob() {
 
   useEffect(() => {
     getAllJobs();
-  }, []);
+  }, [pageofIndex,noofItems]);
 
   const columnsKeys = columns.map((column) => column.key);
 

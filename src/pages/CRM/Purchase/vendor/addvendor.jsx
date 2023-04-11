@@ -27,9 +27,9 @@ import Bankdetails from "./bankdetails/bankdetails";
 import ContactTable from "../../lead/tables/contactstable";
 import Moreinfo from "./Moreinfo/moreinfo";
 
-function Addvendor() {
+function Addvendor({ }  ) {
   const [addForm] = Form.useForm();
-
+  // const [messageApi, contextHolder] = message.useMessage();
   const [successPopup, setSuccessPopup] = useState(false);
 
   const navigate = useNavigate();
@@ -52,6 +52,9 @@ function Addvendor() {
   const [vendordescription, setvendordescription] = useState("");
   const [totalvendor, settotalvendor] = useState("");
 
+  const [vendorattachment,setvendorattachment] = useState("")
+
+  const[vendorId,setVendorId] = useState()
 
   const [toggleState, setToggleState] = useState(1);
 
@@ -71,6 +74,7 @@ function Addvendor() {
       console.log("error to fetching  vendortypes", err);
     }
   };
+
 
   const getData = (current, pageSize) => {
     return allvendor?.slice((current - 1) * pageSize, current * pageSize);
@@ -118,6 +122,13 @@ function Addvendor() {
   const handleChange = (e) => {
     setCountryis(e);
   };
+
+  // const errormessage = () => {
+  //   messageApi.open({
+  //     type: "error",
+  //     content: "Create a Customer",
+  //   });
+  // };
   const getCountry = () => {
     PublicFetch.get(`${GENERAL_SETTING_BASE_URL}/country`)
       .then((res) => {
@@ -131,45 +142,88 @@ function Addvendor() {
         console.log("Error", err);
       });
   };
-  const close_modal = (mShow, time) => {
+  const close_modal = (mShow, time,venddata) => {
     if (!mShow) {
       setTimeout(() => {
         setSuccessPopup(false);
-        navigate(`${ROUTES.VENDOR}`);
+        setTimeOuts(true);
+        setVendorId(venddata);
+        // toggleTab(4);
+        // navigate(`${ROUTES.VENDOR}`);
       }, time);
     }
   };
-  const createvendor = async () => {
-    try {
-      const addvendor = await PublicFetch.post(
-        `${CRM_BASE_URL_PURCHASING}/vendors`,
-        {
-          name: vendorname,
-          org_type: vendorOrganisation,
-          vendor_type: vendortyp,
-          email: vendoremail,
-          contact: vendorcontact,
-          country_id: countryis,
-          city: vendorcity,
-          address: vendoraddress,
-          desc: vendordescription,
-          tax_no: vendortaxno,
-        }
-      );
-      console.log("vendors added successfully", addvendor);
-      if (addvendor.data.success) {
-        setSuccessPopup(true);
-        getallvendors();
-        addForm.resetFields();
+console.log("bnkdetails id iss",vendorId)
 
-        close_modal(successPopup, 1000);
-      }
-    } catch (err) {
-      console.log("err to add the vendors", err);
+  // const createvendor = async () => {
+  //   try {
+  //     const addvendor = await PublicFetch.post(
+  //       `${CRM_BASE_URL_PURCHASING}/vendors`,
+  //       {
+  //         name: vendorname,
+  //         org_type: vendorOrganisation,
+  //         vendor_type: vendortyp,
+  //         email: vendoremail,
+  //         contact: vendorcontact,
+  //         country_id: countryis,
+  //         city: vendorcity,
+  //         address: vendoraddress,
+  //         desc: vendordescription,
+  //         tax_no: vendortaxno,
+  //       }
+  //     );
+  //     console.log("vendors added successfully", addvendor);
+  //     if (addvendor.data.success) {
+  //       setSuccessPopup(true);
+  //       getallvendors();
+  //       addForm.resetFields();
+
+  //       close_modal(successPopup, 1000);
+  //     }
+  //   } catch (err) {
+  //     console.log("err to add the vendors", err);
+  //   }
+  // };
+
+  const createvendor = (data) => {
+    const formData = new FormData();
+    formData.append(`name`, data.vendorname);
+    formData.append(`org_type`, data.org_type);
+    formData.append(`vendor_type`, data.vendortype);
+    formData.append(`email`, data.vendoremail);
+    formData.append(`contact`, data.vendorphone);
+    formData.append(`country_id`, data.vendorcountry);
+    formData.append(`city`, data.vendorcity);
+    formData.append(`website`, data.vendorwebsite);
+    formData.append(`state`, data.vendorstate);
+    formData.append(`address`, data.vendoraddress);
+    formData.append(`remarks`, data.vendorremarks);
+   
+    if (data.vendor_attachments) {
+      formData.append(`attachments`, data.vendor_attachments);
+      // formData.append(`customer_logo`, leadimg);
     }
+
+    PublicFetch.post(`${CRM_BASE_URL_PURCHASING}/vendors`, formData, {
+      "Content-Type": "Multipart/form-Data",
+    })
+      .then((res) => {
+        console.log("successfully added", res);
+        if (res.data.success) {
+          setSuccessPopup(true);
+          addForm.resetFields();
+          close_modal(successPopup, 1000,res?.data?.data);
+
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
   };
 
+
   useEffect(() => {
+    addForm.setFieldsValue({ org_type: "ORG" });
     getallvendortype();
     getallvendors();
     getCountry();
@@ -234,8 +288,9 @@ function Addvendor() {
                   className={toggleState === 2 ? "tabs active-tabs " : "tabs "}
                   onClick={(e) => {
                     handleContactTab(e);
-                    // CustomerId !== null ? errormessage() : handleContactTab(e);
+                    // vendorId == null ? errormessage() : handleContactTab(e);
                   }}
+                  
                 >
                   Contacts
                 </button>
@@ -290,24 +345,18 @@ function Addvendor() {
                   form={addForm}
                   onFinish={(data) => {
                     console.log("valuezzzzzzz", data);
-                    createvendor();
+                    createvendor(data);
                   }}
                   onFinishFailed={(error) => {
                     console.log(error);
                   }}
                 >
-                  {/* <div className="row px-1 pt-2">
-            <h5 className="lead_text">Add Vendor</h5>
-          </div> */}
+                 
 
                   <div className="row  mt-3 mx-0 px-2 py-1">
-                    {/* <div className="col-12">
-              <h5 className="lead_text">Basic Info</h5>
-            </div> */}
-
                     <div className="col-sm-4 pt-2 ">
                       <label>
-                        {" "}
+                       
                         Name<span className="required">*</span>
                       </label>
 
@@ -332,46 +381,25 @@ function Addvendor() {
 
                     <div className="col-sm-4 pt-2">
                       <label>
-                        {" "}
                         Organisation Type<span className="required">*</span>
                       </label>
-
+  
                       <Form.Item
-                        name="vendorOrganisation"
+                        name="org_type"
                         rules={[
                           {
                             required: true,
-                            // pattern: new RegExp("^[A-Za-z ]+$"),
                             message: "Please enter a Valid organisation",
                           },
                         ]}
                       >
                         <Radio.Group
-                         value={vendorOrganisation}
-                         onChange={(e) => {
-                           setvendorOrganisation(e);
-                           // setOrganizationDisable(e);
-                         }}
-                          defaultValue="organization"
+                          defaultValue="ORG"
                         >
-                          <Radio value="organization">Organization</Radio>
-                          <Radio value="individual">Individual</Radio>
+                          <Radio value="ORG">Organization</Radio>
+                          <Radio value="IND">Individual</Radio>
                         </Radio.Group>
-                        {/* <SelectBox
-                          showSearch={true}
-                          allowClear
-                          optionFilterProp="children"
-                          value={vendorOrganisation}
-                          onChange={(e) => {
-                            setvendorOrganisation(e);
-                            // setOrganizationDisable(e);
-                          }}
-                        >
-                          <Select.Option value="ORG">
-                            Organisation
-                          </Select.Option>
-                          <Select.Option value="IND">Indivdual</Select.Option>
-                        </SelectBox> */}
+                       
                       </Form.Item>
                     </div>
 
@@ -418,7 +446,8 @@ function Addvendor() {
                     <div className="col-sm-6 pt-1">
                       <label> Address</label>
                       <div>
-                        <Form.Item className="py-1" name="vendordescription">
+                        <Form.Item className="py-1" 
+                        name="vendoraddress">
                           <TextArea
                             // value={vendordescription}
                             // onChange={(e) => {
@@ -432,7 +461,9 @@ function Addvendor() {
                     <div className="col-sm-6 pt-1">
                       <label> Attachments</label>
                       <div>
-                        <Form.Item className="py-1" name="vendordescription">
+                        <Form.Item className="py-1" 
+                        name="vendor_attachments"
+                        >
                           <FileUpload
                             beforeUpload={beforeUpload}
                             multiple
@@ -452,12 +483,11 @@ function Addvendor() {
 
                     <div className="col-sm-4 pt-3">
                       <label>
-                        {" "}
                         Phone<span className="required">*</span>
                       </label>
 
                       <Form.Item
-                        name="vendorcontact"
+                        name="vendorphone"
                         rules={[
                           {
                             required: true,
@@ -465,21 +495,13 @@ function Addvendor() {
                             message: "Please enter a Valid contact",
                           },
 
-                          // {
-                          //   min: 3,
-                          //   message: "Name must be atleast 3 characters",
-                          // },
-                          // {
-                          //   max: 100,
-                          //   message: " Name cannot be longer than 100 characters",
-                          // },
                         ]}
                       >
                         <InputType
-                          value={vendorcontact}
-                          onChange={(e) => {
-                            setvendorcontact(e.target.value);
-                          }}
+                          // value={vendorcontact}
+                          // onChange={(e) => {
+                          //   setvendorcontact(e.target.value);
+                          // }}
                         />
                       </Form.Item>
                     </div>
@@ -500,10 +522,10 @@ function Addvendor() {
                         ]}
                       >
                         <InputType
-                          value={vendoremail}
-                          onChange={(e) => {
-                            setvendoremail(e.target.value);
-                          }}
+                          // value={vendoremail}
+                          // onChange={(e) => {
+                          //   setvendoremail(e.target.value);
+                          // }}
                         />
                       </Form.Item>
                     </div>
@@ -515,7 +537,7 @@ function Addvendor() {
                       </label>
 
                       <Form.Item
-                        name="vendorcontact"
+                        name="vendorwebsite"
                         rules={[
                           {
                             required: true,
@@ -523,21 +545,13 @@ function Addvendor() {
                             message: "Please enter a Valid Website",
                           },
 
-                          // {
-                          //   min: 3,
-                          //   message: "Name must be atleast 3 characters",
-                          // },
-                          // {
-                          //   max: 100,
-                          //   message: " Name cannot be longer than 100 characters",
-                          // },
                         ]}
                       >
                         <InputType
-                          value={vendorcontact}
-                          onChange={(e) => {
-                            setvendorcontact(e.target.value);
-                          }}
+                          // value={vendorcontact}
+                          // onChange={(e) => {
+                          //   setvendorcontact(e.target.value);
+                          // }}
                         />
                       </Form.Item>
                     </div>
@@ -590,15 +604,12 @@ function Addvendor() {
                     </Form.Item> */}
                     </div>
 
-                    <div className="col-sm-4 pt-3">
+                    <div className="col-sm-4 pt-2">
                       <label>State</label>
 
                       <Form.Item name="vendorstate">
                         <InputType
-                        // value={vendorcity}
-                        // onChange={(e) => {
-                        //   setvendorcity(e.target.value);
-                        // }}
+                        
                         />
                       </Form.Item>
                       {/* <label>Tax No</label>
@@ -612,7 +623,7 @@ function Addvendor() {
                       />
                     </Form.Item> */}
                     </div>
-                    <div className="col-sm-4 pt-3">
+                    <div className="col-sm-4 pt-2">
                       <label>City</label>
 
                       <Form.Item name="vendorcity">
@@ -634,7 +645,8 @@ function Addvendor() {
                     <div className="col-sm-12 pt-1">
                       <label> Remarks</label>
                       <div>
-                        <Form.Item className="py-1" name="vendoraddress">
+                        <Form.Item className="py-1" 
+                        name="vendorremarks">
                           <TextArea
                             value={vendoraddress}
                             onChange={(e) => {
@@ -710,7 +722,9 @@ function Addvendor() {
                 <div className="row mt-3 px-1" style={{ borderRadius: "3px" }}>
                   <div className="col-md-12"></div>
                   <div className="col-12 mt-2">
-                    <Accounting toggle={timeOut} />
+                    <Accounting
+                    vendor={vendorId}
+                    toggle={timeOut} />
                   </div>
                   <div className="col mt-4">
                     {/* <Button btnType="save" onClick={(e) => handleAddressTab(e)}>
@@ -728,7 +742,9 @@ function Addvendor() {
                 <div className="row mt-3 px-1" style={{ borderRadius: "3px" }}>
                   <div className="col-md-12"></div>
                   <div className="col-12 mt-2">
-                    <Bankdetails toggle={timeOut} />
+                    <Bankdetails 
+                    vendor={vendorId}
+                    toggle={timeOut} />
                   </div>
                   <div className="col mt-4">
                     {/* <Button btnType="save" onClick={(e) => handleAddressTab(e)}>
@@ -745,7 +761,9 @@ function Addvendor() {
                 <div className="row mt-3 px-1" style={{ borderRadius: "3px" }}>
                   <div className="col-md-12"></div>
                   <div className="col-12 mt-2">
-                    <Moreinfo toggle={timeOut} />
+                    <Moreinfo 
+                    vendor={vendorId}
+                    toggle={timeOut} />
                   </div>
                   <div className="col mt-4">
                     {/* <Button btnType="save" onClick={(e) => handleAddressTab(e)}>

@@ -5,9 +5,12 @@ import InputType from "../../../../../components/Input Type textbox/InputType";
 import SelectBox from "../../../../../components/Select Box/SelectBox";
 import Custom_model from "../../../../../components/custom_modal/custom_model";
 import Button from "../../../../../components/button/button";
-function Editmoreinfo(){
+function Editmoreinfo(vendor ){
     const [successPopup, setSuccessPopup] = useState(false);
     const [addForm] = Form.useForm();
+
+
+    console.log("editmoreinfo data",vendor)
     return(
         <>
 

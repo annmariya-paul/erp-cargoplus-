@@ -1,8 +1,9 @@
 import { Form, Input, Select } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { FiEdit } from "react-icons/fi";
 import { MdPageview } from "react-icons/md";
+import { ACCOUNTS } from "../../../../api/bootapi";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
 import Button from "../../../../components/button/button";
 import CustomModel from "../../../../components/custom_modal/custom_model";
@@ -11,6 +12,7 @@ import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon
 import MyPagination from "../../../../components/Pagination/MyPagination";
 import SelectBox from "../../../../components/Select Box/SelectBox";
 import TableData from "../../../../components/table/table_data";
+import PublicFetch from "../../../../utils/PublicFetch";
 
 function AccGroup() {
   const [AddForm] = Form.useForm();
@@ -25,6 +27,7 @@ function AccGroup() {
   const [viewPopup, setViewPopup] = useState(false);
   const [successPopup, setSuccessPopup] = useState(false);
   const [AccGroupData, setAccGroupData] = useState();
+  const [AllHeads, setAllHeads] = useState();
 
   const columns = [
     {
@@ -141,6 +144,20 @@ function AccGroup() {
     },
   ];
 
+  const getAllAccountHeads = () => {
+    PublicFetch.get(`${ACCOUNTS}/acc_head`)
+      .then((res) => {
+        console.log("response");
+        if (res.data.success) {
+          console.log("success");
+          setAllHeads(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
   const handleEditClick = (data) => {
     console.log("hai its edit", data);
     if (data) {
@@ -201,8 +218,13 @@ function AccGroup() {
     item.acc_group_description,
     item.acc_group_head,
   ]);
+
+  useEffect(() => {
+    getAllAccountHeads();
+  }, []);
+
   return (
-    <div className="container-fluid shadow-sm p-3">
+    <div className="container-fluid lead_list p-3">
       <div className="row align-items-center">
         <div className="col-xl-4">
           <h5 className="lead_text">Account Groups</h5>
@@ -443,7 +465,18 @@ function AccGroup() {
                       </label>
                       <Form.Item name="acc_group_head">
                         <SelectBox>
-                          <Select.Option></Select.Option>
+                          {AllHeads &&
+                            AllHeads.length > 0 &&
+                            AllHeads.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  key={item.acc_head_id}
+                                  value={item.acc_head_id}
+                                >
+                                  {item.acc_head_name}
+                                </Select.Option>
+                              );
+                            })}
                         </SelectBox>
                       </Form.Item>
                     </div>
@@ -581,7 +614,18 @@ function AccGroup() {
                       </label>
                       <Form.Item name="acc_group_head1">
                         <SelectBox>
-                          <Select.Option></Select.Option>
+                          {AllHeads &&
+                            AllHeads.length > 0 &&
+                            AllHeads.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  key={item.acc_head_id}
+                                  value={item.acc_head_id}
+                                >
+                                  {item.acc_head_name}
+                                </Select.Option>
+                              );
+                            })}
                         </SelectBox>
                       </Form.Item>
                     </div>

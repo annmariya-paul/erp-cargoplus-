@@ -6,7 +6,7 @@ function TextArea({ className, value, onChange, onClick }) {
     <div>
       <div>
         <textarea
-          style={{ minHeight: "120px" }}
+          style={{ minHeight: "100px" }}
           onClick={onClick}
           onChange={onChange}
           value={value}

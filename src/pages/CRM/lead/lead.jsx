@@ -414,7 +414,6 @@ function Lead({}) {
                       </label>
 
                       <Form.Item
-                       
                         name="customer_name"
                         rules={[
                           {
@@ -464,7 +463,6 @@ function Lead({}) {
                           Phone <span className="required">*</span>
                         </label>
                         <Form.Item
-                         
                           name="customer_phone"
                           rules={[
                             {
@@ -522,7 +520,6 @@ function Lead({}) {
                           Email <span className="required">*</span>
                         </label>
                         <Form.Item
-                         
                           name="customer_email"
                           rules={[
                             {
@@ -573,7 +570,6 @@ function Lead({}) {
                     <div className="col-sm-4 pt-2">
                       <label>Website</label>
                       <Form.Item
-                    
                         name="customer_website"
                         rules={
                           [
@@ -601,7 +597,6 @@ function Lead({}) {
                       <div className="mt-3">
                         <label>State</label>
                         <Form.Item
-                         
                           name="customer_state"
                           rules={
                             [
@@ -668,7 +663,6 @@ function Lead({}) {
                       <div className="mt-2 pt-2">
                         <label className="">City</label>
                         <Form.Item
-                        
                           name="customer_city"
                           rules={
                             [

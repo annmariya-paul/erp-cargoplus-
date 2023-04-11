@@ -102,6 +102,9 @@ import DailyExpence from "./pages/Accounts/DailyExpence/DailyExpence";
 import AddPayments from "./pages/Accounts/Payments/AddPayments";
 import CreateExpence from "./pages/Accounts/DailyExpence/CreateExpence";
 import ExpenseCategory from "./pages/Accounts/settings/Expense_Category/ExpenseCategory";
+import ListpurchaseOrder from "./pages/FMS/Purchase/Purchase Order/purchase_orderlist";
+import EditPurchaseorder from "./pages/FMS/Purchase/Purchase Order/edit_purchaseorder";
+import ViewpurchaseOrder from "./pages/FMS/Purchase/Purchase Order/view_purchaseorder";
 // import Vendortype from "./pages/CRM/Purchase/vendertype/vendortype";
 // import Lead from "./pages/lead/lead";
 
@@ -378,6 +381,15 @@ function App() {
            
             <Route path={ROUTES. PURCHASEORDER} element={<ProtectedRoute />}>
               <Route index element={<Purchaseorder />} />
+            </Route>
+            <Route path={ROUTES.PUCHASE_ORDER_LIST} element={<ProtectedRoute />}>
+              <Route index element={<ListpurchaseOrder />} />
+            </Route>
+            <Route path={ROUTES.EDIT_PUCHASE_ORDER_ID} element={<ProtectedRoute />}>
+              <Route index element={<EditPurchaseorder />} />
+            </Route>
+            <Route path={ROUTES.VIEW_PURCHASE_ORDER_ID} element={<ProtectedRoute />}>
+              <Route index element={<ViewpurchaseOrder />} />
             </Route>
 
             {/* <Route  path={ROUTES.UPDATEAGENT}

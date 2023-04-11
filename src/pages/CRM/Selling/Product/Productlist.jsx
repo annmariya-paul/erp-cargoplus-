@@ -26,6 +26,7 @@ import CustomModel from "../../../../components/custom_modal/custom_model";
 import FileUpload from "../../../../components/fileupload/fileUploader";
 import ErrorMsg from "../../../../components/error/ErrorMessage";
 import ProductEditModal from "./ProductEditModal";
+import "./product.scss"
 
 function Productlist() {
   const [numOfItems, setNumOfItems] = useState("25");
@@ -447,13 +448,17 @@ function Productlist() {
             </div>
           </div> */}
           <div className="row my-3">
-            <div className="col-4  px-3">
+            <div className="col-4 d-flex justify-content-start align-items-center">
+            <div className="col-2  ">
               <Select
+               style={{
+                width: 60,
+                
+              }}
+              
                 // defaultValue={"25"}
                 bordered={false}
-                className=" page_size_style"
-                // value={pageSize}
-                // onChange={(e) => setPageSize(e)}
+                className=" page_size_style px-0"
                 value={numOfItems}
                 onChange={(e, current) => {
                   console.log("On page size selected : ", e);
@@ -464,35 +469,30 @@ function Productlist() {
               >
                 {/* <Select.Option value="5">5 | pages</Select.Option> */}
                 <Select.Option value="25">
-                  Show{" "}
-                  <span style={{ color: "lightgray" }} className="ms-1">
-                    |
-                  </span>
+                 
+                 
                   <span style={{ color: "#2f6b8f" }} className="ms-2">
                     25
                   </span>{" "}
                 </Select.Option>
                 <Select.Option value="50">
-                  {" "}
-                  Show{" "}
-                  <span style={{ color: "lightgray" }} className="ms-1">
-                    |
-                  </span>
+                  
                   <span style={{ color: "#2f6b8f" }} className="ms-2">
                     50
                   </span>{" "}
                 </Select.Option>
                 <Select.Option value="100">
-                  {" "}
-                  Show{" "}
-                  <span style={{ color: "lightgray" }} className="ms-1">
-                    |
-                  </span>
+                 
                   <span style={{ color: "#2f6b8f" }} className="ms-2">
                     100
                   </span>{" "}
                 </Select.Option>
               </Select>
+          
+            </div>
+            <div className="col-4 ">  
+            <label className="font_size" >Results:  1-25 <span>of 100</span> </label>
+            </div>
             </div>
             <div className=" col-4 d-flex align-items-center justify-content-center">
               {totalCount > 0 && (

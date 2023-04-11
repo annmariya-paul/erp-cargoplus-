@@ -312,7 +312,7 @@ taxamt:"2000",
                     // handleviewtoedit();
                     // navigate(`${ROUTES.QUATATION_INVOICE}/${id}`);
                     window.open(
-                      `http://localhost:3000/quatation_invoice/${id}`,
+                      `http://localhost:3000/purchase_invoice/${id}`,
                       `_blank`
                     );
                   }}

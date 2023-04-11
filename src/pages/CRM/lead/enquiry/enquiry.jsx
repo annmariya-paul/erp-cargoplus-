@@ -372,13 +372,13 @@ function Enquiry() {
               <label>Freight Type</label>
               <Form.Item
                 name="customerfrighttype"
-                rules={[
-                  {
-                    required: true,
-                    pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                    message: "Please enter a Valid freight type",
-                  },
-                ]}
+                // rules={[
+                //   {
+                //     required: true,
+                //     pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                //     message: "Please enter a Valid freight type",
+                //   },
+                // ]}
               >
                 <SelectBox
                   allowClear
@@ -410,7 +410,16 @@ function Enquiry() {
               <label>
                 Enquiry No<span className="required">*</span>
               </label>
-              <Form.Item name="enquiryno">
+              <Form.Item name="enquiryno"
+              
+                rules={[
+                  {
+                    required: true,
+                    pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                    message: "Please enter a Valid Enquiry number",
+                  },
+                ]}
+              >
                 <InputType
                 //   value={purchasePoNo}
                 //   onChange={(e) => {

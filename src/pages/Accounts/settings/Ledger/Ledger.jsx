@@ -210,7 +210,7 @@ function Ledger() {
   }, []);
 
   return (
-    <div className="container-fluid shadow-sm p-3">
+    <div className="container-fluid lead_list p-3">
       <div className="row align-items-center">
         <div className="col-xl-4">
           <h5 className="lead_text">Ledger</h5>

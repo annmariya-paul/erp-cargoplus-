@@ -184,6 +184,8 @@ const ROUTES = {
   TASKANDEXPENSES_ID: "/task_expenses/:id",
   QUATATION_INVOICE: "/quatation_invoice",
   QUATATION_INVOICE_ID: "/quatation_invoice/:id",
+  PURCHASEORDER_INVOICE: "/purchase_order_invoice",
+  PURCHASEORDER_INVOICE_ID: "/purchase_order_invoice/:id",
   JOB_INVOICE: "/job_invoice",
   JOB_INVOICE_ID: "/job_invoice/:id",
   VENDOR_TYPE: "/vendor_type",

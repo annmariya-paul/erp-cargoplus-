@@ -4,7 +4,7 @@ import MyPagination from "../../../../components/Pagination/MyPagination";
 import TableData from "../../../../components/table/table_data";
 import { MdPageview } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
-import { Form, Input, Select, DatePicker,Radio } from "antd";
+import { Form, Input, Select, DatePicker,Radio,message } from "antd";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import InputType from "../../../../components/Input Type textbox/InputType";
 import Button from "../../../../components/button/button";
@@ -26,6 +26,8 @@ import Accounting from "./Accountings/Accountings";
 import Bankdetails from "./bankdetails/bankdetails";
 import ContactTable from "../../lead/tables/contactstable";
 import Moreinfo from "./Moreinfo/moreinfo";
+import Contact from "./vendorcontact/Contact";
+
 
 function Addvendor({ }  ) {
   const [addForm] = Form.useForm();
@@ -60,8 +62,19 @@ function Addvendor({ }  ) {
 
   const [timeOut, setTimeOuts] = useState(false);
   const [Toggle4, setToggle4] = useState(false);
+  const [Toggle3, setToggle3] = useState(false);
+
 
   const beforeUpload = (file, fileList) => {};
+  const [messageApi, contextHolder] = message.useMessage();
+
+
+  const errormessage = () => {
+    messageApi.open({
+      type: "error",
+      content: "Create a Vendor",
+    });
+  };
 
   const getallvendortype = async () => {
     try {
@@ -148,6 +161,7 @@ function Addvendor({ }  ) {
         setSuccessPopup(false);
         setTimeOuts(true);
         setVendorId(venddata);
+        toggleTab(2);
         // toggleTab(4);
         // navigate(`${ROUTES.VENDOR}`);
       }, time);
@@ -245,25 +259,28 @@ console.log("bnkdetails id iss",vendorId)
   };
 
   const handleAccountingTab = () => {
-    toggleTab(3);
-    // setTimeOuts(false);
+    setTimeOuts(false);
     // setToggle4(false);
+    toggleTab(3);
   };
 
   const handleBankTab = () => {
+    setTimeOuts(false);
+    setToggle4(false);
     toggleTab(4);
-    // setTimeOuts(false);
-    // setToggle4(false);
+ 
   };
   const handleMoreinfoTab = () => {
+    setTimeOuts(false);
+    setToggle4(false);
     toggleTab(5);
-    // setTimeOuts(false);
-    // setToggle4(false);
+   
   };
 
 
   return (
     <>
+    {contextHolder}
       <h5 className="lead_text">Add Vendor</h5>
       <div className="container-fluid">
         <div className="lead_container">
@@ -287,8 +304,8 @@ console.log("bnkdetails id iss",vendorId)
                   id="button-tabs"
                   className={toggleState === 2 ? "tabs active-tabs " : "tabs "}
                   onClick={(e) => {
-                    handleContactTab(e);
-                    // vendorId == null ? errormessage() : handleContactTab(e);
+                    // handleContactTab(e);
+                    vendorId == null ? errormessage() : handleContactTab(e);
                   }}
                   
                 >
@@ -300,8 +317,8 @@ console.log("bnkdetails id iss",vendorId)
                   id="button-tabs"
                   className={toggleState === 3 ? "tabs active-tabs" : "tabs"}
                   onClick={(e) => {
-                    handleAccountingTab(e);
-                    // CustomerId !== null ? errormessage() : handleAddressTab(e);
+                    // handleAccountingTab(e);
+                    vendorId == null ? errormessage() : handleAccountingTab(e);
                   }}
                 >
                   Accounting
@@ -311,10 +328,8 @@ console.log("bnkdetails id iss",vendorId)
                 <button
                   className={toggleState === 4 ? "tabs active-tabs" : "tabs"}
                   onClick={(e) => {
-                    handleBankTab(e);
-                    // CustomerId !== null
-                    //   ? errormessage()
-                    //   : handleAccountingTab(e);
+                    // handleBankTab(e);
+                    vendorId == null ? errormessage() : handleBankTab(e);
                   }}
                 >
                   Bank Details
@@ -324,10 +339,8 @@ console.log("bnkdetails id iss",vendorId)
                 <button
                   className={toggleState === 5 ? "tabs active-tabs" : "tabs"}
                   onClick={(e) => {
-                    handleMoreinfoTab(e);
-                    // CustomerId !== null
-                    //   ? errormessage()
-                    //   : handleAccountingTab(e);
+                    // handleMoreinfoTab(e);
+                    vendorId == null ? errormessage() : handleMoreinfoTab(e);
                   }}
                 >
                   More Info
@@ -704,7 +717,9 @@ console.log("bnkdetails id iss",vendorId)
                 <div className="row mt-3 px-1" style={{ borderRadius: "3px" }}>
                   <div className="col-md-12"></div>
                   <div className="col-12 mt-2">
-                    <ContactTable toggle={timeOut} />
+                    <Contact 
+                     vendor={vendorId}
+                    toggle={timeOut} />
                   </div>
                   <div className="col mt-4">
                     {/* <Button btnType="save" onClick={(e) => handleAddressTab(e)}>
@@ -724,7 +739,7 @@ console.log("bnkdetails id iss",vendorId)
                   <div className="col-12 mt-2">
                     <Accounting
                     vendor={vendorId}
-                    toggle={timeOut} />
+                    toggle={Toggle3} />
                   </div>
                   <div className="col mt-4">
                     {/* <Button btnType="save" onClick={(e) => handleAddressTab(e)}>
@@ -744,7 +759,7 @@ console.log("bnkdetails id iss",vendorId)
                   <div className="col-12 mt-2">
                     <Bankdetails 
                     vendor={vendorId}
-                    toggle={timeOut} />
+                    toggle={Toggle3} />
                   </div>
                   <div className="col mt-4">
                     {/* <Button btnType="save" onClick={(e) => handleAddressTab(e)}>

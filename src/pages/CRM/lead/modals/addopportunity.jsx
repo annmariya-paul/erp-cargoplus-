@@ -7,6 +7,7 @@ import { DatePicker, Form, Select } from "antd";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import Button from "../../../../components/button/button";
 import { useForm } from "react-hook-form";
+import CustomerModal from "../../../../components/CustomerModal.jsx/CustomerModal";
 import Custom_model from "../../../../components/custom_modal/custom_model";
 import {
   CRM_BASE_URL,
@@ -37,7 +38,7 @@ export default function AddOpportunity() {
   const [date, setDate] = useState();
   const [validityDate,setValidityDate]= useState();
   const [name, setName] = useState();
-
+  const [modalAddCustomer, setModalAddCustomer] = useState(false);
   const [value, setValue] = useState([]);
   const [ShowEditModal, setShowEditModal] = useState(false); //oppertunity edit modal
   const [showProgressModal, setShowProgresssModal] = useState(false); //Oppoertunity progress modal
@@ -388,7 +389,10 @@ export default function AddOpportunity() {
                 </Form.Item>
               </div>
               <div className="col-1 mt-4 ps-1">
-                <Button btnType="add_borderless" type="button">
+                <Button btnType="add_borderless" type="button"   onClick={() => {
+                    setModalAddCustomer(true);
+                    addForm.resetFields();
+                  }}>
                   {" "}
                   <AiOutlinePlusCircle style={{ fontSize: "25px" }} />
                 </Button>
@@ -773,6 +777,14 @@ export default function AddOpportunity() {
         }
         // {...props}
       ></Custom_model> */}
+
+        {/* Modal for add Customer */}
+        <CustomerModal
+          show={modalAddCustomer}
+          onHide={() => {
+            setModalAddCustomer(false);
+          }}
+        />
         <Custom_model
           size={`sm`}
           success

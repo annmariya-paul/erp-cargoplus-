@@ -46,7 +46,7 @@ export default function Sidebar({ showSidebar }) {
   const [CRMservicemaster, setCRMservicemaster] = useState(false);
   const [CRMproduct, setCRMproduct] = useState(false);
   const [CRMservice, setCRMservice] = useState(false);
-
+  const [FMSpurchase, setFMSpurchase] = useState(false);
   const [CRMgeneral, setCRMgeneral] = useState(false);
   const [FMSOpen, setFMSOpen] = useState(false);
   const [FMSOppopen, setFMSOppopen] = useState(false);
@@ -1023,62 +1023,7 @@ export default function Sidebar({ showSidebar }) {
                     )}
                   </div>
 
-                  <li
-                    className={
-                      FMSSettingsopen
-                        ? "nav-text  items_hrms nav_active_color open"
-                        : "nav-text  items_hrms nav_active_color"
-                    }
-                  >
-                    <Link
-                      // className={FMSSettingsopen ? "active-link" : "link"}
-                      className="link"
-                      // to="/"
-                      onClick={() => setFMSSettingsopen(!FMSSettingsopen)}
-                    >
-                      <div className="d-flex justify-content-between gap-5 ms-3">
-                        <div className="d-flex">
-                          {/* <MdSettingsInputComponent className="sidebar_icons ms-1 pt-1 " /> */}
-                          <div
-                            style={{ width: "90px" }}
-                            className="subactivelink"
-                          >
-                            Purchase
-                          </div>
-                        </div>
-                        <div className="text-right ">
-                          <AiOutlineCaretDown className="toggle_btn subactivelink" />
-                        </div>
-                      </div>
-                    </Link>
-                  </li>
-                  {FMSSettingsopen ? (
-                    <>
-                      <div className="nav_active_color">
-                        {checkPermission("purchase_order_list") && (
-                          <li className="nav-text">
-                            <NavLink
-                              className={({ isActive }) =>
-                                isActive ? "active-link" : "link"
-                              }
-                              to={ROUTES.PUCHASE_ORDER_LIST}
-                            >
-                              <div className="ms-4 ps-3 subactivelink">
-                                Purchase Order
-                              </div>
-                            </NavLink>
-                          </li>
-                        )}
-                    
-                       
-
-                     
-                     
-                      </div>
-                    </>
-                  ) : (
-                    ""
-                  )}
+              
 
                   <li
                     className={
@@ -1417,6 +1362,63 @@ export default function Sidebar({ showSidebar }) {
                   ) : (
                     ""
                   )}
+                </>
+              ) : (
+                ""
+              )}
+
+
+
+              
+              {/* purchase order */}
+
+              <li
+                className={
+                  FMSpurchase
+                    ? "nav-text  items_hrms open ps-2"
+                    : "nav-text  items_hrms ps-2"
+                }
+              >
+                <Link
+                  className={FMSpurchase ? "active-link_main" : "link"}
+                  // to="/"
+                  onClick={() => setFMSpurchase(!FMSpurchase)}
+                >
+                  <div className="d-flex justify-content-between gap-5">
+                    <div className="d-flex">
+                      {/* <RiTeamFill className="sidebar_icons" />
+                       */}
+                      {/* <GrServices className="sidebar_icons pt-1" /> */}
+                      <div style={{ width: "120px" }} className="">
+                     Purchase 
+                      </div>
+                    </div>
+
+                    <div className="  ">
+                      <div className="text-right ">
+                        <AiOutlineCaretDown className="toggle_btn " />
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              </li>
+
+              {FMSpurchase ? (
+                <>
+                  <div className="nav_active_color ">
+                    {checkPermission("lead") && (
+                      <li className="nav-text ">
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.PUCHASE_ORDER_LIST}
+                        >
+                          <div className="ms-4 subactivelink"> Purchase Order</div>
+                        </NavLink>
+                      </li>
+                    )}
+                  </div>
                 </>
               ) : (
                 ""

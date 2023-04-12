@@ -18,7 +18,7 @@ import EditOpportunity from "./pages/CRM/lead/modals/editopportunity";
 // import Addunit from "./pages/CRM/Selling/unit/Addunit";
 
 import LeadEdit from "./pages/CRM/lead/lead_list/edit_lead_list";
-
+import Purchaseorderinvoice from "./pages/FMS/Purchase/Purchase Order/purcahse_invoice";
 import OpportunityReport from "./pages/opportunityReport/OpportunityReport";
 
 // import Viewunit from "./pages/unit/ViewUnit";
@@ -760,6 +760,11 @@ function App() {
 
             {/* </Route> */}
           </Route>
+
+
+          <Route path={ROUTES.PURCHASEORDER_INVOICE_ID} element={<ProtectedRoute />}>
+              <Route index element={<Purchaseorderinvoice />} />
+            </Route>
           <Route
             path={ROUTES.QUATATION_INVOICE_ID}
             element={<Quotationinvoice />}

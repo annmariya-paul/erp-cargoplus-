@@ -123,6 +123,9 @@ export default function LeadList() {
               customer_status: item.customer_status,
               customer_jobs_no: item?.fms_v1_jobs?.length,
               customer_opportunity_no: item?.crm_v1_opportunities?.length,
+              invoice_amt:item?._sum?.invoice_accounts_grand_total,
+              due_amt:item?._sum?.invoice_accounts_due_amount,
+              customer_credit_days:item?.customer_credit_days
             });
             //       }
             //     });

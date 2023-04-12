@@ -31,6 +31,7 @@ import Select from "rc-select";
 import "../lead.styles.scss";
 import Phone_Input from "../../../../components/PhoneInput/phoneInput";
 import EditMoreinfo from "../editmoreinfo/EditMoreinfo";
+import Editaccounting from "../editmoreinfo/Editaccounting";
 
 function LeadEdit() {
   // const history=useHistory();
@@ -100,7 +101,7 @@ function LeadEdit() {
     );
   };
 
-  const close_modal = (mShow, time) => {
+  const close_modal = (mShow, time) => {  
     if (!mShow) {
       setTimeout(() => {
         setModalShow(false);
@@ -807,7 +808,10 @@ function LeadEdit() {
                 }
               >
                 <div className="col-lg" style={{ borderRadius: "3px" }}>
-                  <Countrystate customerId={id} />
+                  {/* <Countrystate customerId={id} /> */}
+                  <Editaccounting 
+                  customerId={id} />
+                  
                 </div>
               </div>{" "}
 

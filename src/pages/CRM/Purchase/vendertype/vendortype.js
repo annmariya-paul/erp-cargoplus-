@@ -192,11 +192,11 @@ function Vendortype() {
       title: "ACTION",
       dataIndex: "action",
       key: "key",
-      width: "30%",
+      width: "10%",
       render: (data, index) => {
         console.log("index is :", index);
         return (
-          <div className="d-flex justify-content-end align-items-end gap-2">
+          <div className="d-flex justify-content-center align-items-center gap-2">
             <div
               className="editIcon m-0"
               onClick={() => {
@@ -209,15 +209,15 @@ function Vendortype() {
               className="viewIcon m-0"
               onClick={() => handleViewClick(index)}
             >
-              <MdPageview style={{ marginLeft: 15, marginRight: 15 }} />
+              <MdPageview style={{ marginLeft: 5, marginRight: 5}} />
             </div>
             <div className="deleteIcon m-0">
-              <FaTrash />
+              <FaTrash style={{ marginBottom: 2}}/>
             </div>
           </div>
         );
       },
-      align: "right",
+      align: "center",
     },
   ];
 
@@ -386,7 +386,7 @@ function Vendortype() {
             >
               <div className="row py-4">
                 <div className="col-12 pt-1">
-                  <label className="mb-2">Vendor Type Name<span className="required">*</span></label>
+                  <label className="mb-2">Name<span className="required">*</span></label>
                   <div>
                     <Form.Item
                       name="vendortypename"
@@ -418,7 +418,7 @@ function Vendortype() {
                   </div>
                 </div>
                 <div className="col-12 pt-1">
-                  <label className="mb-2">Vendor Type Description</label>
+                  <label className="mb-2">Description</label>
                   <div>
                     <Form.Item name="freightprefix">
                       <TextArea
@@ -488,7 +488,7 @@ function Vendortype() {
             </div>
             <div className="row mt-4">
               <div className="col-4">
-                <p> Vendortype Description</p>
+                <p>Description</p>
               </div>
               <div className="col-1">:</div>
               <div className="col-6 justify-content-start">
@@ -522,7 +522,7 @@ function Vendortype() {
                   }}
                 >
                   <div className="col-12">
-                    <label className="mb-2">Name</label>
+                    <label className="mb-2">Name<span className="required">*</span></label>
                     <Form.Item
                       name="vendortypename"
                       rules={[

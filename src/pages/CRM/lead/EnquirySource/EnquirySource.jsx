@@ -128,11 +128,11 @@ function EnquirySource() {
       title: "Action",
       dataIndex: "action",
       key: "action",
-      width: "24%",
-      align: "right",
+      width: "4%",
+      align: "center",
       render: (data, index) => {
         return (
-          <div className=" d-flex justify-content-end align-items-end gap-3">
+          <div className=" d-flex justify-content-center align-items-center gap-3">
             <div
               className="actionEdit"
               onClick={() => {

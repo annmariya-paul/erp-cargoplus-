@@ -19,7 +19,7 @@ function CustomerModal({ onHide, show }) {
                 <Form>
                   <div className="row ">
                     <div className="col-12">
-                      <h4 className="lead_text">Add Customer</h4>
+                      <h4 className="lead_text">New Customer</h4>
                     </div>
                     <div className="col-6 mt-2">
                       <lable>

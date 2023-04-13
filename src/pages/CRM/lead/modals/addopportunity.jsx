@@ -389,13 +389,18 @@ export default function AddOpportunity() {
                 </Form.Item>
               </div>
               <div className="col-1 mt-4 ps-1">
-                <Button btnType="add_borderless" type="button"   onClick={() => {
+              
+                  {" "}
+                  <AiOutlinePlusCircle style={{ fontSize: "21px",
+                      marginTop: "27px",
+                      marginLeft: "10px",
+                      color:"#0891d1", }} 
+                  onClick={() => {
                     setModalAddCustomer(true);
                     addForm.resetFields();
-                  }}>
-                  {" "}
-                  <AiOutlinePlusCircle style={{ fontSize: "25px" }} />
-                </Button>
+                  }}
+                  />
+               
               </div>
             </div>
 

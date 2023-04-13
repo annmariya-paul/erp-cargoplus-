@@ -61,6 +61,8 @@ function Lead({}) {
   const [Toggle4, setToggle4] = useState(false);
   const [countries, setCountries] = useState("");
 
+  const [customerdetails,setcustomerdetails]= useState()
+
   const [addForm] = Form.useForm();
 
   const [error, setError] = useState(false);
@@ -100,6 +102,7 @@ function Lead({}) {
         setModalShow(false);
         setTimeOuts(true);
         setCustomerId(customer?.customer_id);
+        setcustomerdetails(customer)
         toggleTab(2);
       }, time);
     }
@@ -200,6 +203,7 @@ function Lead({}) {
       .then((res) => {
         console.log("response", res);
         if (res.data.success) {
+          modalShow(true)
           close_modal(modalShow, 1000, res?.data?.data);
           setModalContact(false);
         }
@@ -876,7 +880,10 @@ function Lead({}) {
                 }
               >
                 <div className="col-lg" style={{ borderRadius: "3px" }}>
-                  <Countrystate customer_id={CustomerId} />
+                  <Countrystate 
+                  customerdetails= {customerdetails}
+                  // customer_id={CustomerId}
+                   />
                 </div>
               </div>{" "}
               <div
@@ -886,7 +893,7 @@ function Lead({}) {
               >
                 <div className="col-lg" style={{ borderRadius: "3px" }}>
                   <Moreinfo
-                  // customer_id={CustomerId}
+                   customerdetails= {customerdetails}
                   />
                 </div>
               </div>

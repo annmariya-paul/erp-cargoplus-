@@ -257,17 +257,17 @@ function CreateJob() {
     setLeadIdEnq(e);
   };
 
-  const [allLeadList, setAllLeadList] = useState([]);
-  console.log("all leads", allLeadList);
+  const [allCustomerList, setAllcustomerList] = useState([]);
+  console.log("all leads", allCustomerList);
   const GetAllLeadData = () => {
-    PublicFetch.get(`${CRM_BASE_URL}/lead/Minimal`)
+    PublicFetch.get(`${CRM_BASE_URL}/customer/Minimal`)
       .then((res) => {
         if (res?.data?.success) {
           console.log("All lead data", res?.data?.data);
           // setAllLeadList(res?.data?.data?.leads);
           setTotalcount(res?.data?.data?.totalCount);
           setCurrentcount(res?.data?.data?.currentCount);
-          setAllLeadList(res.data.data);
+          setAllcustomerList(res?.data?.data);
           let array = [];
           res?.data?.data?.forEach((item, index) => {
             array.push({
@@ -331,8 +331,8 @@ function CreateJob() {
     formData.append("job_awb_bl_no", awbno);
 
     formData.append("job_origin_id", data.job_origin_id);
-
-    formData.append("job_customer", data.job_customer);
+    formData.append("job_salesperson_id", data.sales_person);
+    // formData.append("job_customer", data.job_customer);
 
     formData.append("job_destination_id", data.job_destination_id);
 
@@ -341,7 +341,7 @@ function CreateJob() {
     formData.append("job_gross_wt", data.job_grossweight);
     formData.append("job_chargeable_wt", data.job_chargable_weight);
     formData.append("job_payment_terms", data.job_payment_terms);
-    formData.append("job_total_cost_currency", data.job_currency);
+    formData.append("job_total_cost_curr", data.job_currency);
     formData.append("job_total_cost_exch", data.exchnagerate);
     formData.append("job_credit_days", data.job_credit_days);
     formData.append("job_incoterm_id", data.incoterm);
@@ -471,6 +471,10 @@ function CreateJob() {
             if (item.currency_is_default === 1) {
               arr = item?.currency_code;
               setCurrencyDefault(arr);
+              addForm.setFieldsValue({
+                job_currency: item?.currency_id,
+              });
+              getCurrencyRate(item.currency_id);
             }
           });
         }
@@ -491,8 +495,6 @@ function CreateJob() {
       console.log("error to fetching  containertypes", err);
     }
   };
-
-
 
   const [currencyRates, setCurrencyRates] = useState(0);
   console.log("ratesssss", currencyRates);
@@ -576,7 +578,7 @@ function CreateJob() {
     getallfrighttype();
     CuurencyDatas();
     GetSalesPersons();
-    getallcontainertype()
+    getallcontainertype();
   }, []);
   const beforeUpload = (file, fileList) => {};
 
@@ -610,7 +612,7 @@ function CreateJob() {
                     <h5 className="lead_text">Basic Info</h5>
                   </div>
                   <div className="col-xl-4 col-sm-12 mt-2 px-3 ">
-                  <label>Customer</label>
+                    <label>Customer</label>
                     <Form.Item
                       name="job_customer"
                       rules={[
@@ -630,27 +632,23 @@ function CreateJob() {
                         showSearch
                         optionFilterProp="children"
                       >
-                        {allLeadList &&
-                          allLeadList.length > 0 &&
-                          allLeadList.map((item, index) => {
+                        {allCustomerList &&
+                          allCustomerList.length > 0 &&
+                          allCustomerList.map((item, index) => {
                             return (
                               <Select.Option
-                                key={item.lead_id}
-                                value={item.lead_id}
+                                key={item.customer_id}
+                                value={item.customer_id}
                               >
-                                {item.lead_customer_name}
+                                {item.customer_name}
                               </Select.Option>
                             );
                           })}
                       </SelectBox>
                     </Form.Item>
-
-                  
                   </div>
                   <div className="col-xl-4 col-sm-12 mt-2 px-3">
-
-
-                  <label>Freight Type</label>
+                    <label>Freight Type</label>
                     <Form.Item
                       name="job_freight_type"
                       rules={[
@@ -723,9 +721,9 @@ function CreateJob() {
                   </div>
 
                   <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                  <label>Job No</label>
+                    <label>Job No</label>
                     <Form.Item
-                      name="quotationno"
+                      name="job_no"
                       // rules={[
                       //   {
                       //     required: true,
@@ -734,7 +732,8 @@ function CreateJob() {
                       //   },
                       // ]}
                     >
-                      <SelectBox
+                      <InputType disabled={true} />
+                      {/* <SelectBox
                         onChange={(e) => {
                           if (e) {
                             handleLeadIdEnq(e);
@@ -760,13 +759,12 @@ function CreateJob() {
                               </Select.Option>
                             );
                           })}
-                      </SelectBox>
+                      </SelectBox> */}
                     </Form.Item>
-
                   </div>
 
                   <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                  <label>Job Date</label>
+                    <label>Job Date</label>
                     <Form.Item
                       name="jobdate"
                       rules={[
@@ -778,20 +776,17 @@ function CreateJob() {
                       ]}
                     >
                       <DatePicker
+                        className="m-0"
                         style={{ borderWidth: 0, marginTop: 10 }}
                         defaultValue={moment(date)}
                         format={dateFormatList}
                       />
                     </Form.Item>
-
                   </div>
 
                   <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                  <label>Quotation No</label>
-                    <Form.Item
-                      name="quotationno"
-                      
-                    >
+                    <label>Quotation No</label>
+                    <Form.Item name="quotationno">
                       <SelectBox
                         onChange={(e) => {
                           if (e) {
@@ -836,7 +831,7 @@ function CreateJob() {
                     </Form.Item> */}
                   </div>
                   <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                  <label>
+                    <label>
                       Sale Person<span className="required">*</span>
                     </label>
                     <Form.Item
@@ -941,7 +936,7 @@ function CreateJob() {
                       </Form.Item>
                     </div> */}
 
-<div className="col-xl-4 col-sm-12 mt-2">
+                  <div className="col-xl-4 col-sm-12 mt-2">
                     <label>Consignee</label>
                     <Form.Item
                       name="job_consignee"
@@ -957,7 +952,7 @@ function CreateJob() {
                     </Form.Item>
                   </div>
                   <div className="col-xl-4 col-sm-12 mt-2">
-                   <label>Shipper</label>
+                    <label>Shipper</label>
                     <Form.Item
                       name="job_shipper"
                       rules={[
@@ -970,8 +965,7 @@ function CreateJob() {
                     >
                       <InputType disabled={disable} />
                     </Form.Item>
-   </div>
-          
+                  </div>
 
                   <div className="col-xl-4 col-sm-12 mt-2">
                     <label>Origin</label>
@@ -1114,13 +1108,13 @@ function CreateJob() {
                     <label>Container Type</label>
                     <Form.Item
                       name="job_containertype"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid carrier",
-                        },
-                      ]}
+                      // rules={[
+                      //   {
+                      //     required: true,
+                      //     pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                      //     message: "Please enter a Valid carrier",
+                      //   },
+                      // ]}
                     >
                       <SelectBox
                         allowClear
@@ -1131,7 +1125,7 @@ function CreateJob() {
                         {allcontainertype &&
                           allcontainertype.length > 0 &&
                           allcontainertype.map((item, index) => {
-                            console.log("datass",item)
+                            console.log("datass", item);
                             return (
                               <Select.Option
                                 value={item.container_type_id}
@@ -1195,7 +1189,7 @@ function CreateJob() {
                       ]}
                     >
                       <Input_Number
-                        className="text_right"
+                        className="text_right m-0"
                         // value={currencyRates}
                         // onChange={handleChange}
                         align="right"
@@ -1244,17 +1238,17 @@ function CreateJob() {
                   <div className="col-xl-4 col-sm-12 mt-2">
                     <label>Length</label>
                     <Form.Item
-                      name="job_grossweight"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid gross wt",
-                        },
-                      ]}
+                      name="job_length"
+                      // rules={[
+                      //   {
+                      //     required: true,
+                      //     pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                      //     message: "Please enter a Valid gross wt",
+                      //   },
+                      // ]}
                     >
                       <Input_Number
-                        className="text_right"
+                        className="text_right m-0"
                         // value={currencyRates}
                         // onChange={handleChange}
                         align="right"
@@ -1270,17 +1264,17 @@ function CreateJob() {
                   <div className="col-xl-4 col-sm-12 mt-2">
                     <label>Breadth</label>
                     <Form.Item
-                      name="job_grossweight"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid gross wt",
-                        },
-                      ]}
+                      name="job_breadth"
+                      // rules={[
+                      //   {
+                      //     required: true,
+                      //     pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                      //     message: "Please enter a Valid gross wt",
+                      //   },
+                      // ]}
                     >
                       <Input_Number
-                        className="text_right"
+                        className="text_right m-0"
                         // value={currencyRates}
                         // onChange={handleChange}
                         align="right"
@@ -1296,17 +1290,17 @@ function CreateJob() {
                   <div className="col-xl-4 col-sm-12 mt-2">
                     <label>Height</label>
                     <Form.Item
-                      name="job_grossweight"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid gross wt",
-                        },
-                      ]}
+                      name="job_height"
+                      // rules={[
+                      //   {
+                      //     required: true,
+                      //     pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                      //     message: "Please enter a Valid gross wt",
+                      //   },
+                      // ]}
                     >
                       <Input_Number
-                        className="text_right"
+                        className="text_right m-0"
                         // value={currencyRates}
                         // onChange={handleChange}
                         align="right"
@@ -1321,17 +1315,17 @@ function CreateJob() {
                   <div className="col-xl-4 col-sm-12 mt-2">
                     <label>Volume</label>
                     <Form.Item
-                      name="job_grossweight"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid gross wt",
-                        },
-                      ]}
+                      name="job_volume"
+                      // rules={[
+                      //   {
+                      //     required: true,
+                      //     pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                      //     message: "Please enter a Valid gross wt",
+                      //   },
+                      // ]}
                     >
                       <Input_Number
-                        className="text_right"
+                        className="text_right m-0"
                         // value={currencyRates}
                         // onChange={handleChange}
                         align="right"
@@ -1357,7 +1351,7 @@ function CreateJob() {
                       ]}
                     >
                       <Input_Number
-                        className="text_right"
+                        className="text_right m-0"
                         // value={currencyRates}
                         // onChange={handleChange}
                         align="right"
@@ -1382,7 +1376,7 @@ function CreateJob() {
                       ]}
                     >
                       <Input_Number
-                        className="text_right"
+                        className="text_right m-0"
                         // value={currencyRates}
                         // onChange={handleChange}
                         align="right"
@@ -1505,16 +1499,16 @@ function CreateJob() {
                     <label>Exchange Rate</label>
                     <Form.Item
                       name="exchnagerate"
-                      rules={[
-                        {
-                          required: true,
+                      // rules={[
+                      //   {
+                      //     required: true,
 
-                          message: "Please enter a Valid Rate",
-                        },
-                      ]}
+                      //     message: "Please enter a Valid Rate",
+                      //   },
+                      // ]}
                     >
                       <Input_Number
-                        className="text_right"
+                        className="text_right "
                         // value={currencyRates}
                         // onChange={handleChange}
                         align="right"

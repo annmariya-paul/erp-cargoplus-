@@ -49,6 +49,11 @@ function Moreinfo({vendor}){
             console.log("vendor id", res?.data?.data);
             // setOneLeadData(res?.data?.data);
             setvendorId(res?.data?.data?.vendor_id);
+           addForm.setFieldsValue({
+            vendor_freighttype:res.data.data.crm_v1_vendor_freight_types?.ven_frt_type_id,
+            vendorincoterms:res.data.data.crm_v1_vendor_incoterms?.ven_incoterm_id
+           })
+
           } else {
             console.log("FAILED TO LOAD DATA");
           }
@@ -85,20 +90,27 @@ function Moreinfo({vendor}){
         "Content-Type": "Multipart/form-Data",
       })
         .then((res) => {
-          console.log("successfully updated", res);
-          // if (res.data.success) {
+          console.log("successfully updated vendor moreinfo", res);
+          if (res.data.success) {
 
-          //   setSuccessPopup(true);
-          //   editForm.resetFields();
-          //   close_modal(successPopup, 1000);
+            setSuccessPopup(true);
+            // addForm.resetFields();
+            close_modal(successPopup, 1000);
   
-          // }
+          }
         })
         .catch((err) => {
           console.log("Error", err);
         });
     };
 
+    const close_modal = (mShow, time) => {
+      if (!mShow) {
+        setTimeout(() => {
+          setSuccessPopup(false);
+        }, time);
+      }
+    };
   
 
     useEffect(() => {
@@ -126,7 +138,7 @@ function Moreinfo({vendor}){
       >
         <div className="row py-5 px-1">
           <div className="col-sm-6">
-            <label>Preferred Freight Type </label>
+            <label>Preferred Freight Typesss </label>
             <Form.Item name="vendor_freighttype">
               
             <SelectBox
@@ -184,13 +196,7 @@ function Moreinfo({vendor}){
       
 
           <div className=" pt-4">
-            {/* <Button
-              btntype="submit"
-              className="btn_save"
-              // onClick={() => setModalShow(true)}
-            >
-              Save
-            </Button> */}
+          
           
             <Button type="submit" className="qtn_save" btnType="save">
               Save

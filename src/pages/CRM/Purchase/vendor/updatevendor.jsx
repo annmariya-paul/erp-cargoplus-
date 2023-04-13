@@ -25,6 +25,9 @@ import Accounting from "./Accountings/Accountings";
 import Bankdetails from "./bankdetails/bankdetails";
 import FileUpload from "../../../../components/fileupload/fileUploader";
 import Editmoreinfo from "./editmoreinfo/Editmoreinfo";
+import Contact from "./vendorcontact/Contact";
+import Moreinfo from "./Moreinfo/moreinfo";
+
 
 function Updatevendor(){
     const { id } = useParams();
@@ -76,6 +79,8 @@ function Updatevendor(){
 
     const [timeOut, setTimeOuts] = useState(false);
     const [Toggle4, setToggle4] = useState(false);
+    const [Toggle3, setToggle3] = useState(false);
+
 
     const beforeUpload = (file, fileList) => {};
     const [viewvendor, setViewvendor] = useState({
@@ -366,6 +371,7 @@ function Updatevendor(){
           setTimeOuts(true);
           console.log("ediittt",venderdata)
           setVendorId(venderdata);
+          toggleTab(2)
         }, time);
       }
     };
@@ -389,18 +395,21 @@ function Updatevendor(){
       if (e) {
         setTimeOuts(true);
         setToggle4(false);
+        setToggle3(false)
         toggleTab(2);
       }
     };
   
     const handleAccountingTab = () => {
       toggleTab(3);
+      setToggle3(false)
       // setTimeOuts(false);
       // setToggle4(false);
     };
   
     const handleBankTab = () => {
       toggleTab(4);
+      setToggle3(true)
       // setTimeOuts(false);
       // setToggle4(false);
     };
@@ -877,7 +886,9 @@ function Updatevendor(){
                 <div className="row mt-3 px-1" style={{ borderRadius: "3px" }}>
                   <div className="col-md-12"></div>
                   <div className="col-12 mt-2">
-                    <ContactTable toggle={timeOut} />
+                    <Contact 
+                      vendor={vendorList}
+                    toggle={timeOut} />
                   </div>
                   <div className="col mt-4">
                     {/* <Button btnType="save" onClick={(e) => handleAddressTab(e)}>
@@ -897,7 +908,7 @@ function Updatevendor(){
                   <div className="col-12 mt-2">
                     <Accounting 
                     vendor={vendorList}
-                    toggle={timeOut} />
+                    toggle={Toggle3} />
                   </div>
                   <div className="col mt-4">
                     {/* <Button btnType="save" onClick={(e) => handleAddressTab(e)}>
@@ -917,7 +928,7 @@ function Updatevendor(){
                   <div className="col-12 mt-2">
                     <Bankdetails
                      vendor={vendorList}
-                    toggle={timeOut} />
+                    toggle={Toggle3} />
                   </div>
                   <div className="col mt-4">
                     {/* <Button btnType="save" onClick={(e) => handleAddressTab(e)}>
@@ -935,9 +946,9 @@ function Updatevendor(){
                 <div className="row mt-3 px-1" style={{ borderRadius: "3px" }}>
                   <div className="col-md-12"></div>
                   <div className="col-12 mt-2">
-                    <Editmoreinfo 
-                      vendor={vendorId}
-                    toggle={timeOut} />
+                    <Moreinfo
+                      vendor={vendorList}
+                    toggle={Toggle3} />
                   </div>
                   <div className="col mt-4">
                     {/* <Button btnType="save" onClick={(e) => handleAddressTab(e)}>

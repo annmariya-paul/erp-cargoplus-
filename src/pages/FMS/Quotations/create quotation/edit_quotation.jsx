@@ -1105,6 +1105,7 @@ export default function EditQuotation(
     const formData = new FormData();
     formData.append("quotation_no", data.quotation_no.trim(" "));
     formData.append("quotation_date", new Date(data.quotationdate));
+    formData.append("qoutation_customer", data.customer);
     formData.append("quotation_validity", new Date(data.validity_date));
     formData.append("quotation_consignee", data.quotation_consignee);
     formData.append("quotation_shipper", data.shipper);
@@ -1493,7 +1494,8 @@ export default function EditQuotation(
                         },
                       ]}
                     >
-                      <SelectBox
+                      <InputType />
+                      {/* <SelectBox
                         allowClear
                         showSearch
                         optionFilterProp="children"
@@ -1511,7 +1513,7 @@ export default function EditQuotation(
                               </Select.Option>
                             );
                           })}
-                      </SelectBox>
+                      </SelectBox> */}
                     </Form.Item>
                   </div>
 

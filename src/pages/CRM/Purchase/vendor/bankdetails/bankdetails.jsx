@@ -10,7 +10,7 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { CRM_BASE_URL_PURCHASING } from "../../../../../api/bootapi";
 import PublicFetch from "../../../../../utils/PublicFetch";
 import { FaEdit, FaTrash } from "react-icons/fa";
-function Bankdetails( {vendor} ){
+function Bankdetails( {vendor,toggle } ){
     const [successPopup, setSuccessPopup] = useState(false);
     const [addForm] = Form.useForm();
     const [serialNo, setserialNo] = useState(1);
@@ -217,7 +217,16 @@ function Bankdetails( {vendor} ){
     }, [vendorId, vendor?.vendor_id]);
 
 
+    useEffect(() => {
+      if (toggle == true && bnkdetails?.length <= 0) {
+        setModalShow(true);
+        console.log("this ais test", modalShow);
+      }
+    }, [toggle, bnkdetails?.length]);
+
 console.log("vendorbankk id iss",vendor?.vendor_id)
+
+
     return(
         <>
  <div className="row">

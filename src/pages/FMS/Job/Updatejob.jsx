@@ -48,6 +48,7 @@ function Updatejob() {
   const [disable, setDisable] = useState(false);
   const [quotationdisable, setQuotationDisable] = useState(true);
   const [allSalesPerson, setAllSalesPerson] = useState();
+  const [allcontainertype, setallcontainertype] = useState("");
 
   const [allincoterms, setallincoterms] = useState("");
   const [defaultincoterm, setdefaultincoterm] = useState("");
@@ -102,6 +103,8 @@ function Updatejob() {
             job_total_exp_amountlx: res.data.data.job_total_exp_amountlx,
             grosswt: res.data.data.job_gross_wt,
             chargeablewt: res.data.data.job_chargeable_wt,
+            incoterm: res.data.data.job_incoterm_id,
+            sales_person: res.data.data.job_salesperson_id,
           });
         }
       })
@@ -296,6 +299,9 @@ function Updatejob() {
     formData.append("job_total_cost_curr", data.job_currency);
     formData.append("job_total_cost_exch", data.exchangerate);
     formData.append("job_credit_days", data.creditdays);
+    formData.append("job_salesperson_id", data.sales_person);
+    formData.append("job_incoterm_id", data.incoterm);
+
     if (docfile) {
       formData.append("job_docs", docfile);
     }
@@ -344,6 +350,18 @@ function Updatejob() {
     }
   };
 
+  const getallcontainertype = async () => {
+    try {
+      const allcontainertype = await PublicFetch.get(
+        `${CRM_BASE_URL_FMS}/container_type`
+      );
+      console.log("getting all containertype", allcontainertype);
+      setallcontainertype(allcontainertype.data.data);
+    } catch (err) {
+      console.log("error to fetching  containertypes", err);
+    }
+  };
+
   const GetSalesPersons = () => {
     PublicFetch.get(`${CRM_BASE_URL_HRMS}/employees/salesexecutive`)
       .then((res) => {
@@ -371,6 +389,7 @@ function Updatejob() {
     allQuotations();
     getAllincoterm();
     GetSalesPersons();
+    getallcontainertype();
   }, [id, pageofIndex, noofItems]);
   const beforeUpload = (file, fileList) => {};
 
@@ -405,9 +424,7 @@ function Updatejob() {
                   </div>
 
                   <div className="col-xl-4 col-sm-12 mt-2 px-3 ">
-
-
-                  <label>Customer</label>
+                    <label>Customer</label>
                     <Form.Item
                       name="customer"
                       rules={[
@@ -442,13 +459,10 @@ function Updatejob() {
                           })}
                       </SelectBox>
                     </Form.Item>
-
-                   
                   </div>
 
                   <div className="col-xl-4 col-sm-12 mt-2 px-3">
-
-                  <label>Freight Type</label>
+                    <label>Freight Type</label>
                     <Form.Item
                       name="freighttype"
                       rules={[
@@ -479,13 +493,9 @@ function Updatejob() {
                           })}
                       </SelectBox>
                     </Form.Item>
-
-                   
                   </div>
                   <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                  
-
-                  <label>Job No</label>
+                    <label>Job No</label>
                     <Form.Item
                       name="jobno"
                       rules={[
@@ -498,11 +508,9 @@ function Updatejob() {
                     >
                       <InputType disabled={disable} />
                     </Form.Item>
-                 
                   </div>
                   <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                  
-                  <label>Job Date</label>
+                    <label>Job Date</label>
                     <Form.Item
                       name="jobdate"
                       rules={[
@@ -515,10 +523,9 @@ function Updatejob() {
                     >
                       <DatePicker format={"DD-MM-YYYY"} disabled={disable} />
                     </Form.Item>
-                
                   </div>
                   <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                  <label>Quotation No</label>
+                    <label>Quotation No</label>
                     <Form.Item
                       name="quotationno"
                       // rules={[
@@ -549,8 +556,6 @@ function Updatejob() {
                           })}
                       </SelectBox>
                     </Form.Item>
-
-
                   </div>
                   {/* <div className="col-xl-4 col-sm-12 mt-2 px-3">
                     <label>Shipper</label>
@@ -622,8 +627,6 @@ function Updatejob() {
                   </div>
 
                   <div className="col-xl-6 col-sm-12 mt-2" hidden>
-
-
                     <label>Mode</label>
                     <Form.Item
                       name="Mode"
@@ -786,7 +789,7 @@ function Updatejob() {
                       </SelectBox>
                     </Form.Item>
                   </div>
-                 
+
                   <div className="col-xl-4 col-sm-12 mt-2 ">
                     <label>AWB/BL No</label>
                     <Form.Item
@@ -835,24 +838,20 @@ function Updatejob() {
                         },
                       ]}
                     >
-                      <SelectBox
-                        // disabled={disable}
-                        // allowClear
-                        // showSearch
-                        // optionFilterProp="children"
-                      >
-                        {/* {locations &&
-                          locations.length > 0 &&
-                          locations.map((item, index) => {
+                      <SelectBox>
+                        {allcontainertype &&
+                          allcontainertype.length > 0 &&
+                          allcontainertype.map((item, index) => {
+                            console.log("datass", item);
                             return (
                               <Select.Option
-                                key={item.location_id}
-                                value={item.location_id}
+                                value={item.container_type_id}
+                                key={item.container_type_id}
                               >
-                                {item.location_name}
+                                {item.container_type_shortname}
                               </Select.Option>
                             );
-                          })} */}
+                          })}
                       </SelectBox>
                     </Form.Item>
                   </div>
@@ -956,13 +955,13 @@ function Updatejob() {
                     <label>Length</label>
                     <Form.Item
                       name="length"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid grosswt",
-                        },
-                      ]}
+                      // rules={[
+                      //   {
+                      //     required: true,
+                      //     pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                      //     message: "Please enter a Valid grosswt",
+                      //   },
+                      // ]}
                     >
                       <Input_Number
                         className="text_right"
@@ -981,13 +980,13 @@ function Updatejob() {
                     <label>Breadth</label>
                     <Form.Item
                       name="breadth"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid grosswt",
-                        },
-                      ]}
+                      // rules={[
+                      //   {
+                      //     required: true,
+                      //     pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                      //     message: "Please enter a Valid grosswt",
+                      //   },
+                      // ]}
                     >
                       <Input_Number
                         className="text_right"
@@ -1006,13 +1005,13 @@ function Updatejob() {
                     <label>Height</label>
                     <Form.Item
                       name="height"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid grosswt",
-                        },
-                      ]}
+                      // rules={[
+                      //   {
+                      //     required: true,
+                      //     pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                      //     message: "Please enter a Valid grosswt",
+                      //   },
+                      // ]}
                     >
                       <Input_Number
                         className="text_right"
@@ -1032,13 +1031,13 @@ function Updatejob() {
                     <label>Volume</label>
                     <Form.Item
                       name="volume"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid grosswt",
-                        },
-                      ]}
+                      // rules={[
+                      //   {
+                      //     required: true,
+                      //     pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                      //     message: "Please enter a Valid grosswt",
+                      //   },
+                      // ]}
                     >
                       <Input_Number
                         className="text_right"
@@ -1108,7 +1107,7 @@ function Updatejob() {
                     <label> Incoterm</label>
                     <Form.Item name="incoterm">
                       <SelectBox
-                        value={defaultincoterm}
+                        // value={defaultincoterm}
                         onChange={(e) => {
                           console.log("select the brandss", e);
                           setdefaultincoterm(parseInt(e));

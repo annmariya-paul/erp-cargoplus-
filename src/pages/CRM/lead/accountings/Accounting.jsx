@@ -18,7 +18,7 @@ import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../../routes";
 import Input_Number from "../../../../components/InputNumber/InputNumber";
 
-function Countrystate(props) {
+function Countrystate({customerdetails} ) {
   const [modalShow, setModalShow] = useState(false);
   const [data, setData] = useState([]);
   const [getCountry, setCountry] = useState();
@@ -30,6 +30,9 @@ function Countrystate(props) {
   const [frighttype, setFrighttype] = useState();
   const [successPopup, setSuccessPopup] = useState(false);
 
+  const [onecustomerData, setOnecustomerData] = useState();
+
+  const [customerid,setcustomerid]= useState()
   const navigate = useNavigate();
   const {
     register,
@@ -43,7 +46,7 @@ function Countrystate(props) {
     if (!mShow) {
       setTimeout(() => {
         setSuccessPopup(false);
-        navigate(ROUTES.LEADLIST);
+        // navigate(ROUTES.LEADLIST);
       }, time);
     }
   };
@@ -72,96 +75,194 @@ function Countrystate(props) {
       console.log("Error in fetching fright types : ", err);
     }
   };
-  console.log("customer id", props.customerId, props.customer_id);
+  // console.log("customer id", props.customerId, props.customer_id);
 
-  const getAccounts = () => {
-    PublicFetch.get(
-      `${CRM_BASE_URL}/customer-accounting?startIndex=0&noOfItems=10`
-    )
+  // const getAccounts = () => {
+  //   PublicFetch.get(
+  //     `${CRM_BASE_URL}/customer-accounting?startIndex=0&noOfItems=10`
+  //   )
+  //     .then((res) => {
+  //       console.log("response", res);
+  //       if (res.data.success) {
+  //         console.log("success of accounts", res.data.data.customerAccounting);
+  //         let temp = [];
+  //         res?.data?.data?.customerAccounting?.forEach((item, index) => {
+  //           // console.log("acounts of custiomer", item);
+
+  //           if (props?.customerId == item?.customer_accounting_customer_id) {
+  //             console.log("acounts of custiomer", item);
+  //             temp.push({
+  //               customer_accounting_id: item.customer_accounting_id,
+  //               customer_accounting_credit_days:
+  //                 item.customer_accounting_credit_days,
+  //               customer_accounting_preferred_freight_type:
+  //                 item.customer_accounting_preferred_freight_type,
+  //               customer_accounting_qtn_validity_days:
+  //                 item.customer_accounting_qtn_validity_days,
+  //               customer_accounting_credit_limit:
+  //                 item.customer_accounting_credit_limit,
+  //               customer_accounting_tax_no: item.customer_accounting_tax_no,
+  //               customer_accounting_customer_id:
+  //                 item.customer_accounting_customer_id,
+  //             });
+  //             addForm.setFieldsValue({
+  //               customer_accounting_id: item.customer_accounting_id,
+  //               customer_accounting_credit_days:
+  //                 item.customer_accounting_credit_days,
+  //               customer_accounting_preferred_freight_type:
+  //                 item.customer_accounting_preferred_freight_type,
+  //               customer_accounting_qtn_validity_days:
+  //                 item.customer_accounting_qtn_validity_days,
+  //               customer_accounting_credit_limit:
+  //                 item.customer_accounting_credit_limit,
+  //               customer_accounting_tax_no: item.customer_accounting_tax_no,
+  //               customer_accounting_customer_id:
+  //                 item.customer_accounting_customer_id,
+  //             });
+  //           }
+  //         });
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log("Error", err);
+  //     });
+  // };
+
+
+  const GetLeadData = () => {
+    PublicFetch.get(`${CRM_BASE_URL}/customer/${customerdetails?.customer_id}`)
       .then((res) => {
-        console.log("response", res);
-        if (res.data.success) {
-          console.log("success of accounts", res.data.data.customerAccounting);
-          let temp = [];
-          res?.data?.data?.customerAccounting?.forEach((item, index) => {
-            // console.log("acounts of custiomer", item);
-
-            if (props?.customerId == item?.customer_accounting_customer_id) {
-              console.log("acounts of custiomer", item);
-              temp.push({
-                customer_accounting_id: item.customer_accounting_id,
-                customer_accounting_credit_days:
-                  item.customer_accounting_credit_days,
-                customer_accounting_preferred_freight_type:
-                  item.customer_accounting_preferred_freight_type,
-                customer_accounting_qtn_validity_days:
-                  item.customer_accounting_qtn_validity_days,
-                customer_accounting_credit_limit:
-                  item.customer_accounting_credit_limit,
-                customer_accounting_tax_no: item.customer_accounting_tax_no,
-                customer_accounting_customer_id:
-                  item.customer_accounting_customer_id,
-              });
-              addForm.setFieldsValue({
-                customer_accounting_id: item.customer_accounting_id,
-                customer_accounting_credit_days:
-                  item.customer_accounting_credit_days,
-                customer_accounting_preferred_freight_type:
-                  item.customer_accounting_preferred_freight_type,
-                customer_accounting_qtn_validity_days:
-                  item.customer_accounting_qtn_validity_days,
-                customer_accounting_credit_limit:
-                  item.customer_accounting_credit_limit,
-                customer_accounting_tax_no: item.customer_accounting_tax_no,
-                customer_accounting_customer_id:
-                  item.customer_accounting_customer_id,
-              });
-            }
+        if (res?.data?.success) {
+          console.log("Unique Lead Id data", res?.data?.data);
+          setOnecustomerData(res?.data?.data);
+         
+          addForm.setFieldsValue({
+            // customer_type: res?.data?.data?.customer_type,
+            // customer_name: res?.data?.data?.customer_name,
+            // customer_address: res?.data?.data?.customer_address,
+            // customer_phone: res?.data?.data?.customer_phone,
+            // customer_email: res?.data?.data?.customer_email,
+            // customer_website: res?.data?.data?.customer_website,
+            // customer_logo: res?.data?.data?.customer_logo,
+            // customer_remarks: res?.data?.data?.customer_remarks,
+            customer_accounting_tax_no: res?.data?.data?.customer_tax_no,
+            customer_accounting_credit_days: res?.data?.data?.customer_credit_days,
+            customer_accounting_credit_limit: res?.data?.data?.customer_credit_limit,
           });
+        } else {
+          console.log("FAILED T LOAD DATA");
         }
       })
       .catch((err) => {
-        console.log("Error", err);
+        console.log("Errror while getting data", err);
       });
   };
+
+
+  const createCustomeraccounting = (data) => {
+
+    const formData = new FormData();
+    formData.append(`customer_name`, customerdetails.customer_name);
+    formData.append(`customer_type`, customerdetails.customer_type);
+    formData.append(`customer_address`, customerdetails.customer_address);
+    formData.append(`customer_phone`, customerdetails.customer_phone);
+    formData.append(`customer_email`, customerdetails.customer_email);
+    formData.append(`customer_website`, customerdetails.customer_website);
+    formData.append(`customer_remarks`, customerdetails.customer_remarks);
+    formData.append(`customer_country`, customerdetails.customer_country);
+    formData.append(`customer_state`, customerdetails.customer_state);
+    formData.append(`customer_city`, customerdetails.customer_city);
+
+    formData.append(`customer_tax_no`, data.customer_accounting_tax_no);
+    formData.append(`customer_credit_days`, data.customer_accounting_credit_days);
+    formData.append(`customer_credit_limit`, data.customer_accounting_credit_limit);
+
+    // if (leadimg) {
+    //   formData.append(`customer_logo`, leadimg);
+    // }
+if(onecustomerData){
+  PublicFetch.patch(`${CRM_BASE_URL}/customer/${customerdetails?.customer_id}`, formData, {
+    "Content-Type": "Multipart/form-Data",
+  })
+    .then((res) => {
+      console.log("data addedsuccessfully", res);
+      if (res.data.success) {
+        GetLeadData()
+        setSuccessPopup(true)
+        close_modal(modalShow, 1000, res?.data?.data);
+        // setModalContact(false);
+      }
+    })
+  
+    .catch((err) => {
+      console.log("Error", err);
+    });
+}
+else {
+
+    PublicFetch.post(`${CRM_BASE_URL}/customer`, formData, {
+      "Content-Type": "Multipart/form-Data",
+    })
+      .then((res) => {
+        console.log("data addedsuccessfully", res);
+        if (res.data.success) {
+          GetLeadData()
+          setSuccessPopup(true)
+          close_modal(modalShow, 1000, res?.data?.data);
+          // setModalContact(false);
+        }
+      })
+    
+      .catch((err) => {
+        console.log("Error", err);
+      });
+    }
+  };
+
+
 
   useEffect(() => {
-    if (props.customerId) {
-      getAccounts();
+    if(customerdetails?.customer_id){
+      GetLeadData()
     }
+  
+    // if (props.customerId) {
+    //   getAccounts();
+    // }
     getallfrighttype();
     getAllCountries();
-  }, [props.customerId]);
+  }, [customerdetails?.customer_id]);
+ console.log("haiaii",customerdetails)
 
-  const OnSubmit = (value) => {
-    const data = {
-      customer_accounting_tax_no: value.customer_accounting_tax_no,
-      customer_accounting_customer_id: props?.customer_id,
-      customer_accounting_credit_days: value.customer_accounting_credit_days,
-      customer_accounting_preferred_freight_type:
-        value.customer_accounting_preferred_freight_type,
-      customer_accounting_qtn_validity_days:
-        value.customer_accounting_qtn_validity_days,
-      customer_accounting_credit_limit: value.customer_accounting_credit_limit,
-    };
-    PublicFetch.post(`${CRM_BASE_URL}/customer-accounting`, data)
-      .then((res) => {
-        console.log("Response", res);
-        if (res.data.success) {
-          console.log("success", res.data.data);
-          setSuccessPopup(true);
-          // getallPaymentTerms()
-          // close_modal(successPopup, 1200);
+  // const OnSubmit = (value) => {
+  //   const data = {
+  //     customer_accounting_tax_no: value.customer_accounting_tax_no,
+  //     customer_accounting_customer_id: props?.customer_id,
+  //     customer_accounting_credit_days: value.customer_accounting_credit_days,
+  //     customer_accounting_preferred_freight_type:
+  //       value.customer_accounting_preferred_freight_type,
+  //     customer_accounting_qtn_validity_days:
+  //       value.customer_accounting_qtn_validity_days,
+  //     customer_accounting_credit_limit: value.customer_accounting_credit_limit,
+  //   };
+  //   PublicFetch.post(`${CRM_BASE_URL}/customer-accounting`, data)
+  //     .then((res) => {
+  //       console.log("Response", res);
+  //       if (res.data.success) {
+  //         console.log("success", res.data.data);
+  //         setSuccessPopup(true);
+  //         // getallPaymentTerms()
+  //         // close_modal(successPopup, 1200);
 
-          addForm.resetFields();
-          close_modal(successPopup, 1000);
-          // setModalAddPayment(false);
-        }
-      })
-      .catch((err) => {
-        console.log("Error", err);
-      });
-  };
+  //         addForm.resetFields();
+  //         close_modal(successPopup, 1000);
+  //         // setModalAddPayment(false);
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log("Error", err);
+  //     });
+  // };
   // const Submit = (data) => {
   //   console.log(data);
   //   if (data) {
@@ -210,7 +311,8 @@ function Countrystate(props) {
         form={addForm}
         onFinish={(values) => {
           console.log("values iss", values);
-          OnSubmit(values);
+          // OnSubmit(values);
+          createCustomeraccounting(values)
         }}
         onFinishFailed={(error) => {
           console.log(error);

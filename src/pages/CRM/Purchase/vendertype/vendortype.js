@@ -156,11 +156,13 @@ function Vendortype() {
       key: "index",
       render: (value, item, index) => serialNo + index,
       align: "center",
+      width:"10%",
     },
     {
       title: " NAME",
       dataIndex: "vendor_type_name",
       key: "vendor_type_name",
+      width:"27%",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
         return (
@@ -190,7 +192,7 @@ function Vendortype() {
       title: "ACTION",
       dataIndex: "action",
       key: "key",
-      width: "30%",
+      width: "10%",
       render: (data, index) => {
         console.log("index is :", index);
         return (
@@ -207,10 +209,10 @@ function Vendortype() {
               className="viewIcon m-0"
               onClick={() => handleViewClick(index)}
             >
-              <MdPageview style={{ marginLeft: 15, marginRight: 15 }} />
+              <MdPageview style={{ marginLeft: 5, marginRight: 5}} />
             </div>
             <div className="deleteIcon m-0">
-              <FaTrash />
+              <FaTrash style={{ marginBottom: 2}}/>
             </div>
           </div>
         );
@@ -370,7 +372,7 @@ function Vendortype() {
         list_content={
           <>
             <div className="row">
-              <h5 className="lead_text">Add Vendor Type</h5>
+              <h5 className="lead_text">New Vendor Type</h5>
             </div>
             <Form
               form={addForm}
@@ -384,7 +386,7 @@ function Vendortype() {
             >
               <div className="row py-4">
                 <div className="col-12 pt-1">
-                  <label>Vendor Type Name</label>
+                  <label className="mb-2">Name<span className="required">*</span></label>
                   <div>
                     <Form.Item
                       name="vendortypename"
@@ -406,7 +408,7 @@ function Vendortype() {
                       ]}
                       // onChange={(e) => setFrighttypename(e.target.value)}
                     >
-                      <InputType
+                      <InputType className="mb-2"
                         value={vendortypename}
                         onChange={(e) => {
                           setVendortypename(e.target.value);
@@ -416,7 +418,7 @@ function Vendortype() {
                   </div>
                 </div>
                 <div className="col-12 pt-1">
-                  <label>Vendor Type Description</label>
+                  <label className="mb-2">Description</label>
                   <div>
                     <Form.Item name="freightprefix">
                       <TextArea
@@ -486,7 +488,7 @@ function Vendortype() {
             </div>
             <div className="row mt-4">
               <div className="col-4">
-                <p> Vendortype Description</p>
+                <p>Description</p>
               </div>
               <div className="col-1">:</div>
               <div className="col-6 justify-content-start">
@@ -504,7 +506,7 @@ function Vendortype() {
         View_list
         list_content={
           <div>
-            <div className="container-fluid px-4 my-3">
+            <div className="container-fluid px-4 my-2">
               <div>
                 <h5 className="lead_text">Edit Vendor Type</h5>
               </div>
@@ -520,7 +522,7 @@ function Vendortype() {
                   }}
                 >
                   <div className="col-12">
-                    <label>Name</label>
+                    <label className="mb-2">Name<span className="required">*</span></label>
                     <Form.Item
                       name="vendortypename"
                       rules={[
@@ -540,7 +542,7 @@ function Vendortype() {
                       ]}
                     >
                       <InputType
-                        className="input_type_style w-100"
+                        className="input_type_style w-100 mb-2"
                         value={editvendortypename}
                         onChange={(e) => {
                           seteditvendortypename(e.target.value);
@@ -563,7 +565,7 @@ function Vendortype() {
                     ) : null} */}
                   </div>
                   <div className="col-12">
-                    <label>Vendor Type Description</label>
+                    <label className="mb-2">Vendor Type Description</label>
                     <Form.Item name="vendortypedesc">
                       <TextArea
                         value={editvendortypedesc}

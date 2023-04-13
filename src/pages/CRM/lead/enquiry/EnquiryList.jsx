@@ -188,8 +188,8 @@ function EnquiryList() {
 
     {
       title: "STATUS",
-      dataIndex: "status",
-      key: "status",
+      // dataIndex:"enquiry_status",
+      // key:"enquiry_status",
       // width: "23%",
       align: "left",
     },
@@ -288,6 +288,7 @@ function EnquiryList() {
               enquiry_source: item.enquiry_source,
               contact_email: item?.crm_v1_contacts?.contact_email,
               contact_phone_1: item?.crm_v1_contacts?.contact_phone_1,
+              enquiry_status:item?.enquiry_status,
             });
           });
           setAllnquires(temp);

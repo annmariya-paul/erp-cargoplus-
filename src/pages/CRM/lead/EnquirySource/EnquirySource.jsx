@@ -42,8 +42,8 @@ function EnquirySource() {
       title: "NAME",
       dataIndex: "enq_source_name",
       key: "enq_source_name",
-      width: "25%",
-      align: "center",
+      width: "17%",
+      align: "left",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
         // console.log("hai how are", record.children);
@@ -63,8 +63,8 @@ function EnquirySource() {
       title: "DESCRIPTION",
       dataIndex: "enq_source_description",
       key: "enq_source_description",
-      width: "11%",
-      align: "center",
+      width: "20%",
+      align: "left",
       filteredValue: [searchedText],
       onFilter: (value, record) => {
         // console.log("hai how are", record.children);
@@ -128,7 +128,7 @@ function EnquirySource() {
       title: "Action",
       dataIndex: "action",
       key: "action",
-      width: "24%",
+      width: "4%",
       align: "center",
       render: (data, index) => {
         return (
@@ -260,7 +260,7 @@ function EnquirySource() {
           <div>
             <div className="row flex-wrap">
               <div className="col-4 pt-2">
-                <h5 className="lead_text">Enquiry Source</h5>
+                <h5 className="lead_text mb-2">Enquiry Source</h5>
               </div>
               <div
                 // style={{ backgroundColor: "rgb(233, 233, 233)", width: "fit-content"}}
@@ -287,6 +287,7 @@ function EnquirySource() {
                 {AllEnquirySource && (
                   <Leadlist_Icons
                     datas={data12}
+                    name="Enquirysource"
                     columns={columns}
                     items={data12}
                     xlheading={TaxGroupHeads}
@@ -432,7 +433,7 @@ function EnquirySource() {
                       <h5 className="lead_text">Enquiry Source</h5>
                     </div>
                     <div className="col-12 mt-2">
-                      <label>
+                      <label className="mb-2">
                         Name<span className="required">*</span>
                       </label>
                       <Form.Item
@@ -448,7 +449,7 @@ function EnquirySource() {
                       </Form.Item>
                     </div>
                     <div className="col-12 mt-3">
-                      <label>Description</label>
+                      <label className="mb-2">Description</label>
                       <Form.Item name="enq_source_description">
                         <TextArea />
                       </Form.Item>
@@ -485,7 +486,7 @@ function EnquirySource() {
                       <h5 className="lead_text">Enquiry Source</h5>
                     </div>
                     <div className="col-12 mt-2">
-                      <label>
+                      <label className="mb-2">
                         Name<span className="required">*</span>
                       </label>
                       <Form.Item
@@ -497,11 +498,11 @@ function EnquirySource() {
                           },
                         ]}
                       >
-                        <InputType />
+                        <InputType className="mb-2" />
                       </Form.Item>
                     </div>
                     <div className="col-12 mt-3">
-                      <label>Description</label>
+                      <label className="mb-2">Description</label>
                       <Form.Item name="enq_source_description1">
                         <TextArea />
                       </Form.Item>

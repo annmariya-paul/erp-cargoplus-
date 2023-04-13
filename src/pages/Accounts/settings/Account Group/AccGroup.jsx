@@ -28,6 +28,8 @@ function AccGroup() {
   const [successPopup, setSuccessPopup] = useState(false);
   const [AccGroupData, setAccGroupData] = useState();
   const [AllHeads, setAllHeads] = useState();
+  const [AccGroupId, setAccGroupId] = useState();
+  const [AllAccGroups, setAllAccGroups] = useState();
 
   const columns = [
     {
@@ -42,6 +44,7 @@ function AccGroup() {
           </div>
         );
       },
+      align: "center",
     },
     {
       title: "GROUP CODE",
@@ -68,7 +71,6 @@ function AccGroup() {
             .includes(value.toLowerCase())
         );
       },
-      // align: "center",
     },
     {
       title: "GROUP Name",
@@ -158,6 +160,79 @@ function AccGroup() {
       });
   };
 
+  const getAllGroupsData = () => {
+    PublicFetch.get(`${ACCOUNTS}/account_groups`)
+      .then((res) => {
+        console.log("Response of all groups");
+        if (res.data.success) {
+          console.log("Success of all Groups");
+          setAllAccGroups(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+  const createAccGroup = (data) => {
+    PublicFetch.post(`${ACCOUNTS}/account_groups/create_group`, data)
+      .then((res) => {
+        console.log("Response of create");
+        if (res.data.data) {
+          console.log("Success of Create");
+          getAllGroupsData();
+          setSuccessPopup(true);
+          setAddPopup(false);
+          close_modal(successPopup, 1200);
+          AddForm.resetFields();
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+  const UpdateAccGroup = (data) => {
+    PublicFetch.patch(`${ACCOUNTS}/account_groups/${AccGroupId}`, {
+      acc_group_description: data.acc_group_description1,
+      acc_group_name: data.acc_group_name1,
+      acc_group_parent: data.acc_group_parent_id1,
+      acc_group_head: data.acc_group_head1,
+    })
+      .then((res) => {
+        console.log("Response from Update");
+        if (res.data.success) {
+          console.log("Success from Update");
+          getAllGroupsData();
+          setSuccessPopup(true);
+          setEditPopup(false);
+          close_modal(successPopup, 1200);
+          AddForm.resetFields();
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+  const GetAccountGroupCode = (head, ParentId) => {};
+
+  const getOneAccGroup = (data) => {
+    PublicFetch.get(`${ACCOUNTS}/account_groups/${data}`)
+      .then((res) => {
+        console.log("response");
+        if (res.data.success) {
+          console.log("success");
+          AddForm.setFieldsValue({
+            acc_group_head: res.data.data.acc_group_head,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
   const handleEditClick = (data) => {
     console.log("hai its edit", data);
     if (data) {
@@ -167,7 +242,9 @@ function AccGroup() {
         acc_group_name1: data.acc_group_name,
         acc_group_parent_id1: data.acc_group_parent_id,
         acc_group_description1: data.acc_group_description,
+        acc_group_head1: data.acc_group_head,
       });
+      setAccGroupId(data.acc_group_id);
       setViewPopup(false);
     }
   };
@@ -210,7 +287,7 @@ function AccGroup() {
     ],
   ];
   //for pdf download
-  const data12 = data?.map((item, index) => [
+  const data12 = AllAccGroups?.map((item, index) => [
     index + slno,
     item.acc_group_code,
     item.acc_group_name,
@@ -221,6 +298,7 @@ function AccGroup() {
 
   useEffect(() => {
     getAllAccountHeads();
+    getAllGroupsData();
   }, []);
 
   return (
@@ -334,7 +412,7 @@ function AccGroup() {
           <div className="datatable">
             {/* {AllinvoiceData && ( */}
             <TableData
-              data={data}
+              data={AllAccGroups}
               // data={allLeadList}
               // data={OpportunityList}
               columns={columns}
@@ -363,6 +441,7 @@ function AccGroup() {
         show={AddPopup}
         onHide={() => {
           setAddPopup(false);
+          // AddForm.resetFields();
         }}
         // centered
         View_list
@@ -374,7 +453,7 @@ function AccGroup() {
                 form={AddForm}
                 onFinish={(value) => {
                   console.log("On finishing", value);
-                  //   createExpenseCategory(value);
+                  createAccGroup(value);
                 }}
               >
                 <div className="row">
@@ -384,15 +463,16 @@ function AccGroup() {
                         <div className="">
                           <label>Group Code</label>
                           <Form.Item
-                            rules={[
-                              {
-                                required: true,
-                                message: "Group code is Required",
-                              },
-                            ]}
+                            // rules={[
+                            //   {
+                            //     required: true,
+                            //     message: "Group code is Required",
+                            //   },
+                            // ]}
                             name="acc_group_code"
                           >
                             <InputType
+                              disabled={true}
                               onChange={(e) => {
                                 // setCategoryName(e.target.value);
                                 // setUniqueName(false);
@@ -454,8 +534,24 @@ function AccGroup() {
                     <div className="col-12 py-2">
                       <label>Parent Group</label>
                       <Form.Item name="acc_group_parent_id">
-                        <SelectBox>
-                          <Select.Option></Select.Option>
+                        <SelectBox
+                          onChange={(e) => {
+                            GetAccountGroupCode(0, e);
+                            getOneAccGroup(e);
+                          }}
+                        >
+                          {AllAccGroups &&
+                            AllAccGroups.length > 0 &&
+                            AllAccGroups.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  key={item.acc_group_id}
+                                  value={item.acc_group_id}
+                                >
+                                  {item.acc_group_name}{" "}
+                                </Select.Option>
+                              );
+                            })}
                         </SelectBox>
                       </Form.Item>
                     </div>
@@ -463,8 +559,20 @@ function AccGroup() {
                       <label>
                         Account Head<span className="required">*</span>
                       </label>
-                      <Form.Item name="acc_group_head">
-                        <SelectBox>
+                      <Form.Item
+                        rules={[
+                          {
+                            required: true,
+                            message: "Account Head is Required",
+                          },
+                        ]}
+                        name="acc_group_head"
+                      >
+                        <SelectBox
+                          onChange={(e) => {
+                            GetAccountGroupCode(e, 0);
+                          }}
+                        >
                           {AllHeads &&
                             AllHeads.length > 0 &&
                             AllHeads.map((item, index) => {
@@ -523,7 +631,7 @@ function AccGroup() {
                 form={AddForm}
                 onFinish={(value) => {
                   console.log("On finishing", value);
-                  //   createExpenseCategory(value);
+                  UpdateAccGroup(value);
                 }}
               >
                 <div className="row">
@@ -542,6 +650,7 @@ function AccGroup() {
                             name="acc_group_code1"
                           >
                             <InputType
+                              disabled={true}
                               onChange={(e) => {
                                 // setCategoryName(e.target.value);
                                 // setUniqueName(false);
@@ -603,8 +712,19 @@ function AccGroup() {
                     <div className="col-12 py-2">
                       <label>Parent Group</label>
                       <Form.Item name="acc_group_parent_id1">
-                        <SelectBox>
-                          <Select.Option></Select.Option>
+                        <SelectBox disabled={true}>
+                          {AllAccGroups &&
+                            AllAccGroups.length > 0 &&
+                            AllAccGroups.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  key={item.acc_group_id}
+                                  value={item.acc_group_id}
+                                >
+                                  {item.acc_group_name}{" "}
+                                </Select.Option>
+                              );
+                            })}
                         </SelectBox>
                       </Form.Item>
                     </div>
@@ -613,7 +733,7 @@ function AccGroup() {
                         Account Head<span className="required">*</span>
                       </label>
                       <Form.Item name="acc_group_head1">
-                        <SelectBox>
+                        <SelectBox disabled={true}>
                           {AllHeads &&
                             AllHeads.length > 0 &&
                             AllHeads.map((item, index) => {
@@ -722,7 +842,7 @@ function AccGroup() {
                     <div className="col-1">:</div>
                     <div className="col-6 justify-content-start">
                       <p className="modal-view-data">
-                        {AccGroupData?.acc_ledger_code}{" "}
+                        {AccGroupData?.acc_group_code}{" "}
                       </p>
                     </div>
                   </div>
@@ -733,7 +853,7 @@ function AccGroup() {
                     <div className="col-1">:</div>
                     <div className="col-6 justify-content-start">
                       <p className="modal-view-data">
-                        {AccGroupData?.acc_ledger_name}{" "}
+                        {AccGroupData?.acc_group_name}{" "}
                       </p>
                     </div>
                   </div>
@@ -744,7 +864,7 @@ function AccGroup() {
                     <div className="col-1">:</div>
                     <div className="col-6 justify-content-start">
                       <p className="modal-view-data">
-                        {AccGroupData?.acc_ledger_group_name}{" "}
+                        {AccGroupData?.acc_group_Parent_name}{" "}
                       </p>
                     </div>
                   </div>
@@ -755,7 +875,7 @@ function AccGroup() {
                     <div className="col-1">:</div>
                     <div className="col-6 justify-content-start">
                       <p className="modal-view-data">
-                        {AccGroupData?.acc_ledger_group_name}{" "}
+                        {AccGroupData?.acc_group_head_name}{" "}
                       </p>
                     </div>
                   </div>
@@ -766,7 +886,7 @@ function AccGroup() {
                     <div className="col-1">:</div>
                     <div className="col-6 justify-content-start">
                       <p className="modal-view-data">
-                        {AccGroupData?.acc_ledger_description}{" "}
+                        {AccGroupData?.acc_group_description}{" "}
                       </p>
                     </div>
                   </div>

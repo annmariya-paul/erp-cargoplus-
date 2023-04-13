@@ -18,12 +18,13 @@ import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../../routes";
 import Input_Number from "../../../../components/InputNumber/InputNumber";
 
-function Countrystate({customerdetails} ) {
+function Countrystate({ customerdetails, setIsAccountSave }) {
   const [modalShow, setModalShow] = useState(false);
   const [data, setData] = useState([]);
   const [getCountry, setCountry] = useState();
   const [getState, setState] = useState([]);
-  const [selectedState, setSelectedState] = useState();
+  const [selectedState, setSelectedState] = useState(false);
+  // const [isAccountsave, setIsAccountSave] = useState();
   const [getCity, setCity] = useState([]);
   const [countries, setCountries] = useState("");
   const [addForm] = Form.useForm();
@@ -32,7 +33,7 @@ function Countrystate({customerdetails} ) {
 
   const [onecustomerData, setOnecustomerData] = useState();
 
-  const [customerid,setcustomerid]= useState()
+  const [customerid, setcustomerid] = useState();
   const navigate = useNavigate();
   const {
     register,
@@ -46,7 +47,8 @@ function Countrystate({customerdetails} ) {
     if (!mShow) {
       setTimeout(() => {
         setSuccessPopup(false);
-        // navigate(ROUTES.LEADLIST);
+        let shu = true;
+        setIsAccountSave(shu);
       }, time);
     }
   };
@@ -128,14 +130,13 @@ function Countrystate({customerdetails} ) {
   //     });
   // };
 
-
   const GetLeadData = () => {
     PublicFetch.get(`${CRM_BASE_URL}/customer/${customerdetails?.customer_id}`)
       .then((res) => {
         if (res?.data?.success) {
           console.log("Unique Lead Id data", res?.data?.data);
           setOnecustomerData(res?.data?.data);
-         
+
           addForm.setFieldsValue({
             // customer_type: res?.data?.data?.customer_type,
             // customer_name: res?.data?.data?.customer_name,
@@ -146,8 +147,10 @@ function Countrystate({customerdetails} ) {
             // customer_logo: res?.data?.data?.customer_logo,
             // customer_remarks: res?.data?.data?.customer_remarks,
             customer_accounting_tax_no: res?.data?.data?.customer_tax_no,
-            customer_accounting_credit_days: res?.data?.data?.customer_credit_days,
-            customer_accounting_credit_limit: res?.data?.data?.customer_credit_limit,
+            customer_accounting_credit_days:
+              res?.data?.data?.customer_credit_days,
+            customer_accounting_credit_limit:
+              res?.data?.data?.customer_credit_limit,
           });
         } else {
           console.log("FAILED T LOAD DATA");
@@ -158,9 +161,7 @@ function Countrystate({customerdetails} ) {
       });
   };
 
-
   const createCustomeraccounting = (data) => {
-
     const formData = new FormData();
     formData.append(`customer_name`, customerdetails.customer_name);
     formData.append(`customer_type`, customerdetails.customer_type);
@@ -174,65 +175,76 @@ function Countrystate({customerdetails} ) {
     formData.append(`customer_city`, customerdetails.customer_city);
 
     formData.append(`customer_tax_no`, data.customer_accounting_tax_no);
-    formData.append(`customer_credit_days`, data.customer_accounting_credit_days);
-    formData.append(`customer_credit_limit`, data.customer_accounting_credit_limit);
+    formData.append(
+      `customer_credit_days`,
+      data.customer_accounting_credit_days
+    );
+    formData.append(
+      `customer_credit_limit`,
+      data.customer_accounting_credit_limit
+    );
 
     // if (leadimg) {
     //   formData.append(`customer_logo`, leadimg);
     // }
-if(onecustomerData){
-  PublicFetch.patch(`${CRM_BASE_URL}/customer/${customerdetails?.customer_id}`, formData, {
-    "Content-Type": "Multipart/form-Data",
-  })
-    .then((res) => {
-      console.log("data addedsuccessfully", res);
-      if (res.data.success) {
-        GetLeadData()
-        setSuccessPopup(true)
-        close_modal(modalShow, 1000, res?.data?.data);
-        // setModalContact(false);
-      }
-    })
-  
-    .catch((err) => {
-      console.log("Error", err);
-    });
-}
-else {
-
-    PublicFetch.post(`${CRM_BASE_URL}/customer`, formData, {
-      "Content-Type": "Multipart/form-Data",
-    })
-      .then((res) => {
-        console.log("data addedsuccessfully", res);
-        if (res.data.success) {
-          GetLeadData()
-          setSuccessPopup(true)
-          close_modal(modalShow, 1000, res?.data?.data);
-          // setModalContact(false);
+    if (onecustomerData) {
+      PublicFetch.patch(
+        `${CRM_BASE_URL}/customer/${customerdetails?.customer_id}`,
+        formData,
+        {
+          "Content-Type": "Multipart/form-Data",
         }
+      )
+        .then((res) => {
+          console.log("data addedsuccessfully", res);
+          if (res.data.success) {
+            GetLeadData();
+            setSuccessPopup(true);
+            close_modal(modalShow, 1000, res?.data?.data);
+            // setModalContact(false);
+            // setSelectedState(true);
+
+            // isSave = true;
+          }
+        })
+
+        .catch((err) => {
+          console.log("Error", err);
+        });
+    } else {
+      PublicFetch.post(`${CRM_BASE_URL}/customer`, formData, {
+        "Content-Type": "Multipart/form-Data",
       })
-    
-      .catch((err) => {
-        console.log("Error", err);
-      });
+        .then((res) => {
+          console.log("data addedsuccessfully", res);
+          if (res.data.success) {
+            GetLeadData();
+            setIsAccountSave(res.data.data);
+
+            setSuccessPopup(true);
+            close_modal(modalShow, 1000, res?.data?.data);
+            // setModalContact(false);
+          }
+        })
+
+        .catch((err) => {
+          console.log("Error", err);
+        });
     }
   };
 
-
-
   useEffect(() => {
-    if(customerdetails?.customer_id){
-      GetLeadData()
+    if (customerdetails?.customer_id) {
+      GetLeadData();
     }
-  
+
     // if (props.customerId) {
     //   getAccounts();
     // }
     getallfrighttype();
     getAllCountries();
   }, [customerdetails?.customer_id]);
- console.log("haiaii",customerdetails)
+  console.log("haiaii", customerdetails);
 
   // const OnSubmit = (value) => {
   //   const data = {
@@ -312,7 +324,7 @@ else {
         onFinish={(values) => {
           console.log("values iss", values);
           // OnSubmit(values);
-          createCustomeraccounting(values)
+          createCustomeraccounting(values);
         }}
         onFinishFailed={(error) => {
           console.log(error);

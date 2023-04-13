@@ -68,14 +68,14 @@ function EnquiryReport() {
       title: "STATUS",
       dataIndex: "status",
       key: "status",
-      align: "center",
+      align: "left",
       width: "16%",
     },
     {
       title: "CUSTOMER",
-      dataIndex: "lead",
-      key: "lead",
-      align: "center",
+      dataIndex: "customer",
+      key: "customer",
+      align: "left",
       width: "16%",
     },
   ];
@@ -143,10 +143,11 @@ function EnquiryReport() {
                     enquiry_date: i?.opportunity_created_at,
                     validity_date: i?.opportunity_validity,
                     status: item?.name,
-                    lead_id: i?.opportunity_lead_id,
-                    lead: i?.crm_v1_leads.lead_customer_name,
+                    customer_id: i?.opportunity_customer_id,
+                    customer: i?.crm_v1_leads?.customer_name,
                   });
                   setReportData(array);
+                  console.log("temoeray aray", array);
                 }
               });
             });

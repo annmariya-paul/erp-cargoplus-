@@ -49,7 +49,7 @@ function InvoiceView() {
       // render: (value, item, indx) => count + indx,
     },
     {
-      title: "TAX TYPE",
+      title: "TAX GROUP",
       dataIndex: "job_task_expense_tax_group_name",
       key: "job_task_expense_tax_group_name",
       align: "left",

@@ -6,6 +6,8 @@ import InputType from "../Input Type textbox/InputType";
 import Phone_Input from "../PhoneInput/phoneInput";
 import PublicFetch from "../../utils/PublicFetch";
 import { CRM_BASE_URL } from "../../api/bootapi";
+import CheckUnique from "../../check Unique/CheckUnique";
+import { UniqueErrorMsg } from "../../ErrorMessages/UniqueErrorMessage";
 
 function CustomerModal({ onHide, show, setCustomerName ,setCustomernew}) {
   const [addForm] = Form.useForm();
@@ -13,7 +15,9 @@ function CustomerModal({ onHide, show, setCustomerName ,setCustomernew}) {
   const [custype, setCustype] = useState("individual");
   const [contactpname,setContactpname]=useState();
   console.log("contact",contactpname);
+  const [uniqueName, setUniqueName] = useState(false);
   // setCustomerName("new Name")
+  const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
 
   const close_modal = (mShow, time) => {
     if (!mShow) {
@@ -128,7 +132,7 @@ function CustomerModal({ onHide, show, setCustomerName ,setCustomernew}) {
                         rules={[
                           {
                             required: true,
-                            message: "Customer is Required",
+                            message: "Customer name is required",
                           },
                           {
                             min: 2, // Minimum length of 3 characters
@@ -142,10 +146,22 @@ function CustomerModal({ onHide, show, setCustomerName ,setCustomernew}) {
                         onChange={(e)=>{
                           setContactpname(e.target.value);
                           console.log("contact details ",contactpname);
-                          
+                          setUniqueName(false);
+                        }}
+                        onBlur={async () => {
+                          let n = await CheckUnique({
+                            type: "customername",
+                            value: contactpname,
+                          });
+                          setUniqueName(n);
                         }}
                         />
                       </Form.Item>
+                      {uniqueName ? (
+                        <p style={{ color: "red" }}>
+                          Customer name {uniqueErrMsg.UniqueErrName}
+                        </p>
+                      ) : null}
                     </div>
                     <div className="col-12 mt-2">
                       <lable>
@@ -155,7 +171,7 @@ function CustomerModal({ onHide, show, setCustomerName ,setCustomernew}) {
                       rules={[
                         {
                           required: true,
-                          message: "Contact person is Required",
+                          message: "Contact person name is required",
                         },
                         
                           {

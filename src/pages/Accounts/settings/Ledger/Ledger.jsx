@@ -28,6 +28,9 @@ function Ledger() {
   const [successPopup, setSuccessPopup] = useState(false);
   const [LedgerData, setLedgerData] = useState();
   const [AllLegderData, setAllLedgerData] = useState();
+  const [AccGroupId, setAccGroupId] = useState();
+  const [LedgerId, setLedgerId] = useState();
+  const [Allgroups, setAllGroup] = useState();
 
   const columns = [
     {
@@ -66,6 +69,13 @@ function Ledger() {
         );
       },
       // align: "center",
+    },
+    {
+      title: "LEDGER NAME",
+      dataIndex: "acc_ledger_name",
+      key: "acc_ledger_name",
+      width: "15%",
+      //   filteredValue: [searchSource],
     },
 
     {
@@ -123,8 +133,26 @@ function Ledger() {
       .then((res) => {
         console.log("Response");
         if (res.data.success) {
+          let temp = [];
+
+          res.data.data.forEach((item, index) => {
+            temp.push({
+              acc_ledger_code: item.acc_ledger_code,
+              acc_ledger_created_at: item.acc_ledger_created_at,
+              acc_ledger_created_by: item.acc_ledger_created_by,
+              acc_ledger_description: item.acc_ledger_description,
+              acc_ledger_group_id: item.acc_ledger_group_id,
+              acc_ledger_id: item.acc_ledger_id,
+              acc_ledger_name: item.acc_ledger_name,
+              acc_ledger_status: item.acc_ledger_status,
+              acc_ledger_updated_at: item.acc_ledger_updated_at,
+              acc_ledger_updated_by: item.acc_ledger_updated_by,
+              acc_ledger_group_name:
+                item.accounts_v1_account_groups?.acc_group_name,
+            });
+          });
           console.log("Success", res?.data?.data);
-          setAllLedgerData(res.data.data);
+          setAllLedgerData(temp);
           totalledger(res.data.data);
         }
       })
@@ -148,11 +176,12 @@ function Ledger() {
       setEditPopup(true);
       AddForm.setFieldsValue({
         acc_ledger_code1: data.acc_ledger_code,
-        acc_ledger_group_name1: data.acc_ledger_group_name,
+        acc_ledger_group1: data.acc_ledger_group_id,
         acc_ledger_name1: data.acc_ledger_name,
         acc_ledger_description1: data.acc_ledger_description,
       });
       setViewPopup(false);
+      setLedgerId(data?.acc_ledger_id);
     }
   };
 
@@ -205,8 +234,78 @@ function Ledger() {
     return AllLegderData?.slice((current - 1) * pageSize, current * pageSize);
   };
 
+  const getAllGroups = () => {
+    PublicFetch.get(`${ACCOUNTS}/account_groups`)
+      .then((res) => {
+        console.log("Response");
+        if (res.data.success) {
+          console.log("Success", res.data.data);
+          setAllGroup(res?.data?.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+  const getLedgerCode = (groupId) => {
+    PublicFetch.get(`${ACCOUNTS}/acc_ledger/ledger_code/${groupId}`)
+      .then((res) => {
+        console.log("response");
+        if (res.data.success) {
+          console.log("Success");
+          AddForm.setFieldsValue({
+            acc_ledger_code: res?.data?.data,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+  const createLedger = (data) => {
+    PublicFetch.post(`${ACCOUNTS}/acc_ledger`, data)
+      .then((res) => {
+        console.log("Response");
+        if (res.data.success) {
+          console.log("Success");
+          GetallLedgers();
+          setSuccessPopup(true);
+          setAddPopup(false);
+          close_modal(successPopup, 1200);
+          AddForm.resetFields();
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+  const UpdateLedger = (data) => {
+    PublicFetch.patch(`${ACCOUNTS}/acc_ledger/${LedgerId}`, {
+      acc_ledger_name: data.acc_ledger_name1,
+      acc_ledger_description: data.acc_ledger_description1,
+      acc_ledger_group_id: data.acc_ledger_group1,
+    })
+      .then((res) => {
+        console.log("Response");
+        if (res.data.success) {
+          console.log("success");
+          GetallLedgers();
+          setSuccessPopup(true);
+          setEditPopup(false);
+          close_modal(successPopup, 1200);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
   useEffect(() => {
     GetallLedgers();
+    getAllGroups();
   }, []);
 
   return (
@@ -361,6 +460,7 @@ function Ledger() {
                 onFinish={(value) => {
                   console.log("On finishing", value);
                   //   createExpenseCategory(value);
+                  createLedger(value);
                 }}
               >
                 <div className="row">
@@ -379,6 +479,7 @@ function Ledger() {
                             name="acc_ledger_code"
                           >
                             <InputType
+                              disabled={true}
                               onChange={(e) => {
                                 // setCategoryName(e.target.value);
                                 // setUniqueName(false);
@@ -441,9 +542,24 @@ function Ledger() {
                       <label>
                         Ledger Group<span className="required">*</span>
                       </label>
-                      <Form.Item name="acc_ledger_group">
-                        <SelectBox>
-                          <Select.Option></Select.Option>
+                      <Form.Item name="acc_ledger_group_id">
+                        <SelectBox
+                          onChange={(e) => {
+                            getLedgerCode(e);
+                          }}
+                        >
+                          {Allgroups &&
+                            Allgroups.length > 0 &&
+                            Allgroups.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  key={item.acc_group_id}
+                                  value={item.acc_group_id}
+                                >
+                                  {item.acc_group_name}
+                                </Select.Option>
+                              );
+                            })}
                         </SelectBox>
                       </Form.Item>
                     </div>
@@ -491,6 +607,7 @@ function Ledger() {
                 onFinish={(value) => {
                   console.log("On finishing", value);
                   //   createExpenseCategory(value);
+                  UpdateLedger(value);
                 }}
               >
                 <div className="row">
@@ -509,6 +626,7 @@ function Ledger() {
                             name="acc_ledger_code1"
                           >
                             <InputType
+                              disabled={true}
                               onChange={(e) => {
                                 // setCategoryName(e.target.value);
                                 // setUniqueName(false);
@@ -572,8 +690,24 @@ function Ledger() {
                         Ledger Group<span className="required">*</span>
                       </label>
                       <Form.Item name="acc_ledger_group1">
-                        <SelectBox>
-                          <Select.Option></Select.Option>
+                        <SelectBox
+                          disabled={true}
+                          onChange={(e) => {
+                            // getLedgerCode(e);
+                          }}
+                        >
+                          {Allgroups &&
+                            Allgroups.length > 0 &&
+                            Allgroups.map((item, index) => {
+                              return (
+                                <Select.Option
+                                  key={item.acc_group_id}
+                                  value={item.acc_group_id}
+                                >
+                                  {item.acc_group_name}
+                                </Select.Option>
+                              );
+                            })}
                         </SelectBox>
                       </Form.Item>
                     </div>

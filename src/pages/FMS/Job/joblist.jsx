@@ -200,9 +200,8 @@ function Listjob() {
         console.log("Responseeee", res);
         if (res.data.success) {
           console.log("success of job", res.data.data);
-          settotaljob(res.data.data.totalCount);
           let temp = [];
-          res.data.data.job.forEach((item, index) => {
+          res?.data?.data?.job?.forEach((item, index) => {
             let date = moment(item.job_date).format("DD-MM-YYYY");
             jobStatus.forEach((status, index) => {
               var jobsts = parseInt(status.value);
@@ -212,7 +211,7 @@ function Listjob() {
                   // quotation_carrier: item.quotation_carrier,
                   job_id: item.job_id,
                   job_consignee: item.job_consignee,
-                  job_consignee_name: item.crm_v1_leads.lead_customer_name,
+                  job_consignee_name: item.crm_v1_customer.customer_name,
                   job_date: date,
                   job_shipper: item.job_shipper,
                   job_freight_type: item.job_freight_type,
@@ -230,6 +229,7 @@ function Listjob() {
             });
           });
           setAllJobs(temp);
+          settotaljob(res.data.data.totalCount);
         }
       })
       .catch((err) => {

@@ -856,7 +856,7 @@ export default function Add_Quotation() {
 
   console.log("Selected  enquiry lead id is ", leadIdEnq);
   const handleLeadIdEnq = (leadIdenq) => {
-    addForm.setFieldValue("consignee", leadIdenq);
+    // addForm.setFieldValue("consignee", leadIdenq);
     setLeadIdEnq(leadIdenq);
   };
   // const handleFirstDropdownChange = (event) => {
@@ -1057,6 +1057,7 @@ export default function Add_Quotation() {
     const docfile = data?.new?.file?.originFileObj;
     const formData = new FormData();
     // formData.append("quotation_no", qno);
+    formData.append("quotation_customer", data.customer);
     formData.append("quotation_enquiry", data.eno);
     formData.append("quotation_date", date1);
     formData.append("quotation_validity", date2);

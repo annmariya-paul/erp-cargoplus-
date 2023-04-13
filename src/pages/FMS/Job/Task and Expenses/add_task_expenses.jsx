@@ -61,10 +61,10 @@ export default function Taskexpenses() {
       job_task_expense_cost_taxfx: "",
       job_task_expense_cost_subtotalfx: "",
       job_task_expense_exp_curr: defaultCurrencydata,
-      job_task_expense_exp_exch: currencyDefault,
+      job_task_expense_exp_exch: currencyRates,
       job_task_expense_exp_amountfx: "",
       job_task_expense_exp_amountlx: "",
-      job_task_expense_id: "",
+      // job_task_expense_id: "",
       job_task_expense_invoiceable: 0,
     },
   ];
@@ -424,11 +424,11 @@ export default function Taskexpenses() {
       setCurrencydata(allcurrency.data.data);
       let arr = [];
       allcurrency?.data?.data?.forEach((item, index) => {
-        if (item.currency_is_default === 1) {
+        if (item?.currency_is_default === 1) {
           arr = item?.currency_code;
           setCurrencyDefault(arr);
-          setDefaultCurrencyData(item.currency_id);
-          getCurrencyRate(item.currency_id, index);
+          setDefaultCurrencyData(item?.currency_id);
+          getCurrencyRate(item?.currency_id, index);
         }
       });
     } catch (err) {
@@ -646,7 +646,7 @@ export default function Taskexpenses() {
             job_carrier: res.data.data.job_carrier,
             job_carrier1: res.data.data.fms_v1_carrier.carrier_name,
             job_consignee: res.data.data.job_consignee,
-            job_consignee1: res.data.data.crm_v1_leads.lead_customer_name,
+            job_consignee1: res.data.data.crm_v1_customer.customer_name,
             // job_currency: res.data.data.job_currency,
             // job_currency1:
             //   res.data.data.generalsettings_v1_currency.currency_name,

@@ -25,6 +25,10 @@ function Enquiry() {
   const [addForm] = Form.useForm();
   const [SuccessPopup, setSuccessPopup] = useState(false);
   const [img, setImg] = useState([]);
+  const [customername,setCustomerName]=useState();
+  console.log("customer id",customername);
+  const [customernew,setCustomernew]=useState();
+  console.log("customer nameee",customernew);
   const navigate = useNavigate();
   const [modalAddCustomer, setModalAddCustomer] = useState(false);
   const [imgSizeError, setImgSizeError] = useState(false);
@@ -49,6 +53,7 @@ function Enquiry() {
       }, time);
     }
   };
+  
 
   const getallfrighttype = async () => {
     try {
@@ -68,6 +73,20 @@ function Enquiry() {
     getallfrighttype();
   }, []);
 
+
+  useEffect(() => {
+// 
+  if(customername){
+    GetAllCustomers();
+    GetAllContacts();
+    addForm.setFieldsValue({customer : customername})
+    setCustomer_Id(customername);
+    handleclicknew(customername);
+    // GetSingleCustomer(customername);
+   
+  }
+  }, [customername]);
+
   const mode = (e) => {
     if (e) {
       {
@@ -85,6 +104,7 @@ function Enquiry() {
       }
     }
   };
+
 
   const locationBytype = (data) => {
     PublicFetch.get(`${CRM_BASE_URL_FMS}/locations/type-location/${data}`)
@@ -147,7 +167,7 @@ function Enquiry() {
         console.log("Error", err);
       });
   };
-
+console.log("CustomerName", customername);
   const GetSingleCustomer = (e) => {
     PublicFetch.get(`${CRM_BASE_URL}/customer/${e}`)
       .then((res) => {
@@ -155,14 +175,16 @@ function Enquiry() {
         if (res.data.success) {
           console.log("Success from single customer", res.data.data);
           console.log("contact data", res.data.data.crm_v1_contacts[0]);
-          console.log("accounts data",res.data.data.crm_v1_customer_accounting[0])
+          console.log("accounts data",res.data.data.customer_preferred_freight_type)
           let a = res.data.data.crm_v1_contacts[0];
-          let b =res.data.data.crm_v1_customer_accounting[0];
+          setAllContacts(res.data.data.crm_v1_contacts)
+          // let b =res.data.data.crm_v1_customer_accounting[0];
+          let b= res.data.data.customer_preferred_freight_type;
           addForm.setFieldsValue({
             contactperson: a?.contact_id,
             contactemail: a?.contact_email,
             contactphone: a?.contact_phone_1,
-            customerfrighttype: b?.customer_accounting_preferred_freight_type,
+            customerfrighttype: b,
             
           });
         }
@@ -287,6 +309,11 @@ function Enquiry() {
   const handleclick = (e) => {
     GetSingleCustomer(e);
   };
+  const handleclicknew = (e) => {
+    console.log("reached",e);
+    GetSingleCustomer(e);
+    // GetSingleContact(e);
+  };
   return (
     <>
       <div className="container-fluid">
@@ -308,7 +335,7 @@ function Enquiry() {
 
           <div className="row jobpay_cards mt-3 mx-0 px-2 py-3">
             <div className="col-12">
-              <h5 className="lead_text">Basic Info</h5>
+              <h6 className="lead_text">Basic Info</h6>
             </div>
 
             <div className="col-sm-4 pt-2 d-flex">
@@ -350,21 +377,27 @@ function Enquiry() {
                 </Form.Item>
               </div>
               <div className="col-1 ">
-                <Button
+                {/* <Button
                   btnType="add_borderless"
                   onClick={() => {
                     setModalAddCustomer(true);
                     addForm.resetFields();
                   }}
-                >
+                > */}
                   <BsPlusCircleFill
                     style={{
                       fontSize: "21px",
-                      marginTop: "20px",
+                      marginTop: "27px",
                       marginLeft: "10px",
+                      color:"#0891d1",
                     }}
+                    onClick={() => {
+                      setModalAddCustomer(true);
+                      addForm.resetFields();
+                    }}
+
                   />{" "}
-                </Button>
+                {/* </Button> */}
               </div>
             </div>
 
@@ -532,7 +565,7 @@ function Enquiry() {
 
           <div className="row jobpay_cards mt-3 mx-0 px-2 py-3">
             <div className="col-12">
-              <h5 className="lead_text">Contact Details</h5>
+              <h6 className="lead_text">Contact Details</h6>
             </div>
 
             <div className="col-sm-4 pt-3">
@@ -586,7 +619,7 @@ function Enquiry() {
 
           <div className="row jobpay_cards mt-3 mx-0 px-2 py-5">
             <div className="col-12">
-              <h5 className="lead_text">Extra Info</h5>
+              <h6 className="lead_text">Extra Info</h6>
             </div>
 
             {/* <div className="col-3">
@@ -664,6 +697,8 @@ function Enquiry() {
 
         {/* Modal for add Customer */}
         <CustomerModal
+        setCustomerName={setCustomerName}
+        setCustomernew={setCustomernew}
           show={modalAddCustomer}
           onHide={() => {
             setModalAddCustomer(false);

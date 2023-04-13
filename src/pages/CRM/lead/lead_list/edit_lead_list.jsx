@@ -32,6 +32,7 @@ import "../lead.styles.scss";
 import Phone_Input from "../../../../components/PhoneInput/phoneInput";
 import EditMoreinfo from "../editmoreinfo/EditMoreinfo";
 import Editaccounting from "../editmoreinfo/Editaccounting";
+import Moreinfo from "../accountings/MoreInfo";
 
 function LeadEdit() {
   // const history=useHistory();
@@ -106,7 +107,7 @@ function LeadEdit() {
       setTimeout(() => {
         setModalShow(false);
         // handletoggle2(time);
-        goToLeadlist();
+        // goToLeadlist();
       }, time);
     }
   };
@@ -808,9 +809,11 @@ function LeadEdit() {
                 }
               >
                 <div className="col-lg" style={{ borderRadius: "3px" }}>
-                  {/* <Countrystate customerId={id} /> */}
-                  <Editaccounting 
-                  customerId={id} />
+                  <Countrystate 
+                  customerdetails={oneLeadData}
+                   />
+                  {/* <Editaccounting 
+                  customerId={id} /> */}
                   
                 </div>
               </div>{" "}
@@ -821,7 +824,10 @@ function LeadEdit() {
                 }
               >
                 <div className="col-lg" style={{ borderRadius: "3px" }}>
-                  <EditMoreinfo customerId={id} />
+                  <Moreinfo 
+                  // customerId={id}
+                  customerdetails={oneLeadData} 
+                  />
                 </div>
               </div>
               {/* <Custom_model

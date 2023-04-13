@@ -5,7 +5,7 @@ import Button from "../../../components/button/button";
 import { FiEdit } from "react-icons/fi";
 import TableData from "../../../components/table/table_data";
 
-import { Collapse } from "antd";
+import { Alert, Collapse, message, Popconfirm } from "antd";
 import html2canvas from "html2canvas";
 
 import { BorderOutlined } from "@ant-design/icons";
@@ -29,9 +29,9 @@ const progress = [
     // render: (value, item, indx) => count + indx,
   },
   {
-    title: "TAX TYPE",
-    dataIndex: "quotation_details_tax_type",
-    key: "quotation_details_tax_type",
+    title: "TAX GROUP",
+    dataIndex: "job_task_expense_tax_group_name",
+    key: "job_task_expense_tax_group_name",
     align: "left",
   },
   {
@@ -92,7 +92,7 @@ export default function ViewJob() {
   const [qtnno, setQtnno] = useState();
   const [tabledata, setTabledata] = useState();
   const [grandtotal, setGrandTotal] = useState();
-  console.log("grand",grandtotal);
+  console.log("grand", grandtotal);
   const [detailstable, setAlldetailstable] = useState();
   const [invoice_status, setInvoice_Status] = useState();
   console.log("details", detailstable);
@@ -111,28 +111,31 @@ export default function ViewJob() {
         if (res.data.success) {
           console.log("Success of job", res.data.data);
           setAllJobs(res?.data?.data);
+          setInvoice_Status(res?.data?.data?.job_invoice_status);
 
           let total = 0;
           let newdatas = [];
           res?.data?.data?.fms_v1_quotation_jobs?.forEach((item, index) => {
             newdatas.push(item?.fms_v1_quotation.quotation_no);
             setQtnno(newdatas);
-            let servdata = [];
-            res.data.data.fms_v1_job_task_expenses.forEach((item, index) => {
-              servdata.push({
-                quotation_details_service_id: item.crm_v1_services.service_name,
-                quotation_details_cost:
-                  item.job_task_expense_cost_amountfx.toFixed(2),
-                quotation_details_tax_type: item.fms_v1_tax_types.tax_type_name,
-                quotation_details_tax_amount:
-                  item.job_task_expense_cost_taxfx.toFixed(2),
-                quotation_details_total:
-                  item.job_task_expense_cost_subtotalfx.toFixed(2),
-              });
-              setTax(servdata);
-              total = Number.parseFloat(total);
-              total += item.job_task_expense_cost_subtotalfx;
+          });
+          let servdata = [];
+          res.data.data.fms_v1_job_task_expenses.forEach((item, index) => {
+            servdata.push({
+              quotation_details_service_id: item.crm_v1_services.service_name,
+              quotation_details_cost:
+                item.job_task_expense_cost_amountfx.toFixed(2),
+              job_task_expense_tax_group_name:
+                item.fms_v1_tax_groups.tax_group_name,
+              quotation_details_tax_amount:
+                item.job_task_expense_cost_taxfx.toFixed(2),
+              quotation_details_total:
+                item.job_task_expense_cost_subtotalfx.toFixed(2),
             });
+            setTax(servdata);
+            total = Number.parseFloat(total);
+            total += item.job_task_expense_cost_subtotalfx;
+
             // let tabletasks = [];
             // item.fms_v1_quotation.fms_v1_quotation_details.forEach((item, index) => {
             //   tabletasks.push({
@@ -216,7 +219,6 @@ export default function ViewJob() {
             job_docs: res.data.data.job_docs,
           };
           console.log("datas", temp);
-          setInvoice_Status(res?.data?.data?.job_invoice_status);
         }
       })
       .catch((err) => {
@@ -264,7 +266,10 @@ export default function ViewJob() {
                 </div>
                 <div className="col-xl-6 col-md-12">
                   <div className="row justify-content-end mx-2 py-3">
-                    <div className="col-xl-2 col-lg-2 col-md-3 col-sm-12  mb-3 ">
+                    <div className="col-1"></div>
+                    <div className="col-1"></div>
+
+                    <div className="col-xl-2 col-lg-2 col-md-12 col-sm-12  mb-3 d-flex justify-content-end">
                       <Button
                         btnType="add_borderless"
                         className="edit_button rounded"
@@ -280,7 +285,7 @@ export default function ViewJob() {
                         Print
                       </Button>
                     </div>
-                    <div className="col-xl-2 col-lg-2 col-md-3 col-sm-12 mb-3 ">
+                    <div className="col-xl-2 col-lg-2 col-md-12 col-sm-12 mb-3 d-flex justify-content-end">
                       <Button
                         btnType="add_borderless"
                         className="edit_button rounded"
@@ -293,14 +298,18 @@ export default function ViewJob() {
                         <FiEdit />
                       </Button>
                     </div>
-                    <div className="col-xl-4 col-lg-4 col-md-7 col-sm-12 mb-3 ">
-                      {invoice_status == 1 ? (
+                    <div className="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3 d-flex justify-content-end">
+                      {invoice_status !== 0 ? (
                         <Button
                           btnType="save"
                           className="edit_button rounded"
                           onClick={() => {
                             // handleviewtoedit();
-                            navigate(`${ROUTES.INVOICE_PREVIEW}/${id}`);
+                            if (invoice_status == 1) {
+                              message.error("Invoice Already Created");
+                            } else {
+                              navigate(`${ROUTES.INVOICE_PREVIEW}/${id}`);
+                            }
                           }}
                         >
                           Regenerate Invoice
@@ -311,16 +320,13 @@ export default function ViewJob() {
                           btnType="save"
                           className="edit_button rounded"
                           onClick={() => {
-                            // handleviewtoedit();
                             navigate(`${ROUTES.INVOICE_PREVIEW}/${id}`);
                           }}
                         >
                           Generate Invoice
-                          {/* <FiEdit /> */}
                         </Button>
                       )}
                     </div>
-
                   </div>
                 </div>
               </div>
@@ -369,12 +375,12 @@ export default function ViewJob() {
                     </div>
                   </div>
                   <div className="col-xl-4 col-sm-12 d-flex">
-                    <div className="col-4 boldhd">Consignee</div>
+                    <div className="col-4 boldhd">Customer</div>
                     <div className="col-1">:</div>
 
                     <div className="col-7">
                       <p className="modal-view-data">
-                        {alljobs?.crm_v1_leads?.lead_customer_name}
+                        {alljobs?.crm_v1_customer?.customer_name}
                       </p>
                     </div>
                   </div>
@@ -458,7 +464,6 @@ export default function ViewJob() {
                       </p>
                     </div>
                   </div>
-
                 </div>
               </div>
 
@@ -519,7 +524,6 @@ export default function ViewJob() {
                       </p>
                     </div>
                   </div>
-
                 </div>
               </div>
             </div>
@@ -571,13 +575,11 @@ export default function ViewJob() {
                       </p>
                     </div>
                   </div>
-
-
                 </div>
               </div>
               <div className="col-md-6 col-12">
                 <div className="content-tabs-new row  mx-1 mb-1 me-3">
-                  <div className="row mt-3 mb-3">
+                  <div className="row mt-3 mb-3 p-1">
                     <h5 className="lead_text">Attachments</h5>
                   </div>
 

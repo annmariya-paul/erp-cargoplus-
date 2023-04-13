@@ -154,7 +154,7 @@ function Invoicereport() {
               invoice_date: item.invoice_date,
               invoice_no: item.invoice_no,
               job_no: item.job_no,
-              customer: item?.customer?.lead_customer_name,
+              customer: item?.customer?.customer_name,
               currency: item?.currency?.currency_name,
               cost_fx: item.cost_fx.toFixed(2),
               const_lx: item.const_lx.toFixed(2),

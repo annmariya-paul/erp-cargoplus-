@@ -32,7 +32,7 @@ export default function AwbblReport() {
   const [jobList, setJobList] = useState();
   const [customerList, setCustomerList] = useState();
   const [allReports, setAllReports] = useState();
-  console.log("all dattta",allReports);
+  console.log("all dattta", allReports);
 
   const columns = [
     {
@@ -179,8 +179,8 @@ export default function AwbblReport() {
               awb_bl_no: item.job_awb_bl_no,
               job_no: item.job_number,
               customer: item?.crm_v1_customer?.customer_name,
-              job_date:item?.job_date,
-
+              job_date: item?.job_date,
+              sales_person: item?.hrms_v1_employee?.employee_name,
             });
           });
           setAllReports(temp);
@@ -313,7 +313,10 @@ export default function AwbblReport() {
                       jobList.length > 0 &&
                       jobList.map((item, index) => {
                         return (
-                          <Select.Option key={item.job_id} value={item.job_number}>
+                          <Select.Option
+                            key={item.job_id}
+                            value={item.job_number}
+                          >
                             {item.job_number}
                           </Select.Option>
                         );

@@ -7,6 +7,7 @@ import { DatePicker, Form, Select } from "antd";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import Button from "../../../../components/button/button";
 import { useForm } from "react-hook-form";
+import { BsPlusCircleFill } from "react-icons/bs";
 import CustomerModal from "../../../../components/CustomerModal.jsx/CustomerModal";
 import Custom_model from "../../../../components/custom_modal/custom_model";
 import {
@@ -391,10 +392,11 @@ export default function AddOpportunity() {
               <div className="col-1 mt-4 ps-1">
               
                   {" "}
-                  <AiOutlinePlusCircle style={{ fontSize: "21px",
-                      marginTop: "27px",
+                  <BsPlusCircleFill style={{ fontSize: "21px",
+                      marginTop: "10px",
                       marginLeft: "10px",
-                      color:"#0891d1", }} 
+                      color:"#0891d1",
+                     }} 
                   onClick={() => {
                     setModalAddCustomer(true);
                     addForm.resetFields();

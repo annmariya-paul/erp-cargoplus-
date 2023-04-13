@@ -50,8 +50,8 @@ function InvoiceView() {
     },
     {
       title: "TAX TYPE",
-      dataIndex: "job_task_expense_tax_type_name",
-      key: "job_task_expense_tax_type_name",
+      dataIndex: "job_task_expense_tax_group_name",
+      key: "job_task_expense_tax_group_name",
       align: "left",
     },
     {
@@ -99,8 +99,8 @@ function InvoiceView() {
               job_task_expense_task_id: item.job_task_expense_task_id,
               job_task_expense_tax_perc: item.job_task_expense_tax_perc,
               job_task_expense_task_name: item.crm_v1_services?.service_name,
-              job_task_expense_tax_type_name:
-                item.fms_v1_tax_types?.tax_type_name,
+              job_task_expense_tax_group_name:
+                item.fms_v1_tax_groups?.tax_group_name,
             });
             total += item.job_task_expense_cost_subtotalfx;
           });
@@ -183,12 +183,12 @@ function InvoiceView() {
                       </div>
                     </div>
                     <div className="col-12 d-flex">
-                      <div className="col-4">Consignee</div>
+                      <div className="col-4">Customer</div>
                       <div className="col-1">:</div>
 
                       <div className="col-7">
                         <p className="modal-view-data">
-                          {jobData?.crm_v1_leads?.lead_customer_name}
+                          {jobData?.crm_v1_customer?.customer_name}
                         </p>
                       </div>
                     </div>
@@ -211,8 +211,6 @@ function InvoiceView() {
                         </p>
                       </div>
                     </div>
-
-
                   </div>
                 </div>
                 <div className="col-md-6 col-12 mt-1">
@@ -383,16 +381,15 @@ function InvoiceView() {
                   <div className="col-12 d-flex mb-4 pb-4">
                     <div className="col-4">Credit Days</div>
                     <div className="col-1">:</div>
-                    {jobData?.crm_v1_leads?.lead_credit_days}
                     <div className="col-7">
-                      <p className="modal-view-data"></p>
+                      <p className="modal-view-data">
+                        {jobData?.job_credit_days}
+                      </p>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-
-
 
             <div className="row mt-0 me-4 mb-1 pt-0 ms-1 ">
               <div className="content-tabs-tablenew  justify-content m-3 ">
@@ -406,8 +403,6 @@ function InvoiceView() {
                     <lable style={{ fontWeight: 600 }}>{grandTotal} </lable>
                   </div>
                 </div>
-
-                
               </div>
             </div>
             {/* </Form> */}

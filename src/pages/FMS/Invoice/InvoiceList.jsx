@@ -27,6 +27,7 @@ function InvoiceList() {
   const [cancelPopup, setCancelPopup] = useState(false);
   const [invoice_id, setInvoice_id] = useState();
   const [successPopup, setSuccessPopup] = useState(false);
+  const [InvoiceJobId, setInvoiceJobId] = useState();
 
   const [noofItems, setNoofItems] = useState("25");
   // const [current, setCurrent] = useState(1);
@@ -98,9 +99,24 @@ function InvoiceList() {
             .includes(value.toLowerCase()) ||
           String(record.invoice_date)
             .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.invoice_job_customer)
+            .toLowerCase()
             .includes(value.toLowerCase())
         );
       },
+    },
+    {
+      title: "CUSTOMER",
+      dataIndex: "invoice_job_customer",
+      key: "invoice_job_customer",
+      width: "15%",
+      //  filteredValue: [searchSource],
+      // onFilter: (value, record) => {
+      //   return String(record.opportunity_source)
+      //     .toLowerCase()
+      //     .includes(value.toLowerCase());
+      // },
     },
 
     {
@@ -215,6 +231,7 @@ function InvoiceList() {
                 onClick={() => {
                   setCancelPopup(true);
                   setInvoice_id(index.invoice_id);
+                  setInvoiceJobId(index.invoice_job_id);
                 }}
               >
                 cancel
@@ -263,8 +280,9 @@ function InvoiceList() {
               invoice_exchange_rate: item.invoice_exchange_rate,
               invoice_grand_total: item.invoice_grand_total,
               invoice_job_no: item.fms_v1_jobs?.job_number,
-              invoice_job_consignee:
-                item.fms_v1_jobs?.crm_v1_leads?.lead_customer_name,
+              invoice_job_consignee: item.fms_v1_jobs?.job_consignee,
+              invoice_job_customer:
+                item.fms_v1_jobs?.crm_v1_customer?.customer_name,
               invoice_job_shipper: item?.fms_v1_jobs?.job_shipper,
             });
           });
@@ -285,6 +303,7 @@ function InvoiceList() {
     console.log("reson", data);
     PublicFetch.patch(`${CRM_BASE_URL_FMS}/invoice/cancel/${invoice_id}`, {
       invoice_cancel_reason: data.cancel_reason,
+      invoice_job_id: InvoiceJobId,
     })
       .then((res) => {
         console.log("Response", res);

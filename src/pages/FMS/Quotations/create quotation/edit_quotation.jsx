@@ -861,6 +861,7 @@ export default function EditQuotation(
         shipper: data11.quotation_shipper,
         quotation_enquiry_no: quotation_enquiry_no,
         quotation_consignee: data11.crm_v1_leads.lead_id,
+        customer: data11.crm_v1_leads.customer_id,
         freight_type: data11.quotation_freight_type,
         quotation_cargotype: data11.quotation_cargo_type,
         quotation_mode: data11.quotation_mode,
@@ -874,6 +875,8 @@ export default function EditQuotation(
         quotation_units: data11.quotation_uom,
         quotation_destination: data11.quotation_destination_id,
         quotation_origin: data11.quotation_origin_id,
+        incoterm: data11.incoterm_id,
+        consignee: data11.consignee,
       });
       locationBytype(onequatation?.data?.data?.quotation?.quotation_mode);
 
@@ -1107,7 +1110,7 @@ export default function EditQuotation(
     formData.append("quotation_date", new Date(data.quotationdate));
     formData.append("qoutation_customer", data.customer);
     formData.append("quotation_validity", new Date(data.validity_date));
-    formData.append("quotation_consignee", data.quotation_consignee);
+    formData.append("quotation_consignee", data.customer);
     formData.append("quotation_shipper", data.shipper);
     formData.append("quotation_freight_type", data.freight_type);
     formData.append("quotation_cargo_type", data.quotation_cargotype);
@@ -1125,6 +1128,9 @@ export default function EditQuotation(
     formData.append("quotation_payment_terms", data.quotation_terms);
     formData.append("quotation_currency", data.currency);
     formData.append("quotation_exchange_rate", data.exchnagerate);
+    formData.append("quotation_sales_person", data.salesperson);
+    formData.append("incoterm_id", data.incoterm);
+    formData.append("consignee", data.consignee);
     // formData.append(
     //   "quotation_details",
     //   JSON.stringify(data.quotation_details)
@@ -1222,6 +1228,20 @@ export default function EditQuotation(
       });
   };
 
+  // const mode = (e) => {
+  //   if (e) {
+  //     frighttype &&
+  //       frighttype.length > 0 &&
+  //       frighttype.map((item, index) => {
+  //         if (item.freight_type_id === e) {
+  //           console.log("reached", item.freight_type_mode);
+  //           //  setFrighttypemode(item.freight_type_mode);
+  //           locationBytype(item.freight_type_mode);
+  //         }
+  //       });
+  //   }
+  // };
+
   useEffect(() => {
     GetAllSalesPersons();
     getAllTaxGroups();
@@ -1318,6 +1338,9 @@ export default function EditQuotation(
                         disabled={true}
                         showSearch
                         optionFilterProp="children"
+                        // onChange={(e) => {
+                        //   mode(e);
+                        // }}
                       >
                         {frighttype &&
                           frighttype.length > 0 &&
@@ -1486,7 +1509,7 @@ export default function EditQuotation(
                   <div className="col-xl-4 col-sm-12 mt-2 px-3">
                     <label>Consignee</label>
                     <Form.Item
-                      name="quotation_consignee"
+                      name="consignee"
                       rules={[
                         {
                           required: true,

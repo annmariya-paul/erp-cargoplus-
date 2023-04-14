@@ -42,6 +42,7 @@ export default function Add_Quotation() {
   const [date, setDate] = useState();
   const [taxGroup, setTaxGroup] = useState();
   const [currencyDefault, setCurrencyDefault] = useState();
+
   console.log("curencydefault", currencyDefault);
 
   const [allincoterms, setallincoterms] = useState("");
@@ -291,11 +292,16 @@ export default function Add_Quotation() {
       );
       console.log("Getting all currency : ", allcurrency.data.data);
       setCurrencydata(allcurrency.data.data);
-      let arr = [];
+      // let arr = "";
+      let a = 0;
       allcurrency?.data?.data?.forEach((item, index) => {
-        if (item.currency_is_default === 1) {
-          arr = item?.currency_code;
-          setCurrencyDefault(arr);
+        if (item?.currency_is_default == 1) {
+          setCurrencyDefault(item?.currency_code);
+          a = item?.currency_id;
+          addForm.setFieldsValue({
+            currency: item?.currency_id,
+          });
+          getCurrencyRate(item?.currency_id, item?.currency_code);
         }
       });
     } catch (err) {
@@ -393,7 +399,7 @@ export default function Add_Quotation() {
   const [currencyRates, setCurrencyRates] = useState(0);
   console.log("ratesssss", currencyRates);
   let b;
-  const getCurrencyRate = (data) => {
+  const getCurrencyRate = (data, ccode) => {
     const code = currencydata?.filter((item) => {
       if (item?.currency_id === data) {
         b = item?.currency_code;
@@ -402,14 +408,14 @@ export default function Add_Quotation() {
     console.log("code", b);
     console.log(";;;;;;;;;", data);
     axios
-      .get(`https://open.er-api.com/v6/latest/${currencyDefault}`)
+      .get(`https://open.er-api.com/v6/latest/${ccode}`)
       .then(function (response) {
         console.log("currency current rate:", response);
         let a = response.data.rates[b];
         console.log("currency match", a);
         let rate = 1 / a;
+        addForm.setFieldsValue({ exchnagerate: rate });
         setCurrencyRates(rate);
-        addForm.setFieldValue("exchnagerate", rate);
       })
       .catch(function (error) {
         console.log(error);
@@ -864,19 +870,15 @@ export default function Add_Quotation() {
   // };
   const mode = (e) => {
     if (e) {
-      {
-        frighttype &&
-          frighttype.length > 0 &&
-          frighttype.map((item, index) => {
-            if (item.freight_type_id === e) {
-              console.log("reached", item.freight_type_mode);
-              setFrighttypemode(item.freight_type_mode);
-              locationBytype(item.freight_type_mode);
-            } else {
-              locationBytype();
-            }
-          });
-      }
+      frighttype &&
+        frighttype.length > 0 &&
+        frighttype.map((item, index) => {
+          if (item.freight_type_id === e) {
+            console.log("reached", item.freight_type_mode);
+            setFrighttypemode(item.freight_type_mode);
+            locationBytype(item.freight_type_mode);
+          }
+        });
     }
   };
   const [oppleadid, setOppleadid] = useState();
@@ -1057,11 +1059,11 @@ export default function Add_Quotation() {
     const docfile = data?.new?.file?.originFileObj;
     const formData = new FormData();
     // formData.append("quotation_no", qno);
-    formData.append("quotation_customer", data.customer);
+    // formData.append("quotation_customer", data.customer);
     formData.append("quotation_enquiry", data.eno);
     formData.append("quotation_date", date1);
     formData.append("quotation_validity", date2);
-    formData.append("quotation_consignee", data.consignee);
+    formData.append("quotation_consignee", data.customer);
     formData.append("quotation_shipper", data.shipper);
     formData.append("quotation_freight_type", data.freighttype);
     formData.append("quotation_cargo_type", data.cargotype);
@@ -1080,6 +1082,7 @@ export default function Add_Quotation() {
     formData.append("quotation_exchange_rate", data.exchnagerate);
     formData.append("quotation_grand_total", data.grandtotal);
     formData.append("incoterm_id", data.incoterm);
+    formData.append("consignee", data.consignee);
 
     if (filenew) {
       formData.append("attachments", filenew);
@@ -1379,60 +1382,6 @@ export default function Add_Quotation() {
                       //   },
                       // ]}
                     >
-                      {/* <SelectBox
-                          onChange={(e) => handleLeadId(e)}
-                          allowClear
-                          showSearch
-                          optionFilterProp="children"
-                        >
-                          {allLeadList &&
-                            allLeadList.length > 0 &&
-                            allLeadList.map((item, index) => {
-                              // console.log("lead id ddd:",item.lead_id)
-
-                              //  if( leadIdEnq && leadIdEnq === leadId){
-
-                              //   return (
-                              //     <Select.Option
-                              //       key={item.lead_id}
-                              //       value={item.lead_id}
-                              //     >
-                              //       {item.lead_customer_name}
-                              //     </Select.Option>
-                              //   );
-
-                              //  }else{
-                              //   return (
-                              //     <Select.Option
-                              //       key={item.lead_id}
-                              //       value={item.lead_id}
-                              //     >
-                              //       {item.lead_customer_name}
-                              //     </Select.Option>
-                              //   );
-                              //  }
-                              if (leadIdEnq && leadIdEnq === item.lead_id) {
-                                return (
-                                  <Select.Option
-                                    key={item.lead_id}
-                                    value={item.lead_id}
-                                  >
-                                    {item.lead_customer_name}
-                                  </Select.Option>
-                                );
-                              } else if (leadIdEnq === undefined) {
-                                return (
-                                  <Select.Option
-                                    key={item.lead_id}
-                                    value={item.lead_id}
-                                  >
-                                    {item.lead_customer_name}
-                                  </Select.Option>
-                                );
-                              }
-                              // return null;
-                            })}
-                        </SelectBox> */}
                       <InputType />
                     </Form.Item>
                   </div>

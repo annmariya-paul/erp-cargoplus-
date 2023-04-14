@@ -188,7 +188,7 @@ const CostAndExpenseReport = () => {
         searchData?.data.data.map((item) => {
           temp.push({
             job_no: item.job_number,
-            customer: item.customer.lead_customer_name,
+            customer: item.customer.customer_name,
             cost: item.cost != null ? item.cost.toFixed(2) : "",
             expense: item.expense != null ? item.expense.toFixed(2) : "",
             profit_loss:

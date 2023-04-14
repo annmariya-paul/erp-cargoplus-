@@ -12,6 +12,7 @@ const Button = React.forwardRef((props, ref) => {
     type,
     prependIcon = null,
     appendIcon = null,
+    disabled,
     ...rest
   } = props;
   var classNames = "";
@@ -38,6 +39,7 @@ const Button = React.forwardRef((props, ref) => {
   }
   return (
     <button
+      disabled={disabled}
       ref={ref}
       id={id}
       onClick={onClick}

@@ -60,8 +60,9 @@ function Lead({}) {
   const [timeOut, setTimeOuts] = useState(false);
   const [Toggle4, setToggle4] = useState(false);
   const [countries, setCountries] = useState("");
+  const [isAccountsave, setIsAccountSave] = useState();
 
-  const [customerdetails,setcustomerdetails]= useState()
+  const [customerdetails, setcustomerdetails] = useState();
 
   const [addForm] = Form.useForm();
 
@@ -102,7 +103,7 @@ function Lead({}) {
         setModalShow(false);
         setTimeOuts(true);
         setCustomerId(customer?.customer_id);
-        setcustomerdetails(customer)
+        setcustomerdetails(customer);
         toggleTab(2);
       }, time);
     }
@@ -203,7 +204,7 @@ function Lead({}) {
       .then((res) => {
         console.log("response", res);
         if (res.data.success) {
-          modalShow(true)
+          setModalShow(true);
           close_modal(modalShow, 1000, res?.data?.data);
           setModalContact(false);
         }
@@ -272,6 +273,8 @@ function Lead({}) {
     }
     getAllCountries();
   }, [CustomerId]);
+
+  console.log("uegwy", isAccountsave);
 
   return (
     <>
@@ -880,10 +883,16 @@ function Lead({}) {
                 }
               >
                 <div className="col-lg" style={{ borderRadius: "3px" }}>
-                  <Countrystate 
-                  customerdetails= {customerdetails}
-                  // customer_id={CustomerId}
-                   />
+                  <Countrystate
+                    customerdetails={customerdetails}
+                    setIsAccountSave={(value) => {
+                      console.log("igywf", value);
+                      if (value) {
+                        handleMoreinfoTab();
+                      }
+                    }}
+                    // customer_id={CustomerId}
+                  />
                 </div>
               </div>{" "}
               <div
@@ -892,9 +901,7 @@ function Lead({}) {
                 }
               >
                 <div className="col-lg" style={{ borderRadius: "3px" }}>
-                  <Moreinfo
-                   customerdetails= {customerdetails}
-                  />
+                  <Moreinfo customerdetails={customerdetails} />
                 </div>
               </div>
               <Custom_model

@@ -85,9 +85,7 @@ export default function Monthly_report() {
             job_date: item.jobDate
               ? moment(item.jobDate).format("DD-MM-YYYY")
               : "_",
-            lead: item.lead.lead_customer_name
-              ? item.lead.lead_customer_name
-              : "_",
+            lead: item?.lead?.customer_name ? item?.lead?.customer_name : "_",
             cost: item.cost ? Number(item.cost).toFixed(2) : 0.0,
             expense: item.expense ? Number(item.expense).toFixed(2) : 0.0,
             profit: item.profitLoss ? Number(item.profitLoss).toFixed(2) : 0.0,

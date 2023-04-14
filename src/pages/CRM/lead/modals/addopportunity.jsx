@@ -81,6 +81,37 @@ export default function AddOpportunity() {
   const [Customer_Id, setCustomer_Id] = useState();
 
   const [Customer, setCustomer] = useState();
+
+
+  //  const GetSalesPersons = () => {
+
+  //   PublicFetch.get(`${CRM_BASE_URL_HRMS}/employees/salesexecutive`)
+  //     .then((res) => {
+  //       console.log("response", res);
+  //       if (res.data.success) {
+         
+  //         console.log("Success from sales person", res.data.data);
+  //         setAllSalesPerson(res.data.data);
+  //   const personName = localStorage.getItem('UserID');
+  //   res.data.data.forEach((item,index)=> {
+  //     if(personName == item.employee_id){
+  //       addForm.setFieldsValue({
+  //         salesperson: item.employee_id
+  //       })
+  //     }
+  //   })
+
+
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log("Error", err);
+  //     });
+  // };
+
+  // useEffect(() => {
+  //   GetSalesPersons();
+  // }, []);
   console.log("cus id : and customer",Customer_Id,Customer);
    const handleMultiSelectChange = (event) => {
      const values = Array.from(
@@ -397,8 +428,17 @@ const GetSingleCustomer = (e) => {
         if (res.data.success) {
           console.log("Success from sales person", res.data.data);
           setAllSalesPerson(res.data.data);
+          const personName = localStorage.getItem('UserID');
+    res.data.data.forEach((item,index)=> {
+      if(personName == item.employee_id){
+        addForm.setFieldsValue({
+          sales_person: item.employee_id
+        })
         }
       })
+      
+    }
+  })
       .catch((err) => {
         console.log("Error", err);
       });
@@ -585,7 +625,8 @@ const GetSingleCustomer = (e) => {
                   },
                 ]}
               >
-                <SelectBox
+                <SelectBox 
+                // defaultValue="reference"
                   placeholder={"--Please Select--"}
                   // value={oppsource}
                   // onChange={(e) => setOppSource(e)}
@@ -730,7 +771,8 @@ const GetSingleCustomer = (e) => {
                   },
                 ]}
               >
-                <SelectBox
+                <SelectBox 
+                // defaultValue="sales"
                 // value={oppurtunitytype}
                 // onChange={(e) => {
                 //   setoppurtunitytype(e);
@@ -788,7 +830,8 @@ const GetSingleCustomer = (e) => {
                   },
                 ]}
               >
-                <SelectBox
+                <SelectBox 
+                // defaultValue="M"
                 // value={oppurtunityprobability}
                 // onChange={(e) => {
                 //   setOppurtunityProbability(e);
@@ -813,7 +856,8 @@ const GetSingleCustomer = (e) => {
                   },
                 ]}
               >
-                <SelectBox
+                <SelectBox 
+                // defaultValue={1}
                 // value={oppurtunityprobability}
                 // onChange={(e) => {
                 //   setOppurtunityProbability(e);
@@ -837,6 +881,7 @@ const GetSingleCustomer = (e) => {
                 ]}
               >
                 <SelectBox
+                //  defaultValue={1}
                   placeholder={"--Please Select--"}
                   value={oppstatus}
                   onChange={(e) => setOppStatus(e)}
@@ -875,10 +920,10 @@ const GetSingleCustomer = (e) => {
               <Form.Item name="attachments" className="mt-2">
                 <FileUpload
                   multiple
-                  filetype={"Accept only pdf, docx and zip"}
+                  // filetype={"Accept only pdf, docx and zip"}
                   listType="picture"
                   accept=".pdf,.docx,.zip,.jpeg"
-                  height={120}
+                  height={100}
                   beforeUpload={beforeUpload}
                   onChange={(file) => {
                     console.log("Before upload file size", file.file.size);

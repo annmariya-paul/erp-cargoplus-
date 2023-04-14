@@ -12,7 +12,9 @@ import { CRM_BASE_URL, CRM_BASE_URL_HRMS } from "../../../../api/bootapi";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { message } from "antd";
 import moment from "moment";
+import { BsPlusCircleFill } from "react-icons/bs";
 import { AiOutlinePlusCircle } from "react-icons/ai";
+import CustomerModal from "../../../../components/CustomerModal.jsx/CustomerModal";
 // import TextArea from "antd/lib/input/TextArea";
 import SelectBox from "../../../../components/Select Box/SelectBox";
 import InputType from "../../../../components/Input Type textbox/InputType";
@@ -26,7 +28,7 @@ export default function EditOpportunity() {
   console.log("ID is ...", id);
 
   const [form] = Form.useForm();
-
+  const [addForm] = Form.useForm();
   // const typevalues = [
   //   {
   //     value: "sales",
@@ -44,6 +46,7 @@ export default function EditOpportunity() {
   const navigate = useNavigate();
   const today = new Date();
   const [EditForm] = Form.useForm();
+  const [modalAddCustomer, setModalAddCustomer] = useState(false);
   const [numOfItems, setNumOfItems] = useState("25");
   const [oppstatus, setOppstatus] = useState(Oppor_Status);
   const dateFormatList = ["DD-MM-YYYY", "DD-MM-YY"];
@@ -827,9 +830,17 @@ export default function EditOpportunity() {
                 </Form.Item>
               </div>
               <div className="col-1 mt-4 ps-1">
-                <Button btnType="add_borderless" type="button">
-                  <AiOutlinePlusCircle style={{ fontSize: "25px" }} />
-                </Button>
+              {" "}
+                  <BsPlusCircleFill style={{ fontSize: "21px",
+                      marginTop: "10px",
+                      marginLeft: "10px",
+                      color:"#0891d1",
+                     }} 
+                  onClick={() => {
+                    setModalAddCustomer(true);
+                    addForm.resetFields();
+                  }}
+                  />
               </div>
             </div>
             <div className="col-sm-4 pt-2">
@@ -1228,6 +1239,16 @@ export default function EditOpportunity() {
         }
         // {...props}
       ></Custom_model> */}
+
+
+
+        {/* Modal for add Customer */}
+        <CustomerModal
+          show={modalAddCustomer}
+          onHide={() => {
+            setModalAddCustomer(false);
+          }}
+        />
         <Custom_model
           size={`sm`}
           success

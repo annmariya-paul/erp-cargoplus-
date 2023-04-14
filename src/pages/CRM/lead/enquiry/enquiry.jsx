@@ -247,6 +247,7 @@ console.log("CustomerName", customername);
     formData.append("enquiry_customer_ref", data.reference);
     formData.append("enquiry_contact_person_id", data.contactperson);
     formData.append("enquiry_remarks", data.purchasePoRef);
+    // formData.append("", data.customerfrighttype);
     if (img) {
       formData.append("attachments", img);
     }

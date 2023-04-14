@@ -57,6 +57,18 @@ export default function Departments(props) {
   useEffect(() => {
     Submit();
   }, []);
+
+  const validateNumberAndText = (_, value) => {
+    const regex = /^[0-9a-zA-Z]*$/; // Regular expression to allow numbers and text only
+    if (!regex.test(value)) {
+      return Promise.reject('Please enter numbers and text only');
+    }
+    return Promise.resolve();
+  };
+
+
+
+
   const Submit = (data) => {
     console.log(data);
     if (data) {
@@ -427,7 +439,7 @@ export default function Departments(props) {
         list_content={
           <>
             <div className="row">
-              <h5 className="lead_text">Add Department</h5>
+              <h5 className="lead_text">New Department</h5>
             </div>
             <Form
               name="addForm"
@@ -443,7 +455,7 @@ export default function Departments(props) {
             >
               <div className="row py-4">
                 <div className="col-12 pt-1">
-                  <label htmlfor="dept_name">Department Name</label>
+                  <label htmlfor="dept_name">Department Name<span className="required">*</span></label>
                   <Form.Item
                     name="department_name"
                     rules={[
@@ -490,13 +502,13 @@ export default function Departments(props) {
                 </div>
 
                 <div className="col-12 pt-3">
-                  <label htmlfor="dept_code">Department Code</label>
+                  <label htmlfor="dept_code">Department Code<span className="required">*</span></label>
                   <Form.Item
                     name="department_code"
                     rules={[
                       {
                         required: true,
-                        pattern: new RegExp("^[A-Za-z]+$"),
+                      
                         message: "Please enter a Valid Department code",
                       },
                       {
@@ -508,6 +520,9 @@ export default function Departments(props) {
                         max: 15,
                         message:
                           "Department code cannot be longer than 15 characters",
+                      },
+                      {
+                        validator: validateNumberAndText,
                       },
                     ]}
                   >
@@ -564,7 +579,7 @@ export default function Departments(props) {
             >
               <div className="row py-4">
                 <div className="col-12 pt-1">
-                  <label htmlfor="dept_name">Department Name</label>
+                  <label htmlfor="dept_name">Department Name<span className="required">*</span></label>
                   <Form.Item
                     name="dept_name"
                     rules={[
@@ -612,13 +627,13 @@ export default function Departments(props) {
                 </div>
 
                 <div className="col-12 pt-3">
-                  <label htmlfor="dept_code">Department Code</label>
+                  <label htmlfor="dept_code">Department Code<span className="required">*</span></label>
                   <Form.Item
                     name="dept_code"
                     rules={[
                       {
                         required: true,
-                        pattern: new RegExp("^[A-Za-z]+$"),
+                        // pattern: new RegExp("^[A-Za-z]+$"),
                         message: "Please enter a Valid Department code",
                       },
                       {
@@ -630,6 +645,9 @@ export default function Departments(props) {
                         max: 15,
                         message:
                           "Department code cannot be longer than 15 characters",
+                      },
+                      {
+                        validator: validateNumberAndText,
                       },
                     ]}
                   >

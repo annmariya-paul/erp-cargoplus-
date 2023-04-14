@@ -81,8 +81,8 @@ export default function AwbblReport() {
     },
     {
       title: "SALES PERSON",
-      dataIndex: "sales_person",
-      key: "sales_person",
+      dataIndex: "sales_person_name",
+      key: "sales_person_name",
       align: "left",
       width: "26%",
     },
@@ -175,11 +175,13 @@ export default function AwbblReport() {
           console.log("success of response of repooorts", res.data.data);
           let temp = [];
           res.data.data.forEach((item, index) => {
+            const sales_person_name = item?.hrms_v1_employee?.employee_name;
             temp.push({
               awb_bl_no: item.job_awb_bl_no,
               job_no: item.job_number,
               customer: item?.crm_v1_customer?.customer_name,
               job_date:item?.job_date,
+              sales_person_name: sales_person_name,
 
             });
           });

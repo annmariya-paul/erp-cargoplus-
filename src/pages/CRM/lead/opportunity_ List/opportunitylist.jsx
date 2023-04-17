@@ -592,13 +592,13 @@ function Opportunitylist(props) {
       align: "left",
     },
 
-    {
-      title: "CONVERTED BY",
-      dataIndex: "opportunity_created_by",
-      key: "CONVERTED BY",
-      width: "17%",
-      align: "left",
-    },
+    // {
+    //   title: "CONVERTED BY",
+    //   dataIndex: "opportunity_created_by",
+    //   key: "CONVERTED BY",
+    //   width: "17%",
+    //   align: "left",
+    // },
     {
       title: "SOURCE",
       dataIndex: "opportunity_source",

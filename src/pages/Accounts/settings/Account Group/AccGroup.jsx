@@ -30,6 +30,7 @@ function AccGroup() {
   const [AllHeads, setAllHeads] = useState();
   const [AccGroupId, setAccGroupId] = useState();
   const [AllAccGroups, setAllAccGroups] = useState();
+  const [IsParentGroup, setIsParentGroup] = useState(false);
 
   const columns = [
     {
@@ -66,7 +67,7 @@ function AccGroup() {
           String(record.acc_group_description)
             .toLowerCase()
             .includes(value.toLowerCase()) ||
-          String(record.acc_group_head)
+          String(record.acc_head_name)
             .toLowerCase()
             .includes(value.toLowerCase())
         );
@@ -89,8 +90,8 @@ function AccGroup() {
 
     {
       title: "GROUP HEAD",
-      dataIndex: "acc_group_head",
-      key: "acc_group_head",
+      dataIndex: "acc_head_name",
+      key: "acc_head_name",
       width: "15%",
       //   filteredValue: [searchSource],
     },
@@ -166,7 +167,26 @@ function AccGroup() {
         console.log("Response of all groups");
         if (res.data.success) {
           console.log("Success of all Groups");
-          setAllAccGroups(res.data.data);
+          let temp = [];
+          let temp1 = [];
+          res.data.data.forEach((item, index) => {
+            item?.other_accounts_v1_account_groups.forEach((parent, pindex) => {
+              temp1.push(parent.acc_group_name);
+            });
+            temp.push({
+              acc_group_code: item.acc_group_code,
+              acc_group_description: item.acc_group_description,
+              acc_group_head: item.acc_group_head,
+              acc_group_id: item.acc_group_id,
+              acc_group_name: item.acc_group_name,
+              acc_group_parent_id: item.acc_group_parent_id,
+              acc_group_status: item.acc_group_status,
+              acc_group_type: item.acc_group_type,
+              acc_head_name: item.accounts_v1_account_head?.acc_head_name,
+              acc_group_parent_name: temp1,
+            });
+          });
+          setAllAccGroups(temp);
         }
       })
       .catch((err) => {
@@ -215,7 +235,23 @@ function AccGroup() {
       });
   };
 
-  const GetAccountGroupCode = (head, ParentId) => {};
+  const GetAccountGroupCode = (head, ParentId) => {
+    PublicFetch.get(
+      `${ACCOUNTS}/account_groups/group-code?headId=${head}&parentId=${ParentId}`
+    )
+      .then((res) => {
+        console.log("Response");
+        if (res.data.success) {
+          console.log("Success");
+          AddForm.setFieldsValue({
+            acc_group_code: res.data.data.group_code,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
 
   const getOneAccGroup = (data) => {
     PublicFetch.get(`${ACCOUNTS}/account_groups/${data}`)
@@ -441,7 +477,8 @@ function AccGroup() {
         show={AddPopup}
         onHide={() => {
           setAddPopup(false);
-          // AddForm.resetFields();
+          AddForm.resetFields();
+          setIsParentGroup(false);
         }}
         // centered
         View_list
@@ -535,9 +572,13 @@ function AccGroup() {
                       <label>Parent Group</label>
                       <Form.Item name="acc_group_parent_id">
                         <SelectBox
+                          allowClear
                           onChange={(e) => {
                             GetAccountGroupCode(0, e);
                             getOneAccGroup(e);
+                            if (e !== null || 0) {
+                              setIsParentGroup(true);
+                            }
                           }}
                         >
                           {AllAccGroups &&
@@ -569,6 +610,7 @@ function AccGroup() {
                         name="acc_group_head"
                       >
                         <SelectBox
+                          disabled={IsParentGroup}
                           onChange={(e) => {
                             GetAccountGroupCode(e, 0);
                           }}

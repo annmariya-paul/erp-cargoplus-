@@ -49,9 +49,9 @@ function InvoicePreView() {
       // render: (value, item, indx) => count + indx,
     },
     {
-      title: "TAX TYPE",
-      dataIndex: "job_task_expense_tax_type_name",
-      key: "job_task_expense_tax_type_name",
+      title: "TAX GROUP",
+      dataIndex: "job_task_expense_tax_group_name",
+      key: "job_task_expense_tax_group_name",
       align: "left",
     },
     {
@@ -82,7 +82,7 @@ function InvoicePreView() {
         console.log("Response of job", res);
         if (res.data.success) {
           console.log("success of job", res.data.data);
-          setJobData(res.data.data);
+          setJobData(res?.data?.data);
           let total = 0;
 
           let temp = [];
@@ -99,8 +99,8 @@ function InvoicePreView() {
               job_task_expense_task_id: item.job_task_expense_task_id,
               job_task_expense_tax_perc: item.job_task_expense_tax_perc,
               job_task_expense_task_name: item.crm_v1_services?.service_name,
-              job_task_expense_tax_type_name:
-                item.fms_v1_tax_types?.tax_type_name,
+              job_task_expense_tax_group_name:
+                item.fms_v1_tax_groups?.tax_group_name,
             });
             total += item.job_task_expense_cost_subtotalfx;
           });
@@ -125,7 +125,7 @@ function InvoicePreView() {
       invoice_currency: jobData?.job_total_cost_curr,
       invoice_exchange_rate: jobData?.job_total_cost_exch,
       invoice_grand_total: grandTotal,
-      invoice_credit_days: jobData?.crm_v1_leads.lead_credit_days,
+      invoice_credit_days: jobData?.crm_v1_customer?.customer_credit_days,
     })
       .then((res) => {
         console.log("Response", res);
@@ -177,7 +177,7 @@ function InvoicePreView() {
                       {/* <div className="container mb-4">
                 <div className=" row mt-5">
                   <div className="col-6 d-flex"> */}
-                      <div className="col-12 d-flex">
+                      <div className="col-12 d-flex align-items-center">
                         <div className="col-4">Freight type</div>
                         <div className="col-1">:</div>
 
@@ -188,13 +188,13 @@ function InvoicePreView() {
                         </div>
                       </div>
 
-                      <div className="col-12 d-flex ">
+                      <div className="col-12 d-flex align-items-center">
                         <div className="col-4">Invoice Date</div>
                         <div className="col-1">:</div>
 
-                        <div className="col-7">
+                        <div className="col-7 ">
                           <DatePicker
-                            className="w-50"
+                            className="w-50 mb-2 "
                             format={"DD-MM-YYYY"}
                             value={Invoice_Date}
                             onChange={(e) => {
@@ -204,18 +204,18 @@ function InvoicePreView() {
                         </div>
                       </div>
 
-                      <div className="col-12 d-flex">
-                        <div className="col-4">Consignee</div>
+                      <div className="col-12 d-flex align-items-center">
+                        <div className="col-4">Customer</div>
                         <div className="col-1">:</div>
 
                         <div className="col-7">
                           <p className="modal-view-data">
-                            {jobData?.crm_v1_leads?.lead_customer_name}
+                            {jobData?.crm_v1_customer?.customer_name}
                           </p>
                         </div>
                       </div>
 
-                      <div className="col-12 d-flex">
+                      <div className="col-12 d-flex align-items-center">
                         <div className="col-4">Job No</div>
                         <div className="col-1">:</div>
 
@@ -225,7 +225,7 @@ function InvoicePreView() {
                           </p>
                         </div>
                       </div>
-                      <div className="col-12 d-flex">
+                      <div className="col-12 d-flex align-items-center">
                         <div className="col-4">Shipper</div>
                         <div className="col-1">:</div>
 
@@ -243,7 +243,7 @@ function InvoicePreView() {
                         <h5 className="lead_text">Transportation</h5>
                       </div>
 
-                      <div className="col-12 d-flex">
+                      <div className="col-12 d-flex align-items-center">
                         <div className="col-4">Mode</div>
                         <div className="col-1">:</div>
 
@@ -252,7 +252,7 @@ function InvoicePreView() {
                         </div>
                       </div>
 
-                      <div className="col-12 d-flex">
+                      <div className="col-12 d-flex align-items-center">
                         <div className="col-4">Origin</div>
                         <div className="col-1">:</div>
 
@@ -266,7 +266,7 @@ function InvoicePreView() {
                           </p>
                         </div>
                       </div>
-                      <div className="col-12 d-flex">
+                      <div className="col-12 d-flex align-items-center">
                         <div className="col-4">Destination</div>
                         <div className="col-1">:</div>
 
@@ -281,7 +281,7 @@ function InvoicePreView() {
                         </div>
                       </div>
 
-                      <div className="col-12 d-flex">
+                      <div className="col-12 d-flex align-items-center">
                         <div className="col-4">Carrier</div>
                         <div className="col-1">:</div>
 
@@ -292,7 +292,7 @@ function InvoicePreView() {
                         </div>
                       </div>
 
-                      <div className="col-12 d-flex">
+                      <div className="col-12 d-flex align-items-center">
                         <div className="col-4">AWB/BL</div>
                         <div className="col-1">:</div>
 
@@ -306,117 +306,120 @@ function InvoicePreView() {
                   </div>
                 </div>
                 <div className="row  mb-2 ">
-                <div className="col-md-6 col-12 mt-1">
-                  <div className="content-tabs-new  justify-content  mb-2 ">
-                    <div className="row mt-1 mb-2">
-                      <h5 className="lead_text">Shipment Details</h5>
-                    </div>
-                    <div className="col-12 d-flex">
-                      <div className="col-4">Cargo Type</div>
-                      <div className="col-1">:</div>
+                  <div className="col-md-6 col-12 mt-1">
+                    <div className="content-tabs-new  justify-content  mb-2 ">
+                      <div className="row mt-1 mb-2">
+                        <h5 className="lead_text">Shipment Details</h5>
+                      </div>
+                      <div className="col-12 d-flex align-items-center">
+                        <div className="col-4">Cargo Type</div>
+                        <div className="col-1">:</div>
 
-                      <div className="col-7">
-                        <p className="modal-view-data">
-                          {jobData?.job_cargo_type}
-                        </p>
+                        <div className="col-7">
+                          <p className="modal-view-data">
+                            {jobData?.job_cargo_type}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="col-12 d-flex align-items-center">
+                        <div className="col-4">No of Pieces</div>
+                        <div className="col-1">:</div>
+
+                        <div className="col-7">
+                          <p className="modal-view-data">
+                            {jobData?.job_no_of_pieces}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="col-12 d-flex align-items-center">
+                        <div className="col-4">UOM</div>
+                        <div className="col-1">:</div>
+
+                        <div className="col-7">
+                          <p className="modal-view-data">
+                            {jobData?.crm_v1_units?.unit_name}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="col-12 d-flex align-items-center">
+                        <div className="col-4">Gross wt</div>
+                        <div className="col-1">:</div>
+
+                        <div className="col-7">
+                          <p className="modal-view-data">
+                            {jobData?.job_gross_wt}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="col-12 d-flex align-items-center">
+                        <div className="col-4">Chargeble wt</div>
+                        <div className="col-1">:</div>
+
+                        <div className="col-7">
+                          <p className="modal-view-data">
+                            {jobData?.job_chargeable_wt}
+                          </p>
+                        </div>
                       </div>
                     </div>
+                  </div>
 
-                    <div className="col-12 d-flex">
-                      <div className="col-4">No of Pieces</div>
-                      <div className="col-1">:</div>
-
-                      <div className="col-7">
-                        <p className="modal-view-data">
-                          {jobData?.job_no_of_pieces}
-                        </p>
+                  <div className="col-md-6 col-12 mt-1">
+                    <div className="content-tabs-new   ms-1 mb-2 me-1">
+                      <div className="row mt-1 mb-2">
+                        <h5 className="lead_text">Payment Info</h5>
                       </div>
-                    </div>
 
-                    <div className="col-12 d-flex">
-                      <div className="col-4">UOM</div>
-                      <div className="col-1">:</div>
+                      <div className="col-12 d-flex align-items-center">
+                        <div className="col-4">Terms</div>
+                        <div className="col-1">:</div>
 
-                      <div className="col-7">
-                        <p className="modal-view-data">
-                          {jobData?.crm_v1_units?.unit_name}
-                        </p>
+                        <div className="col-7">
+                          <p className="modal-view-data">
+                            {jobData?.fms_v1_payment_terms?.payment_term_name}
+                          </p>
+                        </div>
                       </div>
-                    </div>
 
-                    <div className="col-12 d-flex">
-                      <div className="col-4">Gross wt</div>
-                      <div className="col-1">:</div>
+                      <div className="col-12 d-flex align-items-center">
+                        <div className="col-4">Currency</div>
+                        <div className="col-1">:</div>
 
-                      <div className="col-7">
-                        <p className="modal-view-data">
-                          {jobData?.job_gross_wt}
-                        </p>
+                        <div className="col-7">
+                          <p className="modal-view-data">
+                            {
+                              jobData?.generalsettings_v1_currency
+                                ?.currency_name
+                            }
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                    <div className="col-12 d-flex">
-                      <div className="col-4">Chargeble wt</div>
-                      <div className="col-1">:</div>
+                      <div className="col-12 d-flex align-items-center">
+                        <div className="col-4">Exchange Rate</div>
+                        <div className="col-1">:</div>
 
-                      <div className="col-7">
-                        <p className="modal-view-data">
-                          {jobData?.job_chargeable_wt}
-                        </p>
+                        <div className="col-7">
+                          <p className="modal-view-data">
+                            {jobData?.job_total_cost_exch}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="col-12 d-flex mb-4 pb-2 align-items-center">
+                        <div className="col-4">Credit Days</div>
+                        <div className="col-1">:</div>
+
+                        <div className="col-7">
+                          <p className="modal-view-data">
+                            {jobData?.job_credit_days}
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-
-                <div className="col-md-6 col-12 mt-1">
-                  <div className="content-tabs-new   ms-1 mb-2 me-1">
-                    <div className="row mt-1 mb-2">
-                      <h5 className="lead_text">Payment Info</h5>
-                    </div>
-
-                    <div className="col-12 d-flex">
-                      <div className="col-4">Terms</div>
-                      <div className="col-1">:</div>
-
-                      <div className="col-7">
-                        <p className="modal-view-data">
-                          {jobData?.fms_v1_payment_terms?.payment_term_name}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="col-12 d-flex">
-                      <div className="col-4">Currency</div>
-                      <div className="col-1">:</div>
-
-                      <div className="col-7">
-                        <p className="modal-view-data">
-                          {jobData?.generalsettings_v1_currency?.currency_name}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="col-12 d-flex">
-                      <div className="col-4">Exchange Rate</div>
-                      <div className="col-1">:</div>
-
-                      <div className="col-7">
-                        <p className="modal-view-data">
-                          {jobData?.job_total_cost_exch}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="col-12 d-flex mb-4 pb-2">
-                      <div className="col-4">Credit Days</div>
-                      <div className="col-1">:</div>
-
-                      <div className="col-7">
-                        <p className="modal-view-data">
-                          {jobData?.crm_v1_leads.lead_credit_days}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-</div>
                 <div className="row mt-0 me-4 mb-1 pt-0 ">
                   <div className="content-tabs-tablenew  justify-content m-3 ">
                     <div className="mt-3">

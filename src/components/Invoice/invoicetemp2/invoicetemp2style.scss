@@ -1,0 +1,276 @@
+
+.invoice_header2 {
+    position: relative !important;
+  
+  }
+
+  // screen styles
+@page {
+  size: A4;
+}
+
+table {
+  width: 100%;
+}
+
+// table,
+// figure {
+//    page-break-inside: avoid;
+// }
+
+.header_invoice1 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  // width: 60%;
+  padding: 0.5rem;
+ 
+
+  .header__address_wrapper {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    h3 {
+      color: #f3a415;
+      margin-top: 0;
+      margin-left: 0 !important;
+    }
+
+    // .header__address_logo {
+    //   img {
+    //     height: 100px;
+    //     width: 100px;
+    //   }
+    // }
+  }
+
+  .header__address_logo {
+    img {
+      height: 100px;
+      width: 100px;
+    }
+  }
+
+
+  .header__invoice {
+  //  padding-right: 100px;
+    // text-align: right;
+
+    h1 {
+      font-weight: 800 !important;
+    }
+
+    div {
+      span {
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+.invoice_detailsnew1 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  // border-bottom: 1px solid black;
+
+  .invoice_details__col {
+    width: 50%;
+  }
+
+  .invoice_details__col_1 {
+    border-right: 1px solid black;
+  }
+
+  .invoice_details__col {
+    padding-left: 10px;
+
+    table {
+      width: 100%;
+
+      td:nth-child(2) {
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+.billto {
+  min-height: 30px;
+  // border-bottom: 1px solid black;
+  // border-top: 1px solid black;
+  border-inline: 1px solid black;
+  background-color: rgb(230, 230, 230);
+  display: flex;
+  align-items: center;
+  padding-left: 5px;
+}
+
+.billto_details {
+  min-height: 35px;
+  // border-bottom: 1px solid black;
+  display: flex;
+  align-items: center;
+  padding-left: 5px;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.invoice_header {
+  position: relative !important;
+
+}
+.tsk_exp{
+  padding-left: 10px !important;
+}
+.th_center{
+  text-align: center !important;
+}
+.details_tablenew2 {
+ 
+  width: 100%;
+ border: 1px solid black;
+  thead {
+  
+  
+  background-color: #2e73eb;
+  th {
+    color: white;
+    text-align: left;
+    // border-top: 1px solid black;
+    border-right: 1px solid black !important;
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+
+    // th:last-child {
+    //   border-right: none !important;
+    // }
+
+    #amount {
+      text-align: right !important;
+    }
+  }
+
+  tbody {
+    tr {
+      td {
+        border-top: 1px solid black;
+        border-right: 1px solid black;
+        padding-left: 5px;
+        padding-right: 5px;
+      }
+
+      td:last-child {
+        border-right: none !important;
+      }
+    }
+
+    tr:last-child {
+      td {
+        // border-bottom: 1px solid black;
+      }
+    }
+  }
+}
+
+.sub_total_wrappernew1 {
+  display: flex;
+  min-height: 100px;
+
+  .sub_total_wrapper__col {
+    width: 50%;
+    padding-left: 5px;
+    padding-right: 5px;
+    display: flex;
+    align-items: center;
+    // border-bottom: 1px solid black;
+  }
+
+  .sub_total_wrapper__col_1 {
+    text-align: left;
+    // border-right: 1px solid black;
+  }
+
+  .sub_total_words {
+    font-weight: 600;
+    font-size: 16px;
+    font-style: italic;
+  }
+
+  .sub_total_wrapper__col_2 {
+    table {
+      width: 100%;
+
+      tbody {
+        tr {
+          td {
+            text-align: right;
+          }
+        }
+      }
+    }
+  }
+}
+
+// print styles
+@media print {
+  #pageborder1st {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    // border: 1px solid black;
+  }
+}
+.address_width{
+width: 300px;
+}
+.invoice_details__colbank{
+  width: 60%;
+}
+
+.font_weight_qt{
+  font-weight: 600;
+}
+//  .border_right{
+//   border-right: none !important;
+//  }
+ .total_color{
+  font-size: 18px;
+  font-weight: 600;
+  color: #f3a415;
+ }
+ .alternative_color{
+  background-color: rgb(237, 235, 235);
+ }
+ .total_bgcolor{
+  min-height: 10px;
+  // width: 20px;
+  padding: 20px;
+  background-color: #f3a415;
+  color: white;
+  text-align: center;
+ }
+ .label_color1{
+  font-weight: 600;
+  font-size: 15px;
+  color: #1356c9;
+ }
+ .headingcolor{
+  color: black;
+  font-weight: bold;
+ }
+ .h1font_size{
+  font-size: 60px;
+ }
+ .font_weight{
+  font-weight: 600;
+ }
+ .header_invoicename{
+  font-size: 50px;
+  font-weight: 800;
+  color: #1356c9;
+ }

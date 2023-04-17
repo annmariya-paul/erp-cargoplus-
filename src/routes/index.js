@@ -224,6 +224,15 @@ const ROUTES = {
 
   // ACCOUNTS => Master => Account Group
   ACC_GROUP: "/account_groups",
+
+  // testingg invoice
+
+  INVOICETEMPLATE:"/invoicetemplate1",
+  INVOICE_NEWTEMP:"/invoicetemplate2"
+
+  // selectinginvoicetemplates
+  
+
 };
 
 module.exports = { ROUTES };

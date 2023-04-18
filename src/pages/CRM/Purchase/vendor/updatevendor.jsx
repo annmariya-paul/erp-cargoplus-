@@ -720,17 +720,18 @@ function Updatevendor(){
             <div className="col-sm-4 ">
                       <label>
                         {" "}
-                        Website<span className="required">*</span>
+                        Website
+                        {/* <span className="required">*</span> */}
                       </label>
 
                       <Form.Item
                         name="vendorwebsite"
                         rules={[
-                          {
-                            required: true,
+                          // {
+                          //   required: true,
 
-                            message: "Please enter a Valid website",
-                          },
+                          //   message: "Please enter a Valid website",
+                          // },
 
                           // {
                           //   min: 3,
@@ -754,17 +755,19 @@ function Updatevendor(){
 
 
             <div className="col-sm-4 pt-2 ">
-              <label>Country<span className="required">*</span></label>
+              <label>Country
+                {/* <span className="required">*</span> */}
+                </label>
               
                 <Form.Item
                   name="vendor_country"
-                  rules={[
-                    {
-                      required: true,
+                  // rules={[
+                  //   {
+                  //     required: true,
                     
-                      message: "Please select a Valid country",
-                    },
-                  ]}
+                  //     message: "Please select a Valid country",
+                  //   },
+                  // ]}
                 >
                   <SelectBox
                     showSearch={true}

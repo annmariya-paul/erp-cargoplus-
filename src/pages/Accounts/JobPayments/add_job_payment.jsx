@@ -40,6 +40,7 @@ export default function AddJobPayments() {
     if (!mShow) {
       setTimeout(() => {
         setSuccessPopup(false);
+        navigate(ROUTES.JOB_PAYMENTS);
       }, time);
     }
   };
@@ -117,7 +118,8 @@ export default function AddJobPayments() {
     try {
       const oneJob = await PublicFetch.get(`${CRM_BASE_URL_FMS}/job/${id}`);
       if (oneJob.data.success) {
-        setJobLeadId(oneJob?.data?.data?.crm_v1_leads?.lead_id);
+        console.log("data of one job ",oneJob.data);
+        setJobLeadId(oneJob?.data?.data?.crm_v1_customer?.customer_id);
         setCurrencyId(
           oneJob?.data?.data.generalsettings_v1_currency.currency_id
         );
@@ -129,7 +131,7 @@ export default function AddJobPayments() {
         }
         addForm.setFieldsValue({
           // JobLeadId: oneJob?.data?.data?.crm_v1_leads?.lead_id,
-          lead_name: oneJob?.data?.data?.crm_v1_leads?.lead_customer_name,
+          lead_name: oneJob?.data?.data?.crm_v1_customer?.customer_name,
           currency:
             oneJob?.data?.data.generalsettings_v1_currency.currency_name,
           Job_exchangeRate: oneJob?.data?.data.job_total_cost_exch.toFixed(2),
@@ -189,6 +191,7 @@ export default function AddJobPayments() {
           setSuccessPopup(true);
           addForm.resetFields();
           close_modal(successPopup, 1000);
+          
         } else {
           console.log("helo", res.data.data);
           // setBrandError(res.data.data);
@@ -225,15 +228,32 @@ export default function AddJobPayments() {
               <h5 className="lead_text">Basic Info</h5>
             </div>
             <div className="col-sm-4 pt-2">
-              <label>Voucher Date</label>
-              <Form.Item className="mt-2" name="voucher_date">
+              <label>Voucher Date<span className="required">*</span></label>
+              <Form.Item className="mt-2" name="voucher_date"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Date is Required",
+                    },
+                  ]}
+              >
                 <DatePicker format={"DD-MM-YYYY"} defaultValue={moment(date)} />
               </Form.Item>
             </div>
             <div className="col-sm-4 pt-2">
-              <label>Job No.</label>
-              <Form.Item name="job_id">
-                <SelectBox
+              <label className="mb-2">Job No<span className="required">*</span></label>
+              <Form.Item name="job_id"
+              
+               rules={[
+                  {
+                    required: true,
+                
+                    message: "Please select a Job No",
+                  },
+                ]}
+              >
+                <SelectBox 
+
                   onChange={(e) => {
                     handleJobNo(e);
                   }}
@@ -251,7 +271,7 @@ export default function AddJobPayments() {
               </Form.Item>
             </div>
             <div className="col-sm-4 pt-2">
-              <label>Lead</label>
+              <label className="mb-2">Customer<span className="required">*</span></label>
               <Form.Item name="lead_name">
                 <InputType disabled />
               </Form.Item>
@@ -263,13 +283,13 @@ export default function AddJobPayments() {
               <h5 className="lead_text">Payment Info</h5>
             </div>
             <div className="col-sm-4 pt-3">
-              <label>Currency</label>
+              <label className="mb-2">Currency<span className="required">*</span></label>
               <Form.Item name="currency">
                 <InputType disabled />
               </Form.Item>
             </div>
             <div className="col-sm-4 pt-3">
-              <label>Exchange Rate</label>
+              <label className="mb-2">Exchange Rate<span className="required">*</span></label>
               <Form.Item
                 name="Job_exchangeRate"
                 onChange={(e) => setJobExchangeRate(e.target.value)}
@@ -283,16 +303,24 @@ export default function AddJobPayments() {
               </Form.Item>
             </div>
             <div className="col-sm-4 pt-3">
-              <label>Job Amount</label>
+              <label className="mb-2">Job Amount<span className="required">*</span></label>
               <Form.Item name="job_amount">
                 <InputNumber disabled min={2} precision={2} />
               </Form.Item>
             </div>
             <div className="col-sm-4 pt-3">
-              <label>Advance Amount</label>
+              <label className="mb-2">Advance Amount<span className="required">*</span></label>
               <Form.Item
                 name="advance_amount"
+                 rules={[
+                  {
+                    required: true,
+                    message: "Please enter Advance amount",
+                  },
+                ]}
                 onChange={(e) => setAdvanceAmount(e.target.value)}
+
+                
               >
                 <Input_Number
                   className="text_right"
@@ -303,8 +331,8 @@ export default function AddJobPayments() {
               </Form.Item>
             </div>
             <div className="col-sm-4 pt-3">
-              <label>
-                Advance in <span>({currencyDefault})</span>
+              <label className="mb-2">
+                Advance in <span>({currencyDefault})</span><span className="required">*</span>
               </label>
               <Form.Item
                 name="advanceIn_DefCurrency"

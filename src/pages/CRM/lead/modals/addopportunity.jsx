@@ -43,7 +43,7 @@ export default function AddOpportunity() {
   const [value, setValue] = useState([]);
   const [ShowEditModal, setShowEditModal] = useState(false); //oppertunity edit modal
   const [showProgressModal, setShowProgresssModal] = useState(false); //Oppoertunity progress modal
-  const [successPopup, setSuccessPopup] = useState(false); //success popups
+  const [SuccessPopup, setSuccessPopup] = useState(false); //success popups
   const [showViewModal, setShowViewModal] = useState(false);
 
   const [amount, setAmount] = useState();
@@ -81,8 +81,46 @@ export default function AddOpportunity() {
   const [Customer_Id, setCustomer_Id] = useState();
 
   const [Customer, setCustomer] = useState();
+  const [customername,setCustomerName]=useState();
+  console.log("customer id",customername);
+  const [customernew,setCustomernew]=useState();
+  console.log("customer nameee",customernew);
+  const [AllCustomers, setAllCustomers] = useState();
 
+  useEffect(() => {
+    // 
+      if(customername){
+        GetAllCustomers();
+        GetAllContacts();
+        addForm.setFieldsValue({oppo_customer : customername})
+        setCustomer_Id(customername);
+        handleclicknew(customername);
+        // GetSingleCustomer(customername);
+       
+      }
+      }, [customername]);
 
+      const handleclicknew = (e) => {
+        console.log("reached",e);
+        GetSingleCustomer(e);
+        // GetSingleContact(e);
+      };
+      
+  const GetAllCustomers = () => {
+    PublicFetch.get(`${CRM_BASE_URL}/customer/minimal`)
+      .then((res) => {
+        console.log("Response", res);
+        if (res.data.success) {
+          console.log("Success og gettimg customers", res?.data?.data);
+          setAllCustomers(res?.data?.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+ 
   //  const GetSalesPersons = () => {
 
   //   PublicFetch.get(`${CRM_BASE_URL_HRMS}/employees/salesexecutive`)
@@ -206,6 +244,35 @@ export default function AddOpportunity() {
  }
     // GetLeadData();
 }, [Customer_Id]);
+
+
+useEffect(()=>{
+  addForm.setFieldsValue({ oppo_source:"reference",oppo_type:"sales",oppo_probability:"L",oppo_status:1
+
+
+  })
+},[])
+
+const [allIncoterms, setAllIncoterms] = useState();
+console.log("incoterm",allIncoterms);
+
+const getAllIncoterms = () => {
+  PublicFetch.get(`${CRM_BASE_URL_FMS}/incoterms?startIndex=0&noOfItems=10`)
+    .then((res) => {
+      addForm.setFieldsValue({oppo_incoterm:res.data.data.incoterms[0].incoterm_id})
+      console.log("response", res);
+      if (res.data.success) {
+        setAllIncoterms(res.data.data.incoterms);
+      }
+    })
+    .catch((err) => {
+      console.log("Error", err);
+    });
+};
+useEffect(() => {
+  getAllIncoterms();
+}, []);
+
   // { function to add opportunity - Ann - 29/3/23}
   const newDate = new Date();
   const thisDate = moment(newDate);
@@ -231,7 +298,19 @@ export default function AddOpportunity() {
     formData.append("opportunity_probability", data.oppo_probability);
     formData.append("opportunity_description", data.oppo_description);
     formData.append("opportunity_status", data.oppo_status);
-    formData.append("oppo_enquiries", data.oppo_enquiries);
+      //  formData.append("opportunity_enquiries",JSON.stringify(data.oppo_enquiries));
+    data.oppo_enquiries?.length &&  data.oppo_enquiries.map((item, index) => {
+      console.log("userdata task", index);
+    
+        formData.append(
+          `opportunity_enquiries[${index}]`,item
+          
+        );
+    })
+
+    // formData.append("opportunity_enquiries",JSON.stringify(["8","9"]));
+    // formData.append("opportunity_enquiries[0]",8);
+    // formData.append("opportunity_enquiries[1]",9);
     // selectedValues.forEach((value) => {
     //   formData.append("opportunity_enquiries", value);
     // });
@@ -248,7 +327,7 @@ export default function AddOpportunity() {
           console.log("hello", res.data.data);
           setSuccessPopup(true);
           addForm.resetFields();
-          close_modal(successPopup, 1000);
+          close_modal(SuccessPopup, 1000);
         } else {
           console.log("helo", res.data.data);
           // setBrandError(res.data.data);
@@ -331,7 +410,8 @@ export default function AddOpportunity() {
   const close_modal = (mShow, time) => {
     if (!mShow) {
       setTimeout(() => {
-        setModalShow(false);
+        setSuccessPopup(false);
+        navigate(`${ROUTES.OPPORTUNITY}`)
       }, time);
     }
   };
@@ -347,7 +427,7 @@ const handleDatas = (data)=>{
 const [allenqdata,setAllEnqdata]=useState();
 console.log("all data",allenqdata);
 const getOneEnquiry = (e) => {
-  PublicFetch.get(`${CRM_BASE_URL_FMS}/enquiries/${e}`)
+  PublicFetch.get(`${CRM_BASE_URL_FMS}/enquiries/${e[0]}`)
   .then((res)=>{
     console.log("responsewww",res);
     if(res.data.success){
@@ -473,26 +553,26 @@ const GetSingleCustomer = (e) => {
               <h6 className="lead_text">Basic Info</h6>
             </div>
             <div className="col-sm-4 pt-2">
-              <label>
-                Enquiry No.<span className="req_star">*</span>
+              <label className="mb-1">
+                Enquiry No.
               </label>
               <Form.Item
                 name="oppo_enquiries"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please Select an Enquiry Number",
-                  },
-                ]}
+                // rules={[
+                //   {
+                //     required: true,
+                //     message: "Please Select an Enquiry Number",
+                //   },
+                // ]}
               >
                 <SelectBox
                   placeholder={"--Please Select--"}
-                  // mode="multiple"
+                  mode="multiple"
                   // maxTagCount="responsive"
                   value={selectedValues}
                   // onChange={handleMultiSelectChange}
                   onChange={(e)=>{
-                    // handleMultiSelectChange(e);
+                   
                     handleDatas(e)
                     console.log("reached",e);
                   }
@@ -516,9 +596,9 @@ const GetSingleCustomer = (e) => {
                 </SelectBox>
               </Form.Item>
             </div>
-            <div className="col-sm-4 pt-2 d-flex">
+            <div className="col-sm-4 pt-1 d-flex">
               <div className="col-11">
-                <label>
+                <label className="mb-1">
                   Customer<span className="req_star">*</span>
                 </label>
                 <Form.Item
@@ -573,8 +653,8 @@ const GetSingleCustomer = (e) => {
               </div>
             </div>
 
-            <div className="col-sm-4 pt-2">
-              <label>Date</label>
+            <div className="col-sm-4 pt-1">
+              <label className="mb-1">Date</label>
               <Form.Item
                 name="oppor_date"
                 // rules={[
@@ -613,7 +693,7 @@ const GetSingleCustomer = (e) => {
             </div> */}
 
             <div className="col-sm-4 pt-2">
-              <label>
+              <label className="mb-1">
                 Source<span className="req_star">*</span>
               </label>
               <Form.Item
@@ -643,7 +723,7 @@ const GetSingleCustomer = (e) => {
             </div>
 
             <div className="col-sm-4 pt-2">
-              <label>
+              <label className="mb-1">
                 Customer Reference<span className="req_star">*</span>
               </label>
               <Form.Item
@@ -659,7 +739,7 @@ const GetSingleCustomer = (e) => {
               </Form.Item>
             </div>
             <div className="col-sm-4 pt-2">
-              <label>
+              <label className="mb-1">
                 Sale Person<span className="required">*</span>
               </label>
               <Form.Item
@@ -692,8 +772,8 @@ const GetSingleCustomer = (e) => {
             <div className="col-12">
               <h6 className="lead_text">Contact Details</h6>
             </div>
-            <div className="col-sm-4 pt-2">
-              <label>
+            <div className="col-sm-4 pt-1">
+              <label className="mb-1">
                 Contact Person<span className="req_star">*</span>
               </label>
               <Form.Item
@@ -728,7 +808,7 @@ const GetSingleCustomer = (e) => {
             </div>
 
             <div className="col-sm-4 pt-2">
-              <label>Email</label>
+              <label className="mb-1">Email</label>
                 <Form.Item name="contactemail">
                 <InputType
                 //   value={purchasePoNo}
@@ -741,7 +821,7 @@ const GetSingleCustomer = (e) => {
               {/* <InputType disabled value={contactdetail?.contact_email} /> */}
             </div>
             <div className="col-sm-4 pt-2">
-              <label>Phone</label>
+              <label className="mb-1">Phone</label>
               <Form.Item name="contactphone">
                 <InputType
                 //   value={purchasePoNo}
@@ -759,7 +839,7 @@ const GetSingleCustomer = (e) => {
               <h6 className="lead_text">Extra Info</h6>
             </div>
             <div className="col-sm-4 pt-2">
-              <label>
+              <label className="mb-1">
                 Opportunity Type<span className="req_star">*</span>
               </label>
               <Form.Item
@@ -785,7 +865,7 @@ const GetSingleCustomer = (e) => {
               </Form.Item>
             </div>
             <div className="col-sm-4  pt-2">
-              <label>
+              <label className="mb-1">
                 Valid Up to<span className="req_star">*</span>
               </label>
               <Form.Item name="oppo_validity" {...config}>
@@ -804,7 +884,7 @@ const GetSingleCustomer = (e) => {
               </Form.Item>
             </div>
             <div className="col-sm-4 pt-2">
-              <label>Expecting Amount</label>
+              <label className="mb-1">Expecting Amount<span className="req_star">*</span></label>
               <Form.Item
                 name="oppo_amount"
                 rules={[
@@ -818,7 +898,7 @@ const GetSingleCustomer = (e) => {
               </Form.Item>
             </div>
             <div className="col-sm-4 pt-2">
-              <label>
+              <label className="mb-1">
                 Probability of conversion<span className="req_star">*</span>
               </label>
               <Form.Item
@@ -844,7 +924,7 @@ const GetSingleCustomer = (e) => {
               </Form.Item>
             </div>
             <div className="col-sm-4 pt-2">
-              <label>
+              <label className="mb-1">
                 Incoterm<span className="req_star">*</span>
               </label>
               <Form.Item
@@ -856,19 +936,30 @@ const GetSingleCustomer = (e) => {
                   },
                 ]}
               >
-                <SelectBox 
-                // defaultValue={1}
-                // value={oppurtunityprobability}
-                // onChange={(e) => {
-                //   setOppurtunityProbability(e);
-                // }}
+               <SelectBox
+                  placeholder={"--Please Select--"}
+                  // value={oppprobability}
+                  // onChange={(e) => oneContact(e)}
                 >
-                  <Select.Option value={1}>EXW</Select.Option>
+                  {allIncoterms &&
+                    allIncoterms.length > 0 &&
+                    allIncoterms.map((item, index) => {
+                      console.log("item",item);
+                      return (
+                        <Select.Option
+                          value={item.incoterm_id}
+                          
+                          key={item.incoterm_id}
+                        >
+                          {item.incoterm_short_name}
+                        </Select.Option>
+                      );
+                    })}
                 </SelectBox>
               </Form.Item>
             </div>
             <div className="col-sm-4 pt-2">
-              <label>
+              <label className="mb-1">
                 Status<span className="req_star">*</span>
               </label>
               <Form.Item
@@ -895,7 +986,7 @@ const GetSingleCustomer = (e) => {
             </div>
 
             <div className="col-sm-6 pt-2">
-              <label>
+              <label >
                 Remarks<span className="req_star">*</span>
               </label>
               <Form.Item
@@ -916,7 +1007,7 @@ const GetSingleCustomer = (e) => {
             </div>
 
             <div className="col-sm-6 mt-2">
-              <label>Attachments</label>
+              <label >Attachments</label>
               <Form.Item name="attachments" className="mt-2">
                 <FileUpload
                   multiple
@@ -972,16 +1063,18 @@ const GetSingleCustomer = (e) => {
 
         {/* Modal for add Customer */}
         <CustomerModal
+         setCustomerName={setCustomerName}
+         setCustomernew={setCustomernew}
           show={modalAddCustomer}
           onHide={() => {
             setModalAddCustomer(false);
           }}
         />
         <Custom_model
-          size={`sm`}
+          // size={`sm`}
           success
-          show={modalShow}
-          onHide={() => setModalShow(false)}
+          show={SuccessPopup}
+          onHide={() =>  setSuccessPopup(false)}
           footer={false}
         />
       </div>

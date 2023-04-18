@@ -82,9 +82,12 @@ function Moreinfo({ customerdetails }) {
     formData.append(`customer_address`, onecustomerData?.customer_address);
     formData.append(`customer_phone`, onecustomerData?.customer_phone);
     formData.append(`customer_email`, onecustomerData?.customer_email);
-    formData.append(`customer_website`, onecustomerData?.customer_website);
+
+    onecustomerData?.customer_website && formData.append(`customer_website`, onecustomerData?.customer_website);
+    onecustomerData?.customer_country &&  formData.append(`customer_country`, onecustomerData?.customer_country);
+    
     formData.append(`customer_remarks`, onecustomerData?.customer_remarks);
-    formData.append(`customer_country`, onecustomerData?.customer_country);
+   
     formData.append(`customer_state`, onecustomerData?.customer_state);
     formData.append(`customer_city`, onecustomerData?.customer_city);
 

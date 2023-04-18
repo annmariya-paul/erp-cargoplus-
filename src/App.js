@@ -159,6 +159,9 @@ import AwbblReport from "./pages/FMS/Awb_bl_report/awb_bl_report";
 import Ledger from "./pages/Accounts/settings/Ledger/Ledger";
 import Gltypes from "./pages/Accounts/settings/GLType/gl_type";
 import AccGroup from "./pages/Accounts/settings/Account Group/AccGroup";
+import Invoicetemp1 from "./components/Invoice/invoicetemp1/invoicetemp1";
+import Invoicetemplate2 from "./components/Invoice/invoicetemp2/invoicetemp2";
+import Invoicetemplateselect from "./pages/General Settings/invoicetemplates/invoicetemplate";
 function App() {
   return (
     <div className="App">
@@ -631,6 +634,11 @@ function App() {
               <Route index element={<Fmssettings />} />
             </Route>
 
+            <Route path={ROUTES.SELECT_INVOICETEMPLATE} element={<ProtectedRoute />}>
+              <Route index element={<Invoicetemplateselect />} />
+            </Route>
+
+
             <Route path={ROUTES.AGENT_REPORT} element={<ProtectedRoute />}>
               <Route index element={<AgentReport />} />
             </Route>
@@ -775,6 +783,9 @@ function App() {
 
           <Route path={ROUTES.JOB_INVOICE_ID} element={<Jobinvoice />} />
           <Route path={ROUTES.INVOICE_PRINT} element={<InvoicePrint />} />
+
+          <Route path={ROUTES.INVOICETEMPLATE} element={<Invoicetemp1/> } />
+          <Route path={ROUTES.INVOICE_NEWTEMP} element={<Invoicetemplate2/> }/>
         </Routes>
       </BrowserRouter>
     </div>

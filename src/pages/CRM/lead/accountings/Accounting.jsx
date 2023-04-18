@@ -168,9 +168,11 @@ function Countrystate({ customerdetails, setIsAccountSave }) {
     formData.append(`customer_address`, customerdetails.customer_address);
     formData.append(`customer_phone`, customerdetails.customer_phone);
     formData.append(`customer_email`, customerdetails.customer_email);
-    formData.append(`customer_website`, customerdetails.customer_website);
+
+    customerdetails?.customer_website && formData.append(`customer_website`, customerdetails.customer_website);
+    customerdetails?.customer_country &&  formData.append(`customer_country`, customerdetails.customer_country);
     formData.append(`customer_remarks`, customerdetails.customer_remarks);
-    formData.append(`customer_country`, customerdetails.customer_country);
+   
     formData.append(`customer_state`, customerdetails.customer_state);
     formData.append(`customer_city`, customerdetails.customer_city);
 
@@ -331,7 +333,7 @@ function Countrystate({ customerdetails, setIsAccountSave }) {
         }}
       >
         <div className="row py-5 px-1">
-          <div className="col-sm-4 mt-2">
+          <div className="col-sm-4 ">
             <label>Tax No</label>
             <Form.Item name="customer_accounting_tax_no">
               <InputType />

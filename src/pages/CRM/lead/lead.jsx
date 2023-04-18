@@ -61,6 +61,7 @@ function Lead({}) {
   const [Toggle4, setToggle4] = useState(false);
   const [countries, setCountries] = useState("");
   const [isAccountsave, setIsAccountSave] = useState();
+  const [contactTable, setContactTable] = useState();
 
   const [customerdetails, setcustomerdetails] = useState();
 
@@ -189,11 +190,13 @@ function Lead({}) {
     formData.append(`customer_address`, data.customer_address);
     formData.append(`customer_phone`, data.customer_phone);
     formData.append(`customer_email`, data.customer_email);
-    formData.append(`customer_website`, data.customer_website);
-    formData.append(`customer_remarks`, data.customer_remarks);
-    formData.append(`customer_country`, data.customer_country);
-    formData.append(`customer_state`, data.customer_state);
-    formData.append(`customer_city`, data.customer_city);
+
+    data?.customer_website && formData.append(`customer_website`, data.customer_website);
+    data?.customer_remarks && formData.append(`customer_remarks`, data.customer_remarks);
+    data?.customer_country && formData.append(`customer_country`, data.customer_country);
+    data?.customer_state &&  formData.append(`customer_state`, data.customer_state);
+    data?.customer_city && formData.append(`customer_city`, data.customer_city);
+    
     if (leadimg) {
       formData.append(`customer_logo`, leadimg);
     }
@@ -531,6 +534,9 @@ function Lead({}) {
                           rules={[
                             {
                               required: true,
+                              pattern: new RegExp(
+                                "^[A-Za-z0-9_!#$%&'*+/=?`{|}~^.-]+@[A-Za-z0-9.-]+$"
+                              ),
                               message: "Please enter a valid Email",
                             },
                           ]}
@@ -580,10 +586,10 @@ function Lead({}) {
                         name="customer_website"
                         rules={
                           [
-                            // {
-                            //   pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                            //   message: "Special characters are not allowed",
-                            // },
+                            {
+                              pattern: new RegExp("[Hh][Tt][Tt][Pp][Ss]?:\/\/(?:(?:[a-zA-Z\u00a1-\uffff0-9]+-?)*[a-zA-Z\u00a1-\uffff0-9]+)(?:\.(?:[a-zA-Z\u00a1-\uffff0-9]+-?)*[a-zA-Z\u00a1-\uffff0-9]+)*(?:\.(?:[a-zA-Z\u00a1-\uffff]{2,}))(?::\d{2,5})?(?:\/[^\s]*)?"),
+                              message: "Enter valid website",
+                            },
                             // {
                             //   min: 2,
                             //   message: "organisation has at least 2 characters",

@@ -215,14 +215,18 @@ function LeadEdit() {
     formData.append(`customer_address`, data.customer_address);
     formData.append(`customer_phone`, data.customer_phone);
     formData.append(`customer_email`, data.customer_email);
-    formData.append(`customer_website`, data.customer_website);
-    formData.append(`customer_remarks`, data.customer_remarks);
-    formData.append(`customer_country`, data.customer_country);
-    formData.append(`customer_state`, data.customer_state);
-    formData.append(`customer_city`, data.customer_city);
+
+    data?.customer_website &&  formData.append(`customer_website`, data.customer_website);
+    data?.customer_country &&  formData.append(`customer_country`, data.customer_country);
+    data?.customer_remarks && formData.append(`customer_remarks`, data.customer_remarks);
+    data?.customer_state && formData.append(`customer_state`, data.customer_state);
+    data?.customer_city && formData.append(`customer_city`, data.customer_city);
+   
+   
     if (leadAttachment) {
       formData.append(`customer_logo`, leadAttachment);
     }
+    console.log("dattataa",data)
 
     PublicFetch.patch(`${CRM_BASE_URL}/customer/${id}`, formData, {
       "Content-Type": "Multipart/form-Data",
@@ -589,12 +593,12 @@ function LeadEdit() {
                         <label>State</label>
                         <Form.Item
                           name="customer_state"
-                          rules={[
-                            {
-                              required: true,
-                              message: "Please select a Type",
-                            },
-                          ]}
+                          // rules={[
+                          //   {
+                          //     required: true,
+                          //     message: "Please select a Type",
+                          //   },
+                          // ]}
                         >
                           <InputType
                             value={leadcreditdays}
@@ -609,12 +613,7 @@ function LeadEdit() {
                       <label>Country</label>
                       <Form.Item
                         name="customer_country"
-                        // rules={[
-                        //   {
-                        //     required: true,
-                        //     message: "Please select a Type",
-                        //   },
-                        // ]}
+                       
                       >
                         <SelectBox
                           // value={leadSource}

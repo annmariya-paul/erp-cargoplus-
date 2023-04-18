@@ -37,7 +37,7 @@ export default function AddOpportunity() {
   const [modalOpportunity, setModalOpportunity] = useState(true);
   const [modalShow, setModalShow] = useState(false);
   const [date, setDate] = useState();
-  const [validityDate,setValidityDate]= useState();
+  const [validityDate, setValidityDate] = useState();
   const [name, setName] = useState();
   const [modalAddCustomer, setModalAddCustomer] = useState(false);
   const [value, setValue] = useState([]);
@@ -70,7 +70,7 @@ export default function AddOpportunity() {
   const [oppdescription, setOppDescription] = useState();
   const [oppstatus, setOppStatus] = useState();
   const [leadName, setLeadName] = useState("");
-  const [opporFrom,setOpporFrom] = useState("customer");
+  const [opporFrom, setOpporFrom] = useState("customer");
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
@@ -81,31 +81,30 @@ export default function AddOpportunity() {
   const [Customer_Id, setCustomer_Id] = useState();
 
   const [Customer, setCustomer] = useState();
-  const [customername,setCustomerName]=useState();
-  console.log("customer id",customername);
-  const [customernew,setCustomernew]=useState();
-  console.log("customer nameee",customernew);
+  const [customername, setCustomerName] = useState();
+  console.log("customer id", customername);
+  const [customernew, setCustomernew] = useState();
+  console.log("customer nameee", customernew);
   const [AllCustomers, setAllCustomers] = useState();
 
   useEffect(() => {
-    // 
-      if(customername){
-        GetAllCustomers();
-        GetAllContacts();
-        addForm.setFieldsValue({oppo_customer : customername})
-        setCustomer_Id(customername);
-        handleclicknew(customername);
-        // GetSingleCustomer(customername);
-       
-      }
-      }, [customername]);
+    //
+    if (customername) {
+      GetAllCustomers();
+      GetAllContacts();
+      addForm.setFieldsValue({ oppo_customer: customername });
+      setCustomer_Id(customername);
+      handleclicknew(customername);
+      // GetSingleCustomer(customername);
+    }
+  }, [customername]);
 
-      const handleclicknew = (e) => {
-        console.log("reached",e);
-        GetSingleCustomer(e);
-        // GetSingleContact(e);
-      };
-      
+  const handleclicknew = (e) => {
+    console.log("reached", e);
+    GetSingleCustomer(e);
+    // GetSingleContact(e);
+  };
+
   const GetAllCustomers = () => {
     PublicFetch.get(`${CRM_BASE_URL}/customer/minimal`)
       .then((res) => {
@@ -120,14 +119,13 @@ export default function AddOpportunity() {
       });
   };
 
- 
   //  const GetSalesPersons = () => {
 
   //   PublicFetch.get(`${CRM_BASE_URL_HRMS}/employees/salesexecutive`)
   //     .then((res) => {
   //       console.log("response", res);
   //       if (res.data.success) {
-         
+
   //         console.log("Success from sales person", res.data.data);
   //         setAllSalesPerson(res.data.data);
   //   const personName = localStorage.getItem('UserID');
@@ -139,7 +137,6 @@ export default function AddOpportunity() {
   //     }
   //   })
 
-
   //       }
   //     })
   //     .catch((err) => {
@@ -150,42 +147,42 @@ export default function AddOpportunity() {
   // useEffect(() => {
   //   GetSalesPersons();
   // }, []);
-  console.log("cus id : and customer",Customer_Id,Customer);
-   const handleMultiSelectChange = (event) => {
-     const values = Array.from(
-       event.target.selectedOptions,
-       (option) => option.value
-     );
-     setSelectedValues(values);
-   };
+  console.log("cus id : and customer", Customer_Id, Customer);
+  const handleMultiSelectChange = (event) => {
+    const values = Array.from(
+      event.target.selectedOptions,
+      (option) => option.value
+    );
+    setSelectedValues(values);
+  };
 
-    const getBase64 = (file) =>
-      new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = (error) => reject(error);
-      });
+  const getBase64 = (file) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
 
-    const handlePreview = async (file) => {
-      if (!file.url && !file.preview) {
-        file.preview = await getBase64(file.originFileObj);
-      }
-      setPreviewImage(file.url || file.preview);
-      setPreviewVisible(true);
-      setPreviewTitle(
-        file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
-      );
-    };
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setPreviewImage(file.url || file.preview);
+    setPreviewVisible(true);
+    setPreviewTitle(
+      file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
+    );
+  };
 
-    const handleAddImage = (e) => {
-      console.log("handleAddImage", e);
-      let temp = [];
-      e?.fileList?.forEach((item, index) => {
-        temp.push(item?.originFileObj);
-      });
-      console.log("tempereay file", temp);
-    };
+  const handleAddImage = (e) => {
+    console.log("handleAddImage", e);
+    let temp = [];
+    e?.fileList?.forEach((item, index) => {
+      temp.push(item?.originFileObj);
+    });
+    console.log("tempereay file", temp);
+  };
 
   // const GetLeadData = () => {
   //   PublicFetch.get(`${CRM_BASE_URL}/lead/${id}`)
@@ -233,45 +230,48 @@ export default function AddOpportunity() {
   };
 
   useEffect(() => {
-      getAllEnquiry();
-      getCustomers();
-      // GetLeadData();
-  }, []);
-  
-  useEffect(() => {
- if(Customer_Id){
-  oneContact(Customer_Id)
- }
+    getAllEnquiry();
+    getCustomers();
     // GetLeadData();
-}, [Customer_Id]);
+  }, []);
 
+  useEffect(() => {
+    if (Customer_Id) {
+      oneContact(Customer_Id);
+    }
+    // GetLeadData();
+  }, [Customer_Id]);
 
-useEffect(()=>{
-  addForm.setFieldsValue({ oppo_source:"reference",oppo_type:"sales",oppo_probability:"L",oppo_status:1
-
-
-  })
-},[])
-
-const [allIncoterms, setAllIncoterms] = useState();
-console.log("incoterm",allIncoterms);
-
-const getAllIncoterms = () => {
-  PublicFetch.get(`${CRM_BASE_URL_FMS}/incoterms?startIndex=0&noOfItems=10`)
-    .then((res) => {
-      addForm.setFieldsValue({oppo_incoterm:res.data.data.incoterms[0].incoterm_id})
-      console.log("response", res);
-      if (res.data.success) {
-        setAllIncoterms(res.data.data.incoterms);
-      }
-    })
-    .catch((err) => {
-      console.log("Error", err);
+  useEffect(() => {
+    addForm.setFieldsValue({
+      oppo_source: "reference",
+      oppo_type: "sales",
+      oppo_probability: "L",
+      oppo_status: 1,
     });
-};
-useEffect(() => {
-  getAllIncoterms();
-}, []);
+  }, []);
+
+  const [allIncoterms, setAllIncoterms] = useState();
+  console.log("incoterm", allIncoterms);
+
+  const getAllIncoterms = () => {
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/incoterms?startIndex=0&noOfItems=10`)
+      .then((res) => {
+        addForm.setFieldsValue({
+          oppo_incoterm: res.data.data.incoterms[0].incoterm_id,
+        });
+        console.log("response", res);
+        if (res.data.success) {
+          setAllIncoterms(res.data.data.incoterms);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+  useEffect(() => {
+    getAllIncoterms();
+  }, []);
 
   // { function to add opportunity - Ann - 29/3/23}
   const newDate = new Date();
@@ -280,7 +280,6 @@ useEffect(() => {
   addForm.setFieldValue("oppo_validity", thisDate);
 
   const oppdata = (data) => {
-
     const date = moment(data.oppor_date).format("MM/DD/YYYY");
     const validityDate = moment(data.oppo_validity).format("MM/DD/YYYY");
     const formData = new FormData();
@@ -298,15 +297,14 @@ useEffect(() => {
     formData.append("opportunity_probability", data.oppo_probability);
     formData.append("opportunity_description", data.oppo_description);
     formData.append("opportunity_status", data.oppo_status);
-      //  formData.append("opportunity_enquiries",JSON.stringify(data.oppo_enquiries));
-    data.oppo_enquiries?.length &&  data.oppo_enquiries.map((item, index) => {
-      console.log("userdata task", index);
-    
-        formData.append(
-          `opportunity_enquiries[${index}]`,item
-          
-        );
-    })
+    formData.append("opportunity_salesperson_id", data.sales_person);
+    //  formData.append("opportunity_enquiries",JSON.stringify(data.oppo_enquiries));
+    data.oppo_enquiries?.length &&
+      data.oppo_enquiries.map((item, index) => {
+        console.log("userdata task", index);
+
+        formData.append(`opportunity_enquiries[${index}]`, item);
+      });
 
     // formData.append("opportunity_enquiries",JSON.stringify(["8","9"]));
     // formData.append("opportunity_enquiries[0]",8);
@@ -339,10 +337,9 @@ useEffect(() => {
       });
   };
   const [AllContacts, setAllContacts] = useState();
-  console.log("all contacts data",AllContacts);
+  console.log("all contacts data", AllContacts);
   useEffect(() => {
     handleJobNo();
-   
   }, []);
 
   // { function to get contacts - Ann - 29/3/23}
@@ -411,96 +408,89 @@ useEffect(() => {
     if (!mShow) {
       setTimeout(() => {
         setSuccessPopup(false);
-        navigate(`${ROUTES.OPPORTUNITY}`)
+        navigate(`${ROUTES.OPPORTUNITY}`);
       }, time);
     }
   };
-const handleDatas = (data)=>{
-  console.log("data",data);
-  getOneEnquiry(data);
-  // oneContact(Customer_Id)
-  GetAllContacts(Customer_Id);
- 
+  const handleDatas = (data) => {
+    console.log("data", data);
+    getOneEnquiry(data);
+    // oneContact(Customer_Id)
+    GetAllContacts(Customer_Id);
+  };
 
-}
-
-const [allenqdata,setAllEnqdata]=useState();
-console.log("all data",allenqdata);
-const getOneEnquiry = (e) => {
-  PublicFetch.get(`${CRM_BASE_URL_FMS}/enquiries/${e[0]}`)
-  .then((res)=>{
-    console.log("responsewww",res);
-    if(res.data.success){
-      console.log("Success from one enquiry", res.data.data);
-      setAllEnqdata(res.data.data);
-      setCustomer(res.data.data.crm_v1_customer?.customer_id)
-      setCustomer_Id(res.data.data.enquiry_contact_person_id);
-      let a = res.data.data.crm_v1_contacts[0];
-      addForm.setFieldsValue({
-        oppo_customer: res.data.data.crm_v1_customer.customer_id,
-        // contact_person:res.data.data.crm_v1_contacts.contact_id,
-        // contactemail:res.data.data.crm_v1_contacts.contact_email,
-        // contactphone:res.data.data.crm_v1_contacts.contact_phone_1,
-      })
-        PublicFetch.get(`${CRM_BASE_URL}/customer/${res.data.data.crm_v1_customer?.customer_id}`)
+  const [allenqdata, setAllEnqdata] = useState();
+  console.log("all data", allenqdata);
+  const getOneEnquiry = (e) => {
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/enquiries/${e[0]}`).then((res) => {
+      console.log("responsewww", res);
+      if (res.data.success) {
+        console.log("Success from one enquiry", res.data.data);
+        setAllEnqdata(res.data.data);
+        setCustomer(res.data.data.crm_v1_customer?.customer_id);
+        setCustomer_Id(res.data.data.enquiry_contact_person_id);
+        let a = res.data.data.crm_v1_contacts[0];
+        addForm.setFieldsValue({
+          oppo_customer: res.data.data.crm_v1_customer.customer_id,
+          // contact_person:res.data.data.crm_v1_contacts.contact_id,
+          // contactemail:res.data.data.crm_v1_contacts.contact_email,
+          // contactphone:res.data.data.crm_v1_contacts.contact_phone_1,
+        });
+        PublicFetch.get(
+          `${CRM_BASE_URL}/customer/${res.data.data.crm_v1_customer?.customer_id}`
+        )
           .then((res) => {
             console.log("Response from single customer", res);
             if (res.data.success) {
-             
               let a = res.data.data.crm_v1_contacts[0];
-              setAllContacts(res.data.data.crm_v1_contacts)
+              setAllContacts(res.data.data.crm_v1_contacts);
               // let b =res.data.data.crm_v1_customer_accounting[0];
-              let b= res.data.data.customer_preferred_freight_type;
+              let b = res.data.data.customer_preferred_freight_type;
               addForm.setFieldsValue({
                 contact_person: a?.contact_id,
                 contactemail: a?.contact_email,
                 contactphone: a?.contact_phone_1,
                 // customerfrighttype: b,
-                
               });
             }
           })
           .catch((err) => {
             console.log("Error", err);
           });
-      
-
-
-      
-    
-    }
-  })
-
-}
-
-const handleclick = (e) => {
-  GetSingleCustomer(e);
-};
-const GetSingleCustomer = (e) => {
-  PublicFetch.get(`${CRM_BASE_URL}/customer/${e}`)
-    .then((res) => {
-      console.log("Response from single customer", res);
-      if (res.data.success) {
-        console.log("Success from single customer", res.data.data);
-        console.log("contact data", res.data.data.crm_v1_contacts[0]);
-        console.log("accounts data",res.data.data.customer_preferred_freight_type)
-        let a = res.data.data.crm_v1_contacts[0];
-        setAllContacts(res.data.data.crm_v1_contacts)
-        // let b =res.data.data.crm_v1_customer_accounting[0];
-        let b= res.data.data.customer_preferred_freight_type;
-        addForm.setFieldsValue({
-          contact_person: a?.contact_id,
-          contactemail: a?.contact_email,
-          contactphone: a?.contact_phone_1,
-          customerfrighttype: b,
-          
-        });
       }
-    })
-    .catch((err) => {
-      console.log("Error", err);
     });
-};
+  };
+
+  const handleclick = (e) => {
+    GetSingleCustomer(e);
+  };
+  const GetSingleCustomer = (e) => {
+    PublicFetch.get(`${CRM_BASE_URL}/customer/${e}`)
+      .then((res) => {
+        console.log("Response from single customer", res);
+        if (res.data.success) {
+          console.log("Success from single customer", res.data.data);
+          console.log("contact data", res.data.data.crm_v1_contacts[0]);
+          console.log(
+            "accounts data",
+            res.data.data.customer_preferred_freight_type
+          );
+          let a = res.data.data.crm_v1_contacts[0];
+          setAllContacts(res.data.data.crm_v1_contacts);
+          // let b =res.data.data.crm_v1_customer_accounting[0];
+          let b = res.data.data.customer_preferred_freight_type;
+          addForm.setFieldsValue({
+            contact_person: a?.contact_id,
+            contactemail: a?.contact_email,
+            contactphone: a?.contact_phone_1,
+            customerfrighttype: b,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
   const GetSalesPersons = () => {
     PublicFetch.get(`${CRM_BASE_URL_HRMS}/employees/salesexecutive`)
       .then((res) => {
@@ -508,17 +498,16 @@ const GetSingleCustomer = (e) => {
         if (res.data.success) {
           console.log("Success from sales person", res.data.data);
           setAllSalesPerson(res.data.data);
-          const personName = localStorage.getItem('UserID');
-    res.data.data.forEach((item,index)=> {
-      if(personName == item.employee_id){
-        addForm.setFieldsValue({
-          sales_person: item.employee_id
-        })
+          const personName = localStorage.getItem("UserID");
+          res.data.data.forEach((item, index) => {
+            if (personName == item.employee_id) {
+              addForm.setFieldsValue({
+                sales_person: item.employee_id,
+              });
+            }
+          });
         }
       })
-      
-    }
-  })
       .catch((err) => {
         console.log("Error", err);
       });
@@ -553,9 +542,7 @@ const GetSingleCustomer = (e) => {
               <h6 className="lead_text">Basic Info</h6>
             </div>
             <div className="col-sm-4 pt-2">
-              <label className="mb-1">
-                Enquiry No.
-              </label>
+              <label className="mb-1">Enquiry No.</label>
               <Form.Item
                 name="oppo_enquiries"
                 // rules={[
@@ -571,13 +558,10 @@ const GetSingleCustomer = (e) => {
                   // maxTagCount="responsive"
                   value={selectedValues}
                   // onChange={handleMultiSelectChange}
-                  onChange={(e)=>{
-                   
-                    handleDatas(e)
-                    console.log("reached",e);
-                  }
-
-                  }
+                  onChange={(e) => {
+                    handleDatas(e);
+                    console.log("reached", e);
+                  }}
                   // value={oppoNumber}
                   // onChange={(e) => setOppoNumber(e.target.value)}
                 >
@@ -616,9 +600,8 @@ const GetSingleCustomer = (e) => {
                     onChange={(e) => {
                       setCustomer_Id(e);
                       GetAllContacts(e);
-                    // addForm.resetFields();
-                    handleclick(e);
-                     
+                      // addForm.resetFields();
+                      handleclick(e);
                     }}
                   >
                     {customersData &&
@@ -637,19 +620,19 @@ const GetSingleCustomer = (e) => {
                 </Form.Item>
               </div>
               <div className="col-1 mt-4 ps-1">
-              
-                  {" "}
-                  <BsPlusCircleFill style={{ fontSize: "21px",
-                      marginTop: "10px",
-                      marginLeft: "10px",
-                      color:"#0891d1",
-                     }} 
+                {" "}
+                <BsPlusCircleFill
+                  style={{
+                    fontSize: "21px",
+                    marginTop: "10px",
+                    marginLeft: "10px",
+                    color: "#0891d1",
+                  }}
                   onClick={() => {
                     setModalAddCustomer(true);
                     addForm.resetFields();
                   }}
-                  />
-               
+                />
               </div>
             </div>
 
@@ -705,8 +688,8 @@ const GetSingleCustomer = (e) => {
                   },
                 ]}
               >
-                <SelectBox 
-                // defaultValue="reference"
+                <SelectBox
+                  // defaultValue="reference"
                   placeholder={"--Please Select--"}
                   // value={oppsource}
                   // onChange={(e) => setOppSource(e)}
@@ -793,7 +776,7 @@ const GetSingleCustomer = (e) => {
                   {AllContacts &&
                     AllContacts.length > 0 &&
                     AllContacts.map((item, index) => {
-                      console.log("item",item);
+                      console.log("item", item);
                       return (
                         <Select.Option
                           value={item.contact_id}
@@ -809,7 +792,7 @@ const GetSingleCustomer = (e) => {
 
             <div className="col-sm-4 pt-2">
               <label className="mb-1">Email</label>
-                <Form.Item name="contactemail">
+              <Form.Item name="contactemail">
                 <InputType
                 //   value={purchasePoNo}
                 //   onChange={(e) => {
@@ -851,7 +834,7 @@ const GetSingleCustomer = (e) => {
                   },
                 ]}
               >
-                <SelectBox 
+                <SelectBox
                 // defaultValue="sales"
                 // value={oppurtunitytype}
                 // onChange={(e) => {
@@ -884,7 +867,9 @@ const GetSingleCustomer = (e) => {
               </Form.Item>
             </div>
             <div className="col-sm-4 pt-2">
-              <label className="mb-1">Expecting Amount<span className="req_star">*</span></label>
+              <label className="mb-1">
+                Expecting Amount<span className="req_star">*</span>
+              </label>
               <Form.Item
                 name="oppo_amount"
                 rules={[
@@ -910,7 +895,7 @@ const GetSingleCustomer = (e) => {
                   },
                 ]}
               >
-                <SelectBox 
+                <SelectBox
                 // defaultValue="M"
                 // value={oppurtunityprobability}
                 // onChange={(e) => {
@@ -936,7 +921,7 @@ const GetSingleCustomer = (e) => {
                   },
                 ]}
               >
-               <SelectBox
+                <SelectBox
                   placeholder={"--Please Select--"}
                   // value={oppprobability}
                   // onChange={(e) => oneContact(e)}
@@ -944,11 +929,10 @@ const GetSingleCustomer = (e) => {
                   {allIncoterms &&
                     allIncoterms.length > 0 &&
                     allIncoterms.map((item, index) => {
-                      console.log("item",item);
+                      console.log("item", item);
                       return (
                         <Select.Option
                           value={item.incoterm_id}
-                          
                           key={item.incoterm_id}
                         >
                           {item.incoterm_short_name}
@@ -972,7 +956,7 @@ const GetSingleCustomer = (e) => {
                 ]}
               >
                 <SelectBox
-                //  defaultValue={1}
+                  //  defaultValue={1}
                   placeholder={"--Please Select--"}
                   value={oppstatus}
                   onChange={(e) => setOppStatus(e)}
@@ -986,7 +970,7 @@ const GetSingleCustomer = (e) => {
             </div>
 
             <div className="col-sm-6 pt-2">
-              <label >
+              <label>
                 Remarks<span className="req_star">*</span>
               </label>
               <Form.Item
@@ -1007,7 +991,7 @@ const GetSingleCustomer = (e) => {
             </div>
 
             <div className="col-sm-6 mt-2">
-              <label >Attachments</label>
+              <label>Attachments</label>
               <Form.Item name="attachments" className="mt-2">
                 <FileUpload
                   multiple
@@ -1063,8 +1047,8 @@ const GetSingleCustomer = (e) => {
 
         {/* Modal for add Customer */}
         <CustomerModal
-         setCustomerName={setCustomerName}
-         setCustomernew={setCustomernew}
+          setCustomerName={setCustomerName}
+          setCustomernew={setCustomernew}
           show={modalAddCustomer}
           onHide={() => {
             setModalAddCustomer(false);
@@ -1074,7 +1058,7 @@ const GetSingleCustomer = (e) => {
           // size={`sm`}
           success
           show={SuccessPopup}
-          onHide={() =>  setSuccessPopup(false)}
+          onHide={() => setSuccessPopup(false)}
           footer={false}
         />
       </div>

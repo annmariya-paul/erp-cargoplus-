@@ -228,10 +228,11 @@ const ROUTES = {
   // testingg invoice
 
   INVOICETEMPLATE:"/invoicetemplate1",
-  INVOICE_NEWTEMP:"/invoicetemplate2"
+  INVOICE_NEWTEMP:"/invoicetemplate2",
 
   // selectinginvoicetemplates
   
+  SELECT_INVOICETEMPLATE:"/selectinvoicetemplate"
 
 };
 

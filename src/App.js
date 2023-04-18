@@ -161,6 +161,7 @@ import Gltypes from "./pages/Accounts/settings/GLType/gl_type";
 import AccGroup from "./pages/Accounts/settings/Account Group/AccGroup";
 import Invoicetemp1 from "./components/Invoice/invoicetemp1/invoicetemp1";
 import Invoicetemplate2 from "./components/Invoice/invoicetemp2/invoicetemp2";
+import Invoicetemplateselect from "./pages/General Settings/invoicetemplates/invoicetemplate";
 function App() {
   return (
     <div className="App">
@@ -632,6 +633,11 @@ function App() {
             <Route path={ROUTES.FMSSETTINGS} element={<ProtectedRoute />}>
               <Route index element={<Fmssettings />} />
             </Route>
+
+            <Route path={ROUTES.SELECT_INVOICETEMPLATE} element={<ProtectedRoute />}>
+              <Route index element={<Invoicetemplateselect />} />
+            </Route>
+
 
             <Route path={ROUTES.AGENT_REPORT} element={<ProtectedRoute />}>
               <Route index element={<AgentReport />} />

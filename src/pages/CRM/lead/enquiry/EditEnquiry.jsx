@@ -2,6 +2,7 @@ import { DatePicker, Form, Select } from "antd";
 import React, { useEffect, useState } from "react";
 import { BsPlusCircleFill } from "react-icons/bs";
 import { useNavigate, useParams } from "react-router-dom";
+import CustomerModal from "../../../../components/CustomerModal.jsx/CustomerModal";
 import {
   CRM_BASE_URL,
   CRM_BASE_URL_FMS,
@@ -23,6 +24,7 @@ function EditEnquiry() {
   const [SuccessPopup, setSuccessPopup] = useState(false);
   const [img, setImg] = useState([]);
   const navigate = useNavigate();
+  const [primage, setPrImage] = useState();
   const [modalAddCustomer, setModalAddCustomer] = useState(false);
   const [imgSizeError, setImgSizeError] = useState(false);
   const [AllCustomers, setAllCustomers] = useState();
@@ -31,6 +33,11 @@ function EditEnquiry() {
   const [allSalesPerson, setAllSalesPerson] = useState();
   const [frighttype, setFrighttype] = useState();
   const [frightmode, setFrightmode] = useState();
+  const [customername,setCustomerName]=useState();
+  console.log("customer id",customername);
+  const [customernew,setCustomernew]=useState();
+  console.log("customer nameee",customernew);
+  
   console.log("change", frightmode);
   const [frighttypemode, setFrighttypemode] = useState();
   const [allLocations, setAllLocations] = useState();
@@ -43,6 +50,23 @@ function EditEnquiry() {
       }, time);
     }
   };
+  useEffect(() => {
+    // 
+      if(customername){
+        GetAllCustomers();
+        GetAllContacts();
+        addForm.setFieldsValue({customer : customername})
+        setCustomer_Id(customername);
+        handleclicknew(customername);
+        // GetSingleCustomer(customername);
+       
+      }
+      }, [customername]);
+      const handleclicknew = (e) => {
+        console.log("reached",e);
+        GetSingleCustomer(e);
+        // GetSingleContact(e);
+      };
 
   const locationBytype = (data) => {
     PublicFetch.get(`${CRM_BASE_URL_FMS}/locations/type-location/${data}`)
@@ -130,6 +154,7 @@ function EditEnquiry() {
           console.log("Success from single customer", res.data.data);
           console.log("contact data", res.data.data.crm_v1_contacts[0]);
           let a = res.data.data.crm_v1_contacts[0];
+          setAllContacts(res.data.data.crm_v1_contacts)
           addForm.setFieldsValue({
             contactperson: a.contact_id,
             contactemail: a.contact_email,
@@ -158,15 +183,33 @@ function EditEnquiry() {
         console.log("Error", err);
       });
   };
+  const getallfrighttype = async () => {
+    try {
+      const allfrighttypes = await PublicFetch.get(
+        `${CRM_BASE_URL_FMS}/freightTypes`
+      );
+      console.log("Getting all frieght types : ", allfrighttypes.data.data);
+      setFrighttype(allfrighttypes.data.data);
+    } catch (err) {
+      console.log("Error in fetching fright types : ", err);
+    }
+  };
+  useEffect(() => {
+    // getallunits();
+    // getAllLocations();
+
+    getallfrighttype();
+  }, []);
 
   const GetSingleEnquires = () => {
     PublicFetch.get(`${CRM_BASE_URL_FMS}/enquiries/${id}`)
       .then((res) => {
         console.log("Response", res);
         if (res.data.success) {
-          console.log("Success of Data", res.data.data);
+          console.log("Success of Data of enq", res.data.data);
           let a = res?.data?.data;
           let enquiry_date = moment(a.enquiry_date);
+          setPrImage(res?.data?.data?.enquiry_docs);
           addForm.setFieldsValue({
             customer: a.enquiry_customer_id,
             enquiryno: a.enquiry_no,
@@ -175,6 +218,10 @@ function EditEnquiry() {
             reference: a.enquiry_customer_ref,
             contactperson: a.enquiry_contact_person_id,
             purchasePoRef: a.enquiry_remarks,
+            sales_person:a.enquiry_sales_person_id,
+            job_freight_type:a.enquiry_freight_type,
+            enquiry_docs:a.attachments,
+
           });
           GetSingleContact(a.enquiry_contact_person_id);
           GetSingleCustomer(a.enquiry_customer_id);
@@ -195,6 +242,8 @@ function EditEnquiry() {
     formData.append("enquiry_customer_ref", data.reference);
     formData.append("enquiry_contact_person_id", data.contactperson);
     formData.append("enquiry_remarks", data.purchasePoRef);
+    formData.append("enquiry_sales_person_id", data.sales_person);
+    formData.append("enquiry_freight_type", data.job_freight_type);
     if (img) {
       formData.append("attachments", img);
     }
@@ -263,12 +312,12 @@ function EditEnquiry() {
 
           <div className="row jobpay_cards mt-3 mx-0 px-2 py-3">
             <div className="col-12">
-              <h5 className="lead_text">Basic Info</h5>
+              <h6 className="lead_text">Basic Info</h6>
             </div>
 
             <div className="col-sm-4 pt-2 d-flex">
-              <div className="col-11">
-                <label>
+              <div className="col-12">
+                <label className="mb-1">
                   Customer<span className="required">*</span>
                 </label>
                 <Form.Item
@@ -302,27 +351,27 @@ function EditEnquiry() {
                   </SelectBox>
                 </Form.Item>
               </div>
-              <div className="col-1 ">
-                <Button
-                  btnType="add_borderless"
-                  onClick={() => {
-                    setModalAddCustomer(true);
-                    addForm.resetFields();
-                  }}
-                >
+              {/* <div className="col-1 ">
+              
                   <BsPlusCircleFill
                     style={{
                       fontSize: "21px",
-                      marginTop: "30px",
+                      marginTop: "27px",
                       marginLeft: "10px",
+                      color:"#0891d1",
                     }}
+                    onClick={() => {
+                      setModalAddCustomer(true);
+                      addForm.resetFields();
+                    }}
+
                   />{" "}
-                </Button>
-              </div>
+              
+              </div> */}
             </div>
 
             <div className="col-sm-4 pt-2 ">
-                    <label>Freight Type</label>
+                    <label className="mb-1">Freight Type</label>
                     <Form.Item
                       name="job_freight_type"
                       // rules={[
@@ -361,7 +410,7 @@ function EditEnquiry() {
                   </div>
 
             <div className="col-sm-4 pt-2">
-              <label>
+              <label className="mb-1">
                 Enquiry No<span className="required">*</span>
               </label>
               <Form.Item name="enquiryno"
@@ -384,12 +433,12 @@ function EditEnquiry() {
             </div>
 
             <div className="col-sm-4 pt-2">
-              <label>
+              <label className="mb-1">
                 Date<span className="required">*</span>
               </label>
               <Form.Item
                 name="date"
-                className="mt-2"
+                className=""
                 rules={[
                   {
                     required: true,
@@ -409,7 +458,7 @@ function EditEnquiry() {
             </div>
 
             <div className="col-sm-4 pt-2">
-              <label>
+              <label className="mb-1">
                 Source
               </label>
               <Form.Item
@@ -435,7 +484,7 @@ function EditEnquiry() {
             </div>
 
             <div className="col-sm-4 pt-2">
-              <label>
+              <label className="mb-1">
                 Customer Reference
               </label>
               <Form.Item
@@ -457,7 +506,7 @@ function EditEnquiry() {
               </Form.Item>
             </div>
             <div className="col-sm-4 pt-2">
-              <label>
+              <label className="mb-1">
                 Sale Person<span className="required">*</span>
               </label>
               <Form.Item
@@ -489,11 +538,11 @@ function EditEnquiry() {
 
           <div className="row jobpay_cards mt-3 mx-0 px-2 py-3">
             <div className="col-12">
-              <h5 className="lead_text">Contact Details</h5>
+              <h6 className="lead_text">Contact Details</h6>
             </div>
 
             <div className="col-sm-4 pt-3">
-              <label>Contact Person</label>
+              <label className="mb-1">Contact Person</label>
               <Form.Item name="contactperson">
                 <SelectBox
                   onChange={(e) => {
@@ -516,7 +565,7 @@ function EditEnquiry() {
               </Form.Item>
             </div>
             <div className="col-sm-4 pt-3">
-              <label>Email</label>
+              <label className="mb-1">Email</label>
               <Form.Item name="contactemail">
                 <InputType
                 //   value={purchasePoNo}
@@ -528,7 +577,7 @@ function EditEnquiry() {
               </Form.Item>
             </div>
             <div className="col-sm-4 pt-3">
-              <label>Phone</label>
+              <label className="mb-1">Phone</label>
               <Form.Item name="contactphone">
                 <InputType
                 //   value={purchasePoNo}
@@ -543,7 +592,7 @@ function EditEnquiry() {
 
           <div className="row jobpay_cards mt-3 mx-0 px-2 py-5">
             <div className="col-12">
-              <h5 className="lead_text">Extra Info</h5>
+              <h6 className="lead_text">Extra Info</h6>
             </div>
 
             {/* <div className="col-3">
@@ -563,21 +612,21 @@ function EditEnquiry() {
                 </div> */}
 
             <div className="col-sm-6 pt-2">
-              <label>Remarks</label>
+              <label className="mb-1">Remarks</label>
               <Form.Item name="purchasePoRef">
                 <TextArea />
               </Form.Item>
             </div>
 
             <div className="col-sm-6 pt-2">
-              <label>Attachments</label>
+              <label className="mb-1">Attachments</label>
               <Form.Item name="attachments" className="">
                 <FileUpload
                   name="attachments"
                   //   value={attachments}
                   multiple
-                  listType="picture"
-                  accept=".png,.jpg,.jpeg"
+                  listType="file"
+                  accept=".pdf,.doc,.zip"
                   height={100}
                   // onPreview={handlePreview}
                   beforeUpload={false}
@@ -598,6 +647,11 @@ function EditEnquiry() {
                   }}
                 />
               </Form.Item>
+              {/* <img
+                      src={`${process.env.REACT_APP_BASE_URL}/${primage}`}
+                      height="40px"
+                      width={"40px"}
+                    /> */}
             </div>
           </div>
 
@@ -617,6 +671,16 @@ function EditEnquiry() {
             </Button>
           </div>
         </Form>
+
+          {/* Modal for add Customer */}
+          <CustomerModal
+        setCustomerName={setCustomerName}
+        setCustomernew={setCustomernew}
+          show={modalAddCustomer}
+          onHide={() => {
+            setModalAddCustomer(false);
+          }}
+        />
 
         <CustomModel
           success

@@ -188,9 +188,16 @@ function EnquiryList() {
 
     {
       title: "STATUS",
-      // dataIndex:"enquiry_status",
-      // key:"enquiry_status",
-      // width: "23%",
+      dataIndex: "enquiry_converted_status",
+      key: "enquiry_converted_status",
+      render: (data, index) => {
+        if (index.enquiry_converted_status === 0) {
+          return <div>Pending</div>;
+        } else {
+          // return <div>{index.enquiry_converted_status}</div>;
+          return <div>Converted</div>;
+        }
+      },
       align: "left",
     },
 
@@ -289,6 +296,7 @@ function EnquiryList() {
               contact_email: item?.crm_v1_contacts?.contact_email,
               contact_phone_1: item?.crm_v1_contacts?.contact_phone_1,
               enquiry_status:item?.enquiry_status,
+              enquiry_converted_status:item?.enquiry_converted_status,
             });
           });
           setAllnquires(temp);

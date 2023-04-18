@@ -185,16 +185,16 @@ export default function EditJobPayment() {
           </div>
           <div className="row jobpay_cards mt-3 mx-0 px-2 py-3">
             <div className="col-12">
-              <h5 className="lead_text">Basic Info</h5>
+              <h6 className="lead_text">Basic Info</h6>
             </div>
-            <div className="col-sm-3 pt-3">
-              <label>Voucher No.</label>
+            <div className="col-sm-4 pt-3">
+              <label className="mb-2">Voucher No<span className="required">*</span></label>
               <Form.Item name="voucher_no">
                 <InputType disabled />
               </Form.Item>
             </div>
-            <div className="col-sm-3 pt-3">
-              <label>Voucher Date</label>
+            <div className="col-sm-4 pt-3">
+              <label>Voucher Date<span className="required">*</span></label>
               <Form.Item
                 className="mt-2"
                 name="voucher_date"
@@ -209,8 +209,8 @@ export default function EditJobPayment() {
                 />
               </Form.Item>
             </div>
-            <div className="col-sm-3 pt-3">
-              <label>Job No.</label>
+            <div className="col-sm-4 pt-3">
+              <label className="mb-2">Job No<span className="required">*</span></label>
               <Form.Item
                 name="job_no"
                 // onChange={(e) => setName(e.target.value)}
@@ -233,8 +233,8 @@ export default function EditJobPayment() {
                 </SelectBox>
               </Form.Item>
             </div>
-            <div className="col-sm-3 pt-3">
-              <label>Lead</label>
+            <div className="col-sm-4 pt-3">
+              <label className="mb-2">Customer<span className="required">*</span></label>
               <Form.Item
                 name="jobpay_lead"
                 // onChange={(e) => setName(e.target.value)}
@@ -245,10 +245,10 @@ export default function EditJobPayment() {
           </div>
           <div className="row jobpay_cards mt-3 mx-0 px-2 py-3">
             <div className="col-12">
-              <h5 className="lead_text">Payment Info</h5>
+              <h6 className="lead_text">Payment Info</h6>
             </div>
             <div className="col-sm-4 pt-3">
-              <label>Currency</label>
+              <label className="mb-2">Currency<span className="required">*</span></label>
               <Form.Item
                 name="job_currency"
                 // onChange={(e) => setName(e.target.value)}
@@ -257,7 +257,7 @@ export default function EditJobPayment() {
               </Form.Item>
             </div>
             <div className="col-sm-4 pt-3">
-              <label>Exchange Rate</label>
+              <label className="mb-2">Exchange Rate<span className="required">*</span></label>
               <Form.Item
                 name="exchange_rate"
                 onChange={(e) => setJobExchangeRate(e.target.value)}
@@ -270,7 +270,7 @@ export default function EditJobPayment() {
               </Form.Item>
             </div>
             <div className="col-sm-4 pt-3">
-              <label>Job Amount</label>
+              <label className="mb-2">Job Amount<span className="required">*</span></label>
               <Form.Item
                 name="job_amount"
                 // onChange={(e) => setName(e.target.value)}
@@ -284,7 +284,7 @@ export default function EditJobPayment() {
               </Form.Item>
             </div>
             <div className="col-sm-4 pt-3">
-              <label>Advance Amount</label>
+              <label className="mb-2">Advance Amount<span className="required">*</span></label>
               <Form.Item
                 name="advance_amount"
                 onChange={(e) => setAdvanceAmount(e.target.value)}
@@ -297,8 +297,8 @@ export default function EditJobPayment() {
               </Form.Item>
             </div>
             <div className="col-sm-4 pt-3">
-              <label>
-                Advance in <span>({currencyDefault})</span>
+              <label className="mb-2">
+                Advance in <span>({currencyDefault})</span><span className="required">*</span>
               </label>
               <Form.Item
                 name="advance_in"
@@ -315,10 +315,10 @@ export default function EditJobPayment() {
           </div>
           <div className="row jobpay_cards mt-3 mx-0 px-2 py-3">
             <div className="col-12">
-              <h5 className="lead_text">Attachments</h5>
+              <h6 className="lead_text">Attachments</h6>
             </div>
             <div className="col-sm-6 pt-3">
-              <label>Remarks</label>
+              <label className="mb-2">Remarks</label>
               <Form.Item
                 name="jobpay_remarks"
                 // onChange={(e) => setName(e.target.value)}
@@ -326,7 +326,7 @@ export default function EditJobPayment() {
                 <TextArea />
               </Form.Item>
             </div>
-            <div className="col-sm-6 mt-2 mb-4">
+            <div className="col-sm-6 pt-3 ">
               <label>Attachments</label>
               <Form.Item name="job_docs" className="mt-2">
                 <FileUpload

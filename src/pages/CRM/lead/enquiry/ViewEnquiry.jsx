@@ -37,9 +37,9 @@ function ViewEnquiry() {
         <div className="col-12">
           <div className="row">
             <div className="col-4">
-              <h4 style={{}} className="lead_text">
+              <h5 style={{}} className="lead_text">
                 View Enquiry
-              </h4>
+              </h5>
             </div>
             <div className="col-4"></div>
             <div className="col-3 d-flex justify-content-end">
@@ -120,6 +120,20 @@ function ViewEnquiry() {
                   </tr>
                   <tr>
                     <td style={{ color: "black", fontWeight: "500" }}>
+                      <p className="">Freight Type</p>
+                    </td>
+                    <td>
+                      {" "}
+                      <p>:</p>
+                    </td>
+                    <td>
+                      <p className="modal_view_p_sub">
+                        {AllEnquiries?.fms_v1_freight_types?.freight_type_name}
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style={{ color: "black", fontWeight: "500" }}>
                       <p className="">Remarks</p>
                     </td>
                     <td>
@@ -151,6 +165,21 @@ function ViewEnquiry() {
                         {moment(AllEnquiries?.enquiry_date).format(
                           "DD-MM-YYYY"
                         )}
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style={{ color: "black", fontWeight: "500" }}>
+                      <p className="">Sale Person</p>
+                    </td>
+                    <td>
+                      {" "}
+                      <p>:</p>
+                    </td>
+                    <td>
+                      <p className="modal_view_p_sub">
+                      {AllEnquiries?.hrms_v1_employee_sales_person
+?.employee_name}
                       </p>
                     </td>
                   </tr>

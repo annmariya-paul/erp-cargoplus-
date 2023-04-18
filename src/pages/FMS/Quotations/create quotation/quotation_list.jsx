@@ -92,7 +92,9 @@ export default function Quotations(props) {
           String(record.quotation_validity)
             .toLowerCase()
             .includes(value.toLowerCase()) ||
-          String(record.customer).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.consignee)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
           String(record.quotation_status)
             .toLowerCase()
             .includes(value.toLowerCase())
@@ -116,26 +118,19 @@ export default function Quotations(props) {
     },
     {
       title: "CUSTOMER",
-      dataIndex: "customer",
-      key: "customer",
-      width: "18%",
+      dataIndex: "customer_name",
+      key: "customer_name",
+      width: "9%",
       // align: "center",
     },
     {
       title: "CONSIGNEE",
-      dataIndex: "consignee_name",
-      key: "consignee_name",
-      width: "15%",
+      dataIndex: "consignee",
+      key: "consignee",
+      width: "9%",
       // align: "center",
     },
 
-    // {
-    //   title: "SHIPPER",
-    //   dataIndex: "quotation_shipper",
-    //   key: "quotation_shipper",
-    //   width: "15%",
-    //   // align: "center",
-    // },
     {
       title: "STATUS",
       dataIndex: "quotation_status",
@@ -276,11 +271,12 @@ export default function Quotations(props) {
               quotation_no: item.quotation_no,
               quotation_date: date,
               quotation_validity: validity,
-              quotation_consignee: item.quotation_consignee,
-              consignee_name: item.crm_v1_leads.lead_customer_name,
+              quotation_customer: item.quotation_consignee,
+              customer_name: item.crm_v1_leads.customer_name,
               quotation_shipper: item.quotation_shipper,
               quotation_status: item.status,
               fms_v1_quotation_agents: item.fms_v1_quotation_agents,
+              consignee: item.consignee,
             });
           });
           setAllQuotations(temp);

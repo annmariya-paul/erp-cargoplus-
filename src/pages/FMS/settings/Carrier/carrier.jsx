@@ -553,10 +553,10 @@ export default function Carrierlist(props) {
         list_content={
           <div className="container-fluid p-3">
             <div className="row">
-              <div className="col-10">
+              <div className="col-9">
                 <h5 className="lead_text">Carrier</h5>
               </div>
-              <div className="col-2">
+              <div className="col-3">
                 <Button
                   btnType="add_borderless"
                   className="edit_button"

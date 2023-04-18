@@ -136,10 +136,12 @@ function CreateJob() {
             onequatation?.data?.data.quotation.quotation_gross_wt,
 
           job_shipper: onequatation?.data?.data.quotation.quotation_shipper,
-          job_customer: onequatation?.data?.data.quotation.crm_v1_leads.lead_id,
+          job_customer:
+            onequatation?.data?.data.quotation.crm_v1_leads.customer_id,
 
           job_credit_days:
-            onequatation?.data?.data.quotation.crm_v1_leads.lead_credit_days,
+            onequatation?.data?.data.quotation.crm_v1_leads
+              .customer_credit_days,
           job_freight_type:
             onequatation?.data?.data.quotation.fms_v1_freight_types
               .freight_type_id,
@@ -169,6 +171,7 @@ function CreateJob() {
             onequatation?.data?.data.quotation?.quotation_exchange_rate,
           job_total_cost_amountfx:
             onequatation?.data?.data.quotation?.quotation_grand_total,
+          job_consignee: onequatation?.data?.data.quotation?.consignee,
         });
         setGrandTotal(onequatation?.data?.data.quotation.quotation_grand_total);
         setFrighttypemode(onequatation?.data?.data.quotation.quotation_mode);
@@ -375,19 +378,15 @@ function CreateJob() {
   };
   const mode = (e) => {
     if (e) {
-      {
-        frighttype &&
-          frighttype.length > 0 &&
-          frighttype.map((item, index) => {
-            if (item.freight_type_id === e) {
-              console.log("reached", item.freight_type_mode);
-              setFrighttypemode(item.freight_type_mode);
-              locationBytype(item.freight_type_mode);
-            } else {
-              locationBytype();
-            }
-          });
-      }
+      frighttype &&
+        frighttype.length > 0 &&
+        frighttype.map((item, index) => {
+          if (item.freight_type_id === e) {
+            console.log("reached", item.freight_type_mode);
+            setFrighttypemode(item.freight_type_mode);
+            locationBytype(item.freight_type_mode);
+          }
+        });
     }
   };
 
@@ -528,27 +527,17 @@ function CreateJob() {
 
   const getCreditdays = (data) => {
     console.log("data1011", data);
-    // const code = allLeadList?.filter((item) => {
-    //   if (item?.lead_id === data) {
-    //     b = item?.lead_id;
 
-    //   }
-    // });
-    // console.log("code", b);
-    // console.log(";;;;;;;;;", data);
-    PublicFetch.get(`${CRM_BASE_URL}/lead/${data}`)
+    PublicFetch.get(`${CRM_BASE_URL}/customer/${data}`)
       .then((res) => {
         if (res?.data?.success) {
           console.log("Unique Lead Id data", res?.data?.data);
-          // setOneLeadData(res?.data?.data);
         } else {
           console.log("FAILED T LOAD DATA");
         }
-
-        addForm.setFieldValue(
-          "job_credit_days",
-          res?.data?.data.lead_credit_days
-        );
+        addForm.setFieldsValue({
+          job_credit_days: res.data.data.customer_credit_days,
+        });
       })
       .catch(function (error) {
         console.log(error);

@@ -21,6 +21,8 @@ import InputType from "../../../../components/Input Type textbox/InputType";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
 import { ROUTES } from "../../../../routes";
 import "../opportunity_ List/opportunitylist.scss";
+import { CRM_BASE_URL_FMS } from "../../../../api/bootapi";
+import Input_Number from "../../../../components/InputNumber/InputNumber";
 import FileUpload from "../../../../components/fileupload/fileUploader";
 // export default function AddOpportunity(props) {
 export default function EditOpportunity() {
@@ -46,6 +48,7 @@ export default function EditOpportunity() {
   const navigate = useNavigate();
   const today = new Date();
   const [EditForm] = Form.useForm();
+  const [SuccessPopup, setSuccessPopup] = useState(false);
   const [modalAddCustomer, setModalAddCustomer] = useState(false);
   const [numOfItems, setNumOfItems] = useState("25");
   const [oppstatus, setOppstatus] = useState(Oppor_Status);
@@ -89,14 +92,261 @@ export default function EditOpportunity() {
   const [progressUpdatenextDate, setProgressUpdatenextDate] = useState();
   const [progressUpdatestatus, setProgressUpdatestatus] = useState(5);
   const [isDate, setIsDate] = useState();
+  const [oppvalidity, setOppValidity] = useState();
+  const [oppamount, setOppAmount] = useState();
+  const [oppdescription, setOppDescription] = useState();
+  // const [oppstatus, setOppStatus] = useState();
+  const [leadName, setLeadName] = useState("");
+  const [opporFrom,setOpporFrom] = useState("customer");
+  const [previewVisible, setPreviewVisible] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+  const [previewTitle, setPreviewTitle] = useState("");
+  const [imageSize, setImageSize] = useState(false);
+  const [fileAttach, setFileAttach] = useState([]);
+  // const [allSalesPerson, setAllSalesPerson] = useState();
+  const [selectedValues, setSelectedValues] = useState([]);
+  const [Customer_Id, setCustomer_Id] = useState();
+  const [AllCustomers, setAllCustomers] = useState();
+  const [allIncoterms, setAllIncoterms] = useState();
+console.log("incoterm",allIncoterms);
+const [Customer, setCustomer] = useState();
+const [AllContacts, setAllContacts] = useState();
+console.log("all contacts data",AllContacts);
+
+
+const [customersData, setCustomersData] = useState();
+console.log("ssssss", customersData);
+const getCustomers = () => {
+  PublicFetch.get(`${CRM_BASE_URL}/customer/minimal`)
+    .then((res) => {
+      console.log("response of customersss", res);
+      if (res.data.success) {
+        setCustomersData(res?.data?.data);
+      }
+    })
+    .catch((err) => {
+      console.log("Error", err);
+    });
+};
+
+useEffect(() => {
+    getAllEnquiry();
+    getCustomers();
+    // GetLeadData();
+}, []);
   //view progress
   const [tableprogress, setTableprogress] = useState("");
   const [count, setcount] = useState(0);
   const [editForm] = Form.useForm();
   const [serialNo, setserialNo] = useState(1);
   const componentRef = useRef();
-  const [successPopup, setSuccessPopup] = useState(false);
+  const [oppstatuss, setOppStatus] = useState();
+  // const [successPopup, setSuccessPopup] = useState(false);
   const [allSalesPerson, setAllSalesPerson] = useState();
+  const [customername,setCustomerName]=useState();
+  console.log("customer id",customername);
+  const [customernew,setCustomernew]=useState();
+  console.log("customer nameee",customernew);
+  useEffect(() => {
+    // 
+      if(customername){
+        GetAllCustomers();
+        GetAllContacts();
+        addForm.setFieldsValue({oppo_customer : customername})
+        setCustomer_Id(customername);
+        handleclicknew(customername);
+        // GetSingleCustomer(customername);
+       
+      }
+      }, [customername]);
+      const handleclicknew = (e) => {
+        console.log("reached",e);
+        GetSingleCustomer(e);
+        // GetSingleContact(e);
+      };
+      
+  const GetAllCustomers = () => {
+    PublicFetch.get(`${CRM_BASE_URL}/customer/minimal`)
+      .then((res) => {
+        console.log("Response", res);
+        if (res.data.success) {
+          console.log("Success og gettimg customers", res?.data?.data);
+          setAllCustomers(res?.data?.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+  const [enquiryData, setEnquiryData] = useState();
+  const getAllEnquiry = () => {
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/enquiries`)
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          setEnquiryData(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+  const [contactdetail, setContactdetail] = useState();
+  const oneContact = (e) => {
+    PublicFetch.get(`${CRM_BASE_URL}/contact/${e}`)
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          console.log("Success data of contact", res.data.data);
+          setContactdetail(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+  const GetAllContacts = (e) => {
+    PublicFetch.get(`${CRM_BASE_URL}/contact`)
+      .then((res) => {
+        console.log("Response", res);
+        if (res.data.success) {
+          console.log("success of contact", res.data.data);
+          // setAllContacts(res.data.data);
+          let temp = [];
+          res.data.data.forEach((item, index) => {
+            if (e == item.enquiry_contact_person_id) {
+              temp.push(item);
+            }
+          });
+          setAllContacts(temp);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+  // const close_modal = (mShow, time) => {
+  //   if (!mShow) {
+  //     setTimeout(() => {
+  //       setSuccessPopup(false);
+  //       navigate(`${ROUTES.OPPORTUNITY}`)
+  //     }, time);
+  //   }
+  // };
+const handleDatas = (data)=>{
+  console.log("data",data);
+  getOneEnquiry(data);
+  // oneContact(Customer_Id)
+  GetAllContacts(Customer_Id);
+ 
+
+}
+
+const [allenqdata,setAllEnqdata]=useState();
+console.log("all data",allenqdata);
+const getOneEnquiry = (e) => {
+  PublicFetch.get(`${CRM_BASE_URL_FMS}/enquiries/${e[0]}`)
+  .then((res)=>{
+    console.log("responsewww",res);
+    if(res.data.success){
+      console.log("Success from one enquiry", res.data.data);
+      setAllEnqdata(res.data.data);
+      setCustomer(res.data.data.crm_v1_customer?.customer_id)
+      setCustomer_Id(res.data.data.enquiry_contact_person_id);
+      let a = res.data.data.crm_v1_contacts[0];
+      addForm.setFieldsValue({
+        oppo_customer: res.data.data.crm_v1_customer.customer_id,
+        // contact_person:res.data.data.crm_v1_contacts.contact_id,
+        // contactemail:res.data.data.crm_v1_contacts.contact_email,
+        // contactphone:res.data.data.crm_v1_contacts.contact_phone_1,
+      })
+        PublicFetch.get(`${CRM_BASE_URL}/customer/${res.data.data.crm_v1_customer?.customer_id}`)
+          .then((res) => {
+            console.log("Response from single customer", res);
+            if (res.data.success) {
+             
+              let a = res.data.data.crm_v1_contacts[0];
+              setAllContacts(res.data.data.crm_v1_contacts)
+              // let b =res.data.data.crm_v1_customer_accounting[0];
+              let b= res.data.data.customer_preferred_freight_type;
+              addForm.setFieldsValue({
+                contact_person: a?.contact_id,
+                contactemail: a?.contact_email,
+                contactphone: a?.contact_phone_1,
+                // customerfrighttype: b,
+                
+              });
+            }
+          })
+          .catch((err) => {
+            console.log("Error", err);
+          });
+      
+
+
+      
+    
+    }
+  })
+
+}
+
+const handleclick = (e) => {
+  GetSingleCustomer(e);
+};
+const GetSingleCustomer = (e) => {
+  PublicFetch.get(`${CRM_BASE_URL}/customer/${e}`)
+    .then((res) => {
+      console.log("Response from single customer", res);
+      if (res.data.success) {
+        console.log("Success from single customer", res.data.data);
+        console.log("contact data", res.data.data.crm_v1_contacts[0]);
+        console.log("accounts data",res.data.data.customer_preferred_freight_type)
+        let a = res.data.data.crm_v1_contacts[0];
+        setAllContacts(res.data.data.crm_v1_contacts)
+        // let b =res.data.data.crm_v1_customer_accounting[0];
+        let b= res.data.data.customer_preferred_freight_type;
+        addForm.setFieldsValue({
+          contact_person: a?.contact_id,
+          contactemail: a?.contact_email,
+          contactphone: a?.contact_phone_1,
+          customerfrighttype: b,
+          
+        });
+      }
+    })
+    .catch((err) => {
+      console.log("Error", err);
+    });
+};
+  // const GetSalesPersons = () => {
+  //   PublicFetch.get(`${CRM_BASE_URL_HRMS}/employees/salesexecutive`)
+  //     .then((res) => {
+  //       console.log("response", res);
+  //       if (res.data.success) {
+  //         console.log("Success from sales person", res.data.data);
+  //         setAllSalesPerson(res.data.data);
+  //         const personName = localStorage.getItem('UserID');
+  //   res.data.data.forEach((item,index)=> {
+  //     if(personName == item.employee_id){
+  //       addForm.setFieldsValue({
+  //         sales_person: item.employee_id
+  //       })
+  //       }
+  //     })
+      
+  //   }
+  // })
+  //     .catch((err) => {
+  //       console.log("Error", err);
+  //     });
+  // };
+  const [validityDate,setValidityDate]= useState();
+  useEffect(() => {
+    GetSalesPersons();
+  }, []);
+  const beforeUpload = (file, fileList) => {};
 
   //pdf file start
   // const exportPDF = () => {
@@ -162,7 +412,22 @@ export default function EditOpportunity() {
   // });
 
   // { function to get all opportunity data - Ann mariya(27/10/22)}
-
+  const GetSingleContact = (e) => {
+    PublicFetch.get(`${CRM_BASE_URL}/contact/${e}`)
+      .then((res) => {
+        console.log("Response from single contact", res);
+        if (res.data.success) {
+          console.log("success from single contact", res.data.data);
+          addForm.setFieldsValue({
+            contactemail: res.data.data.contact_email,
+            contactphone: res.data.data.contact_phone_1,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
   const [OpportunityList, setOpportunityList] = useState([]);
   const [totalCount, setTotalcount] = useState();
   // const [oppurtunityid, setOppurtunityid] = useState();
@@ -232,55 +497,117 @@ export default function EditOpportunity() {
     }
   }, [id]);
 
-  const getoneoppurtunity = async () => {
-    try {
-      const oneoppurtunities = await PublicFetch.get(
-        `${CRM_BASE_URL}/opportunity/${id}`
-      );
-      console.log("one oppurtunitiesss::: ", oneoppurtunities?.data?.data);
-      let date = moment(oneoppurtunities?.data?.data.opportunity_validity);
+  // const getoneoppurtunity = async () => {
+  //   try {
+  //     const oneoppurtunities = await PublicFetch.get(
+  //       `${CRM_BASE_URL}/opportunity/${id}`
+  //     );
+  //     console.log("one oppurtunitiesss::: ", oneoppurtunities?.data?.data);
+  //     let date = moment(oneoppurtunities?.data?.data.opportunity_validity);
 
-      setOneoppurtunity(oneoppurtunities.data?.data);
-      // console.log("typeee:", oneoppurtunities.data?.data?.opportunity_type);
+  //     setOneoppurtunity(oneoppurtunities.data?.data);
+  //     // console.log("typeee:", oneoppurtunities.data?.data?.opportunity_type);
 
-      setOppurtunityid(oneoppurtunities.data?.data?.opportunity_id);
-      setOpportunityNum(oneoppurtunities.data?.data?.opportunity_number);
-      setoppurtunitytype(oneoppurtunities.data?.data?.opportunity_type);
-      setOppurtunityfrom(oneoppurtunities.data?.data?.opportunity_from);
-      setOppurtunitysource(oneoppurtunities.data?.data?.opportunity_source);
-      setOppurtunityvalidity(date);
-      setOpportunitydescription(
-        oneoppurtunities.data?.data?.opportunity_description
-      );
-      setOppurtunityamount(oneoppurtunities.data?.data?.opportunity_amount);
-      setOppurtunityProbability(
-        oneoppurtunities.data?.data?.opportunity_probability
-      );
-      setOppurtunitystatus(oneoppurtunities.data?.data?.opportunity_status);
-      setOppurtunitylead(oneoppurtunities.data?.data?.opportunity_lead_id);
-      setOppurtunityparty(oneoppurtunities.data?.data?.opportunity_party);
-      // setOppurtunityparty()
-      editForm.setFieldsValue({
-        opportunity_number: oneoppurtunities.data?.data?.opportunity_number,
-        opportunity_type: oneoppurtunities.data?.data?.opportunity_type,
-        opportunity_from: oneoppurtunities.data?.data?.opportunity_from,
-        opportunity_party: oneoppurtunities.data?.data?.opportunity_party1,
-        // opportunity_party: item?.crm_v1_contacts?.contact_person_name,
-        // opportunity_party1: item?.crm_v1_contacts?.contact_id,
-        opportunity_source: oneoppurtunities.data?.data?.opportunity_source,
-        opportunity_validity: date,
-        opportunity_amount: oneoppurtunities.data?.data?.opportunity_amount,
-        opportunity_description:
-          oneoppurtunities.data?.data?.opportunity_description,
-        opportunity_probability:
-          oneoppurtunities.data?.data?.opportunity_probability,
-        opportunity_status: oneoppurtunities.data?.data?.opportunity_status,
-        opportunity_lead_id: oneoppurtunities.data?.data?.opportunity_lead_id,
+  //     setOppurtunityid(oneoppurtunities.data?.data?.opportunity_id);
+  //     setOpportunityNum(oneoppurtunities.data?.data?.opportunity_number);
+  //     setoppurtunitytype(oneoppurtunities.data?.data?.opportunity_type);
+  //     setOppurtunityfrom(oneoppurtunities.data?.data?.opportunity_from);
+  //     setOppurtunitysource(oneoppurtunities.data?.data?.opportunity_source);
+  //     setOppurtunityvalidity(date);
+  //     setOpportunitydescription(
+  //       oneoppurtunities.data?.data?.opportunity_description
+  //     );
+  //     setOppurtunityamount(oneoppurtunities.data?.data?.opportunity_amount);
+  //     setOppurtunityProbability(
+  //       oneoppurtunities.data?.data?.opportunity_probability
+  //     );
+  //     setOppurtunitystatus(oneoppurtunities.data?.data?.opportunity_status);
+  //     setOppurtunitylead(oneoppurtunities.data?.data?.opportunity_lead_id);
+  //     setOppurtunityparty(oneoppurtunities.data?.data?.opportunity_party);
+  //     // setOppurtunityparty()
+  //     editForm.setFieldsValue({
+  //       opportunity_number: oneoppurtunities.data?.data?.opportunity_number,
+  //       opportunity_type: oneoppurtunities.data?.data?.opportunity_type,
+  //       opportunity_from: oneoppurtunities.data?.data?.opportunity_from,
+  //       opportunity_party: oneoppurtunities.data?.data?.opportunity_party1,
+  //       // opportunity_party: item?.crm_v1_contacts?.contact_person_name,
+  //       // opportunity_party1: item?.crm_v1_contacts?.contact_id,
+  //       opportunity_source: oneoppurtunities.data?.data?.opportunity_source,
+  //       opportunity_validity: date,
+  //       opportunity_amount: oneoppurtunities.data?.data?.opportunity_amount,
+  //       opportunity_description:
+  //         oneoppurtunities.data?.data?.opportunity_description,
+  //       opportunity_probability:
+  //         oneoppurtunities.data?.data?.opportunity_probability,
+  //       opportunity_status: oneoppurtunities.data?.data?.opportunity_status,
+  //       opportunity_lead_id: oneoppurtunities.data?.data?.opportunity_lead_id,
+  //     });
+  //   } catch (err) {
+  //     console.log("error while getting all leads: ", err);
+  //   }
+  // };
+  const getAllIncoterms = () => {
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/incoterms?startIndex=0&noOfItems=10`)
+      .then((res) => {
+        addForm.setFieldsValue({oppo_incoterm:res.data.data.incoterms[0].incoterm_id})
+        console.log("response", res);
+        if (res.data.success) {
+          setAllIncoterms(res.data.data.incoterms);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
       });
-    } catch (err) {
-      console.log("error while getting all leads: ", err);
-    }
   };
+  useEffect(() => {
+    getAllIncoterms();
+  }, []);
+
+  const getoneoppurtunity =  () => {
+  
+    PublicFetch.get(`${CRM_BASE_URL}/opportunity/${id}`)
+        .then((res) => {
+          console.log("Response", res);
+          if (res.data.success) {
+            console.log("Success of Data of opp", res.data.data);
+            let a = res?.data?.data;
+      // console.log("one oppurtunitiesss::: ", oneoppurtunities?.data?.data);
+      // let date = moment(a.opportunity_validity);
+
+      let enquiry_date = moment(a.enquiry_date);
+      let enqs =  a.fms_v1_enquiry_opportunities.map((item,index)=>item.enq_opp_enquiry_id);
+      console.log("enqs",enqs);
+      addForm.setFieldsValue({
+        oppo_customer: a.opportunity_customer_id,
+        oppo_enquiries: enqs,
+            date: a.opportunity_date,
+            oppo_source: a.opportunity_source,
+            oppo_customer_ref: a.opportunity_customer_ref,
+            contact_person: a.opportunity_contact_id,
+            oppo_type: a.opportunity_type,
+            sales_person:a.enquiry_sales_person_id,
+            job_freight_type:a.enquiry_freight_type,
+            enquiry_docs:a.attachments,
+            oppo_amount :a.opportunity_amount,
+            oppo_probability:a.opportunity_probability,
+            oppo_incoterm:a.opportunity_incoterm_id,
+            oppo_status:a.opportunity_status,
+            oppo_description:a.opportunity_description,
+        // opportunity_lead_id: oneoppurtunities.data?.data?.opportunity_lead_id,
+      })
+      GetSingleContact(a.enquiry_contact_person_id);
+          GetSingleCustomer(a.enquiry_customer_id);
+          GetAllContacts(a.enquiry_customer_id);
+          
+      }
+    })
+    
+    .catch((err) => {
+      console.log("error while getting all leads: ", err);
+    });
+  
+  
+};
 
   const getAllContact = async () => {
     try {
@@ -456,7 +783,7 @@ export default function EditOpportunity() {
 
   const handleEditclick = (e) => {
     // console.log("edit data is ::", item);
-    getoneoppurtunity(e);
+    // getoneoppurtunity(e);
     getAllContact();
     setShowEditModal(true);
   };
@@ -488,7 +815,7 @@ export default function EditOpportunity() {
         setShowEditModal(false);
         GetOpportunityData();
         setSuccessPopup(true);
-        close_modal(successPopup, 1200);
+        close_modal(SuccessPopup, 1200);
       }
     } catch (err) {
       console.log("error while getting all leads: ", err);
@@ -517,7 +844,7 @@ export default function EditOpportunity() {
         setoppurtunityviewprogress();
         setShowProgresssModal(false);
         setSuccessPopup(true);
-        close_modal(successPopup, 1200);
+        close_modal(SuccessPopup, 1200);
       }
     } catch (err) {
       console.log("error while getting oppurtunity progress: ", err);
@@ -525,7 +852,7 @@ export default function EditOpportunity() {
   };
 
   const handleAddclick = () => {
-    getoneoppurtunity();
+    // getoneoppurtunity();
   };
 
   //   const handlePrint = () => {
@@ -760,503 +1087,570 @@ export default function EditOpportunity() {
   useEffect(() => {
     GetSalesPersons();
   }, []);
+//   <Form
+//   form={editForm}
+//   onFinish={(value) => {
+//     console.log("values111333", value);
+//     // setDescription(value.description);
+//     // setBrand(value.brand);
+//     updatedOppurtunity();
+//   }}
+//   // onSubmit={handleSubmit(submit)}
+//   onFinishFailed={(error) => {
+//     console.log(error);
+//   }}
+// >
 
-  return (
-    <>
-      <div className="container-fluid">
-        <Form
-          form={editForm}
-          onFinish={(value) => {
-            console.log("values111333", value);
-            // setDescription(value.description);
-            // setBrand(value.brand);
-            updatedOppurtunity();
-          }}
-          // onSubmit={handleSubmit(submit)}
-          onFinishFailed={(error) => {
-            console.log(error);
-          }}
-        >
-          <div className="row pt-2">
-            <h5 className="lead_text">Edit Opportunity</h5>
+return (
+  <>
+    <div className="container-fluid">
+      <Form
+        name="addForm"
+        form={addForm}
+        onFinish={(values) => {
+          console.log("jobpayvalues", values);
+          // oppdata(values);
+        }}
+        onFinishFailed={(error) => {
+          console.log(error);
+        }}
+      >
+        <div className="row pt-2">
+          <h5 className="lead_text">Edit Opportunity</h5>
+        </div>
+
+        <div className="row crm_cards mt-2 mx-0 px-2 py-4">
+          <div className="col-12">
+            <h6 className="lead_text">Basic Info</h6>
           </div>
-          <div className="row crm_cards mt-2 mx-0 px-2 py-4">
-            <div className="col-12">
-              <h5 className="lead_text">Basic Info</h5>
-            </div>
-            <div className="col-sm-4 pt-2">
-              <label>
-                Enquiry No.<span className="req_star">*</span>
+          <div className="col-sm-4 pt-2">
+            <label className="mb-1">
+              Enquiry No.
+            </label>
+            <Form.Item
+              name="oppo_enquiries"
+              // rules={[
+              //   {
+              //     required: true,
+              //     message: "Please Select an Enquiry Number",
+              //   },
+              // ]}
+            >
+              <SelectBox
+                // placeholder={"--Please Select--"}
+                mode="multiple"
+                // maxTagCount="responsive"
+                // value={selectedValues}
+                // onChange={handleMultiSelectChange}
+                onChange={(e)=>{
+                 
+                  handleDatas(e)
+                  console.log("reached",e);
+                }
+
+                }
+                // value={oppoNumber}
+                // onChange={(e) => setOppoNumber(e.target.value)}
+              >
+                {enquiryData &&
+                  enquiryData.length > 0 &&
+                  enquiryData.map((item, index) => {
+                    return (
+                      <Select.Option
+                        value={item.enquiry_id}
+                        key={item.enquiry_id}
+                      >
+                        {item.enquiry_no}
+                      </Select.Option>
+                    );
+                  })}
+              </SelectBox>
+            </Form.Item>
+          </div>
+          <div className="col-sm-4 pt-1 d-flex">
+            <div className="col-11">
+              <label className="mb-1">
+                Customer<span className="req_star">*</span>
               </label>
               <Form.Item
-                name="enquiryNumber"
+                name="oppo_customer"
                 rules={[
                   {
                     required: true,
-                    message: "Please Select an Enquiry Number",
+                    message: "Please Select a Customer",
                   },
                 ]}
               >
                 <SelectBox
                   placeholder={"--Please Select--"}
-                  // value={oppoNumber}
-                  // onChange={(e) => setOppoNumber(e.target.value)}
-                >
-                  <Select.Option>ENQ-0001</Select.Option>
-                </SelectBox>
-              </Form.Item>
-            </div>
-            <div className="col-sm-4 pt-2 d-flex">
-              <div className="col-11">
-                <label>
-                  Customer<span className="req_star">*</span>
-                </label>
-                <Form.Item
-                  name="customer"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please Select a Customer",
-                    },
-                  ]}
-                >
-                  <SelectBox
-                    placeholder={"--Please Select--"}
-                    // value={opptype}
-                    // onChange={(e) => setOppType(e)}
-                  >
-                    <Select.Option value="sales">Test</Select.Option>
-                  </SelectBox>
-                </Form.Item>
-              </div>
-              <div className="col-1 mt-4 ps-1">
-              {" "}
-                  <BsPlusCircleFill style={{ fontSize: "21px",
-                      marginTop: "10px",
-                      marginLeft: "10px",
-                      color:"#0891d1",
-                     }} 
-                  onClick={() => {
-                    setModalAddCustomer(true);
-                    addForm.resetFields();
-                  }}
-                  />
-              </div>
-            </div>
-            <div className="col-sm-4 pt-2">
-              <label>
-                Opportunity No.<span className="req_star">*</span>
-              </label>
-              <InputType
-                value={opportunityNum}
-                onChange={(e) => setOpportunityNum(e.target.value)}
-                className="input_number_style"
-                style={{ width: "100%" }}
-                disabled
-              />
-            </div>
-            <div className="col-sm-4 pt-2">
-              <label>Date</label>
-              <Form.Item
-                name="date"
-                // rules={[
-                //   {
-                //     required: true,
-                //     message: "Please select an option",
-                //   },
-                // ]}
-              >
-                <DatePicker style={{ borderWidth: 0, marginTop: 2 }} />
-              </Form.Item>
-            </div>
-            <div className="col-sm-4 pt-2">
-              <label>
-                Source<span className="req_star">*</span>
-              </label>
-              <Form.Item
-                name="opportunity_source"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please select a Source",
-                  },
-                ]}
-              >
-                <SelectBox
-                  value={oppurtunitysource}
+                  // value={opptype}
                   onChange={(e) => {
-                    setOppurtunitysource(e);
+                    setCustomer_Id(e);
+                    GetAllContacts(e);
+                  // addForm.resetFields();
+                  handleclick(e);
+                   
                   }}
                 >
-                  <Select.Option value="reference">Reference</Select.Option>
-                  <Select.Option value="direct visit">
-                    Direct Visit
-                  </Select.Option>
-                  <Select.Option value="online registration">
-                    Online Registration
-                  </Select.Option>
-                </SelectBox>
-              </Form.Item>
-            </div>
-            <div className="col-sm-4 pt-2">
-              <label>
-                Customer Reference<span className="req_star">*</span>
-              </label>
-              <Form.Item
-                name="customer_reference"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter a valid Customer Reference",
-                  },
-                ]}
-              >
-                <InputType />
-              </Form.Item>
-            </div>
-            <div className="col-sm-4 pt-2">
-              <label>
-                Sale Person<span className="required">*</span>
-              </label>
-              <Form.Item
-                name="sales_person"
-                rules={[
-                  {
-                    required: true,
-                    message: "Sales Person is Required",
-                  },
-                ]}
-              >
-                <SelectBox>
-                  {allSalesPerson &&
-                    allSalesPerson.length > 0 &&
-                    allSalesPerson.map((item, index) => {
+                  {customersData &&
+                    customersData.length > 0 &&
+                    customersData.map((item, index) => {
                       return (
                         <Select.Option
-                          key={item.employee_id}
-                          value={item.employee_id}
+                          value={item.customer_id}
+                          key={item.customer_id}
                         >
-                          {item.employee_name}
+                          {item.customer_name}
                         </Select.Option>
                       );
                     })}
                 </SelectBox>
               </Form.Item>
             </div>
-          </div>
-          <div className="row crm_cards mt-3 mx-0 px-2 py-4">
-            <div className="col-12">
-              <h5 className="lead_text">Contact Details</h5>
-            </div>
-            <div className="col-sm-4 pt-2">
-              <label>
-                Contact Person<span className="req_star">*</span>
-              </label>
-              <Form.Item
-                name="contact_person"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please Select a value",
-                  },
-                ]}
-              >
-                <SelectBox
-                  placeholder={"--Please Select--"}
-                  // value={oppprobability}
-                  // onChange={(e) => setOppProbaility(e)}
-                >
-                  <Select.Option value="L">test</Select.Option>
-                </SelectBox>
-              </Form.Item>
-            </div>
-            <div className="col-sm-4 pt-2">
-              <label>Email</label>
-              <Form.Item
-                name="email"
-                rules={[
-                  {
-                    message: "Please enter a valid email",
-                  },
-                ]}
-              >
-                <InputType
-                  disabled
-                  // value={oppamount}
-                  // onChange={(e) =>
-                  //   setOppAmount(parseFloat(e.target.value).toFixed(2))
-                  // }
+            <div className="col-1 mt-4 ps-1">
+            
+                {" "}
+                <BsPlusCircleFill style={{ fontSize: "21px",
+                    marginTop: "10px",
+                    marginLeft: "10px",
+                    color:"#0891d1",
+                   }} 
+                onClick={() => {
+                  setModalAddCustomer(true);
+                  addForm.resetFields();
+                }}
                 />
-              </Form.Item>
-            </div>
-            <div className="col-sm-4 pt-2">
-              <label>Phone</label>
-              <Form.Item
-                name="phone"
-                rules={[
-                  {
-                    message: "Please enter a valid phone number",
-                  },
-                ]}
-              >
-                <InputType
-                  disabled
-                  // value={oppamount}
-                  // onChange={(e) =>
-                  //   setOppAmount(parseFloat(e.target.value).toFixed(2))
-                  // }
-                />
-              </Form.Item>
+             
             </div>
           </div>
-          <div className="row crm_cards mt-3 mx-0 px-2 py-4">
-            <div className="col-12">
-              <h5 className="lead_text">Extra Info</h5>
-            </div>
-            <div className="col-sm-4 pt-2">
-              <label>
-                Opportunity Type<span className="req_star">*</span>
-              </label>
-              <Form.Item
-                name="opportunity_type"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please select a Type",
-                  },
-                ]}
+
+          <div className="col-sm-4 pt-1">
+            <label className="mb-1">Date</label>
+            <Form.Item
+              name="oppor_date"
+              // rules={[
+              //   {
+              //     required: true,
+              //     message: "Please select an option",
+              //   },
+              // ]}
+            >
+              <DatePicker
+                style={{ borderWidth: 0, marginTop: 2 }}
+                format={"DD-MM-YYYY"}
+                defaultValue={moment(date)}
+              />
+            </Form.Item>
+          </div>
+
+          {/* <div className="col-sm-4 pt-2">
+            <label>
+              From<span className="req_star">*</span>
+            </label>
+            <Form.Item
+              name="oppo_from"
+              rules={[
+                {
+                  required: true,
+                  message: "Please Select a value",
+                },
+              ]}
+            >
+              <SelectBox placeholder={"--Please Select--"}>
+                <Select.Option value="customer">Customer</Select.Option>
+                <Select.Option value="lead">Lead</Select.Option>
+              </SelectBox>
+            </Form.Item>
+          </div> */}
+
+          <div className="col-sm-4 pt-2">
+            <label className="mb-1">
+              Source<span className="req_star">*</span>
+            </label>
+            <Form.Item
+              name="oppo_source"
+              rules={[
+                {
+                  required: true,
+                  message: "Please Select a value",
+                },
+              ]}
+            >
+              <SelectBox 
+              // defaultValue="reference"
+                placeholder={"--Please Select--"}
+                // value={oppsource}
+                // onChange={(e) => setOppSource(e)}
               >
-                <SelectBox
-                  value={oppurtunitytype}
-                  onChange={(e) => {
-                    setoppurtunitytype(e);
-                  }}
-                >
-                  <Select.Option value="sales">Sales</Select.Option>
-                  <Select.Option value="support">Support</Select.Option>
-                  <Select.Option value="maintenance">Maintenance</Select.Option>
-                </SelectBox>
-              </Form.Item>
-            </div>
-            <div className="col-4 col-sm-4  pt-2">
-              <label>
-                Valid Up to<span className="req_star">*</span>
-              </label>
-              <Form.Item name="opportunity_validity" {...config}>
-                <DatePicker
-                  style={{ borderWidth: 0, marginTop: 10 }}
-                  initialValues={oppurtunityvalidity}
-                  format={dateFormatList}
-                  // disabledDate={(d) => !d || d.isBefore(today)}
-                  onChange={(e) => {
-                    console.log("date mmm", e);
-                    setOppurtunityvalidity(e);
-                  }}
-                />
-              </Form.Item>
-            </div>
-            <div className="col-sm-4 pt-3">
-              <label>Expecting Amount</label>
-              <Form.Item
-                name={"opportunity_amount"}
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter Amount",
-                  },
-                ]}
+                <Select.Option value="reference">reference</Select.Option>
+                <Select.Option value="direct visit">
+                  direct visit
+                </Select.Option>
+                <Select.Option value="online registration">
+                  online registration
+                </Select.Option>
+              </SelectBox>
+            </Form.Item>
+          </div>
+
+          <div className="col-sm-4 pt-2">
+            <label className="mb-1">
+              Customer Reference<span className="req_star">*</span>
+            </label>
+            <Form.Item
+              name="oppo_customer_ref"
+              // rules={[
+              //   {
+              //     required: true,
+              //     message: "Please enter a valid Customer Reference",
+              //   },
+              // ]}
+            >
+              <InputType />
+            </Form.Item>
+          </div>
+          <div className="col-sm-4 pt-2">
+            <label className="mb-1">
+              Sale Person<span className="required">*</span>
+            </label>
+            <Form.Item
+              name="sales_person"
+              rules={[
+                {
+                  required: true,
+                  message: "Sales Person is Required",
+                },
+              ]}
+            >
+              <SelectBox>
+                {allSalesPerson &&
+                  allSalesPerson.length > 0 &&
+                  allSalesPerson.map((item, index) => {
+                    return (
+                      <Select.Option
+                        key={item.employee_id}
+                        value={item.employee_id}
+                      >
+                        {item.employee_name}
+                      </Select.Option>
+                    );
+                  })}
+              </SelectBox>
+            </Form.Item>
+          </div>
+        </div>
+        <div className="row crm_cards mt-3 mx-0 px-2 py-4">
+          <div className="col-12">
+            <h6 className="lead_text">Contact Details</h6>
+          </div>
+          <div className="col-sm-4 pt-1">
+            <label className="mb-1">
+              Contact Person<span className="req_star">*</span>
+            </label>
+            <Form.Item
+              name="contact_person"
+              rules={[
+                {
+                  required: true,
+                  message: "Please Select a value",
+                },
+              ]}
+            >
+              <SelectBox
+                onChange={(e) => {
+                  GetSingleContact(e);
+                }}
+                // value={oppprobability}
+                // onChange={(e) => oneContact(e)}
               >
-                <InputType
-                  value={oppurtunityamount}
-                  onChange={(e) => {
-                    setOppurtunityamount(e.target.value);
-                  }}
-                />
-              </Form.Item>
-            </div>
-            <div className="col-sm-4 pt-2">
-              {/* <Form.Group className="mb-2" controlId="lead_probability"> */}
-              <label>
-                Probability of conversion
-                <span className="req_star">*</span>
-              </label>
-              <Form.Item
-                name={"opportunity_probability"}
-                rules={[
-                  {
-                    required: true,
-                    message: "please select valid Name",
-                  },
-                ]}
+                {AllContacts &&
+                  AllContacts.length > 0 &&
+                  AllContacts.map((item, index) => {
+                    console.log("item",item);
+                    return (
+                      <Select.Option
+                        value={item.contact_id}
+                        key={item.contact_id}
+                      >
+                        {item.contact_person_name}
+                      </Select.Option>
+                    );
+                  })}
+              </SelectBox>
+            </Form.Item>
+          </div>
+
+          <div className="col-sm-4 pt-2">
+            <label className="mb-1">Email</label>
+              <Form.Item name="contactemail">
+              <InputType
+              //   value={purchasePoNo}
+              //   onChange={(e) => {
+              //     setPurchasePoNo(e.target.value);
+              //     console.log("purchasePoNo", purchasePoNo);
+              //   }}
+              />
+            </Form.Item>
+            {/* <InputType disabled value={contactdetail?.contact_email} /> */}
+          </div>
+          <div className="col-sm-4 pt-2">
+            <label className="mb-1">Phone</label>
+            <Form.Item name="contactphone">
+              <InputType
+              //   value={purchasePoNo}
+              //   onChange={(e) => {
+              //     setPurchasePoNo(e.target.value);
+              //     console.log("purchasePoNo", purchasePoNo);
+              //   }}
+              />
+            </Form.Item>
+            {/* <InputType disabled value={contactdetail?.contact_phone_1} /> */}
+          </div>
+        </div>
+        <div className="row crm_cards mt-3 mx-0 px-2 py-4">
+          <div className="col-12">
+            <h6 className="lead_text">Extra Info</h6>
+          </div>
+          <div className="col-sm-4 pt-1">
+            <label className="mb-1">
+              Opportunity Type<span className="req_star">*</span>
+            </label>
+            <Form.Item
+              name="oppo_type"
+              rules={[
+                {
+                  required: true,
+                  message: "Please select a Type",
+                },
+              ]}
+            >
+              <SelectBox 
+              // defaultValue="sales"
+              // value={oppurtunitytype}
+              // onChange={(e) => {
+              //   setoppurtunitytype(e);
+              // }}
               >
-                <SelectBox
-                  value={oppurtunityprobability}
-                  onChange={(e) => {
-                    setOppurtunityProbability(e);
-                  }}
-                >
-                  <Select.Option value="L">low</Select.Option>
-                  <Select.Option value="M">medium</Select.Option>
-                  <Select.Option value="H">high</Select.Option>
-                </SelectBox>
-              </Form.Item>
-            </div>
-            <div className="col-sm-4 pt-2">
-              <label>
-                Incoterm<span className="req_star">*</span>
-              </label>
-              <Form.Item
-                name="incoterm"
-                rules={[
-                  {
-                    required: true,
-                    message: "please select an incoterm",
-                  },
-                ]}
-              >
-                <SelectBox
-                // value={oppurtunityprobability}
+                <Select.Option value="sales">Sales</Select.Option>
+                <Select.Option value="support">Support</Select.Option>
+                <Select.Option value="maintenance">Maintenance</Select.Option>
+              </SelectBox>
+            </Form.Item>
+          </div>
+          <div className="col-sm-4  pt-1">
+            <label className="mb-1">
+              Valid Up to<span className="req_star">*</span>
+            </label>
+            <Form.Item name="oppo_validity" {...config}>
+              <DatePicker
+                style={{ borderWidth: 0 }}
+                format={"DD-MM-YYYY"}
+                defaultValue={moment(validityDate)}
+                // initialValues={oppurtunityvalidity}
+                // format={dateFormatList}
+                // disabledDate={(d) => !d || d.isBefore(today)}
                 // onChange={(e) => {
-                //   setOppurtunityProbability(e);
+                //   console.log("date mmm", e);
+                //   setOppurtunityvalidity(e);
                 // }}
-                >
-                  <Select.Option value="EXW">EXW</Select.Option>
-                </SelectBox>
-              </Form.Item>
-            </div>
-            <div className="col-sm-4 pt-2">
-              <label>
-                Status<span className="req_star">*</span>
-              </label>
-              <Form.Item
-                name={"opportunity_status"}
-                rules={[
-                  {
-                    required: true,
-                    message: "Please select a Status",
-                  },
-                ]}
+              />
+            </Form.Item>
+          </div>
+          <div className="col-sm-4 pt-1">
+            <label className="mb-1">Expecting Amount<span className="req_star">*</span></label>
+            <Form.Item
+              name="oppo_amount"
+              rules={[
+                {
+                  required: true,
+                  message: "Please enter a valid amount",
+                },
+              ]}
+            >
+              <Input_Number precision={2} />
+            </Form.Item>
+          </div>
+          <div className="col-sm-4 pt-2">
+            <label className="mb-1">
+              Probability of conversion<span className="req_star">*</span>
+            </label>
+            <Form.Item
+              name="oppo_probability"
+              rules={[
+                {
+                  required: true,
+                  message: "please select valid Name",
+                },
+              ]}
+            >
+              <SelectBox 
+              // defaultValue="M"
+              // value={oppurtunityprobability}
+              // onChange={(e) => {
+              //   setOppurtunityProbability(e);
+              // }}
               >
-                <SelectBox
-                  value={oppurtunitystatus}
-                  onChange={(e) => setOppurtunitystatus(e)}
-                >
-                  <Select.Option value={1}>Quotation</Select.Option>
-                  <Select.Option value={2}>Interested</Select.Option>
-                  <Select.Option value={3}>Converted</Select.Option>
-                  <Select.Option value={4}>Lost</Select.Option>
-                  <Select.Option value={5}>DND</Select.Option>
-                </SelectBox>
-              </Form.Item>
-            </div>
-            <div className="col-sm-6 pt-3">
-              <label>Remarks</label>
-              <Form.Item
-                className="mt-2"
-                name={"opportunity_description"}
-                rules={[
-                  {
-                    min: 3,
-                    message: "Please enter above 3 character",
-                  },
-                  {
-                    max: 100,
-                  },
-                ]}
+                <Select.Option value="L">low</Select.Option>
+                <Select.Option value="M">medium</Select.Option>
+                <Select.Option value="H">high</Select.Option>
+              </SelectBox>
+            </Form.Item>
+          </div>
+          <div className="col-sm-4 pt-2">
+            <label className="mb-1">
+              Incoterm<span className="req_star">*</span>
+            </label>
+            <Form.Item
+              name="oppo_incoterm"
+              rules={[
+                {
+                  required: true,
+                  message: "please select an incoterm",
+                },
+              ]}
+            >
+             <SelectBox
+                placeholder={"--Please Select--"}
+                // value={oppprobability}
+                // onChange={(e) => oneContact(e)}
               >
-                <TextArea
-                  value={opportunitydescription}
-                  onChange={(e) => {
-                    setOpportunitydescription(e.target.value);
-                  }}
-                />
-              </Form.Item>
-            </div>
-            <div className="col-sm-6 pt-3">
-              <label>Attachments</label>
-              <Form.Item name="attachment" className="mt-2">
-                <FileUpload
-                  multiple
-                  listType="picture"
-                  accept=".pdf,.docx,.zip"
-                  height={120}
-                  // beforeUpload={beforeUpload}
-                  // onChange={(file) => {
-                  //   console.log("Before upload file size", file.file.size);
-                  //   if (file.file.size > 2000 && file.file.size < 500000) {
-                  //     setFileAttach(file.file.originFileObj);
-                  //     setImageSize(false);
-                  //     console.log("select imaggg", file.file.originFileObj);
-                  //     console.log(
-                  //       "image is greater than 2 kb and less than 500 kb"
-                  //     );
-                  //   } else {
-                  //     setImageSize(true);
-                  //     console.log("Error in image upload");
-                  //   }
-                  // }}
-                />
-                {/* {imageSize ? (
+                {allIncoterms &&
+                  allIncoterms.length > 0 &&
+                  allIncoterms.map((item, index) => {
+                    console.log("item",item);
+                    return (
+                      <Select.Option
+                        value={item.incoterm_id}
+                        
+                        key={item.incoterm_id}
+                      >
+                        {item.incoterm_short_name}
+                      </Select.Option>
+                    );
+                  })}
+              </SelectBox>
+            </Form.Item>
+          </div>
+          <div className="col-sm-4 pt-2">
+            <label className="mb-1">
+              Status<span className="req_star">*</span>
+            </label>
+            <Form.Item
+              name="oppo_status"
+              rules={[
+                {
+                  required: true,
+                  message: "Please Select a value",
+                },
+              ]}
+            >
+              <SelectBox
+              //  defaultValue={1}
+                placeholder={"--Please Select--"}
+                value={oppstatuss}
+                onChange={(e) => setOppStatus(e)}
+              >
+                <Select.Option value={1}>New</Select.Option>
+                <Select.Option value={2}>Interested</Select.Option>
+                <Select.Option value={3}>Converted</Select.Option>
+                <Select.Option value={4}>Lost</Select.Option>
+              </SelectBox>
+            </Form.Item>
+          </div>
+
+          <div className="col-sm-6 pt-2">
+            <label >
+              Remarks<span className="req_star">*</span>
+            </label>
+            <Form.Item
+              className="mt-2"
+              name="oppo_description"
+              rules={[
+                {
+                  required: true,
+                  message: "Please enter valid details",
+                },
+              ]}
+            >
+              <TextArea
+                value={oppdescription}
+                onChange={(e) => setOppDescription(e.target.value)}
+              />
+            </Form.Item>
+          </div>
+
+          <div className="col-sm-6 mt-2">
+            <label >Attachments</label>
+            <Form.Item name="attachments" className="mt-2">
+              <FileUpload
+                multiple
+                // filetype={"Accept only pdf, docx and zip"}
+                listType="picture"
+                accept=".pdf,.docx,.zip,.jpeg"
+                height={100}
+                beforeUpload={beforeUpload}
+                onChange={(file) => {
+                  console.log("Before upload file size", file.file.size);
+                  if (file.file.size > 2000 && file.file.size < 500000) {
+                    setFileAttach(file.file.originFileObj);
+                    setImageSize(false);
+                    console.log("select imaggg", file.file.originFileObj);
+                    console.log(
+                      "image is greater than 2 kb and less than 500 kb"
+                    );
+                  } else {
+                    setImageSize(true);
+                    console.log("Error in image upload");
+                  }
+                }}
+              />
+              {imageSize ? (
                 <p style={{ color: "red" }}>
-                  Upload File size between 1 kb and 500 kb
+                  Upload File size between 2 kb and 500 kb
                 </p>
               ) : (
                 ""
-              )} */}
-              </Form.Item>
-            </div>
+              )}
+            </Form.Item>
           </div>
-          <div className="col-12 d-flex justify-content-center my-3 gap-3">
-            <Button
-              onClick={() => {
-                updatedOppurtunity();
-              }}
-              btnType="save"
-              type="submit"
-            >
-              Save
-            </Button>
-            <Button
-              as="input"
-              type="reset"
-              value="Reset"
-              onClick={() => {
-                navigate(ROUTES.OPPORTUNITY);
-              }}
-            >
-              Cancel
-            </Button>
-          </div>
-          <div className="px-1">
-            <div className="row px-1">
-              <div className="px-5">
-                <div className="row px-1"></div>
-              </div>
-            </div>
-          </div>
-        </Form>
-        {/* </>
-        }
-        // {...props}
-      ></Custom_model> */}
+        </div>
 
+        <div className="col-12 d-flex justify-content-center py-3 gap-3">
+          <Button btnType="save">Save</Button>
+          <Button
+            as="input"
+            type="reset"
+            value="Reset"
+            onClick={() => {
+              navigate(ROUTES.OPPORTUNITY);
+            }}
+          >
+            Cancel
+          </Button>
+        </div>
+      </Form>
+      {/* </>
+      }
+      // {...props}
+    ></Custom_model> */}
 
-
-        {/* Modal for add Customer */}
-        <CustomerModal
-          show={modalAddCustomer}
-          onHide={() => {
-            setModalAddCustomer(false);
-          }}
-        />
-        <Custom_model
-          size={`sm`}
-          success
-          show={successPopup}
-          onHide={() => setSuccessPopup(false)}
-          footer={false}
-        />
-      </div>
-    </>
-  );
+      {/* Modal for add Customer */}
+      <CustomerModal
+       setCustomerName={setCustomerName}
+       setCustomernew={setCustomernew}
+        show={modalAddCustomer}
+        onHide={() => {
+          setModalAddCustomer(false);
+        }}
+      />
+      <Custom_model
+        // size={`sm`}
+        success
+        show={SuccessPopup}
+        onHide={() =>  setSuccessPopup(false)}
+        footer={false}
+      />
+    </div>
+  </>
+);
 }

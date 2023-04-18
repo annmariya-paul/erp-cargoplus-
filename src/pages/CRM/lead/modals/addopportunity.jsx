@@ -976,12 +976,12 @@ export default function AddOpportunity() {
               <Form.Item
                 className="mt-2"
                 name="oppo_description"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter valid details",
-                  },
-                ]}
+                // rules={[
+                //   {
+                //     required: true,
+                //     message: "Please enter valid details",
+                //   },
+                // ]}
               >
                 <TextArea
                   value={oppdescription}

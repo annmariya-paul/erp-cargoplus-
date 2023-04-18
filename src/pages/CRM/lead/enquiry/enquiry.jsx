@@ -247,6 +247,8 @@ console.log("CustomerName", customername);
     formData.append("enquiry_customer_ref", data.reference);
     formData.append("enquiry_contact_person_id", data.contactperson);
     formData.append("enquiry_remarks", data.purchasePoRef);
+    formData.append("enquiry_freight_type", data.customerfrighttype);
+    formData.append("enquiry_sales_person_id", data.salesperson);
     // formData.append("", data.customerfrighttype);
     if (img) {
       formData.append("attachments", img);
@@ -341,7 +343,7 @@ console.log("CustomerName", customername);
 
             <div className="col-sm-4 pt-2 d-flex">
               <div className="col-11">
-                <label>
+                <label className="mb-1">
                   Customer<span className="required">*</span>
                 </label>
                 <Form.Item
@@ -403,7 +405,7 @@ console.log("CustomerName", customername);
             </div>
 
             <div className="col-sm-4 pt-2 ">
-              <label>Freight Type</label>
+              <label className="mb-1">Freight Type</label>
               <Form.Item
                 name="customerfrighttype"
                 // rules={[
@@ -441,7 +443,7 @@ console.log("CustomerName", customername);
             </div>
 
             <div className="col-sm-4 pt-2">
-              <label>
+              <label className="mb-1">
                 Enquiry No<span className="required">*</span>
               </label>
               <Form.Item name="enquiryno"
@@ -465,12 +467,12 @@ console.log("CustomerName", customername);
             </div>
 
             <div className="col-sm-4 pt-2">
-              <label>
+              <label className="mb-1">
                 Date<span className="required">*</span>
               </label>
               <Form.Item
                 name="date"
-                className="mt-1"
+                className=""
                 rules={[
                   {
                     required: true,
@@ -534,7 +536,7 @@ console.log("CustomerName", customername);
               </Form.Item>
             </div>
             <div className="col-sm-4 pt-2">
-              <label>
+              <label className="mb-1">
                 Sale Person<span className="required">*</span>
               </label>
               <Form.Item
@@ -570,7 +572,7 @@ console.log("CustomerName", customername);
             </div>
 
             <div className="col-sm-4 pt-3">
-              <label>Contact Person</label>
+              <label className="mb-1">Contact Person</label>
               <Form.Item name="contactperson">
                 <SelectBox
                   onChange={(e) => {
@@ -593,7 +595,7 @@ console.log("CustomerName", customername);
               </Form.Item>
             </div>
             <div className="col-sm-4 pt-3">
-              <label>Email</label>
+              <label className="mb-1">Email</label>
               <Form.Item name="contactemail">
                 <InputType
                 //   value={purchasePoNo}
@@ -605,7 +607,7 @@ console.log("CustomerName", customername);
               </Form.Item>
             </div>
             <div className="col-sm-4 pt-3">
-              <label>Phone</label>
+              <label className="mb-1">Phone</label>
               <Form.Item name="contactphone">
                 <InputType
                 //   value={purchasePoNo}
@@ -640,14 +642,14 @@ console.log("CustomerName", customername);
                 </div> */}
 
             <div className="col-sm-6 pt-2">
-              <label>Remarks</label>
+              <label className="mb-1">Remarks</label>
               <Form.Item name="purchasePoRef">
                 <TextArea />
               </Form.Item>
             </div>
 
             <div className="col-sm-6 pt-2">
-              <label>Attachments</label>
+              <label className="mb-1">Attachments</label>
               <Form.Item name="attachments" className="">
                 <FileUpload
                   name="attachments"

@@ -1143,46 +1143,6 @@ export default function EditOpportunity() {
             <div className="col-12">
               <h6 className="lead_text">Basic Info</h6>
             </div>
-            <div className="col-sm-4 pt-2">
-              <label className="mb-1">Enquiry No.</label>
-              <Form.Item
-                name="oppo_enquiries"
-                // rules={[
-                //   {
-                //     required: true,
-                //     message: "Please Select an Enquiry Number",
-                //   },
-                // ]}
-              >
-                <SelectBox
-                  disabled={true}
-                  // placeholder={"--Please Select--"}
-                  mode="multiple"
-                  // maxTagCount="responsive"
-                  // value={selectedValues}
-                  // onChange={handleMultiSelectChange}
-                  onChange={(e) => {
-                    handleDatas(e);
-                    console.log("reached", e);
-                  }}
-                  // value={oppoNumber}
-                  // onChange={(e) => setOppoNumber(e.target.value)}
-                >
-                  {enquiryData &&
-                    enquiryData.length > 0 &&
-                    enquiryData.map((item, index) => {
-                      return (
-                        <Select.Option
-                          value={item.enquiry_id}
-                          key={item.enquiry_id}
-                        >
-                          {item.enquiry_no}
-                        </Select.Option>
-                      );
-                    })}
-                </SelectBox>
-              </Form.Item>
-            </div>
             <div className="col-sm-4 pt-1 d-flex">
               <div className="col-11">
                 <label className="mb-1">
@@ -1237,6 +1197,46 @@ export default function EditOpportunity() {
                   }}
                 />
               </div>
+            </div>
+            <div className="col-sm-4 pt-2">
+              <label className="mb-1">Enquiry No.</label>
+              <Form.Item
+                name="oppo_enquiries"
+                // rules={[
+                //   {
+                //     required: true,
+                //     message: "Please Select an Enquiry Number",
+                //   },
+                // ]}
+              >
+                <SelectBox
+                  disabled={true}
+                  // placeholder={"--Please Select--"}
+                  mode="multiple"
+                  // maxTagCount="responsive"
+                  // value={selectedValues}
+                  // onChange={handleMultiSelectChange}
+                  onChange={(e) => {
+                    handleDatas(e);
+                    console.log("reached", e);
+                  }}
+                  // value={oppoNumber}
+                  // onChange={(e) => setOppoNumber(e.target.value)}
+                >
+                  {enquiryData &&
+                    enquiryData.length > 0 &&
+                    enquiryData.map((item, index) => {
+                      return (
+                        <Select.Option
+                          value={item.enquiry_id}
+                          key={item.enquiry_id}
+                        >
+                          {item.enquiry_no}
+                        </Select.Option>
+                      );
+                    })}
+                </SelectBox>
+              </Form.Item>
             </div>
 
             <div className="col-sm-4 pt-1">

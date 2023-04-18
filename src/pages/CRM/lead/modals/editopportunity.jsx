@@ -1240,15 +1240,17 @@ export default function EditOpportunity() {
             </div>
 
             <div className="col-sm-4 pt-1">
-              <label className="mb-1">Date</label>
+              <label className="mb-1">
+                Date<span className="req_star">*</span>
+              </label>
               <Form.Item
                 name="oppo_date"
-                // rules={[
-                //   {
-                //     required: true,
-                //     message: "Please select an option",
-                //   },
-                // ]}
+                rules={[
+                  {
+                    required: true,
+                    message: "Please select an Date",
+                  },
+                ]}
               >
                 <DatePicker
                   style={{ borderWidth: 0, marginTop: 2 }}
@@ -1309,9 +1311,7 @@ export default function EditOpportunity() {
             </div>
 
             <div className="col-sm-4 pt-2">
-              <label className="mb-1">
-                Customer Reference<span className="req_star">*</span>
-              </label>
+              <label className="mb-1">Customer Reference</label>
               <Form.Item
                 name="oppo_customer_ref"
                 // rules={[
@@ -1472,33 +1472,29 @@ export default function EditOpportunity() {
               </Form.Item>
             </div>
             <div className="col-sm-4 pt-1">
-              <label className="mb-1">
-                Expecting Amount<span className="req_star">*</span>
-              </label>
+              <label className="mb-1">Expecting Amount</label>
               <Form.Item
                 name="oppo_amount"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter a valid amount",
-                  },
-                ]}
+                // rules={[
+                //   {
+                //     required: true,
+                //     message: "Please enter a valid amount",
+                //   },
+                // ]}
               >
                 <Input_Number precision={2} />
               </Form.Item>
             </div>
             <div className="col-sm-4 pt-2">
-              <label className="mb-1">
-                Probability of conversion<span className="req_star">*</span>
-              </label>
+              <label className="mb-1">Probability of conversion</label>
               <Form.Item
                 name="oppo_probability"
-                rules={[
-                  {
-                    required: true,
-                    message: "please select valid Name",
-                  },
-                ]}
+                // rules={[
+                //   {
+                //     required: true,
+                //     message: "please select valid Name",
+                //   },
+                // ]}
               >
                 <SelectBox
                 // defaultValue="M"
@@ -1575,18 +1571,16 @@ export default function EditOpportunity() {
             </div>
 
             <div className="col-sm-6 pt-2">
-              <label>
-                Remarks<span className="req_star">*</span>
-              </label>
+              <label>Remarks</label>
               <Form.Item
                 className="mt-2"
                 name="oppo_description"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter valid details",
-                  },
-                ]}
+                // rules={[
+                //   {
+                //     required: true,
+                //     message: "Please enter valid details",
+                //   },
+                // ]}
               >
                 <TextArea
                   value={oppdescription}

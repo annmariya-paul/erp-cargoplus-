@@ -684,7 +684,7 @@ export default function AddOpportunity() {
                 rules={[
                   {
                     required: true,
-                    message: "Please Select a value",
+                    message: "Please Select a Source",
                   },
                 ]}
               >
@@ -706,9 +706,7 @@ export default function AddOpportunity() {
             </div>
 
             <div className="col-sm-4 pt-2">
-              <label className="mb-1">
-                Customer Reference<span className="req_star">*</span>
-              </label>
+              <label className="mb-1">Customer Reference</label>
               <Form.Item
                 name="oppo_customer_ref"
                 // rules={[
@@ -867,33 +865,29 @@ export default function AddOpportunity() {
               </Form.Item>
             </div>
             <div className="col-sm-4 pt-2">
-              <label className="mb-1">
-                Expecting Amount<span className="req_star">*</span>
-              </label>
+              <label className="mb-1">Expecting Amount</label>
               <Form.Item
                 name="oppo_amount"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter a valid amount",
-                  },
-                ]}
+                // rules={[
+                //   {
+                //     required: true,
+                //     message: "Please enter a valid amount",
+                //   },
+                // ]}
               >
                 <Input_Number precision={2} />
               </Form.Item>
             </div>
             <div className="col-sm-4 pt-2">
-              <label className="mb-1">
-                Probability of conversion<span className="req_star">*</span>
-              </label>
+              <label className="mb-1">Probability of conversion</label>
               <Form.Item
                 name="oppo_probability"
-                rules={[
-                  {
-                    required: true,
-                    message: "please select valid Name",
-                  },
-                ]}
+                // rules={[
+                //   {
+                //     required: true,
+                //     message: "please select valid Name",
+                //   },
+                // ]}
               >
                 <SelectBox
                 // defaultValue="M"
@@ -970,9 +964,7 @@ export default function AddOpportunity() {
             </div>
 
             <div className="col-sm-6 pt-2">
-              <label>
-                Remarks<span className="req_star">*</span>
-              </label>
+              <label>Remarks</label>
               <Form.Item
                 className="mt-2"
                 name="oppo_description"

@@ -206,10 +206,15 @@ console.log("bnkdetails id iss",vendorId)
     formData.append(`vendor_type`, data.vendortype);
     formData.append(`email`, data.vendoremail);
     formData.append(`contact`, data.vendorphone);
-    formData.append(`country_id`, data.vendorcountry);
-    formData.append(`city`, data.vendorcity);
-    formData.append(`website`, data.vendorwebsite);
-    formData.append(`state`, data.vendorstate);
+
+    data?.vendorcountry && formData.append(`country_id`, data.vendorcountry);
+    data?.vendorwebsite && formData.append(`website`, data.vendorwebsite);
+    data?.vendorcity && formData.append(`city`, data.vendorcity);
+    data?.vendorstate && formData.append(`state`, data.vendorstate);
+
+    // formData.append(`city`, data.vendorcity);
+    // formData.append(`website`, data.vendorwebsite);
+    // formData.append(`state`, data.vendorstate);
     formData.append(`address`, data.vendoraddress);
     formData.append(`remarks`, data.vendorremarks);
    
@@ -546,19 +551,20 @@ console.log("bnkdetails id iss",vendorId)
                     <div className="col-sm-4 pt-3">
                       <label>
                         {" "}
-                        Website<span className="required">*</span>
+                        Website
+                        {/* <span className="required">*</span> */}
                       </label>
 
                       <Form.Item
                         name="vendorwebsite"
-                        rules={[
-                          {
-                            required: true,
+                        // rules={[
+                        //   {
+                        //     required: true,
 
-                            message: "Please enter a Valid Website",
-                          },
+                        //     message: "Please enter a Valid Website",
+                        //   },
 
-                        ]}
+                        // ]}
                       >
                         <InputType
                           // value={vendorcontact}
@@ -571,17 +577,18 @@ console.log("bnkdetails id iss",vendorId)
 
                     <div className="col-sm-4 pt-2">
                       <label>
-                        Country<span className="required">*</span>
+                        Country
+                        {/* <span className="required">*</span> */}
                       </label>
 
                       <Form.Item
                         name="vendorcountry"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please enter a Valid country",
-                          },
-                        ]}
+                        // rules={[
+                        //   {
+                        //     required: true,
+                        //     message: "Please enter a Valid country",
+                        //   },
+                        // ]}
                       >
                         <SelectBox
                           showSearch={true}

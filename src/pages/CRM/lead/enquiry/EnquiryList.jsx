@@ -29,6 +29,7 @@ function EnquiryList() {
   const [allLeadList, setAllLeadList] = useState([]);
   const [serialNo, setserialNo] = useState(1);
   const [AllEnquiries, setAllnquires] = useState();
+  console.log("ggg",AllEnquiries);
 
   const columns = [
     {
@@ -60,7 +61,13 @@ function EnquiryList() {
             .includes(value.toLowerCase()) ||
           String(record.contact_phone_1)
             .toLowerCase()
-            .includes(value.toLowerCase())
+            .includes(value.toLowerCase()) ||
+            String(record.enquiry_date)
+              .toLowerCase()
+              .includes(value.toLowerCase()) ||
+              String(record.enquiry_date)
+                .toLowerCase()
+                .includes(value.toLowerCase())
         );
       },
       align: "left",
@@ -151,7 +158,7 @@ function EnquiryList() {
           String(record.contact_email)
             .toLowerCase()
             .includes(value.toLowerCase()) ||
-          String(record.contact_phone_1)
+          String(record.enquiry_converted_status)
             .toLowerCase()
             .includes(value.toLowerCase())
         );
@@ -273,14 +280,17 @@ function EnquiryList() {
     ],
   ];
 
+  const pageofIndex = noofItems * (current - 1) - 1 + 1;
+  const pagesizecount = Math.ceil(totalCount / noofItems);
+  console.log("page number isss", pagesizecount);
   const GetAllEnquiries = () => {
-    PublicFetch.get(`${CRM_BASE_URL_FMS}/enquiries`)
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/enquiries?startIndex=${pageofIndex}&noOfItems=${noofItems}&search=`)
       .then((res) => {
         console.log("Response ", res);
         if (res.data.success) {
-          console.log("Success of all enquiries", res.data.data);
+          console.log("Success of all enquiries", res.data.data.enquiries);
           let temp = [];
-          res?.data?.data?.forEach((item, index) => {
+          res?.data?.data?.enquiries?.forEach((item, index) => {
             temp.push({
               enquiry_contact_person_id: item.enquiry_contact_person_id,
               enquiry_contact_person_name:
@@ -309,7 +319,7 @@ function EnquiryList() {
 
   useEffect(() => {
     GetAllEnquiries();
-  }, []);
+  }, [noofItems, pageofIndex, pagesizecount]);
 
   return (
     <div className="container-fluid ">
@@ -377,12 +387,13 @@ function EnquiryList() {
                   className="page_size_style"
                   value={noofItems}
                   // onChange={handleLastNameChange}
-                  onChange={(event, current) => {
-                    console.log("On page size selected : ", event);
-                    console.log("nfjnjfv", current);
-                    setNoofItems(event);
-                    setCurrent(1);
-                  }}
+                  // onChange={(event, current) => {
+                  //   console.log("On page size selected : ", event);
+                  //   console.log("nfjnjfv", current);
+                  //   setNoofItems(event);
+                  //   setCurrent(1);
+                  // }}
+                  onChange={(e) => setNoofItems(e)}
                 >
                   {/* <Select.Option value="5">5 | pages</Select.Option> */}
                   {/* <Select.Option value="10">
@@ -424,9 +435,10 @@ function EnquiryList() {
                 </Select>
               </div>
               <div className="col-4 d-flex py-2 justify-content-center">
-                {AllEnquiries?.length > 0 && (
+                {AllEnquiries > 0 && (
                   <MyPagination
                     total={AllEnquiries?.length}
+                    // total={parseInt(AllEnquiries)}
                     current={current}
                     pageSize={noofItems}
                     // defaultPageSize={noofItems}

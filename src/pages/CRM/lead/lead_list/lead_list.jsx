@@ -39,9 +39,12 @@ export default function LeadList() {
   const [ldType, setLdType] = useState(LeadType);
   const [ldUserType, setLdUserType] = useState(LeadOrganization);
   const [allLeadList, setAllLeadList] = useState([]);
-
+  const [contactTable, setContactTable] = useState();
   const [currentcount, setCurrentcount] = useState();
   const [serialNo, setserialNo] = useState(1);
+  const [contactCustomerId, setContactCustomerId] = useState();
+
+  const[custid,setcustid]= useState("")
   // pageindex =0 ->  25 * (1-1)- 1+1
 
   const [viewLead, setViewLead] = useState({
@@ -56,18 +59,19 @@ export default function LeadList() {
   });
   // { function to view selected Lead's data - Ann mariya (18/11/22)}
   const handleViewData = (item) => {
-    console.log("view all attributes", item);
-    setViewLead({
-      ...viewLead,
-      type: item.lead_type,
-      lead_name: item.lead_customer_name,
-      user_type: item.lead_user_type,
-      organisation: item.lead_organization,
-      source: item.lead_source,
-      attachments: item.attachments,
-      description: item.lead_description,
-      status: item.lead_status,
-    });
+    console.log("view customerr", item);
+    
+    // setViewLead({
+    //   ...viewLead,
+    //   type: item.lead_type,
+    //   lead_name: item.lead_customer_name,
+    //   user_type: item.lead_user_type,
+    //   organisation: item.lead_organization,
+    //   source: item.lead_source,
+    //   attachments: item.attachments,
+    //   description: item.lead_description,
+    //   status: item.lead_status,
+    // });
 
     setModalViewLead(true);
   };
@@ -76,7 +80,7 @@ export default function LeadList() {
   const numofItemsTo = noofItems * current;
 
   const pagesizecount = Math.ceil(totalCount / noofItems);
-  console.log("page number isss", pagesizecount);
+  console.log("page number isss", pageofIndex);
 
   // console.log("saag eywrbzxcjhasdbf yryeraeuif:::::", allLeadList);
   // console.log("page size", pageIndex);
@@ -88,13 +92,14 @@ export default function LeadList() {
     )
       .then((res) => {
         if (res?.data?.success) {
-          console.log("All lead data", res?.data?.data);
+          console.log("All lead data", res?.data?.data?.customers);
           // setAllLeadList(res?.data?.data?.leads);
           setTotalcount(res?.data?.data?.total);
           setCurrentcount(res?.data?.data?.currentCount);
           let array = [];
 
           res?.data?.data?.customers?.forEach((item, index) => {
+            console.log("dattas inn",item)
             // ldStatus.forEach((i, index) => {
             //   ldType.forEach((t, index) => {
             //     ldUserType.forEach((usrtyp, index) => {
@@ -105,6 +110,7 @@ export default function LeadList() {
             //         usrtyp.value === item.customer_type
             //       ) {
             array.push({
+             
               customer_id: item?.customer_id,
               customer_type: item?.customer_type,
               customer_name: item?.customer_name,
@@ -121,12 +127,18 @@ export default function LeadList() {
               customer_state: item.customer_state,
               customer_city: item.customer_city,
               customer_status: item.customer_status,
-              customer_jobs_no: item?.fms_v1_jobs?.length,
-              customer_opportunity_no: item?.crm_v1_opportunities?.length,
+              customer_jobs_no: item?.fms_v1_jobs?.length ==0 ? "":item?.fms_v1_jobs?.length,
+              customer_opportunity_no: item?.crm_v1_opportunities?.length ==0 ? "":item?.crm_v1_opportunities?.length,
               invoice_amt:item?._sum?.invoice_accounts_grand_total,
               due_amt:item?._sum?.invoice_accounts_due_amount,
-              customer_credit_days:item?.customer_credit_days
+              customer_credit_days:item?.customer_credit_days,
+
+              contact_person: item?.crm_v1_contacts[0]?.contact_person_name,
+              startindex:res?.data?.data?.startIndex,
+              
             });
+           console.log("arayayay",array)
+           
             //       }
             //     });
             //   });
@@ -143,6 +155,7 @@ export default function LeadList() {
   };
 
   useEffect(() => {
+   
     GetAllLeadData();
   }, [noofItems, pageofIndex, pagesizecount]);
 
@@ -152,6 +165,42 @@ export default function LeadList() {
       noofItems * current
     );
   };
+
+  // console.log("custiddd",custid)
+
+
+  // const getcontacttable = () => {
+  //   PublicFetch.get(`${CRM_BASE_URL}/contact`)
+  //     .then((res) => {
+  //       console.log("all contacts data", res);
+  //       if (res?.data?.success) {
+  //         // # array to set contacts of corresponding Lead Id - Ann Mariya
+  //         let array = [];
+  //         res?.data?.data?.forEach((item, index) => {
+  //           setContactCustomerId(item?.contact_customer_id);
+  //           // console.log("Lead Id : ", CustomerId);
+  //           if (custid === item?.contact_customer_id) {
+  //             console.log("Insie if", item);
+  //             array.push({
+  //               contact_person_name: item?.contact_person_name,
+  //               contact_email: item?.contact_email,
+  //               contact_phone_1: item?.contact_phone_1,
+  //               contact_phone_2: item?.contact_phone_2,
+  //               contact_designation: item?.contact_designation,
+  //             });
+  //           }
+  //         });
+  //         setContactTable([...array]);
+
+  //         // setContactTable(res.data.data);
+  //       } else {
+  //         console.log("Failed to fetch data");
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log("Error While Getting Data", err);
+  //     });
+  // };
 
   // const pageofSize = Math.ceil(totalCount / numofItemsTo);
   // console.log("ffgsdgsd,", pageofSize);
@@ -188,10 +237,16 @@ export default function LeadList() {
 
   const columns = [
     {
-      title: "Sl. No.",
+      title: "#",
       key: "index",
-      width: "4%",
-      render: (value, item, index) => serialNo + index,
+      // width: "4%",
+      render: (value, item, index) => {
+       return (
+        <div>
+        {item?.startindex + index +serialNo}
+      </div>
+       )
+      },
       align: "center",
     },
 
@@ -239,14 +294,14 @@ export default function LeadList() {
       //     .toLowerCase()
       //     .includes(value.toLowerCase());
       // },
-      align: "right",
+      align: "left",
     },
     {
       title: "PHONE",
       dataIndex: "customer_phone",
       key: "customer_phone",
       // width: "23%",
-      align: "right",
+      align: "left",
     },
 
     {
@@ -267,7 +322,7 @@ export default function LeadList() {
       //     .toLowerCase()
       //     .includes(value.toLowerCase());
       // },
-      align: "right",
+      align: "center",
     },
     {
       title: "OPPORTUNITY",
@@ -279,7 +334,7 @@ export default function LeadList() {
       //     .toLowerCase()
       //     .includes(value.toLowerCase());
       // },
-      align: "right",
+      align: "center",
     },
 
     {
@@ -287,7 +342,7 @@ export default function LeadList() {
       dataIndex: "customer_jobs_no",
       key: "customer_jobs_no",
       // width: "23%",
-      align: "right",
+      align: "center",
     },
 
     {
@@ -571,7 +626,7 @@ export default function LeadList() {
                 <div className="container-fluid p-3">
                   <div className="d-flex justify-content-between">
                     <div>
-                      <h5 className="lead_text">Lead</h5>
+                      <h5 className="lead_text">Customer</h5>
                     </div>
                   </div>
 

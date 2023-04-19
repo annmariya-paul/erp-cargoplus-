@@ -17,6 +17,8 @@ import InputType from "../../../../components/Input Type textbox/InputType";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../../routes";
 import Input_Number from "../../../../components/InputNumber/InputNumber";
+import { message } from "antd";
+import ErrorMsg from "../../../../components/error/ErrorMessage";
 
 function Countrystate({ customerdetails, setIsAccountSave }) {
   const [modalShow, setModalShow] = useState(false);
@@ -30,9 +32,12 @@ function Countrystate({ customerdetails, setIsAccountSave }) {
   const [addForm] = Form.useForm();
   const [frighttype, setFrighttype] = useState();
   const [successPopup, setSuccessPopup] = useState(false);
+  const [error, setError] = useState(false);
+  const [BrandError, setBrandError] = useState();
 
   const [onecustomerData, setOnecustomerData] = useState();
 
+  const [messageApi, contextHolder] = message.useMessage();
   const [customerid, setcustomerid] = useState();
   const navigate = useNavigate();
   const {
@@ -47,10 +52,21 @@ function Countrystate({ customerdetails, setIsAccountSave }) {
     if (!mShow) {
       setTimeout(() => {
         setSuccessPopup(false);
-        let shu = true;
-        setIsAccountSave(shu);
+        // let shu = true;
+        // setIsAccountSave(shu);
       }, time);
     }
+  };
+
+  // const errormessage = () => {
+  //   messageApi.open({
+  //     type: "error",
+  //     content: "Create a Customer",
+  //   });
+  // };
+
+  const info = () => {
+    messageApi.info('Atleast Enter one data!');
   };
 
   const getAllCountries = async () => {
@@ -162,6 +178,8 @@ function Countrystate({ customerdetails, setIsAccountSave }) {
   };
 
   const createCustomeraccounting = (data) => {
+ 
+
     const formData = new FormData();
     formData.append(`customer_name`, customerdetails.customer_name);
     formData.append(`customer_type`, customerdetails.customer_type);
@@ -186,9 +204,6 @@ function Countrystate({ customerdetails, setIsAccountSave }) {
       data.customer_accounting_credit_limit
     );
 
-    // if (leadimg) {
-    //   formData.append(`customer_logo`, leadimg);
-    // }
     if (onecustomerData) {
       PublicFetch.patch(
         `${CRM_BASE_URL}/customer/${customerdetails?.customer_id}`,
@@ -208,10 +223,14 @@ function Countrystate({ customerdetails, setIsAccountSave }) {
 
             // isSave = true;
           }
+          else{
+     
+           }
         })
 
         .catch((err) => {
           console.log("Error", err);
+          setError(true);
         });
     } else {
       PublicFetch.post(`${CRM_BASE_URL}/customer`, formData, {
@@ -221,12 +240,16 @@ function Countrystate({ customerdetails, setIsAccountSave }) {
           console.log("data addedsuccessfully", res);
           if (res.data.success) {
             GetLeadData();
-            setIsAccountSave(res.data.data);
+            // setIsAccountSave(res.data.data);
 
             setSuccessPopup(true);
             close_modal(modalShow, 1000, res?.data?.data);
             // setModalContact(false);
           }
+          else{
+          message.error("not entered data")
+          }
+         
         })
 
         .catch((err) => {
@@ -321,6 +344,7 @@ function Countrystate({ customerdetails, setIsAccountSave }) {
   // };
   return (
     <>
+    {contextHolder}
       <Form
         form={addForm}
         onFinish={(values) => {
@@ -342,13 +366,16 @@ function Countrystate({ customerdetails, setIsAccountSave }) {
           <div className="col-sm-4">
             <label>Credit Days</label>
             <Form.Item name="customer_accounting_credit_days">
-              <Input_Number />
+            <InputType />
             </Form.Item>
           </div>
           <div className="col-sm-4">
             <label>Credit Limit</label>
             <Form.Item name="customer_accounting_credit_limit">
-              <Input_Number />
+              <Input_Number 
+              min={0}
+              precision={2}
+              />
             </Form.Item>
           </div>
           {/* <div className="col-sm-4">
@@ -378,25 +405,26 @@ function Countrystate({ customerdetails, setIsAccountSave }) {
             </Form.Item>
           </div> */}
 
-          <div className=" pt-4">
-            {/* <Button
-              btntype="submit"
-              className="btn_save"
-              // onClick={() => setModalShow(true)}
+          <div className=" pt-4 d-flex justify-content-center">
+            
+            <Button type="submit" className="qtn_save" btnType="save"
+            
             >
               Save
-            </Button> */}
-            <Button type="submit" className="qtn_save" btnType="save">
-              Save
             </Button>
-            <Custom_model
+          
+          
+          </div>
+          <Custom_model
               centered
               size={`sm`}
               success
               show={successPopup}
               onHide={() => setSuccessPopup(false)}
             />
-          </div>
+
+
+{/* {error ? <ErrorMsg code={"Please enter any data"} /> : ""} */}
         </div>
       </Form>
     </>

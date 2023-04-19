@@ -60,7 +60,7 @@ function Lead({}) {
   const [timeOut, setTimeOuts] = useState(false);
   const [Toggle4, setToggle4] = useState(false);
   const [countries, setCountries] = useState("");
-  const [isAccountsave, setIsAccountSave] = useState();
+  // const [isAccountsave, setIsAccountSave] = useState();
   const [contactTable, setContactTable] = useState();
 
   const [customerdetails, setcustomerdetails] = useState();
@@ -277,7 +277,7 @@ function Lead({}) {
     getAllCountries();
   }, [CustomerId]);
 
-  console.log("uegwy", isAccountsave);
+  
 
   return (
     <>
@@ -900,6 +900,11 @@ function Lead({}) {
                     // customer_id={CustomerId}
                   />
                 </div>
+                {/* <div className="col mt-4">
+                    <Button btnType="save" onClick={() => toggleTab(5)}>
+                      Next
+                    </Button>
+                  </div> */}
               </div>{" "}
               <div
                 className={

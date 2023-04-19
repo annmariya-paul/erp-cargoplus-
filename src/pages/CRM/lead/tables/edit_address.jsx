@@ -267,11 +267,13 @@ function Edit_Address(props) {
               }}
             >
               <div className="row">
-                <h5 className="lead_text">New Address</h5>
+                <h5 className="lead_text">New Address
+                </h5>
               </div>
               <div className="row mt-3">
                 <div className="px-3">
-                  <label className="mt-3">Title</label>
+                  <label className="mt-3">Title
+                  <span className="required">*</span></label>
                   <Form.Item
                     name="title"
                     rules={[
@@ -304,7 +306,8 @@ function Edit_Address(props) {
                     /> */}
                   </Form.Item>
 
-                  <label className="mt-3">Address</label>
+                  <label className="mt-3">Address
+                  <span className="required">*</span></label>
                   <Form.Item
                     className="mt-2"
                     name="address"

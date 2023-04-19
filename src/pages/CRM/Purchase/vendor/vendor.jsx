@@ -23,7 +23,8 @@ function Vendor() {
   const [successPopup, setSuccessPopup] = useState(false);
   const [searchedText, setSearchedText] = useState("");
 
-  const [pageSize, setPageSize] = useState("25");
+  // const [pageSize, setPageSize] = useState("25");
+  const [noofItems, setNoofItems] = useState("25");
   const [current, setCurrent] = useState(1);
 
   const [allvendor, setAllvendor] = useState();
@@ -35,6 +36,8 @@ function Vendor() {
 
   const [totalvendor, settotalvendor] = useState("");
   const [serialNo, setserialNo] = useState(1);
+  const [totalCount, setTotalcount] = useState();
+
 
   const getCountry = () => {
     PublicFetch.get(`${GENERAL_SETTING_BASE_URL}/country`)
@@ -62,20 +65,24 @@ function Vendor() {
     }
   };
 
-  const getData = (current, pageSize) => {
-    return allvendor?.slice((current - 1) * pageSize, current * pageSize);
-  };
+  // const getData = (current, pageSize) => {
+  //   return allvendor?.slice((current - 1) * pageSize, current * pageSize);
+  // };
+
+  const pageofIndex = noofItems * (current - 1) - 1 + 1;
+  const pagesizecount = Math.ceil(totalCount / noofItems);
 
   const getallvendors = async () => {
     try {
       const allvendor = await PublicFetch.get(
-        `${CRM_BASE_URL_PURCHASING}/vendors`
+        `${CRM_BASE_URL_PURCHASING}/vendors?startIndex=${pageofIndex}&noOfItems=${noofItems}`
       );
-      console.log("getting all vendorss", allvendor.data.data);
+      console.log("getting all vendorss", allvendor?.data?.data?.vendors);
       settotalvendor(allvendor.data.data);
+      setTotalcount(allvendor.data.data.total)
       // setAllvendor(allvendor.data.data)
       let arry = [];
-      allvendor.data.data.map((i, indx) => {
+      allvendor?.data?.data?.vendors.map((i, indx) => {
         vendor_Organisation.forEach((itm, index) => {
           console.log("vndr", itm);
           if (itm.value == i.vendor_org_type) {
@@ -93,6 +100,7 @@ function Vendor() {
               vender_id: i.vendor_id,
               vender_taxno: i.vendor_tax_no,
               vendor_country_id: i.vendor_country_id,
+              startindex:allvendor?.data?.data?.startIndex
             });
           }
         });
@@ -119,13 +127,20 @@ function Vendor() {
     getallvendortype();
     getallvendors();
     getCountry();
-  }, []);
+  },  [noofItems, pageofIndex, pagesizecount]);
 
   const columns = [
     {
-      title: "Sl.No.",
+      title: "#",
       key: "index",
-      render: (value, item, index) => serialNo + index,
+      // render: (value, item, index) => serialNo + index,
+      render: (value, item, index) => {
+        return (
+         <div>
+         {item?.startindex + index +serialNo}
+       </div>
+        )
+       },
       align: "center",
     },
 
@@ -345,8 +360,14 @@ function Vendor() {
             <Select
               bordered={false}
               className="page_size_style"
-              value={pageSize}
-              onChange={(e) => setPageSize(e)}
+              value={noofItems}
+              // onChange={(e) => setPageSize(e)}
+              onChange={(event, current) => {
+                console.log("On page size selected : ", event);
+                console.log("nfjnjfv", current);
+                setNoofItems(event);
+                setCurrent(1);
+              }}
             >
               <Select.Option value="25">
                 Show
@@ -368,14 +389,18 @@ function Vendor() {
 
           <div className="col-4 d-flex  align-items-center justify-content-center">
             <MyPagination
-              total={parseInt(totalvendor?.length)}
+              total={parseInt(totalCount)}
               current={current}
               showSizeChanger={true}
-              pageSize={pageSize}
+              pageSize={noofItems}
               onChange={(current, pageSize) => {
+                console.log("page index isss", pageSize);
                 setCurrent(current);
-                setPageSize(pageSize);
               }}
+              // onChange={(current, pageSize) => {
+              //   setCurrent(current);
+              //   setPageSize(pageSize);
+              // }}
             />
           </div>
 
@@ -389,7 +414,7 @@ function Vendor() {
         </div>
         <div className="datatable">
           <TableData
-            data={getData(current, pageSize)}
+            data={allvendor}
             // data={data}
             columns={columns}
             custom_table_css="table_lead_list"
@@ -397,13 +422,13 @@ function Vendor() {
         </div>
         <div className="d-flex py-2 justify-content-center">
           <MyPagination
-            total={parseInt(totalvendor?.length)}
+           total={parseInt(totalCount)}
             current={current}
             showSizeChanger={true}
-            pageSize={pageSize}
+            pageSize={noofItems}
             onChange={(current, pageSize) => {
+              console.log("page index isss", pageSize);
               setCurrent(current);
-              setPageSize(pageSize);
             }}
           />
         </div>

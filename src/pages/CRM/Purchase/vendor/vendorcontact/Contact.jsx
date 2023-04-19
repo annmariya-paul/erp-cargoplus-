@@ -277,7 +277,9 @@ function Contact({vendor,toggle }) {
             >
               <div className="row pt-3">
                 <div className="px-3">
-                  <label className="mt-3">Name</label>
+                  <label className="mt-3">Name
+                  <span className="required">*</span>
+                  </label>
                   <Form.Item
                     name="ContactName"
                     rules={[
@@ -301,7 +303,8 @@ function Contact({vendor,toggle }) {
                     //   onChange={(e) => setContactName(e.target.value)}
                     />
                   </Form.Item>
-                  <label className="mt-3">Designation</label>
+                  <label className="mt-3">Designation
+                  <span className="required">*</span></label>
                   <Form.Item
                     name="contactdesignation"
                     rules={[
@@ -329,7 +332,8 @@ function Contact({vendor,toggle }) {
                     //   onChange={(e) => setDesignation(e.target.value)}
                     />
                   </Form.Item>
-                  <label className="mt-3">Phone </label>
+                  <label className="mt-3">Phone 
+                  <span className="required">*</span></label>
                   <Form.Item
                     name="contactphone1"
                     className="mt-1"
@@ -359,7 +363,8 @@ function Contact({vendor,toggle }) {
                     />
                   </Form.Item>
 
-                  <label className="mt-3">Email</label>
+                  <label className="mt-3">Email
+                  <span className="required">*</span></label>
                   <Form.Item
                     name="contactemail"
                     rules={[

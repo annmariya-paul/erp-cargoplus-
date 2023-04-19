@@ -11,6 +11,8 @@ import {
   CRM_BASE_URL_FMS,
   GENERAL_SETTING_BASE_URL,
 } from "../../../../api/bootapi";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../../../../routes";
 
 function Moreinfo({ customerdetails }) {
   const [successPopup, setSuccessPopup] = useState(false);
@@ -19,6 +21,7 @@ function Moreinfo({ customerdetails }) {
   const [allfrights, setallfrights] = useState("");
   const [countries, setCountries] = useState("");
   const [modalShow, setModalShow] = useState(false);
+  const navigate = useNavigate();
 
   const getallfright = async () => {
     try {
@@ -48,10 +51,15 @@ function Moreinfo({ customerdetails }) {
     if (!mShow) {
       setTimeout(() => {
         setSuccessPopup(false);
+        navigate(ROUTES.CUSTOMER_LIST)
         // navigate(ROUTES.LEADLIST);
       }, time);
     }
   };
+
+  const handlecancel = ()=>{
+    navigate(ROUTES.CUSTOMER_LIST);
+  }
 
   const GetLeadData = () => {
     PublicFetch.get(`${CRM_BASE_URL}/customer/${customerdetails?.customer_id}`)
@@ -212,7 +220,7 @@ function Moreinfo({ customerdetails }) {
             </Form.Item>
           </div>
 
-          <div className=" pt-4">
+          <div className=" pt-4 d-flex justify-content-center">
             {/* <Button
               btntype="submit"
               className="btn_save"
@@ -224,14 +232,21 @@ function Moreinfo({ customerdetails }) {
             <Button type="submit" className="qtn_save" btnType="save">
               Save
             </Button>
-            <Custom_model
+            <Button type="submit" className="qtn_save" btnType="cancel" 
+          onClick ={()=>{
+            handlecancel()
+          }}
+            >
+              Cancel
+            </Button>
+          </div>
+          <Custom_model
               centered
               size={`sm`}
               success
               show={successPopup}
               onHide={() => setSuccessPopup(false)}
             />
-          </div>
         </div>
       </Form>
     </>

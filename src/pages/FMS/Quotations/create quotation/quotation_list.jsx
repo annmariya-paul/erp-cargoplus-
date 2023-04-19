@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Button from "../../../../components/button/button";
-import { Checkbox } from "antd";
+import { Checkbox, Popconfirm } from "antd";
 import InputType from "../../../../components/Input Type textbox/InputType";
 import ErrorMsg from "../../../../components/error/ErrorMessage";
 import Custom_model from "../../../../components/custom_modal/custom_model";
@@ -9,6 +9,7 @@ import { MdPageview } from "react-icons/md";
 import { Form, Input, Select, DatePicker } from "antd";
 import TableData from "../../../../components/table/table_data";
 import { FaEdit, FaTrash } from "react-icons/fa";
+import { GiCancel } from "react-icons/gi";
 import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
 import { ROUTES } from "../../../../routes";
 import PublicFetch from "../../../../utils/PublicFetch";
@@ -43,6 +44,7 @@ export default function Quotations(props) {
   const [totalquotation, settotalquotation] = useState("");
 
   const [quatationList, setQuatationList] = useState([]);
+  const [cancelPopUp, setCancelPopUp] = useState(false);
 
   const pageofIndex = noofItems * (current - 1) - 1 + 1;
   const numofItemsTo = noofItems * current;
@@ -59,6 +61,13 @@ export default function Quotations(props) {
   const [date, setDate] = useState();
   console.log(date);
   const today = new Date().toISOString().split("T")[0];
+
+  const [startDate, setStartDate] = useState(new Date());
+  const [numberOfDays, setNumberOfDays] = useState(7);
+
+  const endDate = new Date(
+    startDate.getTime() + numberOfDays * 24 * 60 * 60 * 1000
+  );
 
   const columns = [
     {
@@ -97,10 +106,20 @@ export default function Quotations(props) {
             .includes(value.toLowerCase()) ||
           String(record.quotation_status)
             .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.customer_name)
+            .toLowerCase()
             .includes(value.toLowerCase())
         );
       },
       align: "left",
+    },
+    {
+      title: "CUSTOMER",
+      dataIndex: "customer_name",
+      key: "customer_name",
+      width: "9%",
+      // align: "center",
     },
     {
       title: "DATE",
@@ -116,13 +135,7 @@ export default function Quotations(props) {
       width: "9%",
       align: "center",
     },
-    {
-      title: "CUSTOMER",
-      dataIndex: "customer_name",
-      key: "customer_name",
-      width: "9%",
-      // align: "center",
-    },
+
     {
       title: "CONSIGNEE",
       dataIndex: "consignee",
@@ -173,7 +186,14 @@ export default function Quotations(props) {
               <MdPageview style={{ marginLeft: 15, marginRight: 15 }} />
             </div>
             <div className="deleteIcon m-0">
-              <FaTrash style={{ marginRight: 18 }} />
+              <Popconfirm
+                title={`Are you sure you want to Cancel Quotation `}
+                onConfirm={() => {
+                  handleCancelQuotation();
+                }}
+              >
+                <GiCancel style={{ marginRight: 18 }} />
+              </Popconfirm>
             </div>
           </div>
         );
@@ -248,6 +268,10 @@ export default function Quotations(props) {
       key: "2",
     },
   ];
+
+  const handleCancelQuotation = () => {
+    setCancelPopUp(true);
+  };
 
   const getAllQuotation = () => {
     PublicFetch.get(
@@ -618,6 +642,14 @@ export default function Quotations(props) {
         show={successPopup}
         onHide={() => setSuccessPopup(false)}
         success
+      />
+      <CustomModel
+        cancelName={"Quotation"}
+        cancel
+        show={cancelPopUp}
+        onHide={() => {
+          setCancelPopUp(false);
+        }}
       />
       {error ? <ErrorMsg code={"500"} /> : " "}
     </>

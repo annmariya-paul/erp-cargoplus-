@@ -5,6 +5,9 @@ function SelectBox({
   className,
   value,
   onChange,
+  onSearch,
+  filterOption,
+  loading,
   defaultValue,
   onClick,
   children,
@@ -33,6 +36,10 @@ function SelectBox({
           value={value}
           placeholder={placeholder}
           options={options}
+          onSearch={onSearch}
+          filterOption={filterOption}
+          loading={loading}
+        
           showSearch={showSearch}
           allowClear={allowClear}
           defaultValue={defaultValue}

@@ -15,7 +15,7 @@ function ViewEnquiry() {
   const GetSingleEnquiry = () => {
     PublicFetch.get(`${CRM_BASE_URL_FMS}/enquiries/${id}`)
       .then((res) => {
-        console.log("response", res);
+        console.log("response ", res);
         if (res.data.success) {
           console.log("success", res.data.data);
           setAllEnquires(res?.data?.data);
@@ -32,20 +32,21 @@ function ViewEnquiry() {
     }
   }, [id]);
   return (
-    <div className="container-fluid p-4">
-      <div className="row report-content-tabs shadow-sm p-3">
-        <div className="col-12">
-          <div className="row">
-            <div className="col-4">
-              <h5 style={{}} className="lead_text">
+    <div className="container-fluid view_quotation  p-3">
+      <div className="row ">
+        <div className="col-10">
+          {/* <div className="row"> */}
+            {/* <div className="col-4"> */}
+            <h5 className="lead_text">
                 View Enquiry
               </h5>
             </div>
-            <div className="col-4"></div>
-            <div className="col-3 d-flex justify-content-end">
+
+            
+            <div className="col-2 d-flex justify-content-end">
               <Button
-                className="edit_button"
                 btnType="add_borderless"
+                className="edit_button"
                 onClick={() => {
                   navigate(`${ROUTES.EDIT_ENQUIRY}/${id}`);
                 }}
@@ -53,198 +54,142 @@ function ViewEnquiry() {
                 Edit <FaEdit />
               </Button>
             </div>
-            <div className="col-1"></div>
-            <div className="col-6 p-3 mt-5">
-              <table>
-                <tbody>
-                  <tr>
-                    <td>
-                      <p
-                        style={{ color: "black", fontWeight: "500" }}
-                        className=""
-                      >
-                        {" "}
-                        Enquiry No
-                      </p>
-                    </td>
-                    <td>
-                      <p>:</p>
-                    </td>
-                    <td>
-                      <p className="modal_view_p_sub">
-                        {AllEnquiries?.enquiry_no}
-                      </p>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style={{ color: "black", fontWeight: "500" }}>
-                      <p className="">Customer Name</p>
-                    </td>
-                    <td>
-                      {" "}
-                      <p>:</p>
-                    </td>
-                    <td>
-                      <p className="modal_view_p_sub">
-                        {AllEnquiries?.crm_v1_customer?.customer_name}{" "}
-                      </p>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style={{ color: "black", fontWeight: "500" }}>
-                      <p className=""> Contact Person Name</p>
-                    </td>
-                    <td>
-                      {" "}
-                      <p>:</p>
-                    </td>
-                    <td>
-                      <p className="modal_view_p_sub">
-                        {AllEnquiries?.crm_v1_contacts?.contact_person_name}
-                      </p>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style={{ color: "black", fontWeight: "500" }}>
-                      <p className="">Source</p>
-                    </td>
-                    <td>
-                      {" "}
-                      <p>:</p>
-                    </td>
-                    <td>
-                      <p className="modal_view_p_sub">
-                        {AllEnquiries?.enquiry_source}
-                      </p>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style={{ color: "black", fontWeight: "500" }}>
-                      <p className="">Freight Type</p>
-                    </td>
-                    <td>
-                      {" "}
-                      <p>:</p>
-                    </td>
-                    <td>
-                      <p className="modal_view_p_sub">
-                        {AllEnquiries?.fms_v1_freight_types?.freight_type_name}
-                      </p>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style={{ color: "black", fontWeight: "500" }}>
-                      <p className="">Remarks</p>
-                    </td>
-                    <td>
-                      {" "}
-                      <p>:</p>
-                    </td>
-                    <td>
-                      <p className="modal_view_p_sub">
-                        {AllEnquiries?.enquiry_remarks}
-                      </p>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
             </div>
-            <div className="col-6 p-3 mt-5">
-              <table>
-                <tbody>
-                  <tr>
-                    <td style={{ color: "black", fontWeight: "500" }}>
-                      <p className=""> Enquiry Date</p>
-                    </td>
-                    <td>
-                      {" "}
-                      <p>:</p>
-                    </td>
-                    <td>
-                      <p className="modal_view_p_sub">
-                        {moment(AllEnquiries?.enquiry_date).format(
-                          "DD-MM-YYYY"
-                        )}
-                      </p>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style={{ color: "black", fontWeight: "500" }}>
-                      <p className="">Sale Person</p>
-                    </td>
-                    <td>
-                      {" "}
-                      <p>:</p>
-                    </td>
-                    <td>
-                      <p className="modal_view_p_sub">
-                      {AllEnquiries?.hrms_v1_employee_sales_person
-?.employee_name}
-                      </p>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style={{ color: "black", fontWeight: "500" }}>
-                      <p className=""> Email</p>
-                    </td>
-                    <td>
-                      {" "}
-                      <p>:</p>
-                    </td>
-                    <td>
-                      <p className="modal_view_p_sub">
-                        {AllEnquiries?.crm_v1_contacts?.contact_email}
-                      </p>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style={{ color: "black", fontWeight: "500" }}>
-                      <p className=""> Phone</p>
-                    </td>
-                    <td>
-                      {" "}
-                      <p>:</p>
-                    </td>
-                    <td>
-                      <p className="modal_view_p_sub">
-                        {AllEnquiries?.crm_v1_contacts?.contact_phone_1}
-                      </p>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style={{ color: "black", fontWeight: "500" }}>
-                      <p className="">Customer Reference</p>
-                    </td>
-                    <td>
-                      {" "}
-                      <p>:</p>
-                    </td>
-                    <td>
-                      <p className="modal_view_p_sub">
-                        {AllEnquiries?.enquiry_customer_ref}
-                      </p>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style={{ color: "black", fontWeight: "500" }}>
-                      <p className="">Attachments</p>
-                    </td>
-                    <td>
-                      {" "}
-                      <p>:</p>
-                    </td>
-                    <td>
-                      <p className="modal_view_p_sub">
-                        {AllEnquiries?.enquiry_docs}
-                      </p>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+            <div className="row mt-3 pb-5">
+            <div className="col-sm-6 d-flex">
+            <div className="col-4 boldhd pb-3">Enquiry No</div>
+            <div className="col-1">:</div>
+            <div className="col-7">
+              <p className="modal-view-data">
+              {AllEnquiries?.enquiry_no}
+              </p>
             </div>
+           
+        </div>
+        <div className="col-sm-6 d-flex">
+          <div className="col-4 boldhd pb-3">Customer Name</div>
+          <div className="col-1">:</div>
+          <div className="col-7">
+            <p className="modal-view-data">
+            {AllEnquiries?.crm_v1_customer?.customer_name}
+            </p>
           </div>
         </div>
-      </div>
+
+        <div className="col-sm-6 d-flex">
+          <div className="col-4 boldhd pb-3">Contact Person Name</div>
+          <div className="col-1">:</div>
+          <div className="col-7">
+            <p className="modal-view-data">
+            {AllEnquiries?.crm_v1_contacts?.contact_person_name}
+            </p>
+          </div>
+        </div>
+
+        <div className="col-sm-6 d-flex">
+          <div className="col-4 boldhd pb-3">Source</div>
+          <div className="col-1">:</div>
+          <div className="col-7">
+            <p className="modal-view-data">
+            {AllEnquiries?.enquiry_source}
+            </p>
+          </div>
+        </div>
+        <div className="col-sm-6 d-flex">
+          <div className="col-4 boldhd pb-3">Freight Type</div>
+          <div className="col-1">:</div>
+          <div className="col-7">
+            <p className="modal-view-data">
+            {AllEnquiries?.fms_v1_freight_types?.freight_type_name}
+            </p>
+          </div>
+        </div>
+
+        <div className="col-sm-6 d-flex">
+          <div className="col-4 boldhd pb-3">Remarks</div>
+          <div className="col-1">:</div>
+          <div className="col-7">
+            <p className="modal-view-data">
+            {AllEnquiries?.enquiry_remarks}
+            </p>
+          </div>
+        </div>
+
+        <div className="col-sm-6 d-flex">
+          <div className="col-4 boldhd pb-3">Enquiry Date</div>
+          <div className="col-1">:</div>
+          <div className="col-7">
+            <p className="modal-view-data">
+            {moment(AllEnquiries?.enquiry_date).format(
+                          "DD-MM-YYYY"
+                        )}
+
+            </p>
+          </div>
+        </div>
+
+
+
+
+        <div className="col-sm-6 d-flex">
+          <div className="col-4 boldhd pb-3">Sale Person</div>
+          <div className="col-1">:</div>
+          <div className="col-7">
+            <p className="modal-view-data">
+            {AllEnquiries?.hrms_v1_employee_sales_person
+?.employee_name}
+
+            </p>
+          </div>
+        </div>
+
+
+
+        <div className="col-sm-6 d-flex">
+          <div className="col-4 boldhd pb-3">Email</div>
+          <div className="col-1">:</div>
+          <div className="col-7">
+            <p className="modal-view-data">
+            {AllEnquiries?.crm_v1_contacts?.contact_email}
+            </p>
+          </div>
+        </div>
+        <div className="col-sm-6 d-flex">
+          <div className="col-4 boldhd pb-3">Phone</div>
+          <div className="col-1">:</div>
+          <div className="col-7">
+            <p className="modal-view-data">
+            {AllEnquiries?.crm_v1_contacts?.contact_phone_1}
+            </p>
+          </div>
+        </div>
+
+
+        <div className="col-sm-6 d-flex">
+          <div className="col-4 boldhd pb-3">Customer Reference</div>
+          <div className="col-1">:</div>
+          <div className="col-7">
+            <p className="modal-view-data">
+            {AllEnquiries?.enquiry_customer_ref}
+            </p>
+          </div>
+        </div>
+        <div className="col-sm-6 d-flex">
+          <div className="col-4 boldhd pb-3">Attachments</div>
+          <div className="col-1">:</div>
+          <div className="col-7">
+            <p className="modal-view-data">
+            {AllEnquiries?.enquiry_docs}
+            </p>
+          </div>
+        </div>
+
+
+
+        </div>   
+           
+         
+      
     </div>
   );
 }

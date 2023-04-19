@@ -1144,7 +1144,7 @@ export default function EditOpportunity() {
               <h6 className="lead_text">Basic Info</h6>
             </div>
             <div className="col-sm-4 pt-1 d-flex">
-              <div className="col-11">
+              <div className="col-12">
                 <label className="mb-1">
                   Customer<span className="req_star">*</span>
                 </label>
@@ -1182,7 +1182,7 @@ export default function EditOpportunity() {
                   </SelectBox>
                 </Form.Item>
               </div>
-              <div className="col-1 mt-4 ps-1">
+              {/* <div className="col-1 mt-4 ps-1">
                 {" "}
                 <BsPlusCircleFill
                   style={{
@@ -1196,7 +1196,7 @@ export default function EditOpportunity() {
                     addForm.resetFields();
                   }}
                 />
-              </div>
+              </div> */}
             </div>
             <div className="col-sm-4 pt-2">
               <label className="mb-1">Enquiry No.</label>

@@ -69,7 +69,7 @@ function Enquiry() {
   useEffect(() => {
     // getallunits();
     // getAllLocations();
-
+    GetSingleEnquiry();
     getallfrighttype();
   }, []);
 
@@ -79,7 +79,7 @@ function Enquiry() {
   if(customername){
     GetAllCustomers();
     GetAllContacts();
-    addForm.setFieldsValue({customer : customername})
+    // addForm.setFieldsValue({customer : customername})
     setCustomer_Id(customername);
     handleclicknew(customername);
     // GetSingleCustomer(customername);
@@ -140,6 +140,7 @@ function Enquiry() {
         if (res.data.success) {
           console.log("Success og gettimg customers", res?.data?.data);
           setAllCustomers(res?.data?.data);
+         addForm.setFieldsValue({customer : customername})
         }
       })
       .catch((err) => {
@@ -193,6 +194,22 @@ console.log("CustomerName", customername);
         console.log("Error", err);
       });
   };
+const[allEnquiresno,setAllEnquiresno]=useState();
+  const GetSingleEnquiry = () => {
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/enquiries/enquiryNumber`)
+      .then((res) => {
+        console.log("response of enq number", res);
+        if (res.data.success) {
+          console.log("success", res.data.data);
+          setAllEnquiresno(res?.data?.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+
 
   const GetSingleContact = (e) => {
     PublicFetch.get(`${CRM_BASE_URL}/contact/${e}`)
@@ -236,18 +253,38 @@ console.log("CustomerName", customername);
   //     salesperson : personName,
   //   });
   // }, []);
-
+  const handleSelectCustomer = (customerId) => {
+    setCustomer_Id(customerId);
+    GetAllContacts(customerId);
+    GetAllCustomers();
+    // addForm.resetFields();
+    handleclick(customerId);
+  };
 
   const CreateEnquiry = (data) => {
     let enquiry_date = moment(data.date);
     const formData = new FormData();
     formData.append("enquiry_customer_id", data.customer);
-    formData.append("enquiry_source", data.source);
+    if(data.source){
+      formData.append("enquiry_source", data.source);
+    }
+    
     formData.append("enquiry_date", enquiry_date);
-    formData.append("enquiry_customer_ref", data.reference);
+    if(data.reference){
+      formData.append("enquiry_customer_ref", data.reference);
+    }
+    
     formData.append("enquiry_contact_person_id", data.contactperson);
-    formData.append("enquiry_remarks", data.purchasePoRef);
-    formData.append("enquiry_freight_type", data.customerfrighttype);
+
+    if(data.purchasePoRef){
+      formData.append("enquiry_remarks", data.purchasePoRef);
+    }
+ 
+if(data.customerfrighttype){
+  formData.append("enquiry_freight_type", data.customerfrighttype);
+}
+
+   
     formData.append("enquiry_sales_person_id", data.salesperson);
     // formData.append("", data.customerfrighttype);
     if (img) {
@@ -294,10 +331,21 @@ console.log("CustomerName", customername);
         console.log("Error", err);
       });
   };
-
+  const [filteredCustomers, setFilteredCustomers] = useState([]);
   useEffect(() => {
     GetSalesPersons();
   }, []);
+  const handleSearch = (value) => {
+    if (!value) {
+      setFilteredCustomers([]);
+      return;
+    }
+    const filtered = AllCustomers.filter((customer) =>
+      customer.customer_name.toLowerCase().includes(value.toLowerCase())
+    );
+    setFilteredCustomers(filtered);
+  };
+  
 
   useEffect(() => {
     GetAllCustomers();
@@ -355,28 +403,39 @@ console.log("CustomerName", customername);
                     },
                   ]}
                 >
-                  <SelectBox
-                    onChange={(e) => {
-                      setCustomer_Id(e);
-                      GetAllContacts(e);
-                    // addForm.resetFields();
-                    handleclick(e);
-                     
-                    }}
-                  >
-                    {AllCustomers &&
-                      AllCustomers.length > 0 &&
-                      AllCustomers.map((item, index) => {
-                        return (
-                          <Select.Option
-                            key={item.customer_id}
-                            value={item.customer_id}
-                          >
-                            {item?.customer_name}
-                          </Select.Option>
-                        );
-                      })}
-                  </SelectBox>
+               <SelectBox
+           filterOption={(input, option) =>
+
+
+            option.children.toUpperCase().includes(input.toUpperCase())
+
+          }
+
+          showSearch={true}
+          allowClear={true}
+          optionFilterProp="children"
+          // onSearch={handleSearch}
+          // onSelect={handleSelectCustomer} // add a function to handle when the user selects a customer
+          onChange={(e) => {
+            handleclick(e);
+            setCustomer_Id(e);
+            GetAllContacts(e);
+          // addForm.resetFields();
+        
+           
+          }}
+        >
+          {/* {(filteredCustomers.length > 0 ? filteredCustomers : AllCustomers)?.map((item, index) => { */}
+          {AllCustomers &&
+            AllCustomers.length > 0 &&
+            AllCustomers.map((item, index) => {
+            return (
+              <Select.Option key={item.customer_id} value={item.customer_id}>
+                {item?.customer_name}
+              </Select.Option>
+            );
+          })}
+        </SelectBox>
                 </Form.Item>
               </div>
               <div className="col-1 ">
@@ -390,8 +449,8 @@ console.log("CustomerName", customername);
                   <BsPlusCircleFill
                     style={{
                       fontSize: "21px",
-                      marginTop: "27px",
-                      marginLeft: "10px",
+                      marginTop: "32px",
+                      marginLeft: "4px",
                       color:"#0891d1",
                     }}
                     onClick={() => {
@@ -448,13 +507,13 @@ console.log("CustomerName", customername);
               </label>
               <Form.Item name="enquiryno"
               
-                rules={[
-                  {
-                    required: true,
-                    pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                    message: "Please enter a Valid Enquiry number",
-                  },
-                ]}
+                // rules={[
+                //   {
+                //     required: true,
+                //     pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                //     message: "Please enter a Valid Enquiry number",
+                //   },
+                // ]}
               >
                 <InputType
                 //   value={purchasePoNo}
@@ -462,6 +521,7 @@ console.log("CustomerName", customername);
                 //     setPurchasePoNo(e.target.value);
                 //     console.log("purchasePoNo", purchasePoNo);
                 //   }}
+                disabled={true}
                 />
               </Form.Item>
             </div>
@@ -492,16 +552,16 @@ console.log("CustomerName", customername);
             </div>
 
             <div className="col-sm-4 pt-2">
-              <label className="mb-1">Source</label>
+              <label className="mb-1">Source<span className="required">*</span></label>
               <Form.Item
                 name="source"
                 className=""
-                // rules={[
-                //   {
-                //     required: true,
-                //     message: "Source is Required",
-                //   },
-                // ]}
+                rules={[
+                  {
+                    required: true,
+                    message: "Source is Required",
+                  },
+                ]}
               >
                 <SelectBox>
                   <Select.Option value="reference">Reference</Select.Option>

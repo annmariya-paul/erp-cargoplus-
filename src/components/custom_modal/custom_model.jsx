@@ -1,8 +1,8 @@
 import "./custom_model.scss";
 import React from "react";
-import {HiBadgeCheck} from "react-icons/hi"
+import { HiBadgeCheck } from "react-icons/hi";
 // import { Modal } from "react-bootstrap";
-import {Modal} from "antd"
+import { Modal } from "antd";
 
 function Custom_model({
   onClick,
@@ -18,9 +18,11 @@ function Custom_model({
   closable,
   width,
   centered,
+  cancel,
   dialogClassName,
   View_list,
   list_content,
+  cancelName,
   ...rest
 }) {
   return (
@@ -34,7 +36,7 @@ function Custom_model({
         // onHide={onHide}
         onCancel={onHide}
         closable={closable}
-        visible={show}
+        open={show}
         width={width}
         dialogClassName={dialogClassName}
         centered={centered}
@@ -59,7 +61,19 @@ function Custom_model({
                 style={{ fontSize: "100px" }}
               />
               <h4 className="success_msg">Save Success !</h4>
-              <p style={{textAlign: "center" }}>Your Data was Saved</p>
+              <p style={{ textAlign: "center" }}>Your Data was Saved</p>
+            </div>
+          </div>
+        )}
+        {cancel && (
+          <div>
+            <div className="row">
+              <HiBadgeCheck
+                className=" cancel_msg"
+                style={{ fontSize: "100px" }}
+              />
+              <h4 className="cancel_msg">{cancelName} Canceled !</h4>
+              {/* <p style={{ textAlign: "center" }}>Your Data was Saved</p> */}
             </div>
           </div>
         )}

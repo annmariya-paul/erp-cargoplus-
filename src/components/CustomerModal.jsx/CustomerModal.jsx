@@ -9,7 +9,7 @@ import { CRM_BASE_URL } from "../../api/bootapi";
 import CheckUnique from "../../check Unique/CheckUnique";
 import { UniqueErrorMsg } from "../../ErrorMessages/UniqueErrorMessage";
 
-function CustomerModal({ onHide, show, setCustomerName ,setCustomernew}) {
+function CustomerModal({ onHide, show, setCustomerName ,setCustomernew,onCustomerAdded}) {
   const [addForm] = Form.useForm();
   const [successPopup, setSuccessPopup] = useState(false);
   const [custype, setCustype] = useState("individual");

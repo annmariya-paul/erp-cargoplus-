@@ -42,6 +42,11 @@ export default function Add_Quotation() {
   const [date, setDate] = useState();
   const [taxGroup, setTaxGroup] = useState();
   const [currencyDefault, setCurrencyDefault] = useState();
+  const [startDate, setStartDate] = useState(new Date());
+  const [numberOfDays, setNumberOfDays] = useState();
+  // let bs = new Date();
+
+  // console.log("kdsdsd", numberOfDays, endDate);
 
   console.log("curencydefault", currencyDefault);
 
@@ -858,13 +863,71 @@ export default function Add_Quotation() {
   console.log("change", frightmode);
   const [frighttypemode, setFrighttypemode] = useState();
   console.log("frighttype mode ", frighttypemode);
-  const [leadIdEnq, setLeadIdEnq] = useState("");
+  const [opportunity_id, setOpportunity_Id] = useState("");
 
-  console.log("Selected  enquiry lead id is ", leadIdEnq);
-  const handleLeadIdEnq = (leadIdenq) => {
-    // addForm.setFieldValue("consignee", leadIdenq);
-    setLeadIdEnq(leadIdenq);
+  console.log("Selected  opportunity id is ", opportunity_id);
+
+  const handleGetSingleCustomer = (data) => {
+    PublicFetch.get(`${CRM_BASE_URL}/customer/${data}`)
+      .then((res) => {
+        console.log("response from single customer");
+        if (res.data.success) {
+          console.log("success from single customer");
+          setNumberOfDays(res?.data?.data?.customer_qtn_validity_days);
+          addForm.setFieldsValue({
+            // customer: res.data.data.customer_id,
+            // incoterm: res.data.data.incoterm_id,
+            freighttype: res?.data?.data?.customer_preferred_freight_type,
+            // salesperson: res?.data?.data?.opportunity_salesperson_id,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
   };
+
+  const handleLeadIdEnq = (Oppo_id) => {
+    PublicFetch.get(`${CRM_BASE_URL}/opportunity/${Oppo_id}`)
+      .then((res) => {
+        console.log("response from opportunity");
+        if (res.data.success) {
+          console.log("Success from Opporutnity", res.data.data);
+          setNumberOfDays(
+            res?.data?.data?.crm_v1_customer?.customer_qtn_validity_days
+          );
+
+          // console.log("jhwbfh", endDate);
+          addForm.setFieldsValue({
+            customer: res.data.data.opportunity_customer_id,
+            incoterm: res.data.data.opportunity_incoterm_id,
+            freighttype:
+              res?.data?.data?.crm_v1_customer?.customer_preferred_freight_type,
+            salesperson: res?.data?.data?.opportunity_salesperson_id,
+          });
+          // if(res?.data?.data?.crm_v1_customer?.customer_qtn_validity_days == null ||res?.data?.data?.crm_v1_customer?.customer_qtn_validity_days == 0){
+          //   PublicFetch.get(${``})
+          // }
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+
+    setOpportunity_Id(Oppo_id);
+  };
+
+  useEffect(() => {
+    if (numberOfDays && startDate) {
+      const endDate = new Date(
+        startDate.setDate(startDate.getDate() + numberOfDays)
+      );
+      let a = moment(endDate);
+      addForm.setFieldsValue({
+        vdate: a,
+      });
+    }
+  }, [numberOfDays, startDate]);
   // const handleFirstDropdownChange = (event) => {
   //   setSelectedOption(event);
   // };
@@ -910,7 +973,6 @@ export default function Add_Quotation() {
               lead_id: item?.crm_v1_leads?.lead_id,
               assigned_employee: item?.assigned_employee,
             });
-            handleLeadIdEnq();
           });
           console.log("hellooooqqqqq", tempArr);
           setOppnew(tempArr);
@@ -1193,7 +1255,11 @@ export default function Add_Quotation() {
                         },
                       ]}
                     >
-                      <SelectBox>
+                      <SelectBox
+                        onChange={(e) => {
+                          handleGetSingleCustomer(e);
+                        }}
+                      >
                         {allCustomerList &&
                           allCustomerList.length > 0 &&
                           allCustomerList.map((item, index) => {
@@ -1253,7 +1319,7 @@ export default function Add_Quotation() {
                       Quotation No<span className="required">*</span>
                     </label>
                     <Form.Item name="qno">
-                      <SelectBox></SelectBox>
+                      <InputType disabled={true} />
                     </Form.Item>
                   </div>
 
@@ -1275,6 +1341,10 @@ export default function Add_Quotation() {
                         style={{ borderWidth: 0, marginTop: 10 }}
                         defaultValue={moment(date)}
                         format={dateFormatList}
+                        onChange={(e) => {
+                          let a = new Date(e);
+                          setStartDate(a);
+                        }}
                       />
                     </Form.Item>
                   </div>
@@ -1336,7 +1406,7 @@ export default function Add_Quotation() {
                   </div>
 
                   <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                    <label>Enquiry No</label>
+                    <label>Opportunity No</label>
                     <Form.Item name="eno">
                       <SelectBox
                         onChange={(e) => handleLeadIdEnq(e)}
@@ -1781,7 +1851,7 @@ export default function Add_Quotation() {
                 {/* </div> */}
               </div>
               <div className="row mt-1 justify-content-between ">
-                <div className=" col-md-6 col-12 ">
+                <div className="col-xl-6 col-lg-12 col-md-12 col-12 ">
                   <div className="row content-tabs-new justify-content  mb-3">
                     <div className="row mt-2">
                       <h6 className="lead_text">Payment Info</h6>
@@ -1890,7 +1960,7 @@ export default function Add_Quotation() {
                   </div>
                 </div>
 
-                <div className=" col-md-6 col-12">
+                <div className=" col-xl-6 col-lg-12 col-12">
                   <div className="content-tabs-new row justify-content ms-1 mb-3">
                     <div className="row mt-2">
                       <h6 className="lead_text">Attachments</h6>
@@ -1899,6 +1969,7 @@ export default function Add_Quotation() {
                       <Form.Item className="mt-2" name="new">
                         <FileUpload
                           multiple
+                          style={{ height: "60px" }}
                           filetype={"Accept only pdf and docs"}
                           // height={188}
                           listType="picture"

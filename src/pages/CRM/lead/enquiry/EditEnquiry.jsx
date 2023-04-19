@@ -417,8 +417,8 @@ function EditEnquiry() {
               //  rules={[
               //           {
               //             required: true,
-              //             pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-              //             message: "Please enter a Valid Enquiry number",
+                      
+              //             message: "Enquiry number is required",
               //           },
               //         ]} 
               >
@@ -428,6 +428,7 @@ function EditEnquiry() {
                 //     setPurchasePoNo(e.target.value);
                 //     console.log("purchasePoNo", purchasePoNo);
                 //   }}
+                disabled={true}
                 />
               </Form.Item>
             </div>
@@ -459,17 +460,17 @@ function EditEnquiry() {
 
             <div className="col-sm-4 pt-2">
               <label className="mb-1">
-                Source
+                Source<span className="required">*</span>
               </label>
               <Form.Item
                 name="source"
                 className=""
-                // rules={[
-                //   {
-                //     required: true,
-                //     message: "Source is Required",
-                //   },
-                // ]}
+                rules={[
+                  {
+                    required: true,
+                    message: "Source is Required",
+                  },
+                ]}
               >
                 <SelectBox>
                   <Select.Option value="reference">Reference</Select.Option>
@@ -514,7 +515,7 @@ function EditEnquiry() {
                 rules={[
                   {
                     required: true,
-                    message: "Sales Person is Required",
+                    message: "Sale Person is Required",
                   },
                 ]}
               >

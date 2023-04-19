@@ -16,6 +16,11 @@ Button.btn-close {
 .success_msg {
   color: variables.$primary;
 }
+.cancel_msg {
+  color: variables.$primary;
+  justify-content: center !important;
+  text-align: center;
+}
 .modal-footer {
   border-top: none;
   justify-content: center;
@@ -40,10 +45,10 @@ Button.btn-close {
 .form-control {
   outline: none !important;
 }
-input[type='date']{
-    width: 100%;
-    background-color: variables.$inputfield;
-    outline:none;
+input[type="date"] {
+  width: 100%;
+  background-color: variables.$inputfield;
+  outline: none;
 }
 .modal_window_style {
   :global {
@@ -58,9 +63,10 @@ input[type='date']{
   }
 }
 .ant-modal-centered .ant-modal {
-   top: 10%!important; }
+  top: 10% !important;
+}
 
-   .modal_body{
-    height: 500px;
-    overflow-y: auto;
-   }
+.modal_body {
+  height: 500px;
+  overflow-y: auto;
+}

@@ -212,7 +212,7 @@ function Opportunitylist(props) {
                   opportunity_amount: item?.opportunity_amount,
                   opportunity_status: item?.opportunity_status,
                   opportunity_validity: item?.opportunity_validity,
-                  opp_enq:item?.fms_v1_enquiry_opportunities[0].enq_opp_enquiry_id,
+                  // opp_enq:item?.fms_v1_enquiry_opportunities[0].enq_opp_enquiry_id,
 
                 });
               }

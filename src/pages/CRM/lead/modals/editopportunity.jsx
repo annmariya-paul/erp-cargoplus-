@@ -178,7 +178,7 @@ export default function EditOpportunity() {
   };
   const [enquiryData, setEnquiryData] = useState();
   const getAllEnquiry = () => {
-    PublicFetch.get(`${CRM_BASE_URL_FMS}/enquiries`)
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/enquiries/minimal`)
       .then((res) => {
         console.log("response", res);
         if (res.data.success) {
@@ -1158,6 +1158,16 @@ export default function EditOpportunity() {
                   ]}
                 >
                   <SelectBox
+                   filterOption={(input, option) =>
+
+
+                    option.children.toUpperCase().includes(input.toUpperCase())
+        
+                  }
+        
+                  showSearch={true}
+                  allowClear={true}
+                  optionFilterProp="children"
                     placeholder={"--Please Select--"}
                     // value={opptype}
                     onChange={(e) => {

@@ -8,6 +8,8 @@ const ROUTES = {
   CATEGORY: "/category",
   TEST_PAGE: "/test-page",
   OPPORTUNITY: "/opportunity",
+  VIEW_OPPORTUNITY: "/view_opportunity",
+  VIEW_OPPORTUNITY_ID: "/view_opportunity/:id",
 
   CATEGORY_LIST: "/categorylist",
   LEAD_REPORT: "/Customer_Report",

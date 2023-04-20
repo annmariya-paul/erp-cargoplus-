@@ -202,7 +202,7 @@ export default function AddOpportunity() {
 
   const [enquiryData, setEnquiryData] = useState();
   const getAllEnquiry = () => {
-    PublicFetch.get(`${CRM_BASE_URL_FMS}/enquiries`)
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/enquiries/minimal`)
       .then((res) => {
         console.log("response", res);
         if (res.data.success) {
@@ -246,8 +246,8 @@ export default function AddOpportunity() {
     addForm.setFieldsValue({
       oppo_source: "reference",
       oppo_type: "sales",
-      oppo_probability: "L",
-      oppo_status: 1,
+      // oppo_probability: "L",
+      // oppo_status: 1,
     });
   }, []);
 
@@ -286,16 +286,27 @@ export default function AddOpportunity() {
     formData.append("opportunity_date", date);
     formData.append("opportunity_customer_id", data.oppo_customer);
     formData.append("opportunity_from", opporFrom);
-    formData.append("opportunity_customer_ref", data.oppo_customer_ref);
+    if(data.oppo_customer_ref){
+      formData.append("opportunity_customer_ref", data.oppo_customer_ref);
+    }
+    
     formData.append("opportunity_source", data.oppo_source);
     formData.append("opportunity_contact_id", data.contact_person);
     formData.append("opportunity_party", data.contact_person);
     formData.append("opportunity_type", data.oppo_type);
     formData.append("opportunity_incoterm_id", data.oppo_incoterm);
     formData.append("opportunity_validity", validityDate);
-    formData.append("opportunity_amount", data.oppo_amount);
-    formData.append("opportunity_probability", data.oppo_probability);
-    formData.append("opportunity_description", data.oppo_description);
+    if( data.oppo_amount){
+      formData.append("opportunity_amount", data.oppo_amount);
+    }
+   
+    if(data.oppo_probability){
+      formData.append("opportunity_probability", data.oppo_probability);
+    }
+ if(data.oppo_description){
+  formData.append("opportunity_description", data.oppo_description);
+ }
+
     formData.append("opportunity_status", data.oppo_status);
     formData.append("opportunity_salesperson_id", data.sales_person);
     //  formData.append("opportunity_enquiries",JSON.stringify(data.oppo_enquiries));
@@ -556,7 +567,16 @@ export default function AddOpportunity() {
                   ]}
                 >
                   <SelectBox
-                    placeholder={"--Please Select--"}
+                   filterOption={(input, option) =>
+
+
+                    option.children.toUpperCase().includes(input.toUpperCase())
+        
+                  }
+        
+                  showSearch={true}
+                  allowClear={true}
+                  optionFilterProp="children"
                     // value={opptype}
                     onChange={(e) => {
                       setCustomer_Id(e);

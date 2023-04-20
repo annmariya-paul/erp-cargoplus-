@@ -635,13 +635,16 @@ function Opportunitylist(props) {
       render: (data, index) => {
         console.log("indexx", index);
         return (
-          <div className="d-flex justify-content-center gap-2">
-            <div className="editcolor">
+          <div className="d-flex justify-content-center align-items-center gap-2">
+            <div className="m-0">
               {/* <FaEdit onClick={() => handleEditedclick(index)} /> */}
-              <Link to={`${ROUTES.EDIT_OPPORTUNITY}/${index.opportunity_Id}`}>
+              <Link to={`${ROUTES.EDIT_OPPORTUNITY}/${index.opportunity_Id}`}
+               className="editcolor"
+              >
                 <FaEdit />
               </Link>
             </div>
+            <div className="actionView m-0">
             <div className="editcolor"
              onClick={
               () => {
@@ -655,6 +658,7 @@ function Opportunitylist(props) {
                 // onClick={()=>viewprogressoppurtunity(index)}
                 // onClick={() => Viewoppurtunties(index)}
               />
+            </div>
             </div>
             <div className="deleteIcon m-0">
               <Popconfirm

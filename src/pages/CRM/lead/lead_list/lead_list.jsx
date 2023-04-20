@@ -86,9 +86,9 @@ export default function LeadList() {
   // console.log("page size", pageIndex);
   // console.log(totalCount / noofItems);
 
-  const GetAllLeadData = () => {
+  const GetAllLeadData = (query) => {
     PublicFetch.get(
-      `${CRM_BASE_URL}/customer?startIndex=${pageofIndex}&noOfItems=${noofItems}`
+      `${CRM_BASE_URL}/customer?startIndex=${pageofIndex}&noOfItems=${noofItems}&search=${query}`
     )
       .then((res) => {
         if (res?.data?.success) {
@@ -156,7 +156,7 @@ export default function LeadList() {
 
   useEffect(() => {
    
-    GetAllLeadData();
+    GetAllLeadData(searchedText);
   }, [noofItems, pageofIndex, pagesizecount]);
 
   const getData = (numofItemsTo, pageofIndex) => {
@@ -375,13 +375,19 @@ export default function LeadList() {
                 className="editcolor"
               >
                 <FaEdit />
-              </Link>{" "}
+              </Link>
             </div>
 
             <div className="actionView m-0">
-              <div className="editcolor" onClick={() => handleViewData(index)}>
+            <Link
+                to={`${ROUTES.VIEW_CUSTOMER}/${index.customer_id}`}
+                className="editcolor"
+              >
+              <MdPageview />
+              </Link>
+              {/* <div className="editcolor" onClick={() => handleViewData(index)}>
                 <MdPageview />
-              </div>
+              </div> */}
             </div>
           </div>
         );
@@ -509,8 +515,10 @@ export default function LeadList() {
               </Select>
             </div>
           </div> */}
-          <div className="row my-3">
+          <div className="row my-3 ">
             <div className="col-4 px-3">
+              <div className="row">
+            <div className="col-xl-2 col-lg-3 col-md-4 col-sm-12   ">
               <Select
                 // defaultValue={"25"}
                 bordered={false}
@@ -524,44 +532,31 @@ export default function LeadList() {
                   setCurrent(1);
                 }}
               >
-                {/* <Select.Option value="5">5 | pages</Select.Option> */}
-                {/* <Select.Option value="10">
-                  Show
-                  <span style={{ color: "lightgray" }} className="ms-1">
-                    |
-                  </span>
-                  <span style={{ color: "#2f6b8f" }} className="ms-1">
-                    10
-                  </span>
-                </Select.Option> */}
+                
                 <Select.Option value="25">
-                  Show
-                  <span style={{ color: "lightgray" }} className="ms-1">
-                    |
-                  </span>
+                 
                   <span style={{ color: "#2f6b8f" }} className="ms-1">
                     25
                   </span>
                 </Select.Option>
                 <Select.Option value="50">
-                  Show
-                  <span style={{ color: "lightgray" }} className="ms-1">
-                    |
-                  </span>
+                 
                   <span style={{ color: "#2f6b8f" }} className="ms-1">
                     50
                   </span>
                 </Select.Option>
                 <Select.Option value="100">
-                  Show
-                  <span style={{ color: "lightgray" }} className="ms-1">
-                    |
-                  </span>
+                 
                   <span style={{ color: "#2f6b8f" }} className="ms-1">
                     100
                   </span>{" "}
                 </Select.Option>
               </Select>
+            </div>
+            <div className=" col-xl-10 col-lg-9 col-md-8 col-sm-12  d-flex  align-items-center ">
+            <label className="font_size" >Results: 1-{noofItems}  <span>of {totalCount} </span> </label>
+            </div>
+            </div>
             </div>
             <div className="col-4 d-flex py-2 justify-content-center">
               <MyPagination

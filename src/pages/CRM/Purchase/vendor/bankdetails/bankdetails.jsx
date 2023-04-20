@@ -23,7 +23,7 @@ function Bankdetails({ vendor, toggle }) {
   const [editmodalShow, seteditModalShow] = useState(false);
   const [bnkdetailid, setbnkdetailid] = useState("");
   const [bankdefault, setbankdefault] = useState(0);
-  const [editbankdefault, seteditbankdefault] = useState("");
+  const [editbankdefault, seteditbankdefault] = useState(0);
 
   const [successmsg, setSuccessmsg] = useState(false);
 
@@ -59,6 +59,9 @@ function Bankdetails({ vendor, toggle }) {
     if (e.target.checked) {
       console.log("suceccss checked", e.target.checked);
       seteditbankdefault(1);
+    }
+    else{
+      seteditbankdefault(0)
     }
   };
 
@@ -300,39 +303,39 @@ function Bankdetails({ vendor, toggle }) {
                 console.log(error);
               }}
             >
-              <div className="row py-5 px-1">
-                <div className="col-sm-6 pb-2 ">
+              {/* <div className="row py-5 px-1"> */}
+                <div className="col-sm-12  ">
                   <label>Account Name</label>
                   <Form.Item name="vend_accname">
                     <InputType />
                   </Form.Item>
                 </div>
-                <div className="col-sm-6 pb-2">
+                <div className="col-sm-12  mt-3">
                   <label>Account No</label>
                   <Form.Item name="vend_accno">
                     <InputType />
                   </Form.Item>
                 </div>
-                <div className="col-sm-6 pb-2  mt-2">
+                <div className="col-sm-12   mt-3">
                   <label>Bank Name</label>
                   <Form.Item name="vend_bankname">
                     <InputType />
                   </Form.Item>
                 </div>
 
-                <div className="col-sm-6 pb-2 mt-2">
+                <div className="col-sm-12  mt-3">
                   <label>Branch Name</label>
                   <Form.Item name="vend_branchname">
                     <InputType />
                   </Form.Item>
                 </div>
-                <div className="col-sm-6 pb-2 mt-2">
+                <div className="col-sm-12  mt-3">
                   <label>IBAN No</label>
                   <Form.Item name="vend_ibanno">
                     <InputType />
                   </Form.Item>
                 </div>
-                <div className="col-6 pt-2 pb-2 mt-2">
+                <div className="col-sm-12  mt-3">
                   <label>Default Bank</label>
                   <div>
                     <Form.Item name="vend_defaultbnk">
@@ -365,7 +368,7 @@ function Bankdetails({ vendor, toggle }) {
                     onHide={() => setSuccessPopup(false)}
                   />
                 </div>
-              </div>
+              {/* </div> */}
             </Form>
           </>
         }
@@ -393,39 +396,39 @@ function Bankdetails({ vendor, toggle }) {
                 console.log(error);
               }}
             >
-              <div className="row py-5 px-1">
-                <div className="col-sm-6 pb-2 ">
+              {/* <div className="row py-5 px-1"> */}
+                <div className="col-sm-12 pb-2 ">
                   <label>Account Name</label>
                   <Form.Item name="editvend_accname">
                     <InputType />
                   </Form.Item>
                 </div>
-                <div className="col-sm-6 pb-2">
+                <div className="col-sm-12 pb-2">
                   <label>Account No</label>
                   <Form.Item name="editvend_accno">
                     <InputType />
                   </Form.Item>
                 </div>
-                <div className="col-sm-6 pb-2  mt-2">
+                <div className="col-sm-12 pb-2  mt-2">
                   <label>Bank Name</label>
                   <Form.Item name="editvend_bankname">
                     <InputType />
                   </Form.Item>
                 </div>
 
-                <div className="col-sm-6 pb-2 mt-2">
+                <div className="col-sm-12 pb-2 mt-2">
                   <label>Branch Name</label>
                   <Form.Item name="editvend_branchname">
                     <InputType />
                   </Form.Item>
                 </div>
-                <div className="col-sm-6 pb-2 mt-2">
+                <div className="col-sm-12 pb-2 mt-2">
                   <label>IBAN No</label>
                   <Form.Item name="editvend_ibanno">
                     <InputType />
                   </Form.Item>
                 </div>
-                <div className="col-6 pt-2 pb-2 mt-2">
+                <div className="col-sm-12 pt-2 pb-2 mt-2">
                   <label>Default Bank</label>
                   <div>
                     <Form.Item name="editvend_defaultbnk">
@@ -442,7 +445,7 @@ function Bankdetails({ vendor, toggle }) {
                     Save
                   </Button>
                 </div>
-              </div>
+              {/* </div> */}
             </Form>
           </>
         }

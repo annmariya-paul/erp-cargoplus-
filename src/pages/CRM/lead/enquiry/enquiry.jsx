@@ -715,6 +715,7 @@ if(data.customerfrighttype){
               <label className="mb-1">Email</label>
               <Form.Item name="contactemail">
                 <InputType
+                disabled={true}
                 //   value={purchasePoNo}
                 //   onChange={(e) => {
                 //     setPurchasePoNo(e.target.value);
@@ -727,6 +728,7 @@ if(data.customerfrighttype){
               <label className="mb-1">Phone</label>
               <Form.Item name="contactphone">
                 <InputType
+                  disabled={true}
                 //   value={purchasePoNo}
                 //   onChange={(e) => {
                 //     setPurchasePoNo(e.target.value);

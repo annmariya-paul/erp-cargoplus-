@@ -246,8 +246,8 @@ export default function AddOpportunity() {
     addForm.setFieldsValue({
       oppo_source: "reference",
       oppo_type: "sales",
-      // oppo_probability: "L",
-      // oppo_status: 1,
+      oppo_probability: "L",
+      oppo_status: 1,
     });
   }, []);
 
@@ -276,8 +276,9 @@ export default function AddOpportunity() {
   // { function to add opportunity - Ann - 29/3/23}
   const newDate = new Date();
   const thisDate = moment(newDate);
+  const defaultDate = moment().add(7, 'days');
   addForm.setFieldValue("oppor_date", thisDate);
-  addForm.setFieldValue("oppo_validity", thisDate);
+  addForm.setFieldValue("oppo_validity", defaultDate);
 
   const oppdata = (data) => {
     const date = moment(data.oppor_date).format("MM/DD/YYYY");
@@ -875,6 +876,7 @@ export default function AddOpportunity() {
                 <DatePicker
                   style={{ borderWidth: 0, marginTop: 2 }}
                   format={"DD-MM-YYYY"}
+                  
                   defaultValue={moment(validityDate)}
                   // initialValues={oppurtunityvalidity}
                   // format={dateFormatList}

@@ -18,7 +18,6 @@ const ROUTES = {
   VIEW_CUSTOMER: "/view_customer",
   VIEW_CUSTOMER_ID: "/view_customer/:id",
 
-
   OPPORTUNITY_REPORT: "/opportunity-report",
   OPPORTUNITY_LEAD_ID: "/opportunity_lead/:id",
   OPPORTUNITY_LEAD: "/opportunity_lead",
@@ -79,14 +78,12 @@ const ROUTES = {
   EDIT_QUOTATION: "/edit_quotation",
   EDIT_QUOTATION_ID: "/edit_quotation/:id",
 
-  PURCHASEORDER:"/purchase_order",
-  PUCHASE_ORDER_LIST:"/purchase_order_list",
-  EDIT_PUCHASE_ORDER:"/edit_purchase_order",
-  EDIT_PUCHASE_ORDER_ID:"/edit_purchase_order/:id",
-  VIEW_PURCHASE_ORDER:"/view_purchase_order",
-  VIEW_PURCHASE_ORDER_ID:"/view_purchase_order/:id",
-
-
+  PURCHASEORDER: "/purchase_order",
+  PUCHASE_ORDER_LIST: "/purchase_order_list",
+  EDIT_PUCHASE_ORDER: "/edit_purchase_order",
+  EDIT_PUCHASE_ORDER_ID: "/edit_purchase_order/:id",
+  VIEW_PURCHASE_ORDER: "/view_purchase_order",
+  VIEW_PURCHASE_ORDER_ID: "/view_purchase_order/:id",
 
   VIEW_QUOTATION: "/view_quotation",
   ENQUIRIES: "/enquiries",
@@ -188,8 +185,8 @@ const ROUTES = {
   COMPANYINFO: "/company_info",
   TASKANDEXPENSES: "/task_expenses",
   TASKANDEXPENSES_ID: "/task_expenses/:id",
-  QUATATION_INVOICE: "/quatation_invoice",
-  QUATATION_INVOICE_ID: "/quatation_invoice/:id",
+  QUATATION_INVOICE: "/quotation_invoice",
+  QUATATION_INVOICE_ID: "/quotation_invoice/:id",
   PURCHASEORDER_INVOICE: "/purchase_order_invoice",
   PURCHASEORDER_INVOICE_ID: "/purchase_order_invoice/:id",
   JOB_INVOICE: "/job_invoice",
@@ -233,13 +230,12 @@ const ROUTES = {
 
   // testingg invoice
 
-  INVOICETEMPLATE:"/invoicetemplate1",
-  INVOICE_NEWTEMP:"/invoicetemplate2",
+  INVOICETEMPLATE: "/invoicetemplate1",
+  INVOICE_NEWTEMP: "/invoicetemplate2",
 
   // selectinginvoicetemplates
-  
-  SELECT_INVOICETEMPLATE:"/selectinvoicetemplate"
 
+  SELECT_INVOICETEMPLATE: "/selectinvoicetemplate",
 };
 
 module.exports = { ROUTES };

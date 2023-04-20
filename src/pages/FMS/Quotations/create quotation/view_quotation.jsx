@@ -171,7 +171,7 @@ export default function ViewQuotation() {
                     // handleviewtoedit();
                     // navigate(`${ROUTES.QUATATION_INVOICE}/${id}`);
                     window.open(
-                      `http://localhost:3000/quatation_invoice/${id}`,
+                      `http://demoerp.liondurian.com/quotation_invoice/${id}`,
                       `_blank`
                     );
                   }}

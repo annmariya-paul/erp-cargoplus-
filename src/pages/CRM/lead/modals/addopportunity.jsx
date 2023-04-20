@@ -223,6 +223,7 @@ export default function AddOpportunity() {
         console.log("response of customersss", res);
         if (res.data.success) {
           setCustomersData(res?.data?.data);
+          setAllCustomers(res?.data?.data);
         }
       })
       .catch((err) => {

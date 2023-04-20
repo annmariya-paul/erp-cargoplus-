@@ -24,7 +24,6 @@ import ContactTable from "../../lead/tables/contactstable";
 import Accounting from "./Accountings/Accountings";
 import Bankdetails from "./bankdetails/bankdetails";
 import FileUpload from "../../../../components/fileupload/fileUploader";
-import Editmoreinfo from "./editmoreinfo/Editmoreinfo";
 import Contact from "./vendorcontact/Contact";
 import Moreinfo from "./Moreinfo/moreinfo";
 

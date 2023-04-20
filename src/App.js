@@ -162,6 +162,7 @@ import AccGroup from "./pages/Accounts/settings/Account Group/AccGroup";
 import Invoicetemp1 from "./components/Invoice/invoicetemp1/invoicetemp1";
 import Invoicetemplate2 from "./components/Invoice/invoicetemp2/invoicetemp2";
 import Invoicetemplateselect from "./pages/General Settings/invoicetemplates/invoicetemplate";
+import Viewcustomer from "./pages/CRM/lead/lead_list/view_customer";
 import ViewOpportunity from "./pages/CRM/lead/modals/viewopportunity";
 function App() {
   return (
@@ -190,6 +191,11 @@ function App() {
             <Route path={ROUTES.CUSTOMER} element={<ProtectedRoute />}>
               <Route index element={<Lead />} />
             </Route>
+
+            <Route path={ROUTES.VIEW_CUSTOMER_ID} element={<ProtectedRoute />}>
+              <Route index element={<Viewcustomer />} />
+            </Route>
+
 
             <Route path={ROUTES.CATEGORY} element={<ProtectedRoute />}>
               <Route index element={<Category />} />

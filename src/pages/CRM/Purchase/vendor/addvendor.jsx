@@ -207,10 +207,10 @@ console.log("bnkdetails id iss",vendorId)
     formData.append(`email`, data.vendoremail);
     formData.append(`contact`, data.vendorphone);
 
-    data?.vendorcountry && formData.append(`country_id`, data.vendorcountry);
-    data?.vendorwebsite && formData.append(`website`, data.vendorwebsite);
-    data?.vendorcity && formData.append(`city`, data.vendorcity);
-    data?.vendorstate && formData.append(`state`, data.vendorstate);
+    data?.vendorcountry && formData.append(`country_id`, data?.vendorcountry);
+    data?.vendorwebsite && formData.append(`website`, data?.vendorwebsite);
+    data?.vendorcity && formData.append(`city`, data?.vendorcity);
+    data?.vendorstate && formData.append(`state`, data?.vendorstate);
 
     // formData.append(`city`, data.vendorcity);
     // formData.append(`website`, data.vendorwebsite);

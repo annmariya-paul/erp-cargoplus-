@@ -10,6 +10,7 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { CRM_BASE_URL_PURCHASING } from "../../../../../api/bootapi";
 import PublicFetch from "../../../../../utils/PublicFetch";
 import { FaEdit, FaTrash } from "react-icons/fa";
+import { message, Popconfirm } from "antd";
 function Bankdetails({ vendor, toggle }) {
   const [successPopup, setSuccessPopup] = useState(false);
   const [addForm] = Form.useForm();
@@ -21,13 +22,46 @@ function Bankdetails({ vendor, toggle }) {
   const [editForm] = Form.useForm();
   const [editmodalShow, seteditModalShow] = useState(false);
   const [bnkdetailid, setbnkdetailid] = useState("");
-  const [bankdefault,setbankdefault]= useState("")
+  const [bankdefault, setbankdefault] = useState(0);
+  const [editbankdefault, seteditbankdefault] = useState(0);
+
+  const [successmsg, setSuccessmsg] = useState(false);
+
+  const handleEditedclick = (e) => {
+    console.log("bankdataa", e);
+
+    setbnkdetailid(e.vend_bankdetail_id);
+    seteditbankdefault(e.vend_bankdefault);
+    editForm.setFieldsValue({
+      editvend_accname: e.vend_account_name,
+      editvend_bankname: e.vend_account_bnk,
+      editvend_accno: e.vend_account_no,
+      editvend_branchname: e.vend_branchname,
+      editvend_ibanno: e.vend_account_iban,
+      // editvend_defaultbnk:e.vend_bankdefault,
+    });
+    seteditModalShow(true);
+  };
 
   const handleChecked = (e, key) => {
     console.log("isChecked", e);
     if (e.target.checked) {
       console.log("suceccss checked", e.target.checked);
       setbankdefault(1);
+    }
+    else{
+      setbankdefault(0)
+    }
+  };
+
+  const handleCheckededit = (e, key) => {
+    console.log("isChecked", e);
+    if (e.target.checked) {
+      console.log("suceccss checked", e.target.checked);
+      seteditbankdefault(1);
+    }
+    else{
+      seteditbankdefault(0)
     }
   };
 
@@ -58,6 +92,7 @@ function Bankdetails({ vendor, toggle }) {
       }, time);
     }
   };
+
   const getvendorbankdetails = async () => {
     try {
       const allvendortypes = await PublicFetch.get(
@@ -78,7 +113,7 @@ function Bankdetails({ vendor, toggle }) {
               vend_account_iban: item?.ven_bank_det_IBAN,
               vend_bankdetail_id: item?.ven_bank_det_id,
               vend_branchname: item?.ven_bank_det_branch,
-              vend_bankdefault:item?.ven_bank_det_default
+              vend_bankdefault: item?.ven_bank_det_default,
             });
           }
         });
@@ -100,11 +135,14 @@ function Bankdetails({ vendor, toggle }) {
           ven_bank_det_bank: data.vend_bankname,
           ven_bank_det_IBAN: data.vend_ibanno,
           ven_bank_det_branch: data.vend_branchname,
-          ven_bank_det_default: data.vend_defaultbnk,
+          ven_bank_det_default: bankdefault,
           ven_bank_det_vendor_id: vendor?.vendor_id,
         }
       );
-      console.log("successfully add vendorbankdetails", addvendorbnkdetails);
+      console.log(
+        "successfully addinggg vendorbankdetails",
+        addvendorbnkdetails
+      );
       if (addvendorbnkdetails.data.success) {
         getvendorbankdetails();
         setModalShow(false);
@@ -120,7 +158,7 @@ function Bankdetails({ vendor, toggle }) {
 
   const updatevendorbankdetails = async (data) => {
     try {
-      const addvendorbnkdetails = await PublicFetch.patch(
+      const editvendorbnkdetails = await PublicFetch.patch(
         `${process.env.REACT_APP_BASE_URL}/crm/purchase/v1/vendor-bank-details/${bnkdetailid}`,
         {
           ven_bank_det_account_name: data.editvend_accname,
@@ -128,14 +166,17 @@ function Bankdetails({ vendor, toggle }) {
           ven_bank_det_bank: data.editvend_bankname,
           ven_bank_det_IBAN: data.editvend_ibanno,
           ven_bank_det_branch: data.editvend_branchname,
-          ven_bank_det_default: data.editvend_defaultbnk,
+          ven_bank_det_default: editbankdefault,
           ven_bank_det_vendor_id: vendor?.vendor_id,
         }
       );
-      console.log("successfully add vendorbankdetails", addvendorbnkdetails);
-      if (addvendorbnkdetails.data.success) {
+      console.log(
+        "successfully updated vendorbankdetails",
+        editvendorbnkdetails
+      );
+      if (editvendorbnkdetails?.data?.success) {
         getvendorbankdetails();
-        setModalShow(false);
+        seteditModalShow(false);
         //  addForm.resetFields()
         setSuccessPopup(true);
         close_modal(successPopup, 1000);
@@ -193,20 +234,6 @@ function Bankdetails({ vendor, toggle }) {
       align: "center",
     },
   ];
-  const handleEditedclick = (e) => {
-    console.log("bankdataa", e);
-    console.log("bnk idd")
-    setbnkdetailid(e.vend_bankdetail_id);
-    editForm.setFieldsValue({
-      editvend_accname: e.vend_account_name,
-      editvend_bankname: e.vend_account_bnk,
-      editvend_accno: e.vend_account_no,
-      editvend_branchname: e.vend_branchname,
-      editvend_ibanno: e.vend_account_iban,
-      vend_defaultbnk:e.vend_bankdefault,
-    });
-    seteditModalShow(true);
-  };
 
   useEffect(() => {
     getvendorbankdetails();
@@ -224,6 +251,18 @@ function Bankdetails({ vendor, toggle }) {
   }, [toggle, bnkdetails?.length]);
 
   console.log("vendorbankk id iss", vendor?.vendor_id);
+
+  const confirm = (e) => {
+    // console.log(e);
+    // message.success("Click on Yes");
+    setbankdefault(1)
+  };
+
+  const cancel = (e) => {
+    // console.log(e);
+    // message.error("Click on No");
+    setbankdefault(0)
+  };
 
   return (
     <>
@@ -264,46 +303,55 @@ function Bankdetails({ vendor, toggle }) {
                 console.log(error);
               }}
             >
-              <div className="row py-5 px-1">
-                <div className="col-sm-6 pb-2 ">
+              {/* <div className="row py-5 px-1"> */}
+                <div className="col-sm-12  ">
                   <label>Account Name</label>
                   <Form.Item name="vend_accname">
                     <InputType />
                   </Form.Item>
                 </div>
-                <div className="col-sm-6 pb-2">
+                <div className="col-sm-12  mt-3">
                   <label>Account No</label>
                   <Form.Item name="vend_accno">
                     <InputType />
                   </Form.Item>
                 </div>
-                <div className="col-sm-6 pb-2  mt-2">
+                <div className="col-sm-12   mt-3">
                   <label>Bank Name</label>
                   <Form.Item name="vend_bankname">
                     <InputType />
                   </Form.Item>
                 </div>
 
-                <div className="col-sm-6 pb-2 mt-2">
+                <div className="col-sm-12  mt-3">
                   <label>Branch Name</label>
                   <Form.Item name="vend_branchname">
                     <InputType />
                   </Form.Item>
                 </div>
-                <div className="col-sm-6 pb-2 mt-2">
+                <div className="col-sm-12  mt-3">
                   <label>IBAN No</label>
                   <Form.Item name="vend_ibanno">
                     <InputType />
                   </Form.Item>
                 </div>
-                <div className="col-6 pt-2 pb-2 mt-2">
+                <div className="col-sm-12  mt-3">
                   <label>Default Bank</label>
                   <div>
                     <Form.Item name="vend_defaultbnk">
-                      <Checkbox
-                       onChange={handleChecked}
-                       checked={bankdefault === 1 ? true : false}
-                      ></Checkbox>
+                      <Popconfirm
+                        title="Are you sure to setdefault?"
+                        // description="Are you sure to delete this task?"
+                        onConfirm={confirm}
+                        onCancel={cancel}
+                        okText="Yes"
+                        cancelText="No"
+                      >
+                        <Checkbox
+                          onChange={handleChecked}
+                          checked={bankdefault === 1 ? true : false}
+                        ></Checkbox>
+                      </Popconfirm>
                     </Form.Item>
                   </div>
                 </div>
@@ -320,7 +368,7 @@ function Bankdetails({ vendor, toggle }) {
                     onHide={() => setSuccessPopup(false)}
                   />
                 </div>
-              </div>
+              {/* </div> */}
             </Form>
           </>
         }
@@ -348,46 +396,45 @@ function Bankdetails({ vendor, toggle }) {
                 console.log(error);
               }}
             >
-              <div className="row py-5 px-1">
-                <div className="col-sm-6 pb-2 ">
+              {/* <div className="row py-5 px-1"> */}
+                <div className="col-sm-12 pb-2 ">
                   <label>Account Name</label>
                   <Form.Item name="editvend_accname">
                     <InputType />
                   </Form.Item>
                 </div>
-                <div className="col-sm-6 pb-2">
+                <div className="col-sm-12 pb-2">
                   <label>Account No</label>
                   <Form.Item name="editvend_accno">
                     <InputType />
                   </Form.Item>
                 </div>
-                <div className="col-sm-6 pb-2  mt-2">
+                <div className="col-sm-12 pb-2  mt-2">
                   <label>Bank Name</label>
                   <Form.Item name="editvend_bankname">
                     <InputType />
                   </Form.Item>
                 </div>
 
-                <div className="col-sm-6 pb-2 mt-2">
+                <div className="col-sm-12 pb-2 mt-2">
                   <label>Branch Name</label>
                   <Form.Item name="editvend_branchname">
                     <InputType />
                   </Form.Item>
                 </div>
-                <div className="col-sm-6 pb-2 mt-2">
+                <div className="col-sm-12 pb-2 mt-2">
                   <label>IBAN No</label>
                   <Form.Item name="editvend_ibanno">
                     <InputType />
                   </Form.Item>
                 </div>
-                <div className="col-6 pt-2 pb-2 mt-2">
+                <div className="col-sm-12 pt-2 pb-2 mt-2">
                   <label>Default Bank</label>
                   <div>
                     <Form.Item name="editvend_defaultbnk">
                       <Checkbox
-                      // value={currencyDefault}
-                      // onChange={handleCheckededit}
-                      // checked={editdefaultbank == 1 ? true : false}
+                        onChange={handleCheckededit}
+                        checked={editbankdefault === 1 ? true : false}
                       ></Checkbox>
                     </Form.Item>
                   </div>
@@ -397,19 +444,27 @@ function Bankdetails({ vendor, toggle }) {
                   <Button type="submit" className="qtn_save" btnType="save">
                     Save
                   </Button>
-                  <Custom_model
-                    centered
-                    size={`sm`}
-                    success
-                    show={successPopup}
-                    onHide={() => setSuccessPopup(false)}
-                  />
                 </div>
-              </div>
+              {/* </div> */}
             </Form>
           </>
         }
       />
+
+      <Custom_model
+        centered
+        size={`sm`}
+        success
+        show={successPopup}
+        onHide={() => setSuccessPopup(false)}
+      />
+      {/* <Custom_model
+                    centered
+                    size={`sm`}
+                    success
+                    show={successmsg}
+                    onHide={() => setSuccessmsg(false)}
+                  /> */}
     </>
   );
 }

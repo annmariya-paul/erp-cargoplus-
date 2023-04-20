@@ -1,6 +1,8 @@
 import { Checkbox, Input, Select } from "antd";
 import React, { useEffect, useState } from "react";
 import { FaEdit } from "react-icons/fa";
+import {  Popconfirm } from "antd";
+import { GiCancel } from "react-icons/gi";
 import { MdPageview } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import { CRM_BASE_URL_FMS } from "../../../../api/bootapi";
@@ -9,6 +11,7 @@ import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon
 import MyPagination from "../../../../components/Pagination/MyPagination";
 import TableData from "../../../../components/table/table_data";
 import { ROUTES } from "../../../../routes";
+import CustomModel from "../../../../components/custom_modal/custom_model";
 import PublicFetch from "../../../../utils/PublicFetch";
 import {
   LeadType,
@@ -19,6 +22,8 @@ import moment from "moment";
 
 function EnquiryList() {
   const navigate = useNavigate();
+  const [successPopup, setSuccessPopup] = useState(false);
+  const [cancelPopUp, setCancelPopUp] = useState(false);
   const [searchedText, setSearchedText] = useState("");
   const [searchType, setSearchType] = useState("");
   const [searchStatus, setSearchStatus] = useState("");
@@ -30,7 +35,9 @@ function EnquiryList() {
   const [serialNo, setserialNo] = useState(1);
   const [AllEnquiries, setAllnquires] = useState();
   console.log("ggg",AllEnquiries);
-
+  const handleCancelEnq = () => {
+    setCancelPopUp(true);
+  };
   const columns = [
     {
       title: "#",
@@ -44,32 +51,32 @@ function EnquiryList() {
       dataIndex: "enquiry_no",
       key: "enquiry_no",
       width: "10%",
-      filteredValue: [searchedText],
-      onFilter: (value, record) => {
-        return (
-          String(record.enquiry_no)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.enquiry_customer_name)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.enquiry_contact_person_name)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.contact_email)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.contact_phone_1)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-            String(record.enquiry_date)
-              .toLowerCase()
-              .includes(value.toLowerCase()) ||
-              String(record.enquiry_date)
-                .toLowerCase()
-                .includes(value.toLowerCase())
-        );
-      },
+      // filteredValue: [searchedText],
+      // onFilter: (value, record) => {
+      //   return (
+      //     String(record.enquiry_no)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.enquiry_customer_name)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.enquiry_contact_person_name)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.contact_email)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.contact_phone_1)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //       String(record.enquiry_date)
+      //         .toLowerCase()
+      //         .includes(value.toLowerCase()) ||
+      //         String(record.enquiry_date)
+      //           .toLowerCase()
+      //           .includes(value.toLowerCase())
+      //   );
+      // },
       align: "left",
     },
     {
@@ -87,26 +94,26 @@ function EnquiryList() {
       dataIndex: "enquiry_customer_name",
       key: "enquiry_customer_name",
       width: "22%",
-      filteredValue: [searchType],
-      onFilter: (value, record) => {
-        return (
-          String(record.enquiry_no)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.enquiry_customer_name)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.enquiry_contact_person_name)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.contact_email)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.contact_phone_1)
-            .toLowerCase()
-            .includes(value.toLowerCase())
-        );
-      },
+      // filteredValue: [searchType],
+      // onFilter: (value, record) => {
+      //   return (
+      //     String(record.enquiry_no)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.enquiry_customer_name)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.enquiry_contact_person_name)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.contact_email)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.contact_phone_1)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase())
+      //   );
+      // },
       align: "left",
     },
     {
@@ -115,54 +122,54 @@ function EnquiryList() {
       key: "enquiry_contact_person_name",
       // width: "13%",
       align: "left",
-      filteredValue: [searchType],
-      onFilter: (value, record) => {
-        return (
-          String(record.enquiry_no)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.enquiry_customer_name)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.enquiry_contact_person_name)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.contact_email)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.contact_phone_1)
-            .toLowerCase()
-            .includes(value.toLowerCase())
-        );
-      },
+      // filteredValue: [searchType],
+      // onFilter: (value, record) => {
+      //   return (
+      //     String(record.enquiry_no)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.enquiry_customer_name)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.enquiry_contact_person_name)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.contact_email)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.contact_phone_1)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase())
+      //   );
+      // },
     },
 
     {
       title: "EMAIL",
       dataIndex: "contact_email",
       key: "contact_email",
-      width: "20%",
+      width: "17%",
       align: "ledt",
-      filteredValue: [searchType],
-      onFilter: (value, record) => {
-        return (
-          String(record.enquiry_no)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.enquiry_customer_name)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.enquiry_contact_person_name)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.contact_email)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.enquiry_converted_status)
-            .toLowerCase()
-            .includes(value.toLowerCase())
-        );
-      },
+      // filteredValue: [searchType],
+      // onFilter: (value, record) => {
+      //   return (
+      //     String(record.enquiry_no)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.enquiry_customer_name)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.enquiry_contact_person_name)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.contact_email)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.enquiry_converted_status)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase())
+      //   );
+      // },
     },
 
     {
@@ -171,26 +178,26 @@ function EnquiryList() {
       key: "contact_phone_1",
       width: "5%",
       align: "center",
-      filteredValue: [searchType],
-      onFilter: (value, record) => {
-        return (
-          String(record.enquiry_no)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.enquiry_customer_name)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.enquiry_contact_person_name)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.contact_email)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.contact_phone_1)
-            .toLowerCase()
-            .includes(value.toLowerCase())
-        );
-      },
+      // filteredValue: [searchType],
+      // onFilter: (value, record) => {
+      //   return (
+      //     String(record.enquiry_no)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.enquiry_customer_name)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.enquiry_contact_person_name)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.contact_email)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.contact_phone_1)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase())
+      //   );
+      // },
     },
 
     {
@@ -240,6 +247,16 @@ function EnquiryList() {
                 <MdPageview />
               </div>
             </div>
+            <div className="deleteIcon m-0">
+              <Popconfirm
+                title={`Are you sure you want to cancel this Enquiry?`}
+                onConfirm={() => {
+                  handleCancelEnq();
+                }}
+              >
+                <GiCancel style={{ marginRight: 18 }} />
+              </Popconfirm>
+            </div>
           </div>
         );
       },
@@ -283,8 +300,9 @@ function EnquiryList() {
   const pageofIndex = noofItems * (current - 1) - 1 + 1;
   const pagesizecount = Math.ceil(totalCount / noofItems);
   console.log("page number isss", pagesizecount);
-  const GetAllEnquiries = () => {
-    PublicFetch.get(`${CRM_BASE_URL_FMS}/enquiries?startIndex=${pageofIndex}&noOfItems=${noofItems}&search=`)
+  // {query === 'pending' ? 0 : query=== "converted" ? 1: query}
+  const GetAllEnquiries = (query) => {
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/enquiries?startIndex=${pageofIndex}&noOfItems=${noofItems}&search=${query === 'pending' ? 0 : query=== "converted" ? 1: query}`)
       .then((res) => {
         console.log("Response ", res);
         if (res.data.success) {
@@ -318,8 +336,8 @@ function EnquiryList() {
   };
 
   useEffect(() => {
-    GetAllEnquiries();
-  }, [noofItems, pageofIndex, pagesizecount]);
+    GetAllEnquiries(searchedText);
+  }, [noofItems, pageofIndex, pagesizecount,searchedText]);
 
   return (
     <div className="container-fluid ">
@@ -344,7 +362,18 @@ function EnquiryList() {
                   className="inputSearch"
                   value={searchedText}
                   onChange={(e) => {
-                    setSearchedText(e.target.value ? [e.target.value] : []);
+                    console.log("Entered value");
+                    // 
+                    // if(e.target.value.toLowerCase() === "pending")
+                    // {
+                    //   setSearchedText(0);
+                    // }else if(e.target.value.toLowerCase === "converted")
+                    // {
+                    //   setSearchedText(1);
+                    // }else{
+                      setSearchedText(e.target.value ? [e.target.value] : []);
+                    // }
+                    
                   }}
                   onSearch={(value) => {
                     setSearchedText(value);
@@ -559,7 +588,32 @@ function EnquiryList() {
           </div>
         </div>
       </div>
+
+
+      <CustomModel
+        size={"sm"}
+        show={successPopup}
+        onHide={() => setSuccessPopup(false)}
+        success
+      />
+      <CustomModel
+        cancelName={"Enquiry"}
+        cancel
+        show={cancelPopUp}
+        onHide={() => {
+          setCancelPopUp(false);
+        }}
+      />
+
+
+
+
+
     </div>
+
+
+
+
   );
 }
 

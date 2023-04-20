@@ -199,7 +199,8 @@ function AddressTable(props) {
               </div>
               <div className="row mt-3">
                 <div className="px-3">
-                <label className="">Title</label>
+                <label className="">Title
+                <span className="required">*</span></label>
                   <Form.Item
                  
                     name="title"
@@ -233,7 +234,8 @@ function AddressTable(props) {
                     /> */}
                   </Form.Item>
 
-                  <label className="mt-3">Address</label>
+                  <label className="mt-3">Address
+                  <span className="required">*</span></label>
                   <Form.Item
                    
                     name="address"

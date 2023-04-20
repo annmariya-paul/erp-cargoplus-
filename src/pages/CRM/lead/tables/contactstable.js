@@ -219,7 +219,9 @@ function ContactTable(props) {
             >
               <div className="row pt-3">
                 <div className="px-3">
-                  <label className="mt-3">Name</label>
+                  <label className="mt-3">Name
+                  <span className="required">*</span>
+                  </label>
                   <Form.Item
                     name="ContactName"
                     rules={[
@@ -243,7 +245,9 @@ function ContactTable(props) {
                       onChange={(e) => setContactName(e.target.value)}
                     />
                   </Form.Item>
-                  <label className="mt-3">Designation</label>
+                  <label className="mt-3">Designation
+                  <span className="required">*</span>
+                  </label>
                   <Form.Item
                     name="designation"
                     rules={[
@@ -271,7 +275,8 @@ function ContactTable(props) {
                       onChange={(e) => setDesignation(e.target.value)}
                     />
                   </Form.Item>
-                  <label className="mt-3">Phone </label>
+                  <label className="mt-3">Phone 
+                  <span className="required">*</span></label>
                   <Form.Item
                     name="phone"
                     className="mt-1"
@@ -311,7 +316,9 @@ function ContactTable(props) {
                     />
                   </Form.Item>
 
-                  <label className="mt-3">Email</label>
+                  <label className="mt-3">Email
+                  <span className="required">*</span>
+                  </label>
                   <Form.Item
                     name="email"
                     rules={[

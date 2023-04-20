@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { CRM_BASE_URL } from "../../../../api/bootapi";
+import {useNavigate } from "react-router-dom";
 import Dropdown from "react-bootstrap/Dropdown";
 import "../opportunity_ List/opportunitylist.scss";
 import { Oppor_Status, Prob_conversion } from "../../../../utils/SelectOptions";
@@ -23,7 +24,8 @@ import TableData from "../../../../components/table/table_data";
 import MyPagination from "../../../../components/Pagination/MyPagination";
 import CustomModel from "../../../../components/custom_modal/custom_model";
 import Button from "../../../../components/button/button";
-
+import {  Popconfirm } from "antd";
+import { GiCancel } from "react-icons/gi";
 import "./opportunitylist.scss";
 import { BsPlusCircleFill } from "react-icons/bs";
 import { Link, Route } from "react-router-dom";
@@ -52,6 +54,7 @@ import { Toaster, toast } from "react-hot-toast"; // copy to clip board
 // import {useTable} from "react-table";
 
 function Opportunitylist(props) {
+  const navigate = useNavigate();
   const { Search } = Input;
   const { id } = useParams();
   console.log("ID is ...", id);
@@ -104,7 +107,7 @@ function Opportunitylist(props) {
   const [editForm] = Form.useForm();
   const [serialNo, setserialNo] = useState(1);
   const componentRef = useRef();
-
+  const [cancelPopUp, setCancelPopUp] = useState(false);
   //pdf file start
   // const exportPDF = () => {
   //   const unit = "pt";
@@ -179,13 +182,13 @@ function Opportunitylist(props) {
   const pagesizecount = Math.ceil(totalCount / numOfItems);
   console.log("page number isss", pagesizecount);
 
-  const GetOpportunityData = () => {
+  const GetOpportunityData = (query) => {
     PublicFetch.get(
-      `${CRM_BASE_URL}/opportunity?startIndex=${pageofIndex}&noOfItems=${numOfItems}`
+      `${CRM_BASE_URL}/opportunity?startIndex=${pageofIndex}&noOfItems=${numOfItems}&search=${query}`
     )
       .then((res) => {
         if (res?.data?.success) {
-          console.log("All opportunity dataqqq", res?.data?.data.leads);
+          // console.log("All opportunity dataqqq", res?.data?.data.leads?.fms_v1_enquiry_opportunities?.enq_opp_enquiry_id);
 
           let tempArr = [];
           res?.data?.data?.leads.forEach((item, index) => {
@@ -209,6 +212,8 @@ function Opportunitylist(props) {
                   opportunity_amount: item?.opportunity_amount,
                   opportunity_status: item?.opportunity_status,
                   opportunity_validity: item?.opportunity_validity,
+                  opp_enq:item?.fms_v1_enquiry_opportunities[0].enq_opp_enquiry_id,
+
                 });
               }
             });
@@ -226,9 +231,9 @@ function Opportunitylist(props) {
   };
 
   useEffect(() => {
-    GetOpportunityData();
+    GetOpportunityData(searchSource);
     // getAllContact();
-  }, [numOfItems, pageofIndex, pagesizecount]);
+  }, [numOfItems, pageofIndex, pagesizecount,searchSource]);
 
   // get one oppurtunity
   const [oneoppurtunity, setOneoppurtunity] = useState();
@@ -532,10 +537,12 @@ function Opportunitylist(props) {
   // }
 
   //  columns is opportunity listing table componenet
-
+  const handleCancelOpp = () => {
+    setCancelPopUp(true);
+  };
   const columns = [
     {
-      title: "Sl. No.",
+      title: "Sl. No",
       key: "index",
       width: "7%",
       render: (value, item, index) => serialNo + index,
@@ -543,54 +550,61 @@ function Opportunitylist(props) {
     },
 
     {
-      title: "ENQUIRY NO",
+      title: "OPPORTUNITY NO",
       dataIndex: "opportunity_number",
       key: "opportunity_number",
-      width: "12%",
+      width: "18%",
       // align: "center",
     },
+    {
+      title: "CUSTOMER",
+      dataIndex: "opportunity_party",
+      key: "PARTY",
+      align: "left",
+    },
+    // {
+    //   title: "ENQUIRY NO",
+    //   dataIndex: "opp_enq",
+    //   key: "opp_enq",
+    //   // filteredValue: [searchStatus],
+    //   // onFilter: (value, record) => {
+    //   //   return String(record.opportunity_from)
+    //   //     .toLowerCase()
+    //   //     .includes(value.toLowerCase());
+    //   // },
+    //   align: "left",
+    // },
     {
       title: "TYPE",
       dataIndex: "opportunity_type",
       key: "TYPE",
-
-      filteredValue: [searchSource],
-      onFilter: (value, record) => {
-        return (
-          String(record.opportunity_type)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.opportunity_source)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.opportunity_from)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.opportunity_party)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.opportunity_created_by)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.opportunity_number)
-            .toLowerCase()
-            .includes(value.toLowerCase())
-        );
-      },
-      align: "left",
-    },
-    {
-      title: "FROM",
-      dataIndex: "opportunity_from",
-      key: "FROM",
-      // filteredValue: [searchStatus],
+      // width:"10%",
+      // filteredValue: [searchSource],
       // onFilter: (value, record) => {
-      //   return String(record.opportunity_from)
-      //     .toLowerCase()
-      //     .includes(value.toLowerCase());
+      //   return (
+      //     String(record.opportunity_type)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.opportunity_source)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.opportunity_from)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.opportunity_party)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.opportunity_created_by)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.opportunity_number)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase())
+      //   );
       // },
       align: "left",
     },
+   
 
     // {
     //   title: "CONVERTED BY",
@@ -604,6 +618,7 @@ function Opportunitylist(props) {
       dataIndex: "opportunity_source",
       key: "SOURCE",
       align: "left",
+      width:"10%",
       // filteredValue: [searchSource],
       // onFilter: (value, record) => {
       //   return String(record.opportunity_source)
@@ -611,12 +626,7 @@ function Opportunitylist(props) {
       //     .includes(value.toLowerCase());
       // },
     },
-    {
-      title: "PARTY",
-      dataIndex: "opportunity_party",
-      key: "PARTY",
-      align: "left",
-    },
+   
     {
       title: "ACTION",
       dataIndex: "action",
@@ -632,11 +642,29 @@ function Opportunitylist(props) {
                 <FaEdit />
               </Link>
             </div>
-            <div className="editcolor">
+            <div className="editcolor"
+             onClick={
+              () => {
+                navigate(`${ROUTES.VIEW_OPPORTUNITY}/${index.opportunity_Id}`);
+              }
+              //   handleViewData(index)
+            }
+            >
+           
               <MdPageview
                 // onClick={()=>viewprogressoppurtunity(index)}
-                onClick={() => Viewoppurtunties(index)}
+                // onClick={() => Viewoppurtunties(index)}
               />
+            </div>
+            <div className="deleteIcon m-0">
+              <Popconfirm
+                title={`Are you sure you want to cancel this Opportunity?`}
+                onConfirm={() => {
+                  handleCancelOpp();
+                }}
+              >
+                <GiCancel style={{ marginRight: 18 }} />
+              </Popconfirm>
             </div>
           </div>
         );
@@ -762,7 +790,7 @@ function Opportunitylist(props) {
 
   return (
     <div>
-      <div className="container-fluid lead_list  my-3 py-3">
+      <div className="container-fluid   my-3 py-3">
         {/* opportunity listing section One */}
 
         <div>
@@ -1896,6 +1924,15 @@ function Opportunitylist(props) {
             </div>
           </div>
         }
+
+      />
+        <CustomModel
+        cancelName={"Opportunity"}
+        cancel
+        show={cancelPopUp}
+        onHide={() => {
+          setCancelPopUp(false);
+        }}
       />
     </div>
   );

@@ -293,7 +293,9 @@ function EditContact(props) {
             >
               <div className="row mt-3">
                 <div className="px-3">
-                  <label>Name</label>
+                  <label>Name
+                  <span className="required">*</span>
+                  </label>
                   <Form.Item
                     name="title"
                     rules={[
@@ -319,7 +321,9 @@ function EditContact(props) {
                       onChange={(e) => setContactName(e.target.value)}
                     />
                   </Form.Item>
-                  <label className="mt-3">Designation</label>
+                  <label className="mt-3">Designation
+                  
+                  <span className="required">*</span></label>
                   <Form.Item
                     name="designation"
                     rules={[
@@ -345,7 +349,9 @@ function EditContact(props) {
                       onChange={(e) => setDesignation(e.target.value)}
                     />
                   </Form.Item>
-                  <label className="mt-3">Phone</label>
+                  <label className="mt-3">Phone
+                  <span className="required">*</span>
+                  </label>
                   <Form.Item
                     name="phone"
                     rules={[
@@ -362,7 +368,8 @@ function EditContact(props) {
                     />
                   </Form.Item>
 
-                  <label className="mt-3">Mobile</label>
+                  <label className="mt-3">Mobile
+                  </label>
                   <Form.Item name="mobile">
                     <Phone_Input
                       value={mobile}
@@ -370,7 +377,8 @@ function EditContact(props) {
                     />
                   </Form.Item>
 
-                  <label className="mt-3">Email</label>
+                  <label className="mt-3">Email
+                  <span className="required">*</span></label>
                   <Form.Item
                     name="email"
                     rules={[

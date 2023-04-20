@@ -12,13 +12,14 @@ function Accounting({vendor}){
     const [editForm] = Form.useForm();
 
     const [vendorId, setvendorId] = useState();
-
+  const [onevendordata,setonevendordata] = useState()
 
     const Getvendordata = () => {
       PublicFetch.get(`${CRM_BASE_URL_PURCHASING}/vendors/${vendor?.vendor_id}`)
         .then((res) => {
           if (res?.data?.success) {
             console.log("vendor id", res?.data?.data);
+            setonevendordata(res?.data?.data)
             // setOneLeadData(res?.data?.data);
             setvendorId(res?.data?.data?.vendor_id);
              editForm.setFieldsValue({
@@ -42,11 +43,20 @@ function Accounting({vendor}){
       formData.append(`vendor_type`, vendor.vendor_type_id);
       formData.append(`email`, vendor.vendor_email);
       formData.append(`contact`, vendor.vendor_phone);
-      formData.append(`country_id`, vendor.vendor_country_id);
-      formData.append(`city`, vendor.vendor_city);
-      formData.append(`website`, vendor.vendor_website);
-      formData.append(`state`, vendor.vendor_state);
-      formData.append(`address`, vendor.vendor_address);
+
+      vendor?.vendor_country_id && formData.append(`country_id`, vendor?.vendor_country_id);
+      vendor?.vendor_city &&  formData.append(`city`, vendor?.vendor_city);
+      vendor?.vendor_website && formData.append(`website`, vendor?.vendor_website);
+      vendor?.vendor_state && formData.append(`state`, vendor?.vendor_state);
+      vendor?.vendor_address && formData.append(`address`, vendor?.vendor_address);
+
+
+
+      // formData.append(`country_id`, vendor.vendor_country_id);
+      // formData.append(`city`, vendor.vendor_city);
+      // formData.append(`website`, vendor.vendor_website);
+      // formData.append(`state`, vendor.vendor_state);
+      // formData.append(`address`, vendor.vendor_address);
       formData.append(`tax_no`, data.vendortaxno);
       formData.append(`credit_days`, data.vendorcreditdays);
       formData.append(`remarks`, vendor.remarks);
@@ -56,22 +66,49 @@ function Accounting({vendor}){
         // formData.append(`customer_logo`, leadimg);
       }
   
-      PublicFetch.patch(`${CRM_BASE_URL_PURCHASING}/vendors/${vendor?.vendor_id}`, formData, {
-        "Content-Type": "Multipart/form-Data",
-      })
-        .then((res) => {
-          console.log("successfully updated", res);
-          if (res.data.success) {
+      if (onevendordata) {
 
-            setSuccessPopup(true);
-            close_modal(successPopup, 1000);
-  
-          }
+        PublicFetch.patch(`${CRM_BASE_URL_PURCHASING}/vendors/${vendor?.vendor_id}`, formData, {
+          "Content-Type": "Multipart/form-Data",
         })
-        .catch((err) => {
-          console.log("Error", err);
-        });
+          .then((res) => {
+            console.log("successfully updated", res);
+            if (res.data.success) {
+             Getvendordata()
+              setSuccessPopup(true);
+              close_modal(successPopup, 1000,res?.data?.data);
+    
+            }
+          })
+          .catch((err) => {
+            console.log("Error", err);
+          });
+      }
+      else{
+        PublicFetch.post(`${CRM_BASE_URL_PURCHASING}/vendors`, formData, {
+          "Content-Type": "Multipart/form-Data",
+        })
+          .then((res) => {
+            console.log("successfully addedd", res);
+            if (res.data.success) {
+             Getvendordata()
+              setSuccessPopup(true);
+              close_modal(successPopup, 1000,res?.data?.data);
+    
+            }
+          })
+          .catch((err) => {
+            console.log("Error", err);
+          });
+
+      }
+
+      
+
+     
     };
+
+
 
     const close_modal = (mShow, time ) => {
       if (!mShow) {

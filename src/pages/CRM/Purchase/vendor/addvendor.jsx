@@ -93,45 +93,45 @@ function Addvendor({ }  ) {
     return allvendor?.slice((current - 1) * pageSize, current * pageSize);
   };
 
-  const getallvendors = async () => {
-    try {
-      const allvendor = await PublicFetch.get(
-        `${CRM_BASE_URL_PURCHASING}/vendors`
-      );
-      console.log("getting all vendorss", allvendor.data.data);
-      settotalvendor(allvendor.data.data);
-      // setAllvendor(allvendor.data.data)
-      let arry = [];
-      allvendor.data.data.map((i, indx) => {
-        vendor_Organisation.forEach((itm, index) => {
-          console.log("vndr", itm);
-          if (itm.value === i.vendor_org_type) {
-            arry.push({
-              vendor_name: i.vendor_name,
-              vendor_email: i.vendor_email,
-              vendor_org_type: itm.name,
-              vendor_country: i.countries.country_name,
-              vendor_country_id: i.vendor_country_id,
-              vendor_contact: i.vendor_contact,
-              vendor_city: i.vendor_city,
-              vendor_address: i.vendor_address,
-              vendor_description: i.vendor_desc,
-              vendor_type_id: i.vendor_type_id,
-              vender_id: i.vendor_id,
-              vender_taxno: i.vendor_tax_no,
-              vendor_country_id: i.vendor_country_id,
-            });
-          }
-        });
-      });
-      console.log("arryss", arry);
-      setAllvendor(arry);
+  // const getallvendors = async () => {
+  //   try {
+  //     const allvendor = await PublicFetch.get(
+  //       `${CRM_BASE_URL_PURCHASING}/vendors`
+  //     );
+  //     console.log("getting all vendorss", allvendor.data.data);
+  //     settotalvendor(allvendor.data.data);
+      
+  //     let arry = [];
+  //     allvendor.data.data.map((i, indx) => {
+  //       vendor_Organisation.forEach((itm, index) => {
+  //         console.log("vndr", itm);
+  //         if (itm.value === i.vendor_org_type) {
+  //           arry.push({
+  //             vendor_name: i.vendor_name,
+  //             vendor_email: i.vendor_email,
+  //             vendor_org_type: itm.name,
+  //             vendor_country: i.countries.country_name,
+  //             vendor_country_id: i.vendor_country_id,
+  //             vendor_contact: i.vendor_contact,
+  //             vendor_city: i.vendor_city,
+  //             vendor_address: i.vendor_address,
+  //             vendor_description: i.vendor_desc,
+  //             vendor_type_id: i.vendor_type_id,
+  //             vender_id: i.vendor_id,
+  //             vender_taxno: i.vendor_tax_no,
+  //             vendor_country_id: i.vendor_country_id,
+  //           });
+  //         }
+  //       });
+  //     });
+  //     console.log("arryss", arry);
+  //     setAllvendor(arry);
 
-      // setvendortypes(allvendortypes.data.data);
-    } catch (err) {
-      console.log("error to fetching  vendor", err);
-    }
-  };
+  //     // setvendortypes(allvendortypes.data.data);
+  //   } catch (err) {
+  //     console.log("error to fetching  vendor", err);
+  //   }
+  // };
   const handleChange = (e) => {
     setCountryis(e);
   };
@@ -207,10 +207,10 @@ console.log("bnkdetails id iss",vendorId)
     formData.append(`email`, data.vendoremail);
     formData.append(`contact`, data.vendorphone);
 
-    data?.vendorcountry && formData.append(`country_id`, data.vendorcountry);
-    data?.vendorwebsite && formData.append(`website`, data.vendorwebsite);
-    data?.vendorcity && formData.append(`city`, data.vendorcity);
-    data?.vendorstate && formData.append(`state`, data.vendorstate);
+    data?.vendorcountry && formData.append(`country_id`, data?.vendorcountry);
+    data?.vendorwebsite && formData.append(`website`, data?.vendorwebsite);
+    data?.vendorcity && formData.append(`city`, data?.vendorcity);
+    data?.vendorstate && formData.append(`state`, data?.vendorstate);
 
     // formData.append(`city`, data.vendorcity);
     // formData.append(`website`, data.vendorwebsite);
@@ -244,7 +244,7 @@ console.log("bnkdetails id iss",vendorId)
   useEffect(() => {
     addForm.setFieldsValue({ org_type: "ORG" });
     getallvendortype();
-    getallvendors();
+    // getallvendors();
     getCountry();
   }, []);
 

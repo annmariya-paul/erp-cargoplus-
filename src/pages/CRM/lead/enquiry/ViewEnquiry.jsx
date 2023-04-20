@@ -6,19 +6,22 @@ import Button from "../../../../components/button/button";
 import PublicFetch from "../../../../utils/PublicFetch";
 import moment from "moment";
 import { ROUTES } from "../../../../routes";
+import Attachments from "../../../../components/attachments/attachments";
 
 function ViewEnquiry() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [AllEnquiries, setAllEnquires] = useState();
-
+  const [AllAttachments, setAllAttachments] = useState();
+  console.log("all attachments ",AllAttachments);
   const GetSingleEnquiry = () => {
     PublicFetch.get(`${CRM_BASE_URL_FMS}/enquiries/${id}`)
       .then((res) => {
         console.log("response ", res);
         if (res.data.success) {
-          console.log("success", res.data.data);
+          console.log("success of enq", res.data.data);
           setAllEnquires(res?.data?.data);
+          setAllAttachments(res?.data?.data?.enquiry_docs[0]);
         }
       })
       .catch((err) => {
@@ -129,7 +132,7 @@ function ViewEnquiry() {
           <div className="col-1">:</div>
           <div className="col-7">
             <p className="modal-view-data">
-            {AllEnquiries?.enquiry_source}
+            {AllEnquiries?.crm_v1_enquiry_source?.enq_source_name}
             </p>
           </div>
         </div>
@@ -217,7 +220,8 @@ function ViewEnquiry() {
           <div className="col-1">:</div>
           <div className="col-7">
             <p className="modal-view-data">
-            {AllEnquiries?.enquiry_docs}
+            {/* {AllEnquiries?.enquiry_docs} */}
+            <Attachments  attachments={AllEnquiries?.enquiry_docs || []} />
             </p>
           </div>
         </div>

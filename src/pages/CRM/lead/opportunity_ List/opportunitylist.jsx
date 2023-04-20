@@ -188,7 +188,7 @@ function Opportunitylist(props) {
     )
       .then((res) => {
         if (res?.data?.success) {
-          console.log("All opportunity dataqqq", res?.data?.data.leads);
+          // console.log("All opportunity dataqqq", res?.data?.data.leads?.fms_v1_enquiry_opportunities?.enq_opp_enquiry_id);
 
           let tempArr = [];
           res?.data?.data?.leads.forEach((item, index) => {
@@ -212,6 +212,8 @@ function Opportunitylist(props) {
                   opportunity_amount: item?.opportunity_amount,
                   opportunity_status: item?.opportunity_status,
                   opportunity_validity: item?.opportunity_validity,
+                  opp_enq:item?.fms_v1_enquiry_opportunities[0].enq_opp_enquiry_id,
+
                 });
               }
             });
@@ -551,7 +553,7 @@ function Opportunitylist(props) {
       title: "OPPORTUNITY NO",
       dataIndex: "opportunity_number",
       key: "opportunity_number",
-      width: "12%",
+      width: "18%",
       // align: "center",
     },
     {
@@ -560,23 +562,23 @@ function Opportunitylist(props) {
       key: "PARTY",
       align: "left",
     },
-    {
-      title: "ENQUIRY NO",
-      dataIndex: "opportunity_from",
-      key: "FROM",
-      // filteredValue: [searchStatus],
-      // onFilter: (value, record) => {
-      //   return String(record.opportunity_from)
-      //     .toLowerCase()
-      //     .includes(value.toLowerCase());
-      // },
-      align: "left",
-    },
+    // {
+    //   title: "ENQUIRY NO",
+    //   dataIndex: "opp_enq",
+    //   key: "opp_enq",
+    //   // filteredValue: [searchStatus],
+    //   // onFilter: (value, record) => {
+    //   //   return String(record.opportunity_from)
+    //   //     .toLowerCase()
+    //   //     .includes(value.toLowerCase());
+    //   // },
+    //   align: "left",
+    // },
     {
       title: "TYPE",
       dataIndex: "opportunity_type",
       key: "TYPE",
-      width:"10%",
+      // width:"10%",
       // filteredValue: [searchSource],
       // onFilter: (value, record) => {
       //   return (
@@ -788,7 +790,7 @@ function Opportunitylist(props) {
 
   return (
     <div>
-      <div className="container-fluid lead_list  my-3 py-3">
+      <div className="container-fluid   my-3 py-3">
         {/* opportunity listing section One */}
 
         <div>

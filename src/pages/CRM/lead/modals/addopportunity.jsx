@@ -92,7 +92,7 @@ export default function AddOpportunity() {
     if (customername) {
       GetAllCustomers();
       GetAllContacts();
-      addForm.setFieldsValue({ oppo_customer: customername });
+      // addForm.setFieldsValue({ oppo_customer: customername });
       setCustomer_Id(customername);
       handleclicknew(customername);
       // GetSingleCustomer(customername);
@@ -112,6 +112,7 @@ export default function AddOpportunity() {
         if (res.data.success) {
           console.log("Success og gettimg customers", res?.data?.data);
           setAllCustomers(res?.data?.data);
+          addForm.setFieldsValue({ oppo_customer: customername });
         }
       })
       .catch((err) => {
@@ -580,21 +581,22 @@ export default function AddOpportunity() {
                   optionFilterProp="children"
                     // value={opptype}
                     onChange={(e) => {
+                      handleclick(e);
                       setCustomer_Id(e);
                       GetAllContacts(e);
                       // addForm.resetFields();
-                      handleclick(e);
+                     
                     }}
                   >
-                    {customersData &&
-                      customersData.length > 0 &&
-                      customersData.map((item, index) => {
+                    {AllCustomers &&
+                      AllCustomers.length > 0 &&
+                      AllCustomers.map((item, index) => {
                         return (
                           <Select.Option
                             value={item.customer_id}
                             key={item.customer_id}
                           >
-                            {item.customer_name}
+                            {item?.customer_name}
                           </Select.Option>
                         );
                       })}

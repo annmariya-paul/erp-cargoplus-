@@ -26,6 +26,7 @@ function EnquirySource() {
   const [SuccessPopup, setSuccessPopup] = useState(false);
   const [ViewModalSource, setViewModalSource] = useState(false);
   const [AllEnquirySource, setAllEnquirySource] = useState();
+  console.log("enquiry source ",AllEnquirySource);
   const [EnquirySourceId, setEnquirySourceId] = useState();
   const [EnquirySourceData, setEnquirySourceData] = useState();
 

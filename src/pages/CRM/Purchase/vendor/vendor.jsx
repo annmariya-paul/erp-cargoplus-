@@ -27,7 +27,7 @@ function Vendor() {
   const [noofItems, setNoofItems] = useState("25");
   const [current, setCurrent] = useState(1);
 
-  const [allvendor, setAllvendor] = useState();
+  const [allvendor, setAllvendor] = useState([]);
   const [allCountries, setAllCountries] = useState("");
 
   const [vendortypes, setvendortypes] = useState();
@@ -72,60 +72,144 @@ function Vendor() {
   const pageofIndex = noofItems * (current - 1) - 1 + 1;
   const pagesizecount = Math.ceil(totalCount / noofItems);
 
-  const getallvendors = async () => {
-    try {
-      const allvendor = await PublicFetch.get(
-        `${CRM_BASE_URL_PURCHASING}/vendors?startIndex=${pageofIndex}&noOfItems=${noofItems}`
-      );
-      console.log("getting all vendorss", allvendor?.data?.data?.vendors);
-      settotalvendor(allvendor.data.data);
-      setTotalcount(allvendor.data.data.total)
-      // setAllvendor(allvendor.data.data)
-      let arry = [];
-      allvendor?.data?.data?.vendors.map((i, indx) => {
-        vendor_Organisation.forEach((itm, index) => {
-          console.log("vndr", itm);
-          if (itm.value == i.vendor_org_type) {
-            arry.push({
-              vendor_name: i.vendor_name,
-              vendor_email: i.vendor_email,
-              vendor_org_type: itm.name,
-              vendor_country: i.countries.country_name,
-              vendor_country_id: i.vendor_country_id,
-              vendor_contact: i.vendor_phone,
-              vendor_city: i.vendor_city,
-              vendor_address: i.vendor_address,
-              vendor_description: i.vendor_desc,
-              vendor_type_id: i.vendor_type_id,
-              vender_id: i.vendor_id,
-              vender_taxno: i.vendor_tax_no,
-              vendor_country_id: i.vendor_country_id,
-              startindex:allvendor?.data?.data?.startIndex
-            });
-          }
+
+
+  // const getallvendors = async () => {
+  //   PublicFetch.get(`${CRM_BASE_URL_PURCHASING}/vendors?startIndex=${pageofIndex}&noOfItems=${noofItems}`).then((res)=>{
+  //     let arry = [];
+      
+  //     res?.data?.data?.vendors?.map((i?, indx) => {
+  //       vendor_Organisation.forEach((itm, index) => {
+  //         if (itm.value == i?.vendor_org_type) {
+  //           console.log("vndr", itm);
+          
+  //           // setAllvendor((prev)=>([...prev, {vendor_name: i?.vendor_name,
+  //           //   vendor_email: i?.vendor_email,
+  //           //   vendor_org_type: itm.name,
+  //           //   vendor_country: i?.countries.country_name,
+  //           //   vendor_country_id: i?.vendor_country_id,
+  //           //   vendor_contact: i?.vendor_phone,
+  //           //   vendor_city: i?.vendor_city,
+  //           //   vendor_address: i?.vendor_address,
+  //           //   vendor_description: i?.vendor_desc,
+  //           //   vendor_type_id: i?.vendor_type_id,
+  //           //   vender_id: i?.vendor_id,
+  //           //   vender_taxno: i?.vendor_tax_no,
+  //           //   vendor_country_id: i?.vendor_country_id,
+  //           //   startindex:allvendor?.data?.data?.startIndex}]));
+  //           arry.push({
+  //             vendor_name: i??.vendor_name,
+  //             vendor_email: i??.vendor_email,
+  //             vendor_org_type: itm?.name,
+  //             vendor_country: i?.countries?.country_name,
+  //             vendor_country_id: i?.vendor_country_id,
+  //             vendor_contact: i?.vendor_phone,
+  //             vendor_city: i?.vendor_city,
+  //             vendor_address: i?.vendor_address,
+  //             vendor_description: i?.vendor_desc,
+  //             vendor_type_id: i?.vendor_type_id,
+  //             vender_id: i?.vendor_id,
+  //             vender_taxno: i?.vendor_tax_no,
+  //             vendor_country_id: i?.vendor_country_id,
+  //             startindex:allvendor?.data?.data?.startIndex
+  //           });
+  //         }
+  //       });
+  //     });
+  //     console.log("arryss", arry);
+  //     setAllvendor(arry);
+  //   })
+  //   try {
+  //     const allvendor = await PublicFetch.get(
+  //       `${CRM_BASE_URL_PURCHASING}/vendors?startIndex=${pageofIndex}&noOfItems=${noofItems}`
+  //     );
+  //     console.log("getting all vendor detailss", allvendor?.data?.data?.vendors);
+  //     settotalvendor(allvendor.data.data);
+  //     setTotalcount(allvendor.data.data.total)
+  //     // setAllvendor(allvendor.data.data)
+  //     let arry = [];
+  //     allvendor?.data?.data?.vendors.map((i, indx) => {
+  //       vendor_Organisation.forEach((itm, index) => {
+  //         if (itm.value == i.vendor_org_type) {
+  //           // console.log("vndr", itm);
+  //           arry.push({
+  //             vendor_name: i.vendor_name,
+  //             vendor_email: i.vendor_email,
+  //             vendor_org_type: itm.name,
+  //             vendor_country: i.countries.country_name,
+  //             vendor_country_id: i.vendor_country_id,
+  //             vendor_contact: i.vendor_phone,
+  //             vendor_city: i.vendor_city,
+  //             vendor_address: i.vendor_address,
+  //             vendor_description: i.vendor_desc,
+  //             vendor_type_id: i.vendor_type_id,
+  //             vender_id: i.vendor_id,
+  //             vender_taxno: i.vendor_tax_no,
+  //             vendor_country_id: i.vendor_country_id,
+  //             startindex:allvendor?.data?.data?.startIndex
+  //           });
+  //         }
+  //       });
+  //     });
+     
+      
+
+  //     // setvendortypes(allvendortypes.data.data);
+  //   } catch (err) {
+  //     console.log("error to fetching  vendor", err);
+  //   }
+  // };
+
+  const getallvendordata = async(query)=>{
+try{
+  const allvendor = await PublicFetch.get(
+    `${CRM_BASE_URL_PURCHASING}/vendors?startIndex=${pageofIndex}&noOfItems=${noofItems}&search=${query}`
+  );
+  console.log("getting all vendor detailss", allvendor?.data?.data?.vendors);
+  settotalvendor(allvendor.data.data);
+  setTotalcount(allvendor.data.data.total)
+  // setAllvendor(allvendor.data.data)
+  let arry = [];
+  allvendor?.data?.data?.vendors.map((i, indx) => {
+    vendor_Organisation.forEach((itm, index) => {
+      if (itm.value == i.vendor_org_type) {
+        console.log("vndr", itm);
+      
+        arry.push({
+          vendor_name: i?.vendor_name,
+          vendor_email: i?.vendor_email,
+           vendor_org_type: itm?.name,
+           vendor_country: i?.countries?.country_name,
+           vendor_country_id: i?.vendor_country_id,
+           vendor_contact: i?.vendor_phone,
+           vendor_city: i?.vendor_city,
+           vendor_address: i?.vendor_address,
+           vendor_description: i?.vendor_desc,
+           vendor_type_id: i?.vendor_type_id,
+           vender_id: i?.vendor_id,
+           vender_taxno: i?.vendor_tax_no,
+           vendor_country_id: i?.vendor_country_id,
+           startindex:allvendor?.data?.data?.startIndex
         });
-      });
-      console.log("arryss", arry);
-      setAllvendor(arry);
+      }
+    });
+  });
+  setAllvendor(arry)
+  console.log("newArray", arry);
+}
+catch (err) {
+  console.log("error to fetching  vendor", err);
+}
 
-      // setvendortypes(allvendortypes.data.data);
-    } catch (err) {
-      console.log("error to fetching  vendor", err);
-    }
-  };
+  }
+ 
 
-  const close_modal = (mShow, time) => {
-    if (!mShow) {
-      setTimeout(() => {
-        setSuccessPopup(false);
-        // navigate(ROUTES.ATTRIBUTES);
-      }, time);
-    }
-  };
+
+
 
   useEffect(() => {
     getallvendortype();
-    getallvendors();
+    getallvendordata(searchedText);
     getCountry();
   },  [noofItems, pageofIndex, pagesizecount]);
 
@@ -357,6 +441,8 @@ function Vendor() {
         {/* <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}></div> */}
         <div className="row my-3">
           <div className="col-4 ">
+          <div className="row">
+            <div className="col-xl-2 col-lg-3 col-md-4 col-sm-12   ">
             <Select
               bordered={false}
               className="page_size_style"
@@ -370,21 +456,24 @@ function Vendor() {
               }}
             >
               <Select.Option value="25">
-                Show
-                <span className="vertical ms-1">|</span>
+             
                 <span className="sizes ms-1">25</span>
               </Select.Option>
               <Select.Option value="50">
-                Show
-                <span className="vertical ms-1">|</span>
+                
                 <span className="sizes ms-1"> 50</span>
               </Select.Option>
               <Select.Option value="100">
-                Show
-                <span className="vertical ms-1">|</span>
+              
                 <span className="sizes ms-1">100</span>
               </Select.Option>
             </Select>
+            </div>
+            <div className=" col-xl-10 col-lg-9 col-md-8 col-sm-12  d-flex  align-items-center ">
+            <label className="font_size" >Results: 1-{noofItems}  <span>of {totalCount} </span> </label>
+            </div>
+
+            </div>
           </div>
 
           <div className="col-4 d-flex  align-items-center justify-content-center">

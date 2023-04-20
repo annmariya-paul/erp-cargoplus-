@@ -15,6 +15,10 @@ const ROUTES = {
   LEAD_REPORT: "/Customer_Report",
   CUSTOMER_EDIT: "/edit_customer_list",
 
+  VIEW_CUSTOMER: "/view_customer",
+  VIEW_CUSTOMER_ID: "/view_customer/:id",
+
+
   OPPORTUNITY_REPORT: "/opportunity-report",
   OPPORTUNITY_LEAD_ID: "/opportunity_lead/:id",
   OPPORTUNITY_LEAD: "/opportunity_lead",

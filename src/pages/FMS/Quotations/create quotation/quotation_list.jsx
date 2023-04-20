@@ -62,13 +62,6 @@ export default function Quotations(props) {
   console.log(date);
   const today = new Date().toISOString().split("T")[0];
 
-  const [startDate, setStartDate] = useState(new Date());
-  const [numberOfDays, setNumberOfDays] = useState(7);
-
-  const endDate = new Date(
-    startDate.getTime() + numberOfDays * 24 * 60 * 60 * 1000
-  );
-
   const columns = [
     {
       title: "Sl. No.",
@@ -281,29 +274,32 @@ export default function Quotations(props) {
         console.log("Response", res);
         if (res.data.success) {
           console.log("success of quatation", res.data.data);
-          settotalquotation(res.data.data.totalCount);
-          setQuatationList(res.data.data.quotations);
+
           let temp = [];
-          res.data.data.quotations.forEach((item, index) => {
-            let date = moment(item.quotation_date).format("DD-MM-YYYY");
-            let validity = moment(item.quotation_validity).format("DD-MM-YYYY");
+          res?.data?.data?.quotations?.forEach((item, index) => {
+            let date = moment(item?.quotation_date).format("DD-MM-YYYY");
+            let validity = moment(item?.quotation_validity).format(
+              "DD-MM-YYYY"
+            );
             temp.push({
               sl_no: index + 1,
-              quotation_cargo_type: item.quotation_cargo_type,
-              quotation_carrier: item.quotation_carrier,
-              quotation_id: item.quotation_id,
-              quotation_no: item.quotation_no,
+              quotation_cargo_type: item?.quotation_cargo_type,
+              quotation_carrier: item?.quotation_carrier,
+              quotation_id: item?.quotation_id,
+              quotation_no: item?.quotation_no,
               quotation_date: date,
               quotation_validity: validity,
-              quotation_customer: item.quotation_consignee,
-              customer_name: item.crm_v1_leads.customer_name,
-              quotation_shipper: item.quotation_shipper,
-              quotation_status: item.status,
-              fms_v1_quotation_agents: item.fms_v1_quotation_agents,
-              consignee: item.consignee,
+              quotation_customer: item?.quotation_consignee,
+              customer_name: item?.crm_v1_customers?.customer_name,
+              quotation_shipper: item?.quotation_shipper,
+              quotation_status: item?.status,
+              fms_v1_quotation_agents: item?.fms_v1_quotation_agents,
+              consignee: item?.consignee,
             });
           });
           setAllQuotations(temp);
+          settotalquotation(res?.data?.data.totalCount);
+          setQuatationList(res?.data?.data.quotations);
         }
       })
       .catch((err) => {

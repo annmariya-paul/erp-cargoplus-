@@ -96,6 +96,7 @@ export default function EditQuotation(
   // const [tableData, setTableData] = useState();
   const [allincoterms, setallincoterms] = useState("");
   const [AllSalesPersons, setAllSalesPersons] = useState();
+  const [allcontainertype, setallcontainertype] = useState("");
 
   const dataSource = [
     {
@@ -825,6 +826,17 @@ export default function EditQuotation(
       console.log("error to getting all freighttype", err);
     }
   };
+  const getallcontainertype = async () => {
+    try {
+      const allcontainertype = await PublicFetch.get(
+        `${CRM_BASE_URL_FMS}/container_type`
+      );
+      console.log("getting all containertype", allcontainertype);
+      setallcontainertype(allcontainertype.data.data);
+    } catch (err) {
+      console.log("error to fetching  containertypes", err);
+    }
+  };
 
   const getallcarrier = async () => {
     try {
@@ -860,8 +872,8 @@ export default function EditQuotation(
         validity_date: vdate,
         shipper: data11.quotation_shipper,
         quotation_enquiry_no: quotation_enquiry_no,
-        quotation_consignee: data11.crm_v1_leads.lead_id,
-        customer: data11.crm_v1_leads.customer_id,
+        quotation_consignee: data11.crm_v1_customers.customer_id,
+        customer: data11.crm_v1_customers.customer_id,
         freight_type: data11.quotation_freight_type,
         quotation_cargotype: data11.quotation_cargo_type,
         quotation_mode: data11.quotation_mode,
@@ -877,6 +889,8 @@ export default function EditQuotation(
         quotation_origin: data11.quotation_origin_id,
         incoterm: data11.incoterm_id,
         consignee: data11.consignee,
+        container_type: data11.quotation_container_type,
+        salesperson: data11.quotation_salesperson,
       });
       locationBytype(onequatation?.data?.data?.quotation?.quotation_mode);
 
@@ -888,7 +902,6 @@ export default function EditQuotation(
       );
       setquatationno(onequatation?.data?.data?.quotation_no);
       setquotshipper(onequatation?.data?.data?.quotation_shipper);
-      setQuotconsignee(onequatation?.data?.data?.crm_v1_leads.lead_id);
       setquotfreighttype(
         onequatation?.data?.data?.fms_v1_freight_types.freight_type_name
       );
@@ -1128,7 +1141,8 @@ export default function EditQuotation(
     formData.append("quotation_payment_terms", data.quotation_terms);
     formData.append("quotation_currency", data.currency);
     formData.append("quotation_exchange_rate", data.exchnagerate);
-    formData.append("quotation_sales_person", data.salesperson);
+    formData.append("quotation_container_type", data.container_type);
+    formData.append("quotation_salesperson", data.salesperson);
     formData.append("incoterm_id", data.incoterm);
     formData.append("consignee", data.consignee);
     // formData.append(
@@ -1251,6 +1265,7 @@ export default function EditQuotation(
     getallcarrier();
     getallcurrency();
     getAllincoterm();
+    getallcontainertype();
     if (id) {
       getonequatation();
     }
@@ -1697,7 +1712,20 @@ export default function EditQuotation(
                       //   },
                       // ]}
                     >
-                      <SelectBox></SelectBox>
+                      <SelectBox>
+                        {allcontainertype &&
+                          allcontainertype.length > 0 &&
+                          allcontainertype.map((item, index) => {
+                            return (
+                              <Select.Option
+                                value={item.container_type_id}
+                                key={item.container_type_id}
+                              >
+                                {item.container_type_shortname}
+                              </Select.Option>
+                            );
+                          })}
+                      </SelectBox>
                     </Form.Item>
                   </div>
                 </div>

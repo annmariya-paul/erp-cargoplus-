@@ -31,7 +31,7 @@ const progress = [
     align: "center",
   },
   {
-    title: "TAX TYPE",
+    title: "TAX GROUP",
     dataIndex: "tax_type_name",
     key: "tax_type_name",
     align: "center",
@@ -109,11 +109,11 @@ export default function ViewQuotation() {
                 quotation_details_status: item.quotation_details_status,
                 quotation_details_tax_amount:
                   item.quotation_details_tax_amount.toFixed(2),
-                quotation_details_tax_type: item.quotation_details_tax_type,
+                quotation_details_tax_type: item.quotation_details_tax_group,
                 quotation_details_total:
                   item.quotation_details_total.toFixed(2),
                 service_name: item.crm_v1_services?.service_name,
-                tax_type_name: item.fms_v1_tax_types?.tax_type_name,
+                tax_type_name: item.fms_v1_tax_groups?.tax_group_name,
               });
               setTableData(temp11);
             }
@@ -209,7 +209,9 @@ export default function ViewQuotation() {
             <div className="col-1">:</div>
 
             <div className="col-6">
-              <p className="modal-view-data"></p>
+              <p className="modal-view-data">
+                {allqoutation?.crm_v1_customers?.customer_name}
+              </p>
             </div>
           </div>
 
@@ -261,7 +263,13 @@ export default function ViewQuotation() {
             <div className="col-1">:</div>
 
             <div className="col-6">
-              <p className="modal-view-data"></p>
+              <p className="modal-view-data">
+                {
+                  allqoutation
+                    ?.hrms_v1_employee_fms_v1_quotation_quotation_salespersonTohrms_v1_employee
+                    ?.employee_name
+                }
+              </p>
             </div>
           </div>
           {/* </div> */}
@@ -278,9 +286,7 @@ export default function ViewQuotation() {
             <div className="col-1">:</div>
 
             <div className="col-6">
-              <p className="modal-view-data">
-                {allqoutation?.crm_v1_leads?.lead_customer_name}
-              </p>
+              <p className="modal-view-data">{allqoutation?.consignee}</p>
             </div>
           </div>
 
@@ -347,7 +353,9 @@ export default function ViewQuotation() {
             <div className="col-1">:</div>
 
             <div className="col-6">
-              <p className="modal-view-data"></p>
+              <p className="modal-view-data">
+                {allqoutation?.fms_v1_container_types?.container_type_shortname}
+              </p>
             </div>
           </div>
           {/* </div> */}
@@ -398,25 +406,25 @@ export default function ViewQuotation() {
             <div className="col-1">:</div>
 
             <div className="col-7">
-              <p className="modal-view-data">100</p>
+              <p className="modal-view-data">{allqoutation?.length1}</p>
             </div>
           </div>
 
           <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
             <div className="col-4">Breadth</div>
             <div className="col-1">:</div>
-            50
+
             <div className="col-7">
-              <p className="modal-view-data"></p>
+              <p className="modal-view-data">{allqoutation?.breadth1}</p>
             </div>
           </div>
 
           <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
             <div className="col-4">Height</div>
             <div className="col-1">:</div>
-            100
+
             <div className="col-7">
-              <p className="modal-view-data"></p>
+              <p className="modal-view-data">{allqoutation?.height1}</p>
             </div>
           </div>
 
@@ -425,7 +433,7 @@ export default function ViewQuotation() {
             <div className="col-1">:</div>
 
             <div className="col-7">
-              <p className="modal-view-data"></p>
+              <p className="modal-view-data">{allqoutation?.voulme1}</p>
             </div>
           </div>
 
@@ -526,32 +534,32 @@ export default function ViewQuotation() {
         </div>
 
         <div className="row fms_cards mt-3 mx-0 px-2 py-3">
-            <Collapse
-              defaultActiveKey={["1"]}
-              onChange={onChange}
-              expandIconPosition={"end"}
-            >
-              <Panel header="TASK DETAILS" key="1">
-                <div>
-                  {" "}
-                  <TableData
-                    columns={progress}
-                    data={tabledata}
-                    bordered
-                    custom_table_css="table_job_list"
-                  />
+          <Collapse
+            defaultActiveKey={["1"]}
+            onChange={onChange}
+            expandIconPosition={"end"}
+          >
+            <Panel header="TASK DETAILS" key="1">
+              <div>
+                {" "}
+                <TableData
+                  columns={progress}
+                  data={tabledata}
+                  bordered
+                  custom_table_css="table_job_list"
+                />
+              </div>
+              <div className="d-flex justify-content-end  mx-3 ">
+                <div className="col-lg-2 col-sm-4 col-xs-3 d-flex justify-content-end mt-3 me-2">
+                  <p style={{ fontWeight: 500 }}>Grand Total : </p>
                 </div>
-                <div className="d-flex justify-content-end  mx-3 ">
-                  <div className="col-lg-2 col-sm-4 col-xs-3 d-flex justify-content-end mt-3 me-2">
-                    <p style={{ fontWeight: 500 }}>Grand Total : </p>
-                  </div>
-                  <div className="col-lg-2 col-sm-2 col-xs-2 mt-3">
-                    <p>{allqoutation?.quotation_grand_total.toFixed(2)}</p>
-                  </div>
+                <div className="col-lg-2 col-sm-2 col-xs-2 mt-3">
+                  <p>{allqoutation?.quotation_grand_total.toFixed(2)}</p>
                 </div>
-              </Panel>
-            </Collapse>
-          </div>
+              </div>
+            </Panel>
+          </Collapse>
+        </div>
       </div>
     </>
   );

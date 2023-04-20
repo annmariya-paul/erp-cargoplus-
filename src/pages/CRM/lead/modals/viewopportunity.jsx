@@ -1,24 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { FiEdit } from "react-icons/fi";
 import { useNavigate, useParams } from "react-router-dom";
-import { CRM_BASE_URL_FMS } from "../../../../api/bootapi";
+import { CRM_BASE_URL } from "../../../../api/bootapi";
 import Button from "../../../../components/button/button";
+
 import PublicFetch from "../../../../utils/PublicFetch";
 import moment from "moment";
 import { ROUTES } from "../../../../routes";
 
-function ViewEnquiry() {
+function ViewOpportunity() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [AllEnquiries, setAllEnquires] = useState();
+  const [Allopps, setAllOpps] = useState();
 
-  const GetSingleEnquiry = () => {
-    PublicFetch.get(`${CRM_BASE_URL_FMS}/enquiries/${id}`)
+  const GetSingleOpp = () => {
+ 
+    PublicFetch.get(`${CRM_BASE_URL}/opportunity/${id}`)
       .then((res) => {
         console.log("response ", res);
         if (res.data.success) {
-          console.log("success", res.data.data);
-          setAllEnquires(res?.data?.data);
+          console.log("success of", res.data.data);
+          setAllOpps(res?.data?.data);
         }
       })
       .catch((err) => {
@@ -28,7 +30,7 @@ function ViewEnquiry() {
 
   useEffect(() => {
     if (id) {
-      GetSingleEnquiry();
+      GetSingleOpp();
     }
   }, [id]);
   return (
@@ -57,7 +59,7 @@ function ViewEnquiry() {
 
             <div className="row mt-1">
           <div className="col-sm-5 col-12 mt-4 ">
-            <h5 className="lead_text">View Enquiry</h5>
+            <h5 className="lead_text">View Opportunity</h5>
           </div>
           <div className="col-sm-7 col-12">
             <div className="d-flex justify-content-end py-3">
@@ -83,7 +85,7 @@ function ViewEnquiry() {
                   btnType="add_borderless"
                   className="edit_button"
                   onClick={() => {
-                    navigate(`${ROUTES.EDIT_ENQUIRY}/${id}`);
+                    navigate(`${ROUTES.EDIT_OPPORTUNITY}/${id}`);
                   }}
                 >
                   Edit
@@ -95,31 +97,31 @@ function ViewEnquiry() {
         </div>
             <div className="row mt-3 pb-5">
             <div className="col-sm-6 d-flex">
-            <div className="col-4 boldhd pb-3">Enquiry No</div>
+            <div className="col-4 boldhd pb-3">Opportunity No.</div>
             <div className="col-1">:</div>
             <div className="col-7">
               <p className="modal-view-data">
-              {AllEnquiries?.enquiry_no}
+              {Allopps?.opportunity_number}
               </p>
             </div>
            
         </div>
         <div className="col-sm-6 d-flex">
-          <div className="col-4 boldhd pb-3">Customer Name</div>
+          <div className="col-4 boldhd pb-3">Type</div>
           <div className="col-1">:</div>
           <div className="col-7">
             <p className="modal-view-data">
-            {AllEnquiries?.crm_v1_customer?.customer_name}
+            {Allopps?.crm_v1_customer?.opportunity_type}
             </p>
           </div>
         </div>
 
         <div className="col-sm-6 d-flex">
-          <div className="col-4 boldhd pb-3">Contact Person Name</div>
+          <div className="col-4 boldhd pb-3">Customer</div>
           <div className="col-1">:</div>
           <div className="col-7">
             <p className="modal-view-data">
-            {AllEnquiries?.crm_v1_contacts?.contact_person_name}
+            {Allopps?.crm_v1_customer?.customer_name}
             </p>
           </div>
         </div>
@@ -129,70 +131,62 @@ function ViewEnquiry() {
           <div className="col-1">:</div>
           <div className="col-7">
             <p className="modal-view-data">
-            {AllEnquiries?.enquiry_source}
+            {Allopps?.opportunity_source}
             </p>
           </div>
         </div>
         <div className="col-sm-6 d-flex">
-          <div className="col-4 boldhd pb-3">Freight Type</div>
+          <div className="col-4 boldhd pb-3">Valid up to</div>
           <div className="col-1">:</div>
           <div className="col-7">
             <p className="modal-view-data">
-            {AllEnquiries?.fms_v1_freight_types?.freight_type_name}
-            </p>
-          </div>
-        </div>
-
-        <div className="col-sm-6 d-flex">
-          <div className="col-4 boldhd pb-3">Remarks</div>
-          <div className="col-1">:</div>
-          <div className="col-7">
-            <p className="modal-view-data">
-            {AllEnquiries?.enquiry_remarks}
-            </p>
-          </div>
-        </div>
-
-        <div className="col-sm-6 d-flex">
-          <div className="col-4 boldhd pb-3">Enquiry Date</div>
-          <div className="col-1">:</div>
-          <div className="col-7">
-            <p className="modal-view-data">
-            {moment(AllEnquiries?.enquiry_date).format(
+            {moment(Allopps?.opportunity_validity).format(
                           "DD-MM-YYYY"
                         )}
-
             </p>
           </div>
         </div>
 
-
-
-
         <div className="col-sm-6 d-flex">
-          <div className="col-4 boldhd pb-3">Sale Person</div>
+          <div className="col-4 boldhd pb-3">Details</div>
           <div className="col-1">:</div>
           <div className="col-7">
             <p className="modal-view-data">
-            {AllEnquiries?.hrms_v1_employee_sales_person
-?.employee_name}
-
+            {Allopps?.opportunity_description}
             </p>
           </div>
         </div>
 
-
-
         <div className="col-sm-6 d-flex">
-          <div className="col-4 boldhd pb-3">Email</div>
+          <div className="col-4 boldhd pb-3">Expecting Amount</div>
           <div className="col-1">:</div>
           <div className="col-7">
             <p className="modal-view-data">
-            {AllEnquiries?.crm_v1_contacts?.contact_email}
+            {Allopps?.opportunity_amount}
+
             </p>
           </div>
         </div>
+
+
+
+
         <div className="col-sm-6 d-flex">
+          <div className="col-4 boldhd pb-3">Probability of conversion</div>
+          <div className="col-1">:</div>
+          <div className="col-7">
+            <p className="modal-view-data">
+            {Allopps?.opportunity_probability === 'L' ? 'Low' : Allopps?.opportunity_probability === 'H' ? 'High' : Allopps?.opportunity_probability === 'M' ? 'Medium' : ''}
+
+            {/* {Allopps?.opportunity_probability} */}
+            </p>
+          </div>
+        </div>
+
+
+
+        
+        {/* <div className="col-sm-6 d-flex">
           <div className="col-4 boldhd pb-3">Phone</div>
           <div className="col-1">:</div>
           <div className="col-7">
@@ -220,7 +214,7 @@ function ViewEnquiry() {
             {AllEnquiries?.enquiry_docs}
             </p>
           </div>
-        </div>
+        </div> */}
 
 
 
@@ -232,4 +226,4 @@ function ViewEnquiry() {
   );
 }
 
-export default ViewEnquiry;
+export default ViewOpportunity;

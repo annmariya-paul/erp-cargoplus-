@@ -162,6 +162,7 @@ import AccGroup from "./pages/Accounts/settings/Account Group/AccGroup";
 import Invoicetemp1 from "./components/Invoice/invoicetemp1/invoicetemp1";
 import Invoicetemplate2 from "./components/Invoice/invoicetemp2/invoicetemp2";
 import Invoicetemplateselect from "./pages/General Settings/invoicetemplates/invoicetemplate";
+import ViewOpportunity from "./pages/CRM/lead/modals/viewopportunity";
 function App() {
   return (
     <div className="App">
@@ -362,7 +363,9 @@ function App() {
             <Route path={ROUTES.EMPLOYEEGRADE} element={<ProtectedRoute />}>
               <Route index element={<Employeegrade />} />
             </Route>
-
+            <Route path={ROUTES.VIEW_OPPORTUNITY_ID} element={<ProtectedRoute />}>
+              <Route index element={<ViewOpportunity />} />
+            </Route>
             <Route path={ROUTES.ADD_OPPORTUNITY} element={<ProtectedRoute />}>
               <Route index element={<AddOpportunity />} />
             </Route>

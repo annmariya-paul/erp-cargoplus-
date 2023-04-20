@@ -75,7 +75,7 @@ function Enquiry() {
 
 
   useEffect(() => {
-// 
+
   if(customername){
     GetAllCustomers();
     GetAllContacts();
@@ -131,6 +131,8 @@ function Enquiry() {
       });
   };
 
+
+  const [savedisbtn,setSaveddisbtn]=useState(false);
   // api call starts !!
 
   const GetAllCustomers = () => {
@@ -186,6 +188,8 @@ console.log("CustomerName", customername);
             contactemail: a?.contact_email,
             contactphone: a?.contact_phone_1,
             customerfrighttype: b,
+             enquiryno : allEnquiresno,
+            
             
           });
         }
@@ -194,14 +198,24 @@ console.log("CustomerName", customername);
         console.log("Error", err);
       });
   };
-const[allEnquiresno,setAllEnquiresno]=useState();
+  const[allEnquiresno,setAllEnquiresno]=useState();
+  useEffect(() => {
+    if(allEnquiresno){
+      addForm.setFieldsValue({ enquiryno : allEnquiresno })
+    }
+    // getallunits();
+    // getAllLocations();
+ 
+  }, [allEnquiresno]);
+
+console.log("Enquiry no :",allEnquiresno);
   const GetSingleEnquiry = () => {
     PublicFetch.get(`${CRM_BASE_URL_FMS}/enquiries/enquiryNumber`)
       .then((res) => {
         console.log("response of enq number", res);
-        if (res.data.success) {
-          console.log("success", res.data.data);
-          setAllEnquiresno(res?.data?.data);
+        if (res.data.data) {
+          console.log("success of enq", res.data.data);
+          setAllEnquiresno(res?.data?.data.enquiryNumber);
         }
       })
       .catch((err) => {
@@ -262,6 +276,9 @@ const[allEnquiresno,setAllEnquiresno]=useState();
   };
 
   const CreateEnquiry = (data) => {
+    if(data){
+      setSaveddisbtn(true);
+    }
     let enquiry_date = moment(data.date);
     const formData = new FormData();
     formData.append("enquiry_customer_id", data.customer);
@@ -300,6 +317,26 @@ if(data.customerfrighttype){
           setSuccessPopup(true);
           addForm.resetFields();
           close_modal(SuccessPopup, 1200);
+          setSaveddisbtn(false);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+  useEffect(() => {
+    GetAllEnquirySource();
+  }, []);
+  const [AllEnquirySource, setAllEnquirySource] = useState();
+
+  const GetAllEnquirySource = () => {
+    PublicFetch.get(`${CRM_BASE_URL}/enquiry_source`)
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          console.log("success of data", res.data.data);
+          setAllEnquirySource(res.data.data);
         }
       })
       .catch((err) => {
@@ -345,7 +382,10 @@ if(data.customerfrighttype){
     );
     setFilteredCustomers(filtered);
   };
-  
+  function disabledDate(current) {
+    // Disable dates after today
+    return current && current > moment().endOf('day');
+  }
 
   useEffect(() => {
     GetAllCustomers();
@@ -542,6 +582,7 @@ if(data.customerfrighttype){
               >
                 <DatePicker
                   format={"DD-MM-YYYY"}
+                  disabledDate={disabledDate}
                   //   defaultValue={moment(newDate)}
                   //   value={purchase_date}
                   //   onChange={(e) => {
@@ -563,7 +604,7 @@ if(data.customerfrighttype){
                   },
                 ]}
               >
-                <SelectBox>
+                {/* <SelectBox>
                   <Select.Option value="reference">Reference</Select.Option>
                   <Select.Option value="direct visit">
                     Direct Visit
@@ -571,6 +612,21 @@ if(data.customerfrighttype){
                   <Select.Option value="online registration">
                     Online Registration
                   </Select.Option>
+                </SelectBox> */}
+                 <SelectBox>
+                  {AllEnquirySource &&
+                    AllEnquirySource.length > 0 &&
+                    AllEnquirySource.map((item, index) => {
+                      console.log("index of enq source",item);
+                      return (
+                        <Select.Option
+                          key={item.enq_source_id}
+                          value={item.enq_source_id}
+                        >
+                          {item.enq_source_name}
+                        </Select.Option>
+                      );
+                    })}
                 </SelectBox>
               </Form.Item>
             </div>
@@ -612,6 +668,7 @@ if(data.customerfrighttype){
                   {allSalesPerson &&
                     allSalesPerson.length > 0 &&
                     allSalesPerson.map((item, index) => {
+                     
                       return (
                         <Select.Option
                           key={item.employee_id}
@@ -741,7 +798,7 @@ if(data.customerfrighttype){
           </div>
 
           <div className="col-12 d-flex justify-content-center my-4 gap-3">
-            <Button type="submit" btnType="save">
+            <Button type="submit" btnType="save" disabled={savedisbtn}>
               Save
             </Button>
             <Button

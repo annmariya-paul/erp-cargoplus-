@@ -166,6 +166,42 @@ function EditEnquiry() {
         console.log("Error", err);
       });
   };
+  const [AllEnquirySource, setAllEnquirySource] = useState();
+  const GetAllEnquirySource = () => {
+    PublicFetch.get(`${CRM_BASE_URL}/enquiry_source`)
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          console.log("success of data", res.data.data);
+          setAllEnquirySource(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+
+  useEffect(() => {
+    GetAllEnquirySource();
+  }, []);
+
+  // const GetSingleEnqSource = (e) => {
+  //   PublicFetch.get(`${CRM_BASE_URL}/enquiry_source/${e}`)
+  //     .then((res) => {
+  //       console.log("Response from single enquiry Source", res);
+  //       if (res.data.success) {
+  //         console.log("success from single contact", res.data.data);
+  //         addForm.setFieldsValue({
+  //           enq_source_name: res.data.data.enq_source_name1,
+  //           enq_source_id: res.data.data.enq_source_id,
+  //         });
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log("Error", err);
+  //     });
+  // };
 
   const GetSingleContact = (e) => {
     PublicFetch.get(`${CRM_BASE_URL}/contact/${e}`)
@@ -219,13 +255,15 @@ function EditEnquiry() {
             contactperson: a.enquiry_contact_person_id,
             purchasePoRef: a.enquiry_remarks,
             sales_person:a.enquiry_sales_person_id,
-            job_freight_type:a.enquiry_freight_type,
+            customerfrighttype:a.enquiry_freight_type,
             enquiry_docs:a.attachments,
 
           });
           GetSingleContact(a.enquiry_contact_person_id);
           GetSingleCustomer(a.enquiry_customer_id);
           GetAllContacts(a.enquiry_customer_id);
+          // GetSingleEnqSource(a.enquiry_contact_person_id);
+
         }
       })
       .catch((err) => {
@@ -237,13 +275,21 @@ function EditEnquiry() {
     let enquiry_date = moment(data.date);
     const formData = new FormData();
     formData.append("enquiry_customer_id", data.customer);
-    formData.append("enquiry_source", data.source);
+    if(data.source){
+      formData.append("enquiry_source", data.source);
+    }
     formData.append("enquiry_date", enquiry_date);
-    formData.append("enquiry_customer_ref", data.reference);
+    if(data.reference){
+      formData.append("enquiry_customer_ref", data.reference);
+    }
     formData.append("enquiry_contact_person_id", data.contactperson);
-    formData.append("enquiry_remarks", data.purchasePoRef);
+    if(data.purchasePoRef){
+      formData.append("enquiry_remarks", data.purchasePoRef);
+    }
     formData.append("enquiry_sales_person_id", data.sales_person);
-    formData.append("enquiry_freight_type", data.job_freight_type);
+    if(data.customerfrighttype){
+      formData.append("enquiry_freight_type", data.customerfrighttype);
+    }
     if (img) {
       formData.append("attachments", img);
     }
@@ -263,6 +309,10 @@ function EditEnquiry() {
         console.log("Error", err);
       });
   };
+  function disabledDate(current) {
+    // Disable dates after today
+    return current && current > moment().endOf('day');
+  }
   const GetSalesPersons = () => {
     PublicFetch.get(`${CRM_BASE_URL_HRMS}/employees/salesexecutive`)
       .then((res) => {
@@ -330,6 +380,16 @@ function EditEnquiry() {
                   ]}
                 >
                   <SelectBox
+                   filterOption={(input, option) =>
+
+
+                    option.children.toUpperCase().includes(input.toUpperCase())
+        
+                  }
+        
+                  showSearch={true}
+                  allowClear={true}
+                  optionFilterProp="children"
                     onChange={(e) => {
                       GetAllContacts(e);
                       GetSingleCustomer(e);
@@ -373,7 +433,7 @@ function EditEnquiry() {
             <div className="col-sm-4 pt-2 ">
                     <label className="mb-1">Freight Type</label>
                     <Form.Item
-                      name="job_freight_type"
+                      name="customerfrighttype"
                       // rules={[
                       //   {
                       //     required: true,
@@ -448,7 +508,8 @@ function EditEnquiry() {
                 ]}
               >
                 <DatePicker
-                //   format={"DD-MM-YYYY"}
+                  disabledDate={disabledDate}
+                  format={"DD-MM-YYYY"}
                 //   defaultValue={moment(newDate)}
                 //   value={purchase_date}
                 //   onChange={(e) => {
@@ -472,14 +533,19 @@ function EditEnquiry() {
                   },
                 ]}
               >
-                <SelectBox>
-                  <Select.Option value="reference">Reference</Select.Option>
-                  <Select.Option value="direct visit">
-                    Direct Visit
-                  </Select.Option>
-                  <Select.Option value="online registration">
-                    Online Registration
-                  </Select.Option>
+               <SelectBox>
+                  {AllEnquirySource &&
+                    AllEnquirySource.length > 0 &&
+                    AllEnquirySource.map((item, index) => {
+                      return (
+                        <Select.Option
+                          key={item.enq_source_id}
+                          value={item.enq_source_id}
+                        >
+                          {item?.enq_source_name}
+                        </Select.Option>
+                      );
+                    })}
                 </SelectBox>
               </Form.Item>
             </div>

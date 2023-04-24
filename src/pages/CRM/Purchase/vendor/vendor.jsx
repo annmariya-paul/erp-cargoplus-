@@ -37,7 +37,7 @@ function Vendor() {
   const [totalvendor, settotalvendor] = useState("");
   const [serialNo, setserialNo] = useState(1);
   const [totalCount, setTotalcount] = useState();
-
+const [startcount,setstartcount]= useState()
 
   const getCountry = () => {
     PublicFetch.get(`${GENERAL_SETTING_BASE_URL}/country`)
@@ -168,6 +168,9 @@ try{
   console.log("getting all vendor detailss", allvendor?.data?.data?.vendors);
   settotalvendor(allvendor.data.data);
   setTotalcount(allvendor.data.data.total)
+
+  setstartcount(allvendor?.data?.data?.startIndex)
+
   // setAllvendor(allvendor.data.data)
   let arry = [];
   allvendor?.data?.data?.vendors.map((i, indx) => {
@@ -205,6 +208,7 @@ catch (err) {
  
 
 
+  console.log("totaaal",startcount)
 
 
   useEffect(() => {
@@ -470,7 +474,7 @@ catch (err) {
             </Select>
             </div>
             <div className=" col-xl-10 col-lg-9 col-md-8 col-sm-12  d-flex  align-items-center ">
-            <label className="font_size" >Results: 1-{noofItems}  <span>of {totalCount} </span> </label>
+            <label className="font_size" >Results: {startcount +1} -{noofItems *2}  <span>of {totalCount} </span> </label>
             </div>
 
             </div>

@@ -13,6 +13,7 @@ import {
 } from "../../../../api/bootapi";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../../routes";
+import { Alert, Space } from 'antd';
 
 function Moreinfo({ customerdetails }) {
   const [successPopup, setSuccessPopup] = useState(false);
@@ -21,6 +22,7 @@ function Moreinfo({ customerdetails }) {
   const [allfrights, setallfrights] = useState("");
   const [countries, setCountries] = useState("");
   const [modalShow, setModalShow] = useState(false);
+  const [error, setError] = useState(false);
   const navigate = useNavigate();
 
   const getallfright = async () => {
@@ -138,10 +140,14 @@ function Moreinfo({ customerdetails }) {
             close_modal(modalShow, 1000, res?.data?.data);
             // setModalContact(false);
           }
+          else{
+            setError(true)
+          }
         })
 
         .catch((err) => {
           console.log("Error", err);
+          setError(true);
         });
     } else {
       PublicFetch.post(`${CRM_BASE_URL}/customer`, formData, {
@@ -155,10 +161,14 @@ function Moreinfo({ customerdetails }) {
             close_modal(modalShow, 1000, res?.data?.data);
             // setModalContact(false);
           }
+          else{
+            setError(true)
+          }
         })
 
         .catch((err) => {
           console.log("Error", err);
+          setError(true)
         });
     }
   };
@@ -249,6 +259,22 @@ function Moreinfo({ customerdetails }) {
             />
         </div>
       </Form>
+
+      <Space
+    direction="vertical"
+    style={{
+      width: '100%',
+    }}
+  >
+    {error ?  <Alert
+      message="Error"
+      description="Please enter atleast one data."
+      type="error"
+      showIcon
+
+    /> :"" }
+   
+  </Space>
     </>
   );
 }

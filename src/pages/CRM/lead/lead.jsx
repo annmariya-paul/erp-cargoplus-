@@ -551,6 +551,7 @@ function Lead({}) {
                     <div className="col-sm-4 pt-2">
                       <label className="">Address</label>
                       <Form.Item
+                      
                         name="customer_address"
                         rules={[
                           {
@@ -569,8 +570,9 @@ function Lead({}) {
                         ]}
                       >
                         <TextArea
+                           className="custaddress_height"
                           // disabled={organizationDisable === "I"}
-                          style={{ minHeight: "100px" }}
+                          // style={{ minHeight: 113 }}
                           value={leadOrganization}
                           onChange={(e) => setLeadOrganization(e.target.value)}
                         />
@@ -708,13 +710,13 @@ function Lead({}) {
                         <Form.Item name="customer_logo">
                           <FileUpload
                             multiple
-                            style={{ height: "50px" }}
+                            style={{ height: "31px" }}
                             filetype={"Accept only pdf and docs"}
                             listType="picture"
                             accept=".pdf,.docs,"
                             // onPreview={handlePreview}
                             beforeUpload={beforeUpload}
-                            // value={leadAttachment}
+                            // value={leadAttac1ment}
                             // onChange={(e) => setLeadAttachment(e.target.value)}
                             onChange={(file) => {
                               console.log("Before upload", file.file);

@@ -269,7 +269,7 @@ function Bankdetails({ vendor, toggle }) {
       <div className="row">
         <div className="col-12">
           <Button btnType="add" onClick={() => setModalShow(true)}>
-            New Bank Details <AiOutlinePlus />
+            New Bank Details 
           </Button>
         </div>
       </div>

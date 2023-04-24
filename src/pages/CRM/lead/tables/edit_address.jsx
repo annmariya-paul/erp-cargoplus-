@@ -236,7 +236,7 @@ function Edit_Address(props) {
       <div className="row">
         <div className="col-12">
           <Button btnType="add" onClick={() => setModalshowAdd(true)}>
-            {/* Add <AiOutlinePlus /> */}New Address
+           New Address
           </Button>
         </div>
       </div>

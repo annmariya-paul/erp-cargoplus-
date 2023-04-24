@@ -491,6 +491,7 @@ function LeadEdit() {
                         ]}
                       >
                         <Radio.Group
+                        className="d-flex gap-4"
                           value={leadUsertype}
                           onChange={(e) => {
                             setLeadUsertype(e);
@@ -564,6 +565,7 @@ function LeadEdit() {
                         ]}
                       >
                         <TextArea
+                        className="custaddress_height"
                           // disabled={organizationDisable === "I"}
                           // value={leadOrganization}
                           onChange={(e) => setLeadOrganization(e.target.value)}
@@ -657,6 +659,7 @@ function LeadEdit() {
                     <div className="col-sm-4 pt-3 mt-3">
                       <Form.Item name="customer_logo">
                         <FileUpload
+                          style={{ height: "31px" }}
                           multiple
                           filetype={"Accept only pdf and docs"}
                           listType="picture"

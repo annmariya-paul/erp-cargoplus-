@@ -10,6 +10,7 @@ import {
   CRM_BASE_URL_FMS,
   CRM_BASE_URL_PURCHASING,
 } from "../../../../../api/bootapi";
+import { Alert, Space } from 'antd';
 function Moreinfo({ vendor }) {
   const [successPopup, setSuccessPopup] = useState(false);
   const [addForm] = Form.useForm();
@@ -18,6 +19,7 @@ function Moreinfo({ vendor }) {
 
   const [vendorId, setvendorId] = useState();
   const [onevendordata, setonevendordata] = useState();
+  const [error, setError] = useState(false);
 
   const [vendfrighttypeid, setvendfrighttypeid] = useState();
   //
@@ -115,14 +117,18 @@ function Moreinfo({ vendor }) {
       )
         .then((res) => {
           console.log("successfully updated vendor moreinfo", res);
-          if (res.data.success) {
+          if (res?.data?.success) {
             setSuccessPopup(true);
             // addForm.resetFields();
             close_modal(successPopup, 1000);
           }
+          else{
+            setError(true)
+          }
         })
         .catch((err) => {
           console.log("Error", err);
+          setError(true)
         });
     } else {
       PublicFetch.post(`${CRM_BASE_URL_PURCHASING}/vendors`, formData, {
@@ -130,14 +136,18 @@ function Moreinfo({ vendor }) {
       })
         .then((res) => {
           console.log("successfully addedd", res);
-          if (res.data.success) {
+          if (res?.data?.success) {
             Getvendordata();
             setSuccessPopup(true);
             close_modal(successPopup, 1000, res?.data?.data);
           }
+          else{
+            setError(true)
+          }
         })
         .catch((err) => {
           console.log("Error", err);
+          setError(true);
         });
     }
   };
@@ -239,6 +249,21 @@ function Moreinfo({ vendor }) {
           </div>
         </div>
       </Form>
+      <Space
+    direction="vertical"
+    style={{
+      width: '100%',
+    }}
+  >
+    {error ?  <Alert
+      message="Error"
+      description="Please enter atleast one data."
+      type="error"
+      showIcon
+
+    /> :"" }
+   
+  </Space>
     </>
   );
 }

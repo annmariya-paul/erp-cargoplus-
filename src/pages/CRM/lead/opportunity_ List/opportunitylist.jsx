@@ -188,10 +188,17 @@ function Opportunitylist(props) {
     )
       .then((res) => {
         if (res?.data?.success) {
-          // console.log("All opportunity dataqqq", res?.data?.data.leads?.fms_v1_enquiry_opportunities?.enq_opp_enquiry_id);
+          console.log("All opportunity dataqqq", res?.data?.data.leads);
 
           let tempArr = [];
           res?.data?.data?.leads.forEach((item, index) => {
+            let temp = [];
+           item.fms_v1_enquiry_opportunities.forEach((item, index) => {
+            temp.push(item.fms_v1_enquiries.enquiry_no)
+
+            })
+
+        
             oppstatus.forEach((sts, index) => {
               var statusnew = parseInt(sts.value);
               if (statusnew == item.opportunity_status) {
@@ -212,7 +219,7 @@ function Opportunitylist(props) {
                   opportunity_amount: item?.opportunity_amount,
                   opportunity_status: item?.opportunity_status,
                   opportunity_validity: item?.opportunity_validity,
-                  // opp_enq:item?.fms_v1_enquiry_opportunities[0].enq_opp_enquiry_id,
+                  opp_enq:temp,
 
                 });
               }
@@ -562,18 +569,18 @@ function Opportunitylist(props) {
       key: "PARTY",
       align: "left",
     },
-    // {
-    //   title: "ENQUIRY NO",
-    //   dataIndex: "opp_enq",
-    //   key: "opp_enq",
-    //   // filteredValue: [searchStatus],
-    //   // onFilter: (value, record) => {
-    //   //   return String(record.opportunity_from)
-    //   //     .toLowerCase()
-    //   //     .includes(value.toLowerCase());
-    //   // },
-    //   align: "left",
-    // },
+    {
+      title: "ENQUIRY NO",
+      dataIndex: "opp_enq",
+      key: "opp_enq",
+      // filteredValue: [searchStatus],
+      // onFilter: (value, record) => {
+      //   return String(record.opportunity_from)
+      //     .toLowerCase()
+      //     .includes(value.toLowerCase());
+      // },
+      align: "left",
+    },
     {
       title: "TYPE",
       dataIndex: "opportunity_type",

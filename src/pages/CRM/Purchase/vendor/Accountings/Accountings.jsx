@@ -7,12 +7,14 @@ import Custom_model from "../../../../../components/custom_modal/custom_model";
 import Button from "../../../../../components/button/button";
 import PublicFetch from "../../../../../utils/PublicFetch";
 import { CRM_BASE_URL_PURCHASING } from "../../../../../api/bootapi";
+import { Alert, Space } from 'antd';
 function Accounting({vendor}){
     const [successPopup, setSuccessPopup] = useState(false);
     const [editForm] = Form.useForm();
 
     const [vendorId, setvendorId] = useState();
   const [onevendordata,setonevendordata] = useState()
+  const [error, setError] = useState(false);
 
     const Getvendordata = () => {
       PublicFetch.get(`${CRM_BASE_URL_PURCHASING}/vendors/${vendor?.vendor_id}`)
@@ -57,8 +59,8 @@ function Accounting({vendor}){
       // formData.append(`website`, vendor.vendor_website);
       // formData.append(`state`, vendor.vendor_state);
       // formData.append(`address`, vendor.vendor_address);
-      formData.append(`tax_no`, data.vendortaxno);
-      formData.append(`credit_days`, data.vendorcreditdays);
+     formData.append(`tax_no`, data.vendortaxno);
+     formData.append(`credit_days`, data.vendorcreditdays);
       formData.append(`remarks`, vendor.remarks);
      
       if (data.vendor_attachments) {
@@ -79,9 +81,13 @@ function Accounting({vendor}){
               close_modal(successPopup, 1000,res?.data?.data);
     
             }
+            else{
+              setError(true)
+            }
           })
           .catch((err) => {
             console.log("Error", err);
+            setError(true)
           });
       }
       else{
@@ -96,9 +102,13 @@ function Accounting({vendor}){
               close_modal(successPopup, 1000,res?.data?.data);
     
             }
+            else{
+              setError(true)
+            }
           })
           .catch((err) => {
             console.log("Error", err);
+            setError(true);
           });
 
       }
@@ -183,6 +193,21 @@ function Accounting({vendor}){
           </div>
         </div>
       </Form>
+      <Space
+    direction="vertical"
+    style={{
+      width: '100%',
+    }}
+  >
+    {error ?  <Alert
+      message="Error"
+      description="Please enter atleast one data."
+      type="error"
+      showIcon
+
+    /> :"" }
+   
+  </Space>
         </>
     )
 }

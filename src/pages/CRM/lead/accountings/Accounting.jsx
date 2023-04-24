@@ -18,7 +18,8 @@ import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../../routes";
 import Input_Number from "../../../../components/InputNumber/InputNumber";
 import { message } from "antd";
-import ErrorMsg from "../../../../components/error/ErrorMessage";
+import { Alert, Space } from 'antd';
+// import ErrorMsg from "../../../../components/error/ErrorMessage";
 
 function Countrystate({ customerdetails, setIsAccountSave }) {
   const [modalShow, setModalShow] = useState(false);
@@ -178,9 +179,9 @@ function Countrystate({ customerdetails, setIsAccountSave }) {
   };
 
   const createCustomeraccounting = (data) => {
- 
-
+  
     const formData = new FormData();
+
     formData.append(`customer_name`, customerdetails.customer_name);
     formData.append(`customer_type`, customerdetails.customer_type);
     formData.append(`customer_address`, customerdetails.customer_address);
@@ -224,7 +225,7 @@ function Countrystate({ customerdetails, setIsAccountSave }) {
             // isSave = true;
           }
           else{
-     
+            setError(true)
            }
         })
 
@@ -247,7 +248,7 @@ function Countrystate({ customerdetails, setIsAccountSave }) {
             // setModalContact(false);
           }
           else{
-          message.error("not entered data")
+         setError(true)
           }
          
         })
@@ -256,6 +257,7 @@ function Countrystate({ customerdetails, setIsAccountSave }) {
           console.log("Error", err);
         });
     }
+  
   };
 
   useEffect(() => {
@@ -378,32 +380,7 @@ function Countrystate({ customerdetails, setIsAccountSave }) {
               />
             </Form.Item>
           </div>
-          {/* <div className="col-sm-4">
-            <label>Preferred Freight Type</label>
-            <Form.Item name="customer_accounting_preferred_freight_type">
-              <SelectBox allowClear showSearch optionFilterProp="children">
-                {frighttype &&
-                  frighttype.length > 0 &&
-                  frighttype.map((item, index) => {
-                    return (
-                      <Select.Option
-                        key={item.freight_type_id}
-                        value={item.freight_type_id}
-                      >
-                        {item.freight_type_name}
-                      </Select.Option>
-                    );
-                  })}
-              </SelectBox>
-            </Form.Item>
-          </div> */}
-
-          {/* <div className="col-sm-4">
-            <label>Qtn validity Days</label>
-            <Form.Item name="customer_accounting_qtn_validity_days">
-              <Input_Number />
-            </Form.Item>
-          </div> */}
+       
 
           <div className=" pt-4 d-flex justify-content-center">
             
@@ -424,9 +401,25 @@ function Countrystate({ customerdetails, setIsAccountSave }) {
             />
 
 
-{/* {error ? <ErrorMsg code={"Please enter any data"} /> : ""} */}
+
+
         </div>
       </Form>
+      <Space
+    direction="vertical"
+    style={{
+      width: '100%',
+    }}
+  >
+    {error ?  <Alert
+      message="Error"
+      description="Please enter atleast one data."
+      type="error"
+      showIcon
+
+    /> :"" }
+   
+  </Space>
     </>
   );
 }

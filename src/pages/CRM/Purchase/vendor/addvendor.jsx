@@ -412,6 +412,7 @@ console.log("bnkdetails id iss",vendorId)
                         ]}
                       >
                         <Radio.Group
+                        className="d-flex gap-5"
                           defaultValue="ORG"
                         >
                           <Radio value="ORG">Organization</Radio>
@@ -485,7 +486,7 @@ console.log("bnkdetails id iss",vendorId)
                           <FileUpload
                             beforeUpload={beforeUpload}
                             multiple
-                            height={120}
+                            height={100}
                             listType="picture"
                             accept=".pdf,.docs,"
                           />

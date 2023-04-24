@@ -92,7 +92,7 @@ export default function AddOpportunity() {
     if (customername) {
       GetAllCustomers();
       GetAllContacts();
-      addForm.setFieldsValue({ oppo_customer: customername });
+      // addForm.setFieldsValue({ oppo_customer: customername });
       setCustomer_Id(customername);
       handleclicknew(customername);
       // GetSingleCustomer(customername);
@@ -112,6 +112,7 @@ export default function AddOpportunity() {
         if (res.data.success) {
           console.log("Success og gettimg customers", res?.data?.data);
           setAllCustomers(res?.data?.data);
+          addForm.setFieldsValue({ oppo_customer: customername });
         }
       })
       .catch((err) => {
@@ -222,6 +223,7 @@ export default function AddOpportunity() {
         console.log("response of customersss", res);
         if (res.data.success) {
           setCustomersData(res?.data?.data);
+          setAllCustomers(res?.data?.data);
         }
       })
       .catch((err) => {
@@ -246,8 +248,8 @@ export default function AddOpportunity() {
     addForm.setFieldsValue({
       oppo_source: "reference",
       oppo_type: "sales",
-      // oppo_probability: "L",
-      // oppo_status: 1,
+      oppo_probability: "L",
+      oppo_status: 1,
     });
   }, []);
 
@@ -276,8 +278,9 @@ export default function AddOpportunity() {
   // { function to add opportunity - Ann - 29/3/23}
   const newDate = new Date();
   const thisDate = moment(newDate);
+  const defaultDate = moment().add(7, 'days');
   addForm.setFieldValue("oppor_date", thisDate);
-  addForm.setFieldValue("oppo_validity", thisDate);
+  addForm.setFieldValue("oppo_validity", defaultDate);
 
   const oppdata = (data) => {
     const date = moment(data.oppor_date).format("MM/DD/YYYY");
@@ -579,21 +582,22 @@ export default function AddOpportunity() {
                   optionFilterProp="children"
                     // value={opptype}
                     onChange={(e) => {
+                      handleclick(e);
                       setCustomer_Id(e);
                       GetAllContacts(e);
                       // addForm.resetFields();
-                      handleclick(e);
+                     
                     }}
                   >
-                    {customersData &&
-                      customersData.length > 0 &&
-                      customersData.map((item, index) => {
+                    {AllCustomers &&
+                      AllCustomers.length > 0 &&
+                      AllCustomers.map((item, index) => {
                         return (
                           <Select.Option
                             value={item.customer_id}
                             key={item.customer_id}
                           >
-                            {item.customer_name}
+                            {item?.customer_name}
                           </Select.Option>
                         );
                       })}
@@ -875,6 +879,7 @@ export default function AddOpportunity() {
                 <DatePicker
                   style={{ borderWidth: 0, marginTop: 2 }}
                   format={"DD-MM-YYYY"}
+                  
                   defaultValue={moment(validityDate)}
                   // initialValues={oppurtunityvalidity}
                   // format={dateFormatList}

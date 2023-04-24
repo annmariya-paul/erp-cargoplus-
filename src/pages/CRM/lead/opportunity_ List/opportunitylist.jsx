@@ -192,6 +192,13 @@ function Opportunitylist(props) {
 
           let tempArr = [];
           res?.data?.data?.leads.forEach((item, index) => {
+            let temp = [];
+           item.fms_v1_enquiry_opportunities.forEach((item, index) => {
+            temp.push(item.fms_v1_enquiries.enquiry_no)
+
+            })
+
+        
             oppstatus.forEach((sts, index) => {
               var statusnew = parseInt(sts.value);
               if (statusnew == item.opportunity_status) {
@@ -212,6 +219,8 @@ function Opportunitylist(props) {
                   opportunity_amount: item?.opportunity_amount,
                   opportunity_status: item?.opportunity_status,
                   opportunity_validity: item?.opportunity_validity,
+                  opp_enq:temp,
+
                 });
               }
             });
@@ -551,7 +560,7 @@ function Opportunitylist(props) {
       title: "OPPORTUNITY NO",
       dataIndex: "opportunity_number",
       key: "opportunity_number",
-      width: "12%",
+      width: "18%",
       // align: "center",
     },
     {
@@ -562,8 +571,8 @@ function Opportunitylist(props) {
     },
     {
       title: "ENQUIRY NO",
-      dataIndex: "opportunity_from",
-      key: "FROM",
+      dataIndex: "opp_enq",
+      key: "opp_enq",
       // filteredValue: [searchStatus],
       // onFilter: (value, record) => {
       //   return String(record.opportunity_from)
@@ -576,7 +585,7 @@ function Opportunitylist(props) {
       title: "TYPE",
       dataIndex: "opportunity_type",
       key: "TYPE",
-      width:"10%",
+      // width:"10%",
       // filteredValue: [searchSource],
       // onFilter: (value, record) => {
       //   return (
@@ -633,13 +642,16 @@ function Opportunitylist(props) {
       render: (data, index) => {
         console.log("indexx", index);
         return (
-          <div className="d-flex justify-content-center gap-2">
-            <div className="editcolor">
+          <div className="d-flex justify-content-center align-items-center gap-2">
+            <div className="m-0">
               {/* <FaEdit onClick={() => handleEditedclick(index)} /> */}
-              <Link to={`${ROUTES.EDIT_OPPORTUNITY}/${index.opportunity_Id}`}>
+              <Link to={`${ROUTES.EDIT_OPPORTUNITY}/${index.opportunity_Id}`}
+               className="editcolor"
+              >
                 <FaEdit />
               </Link>
             </div>
+            <div className="actionView m-0">
             <div className="editcolor"
              onClick={
               () => {
@@ -653,6 +665,7 @@ function Opportunitylist(props) {
                 // onClick={()=>viewprogressoppurtunity(index)}
                 // onClick={() => Viewoppurtunties(index)}
               />
+            </div>
             </div>
             <div className="deleteIcon m-0">
               <Popconfirm
@@ -788,7 +801,7 @@ function Opportunitylist(props) {
 
   return (
     <div>
-      <div className="container-fluid lead_list  my-3 py-3">
+      <div className="container-fluid   my-3 py-3">
         {/* opportunity listing section One */}
 
         <div>

@@ -302,7 +302,7 @@ function EnquiryList() {
   console.log("page number isss", pagesizecount);
   // {query === 'pending' ? 0 : query=== "converted" ? 1: query}
   const GetAllEnquiries = (query) => {
-    PublicFetch.get(`${CRM_BASE_URL_FMS}/enquiries?startIndex=${pageofIndex}&noOfItems=${noofItems}&search=${query}`)
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/enquiries?startIndex=${pageofIndex}&noOfItems=${noofItems}&search=${query === 'pending' ? 0 : query=== "converted" ? 1: query}`)
       .then((res) => {
         console.log("Response ", res);
         if (res.data.success) {

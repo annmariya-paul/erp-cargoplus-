@@ -72,7 +72,7 @@ function Custom_model({
                 className=" cancel_msg"
                 style={{ fontSize: "100px" }}
               />
-              <h4 className="cancel_msg">{cancelName} Canceled !</h4>
+              <h4 className="cancel_msg">{cancelName} Cancelled !</h4>
               {/* <p style={{ textAlign: "center" }}>Your Data was Saved</p> */}
             </div>
           </div>

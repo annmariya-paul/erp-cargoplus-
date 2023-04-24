@@ -164,7 +164,7 @@ function AddressTable(props) {
       <div className="row">
         <div className="col-12">
           <Button btnType="add" onClick={() => setModalshowAdd(true)}>
-            New Address <AiOutlinePlus />
+            New Address 
           </Button>
         </div>
       </div>

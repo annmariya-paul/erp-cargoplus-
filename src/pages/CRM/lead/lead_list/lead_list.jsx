@@ -556,7 +556,7 @@ export default function LeadList() {
               </Select>
             </div>
             <div className=" col-xl-10 col-lg-9 col-md-8 col-sm-12  d-flex  align-items-center ">
-            <label className="font_size" >Results: {startcount +1} -{noofItems *2 }  <span>of {totalCount} </span> </label>
+            <label className="font_size" >Results: {startcount +1} -{ (1 * noofItems)*current  }  <span>of {totalCount} </span> </label>
             </div>
             </div>
             </div>

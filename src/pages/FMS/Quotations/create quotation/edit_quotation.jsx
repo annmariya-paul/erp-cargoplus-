@@ -97,6 +97,10 @@ export default function EditQuotation(
   const [allincoterms, setallincoterms] = useState("");
   const [AllSalesPersons, setAllSalesPersons] = useState();
   const [allcontainertype, setallcontainertype] = useState("");
+  const [Qtn_length, setQtn_Length] = useState();
+  const [Qtn_breadth, setQtn_Breadth] = useState();
+  const [Qtn_height, setQtn_Height] = useState();
+  const [isTableEmpty, setIsTableEmpty] = useState(false);
 
   const dataSource = [
     {
@@ -872,8 +876,8 @@ export default function EditQuotation(
         validity_date: vdate,
         shipper: data11.quotation_shipper,
         quotation_enquiry_no: quotation_enquiry_no,
-        quotation_consignee: data11.crm_v1_customers.customer_id,
-        customer: data11.crm_v1_customers.customer_id,
+        quotation_consignee: data11.crm_v1_customer.customer_id,
+        customer: data11.crm_v1_customer.customer_id,
         freight_type: data11.quotation_freight_type,
         quotation_cargotype: data11.quotation_cargo_type,
         quotation_mode: data11.quotation_mode,
@@ -887,10 +891,14 @@ export default function EditQuotation(
         quotation_units: data11.quotation_uom,
         quotation_destination: data11.quotation_destination_id,
         quotation_origin: data11.quotation_origin_id,
-        incoterm: data11.incoterm_id,
-        consignee: data11.consignee,
+        incoterm: data11.quotation_incoterm_id,
+        consignee: data11.quotation_consignee,
         container_type: data11.quotation_container_type,
         salesperson: data11.quotation_salesperson,
+        length: data11.quotation_length,
+        breadth: data11.quotation_breadth,
+        height: data11.quotation_height,
+        volume: data11.quotation_volume,
       });
       locationBytype(onequatation?.data?.data?.quotation?.quotation_mode);
 
@@ -1001,6 +1009,9 @@ export default function EditQuotation(
     setTableData([...quotation_details]);
     editForm.setFieldsValue({ quotation_details });
     setSampletable([...quotation_details]);
+    if (tableData?.length <= 0) {
+      setSampletable([...dataSource]);
+    }
   }, [qDetails]);
 
   console.log("table inside data", tableData);
@@ -1116,6 +1127,8 @@ export default function EditQuotation(
       });
   };
 
+  console.log("Table data9229", tableData);
+
   const OnSubmitedit1 = (data) => {
     console.log("Quotation details", data);
     const formData = new FormData();
@@ -1123,7 +1136,7 @@ export default function EditQuotation(
     formData.append("quotation_date", new Date(data.quotationdate));
     formData.append("qoutation_customer", data.customer);
     formData.append("quotation_validity", new Date(data.validity_date));
-    formData.append("quotation_consignee", data.customer);
+    formData.append("quotation_customer", data.customer);
     formData.append("quotation_shipper", data.shipper);
     formData.append("quotation_freight_type", data.freight_type);
     formData.append("quotation_cargo_type", data.quotation_cargotype);
@@ -1143,16 +1156,27 @@ export default function EditQuotation(
     formData.append("quotation_exchange_rate", data.exchnagerate);
     formData.append("quotation_container_type", data.container_type);
     formData.append("quotation_salesperson", data.salesperson);
-    formData.append("incoterm_id", data.incoterm);
-    formData.append("consignee", data.consignee);
+    formData.append("quotation_incoterm_id", data.incoterm);
+    formData.append("quotation_consignee", data.consignee);
+    formData.append("quotation_length", data.length);
+    formData.append("quotation_breadth", data.breadth);
+    formData.append("quotation_height", data.height);
+    formData.append("quotation_volume", data.volume);
     // formData.append(
     //   "quotation_details",
     //   JSON.stringify(data.quotation_details)
     // );
     let tmp = false;
+    let temp = false;
     tableData.map((item, index) => {
       if (item.quotation_details_status === 1) {
         tmp = true;
+      }
+      if (index >= 0) {
+        temp = true;
+        setIsTableEmpty(false);
+      } else {
+        setIsTableEmpty(true);
       }
       console.log("userdata task", item);
       if (item.quotation_details_service_id) {
@@ -1255,6 +1279,16 @@ export default function EditQuotation(
   //       });
   //   }
   // };
+
+  useEffect(() => {
+    let a = 0;
+    if (Qtn_length && Qtn_breadth && Qtn_height) {
+      a = Qtn_breadth * Qtn_height * Qtn_length;
+      editForm.setFieldsValue({
+        volume: a,
+      });
+    }
+  }, [Qtn_breadth, Qtn_height, Qtn_length]);
 
   useEffect(() => {
     GetAllSalesPersons();
@@ -1832,7 +1866,13 @@ export default function EditQuotation(
                       //   },
                       // ]}
                     >
-                      <Input_Number />
+                      <Input_Number
+                        onChange={(e) => {
+                          setQtn_Length(e);
+                        }}
+                        min={0}
+                        precision={2}
+                      />
                     </Form.Item>
                   </div>
 
@@ -1848,7 +1888,13 @@ export default function EditQuotation(
                       //   },
                       // ]}
                     >
-                      <Input_Number />
+                      <Input_Number
+                        onChange={(e) => {
+                          setQtn_Breadth(e);
+                        }}
+                        min={0}
+                        precision={2}
+                      />
                     </Form.Item>
                   </div>
                   <div className="col-xl-4 col-sm-12 mt-2 px-3">
@@ -1863,7 +1909,13 @@ export default function EditQuotation(
                       //   },
                       // ]}
                     >
-                      <Input_Number />
+                      <Input_Number
+                        onChange={(e) => {
+                          setQtn_Height(e);
+                        }}
+                        min={0}
+                        precision={2}
+                      />
                     </Form.Item>
                   </div>
 
@@ -2130,6 +2182,11 @@ export default function EditQuotation(
                       columns={columns}
                       custom_table_css="table_qtn qtn_table_brdr"
                     />
+                    {isTableEmpty ? (
+                      <small style={{ color: "red" }} className="mt-3">
+                        Please Enter Atleast One Row
+                      </small>
+                    ) : null}
                   </div>
 
                   <div className="d-flex justify-content-end mt-4 ms-5">

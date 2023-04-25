@@ -44,6 +44,10 @@ export default function Add_Quotation() {
   const [currencyDefault, setCurrencyDefault] = useState();
   const [startDate, setStartDate] = useState(new Date());
   const [numberOfDays, setNumberOfDays] = useState();
+  const [Qtn_length, setQtn_Length] = useState();
+  const [Qtn_breadth, setQtn_Breadth] = useState();
+  const [Qtn_height, setQtn_Height] = useState();
+
   // let bs = new Date();
 
   // console.log("kdsdsd", numberOfDays, endDate);
@@ -1181,7 +1185,7 @@ export default function Add_Quotation() {
     formData.append("quotation_enquiry", data.eno);
     formData.append("quotation_date", date1);
     formData.append("quotation_validity", date2);
-    formData.append("quotation_consignee", data.customer);
+    formData.append("quotation_customer", data.customer);
     if (data.shipper) {
       formData.append("quotation_shipper", data.shipper);
     }
@@ -1201,12 +1205,16 @@ export default function Add_Quotation() {
     formData.append("quotation_currency", data.currency);
     formData.append("quotation_exchange_rate", data.exchnagerate);
     formData.append("quotation_grand_total", data.grandtotal);
-    formData.append("incoterm_id", data.incoterm);
+    formData.append("quotation_incoterm_id", data.incoterm);
     if (data.consignee) {
-      formData.append("consignee", data.consignee);
+      formData.append("quotation_consignee", data.consignee);
     }
     formData.append("quotation_container_type", data.container_type);
     formData.append("quotation_salesperson", data.salesperson);
+    formData.append("quotation_length", data.length);
+    formData.append("quotation_breadth", data.breadth);
+    formData.append("quotation_height", data.height);
+    formData.append("quotation_volume", data.volume);
 
     if (filenew) {
       formData.append("attachments", filenew);
@@ -1224,13 +1232,10 @@ export default function Add_Quotation() {
 
     userData.map((item, index) => {
       console.log("table data index is that", index);
-      if (
-        item?.quotation_details_service_id &&
-        item.quotation_details_cost !== null
-      ) {
+      if (index > 0) {
         temp = true;
         if (tableData.length > 0) {
-          console.log("hduwue", false);
+          console.log("hduwue", tableData.length);
           setIsTableEmpty(false);
         }
       } else {
@@ -1281,6 +1286,16 @@ export default function Add_Quotation() {
         });
     }
   };
+
+  useEffect(() => {
+    let a = 0;
+    if (Qtn_length && Qtn_breadth && Qtn_height) {
+      a = Qtn_breadth * Qtn_height * Qtn_length;
+      addForm.setFieldsValue({
+        volume: a,
+      });
+    }
+  }, [Qtn_breadth, Qtn_height, Qtn_length]);
 
   const quotationDate = () => {
     let date = new Date();
@@ -1338,6 +1353,7 @@ export default function Add_Quotation() {
                         onChange={(e) => {
                           handleGetSingleCustomer(e);
                           setNumberOfDays(0);
+                          setStartDate(new Date());
                         }}
                       >
                         {allCustomerList &&
@@ -1496,6 +1512,7 @@ export default function Add_Quotation() {
                         onChange={(e) => {
                           handleLeadIdEnq(e);
                           setNumberOfDays(0);
+                          setStartDate(new Date());
                         }}
                       >
                         {oppnew &&
@@ -1797,7 +1814,13 @@ export default function Add_Quotation() {
                       //   },
                       // ]}
                     >
-                      <Input_Number />
+                      <Input_Number
+                        onChange={(e) => {
+                          setQtn_Length(e);
+                        }}
+                        min={0}
+                        precision={2}
+                      />
                     </Form.Item>
                   </div>
 
@@ -1813,7 +1836,13 @@ export default function Add_Quotation() {
                       //   },
                       // ]}
                     >
-                      <Input_Number />
+                      <Input_Number
+                        onChange={(e) => {
+                          setQtn_Breadth(e);
+                        }}
+                        min={0}
+                        precision={2}
+                      />
                     </Form.Item>
                   </div>
                   <div className="col-xl-4 col-sm-12 mt-2 px-3">
@@ -1828,7 +1857,13 @@ export default function Add_Quotation() {
                       //   },
                       // ]}
                     >
-                      <Input_Number />
+                      <Input_Number
+                        onChange={(e) => {
+                          setQtn_Height(e);
+                        }}
+                        min={0}
+                        precision={2}
+                      />
                     </Form.Item>
                   </div>
 
@@ -1844,7 +1879,7 @@ export default function Add_Quotation() {
                       //   },
                       // ]}
                     >
-                      <Input_Number />
+                      <Input_Number min={0} precision={2} />
                     </Form.Item>
                   </div>
 

@@ -171,7 +171,8 @@ export default function ViewQuotation() {
                     // handleviewtoedit();
                     // navigate(`${ROUTES.QUATATION_INVOICE}/${id}`);
                     window.open(
-                      `http://demoerp.liondurian.com/quotation_invoice/${id}`,
+                      // `http://demoerp.liondurian.com/quotation_invoice/${id}`,
+                      `${ROUTES.QUATATION_INVOICE}/${id}`,
                       `_blank`
                     );
                   }}
@@ -210,7 +211,7 @@ export default function ViewQuotation() {
 
             <div className="col-6">
               <p className="modal-view-data">
-                {allqoutation?.crm_v1_customers?.customer_name}
+                {allqoutation?.crm_v1_customer?.customer_name}
               </p>
             </div>
           </div>
@@ -286,7 +287,9 @@ export default function ViewQuotation() {
             <div className="col-1">:</div>
 
             <div className="col-6">
-              <p className="modal-view-data">{allqoutation?.consignee}</p>
+              <p className="modal-view-data">
+                {allqoutation?.quotation_consignee}
+              </p>
             </div>
           </div>
 
@@ -406,7 +409,9 @@ export default function ViewQuotation() {
             <div className="col-1">:</div>
 
             <div className="col-7">
-              <p className="modal-view-data">{allqoutation?.length1}</p>
+              <p className="modal-view-data">
+                {allqoutation?.quotation_length}
+              </p>
             </div>
           </div>
 
@@ -415,7 +420,9 @@ export default function ViewQuotation() {
             <div className="col-1">:</div>
 
             <div className="col-7">
-              <p className="modal-view-data">{allqoutation?.breadth1}</p>
+              <p className="modal-view-data">
+                {allqoutation?.quotation_breadth}
+              </p>
             </div>
           </div>
 
@@ -424,7 +431,9 @@ export default function ViewQuotation() {
             <div className="col-1">:</div>
 
             <div className="col-7">
-              <p className="modal-view-data">{allqoutation?.height1}</p>
+              <p className="modal-view-data">
+                {allqoutation?.quotation_height}
+              </p>
             </div>
           </div>
 
@@ -433,7 +442,9 @@ export default function ViewQuotation() {
             <div className="col-1">:</div>
 
             <div className="col-7">
-              <p className="modal-view-data">{allqoutation?.voulme1}</p>
+              <p className="modal-view-data">
+                {allqoutation?.quotation_volume}
+              </p>
             </div>
           </div>
 

@@ -289,12 +289,12 @@ export default function Quotations(props) {
               quotation_no: item?.quotation_no,
               quotation_date: date,
               quotation_validity: validity,
-              quotation_customer: item?.quotation_consignee,
-              customer_name: item?.crm_v1_customers?.customer_name,
+              quotation_customer: item?.quotation_customer,
+              customer_name: item?.crm_v1_customer?.customer_name,
               quotation_shipper: item?.quotation_shipper,
               quotation_status: item?.status,
               fms_v1_quotation_agents: item?.fms_v1_quotation_agents,
-              consignee: item?.consignee,
+              consignee: item?.quotation_consignee,
             });
           });
           setAllQuotations(temp);

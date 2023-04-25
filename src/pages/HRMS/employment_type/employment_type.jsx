@@ -394,7 +394,7 @@ export default function EmploymentType() {
           View_list
           list_content={
             <>
-              <h6 className="lead_text mb-2">Add Employee Type</h6>
+              <h6 className="lead_text mb-2">New Employee Type</h6>
               <div className="container-fluid px-4 my-4 ">
                 <Form
                   name="addForm"

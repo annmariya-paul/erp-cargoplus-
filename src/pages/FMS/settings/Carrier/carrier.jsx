@@ -410,7 +410,7 @@ export default function Carrierlist(props) {
         list_content={
           <>
             <div className="row">
-              <h5 className="lead_text">Add Carrier</h5>
+              <h5 className="lead_text">New Carrier</h5>
             </div>
             <Form
               form={addForm}

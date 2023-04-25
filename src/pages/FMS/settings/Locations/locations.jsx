@@ -429,7 +429,7 @@ export default function Locations() {
         list_content={
           <>
             <div className="row">
-              <h5 className="lead_text">Add Location</h5>
+              <h5 className="lead_text">New Location</h5>
             </div>
             <Form
               form={addForm}

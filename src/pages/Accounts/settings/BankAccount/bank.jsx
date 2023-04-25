@@ -451,7 +451,7 @@ function Bank(){
                 setModalvendor(true);
               }}
             >
-              Add Bank
+              New Bank
             </Button>
           </div>
         </div>
@@ -489,7 +489,7 @@ function Bank(){
         list_content={
           <>
             <div className="row px-4 ">
-              <h5 className="lead_text">Add Bank</h5>
+              <h5 className="lead_text">New Bank</h5>
             </div>
             <Form
               form={addForm}

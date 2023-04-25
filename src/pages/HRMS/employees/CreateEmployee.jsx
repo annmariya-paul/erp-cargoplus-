@@ -169,7 +169,7 @@ function CreateEmployee() {
     <div>
       <div className="container p-2">
         <div className="row ps-3">
-          <h4 className="lead_text">Add Employee</h4>
+          <h5 className="lead_text">New Employee</h5>
         </div>
         <div className="row">
           <div className="col-12 ">
@@ -181,8 +181,8 @@ function CreateEmployee() {
                 }}
               >
                 <div className="row">
-                  <div className="col-sm-6">
-                    <label>Employee Name</label>
+                  <div className="col-sm-6 mb-2">
+                    <label>Employee Name<span className="required">*</span></label>
                     <Form.Item
                       name="employee_name"
                       rules={[
@@ -240,8 +240,8 @@ function CreateEmployee() {
                       </p>
                     ) : null}
                   </div> */}
-                  <div className="col-sm-6">
-                    <label>Employee Branch</label>
+                  <div className="col-sm-6 mb-2">
+                    <label>Employee Branch<span className="required">*</span></label>
                     <Form.Item
                       name="employee_branch"
                       rules={[
@@ -267,8 +267,8 @@ function CreateEmployee() {
                       </SelectBox>
                     </Form.Item>
                   </div>
-                  <div className="col-sm-6">
-                    <label>Employee Department</label>
+                  <div className="col-sm-6 mb-2">
+                    <label>Employee Department<span className="required">*</span></label>
                     <Form.Item
                       name="employee_department"
                       rules={[
@@ -294,8 +294,8 @@ function CreateEmployee() {
                       </SelectBox>
                     </Form.Item>
                   </div>
-                  <div className="col-sm-6">
-                    <label>Employee Designation</label>
+                  <div className="col-sm-6 mb-2">
+                    <label>Employee Designation<span className="required">*</span></label>
                     <Form.Item
                       name="employee_designation"
                       rules={[
@@ -321,8 +321,8 @@ function CreateEmployee() {
                       </SelectBox>
                     </Form.Item>
                   </div>
-                  <div className="col-sm-6">
-                    <label>Employee Type</label>
+                  <div className="col-sm-6 mb-2">
+                    <label>Employee Type<span className="required">*</span></label>
                     <Form.Item
                       name="employee_type"
                       rules={[
@@ -349,8 +349,8 @@ function CreateEmployee() {
                     </Form.Item>
                   </div>
 
-                  <div className="col-sm-6">
-                    <label>Employee Grade</label>
+                  <div className="col-sm-6 mb-2">
+                    <label>Employee Grade<span className="required">*</span></label>
                     <Form.Item
                       name="employee_grade"
                       rules={[
@@ -376,8 +376,8 @@ function CreateEmployee() {
                       </SelectBox>
                     </Form.Item>
                   </div>
-                  <div className="col-sm-6">
-                    <label>Employee Role</label>
+                  <div className="col-sm-6 mb-2">
+                    <label>Employee Role<span className="required">*</span></label>
                     <Form.Item
                       name="employee_role_id"
                       rules={[
@@ -405,8 +405,8 @@ function CreateEmployee() {
                       {/* <div className="col-12 lead_text mb-2"> */}
                       <h6 className="lead_text my-3">Login Info</h6>
                       {/* </div> */}
-                      <div className="col-sm-6">
-                        <label>Email</label>
+                      <div className="col-sm-6 mb-2">
+                        <label>Email<span className="required">*</span></label>
                         <Form.Item
                           name="employee_email"
                           rules={[
@@ -422,8 +422,8 @@ function CreateEmployee() {
                           <InputType />
                         </Form.Item>
                       </div>
-                      <div className="col-sm-6 mt-1  ">
-                        <label style={{ marginBottom: "1%" }}>Password</label>
+                      <div className="col-sm-6 mt-1 mb-3 ">
+                        <label >Password<span className="required">*</span></label>
                         <Form.Item
                           name="employee_password"
                           rules={[

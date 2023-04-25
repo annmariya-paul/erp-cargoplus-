@@ -334,7 +334,7 @@ function Employeegrade() {
                     <div className="row ms-0 py-1">
                       <div className="col-12 pt-3">
                         <label htmlfor="emp_type_name">
-                        Name
+                        Name<span className="required">*</span>
                         </label>
                         <Form.Item
                           name="Employment_grade_name"
@@ -422,7 +422,7 @@ function Employeegrade() {
                 >
                   <div className="row">
                     <div className="col-12">
-                      <label>Name</label>
+                      <label>Name<span className="required">*</span></label>
                       <Form.Item
                         name="Employment_grade_name"
                         rules={[

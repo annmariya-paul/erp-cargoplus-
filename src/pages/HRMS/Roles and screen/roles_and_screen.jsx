@@ -208,7 +208,7 @@ const [employeeTName, setEmployeeTName] = useState();
                   >
                     <InputType
                     
-                      
+                   
                     value={employeeTName}
                     onChange={(e) => {
                       setEmployeeTName(e.target.value);
@@ -232,7 +232,7 @@ const [employeeTName, setEmployeeTName] = useState();
                         </p>
                       ) : null}
 
-                  <div className="d-flex justify-content-center">
+                  <div className="d-flex justify-content-center ">
                     <Button type="submit" className="p-2 save_button_style" >
                       Save
                     </Button>

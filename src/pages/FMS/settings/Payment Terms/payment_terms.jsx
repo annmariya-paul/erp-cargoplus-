@@ -451,7 +451,7 @@ export default function PaymentTerms(props) {
         list_content={
           <>
             <div className="row">
-              <h5 className="lead_text">Add Payment</h5>
+              <h5 className="lead_text">New Payment</h5>
             </div>
             <Form
               form={addForm}

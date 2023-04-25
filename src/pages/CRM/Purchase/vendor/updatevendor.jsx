@@ -14,7 +14,7 @@ import PublicFetch from "../../../../utils/PublicFetch";
 import {ROUTES} from "../../../../routes";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import Custom_model from "../../../../components/custom_modal/custom_model";
-
+import "./vendor.scss";
 import {
   CRM_BASE_URL_PURCHASING,
   GENERAL_SETTING_BASE_URL,
@@ -26,6 +26,7 @@ import Bankdetails from "./bankdetails/bankdetails";
 import FileUpload from "../../../../components/fileupload/fileUploader";
 import Contact from "./vendorcontact/Contact";
 import Moreinfo from "./Moreinfo/moreinfo";
+import Phone_Input from "../../../../components/PhoneInput/phoneInput";
 
 
 function Updatevendor(){
@@ -564,6 +565,7 @@ function Updatevendor(){
                   ]}
                 >
                      <Radio.Group
+                     className="d-flex gap-5"
                           // defaultValue="ORG"
                         >
                           <Radio value="ORG">Organization</Radio>
@@ -625,7 +627,8 @@ function Updatevendor(){
                 </Form.Item>
             
             </div>
-
+            </div>
+            <div className="row mt-2 mx-0 px-2 ">
             <div className="col-sm-6 pt-2">
                       <label> Address</label>
                       <div>
@@ -648,7 +651,7 @@ function Updatevendor(){
                           <FileUpload
                             beforeUpload={beforeUpload}
                             multiple
-                            height={120}
+                            height={100}
                             listType="picture"
                             accept=".pdf,.docs,"
                           />
@@ -660,7 +663,7 @@ function Updatevendor(){
 
           </div>
 
-          <div className="row  mt-3 mx-0 px-2 ">
+          <div className="row  mt-2 mx-0 px-2 ">
             {/* <div className="col-12">
               <h5 className="lead_text">Contact Details</h5>
             </div> */}
@@ -681,12 +684,13 @@ function Updatevendor(){
                     
                   ]}
                 >
-                  <InputType
+                  <Phone_Input  />
+                  {/* <InputType
                     value={editvendorcontact}
                     onChange={(e) => {
                       seteditvendorcontact(e.target.value);
                     }}
-                  />
+                  /> */}
                 </Form.Item>
               
             </div>
@@ -750,8 +754,9 @@ function Updatevendor(){
                         />
                       </Form.Item>
                     </div>
+                    </div>
 
-
+                    <div className="row  mt-1 mx-0 px-2 py-1 ">
 
             <div className="col-sm-4 pt-2 ">
               <label>Country
@@ -834,7 +839,7 @@ function Updatevendor(){
            
          
           </div>
-    <div className="row  mt-3 mx-0 px-2 ">
+    <div className="row  mt-1 mx-0 px-2 ">
             {/* <div className="col-12">
               <h5 className="lead_text">Extra Info</h5>
             </div> */}

@@ -43,6 +43,7 @@ export default function LeadList() {
   const [currentcount, setCurrentcount] = useState();
   const [serialNo, setserialNo] = useState(1);
   const [contactCustomerId, setContactCustomerId] = useState();
+  const [startcount,setstartcount]= useState()
 
   const[custid,setcustid]= useState("")
   // pageindex =0 ->  25 * (1-1)- 1+1
@@ -96,6 +97,7 @@ export default function LeadList() {
           // setAllLeadList(res?.data?.data?.leads);
           setTotalcount(res?.data?.data?.total);
           setCurrentcount(res?.data?.data?.currentCount);
+          setstartcount(res?.data?.data?.startIndex)
           let array = [];
 
           res?.data?.data?.customers?.forEach((item, index) => {
@@ -554,7 +556,7 @@ export default function LeadList() {
               </Select>
             </div>
             <div className=" col-xl-10 col-lg-9 col-md-8 col-sm-12  d-flex  align-items-center ">
-            <label className="font_size" >Results: 1-{noofItems}  <span>of {totalCount} </span> </label>
+            <label className="font_size" >Results: {startcount +1} -{ (1 * noofItems)*current  }  <span>of {totalCount} </span> </label>
             </div>
             </div>
             </div>

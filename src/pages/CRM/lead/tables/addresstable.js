@@ -164,7 +164,7 @@ function AddressTable(props) {
       <div className="row">
         <div className="col-12">
           <Button btnType="add" onClick={() => setModalshowAdd(true)}>
-            New Address <AiOutlinePlus />
+            New Address 
           </Button>
         </div>
       </div>
@@ -176,7 +176,7 @@ function AddressTable(props) {
         />
       </div>
       <Custom_model
-        bodyStyle={{ height: 570, overflowY: "auto" }}
+        bodyStyle={{ height: 530, overflowY: "auto" }}
         show={modelshowAdd}
         onHide={() => setModalshowAdd(false)}
         footer={false}
@@ -307,7 +307,7 @@ function AddressTable(props) {
                     />
                   </Form.Item>
                 </div>
-                <div className="d-flex justify-content-center mt-3">
+                <div className="d-flex justify-content-center mt-3 pt-3">
                   <Button btnType="save">Save</Button>
                 </div>
               </div>

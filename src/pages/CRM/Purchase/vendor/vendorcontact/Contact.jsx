@@ -240,7 +240,7 @@ function Contact({vendor,toggle }) {
         <div className="col-12">
             
           <Button btnType="add" onClick={() => setModalShow(true)}>
-            New Contact <AiOutlinePlus />
+            New Contact
           </Button>
         </div>
       </div>

@@ -27,6 +27,7 @@ import Bankdetails from "./bankdetails/bankdetails";
 import ContactTable from "../../lead/tables/contactstable";
 import Moreinfo from "./Moreinfo/moreinfo";
 import Contact from "./vendorcontact/Contact";
+import Phone_Input from "../../../../components/PhoneInput/phoneInput";
 
 
 function Addvendor({ }  ) {
@@ -412,6 +413,7 @@ console.log("bnkdetails id iss",vendorId)
                         ]}
                       >
                         <Radio.Group
+                        className="d-flex gap-5"
                           defaultValue="ORG"
                         >
                           <Radio value="ORG">Organization</Radio>
@@ -460,7 +462,8 @@ console.log("bnkdetails id iss",vendorId)
                         </SelectBox>
                       </Form.Item>
                     </div>
-
+                    </div>
+                    <div className="row mt-1 mx-0 px-2 py-1">
                     <div className="col-sm-6 pt-1">
                       <label> Address</label>
                       <div>
@@ -485,21 +488,21 @@ console.log("bnkdetails id iss",vendorId)
                           <FileUpload
                             beforeUpload={beforeUpload}
                             multiple
-                            height={120}
+                            height={100}
                             listType="picture"
                             accept=".pdf,.docs,"
                           />
                         </Form.Item>
                       </div>
                     </div>
-                  </div>
+                 </div>
 
-                  <div className="row  mt-1 mx-0 px-2 py-1">
+                  <div className="row  mt-1 mx-0 px-2 ">
                     {/* <div className="col-12">
                       <h5 className="lead_text">Contact Details</h5>
                     </div> */}
 
-                    <div className="col-sm-4 pt-3">
+                    <div className="col-sm-4 pt-1">
                       <label>
                         Phone<span className="required">*</span>
                       </label>
@@ -515,15 +518,16 @@ console.log("bnkdetails id iss",vendorId)
 
                         ]}
                       >
-                        <InputType
+                        <Phone_Input/>
+                        {/* <InputType
                           // value={vendorcontact}
                           // onChange={(e) => {
                           //   setvendorcontact(e.target.value);
                           // }}
-                        />
+                        /> */}
                       </Form.Item>
                     </div>
-                    <div className="col-sm-4 pt-3">
+                    <div className="col-sm-4 pt-1">
                       <label>
                         {" "}
                         Email<span className="required">*</span>
@@ -548,7 +552,7 @@ console.log("bnkdetails id iss",vendorId)
                       </Form.Item>
                     </div>
 
-                    <div className="col-sm-4 pt-3">
+                    <div className="col-sm-4 pt-1">
                       <label>
                         {" "}
                         Website
@@ -574,8 +578,9 @@ console.log("bnkdetails id iss",vendorId)
                         />
                       </Form.Item>
                     </div>
-
-                    <div className="col-sm-4 pt-2">
+                    </div>
+ <div className="row mt-1 mx-0 px-2 py-1">
+                    <div className="col-sm-4 pt-2 ">
                       <label>
                         Country
                         {/* <span className="required">*</span> */}
@@ -655,7 +660,7 @@ console.log("bnkdetails id iss",vendorId)
                         />
                       </Form.Item>
                     </div>
-                  </div>
+                    </div>
 
                   <div className="row  mt-1 mx-0 px-2 py-1">
                     {/* <div className="col-12">

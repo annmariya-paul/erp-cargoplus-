@@ -560,7 +560,7 @@ function Opportunitylist(props) {
       title: "OPPORTUNITY NO",
       dataIndex: "opportunity_number",
       key: "opportunity_number",
-      width: "18%",
+      width: "12%",
       // align: "center",
     },
     {
@@ -580,6 +580,12 @@ function Opportunitylist(props) {
       //     .includes(value.toLowerCase());
       // },
       align: "left",
+      render: (enquiryNumbers) => {
+        if (Array.isArray(enquiryNumbers)) {
+          return enquiryNumbers.join(", ");
+        }
+        return enquiryNumbers;
+      },
     },
     {
       title: "TYPE",

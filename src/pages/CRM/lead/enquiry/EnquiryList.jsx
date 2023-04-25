@@ -1,7 +1,7 @@
 import { Checkbox, Input, Select } from "antd";
 import React, { useEffect, useState } from "react";
 import { FaEdit } from "react-icons/fa";
-import {  Popconfirm } from "antd";
+import { Popconfirm } from "antd";
 import { GiCancel } from "react-icons/gi";
 import { MdPageview } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
@@ -28,16 +28,46 @@ function EnquiryList() {
   const [searchType, setSearchType] = useState("");
   const [searchStatus, setSearchStatus] = useState("");
   const [noofItems, setNoofItems] = useState("25");
+
   const [totalCount, setTotalcount] = useState();
   const [pageIndex, setPageIndex] = useState(0);
   const [current, setCurrent] = useState(1);
   const [allLeadList, setAllLeadList] = useState([]);
   const [serialNo, setserialNo] = useState(1);
   const [AllEnquiries, setAllnquires] = useState();
-  console.log("ggg",AllEnquiries);
-  const handleCancelEnq = () => {
-    setCancelPopUp(true);
+
+  const [startcount, setstartcount] = useState();
+
+
+  const close_modal = (mShow, time) => {
+    if (!mShow) {
+      setTimeout(() => {
+        setCancelPopUp(false);
+    
+      }, time);
+    }
   };
+
+  console.log("ggg", AllEnquiries);
+  const handleCancelEnq = (index) => {
+    PublicFetch.delete(`${CRM_BASE_URL_FMS}/enquiries/${index.enquiry_id}`)
+    .then((res) => {
+      console.log("response", res);
+      if (res.data.success) {
+        setCancelPopUp(true);
+        GetAllEnquiries(searchedText);
+        close_modal(cancelPopUp, 1200);
+        console.log("success of data", res.data.data);
+      
+      }
+    })
+    .catch((err) => {
+      console.log("Error", err);
+    });
+
+  };
+
+
   const columns = [
     {
       title: "#",
@@ -251,7 +281,7 @@ function EnquiryList() {
               <Popconfirm
                 title={`Are you sure you want to cancel this Enquiry?`}
                 onConfirm={() => {
-                  handleCancelEnq();
+                  handleCancelEnq(index);
                 }}
               >
                 <GiCancel style={{ marginRight: 18 }} />
@@ -302,11 +332,18 @@ function EnquiryList() {
   console.log("page number isss", pagesizecount);
   // {query === 'pending' ? 0 : query=== "converted" ? 1: query}
   const GetAllEnquiries = (query) => {
-    PublicFetch.get(`${CRM_BASE_URL_FMS}/enquiries?startIndex=${pageofIndex}&noOfItems=${noofItems}&search=${query === 'pending' ? 0 : query=== "converted" ? 1: query}`)
+    PublicFetch.get(
+      `${CRM_BASE_URL_FMS}/enquiries?startIndex=${pageofIndex}&noOfItems=${noofItems}&search=${
+        query === "pending" ? 0 : query === "converted" ? 1 : query
+      }`
+    )
       .then((res) => {
         console.log("Response ", res);
         if (res.data.success) {
           console.log("Success of all enquiries", res.data.data.enquiries);
+          setTotalcount(res?.data?.data?.enquiryCount);
+          setstartcount(res?.data?.data?.startIndex);
+
           let temp = [];
           res?.data?.data?.enquiries?.forEach((item, index) => {
             temp.push({
@@ -323,8 +360,8 @@ function EnquiryList() {
               enquiry_source: item.enquiry_source,
               contact_email: item?.crm_v1_contacts?.contact_email,
               contact_phone_1: item?.crm_v1_contacts?.contact_phone_1,
-              enquiry_status:item?.enquiry_status,
-              enquiry_converted_status:item?.enquiry_converted_status,
+              enquiry_status: item?.enquiry_status,
+              enquiry_converted_status: item?.enquiry_converted_status,
             });
           });
           setAllnquires(temp);
@@ -335,9 +372,18 @@ function EnquiryList() {
       });
   };
 
+  const getFinalCount = (total) => {
+    const cutoff = Math.ceil(totalCount / noofItems);
+    console.log("FinalTest", cutoff, current);
+    if (current === cutoff) return totalCount;
+    return total;
+    // console.log("TotalPageTest",current,totalCount)
+    // console.log("TestCount",total)
+  };
+
   useEffect(() => {
     GetAllEnquiries(searchedText);
-  }, [noofItems, pageofIndex, pagesizecount,searchedText]);
+  }, [noofItems, pageofIndex, pagesizecount, searchedText]);
 
   return (
     <div className="container-fluid ">
@@ -363,7 +409,7 @@ function EnquiryList() {
                   value={searchedText}
                   onChange={(e) => {
                     console.log("Entered value");
-                    // 
+                    //
                     // if(e.target.value.toLowerCase() === "pending")
                     // {
                     //   setSearchedText(0);
@@ -371,9 +417,8 @@ function EnquiryList() {
                     // {
                     //   setSearchedText(1);
                     // }else{
-                      setSearchedText(e.target.value ? [e.target.value] : []);
+                    setSearchedText(e.target.value ? [e.target.value] : []);
                     // }
-                    
                   }}
                   onSearch={(value) => {
                     setSearchedText(value);
@@ -383,7 +428,7 @@ function EnquiryList() {
               <div className="col-4 d-flex justify-content-end ">
                 {AllEnquiries && (
                   <Leadlist_Icons
-                  name={"Enquiry"}
+                    name={"Enquiry"}
                     datas={allLeadList}
                     columns={filteredColumns}
                     items={data12}
@@ -409,64 +454,53 @@ function EnquiryList() {
             </div>
 
             <div className="row my-3">
-              <div className="col-4 px-3">
-                <Select
-                  // defaultValue={"25"}
-                  bordered={false}
-                  className="page_size_style"
-                  value={noofItems}
-                  // onChange={handleLastNameChange}
-                  // onChange={(event, current) => {
-                  //   console.log("On page size selected : ", event);
-                  //   console.log("nfjnjfv", current);
-                  //   setNoofItems(event);
-                  //   setCurrent(1);
-                  // }}
-                  onChange={(e) => setNoofItems(e)}
-                >
-                  {/* <Select.Option value="5">5 | pages</Select.Option> */}
-                  {/* <Select.Option value="10">
-                  Show
-                  <span style={{ color: "lightgray" }} className="ms-1">
-                    |
-                  </span>
-                  <span style={{ color: "#2f6b8f" }} className="ms-1">
-                    10
-                  </span>
-                </Select.Option> */}
-                  <Select.Option value="25">
-                    Show
-                    <span style={{ color: "lightgray" }} className="ms-1">
-                      |
-                    </span>
-                    <span style={{ color: "#2f6b8f" }} className="ms-1">
-                      25
-                    </span>
-                  </Select.Option>
-                  <Select.Option value="50">
-                    Show
-                    <span style={{ color: "lightgray" }} className="ms-1">
-                      |
-                    </span>
-                    <span style={{ color: "#2f6b8f" }} className="ms-1">
-                      50
-                    </span>
-                  </Select.Option>
-                  <Select.Option value="100">
-                    Show
-                    <span style={{ color: "lightgray" }} className="ms-1">
-                      |
-                    </span>
-                    <span style={{ color: "#2f6b8f" }} className="ms-1">
-                      100
-                    </span>{" "}
-                  </Select.Option>
-                </Select>
+              <div className="col-xl-4  ">
+                <div className="d-flex justify-content-start align-items-center gap-3">
+                  <div className="   ">
+                    <Select
+                      // defaultValue={"25"}
+                      bordered={false}
+                      className="page_size_style"
+                      value={noofItems}
+                      // onChange={handleLastNameChange}
+                      // onChange={(event, current) => {
+                      //   console.log("On page size selected : ", event);
+                      //   console.log("nfjnjfv", current);
+                      //   setNoofItems(event);
+                      //   setCurrent(1);
+                      // }}
+                      onChange={(e) => setNoofItems(e)}
+                    >
+                      <Select.Option value="25">
+                        <span style={{ color: "#2f6b8f" }} className="ms-1">
+                          25
+                        </span>
+                      </Select.Option>
+                      <Select.Option value="50">
+                        <span style={{ color: "#2f6b8f" }} className="ms-1">
+                          50
+                        </span>
+                      </Select.Option>
+                      <Select.Option value="100">
+                        <span style={{ color: "#2f6b8f" }} className="ms-1">
+                          100
+                        </span>
+                      </Select.Option>
+                    </Select>
+                  </div>
+                  <div className="   d-flex  align-items-center mt-2">
+                    <label className="font_size">
+                      Results: {startcount + 1} -
+                      {getFinalCount(1 * noofItems * current)}{" "}
+                      <span>of {totalCount} </span>{" "}
+                    </label>
+                  </div>
+                </div>
               </div>
               <div className="col-4 d-flex py-2 justify-content-center">
-                {AllEnquiries > 0 && (
+                {totalCount > 0 && (
                   <MyPagination
-                    total={AllEnquiries?.length}
+                    total={parseInt(totalCount)}
                     // total={parseInt(AllEnquiries)}
                     current={current}
                     pageSize={noofItems}
@@ -589,7 +623,6 @@ function EnquiryList() {
         </div>
       </div>
 
-
       <CustomModel
         size={"sm"}
         show={successPopup}
@@ -604,16 +637,7 @@ function EnquiryList() {
           setCancelPopUp(false);
         }}
       />
-
-
-
-
-
     </div>
-
-
-
-
   );
 }
 

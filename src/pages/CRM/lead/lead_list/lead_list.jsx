@@ -458,8 +458,8 @@ export default function LeadList() {
 
   return (
     <>
-      <div className="container-fluid lead_list pt-3">
-        <div className=" ">
+      <div className="container-fluid container_fms pt-3">
+        {/* <div className=" "> */}
           <div className="row flex-wrap align-items-center">
             <div className="col-4">
               <h5 className="lead_text">Customer</h5>
@@ -528,7 +528,7 @@ export default function LeadList() {
             </div>
           </div> */}
           <div className="row my-3 ">
-            <div className="col-4 px-3">
+            <div className="col-4 ">
               <div className="row">
             <div className="col-xl-2 col-lg-3 col-md-4 col-sm-12   ">
               <Select
@@ -570,7 +570,7 @@ export default function LeadList() {
             </div>
             </div>
             </div>
-            <div className="col-4 d-flex py-2 justify-content-center">
+            <div className="col-4 d-flex  align-items-center justify-content-center">
               <MyPagination
                 total={parseInt(totalCount)}
                 current={current}
@@ -587,6 +587,7 @@ export default function LeadList() {
               />
             </div>
             <div className="col-4 d-flex justify-content-end">
+            <div className="col mb-2 px-4">
               <Link to={ROUTES.CUSTOMER}>
                 <Button
                   btnType="add"
@@ -595,6 +596,7 @@ export default function LeadList() {
                   New Customer
                 </Button>
               </Link>
+              </div>
             </div>
           </div>
           <div className="datatable">
@@ -605,7 +607,7 @@ export default function LeadList() {
               custom_table_css="table_lead_list"
             />
           </div>
-          <div className="d-flex py-2 justify-content-center">
+          <div className="d-flex  py-1 justify-content-center">
             {totalCount > 0 && (
               <MyPagination
                 total={parseInt(totalCount)}
@@ -687,7 +689,7 @@ export default function LeadList() {
               </>
             }
           />
-        </div>
+        {/* </div> */}
       </div>
     </>
   );

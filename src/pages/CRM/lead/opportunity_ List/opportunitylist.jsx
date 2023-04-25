@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { CRM_BASE_URL } from "../../../../api/bootapi";
-import {useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Dropdown from "react-bootstrap/Dropdown";
 import "../opportunity_ List/opportunitylist.scss";
 import { Oppor_Status, Prob_conversion } from "../../../../utils/SelectOptions";
@@ -24,7 +24,7 @@ import TableData from "../../../../components/table/table_data";
 import MyPagination from "../../../../components/Pagination/MyPagination";
 import CustomModel from "../../../../components/custom_modal/custom_model";
 import Button from "../../../../components/button/button";
-import {  Popconfirm } from "antd";
+import { Popconfirm } from "antd";
 import { GiCancel } from "react-icons/gi";
 import "./opportunitylist.scss";
 import { BsPlusCircleFill } from "react-icons/bs";
@@ -108,6 +108,8 @@ function Opportunitylist(props) {
   const [serialNo, setserialNo] = useState(1);
   const componentRef = useRef();
   const [cancelPopUp, setCancelPopUp] = useState(false);
+
+  const [startcount,setstartcount]= useState()
   //pdf file start
   // const exportPDF = () => {
   //   const unit = "pt";
@@ -193,12 +195,10 @@ function Opportunitylist(props) {
           let tempArr = [];
           res?.data?.data?.leads.forEach((item, index) => {
             let temp = [];
-           item.fms_v1_enquiry_opportunities.forEach((item, index) => {
-            temp.push(item.fms_v1_enquiries.enquiry_no)
+            item.fms_v1_enquiry_opportunities.forEach((item, index) => {
+              temp.push(item.fms_v1_enquiries.enquiry_no);
+            });
 
-            })
-
-        
             oppstatus.forEach((sts, index) => {
               var statusnew = parseInt(sts.value);
               if (statusnew == item.opportunity_status) {
@@ -219,13 +219,14 @@ function Opportunitylist(props) {
                   opportunity_amount: item?.opportunity_amount,
                   opportunity_status: item?.opportunity_status,
                   opportunity_validity: item?.opportunity_validity,
-                  opp_enq:temp,
-
+                  opp_enq: temp,
+                  startcount:res?.data?.data?.startIndex
                 });
               }
             });
           });
           setOppnew(tempArr);
+          setstartcount(res?.data?.data?.startIndex)
           setOpportunityList(res?.data?.data?.leads);
           setTotalcount(res?.data?.data?.totalCount);
         } else {
@@ -240,7 +241,7 @@ function Opportunitylist(props) {
   useEffect(() => {
     GetOpportunityData(searchSource);
     // getAllContact();
-  }, [numOfItems, pageofIndex, pagesizecount,searchSource]);
+  }, [numOfItems, pageofIndex, pagesizecount, searchSource]);
 
   // get one oppurtunity
   const [oneoppurtunity, setOneoppurtunity] = useState();
@@ -547,6 +548,17 @@ function Opportunitylist(props) {
   const handleCancelOpp = () => {
     setCancelPopUp(true);
   };
+
+
+  const getFinalCount = (total) =>{
+    const cutoff = Math.ceil(totalCount/ numOfItems);
+    console.log("FinalTest",cutoff,current)
+    if(current === cutoff) return totalCount
+    return total
+    // console.log("TotalPageTest",current,totalCount)
+    // console.log("TestCount",total)
+  }
+
   const columns = [
     {
       title: "Sl. No",
@@ -617,7 +629,6 @@ function Opportunitylist(props) {
       // },
       align: "left",
     },
-   
 
     // {
     //   title: "CONVERTED BY",
@@ -631,7 +642,7 @@ function Opportunitylist(props) {
       dataIndex: "opportunity_source",
       key: "SOURCE",
       align: "left",
-      width:"10%",
+      width: "10%",
       // filteredValue: [searchSource],
       // onFilter: (value, record) => {
       //   return String(record.opportunity_source)
@@ -639,7 +650,7 @@ function Opportunitylist(props) {
       //     .includes(value.toLowerCase());
       // },
     },
-   
+
     {
       title: "ACTION",
       dataIndex: "action",
@@ -651,27 +662,30 @@ function Opportunitylist(props) {
           <div className="d-flex justify-content-center align-items-center gap-2">
             <div className="m-0">
               {/* <FaEdit onClick={() => handleEditedclick(index)} /> */}
-              <Link to={`${ROUTES.EDIT_OPPORTUNITY}/${index.opportunity_Id}`}
-               className="editcolor"
+              <Link
+                to={`${ROUTES.EDIT_OPPORTUNITY}/${index.opportunity_Id}`}
+                className="editcolor"
               >
                 <FaEdit />
               </Link>
             </div>
             <div className="actionView m-0">
-            <div className="editcolor"
-             onClick={
-              () => {
-                navigate(`${ROUTES.VIEW_OPPORTUNITY}/${index.opportunity_Id}`);
-              }
-              //   handleViewData(index)
-            }
-            >
-           
-              <MdPageview
+              <div
+                className="editcolor"
+                onClick={
+                  () => {
+                    navigate(
+                      `${ROUTES.VIEW_OPPORTUNITY}/${index.opportunity_Id}`
+                    );
+                  }
+                  //   handleViewData(index)
+                }
+              >
+                <MdPageview
                 // onClick={()=>viewprogressoppurtunity(index)}
                 // onClick={() => Viewoppurtunties(index)}
-              />
-            </div>
+                />
+              </div>
             </div>
             <div className="deleteIcon m-0">
               <Popconfirm
@@ -807,7 +821,7 @@ function Opportunitylist(props) {
 
   return (
     <div>
-      <div className="container-fluid   my-3 py-3">
+      <div className="container-fluid container_fms  my-3 py-3">
         {/* opportunity listing section One */}
 
         <div>
@@ -843,7 +857,7 @@ function Opportunitylist(props) {
             </div>
             <div className="col-4 d-flex justify-content-end">
               <Leadlist_Icons
-              name={"Oppurtunity"}
+                name={"Oppurtunity"}
                 datas={OpportunityList}
                 columns={columns}
                 items={data12}
@@ -974,7 +988,9 @@ function Opportunitylist(props) {
           {/* </div>
           </div> */}
           <div className="row my-3">
-            <div className="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-4  px-3">
+          <div className="col-xl-4  ">
+          <div className="d-flex justify-content-start align-items-center gap-3">
+            <div className="  ">
               <Select
                 bordered={false}
                 className=" page_size_style"
@@ -984,37 +1000,28 @@ function Opportunitylist(props) {
                   setCurrent(1);
                 }}
               >
-                {/* <Select.Option value="5">5 | pages</Select.Option> */}
                 <Select.Option value="25">
-                  Show{" "}
-                  <span style={{ color: "lightgray" }} className="ms-1">
-                    |
-                  </span>
-                  <span style={{ color: "#2f6b8f" }} className="ms-2">
+                  <span style={{ color: "#2f6b8f" }} className="">
                     25
-                  </span>{" "}
+                  </span>
                 </Select.Option>
                 <Select.Option value="50">
-                  {" "}
-                  Show{" "}
-                  <span style={{ color: "lightgray" }} className="ms-1">
-                    |
-                  </span>
-                  <span style={{ color: "#2f6b8f" }} className="ms-2">
+                  <span style={{ color: "#2f6b8f" }} className="">
                     50
-                  </span>{" "}
+                  </span>
                 </Select.Option>
                 <Select.Option value="100">
-                  {" "}
-                  Show{" "}
-                  <span style={{ color: "lightgray" }} className="ms-1">
-                    |
-                  </span>
-                  <span style={{ color: "#2f6b8f" }} className="ms-2">
+                  <span style={{ color: "#2f6b8f" }} className="">
                     100
-                  </span>{" "}
+                  </span>
                 </Select.Option>
               </Select>
+            </div>
+            <div className=" d-flex  align-items-center mt-2 ">
+            <label className="font_size" >Results: {startcount +1} -{ getFinalCount((1 * numOfItems)*current)}  <span>of {totalCount} </span> </label>
+            </div>
+
+            </div>
             </div>
             <div className="col-4 d-flex py-2 justify-content-center">
               {totalCount > 0 && (
@@ -1941,9 +1948,8 @@ function Opportunitylist(props) {
             </div>
           </div>
         }
-
       />
-        <CustomModel
+      <CustomModel
         cancelName={"Opportunity"}
         cancel
         show={cancelPopUp}

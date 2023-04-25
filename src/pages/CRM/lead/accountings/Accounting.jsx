@@ -359,19 +359,19 @@ function Countrystate({ customerdetails, setIsAccountSave }) {
         }}
       >
         <div className="row py-5 px-1">
-          <div className="col-sm-4 ">
+          <div className="col-sm-3 ">
             <label>Tax No</label>
             <Form.Item name="customer_accounting_tax_no">
               <InputType />
             </Form.Item>
           </div>
-          <div className="col-sm-4">
+          <div className="col-sm-3">
             <label>Credit Days</label>
             <Form.Item name="customer_accounting_credit_days">
             <InputType />
             </Form.Item>
           </div>
-          <div className="col-sm-4">
+          <div className="col-sm-3">
             <label>Credit Limit</label>
             <Form.Item name="customer_accounting_credit_limit">
               <Input_Number 

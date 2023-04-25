@@ -1870,6 +1870,21 @@ export default function Sidebar({ showSidebar }) {
                         </NavLink>
                       </li>
                     )}
+
+{checkPermission("invoicetmpalte") && (
+                      <li className="nav-text ">
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.SELECT_INVOICETEMPLATE }
+                        >
+                          <div className="ms-3 ps-1 subactivelink">
+                         Invoice Templates
+                          </div>
+                        </NavLink>
+                      </li>
+                    )}
                   </div>
                 </>
               ) : (

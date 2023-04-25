@@ -282,7 +282,7 @@ function Lead({}) {
   return (
     <>
       {contextHolder}
-      <h5 className="lead_text">Add Customer</h5>
+      <h5 className="lead_text">New Customer</h5>
       <div className="container-fluid">
         <div className="lead_container">
           <div className="row justify-content-md-center">
@@ -705,12 +705,13 @@ function Lead({}) {
                       </div>
                     </div>
 
-                    <div className="col-sm-4 mt-4 py-2">
+                    <div className="col-sm-4 mt-4 ">
                       <div className="">
                         <Form.Item name="customer_logo">
                           <FileUpload
                             multiple
-                            style={{ height: "31px" }}
+                          className="p-0"
+                            style={{ height: "33px" }}
                             filetype={"Accept only pdf and docs"}
                             listType="picture"
                             accept=".pdf,.docs,"
@@ -870,7 +871,7 @@ function Lead({}) {
                       onHide={() => setModalAddress(false)}
                     /> */}
                   </div>
-                  <div className="row mt-2 ms-2">
+                  <div className="col-12 mt-2">
                     <AddressTable
                       customer={CustomerId}
                       toggle={Toggle4}

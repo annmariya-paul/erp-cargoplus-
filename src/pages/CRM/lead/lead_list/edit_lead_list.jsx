@@ -577,12 +577,13 @@ function LeadEdit() {
                       <label>Website</label>
                       <Form.Item
                         name="customer_website"
-                        // rules={[
-                        //   {
-                        //     required: true,
-                        //     message: "Please select a Type",
-                        //   },
-                        // ]}
+                        rules={[
+                          {
+                            pattern: new RegExp("[Hh][Tt][Tt][Pp][Ss]?:\/\/(?:(?:[a-zA-Z\u00a1-\uffff0-9]+-?)*[a-zA-Z\u00a1-\uffff0-9]+)(?:\.(?:[a-zA-Z\u00a1-\uffff0-9]+-?)*[a-zA-Z\u00a1-\uffff0-9]+)*(?:\.(?:[a-zA-Z\u00a1-\uffff]{2,}))(?::\d{2,5})?(?:\/[^\s]*)?"),
+                            message: "Enter valid website",
+                          },
+
+                        ]}
                       >
                         <InputType
                           value={leadcreditdays}

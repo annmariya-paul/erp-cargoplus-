@@ -174,8 +174,8 @@
   
     .sub_total_wrapper__col {
       width: 50%;
-      padding-left: 5px;
-      padding-right: 5px;
+      // padding-left: 5px;
+      // padding-right: 5px;
       display: flex;
       align-items: center;
       // border-bottom: 1px solid black;
@@ -240,14 +240,16 @@
     background-color: rgb(237, 235, 235);
    }
    .total_bgcolor{
-    min-height: 10px;
+   height: 70px;
+ 
     // width: 20px;
-    padding: 20px;
+    // padding: 20px;
     background-color: #f3a415;
     color: white;
     text-align: center;
    }
    .label_color{
+    font-size: 17px;
     color: #f3a415;
    }
    .headingcolor{
@@ -258,6 +260,7 @@
     font-size: 60px;
    }
    .font_weight{
+    padding-top: 7px;
     font-weight: 600;
    }
    .invoice1_paymentsection{
@@ -265,4 +268,10 @@
    }
 .invoice1_nodatesession{
   width:20% ;
+}
+.invoiceth_widthslno{
+  width: 10%;
+}
+.invoiceth_widthdescrip{
+width: 80%;
 }

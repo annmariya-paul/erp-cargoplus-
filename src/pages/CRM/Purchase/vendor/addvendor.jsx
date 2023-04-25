@@ -27,6 +27,7 @@ import Bankdetails from "./bankdetails/bankdetails";
 import ContactTable from "../../lead/tables/contactstable";
 import Moreinfo from "./Moreinfo/moreinfo";
 import Contact from "./vendorcontact/Contact";
+import Phone_Input from "../../../../components/PhoneInput/phoneInput";
 
 
 function Addvendor({ }  ) {
@@ -286,7 +287,7 @@ console.log("bnkdetails id iss",vendorId)
   return (
     <>
     {contextHolder}
-      <h5 className="lead_text">Add Vendor</h5>
+      <h5 className="lead_text">New Vendor</h5>
       <div className="container-fluid">
         <div className="lead_container">
           <div className="row justify-content-md-center">
@@ -461,7 +462,8 @@ console.log("bnkdetails id iss",vendorId)
                         </SelectBox>
                       </Form.Item>
                     </div>
-
+                    </div>
+                    <div className="row mt-1 mx-0 px-2 py-1">
                     <div className="col-sm-6 pt-1">
                       <label> Address</label>
                       <div>
@@ -493,14 +495,14 @@ console.log("bnkdetails id iss",vendorId)
                         </Form.Item>
                       </div>
                     </div>
-                  </div>
+                 </div>
 
-                  <div className="row  mt-1 mx-0 px-2 py-1">
+                  <div className="row  mt-1 mx-0 px-2 ">
                     {/* <div className="col-12">
                       <h5 className="lead_text">Contact Details</h5>
                     </div> */}
 
-                    <div className="col-sm-4 pt-3">
+                    <div className="col-sm-4 pt-1">
                       <label>
                         Phone<span className="required">*</span>
                       </label>
@@ -516,15 +518,16 @@ console.log("bnkdetails id iss",vendorId)
 
                         ]}
                       >
-                        <InputType
+                        <Phone_Input/>
+                        {/* <InputType
                           // value={vendorcontact}
                           // onChange={(e) => {
                           //   setvendorcontact(e.target.value);
                           // }}
-                        />
+                        /> */}
                       </Form.Item>
                     </div>
-                    <div className="col-sm-4 pt-3">
+                    <div className="col-sm-4 pt-1">
                       <label>
                         {" "}
                         Email<span className="required">*</span>
@@ -549,7 +552,7 @@ console.log("bnkdetails id iss",vendorId)
                       </Form.Item>
                     </div>
 
-                    <div className="col-sm-4 pt-3">
+                    <div className="col-sm-4 pt-1">
                       <label>
                         {" "}
                         Website
@@ -558,14 +561,13 @@ console.log("bnkdetails id iss",vendorId)
 
                       <Form.Item
                         name="vendorwebsite"
-                        // rules={[
-                        //   {
-                        //     required: true,
+                        rules={[
+                          {
+                            pattern: new RegExp("[Hh][Tt][Tt][Pp][Ss]?:\/\/(?:(?:[a-zA-Z\u00a1-\uffff0-9]+-?)*[a-zA-Z\u00a1-\uffff0-9]+)(?:\.(?:[a-zA-Z\u00a1-\uffff0-9]+-?)*[a-zA-Z\u00a1-\uffff0-9]+)*(?:\.(?:[a-zA-Z\u00a1-\uffff]{2,}))(?::\d{2,5})?(?:\/[^\s]*)?"),
+                            message: "Enter valid website",
+                          },
 
-                        //     message: "Please enter a Valid Website",
-                        //   },
-
-                        // ]}
+                        ]}
                       >
                         <InputType
                           // value={vendorcontact}
@@ -575,8 +577,9 @@ console.log("bnkdetails id iss",vendorId)
                         />
                       </Form.Item>
                     </div>
-
-                    <div className="col-sm-4 pt-2">
+                    </div>
+ <div className="row mt-1 mx-0 px-2 py-1">
+                    <div className="col-sm-4 pt-2 ">
                       <label>
                         Country
                         {/* <span className="required">*</span> */}
@@ -656,7 +659,7 @@ console.log("bnkdetails id iss",vendorId)
                         />
                       </Form.Item>
                     </div>
-                  </div>
+                    </div>
 
                   <div className="row  mt-1 mx-0 px-2 py-1">
                     {/* <div className="col-12">

@@ -66,6 +66,9 @@ function Invoicetemplateselect() {
       console.log("suceccss checked", e.target.checked);
       setdefaultTempalate(1);
     }
+    else{
+      setdefaultTempalate(0)
+    }
   };
 
 
@@ -101,9 +104,9 @@ custom_table_css="table_lead_list"
                        
                       ></Radio>
                       <img
-                        src={`${process.env.REACT_APP_BASE_URL}/uploads/invoicetemplates/${itm.invoice_template_image}`}
-                        height={70}
-                        width={70}
+                        src={`${process.env.REACT_APP_BASE_URL}/${itm?.invoice_template_image}`}
+                        height={180}
+                        width={150}
                       />
                     </div>
                   );

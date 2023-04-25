@@ -360,55 +360,55 @@ function Invoicetemp1({
 
                   <tr>
                     <td className="border_right p-3">1 </td>
-                    <td className="border_right text_align_words">
+                    <td className="border_right ">
                       servicenme{" "}
                     </td>
 
-                    <td className="text_align_words">28939 </td>
+                    <td className="text_align_words">100.00 </td>
                   </tr>
 
                   <tr className="alternative_color">
                     <td className="border_right p-3">2 </td>
-                    <td className="border_right text_align_words">
+                    <td className="border_right ">
                       Shippemenet{" "}
                     </td>
 
-                    <td className="text_align_words">89767 </td>
+                    <td className="text_align_words">200.00 </td>
                   </tr>
                   <tr>
                     <td className="border_right p-3">3 </td>
-                    <td className="border_right text_align_words">
+                    <td className="border_right ">
                       servicenme{" "}
                     </td>
 
-                    <td className="text_align_words">28992 </td>
+                    <td className="text_align_words">300.00 </td>
                   </tr>
                   <tr className="alternative_color">
                     <td className="border_right p-3">4 </td>
-                    <td className="border_right text_align_words">
+                    <td className="border_right ">
                       servicenme{" "}
                     </td>
 
-                    <td className="text_align_words">98269 </td>
+                    <td className="text_align_words">400 .00</td>
                   </tr>
 
-                  <tr className="">
+                  {/* <tr className="">
                     <td className="border_right p-3"> </td>
                     <td className="border_right text_align_words d-flex justify-content-center align-items-center">
                       {" "}
                       Sub Total{" "}
                     </td>
-                    <td className="text_align_words">289826.00 </td>
-                  </tr>
+                    <td className="text_align_words">1000.00 </td>
+                  </tr> */}
 
-                  <tr className="">
+                  {/* <tr className="">
                     <td className="border_right p-3 py-2"> </td>
                     <td className="border_right text_align_words d-flex justify-content-center align-items-center">
                     
-                      Tax %
+                      Tax 
                     </td>
-                    <td className="text_align_words">15% </td>
-                  </tr>
+                    <td className="text_align_words">45.00 </td>
+                  </tr> */}
                   
                 
                 </tbody>
@@ -421,7 +421,7 @@ function Invoicetemp1({
                   <div style={{ width: "100%" }}>
                     <div className="total_color">Total In Words</div>
                     <div className="sub_total_words">
-               
+                 One thousand only
                     </div>
                   </div>
                 </div>
@@ -433,7 +433,7 @@ function Invoicetemp1({
                     
                       <tr className="total_bgcolor">
                         <td style={{ fontWeight: 600 }} className="px-1">Total</td>
-                        <td style={{ fontWeight: 600 }} className="px-1">78387939.00</td>
+                        <td style={{ fontWeight: 600 }} className="px-1">1000.00</td>
                       </tr>
                      
                     </tbody>

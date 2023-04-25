@@ -211,6 +211,15 @@ catch (err) {
   console.log("totaaal",startcount)
 
 
+  const getFinalCount = (total) =>{
+    const cutoff = Math.ceil(totalCount/ noofItems);
+    console.log("FinalTest",cutoff,current)
+    if(current === cutoff) return totalCount
+    return total
+    // console.log("TotalPageTest",current,totalCount)
+    // console.log("TestCount",total)
+  }
+
   useEffect(() => {
     getallvendortype();
     getallvendordata(searchedText);
@@ -421,6 +430,7 @@ catch (err) {
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
               onChange={(e) => {
+                getallvendordata(searchedText)
                 setSearchedText(e.target.value ? [e.target.value] : []);
               }}
               onSearch={(value) => {
@@ -474,7 +484,7 @@ catch (err) {
             </Select>
             </div>
             <div className=" col-xl-10 col-lg-9 col-md-8 col-sm-12  d-flex  align-items-center ">
-            <label className="font_size" >Results: {startcount +1} -{noofItems *2}  <span>of {totalCount} </span> </label>
+            <label className="font_size" >Results: {startcount +1} -{ getFinalCount((1 * noofItems)*current)}  <span>of {totalCount} </span> </label>
             </div>
 
             </div>

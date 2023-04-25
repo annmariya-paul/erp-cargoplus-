@@ -567,7 +567,7 @@ function Unitlist() {
           View_list
           list_content={
             <div className="container-fluid px-4 my-4 ">
-              <h6 className="lead_text">Add Units and Measurements</h6>
+              <h6 className="lead_text">New Units and Measurements</h6>
               <Form
                 form={addForm}
                 onFinish={(value) => {

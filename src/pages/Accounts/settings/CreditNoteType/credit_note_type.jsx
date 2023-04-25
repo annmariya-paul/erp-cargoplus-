@@ -294,7 +294,7 @@ useEffect(() => {
             onClick={() => {setAddCreditNote(true);
              addForm.resetFields();
             }}   >
-              Add Credit Note Type
+              New Credit Note Type
             </Button>
             {/* </Link> */}
           </div>
@@ -317,7 +317,7 @@ useEffect(() => {
             <>
               {" "}
               <div className="row">
-                <h5 className="lead_text">Add Credit Note Type</h5>
+                <h5 className="lead_text">New Credit Note Type</h5>
               </div>
               <Form
                 form={addForm}

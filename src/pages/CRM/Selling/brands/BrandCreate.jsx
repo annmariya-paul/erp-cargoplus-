@@ -112,7 +112,7 @@ function BrandCreate() {
         >
           <div className="container my-2">
             <div className="my-3">
-              <h5 className="lead_text">Add Brand</h5>
+              <h5 className="lead_text">New Brand</h5>
             </div>
             <Form
               name="addForm"

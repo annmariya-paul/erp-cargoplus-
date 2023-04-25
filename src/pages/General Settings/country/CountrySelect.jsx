@@ -233,7 +233,7 @@ export default function SelectCountry() {
               onClick={() => setmodalAddCountry(true)}
               className="add_opportunity"
             >
-              Add Country
+              New Country
             </Button>
           </div>
         </div>
@@ -268,7 +268,7 @@ export default function SelectCountry() {
         list_content={
           <>
             <div className="row">
-              <h5 className="lead_text">Add Country</h5>
+              <h5 className="lead_text">New Country</h5>
             </div>
             <Form
               form={addForm}

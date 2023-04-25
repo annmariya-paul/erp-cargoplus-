@@ -370,7 +370,7 @@ export default function Designation() {
           View_list
           list_content={
             <div className="container-fluid px-4 my-4 ">
-              <h6 className="lead_text">Add Designation</h6>
+              <h6 className="lead_text">New Designation</h6>
               <Form
                 name="addForm"
                 form={addForm}
@@ -386,7 +386,7 @@ export default function Designation() {
                 <div className="row flex-wrap pt-1">
                   <div className="row ms-0 py-1">
                     <div className="col-12 pt-3">
-                      <label htmlfor="designation">Designation Name</label>
+                      <label htmlfor="designation">Designation Name<span className="required">*</span></label>
                       <Form.Item
                         name="Designation name"
                         rules={[
@@ -422,7 +422,7 @@ export default function Designation() {
 
                   <div className="row ms-0 py-1">
                     <div className="col-12 ">
-                      <label htmlfor="designation">Designation Code</label>
+                      <label htmlfor="designation">Designation Code<span className="required">*</span></label>
                       <Form.Item
                         name="Designation code"
                         rules={[
@@ -488,7 +488,7 @@ export default function Designation() {
               >
                 <div className="row">
                   <div className="col-12">
-                    <label>Name</label>
+                    <label>Name<span className="required">*</span></label>
                     <Form.Item
                       name="desig_name"
                       rules={[
@@ -532,7 +532,7 @@ export default function Designation() {
                     ) : null}
                   </div>
                   <div className="col-12 py-2">
-                    <label>Code</label>
+                    <label>Code<span className="required">*</span></label>
                     <Form.Item
                       name="desig_code"
                       rules={[

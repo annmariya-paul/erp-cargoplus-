@@ -1172,12 +1172,12 @@ export default function EditQuotation(
       if (item.quotation_details_status === 1) {
         tmp = true;
       }
-      if (index >= 0) {
-        temp = true;
-        setIsTableEmpty(false);
-      } else {
-        setIsTableEmpty(true);
-      }
+      // if (index >= 0) {
+      //   temp = true;
+      //   setIsTableEmpty(false);
+      // } else {
+      //   setIsTableEmpty(true);
+      // }
       console.log("userdata task", item);
       if (item.quotation_details_service_id) {
         formData.append(

@@ -282,7 +282,7 @@ function Lead({}) {
   return (
     <>
       {contextHolder}
-      <h5 className="lead_text">Add Customer</h5>
+      <h5 className="lead_text">New Customer</h5>
       <div className="container-fluid">
         <div className="lead_container">
           <div className="row justify-content-md-center">

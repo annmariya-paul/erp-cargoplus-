@@ -730,20 +730,11 @@ function Updatevendor(){
                       <Form.Item
                         name="vendorwebsite"
                         rules={[
-                          // {
-                          //   required: true,
+                          {
+                            pattern: new RegExp("[Hh][Tt][Tt][Pp][Ss]?:\/\/(?:(?:[a-zA-Z\u00a1-\uffff0-9]+-?)*[a-zA-Z\u00a1-\uffff0-9]+)(?:\.(?:[a-zA-Z\u00a1-\uffff0-9]+-?)*[a-zA-Z\u00a1-\uffff0-9]+)*(?:\.(?:[a-zA-Z\u00a1-\uffff]{2,}))(?::\d{2,5})?(?:\/[^\s]*)?"),
+                            message: "Enter valid website",
+                          },
 
-                          //   message: "Please enter a Valid website",
-                          // },
-
-                          // {
-                          //   min: 3,
-                          //   message: "Name must be atleast 3 characters",
-                          // },
-                          // {
-                          //   max: 100,
-                          //   message: " Name cannot be longer than 100 characters",
-                          // },
                         ]}
                       >
                         <InputType

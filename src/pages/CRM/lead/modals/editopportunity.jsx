@@ -602,6 +602,7 @@ export default function EditOpportunity() {
         console.log("error while getting all leads: ", err);
       });
   };
+  
 
   const getAllContact = async () => {
     try {
@@ -1117,6 +1118,7 @@ export default function EditOpportunity() {
 
   useEffect(() => {
     GetSalesPersons();
+    GetAllContacts();
   }, []);
   //   <Form
   //   form={editForm}

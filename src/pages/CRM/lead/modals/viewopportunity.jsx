@@ -148,15 +148,7 @@ function ViewOpportunity() {
           </div>
         </div>
 
-        <div className="col-sm-6 d-flex">
-          <div className="col-4 boldhd pb-3">Details</div>
-          <div className="col-1">:</div>
-          <div className="col-7">
-            <p className="modal-view-data">
-            {Allopps?.opportunity_description}
-            </p>
-          </div>
-        </div>
+      
 
         <div className="col-sm-6 d-flex">
           <div className="col-4 boldhd pb-3">Expecting Amount</div>
@@ -189,14 +181,22 @@ function ViewOpportunity() {
           <div className="col-1">:</div>
           <div className="col-7">
             <p className="modal-view-data">
-            {Allopps?.opportunity_status === '1' ? 'New' : Allopps?.opportunity_status === '2' ? 'Interested' : Allopps?.opportunity_status === '3' ? 'Converted' : ''}
+            {Allopps?.opportunity_status === 1 ? 'New' : Allopps?.opportunity_status === 2 ? 'Interested' : Allopps?.opportunity_status === 3 ? 'Converted' : Allopps?.opportunity_status === 4 ? 'Lost'  : ''}
 
             {/* {Allopps?.opportunity_probability} */}
             </p>
           </div>
         </div>
 
-
+        <div className="col-sm-6 d-flex">
+          <div className="col-4 boldhd pb-3">Remarks</div>
+          <div className="col-1">:</div>
+          <div className="col-7">
+            <p className="modal-view-data">
+            {Allopps?.opportunity_description}
+            </p>
+          </div>
+        </div>
 
         
         {/* <div className="col-sm-6 d-flex">

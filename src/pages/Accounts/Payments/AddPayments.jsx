@@ -338,7 +338,7 @@ const AddPayments = () => {
         <div className="row">
           <div className="col-md-12">
             <div className="heading">
-              <h2 style={{ color: "#0891d1" }}>Add Payment</h2>
+              <h2 style={{ color: "#0891d1" }}>New Payment</h2>
             </div>
           </div>
           <div className="col-md-12">

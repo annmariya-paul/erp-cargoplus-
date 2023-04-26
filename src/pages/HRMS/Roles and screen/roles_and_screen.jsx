@@ -185,7 +185,7 @@ const [employeeTName, setEmployeeTName] = useState();
               <h5 style={{ color: "#0891d1" }}>Roles</h5>
             </div>
             {isEditOn ? (
-              <div className="col-6 mt-2">
+              <div className="col-6 mt-2 ">
                 <Form
                   form={addForm}
                   onFinish={(value) => {
@@ -208,7 +208,7 @@ const [employeeTName, setEmployeeTName] = useState();
                   >
                     <InputType
                     
-                      
+                   
                     value={employeeTName}
                     onChange={(e) => {
                       setEmployeeTName(e.target.value);
@@ -232,8 +232,8 @@ const [employeeTName, setEmployeeTName] = useState();
                         </p>
                       ) : null}
 
-                  <div className="d-flex justify-content-center">
-                    <Button type="submit" className="p-2 save_button_style">
+                  <div className="d-flex justify-content-center ">
+                    <Button type="submit" className="p-2 save_button_style" >
                       Save
                     </Button>
                   </div>

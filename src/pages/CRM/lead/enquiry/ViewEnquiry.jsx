@@ -221,7 +221,7 @@ function ViewEnquiry() {
           <div className="col-7">
             <p className="modal-view-data">
             {/* {AllEnquiries?.enquiry_docs} */}
-            <Attachments  attachments={AllEnquiries?.enquiry_docs || []} />
+            <Attachments Isattachment={AllEnquiries?.enquiry_docs.length >0}  attachments={AllEnquiries?.enquiry_docs || []} />
             </p>
           </div>
         </div>

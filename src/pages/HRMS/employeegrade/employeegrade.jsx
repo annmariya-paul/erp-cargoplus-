@@ -317,7 +317,7 @@ function Employeegrade() {
           View_list
           list_content={
             <>
-              <h6 className="lead_text">Add Employee Grade</h6>
+              <h6 className="lead_text">New Employee Grade</h6>
               <div className="container-fluid px-2 my-4 ">
                 <Form
                   name="addForm"
@@ -334,7 +334,7 @@ function Employeegrade() {
                     <div className="row ms-0 py-1">
                       <div className="col-12 pt-3">
                         <label htmlfor="emp_type_name">
-                          Employee grade Name
+                        Name<span className="required">*</span>
                         </label>
                         <Form.Item
                           name="Employment_grade_name"
@@ -422,7 +422,7 @@ function Employeegrade() {
                 >
                   <div className="row">
                     <div className="col-12">
-                      <label>Name</label>
+                      <label>Name<span className="required">*</span></label>
                       <Form.Item
                         name="Employment_grade_name"
                         rules={[

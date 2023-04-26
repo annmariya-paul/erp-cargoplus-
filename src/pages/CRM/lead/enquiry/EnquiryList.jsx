@@ -37,10 +37,37 @@ function EnquiryList() {
   const [AllEnquiries, setAllnquires] = useState();
 
   const [startcount, setstartcount] = useState();
-  console.log("ggg", AllEnquiries);
-  const handleCancelEnq = () => {
-    setCancelPopUp(true);
+
+
+  const close_modal = (mShow, time) => {
+    if (!mShow) {
+      setTimeout(() => {
+        setCancelPopUp(false);
+    
+      }, time);
+    }
   };
+
+  console.log("ggg", AllEnquiries);
+  const handleCancelEnq = (index) => {
+    PublicFetch.delete(`${CRM_BASE_URL_FMS}/enquiries/${index.enquiry_id}`)
+    .then((res) => {
+      console.log("response", res);
+      if (res.data.success) {
+        setCancelPopUp(true);
+        GetAllEnquiries(searchedText);
+        close_modal(cancelPopUp, 1200);
+        console.log("success of data", res.data.data);
+      
+      }
+    })
+    .catch((err) => {
+      console.log("Error", err);
+    });
+
+  };
+
+
   const columns = [
     {
       title: "#",
@@ -254,7 +281,7 @@ function EnquiryList() {
               <Popconfirm
                 title={`Are you sure you want to cancel this Enquiry?`}
                 onConfirm={() => {
-                  handleCancelEnq();
+                  handleCancelEnq(index);
                 }}
               >
                 <GiCancel style={{ marginRight: 18 }} />

@@ -324,7 +324,7 @@ function Containertypes() {
                 addForm.resetFields();
               }}
             >
-              New ContainerTypes
+              New Container Types
             </Button>
           </div>
         </div>

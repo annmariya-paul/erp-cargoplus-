@@ -524,7 +524,7 @@ export default function Frightlist(props) {
         list_content={
           <>
             <div className="row">
-              <h5 className="lead_text">Add Freight Type</h5>
+              <h5 className="lead_text">New Freight Type</h5>
             </div>
             <Form
               form={addForm}

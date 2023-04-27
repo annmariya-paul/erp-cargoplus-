@@ -64,6 +64,7 @@ export default function TaxType() {
       );
       console.log("all taxtype are", allTxTypes.data.data);
       setTaxTypes(allTxTypes.data.data);
+      setTotalcount(allTxTypes.data.data.totalCount);
       let temp = [];
       allTxTypes.data.data.forEach((item, index) => {
         temp.push({
@@ -380,7 +381,6 @@ export default function TaxType() {
           <div className="col-4 d-flex justify-content-end">
             {data12 && (
               <Leadlist_Icons
-            
                 datas={data12}
                 name="taxtype"
                 columns={filteredColumns}

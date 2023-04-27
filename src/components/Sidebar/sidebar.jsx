@@ -1023,8 +1023,6 @@ export default function Sidebar({ showSidebar }) {
                     )}
                   </div>
 
-              
-
                   <li
                     className={
                       FMSSettingsopen
@@ -1109,6 +1107,20 @@ export default function Sidebar({ showSidebar }) {
                             >
                               <div className="ms-4 ps-3 subactivelink">
                                 Payment Terms
+                              </div>
+                            </NavLink>
+                          </li>
+                        )}
+                        {checkPermission("tax type") && (
+                          <li className="nav-text">
+                            <NavLink
+                              className={({ isActive }) =>
+                                isActive ? "active-link" : "link"
+                              }
+                              to={ROUTES.TAX_GROUP}
+                            >
+                              <div className="ms-4 ps-3 subactivelink">
+                                Tax Group
                               </div>
                             </NavLink>
                           </li>
@@ -1367,9 +1379,6 @@ export default function Sidebar({ showSidebar }) {
                 ""
               )}
 
-
-
-              
               {/* purchase order */}
 
               <li
@@ -1390,7 +1399,7 @@ export default function Sidebar({ showSidebar }) {
                        */}
                       {/* <GrServices className="sidebar_icons pt-1" /> */}
                       <div style={{ width: "120px" }} className="">
-                     Purchase 
+                        Purchase
                       </div>
                     </div>
 
@@ -1414,7 +1423,10 @@ export default function Sidebar({ showSidebar }) {
                           }
                           to={ROUTES.PUCHASE_ORDER_LIST}
                         >
-                          <div className="ms-4 subactivelink"> Purchase Order</div>
+                          <div className="ms-4 subactivelink">
+                            {" "}
+                            Purchase Order
+                          </div>
                         </NavLink>
                       </li>
                     )}
@@ -1871,16 +1883,16 @@ export default function Sidebar({ showSidebar }) {
                       </li>
                     )}
 
-{checkPermission("invoicetmpalte") && (
+                    {checkPermission("invoicetmpalte") && (
                       <li className="nav-text ">
                         <NavLink
                           className={({ isActive }) =>
                             isActive ? "active-link" : "link"
                           }
-                          to={ROUTES.SELECT_INVOICETEMPLATE }
+                          to={ROUTES.SELECT_INVOICETEMPLATE}
                         >
                           <div className="ms-3 ps-1 subactivelink">
-                         Invoice Templates
+                            Invoice Templates
                           </div>
                         </NavLink>
                       </li>

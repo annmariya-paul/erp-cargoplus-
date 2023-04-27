@@ -73,6 +73,7 @@ function CreateJob() {
   const [grandTotal, setGrandTotal] = useState();
   const [awbno, setAwbno] = useState();
 
+  const[jobnoqtn,setJobnoqtn]=useState();
   const [allincoterms, setallincoterms] = useState("");
   const [defaultincoterm, setdefaultincoterm] = useState("");
   const [allSalesPerson, setAllSalesPerson] = useState();
@@ -93,6 +94,15 @@ function CreateJob() {
       // getAllLocations();
    
     }, [jobno]);
+    useEffect(() => {
+      if(jobnoqtn){
+        GetSingleJob(jobnoqtn)
+        addForm.setFieldsValue({ job_no : jobno })
+      }
+      // getallunits();
+      // getAllLocations();
+   
+    }, [jobnoqtn]);
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj);
@@ -157,6 +167,8 @@ function CreateJob() {
       if (onequatation.data.success) {
         console.log("one quatation iss ::", onequatation?.data?.data.quotation);
         locationBytype(onequatation?.data?.data.quotation.quotation_mode);
+        setJobnoqtn( onequatation?.data?.data.quotation.fms_v1_freight_types.freight_type_id);
+        // GetSingleJob(jobnoqtn);
         addForm.setFieldsValue({
           job_chargable_weight:
             onequatation?.data?.data.quotation.quotation_chargeable_wt,

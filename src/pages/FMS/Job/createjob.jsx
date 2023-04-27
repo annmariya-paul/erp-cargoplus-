@@ -72,7 +72,8 @@ function CreateJob() {
   const [currencyDefault, setCurrencyDefault] = useState();
   const [grandTotal, setGrandTotal] = useState();
   const [awbno, setAwbno] = useState();
-
+  const [currencydata, setCurrencydata] = useState();
+  const[jobnoqtn,setJobnoqtn]=useState();
   const [allincoterms, setallincoterms] = useState("");
   const [defaultincoterm, setdefaultincoterm] = useState("");
   const [allSalesPerson, setAllSalesPerson] = useState();
@@ -93,6 +94,15 @@ function CreateJob() {
       // getAllLocations();
    
     }, [jobno]);
+    useEffect(() => {
+      if(jobnoqtn){
+        GetSingleJob(jobnoqtn)
+        addForm.setFieldsValue({ job_no : jobno })
+      }
+      // getallunits();
+      // getAllLocations();
+   
+    }, [jobnoqtn]);
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj);
@@ -157,6 +167,8 @@ function CreateJob() {
       if (onequatation.data.success) {
         console.log("one quatation iss ::", onequatation?.data?.data.quotation);
         locationBytype(onequatation?.data?.data.quotation.quotation_mode);
+        setJobnoqtn( onequatation?.data?.data.quotation.fms_v1_freight_types.freight_type_id);
+        // GetSingleJob(jobnoqtn);
         addForm.setFieldsValue({
           job_chargable_weight:
             onequatation?.data?.data.quotation.quotation_chargeable_wt,
@@ -199,7 +211,13 @@ function CreateJob() {
             onequatation?.data?.data.quotation?.quotation_exchange_rate,
           job_total_cost_amountfx:
             onequatation?.data?.data.quotation?.quotation_grand_total,
-          job_consignee: onequatation?.data?.data.quotation?.consignee,
+          // job_consignee: onequatation?.data?.data.quotation?.consignee,
+          job_volume:onequatation?.data?.data.quotation?.quotation_volume,
+          job_breadth:onequatation?.data?.data.quotation?.quotation_breadth,
+          job_height:onequatation?.data?.data.quotation?.quotation_height,
+          job_length:onequatation?.data?.data.quotation?.quotation_length,
+          job_consignee:onequatation?.data?.data.quotation?.quotation_consignee,
+          job_containertype:onequatation?.data?.data.quotation?.quotation_container_type,
         });
         setGrandTotal(onequatation?.data?.data.quotation.quotation_grand_total);
         setFrighttypemode(onequatation?.data?.data.quotation.quotation_mode);
@@ -352,14 +370,36 @@ function CreateJob() {
     if (data.quotationno) {
       formData.append("job_quotation", data.quotationno);
     }
-
+// if(data.job_consignee){
+//   console.log("consignee values",data.job_consignee);
+//   formData.append("job_consignee",data.job_consignee);
+// }
+if(data.job_containertype){
+  formData.append("job_container_type",data.job_containertype);
+}
     formData.append("job_mode", frighttypemode);
 
     formData.append("job_shipper", data.job_shipper);
     formData.append("job_freight_type", data.job_freight_type);
-    formData.append("job_cargo_type", data.job_cargo_type);
+    if(data.job_cargo_type){
+      formData.append("job_cargo_type", data.job_cargo_type);
+    }
+    
     formData.append("job_carrier", data.job_carrier);
     formData.append("job_awb_bl_no", awbno);
+    if(data.job_breadth)
+    {
+      formData.append("job_breadth", data.job_breadth);
+    }
+    if(data.job_length){
+      formData.append("job_length", data.job_length);
+    }
+    if(data.job_height){
+      formData.append("job_height", data.job_height);
+    }
+    
+   
+    formData.append("job_volume", data.job_volume);
 
     formData.append("job_origin_id", data.job_origin_id);
     formData.append("job_salesperson_id", data.sales_person);
@@ -371,10 +411,16 @@ function CreateJob() {
     formData.append("job_uom", data.job_uom);
     formData.append("job_gross_wt", data.job_grossweight);
     formData.append("job_chargeable_wt", data.job_chargable_weight);
-    formData.append("job_payment_terms", data.job_payment_terms);
+    if(data.job_payment_terms){
+      formData.append("job_payment_terms", data.job_payment_terms);
+    }
+    
     formData.append("job_total_cost_curr", data.job_currency);
     formData.append("job_total_cost_exch", data.exchnagerate);
-    formData.append("job_credit_days", data.job_credit_days);
+    if(data.job_credit_days){
+      formData.append("job_credit_days", data.job_credit_days);
+    }
+  
     formData.append("job_incoterm_id", data.incoterm);
 
     // formData.append("job_total_cost_amountlx", grandTotal);
@@ -526,52 +572,111 @@ function CreateJob() {
   const [currencyRates, setCurrencyRates] = useState(0);
   console.log("ratesssss", currencyRates);
   let b;
-  const getCurrencyRate = (data) => {
-    const code = allCurrency?.filter((item) => {
-      if (item?.currency_id === data) {
-        b = item?.currency_code;
-      }
-    });
-    console.log("code", b);
-    console.log(";;;;;;;;;", data);
-    axios
-      .get(`https://open.er-api.com/v6/latest/${currencyDefault}`)
-      .then(function (response) {
-        console.log("currency current rate:", response);
-        let a = response.data.rates[b];
-        console.log("currency match", a);
-        // setCurrencyRates(a);
-        let rate = 1 / a;
-        setCurrencyRates(rate);
+  // const getCurrencyRate = (data) => {
+  //   const code = allCurrency?.filter((item) => {
+  //     if (item?.currency_id === data) {
+  //       b = item?.currency_code;
+  //     }
+  //   });
+  //   console.log("code", b);
+  //   console.log(";;;;;;;;;", data);
+  //   axios
+  //     .get(`https://open.er-api.com/v6/latest/${currencyDefault}`)
+  //     .then(function (response) {
+  //       console.log("currency current rate:", response);
+  //       let a = response.data.rates[b];
+  //       console.log("currency match", a);
+  //       // setCurrencyRates(a);
+  //       let rate = 1 / a;
+  //       setCurrencyRates(rate);
 
-        addForm.setFieldValue("exchnagerate", rate);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
+  //       addForm.setFieldValue("exchnagerate", rate);
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error);
+  //     });
+  // };
 
   //get credit days
-
+  const getCurrencyRate = (data, ccode, allData) => {
+    // console.log("currency rate find", data, ccode);
+    if (data && ccode) {
+      const code = allData?.filter((item, index) => {
+        if (item?.currency_id === data) {
+          b = item?.currency_code;
+        }
+      });
+      console.log("code", b, code);
+      console.log(";;;;;;;;;", data);
+      axios
+        .get(`https://open.er-api.com/v6/latest/${ccode}`)
+        .then(function (response) {
+          console.log("currency current rate:", response);
+          let a = response?.data?.rates[b];
+          console.log("currency match", a);
+          let rate = 1 / a;
+          addForm.setFieldsValue({ exchnagerate: rate });
+          setCurrencyRates(rate);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
+  };
   const getCreditdays = (data) => {
     console.log("data1011", data);
 
     PublicFetch.get(`${CRM_BASE_URL}/customer/${data}`)
       .then((res) => {
         if (res?.data?.success) {
+          let a=res.data.data.customer_preferred_freight_type;
+          mode(res?.data?.data?.customer_preferred_freight_type);
+          if(res.data.data.customer_preferred_freight_type){
+            GetSingleJob(a);
+          }
+
           console.log("Unique Lead Id data", res?.data?.data);
         } else {
           console.log("FAILED T LOAD DATA");
         }
         addForm.setFieldsValue({
           job_credit_days: res.data.data.customer_credit_days,
+          job_freight_type:res.data.data.customer_preferred_freight_type,
+         
         });
       })
       .catch(function (error) {
         console.log(error);
       });
   };
+  const getallcurrency = async () => {
+    try {
+      const allcurrency = await PublicFetch.get(
+        `${GENERAL_SETTING_BASE_URL}/currency`
+      );
+      console.log("Getting all currency : ", allcurrency.data.data);
+      setCurrencydata(allcurrency?.data?.data);
+      // let arr = "";
+      let a = 0;
+      allcurrency?.data?.data?.forEach((item, index) => {
+        if (item?.currency_is_default == 1) {
+          setCurrencyDefault(item?.currency_code);
+          getCurrencyRate(
+            item?.currency_id,
+            item?.currency_code,
+            allcurrency?.data?.data
+          );
 
+          a = item?.currency_id;
+          addForm.setFieldsValue({
+            currency: item?.currency_id,
+          });
+        }
+      });
+    } catch (err) {
+      console.log("Error in getting currency : ", err);
+    }
+  };
   const GetSalesPersons = () => {
     PublicFetch.get(`${CRM_BASE_URL_HRMS}/employees/salesexecutive`)
       .then((res) => {
@@ -579,8 +684,16 @@ function CreateJob() {
         if (res.data.success) {
           console.log("Success from sales person", res.data.data);
           setAllSalesPerson(res.data.data);
+          const personName = localStorage.getItem('UserID');
+          res.data.data.forEach((item,index)=> {
+            if(personName == item.employee_id){
+              addForm.setFieldsValue({
+                sales_person: item.employee_id
+              })
         }
       })
+    }
+  })
       .catch((err) => {
         console.log("Error", err);
       });
@@ -589,6 +702,7 @@ function CreateJob() {
   useEffect(() => {
     // getallunits();
     // getAllLocations();
+    getallcurrency();
     getallcarrier();
     getallPaymentTerms();
     getallunits();
@@ -636,7 +750,7 @@ function CreateJob() {
                         {
                           required: true,
                           pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid  customer",
+                          message: "Please enter a valid  customer",
                         },
                       ]}
                     >
@@ -672,7 +786,7 @@ function CreateJob() {
                         {
                           required: true,
                           pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid freight type",
+                          message: "Please enter a valid freight type",
                         },
                       ]}
                     >
@@ -790,7 +904,7 @@ function CreateJob() {
                         {
                           required: true,
                           // pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid date",
+                          message: "Please enter a valid date",
                         },
                       ]}
                     >
@@ -858,7 +972,7 @@ function CreateJob() {
                       rules={[
                         {
                           required: true,
-                          message: "Sales Person is Required",
+                          message: "Sale Person is Required",
                         },
                       ]}
                     >
@@ -963,7 +1077,7 @@ function CreateJob() {
                         {
                           required: true,
                           pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid consignee",
+                          message: "Please enter a valid consignee",
                         },
                       ]}
                     >
@@ -978,11 +1092,11 @@ function CreateJob() {
                         {
                           required: true,
                           pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid shipper",
+                          message: "Please enter a valid shipper",
                         },
                       ]}
                     >
-                      <InputType disabled={disable} />
+                      <InputType  />
                     </Form.Item>
                   </div>
 
@@ -994,7 +1108,7 @@ function CreateJob() {
                         {
                           required: true,
                           pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid origin",
+                          message: "Please enter a valid origin",
                         },
                       ]}
                     >
@@ -1028,7 +1142,7 @@ function CreateJob() {
                         {
                           required: true,
                           pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid Destination",
+                          message: "Please enter a valid destination",
                         },
                       ]}
                     >
@@ -1062,7 +1176,7 @@ function CreateJob() {
                         {
                           required: true,
                           pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid carrier",
+                          message: "Please enter a valid carrier",
                         },
                       ]}
                     >
@@ -1095,7 +1209,7 @@ function CreateJob() {
                         {
                           required: true,
                           pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid AWB/BL No",
+                          message: "Please enter a valid AWB/BL No",
                         },
                       ]}
                     >
@@ -1166,7 +1280,7 @@ function CreateJob() {
                     <h6 className="lead_text">Shipment Details</h6>
                   </div>
                   <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                    <label>Cargo Type<span className="required">*</span></label>
+                    <label>Cargo Type</label>
                     <Form.Item
                       name="job_cargo_type"
                       // rules={[
@@ -1203,7 +1317,7 @@ function CreateJob() {
                         {
                           required: true,
                           pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid no of pieces",
+                          message: "Please enter a valid no of pieces",
                         },
                       ]}
                     >
@@ -1228,7 +1342,7 @@ function CreateJob() {
                         {
                           required: true,
                           pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid UOM",
+                          message: "Please enter a valid UOM",
                         },
                       ]}
                     >
@@ -1332,16 +1446,16 @@ function CreateJob() {
                     </Form.Item>
                   </div>
                   <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                    <label>Volume</label>
+                    <label>Volume<span className="required">*</span></label>
                     <Form.Item
                       name="job_volume"
-                      // rules={[
-                      //   {
-                      //     required: true,
-                      //     pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                      //     message: "Please enter a Valid gross wt",
-                      //   },
-                      // ]}
+                      rules={[
+                        {
+                          required: true,
+                          // pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                          message: "Please enter volume",
+                        },
+                      ]}
                     >
                       <Input_Number
                         className="text_right m-0"
@@ -1352,7 +1466,7 @@ function CreateJob() {
                         min={0}
                         precision={2}
                         controlls={false}
-                        disabled={disable}
+                        // disabled={disable}
                       />
                     </Form.Item>
                   </div>
@@ -1365,7 +1479,7 @@ function CreateJob() {
                         {
                           required: true,
                           pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid gross wt",
+                          message: "Please enter a valid gross wt",
                         },
                       ]}
                     >
@@ -1390,7 +1504,7 @@ function CreateJob() {
                         {
                           required: true,
                           pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid chargeable wt",
+                          message: "Please enter a valid chargeable wt",
                         },
                       ]}
                     >
@@ -1446,16 +1560,16 @@ function CreateJob() {
                   </div>
 
                   <div className="col-xl-6 col-sm-12 mt-2">
-                    <label>Terms<span className="required">*</span></label>
+                    <label>Terms</label>
                     <Form.Item
                       name="job_payment_terms"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid terms",
-                        },
-                      ]}
+                      // rules={[
+                      //   {
+                      //     required: true,
+                      //     pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                      //     message: "Please enter a Valid terms",
+                      //   },
+                      // ]}
                     >
                       <SelectBox
                         allowClear
@@ -1486,7 +1600,7 @@ function CreateJob() {
                         {
                           required: true,
                           pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid currency",
+                          message: "Please enter a valid currency",
                         },
                       ]}
                     >
@@ -1496,7 +1610,7 @@ function CreateJob() {
                         optionFilterProp="children"
                         disabled={disable}
                         onChange={(e) => {
-                          getCurrencyRate(e);
+                          getCurrencyRate(e, currencyDefault, currencydata);
                         }}
                       >
                         {allCurrency &&
@@ -1544,13 +1658,13 @@ function CreateJob() {
                     <label>Credit Days</label>
                     <Form.Item
                       name="job_credit_days"
-                      rules={[
-                        {
-                          required: true,
+                      // rules={[
+                      //   {
+                      //     required: true,
 
-                          message: "Please enter Credit Days",
-                        },
-                      ]}
+                      //     message: "Please enter Credit Days",
+                      //   },
+                      // ]}
                     >
                       <InputType
                         // className="text_right"

@@ -26,7 +26,7 @@ function EnquirySource() {
   const [SuccessPopup, setSuccessPopup] = useState(false);
   const [ViewModalSource, setViewModalSource] = useState(false);
   const [AllEnquirySource, setAllEnquirySource] = useState();
-  console.log("enquiry source ",AllEnquirySource);
+  console.log("enquiry source ", AllEnquirySource);
   const [EnquirySourceId, setEnquirySourceId] = useState();
   const [EnquirySourceData, setEnquirySourceData] = useState();
 
@@ -337,24 +337,21 @@ function EnquirySource() {
                     setPageSize(e);
                   }}
                 >
-                   <Select.Option value="25">
-                 
-                 <span style={{ color: "#2f6b8f" }} className="ms-1">
-                   25
-                 </span>
-               </Select.Option>
-               <Select.Option value="50">
-                
-                 <span style={{ color: "#2f6b8f" }} className="ms-1">
-                   50
-                 </span>
-               </Select.Option>
-               <Select.Option value="100">
-                
-                 <span style={{ color: "#2f6b8f" }} className="ms-1">
-                   100
-                 </span>{" "}
-               </Select.Option>
+                  <Select.Option value="25">
+                    <span style={{ color: "#2f6b8f" }} className="ms-1">
+                      25
+                    </span>
+                  </Select.Option>
+                  <Select.Option value="50">
+                    <span style={{ color: "#2f6b8f" }} className="ms-1">
+                      50
+                    </span>
+                  </Select.Option>
+                  <Select.Option value="100">
+                    <span style={{ color: "#2f6b8f" }} className="ms-1">
+                      100
+                    </span>{" "}
+                  </Select.Option>
                 </Select>
               </div>
               <div className="col-4 d-flex align-items-center justify-content-center">

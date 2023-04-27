@@ -266,9 +266,9 @@ export default function Quotations(props) {
     setCancelPopUp(true);
   };
 
-  const getAllQuotation = () => {
+  const getAllQuotation = (name) => {
     PublicFetch.get(
-      `${CRM_BASE_URL_FMS}/quotation?startIndex=${pageofIndex}&noOfItems=${noofItems}`
+      `${CRM_BASE_URL_FMS}/quotation?startIndex=${pageofIndex}&noOfItems=${noofItems}&search=${name}`
     )
       .then((res) => {
         console.log("Response", res);
@@ -341,8 +341,8 @@ export default function Quotations(props) {
   };
 
   useEffect(() => {
-    getAllQuotation();
-  }, []);
+    getAllQuotation(searchedText);
+  }, [pageofIndex, noofItems, searchedText]);
   console.log("quottation", OppHeads);
   console.log("data12", data12);
 

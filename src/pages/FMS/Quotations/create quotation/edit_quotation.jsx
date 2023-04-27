@@ -126,6 +126,8 @@ export default function EditQuotation(
   const navigate = useNavigate();
   const dateFormatList = ["DD-MM-YYYY", "DD-MM-YY"];
   const [amount, setAmount] = useState(0);
+  const [serviceId, setServiceId] = useState();
+  const [CostValue, setCostValue] = useState();
 
   const handleChange = (value) => {
     setAmount(value);
@@ -177,7 +179,7 @@ export default function EditQuotation(
   }
 
   const handleDelete = (key) => {
-    console.log("key of delete", key);
+    console.log("key of delete", key, sampletable.length);
     const newData = tableData?.map((item) => {
       if (item?.key == key.key) {
         return { ...item, quotation_details_status: 0 };
@@ -227,7 +229,7 @@ export default function EditQuotation(
     // }
     // editForm.setFieldsValue({ quotation_details: dtanew });
     if (dtanew1 <= 0) {
-      editForm.setFieldsValue({ quotation_details: dtanew1 });
+      editForm.setFieldsValue({ quotation_details: [] });
     }
     editForm.setFieldsValue({ gtotal: grandTotal });
   };
@@ -242,7 +244,7 @@ export default function EditQuotation(
       let tax_percnt = 0;
       let totalTax_percent = 0;
       if (tx && e === item?.tax_group_id) {
-        if (col && key && tx && e === item?.tax_group_id) {
+        if (col && tx && e === item?.tax_group_id) {
           item?.fms_v1_tax_types?.forEach((taxType, taxIndex) => {
             console.log("tax types", taxType);
             tax_percnt = taxType?.tax_type_percentage;
@@ -283,23 +285,43 @@ export default function EditQuotation(
           // });
           // // }
           // editForm.setFieldsValue({ gtotal: grandTotal });
-          console.log("Grand Total:", grandTotal);
+          console.log("Grand Total::::::", grandTotal, serviceId, CostValue);
 
-          setTableData(
-            tableData.map((item) => {
-              console.log("mmaaiinn", item);
-              if (item.key == key) {
-                delete item.quotation_details_id;
-                return {
-                  ...item,
+          // setTableData(
+          //   tableData.map((item) => {
+          //     console.log("mmaaiinn", item);
+          //     if (item.key == key) {
+          //       delete item.quotation_details_id;
+          //       return {
+          //         ...item,
+          //         quotation_details_service_id: serviceId,
+          //         quotation_details_cost: CostValue,
+          //         quotation_details_tax_amount: taxamount,
+          //         quotation_details_tax_group: e,
+          //         quotation_details_total: totalAmount,
+          //       };
+          //     }
+          //     return item;
+          //   })
+          // );
+          setTableData((prev) => {
+            console.log("pprreevv", prev);
+            if (serviceId && CostValue) {
+              return [
+                ...prev,
+                {
+                  key: tableData.length,
+                  quotation_details_service_id: serviceId,
+                  quotation_details_cost: CostValue,
                   quotation_details_tax_amount: taxamount,
                   quotation_details_tax_group: e,
                   quotation_details_total: totalAmount,
-                };
-              }
-              return item;
-            })
-          );
+                },
+              ];
+            } else {
+              return prev;
+            }
+          });
           setSampletable(
             sampletable.map((item) => {
               console.log("mmaaiinn", item);
@@ -307,6 +329,8 @@ export default function EditQuotation(
                 delete item.quotation_details_id;
                 return {
                   ...item,
+                  quotation_details_service_id: serviceId,
+                  quotation_details_cost: CostValue,
                   quotation_details_tax_amount: taxamount,
                   quotation_details_tax_group: e,
                   quotation_details_total: totalAmount,
@@ -316,7 +340,7 @@ export default function EditQuotation(
             })
           );
           console.log("tabledata", tableData);
-          console.log("sampletable of of", sampletable);
+          // console.log("sampletable of of", sampletable);
 
           // let sum = 0;
           // tableData.forEach((item) => {
@@ -334,23 +358,20 @@ export default function EditQuotation(
   };
   useEffect(() => {
     let grandTotal = 0;
-    tableData?.map((item, index) => {
+    // if(tableData)
+    // tableData?.map((item, index) => {
+    //   console.log("deatils totals", item);
+    //   grandTotal += item.quotation_details_total;
+    // });
+    sampletable?.map((item, index) => {
       console.log("deatils totals", item);
       grandTotal += item.quotation_details_total;
     });
     // }
     editForm.setFieldsValue({ gtotal: grandTotal });
-  }, [tableData]);
+  }, [tableData, sampletable]);
 
   const handleInputchange1 = (e, key, col) => {
-    setTableData(
-      tableData.map((item) => {
-        if (item.key === key) {
-          return { ...item, [col]: e };
-        }
-        return item;
-      })
-    );
     setSampletable(
       sampletable.map((item) => {
         if (item.key === key) {
@@ -359,6 +380,15 @@ export default function EditQuotation(
         return item;
       })
     );
+    // setTableData(
+    //   tableData.map((item) => {
+    //     if (item.key === key) {
+    //       return { ...item, [col]: e };
+    //     }
+    //     return item;
+    //   })
+    // );
+
     if (e && col === "quotation_details_service_id") {
       allservices.map((item, index) => {
         if (e === item?.service_id) {
@@ -395,17 +425,17 @@ export default function EditQuotation(
     console.log("Hello");
     console.log("Key ::::::: ", e.key);
     if (e.key === "Enter" || e.key === "Tab") {
-      setTableData([
-        ...tableData,
-        {
-          key: tableData.length + 1,
-          quotation_details_service_id: "",
-          quotation_details_cost: "",
-          quotation_details_tax_group: "",
-          quotation_details_tax_amount: "",
-          quotation_details_total: "",
-        },
-      ]);
+      // setTableData([
+      //   ...tableData,
+      //   {
+      //     key: tableData.length + 1,
+      //     quotation_details_service_id: "",
+      //     quotation_details_cost: "",
+      //     quotation_details_tax_group: "",
+      //     quotation_details_tax_amount: "",
+      //     quotation_details_total: "",
+      //   },
+      // ]);
       setSampletable([
         ...sampletable,
         {
@@ -417,8 +447,11 @@ export default function EditQuotation(
           quotation_details_total: "",
         },
       ]);
+      // setServiceId();
+      // setCostValue();
+      setIsTableEmpty(false);
     }
-    console.log("tabledata", tableData);
+    // console.log("tabledata", tableData);
     // let sum = 0;
     // tableData.forEach((item) => {
     //   sum += item.quotation_details_cost + item.quotation_details_tax_amount;
@@ -565,6 +598,8 @@ export default function EditQuotation(
                     "quotation_details_service_id"
                   );
                   setIsService(e);
+                  setServiceId(e);
+                  handleInputChange();
                   // handleInputChange(e, index.key, "quotation_details_service_id", "tx")
                 }}
               >
@@ -609,6 +644,9 @@ export default function EditQuotation(
                     index.key,
                     "quotation_details_cost"
                   );
+                  setCostValue(value);
+                  handleInputChange();
+
                   console.log(" input numberevent ", value, index.key);
                 }}
                 align="right"
@@ -1004,7 +1042,7 @@ export default function EditQuotation(
           quotation_details_status: item.quotation_details_status,
         });
       });
-    console.log("mainItem", tableData);
+    // console.log("mainItem", tableData);
 
     setTableData([...quotation_details]);
     editForm.setFieldsValue({ quotation_details });
@@ -1014,7 +1052,7 @@ export default function EditQuotation(
     }
   }, [qDetails]);
 
-  console.log("table inside data", tableData);
+  // console.log("table inside data", tableData);
 
   const getallunits = async () => {
     try {
@@ -1127,7 +1165,7 @@ export default function EditQuotation(
       });
   };
 
-  console.log("Table data9229", tableData);
+  console.log("table data9229", tableData);
 
   const OnSubmitedit1 = (data) => {
     console.log("Quotation details", data);
@@ -1172,12 +1210,7 @@ export default function EditQuotation(
       if (item.quotation_details_status === 1) {
         tmp = true;
       }
-      // if (index >= 0) {
-      //   temp = true;
-      //   setIsTableEmpty(false);
-      // } else {
-      //   setIsTableEmpty(true);
-      // }
+
       console.log("userdata task", item);
       if (item.quotation_details_service_id) {
         formData.append(
@@ -1237,6 +1270,7 @@ export default function EditQuotation(
         });
     } else {
       console.log("Error of Error tyfyfyyfyfyfy", tableData.length);
+      setIsTableEmpty(true);
     }
   };
 
@@ -2135,6 +2169,7 @@ export default function EditQuotation(
                       <Form.Item className="mt-2" name="new">
                         <FileUpload
                           multiple
+                          style={{ height: "60px" }}
                           listType="picture"
                           filetype={"Accept only pdf and docs"}
                           accept=".pdf,.docs,"

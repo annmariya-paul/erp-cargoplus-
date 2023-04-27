@@ -28,7 +28,7 @@ const[defltinvoice,setdefltinvoice]= useState()
       allinvoice?.data?.data.forEach((itm,indx)=>{
       // (itm.invoice_template_default)
      console.log("onee dataa",itm)
-     if(itm?.invoice_template_default === 1){
+     if(itm?.invoice_template_default > 0){
       console.log("dattat",itm.invoice_template_id)
       editForm.setFieldsValue({
         invoicedfult:itm.invoice_template_id
@@ -99,9 +99,9 @@ console.log("dnjd",defltinvoice)
   const handleChecked = (e, key) => {
     console.log("isChecked", e);
 
-    if (e.target.value ) {
+    if (e.target.checked === true ) {
       console.log("suceccss checked", e.target.checked);
-      setdefaultTempalate(e.target.value);
+      setdefaultTempalate(1);
     } else {
       setdefaultTempalate(0);
     }
@@ -135,7 +135,8 @@ console.log("dnjd",defltinvoice)
               <Form.Item name="invoicedfult" >
               <Radio.Group 
                onChange={handleChecked}
-               checked={true}
+               value={defaultTempalate}
+              //  checked={defaultTempalate}
               >
               <div className="row ">
                 
@@ -146,7 +147,7 @@ console.log("dnjd",defltinvoice)
                         <Radio
                           id={itm.invoice_template_id}
                           value={itm.invoice_template_id}
-                         
+                        
                          
                         >
                           <img

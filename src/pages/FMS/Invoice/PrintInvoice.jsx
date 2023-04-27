@@ -5,7 +5,7 @@ import InvoicePrint from "../../../components/Invoice/InvoicePrint";
 import PublicFetch from "../../../utils/PublicFetch";
 import moment from "moment";
 import { camelize } from "../../../utils/camelcaseconvert";
-
+import Invoicetemp1 from "../../../components/Invoice/invoicetemp1/invoicetemp1";
 
 function PrintInvoice() {
   var converter = require("number-to-words");
@@ -14,6 +14,35 @@ function PrintInvoice() {
   const [tabledata, setTabledata] = useState();
   const [alldata, setAllData] = useState();
   const [grandTotal, setGrandTotal] = useState();
+
+  const [defaultTemplate, setdefaultTemplate] = useState(false);
+
+  const getAllinvoicetemp = async () => {
+    try {
+      const allinvoice = await PublicFetch.get(
+        `${CRM_BASE_URL_FMS}/invoice-template`
+      );
+      console.log("all invoice aree", allinvoice.data.data);
+      // setTemplates(allinvoice.data.data);
+
+      allinvoice?.data?.data.forEach((itm, indx) => {
+        // (itm.invoice_template_default)
+        console.log("onee dataa", itm);
+        if (itm?.invoice_template_default > 0) {
+          console.log("dattat", itm.invoice_template_id);
+          setdefaultTemplate(true)
+          // editForm.setFieldsValue({
+          //   invoicedfult:itm.invoice_template_id
+          // })
+        }
+
+        //  console.log("dattat",itm.)
+      });
+    } catch (err) {
+      console.log("error while getting the countries: ", err);
+    }
+  };
+
   const Invoicedata_data = () => {
     PublicFetch.get(`${CRM_BASE_URL_FMS}/invoice/${id}`)
       .then((res) => {
@@ -53,7 +82,8 @@ function PrintInvoice() {
       });
   };
 
-  const capitalize = str => str.charAt(0).toUpperCase() + str.toLowerCase().slice(1)
+  const capitalize = (str) =>
+    str.charAt(0).toUpperCase() + str.toLowerCase().slice(1);
 
   const close_modal = (time) => {
     if (time) {
@@ -64,168 +94,182 @@ function PrintInvoice() {
   };
 
   // let totalAmount = converter.toWords(grandTotal)
-//  let inWords = camelize(totalAmount)
+  //  let inWords = camelize(totalAmount)
   // console.log("grand total", inWords);
   useEffect(() => {
+    getAllinvoicetemp();
     if (id) {
       Invoicedata_data();
     }
   }, [id]);
   return (
-    <div>
-      <InvoicePrint
-        invoice_no
-        billto
-        Invoice_type={"Invoice"}
-        invoice_number={alldata?.invoice_no}
-        invoice_details1={
-          <>
-            <tr className="invoice_header">
-              <td>Invoice Date</td>
-              <td>:</td>
-              <td style={{ fontWeight: 600 }}>
-                {moment(alldata?.invoice_date).format("DD-MM-YYYY")}
-              </td>
-            </tr>
-            <tr className="invoice_header">
-              <td>Terms</td>
-              <td>:</td>
-              <td style={{ fontWeight: 600 }}>
-                {alldata?.fms_v1_jobs?.fms_v1_payment_terms?.payment_term_name}
-              </td>
-            </tr>
-            <tr className="invoice_header">
-              <td>Chargable Weight</td>
-              <td>:</td>
-              <td style={{ fontWeight: 600 }}>
-                {alldata?.fms_v1_jobs?.job_chargeable_wt}
-              </td>
-            </tr>
-            <tr className="invoice_header">
-              <td>Carrier</td>
-              <td>:</td>
-              <td style={{ fontWeight: 600 }}>
-                {alldata?.fms_v1_jobs?.fms_v1_carrier?.carrier_name}
-              </td>
-            </tr>
-            <tr className="invoice_header">
-              <td>Mode</td>
-              <td>:</td>
-              <td style={{ fontWeight: 600 }}>
-                {alldata?.fms_v1_jobs?.job_mode}
-              </td>
-            </tr>
-          </>
-        }
-        invoice_details2={
-          <>
-            <tr className="invoice_header">
-              <td>Project Name</td>
-              <td>:</td>
-              <td style={{ fontWeight: 600 }}>
-                {alldata?.fms_v1_jobs?.job_number}
-              </td>
-            </tr>
-            <tr className="invoice_header">
-              <td>AWB/BL</td>
-              <td>:</td>
-              <td style={{ fontWeight: 600 }}>
-                {alldata?.fms_v1_jobs?.job_awb_bl_no}
-              </td>
-            </tr>
-            <tr className="invoice_header">
-              <td>Origin</td>
-              <td>:</td>
-              <td style={{ fontWeight: 600 }}>
-                {
-                  alldata?.fms_v1_jobs
-                    ?.fms_v1_locations_fms_v1_jobs_job_origin_idTofms_v1_locations
-                    ?.location_name
-                }
-              </td>
-            </tr>
-            <tr className="invoice_header">
-              <td>Destination</td>
-              <td>:</td>
-              <td style={{ fontWeight: 600 }}>
-                {
-                  alldata?.fms_v1_jobs
-                    ?.fms_v1_locations_fms_v1_jobs_job_destination_idTofms_v1_locations
-                    ?.location_name
-                }
-              </td>
-            </tr>
-            <tr className="invoice_header">
-              <td>Shipper</td>
-              <td>:</td>
-              <td style={{ fontWeight: 600 }}>
-                {alldata?.fms_v1_jobs?.job_shipper}
-              </td>
-            </tr>
-            <tr className="invoice_header">
-              <td>Consignee</td>
-              <td>:</td>
-              <td style={{ fontWeight: 600 }}>
-                {alldata?.fms_v1_jobs?.crm_v1_leads?.lead_customer_name}
-              </td>
-            </tr>
-            <tr className="invoice_header">
-              <td>No of pieces</td>
-              <td>:</td>
-              <td style={{ fontWeight: 600 }}>
-                {alldata?.fms_v1_jobs?.job_no_of_pieces}
-              </td>
-            </tr>
-            <tr className="invoice_header">
-              <td>Grows weight</td>
-              <td>:</td>
-              <td style={{ fontWeight: 600 }}>
-                {alldata?.fms_v1_jobs?.job_gross_wt}
-              </td>
-            </tr>
-          </>
-        }
-        invoice_table_header={
-          <>
-            <tr className="invoice_header">
-              <th className="th_center">#</th>
-              <th className="tsk_exp">Task & description</th>
-              {/* <th>Tax Type</th>
+    <>
+      {defaultTemplate ? (
+        <div>
+          <InvoicePrint
+            invoice_no
+            billto
+            Invoice_type={"Invoice"}
+            invoice_number={alldata?.invoice_no}
+            invoice_details1={
+              <>
+                <tr className="invoice_header">
+                  <td>Invoice Date</td>
+                  <td>:</td>
+                  <td style={{ fontWeight: 600 }}>
+                    {moment(alldata?.invoice_date).format("DD-MM-YYYY")}
+                  </td>
+                </tr>
+                <tr className="invoice_header">
+                  <td>Terms</td>
+                  <td>:</td>
+                  <td style={{ fontWeight: 600 }}>
+                    {
+                      alldata?.fms_v1_jobs?.fms_v1_payment_terms
+                        ?.payment_term_name
+                    }
+                  </td>
+                </tr>
+                <tr className="invoice_header">
+                  <td>Chargable Weight</td>
+                  <td>:</td>
+                  <td style={{ fontWeight: 600 }}>
+                    {alldata?.fms_v1_jobs?.job_chargeable_wt}
+                  </td>
+                </tr>
+                <tr className="invoice_header">
+                  <td>Carrier</td>
+                  <td>:</td>
+                  <td style={{ fontWeight: 600 }}>
+                    {alldata?.fms_v1_jobs?.fms_v1_carrier?.carrier_name}
+                  </td>
+                </tr>
+                <tr className="invoice_header">
+                  <td>Mode</td>
+                  <td>:</td>
+                  <td style={{ fontWeight: 600 }}>
+                    {alldata?.fms_v1_jobs?.job_mode}
+                  </td>
+                </tr>
+              </>
+            }
+            invoice_details2={
+              <>
+                <tr className="invoice_header">
+                  <td>Project Name</td>
+                  <td>:</td>
+                  <td style={{ fontWeight: 600 }}>
+                    {alldata?.fms_v1_jobs?.job_number}
+                  </td>
+                </tr>
+                <tr className="invoice_header">
+                  <td>AWB/BL</td>
+                  <td>:</td>
+                  <td style={{ fontWeight: 600 }}>
+                    {alldata?.fms_v1_jobs?.job_awb_bl_no}
+                  </td>
+                </tr>
+                <tr className="invoice_header">
+                  <td>Origin</td>
+                  <td>:</td>
+                  <td style={{ fontWeight: 600 }}>
+                    {
+                      alldata?.fms_v1_jobs
+                        ?.fms_v1_locations_fms_v1_jobs_job_origin_idTofms_v1_locations
+                        ?.location_name
+                    }
+                  </td>
+                </tr>
+                <tr className="invoice_header">
+                  <td>Destination</td>
+                  <td>:</td>
+                  <td style={{ fontWeight: 600 }}>
+                    {
+                      alldata?.fms_v1_jobs
+                        ?.fms_v1_locations_fms_v1_jobs_job_destination_idTofms_v1_locations
+                        ?.location_name
+                    }
+                  </td>
+                </tr>
+                <tr className="invoice_header">
+                  <td>Shipper</td>
+                  <td>:</td>
+                  <td style={{ fontWeight: 600 }}>
+                    {alldata?.fms_v1_jobs?.job_shipper}
+                  </td>
+                </tr>
+                <tr className="invoice_header">
+                  <td>Consignee</td>
+                  <td>:</td>
+                  <td style={{ fontWeight: 600 }}>
+                    {alldata?.fms_v1_jobs?.crm_v1_leads?.lead_customer_name}
+                  </td>
+                </tr>
+                <tr className="invoice_header">
+                  <td>No of pieces</td>
+                  <td>:</td>
+                  <td style={{ fontWeight: 600 }}>
+                    {alldata?.fms_v1_jobs?.job_no_of_pieces}
+                  </td>
+                </tr>
+                <tr className="invoice_header">
+                  <td>Grows weight</td>
+                  <td>:</td>
+                  <td style={{ fontWeight: 600 }}>
+                    {alldata?.fms_v1_jobs?.job_gross_wt}
+                  </td>
+                </tr>
+              </>
+            }
+            invoice_table_header={
+              <>
+                <tr className="invoice_header">
+                  <th className="th_center">#</th>
+                  <th className="tsk_exp">Task & description</th>
+                  {/* <th>Tax Type</th>
               <th>Cost</th>
               <th>Tax amount</th> */}
-              <th id="amount">Amount</th>
-            </tr>
-          </>
-        }
-        invoice_table_data={
-          <>
-            {tabledata &&
-              tabledata.length > 0 &&
-              tabledata.map((item, index) => {
-                return (
-                  <tr className="invoice_header">
-                    <td align="center">{index + 1}</td>
-                    <td className="tsk_exp">
-                      {item?.job_task_expense_task_name}
-                    </td>
-                    {/* <td></td>
+                  <th id="amount">Amount</th>
+                </tr>
+              </>
+            }
+            invoice_table_data={
+              <>
+                {tabledata &&
+                  tabledata.length > 0 &&
+                  tabledata.map((item, index) => {
+                    return (
+                      <tr className="invoice_header">
+                        <td align="center">{index + 1}</td>
+                        <td className="tsk_exp">
+                          {item?.job_task_expense_task_name}
+                        </td>
+                        {/* <td></td>
                     <td></td>
                     <td></td> */}
-                    <td style={{ textAlign: "right" }}>
-                      {item.job_task_expense_cost_subtotalfx.toFixed(2)}
-                    </td>
-                  </tr>
-                );
-              })}
-          </>
-        }
-        amount_in_words={
-          <>{grandTotal && <>{camelize(converter.toWords(grandTotal))}</>}</>
-        }
-        sub_total={grandTotal}
-        total={grandTotal}
-      />
-    </div>
+                        <td style={{ textAlign: "right" }}>
+                          {item.job_task_expense_cost_subtotalfx.toFixed(2)}
+                        </td>
+                      </tr>
+                    );
+                  })}
+              </>
+            }
+            amount_in_words={
+              <>
+                {grandTotal && <>{camelize(converter.toWords(grandTotal))}</>}
+              </>
+            }
+            sub_total={grandTotal}
+            total={grandTotal}
+          />
+        </div>
+      ) : (
+        <div>
+          <Invoicetemp1 />
+        </div>
+      )}
+    </>
   );
 }
 

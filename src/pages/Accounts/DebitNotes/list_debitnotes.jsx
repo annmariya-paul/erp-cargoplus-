@@ -368,7 +368,7 @@ function Debit_notes() {
                       color: "white",
                     }}
                   >
-                    Add Debit Note
+                    New Debit Note
                   </span>
                 </Link>
               </Button>

@@ -220,7 +220,7 @@ export default function AddJobPayments() {
           }}
         >
           <div className="row px-1 pt-2">
-            <h5 className="lead_text">Add Job Payment</h5>
+            <h5 className="lead_text">New Job Payment</h5>
           </div>
 
           <div className="row jobpay_cards mt-3 mx-0 px-2 py-3">

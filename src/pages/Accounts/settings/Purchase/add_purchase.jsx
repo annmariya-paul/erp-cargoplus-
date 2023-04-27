@@ -187,7 +187,7 @@ export default function Add_purchase() {
         >
           <div className="container my-3">
             <div closeButton>
-              <h5 className="modal-title w-100">Add Purchase</h5>
+              <h5 className="modal-title w-100">New Purchase</h5>
             </div>
             <Form
               name="addForm"

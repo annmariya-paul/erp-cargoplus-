@@ -57,7 +57,7 @@ function Adddebit_notes() {
         <div>
           <div className="row">
             <div className="col mt-4">
-              <h5 className="lead_text">Add Debit Notes</h5>
+              <h5 className="lead_text">New Debit Notes</h5>
             </div>
             <Form
               name="addForm"

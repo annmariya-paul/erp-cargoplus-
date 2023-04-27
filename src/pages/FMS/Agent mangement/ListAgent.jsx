@@ -638,7 +638,7 @@ function ListAgent() {
             <>
               <div className="container-fluid px-4 my-3">
                 <div>
-                  <h5 className="lead_text">Add Agent</h5>
+                  <h5 className="lead_text">New Agent</h5>
                 </div>
                 <div className="row my-3 ">
                   <Form

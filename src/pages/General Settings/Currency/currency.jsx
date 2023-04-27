@@ -446,7 +446,7 @@ export default function Currency(props) {
           </div>
           <div className="col-4 d-flex justify-content-end">
             <Button btnType="add" onClick={() => setModalAddCurrency(true)}>
-              Add Currency
+              New Currency
             </Button>
           </div>
           
@@ -486,7 +486,7 @@ export default function Currency(props) {
         list_content={
           <>
             <div className="row">
-              <h5 className="lead_text">Add Currency</h5>
+              <h5 className="lead_text">New Currency</h5>
             </div>
             <Form
               form={addForm}

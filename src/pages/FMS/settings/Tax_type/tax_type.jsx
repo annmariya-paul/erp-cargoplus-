@@ -473,7 +473,7 @@ export default function TaxType() {
         list_content={
           <>
             <div className="row">
-              <h5 className="lead_text">Add Tax Type</h5>
+              <h5 className="lead_text">New Tax Type</h5>
             </div>
             <Form
               form={addForm}

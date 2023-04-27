@@ -389,7 +389,7 @@ function DailyExpence() {
                         to={ROUTES.CREATE_EXPENSE}
                         style={{ color: "white" }}
                       >
-                        <Button btnType="save">Add Daily Expense</Button>
+                        <Button btnType="save">New Daily Expense</Button>
                       </Link>
                     </div>
                   </div>

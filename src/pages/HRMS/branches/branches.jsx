@@ -427,7 +427,7 @@ export default function Branches(props) {
         list_content={
           <>
             <div className="row">
-              <h5 className="lead_text">Add Branch</h5>
+              <h5 className="lead_text">New Branch</h5>
             </div>
             <Form
               form={addForm}
@@ -441,7 +441,7 @@ export default function Branches(props) {
             >
               <div className="row py-4">
                 <div className="col-12 pt-1">
-                  <label>Branch Name</label>
+                  <label>Branch Name<span className="required">*</span></label>
                   <div>
                     <Form.Item
                       name="branchname"
@@ -488,7 +488,7 @@ export default function Branches(props) {
                 </div>
 
                 <div className="col-12 pt-1">
-                  <label>Branch Code</label>
+                  <label>Branch Code<span className="required">*</span></label>
                   <Form.Item
                     name="branchcode"
                     rules={[
@@ -568,7 +568,7 @@ export default function Branches(props) {
                   }}
                 >
                   <div className="col-12">
-                    <label>Name</label>
+                    <label>Name<span className="required">*</span></label>
                     <Form.Item
                       name="NameInput"
                       rules={[
@@ -613,7 +613,7 @@ export default function Branches(props) {
                     ) : null}
                   </div>
                   <div className="col-12">
-                    <label>Code</label>
+                    <label>Code<span className="required">*</span></label>
                     <Form.Item
                       name="CodeInput"
                       rules={[

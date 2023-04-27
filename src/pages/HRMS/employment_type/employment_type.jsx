@@ -411,7 +411,7 @@ export default function EmploymentType() {
                     <div className="row ms-0 py-1">
                       <div className="col-12 pt-3">
                         <label htmlfor="emp_type_name">
-                          Employee Type Name
+                          Employee Type Name<span className="required">*</span>
                         </label>
                         <Form.Item
                           name="Employment Type Name"
@@ -498,7 +498,7 @@ export default function EmploymentType() {
                 >
                   <div className="row">
                     <div className="col-12">
-                      <label>Name</label>
+                      <label>Employee Type Name<span className="required">*</span></label>
                       <Form.Item
                         name="emptype_name"
                         rules={[

@@ -407,7 +407,7 @@ export default function Attribute(props) {
             <div className="container-fluid p-4">
               <div className="d-flex justify-content-between">
                 <div>
-                  <h5 className="lead_text"> Add Attribute</h5>
+                  <h5 className="lead_text"> New Attribute</h5>
                 </div>
               </div>
 

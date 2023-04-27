@@ -220,7 +220,8 @@ function Opportunitylist(props) {
                   opportunity_status: item?.opportunity_status,
                   opportunity_validity: item?.opportunity_validity,
                   opp_enq: temp,
-                  startcount:res?.data?.data?.startIndex
+                  startcount:res?.data?.data?.startIndex,
+                  startindex:res?.data?.data?.startIndex,
                 });
               }
             });
@@ -561,10 +562,16 @@ function Opportunitylist(props) {
 
   const columns = [
     {
-      title: "Sl. No",
+      title: "#",
       key: "index",
       width: "7%",
-      render: (value, item, index) => serialNo + index,
+      render: (value, item, index) => {
+        return (
+         <div>
+         {item?.startindex + index +serialNo}
+       </div>
+        )
+       },
       align: "center",
     },
 

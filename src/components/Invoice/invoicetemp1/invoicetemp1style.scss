@@ -31,20 +31,20 @@
         margin-left: 0 !important;
       }
   
-      // .header__address_logo {
-      //   img {
-      //     height: 100px;
-      //     width: 100px;
-      //   }
-      // }
-    }
-
-    .header__address_logo {
-      img {
-        height: 100px;
-        width: 100px;
+      .header__address_logo {
+        img {
+          height: 100px;
+          width: 240px;
+        }
       }
     }
+
+    // .header__address_logo {
+    //   img {
+    //     height: 120px;
+    //     width: 200px;
+    //   }
+    // }
 
   
     .header__invoice {
@@ -254,7 +254,9 @@
    }
    .headingcolor{
     color: black;
-    font-weight: bold;
+    // font-weight: bold;
+    font-size: 18px;
+
    }
    .h1font_size{
     font-size: 60px;

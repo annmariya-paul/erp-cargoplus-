@@ -45,10 +45,10 @@ table {
     // }
   }
 
-  .header__address_logo {
+  .header__address_logo_temp2 {
     img {
       height: 100px;
-      width: 100px;
+      width: 290px;
     }
   }
 
@@ -69,22 +69,22 @@ table {
   }
 }
 
-.invoice_detailsnew1 {
+.invoice_detailsnew2 {
   display: flex;
   align-items: center;
   justify-content: space-between;
   // border-bottom: 1px solid black;
 
-  .invoice_details__col {
+  .invoice_details__col_2 {
     width: 50%;
   }
 
-  .invoice_details__col_1 {
-    border-right: 1px solid black;
+  .invoice_details__col_2 {
+    // border-right: 1px solid black;
   }
 
   .invoice_details__col {
-    padding-left: 10px;
+    // padding-left: 10px;
 
     table {
       width: 100%;
@@ -127,7 +127,7 @@ table {
 .th_center{
   text-align: center !important;
 }
-.details_tablenew2 {
+.details_tablenewtmp2 {
  
   width: 100%;
  border: 1px solid black;
@@ -139,7 +139,11 @@ table {
     color: white;
     text-align: left;
     // border-top: 1px solid black;
-    border-right: 1px solid black !important;
+    // border-right: 1px solid black !important;
+    border-top: 1px solid black;
+  
+    border-right: 1px solid black;
+
     padding-left: 5px;
     padding-right: 5px;
   }
@@ -274,3 +278,20 @@ width: 300px;
   font-weight: 800;
   color: #1356c9;
  }
+ .invoiceth_widthslno{
+  width: 10%;
+}
+.invoiceth_widthdescrip{
+width: 80%;
+}
+.invoicetemp2_total_fontsize{
+  font-size: 18px;
+  font-weight: 600;
+}
+.cmpny_heading_color{
+  color: #2e73eb;
+  font-weight: 500;
+}
+// .border_white{
+// border-right: 1px solid white !important;
+// }

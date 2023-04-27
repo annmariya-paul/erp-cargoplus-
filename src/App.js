@@ -196,7 +196,6 @@ function App() {
               <Route index element={<Viewcustomer />} />
             </Route>
 
-
             <Route path={ROUTES.CATEGORY} element={<ProtectedRoute />}>
               <Route index element={<Category />} />
             </Route>
@@ -369,7 +368,10 @@ function App() {
             <Route path={ROUTES.EMPLOYEEGRADE} element={<ProtectedRoute />}>
               <Route index element={<Employeegrade />} />
             </Route>
-            <Route path={ROUTES.VIEW_OPPORTUNITY_ID} element={<ProtectedRoute />}>
+            <Route
+              path={ROUTES.VIEW_OPPORTUNITY_ID}
+              element={<ProtectedRoute />}
+            >
               <Route index element={<ViewOpportunity />} />
             </Route>
             <Route path={ROUTES.ADD_OPPORTUNITY} element={<ProtectedRoute />}>
@@ -390,17 +392,26 @@ function App() {
             <Route path={ROUTES.LISTAGENT} element={<ProtectedRoute />}>
               <Route index element={<ListAgent />} />
             </Route>
-           
-            <Route path={ROUTES. PURCHASEORDER} element={<ProtectedRoute />}>
+
+            <Route path={ROUTES.PURCHASEORDER} element={<ProtectedRoute />}>
               <Route index element={<Purchaseorder />} />
             </Route>
-            <Route path={ROUTES.PUCHASE_ORDER_LIST} element={<ProtectedRoute />}>
+            <Route
+              path={ROUTES.PUCHASE_ORDER_LIST}
+              element={<ProtectedRoute />}
+            >
               <Route index element={<ListpurchaseOrder />} />
             </Route>
-            <Route path={ROUTES.EDIT_PUCHASE_ORDER_ID} element={<ProtectedRoute />}>
+            <Route
+              path={ROUTES.EDIT_PUCHASE_ORDER_ID}
+              element={<ProtectedRoute />}
+            >
               <Route index element={<EditPurchaseorder />} />
             </Route>
-            <Route path={ROUTES.VIEW_PURCHASE_ORDER_ID} element={<ProtectedRoute />}>
+            <Route
+              path={ROUTES.VIEW_PURCHASE_ORDER_ID}
+              element={<ProtectedRoute />}
+            >
               <Route index element={<ViewpurchaseOrder />} />
             </Route>
 
@@ -643,10 +654,12 @@ function App() {
               <Route index element={<Fmssettings />} />
             </Route>
 
-            <Route path={ROUTES.SELECT_INVOICETEMPLATE} element={<ProtectedRoute />}>
+            <Route
+              path={ROUTES.SELECT_INVOICETEMPLATE}
+              element={<ProtectedRoute />}
+            >
               <Route index element={<Invoicetemplateselect />} />
             </Route>
-
 
             <Route path={ROUTES.AGENT_REPORT} element={<ProtectedRoute />}>
               <Route index element={<AgentReport />} />
@@ -778,10 +791,12 @@ function App() {
             {/* </Route> */}
           </Route>
 
-
-          <Route path={ROUTES.PURCHASEORDER_INVOICE_ID} element={<ProtectedRoute />}>
-              <Route index element={<Purchaseorderinvoice />} />
-            </Route>
+          <Route
+            path={ROUTES.PURCHASEORDER_INVOICE_ID}
+            element={<ProtectedRoute />}
+          >
+            <Route index element={<Purchaseorderinvoice />} />
+          </Route>
           <Route
             path={ROUTES.QUATATION_INVOICE_ID}
             element={<Quotationinvoice />}
@@ -793,8 +808,8 @@ function App() {
           <Route path={ROUTES.JOB_INVOICE_ID} element={<Jobinvoice />} />
           <Route path={ROUTES.INVOICE_PRINT} element={<InvoicePrint />} />
 
-          <Route path={ROUTES.INVOICETEMPLATE} element={<Invoicetemp1/> } />
-          <Route path={ROUTES.INVOICE_NEWTEMP} element={<Invoicetemplate2/> }/>
+          <Route path={ROUTES.INVOICETEMPLATE} element={<Invoicetemp1 />} />
+          <Route path={ROUTES.INVOICE_NEWTEMP} element={<Invoicetemplate2 />} />
         </Routes>
       </BrowserRouter>
     </div>

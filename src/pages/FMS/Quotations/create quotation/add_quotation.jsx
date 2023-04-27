@@ -44,6 +44,10 @@ export default function Add_Quotation() {
   const [currencyDefault, setCurrencyDefault] = useState();
   const [startDate, setStartDate] = useState(new Date());
   const [numberOfDays, setNumberOfDays] = useState();
+  const [Qtn_length, setQtn_Length] = useState();
+  const [Qtn_breadth, setQtn_Breadth] = useState();
+  const [Qtn_height, setQtn_Height] = useState();
+
   // let bs = new Date();
 
   // console.log("kdsdsd", numberOfDays, endDate);
@@ -54,6 +58,7 @@ export default function Add_Quotation() {
   const [AllSalesPersons, setAllSalesPersons] = useState();
   const [defaultincoterm, setdefaultincoterm] = useState("");
   const [allcontainertype, setallcontainertype] = useState("");
+  const [isTableEmpty, setIsTableEmpty] = useState(false);
 
   const [addForm] = Form.useForm();
   const navigate = useNavigate();
@@ -231,6 +236,8 @@ export default function Add_Quotation() {
           quotation_details_total: "",
         },
       ]);
+
+      setIsTableEmpty(false);
     }
   };
 
@@ -296,22 +303,45 @@ export default function Add_Quotation() {
         `${GENERAL_SETTING_BASE_URL}/currency`
       );
       console.log("Getting all currency : ", allcurrency.data.data);
-      setCurrencydata(allcurrency.data.data);
+      setCurrencydata(allcurrency?.data?.data);
       // let arr = "";
       let a = 0;
       allcurrency?.data?.data?.forEach((item, index) => {
         if (item?.currency_is_default == 1) {
           setCurrencyDefault(item?.currency_code);
+          getCurrencyRate(
+            item?.currency_id,
+            item?.currency_code,
+            allcurrency?.data?.data
+          );
+
           a = item?.currency_id;
           addForm.setFieldsValue({
             currency: item?.currency_id,
           });
-          getCurrencyRate(item?.currency_id, item?.currency_code);
         }
       });
     } catch (err) {
       console.log("Error in getting currency : ", err);
     }
+  };
+
+  const getQuotationNumber = (data) => {
+    PublicFetch.get(
+      `${CRM_BASE_URL_FMS}/quotation/quotation-number?qtnFrtType=${data}`
+    )
+      .then((res) => {
+        console.log("Response from quotation no");
+        if (res.data.success) {
+          console.log("success from quotation no ");
+          addForm.setFieldsValue({
+            qno: res?.data?.data?.quotation_number,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
   };
 
   const GetAllSalesPersons = () => {
@@ -404,27 +434,30 @@ export default function Add_Quotation() {
   const [currencyRates, setCurrencyRates] = useState(0);
   console.log("ratesssss", currencyRates);
   let b;
-  const getCurrencyRate = (data, ccode) => {
-    const code = currencydata?.filter((item) => {
-      if (item?.currency_id === data) {
-        b = item?.currency_code;
-      }
-    });
-    console.log("code", b);
-    console.log(";;;;;;;;;", data);
-    axios
-      .get(`https://open.er-api.com/v6/latest/${ccode}`)
-      .then(function (response) {
-        console.log("currency current rate:", response);
-        let a = response.data.rates[b];
-        console.log("currency match", a);
-        let rate = 1 / a;
-        addForm.setFieldsValue({ exchnagerate: rate });
-        setCurrencyRates(rate);
-      })
-      .catch(function (error) {
-        console.log(error);
+  const getCurrencyRate = (data, ccode, allData) => {
+    // console.log("currency rate find", data, ccode);
+    if (data && ccode) {
+      const code = allData?.filter((item, index) => {
+        if (item?.currency_id === data) {
+          b = item?.currency_code;
+        }
       });
+      console.log("code", b, code);
+      console.log(";;;;;;;;;", data);
+      axios
+        .get(`https://open.er-api.com/v6/latest/${ccode}`)
+        .then(function (response) {
+          console.log("currency current rate:", response);
+          let a = response?.data?.rates[b];
+          console.log("currency match", a);
+          let rate = 1 / a;
+          addForm.setFieldsValue({ exchnagerate: rate });
+          setCurrencyRates(rate);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
   };
 
   const getallcontainertype = async () => {
@@ -874,6 +907,9 @@ export default function Add_Quotation() {
         if (res.data.success) {
           console.log("success from single customer");
           setNumberOfDays(res?.data?.data?.customer_qtn_validity_days);
+          calculateDate(res?.data?.data?.customer_qtn_validity_days);
+          mode(res?.data?.data?.customer_preferred_freight_type);
+          getQuotationNumber(res?.data?.data?.customer_preferred_freight_type);
           addForm.setFieldsValue({
             // customer: res.data.data.customer_id,
             // incoterm: res.data.data.incoterm_id,
@@ -896,7 +932,15 @@ export default function Add_Quotation() {
           setNumberOfDays(
             res?.data?.data?.crm_v1_customer?.customer_qtn_validity_days
           );
-
+          calculateDate(
+            res?.data?.data?.crm_v1_customer?.customer_qtn_validity_days
+          );
+          mode(
+            res?.data?.data?.crm_v1_customer?.customer_preferred_freight_type
+          );
+          getQuotationNumber(
+            res?.data?.data?.crm_v1_customer?.customer_preferred_freight_type
+          );
           // console.log("jhwbfh", endDate);
           addForm.setFieldsValue({
             customer: res.data.data.opportunity_customer_id,
@@ -916,18 +960,32 @@ export default function Add_Quotation() {
 
     setOpportunity_Id(Oppo_id);
   };
+  console.log("No of days ", numberOfDays);
 
-  useEffect(() => {
-    if (numberOfDays && startDate) {
-      const endDate = new Date(
-        startDate.setDate(startDate.getDate() + numberOfDays)
-      );
+  const calculateDate = (number) => {
+    if (number && startDate) {
+      const endDate = new Date(startDate.setDate(startDate.getDate() + number));
+      console.log("date calcualted", endDate);
       let a = moment(endDate);
       addForm.setFieldsValue({
         vdate: a,
       });
     }
-  }, [numberOfDays, startDate]);
+  };
+
+  // useEffect(() => {
+  //   if (numberOfDays && startDate) {
+  //     const endDate = new Date(
+  //       startDate.setDate(startDate.getDate() + numberOfDays)
+  //     );
+  //     console.log("date calcualted", endDate);
+  //     let a = moment(endDate);
+  //     addForm.setFieldsValue({
+  //       vdate: a,
+  //     });
+  //   }
+  // }, [numberOfDays, startDate]);
+
   // const handleFirstDropdownChange = (event) => {
   //   setSelectedOption(event);
   // };
@@ -1113,20 +1171,24 @@ export default function Add_Quotation() {
   const [filenew, setFilenew] = useState();
   console.log("file", filenew);
   const OnSubmit = (data) => {
+    let temp = false;
+
     console.log("submitting data", data);
     const data11 = "noufal12343221";
-
     const date1 = moment(data.qdate).format("YYYY-MM-DD");
     const date2 = moment(data.vdate).format("YYYY-MM-DD");
     const docfile = data?.new?.file?.originFileObj;
     const formData = new FormData();
+
     // formData.append("quotation_no", qno);
     // formData.append("quotation_customer", data.customer);
     formData.append("quotation_enquiry", data.eno);
     formData.append("quotation_date", date1);
     formData.append("quotation_validity", date2);
-    formData.append("quotation_consignee", data.customer);
-    formData.append("quotation_shipper", data.shipper);
+    formData.append("quotation_customer", data.customer);
+    if (data.shipper) {
+      formData.append("quotation_shipper", data.shipper);
+    }
     formData.append("quotation_freight_type", data.freighttype);
     formData.append("quotation_cargo_type", data.cargotype);
     formData.append("quotation_carrier", data.carrier);
@@ -1143,8 +1205,16 @@ export default function Add_Quotation() {
     formData.append("quotation_currency", data.currency);
     formData.append("quotation_exchange_rate", data.exchnagerate);
     formData.append("quotation_grand_total", data.grandtotal);
-    formData.append("incoterm_id", data.incoterm);
-    formData.append("consignee", data.consignee);
+    formData.append("quotation_incoterm_id", data.incoterm);
+    if (data.consignee) {
+      formData.append("quotation_consignee", data.consignee);
+    }
+    formData.append("quotation_container_type", data.container_type);
+    formData.append("quotation_salesperson", data.salesperson);
+    formData.append("quotation_length", data.length);
+    formData.append("quotation_breadth", data.breadth);
+    formData.append("quotation_height", data.height);
+    formData.append("quotation_volume", data.volume);
 
     if (filenew) {
       formData.append("attachments", filenew);
@@ -1161,6 +1231,16 @@ export default function Add_Quotation() {
     // formData.append('quotation_details', JSON.stringify(userData));
 
     userData.map((item, index) => {
+      console.log("table data index is that", index);
+      if (index > 0) {
+        temp = true;
+        if (tableData.length > 0) {
+          console.log("hduwue", tableData.length);
+          setIsTableEmpty(false);
+        }
+      } else {
+        setIsTableEmpty(true);
+      }
       console.log("userdata task", index);
       if (item.quotation_details_service_id) {
         formData.append(
@@ -1185,26 +1265,37 @@ export default function Add_Quotation() {
         );
       }
     });
-
-    console.log("before sending data");
-    PublicFetch.post(`${CRM_BASE_URL_FMS}/quotation`, formData, {
-      "Content-Type": "Multipart/form-Data",
-    })
-      .then((res) => {
-        console.log("data is successfully saved", res.data.success);
-        if (res.data.success) {
-          setSuccessPopup(true);
-          addForm.resetFields();
-          close_modal(successPopup, 1000);
-        } else {
-          setErrormsg(res.data.data);
-        }
+    if ((temp = true)) {
+      console.log("before sending data");
+      PublicFetch.post(`${CRM_BASE_URL_FMS}/quotation`, formData, {
+        "Content-Type": "Multipart/form-Data",
       })
-      .catch((err) => {
-        console.log("error", err);
-        setError(true);
-      });
+        .then((res) => {
+          console.log("data is successfully saved", res.data.success);
+          if (res.data.success) {
+            setSuccessPopup(true);
+            addForm.resetFields();
+            close_modal(successPopup, 1000);
+          } else {
+            setErrormsg(res.data.data);
+          }
+        })
+        .catch((err) => {
+          console.log("error", err);
+          setError(true);
+        });
+    }
   };
+
+  useEffect(() => {
+    let a = 0;
+    if (Qtn_length && Qtn_breadth && Qtn_height) {
+      a = Qtn_breadth * Qtn_height * Qtn_length;
+      addForm.setFieldsValue({
+        volume: a,
+      });
+    }
+  }, [Qtn_breadth, Qtn_height, Qtn_length]);
 
   const quotationDate = () => {
     let date = new Date();
@@ -1256,8 +1347,13 @@ export default function Add_Quotation() {
                       ]}
                     >
                       <SelectBox
+                        showSearch={true}
+                        allowClear={true}
+                        optionFilterProp="children"
                         onChange={(e) => {
                           handleGetSingleCustomer(e);
+                          setNumberOfDays(0);
+                          setStartDate(new Date());
                         }}
                       >
                         {allCustomerList &&
@@ -1296,6 +1392,7 @@ export default function Add_Quotation() {
                           console.log("date mmm", e);
                           setFrightmode(e);
                           mode(e);
+                          getQuotationNumber(e);
                         }}
                       >
                         {frighttype &&
@@ -1409,10 +1506,14 @@ export default function Add_Quotation() {
                     <label>Opportunity No</label>
                     <Form.Item name="eno">
                       <SelectBox
-                        onChange={(e) => handleLeadIdEnq(e)}
-                        allowClear
-                        showSearch
+                        showSearch={true}
+                        allowClear={true}
                         optionFilterProp="children"
+                        onChange={(e) => {
+                          handleLeadIdEnq(e);
+                          setNumberOfDays(0);
+                          setStartDate(new Date());
+                        }}
                       >
                         {oppnew &&
                           oppnew.length > 0 &&
@@ -1713,7 +1814,13 @@ export default function Add_Quotation() {
                       //   },
                       // ]}
                     >
-                      <Input_Number />
+                      <Input_Number
+                        onChange={(e) => {
+                          setQtn_Length(e);
+                        }}
+                        min={0}
+                        precision={2}
+                      />
                     </Form.Item>
                   </div>
 
@@ -1729,7 +1836,13 @@ export default function Add_Quotation() {
                       //   },
                       // ]}
                     >
-                      <Input_Number />
+                      <Input_Number
+                        onChange={(e) => {
+                          setQtn_Breadth(e);
+                        }}
+                        min={0}
+                        precision={2}
+                      />
                     </Form.Item>
                   </div>
                   <div className="col-xl-4 col-sm-12 mt-2 px-3">
@@ -1744,7 +1857,13 @@ export default function Add_Quotation() {
                       //   },
                       // ]}
                     >
-                      <Input_Number />
+                      <Input_Number
+                        onChange={(e) => {
+                          setQtn_Height(e);
+                        }}
+                        min={0}
+                        precision={2}
+                      />
                     </Form.Item>
                   </div>
 
@@ -1760,7 +1879,7 @@ export default function Add_Quotation() {
                       //   },
                       // ]}
                     >
-                      <Input_Number />
+                      <Input_Number min={0} precision={2} />
                     </Form.Item>
                   </div>
 
@@ -1911,7 +2030,7 @@ export default function Add_Quotation() {
                           optionFilterProp="children"
                           onChange={(e) => {
                             console.log("ann", e);
-                            getCurrencyRate(e);
+                            getCurrencyRate(e, currencyDefault, currencydata);
                           }}
                         >
                           {currencydata &&
@@ -2019,6 +2138,11 @@ export default function Add_Quotation() {
                       rowKey={(record) => record.key}
                       custom_table_css="table_qtn qtn_table_brdr"
                     />
+                    {isTableEmpty ? (
+                      <small style={{ color: "red" }} className="mt-3">
+                        Please Enter Atleast One Row
+                      </small>
+                    ) : null}
                   </div>
 
                   <div className="d-flex justify-content-end mt-4 ms-5">

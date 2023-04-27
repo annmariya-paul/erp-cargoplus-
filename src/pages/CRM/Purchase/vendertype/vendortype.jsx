@@ -135,12 +135,22 @@ function Vendortype() {
     }
   };
 
+
+  const getFinalCount = (total) =>{
+    const cutoff = Math.ceil(totalCount/ pageSize);
+    console.log("FinalTest",cutoff,current)
+    if(current === cutoff) return totalCount
+    return total
+    // console.log("TotalPageTest",current,totalCount)
+    // console.log("TestCount",total)
+  }
   const getallvendortype = async () => {
     try {
       const allvendortypes = await PublicFetch.get(
         `${CRM_BASE_URL_PURCHASING}/vendorTypes`
       );
       console.log("getting all vendorTypes", allvendortypes);
+      
       setvendortypes(allvendortypes.data.data);
     } catch (err) {
       console.log("error to fetching  vendortypes", err);
@@ -222,7 +232,7 @@ function Vendortype() {
   ];
 
   const columnsKeys = columns.map((column) => column.key);
-
+  const [totalCount, setTotalcount] = useState();
   const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
   const filteredColumns = columns.filter((column) =>
     selectedColumns.includes(column.key)
@@ -299,23 +309,29 @@ function Vendortype() {
               value={pageSize}
               onChange={(e) => setPageSize(e)}
             >
-              <Select.Option value="25">
-                Show
-                <span className="vertical ms-1">|</span>
-                <span className="sizes ms-1">25</span>
-              </Select.Option>
-              <Select.Option value="50">
-                Show
-                <span className="vertical ms-1">|</span>
-                <span className="sizes ms-1"> 50</span>
-              </Select.Option>
-              <Select.Option value="100">
-                Show
-                <span className="vertical ms-1">|</span>
-                <span className="sizes ms-1">100</span>
-              </Select.Option>
+             <Select.Option value="25">
+                 
+                 <span style={{ color: "#2f6b8f" }} className="ms-1">
+                   25
+                 </span>
+               </Select.Option>
+               <Select.Option value="50">
+                
+                 <span style={{ color: "#2f6b8f" }} className="ms-1">
+                   50
+                 </span>
+               </Select.Option>
+               <Select.Option value="100">
+                
+                 <span style={{ color: "#2f6b8f" }} className="ms-1">
+                   100
+                 </span>{" "}
+               </Select.Option>
             </Select>
           </div>
+          {/* <div className=" col-xl-10 col-lg-9 col-md-8 col-sm-12  d-flex  align-items-center ">
+            <label className="font_size" >Results: {current +1} -{ getFinalCount((1 * pageSize)*current)}  <span>of {totalCount} </span> </label>
+            </div> */}
 
           <div className="col-4 d-flex  align-items-center justify-content-center">
             <MyPagination

@@ -19,6 +19,7 @@ export default function FileUpload({
   fileList,
   beforeUpload,
   style,
+  className
 }) {
   // const [files, setFiles] = useState([]);
 
@@ -72,6 +73,7 @@ export default function FileUpload({
       <Dragger
         // fileList={[]}
         // style={style}
+        className={className}
         action={async () => await customAction()}
         multiple={multiple}
         listType={listType}

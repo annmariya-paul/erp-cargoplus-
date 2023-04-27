@@ -454,9 +454,9 @@ catch (err) {
         </div>
         {/* <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}></div> */}
         <div className="row my-3">
-          <div className="col-4 ">
-          <div className="row">
-            <div className="col-xl-2 col-lg-3 col-md-4 col-sm-12   ">
+          <div className="col-xl-4">
+          <div className="d-flex justify-content-start align-items-center gap-3">
+            <div className="  ">
             <Select
               bordered={false}
               className="page_size_style"
@@ -483,7 +483,7 @@ catch (err) {
               </Select.Option>
             </Select>
             </div>
-            <div className=" col-xl-10 col-lg-9 col-md-8 col-sm-12  d-flex  align-items-center ">
+            <div className=" d-flex  align-items-center mt-2 ">
             <label className="font_size" >Results: {startcount +1} -{ getFinalCount((1 * noofItems)*current)}  <span>of {totalCount} </span> </label>
             </div>
 

@@ -323,7 +323,7 @@ editForm.setFieldsValue({quotationno :qtnnumber })
   };
 
   const submitForm = (data) => {
-    let docfile = data?.attachments?.file?.originFileObj;
+    let docfile = data?.new?.file?.originFileObj;
     const formData = new FormData();
     formData.append("job_number", data.jobno);
     formData.append("job_date", data.jobdate);
@@ -377,7 +377,7 @@ editForm.setFieldsValue({quotationno :qtnnumber })
     formData.append("job_incoterm_id", data.incoterm);
 
     if (docfile) {
-      formData.append("job_docs", docfile);
+      formData.append("attachments", docfile);
     }
     if(data.quotationno){
       formData.append("job_quotation", data.quotationno);
@@ -485,7 +485,7 @@ editForm.setFieldsValue({quotationno :qtnnumber })
         console.log("Errror while getting data", err);
       });
   };
-
+  const [filenew, setFilenew] = useState();
   const [qtnid, setQtnid] = useState();
   console.log("qtn id is : ", qtnid);
   const [AllQuotations, setAllQuotations] = useState();
@@ -1454,7 +1454,7 @@ editForm.setFieldsValue({quotationno :qtnnumber })
                   </div>
                   <div className="col-xl-12 col-sm-12 mt-2 ">
                     <Form.Item  className="mt-2" 
-                      name="attachments"
+                      name="new"
                       // rules={[
                       //   {
                       //     required: true,
@@ -1470,6 +1470,14 @@ editForm.setFieldsValue({quotationno :qtnnumber })
                         listType="picture"
                         accept=".pdf,.docs,"
                         style={{ height: "60px" }}
+                        onChange={(file) => {
+                          console.log("Before upload", file.file);
+                          console.log(
+                            "Before upload file size",
+                            file.file.size
+                          );
+                          setFilenew(file.file.originFileObj);
+                        }}
                       />
                     </Form.Item>
                   </div>

@@ -229,7 +229,15 @@ function ViewOpportunity() {
           </div>
         </div> */}
 
-
+<div className="col-sm-6 d-flex">
+          <div className="col-4 boldhd pb-3">Attachments</div>
+          <div className="col-1">:</div>
+          <div className="col-7">
+            <p className="modal-view-data">
+            {Allopps?.opportunity_docs[0]}
+            </p>
+          </div>
+        </div>
 
         </div>   
            

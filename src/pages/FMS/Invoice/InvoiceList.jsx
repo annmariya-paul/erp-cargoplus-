@@ -28,6 +28,7 @@ function InvoiceList() {
   const [invoice_id, setInvoice_id] = useState();
   const [successPopup, setSuccessPopup] = useState(false);
   const [InvoiceJobId, setInvoiceJobId] = useState();
+  const [startcount, setstartcount] = useState();
 
   const [noofItems, setNoofItems] = useState("25");
   // const [current, setCurrent] = useState(1);
@@ -73,38 +74,38 @@ function InvoiceList() {
       dataIndex: "invoice_job_no",
       key: "invoice_job_no",
       width: "15%",
-      filteredValue: [searchSource],
-      onFilter: (value, record) => {
-        return (
-          String(record.opportunity_from)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.opportunity_source)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.invoice_job_consignee)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.invoice_job_shipper)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.invoice_status)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.invoice_status)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.invoice_no)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.invoice_date)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.invoice_job_customer)
-            .toLowerCase()
-            .includes(value.toLowerCase())
-        );
-      },
+      // filteredValue: [searchSource],
+      // onFilter: (value, record) => {
+      //   return (
+      //     String(record.opportunity_from)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.opportunity_source)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.invoice_job_consignee)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.invoice_job_shipper)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.invoice_status)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.invoice_status)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.invoice_no)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.invoice_date)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.invoice_job_customer)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase())
+      //   );
+      // },
     },
     {
       title: "CUSTOMER",
@@ -254,8 +255,10 @@ function InvoiceList() {
     }
   };
 
-  const getAllInvoices = () => {
-    PublicFetch.get(`${CRM_BASE_URL_FMS}/invoice`)
+  const getAllInvoices = (name) => {
+    PublicFetch.get(
+      `${CRM_BASE_URL_FMS}/invoice?startIndex=${pageofIndex}&noOfItems=${numOfItems}&search=${name}`
+    )
       .then((res) => {
         setInvoiceData(res?.data?.data);
         console.log("response", res);
@@ -264,7 +267,7 @@ function InvoiceList() {
           console.log("success of invoices", res.data.data);
           let temp = [];
           let status = "";
-          res?.data?.data?.forEach((item, index) => {
+          res?.data?.data?.invoices?.forEach((item, index) => {
             if (item.invoice_status == 1) {
               status = "pending";
             }
@@ -288,6 +291,8 @@ function InvoiceList() {
           });
 
           setAllInvoiceData(temp);
+          setstartcount(res.data.data.startIndex);
+          setTotalcount(res.data.data.invoiceCount);
 
           console.log("status", status);
         }
@@ -362,9 +367,18 @@ function InvoiceList() {
     // item.const_lx,
   ]);
 
+  const getFinalCount = (total) => {
+    const cutoff = Math.ceil(totalCount / numOfItems);
+    console.log("FinalTest", cutoff, current);
+    if (current === cutoff) return totalCount;
+    return total;
+    // console.log("TotalPageTest",current,totalCount)
+    // console.log("TestCount",total)
+  };
+
   useEffect(() => {
-    getAllInvoices();
-  }, []);
+    getAllInvoices(searchSource);
+  }, [searchSource, pageofIndex, noofItems]);
   return (
     <div>
       <div className="container-fluid">
@@ -376,7 +390,7 @@ function InvoiceList() {
               <div>
                 <div className="row flex-wrap align-items-center">
                   <div className="col-4">
-                    <h5 className="lead_text">Invoices</h5>
+                    <h5 className="lead_text">Invoice</h5>
                   </div>
                   <div className="col-4">
                     <Input.Search
@@ -424,46 +438,46 @@ function InvoiceList() {
                 </div> */}
                 <div className="row my-3">
                   <div className="col-4   px-3">
-                    <Select
-                      // defaultValue={"25"}
-                      bordered={false}
-                      className=" page_size_style"
-                      value={numOfItems}
-                      onChange={(e) => {
-                        setNumOfItems(e);
-                        setCurrent(1);
-                      }}
-                    >
-                      <Select.Option value="25">
-                        Show{" "}
-                        <span style={{ color: "lightgray" }} className="ms-1">
-                          |
-                        </span>
-                        <span style={{ color: "#2f6b8f" }} className="ms-2">
-                          25
-                        </span>{" "}
-                      </Select.Option>
-                      <Select.Option value="50">
-                        {" "}
-                        Show{" "}
-                        <span style={{ color: "lightgray" }} className="ms-1">
-                          |
-                        </span>
-                        <span style={{ color: "#2f6b8f" }} className="ms-2">
-                          50
-                        </span>{" "}
-                      </Select.Option>
-                      <Select.Option value="100">
-                        {" "}
-                        Show{" "}
-                        <span style={{ color: "lightgray" }} className="ms-1">
-                          |
-                        </span>
-                        <span style={{ color: "#2f6b8f" }} className="ms-2">
-                          100
-                        </span>{" "}
-                      </Select.Option>
-                    </Select>
+                    <div className="row">
+                      <div className="col-xl-2 col-lg-3 col-md-4 col-sm-12   ">
+                        <Select
+                          // defaultValue={"25"}
+                          bordered={false}
+                          className="page_size_style"
+                          value={numOfItems}
+                          // onChange={handleLastNameChange}
+                          onChange={(event, current) => {
+                            console.log("On page size selected : ", event);
+                            console.log("nfjnjfv", current);
+                            setNumOfItems(event);
+                            setCurrent(1);
+                          }}
+                        >
+                          <Select.Option value="25">
+                            <span style={{ color: "#2f6b8f" }} className="ms-1">
+                              25
+                            </span>
+                          </Select.Option>
+                          <Select.Option value="50">
+                            <span style={{ color: "#2f6b8f" }} className="ms-1">
+                              50
+                            </span>
+                          </Select.Option>
+                          <Select.Option value="100">
+                            <span style={{ color: "#2f6b8f" }} className="ms-1">
+                              100
+                            </span>{" "}
+                          </Select.Option>
+                        </Select>
+                      </div>
+                      <div className=" col-xl-10 col-lg-9 col-md-8 col-sm-12  d-flex  align-items-center ">
+                        <label className="font_size">
+                          Results: {startcount + 1} -
+                          {getFinalCount(1 * numOfItems * current)}{" "}
+                          <span>of {totalCount} </span>{" "}
+                        </label>
+                      </div>
+                    </div>
                   </div>
                   <div className="col-4 d-flex align-items-center justify-content-center">
                     {invoiceData && (
@@ -494,7 +508,7 @@ function InvoiceList() {
                 <div className="d-flex py-2 justify-content-center">
                   {invoiceData && (
                     <MyPagination
-                      total={parseInt(invoiceData?.length)}
+                      total={parseInt(totalCount?.length)}
                       current={current}
                       pageSize={numOfItems}
                       onChange={(current, pageSize) => {

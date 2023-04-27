@@ -78,35 +78,35 @@ export default function Quotations(props) {
       dataIndex: "quotation_no",
       key: "quotation_no",
       width: "12%",
-      filteredValue: [searchedText],
-      onFilter: (value, record) => {
-        return (
-          String(record.quotation_no)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.consignee_name)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.quotation_shipper)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.quotation_date)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.quotation_validity)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.consignee)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.quotation_status)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.customer_name)
-            .toLowerCase()
-            .includes(value.toLowerCase())
-        );
-      },
+      // filteredValue: [searchedText],
+      // onFilter: (value, record) => {
+      //   return (
+      //     String(record.quotation_no)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.consignee_name)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.quotation_shipper)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.quotation_date)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.quotation_validity)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.consignee)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.quotation_status)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.customer_name)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase())
+      //   );
+      // },
       align: "left",
     },
     {
@@ -363,7 +363,7 @@ export default function Quotations(props) {
       <div className="container-fluid container2 py-3 ">
         <div className="row">
           <div className="col-4 d-flex justify-content-start">
-            <h5 className="lead_text mt-2">Quotations</h5>
+            <h5 className="lead_text mt-2">Quotation</h5>
           </div>
 
           <div className="col-4  d-flex justify-content-start">

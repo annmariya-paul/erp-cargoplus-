@@ -675,7 +675,7 @@ export default function EditQuotation(
       align: "right",
     },
     {
-      title: "TAX TYPE",
+      title: "TAX GROUP",
       dataIndex: "quotation_details_tax_group",
       key: "quotation_details_tax_group",
 

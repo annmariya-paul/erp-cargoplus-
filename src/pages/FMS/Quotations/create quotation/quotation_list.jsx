@@ -45,6 +45,8 @@ export default function Quotations(props) {
 
   const [quatationList, setQuatationList] = useState([]);
   const [cancelPopUp, setCancelPopUp] = useState(false);
+  const [startcount, setstartcount] = useState();
+  const [totalCount, setTotalcount] = useState();
 
   const pageofIndex = noofItems * (current - 1) - 1 + 1;
   const numofItemsTo = noofItems * current;
@@ -300,6 +302,8 @@ export default function Quotations(props) {
           setAllQuotations(temp);
           settotalquotation(res?.data?.data.totalCount);
           setQuatationList(res?.data?.data.quotations);
+          setTotalcount(res?.data?.data?.totalCount);
+          setstartcount(res?.data?.data?.startIndex);
         }
       })
       .catch((err) => {
@@ -338,6 +342,14 @@ export default function Quotations(props) {
 
   const onChange = (checkedValues) => {
     setSelectedColumns(checkedValues);
+  };
+  const getFinalCount = (total) => {
+    const cutoff = Math.ceil(totalCount / noofItems);
+    console.log("FinalTest", cutoff, current);
+    if (current === cutoff) return totalCount;
+    return total;
+    // console.log("TotalPageTest",current,totalCount)
+    // console.log("TestCount",total)
   };
 
   useEffect(() => {
@@ -403,28 +415,46 @@ export default function Quotations(props) {
         </div> */}
         <div className="row my-3">
           <div className="col-4  px-3">
-            <Select
-              bordered={false}
-              className="page_size_style"
-              value={pageSize}
-              onChange={(e) => setPageSize(e)}
-            >
-              <Select.Option value="25">
-                Show
-                <span className="vertical ms-1">|</span>
-                <span className="sizes ms-1">25</span>
-              </Select.Option>
-              <Select.Option value="50">
-                Show
-                <span className="vertical ms-1">|</span>
-                <span className="sizes ms-1"> 50</span>
-              </Select.Option>
-              <Select.Option value="100">
-                Show
-                <span className="vertical ms-1">|</span>
-                <span className="sizes ms-1">100</span>
-              </Select.Option>
-            </Select>
+            <div className="row">
+              <div className="col-xl-2 col-lg-3 col-md-4 col-sm-12   ">
+                <Select
+                  // defaultValue={"25"}
+                  bordered={false}
+                  className="page_size_style"
+                  value={noofItems}
+                  // onChange={handleLastNameChange}
+                  onChange={(event, current) => {
+                    console.log("On page size selected : ", event);
+                    console.log("nfjnjfv", current);
+                    setNoofItems(event);
+                    setCurrent(1);
+                  }}
+                >
+                  <Select.Option value="25">
+                    <span style={{ color: "#2f6b8f" }} className="ms-1">
+                      25
+                    </span>
+                  </Select.Option>
+                  <Select.Option value="50">
+                    <span style={{ color: "#2f6b8f" }} className="ms-1">
+                      50
+                    </span>
+                  </Select.Option>
+                  <Select.Option value="100">
+                    <span style={{ color: "#2f6b8f" }} className="ms-1">
+                      100
+                    </span>{" "}
+                  </Select.Option>
+                </Select>
+              </div>
+              <div className=" col-xl-10 col-lg-9 col-md-8 col-sm-12  d-flex  align-items-center ">
+                <label className="font_size">
+                  Results: {startcount + 1} -
+                  {getFinalCount(1 * noofItems * current)}{" "}
+                  <span>of {totalCount} </span>{" "}
+                </label>
+              </div>
+            </div>
           </div>
 
           <div className="col-4 d-flex py-2 justify-content-center">

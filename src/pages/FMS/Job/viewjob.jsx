@@ -15,7 +15,7 @@ import { ROUTES } from "../../../routes";
 import { CRM_BASE_URL_FMS } from "../../../api/bootapi";
 import moment from "moment";
 import { useNavigate, useParams } from "react-router-dom";
-
+import Attachments from "../../../components/attachments/attachments";
 const onChange = (key) => {
   console.log(key);
 };
@@ -93,6 +93,8 @@ export default function ViewJob() {
   const [tabledata, setTabledata] = useState();
   const [grandtotal, setGrandTotal] = useState();
   console.log("grand", grandtotal);
+  const [AllAttachments, setAllAttachments] = useState();
+  console.log("all attachments ",AllAttachments);
   const [detailstable, setAlldetailstable] = useState();
   const [invoice_status, setInvoice_Status] = useState();
   console.log("details", detailstable);
@@ -293,7 +295,7 @@ export default function ViewJob() {
                     </div>
                     <div className="col-xl-2 col-md-3 col-4 d-flex justify-content-end mb-3">
                       {invoice_status !== 0 ? (
-                        <Button style={{width:80 , height:60}}
+                        <Button style={{ height:60}}
                           btnType="save"
                           className="edit_button "
                           onClick={() => {
@@ -578,12 +580,15 @@ export default function ViewJob() {
                     <h6 className="lead_text">Attachments</h6>
                   </div>
 
-                  <div className="col-12 d-flex" style={{ marginBottom: "125px" }}>
-                    <div className="col-4">Attachments </div>
+                  <div className="col-12 d-flex pb-1" style={{ marginBottom: "92px" }}>
+                    <div className="col-4 pb-4">Attachments </div>
                     <div className="col-1">:</div>
 
                     <div className="col-5 ">
-                      <p className="modal-view-data">{alljobs?.job_docs}</p>
+                      <p className="modal-view-data">
+                        {alljobs?.job_docs}
+
+                        </p>
                     </div>
                   </div>
                 

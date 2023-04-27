@@ -1025,7 +1025,7 @@ function Opportunitylist(props) {
               </Select>
             </div>
             <div className=" d-flex  align-items-center mt-2 ">
-            <label className="font_size" >Results: {startcount +1} -{ getFinalCount((1 * numOfItems)*current)}  <span>of {totalCount} </span> </label>
+            <label className="font_size" >Results: {startcount +1} -{" "}{ getFinalCount((1 * numOfItems)*current)}  <span>of {totalCount} </span> </label>
             </div>
 
             </div>

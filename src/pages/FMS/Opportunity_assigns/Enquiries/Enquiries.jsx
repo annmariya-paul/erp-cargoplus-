@@ -54,6 +54,8 @@ function Enquiries() {
   const [tableprogress, setTableprogress] = useState("");
   const [count, setcount] = useState(0);
   const [OpportunityList, setOpportunityList] = useState([]);
+  const [startcount, setstartcount] = useState();
+  const [totalCount, setTotalcount] = useState();
 
   const columns = [
     {
@@ -88,26 +90,26 @@ function Enquiries() {
       dataIndex: "lead_customer_name",
       key: "lead_customer_name",
       width: "20%",
-      filteredValue: [Search],
-      onFilter: (value, record) => {
-        return (
-          String(record.lead_customer_name)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.opportunity_party)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.opportunity_number)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.opportunity_created_at)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.opportunity_source)
-            .toLowerCase()
-            .includes(value.toLowerCase())
-        );
-      },
+      // filteredValue: [Search],
+      // onFilter: (value, record) => {
+      //   return (
+      //     String(record.lead_customer_name)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.opportunity_party)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.opportunity_number)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.opportunity_created_at)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.opportunity_source)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase())
+      //   );
+      // },
     },
 
     {
@@ -212,7 +214,15 @@ function Enquiries() {
     setSelectedColumns(checkedValues);
   };
 
-  const [totalCount, setTotalcount] = useState();
+  // const [totalCount, setTotalcount] = useState();
+  const getFinalCount = (total) => {
+    const cutoff = Math.ceil(totalCount / numOfItems);
+    console.log("FinalTest", cutoff, current);
+    if (current === cutoff) return totalCount;
+    return total;
+    // console.log("TotalPageTest",current,totalCount)
+    // console.log("TestCount",total)
+  };
   // const [oppurtunityid, setOppurtunityid] = useState();
 
   const pageofIndex = numOfItems * (current - 1) - 1 + 1;
@@ -220,9 +230,9 @@ function Enquiries() {
   const pagesizecount = Math.ceil(totalCount / numOfItems);
   console.log("page number isss", pagesizecount);
 
-  const GetOpportunityData = () => {
+  const GetOpportunityData = (name) => {
     PublicFetch.get(
-      `${CRM_BASE_URL}/opportunity?startIndex=${pageofIndex}&noOfItems=${numOfItems}`
+      `${CRM_BASE_URL}/opportunity?startIndex=${pageofIndex}&noOfItems=${numOfItems}&search=${name}`
     )
       .then((res) => {
         if (res?.data?.success) {
@@ -236,7 +246,7 @@ function Enquiries() {
               opportunity_type: item?.opportunity_type,
               opportunity_party: item?.crm_v1_contacts?.contact_person_name,
               opportunity_from: item?.opportunity_from,
-              lead_customer_name: item?.crm_v1_leads?.lead_customer_name,
+              lead_customer_name: item?.crm_v1_customer?.customer_name,
               opportunity_created_at: item?.opportunity_created_at,
               opportunity_created_by: item?.opportunity_created_by,
               opportunity_source: item?.opportunity_source,
@@ -251,6 +261,7 @@ function Enquiries() {
           setOppnew(tempArr);
           setOpportunityList(res?.data?.data?.leads);
           setTotalcount(res?.data?.data?.totalCount);
+          setstartcount(res?.data?.data?.startIndex);
           console.log("totalcount iss", res?.data?.data?.totalCount);
           // let samplearry = [];
           // res?.data?.data?.leads.forEach((item, index) => {
@@ -269,8 +280,8 @@ function Enquiries() {
   };
 
   useEffect(() => {
-    GetOpportunityData();
-  }, [pageofIndex, numOfItems]);
+    GetOpportunityData(Search);
+  }, [pageofIndex, numOfItems, Search]);
 
   const handleEditedclick = (index) => {
     navigate(`${ROUTES.ASSIGN_OPPORTUNITIES}/${index.opportunity_id}`);
@@ -346,47 +357,46 @@ function Enquiries() {
         </div> */}
         <div className="row my-3">
           <div className="col-4   px-3">
-            <Select
-              // defaultValue={"25"}
-              bordered={false}
-              className=" page_size_style"
-              value={numOfItems}
-              onChange={(e) => {
-                setNumOfItems(e);
-                setCurrent(1);
-              }}
-            >
-              {/* <Select.Option value="5">5 | pages</Select.Option> */}
-              <Select.Option value="25">
-                Show{" "}
-                <span style={{ color: "lightgray" }} className="ms-1">
-                  |
-                </span>
-                <span style={{ color: "#2f6b8f" }} className="ms-2">
-                  25
-                </span>{" "}
-              </Select.Option>
-              <Select.Option value="50">
-                {" "}
-                Show{" "}
-                <span style={{ color: "lightgray" }} className="ms-1">
-                  |
-                </span>
-                <span style={{ color: "#2f6b8f" }} className="ms-2">
-                  50
-                </span>{" "}
-              </Select.Option>
-              <Select.Option value="100">
-                {" "}
-                Show{" "}
-                <span style={{ color: "lightgray" }} className="ms-1">
-                  |
-                </span>
-                <span style={{ color: "#2f6b8f" }} className="ms-2">
-                  100
-                </span>{" "}
-              </Select.Option>
-            </Select>
+            <div className="row">
+              <div className="col-xl-2 col-lg-3 col-md-4 col-sm-12   ">
+                <Select
+                  // defaultValue={"25"}
+                  bordered={false}
+                  className="page_size_style"
+                  value={numOfItems}
+                  // onChange={handleLastNameChange}
+                  onChange={(event, current) => {
+                    console.log("On page size selected : ", event);
+                    console.log("nfjnjfv", current);
+                    setNumOfItems(event);
+                    setCurrent(1);
+                  }}
+                >
+                  <Select.Option value="25">
+                    <span style={{ color: "#2f6b8f" }} className="ms-1">
+                      25
+                    </span>
+                  </Select.Option>
+                  <Select.Option value="50">
+                    <span style={{ color: "#2f6b8f" }} className="ms-1">
+                      50
+                    </span>
+                  </Select.Option>
+                  <Select.Option value="100">
+                    <span style={{ color: "#2f6b8f" }} className="ms-1">
+                      100
+                    </span>{" "}
+                  </Select.Option>
+                </Select>
+              </div>
+              <div className=" col-xl-10 col-lg-9 col-md-8 col-sm-12  d-flex  align-items-center ">
+                <label className="font_size">
+                  Results: {startcount + 1} -
+                  {getFinalCount(1 * numOfItems * current)}{" "}
+                  <span>of {totalCount} </span>{" "}
+                </label>
+              </div>
+            </div>
           </div>
           <div className="col-4 d-flex align-items-center justify-content-center">
             {totalCount > 0 && (

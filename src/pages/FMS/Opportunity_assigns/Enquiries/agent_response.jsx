@@ -45,7 +45,7 @@ export default function Agent_Response() {
       if (res.data.success) {
         setOpportunityId(res.data.data.opportunity_id);
         setOpporNumber(res.data.data.opportunity_number);
-        setOpporLead(res.data.data.crm_v1_leads.lead_customer_name);
+        setOpporLead(res.data.data.crm_v1_customer.customer_name);
       }
     });
   };
@@ -223,7 +223,7 @@ export default function Agent_Response() {
         <div className="row">
           <div className="col-6 d-flex">
             <div className="col-2 me-4 pt-2" style={{ fontWeight: 500 }}>
-              Lead :
+              Customer :
             </div>
             <div className="col-4 mt-1">
               <p className="input_number_style">{opporLead}</p>

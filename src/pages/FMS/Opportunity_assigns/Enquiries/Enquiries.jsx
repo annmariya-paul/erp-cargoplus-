@@ -66,7 +66,7 @@ function Enquiries() {
       align: "center",
     },
     {
-      title: "OPPURTUNITY NO",
+      title: "OPPORTUNITY NO",
       dataIndex: "opportunity_number",
       key: "opportunity_number",
       width: "12%",

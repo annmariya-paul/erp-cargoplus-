@@ -97,7 +97,7 @@ export default function Add_Quotation() {
       let tax_percnt = 0;
       let totalTax_percent = 0;
       if (tx && e === item?.tax_group_id) {
-        if (col && key && tx && e === item?.tax_group_id) {
+        if (col && tx && e === item?.tax_group_id) {
           item?.fms_v1_tax_types?.forEach((taxType, taxIndex) => {
             console.log("tax types", taxType);
             tax_percnt = taxType?.tax_type_percentage;
@@ -1211,10 +1211,18 @@ export default function Add_Quotation() {
     }
     formData.append("quotation_container_type", data.container_type);
     formData.append("quotation_salesperson", data.salesperson);
-    formData.append("quotation_length", data.length);
-    formData.append("quotation_breadth", data.breadth);
-    formData.append("quotation_height", data.height);
-    formData.append("quotation_volume", data.volume);
+    if (data.length) {
+      formData.append("quotation_length", data.length);
+    }
+    if (data.breadth) {
+      formData.append("quotation_breadth", data.breadth);
+    }
+    if (data.height) {
+      formData.append("quotation_height", data.height);
+    }
+    if (data.volume) {
+      formData.append("quotation_volume", data.volume);
+    }
 
     if (filenew) {
       formData.append("attachments", filenew);

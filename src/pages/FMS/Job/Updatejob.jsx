@@ -396,7 +396,7 @@ function Updatejob() {
   return (
     <>
       <div className="container-fluid ">
-        <div className="row justify-content-md-center">
+        <div className="row justify-content-md-center mb-2">
           {/* <div className="row flex-wrap">
             <div className="col-6 ">
               <h5 className="lead_text"></h5>
@@ -413,18 +413,18 @@ function Updatejob() {
               console.log(error);
             }}
           >
-            <div className="container-fluid ">
+            <div className="container-fluid ms-0 me-2">
               <div className="row  mt-3">
-                <h4 className="lead_text">Edit Job</h4>
+                <h5 className="lead_text">Edit Job</h5>
               </div>
-              <div className="row ms-1 mb-3 ">
-                <div className="content-tabs-new row justify-content px-4">
+              <div className="row mt-1 ">
+                <div className="content-tabs-new row justify-content mx-1 mb-3">
                   <div className="row mt-3 ">
-                    <h5 className="lead_text">Basic Info</h5>
+                    <h6 className="lead_text">Basic Info</h6>
                   </div>
 
                   <div className="col-xl-4 col-sm-12 mt-2 px-3 ">
-                    <label>Customer</label>
+                    <label>Customer<span className="required">*</span></label>
                     <Form.Item
                       name="customer"
                       rules={[
@@ -462,7 +462,7 @@ function Updatejob() {
                   </div>
 
                   <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                    <label>Freight Type</label>
+                    <label>Freight Type<span className="required">*</span></label>
                     <Form.Item
                       name="freighttype"
                       rules={[
@@ -495,7 +495,7 @@ function Updatejob() {
                     </Form.Item>
                   </div>
                   <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                    <label>Job No</label>
+                    <label>Job No<span className="required">*</span></label>
                     <Form.Item
                       name="jobno"
                       rules={[
@@ -510,7 +510,7 @@ function Updatejob() {
                     </Form.Item>
                   </div>
                   <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                    <label>Job Date</label>
+                    <label>Job Date<span className="required">*</span></label>
                     <Form.Item
                       name="jobdate"
                       rules={[
@@ -587,7 +587,7 @@ function Updatejob() {
                       <InputType disabled={disable} />
                     </Form.Item>
                   </div> */}
-                  <div className="col-sm-4 pt-2">
+                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
                     <label>
                       Sale Person<span className="required">*</span>
                     </label>
@@ -616,14 +616,15 @@ function Updatejob() {
                       </SelectBox>
                     </Form.Item>
                   </div>
+
                 </div>
               </div>
-            </div>
-            <div className="row  mt-3 px-1 ">
-              <div className=" col-12 mt-3">
-                <div className="content-tabs-new row justify-content mx-1 mb-3">
+            {/* </div> */}
+            <div className="row  mt-1 ">
+              <div className=" content-tabs-new row justify-content mx-1 mb-3">
+                {/* <div className="content-tabs-new row justify-content mx-1 mb-3"> */}
                   <div className="row mt-3">
-                    <h5 className="lead_text">Transportation</h5>
+                    <h6 className="lead_text">Transportation</h6>
                   </div>
 
                   <div className="col-xl-6 col-sm-12 mt-2" hidden>
@@ -661,7 +662,7 @@ function Updatejob() {
                   </div>
 
                   <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                    <label>Consignee</label>
+                    <label>Consignee<span className="required">*</span></label>
                     <Form.Item
                       name="consignee"
                       rules={[
@@ -676,7 +677,7 @@ function Updatejob() {
                     </Form.Item>
                   </div>
                   <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                    <label>Shipper</label>
+                    <label>Shipper<span className="required">*</span></label>
                     <Form.Item
                       name="shipper"
                       rules={[
@@ -690,8 +691,8 @@ function Updatejob() {
                       <InputType disabled={disable} />
                     </Form.Item>
                   </div>
-                  <div className="col-xl-4 col-sm-12 mt-2 ">
-                    <label>Carrier</label>
+                  <div className="col-xl-4 col-sm-12 mt-2 px-3 ">
+                    <label>Carrier<span className="required">*</span></label>
                     <Form.Item
                       name="carrier"
                       rules={[
@@ -723,8 +724,8 @@ function Updatejob() {
                       </SelectBox>
                     </Form.Item>
                   </div>
-                  <div className="col-xl-4 col-sm-12 mt-2">
-                    <label>Origin</label>
+                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                    <label>Origin<span className="required">*</span></label>
                     <Form.Item
                       name="origin"
                       rules={[
@@ -756,8 +757,8 @@ function Updatejob() {
                       </SelectBox>
                     </Form.Item>
                   </div>
-                  <div className="col-xl-4 col-sm-12 mt-2">
-                    <label>Destination</label>
+                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                    <label>Destination<span className="required">*</span></label>
                     <Form.Item
                       name="destination"
                       rules={[
@@ -790,8 +791,8 @@ function Updatejob() {
                     </Form.Item>
                   </div>
 
-                  <div className="col-xl-4 col-sm-12 mt-2 ">
-                    <label>AWB/BL No</label>
+                  <div className="col-xl-4 col-sm-12 mt-2 px-3 ">
+                    <label>AWB/BL No<span className="required">*</span></label>
                     <Form.Item
                       name="AWB"
                       rules={[
@@ -826,7 +827,7 @@ function Updatejob() {
                       </p>
                     ) : null}
                   </div>
-                  <div className="col-xl-4 col-sm-12 mt-2">
+                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
                     <label>Container Type</label>
                     <Form.Item
                       name="containertype"
@@ -855,14 +856,14 @@ function Updatejob() {
                       </SelectBox>
                     </Form.Item>
                   </div>
-                </div>
+                {/* </div> */}
               </div>
-              <div className=" col-12 mt-3">
-                <div className="content-tabs-new row justify-content mx-1 mb-3 me-3">
+              <div className=" content-tabs-new row justify-content mx-1 mb-3">
+                {/* <div className="content-tabs-new row justify-content mx-1 mb-3 me-3"> */}
                   <div className="row mt-3">
-                    <h5 className="lead_text">Shipment Details</h5>
+                    <h6 className="lead_text">Shipment Details</h6>
                   </div>
-                  <div className="col-xl-4 col-sm-12 mt-2">
+                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
                     <label>Cargo Type</label>
                     <Form.Item
                       name="cargotype"
@@ -892,8 +893,8 @@ function Updatejob() {
                       </SelectBox>
                     </Form.Item>
                   </div>
-                  <div className="col-xl-4 col-sm-12 mt-2">
-                    <label>No of pieces</label>
+                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                    <label>No of pieces<span className="required">*</span></label>
                     <Form.Item
                       name="noofpieces"
                       rules={[
@@ -917,8 +918,8 @@ function Updatejob() {
                       />
                     </Form.Item>
                   </div>
-                  <div className="col-xl-4 col-sm-12 mt-2">
-                    <label>UOM</label>
+                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                    <label>UOM<span className="required">*</span></label>
                     <Form.Item
                       name="Uom"
                       rules={[
@@ -951,7 +952,7 @@ function Updatejob() {
                     </Form.Item>
                   </div>
 
-                  <div className="col-xl-4 col-sm-12 mt-2">
+                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
                     <label>Length</label>
                     <Form.Item
                       name="length"
@@ -976,7 +977,7 @@ function Updatejob() {
                       />
                     </Form.Item>
                   </div>
-                  <div className="col-xl-4 col-sm-12 mt-2">
+                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
                     <label>Breadth</label>
                     <Form.Item
                       name="breadth"
@@ -1001,7 +1002,7 @@ function Updatejob() {
                       />
                     </Form.Item>
                   </div>
-                  <div className="col-xl-4 col-sm-12 mt-2">
+                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
                     <label>Height</label>
                     <Form.Item
                       name="height"
@@ -1027,8 +1028,8 @@ function Updatejob() {
                     </Form.Item>
                   </div>
 
-                  <div className="col-xl-4 col-sm-12 mt-2">
-                    <label>Volume</label>
+                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                    <label>Volume<span className="required">*</span></label>
                     <Form.Item
                       name="volume"
                       // rules={[
@@ -1052,8 +1053,8 @@ function Updatejob() {
                       />
                     </Form.Item>
                   </div>
-                  <div className="col-xl-4 col-sm-12 mt-2">
-                    <label>Gross wt</label>
+                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                    <label>Gross wt<span className="required">*</span></label>
                     <Form.Item
                       name="grosswt"
                       rules={[
@@ -1077,8 +1078,8 @@ function Updatejob() {
                       />
                     </Form.Item>
                   </div>
-                  <div className="col-xl-4 col-sm-12 mt-2 pb-2">
-                    <label>Chargeable wt</label>
+                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                    <label>Chargeable wt<span className="required">*</span></label>
                     <Form.Item
                       name="chargeablewt"
                       rules={[
@@ -1103,8 +1104,8 @@ function Updatejob() {
                     </Form.Item>
                   </div>
 
-                  <div className="col-xl-4 col-sm-12 mt-2 pb-2">
-                    <label> Incoterm</label>
+                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                    <label> Incoterm<span className="required">*</span></label>
                     <Form.Item name="incoterm">
                       <SelectBox
                         // value={defaultincoterm}
@@ -1129,18 +1130,18 @@ function Updatejob() {
                       </SelectBox>
                     </Form.Item>
                   </div>
-                </div>
+                {/* </div> */}
               </div>
             </div>
 
-            <div className="row mt-3 px-1 ">
-              <div className="col-md-6 col-12 ">
-                <div className="content-tabs-new row justify-content mx-1 mb-3">
-                  <div className="row mt-3">
-                    <h5 className="lead_text">Payment Info</h5>
+            <div className="row mt-1 justify-content-between">
+              <div className="col-xl-6 col-lg-12 col-md-12 col-12 ">
+                <div className="row content-tabs-new justify-content  mb-3">
+                  <div className="row mt-2">
+                    <h6 className="lead_text">Payment Info</h6>
                   </div>
                   <div className="col-xl-6 col-sm-12 mt-2">
-                    <label>Terms</label>
+                    <label>Terms<span className="required">*</span></label>
                     <Form.Item
                       name="terms"
                       rules={[
@@ -1174,7 +1175,7 @@ function Updatejob() {
                   </div>
 
                   <div className="col-xl-6 col-sm-12 mt-2">
-                    <label>Currency</label>
+                    <label>Currency<span className="required">*</span></label>
                     <Form.Item
                       name="job_currency"
                       rules={[
@@ -1210,7 +1211,7 @@ function Updatejob() {
                     </Form.Item>
                   </div>
                   <div className="col-xl-6 col-sm-12 mt-2">
-                    <label>Exchange Rate</label>
+                    <label>Exchange Rate<span className="required">*</span></label>
                     <Form.Item
                       name="exchangerate"
                       rules={[
@@ -1235,17 +1236,17 @@ function Updatejob() {
                     </Form.Item>
                   </div>
 
-                  <div className="col-xl-6 col-sm-12 mt-2 mb-1">
+                  <div className="col-xl-6 col-sm-12 mt-2  mb-4">
                     <label>Credit Days</label>
                     <Form.Item
                       name="creditdays"
-                      rules={[
-                        {
-                          required: true,
-                          // pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter credit days",
-                        },
-                      ]}
+                      // rules={[
+                      //   {
+                      //     required: true,
+                      //     // pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                      //     message: "Please enter credit days",
+                      //   },
+                      // ]}
                     >
                       <InputType
                         // className="text_right"
@@ -1263,13 +1264,13 @@ function Updatejob() {
                 </div>
               </div>
 
-              <div className="col-md-6 col-12">
-                <div className="content-tabs-new row justify-content-center mx-1 mb-1 me-3">
-                  <div className="row mt-3">
-                    <h5 className="lead_text">Attachments</h5>
+              <div className="col-xl-6 col-lg-12 col-12">
+                <div className="content-tabs-new row justify-content ms-1 mb-3">
+                  <div className="row mt-2">
+                    <h6 className="lead_text">Attachments</h6>
                   </div>
-                  <div className="col-xl-8 col-sm-12 mt-1 ">
-                    <Form.Item
+                  <div className="col-xl-12 col-sm-12 mt-2 ">
+                    <Form.Item  className="mt-2" 
                       name="attachments"
                       // rules={[
                       //   {
@@ -1285,13 +1286,14 @@ function Updatejob() {
                         filetype={"Accept only pdf and docs"}
                         listType="picture"
                         accept=".pdf,.docs,"
+                        style={{ height: "60px" }}
                       />
                     </Form.Item>
                   </div>
                 </div>
               </div>
             </div>
-
+</div>
             <div className="col-12 d-flex justify-content-center my-4 gap-3">
               <Button className="save_button" btnType="save">
                 Save

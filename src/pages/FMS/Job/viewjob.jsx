@@ -251,28 +251,21 @@ export default function ViewJob() {
 
   return (
     <>
-      {/* <div className=" container-fluid view_quotation  p-3 px-4">
-        <div className="row"> */}
-      <div className="container-fluid">
-        <div className="row justify-content-md-center mb-2">
-          {/* <div className="col-xl-4 col-lg-4 col-md-4 col-sm-12">
-            <h5 className="lead_text">View Job</h5>
-          </div> */}
-          <div className="content-tabs ">
-            <div className="container-fluid ">
-              <div className="row  mt-3 ">
-                <div className="col-xl-6 col-lg-2 col-md-3 col-sm-12 ">
-                  <h4 className="lead_text">View Job</h4>
+   
+            <div className="container-fluid ms-0 me-2">
+              <div className="row ">
+                <div className="col-sm-5 col-12 mt-4 ">
+                  <h5 className="lead_text">View Job</h5>
                 </div>
-                <div className="col-xl-6 col-md-12">
-                  <div className="row justify-content-end mx-2 py-3">
-                    <div className="col-1"></div>
-                    <div className="col-1"></div>
+                <div className="col-sm-7 col-12">
+                  <div className="d-flex justify-content-end py-2">
+                    {/* <div className="col-1"></div>
+                    <div className="col-1"></div> */}
 
-                    <div className="col-xl-2 col-lg-2 col-md-12 col-sm-12  mb-3 d-flex justify-content-end">
-                      <Button
+<div className="col-xl-2 col-md-3 col-4 d-flex justify-content-end ">
+                      <Button style={{width:70 , height:40}}
                         btnType="add_borderless"
-                        className="edit_button rounded"
+                        className="edit_button"
                         // onClick={handlePrint}
                         onClick={() => {
                           // navigate(`${ROUTES.JOB_INVOICE}/${id}`);
@@ -285,10 +278,10 @@ export default function ViewJob() {
                         Print
                       </Button>
                     </div>
-                    <div className="col-xl-2 col-lg-2 col-md-12 col-sm-12 mb-3 d-flex justify-content-end">
-                      <Button
+                    <div className="col-xl-2 col-md-3 col-4 d-flex justify-content-end  me-1">
+                      <Button style={{width:80, height:40}}
                         btnType="add_borderless"
-                        className="edit_button rounded"
+                        className="edit_button"
                         onClick={() => {
                           // handleviewtoedit();
                           navigate(`${ROUTES.UPDATEJOB}/${id}`);
@@ -298,11 +291,11 @@ export default function ViewJob() {
                         <FiEdit />
                       </Button>
                     </div>
-                    <div className="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3 d-flex justify-content-end">
+                    <div className="col-xl-2 col-md-3 col-4 d-flex justify-content-end mb-3">
                       {invoice_status !== 0 ? (
-                        <Button
+                        <Button style={{width:80 , height:60}}
                           btnType="save"
-                          className="edit_button rounded"
+                          className="edit_button "
                           onClick={() => {
                             // handleviewtoedit();
                             if (invoice_status == 1) {
@@ -330,13 +323,13 @@ export default function ViewJob() {
                   </div>
                 </div>
               </div>
-              <div className="row ms-1 mb-3 ">
-                <div className="content-tabs-new row justify-content px-4">
-                  <div className="row mt-3 mb-3">
-                    <h5 className="lead_text">Basic Info</h5>
+              <div className="row mt-1 ">
+                <div className="content-tabs-new row justify-content mx-1 mb-3 ">
+                  <div className="row mt-3 ">
+                    <h6 className="lead_text">Basic Info</h6>
                   </div>
 
-                  <div className="col-xl-4 col-sm-12 d-flex">
+                  <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
                     <div className="col-4 boldhd">Job No</div>
                     <div className="col-1">:</div>
 
@@ -345,7 +338,7 @@ export default function ViewJob() {
                     </div>
                   </div>
 
-                  <div className="col-xl-4 col-sm-12 d-flex">
+                  <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
                     <div className="col-4 boldhd">Job Date</div>
                     <div className="col-1">:</div>
 
@@ -356,7 +349,7 @@ export default function ViewJob() {
                     </div>
                   </div>
 
-                  <div className="col-xl-4 col-sm-12 d-flex">
+                  <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
                     <div className="col-4 boldhd">Freight type</div>
                     <div className="col-1">:</div>
 
@@ -366,7 +359,7 @@ export default function ViewJob() {
                       </p>
                     </div>
                   </div>
-                  <div className="col-xl-4 col-sm-12 d-flex">
+                  <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
                     <div className="col-4 boldhd">Quotation No</div>
                     <div className="col-1">:</div>
 
@@ -374,7 +367,7 @@ export default function ViewJob() {
                       <p className="modal-view-data">{qtnno}</p>
                     </div>
                   </div>
-                  <div className="col-xl-4 col-sm-12 d-flex">
+                  <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
                     <div className="col-4 boldhd">Customer</div>
                     <div className="col-1">:</div>
 
@@ -385,7 +378,7 @@ export default function ViewJob() {
                     </div>
                   </div>
 
-                  <div className="col-xl-4 col-sm-12 d-flex">
+                  <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
                     <div className="col-4 boldhd">Shipper</div>
                     <div className="col-1">:</div>
 
@@ -393,18 +386,18 @@ export default function ViewJob() {
                       <p className="modal-view-data">{alljobs?.job_shipper}</p>
                     </div>
                   </div>
-                </div>
+                {/* </div> */}
               </div>
-            </div>
-
-            <div className="row  mt-3 px-1 ">
-              <div className="col-md-6 col-12 mt-2">
-                <div className="content-tabs-new row justify-content mx-1 mb-3">
-                  <div className="row mt-3 mb-3">
-                    <h5 className="lead_text">Transportation</h5>
+          </div>
+          <div className="row  mt-1 ">
+            <div className="content-tabs-new row justify-content mx-1 mb-3">
+              {/* <div className="col-md-6 col-12 mt-2">
+                <div className="content-tabs-new row justify-content mx-1 mb-3"> */}
+                  <div className="col-12">
+                    <h6 className="lead_text">Transportation</h6>
                   </div>
 
-                  <div className="col-12 d-flex">
+                  <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
                     <div className="col-3 boldhd">Mode</div>
                     <div className="col-1">:</div>
 
@@ -413,7 +406,7 @@ export default function ViewJob() {
                     </div>
                   </div>
 
-                  <div className="col-12 d-flex">
+                  <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
                     <div className="col-3 boldhd">Origin</div>
                     <div className="col-1">:</div>
 
@@ -428,7 +421,7 @@ export default function ViewJob() {
                     </div>
                   </div>
 
-                  <div className="col-12 d-flex">
+                  <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
                     <div className="col-3 boldhd">Destination</div>
                     <div className="col-1">:</div>
 
@@ -443,7 +436,7 @@ export default function ViewJob() {
                     </div>
                   </div>
 
-                  <div className="col-12 d-flex">
+                  <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
                     <div className="col-3 boldhd">Carrier</div>
                     <div className="col-1">:</div>
 
@@ -454,7 +447,7 @@ export default function ViewJob() {
                     </div>
                   </div>
 
-                  <div className="col-12 d-flex">
+                  <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
                     <div className="col-3 boldhd">AWB/BL No</div>
                     <div className="col-1">:</div>
 
@@ -464,15 +457,17 @@ export default function ViewJob() {
                       </p>
                     </div>
                   </div>
-                </div>
-              </div>
-
-              <div className="col-md-6 col-12 mt-2">
-                <div className="content-tabs-new row justify-content mx-1 mb-3 me-3">
-                  <div className="row mt-3 mb-3">
-                    <h5 className="lead_text">Shipment Details</h5>
+                {/* </div>
+              </div> */}
+</div>
+</div>
+<div className="row  mt-1 ">
+              <div className="content-tabs-new row justify-content mx-1 mb-3">
+                {/* <div className="content-tabs-new row justify-content mx-1 mb-3 me-3"> */}
+                  <div className="col-12">
+                    <h6 className="lead_text">Shipment Details</h6>
                   </div>
-                  <div className="col-12 d-flex">
+                  <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
                     <div className="col-3 boldhd">Cargo Type</div>
                     <div className="col-1">:</div>
 
@@ -483,18 +478,18 @@ export default function ViewJob() {
                     </div>
                   </div>
 
-                  <div className="col-12 d-flex">
-                    <div className="col-3 boldhd">No of pieces </div>
+                  <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
+                    <div className="col-4 boldhd">No of pieces </div>
                     <div className="col-1">:</div>
 
-                    <div className="col-8">
+                    <div className="col-7">
                       <p className="modal-view-data">
                         {alljobs?.job_no_of_pieces}
                       </p>
                     </div>
                   </div>
 
-                  <div className="col-12 d-flex">
+                  <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
                     <div className="col-3 boldhd">UOM</div>
                     <div className="col-1">:</div>
 
@@ -505,7 +500,7 @@ export default function ViewJob() {
                     </div>
                   </div>
 
-                  <div className="col-12 d-flex">
+                  <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
                     <div className="col-3 boldhd">Gross wt </div>
                     <div className="col-1">:</div>
 
@@ -514,24 +509,24 @@ export default function ViewJob() {
                     </div>
                   </div>
 
-                  <div className="col-12 d-flex">
-                    <div className="col-3 boldhd">Chargeable wt </div>
+                  <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
+                    <div className="col-4 boldhd">Chargeable wt </div>
                     <div className="col-1">:</div>
 
-                    <div className="col-8">
+                    <div className="col-7">
                       <p className="modal-view-data">
                         {alljobs?.job_chargeable_wt}
                       </p>
                     </div>
                   </div>
-                </div>
+                {/* </div> */}
               </div>
             </div>
-            <div className="row mt-1 px-1 mb-0">
-              <div className="col-md-6 col-12 ">
-                <div className="content-tabs-new row justify-content mx-1 mb-2">
-                  <div className="row mt-1 mb-1">
-                    <h5 className="lead_text">Payment Info</h5>
+            <div className="row mt-1 justify-content-between">
+              <div className="col-xl-6 col-lg-12 col-md-12 col-12 ">
+                <div className="row content-tabs-new justify-content  mb-3">
+                  <div className="row mt-2">
+                    <h6 className="lead_text">Payment Info</h6>
                   </div>
 
                   <div className="col-12 d-flex">
@@ -577,32 +572,31 @@ export default function ViewJob() {
                   </div>
                 </div>
               </div>
-              <div className="col-md-6 col-12">
-                <div className="content-tabs-new row  mx-1 mb-1 me-3">
-                  <div className="row mt-3 mb-3 p-1">
-                    <h5 className="lead_text">Attachments</h5>
+              <div className="col-xl-6 col-lg-12 col-12 ">
+                <div className="content-tabs-new row justify-content ms-1 mb-3">
+                  <div className="row mt-2">
+                    <h6 className="lead_text">Attachments</h6>
                   </div>
 
-                  <div className="col-xl-6 col-sm-12 d-flex mb-4 pb-2 ms-3">
-                    <div className="col-6 boldhd mb-5 pb-3">Attachments </div>
+                  <div className="col-12 d-flex" style={{ marginBottom: "125px" }}>
+                    <div className="col-4">Attachments </div>
                     <div className="col-1">:</div>
 
                     <div className="col-5 ">
                       <p className="modal-view-data">{alljobs?.job_docs}</p>
                     </div>
                   </div>
-                  <br />
-                  <br />
-                  <br />
+                
                 </div>
               </div>
+              
             </div>
             {/* <div className="col-xl-8 col-lg-8 col-md-8 col-sm-12  mt-2">
             <div className="row justify-content-end">
               <div className="col-xl-2 col-lg-2 col-md-2 col-sm-12 my-2"> */}
             {tax ? (
-              <div className="row mt-1 me-4 mb-1 ">
-                <div className="content-tabs-tablenew row justify-content m-3 ">
+              <div className="row mt-1 ">
+                <div className="content-tabs-new row justify-content mx-1 mb-3">
                   {/* <div className="row mt-3">
                     <h5 className="lead_text">Task & Description</h5>
                   </div> */}
@@ -638,11 +632,13 @@ export default function ViewJob() {
                     </Collapse>
                   </div>
                 </div>
+                
               </div>
             ) : null}
-          </div>
-        </div>
+          {/* </div> */}
+        {/* </div> */}
       </div>
+    
     </>
   );
 }

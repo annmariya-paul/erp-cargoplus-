@@ -73,7 +73,13 @@ function EnquiryList() {
       title: "#",
       key: "index",
       width: "4%",
-      render: (value, item, index) => serialNo + index,
+      render: (value, item, index) => {
+        return (
+         <div>
+         {item?.startindex + index +serialNo}
+       </div>
+        )
+       },
       align: "center",
     },
     {
@@ -362,6 +368,7 @@ function EnquiryList() {
               contact_phone_1: item?.crm_v1_contacts?.contact_phone_1,
               enquiry_status: item?.enquiry_status,
               enquiry_converted_status: item?.enquiry_converted_status,
+              startindex:res?.data?.data?.startIndex,
             });
           });
           setAllnquires(temp);

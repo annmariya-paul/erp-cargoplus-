@@ -238,6 +238,10 @@ console.log("bnkdetails id iss",vendorId)
       })
       .catch((err) => {
         console.log("Error", err);
+        if(err?.response?.status == 500){
+          message.error(err?.response?.data?.message)
+
+        }
       });
   };
 
@@ -538,8 +542,10 @@ console.log("bnkdetails id iss",vendorId)
                         rules={[
                           {
                             required: true,
-                            // pattern: new RegExp("^[A-Za-z ]+$"),
-                            message: "Please enter a Valid email",
+                            pattern: new RegExp(
+                              "^[A-Za-z0-9_!#$%&'*+/=?`{|}~^.-]+@[A-Za-z0-9.-]+$"
+                            ),
+                            message: "Please enter a valid Email",
                           },
                         ]}
                       >
@@ -563,9 +569,9 @@ console.log("bnkdetails id iss",vendorId)
                         name="vendorwebsite"
                         rules={[
                           {
-                            pattern: new RegExp("[Hh][Tt][Tt][Pp][Ss]?:\/\/(?:(?:[a-zA-Z\u00a1-\uffff0-9]+-?)*[a-zA-Z\u00a1-\uffff0-9]+)(?:\.(?:[a-zA-Z\u00a1-\uffff0-9]+-?)*[a-zA-Z\u00a1-\uffff0-9]+)*(?:\.(?:[a-zA-Z\u00a1-\uffff]{2,}))(?::\d{2,5})?(?:\/[^\s]*)?"),
+                            pattern: /([^.\/]+\.[^.\/]+)$/,
                             message: "Enter valid website",
-                          },
+                          }
 
                         ]}
                       >

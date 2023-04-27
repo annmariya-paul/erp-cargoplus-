@@ -77,6 +77,12 @@ function Moreinfo({ vendor }) {
   };
 
   const submitForm = (data) => {
+
+ 
+
+  
+   
+
     const formData = new FormData();
     formData.append(`name`, vendor.vendor_name);
     formData.append(`org_type`, vendor.vendor_org_type);
@@ -91,13 +97,7 @@ function Moreinfo({ vendor }) {
     vendor?.vendor_state && formData.append(`state`, vendor.vendor_state);
     vendor?.vendor_address && formData.append(`address`, vendor.vendor_address);
 
-    // formData.append(`country_id`, vendor.vendor_country_id);
-    // formData.append(`city`, vendor.vendor_city);
-    // formData.append(`website`, vendor.vendor_website);
-    // formData.append(`state`, vendor.vendor_state);
-    // formData.append(`address`, vendor.vendor_address);
-    // formData.append(`tax_no`, data.vendortaxno);
-    // formData.append(`credit_days`, data.vendorcreditdays);
+   
     formData.append(`freight_type`, data.vendor_freighttype);
     formData.append(`incoterm`, data.vendorincoterms);
     formData.append(`remarks`, vendor.remarks);
@@ -122,9 +122,9 @@ function Moreinfo({ vendor }) {
             // addForm.resetFields();
             close_modal(successPopup, 1000);
           }
-          else{
-            setError(true)
-          }
+          // else{
+          //   setError(true)
+          // }
         })
         .catch((err) => {
           console.log("Error", err);
@@ -141,15 +141,15 @@ function Moreinfo({ vendor }) {
             setSuccessPopup(true);
             close_modal(successPopup, 1000, res?.data?.data);
           }
-          else{
-            setError(true)
-          }
+        
         })
         .catch((err) => {
           console.log("Error", err);
           setError(true);
         });
     }
+  
+ 
   };
 
   const close_modal = (mShow, time) => {

@@ -163,3 +163,12 @@ button {
 .custaddress_height{
   height: 113px !important;
 }
+
+.antdfileupload{
+  :global {
+    .ant-upload.ant-upload-drag .ant-upload {
+      padding: 10px 0 !important;
+    }
+  }
+  
+}

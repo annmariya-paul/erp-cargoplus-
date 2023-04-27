@@ -193,30 +193,31 @@ function Invoicetemp1({
                           <table>
                             <thead></thead>
                             <tbody>
+                              {invoice_details1}
+
                               <tr>
-                                <td className="font_weight"> Project Name </td>
-                                <td className=""> : </td>
-                                <td className=""> Jnewtst-00023 </td>
-                              </tr>
-                              <tr>
-                                <td className="font_weight"> AWB/BL</td>
-                                <td className=""> : </td>
-                                <td className=""> usdfu213</td>
-                              </tr>
-                              <tr>
-                                <td className="font_weight"> Origin </td>
-                                <td className=""> : </td>
-                                <td className=""> JCochin Sea </td>
-                              </tr>
+              <td className="font_weight"> Project Name </td>
+              <td className=""> : </td>
+              <td className=""> Jnewtst-00023 </td>
+            </tr>
+            <tr>
+              <td className="font_weight"> AWB/BL</td>
+              <td className=""> : </td>
+              <td className=""> usdfu213</td>
+            </tr>
+            <tr>
+              <td className="font_weight"> Origin </td>
+              <td className=""> : </td>
+              <td className=""> JCochin Sea </td>
+            </tr>
+
                               {/* <tr>
                                 <td className="font_weight"> Destination</td>
                                 <td className=""> : </td>
                                 <td className=""> Cochin Sea </td>
                               </tr> */}
-                              
                             </tbody>
                           </table>
-                        
                         </div>
                       </div>
                       <div className=" col-3"></div>
@@ -226,19 +227,15 @@ function Invoicetemp1({
                           <h4 className="headingcolor">testcust</h4>
                         </div>
                       </div>
-                    
+
                       {/* <div className="col-2">
                         <div className="">
                           <label className="label_color">Consignee</label>
                           <h4 className="headingcolor">Teshet</h4>
                         </div>
                       </div> */}
-
                     </div>
                   </tr>
-                  
-                 
-                 
 
                   <tr className="invoice_header">
                     <div className="d-flex ">
@@ -247,6 +244,7 @@ function Invoicetemp1({
                           <table>
                             <thead></thead>
                             <tbody>
+                              {invoice_details2}
                               <tr>
                                 <td className="font_weight"> Destination</td>
                                 <td className=""> : </td>
@@ -277,10 +275,8 @@ function Invoicetemp1({
                                 <td className=""> : </td>
                                 <td className=""> ejnd Sea </td>
                               </tr>
-                           
                             </tbody>
                           </table>
-                        
                         </div>
                       </div>
                       <div className=" col-3"></div>
@@ -290,25 +286,15 @@ function Invoicetemp1({
                           <h4 className="headingcolor">Test One</h4>
                         </div>
                         <div className="pt-4">
-                        <div className="">
-                          <label className="label_color">Consignee</label>
-                          <h4 className="headingcolor">Teshet</h4>
+                          <div className="">
+                            <label className="label_color">Consignee</label>
+                            <h4 className="headingcolor">Teshet</h4>
+                          </div>
                         </div>
                       </div>
-                      </div>
-                    
-                      
-
-                      
-                      
                     </div>
                   </tr>
-                 
-
-                  
-                 
                 </thead>
-                
               );
             })}
 
@@ -346,7 +332,7 @@ function Invoicetemp1({
                   >
                     TASKS & DESCRIPTION
                   </th>
-                
+
                   <th
                     scope="col"
                     className="font_weight_qt text_align_number invoiceth_widthslno"
@@ -360,34 +346,26 @@ function Invoicetemp1({
 
                   <tr>
                     <td className="border_right p-3">1 </td>
-                    <td className="border_right ">
-                      servicenme{" "}
-                    </td>
+                    <td className="border_right ">servicenme </td>
 
                     <td className="text_align_words">100.00 </td>
                   </tr>
 
                   <tr className="alternative_color">
                     <td className="border_right p-3">2 </td>
-                    <td className="border_right ">
-                      Shippemenet{" "}
-                    </td>
+                    <td className="border_right ">Shippemenet </td>
 
                     <td className="text_align_words">200.00 </td>
                   </tr>
                   <tr>
                     <td className="border_right p-3">3 </td>
-                    <td className="border_right ">
-                      servicenme{" "}
-                    </td>
+                    <td className="border_right ">servicenme </td>
 
                     <td className="text_align_words">300.00 </td>
                   </tr>
                   <tr className="alternative_color">
                     <td className="border_right p-3">4 </td>
-                    <td className="border_right ">
-                      servicenme{" "}
-                    </td>
+                    <td className="border_right ">servicenme </td>
 
                     <td className="text_align_words">400 .00</td>
                   </tr>
@@ -409,8 +387,6 @@ function Invoicetemp1({
                     </td>
                     <td className="text_align_words">45.00 </td>
                   </tr> */}
-                  
-                
                 </tbody>
               </table>
               {/* listing table end */}
@@ -420,26 +396,26 @@ function Invoicetemp1({
                 <div className="sub_total_wrapper__col sub_total_wrapper__col_1">
                   <div style={{ width: "100%" }}>
                     <div className="total_color">Total In Words</div>
-                    <div className="sub_total_words">
-                 One thousand only
-                    </div>
+                    <div className="sub_total_words">One thousand only</div>
                   </div>
                 </div>
 
                 <div className="sub_total_wrapper__col sub_total_wrapper__col_2">
-                <div style={{ width: "100%" }}>
-                  <table className="invoice_header">
-                    <tbody className="invoice_header">
-                    
-                      <tr className="total_bgcolor">
-                        <td style={{ fontWeight: 600 }} className="px-1">Total</td>
-                        <td style={{ fontWeight: 600 }} className="px-1">1000.00</td>
-                      </tr>
-                     
-                    </tbody>
-                  </table>
+                  <div style={{ width: "100%" }}>
+                    <table className="invoice_header">
+                      <tbody className="invoice_header">
+                        <tr className="total_bgcolor">
+                          <td style={{ fontWeight: 600 }} className="px-1">
+                            Total
+                          </td>
+                          <td style={{ fontWeight: 600 }} className="px-1">
+                            1000.00
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
-              </div>
 
                 {/* <div className="sub_total_wrapper__col sub_total_wrapper__col_2">
                   <div style={{ width: "100%" }}>

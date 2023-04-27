@@ -76,14 +76,15 @@ function Accounting({vendor}){
           .then((res) => {
             console.log("successfully updated", res);
             if (res.data.success) {
+            
              Getvendordata()
               setSuccessPopup(true);
               close_modal(successPopup, 1000,res?.data?.data);
-    
+               
             }
-            else{
-              setError(true)
-            }
+            // else{
+            //   setError(true)
+            // }
           })
           .catch((err) => {
             console.log("Error", err);
@@ -97,14 +98,15 @@ function Accounting({vendor}){
           .then((res) => {
             console.log("successfully addedd", res);
             if (res.data.success) {
+              setError(false)
              Getvendordata()
               setSuccessPopup(true);
               close_modal(successPopup, 1000,res?.data?.data);
     
             }
-            else{
-              setError(true)
-            }
+            // else{
+            //   setError(true)
+            // }
           })
           .catch((err) => {
             console.log("Error", err);
@@ -124,6 +126,7 @@ function Accounting({vendor}){
       if (!mShow) {
         setTimeout(() => {
           setSuccessPopup(false);
+          setError(false)
           // setTimeOuts(true);
           // console.log("ediittt",venderdata)
           // setVendorId(venderdata);
@@ -157,7 +160,7 @@ function Accounting({vendor}){
             <label>Tax No</label>
             <Form.Item name="vendortaxno">
               
-              <InputType />
+              <InputType  onChange={()=>{ setError(false)}}/>
             </Form.Item>
           </div>
           <div className="col-sm-4">

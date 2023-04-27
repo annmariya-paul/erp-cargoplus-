@@ -213,7 +213,11 @@ function Lead({}) {
         }
       })
       .catch((err) => {
-        console.log("Error", err);
+        console.log("Error", err?.response?.data?.message);
+        if(err?.response?.status == 500){
+          message.error(err?.response?.data?.message)
+
+        }
       });
   };
 
@@ -589,7 +593,7 @@ function Lead({}) {
                         rules={
                           [
                             {
-                              pattern: new RegExp("[Hh][Tt][Tt][Pp][Ss]?:\/\/(?:(?:[a-zA-Z\u00a1-\uffff0-9]+-?)*[a-zA-Z\u00a1-\uffff0-9]+)(?:\.(?:[a-zA-Z\u00a1-\uffff0-9]+-?)*[a-zA-Z\u00a1-\uffff0-9]+)*(?:\.(?:[a-zA-Z\u00a1-\uffff]{2,}))(?::\d{2,5})?(?:\/[^\s]*)?"),
+                              pattern: /([^.\/]+\.[^.\/]+)$/,
                               message: "Enter valid website",
                             },
                             // {
@@ -710,8 +714,8 @@ function Lead({}) {
                         <Form.Item name="customer_logo">
                           <FileUpload
                             multiple
-                          className="p-0"
-                            style={{ height: "33px" }}
+                          className="antdfileupload"
+                            style={{ padding:"0.5px" }}
                             filetype={"Accept only pdf and docs"}
                             listType="picture"
                             accept=".pdf,.docs,"

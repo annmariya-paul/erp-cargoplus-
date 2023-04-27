@@ -22,7 +22,7 @@ function Listjob() {
   const [searchName, setSearchName] = useState("");
   const [searchStatus, setSearchStatus] = useState("");
   const [jobStatus, setJobStatus] = useState(JobStatus);
-
+  const [startcount, setstartcount] = useState();
   const [noofItems, setNoofItems] = useState("25");
   const [current, setCurrent] = useState(1);
 
@@ -36,7 +36,13 @@ function Listjob() {
       title: "Sl. No.",
       key: "index",
       width: "7%",
-      render: (value, item, index) => serialNo + index,
+      render: (value, item, index) => {
+        return (
+         <div>
+         {item?.startindex + index +serialNo}
+       </div>
+        )
+       },
       align: "center",
     },
 
@@ -64,14 +70,14 @@ function Listjob() {
           String(record.job_status).toLowerCase().includes(value.toLowerCase())
         );
       },
-      align: "center",
+      align: "left",
     },
     {
       title: "DATE",
       dataIndex: "job_date",
       key: "job_date",
       width: "9%",
-      align: "center",
+      align: "left",
     },
     {
       title: "AWB/BL",
@@ -84,7 +90,7 @@ function Listjob() {
       //     .toLowerCase()
       //     .includes(value.toLowerCase());
       // },
-      align: "center",
+      align: "left",
     },
     {
       title: "CONSIGNEE",
@@ -107,6 +113,7 @@ function Listjob() {
       title: "STATUS",
       dataIndex: "job_status",
       key: "job_status",
+      width: "5%",
     },
     {
       title: "ACTION",
@@ -200,6 +207,8 @@ function Listjob() {
         console.log("Responseeee", res);
         if (res.data.success) {
           console.log("success of job", res.data.data);
+          // setTotalcount(res?.data?.data?.enquiryCount);
+          setstartcount(res?.data?.data?.startIndex);
           let temp = [];
           res?.data?.data?.job?.forEach((item, index) => {
             let date = moment(item.job_date).format("DD-MM-YYYY");
@@ -224,6 +233,7 @@ function Listjob() {
                   job_no_of_pieces: item.job_no_of_pieces,
                   job_uom: item.job_uom,
                   job_status: status.name,
+                  startindex:res?.data?.data?.startIndex,
                 });
               }
             });
@@ -235,6 +245,16 @@ function Listjob() {
       .catch((err) => {
         console.log("Error", err);
       });
+  };
+
+
+  const getFinalCount = (total) => {
+    const cutoff = Math.ceil(totaljob / noofItems);
+    console.log("FinalTest", cutoff, current);
+    if (current === cutoff) return totaljob;
+    return total;
+    // console.log("TotalPageTest",current,totalCount)
+    // console.log("TestCount",total)
   };
 
   useEffect(() => {
@@ -342,33 +362,44 @@ function Listjob() {
           </div> */}
         {/* </div> */}
         <div className="row my-3">
-          <div className="col-4">
+        <div className="col-xl-4  ">
+                <div className="d-flex justify-content-start align-items-center gap-3">
+                  <div className="   ">
             <Select
               bordered={false}
               className="page_size_style"
-              value={pageSize}
-              onChange={(e) => setPageSize(e)}
+              value={noofItems}
+              onChange={(e) => setNoofItems(e)}
             >
               <Select.Option value="25">
-                Show
-                <span className="vertical ms-1">|</span>
-                <span className="sizes ms-1">25</span>
-              </Select.Option>
-              <Select.Option value="50">
-                Show
-                <span className="vertical ms-1">|</span>
-                <span className="sizes ms-1"> 50</span>
-              </Select.Option>
-              <Select.Option value="100">
-                Show
-                <span className="vertical ms-1">|</span>
-                <span className="sizes ms-1">100</span>
-              </Select.Option>
+                        <span style={{ color: "#2f6b8f" }} className="ms-1">
+                          25
+                        </span>
+                      </Select.Option>
+                      <Select.Option value="50">
+                        <span style={{ color: "#2f6b8f" }} className="ms-1">
+                          50
+                        </span>
+                      </Select.Option>
+                      <Select.Option value="100">
+                        <span style={{ color: "#2f6b8f" }} className="ms-1">
+                          100
+                        </span>
+                      </Select.Option>
             </Select>
           </div>
+          <div className="   d-flex  align-items-center mt-2">
+                    <label className="font_size">
+                      Results: {startcount + 1} -{" "}
+                      {getFinalCount(1 * noofItems * current)}{" "}
+                      <span>of {totaljob} </span>{" "}
+                    </label>
+                  </div>
+                </div>
+              </div>
 
           <div className="col-4 d-flex py-2 justify-content-center">
-            {totaljob > 0 && (
+            {/* {totaljob > 0 && (
               <MyPagination
                 total={parseInt(totaljob)}
                 current={current}
@@ -383,7 +414,24 @@ function Listjob() {
                   // setCurrent(noofItems !== pageSize ? 0 : current);
                 }}
               />
-            )}
+            )} */}
+              {totaljob > 0 && (
+                  <MyPagination
+                    total={parseInt(totaljob)}
+                    // total={parseInt(AllEnquiries)}
+                    current={current}
+                    pageSize={noofItems}
+                    // defaultPageSize={noofItems}
+                    showSizeChanger={false}
+                    onChange={(current, pageSize) => {
+                      console.log("page index isss", pageSize);
+                      setCurrent(current);
+                      // setPageSize(pageSize);
+                      // setNoofItems(pageSize);
+                      // setCurrent(noofItems !== pageSize ? 0 : current);
+                    }}
+                  />
+                )}
           </div>
           <div className="col-4 d-flex justify-content-end">
             <div className="col mb-2 px-4">

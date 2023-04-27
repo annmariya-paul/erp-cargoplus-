@@ -46,6 +46,8 @@ function CreateJob() {
   const [addForm] = Form.useForm();
   const [frightmode, setFrightmode] = useState();
   console.log("change", frightmode);
+  const [jobno, setJobno] = useState();
+  console.log("Job no:",jobno);
   const [frighttypemode, setFrighttypemode] = useState();
   const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
   console.log("frighttype mode ", frighttypemode);
@@ -82,6 +84,15 @@ function CreateJob() {
       reader.onload = () => resolve(reader.result);
       reader.onerror = (error) => reject(error);
     });
+
+    useEffect(() => {
+      if(jobno){
+        addForm.setFieldsValue({ job_no : jobno })
+      }
+      // getallunits();
+      // getAllLocations();
+   
+    }, [jobno]);
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj);
@@ -121,6 +132,23 @@ function CreateJob() {
       });
   };
 
+
+  const GetSingleJob = (e) => {
+    console.log("e",e);
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/job/job-number?jobFrtType=${e}`)
+      .then((res) => {
+        console.log("response of job number", res);
+        if (res.data.data) {
+          console.log("success of job", res.data.data);
+          setJobno(res?.data?.data.job_number);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+
   const getonequatation = async (id) => {
     try {
       const onequatation = await PublicFetch.get(
@@ -137,10 +165,10 @@ function CreateJob() {
 
           job_shipper: onequatation?.data?.data.quotation.quotation_shipper,
           job_customer:
-            onequatation?.data?.data.quotation.crm_v1_leads.customer_id,
+            onequatation?.data?.data.quotation.crm_v1_customer.customer_id,
 
           job_credit_days:
-            onequatation?.data?.data.quotation.crm_v1_leads
+            onequatation?.data?.data.quotation.crm_v1_customer
               .customer_credit_days,
           job_freight_type:
             onequatation?.data?.data.quotation.fms_v1_freight_types
@@ -186,7 +214,7 @@ function CreateJob() {
       .then((res) => {
         console.log("Response", res);
         if (res.data.success) {
-          console.log("success", res.data.data);
+          console.log("success of qtn", res.data.data);
           setAllQuotations(res.data.data);
 
           let temp = [];
@@ -201,7 +229,7 @@ function CreateJob() {
               quotation_date: date,
               quotation_validity: validity,
               quotation_consignee: item.quotation_consignee,
-              consignee_name: item.crm_v1_leads.lead_customer_name,
+              consignee_name: item.crm_v1_customer.lead_customer_name,
               quotation_shipper: item.quotation_shipper,
               quotation_status: item.quotation_status,
               fms_v1_quotation_agents: item.fms_v1_quotation_agents,
@@ -574,7 +602,7 @@ function CreateJob() {
   return (
     <>
       <div className="container-fluid">
-        <div className="row justify-content-md-center">
+        <div className="row justify-content-md-center mb-2">
           {/* <div className="row flex-wrap">
             <div className="col-6 ">
               <h5 className="lead_text">Create Job</h5>
@@ -591,17 +619,17 @@ function CreateJob() {
               console.log(error);
             }}
           >
-            <div className="container-fluid ">
+            <div className="container-fluid ms-0 me-2">
               <div className="row  mt-3">
-                <h4 className="lead_text">Create Job</h4>
+                <h5 className="lead_text">Create Job</h5>
               </div>
-              <div className="row ms-1 mb-3 ">
-                <div className="content-tabs-new row justify-content px-4">
+              <div className="row mt-1 ">
+                <div className="content-tabs-new row justify-content mx-1 mb-3">
                   <div className="row mt-3 ">
-                    <h5 className="lead_text">Basic Info</h5>
+                    <h6 className="lead_text">Basic Info</h6>
                   </div>
                   <div className="col-xl-4 col-sm-12 mt-2 px-3 ">
-                    <label>Customer</label>
+                    <label>Customer<span className="required">*</span></label>
                     <Form.Item
                       name="job_customer"
                       rules={[
@@ -637,7 +665,7 @@ function CreateJob() {
                     </Form.Item>
                   </div>
                   <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                    <label>Freight Type</label>
+                    <label>Freight Type<span className="required">*</span></label>
                     <Form.Item
                       name="job_freight_type"
                       rules={[
@@ -657,6 +685,8 @@ function CreateJob() {
                           console.log("date mmm", e);
                           setFrightmode(e);
                           mode(e);
+                          // setFreightId(e);
+                          GetSingleJob(e);
                         }}
                       >
                         {frighttype &&
@@ -710,7 +740,7 @@ function CreateJob() {
                   </div>
 
                   <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                    <label>Job No</label>
+                    <label>Job No<span className="required">*</span></label>
                     <Form.Item
                       name="job_no"
                       // rules={[
@@ -753,7 +783,7 @@ function CreateJob() {
                   </div>
 
                   <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                    <label>Job Date</label>
+                    <label>Job Date<span className="required">*</span></label>
                     <Form.Item
                       name="jobdate"
                       rules={[
@@ -861,7 +891,7 @@ function CreateJob() {
                       <InputType disabled={disable} />
                     </Form.Item> */}
                   </div>
-                  <div className="col-sm-4 pt-2">
+                  {/* <div className="col-xl-4 col-sm-12 mt-2 px-3"> */}
                     {/* <label>
                       Sale Person<span className="required">*</span>
                     </label>
@@ -889,15 +919,15 @@ function CreateJob() {
                           })}
                       </SelectBox>
                     </Form.Item> */}
-                  </div>
+                  {/* </div> */}
                 </div>
               </div>
-            </div>
-            <div className="row  mt-3 px-1 ">
-              <div className=" col-12 mt-3">
+           
+            <div className="row  mt-1 ">
+              {/* <div className=" col-12 mt-3"> */}
                 <div className="content-tabs-new row justify-content mx-1 mb-3">
                   <div className="row mt-3">
-                    <h5 className="lead_text">Transportation</h5>
+                    <h6 className="lead_text">Transportation</h6>
                   </div>
                   {/* <div className="col-xl-6 col-sm-12 mt-2" hidden>
                       <label>Mode</label>
@@ -925,8 +955,8 @@ function CreateJob() {
                       </Form.Item>
                     </div> */}
 
-                  <div className="col-xl-4 col-sm-12 mt-2">
-                    <label>Consignee</label>
+                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                    <label>Consignee<span className="required">*</span></label>
                     <Form.Item
                       name="job_consignee"
                       rules={[
@@ -940,8 +970,8 @@ function CreateJob() {
                       <InputType />
                     </Form.Item>
                   </div>
-                  <div className="col-xl-4 col-sm-12 mt-2">
-                    <label>Shipper</label>
+                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                    <label>Shipper<span className="required">*</span></label>
                     <Form.Item
                       name="job_shipper"
                       rules={[
@@ -956,8 +986,8 @@ function CreateJob() {
                     </Form.Item>
                   </div>
 
-                  <div className="col-xl-4 col-sm-12 mt-2">
-                    <label>Origin</label>
+                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                    <label>Origin<span className="required">*</span></label>
                     <Form.Item
                       name="job_origin_id"
                       rules={[
@@ -990,8 +1020,8 @@ function CreateJob() {
                     </Form.Item>
                   </div>
 
-                  <div className="col-xl-4 col-sm-12 mt-2">
-                    <label>Destination</label>
+                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                    <label>Destination<span className="required">*</span></label>
                     <Form.Item
                       name="job_destination_id"
                       rules={[
@@ -1024,8 +1054,8 @@ function CreateJob() {
                     </Form.Item>
                   </div>
 
-                  <div className="col-xl-4 col-sm-12 mt-2  ">
-                    <label>Carrier</label>
+                  <div className="col-xl-4 col-sm-12 mt-2 px-3 ">
+                    <label>Carrier<span className="required">*</span></label>
                     <Form.Item
                       name="job_carrier"
                       rules={[
@@ -1057,8 +1087,8 @@ function CreateJob() {
                       </SelectBox>
                     </Form.Item>
                   </div>
-                  <div className="col-xl-4 col-sm-12 mt-2 mb-2">
-                    <label>AWB/BL No</label>
+                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                    <label>AWB/BL No<span className="required">*</span></label>
                     <Form.Item
                       name="job_awb"
                       rules={[
@@ -1093,7 +1123,7 @@ function CreateJob() {
                       </p>
                     ) : null}
                   </div>
-                  <div className="col-xl-4 col-sm-12 ">
+                  <div className="col-xl-4 col-sm-12 mt-2 px-3 ">
                     <label>Container Type</label>
                     <Form.Item
                       name="job_containertype"
@@ -1128,15 +1158,15 @@ function CreateJob() {
                     </Form.Item>
                   </div>
                 </div>
-              </div>
+              {/* </div> */}
 
-              <div className=" col-12 mt-3 pb-1">
-                <div className="content-tabs-new row justify-content mx-1 mb-3 me-3">
-                  <div className="row mt-3">
-                    <h5 className="lead_text">Shipment Details</h5>
+              <div className="content-tabs-new row justify-content mx-1 mb-3 ">
+                <div className="row mt-3">
+                  {/* <div className="row content-tabs-new justify-content  mb-3"> */}
+                    <h6 className="lead_text">Shipment Details</h6>
                   </div>
-                  <div className="col-xl-4 col-sm-12 mt-2">
-                    <label>Cargo Type</label>
+                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                    <label>Cargo Type<span className="required">*</span></label>
                     <Form.Item
                       name="job_cargo_type"
                       // rules={[
@@ -1165,8 +1195,8 @@ function CreateJob() {
                       </SelectBox>
                     </Form.Item>
                   </div>
-                  <div className="col-xl-4 col-sm-12 mt-2">
-                    <label>No of pieces</label>
+                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                    <label>No of pieces<span className="required">*</span></label>
                     <Form.Item
                       name="job_no_of_pieces"
                       rules={[
@@ -1190,8 +1220,8 @@ function CreateJob() {
                       />
                     </Form.Item>
                   </div>
-                  <div className="col-xl-4 col-sm-12 mt-2">
-                    <label>UOM</label>
+                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                    <label>UOM<span className="required">*</span></label>
                     <Form.Item
                       name="job_uom"
                       rules={[
@@ -1224,7 +1254,7 @@ function CreateJob() {
                     </Form.Item>
                   </div>
 
-                  <div className="col-xl-4 col-sm-12 mt-2">
+                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
                     <label>Length</label>
                     <Form.Item
                       name="job_length"
@@ -1250,7 +1280,7 @@ function CreateJob() {
                     </Form.Item>
                   </div>
 
-                  <div className="col-xl-4 col-sm-12 mt-2">
+                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
                     <label>Breadth</label>
                     <Form.Item
                       name="job_breadth"
@@ -1276,7 +1306,7 @@ function CreateJob() {
                     </Form.Item>
                   </div>
 
-                  <div className="col-xl-4 col-sm-12 mt-2">
+                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
                     <label>Height</label>
                     <Form.Item
                       name="job_height"
@@ -1301,7 +1331,7 @@ function CreateJob() {
                       />
                     </Form.Item>
                   </div>
-                  <div className="col-xl-4 col-sm-12 mt-2">
+                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
                     <label>Volume</label>
                     <Form.Item
                       name="job_volume"
@@ -1327,8 +1357,8 @@ function CreateJob() {
                     </Form.Item>
                   </div>
 
-                  <div className="col-xl-4 col-sm-12 mt-2">
-                    <label>Gross wt</label>
+                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                    <label>Gross wt<span className="required">*</span></label>
                     <Form.Item
                       name="job_grossweight"
                       rules={[
@@ -1352,8 +1382,8 @@ function CreateJob() {
                       />
                     </Form.Item>
                   </div>
-                  <div className="col-xl-4 col-sm-12 mt-2">
-                    <label>Chargeable wt</label>
+                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                    <label>Chargeable wt<span className="required">*</span></label>
                     <Form.Item
                       name="job_chargable_weight"
                       rules={[
@@ -1378,8 +1408,8 @@ function CreateJob() {
                     </Form.Item>
                   </div>
 
-                  <div className="col-xl-4 col-sm-12 mt-2">
-                    <label> Incoterm</label>
+                  <div className="col-xl-4 col-sm-12 mt-2 px-3">
+                    <label> Incoterm<span className="required">*</span></label>
                     <Form.Item name="incoterm">
                       <SelectBox
                         value={defaultincoterm}
@@ -1403,20 +1433,20 @@ function CreateJob() {
                           })}
                       </SelectBox>
                     </Form.Item>
-                  </div>
+                  {/* </div> */}
                 </div>
               </div>
             </div>
 
-            <div className="row mt-3 px-1 ">
-              <div className="col-md-6 col-12 ">
-                <div className="content-tabs-new row justify-content mx-1 mb-3">
-                  <div className="row mt-3">
-                    <h5 className="lead_text">Payment Info</h5>
+            <div className="row mt-1 justify-content-between">
+              <div className="col-xl-6 col-lg-12 col-md-12 col-12  ">
+                <div className="row content-tabs-new justify-content  mb-3">
+                  <div className="row mt-2">
+                    <h6 className="lead_text">Payment Info</h6>
                   </div>
 
                   <div className="col-xl-6 col-sm-12 mt-2">
-                    <label>Terms</label>
+                    <label>Terms<span className="required">*</span></label>
                     <Form.Item
                       name="job_payment_terms"
                       rules={[
@@ -1449,7 +1479,7 @@ function CreateJob() {
                     </Form.Item>
                   </div>
                   <div className="col-xl-6 col-sm-12 mt-2">
-                    <label>Currency</label>
+                    <label>Currency<span className="required">*</span></label>
                     <Form.Item
                       name="job_currency"
                       rules={[
@@ -1485,7 +1515,7 @@ function CreateJob() {
                     </Form.Item>
                   </div>
                   <div className="col-xl-6 col-sm-12 mt-2">
-                    <label>Exchange Rate</label>
+                    <label>Exchange Rate<span className="required">*</span></label>
                     <Form.Item
                       name="exchnagerate"
                       // rules={[
@@ -1537,18 +1567,19 @@ function CreateJob() {
                   </div>
                 </div>
               </div>
-              <div className="col-md-6 col-12">
-                <div className="content-tabs-new row justify-content-center mx-1 mb-1 me-3">
-                  <div className="row mt-3">
-                    <h5 className="lead_text">Attachments</h5>
+              <div className="col-xl-6 col-lg-12 col-12">
+                <div className="content-tabs-new row justify-content ms-1 mb-3">
+                  <div className="row mt-2">
+                    <h6 className="lead_text">Attachments</h6>
                   </div>
-                  <div className="col-xl-8 col-sm-12 mt-2 p-1">
+                  <div className="col-xl-12 col-sm-12 mt-2">
                     <Form.Item className="mt-2" name="new">
                       <FileUpload
                         multiple
                         filetype={"Accept only pdf and docs"}
                         listType="picture"
                         accept=".pdf,.docs,"
+                        style={{ height: "60px" }}
                         // aceept=".jpeg,.jpg,.png"
                         // onPreview={handlePreview}
                         beforeUpload={beforeUpload}
@@ -1582,6 +1613,7 @@ function CreateJob() {
                 </div>
               </div>
             </div>
+            </div>
 
             <div className="col-12 d-flex justify-content-center my-4 gap-3">
               <Button className="save_button" btnType="save">
@@ -1600,8 +1632,8 @@ function CreateJob() {
               >
                 Cancel
               </Button>
-              {/* </div> */}
-            </div>
+              </div>
+            
           </Form>
 
           <Custom_model

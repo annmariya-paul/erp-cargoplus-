@@ -337,33 +337,24 @@ function EnquirySource() {
                     setPageSize(e);
                   }}
                 >
-                  <Select.Option value="25">
-                    Show
-                    <span style={{ color: "lightgray" }} className="ms-1">
-                      |
-                    </span>
-                    <span style={{ color: "#2f6b8f" }} className="ms-1">
-                      25
-                    </span>
-                  </Select.Option>
-                  <Select.Option value="50">
-                    Show
-                    <span style={{ color: "lightgray" }} className="ms-1">
-                      |
-                    </span>
-                    <span style={{ color: "#2f6b8f" }} className="ms-1">
-                      50
-                    </span>
-                  </Select.Option>
-                  <Select.Option value="100">
-                    Show
-                    <span style={{ color: "lightgray" }} className="ms-1">
-                      |
-                    </span>
-                    <span style={{ color: "#2f6b8f" }} className="ms-1">
-                      100
-                    </span>
-                  </Select.Option>
+                   <Select.Option value="25">
+                 
+                 <span style={{ color: "#2f6b8f" }} className="ms-1">
+                   25
+                 </span>
+               </Select.Option>
+               <Select.Option value="50">
+                
+                 <span style={{ color: "#2f6b8f" }} className="ms-1">
+                   50
+                 </span>
+               </Select.Option>
+               <Select.Option value="100">
+                
+                 <span style={{ color: "#2f6b8f" }} className="ms-1">
+                   100
+                 </span>{" "}
+               </Select.Option>
                 </Select>
               </div>
               <div className="col-4 d-flex align-items-center justify-content-center">

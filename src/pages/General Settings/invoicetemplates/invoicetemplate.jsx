@@ -7,27 +7,63 @@ import { CRM_BASE_URL_FMS } from "../../../api/bootapi";
 import PublicFetch from "../../../utils/PublicFetch";
 import TableData from "../../../components/table/table_data";
 function Invoicetemplateselect() {
-  const [addform] = Form.useForm();
+  const [editForm] = Form.useForm();
   // const [tempone, setTempone] = useState("");
   const [templates, setTemplates] = useState("");
 
-  const [defaultTempalate,setdefaultTempalate] =useState(0)
+  const [defaultTempalate, setdefaultTempalate] = useState(1);
 
+const[defltinvoice,setdefltinvoice]= useState()
+ 
   const getAllinvoicetemp = async () => {
     try {
       const allinvoice = await PublicFetch.get(
         `${CRM_BASE_URL_FMS}/invoice-template`
       );
       console.log("all invoice aree", allinvoice.data.data);
+      console.log("default value is",allinvoice?.data?.data)
       setTemplates(allinvoice.data.data);
-      //   setallincoterms(allCountries.data.data)
+      
+  
+      allinvoice?.data?.data.forEach((itm,indx)=>{
+      // (itm.invoice_template_default)
+     console.log("onee dataa",itm)
+     if(itm?.invoice_template_default === 1){
+      console.log("dattat",itm.invoice_template_id)
+      editForm.setFieldsValue({
+        invoicedfult:itm.invoice_template_id
+      })
+     }
+     setdefltinvoice(itm.invoice_template_id)
+    //  console.log("dattat",itm.)
+      })
+  
+    } catch (err) {
+      console.log("error while getting the countries: ", err);
+    }
+  };
+
+console.log("dnjd",defltinvoice)
+  const createinvoicetmp = async (data) => {
+    const formData = new FormData();
+    formData.append(`invoice_template_default`, data.invoicedfult);
+    // formData.append(`attachments`, data.invoicedfult);
+    try {
+      const allinvoice = await PublicFetch.patch(
+        `${CRM_BASE_URL_FMS}/invoice-template/${data.invoicedfult}`,formData,{
+          "Content-Type": "Multipart/form-Data",
+        }
+      );
+      console.log("updated in",allinvoice)
+      getAllinvoicetemp()
+     
     } catch (err) {
       console.log("error while getting the countries: ", err);
     }
   };
 
   useEffect(() => {
-    addform.setFieldsValue({ customer_type: "organization" });
+   
     getAllinvoicetemp();
   }, []);
 
@@ -59,18 +95,17 @@ function Invoicetemplateselect() {
   //         ),
   //     },
   // ]
-   
+
   const handleChecked = (e, key) => {
     console.log("isChecked", e);
-    if (e.target.checked) {
+
+    if (e.target.value ) {
       console.log("suceccss checked", e.target.checked);
-      setdefaultTempalate(1);
-    }
-    else{
-      setdefaultTempalate(0)
+      setdefaultTempalate(e.target.value);
+    } else {
+      setdefaultTempalate(0);
     }
   };
-
 
   console.log("templateees", templates);
   return (
@@ -84,34 +119,54 @@ function Invoicetemplateselect() {
             <div>
               <h5 className="modal-title w-100">Select Invoice Template</h5>
             </div>
-{/* <TableData 
-data={templates}
+           
 
-columns={columns}
-custom_table_css="table_lead_list"
-/> */}
+            <Form 
+            form={editForm}
+            onFinish={(value) => {
+              console.log("values111333", value);
+              // Submit();
+              createinvoicetmp(value);
+            }}
+            onFinishFailed={(error) => {
+              console.log(error);
+            }}
+            >
+              <Form.Item name="invoicedfult" >
+              <Radio.Group 
+               onChange={handleChecked}
+               checked={true}
+              >
+              <div className="row ">
+                
+                {templates &&
+                  templates.map((itm, indx) => {
+                    return (
+                      <div className="col-4">
+                        <Radio
+                          id={itm.invoice_template_id}
+                          value={itm.invoice_template_id}
+                         
+                         
+                        >
+                          <img
+                            src={`${process.env.REACT_APP_BASE_URL}/${itm?.invoice_template_image}`}
+                            height={180}
+                            width={150}
+                          />
+                        </Radio>
+                      </div>
+                    );
+                  })}
+              </div>
 
+              </Radio.Group>
+              </Form.Item>
 
-            <div className="row my-4">
-              {templates &&
-                templates.map((itm, indx) => {
-                  return (
-                    <div className="col-4">
-                      <Radio
-                        value="invoice_template_default"
-                        onChange={handleChecked}
-                        checked={defaultTempalate == 1 ? true : false}
-                       
-                      ></Radio>
-                      <img
-                        src={`${process.env.REACT_APP_BASE_URL}/${itm?.invoice_template_image}`}
-                        height={180}
-                        width={150}
-                      />
-                    </div>
-                  );
-                })}
-            </div>
+              <div className="d-flex justify-content-center">
+              <Button type="submit" btnType="save" className="mt-3" >Save</Button>
+              </div>
+            </Form>
           </div>
         </div>
       </div>

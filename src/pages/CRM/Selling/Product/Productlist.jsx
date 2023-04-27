@@ -26,7 +26,7 @@ import CustomModel from "../../../../components/custom_modal/custom_model";
 import FileUpload from "../../../../components/fileupload/fileUploader";
 import ErrorMsg from "../../../../components/error/ErrorMessage";
 import ProductEditModal from "./ProductEditModal";
-import "./product.scss"
+import "./product.scss";
 
 function Productlist() {
   const [numOfItems, setNumOfItems] = useState("25");
@@ -42,6 +42,8 @@ function Productlist() {
   const [products, setProducts] = useState([]);
   const [modalOpportunity, setModalOpportunity] = useState(false);
   const [productid, setProductID] = useState();
+  const [startcount, setstartcount] = useState();
+
   console.log("pr id from state", productid);
 
   const [productpic, setproductpic] = useState();
@@ -105,13 +107,14 @@ function Productlist() {
   const pagesizecount = Math.ceil(totalCount / numOfItems);
   console.log("page number isss", pagesizecount);
 
-  const getallproduct = () => {
+  const getallproduct = (name) => {
     PublicFetch.get(
-      `${CRM_BASE_URL_SELLING}/product?startIndex=${pageofIndex}&noOfItems=${numOfItems}`
+      `${CRM_BASE_URL_SELLING}/product?startIndex=${pageofIndex}&noOfItems=${numOfItems}&search=${name}`
     )
       .then((res) => {
         console.log("the prrr", res.data);
         setTotalcount(res.data.data.totalCount);
+        setstartcount(res.data.data.startIndex);
         if (res?.data?.success) {
           console.log("All products success::: ", res?.data?.data.products);
           let tempArr = [];
@@ -153,8 +156,8 @@ function Productlist() {
       });
   };
   useEffect(() => {
-    getallproduct();
-  }, []);
+    getallproduct(searchedText);
+  }, [pageofIndex, numOfItems, searchedText]);
 
   const data12 = products?.map((item) => [
     item.action,
@@ -206,20 +209,20 @@ function Productlist() {
       title: "NAME",
       dataIndex: "product_name",
       key: "NAME",
-      filteredValue: [searchedText],
-      onFilter: (value, record) => {
-        return (
-          String(record.product_name)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.product_code)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.catgeory_name)
-            .toLowerCase()
-            .includes(value.toLowerCase())
-        );
-      },
+      // filteredValue: [searchedText],
+      // onFilter: (value, record) => {
+      //   return (
+      //     String(record.product_name)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.product_code)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.catgeory_name)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase())
+      //   );
+      // },
       align: "left",
       width: "23%",
     },
@@ -230,20 +233,20 @@ function Productlist() {
       key: "CODE",
       //   width: "23%",
       align: "left",
-      filteredValue: [searchType],
-      onFilter: (value, record) => {
-        return (
-          String(record.product_name)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.product_code)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.catgeory_name)
-            .toLowerCase()
-            .includes(value.toLowerCase())
-        );
-      },
+      // filteredValue: [searchType],
+      // onFilter: (value, record) => {
+      //   return (
+      //     String(record.product_name)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.product_code)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.catgeory_name)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase())
+      //   );
+      // },
     },
     {
       title: "CATEGORY",
@@ -251,21 +254,21 @@ function Productlist() {
       key: "CATEGORY",
       width: "14%",
       align: "left",
-      filteredValue: [searchCategory],
-      onFilter: (value, record) => {
-        console.log("prrrr", record);
-        return (
-          String(record.product_name)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.product_code)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.catgeory_name)
-            .toLowerCase()
-            .includes(value.toLowerCase())
-        );
-      },
+      // filteredValue: [searchCategory],
+      // onFilter: (value, record) => {
+      //   console.log("prrrr", record);
+      //   return (
+      //     String(record.product_name)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.product_code)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.catgeory_name)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase())
+      //   );
+      // },
     },
     {
       title: "ACTION",
@@ -322,12 +325,7 @@ function Productlist() {
   // ];
 
   const ProductHeads = [
-    [
-      "SL.NO",
-      "PRODUCT NAME",
-      "PRODUCT CODE",
-      "PRODUCT CATEGORY",
-    ],
+    ["SL.NO", "PRODUCT NAME", "PRODUCT CODE", "PRODUCT CATEGORY"],
   ];
   //for show or hide colums start-- shahida
   const columnsKeys = columns.map((column) => column.key);
@@ -339,6 +337,15 @@ function Productlist() {
   console.log("filtered columns::", filteredColumns);
   const onChange = (checkedValues) => {
     setSelectedColumns(checkedValues);
+  };
+
+  const getFinalCount = (total) => {
+    const cutoff = Math.ceil(totalCount / numOfItems);
+    console.log("FinalTest", cutoff, current);
+    if (current === cutoff) return totalCount;
+    return total;
+    // console.log("TotalPageTest",current,totalCount)
+    // console.log("TestCount",total)
   };
 
   console.log("cattt", products);
@@ -448,51 +455,50 @@ function Productlist() {
             </div>
           </div> */}
           <div className="row my-3">
-            <div className="col-4 d-flex justify-content-start align-items-center">
-            <div className="col-2  ">
-              <Select
-               style={{
-                width: 60,
-                
-              }}
-              
-                // defaultValue={"25"}
-                bordered={false}
-                className=" page_size_style px-0"
-                value={numOfItems}
-                onChange={(e, current) => {
-                  console.log("On page size selected : ", e);
-                  console.log("nfjnjfv", current);
-                  setNumOfItems(e);
-                  setCurrent(1);
-                }}
-              >
-                {/* <Select.Option value="5">5 | pages</Select.Option> */}
-                <Select.Option value="25">
-                 
-                 
-                  <span style={{ color: "#2f6b8f" }} className="ms-2">
-                    25
-                  </span>{" "}
-                </Select.Option>
-                <Select.Option value="50">
-                  
-                  <span style={{ color: "#2f6b8f" }} className="ms-2">
-                    50
-                  </span>{" "}
-                </Select.Option>
-                <Select.Option value="100">
-                 
-                  <span style={{ color: "#2f6b8f" }} className="ms-2">
-                    100
-                  </span>{" "}
-                </Select.Option>
-              </Select>
-          
-            </div>
-            <div className="col-4 ">  
-            <label className="font_size" >Results:  1-25 <span>of 100</span> </label>
-            </div>
+            <div className="col-4 ">
+              <div className="row">
+                <div className="col-xl-2 col-lg-3 col-md-4 col-sm-12 ">
+                  <Select
+                    style={{
+                      width: 60,
+                    }}
+                    // defaultValue={"25"}
+                    bordered={false}
+                    className=" page_size_style w-100 px-0"
+                    value={numOfItems}
+                    onChange={(e, current) => {
+                      console.log("On page size selected : ", e);
+                      console.log("nfjnjfv", current);
+                      setNumOfItems(e);
+                      setCurrent(1);
+                    }}
+                  >
+                    {/* <Select.Option value="5">5 | pages</Select.Option> */}
+                    <Select.Option value="25">
+                      <span style={{ color: "#2f6b8f" }} className="ms-2">
+                        25
+                      </span>{" "}
+                    </Select.Option>
+                    <Select.Option value="50">
+                      <span style={{ color: "#2f6b8f" }} className="ms-2">
+                        50
+                      </span>{" "}
+                    </Select.Option>
+                    <Select.Option value="100">
+                      <span style={{ color: "#2f6b8f" }} className="ms-2">
+                        100
+                      </span>{" "}
+                    </Select.Option>
+                  </Select>
+                </div>
+                <div className="col-xl-10 col-lg-9 col-md-8 col-sm-12  d-flex  align-items-center">
+                  <label className="font_size">
+                    Results: {startcount + 1} -
+                    {getFinalCount(1 * numOfItems * current)}{" "}
+                    <span>of {totalCount} </span>{" "}
+                  </label>
+                </div>
+              </div>
             </div>
             <div className=" col-4 d-flex align-items-center justify-content-center">
               {totalCount > 0 && (

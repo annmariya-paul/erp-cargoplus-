@@ -73,6 +73,8 @@ function Services() {
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
+  const [startcount, setstartcount] = useState();
+  // const [totalCount, setTotalcount] = useState();
   console.log("set image", img);
   const [services, setServices] = useState([]);
   console.log("Servicesss are :::", services);
@@ -121,9 +123,9 @@ function Services() {
   // const pagesizecount = Math.ceil(totalCount / noofitems);
   // console.log("page number isss", pagesizecount);
 
-  const getAllservices = () => {
+  const getAllservices = (name) => {
     PublicFetch.get(
-      `${CRM_BASE_URL_SELLING}/service?startIndex=${pageofIndex}&noOfItems=${noofitems}`
+      `${CRM_BASE_URL_SELLING}/service?startIndex=${pageofIndex}&noOfItems=${noofitems}&search=${name}`
     )
       .then((res) => {
         console.log("all services is ", res.data.data);
@@ -141,7 +143,7 @@ function Services() {
               service_hsn: item?.service_hsn,
               service_taxrate: item?.service_taxrate,
               service_description: item?.service_description,
-              service_category_name: item?.crm_v1_categories?.category_name,
+              // service_category_name: item?.crm_v1_categories?.category_name,
               service_taxgroup_name: item?.fms_v1_tax_groups?.tax_group_name,
               service_taxgroup: item?.service_taxgroup,
             });
@@ -152,6 +154,7 @@ function Services() {
 
           setAllservices(res?.data?.data.services);
           setTotalcount(res?.data?.data?.totalCount);
+          setstartcount(res.data.data.startIndex);
           // setCurrentcount(res?.data?.data?.currentCount);
         } else {
           console.log("FAILED T LOAD DATA");
@@ -165,7 +168,7 @@ function Services() {
   const getAllTaxTypes = async () => {
     try {
       const allTxTypes = await PublicFetch.get(
-        `${CRM_BASE_URL_FMS}/tax-types?startIndex=${pageofIndex}&perPage=${noofitems}`
+        `${CRM_BASE_URL_FMS}/tax-types/minimal`
       );
       console.log("all taxtype are", allTxTypes.data.data);
       setalltaxtype(allTxTypes.data.data);
@@ -175,9 +178,9 @@ function Services() {
   };
 
   useEffect(() => {
-    getAllservices();
+    getAllservices(searchedName);
     getAllTaxTypes();
-  }, [noofitems, pageofIndex]);
+  }, [noofitems, pageofIndex, searchedName]);
 
   // useEffect(() => {
   //   getAllTaxTypes();
@@ -335,7 +338,7 @@ function Services() {
           console.log("successDataa", res.data.data);
           setShowServiceEditModal(false);
           setSuccessPopup(true);
-          getAllservices();
+          getAllservices(searchedName);
           close_modal(successPopup, 1000);
           // setBrandEditPopup(false);
           editForm.resetFields();
@@ -411,23 +414,23 @@ function Services() {
       title: "NAME",
       dataIndex: "service_name",
       key: "key",
-      filteredValue: [searchedName],
-      onFilter: (value, record) => {
-        return (
-          String(record.service_name)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.service_code)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.service_category_name)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.service_taxtype_name)
-            .toLowerCase()
-            .includes(value.toLowerCase())
-        );
-      },
+      // filteredValue: [searchedName],
+      // onFilter: (value, record) => {
+      //   return (
+      //     String(record.service_name)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.service_code)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.service_category_name)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.service_taxtype_name)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase())
+      //   );
+      // },
       align: "left",
       width: "23%",
     },
@@ -438,23 +441,23 @@ function Services() {
       key: "key",
       width: "10%",
       align: "left",
-      filteredValue: [searchCode],
-      onFilter: (value, record) => {
-        return (
-          String(record.service_name)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.service_code)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.service_category_name)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.service_taxtype_name)
-            .toLowerCase()
-            .includes(value.toLowerCase())
-        );
-      },
+      // filteredValue: [searchCode],
+      // onFilter: (value, record) => {
+      //   return (
+      //     String(record.service_name)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.service_code)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.service_category_name)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.service_taxtype_name)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase())
+      //   );
+      // },
     },
     {
       title: "CATEGORY",
@@ -462,47 +465,47 @@ function Services() {
       key: "key",
       width: "16%",
       align: "left",
-      filteredValue: [searchCategory],
-      onFilter: (value, record) => {
-        return (
-          String(record.service_name)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.service_code)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.service_category_name)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.service_taxtype_name)
-            .toLowerCase()
-            .includes(value.toLowerCase())
-        );
-      },
+      // filteredValue: [searchCategory],
+      // onFilter: (value, record) => {
+      //   return (
+      //     String(record.service_name)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.service_code)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.service_category_name)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.service_taxtype_name)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase())
+      //   );
+      // },
     },
     {
-      title: "TAX TYPE NAME",
+      title: "TAX GROUP",
       dataIndex: "service_taxgroup_name",
       key: "key",
 
       align: "left",
 
-      onFilter: (value, record) => {
-        return (
-          String(record.service_name)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.service_code)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.service_category_name)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.service_taxgroup_name)
-            .toLowerCase()
-            .includes(value.toLowerCase())
-        );
-      },
+      // onFilter: (value, record) => {
+      //   return (
+      //     String(record.service_name)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.service_code)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.service_category_name)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.service_taxgroup_name)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase())
+      //   );
+      // },
     },
     {
       title: "ACTION",
@@ -548,6 +551,14 @@ function Services() {
   ];
 
   const beforeUpload = (file, fileList) => {};
+  const getFinalCount = (total) => {
+    const cutoff = Math.ceil(totalCount / noofitems);
+    console.log("FinalTest", cutoff, current);
+    if (current === cutoff) return totalCount;
+    return total;
+    // console.log("TotalPageTest",current,totalCount)
+    // console.log("TestCount",total)
+  };
   return (
     <div>
       <div className="container-fluid lead_list my-3 py-3">
@@ -676,56 +687,49 @@ function Services() {
             </div> */}
           {/* </div> */}
           <div className="row my-3">
-            <div className="col-2 page_size_style px-3">
-              <div className="">
-                <Select
-                  // defaultValue={"25"}
-                  bordered={false}
-                  className=" "
-                  value={noofitems}
-                  // onChange={(e) => setNoofItems(e)}
-                  onChange={(e, current) => {
-                    console.log("On page size selected : ", e);
-                    console.log("nfjnjfv", current);
-                    setNoofItems(e);
-                    setCurrent(1);
-                  }}
-                >
-                  {/* <Select.Option value="5">5 | pages</Select.Option> */}
-                  <Select.Option value="25">
-                    Show{" "}
-                    <span style={{ color: "lightgray" }} className="ms-1">
-                      |
-                    </span>
-                    <span style={{ color: "#2f6b8f" }} className="ms-2">
-                      25
-                    </span>{" "}
-                  </Select.Option>
-                  <Select.Option value="50">
-                    {" "}
-                    Show{" "}
-                    <span style={{ color: "lightgray" }} className="ms-1">
-                      |
-                    </span>
-                    <span style={{ color: "#2f6b8f" }} className="ms-2">
-                      50
-                    </span>{" "}
-                  </Select.Option>
-                  <Select.Option value="100">
-                    {" "}
-                    Show{" "}
-                    <span style={{ color: "lightgray" }} className="ms-1">
-                      |
-                    </span>
-                    <span style={{ color: "#2f6b8f" }} className="ms-2">
-                      100
-                    </span>{" "}
-                  </Select.Option>
-                </Select>
-                <label>of 100</label>
+            <div className="col-4  ">
+              <div className="row">
+                <div className="col-xl-2 col-lg-3 col-md-4 col-sm-12   ">
+                  <Select
+                    // defaultValue={"25"}
+                    bordered={false}
+                    className="page_size_style"
+                    value={noofitems}
+                    // onChange={handleLastNameChange}
+                    onChange={(event, current) => {
+                      console.log("On page size selected : ", event);
+                      console.log("nfjnjfv", current);
+                      setNoofItems(event);
+                      setCurrent(1);
+                    }}
+                  >
+                    <Select.Option value="25">
+                      <span style={{ color: "#2f6b8f" }} className="ms-1">
+                        25
+                      </span>
+                    </Select.Option>
+                    <Select.Option value="50">
+                      <span style={{ color: "#2f6b8f" }} className="ms-1">
+                        50
+                      </span>
+                    </Select.Option>
+                    <Select.Option value="100">
+                      <span style={{ color: "#2f6b8f" }} className="ms-1">
+                        100
+                      </span>{" "}
+                    </Select.Option>
+                  </Select>
+                </div>
+                <div className=" col-xl-10 col-lg-9 col-md-8 col-sm-12  d-flex  align-items-center ">
+                  <label className="font_size">
+                    Results: {startcount + 1} -
+                    {getFinalCount(1 * noofitems * current)}{" "}
+                    <span>of {totalCount} </span>{" "}
+                  </label>
+                </div>
               </div>
             </div>
-            <div className="col-2"></div>
+
             <div className=" col-4 d-flex justify-content-center">
               {totalCount > 0 && (
                 <MyPagination

@@ -316,6 +316,7 @@ export default function EditQuotation(
                   quotation_details_tax_amount: taxamount,
                   quotation_details_tax_group: e,
                   quotation_details_total: totalAmount,
+                  quotation_details_status: 1,
                 },
               ];
             } else {
@@ -674,7 +675,7 @@ export default function EditQuotation(
       align: "right",
     },
     {
-      title: "TAX TYPE",
+      title: "TAX GROUP",
       dataIndex: "quotation_details_tax_group",
       key: "quotation_details_tax_group",
 

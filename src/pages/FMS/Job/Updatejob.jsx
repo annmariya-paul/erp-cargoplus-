@@ -61,6 +61,8 @@ function Updatejob() {
     }
   };
 
+const[qtnnumber,setQtnNumber]=useState();
+console.log("number ",qtnnumber);
   const OneJobList = () => {
     PublicFetch.get(`${CRM_BASE_URL_FMS}/job/${id}`)
       .then((res) => {
@@ -68,6 +70,7 @@ function Updatejob() {
         if (res.data.success) {
           console.log("success of job", res.data.data);
           setJobList(res.data.data);
+         setQtnNumber(res.data.data?.fms_v1_quotation_jobs[0]?.fms_v1_quotation?.quotation_no);
           let date = moment(res.data.data.job_date);
           locationByMode(res.data.data.job_mode);
           let quotationNo = [];
@@ -76,7 +79,7 @@ function Updatejob() {
             if (item.quotation_job_id) {
               setDisable(true);
             } else {
-              setDisable(true);
+              setDisable(false);
               // setQuotationDisable(true);
             }
           });
@@ -86,7 +89,7 @@ function Updatejob() {
             jobdate: date,
             customer: res.data.data.job_customer,
             consignee: res.data.data.job_consignee,
-            quotationno: quotationNo,
+            // quotationno: qtnnumber,
             shipper: res.data.data.job_shipper,
             cargotype: res.data.data.job_cargo_type,
             Mode: res.data.data.job_mode,
@@ -105,6 +108,11 @@ function Updatejob() {
             chargeablewt: res.data.data.job_chargeable_wt,
             incoterm: res.data.data.job_incoterm_id,
             sales_person: res.data.data.job_salesperson_id,
+            length:res.data.data.job_length,
+            height:res.data.data.job_height,
+            breadth:res.data.data.job_breadth,
+            volume:res.data.data.job_volume,
+            containertype:res.data.data.job_container_type,
           });
         }
       })
@@ -112,7 +120,11 @@ function Updatejob() {
         console.log("Error", err);
       });
   };
-
+ useEffect(() => {
+    if(qtnnumber){
+editForm.setFieldsValue({quotationno :qtnnumber })
+    }
+     },[qtnnumber]);
   const freightTypes = () => {
     PublicFetch.get(`${CRM_BASE_URL_FMS}/freightTypes`)
       .then((res) => {
@@ -222,32 +234,66 @@ function Updatejob() {
         console.log(error);
       });
   };
-  const getCreditdays = (data) => {
-    console.log("data1011", data);
-    // const code = allLeadList?.filter((item) => {
-    //   if (item?.lead_id === data) {
-    //     b = item?.lead_id;
+  const [frighttype, setFrighttype] = useState();
+  const [frighttypemode, setFrighttypemode] = useState();
 
-    //   }
-    // });
-    // console.log("code", b);
-    // console.log(";;;;;;;;;", data);
-    PublicFetch.get(`${CRM_BASE_URL}/lead/${data}`)
+
+  const getallfrighttype = async () => {
+    try {
+      const allfrighttypes = await PublicFetch.get(
+        `${CRM_BASE_URL_FMS}/freightTypes`
+      );
+      console.log("Getting all frieght types : ", allfrighttypes.data.data);
+      setFrighttype(allfrighttypes.data.data);
+    } catch (err) {
+      console.log("Error in fetching fright types : ", err);
+    }
+  };
+  const mode = (e) => {
+    if (e) {
+      frighttype &&
+        frighttype.length > 0 &&
+        frighttype.map((item, index) => {
+          if (item.freight_type_id === e) {
+            console.log("reached", item.freight_type_mode);
+            setFrighttypemode(item.freight_type_mode);
+            locationBytype(item.freight_type_mode);
+          }
+        });
+    }
+  };
+ const getCreditdays = (data) => {
+    console.log("data1011", data);
+
+    PublicFetch.get(`${CRM_BASE_URL}/customer/${data}`)
       .then((res) => {
         if (res?.data?.success) {
+          let a=res.data.data.customer_preferred_freight_type;
+          mode(res?.data?.data?.customer_preferred_freight_type);
+          // if(res.data.data.customer_preferred_freight_type){
+          //   GetSingleJob(a);
+          // }
+
           console.log("Unique Lead Id data", res?.data?.data);
-          // setOneLeadData(res?.data?.data);
         } else {
           console.log("FAILED T LOAD DATA");
         }
-
-        editForm.setFieldValue("creditdays", res?.data?.data.lead_credit_days);
+        editForm.setFieldsValue({
+          creditdays: res.data.data.customer_credit_days,
+          // freighttype:res.data.data.customer_preferred_freight_type,
+         
+        });
       })
       .catch(function (error) {
         console.log(error);
       });
   };
-
+  const [leadId, setLeadId] = useState("");
+  console.log("qto idd id : ", leadId);
+  console.log("Selected lead id is ", leadId);
+  const handleLeadId = (leadId) => {
+    setLeadId(leadId);
+  };
   const locationByMode = (data) => {
     PublicFetch.get(`${CRM_BASE_URL_FMS}/locations/type-location/${data}`)
       .then((res) => {
@@ -285,27 +331,58 @@ function Updatejob() {
     formData.append("job_shipper", data.shipper);
     formData.append("job_customer", data.customer);
     formData.append("job_freight_type", data.freighttype);
-    formData.append("job_cargo_type", data.cargotype);
+    if(data.cargotype){
+      formData.append("job_cargo_type", data.cargotype);
+    }
+    
     formData.append("job_carrier", data.carrier);
     formData.append("job_awb_bl_no", data.AWB);
     formData.append("job_mode", data.Mode);
+    if(data.breadth)
+    {
+      formData.append("job_breadth", data.breadth);
+    }
+    if(data.length){
+      formData.append("job_length", data.length);
+    }
+    if(data.height){
+      formData.append("job_height", data.height);
+    }
+    
+   
+    formData.append("job_volume", data.volume);
+
+
+
     formData.append("job_origin_id", data.origin);
     formData.append("job_destination_id", data.destination);
     formData.append("job_no_of_pieces", data.noofpieces);
     formData.append("job_uom", data.Uom);
     formData.append("job_gross_wt", data.grosswt);
     formData.append("job_chargeable_wt", data.chargeablewt);
-    formData.append("job_payment_terms", data.terms);
+    if(data.terms){
+      formData.append("job_payment_terms", data.terms);
+    }
+   
     formData.append("job_total_cost_curr", data.job_currency);
     formData.append("job_total_cost_exch", data.exchangerate);
-    formData.append("job_credit_days", data.creditdays);
+    if(data.creditdays){
+      formData.append("job_credit_days", data.creditdays);
+    }
+    
+    if(data.containertype){
+      formData.append("job_container_type",data.containertype);
+    }
     formData.append("job_salesperson_id", data.sales_person);
     formData.append("job_incoterm_id", data.incoterm);
 
     if (docfile) {
       formData.append("job_docs", docfile);
     }
-    formData.append("job_quotation", data.quotationno);
+    if(data.quotationno){
+      formData.append("job_quotation", data.quotationno);
+    }
+    
     PublicFetch.patch(`${CRM_BASE_URL_FMS}/job/${id}`, formData, {
       "Content-Type": "Multipart/form-Data",
     })
@@ -375,7 +452,109 @@ function Updatejob() {
         console.log("Error", err);
       });
   };
+  useEffect(() => {
+    GetAllLeadData();
+    getAllQuotation();
+  }, []);
+ 
+  const [allCustomerList, setAllcustomerList] = useState([]);
+  console.log("all leads", allCustomerList);
+  const GetAllLeadData = () => {
+    PublicFetch.get(`${CRM_BASE_URL}/customer/Minimal`)
+      .then((res) => {
+        if (res?.data?.success) {
+          console.log("All lead data", res?.data?.data);
+          // setAllLeadList(res?.data?.data?.leads);
+          // setTotalcount(res?.data?.data?.totalCount);
+          // setCurrentcount(res?.data?.data?.currentCount);
+          setAllcustomerList(res?.data?.data);
+          let array = [];
+          res?.data?.data?.forEach((item, index) => {
+            array.push({
+              lead_id: item?.lead_id,
+              lead_customer_name: item?.lead_customer_name,
+              lead_credit_days: item?.lead_credit_days,
+            });
+            handleLeadId(item.lead_id);
+          });
+        } else {
+          console.log("FAILED T LOAD DATA");
+        }
+      })
+      .catch((err) => {
+        console.log("Errror while getting data", err);
+      });
+  };
 
+  const [qtnid, setQtnid] = useState();
+  console.log("qtn id is : ", qtnid);
+  const [AllQuotations, setAllQuotations] = useState();
+  console.log("all qtns",AllQuotations);
+
+  const getAllQuotation = () => {
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/quotation/Minimal`)
+      .then((res) => {
+        console.log("Response", res);
+        if (res.data.success) {
+          console.log("success of qtn", res.data.data);
+          setAllQuotations(res.data.data);
+
+          let temp = [];
+          res.data.data.forEach((item, index) => {
+            let date = moment(item.quotation_date).format("DD-MM-YYYY");
+            let validity = moment(item.quotation_validity).format("DD-MM-YYYY");
+            temp.push({
+              // quotation_cargo_type: item.quotation_cargo_type,
+              // quotation_carrier: item.quotation_carrier,
+              quotation_id: item.quotation_id,
+              quotation_no: item.quotation_no,
+              // quotation_date: date,
+              // quotation_validity: validity,
+              // quotation_consignee: item.quotation_consignee,
+              // consignee_name: item.crm_v1_customer.lead_customer_name,
+              // quotation_shipper: item.quotation_shipper,
+              // quotation_status: item.quotation_status,
+              // fms_v1_quotation_agents: item.fms_v1_quotation_agents,
+            });
+            setQtnid(item.quotation_id);
+            // let name= item.crm_v1_leads.lead_customer_name;
+            // console.log("name",name);
+            // addForm.setFieldsValue({ consignee:name });
+          });
+
+          // let name= res.data.data.quotation_consignee;
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+  const [locationType, setLocationType] = useState();
+  const [allLocations, setAllLocations] = useState();
+  const locationBytype = (data) => {
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/locations/type-location/${data}`)
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          console.log("success of location type", res.data, data);
+          setLocationType(res.data.data.location_type);
+          let temp = [];
+          res.data.data.forEach((item, index) => {
+            temp.push({
+              location_id: item.location_id,
+              location_code: item.location_code,
+              location_name: item.location_name,
+              location_type: item.location_type,
+              location_country: item.location_country,
+            });
+            setAllLocations(temp);
+          });
+        }
+      })
+      .catch((err) => {
+        console.log("Error of location type", err);
+      });
+  };
   useEffect(() => {
     if (id) {
       OneJobList();
@@ -430,14 +609,14 @@ function Updatejob() {
                       rules={[
                         {
                           required: true,
-                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                          // pattern: new RegExp("^[A-Za-z0-9 ]+$"),
                           message: "Please enter a Valid consignee",
                         },
                       ]}
                     >
                       <SelectBox
                         onChange={(e) => {
-                          // handleLeadId(e);
+                          handleLeadId(e);
                           getCreditdays(e);
                         }}
                         disabled={disable}
@@ -445,15 +624,15 @@ function Updatejob() {
                         showSearch
                         optionFilterProp="children"
                       >
-                        {consignees &&
-                          consignees.length > 0 &&
-                          consignees.map((item, index) => {
+                        {allCustomerList &&
+                          allCustomerList.length > 0 &&
+                          allCustomerList.map((item, index) => {
                             return (
                               <Select.Option
-                                key={item.lead_id}
-                                value={item.lead_id}
+                                key={item.customer_id}
+                                value={item.customer_id}
                               >
-                                {item.lead_customer_name}
+                                {item.customer_name}
                               </Select.Option>
                             );
                           })}
@@ -538,13 +717,14 @@ function Updatejob() {
                     >
                       <SelectBox
                         disabled={quotationdisable}
+                        value={qtnnumber}
                         allowClear
                         showSearch
                         optionFilterProp="children"
                       >
-                        {quotations &&
-                          quotations.length > 0 &&
-                          quotations.map((item, index) => {
+                        {/* {AllQuotations &&
+                          AllQuotations.length > 0 &&
+                          AllQuotations.map((item, index) => {
                             return (
                               <Select.Option
                                 key={item.quotation_id}
@@ -553,7 +733,7 @@ function Updatejob() {
                                 {item.quotation_no}
                               </Select.Option>
                             );
-                          })}
+                          })} */}
                       </SelectBox>
                     </Form.Item>
                   </div>
@@ -596,11 +776,11 @@ function Updatejob() {
                       rules={[
                         {
                           required: true,
-                          message: "Sales Person is Required",
+                          message: "Sale Person is Required",
                         },
                       ]}
                     >
-                      <SelectBox>
+                      <SelectBox disabled={disable} >
                         {allSalesPerson &&
                           allSalesPerson.length > 0 &&
                           allSalesPerson.map((item, index) => {
@@ -831,15 +1011,15 @@ function Updatejob() {
                     <label>Container Type</label>
                     <Form.Item
                       name="containertype"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid containertype",
-                        },
-                      ]}
+                      // rules={[
+                      //   {
+                      //     required: true,
+                      //     pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                      //     message: "Please enter a Valid containertype",
+                      //   },
+                      // ]}
                     >
-                      <SelectBox>
+                      <SelectBox disabled={disable} >
                         {allcontainertype &&
                           allcontainertype.length > 0 &&
                           allcontainertype.map((item, index) => {
@@ -1109,6 +1289,7 @@ function Updatejob() {
                     <Form.Item name="incoterm">
                       <SelectBox
                         // value={defaultincoterm}
+                        disabled={disable} 
                         onChange={(e) => {
                           console.log("select the brandss", e);
                           setdefaultincoterm(parseInt(e));
@@ -1225,6 +1406,7 @@ function Updatejob() {
                       <Input_Number
                         className="text_right"
                         value={currencyRates}
+                        disabled={disable} 
                         // onChange={handleChange}
                         align="right"
                         // step={0.01}
@@ -1249,6 +1431,7 @@ function Updatejob() {
                       // ]}
                     >
                       <InputType
+                      disabled={disable} 
                         // className="text_right"
                         // value={currencyRates}
                         // onChange={handleChange}

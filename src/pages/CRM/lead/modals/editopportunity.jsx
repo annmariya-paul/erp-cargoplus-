@@ -177,6 +177,7 @@ export default function EditOpportunity() {
       });
   };
   const [enquiryData, setEnquiryData] = useState();
+  console.log("Enq data",enquiryData);
   const getAllEnquiry = () => {
     PublicFetch.get(`${CRM_BASE_URL_FMS}/enquiries/minimal`)
       .then((res) => {

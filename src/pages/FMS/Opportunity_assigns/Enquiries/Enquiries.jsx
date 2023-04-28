@@ -361,6 +361,7 @@ function Enquiries() {
         <div className="row my-3">
           <div className="col-xl-4 ">
             <div className="d-flex justify-content-start align-items-center gap-3">
+            {totalCount > 0 && (
               <div className="  ">
                 <Select
                   // defaultValue={"25"}
@@ -392,13 +393,16 @@ function Enquiries() {
                   </Select.Option>
                 </Select>
               </div>
+              )}
+              {totalCount > 0 && (
               <div className=" col-xl-10 col-lg-9 col-md-8 col-sm-12  d-flex  align-items-center ">
                 <label className="font_size">
-                  Results: {startcount + 1} -
+                  Results: {startcount + 1} - {" "}
                   {getFinalCount(1 * numOfItems * current)}{" "}
                   <span>of {totalCount} </span>{" "}
                 </label>
               </div>
+              )}
             </div>
           </div>
           <div className="col-4 d-flex align-items-center justify-content-center">

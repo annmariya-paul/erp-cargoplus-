@@ -525,6 +525,7 @@ function Vendor() {
           />
         </div>
         <div className="d-flex py-2 justify-content-center">
+        {totalCount > 0 && (
           <MyPagination
             total={parseInt(totalCount)}
             current={current}
@@ -535,6 +536,7 @@ function Vendor() {
               setCurrent(current);
             }}
           />
+        )}
         </div>
       </div>
 

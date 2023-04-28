@@ -20,7 +20,7 @@ function MyPagination({ total, onChange, current, defaultPageSize,  pageSize, to
 }) } */}
 
  
-     <Pagination style={{paddingTop:"20%"}}
+     <Pagination 
         size="small"
         onChange={onChange}
         total={total}

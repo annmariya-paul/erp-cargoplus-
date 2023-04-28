@@ -7,6 +7,7 @@ import Button from "../../../../components/button/button";
 import PublicFetch from "../../../../utils/PublicFetch";
 import moment from "moment";
 import { ROUTES } from "../../../../routes";
+import Attachments from "../../../../components/attachments/attachments";
 
 function ViewOpportunity() {
   const { id } = useParams();
@@ -112,7 +113,7 @@ function ViewOpportunity() {
           <div className="col-1">:</div>
           <div className="col-7">
             <p className="modal-view-data">
-            {Allopps?.crm_v1_customer?.opportunity_type}
+            {Allopps?.opportunity_type}
             </p>
           </div>
         </div>
@@ -234,7 +235,8 @@ function ViewOpportunity() {
           <div className="col-1">:</div>
           <div className="col-7">
             <p className="modal-view-data">
-            {Allopps?.opportunity_docs[0]}
+            {/* {Allopps?.opportunity_docs[0]} */}
+            <Attachments Isattachment={Allopps?.opportunity_docs.length >0}  attachments={Allopps?.opportunity_docs || []} />
             </p>
           </div>
         </div>

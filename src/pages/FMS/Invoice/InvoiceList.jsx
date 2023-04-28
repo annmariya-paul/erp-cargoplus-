@@ -482,7 +482,7 @@ function InvoiceList() {
                   <div className="col-4 d-flex align-items-center justify-content-center">
                     {invoiceData && (
                       <MyPagination
-                        total={parseInt(invoiceData?.length)}
+                        total={parseInt(totalCount)}
                         current={current}
                         pageSize={numOfItems}
                         onChange={(current, pageSize) => {
@@ -508,7 +508,7 @@ function InvoiceList() {
                 <div className="d-flex py-2 justify-content-center">
                   {invoiceData && (
                     <MyPagination
-                      total={parseInt(totalCount?.length)}
+                      total={parseInt(totalCount)}
                       current={current}
                       pageSize={numOfItems}
                       onChange={(current, pageSize) => {

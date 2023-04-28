@@ -51,25 +51,25 @@ function Listjob() {
       dataIndex: "job_number",
       key: "job_number",
       width: "10%",
-      filteredValue: [searchedText],
-      onFilter: (value, record) => {
-        return (
-          String(record.job_number)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.job_date).toLowerCase().includes(value.toLowerCase()) ||
-          String(record.job_awb_bl_no)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.job_consignee_name)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.job_shipper)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.job_status).toLowerCase().includes(value.toLowerCase())
-        );
-      },
+      // filteredValue: [searchedText],
+      // onFilter: (value, record) => {
+      //   return (
+      //     String(record.job_number)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.job_date).toLowerCase().includes(value.toLowerCase()) ||
+      //     String(record.job_awb_bl_no)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.job_consignee_name)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.job_shipper)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.job_status).toLowerCase().includes(value.toLowerCase())
+      //   );
+      // },
       align: "left",
     },
     {
@@ -113,6 +113,17 @@ function Listjob() {
       title: "STATUS",
       dataIndex: "job_status",
       key: "job_status",
+      render: (data, index) => {
+        console.log("index of job status",index);
+        if (index.job_status === 0) {
+          return <div>Pending</div>;
+        } else  if (index.job_status === 1) {
+          return <div>Converted</div>;
+        } else  {
+          // return <div>{index.enquiry_converted_status}</div>;
+          return <div>Cancelled</div>;
+        }
+      },
       width: "5%",
     },
     {
@@ -199,9 +210,11 @@ function Listjob() {
   ];
 
   const [AllJobs, setAllJobs] = useState();
-  const getAllJobs = () => {
+  const getAllJobs = (query) => {
     PublicFetch.get(
-      `${CRM_BASE_URL_FMS}/job?startIndex=${pageofIndex}&noOfItems=${noofItems}`
+      `${CRM_BASE_URL_FMS}/job?startIndex=${pageofIndex}&noOfItems=${noofItems}&search=${
+        query.toLowerCase() === "pending" ? 0 : query.toLowerCase() === "converted" ? 1  : query.toLowerCase() === "cancelled" ? 2 : query.toLowerCase()
+      }`
     )
       .then((res) => {
         console.log("Responseeee", res);
@@ -212,9 +225,9 @@ function Listjob() {
           let temp = [];
           res?.data?.data?.job?.forEach((item, index) => {
             let date = moment(item.job_date).format("DD-MM-YYYY");
-            jobStatus.forEach((status, index) => {
-              var jobsts = parseInt(status.value);
-              if (jobsts === item.job_status) {
+            // jobStatus.forEach((status, index) => {
+              // var jobsts = parseInt(status.value);
+              // if (jobsts === item.job_status) {
                 temp.push({
                   job_number: item.job_number,
                   // quotation_carrier: item.quotation_carrier,
@@ -232,11 +245,12 @@ function Listjob() {
                   job_destination_id: item.job_destination_id,
                   job_no_of_pieces: item.job_no_of_pieces,
                   job_uom: item.job_uom,
-                  job_status: status.name,
+                  // job_status: item.job_invoice_status === 0 ? "Pending" :item.job_invoice_status === 1 ? "Converted" : item.job_invoice_status === 2 && "Cancelled" ,
+                  job_status: item.job_invoice_status ,
                   startindex:res?.data?.data?.startIndex,
                 });
-              }
-            });
+              // }
+            // });
           });
           setAllJobs(temp);
           settotaljob(res.data.data.totalCount);
@@ -257,9 +271,19 @@ function Listjob() {
     // console.log("TestCount",total)
   };
 
+
   useEffect(() => {
-    getAllJobs();
-  }, [pageofIndex,noofItems]);
+    const getData = setTimeout(() => {
+      getAllJobs(searchedText);
+    }, 1000)
+    return () => clearTimeout(getData);
+  }, [pageofIndex,noofItems,searchedText]);
+ 
+
+ 
+  // useEffect(() => {
+  //   getAllJobs(searchedText);
+  // }, [pageofIndex,noofItems,searchedText]);
 
   const columnsKeys = columns.map((column) => column.key);
 
@@ -292,7 +316,7 @@ function Listjob() {
 
   return (
     <>
-      <div className="container-fluid container2 pt-3">
+      <div className="container-fluid container_fms pt-3">
         <div className="row flex-wrap">
           <div className="col-4">
             <h5 className="lead_text">Job</h5>

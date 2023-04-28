@@ -71,6 +71,7 @@ export default function Add_Quotation() {
       quotation_details_tax_group: "",
       quotation_details_tax_amount: "",
       quotation_details_total: "",
+      quotation_details_status: 0,
     },
   ];
   const [Errormsg, setErrormsg] = useState();
@@ -136,7 +137,7 @@ export default function Add_Quotation() {
           // }
 
           // console.log("Grand Total:", grandTotal);
-
+          let ab = 1;
           setTableData(
             tableData.map((item) => {
               if (item.key === key) {
@@ -145,6 +146,7 @@ export default function Add_Quotation() {
                   quotation_details_tax_amount: taxamount,
                   quotation_details_tax_group: e,
                   quotation_details_total: totalAmount,
+                  quotation_details_status: ab,
                 };
               }
               return item;
@@ -207,7 +209,7 @@ export default function Add_Quotation() {
     }
     // addForm.setFieldValue("quotation_details_tax_type", taxratee);
   };
-  console.log("tax type ::123", taxGroup);
+  console.log("tax type ::123", taxGroup, tableData);
 
   const handleInputChange2 = (e, index, col) => {
     setTableData(
@@ -585,6 +587,7 @@ export default function Add_Quotation() {
                     index.key,
                     "quotation_details_service_id"
                   );
+                  setIsTableEmpty(false);
                   // handleInputChange(e, index.key, "quotation_details_service_id", "tx")
                 }}
               >
@@ -635,6 +638,7 @@ export default function Add_Quotation() {
                     "tr"
                   );
                   console.log(" input numberevent ", value, index.key);
+                  setIsTableEmpty(false);
                 }}
                 align="right"
                 // step={0.01}
@@ -1173,7 +1177,7 @@ export default function Add_Quotation() {
   const OnSubmit = (data) => {
     let temp = false;
 
-    console.log("submitting data", data);
+    console.log("submitting data", data, temp);
     const data11 = "noufal12343221";
     const date1 = moment(data.qdate).format("YYYY-MM-DD");
     const date2 = moment(data.vdate).format("YYYY-MM-DD");
@@ -1238,16 +1242,10 @@ export default function Add_Quotation() {
     // formData.append('userData', JSON.stringify(userData));
     // formData.append('quotation_details', JSON.stringify(userData));
 
-    userData.map((item, index) => {
-      console.log("table data index is that", index);
-      if (index > 0) {
+    tableData.map((item, index) => {
+      console.log("table data index is that", item);
+      if (item.quotation_details_status == 1) {
         temp = true;
-        if (tableData.length > 0) {
-          console.log("hduwue", tableData.length);
-          setIsTableEmpty(false);
-        }
-      } else {
-        setIsTableEmpty(true);
       }
       console.log("userdata task", index);
       if (item.quotation_details_service_id) {
@@ -1273,7 +1271,7 @@ export default function Add_Quotation() {
         );
       }
     });
-    if ((temp = true)) {
+    if (temp === true) {
       console.log("before sending data");
       PublicFetch.post(`${CRM_BASE_URL_FMS}/quotation`, formData, {
         "Content-Type": "Multipart/form-Data",
@@ -1292,6 +1290,9 @@ export default function Add_Quotation() {
           console.log("error", err);
           setError(true);
         });
+    } else {
+      console.log("response while error", false);
+      setIsTableEmpty(true);
     }
   };
 

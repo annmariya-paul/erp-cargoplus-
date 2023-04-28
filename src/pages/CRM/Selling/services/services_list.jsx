@@ -178,7 +178,10 @@ function Services() {
   };
 
   useEffect(() => {
-    getAllservices(searchedName);
+    const getData = setTimeout(() => {
+      getAllservices(searchedName);
+    }, 1000);
+    return () => clearTimeout(getData);
     getAllTaxTypes();
   }, [noofitems, pageofIndex, searchedName]);
 

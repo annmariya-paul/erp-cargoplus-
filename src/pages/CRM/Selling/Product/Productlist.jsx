@@ -156,7 +156,11 @@ function Productlist() {
       });
   };
   useEffect(() => {
-    getallproduct(searchedText);
+    const getData = setTimeout(() => {
+      getallproduct(searchedText);
+    }, 1000);
+
+    return () => clearTimeout(getData);
   }, [pageofIndex, numOfItems, searchedText]);
 
   const data12 = products?.map((item) => [

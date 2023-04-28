@@ -530,6 +530,7 @@ export default function LeadList() {
         <div className="row my-3 ">
           <div className="col-xl-4 ">
             <div className="d-flex justify-content-start align-items-center gap-3">
+            {totalCount > 0 && ( 
               <div className="  ">
                 <Select
                   // defaultValue={"25"}
@@ -561,6 +562,8 @@ export default function LeadList() {
                   </Select.Option>
                 </Select>
               </div>
+            )}
+                {totalCount > 0 && ( 
               <div className=" d-flex  align-items-center mt-2 ">
                 <label className="font_size">
                   Results: {startcount + 1} -
@@ -568,9 +571,12 @@ export default function LeadList() {
                   <span>of {totalCount} </span>{" "}
                 </label>
               </div>
+                )}
+            
             </div>
           </div>
           <div className="col-4 d-flex  align-items-center justify-content-center">
+          {totalCount > 0 && ( 
             <MyPagination
               total={parseInt(totalCount)}
               current={current}
@@ -585,6 +591,7 @@ export default function LeadList() {
                 // setCurrent(noofItems !== pageSize ? 0 : current);
               }}
             />
+          )}
           </div>
           <div className="col-4 d-flex justify-content-end">
             <div className="col mb-2 px-4">

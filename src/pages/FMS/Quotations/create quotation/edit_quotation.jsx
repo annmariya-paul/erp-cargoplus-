@@ -1196,11 +1196,23 @@ export default function EditQuotation(
     formData.append("quotation_container_type", data.container_type);
     formData.append("quotation_salesperson", data.salesperson);
     formData.append("quotation_incoterm_id", data.incoterm);
+   if(data.consignee){
     formData.append("quotation_consignee", data.consignee);
+   }
+   if(data.length){
     formData.append("quotation_length", data.length);
-    formData.append("quotation_breadth", data.breadth);
-    formData.append("quotation_height", data.height);
-    formData.append("quotation_volume", data.volume);
+   }
+    if(data.breadth){
+      formData.append("quotation_breadth", data.breadth);
+    }
+    if(data.height){
+      formData.append("quotation_height", data.height);
+    }
+    // formData.append("quotation_height", data.height);
+    if(data.volume){
+      formData.append("quotation_volume", data.volume);
+    }
+    
     // formData.append(
     //   "quotation_details",
     //   JSON.stringify(data.quotation_details)
@@ -1594,12 +1606,12 @@ export default function EditQuotation(
                     <label>Consignee</label>
                     <Form.Item
                       name="consignee"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please select a Type",
-                        },
-                      ]}
+                      // rules={[
+                      //   {
+                      //     required: true,
+                      //     message: "Please select a Type",
+                      //   },
+                      // ]}
                     >
                       <InputType />
                       {/* <SelectBox

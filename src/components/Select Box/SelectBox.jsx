@@ -18,6 +18,7 @@ function SelectBox({
   optionFilterProp,
   disabled,
   onBlur,
+  open,
   mode,
   maxTagCount,
 }) {
@@ -33,6 +34,7 @@ function SelectBox({
           className={`w-100 ${className}`}
           onClick={onClick}
           onChange={onChange}
+          open={open}
           value={value}
           placeholder={placeholder}
           options={options}

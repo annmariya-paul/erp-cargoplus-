@@ -388,6 +388,7 @@ function Listjob() {
         <div className="row my-3">
         <div className="col-xl-4  ">
                 <div className="d-flex justify-content-start align-items-center gap-3">
+                {totaljob > 0 && (
                   <div className="   ">
             <Select
               bordered={false}
@@ -412,13 +413,24 @@ function Listjob() {
                       </Select.Option>
             </Select>
           </div>
-          <div className="   d-flex  align-items-center mt-2">
+                )}
+          {totaljob > 0 && (
+          <div className=" d-flex  align-items-center mt-2">
                     <label className="font_size">
+                   
                       Results: {startcount + 1} -{" "}
                       {getFinalCount(1 * noofItems * current)}{" "}
                       <span>of {totaljob} </span>{" "}
+                  
                     </label>
                   </div>
+                    )}
+<div className=" col-4 d-flex py-2 justify-content-center ">
+
+
+</div>
+
+
                 </div>
               </div>
 
@@ -439,7 +451,7 @@ function Listjob() {
                 }}
               />
             )} */}
-              {totaljob > 0 && (
+            {totaljob > 0 && (
                   <MyPagination
                     total={parseInt(totaljob)}
                     // total={parseInt(AllEnquiries)}
@@ -456,6 +468,7 @@ function Listjob() {
                     }}
                   />
                 )}
+            
           </div>
           <div className="col-4 d-flex justify-content-end">
             <div className="col mb-2 px-4">

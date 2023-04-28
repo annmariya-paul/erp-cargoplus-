@@ -331,7 +331,7 @@ function EnquiryList() {
   const GetAllEnquiries = (query) => {
     PublicFetch.get(
       `${CRM_BASE_URL_FMS}/enquiries?startIndex=${pageofIndex}&noOfItems=${noofItems}&search=${
-        query === "pending" ? 0 : query === "converted" ? 1 : query
+        query.toLowerCase() === "pending" ? 0 : query.toLowerCase() === "converted" ? 1 : query.toLowerCase()
       }`
     )
       .then((res) => {

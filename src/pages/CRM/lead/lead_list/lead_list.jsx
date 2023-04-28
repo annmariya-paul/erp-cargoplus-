@@ -43,9 +43,9 @@ export default function LeadList() {
   const [currentcount, setCurrentcount] = useState();
   const [serialNo, setserialNo] = useState(1);
   const [contactCustomerId, setContactCustomerId] = useState();
-  const [startcount,setstartcount]= useState()
+  const [startcount, setstartcount] = useState();
 
-  const[custid,setcustid]= useState("")
+  const [custid, setcustid] = useState("");
   // pageindex =0 ->  25 * (1-1)- 1+1
 
   const [viewLead, setViewLead] = useState({
@@ -61,7 +61,7 @@ export default function LeadList() {
   // { function to view selected Lead's data - Ann mariya (18/11/22)}
   const handleViewData = (item) => {
     console.log("view customerr", item);
-    
+
     // setViewLead({
     //   ...viewLead,
     //   type: item.lead_type,
@@ -97,11 +97,11 @@ export default function LeadList() {
           // setAllLeadList(res?.data?.data?.leads);
           setTotalcount(res?.data?.data?.total);
           setCurrentcount(res?.data?.data?.currentCount);
-          setstartcount(res?.data?.data?.startIndex)
+          setstartcount(res?.data?.data?.startIndex);
           let array = [];
 
           res?.data?.data?.customers?.forEach((item, index) => {
-            console.log("dattas inn",item)
+            console.log("dattas inn", item);
             // ldStatus.forEach((i, index) => {
             //   ldType.forEach((t, index) => {
             //     ldUserType.forEach((usrtyp, index) => {
@@ -112,7 +112,6 @@ export default function LeadList() {
             //         usrtyp.value === item.customer_type
             //       ) {
             array.push({
-             
               customer_id: item?.customer_id,
               customer_type: item?.customer_type,
               customer_name: item?.customer_name,
@@ -129,18 +128,21 @@ export default function LeadList() {
               customer_state: item.customer_state,
               customer_city: item.customer_city,
               customer_status: item.customer_status,
-              customer_jobs_no: item?.fms_v1_jobs?.length ==0 ? "":item?.fms_v1_jobs?.length,
-              customer_opportunity_no: item?.crm_v1_opportunities?.length ==0 ? "":item?.crm_v1_opportunities?.length,
-              invoice_amt:item?._sum?.invoice_accounts_grand_total,
-              due_amt:item?._sum?.invoice_accounts_due_amount,
-              customer_credit_days:item?.customer_credit_days,
+              customer_jobs_no:
+                item?.fms_v1_jobs?.length == 0 ? "" : item?.fms_v1_jobs?.length,
+              customer_opportunity_no:
+                item?.crm_v1_opportunities?.length == 0
+                  ? ""
+                  : item?.crm_v1_opportunities?.length,
+              invoice_amt: item?._sum?.invoice_accounts_grand_total,
+              due_amt: item?._sum?.invoice_accounts_due_amount,
+              customer_credit_days: item?.customer_credit_days,
 
               contact_person: item?.crm_v1_contacts[0]?.contact_person_name,
-              startindex:res?.data?.data?.startIndex,
-              
+              startindex: res?.data?.data?.startIndex,
             });
-           console.log("arayayay",array)
-           
+            console.log("arayayay", array);
+
             //       }
             //     });
             //   });
@@ -156,18 +158,21 @@ export default function LeadList() {
       });
   };
 
-  const getFinalCount = (total) =>{
-    const cutoff = Math.ceil(totalCount/ noofItems);
-    console.log("FinalTest",cutoff,current)
-    if(current === cutoff) return totalCount
-    return total
+  const getFinalCount = (total) => {
+    const cutoff = Math.ceil(totalCount / noofItems);
+    console.log("FinalTest", cutoff, current);
+    if (current === cutoff) return totalCount;
+    return total;
     // console.log("TotalPageTest",current,totalCount)
     // console.log("TestCount",total)
-  }
+  };
 
   useEffect(() => {
-   
-    GetAllLeadData(searchedText);
+    const getData = setTimeout(() => {
+      GetAllLeadData(searchedText);
+    }, 1000);
+
+    return () => clearTimeout(getData);
   }, [noofItems, pageofIndex, pagesizecount]);
 
   const getData = (numofItemsTo, pageofIndex) => {
@@ -178,7 +183,6 @@ export default function LeadList() {
   };
 
   // console.log("custiddd",custid)
-
 
   // const getcontacttable = () => {
   //   PublicFetch.get(`${CRM_BASE_URL}/contact`)
@@ -252,11 +256,7 @@ export default function LeadList() {
       key: "index",
       // width: "4%",
       render: (value, item, index) => {
-       return (
-        <div>
-        {item?.startindex + index +serialNo}
-      </div>
-       )
+        return <div>{item?.startindex + index + serialNo}</div>;
       },
       align: "center",
     },
@@ -390,11 +390,11 @@ export default function LeadList() {
             </div>
 
             <div className="actionView m-0">
-            <Link
+              <Link
                 to={`${ROUTES.VIEW_CUSTOMER}/${index.customer_id}`}
                 className="editcolor"
               >
-              <MdPageview />
+                <MdPageview />
               </Link>
               {/* <div className="editcolor" onClick={() => handleViewData(index)}>
                 <MdPageview />
@@ -460,48 +460,48 @@ export default function LeadList() {
     <>
       <div className="container-fluid container_fms pt-3">
         {/* <div className=" "> */}
-          <div className="row flex-wrap align-items-center">
-            <div className="col-4">
-              <h5 className="lead_text">Customer</h5>
-            </div>
-            <div className="col-4">
-              <Input.Search
-                className="inputSearch"
-                placeholder="Search "
-                style={{ margin: "5px", borderRadius: "5px" }}
-                value={searchedText}
-                onChange={(e) => {
-                  GetAllLeadData(searchedText)
-                  setSearchedText(e.target.value ? [e.target.value] : []);
-                }}
-                onSearch={(value) => {
-                  setSearchedText(value);
-                }}
-              />
-            </div>
-            <div className="col-4 d-flex justify-content-end">
-              <Leadlist_Icons
-                name={"customer"}
-                datas={allLeadList}
-                columns={filteredColumns}
-                items={data12}
-                xlheading={LeadHeads}
-                filename="data.csv"
-                chechboxes={
-                  <Checkbox.Group onChange={onChange} value={selectedColumns}>
-                    {columnsKeys.map((column) => (
-                      <li>
-                        <Checkbox value={column} key={column}>
-                          {column}
-                        </Checkbox>
-                      </li>
-                    ))}
-                  </Checkbox.Group>
-                }
-              />
-            </div>
+        <div className="row flex-wrap align-items-center">
+          <div className="col-4">
+            <h5 className="lead_text">Customer</h5>
           </div>
-          {/* <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
+          <div className="col-4">
+            <Input.Search
+              className="inputSearch"
+              placeholder="Search "
+              style={{ margin: "5px", borderRadius: "5px" }}
+              value={searchedText}
+              onChange={(e) => {
+                GetAllLeadData(searchedText);
+                setSearchedText(e.target.value ? [e.target.value] : []);
+              }}
+              onSearch={(value) => {
+                setSearchedText(value);
+              }}
+            />
+          </div>
+          <div className="col-4 d-flex justify-content-end">
+            <Leadlist_Icons
+              name={"customer"}
+              datas={allLeadList}
+              columns={filteredColumns}
+              items={data12}
+              xlheading={LeadHeads}
+              filename="data.csv"
+              chechboxes={
+                <Checkbox.Group onChange={onChange} value={selectedColumns}>
+                  {columnsKeys.map((column) => (
+                    <li>
+                      <Checkbox value={column} key={column}>
+                        {column}
+                      </Checkbox>
+                    </li>
+                  ))}
+                </Checkbox.Group>
+              }
+            />
+          </div>
+        </div>
+        {/* <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
             
            
             <div className="col-4">
@@ -527,66 +527,66 @@ export default function LeadList() {
               </Select>
             </div>
           </div> */}
-          <div className="row my-3 ">
-            <div className="col-xl-4 ">
-              <div className="d-flex justify-content-start align-items-center gap-3">
-            <div className="  ">
-              <Select
-                // defaultValue={"25"}
-                bordered={false}
-                className="page_size_style"
-                value={noofItems}
-                // onChange={handleLastNameChange}
-                onChange={(event, current) => {
-                  console.log("On page size selected : ", event);
-                  console.log("nfjnjfv", current);
-                  setNoofItems(event);
-                  setCurrent(1);
-                }}
-              >
-                
-                <Select.Option value="25">
-                 
-                  <span style={{ color: "#2f6b8f" }} className="ms-1">
-                    25
-                  </span>
-                </Select.Option>
-                <Select.Option value="50">
-                 
-                  <span style={{ color: "#2f6b8f" }} className="ms-1">
-                    50
-                  </span>
-                </Select.Option>
-                <Select.Option value="100">
-                 
-                  <span style={{ color: "#2f6b8f" }} className="ms-1">
-                    100
-                  </span>{" "}
-                </Select.Option>
-              </Select>
+        <div className="row my-3 ">
+          <div className="col-xl-4 ">
+            <div className="d-flex justify-content-start align-items-center gap-3">
+              <div className="  ">
+                <Select
+                  // defaultValue={"25"}
+                  bordered={false}
+                  className="page_size_style"
+                  value={noofItems}
+                  // onChange={handleLastNameChange}
+                  onChange={(event, current) => {
+                    console.log("On page size selected : ", event);
+                    console.log("nfjnjfv", current);
+                    setNoofItems(event);
+                    setCurrent(1);
+                  }}
+                >
+                  <Select.Option value="25">
+                    <span style={{ color: "#2f6b8f" }} className="ms-1">
+                      25
+                    </span>
+                  </Select.Option>
+                  <Select.Option value="50">
+                    <span style={{ color: "#2f6b8f" }} className="ms-1">
+                      50
+                    </span>
+                  </Select.Option>
+                  <Select.Option value="100">
+                    <span style={{ color: "#2f6b8f" }} className="ms-1">
+                      100
+                    </span>{" "}
+                  </Select.Option>
+                </Select>
+              </div>
+              <div className=" d-flex  align-items-center mt-2 ">
+                <label className="font_size">
+                  Results: {startcount + 1} -
+                  {getFinalCount(1 * noofItems * current)}{" "}
+                  <span>of {totalCount} </span>{" "}
+                </label>
+              </div>
             </div>
-            <div className=" d-flex  align-items-center mt-2 ">
-            <label className="font_size" >Results: {startcount +1} -{ getFinalCount((1 * noofItems)*current)}  <span>of {totalCount} </span> </label>
-            </div>
-            </div>
-            </div>
-            <div className="col-4 d-flex  align-items-center justify-content-center">
-              <MyPagination
-                total={parseInt(totalCount)}
-                current={current}
-                pageSize={noofItems}
-                // defaultPageSize={noofItems}
-                showSizeChanger={false}
-                onChange={(current, pageSize) => {
-                  console.log("page index isss", pageSize);
-                  setCurrent(current);
-                  // setPageSize(pageSize);
-                  // setNoofItems(pageSize);
-                  // setCurrent(noofItems !== pageSize ? 0 : current);
-                }}
-              />
-            </div>
-            <div className="col-4 d-flex justify-content-end">
+          </div>
+          <div className="col-4 d-flex  align-items-center justify-content-center">
+            <MyPagination
+              total={parseInt(totalCount)}
+              current={current}
+              pageSize={noofItems}
+              // defaultPageSize={noofItems}
+              showSizeChanger={false}
+              onChange={(current, pageSize) => {
+                console.log("page index isss", pageSize);
+                setCurrent(current);
+                // setPageSize(pageSize);
+                // setNoofItems(pageSize);
+                // setCurrent(noofItems !== pageSize ? 0 : current);
+              }}
+            />
+          </div>
+          <div className="col-4 d-flex justify-content-end">
             <div className="col mb-2 px-4">
               <Link to={ROUTES.CUSTOMER}>
                 <Button
@@ -596,99 +596,99 @@ export default function LeadList() {
                   New Customer
                 </Button>
               </Link>
-              </div>
             </div>
           </div>
-          <div className="datatable">
-            <TableData
-              // data={getData(numofItemsTo, pageofIndex)}
-              data={allLeadList}
-              columns={filteredColumns}
-              custom_table_css="table_lead_list"
+        </div>
+        <div className="datatable">
+          <TableData
+            // data={getData(numofItemsTo, pageofIndex)}
+            data={allLeadList}
+            columns={filteredColumns}
+            custom_table_css="table_lead_list"
+          />
+        </div>
+        <div className="d-flex  py-1 justify-content-center">
+          {totalCount > 0 && (
+            <MyPagination
+              total={parseInt(totalCount)}
+              current={current}
+              pageSize={noofItems}
+              // defaultPageSize={noofItems}
+              showSizeChanger={false}
+              onChange={(current, pageSize) => {
+                console.log("page index isss", pageSize);
+                setCurrent(current);
+                // setPageSize(pageSize);
+                // setNoofItems(pageSize);
+                // setCurrent(noofItems !== pageSize ? 0 : current);
+              }}
             />
-          </div>
-          <div className="d-flex  py-1 justify-content-center">
-            {totalCount > 0 && (
-              <MyPagination
-                total={parseInt(totalCount)}
-                current={current}
-                pageSize={noofItems}
-                // defaultPageSize={noofItems}
-                showSizeChanger={false}
-                onChange={(current, pageSize) => {
-                  console.log("page index isss", pageSize);
-                  setCurrent(current);
-                  // setPageSize(pageSize);
-                  // setNoofItems(pageSize);
-                  // setCurrent(noofItems !== pageSize ? 0 : current);
-                }}
-              />
-            )}
-          </div>
+          )}
+        </div>
 
-          <Custom_model
-            show={modalViewLead}
-            onHide={() => setModalViewLead(false)}
-            View_list
-            list_content={
-              <>
-                <div className="container-fluid p-3">
-                  <div className="d-flex justify-content-between">
-                    <div>
-                      <h5 className="lead_text">Customer</h5>
-                    </div>
-                  </div>
-
-                  <div className="mt-2">
-                    <table className="table table-borderless">
-                      <tbody>
-                        <tr>
-                          <td>Type</td>
-                          <td>:</td>
-                          <td>{viewLead.type}</td>
-                        </tr>
-                        <tr>
-                          <td>Name</td>
-                          <td>:</td>
-                          <td>{viewLead.lead_name}</td>
-                        </tr>
-                        <tr>
-                          <td>User Type</td>
-                          <td>:</td>
-                          <td>{viewLead.user_type}</td>
-                        </tr>
-                        <tr>
-                          <td>Organisation</td>
-                          <td>:</td>
-                          <td>{viewLead.organisation}</td>
-                        </tr>
-                        <tr>
-                          <td>Source</td>
-                          <td>:</td>
-                          <td>{viewLead.source}</td>
-                        </tr>
-                        <tr>
-                          <td>Attachments</td>
-                          <td>:</td>
-                          <td className="lead_text">{viewLead.attachments}</td>
-                        </tr>
-                        <tr>
-                          <td>Description</td>
-                          <td>:</td>
-                          <td>{viewLead.description}</td>
-                        </tr>
-                        <tr>
-                          <td>Lead Status</td>
-                          <td>:</td>
-                          <td>{viewLead.status}</td>
-                        </tr>
-                      </tbody>
-                    </table>
+        <Custom_model
+          show={modalViewLead}
+          onHide={() => setModalViewLead(false)}
+          View_list
+          list_content={
+            <>
+              <div className="container-fluid p-3">
+                <div className="d-flex justify-content-between">
+                  <div>
+                    <h5 className="lead_text">Customer</h5>
                   </div>
                 </div>
-              </>
-            }
-          />
+
+                <div className="mt-2">
+                  <table className="table table-borderless">
+                    <tbody>
+                      <tr>
+                        <td>Type</td>
+                        <td>:</td>
+                        <td>{viewLead.type}</td>
+                      </tr>
+                      <tr>
+                        <td>Name</td>
+                        <td>:</td>
+                        <td>{viewLead.lead_name}</td>
+                      </tr>
+                      <tr>
+                        <td>User Type</td>
+                        <td>:</td>
+                        <td>{viewLead.user_type}</td>
+                      </tr>
+                      <tr>
+                        <td>Organisation</td>
+                        <td>:</td>
+                        <td>{viewLead.organisation}</td>
+                      </tr>
+                      <tr>
+                        <td>Source</td>
+                        <td>:</td>
+                        <td>{viewLead.source}</td>
+                      </tr>
+                      <tr>
+                        <td>Attachments</td>
+                        <td>:</td>
+                        <td className="lead_text">{viewLead.attachments}</td>
+                      </tr>
+                      <tr>
+                        <td>Description</td>
+                        <td>:</td>
+                        <td>{viewLead.description}</td>
+                      </tr>
+                      <tr>
+                        <td>Lead Status</td>
+                        <td>:</td>
+                        <td>{viewLead.status}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </>
+          }
+        />
         {/* </div> */}
       </div>
     </>

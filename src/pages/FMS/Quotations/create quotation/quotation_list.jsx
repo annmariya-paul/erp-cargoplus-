@@ -353,7 +353,10 @@ export default function Quotations(props) {
   };
 
   useEffect(() => {
-    getAllQuotation(searchedText);
+    const getData = setTimeout(() => {
+      getAllQuotation(searchedText);
+    }, 1000);
+    return () => clearTimeout(getData);
   }, [pageofIndex, noofItems, searchedText]);
   console.log("quottation", OppHeads);
   console.log("data12", data12);

@@ -21,6 +21,7 @@ function Dashboard() {
   const [quotationCount, setQuotationCount] = useState();
   const [jobcount, setJobCount] = useState();
   const [invoiceCount, setInvoiceCount] = useState();
+  const [searchInvoice, setSearchInvoice] = useState();
   console.log("count", leadCount);
 
   //  const GetLeadData = () => {
@@ -66,13 +67,15 @@ function Dashboard() {
       });
   };
 
-  const getAllInvoice = () => {
-    PublicFetch.get(`${CRM_BASE_URL_FMS}/invoice`)
+  const getAllInvoice = (name) => {
+    PublicFetch.get(
+      `${CRM_BASE_URL_FMS}/invoice?startIndex=0&noOfItems=100&search=${name}`
+    )
       .then((res) => {
         console.log("response", res);
         if (res.data.success) {
           console.log("success of res", res?.data?.data?.length);
-          setInvoiceCount(res?.data?.data?.length);
+          setInvoiceCount(res?.data?.data?.invoiceCount);
         }
       })
       .catch((err) => {
@@ -83,9 +86,9 @@ function Dashboard() {
     //  GetLeadData();
     getAllQuotation();
     getAllJobs();
-    getAllInvoice();
+    getAllInvoice(searchInvoice);
     setInvoiceCount();
-  }, []);
+  }, [searchInvoice]);
 
   const tableColumns = [
     {

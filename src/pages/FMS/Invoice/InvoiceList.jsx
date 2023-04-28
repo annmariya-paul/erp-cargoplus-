@@ -201,7 +201,7 @@ function InvoiceList() {
                 onClick={() => {
                   // navigate(`${ROUTES.PRINT_INVOICE}/${index.invoice_id}`);
                   window.open(
-                    `http://localhost:3000/print_invoice/${index.invoice_id}`,
+                    `${ROUTES.PRINT_INVOICE}/${index.invoice_id}`,
                     `_blank`
                   );
                 }}
@@ -377,7 +377,11 @@ function InvoiceList() {
   };
 
   useEffect(() => {
-    getAllInvoices(searchSource);
+    const getData = setTimeout(() => {
+      getAllInvoices(searchSource);
+    }, 1000);
+    // getAllInvoices(searchSource);
+    return () => clearTimeout(getData);
   }, [searchSource, pageofIndex, noofItems]);
   return (
     <div>

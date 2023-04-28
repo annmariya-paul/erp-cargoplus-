@@ -280,7 +280,10 @@ function Enquiries() {
   };
 
   useEffect(() => {
-    GetOpportunityData(Search);
+    const getData = setTimeout(() => {
+      GetOpportunityData(Search);
+    }, 1000);
+    return () => clearTimeout(getData);
   }, [pageofIndex, numOfItems, Search]);
 
   const handleEditedclick = (index) => {

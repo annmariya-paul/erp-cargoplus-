@@ -328,7 +328,10 @@ function EnquirySource() {
               </div>
             </div>
             <div className="row my-3">
-              <div className="col-4  ">
+            <div className="col-xl-4  ">
+          <div className="d-flex justify-content-start align-items-center gap-3">
+          { AllEnquirySource?.length > 0 && (
+            <div className="  ">
                 <Select
                   bordered={false}
                   className="page_size_style"
@@ -355,7 +358,11 @@ function EnquirySource() {
                   </Select.Option>
                 </Select>
               </div>
-              <div className="col-4 d-flex align-items-center justify-content-center">
+          )}
+           </div>
+        </div>
+              <div className="col-4 d-flex py-2 justify-content-center">
+              {AllEnquirySource?.length > 0 && (
                 <MyPagination
                   total={AllEnquirySource?.length}
                   current={current}
@@ -366,6 +373,7 @@ function EnquirySource() {
                     setPageSize(pageSize);
                   }}
                 />
+              )}
               </div>
               <div className="col-4 d-flex justify-content-end" style={{}}>
                 <Button

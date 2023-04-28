@@ -375,7 +375,7 @@ function EnquirySource() {
                 />
               )}
               </div>
-              <div className="col-4 d-flex justify-content-end" style={{}}>
+              <div className="col-lg-4 col-lg-4 col-md-4 col-sm-12 col-4 d-flex justify-content-end" style={{}}>
                 <Button
                   btnType="add"
                   onClick={() => {
@@ -397,6 +397,7 @@ function EnquirySource() {
               />
             </div>
             <div className="d-flex py-2 justify-content-center">
+            {AllEnquirySource?.length > 0 && (
               <MyPagination
                 total={AllEnquirySource?.length}
                 current={current}
@@ -407,6 +408,7 @@ function EnquirySource() {
                   setPageSize(pageSize);
                 }}
               />
+            )}
             </div>
           {/* </div> */}
         {/* </div> */}

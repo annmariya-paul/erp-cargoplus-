@@ -376,6 +376,7 @@ function Vendortype() {
           />
         </div>
         <div className="d-flex py-2 justify-content-center">
+        {vendortypes?.length > 0 && (
           <MyPagination
             total={parseInt(vendortypes?.length)}
             current={current}
@@ -386,6 +387,7 @@ function Vendortype() {
               setPageSize(pageSize);
             }}
           />
+        )}
         </div>
       </div>
 

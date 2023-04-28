@@ -1322,16 +1322,16 @@ editForm.setFieldsValue({quotationno :qtnnumber })
                     <h6 className="lead_text">Payment Info</h6>
                   </div>
                   <div className="col-xl-6 col-sm-12 mt-2">
-                    <label>Terms<span className="required">*</span></label>
+                    <label>Terms</label>
                     <Form.Item
                       name="terms"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid terms",
-                        },
-                      ]}
+                      // rules={[
+                      //   {
+                      //     required: true,
+                      //     pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                      //     message: "Please enter a Valid terms",
+                      //   },
+                      // ]}
                     >
                       <SelectBox
                         disabled={disable}

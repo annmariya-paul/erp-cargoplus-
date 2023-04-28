@@ -302,7 +302,11 @@ function Vendortype() {
         </div>
         {/* <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}></div> */}
         <div className="row my-3">
-          <div className="col-4 ">
+        
+          <div className="col-xl-4  ">
+          <div className="d-flex justify-content-start align-items-center gap-3">
+          { vendortypes?.length > 0 && (
+            <div className="  ">
             <Select
               bordered={false}
               className="page_size_style"
@@ -329,11 +333,17 @@ function Vendortype() {
                </Select.Option>
             </Select>
           </div>
+        )}
+        </div>
+        </div>
           {/* <div className=" col-xl-10 col-lg-9 col-md-8 col-sm-12  d-flex  align-items-center ">
             <label className="font_size" >Results: {current +1} -{ getFinalCount((1 * pageSize)*current)}  <span>of {totalCount} </span> </label>
             </div> */}
 
-          <div className="col-4 d-flex  align-items-center justify-content-center">
+          <div className="col-4 d-flex py-2 justify-content-center">
+         {vendortypes?.length > 0 && (
+
+        
             <MyPagination
               total={parseInt(vendortypes?.length)}
               current={current}
@@ -344,9 +354,10 @@ function Vendortype() {
                 setPageSize(pageSize);
               }}
             />
+            )}
           </div>
 
-          <div className="col-4 ">
+          <div className="col-lg-4 col-lg-4 col-md-4 col-sm-12 col-4 d-flex justify-content-end ">
             <Button
               btnType="add"
               onClick={() => {

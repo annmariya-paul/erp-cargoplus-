@@ -388,18 +388,19 @@ function EnquiryList() {
   }, [noofItems, pageofIndex, pagesizecount, searchedText]);
 
   return (
-    <div className="container-fluid ">
-      <div className="row shadow-sm">
-        <div className="col-12">
-          <div className=" ">
-            <div className="row ">
-              <div className="col-4 d-flex justify-content-start">
+    <div className="container-fluid container_fms pt-3">
+      <div className="row flex-wrap align-items-center">
+      <div className="col-4 ">
                 <h5 className="lead_text mt-3">Enquiry</h5>
               </div>
-              <div
+        <div className="col-4">
+          {/* <div className=" "> */}
+            {/* <div className="row "> */}
+             
+              {/* <div
                 // style={{ backgroundColor: "rgb(233, 233, 233)", width: "fit-content"}}
                 className="col-4 mb-3 "
-              >
+              > */}
                 <Input.Search
                   placeholder="Search "
                   style={{
@@ -427,7 +428,8 @@ function EnquiryList() {
                   }}
                 />
               </div>
-              <div className="col-4 d-flex justify-content-end ">
+
+                <div className="col-4 d-flex justify-content-end">
                 {AllEnquiries && (
                   <Leadlist_Icons
                     name={"Enquiry"}
@@ -621,9 +623,9 @@ function EnquiryList() {
                 </>
               }
             /> */}
-          </div>
-        </div>
-      </div>
+          {/* </div> */}
+        {/* </div>
+      </div> */}
 
       <CustomModel
         size={"sm"}

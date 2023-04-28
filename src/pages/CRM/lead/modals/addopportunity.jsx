@@ -634,6 +634,7 @@ export default function AddOpportunity() {
                 <SelectBox
                   placeholder={"--Please Select--"}
                   mode="multiple"
+                  // open={true}
                   // maxTagCount="responsive"
                   value={selectedValues}
                   // onChange={handleMultiSelectChange}

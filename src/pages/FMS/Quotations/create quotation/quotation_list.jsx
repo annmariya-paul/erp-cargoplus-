@@ -417,9 +417,9 @@ export default function Quotations(props) {
           </div>
         </div> */}
         <div className="row my-3">
-          <div className="col-4  px-3">
-            <div className="row">
-              <div className="col-xl-2 col-lg-3 col-md-4 col-sm-12   ">
+          <div className="col-xl-4 ">
+            <div className="d-flex justify-content-start align-items-center gap-3">
+              <div className=" ">
                 <Select
                   // defaultValue={"25"}
                   bordered={false}

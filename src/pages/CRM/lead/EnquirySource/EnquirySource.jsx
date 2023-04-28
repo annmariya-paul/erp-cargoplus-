@@ -255,17 +255,18 @@ function EnquirySource() {
   }, []);
 
   return (
-    <div className="container-fluid">
-      <div className="row shadow-sm p-2">
-        <div className="col-12">
-          <div>
-            <div className="row flex-wrap">
-              <div className="col-4 pt-2">
-                <h5 className="lead_text mb-2">Enquiry Source</h5>
+    <div className="container-fluid container_fms  pt-3">
+      <div className="row flex-wrap align-items-center">
+      <div className="col-4">
+                <h5 className="lead_text">Enquiry Source</h5>
               </div>
+        {/* <div className="col-12"> */}
+          {/* <div> */}
+            {/* <div className="row flex-wrap"> */}
+             
               <div
                 // style={{ backgroundColor: "rgb(233, 233, 233)", width: "fit-content"}}
-                className="col-4 mb-3 "
+                className="col-4"
               >
                 <Input.Search
                   placeholder="Search "
@@ -284,7 +285,7 @@ function EnquirySource() {
                   }}
                 />
               </div>
-              <div className="col-4 d-flex justify-content-end" style={{}}>
+              <div className="col-4 d-flex justify-content-end" >
                 {AllEnquirySource && (
                   <Leadlist_Icons
                     datas={data12}
@@ -296,7 +297,7 @@ function EnquirySource() {
                   />
                 )}
               </div>
-            </div>
+            {/* </div> */}
             <div className="row py-1">
               <div className="col-4"></div>
               {/* <div className="col-4">
@@ -399,8 +400,8 @@ function EnquirySource() {
                 }}
               />
             </div>
-          </div>
-        </div>
+          {/* </div> */}
+        {/* </div> */}
         <CustomModel
           show={AddModalSource}
           onHide={() => {

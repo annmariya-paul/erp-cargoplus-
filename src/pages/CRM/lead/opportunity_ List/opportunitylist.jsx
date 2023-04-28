@@ -827,11 +827,11 @@ function Opportunitylist(props) {
 
   return (
     <div>
-      <div className="container-fluid container_fms  my-3 py-3">
+      <div className="container-fluid container_fms  pt-3">
         {/* opportunity listing section One */}
 
-        <div>
-          <div className="row flex-wrap">
+        {/* <div> */}
+          <div className="row flex-wrap align-items-center">
             <div className="col-4">
               <h5 className="lead_text">Opportunities</h5>
 
@@ -1073,7 +1073,7 @@ function Opportunitylist(props) {
             )}
           </div>
           {/* {"mcncncncncncncnc"} */}
-        </div>
+        {/* </div> */}
 
         {/*  {/* {View model of opportunity  section Two    }  */}
       </div>

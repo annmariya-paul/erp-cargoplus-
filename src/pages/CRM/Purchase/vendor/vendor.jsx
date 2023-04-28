@@ -451,6 +451,7 @@ function Vendor() {
         <div className="row my-3">
           <div className="col-xl-4">
             <div className="d-flex justify-content-start align-items-center gap-3">
+            {totalCount > 0 && (
               <div className="  ">
                 <Select
                   bordered={false}
@@ -475,6 +476,8 @@ function Vendor() {
                   </Select.Option>
                 </Select>
               </div>
+            )}
+              {totalCount > 0 && (
               <div className=" d-flex  align-items-center mt-2 ">
                 <label className="font_size">
                   Results: {startcount + 1} -
@@ -482,10 +485,12 @@ function Vendor() {
                   <span>of {totalCount} </span>{" "}
                 </label>
               </div>
+              )}
             </div>
           </div>
 
           <div className="col-4 d-flex  align-items-center justify-content-center">
+          {totalCount > 0 && (
             <MyPagination
               total={parseInt(totalCount)}
               current={current}
@@ -500,6 +505,7 @@ function Vendor() {
               //   setPageSize(pageSize);
               // }}
             />
+          )}
           </div>
 
           <div className="col-4 d-flex justify-content-end">
@@ -519,6 +525,7 @@ function Vendor() {
           />
         </div>
         <div className="d-flex py-2 justify-content-center">
+        {totalCount > 0 && (
           <MyPagination
             total={parseInt(totalCount)}
             current={current}
@@ -529,6 +536,7 @@ function Vendor() {
               setCurrent(current);
             }}
           />
+        )}
         </div>
       </div>
 

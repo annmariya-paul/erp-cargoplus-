@@ -996,6 +996,7 @@ function Opportunitylist(props) {
           <div className="row my-3">
             <div className="col-xl-4  ">
               <div className="d-flex justify-content-start align-items-center gap-3">
+              {totalCount > 0 && (
                 <div className="  ">
                   <Select
                     bordered={false}
@@ -1023,6 +1024,8 @@ function Opportunitylist(props) {
                     </Select.Option>
                   </Select>
                 </div>
+              )}
+                {totalCount > 0 && (
                 <div className=" d-flex  align-items-center mt-2 ">
                   <label className="font_size">
                     Results: {startcount + 1} -{" "}
@@ -1030,6 +1033,7 @@ function Opportunitylist(props) {
                     <span>of {totalCount} </span>{" "}
                   </label>
                 </div>
+                )}
               </div>
             </div>
             <div className="col-4 d-flex py-2 justify-content-center">

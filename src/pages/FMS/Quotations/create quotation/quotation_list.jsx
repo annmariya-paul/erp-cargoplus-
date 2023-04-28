@@ -439,6 +439,7 @@ export default function Quotations(props) {
         <div className="row my-3">
           <div className="col-xl-4 ">
             <div className="d-flex justify-content-start align-items-center gap-3">
+            {totalquotation > 0 && (
               <div className=" ">
                 <Select
                   // defaultValue={"25"}
@@ -470,13 +471,16 @@ export default function Quotations(props) {
                   </Select.Option>
                 </Select>
               </div>
+              )}
+              {totalquotation > 0 && (
               <div className=" col-xl-10 col-lg-9 col-md-8 col-sm-12  d-flex  align-items-center ">
                 <label className="font_size">
-                  Results: {startcount + 1} -
+                  Results: {startcount + 1} -{" "}
                   {getFinalCount(1 * noofItems * current)}{" "}
                   <span>of {totalCount} </span>{" "}
                 </label>
               </div>
+              )}
             </div>
           </div>
 

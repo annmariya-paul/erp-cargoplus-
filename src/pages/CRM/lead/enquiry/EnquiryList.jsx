@@ -38,12 +38,10 @@ function EnquiryList() {
 
   const [startcount, setstartcount] = useState();
 
-
   const close_modal = (mShow, time) => {
     if (!mShow) {
       setTimeout(() => {
         setCancelPopUp(false);
-    
       }, time);
     }
   };
@@ -51,22 +49,19 @@ function EnquiryList() {
   console.log("ggg", AllEnquiries);
   const handleCancelEnq = (index) => {
     PublicFetch.delete(`${CRM_BASE_URL_FMS}/enquiries/${index.enquiry_id}`)
-    .then((res) => {
-      console.log("response", res);
-      if (res.data.success) {
-        setCancelPopUp(true);
-        GetAllEnquiries(searchedText);
-        close_modal(cancelPopUp, 1200);
-        console.log("success of data", res.data.data);
-      
-      }
-    })
-    .catch((err) => {
-      console.log("Error", err);
-    });
-
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          setCancelPopUp(true);
+          GetAllEnquiries(searchedText);
+          close_modal(cancelPopUp, 1200);
+          console.log("success of data", res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
   };
-
 
   const columns = [
     {
@@ -74,12 +69,8 @@ function EnquiryList() {
       key: "index",
       width: "4%",
       render: (value, item, index) => {
-        return (
-         <div>
-         {item?.startindex + index +serialNo}
-       </div>
-        )
-       },
+        return <div>{item?.startindex + index + serialNo}</div>;
+      },
       align: "center",
     },
     {
@@ -368,7 +359,7 @@ function EnquiryList() {
               contact_phone_1: item?.crm_v1_contacts?.contact_phone_1,
               enquiry_status: item?.enquiry_status,
               enquiry_converted_status: item?.enquiry_converted_status,
-              startindex:res?.data?.data?.startIndex,
+              startindex: res?.data?.data?.startIndex,
             });
           });
           setAllnquires(temp);
@@ -389,7 +380,11 @@ function EnquiryList() {
   };
 
   useEffect(() => {
-    GetAllEnquiries(searchedText);
+    const getData = setTimeout(() => {
+      GetAllEnquiries(searchedText);
+    }, 1000);
+
+    return () => clearTimeout(getData);
   }, [noofItems, pageofIndex, pagesizecount, searchedText]);
 
   return (

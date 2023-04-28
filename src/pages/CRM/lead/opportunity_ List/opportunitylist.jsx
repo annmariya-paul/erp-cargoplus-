@@ -109,7 +109,7 @@ function Opportunitylist(props) {
   const componentRef = useRef();
   const [cancelPopUp, setCancelPopUp] = useState(false);
 
-  const [startcount,setstartcount]= useState()
+  const [startcount, setstartcount] = useState();
   //pdf file start
   // const exportPDF = () => {
   //   const unit = "pt";
@@ -220,14 +220,14 @@ function Opportunitylist(props) {
                   opportunity_status: item?.opportunity_status,
                   opportunity_validity: item?.opportunity_validity,
                   opp_enq: temp,
-                  startcount:res?.data?.data?.startIndex,
-                  startindex:res?.data?.data?.startIndex,
+                  startcount: res?.data?.data?.startIndex,
+                  startindex: res?.data?.data?.startIndex,
                 });
               }
             });
           });
           setOppnew(tempArr);
-          setstartcount(res?.data?.data?.startIndex)
+          setstartcount(res?.data?.data?.startIndex);
           setOpportunityList(res?.data?.data?.leads);
           setTotalcount(res?.data?.data?.totalCount);
         } else {
@@ -240,7 +240,11 @@ function Opportunitylist(props) {
   };
 
   useEffect(() => {
-    GetOpportunityData(searchSource);
+    const getData = setTimeout(() => {
+      GetOpportunityData(searchSource);
+    }, 1000);
+
+    return () => clearTimeout(getData);
     // getAllContact();
   }, [numOfItems, pageofIndex, pagesizecount, searchSource]);
 
@@ -550,15 +554,14 @@ function Opportunitylist(props) {
     setCancelPopUp(true);
   };
 
-
-  const getFinalCount = (total) =>{
-    const cutoff = Math.ceil(totalCount/ numOfItems);
-    console.log("FinalTest",cutoff,current)
-    if(current === cutoff) return totalCount
-    return total
+  const getFinalCount = (total) => {
+    const cutoff = Math.ceil(totalCount / numOfItems);
+    console.log("FinalTest", cutoff, current);
+    if (current === cutoff) return totalCount;
+    return total;
     // console.log("TotalPageTest",current,totalCount)
     // console.log("TestCount",total)
-  }
+  };
 
   const columns = [
     {
@@ -566,12 +569,8 @@ function Opportunitylist(props) {
       key: "index",
       width: "7%",
       render: (value, item, index) => {
-        return (
-         <div>
-         {item?.startindex + index +serialNo}
-       </div>
-        )
-       },
+        return <div>{item?.startindex + index + serialNo}</div>;
+      },
       align: "center",
     },
 
@@ -995,40 +994,43 @@ function Opportunitylist(props) {
           {/* </div>
           </div> */}
           <div className="row my-3">
-          <div className="col-xl-4  ">
-          <div className="d-flex justify-content-start align-items-center gap-3">
-            <div className="  ">
-              <Select
-                bordered={false}
-                className=" page_size_style"
-                value={numOfItems}
-                onChange={(e) => {
-                  setNumOfItems(e);
-                  setCurrent(1);
-                }}
-              >
-                <Select.Option value="25">
-                  <span style={{ color: "#2f6b8f" }} className="">
-                    25
-                  </span>
-                </Select.Option>
-                <Select.Option value="50">
-                  <span style={{ color: "#2f6b8f" }} className="">
-                    50
-                  </span>
-                </Select.Option>
-                <Select.Option value="100">
-                  <span style={{ color: "#2f6b8f" }} className="">
-                    100
-                  </span>
-                </Select.Option>
-              </Select>
-            </div>
-            <div className=" d-flex  align-items-center mt-2 ">
-            <label className="font_size" >Results: {startcount +1} -{" "}{ getFinalCount((1 * numOfItems)*current)}  <span>of {totalCount} </span> </label>
-            </div>
-
-            </div>
+            <div className="col-xl-4  ">
+              <div className="d-flex justify-content-start align-items-center gap-3">
+                <div className="  ">
+                  <Select
+                    bordered={false}
+                    className=" page_size_style"
+                    value={numOfItems}
+                    onChange={(e) => {
+                      setNumOfItems(e);
+                      setCurrent(1);
+                    }}
+                  >
+                    <Select.Option value="25">
+                      <span style={{ color: "#2f6b8f" }} className="">
+                        25
+                      </span>
+                    </Select.Option>
+                    <Select.Option value="50">
+                      <span style={{ color: "#2f6b8f" }} className="">
+                        50
+                      </span>
+                    </Select.Option>
+                    <Select.Option value="100">
+                      <span style={{ color: "#2f6b8f" }} className="">
+                        100
+                      </span>
+                    </Select.Option>
+                  </Select>
+                </div>
+                <div className=" d-flex  align-items-center mt-2 ">
+                  <label className="font_size">
+                    Results: {startcount + 1} -{" "}
+                    {getFinalCount(1 * numOfItems * current)}{" "}
+                    <span>of {totalCount} </span>{" "}
+                  </label>
+                </div>
+              </div>
             </div>
             <div className="col-4 d-flex py-2 justify-content-center">
               {totalCount > 0 && (

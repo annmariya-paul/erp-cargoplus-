@@ -57,10 +57,10 @@ export default function TaxType() {
     }
   };
   // { function to get all tax types - Ann - 18/1/23}
-  const getAllTaxTypes = async () => {
+  const getAllTaxTypes = async (name) => {
     try {
       const allTxTypes = await PublicFetch.get(
-        `${CRM_BASE_URL_FMS}/tax-types?startIndex=${pageofIndex}&perPage=${numOfItems}`
+        `${CRM_BASE_URL_FMS}/tax-types?startIndex=${pageofIndex}&noOfItems=${numOfItems}&search=${name}`
       );
       console.log("all taxtype are", allTxTypes.data.data);
       setTaxTypes(allTxTypes.data.data);

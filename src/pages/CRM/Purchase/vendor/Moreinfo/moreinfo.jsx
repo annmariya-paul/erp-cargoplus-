@@ -11,6 +11,8 @@ import {
   CRM_BASE_URL_PURCHASING,
 } from "../../../../../api/bootapi";
 import { Alert, Space } from 'antd';
+import { ROUTES } from "../../../../../routes";
+import { useNavigate } from "react-router-dom";
 function Moreinfo({ vendor }) {
   const [successPopup, setSuccessPopup] = useState(false);
   const [addForm] = Form.useForm();
@@ -21,6 +23,7 @@ function Moreinfo({ vendor }) {
   const [onevendordata, setonevendordata] = useState();
   const [error, setError] = useState(false);
 
+  const navigate = useNavigate();
   const [vendfrighttypeid, setvendfrighttypeid] = useState();
   //
   const getallfright = async () => {
@@ -156,9 +159,14 @@ function Moreinfo({ vendor }) {
     if (!mShow) {
       setTimeout(() => {
         setSuccessPopup(false);
+        navigate(ROUTES.VENDOR)
       }, time);
     }
   };
+
+  const handlecancel = ()=>{
+    navigate(ROUTES.VENDOR);
+  }
 
   useEffect(() => {
     if (vendor?.vendor_id) {
@@ -181,7 +189,7 @@ function Moreinfo({ vendor }) {
           console.log(error);
         }}
       >
-        <div className="row py-5 px-1">
+        <div className="row py-1 px-1">
           <div className="col-sm-4">
             <label>Preferred Freight Type </label>
             <Form.Item name="vendor_freighttype">
@@ -239,16 +247,25 @@ function Moreinfo({ vendor }) {
             <Button type="submit" className="qtn_save" btnType="save">
               Save
             </Button>
-            <Custom_model
+
+            <Button type="submit" className="qtn_save" btnType="cancel" 
+          onClick ={()=>{
+            handlecancel()
+          }}
+            >
+              Cancel
+            </Button>
+          </div>
+        </div>
+      </Form>
+
+      <Custom_model
               centered
               size={`sm`}
               success
               show={successPopup}
               onHide={() => setSuccessPopup(false)}
             />
-          </div>
-        </div>
-      </Form>
       <Space
     direction="vertical"
     style={{

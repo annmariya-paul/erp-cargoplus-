@@ -458,75 +458,53 @@ export default function LeadList() {
 
   return (
     <>
-      <div className="container-fluid container_fms pt-3">
+      <div className="container-fluid container_fms ">
         {/* <div className=" "> */}
-        <div className="row flex-wrap align-items-center">
-          <div className="col-4">
-            <h5 className="lead_text">Customer</h5>
-          </div>
-          <div className="col-4">
-            <Input.Search
-              className="inputSearch"
-              placeholder="Search "
-              style={{ margin: "5px", borderRadius: "5px" }}
-              value={searchedText}
-              onChange={(e) => {
-                GetAllLeadData(searchedText);
-                setSearchedText(e.target.value ? [e.target.value] : []);
-              }}
-              onSearch={(value) => {
-                setSearchedText(value);
-              }}
-            />
-          </div>
-          <div className="col-4 d-flex justify-content-end">
-            <Leadlist_Icons
-              name={"customer"}
-              datas={allLeadList}
-              columns={filteredColumns}
-              items={data12}
-              xlheading={LeadHeads}
-              filename="data.csv"
-              chechboxes={
-                <Checkbox.Group onChange={onChange} value={selectedColumns}>
-                  {columnsKeys.map((column) => (
-                    <li>
-                      <Checkbox value={column} key={column}>
-                        {column}
-                      </Checkbox>
-                    </li>
-                  ))}
-                </Checkbox.Group>
-              }
-            />
-          </div>
-        </div>
-        {/* <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}>
-            
-           
+          <div className="row flex-wrap align-items-center">
             <div className="col-4">
-              <Select
-                allowClear
-                showSearch
-                style={{ width: "100%", marginTop: "8px", borderRadius: "5px" }}
-                placeholder="Search by status"
-                className="select_search"
-                optionFilterProp="children"
-                onChange={(event) => {
-                  setSearchStatus(event ? [event] : []);
-                }}
-              >
-                {LeadStatus &&
-                  LeadStatus.map((item, index) => {
-                    return (
-                      <Select.Option key={item.id} value={item.name}>
-                        {item.name}
-                      </Select.Option>
-                    );
-                  })}
-              </Select>
+              <h5 className="lead_text">Customer</h5>
             </div>
-          </div> */}
+            <div className="col-4 pt-2">
+              <Input.Search
+                className="inputSearch"
+                placeholder="Search "
+                style={{ margin: "5px", borderRadius: "5px" }}
+                value={searchedText}
+                onChange={(e) => {
+                  GetAllLeadData(searchedText)
+                  setSearchedText(e.target.value ? [e.target.value] : []);
+                }}
+                onSearch={(value) => {
+                  setSearchedText(value);
+                }}
+              />
+            </div>
+            <div className="col-4 d-flex justify-content-end">
+              <Leadlist_Icons
+                name={"customer"}
+                datas={allLeadList}
+                columns={filteredColumns}
+                items={data12}
+                xlheading={LeadHeads}
+                filename="data.csv"
+                chechboxes={
+                  <Checkbox.Group onChange={onChange} value={selectedColumns}>
+                    {columnsKeys.map((column) => (
+                      <li>
+                        <Checkbox value={column} key={column}>
+                          {column}
+                        </Checkbox>
+                      </li>
+                    ))}
+                  </Checkbox.Group>
+                }
+              />
+            </div>
+       
+        </div>
+         
+
+           
         <div className="row my-3 ">
           <div className="col-xl-4 ">
             <div className="d-flex justify-content-start align-items-center gap-3">
@@ -575,6 +553,8 @@ export default function LeadList() {
             
             </div>
           </div>
+
+
           <div className="col-4 d-flex  align-items-center justify-content-center">
           {totalCount > 0 && ( 
             <MyPagination
@@ -593,6 +573,8 @@ export default function LeadList() {
             />
           )}
           </div>
+
+
           <div className="col-4 d-flex justify-content-end">
             <div className="col mb-2 px-4">
               <Link to={ROUTES.CUSTOMER}>
@@ -605,7 +587,38 @@ export default function LeadList() {
               </Link>
             </div>
           </div>
+
+
+          <div className="datatable">
+            <TableData
+          
+              // data={getData(numofItemsTo, pageofIndex)}
+              data={allLeadList}
+              columns={filteredColumns}
+              custom_table_css="table_lead_list"
+            />
+          </div>
+          <div className="d-flex  py-4 justify-content-center">
+            {totalCount > 0 && (
+              <MyPagination
+                total={parseInt(totalCount)}
+                current={current}
+                pageSize={noofItems}
+                // defaultPageSize={noofItems}
+                showSizeChanger={false}
+                onChange={(current, pageSize) => {
+                  console.log("page index isss", pageSize);
+                  setCurrent(current);
+                  // setPageSize(pageSize);
+                  // setNoofItems(pageSize);
+                  // setCurrent(noofItems !== pageSize ? 0 : current);
+                }}
+              />
+            )}
+          </div>
         </div>
+
+
         <div className="datatable">
           <TableData
             // data={getData(numofItemsTo, pageofIndex)}

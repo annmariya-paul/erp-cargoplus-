@@ -105,6 +105,7 @@ function LeadEdit() {
   const close_modal = (mShow, time) => {  
     if (!mShow) {
       setTimeout(() => {
+        // window.scrollTo(0,0)
         setModalShow(false);
         // handletoggle2(time);
         // goToLeadlist();
@@ -132,15 +133,15 @@ function LeadEdit() {
           editForm.setFieldsValue({
             customer_type: res?.data?.data?.customer_type,
             customer_name: res?.data?.data?.customer_name,
-            customer_address: res?.data?.data?.customer_address,
+            customer_address: res?.data?.data?.customer_address == "undefined"?"":""  ,
             customer_phone: res?.data?.data?.customer_phone,
             customer_email: res?.data?.data?.customer_email,
             customer_website: res?.data?.data?.customer_website,
             customer_logo: res?.data?.data?.customer_logo,
-            customer_remarks: res?.data?.data?.customer_remarks,
+            customer_remarks: res?.data?.data?.customer_remarks == "undefined"?"":"",
             customer_country: res?.data?.data?.customer_country,
-            customer_state: res?.data?.data?.customer_state,
-            customer_city: res?.data?.data?.customer_city,
+            customer_state: res?.data?.data?.customer_state == "undefined"?"":"",
+            customer_city: res?.data?.data?.customer_city == "undefined"?"":"",
           });
         } else {
           console.log("FAILED T LOAD DATA");
@@ -355,7 +356,7 @@ function LeadEdit() {
                         className="col-md-5 col-sm-6  d-flex justify-content-end"
                         // style={{ justifyContent: "center" }}
                       >
-                        <Link
+                        {/* <Link
                           to={`${ROUTES.ADD_OPPORTUNITY}/${id}`}
                           className="nav-link"
                         >
@@ -363,7 +364,7 @@ function LeadEdit() {
                             <BsPlusCircleFill style={{ fontSize: "16px" }} />{" "}
                             New Opportunity
                           </Button>
-                        </Link>
+                        </Link> */}
 
                         {/* <Button
                           btnType="add_borderless"
@@ -378,7 +379,7 @@ function LeadEdit() {
                           style="width:1250px"
                         /> */}
                       </div>
-                      <div
+                      {/* <div
                         className="col-md-6 col-sm-4  d-flex justify-content-end"
                         // style={{ justifyContent: "center" }}
                       >
@@ -391,7 +392,7 @@ function LeadEdit() {
                             View Opportunity
                           </Button>
                         </Link>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </div>
@@ -544,25 +545,22 @@ function LeadEdit() {
                       <label>Address</label>
                       <Form.Item
                         name="customer_address"
-                        rules={[
-                          {
-                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                            message: "Please enter a Valid Organization",
-                          },
-                          {
-                            whitespace: true,
-                          },
-                          {
-                            min: 2,
-                            message:
-                              "Organization must be at least 2 characters",
-                          },
-                          {
-                            max: 100,
-                            message:
-                              "Organization cannot be longer than 100 characters",
-                          },
-                        ]}
+                        // rules={[
+                         
+                        //   {
+                        //     whitespace: true,
+                        //   },
+                        //   {
+                        //     min: 2,
+                        //     message:
+                        //       "Organization must be at least 2 characters",
+                        //   },
+                        //   {
+                        //     max: 100,
+                        //     message:
+                        //       "Organization cannot be longer than 100 characters",
+                        //   },
+                        // ]}
                       >
                         <TextArea
                         className="custaddress_height"
@@ -659,7 +657,7 @@ function LeadEdit() {
                     <div className="col-sm-4 pt-3 mt-3">
                       <Form.Item name="customer_logo">
                         <FileUpload
-                          style={{ height: "31px" }}
+                          style={{ height: "43px" }}
                           multiple
                           filetype={"Accept only pdf and docs"}
                           listType="picture"

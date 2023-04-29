@@ -20,9 +20,9 @@ export default function Viewvendor() {
   const getSinglevendor = () => {
     PublicFetch.get(`${CRM_BASE_URL_PURCHASING}/vendors/${id}`)
       .then((res) => {
-        console.log("response of vendor", res);
+        console.log("one of vendor", res);
         if (res.data.success) {
-          console.log("Success of vendor", res.data.data);
+          console.log("one  vendor isss", res.data.data);
           setAllvendor(res?.data?.data);
         }
       })
@@ -58,89 +58,113 @@ export default function Viewvendor() {
             </Button>
           </div>
         </div>
-        <div className="row mt-3">
-          <div className="col-4">
-            <p> Vendor Name</p>
-          </div>
-          <div className="col-1">:</div>
-          <div className="col-6 justify-content-start">
-            <p className="modal-view-data">{allvendor?.vendor_name}</p>
-          </div>
-        </div>
 
-        <div className="row mt-2">
-          <div className="col-4">
-            <p> Organisation Type</p>
+        <div className="row mt-1 pb-2">
+          <div className="col-sm-6 d-flex">
+            <div className="col-4 boldhd pb-3">Vendor Name</div>
+            <div className="col-1">:</div>
+            <div className="col-7">
+              <p className="modal-view-data">{allvendor?.vendor_name}</p>
+            </div>
           </div>
-          <div className="col-1">:</div>
-          <div className="col-6 justify-content-start">
+
+          <div className="col-sm-6 d-flex">
+            <div className="col-4 boldhd pb-3">Organisation Type</div>
+            <div className="col-1">:</div>
+            <div className="col-7">
             <p className="modal-view-data">{allvendor?.vendor_org_type}</p>
+            </div>
           </div>
-        </div>
 
-        <div className="row mt-2">
-          <div className="col-4">
-            <p> Type</p>
+          <div className="col-sm-6 d-flex">
+            <div className="col-4 boldhd pb-3">Type</div>
+            <div className="col-1">:</div>
+            <div className="col-7">
+              <p className="modal-view-data"> {allvendor?.crm_v1_vendor_types?.vendor_type_name}</p>
+            </div>
           </div>
-          <div className="col-1">:</div>
-          <div className="col-6 justify-content-start">
-            <p className="modal-view-data">
-              {allvendor?.crm_v1_vendor_types?.vendor_type_name}
-            </p>
-          </div>
-        </div>
 
-        <div className="row mt-2">
-          <div className="col-4">
-            <p>Email</p>
+          <div className="col-sm-6 d-flex">
+            <div className="col-4 boldhd pb-3">Address</div>
+            <div className="col-1">:</div>
+            <div className="col-7">
+              <p className="modal-view-data"> {allvendor?.vendor_address}</p>
+            </div>
           </div>
-          <div className="col-1">:</div>
-          <div className="col-6 justify-content-start">
+
+          <div className="col-sm-6 d-flex">
+            <div className="col-4 boldhd pb-3">Email</div>
+            <div className="col-1">:</div>
+            <div className="col-7">
             <p className="modal-view-data">{allvendor?.vendor_email}</p>
+            </div>
           </div>
-        </div>
 
-        <div className="row mt-2">
-          <div className="col-4">
-            <p> Contact </p>
+          <div className="col-sm-6 d-flex">
+            <div className="col-4 boldhd pb-3">Phone</div>
+            <div className="col-1">:</div>
+            <div className="col-7">
+            <p className="modal-view-data">{allvendor?.vendor_phone} </p>
+            </div>
           </div>
-          <div className="col-1">:</div>
-          <div className="col-6 justify-content-start">
-            <p className="modal-view-data">{allvendor?.vendor_contact} </p>
-          </div>
-        </div>
 
-        <div className="row mt-2">
-          <div className="col-4">
-            <p>Tax No</p>
+          <div className="col-sm-6 d-flex">
+            <div className="col-4 boldhd pb-3">Website</div>
+            <div className="col-1">:</div>
+            <div className="col-7">
+            <p className="modal-view-data">{allvendor?.vendor_website} </p>
+            </div>
           </div>
-          <div className="col-1">:</div>
-          <div className="col-6 justify-content-start">
+
+          <div className="col-sm-6 d-flex">
+            <div className="col-4 boldhd pb-3">State</div>
+            <div className="col-1">:</div>
+            <div className="col-7">
+              <p className="modal-view-data"> {allvendor?.vendor_state}</p>
+            </div>
+          </div>
+
+          <div className="col-sm-6 d-flex">
+            <div className="col-4 boldhd pb-3">City</div>
+            <div className="col-1">:</div>
+            <div className="col-7">
+              <p className="modal-view-data"> {allvendor?.vendor_city}</p>
+            </div>
+          </div>
+          <div className="col-sm-6 d-flex">
+            <div className="col-4 boldhd pb-3">Tax No</div>
+            <div className="col-1">:</div>
+            <div className="col-7">
             <p className="modal-view-data">{allvendor?.vendor_tax_no}</p>
+            </div>
           </div>
+          <div className="col-sm-6 d-flex">
+            <div className="col-4 boldhd pb-3">Credit Days</div>
+            <div className="col-1">:</div>
+            <div className="col-7">
+            <p className="modal-view-data">{allvendor?.vendor_credit_days}</p>
+            </div>
+          </div>
+
+          <div className="col-sm-6 d-flex">
+            <div className="col-4 boldhd pb-3">Preferred frighttype</div>
+            <div className="col-1">:</div>
+            <div className="col-7">
+            <p className="modal-view-data">Test One</p>
+            </div>
+          </div>
+
+          <div className="col-sm-6 d-flex">
+            <div className="col-4 boldhd pb-3">Incoterm</div>
+            <div className="col-1">:</div>
+            <div className="col-7">
+            <p className="modal-view-data">Test One</p>
+            </div>
+          </div>
+
         </div>
 
-        <div className="row mt-2">
-          <div className="col-4">
-            <p> Country</p>
-          </div>
-          <div className="col-1">:</div>
-          <div className="col-6 justify-content-start">
-            <p className="modal-view-data">
-              {allvendor?.countries?.country_name}
-            </p>
-          </div>
-        </div>
-
-        <div className="row mt-2">
-          <div className="col-4">
-            <p> Vendortype Description</p>
-          </div>
-          <div className="col-1">:</div>
-          <div className="col-6 justify-content-start">
-            <p className="modal-view-data">{allvendor?.vendor_desc}</p>
-          </div>
-        </div>
+       
       </div>
     </>
   );

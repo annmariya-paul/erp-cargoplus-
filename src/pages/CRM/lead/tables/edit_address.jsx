@@ -352,13 +352,16 @@ function Edit_Address(props) {
                     />
                   </Form.Item>
 
-                  <label className="mt-3">Mobile</label>
+                  <label className="mt-3">Mobile  <span className="required">*</span></label>
                   <Form.Item
                     name="addphone"
                     rules={[
                       {
-                        min: 6,
-                        message: "Please enter valid address",
+                        required: true,
+                        // pattern: new RegExp(
+                        //   "^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-s./0-9]*$"
+                        // ),
+                        message: "Please enter a valid phone number",
                       },
                     ]}
                   >
@@ -475,9 +478,19 @@ function Edit_Address(props) {
                   </Form.Item>
 
                   <label for="phone" className="form-label mt-3">
-                    Mobile
-                  </label>
-                  <Form.Item name="editPhone">
+                    Mobiles
+                    <span className="required">*</span></label>
+                  <Form.Item name="editPhone"
+                   rules={[
+                    {
+                      required: true,
+                      // pattern: new RegExp(
+                      //   "^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-s./0-9]*$"
+                      // ),
+                      message: "Please enter a valid phone number",
+                    },
+                  ]}
+                  >
                     <Phone_Input
                       value={editPhone}
                       onChange={(value) => setEditPhone(value)}

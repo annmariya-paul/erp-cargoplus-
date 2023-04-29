@@ -17,6 +17,8 @@ function Invoicetemplate2({
   Invoice_type,
   invoice_number,
   billto,
+  // setInvoice2,
+  settemplate2
 }) {
 
   const [companyInfodata, setCompanyInfodata] = useState();
@@ -35,9 +37,11 @@ function Invoicetemplate2({
       });
   };
 
+  let temp3 = "uploads/invoiceTemplate/template2.png"
   
   useEffect(() => {
     companyinfo();
+    settemplate2(temp3)
     // allCurrency();
     // getallbanks();
   }, []);

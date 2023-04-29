@@ -155,7 +155,7 @@ function Accounting({vendor}){
           console.log(error);
         }}
       >
-        <div className="row py-5 px-1">
+        <div className="row py-1 px-1">
           <div className="col-sm-4">
             <label>Tax No</label>
             <Form.Item name="vendortaxno">

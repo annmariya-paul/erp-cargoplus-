@@ -367,6 +367,7 @@ function Updatevendor(){
     const close_modal = (mShow, time,venderdata ) => {
       if (!mShow) {
         setTimeout(() => {
+          // window.scrollTo(0,0)
           setSuccessPopup(false);
           setTimeOuts(true);
           console.log("ediittt",venderdata)

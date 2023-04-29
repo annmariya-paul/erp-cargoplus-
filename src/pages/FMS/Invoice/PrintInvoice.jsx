@@ -6,7 +6,7 @@ import PublicFetch from "../../../utils/PublicFetch";
 import moment from "moment";
 import { camelize } from "../../../utils/camelcaseconvert";
 import Invoicetemp1 from "../../../components/Invoice/invoicetemp1/invoicetemp1";
-
+import Invoicetemp2 from "../../../components/Invoice/invoicetemp2/invoicetemp2";
 function PrintInvoice() {
   var converter = require("number-to-words");
 
@@ -15,33 +15,53 @@ function PrintInvoice() {
   const [alldata, setAllData] = useState();
   const [grandTotal, setGrandTotal] = useState();
 
-  const [defaultTemplate, setdefaultTemplate] = useState(false);
+  const [defaultTemplate, setdefaultTemplate] = useState();
+
+  const [defaultTemplate1, setdefaultTemplate1] = useState(false);
+  const [defaultTemplate2, setdefaultTemplate2] = useState();
+  const [defaultTemplate3, setdefaultTemplate3] = useState();
+  const [defaultTemp, setDefaultTemp] = useState()
+
+  const template1 = InvoicePrint
 
   const getAllinvoicetemp = async () => {
     try {
       const allinvoice = await PublicFetch.get(
-        `${CRM_BASE_URL_FMS}/invoice-template`
+        `${CRM_BASE_URL_FMS}/invoice-template/default`
       );
       console.log("all invoice aree", allinvoice.data.data);
       // setTemplates(allinvoice.data.data);
+const templateNameArr = allinvoice.data.data.invoice_template_image?.split('/')
+const tempName = templateNameArr[templateNameArr.length-1].split('.')[0]
+setDefaultTemp(tempName)
+console.log("tempName", tempName);
+      // allinvoice?.data?.data?.forEach((itm, indx) => {
+      //   // (itm.invoice_template_default)
+      //   console.log("onee dataa is", itm);
+      //   if (itm?.invoice_template_default == 1) {
+      //     // setDefaultTemp(itm.invoice_template_image.split('/')[])
+      //     console.log("datatsasr", itm);
+      //     let a = itm?.invoice_template_image.toString();
+      //     let b = defaultTemplate.toString()
+      //     console.log("adisdiasdaj",a,b,defaultTemplate2,defaultTemplate3);
+      //     if (itm?.invoice_template_image == defaultTemplate) {
+      //       console.log("tmpll1234",);
+      //       setdefaultTemplate1(true);
+      //     } else if(itm?.invoice_template_image == defaultTemplate2){
+      //       console.log("tmpll1234", itm?.invoice_template_image);
+      //     } else if(itm?.invoice_template_image == defaultTemplate3){
+      //       console.log("tmpll1234", itm?.invoice_template_image);
 
-      allinvoice?.data?.data.forEach((itm, indx) => {
-        // (itm.invoice_template_default)
-        console.log("onee dataa", itm);
-        if (itm?.invoice_template_default > 0) {
-          console.log("dattat", itm.invoice_template_id);
-          setdefaultTemplate(true)
-          // editForm.setFieldsValue({
-          //   invoicedfult:itm.invoice_template_id
-          // })
-        }
+      //     }
+      //   }
 
-        //  console.log("dattat",itm.)
-      });
+      //   //  console.log("dattat",itm.)
+      // });
     } catch (err) {
       console.log("error while getting the countries: ", err);
     }
   };
+  console.log("hfidow", defaultTemplate);
 
   const Invoicedata_data = () => {
     PublicFetch.get(`${CRM_BASE_URL_FMS}/invoice/${id}`)
@@ -74,7 +94,7 @@ function PrintInvoice() {
           );
           setTabledata(temp);
           setAllData(res.data.data);
-          close_modal(1200);
+          // close_modal(1200);
         }
       })
       .catch((err) => {
@@ -85,13 +105,13 @@ function PrintInvoice() {
   const capitalize = (str) =>
     str.charAt(0).toUpperCase() + str.toLowerCase().slice(1);
 
-  const close_modal = (time) => {
-    if (time) {
-      setTimeout(() => {
-        window.print();
-      }, time);
-    }
-  };
+  // const close_modal = (time) => {
+  //   if (time) {
+  //     setTimeout(() => {
+  //       window.print();
+  //     }, time);
+  //   }
+  // };
 
   // let totalAmount = converter.toWords(grandTotal)
   //  let inWords = camelize(totalAmount)
@@ -102,11 +122,47 @@ function PrintInvoice() {
       Invoicedata_data();
     }
   }, [id]);
+  console.log("dndj", defaultTemplate1);
   return (
     <>
-      {defaultTemplate ? (
-        <div>
-          <InvoicePrint
+      <div>
+      
+      {
+        defaultTemp === 'template3' ? ( 
+        <Invoicetemp1
+          settemplate2={(e)=>{
+            console.log("temp1",e);
+            setdefaultTemplate2(e)
+          }}
+            invoice_table_data={
+              <>
+                {tabledata &&
+                  tabledata.length > 0 &&
+                  tabledata.map((item, index) => {
+                    return (
+                      <tr className="invoice_header">
+                        <td align="center border_right p-3">{index + 1}</td>
+                        <td className="  border_right">
+                          {item?.job_task_expense_task_name}
+                        </td>
+                        {/* <td></td>
+                    <td></td>
+                    <td></td> */}
+                        <td style={{ textAlign: "right" }}>
+                          {item.job_task_expense_cost_subtotalfx.toFixed(2)}
+                        </td>
+                      </tr>
+                    );
+                  })}
+              </>
+            }
+            total={grandTotal}
+          />) : defaultTemp === 'template2'? ( 
+            <InvoicePrint
+            settemp1={(e) => {
+              console.log("tmpp", e);
+              setdefaultTemplate(e);
+            }}
             invoice_no
             billto
             Invoice_type={"Invoice"}
@@ -227,8 +283,8 @@ function PrintInvoice() {
                   <th className="th_center">#</th>
                   <th className="tsk_exp">Task & description</th>
                   {/* <th>Tax Type</th>
-              <th>Cost</th>
-              <th>Tax amount</th> */}
+                <th>Cost</th>
+                <th>Tax amount</th> */}
                   <th id="amount">Amount</th>
                 </tr>
               </>
@@ -245,8 +301,8 @@ function PrintInvoice() {
                           {item?.job_task_expense_task_name}
                         </td>
                         {/* <td></td>
-                    <td></td>
-                    <td></td> */}
+                      <td></td>
+                      <td></td> */}
                         <td style={{ textAlign: "right" }}>
                           {item.job_task_expense_cost_subtotalfx.toFixed(2)}
                         </td>
@@ -256,19 +312,26 @@ function PrintInvoice() {
               </>
             }
             amount_in_words={
-              <>
-                {grandTotal && <>{camelize(converter.toWords(grandTotal))}</>}
-              </>
+              <>{grandTotal && <>{camelize(converter.toWords(grandTotal))}</>}</>
             }
             sub_total={grandTotal}
             total={grandTotal}
-          />
-        </div>
-      ) : (
-        <div>
-          <Invoicetemp1 />
-        </div>
-      )}
+            />
+          ) : defaultTemp === 'template1'?  (
+
+           <Invoicetemp2 
+           
+           settemplate2={(e)=>{
+            console.log("temp1",e);
+            setdefaultTemplate3(e)
+          }}
+           />
+
+          ) :""
+      }
+      </div>
+
+     
     </>
   );
 }

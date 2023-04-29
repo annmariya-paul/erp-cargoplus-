@@ -101,6 +101,7 @@ function Lead({}) {
   const close_modal = (mShow, time, customer) => {
     if (!mShow) {
       setTimeout(() => {
+        window.scrollTo(0,0)
         setModalShow(false);
         setTimeOuts(true);
         setCustomerId(customer?.customer_id);
@@ -315,7 +316,7 @@ function Lead({}) {
                   Contacts
                 </button>
               </div>
-              <div className="col-xl-1 col-sm-2 pe-1">
+              <div className="col-xl-1  col-sm-2 pe-1">
                 <button
                   id="button-tabs"
                   className={toggleState === 3 ? "tabs active-tabs" : "tabs"}
@@ -346,7 +347,7 @@ function Lead({}) {
                     handleMoreinfoTab();
                   }}
                 >
-                  MoreInfo
+                  More Info
                 </button>
               </div>
             </div>
@@ -557,21 +558,21 @@ function Lead({}) {
                       <Form.Item
                       
                         name="customer_address"
-                        rules={[
-                          {
-                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                            message: "Special characters are not allowed",
-                          },
-                          {
-                            min: 2,
-                            message: "organisation has at least 2 characters",
-                          },
-                          {
-                            max: 100,
-                            message:
-                              "organisation cannot be longer than 100 characters",
-                          },
-                        ]}
+                        // rules={[
+                        //   {
+                        //     pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                        //     message: "Special characters are not allowed",
+                        //   },
+                        //   {
+                        //     min: 2,
+                        //     message: "organisation has at least 2 characters",
+                        //   },
+                        //   {
+                        //     max: 100,
+                        //     message:
+                        //       "organisation cannot be longer than 100 characters",
+                        //   },
+                        // ]}
                       >
                         <TextArea
                            className="custaddress_height"
@@ -596,15 +597,7 @@ function Lead({}) {
                               pattern: /([^.\/]+\.[^.\/]+)$/,
                               message: "Enter valid website",
                             },
-                            // {
-                            //   min: 2,
-                            //   message: "organisation has at least 2 characters",
-                            // },
-                            // {
-                            //   max: 100,
-                            //   message:
-                            //     "organisation cannot be longer than 100 characters",
-                            // },
+                          
                           ]
                         }
                       >

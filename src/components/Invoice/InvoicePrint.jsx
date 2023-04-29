@@ -16,11 +16,14 @@ function InvoicePrint({
   invoice_no,
   Invoice_type,
   invoice_number,
-  billto
+  billto,
+  settemp1,
 }) {
   const [companyInfodata, setCompanyInfodata] = useState();
   const [defaultCurrency, setDefaultCurrency] = useState();
   const [defaultbank,setdefaultbank]= useState();
+   
+  // const [temp1,settemp1] =useState()
 
   const companyinfo = () => {
     PublicFetch.get(`${GENERAL_SETTING_BASE_URL}/company`)
@@ -75,6 +78,9 @@ function InvoicePrint({
     }
   };
 
+let template12 = "uploads/invoiceTemplate/template1.png"
+
+
   // function camelize(str) {
   //   return str.replace(/(?:^\w|[A-Z]|\b\w)/g, function(word, index) {
   //     return index === 0 ? word.toLowerCase() : word.toUpperCase();
@@ -93,9 +99,11 @@ function InvoicePrint({
     companyinfo();
     allCurrency();
     getallbanks();
+    settemp1(template12)
   }, []);
   return (
     <div>
+    
       <div>
         {/* div to set page border on all pages */}
         <div id="pageborder"></div>

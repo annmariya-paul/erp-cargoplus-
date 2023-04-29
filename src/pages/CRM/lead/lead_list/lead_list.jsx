@@ -458,13 +458,13 @@ export default function LeadList() {
 
   return (
     <>
-      <div className="container-fluid container_fms pt-3">
+      <div className="container-fluid container_fms ">
         {/* <div className=" "> */}
           <div className="row flex-wrap align-items-center">
             <div className="col-4">
               <h5 className="lead_text">Customer</h5>
             </div>
-            <div className="col-4">
+            <div className="col-4 pt-2">
               <Input.Search
                 className="inputSearch"
                 placeholder="Search "
@@ -527,8 +527,8 @@ export default function LeadList() {
               </Select>
             </div>
           </div> */}
-          <div className="row my-3 ">
-            <div className="col-xl-4 ">
+          <div className="row ">
+            <div className="col-4 ">
               <div className="d-flex justify-content-start align-items-center gap-3">
             <div className="  ">
               <Select
@@ -570,7 +570,7 @@ export default function LeadList() {
             </div>
             </div>
             </div>
-            <div className="col-4 d-flex  align-items-center justify-content-center">
+            <div className="col-4  py-2 d-flex justify-content-center ">
               <MyPagination
                 total={parseInt(totalCount)}
                 current={current}
@@ -586,7 +586,7 @@ export default function LeadList() {
                 }}
               />
             </div>
-            <div className="col-4 d-flex justify-content-end">
+            <div className="col-4 d-flex justify-content-end ">
             <div className="col mb-2 px-4">
               <Link to={ROUTES.CUSTOMER}>
                 <Button
@@ -601,13 +601,14 @@ export default function LeadList() {
           </div>
           <div className="datatable">
             <TableData
+          
               // data={getData(numofItemsTo, pageofIndex)}
               data={allLeadList}
               columns={filteredColumns}
               custom_table_css="table_lead_list"
             />
           </div>
-          <div className="d-flex  py-1 justify-content-center">
+          <div className="d-flex  py-4 justify-content-center">
             {totalCount > 0 && (
               <MyPagination
                 total={parseInt(totalCount)}

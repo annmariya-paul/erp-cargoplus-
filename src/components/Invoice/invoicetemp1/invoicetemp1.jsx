@@ -19,6 +19,7 @@ function Invoicetemp1({
   Invoice_type,
   invoice_number,
   billto,
+  settemplate2,
 }) {
   const [companyInfodata, setCompanyInfodata] = useState();
   const [defaultCurrency, setDefaultCurrency] = useState();
@@ -76,15 +77,19 @@ function Invoicetemp1({
   //       console.log("error to fetching  bank details", err);
   //     }
   //   };
+  let templte2= "uploads/invoiceTemplate/template3.png"
 
   useEffect(() => {
     companyinfo();
+    settemplate2(templte2)
     // allCurrency();
     // getallbanks();
   }, []);
+ 
 
   return (
     <div>
+      
       <div>
         <div id="pageborder1st"></div>
 
@@ -344,7 +349,7 @@ function Invoicetemp1({
                 <tbody>
                   {invoice_table_data}
 
-                  <tr>
+                  {/* <tr>
                     <td className="border_right p-3">1 </td>
                     <td className="border_right ">servicenme </td>
 
@@ -368,8 +373,8 @@ function Invoicetemp1({
                     <td className="border_right ">servicenme </td>
 
                     <td className="text_align_words">400 .00</td>
-                  </tr>
-
+                  </tr> */}
+{/* subtotal */}
                   {/* <tr className="">
                     <td className="border_right p-3"> </td>
                     <td className="border_right text_align_words d-flex justify-content-center align-items-center">
@@ -409,7 +414,7 @@ function Invoicetemp1({
                             Total
                           </td>
                           <td style={{ fontWeight: 600 }} className="px-1">
-                            1000.00
+                          {total}
                           </td>
                         </tr>
                       </tbody>

@@ -28,7 +28,7 @@ const[defltinvoice,setdefltinvoice]= useState()
       allinvoice?.data?.data.forEach((itm,indx)=>{
       // (itm.invoice_template_default)
      console.log("onee dataa",itm)
-     if(itm?.invoice_template_default > 0){
+     if(itm?.invoice_template_default == 1){
       console.log("dattat",itm.invoice_template_id)
       editForm.setFieldsValue({
         invoicedfult:itm.invoice_template_id
@@ -50,7 +50,7 @@ console.log("dnjd",defltinvoice)
     // formData.append(`attachments`, data.invoicedfult);
     try {
       const allinvoice = await PublicFetch.patch(
-        `${CRM_BASE_URL_FMS}/invoice-template/${data.invoicedfult}`,formData,{
+        `${CRM_BASE_URL_FMS}/invoice-template/default/${data.invoicedfult}`,formData,{
           "Content-Type": "Multipart/form-Data",
         }
       );

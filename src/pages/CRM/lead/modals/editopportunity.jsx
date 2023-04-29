@@ -177,6 +177,7 @@ export default function EditOpportunity() {
       });
   };
   const [enquiryData, setEnquiryData] = useState();
+  console.log("Enq data",enquiryData);
   const getAllEnquiry = () => {
     PublicFetch.get(`${CRM_BASE_URL_FMS}/enquiries/minimal`)
       .then((res) => {
@@ -555,13 +556,20 @@ export default function EditOpportunity() {
   useEffect(() => {
     getAllIncoterms();
   }, []);
-
+const[enqno,setEnqnos]=useState();
+console.log("enq no",enqno);
   const getoneoppurtunity = () => {
     PublicFetch.get(`${CRM_BASE_URL}/opportunity/${id}`)
       .then((res) => {
         console.log("Response", res);
         if (res.data.success) {
           console.log("Success of Data of opp", res.data.data);
+          let enq=res.data.data?.fms_v1_enquiry_opportunities.map((item,index) =>
+          item.fms_v1_enquiries.enquiry_no
+
+          );
+          console.log("enq no is",enq);
+          setEnqnos( res.data.data?.fms_v1_enquiry_opportunities[0]?.fms_v1_enquiries?.enquiry_no);
           let a = res?.data?.data;
           // console.log("one oppurtunitiesss::: ", oneoppurtunities?.data?.data);
           // let date = moment(a.opportunity_validity);
@@ -575,7 +583,8 @@ export default function EditOpportunity() {
           console.log("enqs", enqs);
           addForm.setFieldsValue({
             oppo_customer: a.opportunity_customer_id,
-            oppo_enquiries: enqs,
+            // oppo_enquiries: enqs,
+            oppo_enquiries: enq,
             oppo_date: date1,
             oppo_source: a.opportunity_source,
             oppo_customer_ref: a.opportunity_customer_ref,

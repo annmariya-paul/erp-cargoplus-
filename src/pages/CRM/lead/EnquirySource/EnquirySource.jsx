@@ -26,7 +26,7 @@ function EnquirySource() {
   const [SuccessPopup, setSuccessPopup] = useState(false);
   const [ViewModalSource, setViewModalSource] = useState(false);
   const [AllEnquirySource, setAllEnquirySource] = useState();
-  console.log("enquiry source ",AllEnquirySource);
+  console.log("enquiry source ", AllEnquirySource);
   const [EnquirySourceId, setEnquirySourceId] = useState();
   const [EnquirySourceData, setEnquirySourceData] = useState();
 
@@ -255,17 +255,18 @@ function EnquirySource() {
   }, []);
 
   return (
-    <div className="container-fluid">
-      <div className="row shadow-sm p-2">
-        <div className="col-12">
-          <div>
-            <div className="row flex-wrap">
-              <div className="col-4 pt-2">
-                <h5 className="lead_text mb-2">Enquiry Source</h5>
+    <div className="container-fluid container_fms  pt-3">
+      <div className="row flex-wrap align-items-center">
+      <div className="col-4">
+                <h5 className="lead_text">Enquiry Source</h5>
               </div>
+        {/* <div className="col-12"> */}
+          {/* <div> */}
+            {/* <div className="row flex-wrap"> */}
+             
               <div
                 // style={{ backgroundColor: "rgb(233, 233, 233)", width: "fit-content"}}
-                className="col-4 mb-3 "
+                className="col-4"
               >
                 <Input.Search
                   placeholder="Search "
@@ -284,7 +285,7 @@ function EnquirySource() {
                   }}
                 />
               </div>
-              <div className="col-4 d-flex justify-content-end" style={{}}>
+              <div className="col-4 d-flex justify-content-end" >
                 {AllEnquirySource && (
                   <Leadlist_Icons
                     datas={data12}
@@ -296,7 +297,7 @@ function EnquirySource() {
                   />
                 )}
               </div>
-            </div>
+            {/* </div> */}
             <div className="row py-1">
               <div className="col-4"></div>
               {/* <div className="col-4">
@@ -327,7 +328,10 @@ function EnquirySource() {
               </div>
             </div>
             <div className="row my-3">
-              <div className="col-4  ">
+            <div className="col-xl-4  ">
+          <div className="d-flex justify-content-start align-items-center gap-3">
+          { AllEnquirySource?.length > 0 && (
+            <div className="  ">
                 <Select
                   bordered={false}
                   className="page_size_style"
@@ -337,27 +341,28 @@ function EnquirySource() {
                     setPageSize(e);
                   }}
                 >
-                   <Select.Option value="25">
-                 
-                 <span style={{ color: "#2f6b8f" }} className="ms-1">
-                   25
-                 </span>
-               </Select.Option>
-               <Select.Option value="50">
-                
-                 <span style={{ color: "#2f6b8f" }} className="ms-1">
-                   50
-                 </span>
-               </Select.Option>
-               <Select.Option value="100">
-                
-                 <span style={{ color: "#2f6b8f" }} className="ms-1">
-                   100
-                 </span>{" "}
-               </Select.Option>
+                  <Select.Option value="25">
+                    <span style={{ color: "#2f6b8f" }} className="ms-1">
+                      25
+                    </span>
+                  </Select.Option>
+                  <Select.Option value="50">
+                    <span style={{ color: "#2f6b8f" }} className="ms-1">
+                      50
+                    </span>
+                  </Select.Option>
+                  <Select.Option value="100">
+                    <span style={{ color: "#2f6b8f" }} className="ms-1">
+                      100
+                    </span>{" "}
+                  </Select.Option>
                 </Select>
               </div>
-              <div className="col-4 d-flex align-items-center justify-content-center">
+          )}
+           </div>
+        </div>
+              <div className="col-4 d-flex py-2 justify-content-center">
+              {AllEnquirySource?.length > 0 && (
                 <MyPagination
                   total={AllEnquirySource?.length}
                   current={current}
@@ -368,8 +373,9 @@ function EnquirySource() {
                     setPageSize(pageSize);
                   }}
                 />
+              )}
               </div>
-              <div className="col-4 d-flex justify-content-end" style={{}}>
+              <div className="col-lg-4 col-lg-4 col-md-4 col-sm-12 col-4 d-flex justify-content-end" style={{}}>
                 <Button
                   btnType="add"
                   onClick={() => {
@@ -391,6 +397,7 @@ function EnquirySource() {
               />
             </div>
             <div className="d-flex py-2 justify-content-center">
+            {AllEnquirySource?.length > 0 && (
               <MyPagination
                 total={AllEnquirySource?.length}
                 current={current}
@@ -401,9 +408,10 @@ function EnquirySource() {
                   setPageSize(pageSize);
                 }}
               />
+            )}
             </div>
-          </div>
-        </div>
+          {/* </div> */}
+        {/* </div> */}
         <CustomModel
           show={AddModalSource}
           onHide={() => {

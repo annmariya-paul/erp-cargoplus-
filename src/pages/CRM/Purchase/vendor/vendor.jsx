@@ -37,7 +37,7 @@ function Vendor() {
   const [totalvendor, settotalvendor] = useState("");
   const [serialNo, setserialNo] = useState(1);
   const [totalCount, setTotalcount] = useState();
-const [startcount,setstartcount]= useState()
+  const [startcount, setstartcount] = useState();
 
   const getCountry = () => {
     PublicFetch.get(`${GENERAL_SETTING_BASE_URL}/country`)
@@ -72,17 +72,15 @@ const [startcount,setstartcount]= useState()
   const pageofIndex = noofItems * (current - 1) - 1 + 1;
   const pagesizecount = Math.ceil(totalCount / noofItems);
 
-
-
   // const getallvendors = async () => {
   //   PublicFetch.get(`${CRM_BASE_URL_PURCHASING}/vendors?startIndex=${pageofIndex}&noOfItems=${noofItems}`).then((res)=>{
   //     let arry = [];
-      
+
   //     res?.data?.data?.vendors?.map((i?, indx) => {
   //       vendor_Organisation.forEach((itm, index) => {
   //         if (itm.value == i?.vendor_org_type) {
   //           console.log("vndr", itm);
-          
+
   //           // setAllvendor((prev)=>([...prev, {vendor_name: i?.vendor_name,
   //           //   vendor_email: i?.vendor_email,
   //           //   vendor_org_type: itm.name,
@@ -151,8 +149,6 @@ const [startcount,setstartcount]= useState()
   //         }
   //       });
   //     });
-     
-      
 
   //     // setvendortypes(allvendortypes.data.data);
   //   } catch (err) {
@@ -160,71 +156,74 @@ const [startcount,setstartcount]= useState()
   //   }
   // };
 
-  const getallvendordata = async(query)=>{
-try{
-  const allvendor = await PublicFetch.get(
-    `${CRM_BASE_URL_PURCHASING}/vendors?startIndex=${pageofIndex}&noOfItems=${noofItems}&search=${query}`
-  );
-  console.log("getting all vendor detailss", allvendor?.data?.data?.vendors);
-  settotalvendor(allvendor.data.data);
-  setTotalcount(allvendor.data.data.total)
+  const getallvendordata = async (query) => {
+    try {
+      const allvendor = await PublicFetch.get(
+        `${CRM_BASE_URL_PURCHASING}/vendors?startIndex=${pageofIndex}&noOfItems=${noofItems}&search=${query}`
+      );
+      console.log(
+        "getting all vendor detailss",
+        allvendor?.data?.data?.vendors
+      );
+      settotalvendor(allvendor.data.data);
+      setTotalcount(allvendor.data.data.total);
 
-  setstartcount(allvendor?.data?.data?.startIndex)
+      setstartcount(allvendor?.data?.data?.startIndex);
 
-  // setAllvendor(allvendor.data.data)
-  let arry = [];
-  allvendor?.data?.data?.vendors.map((i, indx) => {
-    vendor_Organisation.forEach((itm, index) => {
-      if (itm.value == i.vendor_org_type) {
-        console.log("vndr", itm);
-      
-        arry.push({
-          vendor_name: i?.vendor_name,
-          vendor_email: i?.vendor_email,
-           vendor_org_type: itm?.name,
-           vendor_country: i?.countries?.country_name,
-           vendor_country_id: i?.vendor_country_id,
-           vendor_contact: i?.vendor_phone,
-           vendor_city: i?.vendor_city,
-           vendor_address: i?.vendor_address,
-           vendor_description: i?.vendor_desc,
-           vendor_type_id: i?.vendor_type_id,
-           vender_id: i?.vendor_id,
-           vender_taxno: i?.vendor_tax_no,
-           vendor_country_id: i?.vendor_country_id,
-           startindex:allvendor?.data?.data?.startIndex
+      // setAllvendor(allvendor.data.data)
+      let arry = [];
+      allvendor?.data?.data?.vendors.map((i, indx) => {
+        vendor_Organisation.forEach((itm, index) => {
+          if (itm.value == i.vendor_org_type) {
+            console.log("vndr", itm);
+
+            arry.push({
+              vendor_name: i?.vendor_name,
+              vendor_email: i?.vendor_email,
+              vendor_org_type: itm?.name,
+              vendor_country: i?.countries?.country_name,
+              vendor_country_id: i?.vendor_country_id,
+              vendor_contact: i?.vendor_phone,
+              vendor_city: i?.vendor_city,
+              vendor_address: i?.vendor_address,
+              vendor_description: i?.vendor_desc,
+              vendor_type_id: i?.vendor_type_id,
+              vender_id: i?.vendor_id,
+              vender_taxno: i?.vendor_tax_no,
+              vendor_country_id: i?.vendor_country_id,
+              startindex: allvendor?.data?.data?.startIndex,
+            });
+          }
         });
-      }
-    });
-  });
-  setAllvendor(arry)
-  console.log("newArray", arry);
-}
-catch (err) {
-  console.log("error to fetching  vendor", err);
-}
+      });
+      setAllvendor(arry);
+      console.log("newArray", arry);
+    } catch (err) {
+      console.log("error to fetching  vendor", err);
+    }
+  };
 
-  }
- 
+  console.log("totaaal", startcount);
 
-
-  console.log("totaaal",startcount)
-
-
-  const getFinalCount = (total) =>{
-    const cutoff = Math.ceil(totalCount/ noofItems);
-    console.log("FinalTest",cutoff,current)
-    if(current === cutoff) return totalCount
-    return total
+  const getFinalCount = (total) => {
+    const cutoff = Math.ceil(totalCount / noofItems);
+    console.log("FinalTest", cutoff, current);
+    if (current === cutoff) return totalCount;
+    return total;
     // console.log("TotalPageTest",current,totalCount)
     // console.log("TestCount",total)
-  }
+  };
 
   useEffect(() => {
     getallvendortype();
-    getallvendordata(searchedText);
     getCountry();
-  },  [noofItems, pageofIndex, pagesizecount]);
+
+    const getData = setTimeout(() => {
+      getallvendordata(searchedText);
+    }, 1000);
+
+    return () => clearTimeout(getData);
+  }, [noofItems, pageofIndex, pagesizecount]);
 
   const columns = [
     {
@@ -232,12 +231,8 @@ catch (err) {
       key: "index",
       // render: (value, item, index) => serialNo + index,
       render: (value, item, index) => {
-        return (
-         <div>
-         {item?.startindex + index +serialNo}
-       </div>
-        )
-       },
+        return <div>{item?.startindex + index + serialNo}</div>;
+      },
       align: "center",
     },
 
@@ -430,7 +425,7 @@ catch (err) {
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
               onChange={(e) => {
-                getallvendordata(searchedText)
+                getallvendordata(searchedText);
                 setSearchedText(e.target.value ? [e.target.value] : []);
               }}
               onSearch={(value) => {
@@ -441,7 +436,7 @@ catch (err) {
           <div className="col-4 d-flex justify-content-end">
             {data12 && (
               <Leadlist_Icons
-              name={"vendor"}
+                name={"vendor"}
                 datas={data12}
                 columns={filteredColumns}
                 items={data12}
@@ -455,42 +450,47 @@ catch (err) {
         {/* <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}></div> */}
         <div className="row my-3">
           <div className="col-xl-4">
-          <div className="d-flex justify-content-start align-items-center gap-3">
-            <div className="  ">
-            <Select
-              bordered={false}
-              className="page_size_style"
-              value={noofItems}
-              // onChange={(e) => setPageSize(e)}
-              onChange={(event, current) => {
-                console.log("On page size selected : ", event);
-                console.log("nfjnjfv", current);
-                setNoofItems(event);
-                setCurrent(1);
-              }}
-            >
-              <Select.Option value="25">
-             
-                <span className="sizes ms-1">25</span>
-              </Select.Option>
-              <Select.Option value="50">
-                
-                <span className="sizes ms-1"> 50</span>
-              </Select.Option>
-              <Select.Option value="100">
-              
-                <span className="sizes ms-1">100</span>
-              </Select.Option>
-            </Select>
-            </div>
-            <div className=" d-flex  align-items-center mt-2 ">
-            <label className="font_size" >Results: {startcount +1} -{ getFinalCount((1 * noofItems)*current)}  <span>of {totalCount} </span> </label>
-            </div>
-
+            <div className="d-flex justify-content-start align-items-center gap-3">
+            {totalCount > 0 && (
+              <div className="  ">
+                <Select
+                  bordered={false}
+                  className="page_size_style"
+                  value={noofItems}
+                  // onChange={(e) => setPageSize(e)}
+                  onChange={(event, current) => {
+                    console.log("On page size selected : ", event);
+                    console.log("nfjnjfv", current);
+                    setNoofItems(event);
+                    setCurrent(1);
+                  }}
+                >
+                  <Select.Option value="25">
+                    <span className="sizes ms-1">25</span>
+                  </Select.Option>
+                  <Select.Option value="50">
+                    <span className="sizes ms-1"> 50</span>
+                  </Select.Option>
+                  <Select.Option value="100">
+                    <span className="sizes ms-1">100</span>
+                  </Select.Option>
+                </Select>
+              </div>
+            )}
+              {totalCount > 0 && (
+              <div className=" d-flex  align-items-center mt-2 ">
+                <label className="font_size">
+                  Results: {startcount + 1} -
+                  {getFinalCount(1 * noofItems * current)}{" "}
+                  <span>of {totalCount} </span>{" "}
+                </label>
+              </div>
+              )}
             </div>
           </div>
 
           <div className="col-4 d-flex  align-items-center justify-content-center">
+          {totalCount > 0 && (
             <MyPagination
               total={parseInt(totalCount)}
               current={current}
@@ -505,6 +505,7 @@ catch (err) {
               //   setPageSize(pageSize);
               // }}
             />
+          )}
           </div>
 
           <div className="col-4 d-flex justify-content-end">
@@ -524,8 +525,9 @@ catch (err) {
           />
         </div>
         <div className="d-flex py-2 justify-content-center">
+        {totalCount > 0 && (
           <MyPagination
-           total={parseInt(totalCount)}
+            total={parseInt(totalCount)}
             current={current}
             showSizeChanger={true}
             pageSize={noofItems}
@@ -534,6 +536,7 @@ catch (err) {
               setCurrent(current);
             }}
           />
+        )}
         </div>
       </div>
 

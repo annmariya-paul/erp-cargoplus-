@@ -201,7 +201,7 @@ function InvoiceList() {
                 onClick={() => {
                   // navigate(`${ROUTES.PRINT_INVOICE}/${index.invoice_id}`);
                   window.open(
-                    `http://localhost:3000/print_invoice/${index.invoice_id}`,
+                    `${ROUTES.PRINT_INVOICE}/${index.invoice_id}`,
                     `_blank`
                   );
                 }}
@@ -377,7 +377,11 @@ function InvoiceList() {
   };
 
   useEffect(() => {
-    getAllInvoices(searchSource);
+    const getData = setTimeout(() => {
+      getAllInvoices(searchSource);
+    }, 1000);
+    // getAllInvoices(searchSource);
+    return () => clearTimeout(getData);
   }, [searchSource, pageofIndex, noofItems]);
   return (
     <div>
@@ -482,7 +486,7 @@ function InvoiceList() {
                   <div className="col-4 d-flex align-items-center justify-content-center">
                     {invoiceData && (
                       <MyPagination
-                        total={parseInt(invoiceData?.length)}
+                        total={parseInt(totalCount)}
                         current={current}
                         pageSize={numOfItems}
                         onChange={(current, pageSize) => {
@@ -508,7 +512,7 @@ function InvoiceList() {
                 <div className="d-flex py-2 justify-content-center">
                   {invoiceData && (
                     <MyPagination
-                      total={parseInt(totalCount?.length)}
+                      total={parseInt(totalCount)}
                       current={current}
                       pageSize={numOfItems}
                       onChange={(current, pageSize) => {

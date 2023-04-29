@@ -42,6 +42,7 @@ export default function TaxType() {
   const [editUniqueName, setEditUniqueName] = useState();
   const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
   const [taxGroups, setTaxGroups] = useState();
+  const [startcount, setstartcount] = useState();
 
   const [taxTypes, setTaxTypes] = useState();
   const [addForm] = Form.useForm();
@@ -57,16 +58,16 @@ export default function TaxType() {
     }
   };
   // { function to get all tax types - Ann - 18/1/23}
-  const getAllTaxTypes = async () => {
+  const getAllTaxTypes = async (name) => {
     try {
       const allTxTypes = await PublicFetch.get(
-        `${CRM_BASE_URL_FMS}/tax-types?startIndex=${pageofIndex}&perPage=${numOfItems}`
+        `${CRM_BASE_URL_FMS}/tax-types?startIndex=${pageofIndex}&noOfItems=${numOfItems}&search=${name}`
       );
       console.log("all taxtype are", allTxTypes.data.data);
-      setTaxTypes(allTxTypes.data.data);
-      setTotalcount(allTxTypes.data.data.totalCount);
+
       let temp = [];
-      allTxTypes.data.data.forEach((item, index) => {
+      allTxTypes?.data?.data?.taxTypes?.forEach((item, index) => {
+        console.log("tax types inside", item);
         temp.push({
           tax_type_id: item.tax_type_id,
           tax_type_description: item.tax_type_description,
@@ -74,9 +75,12 @@ export default function TaxType() {
           tax_type_percentage: item.tax_type_percentage,
           tax_type_status: item.tax_type_status,
           tax_type_tax_group_id: item.tax_type_tax_group_id,
-          // tax_type_tax_group_name: item.fms_v1_tax_group.tax_group_name,
+          tax_type_tax_group_name: item?.fms_v1_tax_groups?.tax_group_name,
         });
       });
+      setTaxTypes(temp);
+      setTotalcount(allTxTypes.data.data.totalCount);
+      setstartcount(allTxTypes.data.data.startIndex);
       console.log("tax group array", temp);
     } catch (err) {
       console.log("error while getting the tax types: ", err);
@@ -98,9 +102,12 @@ export default function TaxType() {
   };
 
   useEffect(() => {
-    getAllTaxTypes();
+    const getData = setTimeout(() => {
+      getAllTaxTypes(searchedText);
+    }, 1000);
     GetTaxGroups();
-  }, []);
+    return () => clearTimeout(getData);
+  }, [pageofIndex, numOfItems, searchedText]);
 
   // { function to add a tax type - Ann - 19/1/23}
   const createTaxTypes = async (data) => {
@@ -211,23 +218,7 @@ export default function TaxType() {
       title: "TAX TYPE NAME",
       dataIndex: "tax_type_name",
       key: "tax_type_name",
-      filteredValue: [searchedText],
-      onFilter: (value, record) => {
-        return (
-          String(record.tax_type_name)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.tax_type_percentage)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.tax_type_description)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.tax_type_tax_group)
-            .toLowerCase()
-            .includes(value.toLowerCase())
-        );
-      },
+
       align: "left",
     },
     {
@@ -235,69 +226,18 @@ export default function TaxType() {
       dataIndex: "tax_type_percentage",
       key: "tax_type_percentage",
       align: "center",
-      filteredValue: [searchedText],
-      onFilter: (value, record) => {
-        return (
-          String(record.tax_type_name)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.tax_type_percentage)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.tax_type_description)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.tax_type_tax_group)
-            .toLowerCase()
-            .includes(value.toLowerCase())
-        );
-      },
     },
     {
       title: "TAX GROUP",
-      dataIndex: "tax_type_tax_group",
-      key: "tax_type_tax_group",
+      dataIndex: "tax_type_tax_group_name",
+      key: "tax_type_tax_group_name",
       align: "left",
-      filteredValue: [searchedText],
-      onFilter: (value, record) => {
-        return (
-          String(record.tax_type_name)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.tax_type_percentage)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.tax_type_description)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.tax_type_tax_group)
-            .toLowerCase()
-            .includes(value.toLowerCase())
-        );
-      },
     },
     {
       title: "DESCRIPTION",
       dataIndex: "tax_type_description",
       key: "tax_type_description",
       align: "left",
-      filteredValue: [searchedText],
-      onFilter: (value, record) => {
-        return (
-          String(record.tax_type_name)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.tax_type_percentage)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.tax_type_description)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.tax_type_tax_group)
-            .toLowerCase()
-            .includes(value.toLowerCase())
-        );
-      },
     },
     {
       title: "ACTION",
@@ -357,6 +297,15 @@ export default function TaxType() {
     item.tax_type_description,
   ]);
 
+  const getFinalCount = (total) => {
+    const cutoff = Math.ceil(totalCount / numOfItems);
+    console.log("FinalTest", cutoff, current);
+    if (current === cutoff) return totalCount;
+    return total;
+    // console.log("TotalPageTest",current,totalCount)
+    // console.log("TestCount",total)
+  };
+
   return (
     <>
       <div className="container-fluid container_fms pt-3">
@@ -394,33 +343,51 @@ export default function TaxType() {
         </div>
         <div className="row my-3">
           <div className="col-4 px-3">
-            <Select
-              bordered={false}
-              className="page_size_style"
-              value={pageSize}
-              onChange={(e) => setPageSize(e)}
-            >
-              <Select.Option value="25">
-                Show
-                <span className="vertical ms-1">|</span>
-                <span className="sizes ms-1">25</span>
-              </Select.Option>
-              <Select.Option value="50">
-                Show
-                <span className="vertical ms-1">|</span>
-                <span className="sizes ms-1"> 50</span>
-              </Select.Option>
-              <Select.Option value="100">
-                Show
-                <span className="vertical ms-1">|</span>
-                <span className="sizes ms-1">100</span>
-              </Select.Option>
-            </Select>
+            <div className="row">
+              <div className="col-xl-2 col-lg-3 col-md-4 col-sm-12   ">
+                <Select
+                  // defaultValue={"25"}
+                  bordered={false}
+                  className="page_size_style"
+                  value={numOfItems}
+                  // onChange={handleLastNameChange}
+                  onChange={(event, current) => {
+                    console.log("On page size selected : ", event);
+                    console.log("nfjnjfv", current);
+                    setNumOfItems(event);
+                    setCurrent(1);
+                  }}
+                >
+                  <Select.Option value="25">
+                    <span style={{ color: "#2f6b8f" }} className="ms-1">
+                      25
+                    </span>
+                  </Select.Option>
+                  <Select.Option value="50">
+                    <span style={{ color: "#2f6b8f" }} className="ms-1">
+                      50
+                    </span>
+                  </Select.Option>
+                  <Select.Option value="100">
+                    <span style={{ color: "#2f6b8f" }} className="ms-1">
+                      100
+                    </span>{" "}
+                  </Select.Option>
+                </Select>
+              </div>
+              <div className=" col-xl-10 col-lg-9 col-md-8 col-sm-12  d-flex  align-items-center ">
+                <label className="font_size">
+                  Results: {startcount + 1} -
+                  {getFinalCount(1 * numOfItems * current)}{" "}
+                  <span>of {totalCount} </span>{" "}
+                </label>
+              </div>
+            </div>
           </div>
           <div className="col-4  d-flex align-items-center justify-content-center">
             {taxTypes && (
               <MyPagination
-                total={parseInt(taxTypes?.length)}
+                total={parseInt(totalCount)}
                 current={current}
                 pageSize={numOfItems}
                 onChange={(current, pageSize) => {
@@ -452,7 +419,7 @@ export default function TaxType() {
         <div className="d-flex mt-4 justify-content-center">
           {taxTypes && (
             <MyPagination
-              total={parseInt(taxTypes?.length)}
+              total={parseInt(totalCount)}
               current={current}
               pageSize={numOfItems}
               onChange={(current, pageSize) => {

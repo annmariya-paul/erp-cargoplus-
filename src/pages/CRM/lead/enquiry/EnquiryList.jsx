@@ -38,12 +38,10 @@ function EnquiryList() {
 
   const [startcount, setstartcount] = useState();
 
-
   const close_modal = (mShow, time) => {
     if (!mShow) {
       setTimeout(() => {
         setCancelPopUp(false);
-    
       }, time);
     }
   };
@@ -51,22 +49,19 @@ function EnquiryList() {
   console.log("ggg", AllEnquiries);
   const handleCancelEnq = (index) => {
     PublicFetch.delete(`${CRM_BASE_URL_FMS}/enquiries/${index.enquiry_id}`)
-    .then((res) => {
-      console.log("response", res);
-      if (res.data.success) {
-        setCancelPopUp(true);
-        GetAllEnquiries(searchedText);
-        close_modal(cancelPopUp, 1200);
-        console.log("success of data", res.data.data);
-      
-      }
-    })
-    .catch((err) => {
-      console.log("Error", err);
-    });
-
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          setCancelPopUp(true);
+          GetAllEnquiries(searchedText);
+          close_modal(cancelPopUp, 1200);
+          console.log("success of data", res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
   };
-
 
   const columns = [
     {
@@ -74,12 +69,8 @@ function EnquiryList() {
       key: "index",
       width: "4%",
       render: (value, item, index) => {
-        return (
-         <div>
-         {item?.startindex + index +serialNo}
-       </div>
-        )
-       },
+        return <div>{item?.startindex + index + serialNo}</div>;
+      },
       align: "center",
     },
     {
@@ -340,7 +331,7 @@ function EnquiryList() {
   const GetAllEnquiries = (query) => {
     PublicFetch.get(
       `${CRM_BASE_URL_FMS}/enquiries?startIndex=${pageofIndex}&noOfItems=${noofItems}&search=${
-        query === "pending" ? 0 : query === "converted" ? 1 : query
+        query.toLowerCase() === "pending" ? 0 : query.toLowerCase() === "converted" ? 1 : query.toLowerCase()
       }`
     )
       .then((res) => {
@@ -368,7 +359,7 @@ function EnquiryList() {
               contact_phone_1: item?.crm_v1_contacts?.contact_phone_1,
               enquiry_status: item?.enquiry_status,
               enquiry_converted_status: item?.enquiry_converted_status,
-              startindex:res?.data?.data?.startIndex,
+              startindex: res?.data?.data?.startIndex,
             });
           });
           setAllnquires(temp);
@@ -389,22 +380,27 @@ function EnquiryList() {
   };
 
   useEffect(() => {
-    GetAllEnquiries(searchedText);
+    const getData = setTimeout(() => {
+      GetAllEnquiries(searchedText);
+    }, 1000);
+
+    return () => clearTimeout(getData);
   }, [noofItems, pageofIndex, pagesizecount, searchedText]);
 
   return (
-    <div className="container-fluid ">
-      <div className="row shadow-sm">
-        <div className="col-12">
-          <div className=" ">
-            <div className="row ">
-              <div className="col-4 d-flex justify-content-start">
+    <div className="container-fluid container_fms pt-3">
+      <div className="row flex-wrap align-items-center">
+      <div className="col-4 ">
                 <h5 className="lead_text mt-3">Enquiry</h5>
               </div>
-              <div
+        <div className="col-4">
+          {/* <div className=" "> */}
+            {/* <div className="row "> */}
+             
+              {/* <div
                 // style={{ backgroundColor: "rgb(233, 233, 233)", width: "fit-content"}}
                 className="col-4 mb-3 "
-              >
+              > */}
                 <Input.Search
                   placeholder="Search "
                   style={{
@@ -432,7 +428,8 @@ function EnquiryList() {
                   }}
                 />
               </div>
-              <div className="col-4 d-flex justify-content-end ">
+
+                <div className="col-4 d-flex justify-content-end">
                 {AllEnquiries && (
                   <Leadlist_Icons
                     name={"Enquiry"}
@@ -463,6 +460,7 @@ function EnquiryList() {
             <div className="row my-3">
               <div className="col-xl-4  ">
                 <div className="d-flex justify-content-start align-items-center gap-3">
+                {totalCount > 0 && (
                   <div className="   ">
                     <Select
                       // defaultValue={"25"}
@@ -495,13 +493,16 @@ function EnquiryList() {
                       </Select.Option>
                     </Select>
                   </div>
+                )}
+                  {totalCount > 0 && (
                   <div className="   d-flex  align-items-center mt-2">
                     <label className="font_size">
-                      Results: {startcount + 1} -
+                      Results: {startcount + 1} -{" "}
                       {getFinalCount(1 * noofItems * current)}{" "}
                       <span>of {totalCount} </span>{" "}
                     </label>
                   </div>
+                  )}
                 </div>
               </div>
               <div className="col-4 d-flex py-2 justify-content-center">
@@ -626,9 +627,9 @@ function EnquiryList() {
                 </>
               }
             /> */}
-          </div>
-        </div>
-      </div>
+          {/* </div> */}
+        {/* </div>
+      </div> */}
 
       <CustomModel
         size={"sm"}

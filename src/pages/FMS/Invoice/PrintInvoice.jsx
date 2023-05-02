@@ -134,7 +134,13 @@ function PrintInvoice() {
               console.log("temp1", e);
               setdefaultTemplate2(e);
             }}
-            invoice_number={alldata?.invoice_no}
+
+          
+           shipper={alldata?.fms_v1_jobs?.job_shipper}
+            invoice_no={alldata?.invoice_no}
+            invoice_date={moment(alldata?.invoice_date).format("DD-MM-YYYY")}
+            payment_tocust={ alldata?.fms_v1_jobs?.crm_v1_customer?.customer_name}
+            consignee_name={  alldata?.fms_v1_jobs?.job_consignee}
             
             invoice_details1={
               <>
@@ -415,8 +421,13 @@ function PrintInvoice() {
               console.log("temp1", e);
               setdefaultTemplate3(e);
             }}
+          invoice_no={alldata?.invoice_no}
+          Invoice_date= {moment(alldata?.invoice_date).format("DD-MM-YYYY")}
+          customer_name={ alldata?.fms_v1_jobs?.crm_v1_customer?.customer_name}
+          customer_email={ alldata?.fms_v1_jobs?.crm_v1_customer?.customer_email}
+          customer_address={alldata?.fms_v1_jobs?.crm_v1_customer?.customer_address}
             consignee_name={
-              alldata?.fms_v1_jobs?.crm_v1_leads?.lead_customer_name
+              alldata?.fms_v1_jobs?.job_consignee
             }
             invoice_details1={
               <>

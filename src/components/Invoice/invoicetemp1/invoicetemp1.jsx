@@ -16,7 +16,11 @@ function Invoicetemp1({
   permanent_made,
   balance_due,
   invoice_no,
+  invoice_date,
   Invoice_type,
+  payment_tocust,
+  shipper,
+  consignee_name,
   invoice_number,
   billto,
   settemplate2,
@@ -178,53 +182,31 @@ function Invoicetemp1({
                       </div>
                       <div className="col-2 ">
                         <div className="">
-                          <tr>
-                          <td className="label_color">Invoice No</td>
-                          <td className="headingcolor">{invoice_no}</td>
-                          </tr>
-                          {/* <label className="label_color">Invoice No</label>
-                          <h4 className="headingcolor">{invoice_no} </h4> */}
+                         
+                          <label className="label_color">Invoice No</label>
+                          <h4 className="headingcolor">{invoice_no} </h4>
                         </div>
                       </div>
                       <div className="col-2">
                         <div className="">
                           <label className="label_color">Invoice Date</label>
-                          <h4 className="headingcolor">12/3/2023</h4>
+                          <h4 className="headingcolor">{invoice_date} </h4>
                         </div>
                       </div>
                     </div>
                   </tr>
                   <br></br>
+
                   <tr className="invoice_header">
                     <div className="d-flex ">
                       <div className=" col-5">
-                        <div className="header__address_content">
+                        <div className="">
                           <table>
                             <thead></thead>
                             <tbody>
                               {invoice_details1}
 
-                              {/* <tr>
-              <td className="font_weight"> Project Name </td>
-              <td className=""> : </td>
-              <td className=""> Jnewtst-00023 </td>
-            </tr>
-            <tr>
-              <td className="font_weight"> AWB/BL</td>
-              <td className=""> : </td>
-              <td className=""> usdfu213</td>
-            </tr>
-            <tr>
-              <td className="font_weight"> Origin </td>
-              <td className=""> : </td>
-              <td className=""> JCochin Sea </td>
-            </tr> */}
-
-                              {/* <tr>
-                                <td className="font_weight"> Destination</td>
-                                <td className=""> : </td>
-                                <td className=""> Cochin Sea </td>
-                              </tr> */}
+                            
                             </tbody>
                           </table>
                         </div>
@@ -233,57 +215,23 @@ function Invoicetemp1({
                       <div className="col-2 ">
                         <div className="">
                           <label className="label_color">Payment To</label>
-                          <h4 className="headingcolor">testcust</h4>
+                          <h4 className="headingcolor">{payment_tocust} </h4>
                         </div>
                       </div>
 
-                      {/* <div className="col-2">
-                        <div className="">
-                          <label className="label_color">Consignee</label>
-                          <h4 className="headingcolor">Teshet</h4>
-                        </div>
-                      </div> */}
+                    
                     </div>
                   </tr>
 
                   <tr className="invoice_header">
                     <div className="d-flex ">
                       <div className=" col-5">
-                        <div className="header__address_content">
+                        <div className="">
                           <table>
                             <thead></thead>
                             <tbody>
                               {invoice_details2}
-                              {/* <tr>
-                                <td className="font_weight"> Destination</td>
-                                <td className=""> : </td>
-                                <td className=""> Jnewtst-00023 </td>
-                              </tr>
-                              <tr>
-                                <td className="font_weight"> No: of Pieces</td>
-                                <td className=""> : </td>
-                                <td className=""> usdfu213</td>
-                              </tr>
-                              <tr>
-                                <td className="font_weight"> Gross Weight </td>
-                                <td className=""> : </td>
-                                <td className=""> JCochin Sea </td>
-                              </tr>
-                              <tr>
-                                <td className="font_weight"> Chargble </td>
-                                <td className=""> : </td>
-                                <td className=""> 223 </td>
-                              </tr>
-                              <tr>
-                                <td className="font_weight"> Terms</td>
-                                <td className=""> : </td>
-                                <td className=""> djjksc</td>
-                              </tr>
-                              <tr>
-                                <td className="font_weight"> Carrier </td>
-                                <td className=""> : </td>
-                                <td className=""> ejnd Sea </td>
-                              </tr> */}
+                             
                             </tbody>
                           </table>
                         </div>
@@ -292,12 +240,12 @@ function Invoicetemp1({
                       <div className="col-2 ">
                         <div className="">
                           <label className="label_color">shipper</label>
-                          <h4 className="headingcolor">Test One</h4>
+                          <h4 className="headingcolor">{shipper }</h4>
                         </div>
                         <div className="pt-4">
                           <div className="">
                             <label className="label_color">Consignee</label>
-                            <h4 className="headingcolor">Teshet</h4>
+                            <h4 className="headingcolor">{consignee_name} </h4>
                           </div>
                         </div>
                       </div>

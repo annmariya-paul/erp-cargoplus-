@@ -309,16 +309,25 @@ export default function AddOpportunity() {
  if(data.oppo_description){
   formData.append("opportunity_description", data.oppo_description);
  }
+ 
 
     formData.append("opportunity_status", data.oppo_status);
     formData.append("opportunity_salesperson_id", data.sales_person);
-    //  formData.append("opportunity_enquiries",JSON.stringify(data.oppo_enquiries));
-    data.oppo_enquiries?.length &&
+    // if(enqnw){
+    //   enqnw?.length && enqnw.map((item,index) =>{
+    //     formData.append(`opportunity_enquiries[${index}]`, item);
+    //   })
+        
+    // }
+      data.oppo_enquiries?.length &&
       data.oppo_enquiries.map((item, index) => {
         console.log("userdata task", index);
 
         formData.append(`opportunity_enquiries[${index}]`, item);
       });
+    
+    //  formData.append("opportunity_enquiries",JSON.stringify(data.oppo_enquiries));
+    
 
     // formData.append("opportunity_enquiries",JSON.stringify(["8","9"]));
     // formData.append("opportunity_enquiries[0]",8);
@@ -432,10 +441,26 @@ export default function AddOpportunity() {
     // oneContact(Customer_Id)
     GetAllContacts(Customer_Id);
   };
-
+const [enqnw,setEnqnonw]=useState();
+console.log("enqno",enqnw);
+useEffect(() => {
+  if (id) {
+    getOneEnq(id);
+    // setEnqnonw(parseInt(id))
+  let a = parseInt(id);
+  let b=[];
+  b.push(a);
+  // setEnqnonw(a);
+  addForm.setFieldsValue({
+    oppo_enquiries: b,
+    // oppo_enquiries: enqnw,
+   });
+  }
+  }, [id]);
   const [allenqdata, setAllEnqdata] = useState();
   console.log("all data", allenqdata);
   const getOneEnquiry = (e) => {
+    console.log("enq value",e);
     PublicFetch.get(`${CRM_BASE_URL_FMS}/enquiries/${e[0]}`).then((res) => {
       console.log("responsewww", res);
       if (res.data.success) {
@@ -449,6 +474,55 @@ export default function AddOpportunity() {
           // contact_person:res.data.data.crm_v1_contacts.contact_id,
           // contactemail:res.data.data.crm_v1_contacts.contact_email,
           // contactphone:res.data.data.crm_v1_contacts.contact_phone_1,
+          oppo_customer_ref:res.data.data.enquiry_customer_ref,
+          oppo_description:res.data.data.enquiry_remarks,
+          sales_person:res.data.data. enquiry_sales_person_id,
+        
+        });
+        PublicFetch.get(
+          `${CRM_BASE_URL}/customer/${res.data.data.crm_v1_customer?.customer_id}`
+        )
+          .then((res) => {
+            console.log("Response from single customer", res);
+            if (res.data.success) {
+              let a = res.data.data.crm_v1_contacts[0];
+              setAllContacts(res.data.data.crm_v1_contacts);
+              // let b =res.data.data.crm_v1_customer_accounting[0];
+              let b = res.data.data.customer_preferred_freight_type;
+              addForm.setFieldsValue({
+                contact_person: a?.contact_id,
+                contactemail: a?.contact_email,
+                contactphone: a?.contact_phone_1,
+                // customerfrighttype: b,
+              });
+            }
+          })
+          .catch((err) => {
+            console.log("Error", err);
+          });
+      }
+    });
+  };
+
+  const getOneEnq = (e) => {
+    console.log("enq value",e);
+    PublicFetch.get(`${CRM_BASE_URL_FMS}/enquiries/${e}`).then((res) => {
+      console.log("responsewww", res);
+      if (res.data.success) {
+        console.log("Success from one enquiry", res.data.data);
+        setAllEnqdata(res.data.data);
+        setCustomer(res.data.data.crm_v1_customer?.customer_id);
+        setCustomer_Id(res.data.data.enquiry_contact_person_id);
+        let a = res.data.data.crm_v1_contacts[0];
+        addForm.setFieldsValue({
+          oppo_customer: res.data.data.crm_v1_customer.customer_id,
+          // contact_person:res.data.data.crm_v1_contacts.contact_id,
+          // contactemail:res.data.data.crm_v1_contacts.contact_email,
+          // contactphone:res.data.data.crm_v1_contacts.contact_phone_1,
+          oppo_customer_ref:res.data.data.enquiry_customer_ref,
+          oppo_description:res.data.data.enquiry_remarks,
+          sales_person:res.data.data. enquiry_sales_person_id,
+        
         });
         PublicFetch.get(
           `${CRM_BASE_URL}/customer/${res.data.data.crm_v1_customer?.customer_id}`

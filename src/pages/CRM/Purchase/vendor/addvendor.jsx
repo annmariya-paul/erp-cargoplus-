@@ -159,6 +159,7 @@ function Addvendor({ }  ) {
   const close_modal = (mShow, time,venddata) => {
     if (!mShow) {
       setTimeout(() => {
+        window.scrollTo(0, 0);
         setSuccessPopup(false);
         setTimeOuts(true);
         setVendorId(venddata);
@@ -296,7 +297,7 @@ console.log("bnkdetails id iss",vendorId)
         <div className="lead_container">
           <div className="row justify-content-md-center">
             <div className="bloc-tabs tabs-responsive">
-              <div className="col-xl-1 col-sm-2 pe-1">
+              <div className="col-xl-1 col-lg-2 col-sm-2 ">
                 <button
                   id="button-tabs"
                   className={toggleState === 1 ? "tabs active-tabs " : "tabs "}
@@ -309,7 +310,7 @@ console.log("bnkdetails id iss",vendorId)
                   Basic Info
                 </button>
               </div>
-              <div className="col-xl-1 col-sm-2 pe-1">
+              <div className="col-xl-1  col-lg-2 col-sm-2 ">
                 <button
                   id="button-tabs"
                   className={toggleState === 2 ? "tabs active-tabs " : "tabs "}
@@ -322,7 +323,7 @@ console.log("bnkdetails id iss",vendorId)
                   Contacts
                 </button>
               </div>
-              <div className="col-xl-1 col-sm-2 pe-1">
+              <div className="col-xl-1  col-lg-2 col-sm-2 pe-1">
                 <button
                   id="button-tabs"
                   className={toggleState === 3 ? "tabs active-tabs" : "tabs"}
@@ -334,7 +335,7 @@ console.log("bnkdetails id iss",vendorId)
                   Accounting
                 </button>
               </div>
-              <div className="col-xl-1 col-sm-2 pe-1">
+              <div className="col-xl-1 col-lg-2  col-md-4 col-sm-2 pe-2">
                 <button
                   className={toggleState === 4 ? "tabs active-tabs" : "tabs"}
                   onClick={(e) => {
@@ -345,7 +346,7 @@ console.log("bnkdetails id iss",vendorId)
                   Bank Details
                 </button>
               </div>
-              <div className="col-xl-1 col-sm-2 pe-1">
+              <div className="col-xl-1  col-lg-2 col-sm-2 pe-1">
                 <button
                   className={toggleState === 5 ? "tabs active-tabs" : "tabs"}
                   onClick={(e) => {

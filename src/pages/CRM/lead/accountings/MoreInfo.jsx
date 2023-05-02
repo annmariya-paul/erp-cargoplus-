@@ -224,7 +224,7 @@ function Moreinfo({ customerdetails }) {
             </Form.Item>
           </div>
           <div className="col-sm-4 ">
-            <label>Qtn validity Days</label>
+            <label>Quotation validity Days</label>
             <Form.Item name="customer_accounting_qtnvalidity_days">
               <InputType />
             </Form.Item>

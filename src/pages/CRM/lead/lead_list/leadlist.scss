@@ -103,7 +103,7 @@ span.ant-select-selection-item {
 
 // ##### Lead list table ######
 .table_lead_list {
-  height: 414px !important;
+  height: 562px !important;
   overflow-y: auto !important;
 }
 
@@ -127,4 +127,7 @@ span.ant-select-selection-item {
 }
 .dd {
   color: rgb(233, 233, 233);
+}
+.tableheight{
+height: 500px;
 }

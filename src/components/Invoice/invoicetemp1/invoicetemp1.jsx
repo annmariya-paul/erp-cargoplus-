@@ -19,6 +19,7 @@ function Invoicetemp1({
   Invoice_type,
   invoice_number,
   billto,
+  settemplate2,
 }) {
   const [companyInfodata, setCompanyInfodata] = useState();
   const [defaultCurrency, setDefaultCurrency] = useState();
@@ -76,15 +77,19 @@ function Invoicetemp1({
   //       console.log("error to fetching  bank details", err);
   //     }
   //   };
+  let templte2= "uploads/invoiceTemplate/template3.png"
 
   useEffect(() => {
     companyinfo();
+    settemplate2(templte2)
     // allCurrency();
     // getallbanks();
   }, []);
+ 
 
   return (
     <div>
+      
       <div>
         <div id="pageborder1st"></div>
 
@@ -111,7 +116,7 @@ function Invoicetemp1({
                         <div>
                           {/* {Invoice_type} */}
 
-                          <span>{invoice_number}</span>
+                          {/* <span>{invoice_number}</span> */}
                         </div>
                       </div>
                       {/* )} */}
@@ -173,8 +178,12 @@ function Invoicetemp1({
                       </div>
                       <div className="col-2 ">
                         <div className="">
-                          <label className="label_color">Invoice No</label>
-                          <h4 className="headingcolor">INV-00006</h4>
+                          <tr>
+                          <td className="label_color">Invoice No</td>
+                          <td className="headingcolor">{invoice_no}</td>
+                          </tr>
+                          {/* <label className="label_color">Invoice No</label>
+                          <h4 className="headingcolor">{invoice_no} </h4> */}
                         </div>
                       </div>
                       <div className="col-2">
@@ -195,7 +204,7 @@ function Invoicetemp1({
                             <tbody>
                               {invoice_details1}
 
-                              <tr>
+                              {/* <tr>
               <td className="font_weight"> Project Name </td>
               <td className=""> : </td>
               <td className=""> Jnewtst-00023 </td>
@@ -209,7 +218,7 @@ function Invoicetemp1({
               <td className="font_weight"> Origin </td>
               <td className=""> : </td>
               <td className=""> JCochin Sea </td>
-            </tr>
+            </tr> */}
 
                               {/* <tr>
                                 <td className="font_weight"> Destination</td>
@@ -245,7 +254,7 @@ function Invoicetemp1({
                             <thead></thead>
                             <tbody>
                               {invoice_details2}
-                              <tr>
+                              {/* <tr>
                                 <td className="font_weight"> Destination</td>
                                 <td className=""> : </td>
                                 <td className=""> Jnewtst-00023 </td>
@@ -274,7 +283,7 @@ function Invoicetemp1({
                                 <td className="font_weight"> Carrier </td>
                                 <td className=""> : </td>
                                 <td className=""> ejnd Sea </td>
-                              </tr>
+                              </tr> */}
                             </tbody>
                           </table>
                         </div>
@@ -344,7 +353,7 @@ function Invoicetemp1({
                 <tbody>
                   {invoice_table_data}
 
-                  <tr>
+                  {/* <tr>
                     <td className="border_right p-3">1 </td>
                     <td className="border_right ">servicenme </td>
 
@@ -368,8 +377,8 @@ function Invoicetemp1({
                     <td className="border_right ">servicenme </td>
 
                     <td className="text_align_words">400 .00</td>
-                  </tr>
-
+                  </tr> */}
+{/* subtotal */}
                   {/* <tr className="">
                     <td className="border_right p-3"> </td>
                     <td className="border_right text_align_words d-flex justify-content-center align-items-center">
@@ -396,7 +405,7 @@ function Invoicetemp1({
                 <div className="sub_total_wrapper__col sub_total_wrapper__col_1">
                   <div style={{ width: "100%" }}>
                     <div className="total_color">Total In Words</div>
-                    <div className="sub_total_words">One thousand only</div>
+                    <div className="sub_total_words">{amount_in_words} </div>
                   </div>
                 </div>
 
@@ -409,7 +418,7 @@ function Invoicetemp1({
                             Total
                           </td>
                           <td style={{ fontWeight: 600 }} className="px-1">
-                            1000.00
+                          {total}
                           </td>
                         </tr>
                       </tbody>

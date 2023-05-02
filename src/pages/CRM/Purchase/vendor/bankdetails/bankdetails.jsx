@@ -305,27 +305,59 @@ function Bankdetails({ vendor, toggle }) {
             >
               {/* <div className="row py-5 px-1"> */}
                 <div className="col-sm-12  ">
-                  <label>Account Name</label>
-                  <Form.Item name="vend_accname">
+                  <label>Account Name<span className="required">*</span></label>
+                  <Form.Item 
+                  name="vend_accname"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter a valid account name",
+                    },
+                  ]}
+                  >
                     <InputType />
                   </Form.Item>
                 </div>
                 <div className="col-sm-12  mt-3">
-                  <label>Account No</label>
-                  <Form.Item name="vend_accno">
+                  <label>Account No<span className="required">*</span></label>
+                  <Form.Item 
+                  name="vend_accno"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter a valid account no",
+                    },
+                  ]}
+                  >
                     <InputType />
                   </Form.Item>
                 </div>
                 <div className="col-sm-12   mt-3">
-                  <label>Bank Name</label>
-                  <Form.Item name="vend_bankname">
+                  <label>Bank Name<span className="required">*</span></label>
+                  <Form.Item 
+                  name="vend_bankname"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter a valid bank name",
+                    },
+                  ]}
+                  >
                     <InputType />
                   </Form.Item>
                 </div>
 
                 <div className="col-sm-12  mt-3">
-                  <label>Branch Name</label>
-                  <Form.Item name="vend_branchname">
+                  <label>Branch Name<span className="required">*</span></label>
+                  <Form.Item 
+                  name="vend_branchname"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter a valid branch name",
+                    },
+                  ]}
+                  >
                     <InputType />
                   </Form.Item>
                 </div>

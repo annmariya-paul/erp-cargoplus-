@@ -281,7 +281,7 @@ function AddressTable(props) {
                     />
                   </Form.Item>
 
-                  <label className="mt-3">Mobile</label>
+                  <label className="mt-3">Mobile <span className="required">*</span></label>
                   <Form.Item
                     name="phone"
                     rules={[

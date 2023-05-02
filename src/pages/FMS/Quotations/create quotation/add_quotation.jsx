@@ -288,6 +288,7 @@ export default function Add_Quotation() {
   const [OpportunityList, setOpportunityList] = useState([]);
   const [currentcount, setCurrentcount] = useState();
   const [locationType, setLocationType] = useState();
+  const [freightType1, setFreightType1] = useState();
 
   const [allCustomerList, setAllCustomerList] = useState([]);
   console.log("Lead names :", allCustomerList);
@@ -496,7 +497,10 @@ export default function Add_Quotation() {
         eno: a,
       });
     }
-  }, [id]);
+    if (freightType1) {
+      mode(freightType1);
+    }
+  }, [id, freightType1]);
 
   const handleDelete = (key) => {
     const newData = tableData?.filter((item) => item?.key !== key);
@@ -940,7 +944,7 @@ export default function Add_Quotation() {
     PublicFetch.get(`${CRM_BASE_URL}/opportunity/${Oppo_id}`)
       .then((res) => {
         console.log("response from opportunity");
-        if (res.data.success) {
+        if (res?.data?.success) {
           console.log("Success from Opporutnity", res.data.data);
           setNumberOfDays(
             res?.data?.data?.crm_v1_customer?.customer_qtn_validity_days
@@ -948,6 +952,10 @@ export default function Add_Quotation() {
           calculateDate(
             res?.data?.data?.crm_v1_customer?.customer_qtn_validity_days
           );
+          let a =
+            res?.data?.data?.crm_v1_customer?.customer_preferred_freight_type;
+          console.log("freight type", a);
+          setFreightType1(a);
           mode(
             res?.data?.data?.crm_v1_customer?.customer_preferred_freight_type
           );

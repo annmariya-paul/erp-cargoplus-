@@ -124,7 +124,7 @@ export default function TaxType() {
       console.log("fright added successfully", addtaxtypes);
       if (addtaxtypes.data.success) {
         setSuccessPopup(true);
-        getAllTaxTypes();
+        getAllTaxTypes(searchedText);
         addForm.resetFields();
         setModalAddTaxtype(false);
         close_modal(successPopup, 1000);
@@ -158,6 +158,7 @@ export default function TaxType() {
       ...viewTaxType,
       tax_type_id: item.tax_type_id,
       tax_type_name: item.tax_type_name,
+      tax_group_name: item.tax_type_tax_group_name,
       tax_type_percentage: item.tax_type_percentage,
       tax_type_description: item.tax_type_description,
     });
@@ -196,7 +197,7 @@ export default function TaxType() {
       if (updated.data.success) {
         setModalEditTaxtype(false);
         close_modal(successPopup, 1000);
-        getAllTaxTypes();
+        getAllTaxTypes(searchedText);
         setSuccessPopup(true);
       }
     } catch (err) {
@@ -343,7 +344,7 @@ export default function TaxType() {
         </div>
         <div className="row my-3">
           <div className="col-4 px-3">
-            <div className="row">
+            {/* <div className="row">
               <div className="col-xl-2 col-lg-3 col-md-4 col-sm-12   ">
                 <Select
                   // defaultValue={"25"}
@@ -382,7 +383,7 @@ export default function TaxType() {
                   <span>of {totalCount} </span>{" "}
                 </label>
               </div>
-            </div>
+            </div> */}
           </div>
           <div className="col-4  d-flex align-items-center justify-content-center">
             {taxTypes && (
@@ -701,6 +702,15 @@ export default function TaxType() {
               <div className="col-1">:</div>
               <div className="col-6 ">
                 <p className="modal-view-data">{viewTaxType.tax_type_name}</p>
+              </div>
+            </div>
+            <div className="row mt-3">
+              <div className="col-4">
+                <p>Tax Group</p>
+              </div>
+              <div className="col-1">:</div>
+              <div className="col-6 ">
+                <p className="modal-view-data">{viewTaxType?.tax_group_name}</p>
               </div>
             </div>
             <div className="row mt-3">

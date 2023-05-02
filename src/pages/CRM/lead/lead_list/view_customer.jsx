@@ -5,6 +5,8 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import PublicFetch from "../../../../utils/PublicFetch";
 import { CRM_BASE_URL } from "../../../../api/bootapi";
 import { ROUTES } from "../../../../routes";
+import TableData from "../../../../components/table/table_data";
+
 // import { CRM_BASE_URL_PURCHASING } from "../../../../api/bootapi";
 
 export default function Viewcustomer() {
@@ -13,6 +15,9 @@ export default function Viewcustomer() {
 
   const [allcustomer, setAllcustomer] = useState();
 
+  const [allcontacts, setallcontacts] = useState([]);
+  const [alladdress, setalladdress] = useState([])
+  const [serialNo, setserialNo] = useState(1);
 
   const getSinglecustomer = () => {
     PublicFetch.get(`${CRM_BASE_URL}/customer/${id}`)
@@ -21,6 +26,9 @@ export default function Viewcustomer() {
         if (res.data.success) {
           console.log("single customer is", res.data.data);
           setAllcustomer(res?.data?.data);
+          setallcontacts(res?.data?.data?.crm_v1_contacts)
+          setalladdress(res?.data?.data?.crm_v1_addresses
+            )
         }
       })
       .catch((err) => {
@@ -34,6 +42,83 @@ export default function Viewcustomer() {
       getSinglecustomer();
     }
   }, [id]);
+
+  const columns = [
+    {
+      title: "Sl. No.",
+      key: "index",
+      // width: "7%",
+      render: (value, item, index) => serialNo + index,
+      align: "center",
+    },
+,
+    {
+      title: "EMAIL",
+      dataIndex: "contact_email",
+      key: "contact_email",
+      align: "left",
+    },
+    {
+      title: "CONTACT ",
+      dataIndex: "contact_person_name",
+      key: "contact_person",
+      align: "left",
+    },
+    {
+      title: "PHONE",
+      dataIndex: "contact_phone_1",
+      key: "contact_phone_1",
+      align: "left",
+    },
+    {
+      title: "MOBILE",
+      dataIndex: "contact_phone_1",
+      key: "contact_phone_1",
+      align: "left",
+    },
+    {
+      title: "DESIGNATION",
+      dataIndex: "contact_designation",
+      key: "contact_designation",
+      align: "left",
+    },
+   
+ ]
+ const addresscolumn=[
+  {
+    title: "Sl. No.",
+    key: "index",
+    // width: "7%",
+    render: (value, item, index) => serialNo + index,
+    align: "center",
+  },
+
+  {
+    title: "TITLE",
+    dataIndex: "address_title",
+    key: "address_title",
+    align: "left",
+  },
+  {
+    title: "ADDRESS ",
+    dataIndex: "address_content",
+    key: "address_content",
+    align: "left",
+  },
+  {
+    title: "PIN",
+    dataIndex: "address_pin",
+    key: "address_pin",
+    align: "left",
+  },
+  {
+    title: "CONTACT",
+    dataIndex: "address_contact",
+    key: "address_contact",
+    align: "left",
+  },
+ 
+ ]
 
   return (
     <>
@@ -159,102 +244,29 @@ export default function Viewcustomer() {
          
 
           </div>
-
-        {/* <div className="row mt-3">
-          <div className="col-4">
-            <p> Customer Name</p>
-          </div>
-          <div className="col-1">:</div>
-          <div className="col-6 justify-content-start">
-            <p className="modal-view-data">
-              {allcustomer?.customer_name}
-              </p>
-          </div>
+          <div className="mt-2"><h5>Contact Details</h5> </div>
+          <div className="datatable">
+            { allcontacts &&(
+          <TableData
+            // data={getData(numofItemsTo, pageofIndex)}
+            data={allcontacts}
+            columns={columns}
+            custom_table_css="contact_table"
+          />
+          )}
         </div>
-
-        <div className="row mt-2">
-          <div className="col-4">
-            <p> Customer Type</p>
+<div className="mt-2"><h5>Address Details</h5> </div>
+        <div className="datatable">
+            { alladdress && (
+            <TableData
+              // data={getData(numofItemsTo, pageofIndex)}
+              data={alladdress}
+              columns={addresscolumn}
+              custom_table_css="contact_table"
+            />
+            )}
           </div>
-          <div className="col-1">:</div>
-          <div className="col-6 justify-content-start">
-            <p className="modal-view-data">
-              {allcustomer?.customer_type}
-              </p>
-          </div>
-        </div>
-
-        <div className="row mt-2">
-          <div className="col-4">
-            <p> Phone</p>
-          </div>
-          <div className="col-1">:</div>
-          <div className="col-6 justify-content-start">
-            <p className="modal-view-data">
-              {allcustomer?.customer_phone}
-            </p>
-          </div>
-        </div>
-
-        <div className="row mt-2">
-          <div className="col-4">
-            <p>Email</p>
-          </div>
-          <div className="col-1">:</div>
-          <div className="col-6 justify-content-start">
-            <p className="modal-view-data">
-              {allcustomer?.customer_email}
-              </p>
-          </div>
-        </div>
-
-        <div className="row mt-2">
-          <div className="col-4">
-            <p> Contact </p>
-          </div>
-          <div className="col-1">:</div>
-          <div className="col-6 justify-content-start">
-            <p className="modal-view-data">
-              {allcustomer?.crm_v1_contacts[0]?.contact_person_name} 
-              </p>
-          </div>
-        </div>
-
-        <div className="row mt-2">
-          <div className="col-4">
-            <p>Website</p>
-          </div>
-          <div className="col-1">:</div>
-          <div className="col-6 justify-content-start">
-            <p className="modal-view-data">
-              {allcustomer?.customer_website}
-              </p>
-          </div>
-        </div>
-
-        <div className="row mt-2">
-          <div className="col-4">
-            <p> Country</p>
-          </div>
-          <div className="col-1">:</div>
-          <div className="col-6 justify-content-start">
-            <p className="modal-view-data">
-              {allcustomer?.countries?.country_name}
-            </p>
-          </div>
-        </div>
-
-        <div className="row mt-2">
-          <div className="col-4">
-            <p> State</p>
-          </div>
-          <div className="col-1">:</div>
-          <div className="col-6 justify-content-start">
-            <p className="modal-view-data">
-              {allcustomer?.customer_state}
-              </p>
-          </div>
-        </div> */}
+        
       </div>
     </>
   );

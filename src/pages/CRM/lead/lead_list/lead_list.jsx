@@ -30,7 +30,7 @@ export default function LeadList() {
   const [searchedText, setSearchedText] = useState("");
   const [searchType, setSearchType] = useState("");
   const [searchStatus, setSearchStatus] = useState("");
-  const [noofItems, setNoofItems] = useState("25");
+  const [noofItems, setNoofItems] = useState("15");
   const [totalCount, setTotalcount] = useState();
   const [pageIndex, setPageIndex] = useState(0);
   const [current, setCurrent] = useState(1);
@@ -523,6 +523,11 @@ export default function LeadList() {
                     setCurrent(1);
                   }}
                 >
+                   <Select.Option value="15">
+                    <span style={{ color: "#2f6b8f" }} className="ms-1">
+                      15
+                    </span>
+                  </Select.Option>
                   <Select.Option value="25">
                     <span style={{ color: "#2f6b8f" }} className="ms-1">
                       25
@@ -589,33 +594,7 @@ export default function LeadList() {
           </div>
 
 
-          <div className="datatable">
-            <TableData
-          
-              // data={getData(numofItemsTo, pageofIndex)}
-              data={allLeadList}
-              columns={filteredColumns}
-              custom_table_css="table_lead_list"
-            />
-          </div>
-          <div className="d-flex  py-4 justify-content-center">
-            {totalCount > 0 && (
-              <MyPagination
-                total={parseInt(totalCount)}
-                current={current}
-                pageSize={noofItems}
-                // defaultPageSize={noofItems}
-                showSizeChanger={false}
-                onChange={(current, pageSize) => {
-                  console.log("page index isss", pageSize);
-                  setCurrent(current);
-                  // setPageSize(pageSize);
-                  // setNoofItems(pageSize);
-                  // setCurrent(noofItems !== pageSize ? 0 : current);
-                }}
-              />
-            )}
-          </div>
+        
         </div>
 
 
@@ -627,7 +606,7 @@ export default function LeadList() {
             custom_table_css="table_lead_list"
           />
         </div>
-        <div className="d-flex  py-1 justify-content-center">
+        <div className="d-flex   justify-content-center">
           {totalCount > 0 && (
             <MyPagination
               total={parseInt(totalCount)}

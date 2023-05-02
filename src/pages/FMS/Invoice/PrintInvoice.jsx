@@ -20,9 +20,9 @@ function PrintInvoice() {
   const [defaultTemplate1, setdefaultTemplate1] = useState(false);
   const [defaultTemplate2, setdefaultTemplate2] = useState();
   const [defaultTemplate3, setdefaultTemplate3] = useState();
-  const [defaultTemp, setDefaultTemp] = useState()
+  const [defaultTemp, setDefaultTemp] = useState();
 
-  const template1 = InvoicePrint
+  const template1 = InvoicePrint;
 
   const getAllinvoicetemp = async () => {
     try {
@@ -31,10 +31,12 @@ function PrintInvoice() {
       );
       console.log("all invoice aree", allinvoice.data.data);
       // setTemplates(allinvoice.data.data);
-const templateNameArr = allinvoice.data.data.invoice_template_image?.split('/')
-const tempName = templateNameArr[templateNameArr.length-1].split('.')[0]
-setDefaultTemp(tempName)
-console.log("tempName", tempName);
+      const templateNameArr =
+        allinvoice.data.data.invoice_template_image?.split("/");
+      const tempName =
+        templateNameArr[templateNameArr.length - 1].split(".")[0];
+      setDefaultTemp(tempName);
+      console.log("tempName", tempName);
       // allinvoice?.data?.data?.forEach((itm, indx) => {
       //   // (itm.invoice_template_default)
       //   console.log("onee dataa is", itm);
@@ -94,7 +96,7 @@ console.log("tempName", tempName);
           );
           setTabledata(temp);
           setAllData(res.data.data);
-          // close_modal(1200);
+          close_modal(1200);
         }
       })
       .catch((err) => {
@@ -105,13 +107,13 @@ console.log("tempName", tempName);
   const capitalize = (str) =>
     str.charAt(0).toUpperCase() + str.toLowerCase().slice(1);
 
-  // const close_modal = (time) => {
-  //   if (time) {
-  //     setTimeout(() => {
-  //       window.print();
-  //     }, time);
-  //   }
-  // };
+  const close_modal = (time) => {
+    if (time) {
+      setTimeout(() => {
+        window.print();
+      }, time);
+    }
+  };
 
   // let totalAmount = converter.toWords(grandTotal)
   //  let inWords = camelize(totalAmount)
@@ -122,26 +124,108 @@ console.log("tempName", tempName);
       Invoicedata_data();
     }
   }, [id]);
-  console.log("dndj", defaultTemplate1);
+  console.log("conss", alldata?.invoice_no);
   return (
     <>
       <div>
-      
-      {
-        defaultTemp === 'template3' ? ( 
-        <Invoicetemp1
-          settemplate2={(e)=>{
-            console.log("temp1",e);
-            setdefaultTemplate2(e)
-          }}
+        {defaultTemp === "template3" ? (
+          <Invoicetemp1
+            settemplate2={(e) => {
+              console.log("temp1", e);
+              setdefaultTemplate2(e);
+            }}
+            invoice_number={alldata?.invoice_no}
+            
+            invoice_details1={
+              <>
+                <tr>
+                  <td className="font_weight"> Project Name </td>
+                  <td className=""> : </td>
+                  <td className=""> {alldata?.fms_v1_jobs?.job_number} </td>
+                </tr>
+                <tr>
+                  <td className="font_weight"> AWB/BL</td>
+                  <td className=""> : </td>
+                  <td className=""> {alldata?.fms_v1_jobs?.job_awb_bl_no}</td>
+                </tr>
+                <tr>
+                  <td className="font_weight"> Origin </td>
+                  <td className=""> : </td>
+                  <td className="">
+                    {" "}
+                    {
+                      alldata?.fms_v1_jobs
+                        ?.fms_v1_locations_fms_v1_jobs_job_origin_idTofms_v1_locations
+                        ?.location_name
+                    }{" "}
+                  </td>
+                </tr>
+              </>
+            }
+            invoice_details2={
+              <>
+                <tr>
+                  <td className="font_weight"> Destination</td>
+                  <td className=""> : </td>
+                  <td className="">
+                    {" "}
+                    {
+                      alldata?.fms_v1_jobs
+                        ?.fms_v1_locations_fms_v1_jobs_job_destination_idTofms_v1_locations
+                        ?.location_name
+                    }{" "}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="font_weight"> No: of Pieces</td>
+                  <td className=""> : </td>
+                  <td className="">
+                    {" "}
+                    {alldata?.fms_v1_jobs?.job_no_of_pieces}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="font_weight"> Gross Weight </td>
+                  <td className=""> : </td>
+                  <td className=""> {alldata?.fms_v1_jobs?.job_gross_wt} </td>
+                </tr>
+                <tr>
+                  <td className="font_weight"> Chargeble Weight </td>
+                  <td className=""> : </td>
+                  <td className="">
+                    {" "}
+                    {alldata?.fms_v1_jobs?.job_chargeable_wt}{" "}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="font_weight"> Terms</td>
+                  <td className=""> : </td>
+                  <td className="">
+                    {" "}
+                    {
+                      alldata?.fms_v1_jobs?.fms_v1_payment_terms
+                        ?.payment_term_name
+                    }
+                  </td>
+                </tr>
+                <tr>
+                  <td className="font_weight"> Carrier </td>
+                  <td className=""> : </td>
+                  <td className="">
+                    {" "}
+                    {alldata?.fms_v1_jobs?.fms_v1_carrier?.carrier_name}{" "}
+                  </td>
+                </tr>
+              </>
+            }
             invoice_table_data={
               <>
                 {tabledata &&
                   tabledata.length > 0 &&
                   tabledata.map((item, index) => {
                     return (
-                      <tr className="invoice_header">
-                        <td align="center border_right p-3">{index + 1}</td>
+                      <tr className="invoice_header border-0">
+                        <td align="center " className="p-2">{index + 1}</td>
                         <td className="  border_right">
                           {item?.job_task_expense_task_name}
                         </td>
@@ -156,9 +240,15 @@ console.log("tempName", tempName);
                   })}
               </>
             }
+            amount_in_words={
+              <>
+                {grandTotal && <>{camelize(converter.toWords(grandTotal))}</>}
+              </>
+            }
             total={grandTotal}
-          />) : defaultTemp === 'template2'? ( 
-            <InvoicePrint
+          />
+        ) : defaultTemp === "template2" ? (
+          <InvoicePrint
             settemp1={(e) => {
               console.log("tmpp", e);
               setdefaultTemplate(e);
@@ -269,7 +359,7 @@ console.log("tempName", tempName);
                   </td>
                 </tr>
                 <tr className="invoice_header">
-                  <td>Grows weight</td>
+                  <td>Gross weight</td>
                   <td>:</td>
                   <td style={{ fontWeight: 600 }}>
                     {alldata?.fms_v1_jobs?.job_gross_wt}
@@ -312,26 +402,162 @@ console.log("tempName", tempName);
               </>
             }
             amount_in_words={
-              <>{grandTotal && <>{camelize(converter.toWords(grandTotal))}</>}</>
+              <>
+                {grandTotal && <>{camelize(converter.toWords(grandTotal))}</>}
+              </>
             }
             sub_total={grandTotal}
             total={grandTotal}
-            />
-          ) : defaultTemp === 'template1'?  (
+          />
+        ) : defaultTemp === "template1" ? (
+          <Invoicetemp2
+            settemplate2={(e) => {
+              console.log("temp1", e);
+              setdefaultTemplate3(e);
+            }}
+            consignee_name={
+              alldata?.fms_v1_jobs?.crm_v1_leads?.lead_customer_name
+            }
+            invoice_details1={
+              <>
+                <tr>
+                  <td className="font_weight"> Project Name </td>
+                  <td className=""> : </td>
+                  <td className=""> {alldata?.fms_v1_jobs?.job_number} </td>
+                </tr>
+                <tr>
+                  <td className="font_weight">AWB/BL </td>
+                  <td className=""> : </td>
+                  <td className=""> {alldata?.fms_v1_jobs?.job_awb_bl_no} </td>
+                </tr>
+                <tr>
+                  <td className="font_weight"> Origin </td>
+                  <td className=""> : </td>
+                  <td className="">
+                    {" "}
+                    {
+                      alldata?.fms_v1_jobs
+                        ?.fms_v1_locations_fms_v1_jobs_job_origin_idTofms_v1_locations
+                        ?.location_name
+                    }{" "}
+                  </td>
+                </tr>
 
-           <Invoicetemp2 
-           
-           settemplate2={(e)=>{
-            console.log("temp1",e);
-            setdefaultTemplate3(e)
-          }}
-           />
+                <tr>
+                  <td className="font_weight"> Destination </td>
+                  <td className=""> : </td>
+                  <td className="">
+                    {" "}
+                    {
+                      alldata?.fms_v1_jobs
+                        ?.fms_v1_locations_fms_v1_jobs_job_destination_idTofms_v1_locations
+                        ?.location_name
+                    }{" "}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="font_weight"> Shipper </td>
+                  <td className=""> : </td>
+                  <td className=""> {alldata?.fms_v1_jobs?.job_shipper} </td>
+                </tr>
+                <tr>
+                  <td className="font_weight"> Terms </td>
+                  <td className=""> : </td>
+                  <td className="">
+                    {" "}
+                    {
+                      alldata?.fms_v1_jobs?.fms_v1_payment_terms
+                        ?.payment_term_name
+                    }{" "}
+                  </td>
+                </tr>
+              </>
+            }
+            invoice_details2={
+              <>
+                <tr>
+                  <td className="font_weight"> No of Pieces </td>
+                  <td className=""> : </td>
+                  <td className="">
+                    {" "}
+                    {alldata?.fms_v1_jobs?.job_no_of_pieces}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="font_weight">Gross weight </td>
+                  <td className=""> : </td>
+                  <td className=""> {alldata?.fms_v1_jobs?.job_gross_wt} </td>
+                </tr>
+                <tr>
+                  <td className="font_weight"> Chargable weight </td>
+                  <td className=""> : </td>
+                  <td className="">
+                    {" "}
+                    {alldata?.fms_v1_jobs?.job_chargeable_wt}{" "}
+                  </td>
+                </tr>
 
-          ) :""
-      }
+                <tr>
+                  <td className="font_weight"> Carrier </td>
+                  <td className=""> : </td>
+                  <td className="">
+                    {" "}
+                    {alldata?.fms_v1_jobs?.fms_v1_carrier?.carrier_name}{" "}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="font_weight"> Mode </td>
+                  <td className=""> : </td>
+                  <td className=""> {alldata?.fms_v1_jobs?.job_mode} </td>
+                </tr>
+                <tr>
+                  <td className="font_weight"> Terms </td>
+                  <td className=""> : </td>
+                  <td className=""> tstone </td>
+                </tr>
+              </>
+            }
+            invoice_table_data={
+              <>
+                {tabledata &&
+                  tabledata.length > 0 &&
+                  tabledata.map((item, index) => {
+                    return (
+                      <tr className="invoice_header">
+                        <td align="center" className="p-3">
+                          {index + 1}
+                        </td>
+                        <td className="tsk_exp">
+                          {item?.job_task_expense_task_name}
+                        </td>
+                        {/* <td></td>
+                      <td></td>
+                      <td></td> */}
+                        <td style={{ textAlign: "right" }}>
+                          {item.job_task_expense_cost_subtotalfx.toFixed(2)}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                {/* <tr>
+                    <td className=" p-3">1 </td>
+                    <td className=" ">servicenme </td>
+
+                    <td className="text_align_words">983.00 </td>
+                  </tr> */}
+              </>
+            }
+            amount_in_words={
+              <>
+                {grandTotal && <>{camelize(converter.toWords(grandTotal))}</>}
+              </>
+            }
+            total={grandTotal}
+          />
+        ) : (
+          ""
+        )}
       </div>
-
-     
     </>
   );
 }

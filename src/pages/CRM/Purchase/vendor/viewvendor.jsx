@@ -9,12 +9,15 @@ import { ROUTES } from "../../../../routes";
 
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { CRM_BASE_URL_PURCHASING } from "../../../../api/bootapi";
+import TableData from "../../../../components/table/table_data";
 
 export default function Viewvendor() {
   const { id } = useParams();
   const navigate = useNavigate();
 
   const [allvendor, setAllvendor] = useState();
+  const [allcontact,setallcontact]= useState()
+  const [serialNo, setserialNo] = useState(1);
 
   console.log("all vendor : ", allvendor);
   const getSinglevendor = () => {
@@ -24,6 +27,7 @@ export default function Viewvendor() {
         if (res.data.success) {
           console.log("one  vendor isss", res.data.data);
           setAllvendor(res?.data?.data);
+          setallcontact(res?.data?.data?.crm_v1_vendor_contacts)
         }
       })
       .catch((err) => {
@@ -36,6 +40,49 @@ export default function Viewvendor() {
       getSinglevendor();
     }
   }, [id]);
+
+  const addresscolumn=[
+    {
+      title: "Sl. No.",
+      key: "index",
+      // width: "7%",
+      render: (value, item, index) => serialNo + index,
+      align: "center",
+    },
+  
+    {
+      title: "EMAIL",
+      dataIndex: "ven_contact_email",
+      key: "ven_contact_email",
+      align: "left",
+    },
+    {
+      title: "CONTACT ",
+      dataIndex: "ven_contact_person_name",
+      key: "contact_person",
+      align: "left",
+    },
+    {
+      title: "PHONE",
+      dataIndex: "ven_contact_phone_1",
+      key: "contact_phone_1",
+      align: "left",
+    },
+    {
+      title: "MOBILE",
+      dataIndex: "ven_contact_phone_2",
+      key: "contact_phone_1",
+      align: "left",
+    },
+    {
+      title: "DESIGNATION",
+      dataIndex: "ven_contact_designation",
+      key: "contact_designation",
+      align: "left",
+    },
+   
+   ]
+  
 
   return (
     <>
@@ -150,7 +197,7 @@ export default function Viewvendor() {
             <div className="col-4 boldhd pb-3">Preferred frighttype</div>
             <div className="col-1">:</div>
             <div className="col-7">
-            <p className="modal-view-data">Test One</p>
+            <p className="modal-view-data">{allvendor?.crm_v1_vendor_freight_types?.fms_v1_freight_types?.freight_type_name}</p>
             </div>
           </div>
 
@@ -158,13 +205,23 @@ export default function Viewvendor() {
             <div className="col-4 boldhd pb-3">Incoterm</div>
             <div className="col-1">:</div>
             <div className="col-7">
-            <p className="modal-view-data">Test One</p>
+            <p className="modal-view-data">{allvendor?.crm_v1_vendor_incoterms?.fms_v1_incoterms?.incoterm_full_name}</p>
             </div>
           </div>
 
         </div>
 
-       
+        <div className="mt-2"><h5>Contact Details</h5> </div>
+        <div className="datatable">
+            { allcontact && (
+            <TableData
+              // data={getData(numofItemsTo, pageofIndex)}
+              data={allcontact}
+              columns={addresscolumn}
+              custom_table_css="contact_table"
+            />
+            )}
+          </div>
       </div>
     </>
   );

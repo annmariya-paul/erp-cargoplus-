@@ -18,7 +18,8 @@ function Invoicetemplate2({
   invoice_number,
   billto,
   // setInvoice2,
-  settemplate2
+  settemplate2,
+  consignee_name,
 }) {
 
   const [companyInfodata, setCompanyInfodata] = useState();
@@ -145,7 +146,7 @@ function Invoicetemplate2({
                       <label className="label_color1"> Delivery To</label>
                       <div className="address_width font_weight ">
                         <br />
-                       Consignee
+                      <label>{consignee_name} </label>   
                         <br />
                    
                       </div>
@@ -176,7 +177,8 @@ function Invoicetemplate2({
               <div className="invoice_details__col invoice_details__col_2">
                 <table>
                   <tbody>
-                    <tr>
+                    {invoice_details1}
+                    {/* <tr>
                       <td className="font_weight"> Project Name </td>
                       <td className=""> : </td>
                       <td className=""> Jnewtst-00023 </td>
@@ -206,7 +208,7 @@ function Invoicetemplate2({
                       <td className="font_weight"> Terms </td>
                       <td className=""> : </td>
                       <td className=""> testondone </td>
-                    </tr>
+                    </tr> */}
                   </tbody>
                 </table>
               </div>
@@ -214,7 +216,8 @@ function Invoicetemplate2({
               <div className="invoice_details__col invoice_details__col_2">
                 <table>
                   <tbody>
-                    <tr>
+                    {invoice_details2}
+                    {/* <tr>
                       <td className="font_weight"> No of Pieces  </td>
                       <td className=""> : </td>
                       <td className="">2</td>
@@ -244,7 +247,7 @@ function Invoicetemplate2({
                       <td className="font_weight"> Terms </td>
                       <td className=""> : </td>
                       <td className=""> modeterms </td>
-                    </tr>
+                    </tr> */}
                   </tbody>
                 </table>
               </div>
@@ -311,7 +314,7 @@ function Invoicetemplate2({
                 <tbody>
                   {invoice_table_data}
 
-                  <tr>
+                  {/* <tr>
                     <td className=" p-3">1 </td>
                     <td className=" ">servicenme </td>
 
@@ -323,7 +326,7 @@ function Invoicetemplate2({
                     <td className=" ">servicenme </td>
 
                     <td className="text_align_words">8399.00 </td>
-                  </tr>
+                  </tr> */}
 
                   {/* <tr>
                     <td className=" p-3"> </td>
@@ -343,7 +346,7 @@ function Invoicetemplate2({
                   <div style={{ width: "100%" }}>
                     <div className="invoicetemp2_total_fontsize">Total In Words</div>
                     <div className="sub_total_words">
-                 One thousand only
+                {amount_in_words}
                     </div>
                   </div>
                 </div>
@@ -355,7 +358,7 @@ function Invoicetemplate2({
                     
                       <tr className="">
                         <td style={{ fontWeight: 600 }} className="px-1">Total</td>
-                        <td style={{ fontWeight: 600 }} className="px-1">1000.00</td>
+                        <td style={{ fontWeight: 600 }} className="px-1"> {total} </td>
                       </tr>
                      
                     </tbody>

@@ -413,7 +413,7 @@ function Vendor() {
 
   return (
     <>
-      <div className="container-fluid container_fms pt-3">
+      <div className="container-fluid container_fms pt-3 py-5">
         <div className="row flex-wrap align-items-center ">
           <div className="col-4">
             <h5 className="lead_text">Vendor</h5>

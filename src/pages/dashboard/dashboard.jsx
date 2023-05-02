@@ -86,6 +86,7 @@ function Dashboard() {
     //  GetLeadData();
     getAllQuotation();
     getAllJobs();
+    
     getAllInvoice(searchInvoice);
     setInvoiceCount();
   }, [searchInvoice]);

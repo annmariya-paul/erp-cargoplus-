@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Button from "../../../../components/button/button";
-import { Checkbox, Popconfirm } from "antd";
+import { Checkbox, message, Popconfirm } from "antd";
 import InputType from "../../../../components/Input Type textbox/InputType";
 import ErrorMsg from "../../../../components/error/ErrorMessage";
 import Custom_model from "../../../../components/custom_modal/custom_model";
@@ -56,6 +56,7 @@ export default function Quotations(props) {
     if (!mShow) {
       setTimeout(() => {
         setSuccessPopup(false);
+        setCancelPopUp(false);
       }, time);
     }
   };
@@ -184,7 +185,7 @@ export default function Quotations(props) {
               <Popconfirm
                 title={`Are you sure you want to Cancel Quotation `}
                 onConfirm={() => {
-                  handleCancelQuotation();
+                  CancelQuotation(index?.quotation_id);
                 }}
               >
                 <GiCancel style={{ marginRight: 18 }} />
@@ -264,9 +265,9 @@ export default function Quotations(props) {
     },
   ];
 
-  const handleCancelQuotation = () => {
-    setCancelPopUp(true);
-  };
+  // const handleCancelQuotation = () => {
+  //   setCancelPopUp(true);
+  // };
 
   const getAllQuotation = (name) => {
     PublicFetch.get(
@@ -309,6 +310,25 @@ export default function Quotations(props) {
       .catch((err) => {
         console.log("Error", err);
       });
+  };
+
+  const CancelQuotation = (data) => {
+    if (data) {
+      PublicFetch.delete(`${CRM_BASE_URL_FMS}/quotation/${data}`)
+        .then((res) => {
+          console.log("Response when deleted");
+          if (res.data.success) {
+            console.log("success of deletee");
+            setCancelPopUp(true);
+            close_modal(cancelPopUp, 1200);
+            getAllQuotation(searchedText);
+          }
+        })
+        .catch((err) => {
+          console.log("Error", err);
+          message.error(err?.response?.data?.data?.err?.message);
+        });
+    }
   };
 
   const columnsKeys = columns.map((column) => column.key);

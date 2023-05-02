@@ -13,7 +13,7 @@ import { CRM_BASE_URL } from "../../../../api/bootapi";
 import TableData from "../../../../components/table/table_data";
 import { FaTrash } from "react-icons/fa";
 import { CRM_BASE_URL_FMS } from "../../../../api/bootapi";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { GENERAL_SETTING_BASE_URL } from "../../../../api/bootapi";
 import FileUpload from "../../../../components/fileupload/fileUploader";
 import { Form, InputNumber } from "antd";
@@ -31,6 +31,8 @@ import moment from "moment";
 import axios from "axios";
 
 export default function Add_Quotation() {
+  const { id } = useParams();
+  console.log("id:::", id);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [successPopup, setSuccessPopup] = useState(false);
   const [error, setError] = useState(false);
@@ -487,7 +489,14 @@ export default function Add_Quotation() {
     getAllincoterm();
     getallcontainertype();
     getAllTaxGroup();
-  }, []);
+    if (id) {
+      handleLeadIdEnq(id);
+      let a = parseInt(id);
+      addForm.setFieldsValue({
+        eno: a,
+      });
+    }
+  }, [id]);
 
   const handleDelete = (key) => {
     const newData = tableData?.filter((item) => item?.key !== key);
@@ -998,10 +1007,10 @@ export default function Add_Quotation() {
       frighttype &&
         frighttype.length > 0 &&
         frighttype.map((item, index) => {
-          if (item.freight_type_id === e) {
+          if (item?.freight_type_id === e) {
             console.log("reached", item.freight_type_mode);
-            setFrighttypemode(item.freight_type_mode);
-            locationBytype(item.freight_type_mode);
+            setFrighttypemode(item?.freight_type_mode);
+            locationBytype(item?.freight_type_mode);
           }
         });
     }

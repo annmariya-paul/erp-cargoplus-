@@ -65,7 +65,7 @@ function ViewEnquiry() {
           <div className="col-sm-7 col-12">
             <div className="d-flex justify-content-end py-3">
               <div className="col-xl-2 col-md-3 col-4 d-flex justify-content-end mb-3 ">
-                <Button style={{width:70}}
+                {/* <Button style={{width:70}}
                   btnType="add_borderless"
                   className="edit_button"
                   // onClick={handlePrint}
@@ -79,7 +79,7 @@ function ViewEnquiry() {
                   }}
                 >
                   Print
-                </Button>
+                </Button> */}
               </div>
               <div className="col-xl-2 col-md-3 col-4 d-flex justify-content-end mb-3 ">
                 <Button style={{width:80}}

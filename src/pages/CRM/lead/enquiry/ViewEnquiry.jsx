@@ -85,7 +85,7 @@ function ViewEnquiry() {
               <div className="col-xl-3 col-md-4 col-4 d-flex justify-content-end mb-3 ">
                 <Button style={{width:100}}
                   btnType="add_borderless"
-                  className="edit_button"
+                  className="edit_button me-3"
                   onClick={() => {
                     navigate(`${ROUTES.EDIT_ENQUIRY}/${id}`);
                   }}

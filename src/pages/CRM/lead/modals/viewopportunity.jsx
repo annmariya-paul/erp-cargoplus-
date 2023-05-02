@@ -13,10 +13,9 @@ function ViewOpportunity() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [Allopps, setAllOpps] = useState();
-  console.log("all datttaa",Allopps);
+  console.log("all datttaa", Allopps);
 
   const GetSingleOpp = () => {
- 
     PublicFetch.get(`${CRM_BASE_URL}/opportunity/${id}`)
       .then((res) => {
         console.log("response ", res);
@@ -59,62 +58,72 @@ function ViewOpportunity() {
             </div>
             </div> */}
 
-            <div className="row mt-1">
-          <div className="col-sm-5 col-12 mt-4 ">
-            <h5 className="lead_text">View Opportunity</h5>
-          </div>
-          <div className="col-sm-7 col-12">
-            <div className="d-flex justify-content-end py-3">
-              <div className="col-xl-2 col-md-3 col-4 d-flex justify-content-end mb-3 ">
-                <Button style={{width:70}}
-                  btnType="add_borderless"
-                  className="edit_button"
-                  // onClick={handlePrint}
-                  onClick={() => {
-                    // handleviewtoedit();
-                    // navigate(`${ROUTES.QUATATION_INVOICE}/${id}`);
-                    window.open(
-                      `http://localhost:3000/purchase_invoice/${id}`,
-                      `_blank`
-                    );
-                  }}
-                >
-                  Print
-                </Button>
-              </div>
-              <div className="col-xl-2 col-md-3 col-4 d-flex justify-content-end mb-3 ">
-                <Button style={{width:80}}
-                  btnType="add_borderless"
-                  className="edit_button"
-                  onClick={() => {
-                    navigate(`${ROUTES.EDIT_OPPORTUNITY}/${id}`);
-                  }}
-                >
-                  Edit
-                  <FiEdit />
-                </Button>
-              </div>
+      <div className="row mt-1">
+        <div className="col-sm-3 col-12 mt-4 ">
+          <h5 className="lead_text">View Opportunity</h5>
+        </div>
+        <div className="col-sm-9 col-12">
+          <div className="row justify-content-end py-3">
+            <div className="col-xl-4 col-md-4 col-4 d-flex justify-content-end mb-3 ">
+              <Button
+                style={{ width: 300 }}
+                btnType="add_borderless"
+                className="edit_button"
+                // onClick={handlePrint}
+                onClick={() => {
+                  navigate(`${ROUTES.ADD_QUOTATION}/${id}`);
+                }}
+              >
+                Converted to Quotation
+              </Button>
+            </div>
+            <div className="col-xl-2 col-md-3 col-4 d-flex justify-content-end mb-3 ">
+              <Button
+                style={{ width: 100 }}
+                btnType="add_borderless"
+                className="edit_button"
+                // onClick={handlePrint}
+                onClick={() => {
+                  // handleviewtoedit();
+                  // navigate(`${ROUTES.QUATATION_INVOICE}/${id}`);
+                  window.open(
+                    `http://localhost:3000/purchase_invoice/${id}`,
+                    `_blank`
+                  );
+                }}
+              >
+                Print
+              </Button>
+            </div>
+            <div className="col-xl-2 col-md-3 col-4 d-flex justify-content-end mb-3 ">
+              <Button
+                style={{ width: 100 }}
+                btnType="add_borderless"
+                className="edit_button"
+                onClick={() => {
+                  navigate(`${ROUTES.EDIT_OPPORTUNITY}/${id}`);
+                }}
+              >
+                Edit
+                <FiEdit />
+              </Button>
             </div>
           </div>
         </div>
-            <div className="row mt-3 pb-5">
-            <div className="col-sm-6 d-flex">
-            <div className="col-4 boldhd pb-3">Opportunity No.</div>
-            <div className="col-1">:</div>
-            <div className="col-7">
-              <p className="modal-view-data">
-              {Allopps?.opportunity_number}
-              </p>
-            </div>
-           
+      </div>
+      <div className="row mt-3 pb-5">
+        <div className="col-sm-6 d-flex">
+          <div className="col-4 boldhd pb-3">Opportunity No.</div>
+          <div className="col-1">:</div>
+          <div className="col-7">
+            <p className="modal-view-data">{Allopps?.opportunity_number}</p>
+          </div>
         </div>
         <div className="col-sm-6 d-flex">
           <div className="col-4 boldhd pb-3">Type</div>
           <div className="col-1">:</div>
           <div className="col-7">
-            <p className="modal-view-data">
-            {Allopps?.opportunity_type}
-            </p>
+            <p className="modal-view-data">{Allopps?.opportunity_type}</p>
           </div>
         </div>
 
@@ -123,7 +132,7 @@ function ViewOpportunity() {
           <div className="col-1">:</div>
           <div className="col-7">
             <p className="modal-view-data">
-            {Allopps?.crm_v1_customer?.customer_name}
+              {Allopps?.crm_v1_customer?.customer_name}
             </p>
           </div>
         </div>
@@ -132,9 +141,7 @@ function ViewOpportunity() {
           <div className="col-4 boldhd pb-3">Source</div>
           <div className="col-1">:</div>
           <div className="col-7">
-            <p className="modal-view-data">
-            {Allopps?.opportunity_source}
-            </p>
+            <p className="modal-view-data">{Allopps?.opportunity_source}</p>
           </div>
         </div>
         <div className="col-sm-6 d-flex">
@@ -142,37 +149,33 @@ function ViewOpportunity() {
           <div className="col-1">:</div>
           <div className="col-7">
             <p className="modal-view-data">
-            {moment(Allopps?.opportunity_validity).format(
-                          "DD-MM-YYYY"
-                        )}
+              {moment(Allopps?.opportunity_validity).format("DD-MM-YYYY")}
             </p>
           </div>
         </div>
-
-      
 
         <div className="col-sm-6 d-flex">
           <div className="col-4 boldhd pb-3">Expecting Amount</div>
           <div className="col-1">:</div>
           <div className="col-7">
-            <p className="modal-view-data">
-            {Allopps?.opportunity_amount}
-
-            </p>
+            <p className="modal-view-data">{Allopps?.opportunity_amount}</p>
           </div>
         </div>
-
-
-
 
         <div className="col-sm-6 d-flex">
           <div className="col-4 boldhd pb-3">Probability of conversion</div>
           <div className="col-1">:</div>
           <div className="col-7">
             <p className="modal-view-data">
-            {Allopps?.opportunity_probability === 'L' ? 'Low' : Allopps?.opportunity_probability === 'H' ? 'High' : Allopps?.opportunity_probability === 'M' ? 'Medium' : ''}
+              {Allopps?.opportunity_probability === "L"
+                ? "Low"
+                : Allopps?.opportunity_probability === "H"
+                ? "High"
+                : Allopps?.opportunity_probability === "M"
+                ? "Medium"
+                : ""}
 
-            {/* {Allopps?.opportunity_probability} */}
+              {/* {Allopps?.opportunity_probability} */}
             </p>
           </div>
         </div>
@@ -182,9 +185,17 @@ function ViewOpportunity() {
           <div className="col-1">:</div>
           <div className="col-7">
             <p className="modal-view-data">
-            {Allopps?.opportunity_status === 1 ? 'New' : Allopps?.opportunity_status === 2 ? 'Interested' : Allopps?.opportunity_status === 3 ? 'Converted' : Allopps?.opportunity_status === 4 ? 'Lost'  : ''}
+              {Allopps?.opportunity_status === 1
+                ? "New"
+                : Allopps?.opportunity_status === 2
+                ? "Interested"
+                : Allopps?.opportunity_status === 3
+                ? "Converted"
+                : Allopps?.opportunity_status === 4
+                ? "Lost"
+                : ""}
 
-            {/* {Allopps?.opportunity_probability} */}
+              {/* {Allopps?.opportunity_probability} */}
             </p>
           </div>
         </div>
@@ -194,12 +205,11 @@ function ViewOpportunity() {
           <div className="col-1">:</div>
           <div className="col-7">
             <p className="modal-view-data">
-            {Allopps?.opportunity_description}
+              {Allopps?.opportunity_description}
             </p>
           </div>
         </div>
 
-        
         {/* <div className="col-sm-6 d-flex">
           <div className="col-4 boldhd pb-3">Phone</div>
           <div className="col-1">:</div>
@@ -230,21 +240,20 @@ function ViewOpportunity() {
           </div>
         </div> */}
 
-<div className="col-sm-6 d-flex">
+        <div className="col-sm-6 d-flex">
           <div className="col-4 boldhd pb-3">Attachments</div>
           <div className="col-1">:</div>
           <div className="col-7">
             <p className="modal-view-data">
-            {/* {Allopps?.opportunity_docs[0]} */}
-            <Attachments Isattachment={Allopps?.opportunity_docs.length >0}  attachments={Allopps?.opportunity_docs || []} />
+              {/* {Allopps?.opportunity_docs[0]} */}
+              <Attachments
+                Isattachment={Allopps?.opportunity_docs.length > 0}
+                attachments={Allopps?.opportunity_docs || []}
+              />
             </p>
           </div>
         </div>
-
-        </div>   
-           
-         
-      
+      </div>
     </div>
   );
 }

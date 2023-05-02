@@ -460,6 +460,9 @@ function App() {
             <Route path={ROUTES.ADD_QUOTATION} element={<ProtectedRoute />}>
               <Route index element={<Add_Quotation />} />
             </Route>
+            <Route path={ROUTES.ADD_QUOTATION_ID} element={<ProtectedRoute />}>
+              <Route index element={<Add_Quotation />} />
+            </Route>
 
             <Route path={ROUTES.FRIGHTLIST} element={<ProtectedRoute />}>
               <Route index element={<Frightlist />} />

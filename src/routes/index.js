@@ -75,6 +75,7 @@ const ROUTES = {
   MODE: "/mode",
   QUATATIONS: "/quatations_list",
   ADD_QUOTATION: "/add_quotation",
+  ADD_QUOTATION_ID: "/add_quotation/:id",
   EDIT_QUOTATION: "/edit_quotation",
   EDIT_QUOTATION_ID: "/edit_quotation/:id",
 

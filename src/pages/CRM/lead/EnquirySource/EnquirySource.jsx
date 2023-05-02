@@ -192,6 +192,7 @@ function EnquirySource() {
           setSuccessPopup(true);
           close_modal(SuccessPopup, 1200);
           SetAddModalSource(false);
+          GetAllEnquirySource();
         }
       })
       .catch((err) => {

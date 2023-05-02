@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, Select, DatePicker, Popconfirm } from "antd";
+import { Form, Input, Select, DatePicker, Popconfirm, message } from "antd";
 import TableData from "../../../components/table/table_data";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { MdPageview } from "react-icons/md";
@@ -297,6 +297,7 @@ function Listjob() {
         })
         .catch((err) => {
           console.log("Error", err);
+          message.error(err?.response?.data?.data?.err?.message);
         });
     }
   };

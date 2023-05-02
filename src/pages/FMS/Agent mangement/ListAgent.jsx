@@ -36,6 +36,8 @@ function ListAgent() {
   const [pageSize, setPageSize] = useState("25");
   const [current, setCurrent] = useState(1);
 
+  const [allagents,setallagents]= useState()
+
   const [agentdata, setAgentdata] = useState();
   console.log("agent data", agentdata);
   const [inpiutId, setinpiutId] = useState();
@@ -307,7 +309,7 @@ function ListAgent() {
     }
   };
   const getData = (current, pageSize) => {
-    return agentdata?.slice((current - 1) * pageSize, current * pageSize);
+    return allagents?.slice((current - 1) * pageSize, current * pageSize);
   };
 
   const getagents = async () => {
@@ -315,6 +317,9 @@ function ListAgent() {
       const allagent = await PublicFetch.get(
         `${process.env.REACT_APP_BASE_URL}/agents`
       );
+
+      console.log("agent list iss",allagent.data.data.length)
+      setallagents(allagent.data.data)
       if (allagent?.data.success) {
         let temp = [];
         allagent?.data.data.forEach((item, index) => {
@@ -577,7 +582,7 @@ function ListAgent() {
           </div>
           <div className=" col-4 d-flex py-2 justify-content-center">
             <MyPagination
-              total={agentdata?.length}
+              total={allagents?.length}
               current={current}
               showSizeChanger={true}
               pageSize={pageSize}
@@ -606,8 +611,8 @@ function ListAgent() {
 
         <div className="datatable">
           <TableData
-            // data={getData(current, pageSize)}
-            data={agentdata}
+            data={getData(current, pageSize)}
+            
             columns={columns}
             // columns={filteredColumns}
             custom_table_css="attribute_table"
@@ -636,10 +641,11 @@ function ListAgent() {
           View_list
           list_content={
             <>
-              <div className="container-fluid px-4 my-3">
-                <div>
-                  <h5 className="lead_text">New Agent</h5>
+             <div>
+              <h5 className="lead_text">New Agent</h5>
                 </div>
+              <div className="container-fluid  my-3">
+               
                 <div className="row my-3 ">
                   <Form
                     form={addForm}
@@ -653,7 +659,7 @@ function ListAgent() {
                     }}
                   >
                     <div className="row">
-                      <div className="col-6 pb-2">
+                      <div className="col-12 pb-2">
                         <div className="">
                           <label>Vendor</label>
                           <label
@@ -752,8 +758,8 @@ function ListAgent() {
                               </SelectBox> */}
                         </div>
                       </div>
-                      <div className="col-6">
-                        <div className="">
+                      <div className="col-12">
+                        <div className="py-2">
                           <label>Country</label>
                           <Form.Item>
                             <SelectBox
@@ -781,7 +787,7 @@ function ListAgent() {
                         </div>
                       </div>
                       <div className="col-12 pb-4">
-                        <div className="">
+                        <div className="py-2">
                           <label>Commission</label>
                           <Form.Item>
                             <TextArea
@@ -851,7 +857,7 @@ function ListAgent() {
                     }}
                   >
                     <div className="row">
-                      <div className="col-6 pb-3">
+                      <div className="col-12 pb-3">
                         <div className="">
                           <label>Vendor Id</label>
                           <Form.Item
@@ -897,7 +903,7 @@ function ListAgent() {
                           ) : null}
                         </div>
                       </div>
-                      <div className="col-6">
+                      <div className="col-12">
                         <div className="">
                           <label>Country</label>
                           <Form.Item name="country">

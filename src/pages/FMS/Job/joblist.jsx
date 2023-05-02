@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, Select, DatePicker } from "antd";
+import { Form, Input, Select, DatePicker, Popconfirm, message } from "antd";
 import TableData from "../../../components/table/table_data";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { MdPageview } from "react-icons/md";
@@ -13,6 +13,8 @@ import MyPagination from "../../../components/Pagination/MyPagination";
 import { JobStatus } from "../../../utils/SelectOptions";
 import { Checkbox } from "antd";
 import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
+import Custom_model from "../../../components/custom_modal/custom_model";
+import { GiCancel } from "react-icons/gi";
 function Listjob() {
   const [searchedText, setSearchedText] = useState("");
   const [pageSize, setPageSize] = useState("25");
@@ -25,7 +27,7 @@ function Listjob() {
   const [startcount, setstartcount] = useState();
   const [noofItems, setNoofItems] = useState("25");
   const [current, setCurrent] = useState(1);
-
+  const [cancelPopup, setCancelPopup] = useState(false);
   const [totaljob, settotaljob] = useState("");
   const [serialNo, setserialNo] = useState(1);
 
@@ -37,12 +39,8 @@ function Listjob() {
       key: "index",
       width: "7%",
       render: (value, item, index) => {
-        return (
-         <div>
-         {item?.startindex + index +serialNo}
-       </div>
-        )
-       },
+        return <div>{item?.startindex + index + serialNo}</div>;
+      },
       align: "center",
     },
 
@@ -114,12 +112,12 @@ function Listjob() {
       dataIndex: "job_status",
       key: "job_status",
       render: (data, index) => {
-        console.log("index of job status",index);
+        console.log("index of job status", index);
         if (index.job_status === 0) {
           return <div>Pending</div>;
-        } else  if (index.job_status === 1) {
+        } else if (index.job_status === 1) {
           return <div>Converted</div>;
-        } else  {
+        } else {
           // return <div>{index.enquiry_converted_status}</div>;
           return <div>Cancelled</div>;
         }
@@ -169,7 +167,14 @@ function Listjob() {
                   <MdPageview style={{ marginLeft: 15, marginRight: 15 }} />
                 </div> */}
             <div className="deleteIcon m-0">
-              <FaTrash />
+              <Popconfirm
+                title={`Are you sure you want to Cancel Quotation `}
+                onConfirm={() => {
+                  cancelJob(index?.job_id);
+                }}
+              >
+                <GiCancel style={{ marginRight: 18 }} />
+              </Popconfirm>
             </div>
           </div>
         );
@@ -213,7 +218,13 @@ function Listjob() {
   const getAllJobs = (query) => {
     PublicFetch.get(
       `${CRM_BASE_URL_FMS}/job?startIndex=${pageofIndex}&noOfItems=${noofItems}&search=${
-        query.toLowerCase() === "pending" ? 0 : query.toLowerCase() === "converted" ? 1  : query.toLowerCase() === "cancelled" ? 2 : query.toLowerCase()
+        query.toLowerCase() === "pending"
+          ? 0
+          : query.toLowerCase() === "converted"
+          ? 1
+          : query.toLowerCase() === "cancelled"
+          ? 2
+          : query.toLowerCase()
       }`
     )
       .then((res) => {
@@ -226,30 +237,30 @@ function Listjob() {
           res?.data?.data?.job?.forEach((item, index) => {
             let date = moment(item.job_date).format("DD-MM-YYYY");
             // jobStatus.forEach((status, index) => {
-              // var jobsts = parseInt(status.value);
-              // if (jobsts === item.job_status) {
-                temp.push({
-                  job_number: item.job_number,
-                  // quotation_carrier: item.quotation_carrier,
-                  job_id: item.job_id,
-                  job_consignee: item.job_consignee,
-                  job_consignee_name: item.crm_v1_customer.customer_name,
-                  job_date: date,
-                  job_shipper: item.job_shipper,
-                  job_freight_type: item.job_freight_type,
-                  job_cargo_type: item.job_cargo_type,
-                  job_carrier: item.job_carrier,
-                  job_awb_bl_no: item.job_awb_bl_no,
-                  job_mode: item.job_mode,
-                  job_origin_id: item.job_origin_id,
-                  job_destination_id: item.job_destination_id,
-                  job_no_of_pieces: item.job_no_of_pieces,
-                  job_uom: item.job_uom,
-                  // job_status: item.job_invoice_status === 0 ? "Pending" :item.job_invoice_status === 1 ? "Converted" : item.job_invoice_status === 2 && "Cancelled" ,
-                  job_status: item.job_invoice_status ,
-                  startindex:res?.data?.data?.startIndex,
-                });
-              // }
+            // var jobsts = parseInt(status.value);
+            // if (jobsts === item.job_status) {
+            temp.push({
+              job_number: item.job_number,
+              // quotation_carrier: item.quotation_carrier,
+              job_id: item.job_id,
+              job_consignee: item.job_consignee,
+              job_consignee_name: item.crm_v1_customer.customer_name,
+              job_date: date,
+              job_shipper: item.job_shipper,
+              job_freight_type: item.job_freight_type,
+              job_cargo_type: item.job_cargo_type,
+              job_carrier: item.job_carrier,
+              job_awb_bl_no: item.job_awb_bl_no,
+              job_mode: item.job_mode,
+              job_origin_id: item.job_origin_id,
+              job_destination_id: item.job_destination_id,
+              job_no_of_pieces: item.job_no_of_pieces,
+              job_uom: item.job_uom,
+              // job_status: item.job_invoice_status === 0 ? "Pending" :item.job_invoice_status === 1 ? "Converted" : item.job_invoice_status === 2 && "Cancelled" ,
+              job_status: item.job_invoice_status,
+              startindex: res?.data?.data?.startIndex,
+            });
+            // }
             // });
           });
           setAllJobs(temp);
@@ -261,7 +272,6 @@ function Listjob() {
       });
   };
 
-
   const getFinalCount = (total) => {
     const cutoff = Math.ceil(totaljob / noofItems);
     console.log("FinalTest", cutoff, current);
@@ -271,16 +281,34 @@ function Listjob() {
     // console.log("TestCount",total)
   };
 
+  const cancelJob = (data) => {
+    if (data) {
+      PublicFetch.delete(`${CRM_BASE_URL_FMS}/job/${data}`)
+        .then((res) => {
+          console.log("Response from job delete");
+          if (res.data.success) {
+            console.log("success from job delete");
+            setCancelPopup(true);
+            getAllJobs(searchedText);
+            setTimeout(() => {
+              setCancelPopup(false);
+            }, 1200);
+          }
+        })
+        .catch((err) => {
+          console.log("Error", err);
+          message.error(err?.response?.data?.data?.err?.message);
+        });
+    }
+  };
 
   useEffect(() => {
     const getData = setTimeout(() => {
       getAllJobs(searchedText);
-    }, 1000)
+    }, 1000);
     return () => clearTimeout(getData);
-  }, [pageofIndex,noofItems,searchedText]);
- 
+  }, [pageofIndex, noofItems, searchedText]);
 
- 
   // useEffect(() => {
   //   getAllJobs(searchedText);
   // }, [pageofIndex,noofItems,searchedText]);
@@ -386,53 +414,46 @@ function Listjob() {
           </div> */}
         {/* </div> */}
         <div className="row my-3">
-        <div className="col-xl-4  ">
-                <div className="d-flex justify-content-start align-items-center gap-3">
-                {totaljob > 0 && (
-                  <div className="   ">
-            <Select
-              bordered={false}
-              className="page_size_style"
-              value={noofItems}
-              onChange={(e) => setNoofItems(e)}
-            >
-              <Select.Option value="25">
-                        <span style={{ color: "#2f6b8f" }} className="ms-1">
-                          25
-                        </span>
-                      </Select.Option>
-                      <Select.Option value="50">
-                        <span style={{ color: "#2f6b8f" }} className="ms-1">
-                          50
-                        </span>
-                      </Select.Option>
-                      <Select.Option value="100">
-                        <span style={{ color: "#2f6b8f" }} className="ms-1">
-                          100
-                        </span>
-                      </Select.Option>
-            </Select>
-          </div>
-                )}
-          {totaljob > 0 && (
-          <div className=" d-flex  align-items-center mt-2">
-                    <label className="font_size">
-                   
-                      Results: {startcount + 1} -{" "}
-                      {getFinalCount(1 * noofItems * current)}{" "}
-                      <span>of {totaljob} </span>{" "}
-                  
-                    </label>
-                  </div>
-                    )}
-<div className=" col-4 d-flex py-2 justify-content-center ">
-
-
-</div>
-
-
+          <div className="col-xl-4  ">
+            <div className="d-flex justify-content-start align-items-center gap-3">
+              {totaljob > 0 && (
+                <div className="   ">
+                  <Select
+                    bordered={false}
+                    className="page_size_style"
+                    value={noofItems}
+                    onChange={(e) => setNoofItems(e)}
+                  >
+                    <Select.Option value="25">
+                      <span style={{ color: "#2f6b8f" }} className="ms-1">
+                        25
+                      </span>
+                    </Select.Option>
+                    <Select.Option value="50">
+                      <span style={{ color: "#2f6b8f" }} className="ms-1">
+                        50
+                      </span>
+                    </Select.Option>
+                    <Select.Option value="100">
+                      <span style={{ color: "#2f6b8f" }} className="ms-1">
+                        100
+                      </span>
+                    </Select.Option>
+                  </Select>
                 </div>
-              </div>
+              )}
+              {totaljob > 0 && (
+                <div className=" d-flex  align-items-center mt-2">
+                  <label className="font_size">
+                    Results: {startcount + 1} -{" "}
+                    {getFinalCount(1 * noofItems * current)}{" "}
+                    <span>of {totaljob} </span>{" "}
+                  </label>
+                </div>
+              )}
+              <div className=" col-4 d-flex py-2 justify-content-center "></div>
+            </div>
+          </div>
 
           <div className="col-4 d-flex py-2 justify-content-center">
             {/* {totaljob > 0 && (
@@ -452,23 +473,22 @@ function Listjob() {
               />
             )} */}
             {totaljob > 0 && (
-                  <MyPagination
-                    total={parseInt(totaljob)}
-                    // total={parseInt(AllEnquiries)}
-                    current={current}
-                    pageSize={noofItems}
-                    // defaultPageSize={noofItems}
-                    showSizeChanger={false}
-                    onChange={(current, pageSize) => {
-                      console.log("page index isss", pageSize);
-                      setCurrent(current);
-                      // setPageSize(pageSize);
-                      // setNoofItems(pageSize);
-                      // setCurrent(noofItems !== pageSize ? 0 : current);
-                    }}
-                  />
-                )}
-            
+              <MyPagination
+                total={parseInt(totaljob)}
+                // total={parseInt(AllEnquiries)}
+                current={current}
+                pageSize={noofItems}
+                // defaultPageSize={noofItems}
+                showSizeChanger={false}
+                onChange={(current, pageSize) => {
+                  console.log("page index isss", pageSize);
+                  setCurrent(current);
+                  // setPageSize(pageSize);
+                  // setNoofItems(pageSize);
+                  // setCurrent(noofItems !== pageSize ? 0 : current);
+                }}
+              />
+            )}
           </div>
           <div className="col-4 d-flex justify-content-end">
             <div className="col mb-2 px-4">
@@ -504,6 +524,14 @@ function Listjob() {
           )}
         </div>
       </div>
+      <Custom_model
+        cancel
+        cancelName={"Job"}
+        show={cancelPopup}
+        onHide={() => {
+          setCancelPopup(false);
+        }}
+      />
     </>
   );
 }

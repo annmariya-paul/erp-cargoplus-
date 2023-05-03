@@ -35,7 +35,7 @@ function ViewEnquiry() {
     }
   }, [id]);
   return (
-    <div className="container-fluid view_quotation  p-3">
+    <div className="container-fluid view_quotation " >
       {/* <div className="row ">
         <div className="col-10">
          
@@ -62,10 +62,11 @@ function ViewEnquiry() {
           <div className="col-sm-5 col-12 mt-4 ">
             <h5 className="lead_text">View Enquiry</h5>
           </div>
-          <div className="col-sm-7 col-12">
-            <div className="d-flex justify-content-end py-3">
-              <div className="col-xl-2 col-md-3 col-4 d-flex justify-content-end mb-3 ">
-                <Button style={{width:70}}
+          <div className=" col-xl-12 col-sm-9" style={{marginTop:"-4%",marginBottom:"1%"}}>
+            <div className="d-flex justify-content-end ">
+             
+              <div className="col-xl-6 col-md-4 col-4 d-flex justify-content-end mb-3 ">
+                {/* <Button style={{width:300}}
                   btnType="add_borderless"
                   className="edit_button"
                   // onClick={handlePrint}
@@ -79,18 +80,30 @@ function ViewEnquiry() {
                   }}
                 >
                   Print
-                </Button>
+                </Button> */}
               </div>
-              <div className="col-xl-2 col-md-3 col-4 d-flex justify-content-end mb-3 ">
-                <Button style={{width:80}}
+              <div className="col-xl-3 col-md-4 col-4 d-flex justify-content-end mb-3 ">
+                <Button style={{width:100}}
                   btnType="add_borderless"
-                  className="edit_button"
+                  className="edit_button me-3"
                   onClick={() => {
                     navigate(`${ROUTES.EDIT_ENQUIRY}/${id}`);
                   }}
                 >
                   Edit
                   <FiEdit />
+                </Button>
+              </div>
+              <div className="col-xl-3 col-md-4 col-4 d-flex justify-content-end mb-3 ">
+                <Button style={{width: 300 }}
+                  btnType="add_borderless"
+                  className="edit_button"
+                  onClick={() => {
+                    navigate(`${ROUTES.ADD_OPPORTUNITY}/${id}`);
+                  }}
+                >
+                  Convert to Opportunity
+               
                 </Button>
               </div>
             </div>

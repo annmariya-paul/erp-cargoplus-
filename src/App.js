@@ -377,6 +377,9 @@ function App() {
             <Route path={ROUTES.ADD_OPPORTUNITY} element={<ProtectedRoute />}>
               <Route index element={<AddOpportunity />} />
             </Route>
+            <Route path={ROUTES.ADD_OPPORTUNITY_ID} element={<ProtectedRoute />}>
+              <Route index element={<AddOpportunity />} />
+            </Route>
             <Route
               path={ROUTES.EDIT_OPPORTUNITY_ID}
               element={<ProtectedRoute />}

@@ -194,9 +194,9 @@ function Opportunitylist(props) {
                   opportunity_party1: item?.crm_v1_contacts?.contact_id,
                   opportunity_from: item?.opportunity_from,
                   opportunity_statusname: sts?.name,
-                  opportunity_created_by1: item?.crm_v1_leads?.lead_id,
+                  opportunity_created_by1: item?.crm_v1_customer?.customer_id,
                   opportunity_created_by:
-                    item?.crm_v1_leads?.lead_customer_name,
+                    item?.crm_v1_customer?.customer_name,
                   opportunity_source: item?.opportunity_source,
                   opportunity_probability: item?.opportunity_probability,
                   opportunity_description: item?.opportunity_description,
@@ -206,6 +206,7 @@ function Opportunitylist(props) {
                   opp_enq: temp,
                   startcount: res?.data?.data?.startIndex,
                   startindex: res?.data?.data?.startIndex,
+                  opportunity_created_at: item?. opportunity_created_at,
                 });
               }
             });
@@ -435,7 +436,7 @@ function Opportunitylist(props) {
     {
       title: "#",
       key: "index",
-      width: "7%",
+      width: "4%",
       render: (value, item, index) => {
         return <div>{item?.startindex + index + serialNo}</div>;
       },
@@ -450,29 +451,41 @@ function Opportunitylist(props) {
       // align: "center",
     },
     {
+      title: "DATE",
+      dataIndex: "opportunity_created_at",
+      key: "opportunity_created_at",
+      render: (data, index) => {
+        return <div>{moment(index.opportunity_created_at).format("DD-MM-YYYY")}</div>;
+      },
+      align: "left",
+      width: "8%",
+    },
+    {
       title: "CUSTOMER",
-      dataIndex: "opportunity_party",
-      key: "PARTY",
+      dataIndex: "opportunity_created_by",
+      key: "opportunity_created_by",
       align: "left",
     },
     {
       title: "ENQUIRY NO",
       dataIndex: "opp_enq",
       key: "opp_enq",
-
+      width:"17%",
       align: "left",
       render: (enquiryNumbers) => {
         if (Array.isArray(enquiryNumbers)) {
+          // enquiryNumbers.unshift("<br/>")
           return enquiryNumbers.join(", ");
         }
         return enquiryNumbers;
       },
+      // ellipsis: false,
     },
     {
       title: "TYPE",
       dataIndex: "opportunity_type",
       key: "TYPE",
-      // width:"10%",
+      width:"10%",
 
       align: "left",
     },
@@ -489,7 +502,7 @@ function Opportunitylist(props) {
       dataIndex: "opportunity_source",
       key: "SOURCE",
       align: "left",
-      width: "10%",
+      width: "7%",
     },
 
     {

@@ -17,6 +17,8 @@ export default function Viewvendor() {
 
   const [allvendor, setAllvendor] = useState();
   const [allcontact,setallcontact]= useState()
+  const [allbankdetails,setallbankdetails]= useState()
+
   const [serialNo, setserialNo] = useState(1);
 
   console.log("all vendor : ", allvendor);
@@ -28,6 +30,7 @@ export default function Viewvendor() {
           console.log("one  vendor isss", res.data.data);
           setAllvendor(res?.data?.data);
           setallcontact(res?.data?.data?.crm_v1_vendor_contacts)
+          setallbankdetails(res?.data?.data?.crm_v1_vendor_bank_details)
         }
       })
       .catch((err) => {
@@ -81,6 +84,40 @@ export default function Viewvendor() {
       align: "left",
     },
    
+   ]
+   const bankdetails=[
+    {
+      title: "Sl. No.",
+      key: "index",
+      // width: "7%",
+      render: (value, item, index) => serialNo + index,
+      align: "center",
+    },
+  
+    {
+      title: " ACCOUNT NAME",
+      dataIndex: "ven_bank_det_account_name",
+      key: "ven_bank_det_account_name",
+      align: "left",
+    },
+    {
+      title: "ACCOUNT NO",
+      dataIndex: "ven_bank_det_account_no",
+      key: "ven_bank_det_account_no",
+      align: "left",
+    },
+    {
+      title: "BANK NAME",
+      dataIndex: "ven_bank_det_bank",
+      key: "ven_bank_det_bank",
+      align: "left",
+    },
+    {
+      title: "IBAN NO",
+      dataIndex: "ven_bank_det_IBAN",
+      key: "ven_bank_det_IBAN",
+      align: "left",
+    },
    ]
   
 
@@ -218,6 +255,18 @@ export default function Viewvendor() {
               // data={getData(numofItemsTo, pageofIndex)}
               data={allcontact}
               columns={addresscolumn}
+              custom_table_css="contact_table"
+            />
+            )}
+          </div>
+
+          <div className="mt-2"><h5>Bank Details</h5> </div>
+        <div className="datatable">
+            { allcontact && (
+            <TableData
+              // data={getData(numofItemsTo, pageofIndex)}
+              data={allbankdetails}
+              columns={bankdetails}
               custom_table_css="contact_table"
             />
             )}

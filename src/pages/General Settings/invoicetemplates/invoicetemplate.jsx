@@ -6,6 +6,7 @@ import Button from "../../../components/button/button";
 import { CRM_BASE_URL_FMS } from "../../../api/bootapi";
 import PublicFetch from "../../../utils/PublicFetch";
 import TableData from "../../../components/table/table_data";
+import Custom_model from "../../../components/custom_modal/custom_model";
 function Invoicetemplateselect() {
   const [editForm] = Form.useForm();
   // const [tempone, setTempone] = useState("");
@@ -13,8 +14,19 @@ function Invoicetemplateselect() {
 
   const [defaultTempalate, setdefaultTempalate] = useState(1);
 
+  const [saveSuccess, setSaveSuccess] = useState(false);
+
 const[defltinvoice,setdefltinvoice]= useState()
  
+
+const close_modal = (mShow, time) => {
+  if (!mShow) {
+    setTimeout(() => {
+      setSaveSuccess(false);
+      // navigate(ROUTES.ATTRIBUTES);
+    }, time);
+  }
+};
   const getAllinvoicetemp = async () => {
     try {
       const allinvoice = await PublicFetch.get(
@@ -23,8 +35,7 @@ const[defltinvoice,setdefltinvoice]= useState()
       console.log("all invoice aree", allinvoice.data.data);
       console.log("default value is",allinvoice?.data?.data)
       setTemplates(allinvoice.data.data);
-      
-  
+
       allinvoice?.data?.data.forEach((itm,indx)=>{
       // (itm.invoice_template_default)
      console.log("onee dataa",itm)
@@ -53,7 +64,13 @@ console.log("dnjd",defltinvoice)
         `${CRM_BASE_URL_FMS}/invoice-template/default/${data.invoicedfult}`,formData,{
           "Content-Type": "Multipart/form-Data",
         }
+        
       );
+      if (allinvoice?.data?.success) {
+        setSaveSuccess(true);
+        close_modal(saveSuccess, 1000);
+      } 
+  
       console.log("updated in",allinvoice)
       getAllinvoicetemp()
      
@@ -169,6 +186,14 @@ console.log("dnjd",defltinvoice)
               </div>
             </Form>
           </div>
+
+
+          <Custom_model
+          size={"sm"}
+          show={saveSuccess}
+          onHide={() => setSaveSuccess(false)}
+          success
+        />
         </div>
       </div>
     </>

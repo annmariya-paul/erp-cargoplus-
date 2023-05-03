@@ -309,7 +309,7 @@ function ListAgent() {
     }
   };
   const getData = (current, pageSize) => {
-    return allagents?.slice((current - 1) * pageSize, current * pageSize);
+    return agentdata?.slice((current - 1) * pageSize, current * pageSize);
   };
 
   const getagents = async () => {
@@ -318,14 +318,16 @@ function ListAgent() {
         `${process.env.REACT_APP_BASE_URL}/agents`
       );
 
-      console.log("agent list iss",allagent.data.data.length)
+      console.log("agent list iss",allagent.data)
+      console.log("startindexx iss",allagent?.data?.data[0])
       setallagents(allagent.data.data)
       if (allagent?.data.success) {
         let temp = [];
         allagent?.data.data.forEach((item, index) => {
+          console.log("agntt",item)
           temp.push({
             agent_id: item.agent_id,
-            agent_country: item.agent_country,
+            agent_country: item?.countries?.country_name,
             agent_commission_details: item.agent_commission_details,
             agent_vendor_id: item.agent_vendor_id,
             agent_name: item.crm_v1_vendors.vendor_name,
@@ -506,6 +508,16 @@ function ListAgent() {
     item.agent_commission_details,
   ]);
   console.log("country", agentdata);
+
+
+
+  // const getFinalCount = (total) => {
+  //   const cutoff = Math.ceil(totalCount / noofItems);
+  //   console.log("FinalTest", cutoff, current);
+  //   if (current === cutoff) return totalCount;
+  //   return total;
+  
+  // };
   return (
     <>
       <div className="container-fluid container_fms pt-3">
@@ -557,6 +569,7 @@ function ListAgent() {
         {/* </div> */}
         <div className="row my-3">
           <div className="col-4 px-3 ">
+          <div className="d-flex justify-content-start align-items-center gap-3">
             <Select
               bordered={false}
               className="page_size_style"
@@ -579,8 +592,19 @@ function ListAgent() {
                 <span className="sizes ms-1">100</span>
               </Select.Option>
             </Select>
+          
+              <div className=" d-flex  align-items-center mt-2 ">
+                <label className="font_size">
+                  {/* Results 1-70 */}
+                  {/* Results: {startcount + 1} -
+                  {getFinalCount(1 * pageSize * current)}{" "}
+                  <span>of {allagents?.length} </span>{" "} */}
+                </label>
+              </div>
+          
+            </div>
           </div>
-          <div className=" col-4 d-flex py-2 justify-content-center">
+          <div className="col-4 d-flex  align-items-center justify-content-center">
             <MyPagination
               total={allagents?.length}
               current={current}
@@ -592,7 +616,7 @@ function ListAgent() {
               }}
             />
           </div>
-          <div className="col-4 mb-2 px-4">
+          <div className="col-4 d-flex justify-content-end">
             {/* <Link to={ROUTES.CREATEAGENT} style={{ color: "white" }}> */}
             <Button
               btnType="add"
@@ -837,14 +861,17 @@ function ListAgent() {
         {/* Modal for edit Agent */}
         <Custom_model
           show={FrightEditPopup}
-          onHide={() => setFrightEditPopup(false)}
+          onHide={() => {setFrightEditPopup(false)
+            setUniqueName(false);
+          }}
           View_list
           list_content={
             <div>
-              <div className="container-fluid px-4 my-3">
                 <div>
                   <h5 className="lead_text">Update Agent</h5>
                 </div>
+              <div className="container-fluid  my-3">
+              
                 <div className="row my-3 ">
                   <Form
                     form={editForm}
@@ -859,7 +886,9 @@ function ListAgent() {
                     <div className="row">
                       <div className="col-12 pb-3">
                         <div className="">
-                          <label>Vendor Id</label>
+                          <label>Vendor Id  
+                            
+                          </label>
                           <Form.Item
                             name="inpiutId"
                             rules={[
@@ -886,6 +915,7 @@ function ListAgent() {
                                   // if (item.emptype_name == "Agent") {
                                   return (
                                     <Select.Option
+                                    id={item.vendor_id}
                                       key={item.vendor_id}
                                       value={item.vendor_id}
                                     >
@@ -904,7 +934,7 @@ function ListAgent() {
                         </div>
                       </div>
                       <div className="col-12">
-                        <div className="">
+                        <div className="py-2">
                           <label>Country</label>
                           <Form.Item name="country">
                             <SelectBox
@@ -932,7 +962,7 @@ function ListAgent() {
                         </div>
                       </div>
                       <div className="col-12">
-                        <div className="">
+                        <div className="py-2">
                           <label>Commission</label>
                           <Form.Item name="inputcommision">
                             <TextArea

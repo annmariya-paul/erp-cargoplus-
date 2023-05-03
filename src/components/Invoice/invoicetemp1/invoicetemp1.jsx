@@ -212,12 +212,12 @@ function Invoicetemp1({
                         </div>
                       </div>
                       <div className=" col-3"></div>
-                      <div className="col-2 ">
+                      {/* <div className="col-2 ">
                         <div className="">
                           <label className="label_color">Payment To</label>
                           <h4 className="headingcolor">{payment_tocust} </h4>
                         </div>
-                      </div>
+                      </div> */}
 
                     
                     </div>
@@ -238,7 +238,14 @@ function Invoicetemp1({
                       </div>
                       <div className=" col-3"></div>
                       <div className="col-2 ">
-                        <div className="">
+                      <div className="">
+                          <div className="">
+                            <label className="label_color">Payment To</label>
+                            <h4 className="headingcolor">{payment_tocust} </h4>
+                          </div>
+                        </div>
+
+                        <div className="pt-3">
                           <label className="label_color">shipper</label>
                           <h4 className="headingcolor">{shipper }</h4>
                         </div>
@@ -248,6 +255,7 @@ function Invoicetemp1({
                             <h4 className="headingcolor">{consignee_name} </h4>
                           </div>
                         </div>
+
                       </div>
                     </div>
                   </tr>

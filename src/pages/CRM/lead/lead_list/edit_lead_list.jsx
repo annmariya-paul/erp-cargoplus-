@@ -213,10 +213,11 @@ function LeadEdit() {
     const formData = new FormData();
     formData.append(`customer_name`, data.customer_name);
     formData.append(`customer_type`, data.customer_type);
-    formData.append(`customer_address`, data.customer_address);
+    // formData.append(`customer_address`, data.customer_address);
     formData.append(`customer_phone`, data.customer_phone);
     formData.append(`customer_email`, data.customer_email);
 
+    data?.customer_address  && formData.append(`customer_address`, data.customer_address);
     data?.customer_website &&  formData.append(`customer_website`, data.customer_website);
     data?.customer_country &&  formData.append(`customer_country`, data.customer_country);
     data?.customer_remarks && formData.append(`customer_remarks`, data.customer_remarks);

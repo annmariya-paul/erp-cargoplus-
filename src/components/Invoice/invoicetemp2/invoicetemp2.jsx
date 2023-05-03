@@ -14,15 +14,20 @@ function Invoicetemplate2({
   permanent_made,
   balance_due,
   invoice_no,
+  Invoice_date,
   Invoice_type,
   invoice_number,
   billto,
   // setInvoice2,
   settemplate2,
   consignee_name,
+  customer_name,
+  customer_address,
+  customer_email,
 }) {
 
   const [companyInfodata, setCompanyInfodata] = useState();
+  console.log("fkkf",consignee_name);
 
   const companyinfo = () => {
     PublicFetch.get(`${GENERAL_SETTING_BASE_URL}/company`)
@@ -127,17 +132,18 @@ function Invoicetemplate2({
 
 
               <tr className="invoice_header">
-                <div className="d-flex ">
+                <div className="row ">
                   <div className=" col-3">
                     <div className="header__address_content">
                       <label className="label_color1"> Invoice To</label>
                       <div className="address_width font_weight ">
                         <br />
-                        Customer Name
+                       {customer_name}
                         <br />
-                        Customer Address
+                        {customer_email}
+                   
                         <br />
-                        Customer Email
+                        {customer_address}
                       </div>
                     </div>
                   </div>
@@ -157,9 +163,9 @@ function Invoicetemplate2({
                       <div className="header__address_content">
                         <div className="address_width font_weight ">
                           <br /> <br />
-                          Invoice No
+                        Invoice No:  {invoice_no }
                           <br />
-                          Invoice Date
+                          Invoice Date:  { Invoice_date}
                           <br />
                          
                         </div>

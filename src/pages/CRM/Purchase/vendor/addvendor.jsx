@@ -335,7 +335,7 @@ console.log("bnkdetails id iss",vendorId)
                   Accounting
                 </button>
               </div>
-              <div className="col-xl-1 col-lg-2  col-md-4 col-sm-2 pe-2">
+              <div className="col-xl-1 col-lg-2  col-md-6 col-sm-2 pe-1">
                 <button
                   className={toggleState === 4 ? "tabs active-tabs" : "tabs"}
                   onClick={(e) => {

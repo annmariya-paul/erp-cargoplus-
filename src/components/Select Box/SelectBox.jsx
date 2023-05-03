@@ -41,11 +41,10 @@ function SelectBox({
           onSearch={onSearch}
           filterOption={filterOption}
           loading={loading}
-        
-          showSearch={showSearch}
-          allowClear={allowClear}
+          showSearch={true}
+          allowClear={true}
           defaultValue={defaultValue}
-          optionFilterProp={optionFilterProp}
+          optionFilterProp="children"
           disabled={disabled}
           onBlur={onBlur}
           mode={mode}

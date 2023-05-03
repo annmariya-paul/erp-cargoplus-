@@ -497,7 +497,7 @@ export default function Add_Quotation() {
         eno: a,
       });
     }
-    if (freightType1) {
+    if (freightType1 !== null) {
       mode(freightType1);
     }
   }, [id, freightType1]);
@@ -946,19 +946,26 @@ export default function Add_Quotation() {
         console.log("response from opportunity");
         if (res?.data?.success) {
           console.log("Success from Opporutnity", res.data.data);
+          // if (res?.data?.data?.crm_v1_customer?.customer_qtn_validity_days) {
           setNumberOfDays(
             res?.data?.data?.crm_v1_customer?.customer_qtn_validity_days
           );
+
           calculateDate(
             res?.data?.data?.crm_v1_customer?.customer_qtn_validity_days
           );
+          // }
+
           let a =
             res?.data?.data?.crm_v1_customer?.customer_preferred_freight_type;
           console.log("freight type", a);
-          setFreightType1(a);
-          mode(
-            res?.data?.data?.crm_v1_customer?.customer_preferred_freight_type
-          );
+          if (a !== null) {
+            setFreightType1(a);
+            mode(
+              res?.data?.data?.crm_v1_customer?.customer_preferred_freight_type
+            );
+          }
+
           getQuotationNumber(
             res?.data?.data?.crm_v1_customer?.customer_preferred_freight_type
           );
@@ -991,6 +998,27 @@ export default function Add_Quotation() {
       addForm.setFieldsValue({
         vdate: a,
       });
+    } else {
+      PublicFetch.get(`${GENERAL_SETTING_BASE_URL}/fms`)
+        .then((res) => {
+          console.log("Response from fms settings");
+          if (res.data.success) {
+            console.log("success from fms settings");
+            const endDate = new Date(
+              startDate.setDate(
+                startDate.getDate() + res?.data?.data?.fms_settings_qtn_validity
+              )
+            );
+            console.log("date calcualted", endDate);
+            let a = moment(endDate);
+            addForm.setFieldsValue({
+              vdate: a,
+            });
+          }
+        })
+        .catch((err) => {
+          console.log("error", err);
+        });
     }
   };
 

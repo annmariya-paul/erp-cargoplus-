@@ -64,9 +64,9 @@ function ViewOpportunity() {
         </div>
         <div className="col-sm-9 col-12">
           <div className="row justify-content-end py-3">
-            <div className="col-xl-4 col-md-4 col-4 d-flex justify-content-end mb-3 ">
+            <div className="col-xl-3 col-md-3 col-4 d-flex justify-content-end mb-3 ">
               <Button
-                style={{ width: 300 }}
+                style={{ width: 250 }}
                 btnType="add_borderless"
                 className="edit_button"
                 // onClick={handlePrint}
@@ -74,10 +74,10 @@ function ViewOpportunity() {
                   navigate(`${ROUTES.ADD_QUOTATION}/${id}`);
                 }}
               >
-                Converted to Quotation
+                Convert to Quotation
               </Button>
             </div>
-            <div className="col-xl-2 col-md-3 col-4 d-flex justify-content-end mb-3 ">
+            {/* <div className="col-xl-2 col-md-3 col-4 d-flex justify-content-end mb-3 ">
               <Button
                 style={{ width: 100 }}
                 btnType="add_borderless"
@@ -94,7 +94,7 @@ function ViewOpportunity() {
               >
                 Print
               </Button>
-            </div>
+            </div> */}
             <div className="col-xl-2 col-md-3 col-4 d-flex justify-content-end mb-3 ">
               <Button
                 style={{ width: 100 }}

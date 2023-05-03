@@ -164,6 +164,7 @@ import Invoicetemplate2 from "./components/Invoice/invoicetemp2/invoicetemp2";
 import Invoicetemplateselect from "./pages/General Settings/invoicetemplates/invoicetemplate";
 import Viewcustomer from "./pages/CRM/lead/lead_list/view_customer";
 import ViewOpportunity from "./pages/CRM/lead/modals/viewopportunity";
+import AccountSettings from "./pages/Accounts/settings/AccountSettings/AccountSettings";
 function App() {
   return (
     <div className="App">
@@ -377,7 +378,10 @@ function App() {
             <Route path={ROUTES.ADD_OPPORTUNITY} element={<ProtectedRoute />}>
               <Route index element={<AddOpportunity />} />
             </Route>
-            <Route path={ROUTES.ADD_OPPORTUNITY_ID} element={<ProtectedRoute />}>
+            <Route
+              path={ROUTES.ADD_OPPORTUNITY_ID}
+              element={<ProtectedRoute />}
+            >
               <Route index element={<AddOpportunity />} />
             </Route>
             <Route
@@ -555,7 +559,6 @@ function App() {
             <Route path={ROUTES.CREATEJOB} element={<ProtectedRoute />}>
               <Route index element={<CreateJob />} />
             </Route>
-
 
             <Route path={ROUTES.CREATEJOB_ID} element={<ProtectedRoute />}>
               <Route index element={<CreateJob />} />
@@ -797,6 +800,9 @@ function App() {
               element={<ProtectedRoute />}
             >
               <Route index element={<ViewBillPayment />} />
+            </Route>
+            <Route path={ROUTES.ACCOUNTS_SETTINGS} element={<ProtectedRoute />}>
+              <Route index element={<AccountSettings />} />
             </Route>
 
             {/* </Route> */}

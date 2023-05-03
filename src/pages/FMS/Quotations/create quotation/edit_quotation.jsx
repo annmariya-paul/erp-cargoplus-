@@ -1176,7 +1176,10 @@ export default function EditQuotation(
     formData.append("qoutation_customer", data.customer);
     formData.append("quotation_validity", new Date(data.validity_date));
     formData.append("quotation_customer", data.customer);
-    formData.append("quotation_shipper", data.shipper);
+    if(data.shipper){
+      formData.append("quotation_shipper", data.shipper);
+    }
+
     formData.append("quotation_freight_type", data.freight_type);
     formData.append("quotation_cargo_type", data.quotation_cargotype);
     formData.append("quotation_carrier", data.quotation_carrier);
@@ -1640,13 +1643,13 @@ export default function EditQuotation(
                     <label>Shipper</label>
                     <Form.Item
                       name="shipper"
-                      rules={[
-                        {
-                          required: true,
-                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid value",
-                        },
-                      ]}
+                      // rules={[
+                      //   {
+                      //     required: true,
+                      //     pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                      //     message: "Please enter a Valid value",
+                      //   },
+                      // ]}
                     >
                       <InputType value={quotshipper} />
                     </Form.Item>

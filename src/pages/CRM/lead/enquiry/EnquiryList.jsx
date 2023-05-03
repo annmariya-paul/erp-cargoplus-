@@ -204,7 +204,7 @@ function EnquiryList() {
       dataIndex: "contact_phone_1",
       key: "contact_phone_1",
       width: "5%",
-      align: "center",
+      align: "left",
       // filteredValue: [searchType],
       // onFilter: (value, record) => {
       //   return (
@@ -252,7 +252,7 @@ function EnquiryList() {
         // console.log("id is : ",index.lead_id);
         return (
           <div className="d-flex justify-content-center align-items-center gap-2">
-            <div className="m-0">
+            <div className="m-0 ms-2">
               <Link
                 to={`${ROUTES.EDIT_ENQUIRY}/${index.enquiry_id}`}
                 className="editcolor"

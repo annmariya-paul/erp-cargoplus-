@@ -25,6 +25,7 @@ function Bankdetails({ vendor, toggle }) {
   const [bankdefault, setbankdefault] = useState(0);
   const [editbankdefault, seteditbankdefault] = useState(0);
 
+  const [isdefault, setisdefault] = useState(false);
   const [successmsg, setSuccessmsg] = useState(false);
 
   const handleEditedclick = (e) => {
@@ -41,28 +42,6 @@ function Bankdetails({ vendor, toggle }) {
       // editvend_defaultbnk:e.vend_bankdefault,
     });
     seteditModalShow(true);
-  };
-
-  const handleChecked = (e, key) => {
-    console.log("isChecked", e);
-    if (e.target.checked) {
-      console.log("suceccss checked", e.target.checked);
-      setbankdefault(1);
-    }
-    else{
-      setbankdefault(0)
-    }
-  };
-
-  const handleCheckededit = (e, key) => {
-    console.log("isChecked", e);
-    if (e.target.checked) {
-      console.log("suceccss checked", e.target.checked);
-      seteditbankdefault(1);
-    }
-    else{
-      seteditbankdefault(0)
-    }
   };
 
   const Getvendordata = () => {
@@ -187,6 +166,28 @@ function Bankdetails({ vendor, toggle }) {
     }
   };
 
+  const getdefaultbank = async () => {
+    try {
+      const defaultbank = await PublicFetch.get(
+        `${process.env.REACT_APP_BASE_URL}/misc/default?type=vendorbankdefault`
+      );
+      console.log("hdjsjk", defaultbank?.data?.data?.exist);
+      if (defaultbank?.data?.data?.exist == true) {
+        setisdefault(true);
+      } else {
+        setisdefault(false);
+      seteditbankdefault(1);
+        
+      }
+      
+      console.log("getting all  defaultbank", defaultbank);
+
+      // setvendortypes(allvendortypes.data.data);
+    } catch (err) {
+      console.log("error to fetching  defaultbank", err);
+    }
+  };
+
   const columns = [
     {
       title: "Sl. No.",
@@ -237,6 +238,7 @@ function Bankdetails({ vendor, toggle }) {
 
   useEffect(() => {
     getvendorbankdetails();
+
     if (vendor?.vendor_id) {
       // getallvendorbankdetails();
       Getvendordata();
@@ -255,21 +257,52 @@ function Bankdetails({ vendor, toggle }) {
   const confirm = (e) => {
     // console.log(e);
     // message.success("Click on Yes");
-    setbankdefault(1)
+    setbankdefault(1);
   };
 
   const cancel = (e) => {
     // console.log(e);
     // message.error("Click on No");
-    setbankdefault(0)
+    setbankdefault(0);
   };
 
+  const handleChecked = (e, key) => {
+    console.log("isChecked", e);
+    // PublicFetch.get(`${CRM_BASE_URL_SELLING}/category`)
+    // .then((res) => {
+    //   console.log("response Data", res);
+    //   if (res.data.success) {
+
+    //   }
+    // })
+    // .catch((err) => {
+    //   console.log("Error", err);
+    // });
+    if (e.target.checked) {
+      getdefaultbank();
+      
+      console.log("suceccss checked", e.target.checked);
+      setbankdefault(1);
+    } else {
+      setbankdefault(0);
+    }
+  };
+
+  const handleCheckededit = (e, key) => {
+    console.log("isChecked", e);
+    if (e.target.checked) {
+      getdefaultbank();
+      // console.log("suceccss checked", e.target.checked);
+    } else {
+      seteditbankdefault(0);
+    }
+  };
   return (
     <>
       <div className="row">
         <div className="col-12">
           <Button btnType="add" onClick={() => setModalShow(true)}>
-            New Bank Details 
+            New Bank Details
           </Button>
         </div>
       </div>
@@ -284,7 +317,10 @@ function Bankdetails({ vendor, toggle }) {
       <Custom_model
         bodyStyle={{ height: 580, overflowY: "auto" }}
         show={modalShow}
-        onHide={() => setModalShow(false)}
+        onHide={() => {setModalShow(false)
+         
+
+        }}
         View_list
         footer={false}
         //  {...props}
@@ -304,9 +340,11 @@ function Bankdetails({ vendor, toggle }) {
               }}
             >
               {/* <div className="row py-5 px-1"> */}
-                <div className="col-sm-12  ">
-                  <label>Account Name<span className="required">*</span></label>
-                  <Form.Item 
+              <div className="col-sm-12  ">
+                <label>
+                  Account Name<span className="required">*</span>
+                </label>
+                <Form.Item
                   name="vend_accname"
                   rules={[
                     {
@@ -314,13 +352,15 @@ function Bankdetails({ vendor, toggle }) {
                       message: "Please enter a valid account name",
                     },
                   ]}
-                  >
-                    <InputType />
-                  </Form.Item>
-                </div>
-                <div className="col-sm-12  mt-3">
-                  <label>Account No<span className="required">*</span></label>
-                  <Form.Item 
+                >
+                  <InputType />
+                </Form.Item>
+              </div>
+              <div className="col-sm-12  mt-3">
+                <label>
+                  Account No<span className="required">*</span>
+                </label>
+                <Form.Item
                   name="vend_accno"
                   rules={[
                     {
@@ -328,13 +368,15 @@ function Bankdetails({ vendor, toggle }) {
                       message: "Please enter a valid account no",
                     },
                   ]}
-                  >
-                    <InputType />
-                  </Form.Item>
-                </div>
-                <div className="col-sm-12   mt-3">
-                  <label>Bank Name<span className="required">*</span></label>
-                  <Form.Item 
+                >
+                  <InputType />
+                </Form.Item>
+              </div>
+              <div className="col-sm-12   mt-3">
+                <label>
+                  Bank Name<span className="required">*</span>
+                </label>
+                <Form.Item
                   name="vend_bankname"
                   rules={[
                     {
@@ -342,14 +384,16 @@ function Bankdetails({ vendor, toggle }) {
                       message: "Please enter a valid bank name",
                     },
                   ]}
-                  >
-                    <InputType />
-                  </Form.Item>
-                </div>
+                >
+                  <InputType />
+                </Form.Item>
+              </div>
 
-                <div className="col-sm-12  mt-3">
-                  <label>Branch Name<span className="required">*</span></label>
-                  <Form.Item 
+              <div className="col-sm-12  mt-3">
+                <label>
+                  Branch Name<span className="required">*</span>
+                </label>
+                <Form.Item
                   name="vend_branchname"
                   rules={[
                     {
@@ -357,49 +401,50 @@ function Bankdetails({ vendor, toggle }) {
                       message: "Please enter a valid branch name",
                     },
                   ]}
-                  >
-                    <InputType />
+                >
+                  <InputType />
+                </Form.Item>
+              </div>
+              <div className="col-sm-12  mt-3">
+                <label>IBAN No</label>
+                <Form.Item name="vend_ibanno">
+                  <InputType />
+                </Form.Item>
+              </div>
+              <div className="col-sm-12  mt-3">
+                <label>Default Bank</label>
+                <div>
+                  <Form.Item name="vend_defaultbnk">
+                    <Popconfirm
+                      title="Are you sure to setdefault?"
+                      // description="Are you sure to delete this task?"
+                      onConfirm={confirm}
+                      onCancel={cancel}
+                      okText="Yes"
+                      cancelText="No"
+                    >
+                      <Checkbox
+                        onChange={handleChecked}
+                        checked={bankdefault === 1 ? true : false}
+                        // onClick={()=>  }
+                      ></Checkbox>
+                    </Popconfirm>
                   </Form.Item>
                 </div>
-                <div className="col-sm-12  mt-3">
-                  <label>IBAN No</label>
-                  <Form.Item name="vend_ibanno">
-                    <InputType />
-                  </Form.Item>
-                </div>
-                <div className="col-sm-12  mt-3">
-                  <label>Default Bank</label>
-                  <div>
-                    <Form.Item name="vend_defaultbnk">
-                      <Popconfirm
-                        title="Are you sure to setdefault?"
-                        // description="Are you sure to delete this task?"
-                        onConfirm={confirm}
-                        onCancel={cancel}
-                        okText="Yes"
-                        cancelText="No"
-                      >
-                        <Checkbox
-                          onChange={handleChecked}
-                          checked={bankdefault === 1 ? true : false}
-                        ></Checkbox>
-                      </Popconfirm>
-                    </Form.Item>
-                  </div>
-                </div>
+              </div>
 
-                <div className=" pt-4 d-flex justify-content-center">
-                  <Button type="submit" className="qtn_save" btnType="save">
-                    Save
-                  </Button>
-                  <Custom_model
-                    centered
-                    size={`sm`}
-                    success
-                    show={successPopup}
-                    onHide={() => setSuccessPopup(false)}
-                  />
-                </div>
+              <div className=" pt-4 d-flex justify-content-center">
+                <Button type="submit" className="qtn_save" btnType="save">
+                  Save
+                </Button>
+                <Custom_model
+                  centered
+                  size={`sm`}
+                  success
+                  show={successPopup}
+                  onHide={() => setSuccessPopup(false)}
+                />
+              </div>
               {/* </div> */}
             </Form>
           </>
@@ -409,7 +454,9 @@ function Bankdetails({ vendor, toggle }) {
       <Custom_model
         bodyStyle={{ height: 580, overflowY: "auto" }}
         show={editmodalShow}
-        onHide={() => seteditModalShow(false)}
+      onHide={() => {seteditModalShow(false)
+        setisdefault(false)
+      }}
         View_list
         footer={false}
         //  {...props}
@@ -429,54 +476,58 @@ function Bankdetails({ vendor, toggle }) {
               }}
             >
               {/* <div className="row py-5 px-1"> */}
-                <div className="col-sm-12 pb-2 ">
-                  <label>Account Name</label>
-                  <Form.Item name="editvend_accname">
-                    <InputType />
-                  </Form.Item>
-                </div>
-                <div className="col-sm-12 pb-2">
-                  <label>Account No</label>
-                  <Form.Item name="editvend_accno">
-                    <InputType />
-                  </Form.Item>
-                </div>
-                <div className="col-sm-12 pb-2  mt-2">
-                  <label>Bank Name</label>
-                  <Form.Item name="editvend_bankname">
-                    <InputType />
-                  </Form.Item>
-                </div>
+              <div className="col-sm-12 pb-2 ">
+                <label>Account Name</label>
+                <Form.Item name="editvend_accname">
+                  <InputType />
+                </Form.Item>
+              </div>
+              <div className="col-sm-12 pb-2">
+                <label>Account No</label>
+                <Form.Item name="editvend_accno">
+                  <InputType />
+                </Form.Item>
+              </div>
+              <div className="col-sm-12 pb-2  mt-2">
+                <label>Bank Name</label>
+                <Form.Item name="editvend_bankname">
+                  <InputType />
+                </Form.Item>
+              </div>
 
-                <div className="col-sm-12 pb-2 mt-2">
-                  <label>Branch Name</label>
-                  <Form.Item name="editvend_branchname">
-                    <InputType />
+              <div className="col-sm-12 pb-2 mt-2">
+                <label>Branch Name</label>
+                <Form.Item name="editvend_branchname">
+                  <InputType />
+                </Form.Item>
+              </div>
+              <div className="col-sm-12 pb-2 mt-2">
+                <label>IBAN No</label>
+                <Form.Item name="editvend_ibanno">
+                  <InputType />
+                </Form.Item>
+              </div>
+              <div className="col-sm-12 pt-2 pb-2 mt-2">
+                <label>Default Bank</label>
+                <div>
+                  <Form.Item name="editvend_defaultbnk">
+                    <Checkbox
+                      onChange={handleCheckededit}
+                      checked={editbankdefault === 1 ? true : false}
+                    ></Checkbox>
                   </Form.Item>
                 </div>
-                <div className="col-sm-12 pb-2 mt-2">
-                  <label>IBAN No</label>
-                  <Form.Item name="editvend_ibanno">
-                    <InputType />
-                  </Form.Item>
-                </div>
-                <div className="col-sm-12 pt-2 pb-2 mt-2">
-                  <label>Default Bank</label>
-                  <div>
-                    <Form.Item name="editvend_defaultbnk">
-                      <Checkbox
-                        onChange={handleCheckededit}
-                        checked={editbankdefault === 1 ? true : false}
-                      ></Checkbox>
-                    </Form.Item>
-                  </div>
-                </div>
-
-                <div className=" pt-4 d-flex justify-content-center">
-                  <Button type="submit" className="qtn_save" btnType="save">
-                    Save
-                  </Button>
-                </div>
+              </div>
+              {isdefault ? (
+                <label style={{ color: "red" }}>Bank is already exist </label>
+              ) : (
+                ""
+              )}
+              <div className=" pt-4 d-flex justify-content-center">
+                <Button type="submit" className="qtn_save" btnType="save">
+                  Save
+                </Button>
+              </div>
               {/* </div> */}
             </Form>
           </>

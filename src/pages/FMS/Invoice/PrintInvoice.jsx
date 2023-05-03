@@ -134,11 +134,23 @@ function PrintInvoice() {
               console.log("temp1", e);
               setdefaultTemplate2(e);
             }}
-            invoice_number={alldata?.invoice_no}
+
+          
+           shipper={alldata?.fms_v1_jobs?.job_shipper}
+            invoice_no={alldata?.invoice_no}
+            invoice_date={moment(alldata?.invoice_date).format("DD-MM-YYYY")}
+            payment_tocust={ alldata?.fms_v1_jobs?.crm_v1_customer?.customer_name}
+            consignee_name={  alldata?.fms_v1_jobs?.job_consignee}
             
-            invoice_details1={
+            // invoice_details1={
+            //   <>
+              
+            //   </>
+            // }
+            invoice_details2={
               <>
-                <tr>
+
+<tr>
                   <td className="font_weight"> Project Name </td>
                   <td className=""> : </td>
                   <td className=""> {alldata?.fms_v1_jobs?.job_number} </td>
@@ -160,10 +172,9 @@ function PrintInvoice() {
                     }{" "}
                   </td>
                 </tr>
-              </>
-            }
-            invoice_details2={
-              <>
+
+                
+
                 <tr>
                   <td className="font_weight"> Destination</td>
                   <td className=""> : </td>
@@ -226,7 +237,7 @@ function PrintInvoice() {
                     return (
                       <tr className="invoice_header border-0">
                         <td align="center " className="p-2">{index + 1}</td>
-                        <td className="  border_right">
+                        <td className=" ">
                           {item?.job_task_expense_task_name}
                         </td>
                         {/* <td></td>
@@ -415,8 +426,13 @@ function PrintInvoice() {
               console.log("temp1", e);
               setdefaultTemplate3(e);
             }}
+          invoice_no={alldata?.invoice_no}
+          Invoice_date= {moment(alldata?.invoice_date).format("DD-MM-YYYY")}
+          customer_name={ alldata?.fms_v1_jobs?.crm_v1_customer?.customer_name}
+          customer_email={ alldata?.fms_v1_jobs?.crm_v1_customer?.customer_email}
+          customer_address={alldata?.fms_v1_jobs?.crm_v1_customer?.customer_address}
             consignee_name={
-              alldata?.fms_v1_jobs?.crm_v1_leads?.lead_customer_name
+              alldata?.fms_v1_jobs?.job_consignee
             }
             invoice_details1={
               <>

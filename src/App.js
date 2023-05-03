@@ -556,6 +556,11 @@ function App() {
               <Route index element={<CreateJob />} />
             </Route>
 
+
+            <Route path={ROUTES.CREATEJOB_ID} element={<ProtectedRoute />}>
+              <Route index element={<CreateJob />} />
+            </Route>
+
             <Route path={ROUTES.UPDATEJOB_ID} element={<ProtectedRoute />}>
               <Route index element={<Updatejob />} />
             </Route>

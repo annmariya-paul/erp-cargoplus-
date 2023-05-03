@@ -12,7 +12,7 @@ import FileUpload from "../../../components/fileupload/fileUploader";
 import InputType from "../../../components/Input Type textbox/InputType";
 import SelectBox from "../../../components/Select Box/SelectBox";
 import { Select } from "antd";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { cargo_typeoptions } from "../../../utils/SelectOptions";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -25,8 +25,10 @@ import Input_Number from "../../../components/InputNumber/InputNumber";
 import axios from "axios";
 import CheckUnique from "../../../check Unique/CheckUnique";
 import { UniqueErrorMsg } from "../../../ErrorMessages/UniqueErrorMessage";
-
+import { useNavigate, useParams } from "react-router-dom";
 function CreateJob() {
+  const { id } = useParams();
+  console.log("ID is ...", id);
   const [AllQuotations, setAllQuotations] = useState();
   const [cargooptions, setCargooptions] = useState(cargo_typeoptions);
   const dateFormatList = ["DD-MM-YYYY", "DD-MM-YY"];
@@ -174,7 +176,7 @@ function CreateJob() {
             onequatation?.data?.data.quotation.quotation_chargeable_wt,
           job_grossweight:
             onequatation?.data?.data.quotation.quotation_gross_wt,
-
+            sales_person:onequatation?.data?.data.quotation.quotation_salesperson,
           job_shipper: onequatation?.data?.data.quotation.quotation_shipper,
           job_customer:
             onequatation?.data?.data.quotation.crm_v1_customer.customer_id,
@@ -216,7 +218,8 @@ function CreateJob() {
           job_breadth:onequatation?.data?.data.quotation?.quotation_breadth,
           job_height:onequatation?.data?.data.quotation?.quotation_height,
           job_length:onequatation?.data?.data.quotation?.quotation_length,
-          job_consignee:onequatation?.data?.data.quotation?.quotation_consignee,
+
+          job_consignee:onequatation?.data?.data.quotation?.quotation_consignee ?? '',
           job_containertype:onequatation?.data?.data.quotation?.quotation_container_type,
         });
         setGrandTotal(onequatation?.data?.data.quotation.quotation_grand_total);
@@ -299,6 +302,14 @@ function CreateJob() {
     getAllQuotation();
     getfmssettings();
     getAllincoterm();
+    if(id){
+      handleLeadIdEnq(id);
+      let a = parseInt(id);
+      addForm.setFieldsValue({
+        quotationno: a,
+        // oppo_enquiries: enqnw,
+       });
+    }
   }, []);
 
   const handleLeadIdEnq = (e) => {

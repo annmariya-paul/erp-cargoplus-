@@ -104,6 +104,7 @@ const ROUTES = {
   ASSIGN_QUOTATION_ID: "/assign_quotation/:id",
   LIST_JOB: "/joblist",
   CREATEJOB: "/createjob",
+  CREATEJOB_ID: "/createjob/:id",
   UPDATEJOB: "/updatejob",
   UPDATEJOB_ID: "/updatejob/:id",
   VIEW_JOB: "/view_job",

@@ -36,7 +36,7 @@ function ListAgent() {
   const [pageSize, setPageSize] = useState("25");
   const [current, setCurrent] = useState(1);
 
-  const [allagents,setallagents]= useState()
+  const [allagents, setallagents] = useState();
 
   const [agentdata, setAgentdata] = useState();
   console.log("agent data", agentdata);
@@ -318,19 +318,20 @@ function ListAgent() {
         `${process.env.REACT_APP_BASE_URL}/agents`
       );
 
-      console.log("agent list iss",allagent.data)
-      console.log("startindexx iss",allagent?.data?.data[0])
-      setallagents(allagent.data.data)
+      console.log("agent list iss", allagent.data);
+      console.log("startindexx iss", allagent?.data?.data[0]);
+      setallagents(allagent.data.data);
       if (allagent?.data.success) {
         let temp = [];
         allagent?.data.data.forEach((item, index) => {
-          console.log("agntt",item)
+          console.log("agntt", item);
           temp.push({
             agent_id: item.agent_id,
             agent_country: item?.countries?.country_name,
             agent_commission_details: item.agent_commission_details,
             agent_vendor_id: item.agent_vendor_id,
             agent_name: item.crm_v1_vendors.vendor_name,
+            serialNo: index + 1,
           });
         });
         setAgentdata(temp);
@@ -364,7 +365,7 @@ function ListAgent() {
       title: "SI.NO",
       key: "index",
       width: "13%",
-      render: (value, item, index) => serialNo + index,
+      render: (value, item, index) => item?.serialNo,
       align: "center",
     },
     {
@@ -509,14 +510,12 @@ function ListAgent() {
   ]);
   console.log("country", agentdata);
 
-
-
   // const getFinalCount = (total) => {
   //   const cutoff = Math.ceil(totalCount / noofItems);
   //   console.log("FinalTest", cutoff, current);
   //   if (current === cutoff) return totalCount;
   //   return total;
-  
+
   // };
   return (
     <>
@@ -569,30 +568,30 @@ function ListAgent() {
         {/* </div> */}
         <div className="row my-3">
           <div className="col-4 px-3 ">
-          <div className="d-flex justify-content-start align-items-center gap-3">
-            <Select
-              bordered={false}
-              className="page_size_style"
-              value={pageSize}
-              onChange={(e) => setPageSize(e)}
-            >
-              <Select.Option value="25">
-                Show
-                <span className="vertical ms-1">|</span>
-                <span className="sizes ms-2"> 25</span>
-              </Select.Option>
-              <Select.Option value="50">
-                Show
-                <span className="vertical ms-1">|</span>
-                <span className="sizes ms-1"> 50</span>
-              </Select.Option>
-              <Select.Option value="100">
-                Show
-                <span className="vertical ms-1">|</span>
-                <span className="sizes ms-1">100</span>
-              </Select.Option>
-            </Select>
-          
+            <div className="d-flex justify-content-start align-items-center gap-3">
+              <Select
+                bordered={false}
+                className="page_size_style"
+                value={pageSize}
+                onChange={(e) => setPageSize(e)}
+              >
+                <Select.Option value="25">
+                  Show
+                  <span className="vertical ms-1">|</span>
+                  <span className="sizes ms-2"> 25</span>
+                </Select.Option>
+                <Select.Option value="50">
+                  Show
+                  <span className="vertical ms-1">|</span>
+                  <span className="sizes ms-1"> 50</span>
+                </Select.Option>
+                <Select.Option value="100">
+                  Show
+                  <span className="vertical ms-1">|</span>
+                  <span className="sizes ms-1">100</span>
+                </Select.Option>
+              </Select>
+
               <div className=" d-flex  align-items-center mt-2 ">
                 <label className="font_size">
                   {/* Results 1-70 */}
@@ -601,7 +600,6 @@ function ListAgent() {
                   <span>of {allagents?.length} </span>{" "} */}
                 </label>
               </div>
-          
             </div>
           </div>
           <div className="col-4 d-flex  align-items-center justify-content-center">
@@ -636,7 +634,6 @@ function ListAgent() {
         <div className="datatable">
           <TableData
             data={getData(current, pageSize)}
-            
             columns={columns}
             // columns={filteredColumns}
             custom_table_css="attribute_table"
@@ -665,11 +662,10 @@ function ListAgent() {
           View_list
           list_content={
             <>
-             <div>
-              <h5 className="lead_text">New Agent</h5>
-                </div>
+              <div>
+                <h5 className="lead_text">New Agent</h5>
+              </div>
               <div className="container-fluid  my-3">
-               
                 <div className="row my-3 ">
                   <Form
                     form={addForm}
@@ -861,17 +857,17 @@ function ListAgent() {
         {/* Modal for edit Agent */}
         <Custom_model
           show={FrightEditPopup}
-          onHide={() => {setFrightEditPopup(false)
+          onHide={() => {
+            setFrightEditPopup(false);
             setUniqueName(false);
           }}
           View_list
           list_content={
             <div>
-                <div>
-                  <h5 className="lead_text">Update Agent</h5>
-                </div>
+              <div>
+                <h5 className="lead_text">Update Agent</h5>
+              </div>
               <div className="container-fluid  my-3">
-              
                 <div className="row my-3 ">
                   <Form
                     form={editForm}
@@ -886,9 +882,7 @@ function ListAgent() {
                     <div className="row">
                       <div className="col-12 pb-3">
                         <div className="">
-                          <label>Vendor Id  
-                            
-                          </label>
+                          <label>Vendor Id</label>
                           <Form.Item
                             name="inpiutId"
                             rules={[
@@ -915,7 +909,7 @@ function ListAgent() {
                                   // if (item.emptype_name == "Agent") {
                                   return (
                                     <Select.Option
-                                    id={item.vendor_id}
+                                      id={item.vendor_id}
                                       key={item.vendor_id}
                                       value={item.vendor_id}
                                     >

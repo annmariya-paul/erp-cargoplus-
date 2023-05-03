@@ -163,7 +163,7 @@ export default function ViewQuotation() {
           <div className="col-sm-7 col-12">
             <div className="d-flex justify-content-end py-3">
               <div className="col-xl-2 col-md-3 col-4 d-flex justify-content-end mb-3">
-                <Button
+                {/* <Button
                   btnType="add_borderless"
                   className="edit_button"
                   // onClick={handlePrint}
@@ -178,10 +178,11 @@ export default function ViewQuotation() {
                   }}
                 >
                   Print
-                </Button>
+                </Button> */}
               </div>
-              <div className="col-xl-2 col-md-3 col-4 d-flex justify-content-end mb-3 ">
+              <div className="col-xl-2 col-md-3 col-4 d-flex justify-content-end mb-3 me-2">
                 <Button
+                  style={{ width: 100 }}
                   btnType="add_borderless"
                   className="edit_button"
                   onClick={() => {
@@ -191,6 +192,20 @@ export default function ViewQuotation() {
                 >
                   Edit
                   <FiEdit />
+                </Button>
+              </div>
+              <div className="col-xl-2 col-md-3 col-4 d-flex justify-content-end mb-3 ">
+                <Button
+                 style={{ width: 300 }}
+                  btnType="add_borderless"
+                  className="edit_button"
+                  onClick={() => {
+                    // handleviewtoedit();
+                    navigate(`${ROUTES.CREATEJOB}/${id}`);
+                  }}
+                >
+                  Convert to Job
+                 
                 </Button>
               </div>
             </div>

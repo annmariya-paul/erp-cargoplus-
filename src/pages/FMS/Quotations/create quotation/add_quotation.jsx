@@ -288,6 +288,7 @@ export default function Add_Quotation() {
   const [OpportunityList, setOpportunityList] = useState([]);
   const [currentcount, setCurrentcount] = useState();
   const [locationType, setLocationType] = useState();
+  const [freightType1, setFreightType1] = useState();
 
   const [allCustomerList, setAllCustomerList] = useState([]);
   console.log("Lead names :", allCustomerList);
@@ -496,7 +497,10 @@ export default function Add_Quotation() {
         eno: a,
       });
     }
-  }, [id]);
+    if (freightType1 !== null) {
+      mode(freightType1);
+    }
+  }, [id, freightType1]);
 
   const handleDelete = (key) => {
     const newData = tableData?.filter((item) => item?.key !== key);
@@ -940,17 +944,28 @@ export default function Add_Quotation() {
     PublicFetch.get(`${CRM_BASE_URL}/opportunity/${Oppo_id}`)
       .then((res) => {
         console.log("response from opportunity");
-        if (res.data.success) {
+        if (res?.data?.success) {
           console.log("Success from Opporutnity", res.data.data);
+          // if (res?.data?.data?.crm_v1_customer?.customer_qtn_validity_days) {
           setNumberOfDays(
             res?.data?.data?.crm_v1_customer?.customer_qtn_validity_days
           );
+
           calculateDate(
             res?.data?.data?.crm_v1_customer?.customer_qtn_validity_days
           );
-          mode(
-            res?.data?.data?.crm_v1_customer?.customer_preferred_freight_type
-          );
+          // }
+
+          let a =
+            res?.data?.data?.crm_v1_customer?.customer_preferred_freight_type;
+          console.log("freight type", a);
+          if (a !== null) {
+            setFreightType1(a);
+            mode(
+              res?.data?.data?.crm_v1_customer?.customer_preferred_freight_type
+            );
+          }
+
           getQuotationNumber(
             res?.data?.data?.crm_v1_customer?.customer_preferred_freight_type
           );
@@ -983,6 +998,27 @@ export default function Add_Quotation() {
       addForm.setFieldsValue({
         vdate: a,
       });
+    } else {
+      PublicFetch.get(`${GENERAL_SETTING_BASE_URL}/fms`)
+        .then((res) => {
+          console.log("Response from fms settings");
+          if (res.data.success) {
+            console.log("success from fms settings");
+            const endDate = new Date(
+              startDate.setDate(
+                startDate.getDate() + res?.data?.data?.fms_settings_qtn_validity
+              )
+            );
+            console.log("date calcualted", endDate);
+            let a = moment(endDate);
+            addForm.setFieldsValue({
+              vdate: a,
+            });
+          }
+        })
+        .catch((err) => {
+          console.log("error", err);
+        });
     }
   };
 

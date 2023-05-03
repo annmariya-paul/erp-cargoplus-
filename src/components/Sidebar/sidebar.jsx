@@ -58,6 +58,7 @@ export default function Sidebar({ showSidebar }) {
   const [FMSSettingsopen, setFMSSettingsopen] = useState(false);
   const [accountsSettings, setAccountsSettings] = useState(false);
   const [accountsReports, setAccountsReports] = useState(false);
+  const [currentOpen, setCurrentOpen] = useState();
 
   const location = useLocation();
 
@@ -133,7 +134,10 @@ export default function Sidebar({ showSidebar }) {
                 <Link
                   className={HRMSopen ? "active-link_main" : "link"}
                   // to="/"
-                  onClick={() => setHRMSopen(!HRMSopen)}
+                  onClick={() => {
+                    setHRMSopen(!HRMSopen);
+                    setCurrentOpen("hrms");
+                  }}
                 >
                   <div className="d-flex justify-content-between gap-5 ">
                     <div className="d-flex">
@@ -153,7 +157,13 @@ export default function Sidebar({ showSidebar }) {
               </li>
               {HRMSopen ? (
                 <>
-                  <div className="nav_active_color ">
+                  <div
+                    className={` ${
+                      HRMSopen && currentOpen === "hrms"
+                        ? "nav_active_color"
+                        : "nav_active_color_secondary"
+                    } `}
+                  >
                     {checkPermission("branch") && (
                       <li className="nav-text ">
                         <NavLink
@@ -275,7 +285,10 @@ export default function Sidebar({ showSidebar }) {
                 <Link
                   className={CRMopen ? "active-link_main" : "link"}
                   // to="/"
-                  onClick={() => setCRMopen(!CRMopen)}
+                  onClick={() => {
+                    setCRMopen(!CRMopen);
+                    setCurrentOpen("crm");
+                  }}
                 >
                   <div className="d-flex justify-content-between gap-5">
                     <div className="d-flex">
@@ -510,7 +523,13 @@ export default function Sidebar({ showSidebar }) {
                   )} */}
 
                   {/* changes sidebar */}
-                  <div className="nav_active_color ">
+                  <div
+                    className={` ${
+                      CRMopen && currentOpen === "crm"
+                        ? "nav_active_color"
+                        : "nav_active_color_secondary"
+                    } `}
+                  >
                     {checkPermission("lead") && (
                       <li className="nav-text ">
                         <NavLink
@@ -711,7 +730,10 @@ export default function Sidebar({ showSidebar }) {
                 <Link
                   className={CRMproduct ? "active-link_main" : "link"}
                   // to="/"
-                  onClick={() => setCRMproduct(!CRMproduct)}
+                  onClick={() => {
+                    setCRMproduct(!CRMproduct);
+                    setCurrentOpen("product");
+                  }}
                 >
                   <div className="d-flex justify-content-between gap-5">
                     <div className="d-flex">
@@ -732,7 +754,13 @@ export default function Sidebar({ showSidebar }) {
 
               {CRMproduct ? (
                 <>
-                  <div className="nav_active_color ">
+                  <div
+                    className={` ${
+                      CRMproduct && currentOpen === "product"
+                        ? "nav_active_color"
+                        : "nav_active_color_secondary"
+                    } `}
+                  >
                     {checkPermission("lead") && (
                       <li className="nav-text ">
                         <NavLink
@@ -860,7 +888,10 @@ export default function Sidebar({ showSidebar }) {
                 <Link
                   className={CRMservice ? "active-link_main" : "link"}
                   // to="/"
-                  onClick={() => setCRMservice(!CRMservice)}
+                  onClick={() => {
+                    setCRMservice(!CRMservice);
+                    setCurrentOpen("service");
+                  }}
                 >
                   <div className="d-flex justify-content-between gap-5">
                     <div className="d-flex">
@@ -883,7 +914,13 @@ export default function Sidebar({ showSidebar }) {
 
               {CRMservice ? (
                 <>
-                  <div className="nav_active_color ">
+                  <div
+                    className={` ${
+                      CRMservice && currentOpen === "service"
+                        ? "nav_active_color"
+                        : "nav_active_color_secondary"
+                    } `}
+                  >
                     {checkPermission("lead") && (
                       <li className="nav-text ">
                         <NavLink
@@ -913,7 +950,10 @@ export default function Sidebar({ showSidebar }) {
                 <Link
                   className={FMSOpen ? "active-link_main" : "link"}
                   // to="/"
-                  onClick={() => setFMSOpen(!FMSOpen)}
+                  onClick={() => {
+                    setFMSOpen(!FMSOpen);
+                    setCurrentOpen("fms");
+                  }}
                 >
                   <div className="d-flex justify-content-between gap-5">
                     <div className="d-flex">
@@ -968,7 +1008,13 @@ export default function Sidebar({ showSidebar }) {
               )} */}
               {FMSOpen ? (
                 <>
-                  <div className="nav_active_color ">
+                  <div
+                    className={` ${
+                      FMSOpen && currentOpen === "fms"
+                        ? "nav_active_color"
+                        : "nav_active_color_secondary"
+                    } `}
+                  >
                     {checkPermission("opportunity assign") && (
                       <li className="nav-text ">
                         <NavLink
@@ -1111,7 +1157,7 @@ export default function Sidebar({ showSidebar }) {
                             </NavLink>
                           </li>
                         )}
-                        {checkPermission("tax type") && (
+                        {checkPermission("tax group") && (
                           <li className="nav-text">
                             <NavLink
                               className={({ isActive }) =>
@@ -1391,7 +1437,10 @@ export default function Sidebar({ showSidebar }) {
                 <Link
                   className={FMSpurchase ? "active-link_main" : "link"}
                   // to="/"
-                  onClick={() => setFMSpurchase(!FMSpurchase)}
+                  onClick={() => {
+                    setFMSpurchase(!FMSpurchase);
+                    setCurrentOpen("purchase");
+                  }}
                 >
                   <div className="d-flex justify-content-between gap-5">
                     <div className="d-flex">
@@ -1414,7 +1463,13 @@ export default function Sidebar({ showSidebar }) {
 
               {FMSpurchase ? (
                 <>
-                  <div className="nav_active_color ">
+                  <div
+                    className={` ${
+                      FMSpurchase && currentOpen === "purchase"
+                        ? "nav_active_color"
+                        : "nav_active_color_secondary"
+                    } `}
+                  >
                     {checkPermission("lead") && (
                       <li className="nav-text ">
                         <NavLink
@@ -1448,7 +1503,10 @@ export default function Sidebar({ showSidebar }) {
                 <Link
                   className={Accounts ? "active-link_main" : "link"}
                   // to="/"
-                  onClick={() => setAccounts(!Accounts)}
+                  onClick={() => {
+                    setAccounts(!Accounts);
+                    setCurrentOpen("accounts");
+                  }}
                 >
                   <div className="d-flex justify-content-between gap-5">
                     <div className="d-flex">
@@ -1639,6 +1697,20 @@ export default function Sidebar({ showSidebar }) {
                             >
                               <div className="ms-4 ps-3 subactivelink">
                                 Ledger
+                              </div>
+                            </NavLink>
+                          </li>
+                        )}
+                        {checkPermission("acc_settings") && (
+                          <li className="nav-text ">
+                            <NavLink
+                              className={({ isActive }) =>
+                                isActive ? "active-link" : "link"
+                              }
+                              to={ROUTES.ACCOUNTS_SETTINGS}
+                            >
+                              <div className="ms-4 ps-3 subactivelink">
+                                Accounts Settings
                               </div>
                             </NavLink>
                           </li>

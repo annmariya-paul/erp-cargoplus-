@@ -18,6 +18,7 @@ import CheckUnique from "../../../../check Unique/CheckUnique";
 import { UniqueErrorMsg } from "../../../../ErrorMessages/UniqueErrorMessage";
 import MyPagination from "../../../../components/Pagination/MyPagination";
 import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
+import PageSizer from "../../../../components/PageSizer/PageSizer"
 
 export default function Carrierlist(props) {
   const [addForm] = Form.useForm();
@@ -42,9 +43,15 @@ export default function Carrierlist(props) {
   const [editcarriername, setEditcarriername] = useState();
   const [editcarrierid, seteditcarrierid] = useState();
   const [uniqueCode, setuniqueCode] = useState(false);
-  const [pageSize, setPageSize] = useState("25");
+  const [pageSize, setPageSize] = useState(localStorage.getItem("noofitem"));
   const [current, setCurrent] = useState(1);
   const [editUniqueCode, setEditUniqueCode] = useState();
+
+  
+
+  
+// setPageSize(localStorage.getItem("noofitem"))
+  console.log("locaal itmm",localStorage.getItem("noofitem"),pageSize)
 
   const [editForm] = Form.useForm();
   const close_modal = (mShow, time) => {
@@ -277,6 +284,7 @@ export default function Carrierlist(props) {
   ]);
   //heder icons end
 
+ 
   return (
     <>
       <div className="container-fluid container2 pt-3">
@@ -333,28 +341,9 @@ export default function Carrierlist(props) {
         </div> */}
         <div className="row my-3">
           <div className="col-4 px-3">
-            <Select
-              bordered={false}
-              className="page_size_style"
-              value={pageSize}
-              onChange={(e) => setPageSize(e)}
-            >
-              <Select.Option value="25">
-                Show
-                <span className="vertical ms-1">|</span>
-                <span className="sizes ms-1">25</span>
-              </Select.Option>
-              <Select.Option value="50">
-                Show
-                <span className="vertical ms-1">|</span>
-                <span className="sizes ms-1"> 50</span>
-              </Select.Option>
-              <Select.Option value="100">
-                Show
-                <span className="vertical ms-1">|</span>
-                <span className="sizes ms-1">100</span>
-              </Select.Option>
-            </Select>
+           <PageSizer/>
+
+          
           </div>
           <div className=" col-4 d-flex  align-items-center justify-content-center">
             {carrierdata && (

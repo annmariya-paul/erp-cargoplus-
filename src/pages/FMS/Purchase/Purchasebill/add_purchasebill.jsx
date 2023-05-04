@@ -168,7 +168,7 @@ function Addpurchasebill(){
                   </div>
 
                   <div className="col-xl-4 col-sm-12 mt-2 px-3">
-                  <label>Due date
+                  <label>Vendor Ref No
                     </label>
 
                     <Form.Item

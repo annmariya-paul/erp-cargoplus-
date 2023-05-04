@@ -380,12 +380,12 @@ function Companyinfo() {
 
                                     if (
                                       file.file.size > 1000 &&
-                                      file.file.size < 500000
+                                      file.file.size < 100000000
                                     ) {
                                       setCompanylogo(file.file.originFileObj);
                                       setImgSizeError(false);
                                       console.log(
-                                        "Image must be greater than 1 kb and less than 500 kb"
+                                        "Image must be greater than 1 kb and less than 500 byte"
                                       );
                                     } else {
                                       console.log(

@@ -32,6 +32,7 @@ import InputType from "../../../../components/Input Type textbox/InputType";
 import { TreeSelect, Form, InputNumber } from "antd";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
 import SelectBox from "../../../../components/Select Box/SelectBox";
+import PageSizer from "../../../../components/PageSizer/PageSizer";
 
 function Services() {
   const [editForm] = Form.useForm();
@@ -45,7 +46,7 @@ function Services() {
   const [serviceView, setServiceView] = useState(false);
   const [successPopup, setSuccessPopup] = useState(false);
   const [error, setError] = useState(false);
-  const [noofitems, setNoofItems] = useState("25");
+  const [noofitems, setNoofItems] = useState(localStorage.getItem("noofitem"));
   const [allservices, setAllservices] = useState();
   const [totalCount, setTotalcount] = useState();
   const [serviceName, setserviceName] = useState();
@@ -64,13 +65,19 @@ function Services() {
   const [State, setState] = useState("null");
   const [treeLine, setTreeLine] = useState(true);
   const [services, setServices] = useState([]);
+
+
+
   console.log("Servicesss are :::", services);
   const columns = [
     {
       title: "#",
       key: "index",
       width: "8%",
-      render: (value, item, index) => serialNo + index,
+      render: (value, item, index) => {
+        return <div>{startcount+ index + serialNo}</div>;
+        // <div>{startcount+1} </div>
+      },
       align: "center",
     },
     // {
@@ -352,6 +359,7 @@ function Services() {
               // service_category_name: item?.crm_v1_categories?.category_name,
               service_taxgroup_name: item?.fms_v1_tax_groups?.tax_group_name,
               service_taxgroup: item?.service_taxgroup,
+              slno:res?.data?.data?.startIndex,
             });
             // console.log("taxtype service is",item?.fms_v1_tax_types?.tax_type_name)
           });
@@ -596,6 +604,8 @@ function Services() {
     return total;
   
   };
+
+  console.log("pagesize",localStorage.getItem("noofitem"))
   return (
     // <div>
       <div className="container-fluid container_fms pt-3">
@@ -656,7 +666,8 @@ function Services() {
               <div className="d-flex justify-content-start align-items-center gap-3">
               {totalCount > 0 && (
                   <div className="   ">
-                    <Select
+                    <PageSizer/>
+                    {/* <Select
                     // defaultValue={"25"}
                     bordered={false}
                     className="page_size_style"
@@ -685,7 +696,7 @@ function Services() {
                         100
                       </span>{" "}
                     </Select.Option>
-                  </Select>
+                  </Select> */}
                 </div>
                    )}
                {totalCount > 0 && (
@@ -711,6 +722,7 @@ function Services() {
                   onChange={(current, pageSize) => {
                     console.log("page index isss", pageSize);
                     setCurrent(current);
+                    setNoofItems(pageSize)
                   }}
                 />
               )}

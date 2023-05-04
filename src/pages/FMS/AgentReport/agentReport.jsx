@@ -9,6 +9,8 @@ import { ACCOUNTS, CRM_BASE_URL_FMS } from "../../../api/bootapi";
 import PublicFetch from "../../../utils/PublicFetch";
 import { FaFileExcel } from "react-icons/fa";
 import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
+import PageSizer from "../../../components/PageSizer/PageSizer";
+import MyPagination from "../../../components/Pagination/MyPagination";
 
 export default function AgentReport() {
   const [serialNo, setserialNo] = useState(1);
@@ -18,6 +20,8 @@ export default function AgentReport() {
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
   const [reportData, setReportData] = useState();
+  const [pageSize, setPageSize] = useState(localStorage.getItem("noofitem"));
+  const [current, setCurrent] = useState(1); 
   console.log("dataaaa", reportData);
 
   const getallagents = async () => {
@@ -194,7 +198,7 @@ export default function AgentReport() {
           </li> */}
         </div>
         <div className="row">
-          <div className="col-sm-3 col-12">
+          <div className="col-sm-3 mt-2 col-12">
             <lable>Agent</lable>
             {/* <Form.Item
                     name="job_no"
@@ -264,6 +268,50 @@ export default function AgentReport() {
           </li>
           </div> */}
         </div>
+
+
+        <div className="row">
+              <div className="col-xl-4">
+            <div className="d-flex justify-content-start align-items-center gap-3">
+           
+              <div className="  ">
+            
+             <PageSizer/>
+              </div>
+         
+            
+              <div className=" d-flex  align-items-center mt-2 ">
+                <label className="font_size">
+                  {/* Results: {  + 1} -
+                  {getFinalCount(1 * numOfItems * current)}{" "}
+                  <span>of {totalCount} </span>{" "} */}
+                </label>
+              </div>
+            
+            </div>
+             </div>
+             <div className="col-xl-4 d-flex  align-items-center justify-content-center">
+            {reportData &&(
+            <MyPagination
+              total={parseInt(reportData?.length)}
+              current={current}
+              showSizeChanger={true}
+              pageSize={pageSize}
+              onChange={(current, pageSize) => {
+                console.log("page index isss", pageSize);
+                setCurrent(current);
+              }}
+              // onChange={(current, pageSize) => {
+              //   setCurrent(current);
+              //   setPageSize(pageSize);
+              // }}
+            />
+            )} 
+      
+          </div>
+
+              </div>
+
       </div>
       <div className="container-fluid container_agent_report py-2">
         <div className="datatable">

@@ -27,9 +27,10 @@ import FileUpload from "../../../../components/fileupload/fileUploader";
 import ErrorMsg from "../../../../components/error/ErrorMessage";
 import ProductEditModal from "./ProductEditModal";
 import "./product.scss";
+import PageSizer from "../../../../components/PageSizer/PageSizer";
 
 function Productlist() {
-  const [numOfItems, setNumOfItems] = useState("25");
+  const [numOfItems, setNumOfItems] = useState(localStorage.getItem("noofitem"));
   const [pageSize, setPageSize] = useState("25"); // page size
   const [current, setCurrent] = useState(1);
   const [searchedText, setSearchedText] = useState(""); // search by text input
@@ -462,7 +463,8 @@ function Productlist() {
             <div className="col-4 ">
               <div className="row">
                 <div className="col-xl-2 col-lg-3 col-md-4 col-sm-12 ">
-                  <Select
+                  <PageSizer/>
+                  {/* <Select
                     style={{
                       width: 60,
                     }}
@@ -477,7 +479,7 @@ function Productlist() {
                       setCurrent(1);
                     }}
                   >
-                    {/* <Select.Option value="5">5 | pages</Select.Option> */}
+                   
                     <Select.Option value="25">
                       <span style={{ color: "#2f6b8f" }} className="ms-2">
                         25
@@ -493,7 +495,7 @@ function Productlist() {
                         100
                       </span>{" "}
                     </Select.Option>
-                  </Select>
+                  </Select> */}
                 </div>
                 <div className="col-xl-10 col-lg-9 col-md-8 col-sm-12  d-flex  align-items-center">
                   <label className="font_size">

@@ -6,13 +6,16 @@ import { DatePicker, Select, message } from "antd";
 import moment from "moment";
 import Button from "../../../components/button/button";
 import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
+import PageSizer from "../../../components/PageSizer/PageSizer";
+import MyPagination from "../../../components/Pagination/MyPagination";
 
 export default function Monthly_report() {
-  const [pageSize, setPageSize] = useState("");
+  const [pageSize, setPageSize] = useState(localStorage.getItem("noofitem"));
   const [serialNo, setserialNo] = useState(1);
   const [year, setYear] = useState();
   const [monthlyReportData, setMonthlyReportData] = useState();
   const [totalSummary, setTotalSummary] = useState();
+  const [current, setCurrent] = useState(1); 
 
   const onChange = (date, dateString) => {
     setYear(dateString);
@@ -210,6 +213,49 @@ export default function Monthly_report() {
             </Button>
           </div>
         </div>
+
+        <div className="row">
+              <div className="col-xl-4">
+            <div className="d-flex justify-content-start align-items-center gap-3">
+           
+              <div className="  ">
+             
+             <PageSizer/>
+              </div>
+         
+            
+              <div className=" d-flex  align-items-center mt-2 ">
+                <label className="font_size">
+                  {/* Results: {  + 1} -
+                  {getFinalCount(1 * numOfItems * current)}{" "}
+                  <span>of {totalCount} </span>{" "} */}
+                </label>
+              </div>
+            
+            </div>
+             </div>
+             <div className="col-xl-4 d-flex  align-items-center justify-content-center">
+            {monthlyReportData &&(
+            <MyPagination
+              total={parseInt(monthlyReportData?.length)}
+              current={current}
+              showSizeChanger={true}
+              pageSize={pageSize}
+              onChange={(current, pageSize) => {
+                console.log("page index isss", pageSize);
+                setCurrent(current);
+              }}
+              // onChange={(current, pageSize) => {
+              //   setCurrent(current);
+              //   setPageSize(pageSize);
+              // }}
+            />
+            )}
+      
+          </div>
+
+              </div>
+
       </div>
       <div className="container-fluid container_monthly_report py-2">
         <div className="datatable">

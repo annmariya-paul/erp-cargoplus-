@@ -1,4 +1,4 @@
-import { Checkbox, Select } from "antd";
+import { Select } from "antd";
 import "../../../../components/Input Type textbox/InputType.scss";
 import React, { useEffect, useState } from "react";
 import Button from "../../../../components/button/button";
@@ -8,14 +8,14 @@ import FileUpload from "../../../../components/fileupload/fileUploader";
 import InputType from "../../../../components/Input Type textbox/InputType";
 import SelectBox from "../../../../components/Select Box/SelectBox";
 import TextArea from "../../../../components/ InputType TextArea/TextArea";
-import { Form, message, InputNumber } from "antd";
+import { Form } from "antd";
 import PublicFetch from "../../../../utils/PublicFetch";
 import {
   CRM_BASE_URL_FMS,
   CRM_BASE_URL_SELLING,
 } from "../../../../api/bootapi";
 import { TreeSelect } from "antd";
-import { Navigate, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../../routes";
 import CheckUnique from "../../../../check Unique/CheckUnique";
 import { UniqueErrorMsg } from "../../../../ErrorMessages/UniqueErrorMessage";
@@ -25,29 +25,29 @@ function ServiceCreate() {
   const [error, setError] = useState(false);
   const [serviceName, setServiceName] = useState("");
   const [servicecode, setServicecode] = useState("");
-  const [category, setCategory] = useState();
-  const [Hsn, setHsn] = useState();
+  // const [category, setCategory] = useState();
+  // const [Hsn, setHsn] = useState();
   const [taxRate, setTaxRate] = useState();
   // const [displayPicture, setDisplayPicture] = useState([]);
-  const [file, setFile] = useState(null);
+  // const [file, setFile] = useState(null);
   const [img, setImg] = useState([]);
   console.log("set image", img);
   const [description, setDescription] = useState();
-  const [toggleState, setToggleState] = useState(1);
+  // const [toggleState, setToggleState] = useState(1);
   const [State, setState] = useState("null");
-  const toggleTab = (index) => {
-    setToggleState(index);
-  };
+  // const toggleTab = (index) => {
+  //   setToggleState(index);
+  // };
   const [TreeData, setTreeData] = useState();
   const [categoryTree, setCategoryTree] = useState([]);
 
-  const [previewVisible, setPreviewVisible] = useState(false);
-  const [previewImage, setPreviewImage] = useState("");
-  const [previewTitle, setPreviewTitle] = useState("");
+  // const [previewVisible, setPreviewVisible] = useState(false);
+  // const [previewImage, setPreviewImage] = useState("");
+  // const [previewTitle, setPreviewTitle] = useState("");
   const [imageSize, setImageSize] = useState();
   const [uniqueCode, setuniqueCode] = useState();
   const [uniqueserCode, setuniqueserCode] = useState();
-  const [uniqueHsnCode, setuniqueHsnCode] = useState();
+  // const [uniqueHsnCode, setuniqueHsnCode] = useState();
   const [TaxGroups, setTaxGroups] = useState();
   const [numOfItems, setNumOfItems] = useState("25");
   const [current, setCurrent] = useState(1);
@@ -56,13 +56,13 @@ function ServiceCreate() {
   const [alltaxtype, setalltaxtype] = useState("");
   const [addform] = Form.useForm();
   const navigate = useNavigate();
-  const getBase64 = (file) =>
-    new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-    });
+  // const getBase64 = (file) =>
+  //   new Promise((resolve, reject) => {
+  //     const reader = new FileReader();
+  //     reader.readAsDataURL(file);
+  //     reader.onload = () => resolve(reader.result);
+  //     reader.onerror = (error) => reject(error);
+  //   });
 
   const close_modal = (mShow, time) => {
     if (!mShow) {
@@ -117,16 +117,16 @@ function ServiceCreate() {
       });
   };
 
-  const handlePreview = async (file) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
-    }
-    setPreviewImage(file.url || file.preview);
-    setPreviewVisible(true);
-    setPreviewTitle(
-      file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
-    );
-  };
+  // const handlePreview = async (file) => {
+  //   if (!file.url && !file.preview) {
+  //     file.preview = await getBase64(file.originFileObj);
+  //   }
+  //   setPreviewImage(file.url || file.preview);
+  //   setPreviewVisible(true);
+  //   setPreviewTitle(
+  //     file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
+  //   );
+  // };
 
   useEffect(() => {
     getCategorydata();
@@ -137,10 +137,18 @@ function ServiceCreate() {
     formData.append("service_name", serviceName);
     formData.append("service_code", servicecode);
     formData.append("service_category_id", State);
-    formData.append("service_hsn", Hsn);
-    formData.append("service_pic", img);
-    formData.append("service_taxgroup", taxRate);
-    formData.append("service_description", description);
+    // formData.append("service_hsn", Hsn);
+    if(img){
+      formData.append("service_pic", img);
+    }
+    
+    if(taxRate){
+      formData.append("service_taxgroup", taxRate);
+    }
+    if(description){
+      formData.append("service_description", description);
+    }
+   
 
     PublicFetch.post(`${CRM_BASE_URL_SELLING}/service`, formData, {
       "Content-Type": "Multipart/form-Data",
@@ -219,8 +227,8 @@ function ServiceCreate() {
               }}
             >
               <div className="row my-4">
-                <div className="col-6">
-                  <label>Name</label>
+                <div className="col-6 mb-2">
+                  <label>Name<span className="required">*</span></label>
                   <Form.Item
                     name="servicename"
                     rules={[
@@ -266,8 +274,8 @@ function ServiceCreate() {
                     ""
                   )}
                 </div>
-                <div className="col-6">
-                  <label>Code</label>
+                <div className="col-6 mb-2">
+                  <label>Code<span className="required">*</span></label>
                   <Form.Item
                     name="code"
                     rules={[
@@ -313,41 +321,12 @@ function ServiceCreate() {
                     ""
                   )}
                 </div>
-                {/* <div className="col-4">
-                  <label>Category</label>
-                  <Form.Item
-                    className="mt-2"
-                    name="category"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please select a category",
-                      },
-                    ]}
-                  >
-                    <TreeSelect
-                      className="tree"
-                      name="tree"
-                      style={{ width: "100%" }}
-                      // value={category}
-                      // value={ setState.value}
-                      dropdownStyle={{
-                        maxHeight: 400,
-                        overflow: "auto",
-                      }}
-                      treeData={categoryTree}
-                      placeholder="Please select"
-                      treeDefaultExpandAll
-                      onChange={onChangetree}
-                      onSelect={onSelect}
-                    />
-                  </Form.Item>
-                </div> */}
+               
 
-                <div className="col-6">
-                  <label>Category</label>
+                <div className="col-6 mb-2">
+                  <label>Category<span className="required">*</span></label>
                   <Form.Item
-                    className="mt-2"
+                    // className="mt-2"
                     name="category"
                     rules={[
                       {
@@ -374,109 +353,14 @@ function ServiceCreate() {
                     />
                   </Form.Item>
                 </div>
-                {/* <div className="col-6 mt-2">
-                  <label>HSN</label>
-                  <Form.Item
-                    name="HSN"
-                    rules={[
-                      {
-                        pattern: new RegExp("^[0-9]+$"),
-                        message: "Please enter a Valid Code",
-                      },
-                    ]}
-                  >
-                    <InputType
-                      value={Hsn}
-                      onChange={(e) => {
-                        setHsn(e.target.value);
-                        setuniqueHsnCode(false);
-                      }}
-                      onBlur={async () => {
-                        // checkAttributeNameis();
-                        let a = await CheckUnique({
-                          type: "servicehsn",
-                          value: Hsn,
-                        });
-                        console.log("hai how are u", a);
-                        setuniqueHsnCode(a);
-                      }}
-                    />
-                  </Form.Item>
-                  {uniqueHsnCode ? (
-                    <div>
-                      <label style={{ color: "red" }}>
-                        Service Hsn {UniqueErrorMsg.UniqueErrName}
-                      </label>
-                    </div>
-                  ) : (
-                    ""
-                  )}
-                </div> */}
-                {/* <div className="col-6 mt-1">
-                  <label className="">Tax Type</label>
-                  <Form.Item
-                    name="taxRate"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please enter a Valid Tax Rate",
-                      },
-                      {
-                        pattern: new RegExp("^[0-9]+$"),
-                        message: "Please enter zero or Postive integers",
-                      },
-                    ]}
-                  >
-                    
-                    <SelectBox
-                      placeholder={"--Please Select--"}
-                      value={taxRate}
-                      onChange={(e) => {
-                        console.log("select the brandss", e);
-                        setTaxRate(parseInt(e));
-                      }}
-                    >
-                      {alltaxtype &&
-                        alltaxtype.length > 0 &&
-                        alltaxtype.map((item, index) => {
-                          return (
-                            <Select.Option
-                              key={item.tax_type_id}
-                              value={item.tax_type_id}
-                            >
-                              {item.tax_type_name}
-                            </Select.Option>
-                          );
-                        })}
-                    </SelectBox>
-                  </Form.Item>
-                </div> */}
-                <div className="col-6 mt-1">
+              
+                <div className="col-6 mb-2">
                   <label className="">Tax Groups</label>
                   <Form.Item
                     name="taxRate"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please enter a Valid Tax Rate",
-                      },
-                      {
-                        pattern: new RegExp("^[0-9]+$"),
-                        message: "Please enter zero or Postive integers",
-                      },
-                    ]}
+                   
                   >
-                    {/* <InputNumber
-                      style={{
-                        border: "0",
-                        backgroundColor: "whitesmoke",
-                        width: "100%",
-                        paddingBlock: "2px",
-                        boxShadow: "none",
-                      }}
-                      value={taxRate}
-                      onChange={(e) => setTaxRate(e.target.value)}
-                    /> */}
+                   
                     <SelectBox
                       placeholder={"--Please Select--"}
                       // value={taxRate}
@@ -500,7 +384,7 @@ function ServiceCreate() {
                     </SelectBox>
                   </Form.Item>
                 </div>
-                <div className="col-6 mt-2">
+                <div className="col-6 mb-2">
                   <label>Display Picture</label>
                   <Form.Item name="new" className="mt-2">
                     <FileUpload
@@ -508,7 +392,7 @@ function ServiceCreate() {
                       listType="picture"
                       accept=".png,.jpeg"
                       // height={100}
-                      style={{ height: "65px" }}
+                      // style={{ height: "65px" }}
                       // onPreview={handlePreview}
                       beforeUpload={beforeUpload}
                       onChange={(file) => {
@@ -535,7 +419,7 @@ function ServiceCreate() {
                     )}
                   </Form.Item>
                 </div>
-                <div className="col-6 mt-2">
+                <div className="col-6 mb-2">
                   <label>Description</label>
                   <Form.Item
                     className="mt-2"

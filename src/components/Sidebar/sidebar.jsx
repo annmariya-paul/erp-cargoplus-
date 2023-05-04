@@ -59,10 +59,18 @@ export default function Sidebar({ showSidebar }) {
   const [accountsSettings, setAccountsSettings] = useState(false);
   const [accountsReports, setAccountsReports] = useState(false);
   const [currentOpen, setCurrentOpen] = useState();
-
   const location = useLocation();
-
+  console.log("location",location);
+  // const[locationnew,setLocationnew]=useState();
   const { pathname } = location;
+  // setLocationnew(pathname);
+  useEffect(() => {
+    console.log("hello");
+  window.scrollTo({top:0, behavior:'auto'});
+    // console.log("has permission : ", checkPermission("designation"));
+  }, [pathname]);
+
+ 
   useEffect(() => {
     let p = localStorage.getItem("userPermissions");
     if (p) {

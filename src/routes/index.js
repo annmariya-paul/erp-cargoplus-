@@ -75,7 +75,7 @@ const ROUTES = {
   FRIGHTLIST: "/fright_list",
   CARRIER: "/carrier",
   MODE: "/mode",
-  QUATATIONS: "/quatations_list",
+  QUATATIONS: "/quotations_list",
   ADD_QUOTATION: "/add_quotation",
   ADD_QUOTATION_ID: "/add_quotation/:id",
   EDIT_QUOTATION: "/edit_quotation",
@@ -228,6 +228,7 @@ const ROUTES = {
   // ACCOUNTS => master => Legder
   LEDGER: "/ledger",
   GL_TYPE: "/gl_type",
+  ACCOUNTS_SETTINGS: "/accounts_settings",
 
   // ACCOUNTS => Master => Account Group
   ACC_GROUP: "/account_groups",

@@ -57,14 +57,221 @@ function Services() {
   const [serviceImg, setServiceImg] = useState([]);
   const [imageSize, setImageSize] = useState(false);
   const [alltaxtype, setalltaxtype] = useState("");
-
+  const [allLeadList, setAllLeadList] = useState([]);
   const [serviceid, setserviceid] = useState();
   const [ImageUpload, setImageUpload] = useState();
   const [toggleState, setToggleState] = useState(1);
   const [State, setState] = useState("null");
   const [treeLine, setTreeLine] = useState(true);
+  const [services, setServices] = useState([]);
+  console.log("Servicesss are :::", services);
+  const columns = [
+    {
+      title: "#",
+      key: "index",
+      width: "8%",
+      render: (value, item, index) => serialNo + index,
+      align: "center",
+    },
+    // {
+    //   title: "IMAGE",
+    //   dataIndex: "service_pic",
+    //   key: "key",
+    //   width: "15%",
+    //   // filteredValue: [searchStatus],
+    //   // onFilter: (value, record) => {
+    //   //   return String(record.lead_status)
+    //   //     .toLowerCase()
+    //   //     .includes(value.toLowerCase());
+    //   // },
+
+    //   align: "center",
+    //   render: (theImageURL, records) => {
+    //     return theImageURL ? (
+    //       <img
+    //         src={`${process.env.REACT_APP_BASE_URL}/${theImageURL}`}
+    //         height="20px"
+    //         width={"20px"}
+    //       />
+    //     ) : (
+    //       ""
+    //     );
+    //   },
+    // },
+    {
+      title: "NAME",
+      dataIndex: "service_name",
+      key: "key",
+      // filteredValue: [searchedName],
+      // onFilter: (value, record) => {
+      //   return (
+      //     String(record.service_name)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.service_code)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.service_category_name)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.service_taxtype_name)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase())
+      //   );
+      // },
+      align: "left",
+      width: "23%",
+    },
+
+    {
+      title: "CODE",
+      dataIndex: "service_code",
+      key: "key",
+      width: "15%",
+      align: "left",
+      // filteredValue: [searchCode],
+      // onFilter: (value, record) => {
+      //   return (
+      //     String(record.service_name)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.service_code)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.service_category_name)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.service_taxtype_name)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase())
+      //   );
+      // },
+    },
+    {
+      title: "CATEGORY",
+      dataIndex: "service_category_name",
+      key: "key",
+      width: "19%",
+      align: "left",
+      // filteredValue: [searchCategory],
+      // onFilter: (value, record) => {
+      //   return (
+      //     String(record.service_name)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.service_code)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.service_category_name)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.service_taxtype_name)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase())
+      //   );
+      // },
+    },
+    {
+      title: "TAX GROUP",
+      dataIndex: "service_taxgroup_name",
+      key: "key",
+
+      align: "left",
+
+      // onFilter: (value, record) => {
+      //   return (
+      //     String(record.service_name)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.service_code)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.service_category_name)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.service_taxgroup_name)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase())
+      //   );
+      // },
+    },
+    {
+      title: "ACTION",
+      dataIndex: "action",
+      key: "key",
+      width: "14%",
+      render: (data, index) => {
+        console.log("tb dataa", index);
+        return (
+          <div className="d-flex justify-content-center align-items-center gap-3">
+            <div
+              // onClick={() => {
+              //   console.log("tb dataa", index);
+              //   handleEditclick(index);
+              // }}
+              className="actionEdit m-0 p-0"
+            >
+              <Link
+                to={`${ROUTES.SERVICE_EDIT}/${index.service_id}`}
+                className="editcolor"
+              >
+                <FaEdit />
+              </Link>
+            </div>
+            {/* <Link to={ROUTES.SERVICEDETAILS}> */}
+            <div
+                className="actionView editcolor m-0"
+                onClick={
+                  () => {
+                    navigate(`${ROUTES.VIEW_SERVICE}/${index.service_id}`);
+                  }
+                  //   handleViewData(index)
+                }
+              >
+                <MdPageview />
+              </div>
+            {/* </Link> */}
+            <div className="deleteIcon m-0">
+              {/* <Link> */}
+              <FaTrash />
+              {/* </Link> */}
+            </div>
+          </div>
+        );
+      },
+      align: "center",
+    },
+  ];
   const toggleTab = (index) => {
     setToggleState(index);
+  };
+  const columnsKeys = columns.map((column) => column.key);
+  const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
+  const filteredColumns = columns.filter((column) =>
+    selectedColumns.includes(column.key)
+  );
+  const data12 = services?.map((item,index) => [
+    // item.action,
+    index + serialNo,
+    item.service_name,
+    item.service_code,
+    item.service_category_name,
+    item.service_taxgroup_name,
+   
+  ]);
+  const EnquiryHeads = [
+    [
+     
+      "NAME",
+      "CODE",
+      "CATEGORY",
+      "TAX GROUP",
+     
+      
+    ],
+  ];
+  const onChange = (checkedValues) => {
+    setSelectedColumns(checkedValues);
   };
   const [TreeData, setTreeData] = useState();
   const [categoryTree, setCategoryTree] = useState([]);
@@ -76,8 +283,7 @@ function Services() {
   const [startcount, setstartcount] = useState();
   // const [totalCount, setTotalcount] = useState();
   console.log("set image", img);
-  const [services, setServices] = useState([]);
-  console.log("Servicesss are :::", services);
+
 
   const navigate = useNavigate();
 
@@ -380,178 +586,7 @@ function Services() {
   ];
   // {columns is service listing table componenet }
 
-  const columns = [
-    {
-      title: "Sl. No.",
-      key: "index",
-      width: "8%",
-      render: (value, item, index) => serialNo + index,
-      align: "center",
-    },
-    {
-      title: "IMAGE",
-      dataIndex: "service_pic",
-      key: "key",
-      width: "15%",
-      // filteredValue: [searchStatus],
-      // onFilter: (value, record) => {
-      //   return String(record.lead_status)
-      //     .toLowerCase()
-      //     .includes(value.toLowerCase());
-      // },
 
-      align: "center",
-      render: (theImageURL, records) => {
-        return theImageURL ? (
-          <img
-            src={`${process.env.REACT_APP_BASE_URL}/${theImageURL}`}
-            height="20px"
-            width={"20px"}
-          />
-        ) : (
-          ""
-        );
-      },
-    },
-    {
-      title: "NAME",
-      dataIndex: "service_name",
-      key: "key",
-      // filteredValue: [searchedName],
-      // onFilter: (value, record) => {
-      //   return (
-      //     String(record.service_name)
-      //       .toLowerCase()
-      //       .includes(value.toLowerCase()) ||
-      //     String(record.service_code)
-      //       .toLowerCase()
-      //       .includes(value.toLowerCase()) ||
-      //     String(record.service_category_name)
-      //       .toLowerCase()
-      //       .includes(value.toLowerCase()) ||
-      //     String(record.service_taxtype_name)
-      //       .toLowerCase()
-      //       .includes(value.toLowerCase())
-      //   );
-      // },
-      align: "left",
-      width: "23%",
-    },
-
-    {
-      title: "CODE",
-      dataIndex: "service_code",
-      key: "key",
-      width: "10%",
-      align: "left",
-      // filteredValue: [searchCode],
-      // onFilter: (value, record) => {
-      //   return (
-      //     String(record.service_name)
-      //       .toLowerCase()
-      //       .includes(value.toLowerCase()) ||
-      //     String(record.service_code)
-      //       .toLowerCase()
-      //       .includes(value.toLowerCase()) ||
-      //     String(record.service_category_name)
-      //       .toLowerCase()
-      //       .includes(value.toLowerCase()) ||
-      //     String(record.service_taxtype_name)
-      //       .toLowerCase()
-      //       .includes(value.toLowerCase())
-      //   );
-      // },
-    },
-    {
-      title: "CATEGORY",
-      dataIndex: "service_category_name",
-      key: "key",
-      width: "16%",
-      align: "left",
-      // filteredValue: [searchCategory],
-      // onFilter: (value, record) => {
-      //   return (
-      //     String(record.service_name)
-      //       .toLowerCase()
-      //       .includes(value.toLowerCase()) ||
-      //     String(record.service_code)
-      //       .toLowerCase()
-      //       .includes(value.toLowerCase()) ||
-      //     String(record.service_category_name)
-      //       .toLowerCase()
-      //       .includes(value.toLowerCase()) ||
-      //     String(record.service_taxtype_name)
-      //       .toLowerCase()
-      //       .includes(value.toLowerCase())
-      //   );
-      // },
-    },
-    {
-      title: "TAX GROUP",
-      dataIndex: "service_taxgroup_name",
-      key: "key",
-
-      align: "left",
-
-      // onFilter: (value, record) => {
-      //   return (
-      //     String(record.service_name)
-      //       .toLowerCase()
-      //       .includes(value.toLowerCase()) ||
-      //     String(record.service_code)
-      //       .toLowerCase()
-      //       .includes(value.toLowerCase()) ||
-      //     String(record.service_category_name)
-      //       .toLowerCase()
-      //       .includes(value.toLowerCase()) ||
-      //     String(record.service_taxgroup_name)
-      //       .toLowerCase()
-      //       .includes(value.toLowerCase())
-      //   );
-      // },
-    },
-    {
-      title: "ACTION",
-      dataIndex: "action",
-      key: "key",
-      width: "14%",
-      render: (data, index) => {
-        console.log("tb dataa", index);
-        return (
-          <div className="d-flex justify-content-center align-items-center gap-3">
-            <div
-              // onClick={() => {
-              //   console.log("tb dataa", index);
-              //   handleEditclick(index);
-              // }}
-              className="actionEdit m-0 p-0"
-            >
-              <Link
-                to={`${ROUTES.SERVICE_EDIT}/${index.service_id}`}
-                className="editcolor"
-              >
-                <FaEdit />
-              </Link>
-            </div>
-            <Link to={ROUTES.SERVICEDETAILS}>
-              <div
-                onClick={() => handleViewClick(index)}
-                className="actionView m-0 p-0"
-              >
-                <MdPageview />
-              </div>
-            </Link>
-            <div className="deleteIcon m-0">
-              {/* <Link> */}
-              <FaTrash />
-              {/* </Link> */}
-            </div>
-          </div>
-        );
-      },
-      align: "center",
-    },
-  ];
 
   const beforeUpload = (file, fileList) => {};
   const getFinalCount = (total) => {
@@ -559,26 +594,22 @@ function Services() {
     console.log("FinalTest", cutoff, current);
     if (current === cutoff) return totalCount;
     return total;
-    // console.log("TotalPageTest",current,totalCount)
-    // console.log("TestCount",total)
+  
   };
   return (
-    <div>
-      <div className="container-fluid lead_list my-3 py-3">
-        <div>
+    // <div>
+      <div className="container-fluid container_fms pt-3">
+      <div className="row flex-wrap align-items-center">
           {/* {service listing starts section one} */}
-          <div className="row flex-wrap">
-            <div className="col-4 pt-3">
-              <h5 className="lead_text">Services</h5>
-            </div>
-            <div
-              // style={{ backgroundColor: "rgb(233, 233, 233)", width: "fit-content"}}
-              className="col-4 pb-2 "
-            >
+          {/* <div className="row flex-wrap"> */}
+          <div className="col-4 ">
+                <h5 className="lead_text mt-3">Services</h5>
+              </div>
+        <div className="col-4">
               <Input.Search
                 placeholder="Search "
                 style={{
-                  margin: "5px",
+                  // margin: "5px",
                   borderRadius: "5px",
                   backgroundColor: "whitesmoke",
                 }}
@@ -592,119 +623,52 @@ function Services() {
                 }}
               />
             </div>
-            <div className="col-4"></div>
-            {/* <Leadlist_Icons 
-              datas={attributes}
-              columns={filteredColumns}
-              items={data12}
-              xlheading={AttributeHeads}
-              filename="data.csv"
-            
-              chechboxes={
-                <Checkbox.Group onChange={onChange} value={selectedColumns}>
-                  {columnsKeys.map((column) => (
-                    <li>
-                      <Checkbox value={column} key={column}>
-                        {column}
-                      </Checkbox>
-                    </li>
-                  ))}
-                </Checkbox.Group>
-              } /> */}
-          </div>
-          {/* <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}> */}
-          {/* <div className="col-4">
-              <Input.Search
-                placeholder="Search by Name"
-                style={{ margin: "5px", borderRadius: "5px" }}
-                value={searchedName}
-                onChange={(e) => {
-                  setSearchedName(e.target.value ? [e.target.value] : []);
-                }}
-                onSearch={(value) => {
-                  setSearchedName(value);
-                }}
-              />
-            </div>
-            <div className="col-4 ">
-              <Input.Search
-                placeholder="Search by Code"
-                style={{ margin: "5px", borderRadius: "5px" }}
-                value={searchCode}
-                onChange={(e) => {
-                  setSearchCode(e.target.value ? [e.target.value] : []);
-                }}
-                onSearch={(value) => {
-                  setSearchCode(value);
-                }}
-              />
-              <Select
-                allowClear
-                showSearch
-                style={{
-                  width: "100%",
-                  marginTop: "8px",
-                  borderRadius: "5px",
-                }}
-                placeholder="Search by Code"
-                className="select_search"
-                optionFilterProp="children"
-                onChange={(event) => {
-                  setSearchType(event ? [event] : []);
-                }}
-              >
-                <Select.Option value="sales">sales</Select.Option>
-                <Select.Option value="maintenance">Maintenance</Select.Option>
-                <Select.Option value="support">support</Select.Option>
-              </Select>
-            </div>
-            <div className="col-4 ">
-              <Select
-                allowClear
-                showSearch
-                style={{
-                  width: "100%",
-                  marginTop: "8px",
-                  borderRadius: "5px",
-                }}
-                placeholder="Search by Category"
-                className="select_search"
-                optionFilterProp="children"
-                onChange={(event) => {
-                  setSearchCategory(event ? [event] : []);
-                }}
-              >
-                {services &&
-                  services.map((item, index) => {
-                    console.log("dataaa", item);
-                    return (
-                      <Select.Option
-                        key={item.service_category_id}
-                        value={item.service_category_name}
+            <div className="col-4 d-flex justify-content-end">
+                {services && (
+                  <Leadlist_Icons
+                    name={"Services"}
+                    datas={services}
+                    columns={filteredColumns}
+                    items={data12}
+                    xlheading={EnquiryHeads}
+                    filename="services.csv"
+                    chechboxes={
+                      <Checkbox.Group
+                        onChange={onChange}
+                        value={selectedColumns}
                       >
-                        {item.service_category_name}
-                      </Select.Option>
-                    );
-                  })}
-              </Select>
-            </div> */}
-          {/* </div> */}
+                        {columnsKeys.map((column) => (
+                          <li>
+                            <Checkbox value={column} key={column}>
+                              {column}
+                            </Checkbox>
+                          </li>
+                        ))}
+                      </Checkbox.Group>
+                    }
+                  />
+                )}
+              </div>
+              </div>
+         
           <div className="row my-3">
-            <div className="col-4  ">
-              <div className="row">
-                <div className="col-xl-2 col-lg-3 col-md-4 col-sm-12   ">
-                  <Select
+            <div className="col-xl-4   ">
+              <div className="d-flex justify-content-start align-items-center gap-3">
+              {totalCount > 0 && (
+                  <div className="   ">
+                    <Select
                     // defaultValue={"25"}
                     bordered={false}
                     className="page_size_style"
                     value={noofitems}
                     // onChange={handleLastNameChange}
-                    onChange={(event, current) => {
-                      console.log("On page size selected : ", event);
-                      console.log("nfjnjfv", current);
-                      setNoofItems(event);
-                      setCurrent(1);
-                    }}
+                    // onChange={(event, current) => {
+                    //   console.log("On page size selected : ", event);
+                    //   console.log("nfjnjfv", current);
+                    //   setNoofItems(event);
+                    //   setCurrent(1);
+                    // }}
+                    onChange={(e) => setNoofItems(e)}
                   >
                     <Select.Option value="25">
                       <span style={{ color: "#2f6b8f" }} className="ms-1">
@@ -723,17 +687,20 @@ function Services() {
                     </Select.Option>
                   </Select>
                 </div>
-                <div className=" col-xl-10 col-lg-9 col-md-8 col-sm-12  d-flex  align-items-center ">
-                  <label className="font_size">
-                    Results: {startcount + 1} -
+                   )}
+               {totalCount > 0 && (
+                  <div className="   d-flex  align-items-center mt-2">
+                    <label className="font_size">
+                    Results: {startcount + 1} -{" "}
                     {getFinalCount(1 * noofitems * current)}{" "}
                     <span>of {totalCount} </span>{" "}
-                  </label>
+                    </label>
+                  </div>
+                  )}
                 </div>
               </div>
-            </div>
 
-            <div className=" col-4 d-flex justify-content-center">
+            <div className=" col-4 d-flex py-2 justify-content-center">
               {totalCount > 0 && (
                 <MyPagination
                   total={parseInt(totalCount)}
@@ -793,287 +760,8 @@ function Services() {
               />
             )}
           </div>
-        </div>
-        {/* {section Two service Edit modal starts} */}
-        <CustomModel
-          show={showServiceEditModal}
-          onHide={() => setShowServiceEditModal(false)}
-          // size={`xl`}
-          width={800}
-          View_list
-          list_content={
-            <>
-              <div style={{ borderRadius: "8px" }} className="card border-0">
-                <div className="container">
-                  <div>
-                    <h5 className="lead_text">Edit Service</h5>
-                  </div>
-                  <Form
-                    name="editForm"
-                    form={editForm}
-                    onFinish={(value) => {
-                      console.log("values111333", value);
-                    }}
-                    onFinishFailed={(error) => {
-                      console.log(error);
-                    }}
-                  >
-                    <div className="row mt-4">
-                      <div className="col-6">
-                        <label>Name</label>
-                        <Form.Item
-                          name="service_name"
-                          rules={[
-                            {
-                              required: true,
-                              pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                              message: "Please enter a Valid Name",
-                            },
-                            { whitespace: true },
-                            {
-                              min: 2,
-                              message: "Name must be at least 2 characters",
-                            },
-                            {
-                              max: 100,
-                              message:
-                                "Name cannot be longer than 100 characters",
-                            },
-                          ]}
-                        >
-                          <InputType
-                            value={serviceName}
-                            onChange={(e) => setserviceName(e.target.value)}
-                          />
-                        </Form.Item>
-                      </div>
-                      <div className="col-6">
-                        <label>Code</label>
-                        <Form.Item
-                          name="serviceCode"
-                          rules={[
-                            {
-                              required: true,
-                              pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                              message: "Please enter a Valid Code",
-                            },
-                            {
-                              min: 2,
-                              message: "Code must be atleast 2 characters",
-                            },
-                            {
-                              max: 20,
-                              message:
-                                "Code cannot be longer than 20 characters",
-                            },
-                          ]}
-                        >
-                          <InputType
-                            value={serviceCode}
-                            onChange={(e) => setServiceCode(e.target.value)}
-                          />
-                        </Form.Item>
-                      </div>
-
-                      <div className="col-6 ">
-                        <label className="py-1">Category</label>
-                        <Form.Item
-                          name="serviceCategory"
-                          rules={[
-                            {
-                              required: true,
-                              message: "Please select a category",
-                            },
-                          ]}
-                        >
-                          <TreeSelect
-                            className="tree"
-                            name="tree"
-                            style={{ width: "100%" }}
-                            value={serviceCategory}
-                            dropdownStyle={{
-                              maxHeight: 400,
-                              overflow: "auto",
-                            }}
-                            treeData={categoryTree}
-                            treeDefaultExpandAll
-                            onChange={onChangetree}
-                            onSelect={onSelect}
-                          />
-                        </Form.Item>
-                        {/* <label>HSN</label>
-                        <Form.Item
-                          name="serviceHsn"
-                          rules={[
-                            {
-                              pattern: new RegExp("^[0-9]+$"),
-                              message: "Please enter a Valid Code",
-                            },
-                          ]}
-                        >
-                          <InputType
-                            value={serviceHsn}
-                            onChange={(e) => {
-                              setServiceHsn(e.target.value);
-                            }}
-                          />
-                        </Form.Item> */}
-                      </div>
-                      <div className="col-6 ">
-                        <label>Tax Type</label>
-                        <Form.Item
-                          name="taxRate"
-                          rules={[
-                            {
-                              required: true,
-                              message: "Please enter a Valid Tax Rate",
-                            },
-                            {
-                              pattern: new RegExp("^[0-9]+$"),
-                              message: "Please enter zero or Postive integers",
-                            },
-                          ]}
-                        >
-                          {/* <InputNumber
-                          style={{
-                            border: "0",
-                            backgroundColor: "whitesmoke",
-                            width: "100%",
-                            paddingBlock: "2px",
-                            boxShadow: "none",
-                          }}
-                          value={servicetaxrate}
-                          onChange={(e) => setServicetaxrate(e)}
-                        /> */}
-
-                          <SelectBox
-                            placeholder={"--Please Select--"}
-                            value={servicetaxrate}
-                            onChange={(e) => {
-                              console.log("select the brandss", e);
-                              setServicetaxrate(parseInt(e));
-                            }}
-                          >
-                            {alltaxtype &&
-                              alltaxtype.length > 0 &&
-                              alltaxtype.map((item, index) => {
-                                return (
-                                  <Select.Option
-                                    key={item.tax_type_id}
-                                    value={item.tax_type_id}
-                                  >
-                                    {item.tax_type_name}
-                                  </Select.Option>
-                                );
-                              })}
-                          </SelectBox>
-                        </Form.Item>
-                      </div>
-
-                      <div className="col-6 mt-2">
-                        <label>Display Picture</label>
-                        <Form.Item name="new" className="mt-2">
-                          <FileUpload
-                            multiple
-                            listType="picture"
-                            accept=".png,.jpeg"
-                            height={100}
-                            // onPreview={handlePreview}
-                            beforeUpload={beforeUpload}
-                            onChange={(file) => {
-                              console.log("Before upload", file.file);
-                              console.log(
-                                "Before upload file size",
-                                file.file.size
-                              );
-
-                              if (
-                                file.file.size > 1000 &&
-                                file.file.size < 500000
-                              ) {
-                                setImg(file.file.originFileObj);
-                                setImageSize(false);
-                                console.log(
-                                  "select image",
-                                  file.file.originFileObj
-                                );
-                              } else {
-                                setImageSize(true);
-                                console.log("Error in image upload");
-                              }
-                            }}
-                          />
-                          {imageSize ? (
-                            <p style={{ color: "red" }}>
-                              Upload Image size between 1 kb and 500 kb
-                            </p>
-                          ) : (
-                            ""
-                          )}
-                        </Form.Item>
-                        <img
-                          src={`${process.env.REACT_APP_BASE_URL}/${serviceImg}`}
-                          height="40px"
-                          width={"40px"}
-                        />
-                      </div>
-                      <div className="col-6 mt-2">
-                        <label>Description</label>
-                        <Form.Item
-                          className="mt-2"
-                          name="servicedescription"
-                          rules={[
-                            {
-                              whitespace: true,
-                            },
-                            {
-                              min: 2,
-                              message:
-                                "Description must be at least 2 characters",
-                            },
-                            {
-                              max: 500,
-                            },
-                          ]}
-                        >
-                          <TextArea
-                            value={servicedescription}
-                            onChange={(e) => {
-                              setServicedescription(e.target.value);
-                            }}
-                          />
-                        </Form.Item>
-                      </div>
-                      <div className="col-12 d-flex justify-content-center mt-5 pt-4 gap-3 ">
-                        <Button
-                          className="save_button"
-                          onClick={() => {
-                            handleUpdate();
-                          }}
-                        >
-                          Save
-                        </Button>
-                        <Button
-                          as="input"
-                          type="reset"
-                          value="Reset"
-                          onClick={() => {
-                            setShowServiceEditModal(false);
-                          }}
-                          className="cancel_button p-2"
-                        >
-                          Cancel
-                        </Button>
-                      </div>
-                    </div>
-                  </Form>
-                </div>
-              </div>
-              {/* {error ? <ErrorMsg code="500" /> : ""} */}
-            </>
-          }
-        />
-        {/* {Modal for viewing service details} */}
+        {/* </div> */}
+       
 
         <CustomModel
           size="xl"
@@ -1244,7 +932,7 @@ function Services() {
             </div>
           }
         />
-      </div>
+
 
       {/* {modal for success popups} */}
       <CustomModel

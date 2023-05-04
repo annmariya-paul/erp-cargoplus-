@@ -164,6 +164,7 @@ import Invoicetemplate2 from "./components/Invoice/invoicetemp2/invoicetemp2";
 import Invoicetemplateselect from "./pages/General Settings/invoicetemplates/invoicetemplate";
 import Viewcustomer from "./pages/CRM/lead/lead_list/view_customer";
 import ViewOpportunity from "./pages/CRM/lead/modals/viewopportunity";
+import ViewService from "./pages/CRM/Selling/services/ViewService";
 function App() {
   return (
     <div className="App">
@@ -332,6 +333,10 @@ function App() {
             <Route path={ROUTES.SERVICE_EDIT_ID} element={<ProtectedRoute />}>
               <Route index element={<ServiceEdit />} />
             </Route>
+            <Route path={ROUTES.VIEW_SERVICE_ID} element={<ProtectedRoute />}>
+              <Route index element={<ViewService />} />
+            </Route>
+
 
             <Route path={ROUTES.BRANCHES} element={<ProtectedRoute />}>
               <Route index element={<Branches />} />

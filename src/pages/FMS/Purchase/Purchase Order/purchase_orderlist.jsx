@@ -10,7 +10,7 @@ import { Link, useNavigate } from "react-router-dom";
 // import { ROUTES } from "../../../routes";
 import {ROUTES} from "../../../../routes";
 // import PublicFetch from "../../../utils/PublicFetch";
-
+import PageSizer from "../../../../components/PageSizer/PageSizer";
 // import { CRM_BASE_URL_FMS } from "../../../api/bootapi";
 import moment from "moment";
 import MyPagination from "../../../../components/Pagination/MyPagination";
@@ -19,10 +19,15 @@ import MyPagination from "../../../../components/Pagination/MyPagination";
 import { JobStatus } from "../../../../utils/SelectOptions";
 import { Checkbox } from "antd";
 import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
+import PublicFetch from "../../../../utils/PublicFetch";
+import { CRM_BASE_URL_PURCHASING } from "../../../../api/bootapi";
 // import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
 function ListpurchaseOrder() {
   const [searchedText, setSearchedText] = useState("");
   const [pageSize, setPageSize] = useState("25");
+   const[porders,setPOrders]=useState();
+   const [numOfItems, setNumOfItems] = useState(localStorage.getItem("noofitem"));
+   const [startcount, setstartcount] = useState();
   const [searchedNo, setSearchedNo] = useState("");
   const navigate = useNavigate();
   // const [searchedText, setSearchedText] = useState("");
@@ -35,12 +40,57 @@ function ListpurchaseOrder() {
 
   const [totaljob, settotaljob] = useState("");
   const [serialNo, setserialNo] = useState(1);
-
+  // const [noofitems, setNoofItems] = useState("25");
+  const [searchedName, setSearchedName] = useState(""); 
   const [quatationList, setQuatationList] = useState([]);
   const pageofIndex = noofItems * (current - 1) - 1 + 1;
+  useEffect(() => {
+    const getData = setTimeout(() => {
+      getAllPurchaseOrders(searchedName);
+    }, 1000);
+    return () => clearTimeout(getData);
+    // getAllTaxTypes();
+  }, [noofItems, pageofIndex, searchedName]);
+
+  const getAllPurchaseOrders = (query) => {
+    PublicFetch.get(`${CRM_BASE_URL_PURCHASING}/purchase-order?startIndex=${pageofIndex}&noOfItems=${noofItems}&search=${query
+      // query.toLowerCase() === "pending" ? 0 : query.toLowerCase() === "converted" ? 1 : query.toLowerCase()
+    }`)
+    .then((res) => {
+      console.log("All Purchase orders ",res.data.data);
+      if(res?.data?.success){
+console.log("All Orders ",res?.data?.data?.purchaseOrders);
+let temp=[];
+
+        res?.data?.data?.purchaseOrders.forEach((item,index)=>{
+          temp.push({
+            po_id: item?.po_id,
+            po_bill_no: item?.po_bill_no,
+            po_no : item?.po_no,
+            po_date:item?.po_date,
+            po_vendor_id:item?.crm_v1_vendors?.vendor_name,
+            vendor_status:item?.vendor_status,
+          });
+        });
+        console.log("temp data",temp);
+        setPOrders(temp);
+        setTotalcount(res.data.data.totalCount);
+        setstartcount(res.data.data.startIndex);
+      }else{
+        console.log(" FAILED TO LOAD DATA");
+      }
+    })
+    .catch((err)=>{
+      console.log("Errror while getting data", err);
+    });
+  };
+  useEffect(() => {
+    getAllPurchaseOrders();
+  }, []);
+
   const columns = [
     {
-      title: "Sl. No.",
+      title: "#",
       key: "index",
       width: "7%",
       render: (value, item, index) => serialNo + index,
@@ -52,37 +102,40 @@ function ListpurchaseOrder() {
       dataIndex: "po_no",
       key: "po_no",
     //   width: "10%",
-      filteredValue: [searchedText],
-      onFilter: (value, record) => {
-        return (
-          String(record.po_no)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.purchase_date).toLowerCase().includes(value.toLowerCase()) ||
-          String(record.vendor)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.billno)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.purchase_status)
-            .toLowerCase()
-            .includes(value.toLowerCase())
-        );
-      },
+      // filteredValue: [searchedText],
+      // onFilter: (value, record) => {
+      //   return (
+      //     String(record.po_no)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.purchase_date).toLowerCase().includes(value.toLowerCase()) ||
+      //     String(record.vendor)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.billno)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.purchase_status)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase())
+      //   );
+      // },
       align: "left",
     },
     {
       title: "PURCHASE DATE",
-      dataIndex: "purchase_date",
-      key: "purchase_date",
+      dataIndex: "po_date",
+      key: "po_date",
       width: "14%",
       align: "left",
+      render: (data, index) => {
+        return <div>{moment(index.po_date).format("DD-MM-YYYY")}</div>;
+      },
     },
     {
       title: "VENDOR",
-      dataIndex: "vendor",
-      key: "vendor",
+      dataIndex: "po_vendor_id",
+      key: "po_vendor_id",
       width: "19%",
       // filteredValue: [searchedNo],
       // onFilter: (value, record) => {
@@ -94,8 +147,8 @@ function ListpurchaseOrder() {
     },
     {
       title: "BILL NO",
-      dataIndex: "billno",
-      key: "billno",
+      dataIndex: "po_bill_no",
+      key: "po_bill_no",
       // filteredValue: [searchName],
       // onFilter: (value, record) => {
       //   return String(record.job_consignee_name)
@@ -107,8 +160,17 @@ function ListpurchaseOrder() {
     
     {
       title: "STATUS",
-      dataIndex: "purchase_status",
-      key: "purchase_status",
+      dataIndex: "vendor_status",
+      key: "vendor_status",
+      // render: (data, index) => {
+      //   console.log("index :",index);
+      //   if (index.vendor_status === 1) {
+      //     return <div>Pending</div>;
+      //   } else {
+      //     // return <div>{index.enquiry_converted_status}</div>;
+      //     return <div>Converted</div>;
+      //   }
+      // },
       align: "left",
     },
     {
@@ -123,7 +185,7 @@ function ListpurchaseOrder() {
             <div
               className="editIcon m-0 "
               onClick={() => {
-                navigate(`${ROUTES.EDIT_PUCHASE_ORDER}/${index.purchase_order_id}`);
+                navigate(`${ROUTES.EDIT_PUCHASE_ORDER}/${index.po_id}`);
               }}
             >
               <Link>
@@ -134,7 +196,7 @@ function ListpurchaseOrder() {
             <div
               className="viewIcon m-0"
               onClick={() => {
-                navigate(`${ROUTES.VIEW_PURCHASE_ORDER}/${1}`);
+                navigate(`${ROUTES.VIEW_PURCHASE_ORDER}/${index.po_id}`);
               }}
               // onClick={()=>{
               //   setShowViewModal(true);
@@ -163,8 +225,15 @@ function ListpurchaseOrder() {
     },
   
   ];
-
-
+  const [totalCount, setTotalcount] = useState();
+  const getFinalCount = (total) => {
+    const cutoff = Math.ceil(totalCount / numOfItems);
+    console.log("FinalTest", cutoff, current);
+    if (current === cutoff) return totalCount;
+    return total;
+    // console.log("TotalPageTest",current,totalCount)
+    // console.log("TestCount",total)
+  };
   const columnsKeys = columns.map((column) => column.key);
 
   const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
@@ -201,8 +270,8 @@ function ListpurchaseOrder() {
    }]
   return (
     <>
-      <div className="container-fluid container2 pt-3">
-        <div className="row flex-wrap">
+      <div className="container-fluid container_fms pt-3">
+        <div className="row flex-wrap align-items-center">
           <div className="col-4">
             <h5 className="lead_text">Purchase Order</h5>
           </div>
@@ -210,13 +279,13 @@ function ListpurchaseOrder() {
             <Input.Search
               className="inputSearch"
               placeholder="Search"
-              style={{ margin: "5px", borderRadius: "5px" }}
-              value={searchedText}
+              style={{ borderRadius: "5px" ,  backgroundColor: "whitesmoke"}}
+              value={searchedName}
               onChange={(e) => {
-                setSearchedText(e.target.value ? [e.target.value] : []);
+                setSearchedName(e.target.value ? [e.target.value] : []);
               }}
               onSearch={(value) => {
-                setSearchedText(value);
+                setSearchedName(value);
               }}
             />
           </div>
@@ -272,8 +341,9 @@ function ListpurchaseOrder() {
           </div> */}
         {/* </div> */}
         <div className="row my-3">
-          <div className="col-4">
-            <Select
+        <div className="col-xl-4  ">
+                <div className="d-flex justify-content-start align-items-center gap-3">
+            {/* <Select
               bordered={false}
               className="page_size_style"
               value={pageSize}
@@ -294,9 +364,20 @@ function ListpurchaseOrder() {
                 <span className="vertical ms-1">|</span>
                 <span className="sizes ms-1">100</span>
               </Select.Option>
-            </Select>
-          </div>
-
+            </Select> */}
+              <div className="   ">
+             <PageSizer/>
+             </div>
+          
+          <div className="   d-flex  align-items-center mt-2">
+                    <label className="font_size">
+                    Results: {startcount + 1} -
+                    {getFinalCount(1 * numOfItems * current)}{" "}
+                    <span>of {totalCount} </span>{" "}
+                    </label>
+                  </div>
+                  </div>
+                  </div>
           <div className="col-4 d-flex py-2 justify-content-center">
             {totaljob > 0 && (
               <MyPagination
@@ -316,18 +397,18 @@ function ListpurchaseOrder() {
             )}
           </div>
           <div className="col-4 d-flex justify-content-end">
-            <div className="col mb-2 ">
+            {/* <div className="col mb-2 "> */}
               <Link to={ROUTES.PURCHASEORDER} style={{ color: "white" }}>
                 <Button btnType="add">New Purchase Order</Button>
               </Link>
-            </div>
+            {/* </div> */}
           </div>
         </div>
         <div className="datatable">
           <TableData
             // data={getData(numofItemsTo, pageofIndex)}
 
-            data={data}
+            data={porders}
             columns={columns}
             custom_table_css="table_lead_list"
           />

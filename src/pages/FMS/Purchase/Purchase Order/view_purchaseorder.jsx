@@ -5,7 +5,7 @@ import Button from "../../../../components/button/button";
 import { FiEdit } from "react-icons/fi";
 import TableData from "../../../../components/table/table_data";
 // import TableData from "../../../components/table/table_data";
-
+import Attachments from "../../../../components/attachments/attachments";
 import { Collapse } from "antd";
 import html2canvas from "html2canvas";
 import PublicFetch from "../../../../utils/PublicFetch";
@@ -14,7 +14,7 @@ import { BorderOutlined } from "@ant-design/icons";
 // import PublicFetch from "../../../utils/PublicFetch";
 // import { ROUTES } from "../../../routes";
 import { ROUTES } from "../../../../routes"
-import { CRM_BASE_URL_FMS } from "../../../../api/bootapi";
+import { CRM_BASE_URL_FMS, CRM_BASE_URL_PURCHASING } from "../../../../api/bootapi";
 // import { CRM_BASE_URL_FMS } from "../../../api/bootapi";
 import moment from "moment";
 import { useNavigate, useParams } from "react-router-dom";
@@ -28,8 +28,8 @@ export default function ViewpurchaseOrder() {
   const { id } = useParams();
   console.log("id :::::", id);
   const printRef = useRef(null);
-  const [alljobs, setAllJobs] = useState();
-  console.log("all jobs : ", alljobs);
+  const [allpo, setAllPO] = useState();
+  console.log("all po : ", allpo);
   const [qtnno, setQtnno] = useState();
   const [tabledata, setTabledata] = useState();
   const [grandtotal, setGrandTotal] = useState();
@@ -117,43 +117,44 @@ export default function ViewpurchaseOrder() {
  
 ];
 const { Panel } = Collapse;
-const data = [
-  {
-    tasks: "Data",
-    awbblno: "4223",
-    jobno: "002",
-    amount: "1000",
-tax:"1000",
-taxpercent:"33",
-taxamt:"2000",
-    totalamt: "100022",
+// const data = [
+//   {
+//     tasks: "Data",
+//     awbblno: "4223",
+//     jobno: "002",
+//     amount: "1000",
+// tax:"1000",
+// taxpercent:"33",
+// taxamt:"2000",
+//     totalamt: "100022",
 
-    // key: "1",
-  },
-  {
-    tasks: "Data",
-    awbblno: "4223",
-    jobno: "002",
-    amount: "1000",
-tax:"1000",
-taxpercent:"33",
-taxamt:"2000",
-    totalamt: "100022",
+//     // key: "1",
+//   },
+//   {
+//     tasks: "Data",
+//     awbblno: "4223",
+//     jobno: "002",
+//     amount: "1000",
+// tax:"1000",
+// taxpercent:"33",
+// taxamt:"2000",
+//     totalamt: "100022",
 
-    // key: "1",
-  },
-];
-  const getSingleJob = () => {
-    PublicFetch.get(`${CRM_BASE_URL_FMS}/job/${id}`)
+//     // key: "1",
+//   },
+// ];
+  const getSinglepurchaseorder = () => {
+    PublicFetch.get(`${CRM_BASE_URL_PURCHASING}/purchase-order/${id}`)
       .then((res) => {
-        console.log("response of job", res);
+        console.log("response of purchase", res);
         if (res.data.success) {
-          console.log("Success of job", res.data.data);
-          setAllJobs(res?.data?.data);
+          console.log("Success of purchase", res.data.data);
+          setAllPO(res?.data?.data);
 
           let total = 0;
           let newdatas = [];
-          res?.data?.data?.fms_v1_quotation_jobs?.forEach((item, index) => {
+          res?.data?.data?.crm_v1_puchase_order_details
+?.forEach((item, index) => {
             newdatas.push(item?.fms_v1_quotation.quotation_no);
             setQtnno(newdatas);
             let servdata = [];
@@ -172,17 +173,17 @@ taxamt:"2000",
               total = Number.parseFloat(total);
               total += item.job_task_expense_cost_subtotalfx;
             });
-            // let tabletasks = [];
-            // item.fms_v1_quotation.fms_v1_quotation_details.forEach((item, index) => {
-            //   tabletasks.push({
-            //     quotation_details_service_id : servicename,
-            //     quotation_details_cost :item.quotation_details_cost,
-            //     quotation_details_tax_type : tax,
-            //     quotation_details_tax_amount :item.quotation_details_tax_amount,
-            //     quotation_details_total :item.quotation_details_total,
-            //   })
-            //  setTabledata(tabletasks);
-            // })
+            let tabletasks = [];
+            item.fms_v1_quotation.fms_v1_quotation_details.forEach((item, index) => {
+              tabletasks.push({
+                quotation_details_service_id : servicename,
+                quotation_details_cost :item.quotation_details_cost,
+                quotation_details_tax_type : tax,
+                quotation_details_tax_amount :item.quotation_details_tax_amount,
+                quotation_details_total :item.quotation_details_total,
+              })
+             setTabledata(tabletasks);
+            })
 
             // setTabledata(item.fms_v1_quotation.fms_v1_quotation_details);
           });
@@ -190,18 +191,18 @@ taxamt:"2000",
 
           let temp = "";
 
-          //  let tabletasks = [];
-          //  res.data.data.fms_v1_quotation_jobs.fms_v1_quotation.forEach((item,index) => {
-          //   tabletasks.push({
-          //     quotation_details_service_id : servicename,
-          //     quotation_details_cost :item.quotation_details_cost,
-          //     quotation_details_tax_type : tax,
-          //     quotation_details_tax_amount :item.quotation_details_tax_amount,
-          //     quotation_details_total :item.quotation_details_total,
-          //   }
-          //   )
-          //   setAlldetailstable(tabletasks);
-          //      })
+           let tabletasks = [];
+           res.data.data.fms_v1_quotation_jobs.fms_v1_quotation.forEach((item,index) => {
+            tabletasks.push({
+              quotation_details_service_id : servicename,
+              quotation_details_cost :item.quotation_details_cost,
+              quotation_details_tax_type : tax,
+              quotation_details_tax_amount :item.quotation_details_tax_amount,
+              quotation_details_total :item.quotation_details_total,
+            }
+            )
+            setAlldetailstable(tabletasks);
+               })
 
           let date = moment(res.data.data.job_date).format("DD-MM-YYYY");
           temp = {
@@ -267,7 +268,7 @@ taxamt:"2000",
 
   useEffect(() => {
     if (id) {
-      getSingleJob();
+      getSinglepurchaseorder();
     }
   }, [id]);
 
@@ -347,7 +348,7 @@ taxamt:"2000",
                     <div className="col-1">:</div>
 
                     <div className="col-7">
-                      <p className="modal-view-data">{alljobs?.job_number}</p>
+                      <p className="modal-view-data">{allpo?.po_no}</p>
                     </div>
                   </div>
 
@@ -357,7 +358,7 @@ taxamt:"2000",
 
                     <div className="col-7">
                       <p className="modal-view-data">
-                        {moment(alljobs?.job_date).format("DD-MM-YYYY")}
+                        {moment(allpo?.po_date).format("DD-MM-YYYY")}
                       </p>
                     </div>
                   </div>
@@ -368,8 +369,9 @@ taxamt:"2000",
 
                     <div className="col-7">
                       <p className="modal-view-data">
-                        11-12-2023
-                        {/* {alljobs?.fms_v1_freight_types?.freight_type_name} */}
+                        {/* 11-12-2023 */}
+                        {/* {allpo?.po_due_date} */}
+                        {moment(allpo?.po_due_date).format("DD-MM-YYYY")}
                       </p>
                     </div>
                   </div>
@@ -378,7 +380,7 @@ taxamt:"2000",
                     <div className="col-1">:</div>
 
                     <div className="col-7">
-                      <p className="modal-view-data">{qtnno}</p>
+                      <p className="modal-view-data">{allpo?.po_bill_no}</p>
                     </div>
                   </div>
                   <div className="col-xl-4 col-sm-12 d-flex">
@@ -387,8 +389,8 @@ taxamt:"2000",
 
                     <div className="col-7">
                       <p className="modal-view-data">
-                        Arun
-                        {/* {alljobs?.crm_v1_leads?.lead_customer_name} */}
+                      
+                        {allpo?.crm_v1_vendors?.vendor_name}
                       </p>
                     </div>
                   </div>
@@ -407,7 +409,7 @@ taxamt:"2000",
                   {" "}
                   <TableData
                     columns={progress}
-                    data={data}
+                    // data={data}
                     bordered
                     custom_table_css="table_job_list"
                   />
@@ -436,7 +438,7 @@ taxamt:"2000",
                     <div className="col-1">:</div>
 
                     <div className="col-9">
-                      <p className="modal-view-data">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                      <p className="modal-view-data">{allpo?.vendor_remarks}</p>
                     </div>
                   </div>
 
@@ -446,8 +448,9 @@ taxamt:"2000",
 
                     <div className="col-8">
                       <p className="modal-view-data">
-                        abc.pdf
+                        {/* abc.pdf */}
                         {/* {moment(alljobs?.job_date).format("DD-MM-YYYY")} */}
+                        <Attachments Isattachment={allpo?.vendor_docs >0} attachments={allpo?.vendor_docs || []} />
                       </p>
                     </div>
                   </div>

@@ -2,9 +2,11 @@
   color: lightgrey;
 }
 .sizes {
-  color: variables.$primary;
+  // color: variables.$primary;
+  color: rgb(4, 105, 138);
 }
-.page_size_style {
-  box-shadow: 0px 2px 5px variables.$boxshadow;
+.showpage_size_style {
+  // box-shadow: 0px 2px 5px variables.$boxshadow;
+  box-shadow: 0px 2px 5px whitesmoke;
   border-radius: 4px;
 }

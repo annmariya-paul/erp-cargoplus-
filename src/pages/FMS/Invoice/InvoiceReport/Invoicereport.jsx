@@ -15,6 +15,7 @@ function Invoicereport() {
   const [Allinvoice, setAllInvoice] = useState();
   const [Alljobs, setAllJobs] = useState();
   const [allReports, setAllReports] = useState();
+  const [pageSize, setPageSize] = useState(localStorage.getItem("noofitem"));
 
   const columns = [
     {
@@ -116,7 +117,7 @@ function Invoicereport() {
   const GetAllJobs = () => {
     PublicFetch.get(`${CRM_BASE_URL_FMS}/job?startIndex=0&noOfItems=1000`)
       .then((res) => {
-        console.log("response", res);
+        console.log("response off invoce report", res);
         if (res.data.success) {
           console.log("Success", res.data.data.job);
           setAllJobs(res.data.data.job);

@@ -29,11 +29,13 @@ import { RiFileSearchFill } from "react-icons/ri";
 import PublicFetch from "../../../utils/PublicFetch";
 import { getData, getNameList } from "country-list";
 import CustomModel from "../../../components/custom_modal/custom_model";
+import PageSizer from "../../../components/PageSizer/PageSizer";
+
 function ListAgent() {
   const [countryis, setCountryis] = useState();
   // const options = useMemo(() => getData(), []);
   const [searchedText, setSearchedText] = useState("");
-  const [pageSize, setPageSize] = useState("25");
+  const [pageSize, setPageSize] = useState(localStorage.getItem("noofitem"));
   const [current, setCurrent] = useState(1);
 
   const [allagents, setallagents] = useState();
@@ -569,7 +571,9 @@ function ListAgent() {
         <div className="row my-3">
           <div className="col-4 px-3 ">
             <div className="d-flex justify-content-start align-items-center gap-3">
-              <Select
+               <PageSizer/>
+
+              {/* <Select
                 bordered={false}
                 className="page_size_style"
                 value={pageSize}
@@ -590,7 +594,7 @@ function ListAgent() {
                   <span className="vertical ms-1">|</span>
                   <span className="sizes ms-1">100</span>
                 </Select.Option>
-              </Select>
+              </Select> */}
 
               <div className=" d-flex  align-items-center mt-2 ">
                 <label className="font_size">

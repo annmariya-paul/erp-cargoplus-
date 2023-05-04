@@ -18,9 +18,10 @@ import { ACCOUNTS, CRM_BASE_URL_PURCHASING } from "../../../../api/bootapi";
 import { useNavigate } from "react-router-dom";
 import PublicFetch from "../../../../utils/PublicFetch";
 import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
+import PageSizer from "../../../../components/PageSizer/PageSizer";
 
 export default function Purchase() {
-  const [pageSize, setPageSize] = useState("25");
+  const [pageSize, setPageSize] = useState(localStorage.getItem("noofitem"));
   const [purchase, setpurchase] = useState("");
   console.log("purchase ", purchase);
   const [current, setCurrent] = useState(1);
@@ -60,6 +61,20 @@ export default function Purchase() {
   const [searchedText, setSearchedText] = useState("");
   const [searchSource, setSearchSource] = useState(""); // search by text input
 
+  const [noofItems, setNoofItems] = useState(localStorage.getItem("noofitem"));
+  const [totalCount, setTotalcount] = useState();
+  const [startcount, setstartcount] = useState();
+
+
+  const getFinalCount = (total) => {
+    const cutoff = Math.ceil(totalCount / noofItems);
+    console.log("FinalTest", cutoff, current);
+    if (current === cutoff) return totalCount;
+    return total;
+    // console.log("TotalPageTest",current,totalCount)
+    // console.log("TestCount",total)
+  };
+
   const [viewpurchasemode, setViewpurchasemode] = useState({
     po_no: "",
     date: "",
@@ -84,14 +99,20 @@ export default function Purchase() {
     setPurchaseEditPopup(true);
   };
 
+  const pageofIndex = noofItems * (current - 1) - 1 + 1;
+  const pagesizecount = Math.ceil(totalCount / noofItems);
+
+
   const getallpurchase = async () => {
     try {
       const allpurchases = await PublicFetch.get(
-        `${ACCOUNTS}/purchase?startIndex=0&noOfItems=100`
+        `${ACCOUNTS}/purchase?startIndex=${pageofIndex}&noOfItems=${noofItems}`
       );
-      console.log("getting all purchases", allpurchases);
-      let temp = [];
+      console.log("getting all purchases", allpurchases.data.data);
+      setTotalcount(allpurchases?.data?.data?.totalCount)
+      setstartcount(allpurchases?.data?.data?.startIndex)
 
+      let temp = [];
       allpurchases.data.data.purchases.forEach((item, index) => {
         console.log("itemj", item);
         let datep = moment(item.purchase_purchase_date).format("DD-MM-YYYY");
@@ -117,6 +138,8 @@ export default function Purchase() {
   useEffect(() => {
     getallpurchase();
   }, []);
+
+  console.log("totalcount iss",totalCount, startcount );
 
   const columns = [
     {
@@ -353,8 +376,10 @@ export default function Purchase() {
           
         </div> */}
         <div className="row my-3">
-          <div className="col-4 ">
-            <Select
+          <div className="col-xl-4 ">
+          <div className="d-flex justify-content-start align-items-center gap-3">
+            <PageSizer/>
+            {/* <Select
               bordered={false}
               className="page_size_style"
               value={pageSize}
@@ -375,15 +400,28 @@ export default function Purchase() {
                 <span className="vertical ms-1">|</span>
                 <span className="sizes ms-1">100</span>
               </Select.Option>
-            </Select>
+            </Select> */}
+             <div className=" d-flex  align-items-center mt-2 ">
+                <label className="font_size">
+                  Results: {startcount + 1} -
+                  {getFinalCount(1 * noofItems * current)}{" "}
+                  <span>of {totalCount} </span>{" "}
+                </label>
+              </div>
+          </div>
+         
           </div>
 
           <div className="col-4 d-flex  align-items-center justify-content-center">
             <MyPagination
-              total={parseInt(purchase?.length)}
-              current={current}
-              showSizeChanger={true}
-              pageSize={pageSize}
+             total={parseInt(totalCount)}
+             current={current}
+             showSizeChanger={true}
+             pageSize={noofItems}
+             onChange={(current, pageSize) => {
+               console.log("page index isss", pageSize);
+               setCurrent(current);
+             }}
             />
           </div>
 
@@ -406,12 +444,20 @@ export default function Purchase() {
         </div>
         <div className="d-flex py-2 justify-content-center">
           <MyPagination
-            total={parseInt(purchase?.length)}
+            total={parseInt(totalCount)}
             current={current}
             showSizeChanger={true}
-            pageSize={pageSize}
+            pageSize={noofItems}
+            onChange={(current, pageSize) => {
+              console.log("page index isss", pageSize);
+              setCurrent(current);
+            }}
           />
+
+          
         </div>
+
+       
       </div>
     </div>
   );

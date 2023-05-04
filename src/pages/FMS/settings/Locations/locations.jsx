@@ -19,13 +19,14 @@ import {
 } from "../../../../api/bootapi";
 import MyPagination from "../../../../components/Pagination/MyPagination";
 import SelectBox from "../../../../components/Select Box/SelectBox";
+import PageSizer from "../../../../components/PageSizer/PageSizer";
 
 export default function Locations() {
   const [addForm] = Form.useForm();
   const [searchCode, setSearchCode] = useState("");
   const [searchName, setSearchName] = useState("");
   const [searchbyType, setSearchbyType] = useState("");
-  const [pageSize, setPageSize] = useState("25");
+  const [pageSize, setPageSize] = useState(localStorage.getItem("noofitem"));
   const [current, setCurrent] = useState(1);
 
   const [error, setError] = useState(false);
@@ -81,6 +82,7 @@ export default function Locations() {
           location_type: item.location_type,
           location_country: item.countries.country_id,
           location_countryname: item.countries.country_name,
+          slno: index+1
         });
         setAllLocations(temp);
       });
@@ -181,7 +183,7 @@ export default function Locations() {
       title: "SI.NO",
       key: "index",
       width: "13%",
-      render: (value, item, index) => serialNo + index,
+      render: (value, item, index) => item?.slno,
       align: "center",
     },
 
@@ -346,7 +348,9 @@ export default function Locations() {
         </div> */}
         <div className="row my-3">
           <div className="col-4 px-3">
-            <Select
+          <PageSizer/>
+
+            {/* <Select
               bordered={false}
               className="page_size_style"
               value={pageSize}
@@ -367,7 +371,7 @@ export default function Locations() {
                 <span className="vertical ms-1">|</span>
                 <span className="sizes ms-1">100</span>
               </Select.Option>
-            </Select>
+            </Select> */}
           </div>
 
           <div className=" col-4 d-flex align-items-center justify-content-center">

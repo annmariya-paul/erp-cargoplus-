@@ -2,14 +2,11 @@ import { Select } from "antd";
 import React, { useState } from "react";
 import "./pageSizer.scss";
 
-
-function PageSizer({ value, onClick, onChange ,}) {
-
+function PageSizer({ value, onClick, onChange }) {
   const [pageSize, setPageSize] = useState("15");
 
-
-localStorage.setItem("noofitem",pageSize )
-// console.log("locaal",localStorage.getItem("noofitem"))
+  localStorage.setItem("noofitem", pageSize);
+  // console.log("locaal",localStorage.getItem("noofitem"))
 
   return (
     <div>
@@ -21,6 +18,9 @@ localStorage.setItem("noofitem",pageSize )
         onChange={(e) => setPageSize(e)}
         onClick={onClick}
       >
+        <Select.Option value="15">
+          <span className="sizes ms-2"> 15</span>
+        </Select.Option>
         <Select.Option value="25">
           {/* Show
           <span className="vertical ms-1">|</span> */}
@@ -29,7 +29,7 @@ localStorage.setItem("noofitem",pageSize )
         <Select.Option value="50">
           {/* Show
           <span className="vertical ms-1">|</span> */}
-          <span className="sizes ms-1"> 50</span>
+          <span className="sizes ms-2"> 50</span>
         </Select.Option>
         <Select.Option value="100">
           {/* Show

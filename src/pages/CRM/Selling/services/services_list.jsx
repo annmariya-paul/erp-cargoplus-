@@ -216,7 +216,7 @@ function Services() {
               //   console.log("tb dataa", index);
               //   handleEditclick(index);
               // }}
-              className="actionEdit m-0 p-0"
+              className=" m-0 p-0"
             >
               <Link
                 to={`${ROUTES.SERVICE_EDIT}/${index.service_id}`}
@@ -227,7 +227,9 @@ function Services() {
             </div>
             {/* <Link to={ROUTES.SERVICEDETAILS}> */}
             <div
-                className="actionView editcolor m-0"
+                className=" actionView m-0">
+                   <div
+                className="editcolor"
                 onClick={
                   () => {
                     navigate(`${ROUTES.VIEW_SERVICE}/${index.service_id}`);
@@ -236,6 +238,7 @@ function Services() {
                 }
               >
                 <MdPageview />
+                </div>
               </div>
             {/* </Link> */}
             <div className="deleteIcon m-0">

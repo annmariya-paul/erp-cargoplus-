@@ -155,9 +155,16 @@ function ServiceEdit() {
     // if (serviceImg && serviceImg !== 0) {
     //   formData.append("service_pic", serviceImg);
     // }
-    formData.append("service_pic", img);
+    if(img){
+      formData.append("service_pic", img);
+    }
+   if(data.taxGroup){
     formData.append("service_taxgroup", data.taxGroup);
-    formData.append("service_description", servicedescription);
+   }
+    if(servicedescription){
+      formData.append("service_description", servicedescription);
+    }
+   
 
     PublicFetch.patch(`${CRM_BASE_URL_SELLING}/service/${id}`, formData, {
       "Content-Type": "Multipart/form-Data",
@@ -225,8 +232,8 @@ function ServiceEdit() {
               }}
             >
               <div className="row my-4">
-                <div className="col-6">
-                  <label>Name</label>
+                <div className="col-6 mb-2">
+                  <label>Name<span className="required">*</span></label>
                   <Form.Item
                     name="servicename"
                     rules={[
@@ -272,8 +279,8 @@ function ServiceEdit() {
                     ""
                   )} */}
                 </div>
-                <div className="col-6">
-                  <label>Code</label>
+                <div className="col-6 mb-2">
+                  <label>Code<span className="required">*</span></label>
                   <Form.Item
                     name="code"
                     rules={[
@@ -298,33 +305,17 @@ function ServiceEdit() {
                         setservicecode(e.target.value);
                         // setuniqueserCode(false);
                       }}
-                      //   onBlur={async () => {
-                      //     // checkAttributeNameis();
-                      //     let a = await CheckUnique({
-                      //       type: "servicecode",
-                      //       value: servicecode,
-                      //     });
-                      //     console.log("hai how are u", a);
-                      //     setuniqueserCode(a);
-                      //   }}
+                     
                     />
                   </Form.Item>
-                  {/* {uniqueserCode ? (
-                    <div>
-                      <label style={{ color: "red" }}>
-                        Service Code {UniqueErrorMsg.UniqueErrName}
-                      </label>
-                    </div>
-                  ) : (
-                    ""
-                  )} */}
+               
                 </div>
 
-                <div className="col-6">
-                  <label>Category</label>
+                <div className="col-6 mb-2">
+                  <label>Category<span className="required">*</span></label>
 
                   <Form.Item
-                    className="mt-2"
+                    // className="mt-2"
                     name="category"
                     rules={[
                       {
@@ -352,70 +343,14 @@ function ServiceEdit() {
                   </Form.Item>
                 </div>
 
-                {/* <div className="col-6 mt-1">
-                  <label className="">Tax Type</label>
-                  <Form.Item
-                    name="taxRate"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please enter a Valid Tax Rate",
-                      },
-                      {
-                        pattern: new RegExp("^[0-9]+$"),
-                        message: "Please enter zero or Postive integers",
-                      },
-                    ]}
-                  >
-                    <SelectBox
-                      placeholder={"--Please Select--"}
-                      value={taxRate}
-                      onChange={(e) => {
-                        console.log("select the brandss", e);
-                        setTaxRate(parseInt(e));
-                      }}
-                    >
-                      {alltaxtype &&
-                        alltaxtype.length > 0 &&
-                        alltaxtype.map((item, index) => {
-                          return (
-                            <Select.Option
-                              key={item.tax_type_id}
-                              value={item.tax_type_id}
-                            >
-                              {item.tax_type_name}
-                            </Select.Option>
-                          );
-                        })}
-                    </SelectBox>
-                  </Form.Item>
-                </div> */}
-                <div className="col-6 mt-1">
+               
+                <div className="col-6 mb-2">
                   <label className="">Tax Groups</label>
                   <Form.Item
                     name="taxGroup"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please enter a Valid Tax Rate",
-                      },
-                      {
-                        pattern: new RegExp("^[0-9]+$"),
-                        message: "Please enter zero or Postive integers",
-                      },
-                    ]}
+                   
                   >
-                    {/* <InputNumber
-                      style={{
-                        border: "0",
-                        backgroundColor: "whitesmoke",
-                        width: "100%",
-                        paddingBlock: "2px",
-                        boxShadow: "none",
-                      }}
-                      value={taxRate}
-                      onChange={(e) => setTaxRate(e.target.value)}
-                    /> */}
+                   
                     <SelectBox
                       placeholder={"--Please Select--"}
                       // value={taxRate}
@@ -439,7 +374,7 @@ function ServiceEdit() {
                     </SelectBox>
                   </Form.Item>
                 </div>
-                <div className="col-6 mt-2">
+                <div className="col-6 mb-2">
                   <label>Display Picture</label>
                   <Form.Item name="serviceimg" className="mt-2">
                     <FileUpload
@@ -447,7 +382,7 @@ function ServiceEdit() {
                       listType="picture"
                       accept=".png,.jpeg"
                       // height={100}
-                      style={{ height: "65px" }}
+                      // style={{ height: "65px" }}
                       // onPreview={handlePreview}
                       beforeUpload={beforeUpload}
                       onChange={(file) => {
@@ -474,13 +409,13 @@ function ServiceEdit() {
                     )}
                   </Form.Item>
 
-                  <img
+                  {/* <img
                     src={`${process.env.REACT_APP_BASE_URL}/${servicepicture}`}
                     height="40px"
                     width={"40px"}
-                  />
+                  /> */}
                 </div>
-                <div className="col-6 mt-2">
+                <div className="col-6 mb-2">
                   <label>Description</label>
                   <Form.Item
                     className="mt-2"

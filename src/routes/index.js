@@ -47,6 +47,8 @@ const ROUTES = {
   SERVICECREATE: "/create_service",
   SERVICE_EDIT: "/edit_service",
   SERVICE_EDIT_ID: "/edit_service/:id",
+  VIEW_SERVICE:"/view_service",
+  VIEW_SERVICE_ID:"/view_service/:id",
 
   BRANCHES: "/branches",
 

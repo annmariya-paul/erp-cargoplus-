@@ -87,7 +87,7 @@ const ROUTES = {
   EDIT_PUCHASE_ORDER: "/edit_purchase_order",
   EDIT_PUCHASE_ORDER_ID: "/edit_purchase_order/:id",
   VIEW_PURCHASE_ORDER: "/view_purchase_order",
-  VIEW_PURCHASE_ORDER_ID: "/view_purchase_order/:id",
+  VIEW_PURCHASE_ORDER_ID:"/view_purchase_order/:id",
 
   PURCHASEBILL:"/purchase_bill",
   ADD_PURCHASEBILL:"/add_purchase_bill",

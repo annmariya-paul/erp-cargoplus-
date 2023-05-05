@@ -52,16 +52,16 @@ function Accounting({vendor}){
       vendor?.vendor_state && formData.append(`state`, vendor?.vendor_state);
       vendor?.vendor_address && formData.append(`address`, vendor?.vendor_address);
 
-
+      vendor?.remarks && formData.append(`remarks`, vendor?.remarks);
 
       // formData.append(`country_id`, vendor.vendor_country_id);
       // formData.append(`city`, vendor.vendor_city);
       // formData.append(`website`, vendor.vendor_website);
       // formData.append(`state`, vendor.vendor_state);
       // formData.append(`address`, vendor.vendor_address);
-     formData.append(`tax_no`, data.vendortaxno);
-     formData.append(`credit_days`, data.vendorcreditdays);
-      formData.append(`remarks`, vendor.remarks);
+      data?.vendortaxno && formData.append(`tax_no`, data?.vendortaxno);
+      data?.vendorcreditdays && formData.append(`credit_days`, data?.vendorcreditdays);
+     
      
       if (data.vendor_attachments) {
         formData.append(`attachments`, data.vendor_attachments);

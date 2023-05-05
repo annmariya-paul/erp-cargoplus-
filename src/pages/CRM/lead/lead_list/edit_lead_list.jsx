@@ -133,15 +133,15 @@ function LeadEdit() {
           editForm.setFieldsValue({
             customer_type: res?.data?.data?.customer_type,
             customer_name: res?.data?.data?.customer_name,
-            customer_address: res?.data?.data?.customer_address == "undefined"?"":""  ,
+            customer_address: res?.data?.data?.customer_address,
             customer_phone: res?.data?.data?.customer_phone,
             customer_email: res?.data?.data?.customer_email,
             customer_website: res?.data?.data?.customer_website,
             customer_logo: res?.data?.data?.customer_logo,
-            customer_remarks: res?.data?.data?.customer_remarks == "undefined"?"":"",
+            customer_remarks: res?.data?.data?.customer_remarks ,
             customer_country: res?.data?.data?.customer_country,
-            customer_state: res?.data?.data?.customer_state == "undefined"?"":"",
-            customer_city: res?.data?.data?.customer_city == "undefined"?"":"",
+            customer_state: res?.data?.data?.customer_state ,
+            customer_city: res?.data?.data?.customer_city ,
           });
         } else {
           console.log("FAILED T LOAD DATA");

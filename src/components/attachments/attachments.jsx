@@ -11,11 +11,11 @@ const Attachments = ({ attachments,Isattachment}) => {
 
         const downloadFile = () => {
           console.log("wertyu");
-          window.open(`https://api.erp.refogen.com/${attachments[0]}`, '_blank');
+          window.open(`${process.env.REACT_APP_BASE_URL}/${attachments[0]}`, '_blank');
         };
       
         const viewFile = () => {
-          window.open(`https://api.erp.refogen.com/${attachments[0]}`, '_blank');
+          window.open(`${process.env.REACT_APP_BASE_URL}/${attachments[0]}`, '_blank');
         };
       
         return (

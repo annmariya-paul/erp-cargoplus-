@@ -362,7 +362,7 @@ export default function Departments(props) {
         {/* </div> */}
         <div className="row my-3">
           <div className="col-4 px-3">
-            <Select
+            {/* <Select
               bordered={false}
               className="page_size_style"
               value={pageSize}
@@ -386,10 +386,10 @@ export default function Departments(props) {
                 <span className="vertical ms-1">|</span>
                 <span className="sizes ms-1">100</span>
               </Select.Option>
-            </Select>
+            </Select> */}
           </div>
           <div className=" col-4 d-flex justify-content-center">
-            <MyPagination
+            {/* <MyPagination
               total={alldepartmentdata?.length}
               current={current}
               showSizeChanger={true}
@@ -399,7 +399,7 @@ export default function Departments(props) {
                 setCurrent(current);
                 setPageSize(pageSize);
               }}
-            />
+            /> */}
           </div>
           <div className="col-4 d-flex justify-content-end">
             <Button btnType="add" onClick={() => setModalAddDept(true)}>
@@ -409,14 +409,14 @@ export default function Departments(props) {
         </div>
         <div className="datatable">
           <TableData
-            data={getData(current, pageSize)}
-            // data={alldepartmentdata}
+            // data={getData(current, pageSize)}
+            data={alldepartmentdata}
             columns={columns}
             custom_table_css="table_lead_list"
           />
         </div>
         <div className="d-flex py-2 justify-content-center">
-          <MyPagination
+          {/* <MyPagination
             total={alldepartmentdata?.length}
             current={current}
             showSizeChanger={true}
@@ -426,7 +426,7 @@ export default function Departments(props) {
               setCurrent(current);
               setPageSize(pageSize);
             }}
-          />
+          /> */}
         </div>
       </div>
 
@@ -461,8 +461,8 @@ export default function Departments(props) {
                     rules={[
                       {
                         required: true,
-                        pattern: new RegExp("^[A-Za-z ]+$"),
-                        message: "Please enter a Valid Department Name",
+                       
+                        message: "Please enter a valid department name",
                       },
                       {
                         whitespace: true,
@@ -509,7 +509,7 @@ export default function Departments(props) {
                       {
                         required: true,
                       
-                        message: "Please enter a Valid Department code",
+                        message: "Please enter a valid department code",
                       },
                       {
                         min: 3,
@@ -585,8 +585,8 @@ export default function Departments(props) {
                     rules={[
                       {
                         required: true,
-                        pattern: new RegExp("^[A-Za-z ]+$"),
-                        message: "Please enter a Valid Department Name",
+                        // pattern: new RegExp("^[A-Za-z ]+$"),
+                        message: "Please enter a valid department name",
                       },
                       {
                         whitespace: true,
@@ -594,12 +594,12 @@ export default function Departments(props) {
                       {
                         min: 3,
                         message:
-                          "Department Name must be at least 3 characters",
+                          "Department name must be at least 3 characters",
                       },
                       {
                         max: 100,
                         message:
-                          "Department Name cannot be longer than 100 characters",
+                          "Department name cannot be longer than 100 characters",
                       },
                     ]}
                   >
@@ -634,7 +634,7 @@ export default function Departments(props) {
                       {
                         required: true,
                         // pattern: new RegExp("^[A-Za-z]+$"),
-                        message: "Please enter a Valid Department code",
+                        message: "Please enter a valid department code",
                       },
                       {
                         min: 3,
@@ -646,9 +646,9 @@ export default function Departments(props) {
                         message:
                           "Department code cannot be longer than 15 characters",
                       },
-                      {
-                        validator: validateNumberAndText,
-                      },
+                      // {
+                      //   validator: validateNumberAndText,
+                      // },
                     ]}
                   >
                     <InputType

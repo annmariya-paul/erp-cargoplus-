@@ -293,7 +293,7 @@ export default function Designation() {
         {/* <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}></div> */}
         <div className="row my-3">
           <div className="col-4 px-3">
-            <Select
+            {/* <Select
               bordered={false}
               className="page_size_style"
               value={pageSize}
@@ -317,10 +317,10 @@ export default function Designation() {
                 <span className="vertical ms-1">|</span>
                 <span className="sizes ms-1">100</span>
               </Select.Option>
-            </Select>
+            </Select> */}
           </div>
           <div className="col-4 d-flex  justify-content-center">
-            <MyPagination
+            {/* <MyPagination
               total={desigtiondata?.length}
               current={current}
               showSizeChanger={true}
@@ -330,7 +330,7 @@ export default function Designation() {
                 setCurrent(current);
                 setPageSize(pageSize);
               }}
-            />
+            /> */}
           </div>
           <div className="col-4">
             <Button btnType="add" onClick={() => setAddshow(true)}>
@@ -341,14 +341,15 @@ export default function Designation() {
         <div className="datatable">
           <TableData
             // data={getData(numofItemsTo, pageofIndex)}
-            data={getData(current, pageSize)}
-            // data={data}
+            // data={getData(current, pageSize)}
+            // data={desigtiondata}
+            data={desigtiondata}
             columns={columns}
             custom_table_css="table_lead_list"
           />
         </div>
         <div className="d-flex py-2 justify-content-center">
-          <MyPagination
+          {/* <MyPagination
             total={desigtiondata?.length}
             current={current}
             showSizeChanger={true}
@@ -358,7 +359,7 @@ export default function Designation() {
               setCurrent(current);
               setPageSize(pageSize);
             }}
-          />
+          /> */}
         </div>
 
         <Custom_model

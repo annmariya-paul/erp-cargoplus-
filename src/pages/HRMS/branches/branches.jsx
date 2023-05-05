@@ -339,7 +339,7 @@ export default function Branches(props) {
         {/* </div> */}
         <div className="row my-3">
           <div className="col-sm-4 px-3">
-            <Select
+            {/* <Select
               bordered={false}
               className="page_size_style"
               value={pageSize}
@@ -363,10 +363,10 @@ export default function Branches(props) {
                 <span className="vertical ms-1">|</span>
                 <span className="sizes ms-1">100</span>
               </Select.Option>
-            </Select>
+            </Select> */}
           </div>
           <div className="col-sm-4 d-flex align-items-center justify-content-center">
-            <MyPagination
+            {/* <MyPagination
               total={branches?.length}
               current={current}
               showSizeChanger={true}
@@ -376,7 +376,7 @@ export default function Branches(props) {
                 setCurrent(current);
                 setPageSize(pageSize);
               }}
-            />
+            /> */}
           </div>
           <div className="col-sm-4 d-flex justify-content-end">
             <Button
@@ -394,15 +394,15 @@ export default function Branches(props) {
         </div>
         <div className="datatable">
           <TableData
-            data={getData(current, pageSize)}
-            // data={branches}
+            // data={getData(current, pageSize)}
+            data={branches}
             columns={columns}
             custom_table_css="table_lead_list"
           />
         </div>
 
         <div className="d-flex py-2 justify-content-center">
-          <MyPagination
+          {/* <MyPagination
             total={branches?.length}
             current={current}
             showSizeChanger={true}
@@ -412,7 +412,7 @@ export default function Branches(props) {
               setCurrent(current);
               setPageSize(pageSize);
             }}
-          />
+          /> */}
         </div>
       </div>
 

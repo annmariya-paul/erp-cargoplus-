@@ -318,7 +318,7 @@ export default function EmploymentType() {
         {/* <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}></div> */}
         <div className="row my-3">
           <div className="col-4 px-3">
-            <Select
+            {/* <Select
               bordered={false}
               className="page_size_style"
               value={pageSize}
@@ -342,10 +342,10 @@ export default function EmploymentType() {
                 <span className="vertical ms-1">|</span>
                 <span className="sizes ms-1">100</span>
               </Select.Option>
-            </Select>
+            </Select> */}
           </div>
           <div className="col-4  d-flex align-items-center justify-content-center">
-            <MyPagination
+            {/* <MyPagination
               total={emptypedata?.length}
               current={current}
               showSizeChanger={true}
@@ -355,7 +355,7 @@ export default function EmploymentType() {
                 setCurrent(current);
                 setPageSize(pageSize);
               }}
-            />
+            /> */}
           </div>
           <div className="col-4">
             <Button btnType="add" onClick={() => setaddshowmodal(true)}>
@@ -365,14 +365,15 @@ export default function EmploymentType() {
         </div>
         <div className="datatable">
           <TableData
-            data={getData(current, pageSize)}
+            // data={getData(current, pageSize)}
+            data={emptypedata}
             columns={columns}
             custom_table_css="table_lead_list"
           />
         </div>
 
         <div className="d-flex py-2 justify-content-center">
-          <MyPagination
+          {/* <MyPagination
             total={emptypedata?.length}
             current={current}
             showSizeChanger={true}
@@ -382,7 +383,7 @@ export default function EmploymentType() {
               setCurrent(current);
               setPageSize(pageSize);
             }}
-          />
+          /> */}
         </div>
 
         <Custom_model
@@ -418,9 +419,9 @@ export default function EmploymentType() {
                           rules={[
                             {
                               required: true,
-                              pattern: new RegExp("^[A-Za-z ]+$"),
+                              // pattern: new RegExp("^[A-Za-z ]+$"),
                               message:
-                                "Please enter a valid Employee Type Name",
+                                "Please enter a valid employee type name",
                             },
                             {
                               min: 2,
@@ -504,9 +505,9 @@ export default function EmploymentType() {
                         rules={[
                           {
                             required: true,
-                            pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                            // pattern: new RegExp("^[A-Za-z0-9 ]+$"),
 
-                            message: "Please enter a Employee type Name",
+                            message: "Please enter a employee type name",
                           },
                           {
                             whitespace: true,

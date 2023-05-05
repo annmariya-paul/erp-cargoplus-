@@ -184,26 +184,22 @@ function Countrystate({ customerdetails, setIsAccountSave }) {
 
     formData.append(`customer_name`, customerdetails.customer_name);
     formData.append(`customer_type`, customerdetails.customer_type);
-    formData.append(`customer_address`, customerdetails.customer_address);
+   
     formData.append(`customer_phone`, customerdetails.customer_phone);
     formData.append(`customer_email`, customerdetails.customer_email);
 
+
+    customerdetails?.customer_address && formData.append(`customer_address`, customerdetails.customer_address);
     customerdetails?.customer_website && formData.append(`customer_website`, customerdetails.customer_website);
     customerdetails?.customer_country &&  formData.append(`customer_country`, customerdetails.customer_country);
-    formData.append(`customer_remarks`, customerdetails.customer_remarks);
+    customerdetails?.customer_remarks && formData.append(`customer_remarks`, customerdetails.customer_remarks);
    
-    formData.append(`customer_state`, customerdetails.customer_state);
-    formData.append(`customer_city`, customerdetails.customer_city);
+    customerdetails?.customer_state && formData.append(`customer_state`, customerdetails.customer_state);
+    customerdetails?.customer_city && formData.append(`customer_city`, customerdetails.customer_city);
 
-    formData.append(`customer_tax_no`, data.customer_accounting_tax_no);
-    formData.append(
-      `customer_credit_days`,
-      data.customer_accounting_credit_days
-    );
-    formData.append(
-      `customer_credit_limit`,
-      data.customer_accounting_credit_limit
-    );
+    data?.customer_accounting_tax_no && formData.append(`customer_tax_no`, data.customer_accounting_tax_no);
+    data?.customer_accounting_credit_days && formData.append(`customer_credit_days`,data.customer_accounting_credit_days);
+    data?.customer_accounting_credit_limit && formData.append(`customer_credit_limit`, data.customer_accounting_credit_limit);
 
     if (onecustomerData) {
       PublicFetch.patch(
@@ -234,7 +230,9 @@ function Countrystate({ customerdetails, setIsAccountSave }) {
           setError(true);
         });
     } else {
-      PublicFetch.post(`${CRM_BASE_URL}/customer`, formData, {
+      PublicFetch.post(`${CRM_BASE_URL}/customer`, 
+      formData, 
+      {
         "Content-Type": "Multipart/form-Data",
       })
         .then((res) => {

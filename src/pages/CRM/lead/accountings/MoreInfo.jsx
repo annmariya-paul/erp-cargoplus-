@@ -89,33 +89,28 @@ function Moreinfo({ customerdetails }) {
     const formData = new FormData();
     formData.append(`customer_name`, onecustomerData?.customer_name);
     formData.append(`customer_type`, onecustomerData?.customer_type);
-    formData.append(`customer_address`, onecustomerData?.customer_address);
     formData.append(`customer_phone`, onecustomerData?.customer_phone);
     formData.append(`customer_email`, onecustomerData?.customer_email);
 
+
+    onecustomerData?.customer_address &&  formData.append(`customer_address`, onecustomerData?.customer_address);
     onecustomerData?.customer_website && formData.append(`customer_website`, onecustomerData?.customer_website);
     onecustomerData?.customer_country &&  formData.append(`customer_country`, onecustomerData?.customer_country);
     
-    formData.append(`customer_remarks`, onecustomerData?.customer_remarks);
+    onecustomerData?.customer_remarks && formData.append(`customer_remarks`, onecustomerData?.customer_remarks);
    
-    formData.append(`customer_state`, onecustomerData?.customer_state);
-    formData.append(`customer_city`, onecustomerData?.customer_city);
+    onecustomerData?.customer_state && formData.append(`customer_state`, onecustomerData?.customer_state);
+    onecustomerData?.customer_city && formData.append(`customer_city`, onecustomerData?.customer_city);
 
-    formData.append(`customer_tax_no`, onecustomerData?.customer_tax_no);
-    onecustomerData?.customer_credit_days && formData.append(
-      `customer_credit_days`,
-      onecustomerData?.customer_credit_days
-    );
-    onecustomerData?.customer_credit_limit && formData.append(
-      `customer_credit_limit`,
-      onecustomerData?.customer_credit_limit
-    );
+    onecustomerData?.customer_tax_no && formData.append(`customer_tax_no`, onecustomerData?.customer_tax_no);
+    onecustomerData?.customer_credit_days && formData.append(`customer_credit_days`,onecustomerData?.customer_credit_days);
+    onecustomerData?.customer_credit_limit && formData.append(`customer_credit_limit`,onecustomerData?.customer_credit_limit);
 
-    formData.append(
+    data.customer_accounting_freighttype && formData.append(
       `customer_preferred_freight_type`,
       data.customer_accounting_freighttype
     );
-    formData.append(
+    data.customer_accounting_qtnvalidity_days && formData.append(
       `customer_qtn_validity_days`,
       data.customer_accounting_qtnvalidity_days
     );

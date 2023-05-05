@@ -223,7 +223,7 @@ function Vendor() {
     }, 1000);
 
     return () => clearTimeout(getData);
-  }, [noofItems, pageofIndex, pagesizecount]);
+  }, [noofItems, pageofIndex, pagesizecount,searchedText]);
 
   const columns = [
     {
@@ -425,7 +425,7 @@ function Vendor() {
               style={{ margin: "5px", borderRadius: "5px" }}
               value={searchedText}
               onChange={(e) => {
-                getallvendordata(searchedText);
+                // getallvendordata(searchedText);
                 setSearchedText(e.target.value ? [e.target.value] : []);
               }}
               onSearch={(value) => {

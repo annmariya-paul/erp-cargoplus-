@@ -170,11 +170,11 @@ export default function LeadList() {
   useEffect(() => {
     const getData = setTimeout(() => {
       GetAllLeadData(searchedText);
-      return()=> clearTimeout(getData)
+      
     }, 1000);
 
     return () => clearTimeout(getData);
-  }, [noofItems, pageofIndex, pagesizecount]);
+  }, [noofItems, pageofIndex, pagesizecount,searchedText]);
 
   const getData = (numofItemsTo, pageofIndex) => {
     return allLeadList?.slice(
@@ -267,34 +267,35 @@ export default function LeadList() {
       dataIndex: "customer_name",
       key: "customer_name",
       // width: "23%",
-      filteredValue: [searchedText],
-      onFilter: (value, record) => {
-        return (
-          String(record.customer_name)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.contact_person)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.customer_phone)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.customer_email)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.customer_credit_days)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.customer_jobs_no)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.invoice_amt)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.due_amt).toLowerCase().includes(value.toLowerCase())
-        );
-      },
+      // filteredValue: [searchedText],
+      // onFilter: (value, record) => {
+      //   return (
+      //     String(record.customer_name)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.contact_person)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.customer_phone)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.customer_email)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.customer_credit_days)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.customer_jobs_no)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.invoice_amt)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.due_amt).toLowerCase().includes(value.toLowerCase())
+      //   );
+      // },
       align: "left",
+      
     },
     {
       title: "CONTACT ",
@@ -472,7 +473,6 @@ export default function LeadList() {
                 style={{ margin: "5px", borderRadius: "5px" }}
                 value={searchedText}
                 onChange={(e) => {
-                  GetAllLeadData(searchedText)
                   setSearchedText(e.target.value ? [e.target.value] : []);
                 }}
                 onSearch={(value) => {

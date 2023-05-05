@@ -67,7 +67,7 @@ export default function Sidebar({ showSidebar }) {
   useEffect(() => {
     console.log("hello");
   window.scrollTo({top:0, behavior:'auto'});
-    // console.log("has permission : ", checkPermission("designation"));
+
   }, [pathname]);
 
  

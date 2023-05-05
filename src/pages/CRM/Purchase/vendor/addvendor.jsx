@@ -218,7 +218,7 @@ console.log("bnkdetails id iss",vendorId)
     // formData.append(`website`, data.vendorwebsite);
     // formData.append(`state`, data.vendorstate);
     formData.append(`address`, data.vendoraddress);
-    formData.append(`remarks`, data.vendorremarks);
+    formData.append(`remark`, data.vendorremarks);
    
     if (data.vendor_attachments) {
       formData.append(`attachments`, data.vendor_attachments);

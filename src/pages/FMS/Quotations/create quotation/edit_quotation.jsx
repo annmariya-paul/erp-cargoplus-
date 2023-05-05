@@ -1176,7 +1176,7 @@ export default function EditQuotation(
     formData.append("qoutation_customer", data.customer);
     formData.append("quotation_validity", new Date(data.validity_date));
     formData.append("quotation_customer", data.customer);
-    if(data.shipper){
+    if (data.shipper) {
       formData.append("quotation_shipper", data.shipper);
     }
 
@@ -1199,23 +1199,23 @@ export default function EditQuotation(
     formData.append("quotation_container_type", data.container_type);
     formData.append("quotation_salesperson", data.salesperson);
     formData.append("quotation_incoterm_id", data.incoterm);
-   if(data.consignee){
-    formData.append("quotation_consignee", data.consignee);
-   }
-   if(data.length){
-    formData.append("quotation_length", data.length);
-   }
-    if(data.breadth){
+    if (data.consignee) {
+      formData.append("quotation_consignee", data.consignee);
+    }
+    if (data.length) {
+      formData.append("quotation_length", data.length);
+    }
+    if (data.breadth) {
       formData.append("quotation_breadth", data.breadth);
     }
-    if(data.height){
+    if (data.height) {
       formData.append("quotation_height", data.height);
     }
     // formData.append("quotation_height", data.height);
-    if(data.volume){
+    if (data.volume) {
       formData.append("quotation_volume", data.volume);
     }
-    
+
     // formData.append(
     //   "quotation_details",
     //   JSON.stringify(data.quotation_details)
@@ -2240,8 +2240,8 @@ export default function EditQuotation(
                     ) : null}
                   </div>
 
-                  <div className="d-flex justify-content-end mt-4 ms-5">
-                    <div className="col-lg-2 col-sm-4 col-xs-3 d-flex justify-content-end mt-3 me-3">
+                  <div className="d-flex justify-content-end align-items-center mt-4 ms-5">
+                    <div className="col-lg-2 col-sm-4 col-xs-3 d-flex justify-content-end mt-2 me-3">
                       <p style={{ fontWeight: 600 }}>Grand Total :</p>
                     </div>
 

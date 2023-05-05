@@ -196,7 +196,7 @@ export default function ViewQuotation() {
               </div>
               <div className="col-xl-2 col-md-3 col-4 d-flex justify-content-end mb-3 ">
                 <Button
-                 style={{ width: 300 }}
+                  style={{ width: 300 }}
                   btnType="add_borderless"
                   className="edit_button"
                   onClick={() => {
@@ -205,7 +205,6 @@ export default function ViewQuotation() {
                   }}
                 >
                   Convert to Job
-                 
                 </Button>
               </div>
             </div>
@@ -318,14 +317,14 @@ export default function ViewQuotation() {
               </p>
             </div>
           </div>
-          <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
+          {/* <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
             <div className="col-5">Mode</div>
             <div className="col-1">:</div>
 
             <div className="col-6">
               <p className="modal-view-data">{allqoutation?.quotation_mode}</p>
             </div>
-          </div>
+          </div> */}
 
           <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
             <div className="col-5">Carrier</div>

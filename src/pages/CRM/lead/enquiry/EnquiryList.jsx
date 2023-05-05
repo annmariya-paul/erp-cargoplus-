@@ -1,4 +1,4 @@
-import { Checkbox, Input, Select } from "antd";
+import { Checkbox, Input, Select ,message} from "antd";
 import React, { useEffect, useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { Popconfirm } from "antd";
@@ -13,6 +13,7 @@ import TableData from "../../../../components/table/table_data";
 import { ROUTES } from "../../../../routes";
 import CustomModel from "../../../../components/custom_modal/custom_model";
 import PublicFetch from "../../../../utils/PublicFetch";
+
 import {
   LeadType,
   LeadStatus,
@@ -22,6 +23,7 @@ import moment from "moment";
 
 function EnquiryList() {
   const navigate = useNavigate();
+ 
   const [successPopup, setSuccessPopup] = useState(false);
   const [cancelPopUp, setCancelPopUp] = useState(false);
   const [searchedText, setSearchedText] = useState("");
@@ -35,8 +37,14 @@ function EnquiryList() {
   const [allLeadList, setAllLeadList] = useState([]);
   const [serialNo, setserialNo] = useState(1);
   const [AllEnquiries, setAllnquires] = useState();
-
+  const [messageApi, contextHolder] = message.useMessage();
   const [startcount, setstartcount] = useState();
+  const error = () => {
+    messageApi.open({
+      type: 'error',
+      content: 'This is an error message',
+    });
+  };
 
   const close_modal = (mShow, time) => {
     if (!mShow) {
@@ -59,7 +67,9 @@ function EnquiryList() {
         }
       })
       .catch((err) => {
-        console.log("Error", err);
+        console.log("Error", err.data.data.err.response.message);
+        
+      // {error}
       });
   };
 

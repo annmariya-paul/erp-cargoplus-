@@ -210,14 +210,17 @@ function ListAgent() {
   }, []);
 
   const handleChange = (e) => {
-    setCountryis(e);
+    // setCountryis(e);
+    setAgentCountry(e);
+    
   };
   const handleChangetwo = (e) => {
-    setinputCountry(e);
+    // setinputCountry(e);
+    setAgentCountry(e)
     // setCountryis(e);
   };
 const[agentcountry,setAgentCountry]=useState();
-console.log("country",agentcountry);
+console.log("hhhhhh",agentcountry);
   const getAllCountries = () => {
     PublicFetch.get(`${GENERAL_SETTING_BASE_URL}/country`)
       .then((res) => {
@@ -263,7 +266,7 @@ console.log("country",agentcountry);
 
     let data = {
       agent_vendor_id: parseInt(inpiutId),
-      agent_country: agentcountry,
+      agent_country:parseInt(agentcountry),
       agent_commission_details: inputcommision,
     };
     let idss = parseInt(agentId);
@@ -332,7 +335,7 @@ console.log("country",agentcountry);
           temp.push({
             agent_id: item.agent_id,
             agent_country: item?.countries?.country_name,
-            agent_countryid: item?.crm_v1_vendors?.vendor_country_id,
+            agent_countryid: item?.countries?.country_id,
             agent_commission_details: item.agent_commission_details,
             agent_vendor_id: item.agent_vendor_id,
             agent_name: item.crm_v1_vendors.vendor_name,
@@ -792,9 +795,10 @@ console.log("country",agentcountry);
                             <SelectBox
                               showSearch={true}
                               allowClear
-                              value={countryis}
+                              value={agentcountry}
                               optionFilterProp="children"
-                              onChange={handleChange}
+                              // onChange={handleChange}
+                              
                             >
                               {allCountries &&
                                 allCountries.length > 0 &&
@@ -937,9 +941,9 @@ console.log("country",agentcountry);
                       <div className="col-12">
                         <div className="py-2">
                           <label>Country</label>
-                          <Form.Item name="country">
+                          <Form.Item name="agentcountry">
                             <SelectBox
-                              value={inputCountry}
+                              value={agentcountry}
                               showSearch
                               allowClear={true}
                               optionFilterProp="children"

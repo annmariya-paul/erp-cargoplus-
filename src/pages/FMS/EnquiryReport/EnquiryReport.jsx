@@ -13,9 +13,11 @@ import moment from "moment";
 import { CRM_BASE_URL } from "../../../api/bootapi";
 import { Oppor_Status } from "../../../utils/SelectOptions";
 import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
+import PageSizer from "../../../components/PageSizer/PageSizer"
+
 function EnquiryReport() {
   const [serialNo, setserialNo] = useState(1);
-  const [numOfItems, setNumOfItems] = useState("25");
+  const [numOfItems, setNumOfItems] = useState(localStorage.getItem("noofitem"));
   const [current, setCurrent] = useState(1); // current page
   const [searchSource, setSearchSource] = useState(""); // search by text input
   const [totalCount, setTotalcount] = useState("");
@@ -26,12 +28,122 @@ function EnquiryReport() {
   const [opStatus, setOppStatus] = useState(Oppor_Status);
   console.log(" staopptus", opStatus);
   console.log("reportsss", reportData);
+
+  const getFinalCount = (total) => {
+    const cutoff = Math.ceil(totalCount / numOfItems);
+    console.log("FinalTest", cutoff, current);
+    if (current === cutoff) return totalCount;
+    return total;
+    // console.log("TotalPageTest",current,totalCount)
+    // console.log("TestCount",total)
+  };
+
+  const getData = (current, pageSize) => {
+    return reportData?.slice((current - 1) * pageSize, current * pageSize);
+  };
+
+
+
+  
+  const data = [
+    {
+      job_no: "00111",
+      customer: "Test",
+      currency: "US Dollar",
+      totalcost_fx: "7675",
+      totalcost_lx: "9877",
+    },
+  ];
+
+  const allEnquirys = () => {
+    PublicFetch.get(`${CRM_BASE_URL}/opportunity/minimal`)
+      .then((res) => {
+        console.log("response", res);
+        if (res.data.success) {
+          console.log("Success of miniml", res.data.data);
+          setAllEmquiryNo(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
+  const [selectedEnquiry, setSelectedEnquiry] = useState();
+  console.log("selectedEnquiry", selectedEnquiry);
+  const [selectedState, setSelectedState] = useState("converted");
+  console.log("selectedState", selectedState);
+  const SearchBydate = () => {
+    let startdate = moment(startDate).format("MM-DD-YYYY");
+    let enddate = moment(endDate).format("MM-DD-YYYY");
+    PublicFetch.post(`${CRM_BASE_URL_FMS}/reports/enquiry-report`, {
+      enquiry_no: selectedEnquiry,
+      start_date: startdate,
+      end_date: enddate,
+      status: selectedState,
+    })
+      .then((res) => {
+        console.log("Response", res);
+        if (res.data.success) {
+          console.log("Success Data", res.data.data);
+          setTotalcount(res?.data?.data)
+          //  setReportData(res.data.data);
+          //  setSuccessPopup(true);
+          //  close_modal(successPopup, 1200);
+          //  addForm.resetFields();
+          //  setModalAddCurrency(false);
+          //  getAllCurrency();
+          if (res.data.data.length === 0) {
+            setReportData("");
+          } else {
+            let array = [];
+            res?.data?.data?.forEach((i, indx) => {
+              opStatus.forEach((item, index) => {
+                var oppStat = parseInt(item.value);
+                console.log("oppStat", oppStat);
+                console.log("iii", i.opportunity_status);
+                if (oppStat === i.opportunity_status) {
+                  array.push({
+                    enquiry_no: i?.opportunity_number,
+                    enquiry_date: i?.opportunity_created_at,
+                    validity_date: i?.opportunity_validity,
+                    status: item?.name,
+                    customer_id: i?.opportunity_customer_id,
+                    customer: i?.crm_v1_leads?.customer_name,
+                    slno:   indx+1,
+                  });
+                  setReportData(array);
+                  console.log("temoeray aray", array);
+                }
+              });
+            });
+          }
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  };
+  const handleAllSelected = () => {
+    setIsAllEnquires(true);
+  };
+
+  useEffect(() => {
+    allEnquirys();
+    SearchBydate();
+  }, []);
+
   const columns = [
     {
       title: "Sl. No.",
       key: "index",
       width: "8%",
-      render: (value, item, index) => serialNo + index,
+    render: (value, item, index) => {
+      console.log("dataaa",item?.slno )
+      // <div>{index+1 } </div>
+     },
       align: "center",
     },
     {
@@ -79,93 +191,7 @@ function EnquiryReport() {
       width: "16%",
     },
   ];
-  const data = [
-    {
-      job_no: "00111",
-      customer: "Test",
-      currency: "US Dollar",
-      totalcost_fx: "7675",
-      totalcost_lx: "9877",
-    },
-  ];
 
-  const allEnquirys = () => {
-    PublicFetch.get(`${CRM_BASE_URL}/opportunity/minimal`)
-      .then((res) => {
-        console.log("response", res);
-        if (res.data.success) {
-          console.log("Success of miniml", res.data.data);
-          setAllEmquiryNo(res.data.data);
-        }
-      })
-      .catch((err) => {
-        console.log("Error", err);
-      });
-  };
-
-  const [startDate, setStartDate] = useState();
-  const [endDate, setEndDate] = useState();
-  const [selectedEnquiry, setSelectedEnquiry] = useState();
-  console.log("selectedEnquiry", selectedEnquiry);
-  const [selectedState, setSelectedState] = useState("converted");
-  console.log("selectedState", selectedState);
-  const SearchBydate = () => {
-    let startdate = moment(startDate).format("MM-DD-YYYY");
-    let enddate = moment(endDate).format("MM-DD-YYYY");
-    PublicFetch.post(`${CRM_BASE_URL_FMS}/reports/enquiry-report`, {
-      enquiry_no: selectedEnquiry,
-      start_date: startdate,
-      end_date: enddate,
-      status: selectedState,
-    })
-      .then((res) => {
-        console.log("Response", res);
-        if (res.data.success) {
-          console.log("Success Data", res.data.data);
-          //  setReportData(res.data.data);
-          //  setSuccessPopup(true);
-          //  close_modal(successPopup, 1200);
-          //  addForm.resetFields();
-          //  setModalAddCurrency(false);
-          //  getAllCurrency();
-          if (res.data.data.length === 0) {
-            setReportData("");
-          } else {
-            let array = [];
-            res?.data?.data?.forEach((i, item) => {
-              opStatus.forEach((item, index) => {
-                var oppStat = parseInt(item.value);
-                console.log("oppStat", oppStat);
-                console.log("iii", i.opportunity_status);
-                if (oppStat === i.opportunity_status) {
-                  array.push({
-                    enquiry_no: i?.opportunity_number,
-                    enquiry_date: i?.opportunity_created_at,
-                    validity_date: i?.opportunity_validity,
-                    status: item?.name,
-                    customer_id: i?.opportunity_customer_id,
-                    customer: i?.crm_v1_leads?.customer_name,
-                  });
-                  setReportData(array);
-                  console.log("temoeray aray", array);
-                }
-              });
-            });
-          }
-        }
-      })
-      .catch((err) => {
-        console.log("Error", err);
-      });
-  };
-  const handleAllSelected = () => {
-    setIsAllEnquires(true);
-  };
-
-  useEffect(() => {
-    allEnquirys();
-    SearchBydate();
-  }, []);
 
   const columnsKeys = columns.map((column) => column.key);
 
@@ -199,6 +225,10 @@ function EnquiryReport() {
     item.lead,
   ]);
 
+
+
+
+  console.log("totall",totalCount?.length)
   return (
     <div>
       <div className="container-fluid container_agent_report p-4">
@@ -300,12 +330,53 @@ function EnquiryReport() {
                   </div>
                 </div>
               </div>
+               
+              <div className="row">
+              <div className="col-xl-4">
+            <div className="d-flex justify-content-start align-items-center gap-3">
+           
+              <div className="  ">
+              <PageSizer/>
+              </div>
+         
+              {totalCount > 0 && (
+              <div className=" d-flex  align-items-center mt-2 ">
+                <label className="font_size">
+                  {/* Results: {  + 1} -
+                  {getFinalCount(1 * numOfItems * current)}{" "}
+                  <span>of {totalCount} </span>{" "} */}
+                </label>
+              </div>
+              )}
             </div>
-            {isAllenquires ? (
+             </div>
+             <div className="col-xl-4 d-flex  align-items-center justify-content-center">
+            
+            <MyPagination
+              total={parseInt(totalCount?.length)}
+              current={current}
+              showSizeChanger={true}
+              pageSize={numOfItems}
+              onChange={(current, pageSize) => {
+                console.log("page index isss", pageSize);
+                setCurrent(current);
+              }}
+              // onChange={(current, pageSize) => {
+              //   setCurrent(current);
+              //   setPageSize(pageSize);
+              // }}
+            />
+      
+          </div>
+
+              </div>
+
+            </div>
+            {/* {isAllenquires ? (
               <div className="row ">
                 <div className="col-4 mt-4">
                   <Select
-                    // defaultValue={"25"}
+                  
                     bordered={false}
                     className=" page_size_style"
                     value={numOfItems}
@@ -356,24 +427,25 @@ function EnquiryReport() {
                     }}
                   />
                 </div>
-                {/* <div className="col-xl-6 col-lg-6 col-md-6 col-sm-8 col-12"></div> */}
                 <div className="col-xl-4 col-lg-4 col-md-3 col-sm-12 col-12 d-flex justify-content-end">
                   <div className="">
-                    {/* <Link to={ROUTES.CREATE_EXPENSE} style={{ color: "white" }}>
-                    <Button btnType="save">Add Daily Expense</Button>
-                  </Link> */}
+             
                   </div>
                 </div>
               </div>
             ) : (
               ""
-            )}
+            )} */}
 
             <div className="row ">
               <div className="col-12">
-                <TableData columns={columns} data={reportData} />
+                <TableData 
+                //  data={reportData}
+                data={getData(current, numOfItems)}
+                columns={columns} 
+                />
               </div>
-              {isAllenquires ? (
+              {/* {isAllenquires ? (
                 <div className="col-12 d-flex justify-content-center">
                   <MyPagination
                     total={parseInt(totalCount)}
@@ -386,7 +458,7 @@ function EnquiryReport() {
                 </div>
               ) : (
                 ""
-              )}
+              )} */}
             </div>
           </div>
         </div>

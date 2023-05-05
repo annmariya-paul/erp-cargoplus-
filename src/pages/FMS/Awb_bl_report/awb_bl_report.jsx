@@ -12,6 +12,8 @@ import PublicFetch from "../../../utils/PublicFetch";
 import { FaFileExcel } from "react-icons/fa";
 import InputType from "../../../components/Input Type textbox/InputType";
 import { CRM_BASE_URL } from "../../../api/bootapi";
+import PageSizer from "../../../components/PageSizer/PageSizer";
+import MyPagination from "../../../components/Pagination/MyPagination";
 export default function AwbblReport() {
   const { Option } = Select;
   const [serialNo, setserialNo] = useState(1);
@@ -32,6 +34,9 @@ export default function AwbblReport() {
   const [jobList, setJobList] = useState();
   const [customerList, setCustomerList] = useState();
   const [allReports, setAllReports] = useState();
+
+  const [pageSize, setPageSize] = useState(localStorage.getItem("noofitem"));
+  const [current, setCurrent] = useState(1); 
   console.log("all dattta",allReports);
 
   const columns = [
@@ -340,6 +345,53 @@ export default function AwbblReport() {
           </li>
           </div> */}
           </div>
+
+          <div className="row">
+              <div className="col-xl-4">
+            <div className="d-flex justify-content-start align-items-center gap-3">
+           
+              <div className="  ">
+            
+           
+             <PageSizer/>
+              </div>
+         
+            
+              <div className=" d-flex  align-items-center mt-2 ">
+                <label className="font_size">
+                  {/* Results: {  + 1} -
+                  {getFinalCount(1 * numOfItems * current)}{" "}
+                  <span>of {totalCount} </span>{" "} */}
+                </label>
+              </div>
+            
+            </div>
+             </div>
+             <div className="col-xl-4 d-flex  align-items-center justify-content-center">
+            {allReports &&(
+
+
+            <MyPagination
+              total={parseInt(allReports?.length)}
+              current={current}
+              showSizeChanger={true}
+              pageSize={pageSize}
+              onChange={(current, pageSize) => {
+                console.log("page index isss", pageSize);
+                setCurrent(current);
+                setPageSize(pageSize)
+              }}
+              // onChange={(current, pageSize) => {
+              //   setCurrent(current);
+              //   setPageSize(pageSize);
+              // }}
+            />
+            )} 
+      
+          </div>
+
+              </div>
+
         </Form>
       </div>
       <div className="container-fluid container_agent_report py-2">

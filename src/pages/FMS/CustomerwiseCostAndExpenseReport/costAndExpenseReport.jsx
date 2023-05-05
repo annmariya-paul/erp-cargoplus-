@@ -9,6 +9,8 @@ import moment from "moment";
 import { FaFileExcel } from "react-icons/fa";
 import * as XLSX from "xlsx/xlsx.js"; //for xl download
 import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
+import MyPagination from "../../../components/Pagination/MyPagination";
+import PageSizer from "../../../components/PageSizer/PageSizer";
 
 const CostAndExpenseReport = () => {
   const { Option } = Select;
@@ -21,6 +23,8 @@ const CostAndExpenseReport = () => {
   const [selectedJob, setSelectedJob] = useState();
   const [reportData, setReportData] = useState();
   // console.log(moment(new Date()).format("YYYY-MM-DD"))
+  const [pageSize, setPageSize] = useState(localStorage.getItem("noofitem"));
+  const [current, setCurrent] = useState(1); 
   console.log(moment(new Date()).format("YYYY-MM-DD"), "New Date Details");
   const columns = [
     {
@@ -356,6 +360,52 @@ const CostAndExpenseReport = () => {
                 </div>
               </div>
             </div>
+
+            <div className="row">
+              <div className="col-xl-4">
+            <div className="d-flex justify-content-start align-items-center gap-3">
+           
+              <div className="  ">
+            
+           
+             <PageSizer/>
+              </div>
+         
+            
+              <div className=" d-flex  align-items-center mt-2 ">
+                <label className="font_size">
+                  {/* Results: {  + 1} -
+                  {getFinalCount(1 * numOfItems * current)}{" "}
+                  <span>of {totalCount} </span>{" "} */}
+                </label>
+              </div>
+            
+            </div>
+             </div>
+             <div className="col-xl-4 d-flex  align-items-center justify-content-center">
+            {reportData &&(
+
+
+            <MyPagination
+              total={parseInt(reportData?.length)}
+              current={current}
+              showSizeChanger={true}
+              pageSize={pageSize}
+              onChange={(current, pageSize) => {
+                console.log("page index isss", pageSize);
+                setCurrent(current);
+                setPageSize(pageSize)
+              }}
+              // onChange={(current, pageSize) => {
+              //   setCurrent(current);
+              //   setPageSize(pageSize);
+              // }}
+            />
+            )} 
+      
+          </div>
+
+              </div>
           </div>
           <div className={`${styles.card} card mt-4`}>
             <div className="datatable mt-3">

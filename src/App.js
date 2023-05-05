@@ -164,7 +164,10 @@ import Invoicetemplate2 from "./components/Invoice/invoicetemp2/invoicetemp2";
 import Invoicetemplateselect from "./pages/General Settings/invoicetemplates/invoicetemplate";
 import Viewcustomer from "./pages/CRM/lead/lead_list/view_customer";
 import ViewOpportunity from "./pages/CRM/lead/modals/viewopportunity";
+import ViewService from "./pages/CRM/Selling/services/ViewService";
 import AccountSettings from "./pages/Accounts/settings/AccountSettings/AccountSettings";
+import Purchasebill from "./pages/FMS/Purchase/Purchasebill/Purchasebill";
+import Addpurchasebill from "./pages/FMS/Purchase/Purchasebill/add_purchasebill";
 function App() {
   return (
     <div className="App">
@@ -333,6 +336,10 @@ function App() {
             <Route path={ROUTES.SERVICE_EDIT_ID} element={<ProtectedRoute />}>
               <Route index element={<ServiceEdit />} />
             </Route>
+            <Route path={ROUTES.VIEW_SERVICE_ID} element={<ProtectedRoute />}>
+              <Route index element={<ViewService />} />
+            </Route>
+
 
             <Route path={ROUTES.BRANCHES} element={<ProtectedRoute />}>
               <Route index element={<Branches />} />
@@ -399,7 +406,7 @@ function App() {
             <Route path={ROUTES.LISTAGENT} element={<ProtectedRoute />}>
               <Route index element={<ListAgent />} />
             </Route>
-
+{/* purchase */}
             <Route path={ROUTES.PURCHASEORDER} element={<ProtectedRoute />}>
               <Route index element={<Purchaseorder />} />
             </Route>
@@ -420,6 +427,18 @@ function App() {
               element={<ProtectedRoute />}
             >
               <Route index element={<ViewpurchaseOrder />} />
+            </Route>
+            <Route
+              path={ROUTES.PURCHASEBILL}
+              element={<ProtectedRoute />}
+            >
+              <Route index element={<Purchasebill />} />
+            </Route>
+            <Route
+              path={ROUTES.ADD_PURCHASEBILL}
+              element={<ProtectedRoute />}
+            >
+              <Route index element={<Addpurchasebill />} />
             </Route>
 
             {/* <Route  path={ROUTES.UPDATEAGENT}

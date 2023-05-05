@@ -4,7 +4,7 @@ const CRM_SELLING_PREFIX = "crm/selling";
 const CRM_HRMS_PREFIX = "/hrms";
 const CRM_FMS_PREFIX = "/freightManagement";
 const GENERAL_SETTING_PRIFIX = "/generalsettings";
-const CRM_PURCHASE_PREFIX = "crm/purchases";
+const CRM_PURCHASE_PREFIX = "crm/purchase";
 const ACCOUNTS_PREFIX = "/accounts";
 
 const CRM_BASE_URL = `${process.env.REACT_APP_BASE_URL}/${CRM_PREFIX}/${ApiSettings.crm.version_name}`;

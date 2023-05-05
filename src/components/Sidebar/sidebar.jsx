@@ -26,7 +26,7 @@ import crmIcon from "../../components/img/118211.png";
 import fmsIcon from "../../components/img/icons8-cargo-ship-50.png";
 import settingsicon from "../../components/img/icons8-gear-50.png";
 import { FaRegHandshake } from "react-icons/fa";
-import cargologo from "../../assets/logo/cargopluslogo1.png";
+import cargologo from "../../assets/logo/cargoplusnew.png";
 import Purchaseorder from "../../pages/FMS/Purchase/Purchase Order/purchase_order";
 import ListpurchaseOrder from "../../pages/FMS/Purchase/Purchase Order/purchase_orderlist";
 
@@ -59,10 +59,18 @@ export default function Sidebar({ showSidebar }) {
   const [accountsSettings, setAccountsSettings] = useState(false);
   const [accountsReports, setAccountsReports] = useState(false);
   const [currentOpen, setCurrentOpen] = useState();
-
   const location = useLocation();
-
+  console.log("location",location);
+  // const[locationnew,setLocationnew]=useState();
   const { pathname } = location;
+  // setLocationnew(pathname);
+  useEffect(() => {
+    console.log("hello");
+  window.scrollTo({top:0, behavior:'auto'});
+    // console.log("has permission : ", checkPermission("designation"));
+  }, [pathname]);
+
+ 
   useEffect(() => {
     let p = localStorage.getItem("userPermissions");
     if (p) {

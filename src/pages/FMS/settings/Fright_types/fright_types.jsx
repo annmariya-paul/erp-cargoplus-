@@ -438,7 +438,7 @@ export default function Frightlist(props) {
 
         <div className="row my-3">
           <div className="col-4 ">
-            <Select
+            {/* <Select
               bordered={false}
               className="page_size_style"
               value={pageSize}
@@ -459,11 +459,11 @@ export default function Frightlist(props) {
                 <span className="vertical ms-1">|</span>
                 <span className="sizes ms-1">100</span>
               </Select.Option>
-            </Select>
+            </Select> */}
           </div>
 
           <div className="col-4 d-flex  align-items-center justify-content-center">
-            {frights && (
+            {/* {frights && (
               <MyPagination
                 total={parseInt(frights?.length)}
                 current={current}
@@ -474,7 +474,7 @@ export default function Frightlist(props) {
                   setPageSize(pageSize);
                 }}
               />
-            )}
+            )} */}
           </div>
 
           <div className="col-4 ">
@@ -492,14 +492,14 @@ export default function Frightlist(props) {
         </div>
         <div className="datatable">
           <TableData
-            data={getData(current, pageSize)}
-            // data={frights}
+            // data={getData(current, pageSize)}
+            data={frights}
             columns={columns}
             custom_table_css="table_lead_list"
           />
         </div>
         <div className="d-flex  justify-content-center">
-          {frights && (
+          {/* {frights && (
             <MyPagination
               total={parseInt(frights?.length)}
               current={current}
@@ -510,7 +510,7 @@ export default function Frightlist(props) {
                 setPageSize(pageSize);
               }}
             />
-          )}
+          )} */}
         </div>
       </div>
 

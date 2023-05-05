@@ -583,40 +583,52 @@ export default function Sidebar({ showSidebar }) {
                         </NavLink>
                       </li>
                     )}
-                  </div>
-
-                  <li
-                    className={
-                      CRMpurchasing
-                        ? "nav-text  items_hrms nav_active_color open"
-                        : "nav-text  items_hrms nav_active_color"
-                    }
-                  >
-                    <Link
-                      className="link"
-                      // to="/"
-                      onClick={() => setCRMpurchasing(!CRMpurchasing)}
+                    <li
+                      className={
+                        CRMpurchasing ? "nav-text   open" : "nav-text  "
+                      }
                     >
-                      <div className="d-flex justify-content-between gap-5 ms-3">
-                        <div className="d-flex">
-                          {/* <FaRegHandshake className="sidebar_icons pt-1" /> */}
-                          <div
-                            style={{ width: "100px" }}
-                            className="subactivelink"
-                          >
-                            Masters
+                      <NavLink
+                        className={CRMpurchasing ? "active-link" : "link"}
+                        // to="/"
+                        onClick={() => {
+                          setCRMpurchasing(!CRMpurchasing);
+                          // setCurrentOpen("crm_purchase");
+                        }}
+                      >
+                        <div className="d-flex justify-content-between gap-5 ms-3 ">
+                          <div className="d-flex">
+                            {/* <FaRegHandshake className="sidebar_icons pt-1" /> */}
+                            <div
+                              style={{ width: "100px" }}
+                              className="subactivelink "
+                            >
+                              Masters
+                            </div>
+                          </div>
+                          <div className="text-right ">
+                            <AiOutlineCaretDown
+                              className={`${
+                                CRMpurchasing || currentOpen === "crm"
+                                  ? "toggle_btn subactivelink"
+                                  : `toggle_btn toggle_black`
+                              }`}
+                            />
                           </div>
                         </div>
-                        <div className="text-right ">
-                          <AiOutlineCaretDown className="toggle_btn subactivelink" />
-                        </div>
-                      </div>
-                    </Link>
-                  </li>
+                      </NavLink>
+                    </li>
+                  </div>
 
                   {CRMpurchasing ? (
                     <>
-                      <div className="nav_active_color">
+                      <div
+                        className={` ${
+                          CRMpurchasing && currentOpen === "crm"
+                            ? "nav_active_color"
+                            : "nav_active_color_secondary"
+                        } `}
+                      >
                         {checkPermission("vendor") && (
                           <li className="nav-text">
                             <NavLink
@@ -773,41 +785,53 @@ export default function Sidebar({ showSidebar }) {
                         </NavLink>
                       </li>
                     )}
-                  </div>
-
-                  <li
-                    className={
-                      CRMproductmaster
-                        ? "nav-text  items_hrms nav_active_color open"
-                        : "nav-text  items_hrms nav_active_color"
-                    }
-                  >
-                    <Link
-                      className="link"
-                      // to="/"
-                      onClick={() => setCRMproductmaster(!CRMproductmaster)}
+                    <li
+                      className={
+                        CRMproductmaster ? "nav-text   open" : "nav-text  "
+                      }
                     >
-                      <div className="d-flex justify-content-between gap-5 ms-2">
-                        <div className="d-flex">
-                          {/* <FaRegHandshake className="sidebar_icons pt-1" /> */}
-                          <div
-                            style={{ width: "100px" }}
-                            className="subactivelink ms-2 ps-1"
-                          >
-                            Masters
+                      <NavLink
+                        className={CRMproductmaster ? "active-link" : "link"}
+                        // to="/"
+                        onClick={() => {
+                          setCRMproductmaster(!CRMproductmaster);
+                          // setCurrentOpen("product_master");
+                        }}
+                      >
+                        <div className="d-flex justify-content-between gap-5 ms-2">
+                          <div className="d-flex">
+                            {/* <FaRegHandshake className="sidebar_icons pt-1" /> */}
+                            <div
+                              style={{ width: "100px" }}
+                              className="subactivelink ms-2 ps-1"
+                            >
+                              Masters
+                            </div>
+                          </div>
+
+                          <div className="text-right">
+                            <AiOutlineCaretDown
+                              className={`${
+                                CRMproductmaster || currentOpen === "product"
+                                  ? "toggle_btn subactivelink"
+                                  : `toggle_btn toggle_black`
+                              }`}
+                            />
                           </div>
                         </div>
-
-                        <div className="text-right">
-                          <AiOutlineCaretDown className="toggle_btn subactivelink" />
-                        </div>
-                      </div>
-                    </Link>
-                  </li>
+                      </NavLink>
+                    </li>
+                  </div>
 
                   {CRMproductmaster ? (
                     <>
-                      <div className="nav_active_color ">
+                      <div
+                        className={` ${
+                          CRMproductmaster && currentOpen === "product"
+                            ? "nav_active_color"
+                            : "nav_active_color_secondary"
+                        } `}
+                      >
                         {checkPermission("category") && (
                           <li className="nav-text">
                             <NavLink
@@ -1067,40 +1091,53 @@ export default function Sidebar({ showSidebar }) {
                         </NavLink>
                       </li>
                     )}
-                  </div>
-
-                  <li
-                    className={
-                      FMSSettingsopen
-                        ? "nav-text  items_hrms nav_active_color open"
-                        : "nav-text  items_hrms nav_active_color"
-                    }
-                  >
-                    <Link
-                      // className={FMSSettingsopen ? "active-link" : "link"}
-                      className="link"
-                      // to="/"
-                      onClick={() => setFMSSettingsopen(!FMSSettingsopen)}
+                    <li
+                      className={
+                        FMSSettingsopen
+                          ? "nav-text  items_hrms open"
+                          : "nav-text  items_hrms "
+                      }
                     >
-                      <div className="d-flex justify-content-between gap-5 ms-3">
-                        <div className="d-flex">
-                          {/* <MdSettingsInputComponent className="sidebar_icons ms-1 pt-1 " /> */}
-                          <div
-                            style={{ width: "90px" }}
-                            className="subactivelink"
-                          >
-                            Masters
+                      <Link
+                        className={FMSSettingsopen ? "active-link" : "link"}
+                        // to="/"
+                        onClick={() => {
+                          setFMSSettingsopen(!FMSSettingsopen);
+                          // setCurrentOpen("fmsSettings");
+                        }}
+                      >
+                        <div className="d-flex justify-content-between gap-5 ms-3">
+                          <div className="d-flex">
+                            {/* <MdSettingsInputComponent className="sidebar_icons ms-1 pt-1 " /> */}
+                            <div
+                              style={{ width: "90px" }}
+                              className="subactivelink"
+                            >
+                              Masters
+                            </div>
+                          </div>
+                          <div className="text-right ">
+                            <AiOutlineCaretDown
+                              className={`${
+                                FMSSettingsopen || currentOpen === "fms"
+                                  ? "toggle_btn subactivelink"
+                                  : `toggle_btn toggle_black`
+                              }`}
+                            />
                           </div>
                         </div>
-                        <div className="text-right ">
-                          <AiOutlineCaretDown className="toggle_btn subactivelink" />
-                        </div>
-                      </div>
-                    </Link>
-                  </li>
+                      </Link>
+                    </li>
+                  </div>
                   {FMSSettingsopen ? (
                     <>
-                      <div className="nav_active_color">
+                      <div
+                        className={` ${
+                          FMSSettingsopen && currentOpen === "fms"
+                            ? "nav_active_color"
+                            : "nav_active_color_secondary"
+                        } `}
+                      >
                         {checkPermission("freight type") && (
                           <li className="nav-text">
                             <NavLink
@@ -1273,7 +1310,6 @@ export default function Sidebar({ showSidebar }) {
                   ) : (
                     ""
                   )}
-
                   {/* {track assignment link is commented and hidden in sidebar} */}
                   {/* {checkPermission("track assignment") && (
                         <li className="nav-text">
@@ -1288,37 +1324,60 @@ export default function Sidebar({ showSidebar }) {
                           </NavLink>
                         </li>
                       )} */}
-                  <li
-                    className={
-                      fmsReport
-                        ? "nav-text  items_hrms nav_active_color open"
-                        : "nav-text  items_hrms nav_active_color"
-                    }
+                  <div
+                    className={` ${
+                      FMSOpen && currentOpen === "fms"
+                        ? "nav_active_color"
+                        : "nav_active_color_secondary"
+                    } `}
                   >
-                    <Link
-                      className="link"
-                      // to="/"
-                      onClick={() => setFmsReport(!fmsReport)}
+                    <li
+                      className={
+                        fmsReport
+                          ? "nav-text  items_hrms  open"
+                          : "nav-text  items_hrms "
+                      }
                     >
-                      <div className="d-flex justify-content-between gap-5 ms-3">
-                        <div className="d-flex">
-                          {/* <TbReport className="sidebar_icons ms-1 pt-1 " /> */}
-                          <div
-                            style={{ width: "90px" }}
-                            className="subactivelink"
-                          >
-                            Report
+                      <Link
+                        className={fmsReport ? "active-link" : "link"}
+                        // to="/"
+                        onClick={() => {
+                          setFmsReport(!fmsReport);
+                          // setCurrentOpen("fms_report");
+                        }}
+                      >
+                        <div className="d-flex justify-content-between gap-5 ms-3">
+                          <div className="d-flex">
+                            {/* <TbReport className="sidebar_icons ms-1 pt-1 " /> */}
+                            <div
+                              style={{ width: "90px" }}
+                              className="subactivelink"
+                            >
+                              Report
+                            </div>
+                          </div>
+                          <div className="text-right ">
+                            <AiOutlineCaretDown
+                              className={`${
+                                fmsReport || currentOpen === "fms"
+                                  ? "toggle_btn subactivelink"
+                                  : `toggle_btn toggle_black`
+                              }`}
+                            />
                           </div>
                         </div>
-                        <div className="text-right ">
-                          <AiOutlineCaretDown className="toggle_btn subactivelink" />
-                        </div>
-                      </div>
-                    </Link>
-                  </li>
+                      </Link>
+                    </li>
+                  </div>
                   {fmsReport ? (
                     <>
-                      <div className="nav_active_color ">
+                      <div
+                        className={` ${
+                          fmsReport && currentOpen === "fms"
+                            ? "nav_active_color"
+                            : "nav_active_color_secondary"
+                        } `}
+                      >
                         {checkPermission("agent_report") && (
                           <>
                             <li className="nav-text ">
@@ -1534,37 +1593,149 @@ export default function Sidebar({ showSidebar }) {
 
               {Accounts ? (
                 <>
-                  <li
-                    className={
-                      accountsSettings
-                        ? "nav-text  items_hrms nav_active_color open "
-                        : "nav-text  items_hrms nav_active_color"
-                    }
+                  <div
+                    className={` ${
+                      Accounts && currentOpen === "accounts"
+                        ? "nav_active_color"
+                        : "nav_active_color_secondary"
+                    } `}
                   >
-                    <Link
-                      className="link"
-                      // to="/"
-                      onClick={() => setAccountsSettings(!accountsSettings)}
+                    {checkPermission("purchase") && (
+                      <li className="nav-text">
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.PURCHASE}
+                        >
+                          <div className="ms-3 ps-1 subactivelink">
+                            Purchase
+                          </div>
+                        </NavLink>
+                      </li>
+                    )}
+
+                    {checkPermission("daily_expence") && (
+                      <li className="nav-text ">
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.DAILY_EXPENSE}
+                        >
+                          <div className="ms-3 ps-1 subactivelink">
+                            Daily Expense
+                          </div>
+                        </NavLink>
+                      </li>
+                    )}
+
+                    {checkPermission("job_payments") && (
+                      <li className="nav-text ">
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.JOB_PAYMENTS}
+                        >
+                          <div className="ms-3 ps-1 subactivelink">
+                            Job Payments
+                          </div>
+                        </NavLink>
+                      </li>
+                    )}
+                    {checkPermission("payments") && (
+                      <li className="nav-text ">
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.PAYMENTS}
+                        >
+                          <div className="ms-3 ps-1 subactivelink">
+                            Payments
+                          </div>
+                        </NavLink>
+                      </li>
+                    )}
+                    {checkPermission("add_credit_notes") && (
+                      <li className="nav-text ">
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.CREDIT_NOTES}
+                        >
+                          <div className="ms-3 ps-1 subactivelink">
+                            Credit Notes
+                          </div>
+                        </NavLink>
+                      </li>
+                    )}
+                    {checkPermission("add_debit_notes") && (
+                      <li className="nav-text ">
+                        <NavLink
+                          className={({ isActive }) =>
+                            isActive ? "active-link" : "link"
+                          }
+                          to={ROUTES.DEBIT_NOTES}
+                        >
+                          <div className="ms-3 ps-1 subactivelink">
+                            Debit Notes
+                          </div>
+                        </NavLink>
+                      </li>
+                    )}
+                    <li
+                      className={
+                        accountsSettings
+                          ? "nav-text  items_hrms  open "
+                          : "nav-text  items_hrms `"
+                      }
                     >
-                      <div className="d-flex justify-content-between gap-5 ms-3">
-                        <div className="d-flex">
-                          {/* <MdSettingsInputComponent className="sidebar_icons ms-1 pt-1 " /> */}
-                          <div
-                            style={{ width: "90px" }}
-                            className="subactivelink"
-                          >
-                            Masters
+                      <Link
+                        className={`${
+                          accountsSettings ? "active-link" : "link"
+                        }`}
+                        // to="/"
+                        onClick={() => {
+                          setAccountsSettings(!accountsSettings);
+                          // setCurrentOpen("accountSettings");
+                        }}
+                      >
+                        <div className="d-flex justify-content-between gap-5 ms-3">
+                          <div className="d-flex">
+                            {/* <MdSettingsInputComponent className="sidebar_icons ms-1 pt-1 " /> */}
+                            <div
+                              style={{ width: "90px" }}
+                              className="subactivelink"
+                            >
+                              Masters
+                            </div>
+                          </div>
+                          <div className="text-right ">
+                            <AiOutlineCaretDown
+                              className={`${
+                                accountsSettings || currentOpen === "accounts"
+                                  ? "toggle_btn subactivelink"
+                                  : `toggle_btn toggle_black`
+                              }`}
+                            />
                           </div>
                         </div>
-                        <div className="text-right ">
-                          <AiOutlineCaretDown className="toggle_btn subactivelink" />
-                        </div>
-                      </div>
-                    </Link>
-                  </li>
+                      </Link>
+                    </li>
+                  </div>
+
                   {accountsSettings ? (
                     <>
-                      <div className="nav_active_color ">
+                      <div
+                        className={` ${
+                          accountsSettings && currentOpen === "accounts"
+                            ? "nav_active_color"
+                            : "nav_active_color_secondary"
+                        } `}
+                      >
                         {checkPermission("daily_expence") && (
                           <li className="nav-text ">
                             <NavLink
@@ -1720,139 +1891,77 @@ export default function Sidebar({ showSidebar }) {
                   ) : (
                     ""
                   )}
-                  <div className="nav_active_color">
-                    {checkPermission("purchase") && (
-                      <li className="nav-text">
-                        <NavLink
-                          className={({ isActive }) =>
-                            isActive ? "active-link" : "link"
-                          }
-                          to={ROUTES.PURCHASE}
-                        >
-                          <div className="ms-3 ps-1 subactivelink">
-                            Purchase
-                          </div>
-                        </NavLink>
-                      </li>
-                    )}
-
-                    {checkPermission("daily_expence") && (
-                      <li className="nav-text ">
-                        <NavLink
-                          className={({ isActive }) =>
-                            isActive ? "active-link" : "link"
-                          }
-                          to={ROUTES.DAILY_EXPENSE}
-                        >
-                          <div className="ms-3 ps-1 subactivelink">
-                            Daily Expense
-                          </div>
-                        </NavLink>
-                      </li>
-                    )}
-
-                    {checkPermission("job_payments") && (
-                      <li className="nav-text ">
-                        <NavLink
-                          className={({ isActive }) =>
-                            isActive ? "active-link" : "link"
-                          }
-                          to={ROUTES.JOB_PAYMENTS}
-                        >
-                          <div className="ms-3 ps-1 subactivelink">
-                            Job Payments
-                          </div>
-                        </NavLink>
-                      </li>
-                    )}
-                    {checkPermission("payments") && (
-                      <li className="nav-text ">
-                        <NavLink
-                          className={({ isActive }) =>
-                            isActive ? "active-link" : "link"
-                          }
-                          to={ROUTES.PAYMENTS}
-                        >
-                          <div className="ms-3 ps-1 subactivelink">
-                            Payments
-                          </div>
-                        </NavLink>
-                      </li>
-                    )}
-                    {checkPermission("add_credit_notes") && (
-                      <li className="nav-text ">
-                        <NavLink
-                          className={({ isActive }) =>
-                            isActive ? "active-link" : "link"
-                          }
-                          to={ROUTES.CREDIT_NOTES}
-                        >
-                          <div className="ms-3 ps-1 subactivelink">
-                            Credit Notes
-                          </div>
-                        </NavLink>
-                      </li>
-                    )}
-                    {checkPermission("add_debit_notes") && (
-                      <li className="nav-text ">
-                        <NavLink
-                          className={({ isActive }) =>
-                            isActive ? "active-link" : "link"
-                          }
-                          to={ROUTES.DEBIT_NOTES}
-                        >
-                          <div className="ms-3 ps-1 subactivelink">
-                            Debit Notes
-                          </div>
-                        </NavLink>
-                      </li>
-                    )}
-                  </div>
-
-                  <li
-                    className={
-                      accountsReports
-                        ? "nav-text  items_hrms nav_active_color open"
-                        : "nav-text  items_hrms nav_active_color"
-                    }
+                  <div
+                    className={` ${
+                      Accounts && currentOpen === "accounts"
+                        ? "nav_active_color"
+                        : "nav_active_color_secondary"
+                    } `}
                   >
-                    <Link
-                      className="link"
-                      // to="/"
-                      onClick={() => setAccountsReports(!accountsReports)}
+                    <li
+                      className={
+                        accountsReports
+                          ? "nav-text  items_hrms  open"
+                          : "nav-text  items_hrms "
+                      }
                     >
-                      <div className="d-flex justify-content-between gap-5 ms-3">
-                        <div className="d-flex">
-                          {/* <TbReport className="sidebar_icons ms-1 pt-1 " /> */}
-                          <div
-                            style={{ width: "90px" }}
-                            className="subactivelink"
-                          >
-                            Reports
+                      <Link
+                        className={`${
+                          accountsReports ? "active-link" : "link"
+                        }`}
+                        // to="/"
+                        onClick={() => {
+                          setAccountsReports(!accountsReports);
+                          // setCurrentOpen("acc_reports");
+                        }}
+                      >
+                        <div className="d-flex justify-content-between gap-5 ms-3">
+                          <div className="d-flex">
+                            {/* <TbReport className="sidebar_icons ms-1 pt-1 " /> */}
+                            <div
+                              style={{ width: "90px" }}
+                              className="subactivelink"
+                            >
+                              Reports
+                            </div>
+                          </div>
+                          <div className="text-right ">
+                            <AiOutlineCaretDown
+                              className={`${
+                                accountsReports || currentOpen === "accounts"
+                                  ? "toggle_btn subactivelink"
+                                  : `toggle_btn toggle_black`
+                              }`}
+                            />
                           </div>
                         </div>
-                        <div className="text-right ">
-                          <AiOutlineCaretDown className="toggle_btn subactivelink" />
-                        </div>
-                      </div>
-                    </Link>
-                  </li>
+                      </Link>
+                    </li>
+                  </div>
                   {accountsReports ? (
                     <>
-                      {checkPermission("daily_expense_report") && (
-                        <li className="nav-text nav_active_color">
-                          <NavLink
-                            className={({ isActive }) =>
-                              isActive ? "active-link" : "link"
-                            }
-                            to={ROUTES.DAILY_EXPENSE_REPORT}
-                          >
-                            <div className="subactivelink ms-4 ps-3">
-                              Daily Expense Report
-                            </div>
-                          </NavLink>
-                        </li>
-                      )}
+                      <div
+                        className={` ${
+                          accountsReports && currentOpen === "accounts"
+                            ? "nav_active_color"
+                            : "nav_active_color_secondary"
+                        } `}
+                      >
+                        {checkPermission("daily_expense_report") && (
+                          <li className="nav-text ">
+                            <NavLink
+                              className={({ isActive }) =>
+                                isActive ? "active-link" : "link"
+                              }
+                              to={ROUTES.DAILY_EXPENSE_REPORT}
+                            >
+                              <div className="subactivelink ms-4 ps-3">
+                                Daily Expense Report
+                              </div>
+                            </NavLink>
+                          </li>
+                        )}
+                      </div>
                     </>
                   ) : (
                     ""
@@ -1875,7 +1984,10 @@ export default function Sidebar({ showSidebar }) {
                   className={GeneralSettingsopen ? "active-link_main" : "link"}
                   // style={{ fontSize: 16 }}
                   // to="/"
-                  onClick={() => setGeneralSettingsopen(!GeneralSettingsopen)}
+                  onClick={() => {
+                    setGeneralSettingsopen(!GeneralSettingsopen);
+                    setCurrentOpen("generalSettings");
+                  }}
                 >
                   <div className="d-flex justify-content-between gap-5">
                     <div className="d-flex">
@@ -1895,7 +2007,13 @@ export default function Sidebar({ showSidebar }) {
               </li>
               {GeneralSettingsopen ? (
                 <>
-                  <div className="nav_active_color ">
+                  <div
+                    className={` ${
+                      GeneralSettingsopen && currentOpen === "generalSettings"
+                        ? "nav_active_color"
+                        : "nav_active_color_secondary"
+                    } `}
+                  >
                     {checkPermission("country") && (
                       <li className="nav-text">
                         <NavLink

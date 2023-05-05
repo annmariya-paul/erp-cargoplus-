@@ -247,7 +247,7 @@ function ListAgent() {
     setEmployee_Idd(e.agent_vendor_id);
 
     editForm.setFieldsValue({
-      inpiutId: e.agent_vendor_id,
+      inpiutId: e.agent_name,
       // inputName:e.agent_emp_name,
       country: e.agent_country,
       inputcommision: e.agent_commission_details,
@@ -620,7 +620,7 @@ function ListAgent() {
           </div>
           <div className="col-4 d-flex justify-content-end">
             {/* <Link to={ROUTES.CREATEAGENT} style={{ color: "white" }}> */}
-            <Button
+            {/* <Button
               btnType="add"
               onClick={() => {
                 setModalAddBranch(true);
@@ -630,7 +630,7 @@ function ListAgent() {
               }}
             >
               New Agent
-            </Button>
+            </Button> */}
             {/* </Link> */}
           </div>
         </div>
@@ -869,7 +869,7 @@ function ListAgent() {
           list_content={
             <div>
               <div>
-                <h5 className="lead_text">Update Agent</h5>
+                <h5 className="lead_text">Edit Agent</h5>
               </div>
               <div className="container-fluid  my-3">
                 <div className="row my-3 ">

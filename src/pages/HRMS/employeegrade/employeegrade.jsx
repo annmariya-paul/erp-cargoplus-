@@ -241,7 +241,7 @@ function Employeegrade() {
         {/* <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}></div> */}
         <div className="row my-3">
           <div className="col-4 px-3">
-            <Select
+            {/* <Select
               bordered={false}
               className="page_size_style"
               value={pageSize}
@@ -265,10 +265,10 @@ function Employeegrade() {
                 <span className="vertical ms-1">|</span>
                 <span className="sizes ms-1">100</span>
               </Select.Option>
-            </Select>
+            </Select> */}
           </div>
           <div className="col-4 d-flex py-2 justify-content-center">
-            <MyPagination
+            {/* <MyPagination
               total={employeegradedata?.length}
               current={current}
               showSizeChanger={true}
@@ -278,7 +278,7 @@ function Employeegrade() {
                 setCurrent(current);
                 setPageSize(pageSize);
               }}
-            />
+            /> */}
           </div>
           <div className="col-4">
             <Button btnType="add" onClick={() => setAddmodalshow(true)}>
@@ -288,14 +288,15 @@ function Employeegrade() {
         </div>
         <div className="datatable">
           <TableData
-            data={getData(current, pageSize)}
+            // data={getData(current, pageSize)}
+            data={employeegradedata}
             columns={columns}
             custom_table_css="table_lead_list"
           />
         </div>
 
         <div className="d-flex py-0 justify-content-center">
-          <MyPagination
+          {/* <MyPagination
             total={employeegradedata?.length}
             current={current}
             showSizeChanger={true}
@@ -305,7 +306,7 @@ function Employeegrade() {
               setCurrent(current);
               setPageSize(pageSize);
             }}
-          />
+          /> */}
         </div>
 
         <Custom_model

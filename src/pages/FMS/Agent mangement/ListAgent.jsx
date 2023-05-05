@@ -216,7 +216,8 @@ function ListAgent() {
     setinputCountry(e);
     // setCountryis(e);
   };
-
+const[agentcountry,setAgentCountry]=useState();
+console.log("country",agentcountry);
   const getAllCountries = () => {
     PublicFetch.get(`${GENERAL_SETTING_BASE_URL}/country`)
       .then((res) => {
@@ -242,12 +243,13 @@ function ListAgent() {
     console.log("Fright edit", e);
     setAgentId(e?.agent_id);
     setinputCountry(e.agent_country);
+    setAgentCountry(e.agent_countryid);
     setinputcommision(e.agent_commission_details);
     setinpiutId(e.agent_vendor_id);
     setEmployee_Idd(e.agent_vendor_id);
 
     editForm.setFieldsValue({
-      inpiutId: e.agent_vendor_id,
+      inpiutId: e.agent_name,
       // inputName:e.agent_emp_name,
       country: e.agent_country,
       inputcommision: e.agent_commission_details,
@@ -261,7 +263,7 @@ function ListAgent() {
 
     let data = {
       agent_vendor_id: parseInt(inpiutId),
-      agent_country: inputCountry,
+      agent_country: agentcountry,
       agent_commission_details: inputcommision,
     };
     let idss = parseInt(agentId);
@@ -330,6 +332,7 @@ function ListAgent() {
           temp.push({
             agent_id: item.agent_id,
             agent_country: item?.countries?.country_name,
+            agent_countryid: item?.crm_v1_vendors?.vendor_country_id,
             agent_commission_details: item.agent_commission_details,
             agent_vendor_id: item.agent_vendor_id,
             agent_name: item.crm_v1_vendors.vendor_name,
@@ -620,7 +623,7 @@ function ListAgent() {
           </div>
           <div className="col-4 d-flex justify-content-end">
             {/* <Link to={ROUTES.CREATEAGENT} style={{ color: "white" }}> */}
-            <Button
+            {/* <Button
               btnType="add"
               onClick={() => {
                 setModalAddBranch(true);
@@ -630,7 +633,7 @@ function ListAgent() {
               }}
             >
               New Agent
-            </Button>
+            </Button> */}
             {/* </Link> */}
           </div>
         </div>
@@ -869,7 +872,7 @@ function ListAgent() {
           list_content={
             <div>
               <div>
-                <h5 className="lead_text">Update Agent</h5>
+                <h5 className="lead_text">Edit Agent</h5>
               </div>
               <div className="container-fluid  my-3">
                 <div className="row my-3 ">
@@ -886,7 +889,7 @@ function ListAgent() {
                     <div className="row">
                       <div className="col-12 pb-3">
                         <div className="">
-                          <label>Vendor Id</label>
+                          <label>Agent Name</label>
                           <Form.Item
                             name="inpiutId"
                             rules={[

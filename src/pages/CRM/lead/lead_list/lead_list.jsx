@@ -170,6 +170,7 @@ export default function LeadList() {
   useEffect(() => {
     const getData = setTimeout(() => {
       GetAllLeadData(searchedText);
+      return()=> clearTimeout(getData)
     }, 1000);
 
     return () => clearTimeout(getData);

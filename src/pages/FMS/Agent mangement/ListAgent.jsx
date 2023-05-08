@@ -212,15 +212,14 @@ function ListAgent() {
   const handleChange = (e) => {
     // setCountryis(e);
     setAgentCountry(e);
-    
   };
   const handleChangetwo = (e) => {
     // setinputCountry(e);
-    setAgentCountry(e)
+    setAgentCountry(e);
     // setCountryis(e);
   };
-const[agentcountry,setAgentCountry]=useState();
-console.log("hhhhhh",agentcountry);
+  const [agentcountry, setAgentCountry] = useState();
+  console.log("hhhhhh", agentcountry);
   const getAllCountries = () => {
     PublicFetch.get(`${GENERAL_SETTING_BASE_URL}/country`)
       .then((res) => {
@@ -254,7 +253,7 @@ console.log("hhhhhh",agentcountry);
     editForm.setFieldsValue({
       inpiutId: e.agent_name,
       // inputName:e.agent_emp_name,
-      country: e.agent_country,
+      agentcountry: e.agent_country,
       inputcommision: e.agent_commission_details,
     });
     setFrightEditPopup(true);
@@ -266,7 +265,7 @@ console.log("hhhhhh",agentcountry);
 
     let data = {
       agent_vendor_id: parseInt(inpiutId),
-      agent_country:parseInt(agentcountry),
+      agent_country: parseInt(agentcountry),
       agent_commission_details: inputcommision,
     };
     let idss = parseInt(agentId);
@@ -335,7 +334,7 @@ console.log("hhhhhh",agentcountry);
           temp.push({
             agent_id: item.agent_id,
             agent_country: item?.countries?.country_name,
-            agent_countryid: item?.countries?.country_id,
+            agent_countryid: item?.agent_country,
             agent_commission_details: item.agent_commission_details,
             agent_vendor_id: item.agent_vendor_id,
             agent_name: item.crm_v1_vendors.vendor_name,
@@ -577,7 +576,7 @@ console.log("hhhhhh",agentcountry);
         <div className="row my-3">
           <div className="col-4 px-3 ">
             <div className="d-flex justify-content-start align-items-center gap-3">
-               <PageSizer/>
+              <PageSizer />
 
               {/* <Select
                 bordered={false}
@@ -798,7 +797,6 @@ console.log("hhhhhh",agentcountry);
                               value={agentcountry}
                               optionFilterProp="children"
                               // onChange={handleChange}
-                              
                             >
                               {allCountries &&
                                 allCountries.length > 0 &&
@@ -913,6 +911,7 @@ console.log("hhhhhh",agentcountry);
                               // onBlur={() => {
 
                               // }}
+                              disabled={true}
                             >
                               {allempname &&
                                 allempname.length > 0 &&

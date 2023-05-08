@@ -283,7 +283,7 @@ function Containertypes() {
 
         <div className="row my-3">
           <div className="col-4 ">
-            <Select
+            {/* <Select
               bordered={false}
               className="page_size_style"
               //   value={pageSize}
@@ -304,7 +304,7 @@ function Containertypes() {
                 <span className="vertical ms-1">|</span>
                 <span className="sizes ms-1">100</span>
               </Select.Option>
-            </Select>
+            </Select> */}
           </div>
 
           <div className="col-4 d-flex  align-items-center justify-content-center">
@@ -346,7 +346,7 @@ function Containertypes() {
           list_content={
             <>
               <div className="row">
-                <h5 className="lead_text">New Containertype</h5>
+                <h5 className="lead_text">New Container Type</h5>
               </div>
               <Form
                 form={addForm}
@@ -415,7 +415,7 @@ function Containertypes() {
           list_content={
             <>
               <div className="row">
-                <h5 className="lead_text">Edit ContainerType</h5>
+                <h5 className="lead_text">Edit Container Type</h5>
               </div>
               <Form
                 form={addForm}
@@ -481,7 +481,7 @@ function Containertypes() {
             <div className="container-fluid p-3">
               <div className="row mb-5">
                 <div className="col-9">
-                  <h5 className="lead_text">Containertype</h5>
+                  <h5 className="lead_text">Container Type</h5>
                 </div>
                 <div className="col-3">
                   <Button

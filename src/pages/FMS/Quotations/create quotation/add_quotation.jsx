@@ -2187,6 +2187,7 @@ export default function Add_Quotation() {
                   </div>
                   <div className="datatable">
                     <TableData
+                      tableType="secondary"
                       data={tableData}
                       columns={columns}
                       rowKey={(record) => record.key}

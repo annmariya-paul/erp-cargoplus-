@@ -19,6 +19,7 @@ import moment from "moment";
 
 import { CRM_BASE_URL_HRMS, CRM_BASE_URL_FMS } from "../../../../api/bootapi";
 import MyPagination from "../../../../components/Pagination/MyPagination";
+import PageSizer from "../../../../components/PageSizer/PageSizer";
 
 export default function Quotations(props) {
   const navigate = useNavigate();
@@ -38,7 +39,8 @@ export default function Quotations(props) {
   const [CodeInput, setCodeInput] = useState();
   const [AllQuotations, setAllQuotations] = useState();
   //  const [showViewModal, setShowViewModal] = useState(false);
-  const [noofItems, setNoofItems] = useState("25");
+  let a = localStorage.getItem("noofitem");
+  const [noofItems, setNoofItems] = useState(a);
   const [current, setCurrent] = useState(1);
 
   const [totalquotation, settotalquotation] = useState("");
@@ -441,35 +443,11 @@ export default function Quotations(props) {
             <div className="d-flex justify-content-start align-items-center gap-3">
               {totalquotation > 0 && (
                 <div className=" ">
-                  <Select
-                    // defaultValue={"25"}
-                    bordered={false}
-                    className="page_size_style"
-                    value={noofItems}
-                    // onChange={handleLastNameChange}
-                    onChange={(event, current) => {
-                      console.log("On page size selected : ", event);
-                      console.log("nfjnjfv", current);
-                      setNoofItems(event);
-                      setCurrent(1);
+                  <PageSizer
+                    pageValue={(e) => {
+                      setNoofItems(e);
                     }}
-                  >
-                    <Select.Option value="25">
-                      <span style={{ color: "#2f6b8f" }} className="ms-1">
-                        25
-                      </span>
-                    </Select.Option>
-                    <Select.Option value="50">
-                      <span style={{ color: "#2f6b8f" }} className="ms-1">
-                        50
-                      </span>
-                    </Select.Option>
-                    <Select.Option value="100">
-                      <span style={{ color: "#2f6b8f" }} className="ms-1">
-                        100
-                      </span>{" "}
-                    </Select.Option>
-                  </Select>
+                  />
                 </div>
               )}
               {totalquotation > 0 && (

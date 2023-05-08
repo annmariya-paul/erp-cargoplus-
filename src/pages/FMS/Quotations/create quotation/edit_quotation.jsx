@@ -2229,6 +2229,7 @@ export default function EditQuotation(
                   </div>
                   <div className="datatable">
                     <TableData
+                      tableType="secondary"
                       data={sampletable}
                       columns={columns}
                       custom_table_css="table_qtn qtn_table_brdr"

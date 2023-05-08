@@ -18,7 +18,7 @@ import CheckUnique from "../../../../check Unique/CheckUnique";
 import { UniqueErrorMsg } from "../../../../ErrorMessages/UniqueErrorMessage";
 import MyPagination from "../../../../components/Pagination/MyPagination";
 import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
-import PageSizer from "../../../../components/PageSizer/PageSizer"
+import PageSizer from "../../../../components/PageSizer/PageSizer";
 
 export default function Carrierlist(props) {
   const [addForm] = Form.useForm();
@@ -47,11 +47,8 @@ export default function Carrierlist(props) {
   const [current, setCurrent] = useState(1);
   const [editUniqueCode, setEditUniqueCode] = useState();
 
-  
-
-  
-// setPageSize(localStorage.getItem("noofitem"))
-  console.log("locaal itmm",localStorage.getItem("noofitem"),pageSize)
+  // setPageSize(localStorage.getItem("noofitem"))
+  console.log("locaal itmm", localStorage.getItem("noofitem"), pageSize);
 
   const [editForm] = Form.useForm();
   const close_modal = (mShow, time) => {
@@ -284,7 +281,6 @@ export default function Carrierlist(props) {
   ]);
   //heder icons end
 
- 
   return (
     <>
       <div className="container-fluid container2 pt-3">
@@ -340,13 +336,9 @@ export default function Carrierlist(props) {
 
         </div> */}
         <div className="row my-3">
-          <div className="col-4 px-3">
-           <PageSizer/>
-
-          
-          </div>
+          <div className="col-4 px-3">{/* <PageSizer/> */}</div>
           <div className=" col-4 d-flex  align-items-center justify-content-center">
-            {carrierdata && (
+            {/* {carrierdata && (
               <MyPagination
                 total={parseInt(carrierdata?.length)}
                 current={current}
@@ -357,7 +349,7 @@ export default function Carrierlist(props) {
                   setPageSize(pageSize);
                 }}
               />
-            )}
+            )} */}
           </div>
           <div className="col-4 d-flex justify-content-end">
             <Button btnType="add" onClick={() => setModalAddCarrier(true)}>
@@ -367,14 +359,14 @@ export default function Carrierlist(props) {
         </div>
         <div className="datatable">
           <TableData
-            data={getData(current, pageSize)}
-            // data={carrierdata}
+            // data={getData(current, pageSize)}
+            data={carrierdata}
             columns={columns}
             custom_table_css="table_lead_list"
           />
         </div>
         <div className="d-flex py-2 justify-content-center">
-          {carrierdata && (
+          {/* {carrierdata && (
             <MyPagination
               total={parseInt(carrierdata?.length)}
               current={current}
@@ -385,7 +377,7 @@ export default function Carrierlist(props) {
                 setPageSize(pageSize);
               }}
             />
-          )}
+          )} */}
         </div>
       </div>
 

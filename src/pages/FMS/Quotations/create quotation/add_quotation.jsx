@@ -2187,6 +2187,7 @@ export default function Add_Quotation() {
                   </div>
                   <div className="datatable">
                     <TableData
+                      tableType="secondary"
                       data={tableData}
                       columns={columns}
                       rowKey={(record) => record.key}
@@ -2199,12 +2200,12 @@ export default function Add_Quotation() {
                     ) : null}
                   </div>
 
-                  <div className="d-flex justify-content-end mt-4 ms-5">
-                    <div className="col-lg-2 col-sm-4 col-xs-3 d-flex justify-content-end mt-3 me-3">
+                  <div className="d-flex justify-content-end align-items-center mt-4 ms-5">
+                    <div className="col-lg-2 col-sm-4 col-xs-3 d-flex justify-content-end  mt-2 me-3">
                       <p style={{ fontWeight: 600 }}>Grand Total :</p>
                     </div>
 
-                    <div className="col-lg-2 col-sm-6 col-xs-2 me-5">
+                    <div className="col-lg-2 col-sm-6 col-xs-2 me-5 ">
                       <Form.Item name="grandtotal">
                         <Input_Number
                           className="text_right grandtotal"

@@ -74,7 +74,7 @@ export default function TaxType() {
           tax_type_name: item.tax_type_name,
           tax_type_percentage: item.tax_type_percentage,
           tax_type_status: item.tax_type_status,
-          tax_type_tax_group_id: item.tax_type_tax_group_id,
+          tax_type_tax_group_id: item?.tax_type_tax_group_id,
           tax_type_tax_group_name: item?.fms_v1_tax_groups?.tax_group_name,
         });
       });
@@ -147,6 +147,7 @@ export default function TaxType() {
       editName: i.tax_type_name,
       taxEditPercent: i.tax_type_percentage,
       editDescription: i.tax_type_description,
+      tax_type_tax_group: i.tax_type_tax_group_id,
     });
     setModalEditTaxtype(true);
   };
@@ -176,6 +177,7 @@ export default function TaxType() {
       editName: i.tax_type_name,
       taxEditPercent: i.tax_type_percentage,
       editDescription: i.tax_type_description,
+      tax_type_tax_group: i.tax_type_tax_group_id,
     });
     setViewTaxtypeModal(false);
     setModalEditTaxtype(true);

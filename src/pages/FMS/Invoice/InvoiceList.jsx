@@ -316,7 +316,7 @@ function InvoiceList() {
           console.log("Success of cancel", res.data.data);
           setSuccessPopup(true);
           close_modal(successPopup, 1200);
-          getAllInvoices();
+          getAllInvoices(searchSource);
           setCancelPopup(false);
           AddForm.resetFields();
         }
@@ -388,7 +388,7 @@ function InvoiceList() {
       <div className="container-fluid">
         <div className="row">
           <div className="col-12">
-            <div className="container-fluid lead_list  my-3 py-3">
+            <div className="container-fluid lead_list  py-3">
               {/* invoice listing section One */}
 
               <div>
@@ -441,9 +441,9 @@ function InvoiceList() {
                  
                 </div> */}
                 <div className="row my-3">
-                  <div className="col-4   px-3">
-                    <div className="row">
-                      <div className="col-xl-2 col-lg-3 col-md-4 col-sm-12   ">
+                  <div className="col-xl-4  ">
+                    <div className="d-flex align-items-center gap-3">
+                      <div className="   ">
                         <Select
                           // defaultValue={"25"}
                           bordered={false}
@@ -474,16 +474,16 @@ function InvoiceList() {
                           </Select.Option>
                         </Select>
                       </div>
-                      <div className=" col-xl-10 col-lg-9 col-md-8 col-sm-12  d-flex  align-items-center ">
+                      <div className="   d-flex  align-items-center ">
                         <label className="font_size">
-                          Results: {startcount + 1} -
+                          Results: {startcount + 1} - {""}
                           {getFinalCount(1 * numOfItems * current)}{" "}
                           <span>of {totalCount} </span>{" "}
                         </label>
                       </div>
                     </div>
                   </div>
-                  <div className="col-4 d-flex align-items-center justify-content-center">
+                  <div className="col-xl-4 d-flex align-items-center justify-content-center">
                     {invoiceData && (
                       <MyPagination
                         total={parseInt(totalCount)}
@@ -496,7 +496,7 @@ function InvoiceList() {
                     )}
                   </div>
                   {/* <div className="col-xl-6 col-lg-6 col-md-6 col-sm-8 col-12"></div> */}
-                  <div className="col-4 d-flex justify-content-end"></div>
+                  <div className="col-xl-4 d-flex justify-content-end"></div>
                 </div>
                 <div className="datatable">
                   {/* {AllinvoiceData && ( */}

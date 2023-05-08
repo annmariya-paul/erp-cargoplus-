@@ -21,27 +21,30 @@ const progress = [
     title: "TASKS",
     dataIndex: "service_name",
     key: "service_name",
-    align: "center",
+    align: "left",
+    width: "30%",
     // render: (value, item, indx) => count + indx,
   },
   {
     title: "COST",
     dataIndex: "quotation_details_cost",
     key: "quotation_details_cost",
-    align: "center",
+    align: "right",
+    width: "10%",
   },
   {
     title: "TAX GROUP",
     dataIndex: "tax_type_name",
     key: "tax_type_name",
-    align: "center",
+    align: "left",
+    width: "10%",
   },
   {
     title: "TAX AMOUNT",
     dataIndex: "quotation_details_tax_amount",
     key: "quotation_details_tax_amount",
-    width: "35%",
-    align: "center",
+    width: "10%",
+    align: "right",
     // render: (opportunity_update_next_date_contact) => {
     //   return (
     //     <label>
@@ -54,8 +57,8 @@ const progress = [
     title: "TOTAL AMOUNT",
     dataIndex: "quotation_details_total",
     key: "quotation_details_total",
-
-    align: "center",
+    width: "10%",
+    align: "right",
   },
 ];
 const { Panel } = Collapse;
@@ -85,6 +88,7 @@ export default function ViewQuotation() {
   const printRef = useRef(null);
   const [allqoutation, setAllQuotations] = useState();
   const [tabledata, setTableData] = useState();
+  const [TotalAmount, setTotalAmount] = useState();
   const navigate = useNavigate();
 
   const getSingleQuotation = () => {
@@ -97,9 +101,10 @@ export default function ViewQuotation() {
           console.log("temp", res?.data?.data?.quotation);
 
           let temp11 = [];
-
+          let total = 0;
           res.data.data.quotation.fms_v1_quotation_details.forEach(
             (item, index) => {
+              total += item.quotation_details_total.toFixed(2);
               temp11.push({
                 quotation_details_cost: item.quotation_details_cost.toFixed(2),
                 quotation_details_id: item.quotation_details_id,
@@ -116,6 +121,7 @@ export default function ViewQuotation() {
                 tax_type_name: item.fms_v1_tax_groups?.tax_group_name,
               });
               setTableData(temp11);
+              setTotalAmount(total);
             }
           );
         }
@@ -196,7 +202,7 @@ export default function ViewQuotation() {
               </div>
               <div className="col-xl-2 col-md-3 col-4 d-flex justify-content-end mb-3 ">
                 <Button
-                 style={{ width: 300 }}
+                  style={{ width: 300 }}
                   btnType="add_borderless"
                   className="edit_button"
                   onClick={() => {
@@ -205,7 +211,6 @@ export default function ViewQuotation() {
                   }}
                 >
                   Convert to Job
-                 
                 </Button>
               </div>
             </div>
@@ -318,14 +323,14 @@ export default function ViewQuotation() {
               </p>
             </div>
           </div>
-          <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
+          {/* <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
             <div className="col-5">Mode</div>
             <div className="col-1">:</div>
 
             <div className="col-6">
               <p className="modal-view-data">{allqoutation?.quotation_mode}</p>
             </div>
-          </div>
+          </div> */}
 
           <div className="col-xl-4 col-sm-12 d-flex mt-2 px-3">
             <div className="col-5">Carrier</div>
@@ -580,7 +585,7 @@ export default function ViewQuotation() {
                   <p style={{ fontWeight: 500 }}>Grand Total : </p>
                 </div>
                 <div className="col-lg-2 col-sm-2 col-xs-2 mt-3">
-                  <p>{allqoutation?.quotation_grand_total.toFixed(2)}</p>
+                  <p>{TotalAmount.toFixed(2)}</p>
                 </div>
               </div>
             </Panel>

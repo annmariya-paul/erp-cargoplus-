@@ -342,9 +342,9 @@ function Employeegrade() {
                           rules={[
                             {
                               required: true,
-                              pattern: new RegExp("^[A-Za-z ]+$"),
+                              // pattern: new RegExp("^[A-Za-z ]+$"),
                               message:
-                                "Please enter a valid Employee Grade Name",
+                                "Please enter a valid employee grade name",
                             },
                             {
                               min: 2,

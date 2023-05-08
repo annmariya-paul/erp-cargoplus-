@@ -196,15 +196,18 @@ function Companyinfo() {
   // console.log("data of cmpny",cmpnydata)
   return (
     <div>
-      <div className="">
-        <div className="row">
-          <div className="col-12">
-            <div className="card  border-0 shadow-sm">
-              <div className="container">
-                <div className="row">
-                  <div className="col-12">
-                    <h4 className="">Add CompanyInfo</h4>
-                    <div className="">
+      <div className="container-fluid ">
+        <div  style={{ borderRadius: "8px" }}
+          className="card border-0 content-tabs px-2">
+          <div className="container my-3">
+            <div className="">
+              {/* <div className="container"> */}
+                {/* <div className="row py-3"> */}
+                  {/* <div className="col-12"> */}
+                    <h5 style={{ color: "#0891d1" }}>Add Company Info</h5>
+                    </div>
+
+                   
                       <Form
                         form={addForm}
                         onFinish={(value) => {
@@ -217,7 +220,8 @@ function Companyinfo() {
                       >
                         <div className="row">
                           <div className="col-xl-6 col-lg-6  col-12">
-                            <div className="">
+                           
+                            <div className="mt-1">
                               <label>Company Name</label>
                               <Form.Item
                                 name="company_name"
@@ -236,33 +240,8 @@ function Companyinfo() {
                                 />
                               </Form.Item>
                             </div>
-                          </div>
-                          <div className="col-xl-6 col-lg-6  col-12">
-                            <div className="">
-                              <label>Address</label>
-                              <Form.Item
-                                name="company_address"
-                                rules={[
-                                  {
-                                    required: true,
-                                    message: "Address is Required",
-                                  },
-                                ]}
-                              >
-                                <TextArea
-                                  value={companyaddress}
-                                  onChange={(e) => {
-                                    setCompanyaddress(e.target.value);
-                                  }}
-                                />
-                              </Form.Item>
-                            </div>
-                          </div>
-                        </div>
 
-                        <div className="row mt-2">
-                          <div className="col-xl-6 col-lg-6  col-12">
-                            <div className="">
+                            <div className="mt-1">
                               <label>Email</label>
                               <Form.Item
                                 name="company_email"
@@ -281,9 +260,7 @@ function Companyinfo() {
                                 />
                               </Form.Item>
                             </div>
-                          </div>
-                          <div className=" col-sm-6">
-                            <div>
+                            <div className="mt-1">
                               <label>Phone</label>
                               <Form.Item
                                 name="company_phone"
@@ -308,8 +285,35 @@ function Companyinfo() {
                                 />
                               </Form.Item>
                             </div>
+
+
+                          </div>
+                          <div className="col-xl-6 col-lg-6  col-12">
+                            <div className="">
+                              <label>Address</label>
+                              <Form.Item
+                                name="company_address"
+                                rules={[
+                                  {
+                                    required: true,
+                                    message: "Address is Required",
+                                  },
+                                ]}
+                              >
+                                <TextArea 
+                                height={true}
+                                  value={companyaddress}
+                                 
+                                  onChange={(e) => {
+                                    setCompanyaddress(e.target.value);
+                                  }}
+                                />
+                              </Form.Item>
+                            </div>
                           </div>
                         </div>
+
+         
                         <div className="row mt-2">
                           <div className="col-xl-6 col-lg-6 col-12">
                             <div className="">
@@ -480,14 +484,14 @@ function Companyinfo() {
                         success
                       />
                     </div>
-                  </div>
-                </div>
-              </div>
+                  {/* </div> */}
+                {/* </div> */}
+              {/* </div> */}
             </div>
           </div>
         </div>
-      </div>
-    </div>
+    //   </div>
+    // </div>
   );
 }
 export default Companyinfo;

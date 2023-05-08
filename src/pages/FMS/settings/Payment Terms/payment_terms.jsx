@@ -451,7 +451,7 @@ export default function PaymentTerms(props) {
         list_content={
           <>
             <div className="row">
-              <h5 className="lead_text">New Payment</h5>
+              <h5 className="lead_text">New Payment Term</h5>
             </div>
             <Form
               form={addForm}
@@ -465,15 +465,15 @@ export default function PaymentTerms(props) {
             >
               <div className="row py-4">
                 <div className="col-12 pt-1">
-                  <label> Name</label>
+                  <label> Name<span className="required">*</span></label>
                   <div>
                     <Form.Item
                       name="paymentname"
                       rules={[
                         {
                           required: true,
-                          pattern: new RegExp("^[A-Za-z ]+$"),
-                          message: "Please enter a Valid  Name",
+                          // pattern: new RegExp("^[A-Za-z ]+$"),
+                          message: "Please enter a name",
                         },
                       ]}
                       onChange={(e) => setpayname(e.target.value)}
@@ -541,14 +541,14 @@ export default function PaymentTerms(props) {
                   </div>
                 </div> */}
                 <div className="col-12 pt-1">
-                  <label>Short Name</label>
+                  <label>Short Name<span className="required">*</span></label>
                   <Form.Item
                     name="prefixInput"
                     rules={[
                       {
                         required: true,
                         pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                        message: "Please enter a Valid  Short Name",
+                        message: "Please enter a short name",
                       },
                     ]}
                   >
@@ -692,14 +692,14 @@ export default function PaymentTerms(props) {
                   }}
                 >
                   <div className="col-12 pt-1">
-                    <label>Name</label>
+                    <label>Name<span className="required">*</span></label>
                     <Form.Item
                       name="NameInput"
                       rules={[
                         {
                           required: true,
-                          pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid payment Name",
+                          // pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                          message: "Please enter a name",
                         },
                       ]}
                     >
@@ -730,14 +730,14 @@ export default function PaymentTerms(props) {
                     ) : null}
                   </div>
                   <div className="col-12 pt-1">
-                    <label>Short Name</label>
+                    <label>Short Name<span className="required">*</span></label>
                     <Form.Item
                       name="prefixInput"
                       rules={[
                         {
                           required: true,
                           pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid  Short Name",
+                          message: "Please enter a short name",
                         },
                       ]}
                     >

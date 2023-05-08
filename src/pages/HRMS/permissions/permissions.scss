@@ -10,3 +10,7 @@
 .open .toggle_btn {
   transform: rotate(180deg);
 }
+.table_permission_list {
+  height: fit-content!important;
+  overflow-y: auto !important;
+}

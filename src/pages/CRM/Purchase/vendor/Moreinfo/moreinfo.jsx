@@ -99,11 +99,14 @@ function Moreinfo({ vendor }) {
     vendor?.vendor_website && formData.append(`website`, vendor.vendor_website);
     vendor?.vendor_state && formData.append(`state`, vendor.vendor_state);
     vendor?.vendor_address && formData.append(`address`, vendor.vendor_address);
-
+    vendor?.vendor_remarks && formData.append(`remark`, vendor.vendor_remarks);
    
-    formData.append(`freight_type`, data.vendor_freighttype);
-    formData.append(`incoterm`, data.vendorincoterms);
-    formData.append(`remarks`, vendor.remarks);
+    vendor?.vendor_tax_no && formData.append(`tax_no`, vendor?.vendor_tax_no);
+    vendor?.vendor_credit_days && formData.append(`credit_days`, vendor?.vendor_credit_days);
+
+   data.vendor_freighttype && formData.append(`freight_type`, data.vendor_freighttype);
+   data.vendorincoterms && formData.append(`incoterm`, data.vendorincoterms);
+    
 
     if (data.vendor_attachments) {
       formData.append(`attachments`, data.vendor_attachments);

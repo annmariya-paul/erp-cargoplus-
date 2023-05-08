@@ -33,6 +33,7 @@ import Phone_Input from "../../../../components/PhoneInput/phoneInput";
 import EditMoreinfo from "../editmoreinfo/EditMoreinfo";
 import Editaccounting from "../editmoreinfo/Editaccounting";
 import Moreinfo from "../accountings/MoreInfo";
+import Attachments from "../../../../components/attachments/attachments";
 
 function LeadEdit() {
   // const history=useHistory();
@@ -66,6 +67,8 @@ function LeadEdit() {
   const [toggle2, setToggel2] = useState(false);
   const [toggle3, setToggle3] = useState(false);
   const [countries, setCountries] = useState("");
+
+  const[custlogo,setcustlogo]=useState("")
 
   const [editForm] = Form.useForm();
   const [error, setError] = useState(false);
@@ -118,7 +121,11 @@ function LeadEdit() {
     PublicFetch.get(`${CRM_BASE_URL}/customer/${id}`)
       .then((res) => {
         if (res?.data?.success) {
-          console.log("Unique Lead Id data", res?.data?.data);
+          console.log("single customer data", res?.data?.data);
+
+          console.log("customer logo iss",res?.data?.data?.customer_logo)
+          setcustlogo(res?.data?.data)
+
           setOneLeadData(res?.data?.data);
           setLeadType(res?.data?.data?.lead_type);
           setCustomerName(res?.data?.data?.customer_name);
@@ -142,6 +149,8 @@ function LeadEdit() {
             customer_country: res?.data?.data?.customer_country,
             customer_state: res?.data?.data?.customer_state ,
             customer_city: res?.data?.data?.customer_city ,
+            customer_logo:res?.data?.data?.customer_logo
+
           });
         } else {
           console.log("FAILED T LOAD DATA");
@@ -695,7 +704,12 @@ function LeadEdit() {
                         ) : (
                           ""
                         )}
+
+                       
                       </Form.Item>
+                    <label>
+                      <Attachments  Isattachment={custlogo?.customer_logo?.length>0} attachments={custlogo?.customer_logo || []} />
+                      </label>
                     </div>
 
                     <div className="col-sm-12 pt-2">

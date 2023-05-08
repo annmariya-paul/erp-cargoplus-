@@ -10,6 +10,7 @@ import { ROUTES } from "../../../../routes";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { CRM_BASE_URL_PURCHASING } from "../../../../api/bootapi";
 import TableData from "../../../../components/table/table_data";
+import Attachments from "../../../../components/attachments/attachments";
 
 export default function Viewvendor() {
   const { id } = useParams();
@@ -156,7 +157,7 @@ export default function Viewvendor() {
             <div className="col-4 boldhd pb-3">Organisation Type</div>
             <div className="col-1">:</div>
             <div className="col-7">
-            <p className="modal-view-data">{allvendor?.vendor_org_type}</p>
+            <p className="modal-view-data">{allvendor?.vendor_org_type === "ORG"? "Organisation":"Individual"  }</p>
             </div>
           </div>
 
@@ -246,9 +247,19 @@ export default function Viewvendor() {
             </div>
           </div>
 
+          <div className="col-sm-6 d-flex">
+            <div className="col-4 boldhd pb-3">Attachments</div>
+            <div className="col-1">:</div>
+            <div className="col-7">
+            <p className="modal-view-data"> 
+             <Attachments  Isattachment={allvendor?.vendor_docs?.length>0 }  attachments={allvendor?.vendor_docs || []} />
+            </p>
+            </div>
+          </div>
+
         </div>
 
-        <div className="mt-2"><h5>Contact Details</h5> </div>
+        <div className="mt-2"><h5 className="lead_text">Contact Details</h5> </div>
         <div className="datatable">
             { allcontact && (
             <TableData
@@ -260,7 +271,7 @@ export default function Viewvendor() {
             )}
           </div>
 
-          <div className="mt-2"><h5>Bank Details</h5> </div>
+          <div className="mt-2"><h5 className="lead_text">Bank Details</h5> </div>
         <div className="datatable">
             { allcontact && (
             <TableData

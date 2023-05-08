@@ -140,7 +140,7 @@ function Containertypes() {
 
   const columns = [
     {
-      title: "Sl. No.",
+      title: "Sl.No.",
       key: "index",
       width: "8%",
       render: (value, item, index) => serialNo + index,
@@ -330,7 +330,8 @@ function Containertypes() {
         </div>
         <div className="datatable">
           <TableData
-            data={getData(current, pageSize)}
+            // data={getData(current, pageSize)}
+            data={allcontainertype}
             columns={columns}
             custom_table_css="table_lead_list"
           />
@@ -369,7 +370,7 @@ function Containertypes() {
                         {
                           required: true,
                           // pattern: new RegExp("^[A-Za-z ]+$"),
-                          message: "Please enter a Valid Short Name",
+                          message: "Please enter a Short Name",
                         },
                       ]}
                     >

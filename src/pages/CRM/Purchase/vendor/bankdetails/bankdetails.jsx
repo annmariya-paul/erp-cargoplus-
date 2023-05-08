@@ -26,12 +26,16 @@ function Bankdetails({ vendor, toggle }) {
   const [editbankdefault, seteditbankdefault] = useState(0);
 
   const [isdefault, setisdefault] = useState(false);
-  const [successmsg, setSuccessmsg] = useState(false);
+
+  const [defaultbnkname, setdefaultbnkname] = useState("");
+
+  const [editdefaultbnkname, seteditdefaultbnkname] = useState("");
 
   const handleEditedclick = (e) => {
     console.log("bankdataa", e);
 
     setbnkdetailid(e.vend_bankdetail_id);
+    seteditdefaultbnkname(e.vend_account_bnk)
     seteditbankdefault(e.vend_bankdefault);
     editForm.setFieldsValue({
       editvend_accname: e.vend_account_name,
@@ -159,6 +163,7 @@ function Bankdetails({ vendor, toggle }) {
         //  addForm.resetFields()
         setSuccessPopup(true);
         close_modal(successPopup, 1000);
+        setisdefault(false)
       }
       // setvendortypes(allvendortypes.data.data);
     } catch (err) {
@@ -268,34 +273,66 @@ function Bankdetails({ vendor, toggle }) {
 
   const handleChecked = (e, key) => {
     console.log("isChecked", e);
-    // PublicFetch.get(`${CRM_BASE_URL_SELLING}/category`)
-    // .then((res) => {
-    //   console.log("response Data", res);
-    //   if (res.data.success) {
-
-    //   }
-    // })
-    // .catch((err) => {
-    //   console.log("Error", err);
-    // });
     if (e.target.checked) {
-      getdefaultbank();
+      // getdefaultbank();
+      PublicFetch.get(`${process.env.REACT_APP_BASE_URL}/misc/default?type=vendorbankdefault`)
+      .then((res) => {
+       
+        console.log("exist bnkk", res?.data?.data?.exist);
       
-      console.log("suceccss checked", e.target.checked);
-      setbankdefault(1);
-    } else {
+        if (res?.data?.data?.exist == true) {
+          setisdefault(true);
+          setbankdefault(1);
+        } else {
+          setisdefault(false);
+        setbankdefault(1);
+          
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+      
+      // console.log("suceccss checked", e.target.checked);
+      // setbankdefault(1);
+    } 
+    else {
+      setisdefault(false);
       setbankdefault(0);
     }
   };
 
   const handleCheckededit = (e, key) => {
     console.log("isChecked", e);
-    if (e.target.checked) {
-      getdefaultbank();
+      if (e.target.checked) {
+        // getdefaultbank();
+        PublicFetch.get(`${process.env.REACT_APP_BASE_URL}/misc/default?type=vendorbankdefault`)
+        .then((res) => {
+         
+          console.log("edit  exist bnkk", res?.data?.data?.data?.ven_bank_det_bank);
+          setdefaultbnkname(res?.data?.data?.data?.ven_bank_det_bank)
+          if (res?.data?.data?.exist == true) {
+            setisdefault(true);
+            seteditbankdefault(1);
+          } else {
+            setisdefault(false);
+          seteditbankdefault(1);
+            
+          }
+        })
+        .catch((err) => {
+          console.log("Error", err);
+        });
+        
+        // console.log("suceccss checked", e.target.checked);
+        // setbankdefault(1);
+      } 
+      else {
+        setisdefault(false);
+        seteditbankdefault(0);
+      }
       // console.log("suceccss checked", e.target.checked);
-    } else {
-      seteditbankdefault(0);
-    }
+  
   };
   return (
     <>
@@ -317,8 +354,9 @@ function Bankdetails({ vendor, toggle }) {
       <Custom_model
         bodyStyle={{ height: 580, overflowY: "auto" }}
         show={modalShow}
-        onHide={() => {setModalShow(false)
-         
+        onHide={() => {
+        setModalShow(false)
+        setisdefault(false)
 
         }}
         View_list
@@ -414,36 +452,41 @@ function Bankdetails({ vendor, toggle }) {
               <div className="col-sm-12  mt-3">
                 <label>Default Bank</label>
                 <div>
-                  <Form.Item name="vend_defaultbnk">
-                    <Popconfirm
+                  <Form.Item 
+                  name="vend_defaultbnk"
+                  >
+                    <Checkbox
+                        onChange={handleChecked}
+                        checked={bankdefault === 1 ? true : false}
+                        // onClick={()=>  }
+                      ></Checkbox>
+                    {/* <Popconfirm
                       title="Are you sure to setdefault?"
                       // description="Are you sure to delete this task?"
                       onConfirm={confirm}
                       onCancel={cancel}
                       okText="Yes"
                       cancelText="No"
-                    >
-                      <Checkbox
+                    > */}
+                      {/* <Checkbox
                         onChange={handleChecked}
                         checked={bankdefault === 1 ? true : false}
                         // onClick={()=>  }
-                      ></Checkbox>
-                    </Popconfirm>
+                      ></Checkbox> */}
+                    {/* </Popconfirm> */}
                   </Form.Item>
                 </div>
               </div>
-
+              {isdefault ? (
+                <label style={{ color: "red" }}>Another Bank is changed to this Bank </label>
+              ) : (
+                ""
+              )}
               <div className=" pt-4 d-flex justify-content-center">
                 <Button type="submit" className="qtn_save" btnType="save">
                   Save
                 </Button>
-                <Custom_model
-                  centered
-                  size={`sm`}
-                  success
-                  show={successPopup}
-                  onHide={() => setSuccessPopup(false)}
-                />
+                
               </div>
               {/* </div> */}
             </Form>
@@ -454,7 +497,8 @@ function Bankdetails({ vendor, toggle }) {
       <Custom_model
         bodyStyle={{ height: 580, overflowY: "auto" }}
         show={editmodalShow}
-      onHide={() => {seteditModalShow(false)
+      onHide={() => {
+        seteditModalShow(false)
         setisdefault(false)
       }}
         View_list
@@ -513,13 +557,14 @@ function Bankdetails({ vendor, toggle }) {
                   <Form.Item name="editvend_defaultbnk">
                     <Checkbox
                       onChange={handleCheckededit}
+                    
                       checked={editbankdefault === 1 ? true : false}
                     ></Checkbox>
                   </Form.Item>
                 </div>
               </div>
               {isdefault ? (
-                <label style={{ color: "red" }}>Bank is already exist </label>
+                <label style={{ color: "orange" }}>Default Bank is changed from  {defaultbnkname}  to  {editdefaultbnkname}  </label>
               ) : (
                 ""
               )}
@@ -542,12 +587,13 @@ function Bankdetails({ vendor, toggle }) {
         onHide={() => setSuccessPopup(false)}
       />
       {/* <Custom_model
-                    centered
-                    size={`sm`}
-                    success
-                    show={successmsg}
-                    onHide={() => setSuccessmsg(false)}
-                  /> */}
+                  centered
+                  size={`sm`}
+                  success
+                  show={successPopup}
+                  onHide={() => setSuccessPopup(false)}
+                /> */}
+     
     </>
   );
 }

@@ -49,6 +49,8 @@ export default function Currency(props) {
   const [country, setCountry] = useState();
   const [currencyDefault, setCurrencyDefault] = useState();
   console.log("checkeeddd", currencyDefault);
+
+  const [isdefault, setisdefault] = useState(false);
   // const [editForm] = Form.useForm();
 
   const onChange = (e) => {
@@ -58,8 +60,31 @@ export default function Currency(props) {
   const handleChecked = (e, key) => {
     console.log("isChecked", e);
     if (e.target.checked) {
+      // getdefaultcurrency()
+
+      PublicFetch.get(`${process.env.REACT_APP_BASE_URL}/misc/default?type=currencydefault`)
+      .then((res) => {
+       
+        console.log("exist currency", res?.data?.data?.exist);
+        if (res?.data?.data?.exist == true) {
+          setisdefault(true);
+          setCurrencyDefault(1);
+        } else {
+          setisdefault(false);
+          setCurrencyDefault(1);
+          
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
       console.log("suceccss checked", e.target.checked);
-      setCurrencyDefault(1);
+      // setCurrencyDefault(1);
+    }
+    else {
+      setisdefault(false);
+      setCurrencyDefault(0)
+    
     }
   };
 
@@ -233,6 +258,31 @@ export default function Currency(props) {
         console.log("Error", err);
       });
   };
+
+  const getdefaultcurrency = async () => {
+    try {
+      const defaultbank = await PublicFetch.get(
+        `${process.env.REACT_APP_BASE_URL}/misc/default?type=currencydefault`
+      );
+      console.log("hdjsjk", defaultbank?.data?.data?.exist);
+      if (defaultbank?.data?.data?.exist == true) {
+        setisdefault(true);
+      } else {
+        setisdefault(false);
+      // seteditbankdefault(1);
+        
+      }
+      
+      console.log("getting all  defaultbank", defaultbank);
+
+      // setvendortypes(allvendortypes.data.data);
+    } catch (err) {
+      console.log("error to fetching  defaultbank", err);
+    }
+  };
+
+
+
 
   const getAllCurrency = () => {
     PublicFetch.get(`${GENERAL_SETTING_BASE_URL}/currency`)
@@ -854,6 +904,12 @@ export default function Currency(props) {
                         </Form.Item>
                       </div>
                     </div>
+
+                    {isdefault ? (
+                <label style={{ color: "red" }}>Another Currency is changed to this Currency </label>
+              ) : (
+                ""
+              )}
                     <div className="col-12 d-flex justify-content-center mt-5 gap-2">
                       <Button btnType="save">Save</Button>
                       <Button

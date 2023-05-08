@@ -20,8 +20,9 @@ const Attachments = ({ attachments,Isattachment}) => {
       
         return (
             <>
-            <div className='row'>
-            <div className='col-12 mb-4'>{fileName} <button className='editcolor btn_add_borderless w-100' onClick={viewFile}>View</button></div>
+            <div className=''>
+         <a href="" onClick={viewFile} > {fileName}</a>
+            {/* <div className='col-12 '>{fileName} <button className='editcolor btn_add_borderless w-100' onClick={viewFile}>View</button></div> */}
             
             </div>
             

@@ -6,6 +6,7 @@ import PublicFetch from "../../../../utils/PublicFetch";
 import { CRM_BASE_URL } from "../../../../api/bootapi";
 import { ROUTES } from "../../../../routes";
 import TableData from "../../../../components/table/table_data";
+import Attachments from "../../../../components/attachments/attachments";
 
 // import { CRM_BASE_URL_PURCHASING } from "../../../../api/bootapi";
 
@@ -218,10 +219,18 @@ export default function Viewcustomer() {
           </div>
 
           <div className="col-sm-6 d-flex">
-            <div className="col-4 boldhd pb-3">Contacts</div>
+            <div className="col-4 boldhd pb-3">Remarks</div>
             <div className="col-1">:</div>
             <div className="col-7">
-              <p className="modal-view-data">{allcustomer?.crm_v1_contacts[0]?.contact_person_name}</p>
+              <p className="modal-view-data">{allcustomer?.customer_remarks}</p>
+            </div>
+          </div>
+
+          <div className="col-sm-6 d-flex">
+            <div className="col-4 boldhd pb-3">Credit Limit</div>
+            <div className="col-1">:</div>
+            <div className="col-7">
+              <p className="modal-view-data">{allcustomer?.customer_credit_limit}</p>
             </div>
           </div>
 
@@ -241,10 +250,36 @@ export default function Viewcustomer() {
             </div>
           </div>
 
+          <div className="col-sm-6 d-flex">
+            <div className="col-4 boldhd pb-3">Preferred Freight Type</div>
+            <div className="col-1">:</div>
+            <div className="col-7">
+              <p className="modal-view-data">{allcustomer?.customer_credit_days}</p>
+            </div>
+          </div>
+
+          <div className="col-sm-6 d-flex">
+            <div className="col-4 boldhd pb-3">Quotation Validity Days</div>
+            <div className="col-1">:</div>
+            <div className="col-7">
+              <p className="modal-view-data">{allcustomer?.customer_qtn_validity_days}</p>
+            </div>
+          </div>
+
+          <div className="col-sm-6 d-flex">
+            <div className="col-4 boldhd pb-3">Attachment</div>
+            <div className="col-1">:</div>
+            <div className="col-7">
+              <p className="modal-view-data"> 
+              <Attachments  Isattachment={allcustomer?.customer_logo.length>0 }  attachments={allcustomer?.customer_logo || []}/>
+              </p>
+            </div>
+          </div>
+
          
 
           </div>
-          <div className="mt-2"><h5>Contact Details</h5> </div>
+          <div className="mt-2  "><h5 className="lead_text">Contact Details</h5> </div>
           <div className="datatable">
             { allcontacts &&(
           <TableData
@@ -255,7 +290,7 @@ export default function Viewcustomer() {
           />
           )}
         </div>
-<div className="mt-2"><h5>Address Details</h5> </div>
+<div className="mt-2"><h5 className="lead_text">Address Details</h5> </div>
         <div className="datatable">
             { alladdress && (
             <TableData

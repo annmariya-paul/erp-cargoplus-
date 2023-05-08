@@ -209,8 +209,23 @@ export default function Agent_Response() {
             <h5 className="lead_text">Agents Responses</h5>
           </div>
         </div>
-
-        <div className="row mt-2">
+        <div className="row mt-3 pb-5">
+        <div className="col-sm-6 d-flex">
+          <div className="col-4 boldhd pb-3">Opportunity No</div>
+          <div className="col-1">:</div>
+          <div className="col-7">
+            <p className="modal-view-data">{opporNumber}</p>
+          </div>
+        </div>
+        <div className="col-sm-6 d-flex">
+          <div className="col-4 boldhd pb-3">Customer</div>
+          <div className="col-1">:</div>
+          <div className="col-7">
+            <p className="modal-view-data">{opporLead}</p>
+          </div>
+        </div>
+        </div>
+        {/* <div className="row mt-2">
           <div className="col-6 d-flex">
             <div className="pe-2 pt-2" style={{ fontWeight: 500 }}>
               Opportunity No :
@@ -219,8 +234,8 @@ export default function Agent_Response() {
               <p className="input_number_style">{opporNumber}</p>
             </div>
           </div>
-        </div>
-        <div className="row">
+        </div> */}
+        {/* <div className="row">
           <div className="col-6 d-flex">
             <div className="col-2 me-4 pt-2" style={{ fontWeight: 500 }}>
               Customer :
@@ -236,7 +251,7 @@ export default function Agent_Response() {
               </Button>
             </div>
           </div>
-        </div>
+        </div> */}
         <div className="datatable">
           <TableData
             data={agentResponse}

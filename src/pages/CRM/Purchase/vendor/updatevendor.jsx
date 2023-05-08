@@ -27,6 +27,7 @@ import FileUpload from "../../../../components/fileupload/fileUploader";
 import Contact from "./vendorcontact/Contact";
 import Moreinfo from "./Moreinfo/moreinfo";
 import Phone_Input from "../../../../components/PhoneInput/phoneInput";
+import Attachments from "../../../../components/attachments/attachments";
 
 
 function Updatevendor(){
@@ -81,6 +82,12 @@ function Updatevendor(){
     const [Toggle4, setToggle4] = useState(false);
     const [Toggle3, setToggle3] = useState(false);
 
+    const [vendorAttachment, setvendorAttachment] = useState("");
+
+  
+
+  // const [leadimg, setLeadimg] = useState([]);
+  const [FileSizeError, setFileSizeError] = useState(false);
 
     const beforeUpload = (file, fileList) => {};
     const [viewvendor, setViewvendor] = useState({
@@ -241,15 +248,17 @@ function Updatevendor(){
       formData.append(`vendor_type`, data.vendor_type);
       formData.append(`email`, data.vendor_email);
       formData.append(`contact`, data.vendor_contact);
-      formData.append(`country_id`, data.vendor_country);
-      formData.append(`city`, data.vendorcity);
-      formData.append(`website`, data.vendorwebsite);
-      formData.append(`state`, data.vendorstate);
-      formData.append(`address`, data.vendoraddress);
-      formData.append(`remarks`, data.vendorremarks);
+
+
+     data.vendor_country && formData.append(`country_id`, data.vendor_country);
+     data.vendorcity && formData.append(`city`, data.vendorcity);
+     data.vendorwebsite && formData.append(`website`, data.vendorwebsite);
+     data.vendorstate && formData.append(`state`, data.vendorstate);
+     data.vendoraddress && formData.append(`address`, data.vendoraddress);
+     data.vendorremarks && formData.append(`remark`, data.vendorremarks);
      
-      if (data.vendor_attachments) {
-        formData.append(`attachments`, data.vendor_attachments);
+      if (vendorAttachment) {
+        formData.append(`attachments`, vendorAttachment);
         // formData.append(`customer_logo`, leadimg);
       }
   
@@ -296,6 +305,8 @@ function Updatevendor(){
             if (res.data.success) {
               console.log("success of vendors", res.data.data);
               setVendorList(res.data.data);
+              setvendorAttachment(res?.data?.data?.vendor_docs);
+            
               editForm.setFieldsValue({
                 vendor_name: res.data.data.vendor_name,
                 vendor_Organisation: res.data.data.vendor_org_type,
@@ -309,6 +320,7 @@ function Updatevendor(){
                 vendorstate:res.data.data.vendor_state,
                 vendor_country: res.data.data.vendor_country_id,
                 vendor_type: res.data.data.vendor_type_id,
+                vendorremarks:res.data.data.vendor_remarks
               });
            
            
@@ -319,50 +331,50 @@ function Updatevendor(){
           });
       };
   
-    const getallvendors = async () => {
-      try {
-        const allvendor = await PublicFetch.get(
-          `${CRM_BASE_URL_PURCHASING}/vendors`
-        );
-        console.log("getting all vendorss", allvendor.data.data);
-        settotalvendor(allvendor.data.data)
-        // setAllvendor(allvendor.data.data)
-        let arry = [];
-        allvendor.data.data.map((i, indx) => {
-          vendor_Organisation.forEach((itm,index)=>{
-            console.log("vndr",itm)
-            if (
-              itm.value === i.vendor_org_type
-            )
-            {
+    // const getallvendors = async () => {
+    //   try {
+    //     const allvendor = await PublicFetch.get(
+    //       `${CRM_BASE_URL_PURCHASING}/vendors`
+    //     );
+    //     console.log("getting all vendorss", allvendor.data.data);
+    //     settotalvendor(allvendor.data.data)
+    //     // setAllvendor(allvendor.data.data)
+    //     let arry = [];
+    //     allvendor.data.data.map((i, indx) => {
+    //       vendor_Organisation.forEach((itm,index)=>{
+    //         console.log("vndr",itm)
+    //         if (
+    //           itm.value === i.vendor_org_type
+    //         )
+    //         {
   
-          arry.push({
-            vendor_name: i.vendor_name,
-            vendor_email: i.vendor_email,
-            vendor_org_type: itm.name,
-            vendor_country: i.countries.country_name,
-            vendor_country_id: i.vendor_country_id,
-            vendor_contact: i.vendor_contact,
-            vendor_city: i.vendor_city,
-            vendor_address: i.vendor_address,
-            vendor_description: i.vendor_desc,
-            vendor_type_id: i.vendor_type_id,
-            vender_id: i.vendor_id,
-            vender_taxno: i.vendor_tax_no,
-            vendor_country_id: i.vendor_country_id,
-          });
-        }
+    //       arry.push({
+    //         vendor_name: i.vendor_name,
+    //         vendor_email: i.vendor_email,
+    //         vendor_org_type: itm.name,
+    //         vendor_country: i.countries.country_name,
+    //         vendor_country_id: i.vendor_country_id,
+    //         vendor_contact: i.vendor_contact,
+    //         vendor_city: i.vendor_city,
+    //         vendor_address: i.vendor_address,
+    //         vendor_description: i.vendor_desc,
+    //         vendor_type_id: i.vendor_type_id,
+    //         vender_id: i.vendor_id,
+    //         vender_taxno: i.vendor_tax_no,
+    //         vendor_country_id: i.vendor_country_id,
+    //       });
+    //     }
   
-        })
-        });
-        console.log("arryss", arry);
-        setAllvendor(arry);
+    //     })
+    //     });
+    //     console.log("arryss", arry);
+    //     setAllvendor(arry);
   
-        // setvendortypes(allvendortypes.data.data);
-      } catch (err) {
-        console.log("error to fetching  vendor", err);
-      }
-    };
+    //     // setvendortypes(allvendortypes.data.data);
+    //   } catch (err) {
+    //     console.log("error to fetching  vendor", err);
+    //   }
+    // };
   
     const close_modal = (mShow, time,venderdata ) => {
       if (!mShow) {
@@ -381,7 +393,7 @@ function Updatevendor(){
  
     useEffect(() => {
       getallvendortype();
-      getallvendors();
+      // getallvendors();
       getCountry();
       Onevendor();
     }, []);
@@ -648,15 +660,56 @@ function Updatevendor(){
                     <div className="col-sm-6 pt-2">
                       <label> Attachments</label>
                       <div>
-                        <Form.Item className="py-1" name="vendor_attachments">
+                      <Form.Item 
+                      name="vendor_docs"
+                      
+                      >
                           <FileUpload
-                            beforeUpload={beforeUpload}
                             multiple
-                            height={100}
+                          className="antdfileupload"
+                            style={{ padding:"0.5px" }}
+                            filetype={"Accept only pdf and docs"}
                             listType="picture"
                             accept=".pdf,.docs,"
+                            // onPreview={handlePreview}
+                            beforeUpload={beforeUpload}
+                            // value={leadAttac1ment}
+                            // onChange={(e) => setLeadAttachment(e.target.value)}
+                            onChange={(file) => {
+                              console.log("Before upload", file.file);
+                              console.log(
+                                "Before upload file size",
+                                file.file.size
+                              );
+                              if (
+                                file.file.size > 1000 &&
+                                file.file.size < 500000
+                              ) {
+                                setvendorAttachment(file.file.originFileObj);
+                                setFileSizeError(false);
+                                console.log(
+                                  "file greater than 1 kb and less than 500 kb"
+                                );
+                              } else {
+                                setFileSizeError(true);
+                                console.log("hgrtryyryr");
+                              }
+                            }}
                           />
+                          {FileSizeError ? (
+                            <div>
+                              <label style={{ color: "red" }}>
+                                File size must be between 1kb and 500kb
+                              </label>
+                            </div>
+                          ) : (
+                            ""
+                          )}
                         </Form.Item>
+                        <label>
+                          <Attachments Isattachment={vendorList?.vendor_docs?.length>0} attachments={vendorList?.vendor_docs || []} />
+                        </label>
+
                       </div>
                     </div>
 

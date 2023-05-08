@@ -140,7 +140,7 @@ function Containertypes() {
 
   const columns = [
     {
-      title: "Sl. No.",
+      title: "Sl.No.",
       key: "index",
       width: "8%",
       render: (value, item, index) => serialNo + index,
@@ -283,7 +283,7 @@ function Containertypes() {
 
         <div className="row my-3">
           <div className="col-4 ">
-            <Select
+            {/* <Select
               bordered={false}
               className="page_size_style"
               //   value={pageSize}
@@ -304,7 +304,7 @@ function Containertypes() {
                 <span className="vertical ms-1">|</span>
                 <span className="sizes ms-1">100</span>
               </Select.Option>
-            </Select>
+            </Select> */}
           </div>
 
           <div className="col-4 d-flex  align-items-center justify-content-center">
@@ -330,7 +330,8 @@ function Containertypes() {
         </div>
         <div className="datatable">
           <TableData
-            data={getData(current, pageSize)}
+            // data={getData(current, pageSize)}
+            data={allcontainertype}
             columns={columns}
             custom_table_css="table_lead_list"
           />
@@ -346,7 +347,7 @@ function Containertypes() {
           list_content={
             <>
               <div className="row">
-                <h5 className="lead_text">New Containertype</h5>
+                <h5 className="lead_text">New Container Types</h5>
               </div>
               <Form
                 form={addForm}
@@ -369,7 +370,7 @@ function Containertypes() {
                         {
                           required: true,
                           // pattern: new RegExp("^[A-Za-z ]+$"),
-                          message: "Please enter a Valid Short Name",
+                          message: "Please enter a Short Name",
                         },
                       ]}
                     >

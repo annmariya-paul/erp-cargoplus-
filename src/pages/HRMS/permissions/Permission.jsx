@@ -508,17 +508,17 @@ function Permission() {
 
   return (
     <div>
-      <div className="">
-        <div className="container p-3">
+      <div className="container-fluid container_hrms pt-3">
+        <div className="container">
           <div className="">
-            <h2 style={{ color: "#0891d1" }}>Assign Permission</h2>
+            <h5 style={{ color: "#0891d1" }}>Assign Permission</h5>
           </div>
           <Form
             onFinish={(value) => {
               console.log("Values of submit::", value);
             }}
           >
-            <div className="row">
+            <div className="row ">
               <div className="col-4 py-3">
                 <div className="">
                   <label>Roles</label>
@@ -542,144 +542,24 @@ function Permission() {
                   </div>
                 </div>
               </div>
-              {/* <div className="col-12 py-5">
-                <div className="row">
-                  <div className="col-6"></div>
-                  <div className="col-6">
-                    <div className="row">
-                      <div className="col-3">
-                        <label>Create</label>
-                      </div>
-                      <div className="col-3">
-                        <label>Update</label>
-                      </div>
-                      <div className="col-3">
-                        <label>Read</label>
-                      </div>
-                      <div className="col-3">
-                        <label>Delete</label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-               
-                <div className="row">
-                  <div className="col-6">
-                    <div className="d-flex justify-content-center">
-                     
-
-                      
-                    </div>
-                  </div>
-                  {module1Click ? (
-                    <>
-                      {AllObjects &&
-                        AllObjects.length > 0 &&
-                        AllObjects.map((object, objectIndex) => {
-                          return (
-                            <>
-                              <div className="col-12 my-3" key={object.id}>
-                                <div className="row">
-                                  <div className="col-3"></div>
-                                  <div className="col-3 ">
-                                    <div className=" d-flex justify-content-start gap-2">
-                                     
-                                      <Checkbox
-                                        name={object.name}
-                                        value={object.id}
-                                        onChange={(e) =>
-                                          handleSubModuleChange(
-                                            e.target.checked,
-                                            object.id
-                                          )
-                                        }
-                                        checked={checkSubmodule(object.id)}
-                                      >
-                                        {object.name}
-                                      </Checkbox>
-                                     
-                                    </div>
-                                  </div>
-
-                                  <div className="col-6 ps-4">
-                                    <div className="row">
-                                      {AllObjects &&
-                                        AllObjects.length > 0 &&
-                                        arrayofcheckbox.map(
-                                          (permission, permissionIndex) => {
-                                            return (
-                                              <div className="col-3">
-                                                <div className="">
-                                                 
-                                                  <Checkbox
-                                                    key={`${permission.value}-${object.id}`}
-                                                    value={`${permission.value}-${object.id}`}
-                                                    onChange={(e) =>
-                                                      handleSinglePermissionChange(
-                                                        e.target.checked,
-                                                        permission.value,
-                                                        object.id
-                                                      )
-                                                    }
-                                                    checked={checkPermission(
-                                                      permission.value,
-                                                      object.id
-                                                    )}
-                                                  />
-                                                  
-                                                </div>
-                                              </div>
-                                            );
-                                          }
-                                        )}
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </>
-                          );
-                        })}
-                    </>
-                  ) : (
-                    ""
-                  )}
-                </div>
-                
-              </div> */}
-
+             
               {/* Alan adding dummy data uncomment the below for api integration */}
               <TableData
                 data={AllObjects}
                 columns={columns}
-                custom_table_css="table_lead_list"
+                custom_table_css="table_permission_list"
               />
 
-              {/* <table class="table">
-      <thead>
-    <tr>
-      <th scope="col">Create</th>
-      <th scope="col">Read</th>
-      <th scope="col">Update</th>
-      <th scope="col">Delete</th>
-    </tr>
-     </thead>
-  <tbody>
-    <tr>
-      <th>1</th>
-      <th>Mark</th>
-      <th>Otto</th>
-      <th>@mdo</th>
-    </tr>
-  </tbody>
-</table> */}
+      
 
-              <div className="col-12 d-flex justify-content-center">
+              <div className="col-12 d-flex justify-content-center ">
                 <Button
+                
                   onClick={handleSubmit}
                   className="p-2 save_button_style"
                 >
                   {" "}
-                  save
+                  Save
                 </Button>
               </div>
             </div>

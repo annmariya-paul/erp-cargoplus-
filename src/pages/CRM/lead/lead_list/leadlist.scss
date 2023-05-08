@@ -54,7 +54,9 @@ $grey: #777777;
   &:focus {
     box-shadow: none !important;
   }
+  padding: 0 5px !important;
 }
+
 .ant-input-search
   > .ant-input-group
   > .ant-input-group-addon:last-child
@@ -97,9 +99,9 @@ $grey: #777777;
   background-color: variables.$primary !important;
   color: white !important;
 }
-span.ant-select-selection-item {
-  padding-left: 5px !important;
-}
+// span.ant-select-selection-item {
+//   padding-left: 5px !important;
+// }
 
 // ##### Lead list table ######
 .table_lead_list {

@@ -175,7 +175,7 @@ const [employeeTName, setEmployeeTName] = useState();
   ];
   return (
     <div>
-      <div className="">
+      <div className="container-fluid container_hrms pt-3">
         <div className="container">
           <div className="">
             <h2></h2>
@@ -184,8 +184,9 @@ const [employeeTName, setEmployeeTName] = useState();
             <div className="col-12">
               <h5 style={{ color: "#0891d1" }}>Roles</h5>
             </div>
+            
             {isEditOn ? (
-              <div className="col-6 mt-2 ">
+              <div className="col-6 mt-3 ">
                 <Form
                   form={addForm}
                   onFinish={(value) => {
@@ -207,7 +208,7 @@ const [employeeTName, setEmployeeTName] = useState();
                     ]}
                   >
                     <InputType
-                    
+                   
                    
                     value={employeeTName}
                     onChange={(e) => {
@@ -240,7 +241,7 @@ const [employeeTName, setEmployeeTName] = useState();
                 </Form>
               </div>
             ) : (
-              <div className="col-6 mt-2">
+              <div className="col-6 mt-3">
                 <Form
                   id=""
                   name="addForm"
@@ -294,7 +295,7 @@ const [employeeTName, setEmployeeTName] = useState();
               </div>
             )}
 
-            <div className="col-6">
+            <div className="col-6 ">
               <div className="">
                 <TableData columns={Rolecolumns} data={getallRoles} />
               </div>

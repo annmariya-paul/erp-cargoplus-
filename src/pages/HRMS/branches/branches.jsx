@@ -55,23 +55,23 @@ export default function Branches(props) {
     }
   };
 
-  const getData = (current, pageSize) => {
-    return branches?.slice((current - 1) * pageSize, current * pageSize);
-  };
+  // const getData = (current, pageSize) => {
+  //   return branches?.slice((current - 1) * pageSize, current * pageSize);
+  // };
 
   //API for branches -- shahida 12.12.22
   const getallbranches = async () => {
     try {
       const allbranches = await PublicFetch.get(`${CRM_BASE_URL_HRMS}/branch`);
       console.log("all branches are", allbranches.data.data);
-      setBranches(allbranches.data.data);
-      setBranch_id(allbranches.data.branch_id);
+      setBranches(allbranches?.data?.data);
+      // setBranch_id(allbranches.data?.branch_id);
       console.log("branch id", branch_id);
     } catch (err) {
       console.log("error while getting the brands: ", err);
     }
   };
-
+  console.log("branches", branches);
   useEffect(() => {
     getallbranches();
   }, []);
@@ -123,7 +123,7 @@ export default function Branches(props) {
   const columns = [
     {
       title: "SI.NO",
-      key: "index",
+      key: "slno",
       width: "20%",
       render: (value, item, index) => serialNo + index,
       align: "center",
@@ -394,7 +394,6 @@ export default function Branches(props) {
         </div>
         <div className="datatable">
           <TableData
-            // data={getData(current, pageSize)}
             data={branches}
             columns={columns}
             custom_table_css="table_lead_list"
@@ -441,7 +440,9 @@ export default function Branches(props) {
             >
               <div className="row py-4">
                 <div className="col-12 pt-1">
-                  <label>Branch Name<span className="required">*</span></label>
+                  <label>
+                    Branch Name<span className="required">*</span>
+                  </label>
                   <div>
                     <Form.Item
                       name="branchname"
@@ -488,7 +489,9 @@ export default function Branches(props) {
                 </div>
 
                 <div className="col-12 pt-1">
-                  <label>Branch Code<span className="required">*</span></label>
+                  <label>
+                    Branch Code<span className="required">*</span>
+                  </label>
                   <Form.Item
                     name="branchcode"
                     rules={[
@@ -568,7 +571,9 @@ export default function Branches(props) {
                   }}
                 >
                   <div className="col-12">
-                    <label>Name<span className="required">*</span></label>
+                    <label>
+                      Name<span className="required">*</span>
+                    </label>
                     <Form.Item
                       name="NameInput"
                       rules={[
@@ -613,7 +618,9 @@ export default function Branches(props) {
                     ) : null}
                   </div>
                   <div className="col-12">
-                    <label>Code<span className="required">*</span></label>
+                    <label>
+                      Code<span className="required">*</span>
+                    </label>
                     <Form.Item
                       name="CodeInput"
                       rules={[

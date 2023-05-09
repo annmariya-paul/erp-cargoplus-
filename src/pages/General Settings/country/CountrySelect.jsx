@@ -5,7 +5,10 @@ import { GENERAL_SETTING_BASE_URL } from "../../../api/bootapi";
 import PublicFetch from "../../../utils/PublicFetch";
 import Button from "../../../components/button/button";
 import TableData from "../../../components/table/table_data";
+import { UniqueErrorMsg } from "../../../ErrorMessages/UniqueErrorMessage";
+import PageSizer from "../../../components/PageSizer/PageSizer";
 import { countryList } from "../../../utils/countries";
+import CheckUnique from "../../../check Unique/CheckUnique";
 import CustomModel from "../../../components/custom_modal/custom_model";
 import SelectBox from "../../../components/Select Box/SelectBox";
 import MyPagination from "../../../components/Pagination/MyPagination";
@@ -13,15 +16,36 @@ import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
 export default function SelectCountry() {
   const [addForm] = Form.useForm();
   const [serialNo, setserialNo] = useState(1);
+  const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
   const [searchedText, setSearchedText] = useState("");
   const [countryName, setCountryName] = useState("");
   const [countries, setCountries] = useState("");
   const [getCountries,setGetCountries] = useState();
+  const [uniqueName, setUniqueName] = useState(false);
   const [successPopup, setSuccessPopup] = useState(false);
   const [modalAddCountry, setmodalAddCountry] = useState(false);
-  const [pageSize, setPageSize] = useState("25");
+  // const [pageSize, setPageSize] = useState("25");
+  // const [current, setCurrent] = useState(1);
+  const [startcount, setstartcount] = useState();
+  const getFinalCount = (total) => {
+    const cutoff = Math.ceil(totalCount / pageSize);
+    console.log("FinalTest", cutoff, current);
+    if (current === cutoff) return totalCount;
+    return total;
+    // console.log("TotalPageTest",current,totalCount)
+    // console.log("TestCount",total)
+  };
+  let a = localStorage.getItem("noofitem");
+  const [pageSize, setPageSize] = useState(a);
   const [current, setCurrent] = useState(1);
 
+  console.log("PageSize", pageSize);
+
+  const pageofIndex = pageSize * (current - 1) - 1 + 1;
+
+  const getDatas = (current, pageSize) => {
+    return getCountries?.slice((current - 1) * pageSize, current * pageSize);
+  };
   const close_modal = (mShow, time) => {
     if (!mShow) {
       setTimeout(() => {
@@ -30,26 +54,37 @@ export default function SelectCountry() {
     }
   };
 
-  const getData = (current, pageSize) => {
-    return getCountries?.slice((current - 1) * pageSize, current * pageSize);
-  };
-
+  // const getData = (current, pageSize) => {
+  //   return getCountries?.slice((current - 1) * pageSize, current * pageSize);
+  // };
+  // const [startcount, setstartcount] = useState();
+  const [totalCount, setTotalcount] = useState();
   // { function to get all tax types - Ann - 18/1/23}
-  const getAllCountries = async () => {
+  const getAllCountries = async (query) => {
     try {
       const allCountries = await PublicFetch.get(
-        `${GENERAL_SETTING_BASE_URL}/country`
+        `${GENERAL_SETTING_BASE_URL}/country?startIndex=${pageofIndex}&noOfItems=${pageSize}&search=${query}`
       );
       console.log("countries are", allCountries.data.data);
-      setGetCountries(allCountries.data.data);
+      setGetCountries(allCountries?.data?.data?.countries);
+      setTotalcount(allCountries?.data?.data?.totalCount);
+      setstartcount(allCountries?.data?.data?.startIndex);
     } catch (err) {
       console.log("error while getting the countries: ", err);
     }
   };
 
+  // useEffect(() => {
+  //   getAllCountries();
+  // }, []);
   useEffect(() => {
-    getAllCountries();
-  }, []);
+    const getData = setTimeout(() => {
+      getAllCountries(searchedText);
+      
+    }, 1000);
+    return () => clearTimeout(getData);
+ 
+  }, [pageSize, pageofIndex, searchedText]);
 
   // { function to add country - Ann - 19/1/23}
   const addCountry = async () => {
@@ -191,31 +226,26 @@ export default function SelectCountry() {
        
         <div className="row my-3">
           <div className="col-4 px-3">
-            <Select
-              bordered={false}
-              className="page_size_style"
-              value={pageSize}
-              onChange={(e) => setPageSize(e)}
-            >
-              <Select.Option value="25">
-                Show
-                <span className="vertical ms-1">|</span>
-                <span className="sizes ms-1">25</span>
-              </Select.Option>
-              <Select.Option value="50">
-                Show
-                <span className="vertical ms-1">|</span>
-                <span className="sizes ms-1"> 50</span>
-              </Select.Option>
-              <Select.Option value="100">
-                Show
-                <span className="vertical ms-1">|</span>
-                <span className="sizes ms-1">100</span>
-              </Select.Option>
-            </Select>
+          <div className="d-flex justify-content-start align-items-center gap-3">
+          <PageSizer
+              pageValue={(e) => {
+                console.log("Pge Sizer in location", e);
+                setPageSize(e);
+              }}
+            />
+             {totalCount > 0 && (
+              <div className="   d-flex  align-items-center mt-2">
+                <label className="font_size">
+                  Results: {startcount + 1} -{" "}
+                  {getFinalCount(1 * pageSize * current)}{" "}
+                  <span>of {totalCount} </span>{" "}
+                </label>
+              </div>
+            )}
+            </div>
           </div>
           <div className=" col-4 d-flex align-items-center justify-content-center">
-            {getCountries && (
+            {getCountries?.length > 0 && (
             <MyPagination
               total={parseInt(getCountries?.length)}
               current={current}
@@ -230,7 +260,13 @@ export default function SelectCountry() {
           </div>
           <div className="col-4 d-flex justify-content-end">
             <Button
-              onClick={() => setmodalAddCountry(true)}
+              onClick={() =>
+                {
+                  setmodalAddCountry(true);
+                  setUniqueName(false);
+                  addForm.resetFields();
+                }
+               }
               className="add_opportunity"
             >
               New Country
@@ -239,14 +275,14 @@ export default function SelectCountry() {
         </div>
         <div className="datatable">
           <TableData
-            data={getData(current, pageSize)}
+            data={getDatas(current, pageSize)}
             // data={countries}
             columns={columns}
             custom_table_css="table_lead_list"
           />
         </div>
         <div className="d-flex py-2 justify-content-center">
-          {getCountries && (
+          {getCountries?.length > 0 && (
           <MyPagination
             total={parseInt(getCountries?.length)}
             current={current}
@@ -301,6 +337,14 @@ export default function SelectCountry() {
                       onChange={(event) => {
                         setCountries(event ? [event] : []);
                         setCountryName(event);
+                        setUniqueName(false);
+                      }}
+                      onBlur={async () => {
+                        let n = await CheckUnique({
+                          type: "countryname",
+                          value: countryName,
+                        });
+                        setUniqueName(n);
                       }}
                     >
                       {countryList &&
@@ -313,6 +357,11 @@ export default function SelectCountry() {
                         })}
                     </SelectBox>
                   </Form.Item>
+                  {uniqueName ? (
+                    <p style={{ color: "red" }}>
+                    Country name {uniqueErrMsg.UniqueErrName}
+                    </p>
+                  ) : null}
                 </div>
               </div>
               <div className="col-12 d-flex justify-content-center mt-5 gap-2">

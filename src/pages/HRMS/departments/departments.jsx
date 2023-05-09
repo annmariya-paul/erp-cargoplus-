@@ -14,6 +14,7 @@ import PublicFetch from "../../../utils/PublicFetch";
 import { CRM_BASE_URL_HRMS } from "../../../api/bootapi";
 import { UniqueErrorMsg } from "../../../ErrorMessages/UniqueErrorMessage";
 import CheckUnique from "../../../check Unique/CheckUnique";
+// import "../../../components/button/button.scss";
 
 // { Add and list Departments - Ann mariya - 16/11/22 }
 export default function Departments(props) {
@@ -30,6 +31,7 @@ export default function Departments(props) {
   const [alldepartmentdata, setAllDepartmentData] = useState();
   const [showEditModal, setShowEditModal] = useState();
   const [department_id, setDepartment_id] = useState();
+  const[loading,setLoading]=useState(false);
   const [uniqueName, setUniqueName] = useState(false);
   const [uniqueEditName, setUniqueEditName] = useState(false);
   const [uniqueCode, setUniqueCode] = useState(false);
@@ -81,8 +83,10 @@ export default function Departments(props) {
   };
 
   const createDepartment = (data) => {
+    setLoading(true);
     PublicFetch.post(`${CRM_BASE_URL_HRMS}/departments`, data)
       .then((res) => {
+        setLoading(false);
         console.log("response", res);
         if (res.data.success) {
           console.log("success ", res.data.success);
@@ -93,16 +97,20 @@ export default function Departments(props) {
         }
       })
       .catch((err) => {
+        setLoading(false);
         console.log("Error", err);
         setError(true);
       });
   };
 
   const getAllDepartments = () => {
+   
     PublicFetch.get(`${CRM_BASE_URL_HRMS}/departments`)
       .then((res) => {
+      
         console.log("all dept response", res.data.data);
         if (res.data.success) {
+         
           setAllDepartmentData(res.data.data);
         }
       })
@@ -402,7 +410,16 @@ export default function Departments(props) {
             /> */}
           </div>
           <div className="col-4 d-flex justify-content-end">
-            <Button btnType="add" onClick={() => setModalAddDept(true)}>
+            <Button btnType="add" onClick={() =>
+            {
+              setModalAddDept(true);
+              setUniqueName(false);
+              setUniqueCode(false);
+              addForm.resetFields();
+            }
+            
+               
+               }>
               New Department
             </Button>
           </div>
@@ -467,16 +484,7 @@ export default function Departments(props) {
                       {
                         whitespace: true,
                       },
-                      {
-                        min: 3,
-                        message:
-                          "Department Name must be at least 3 characters",
-                      },
-                      {
-                        max: 100,
-                        message:
-                          "Department Name cannot be longer than 100 characters",
-                      },
+                     
                     ]}
                   >
                     <InputType
@@ -511,19 +519,10 @@ export default function Departments(props) {
                       
                         message: "Please enter a valid department code",
                       },
-                      {
-                        min: 3,
-                        message:
-                          "Department code must be at least 3 characters",
-                      },
-                      {
-                        max: 15,
-                        message:
-                          "Department code cannot be longer than 15 characters",
-                      },
-                      {
-                        validator: validateNumberAndText,
-                      },
+                     
+                      // {
+                      //   validator: validateNumberAndText,
+                      // },
                     ]}
                   >
                     <InputType
@@ -549,7 +548,14 @@ export default function Departments(props) {
               </div>
               <div className="row justify-content-center">
                 <div className="col-auto">
-                  <Button btnType="save">Save</Button>
+                  <Button 
+                   className={loading ? "btn_loadingColor" : ""}
+                  // className='btn_loadingColor'
+                  // className='uu' 
+                  disabled={loading}
+                  // style={loading ? { backgroundColor: "gray" } : {}}
+                   btnType="save"
+                   >Save</Button>
                 </div>
               </div>
             </Form>
@@ -591,16 +597,7 @@ export default function Departments(props) {
                       {
                         whitespace: true,
                       },
-                      {
-                        min: 3,
-                        message:
-                          "Department name must be at least 3 characters",
-                      },
-                      {
-                        max: 100,
-                        message:
-                          "Department name cannot be longer than 100 characters",
-                      },
+                     
                     ]}
                   >
                     <InputType
@@ -636,16 +633,7 @@ export default function Departments(props) {
                         // pattern: new RegExp("^[A-Za-z]+$"),
                         message: "Please enter a valid department code",
                       },
-                      {
-                        min: 3,
-                        message:
-                          "Department code must be at least 3 characters",
-                      },
-                      {
-                        max: 15,
-                        message:
-                          "Department code cannot be longer than 15 characters",
-                      },
+                      
                       // {
                       //   validator: validateNumberAndText,
                       // },
@@ -676,7 +664,7 @@ export default function Departments(props) {
               </div>
               <div className="row justify-content-center">
                 <div className="col-auto">
-                  <Button btnType="save">Save</Button>
+                  <Button disabled={true} btnType="save">Save</Button>
                 </div>
               </div>
             </Form>

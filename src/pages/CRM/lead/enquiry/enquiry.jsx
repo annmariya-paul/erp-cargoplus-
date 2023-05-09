@@ -326,7 +326,7 @@ if(data.customerfrighttype){
   };
 
   useEffect(() => {
-    GetAllEnquirySource();
+ GetAllEnquirySource();
   }, []);
   const [AllEnquirySource, setAllEnquirySource] = useState();
 

@@ -65,6 +65,10 @@ function Addvendor({ }  ) {
   const [Toggle4, setToggle4] = useState(false);
   const [Toggle3, setToggle3] = useState(false);
 
+  const [vendordoc, setvendordoc] = useState([]);
+
+  const [FileSizeError, setFileSizeError] = useState(false);
+
 
   const beforeUpload = (file, fileList) => {};
   const [messageApi, contextHolder] = message.useMessage();
@@ -217,11 +221,11 @@ console.log("bnkdetails id iss",vendorId)
     // formData.append(`city`, data.vendorcity);
     // formData.append(`website`, data.vendorwebsite);
     // formData.append(`state`, data.vendorstate);
-    formData.append(`address`, data.vendoraddress);
-    formData.append(`remark`, data.vendorremarks);
+    data.vendoraddress && formData.append(`address`, data.vendoraddress);
+    data.vendorremarks && formData.append(`remark`, data.vendorremarks);
    
-    if (data.vendor_attachments) {
-      formData.append(`attachments`, data.vendor_attachments);
+    if (vendordoc) {
+      formData.append(`attachments`, vendordoc);
       // formData.append(`customer_logo`, leadimg);
     }
 
@@ -487,16 +491,48 @@ console.log("bnkdetails id iss",vendorId)
                     <div className="col-sm-6 pt-1">
                       <label> Attachments</label>
                       <div>
-                        <Form.Item className="py-1" 
-                        name="vendor_attachments"
-                        >
+                      <Form.Item name="vendor_docs">
                           <FileUpload
-                            beforeUpload={beforeUpload}
                             multiple
-                            height={100}
+                          className="antdfileupload"
+                            style={{ padding:"0.5px" }}
+                            filetype={"Accept only pdf and docs"}
                             listType="picture"
                             accept=".pdf,.docs,"
+                           
+                            beforeUpload={beforeUpload}
+                            // value={leadAttac1ment}
+                            // onChange={(e) => setLeadAttachment(e.target.value)}
+                            onChange={(file) => {
+                              console.log("Before upload", file.file);
+                              console.log(
+                                "Before upload file size",
+                                file.file.size
+                              );
+                              if (
+                                file.file.size > 1000 &&
+                                file.file.size < 500000
+                              ) {
+                                setvendordoc(file.file.originFileObj);
+                                setFileSizeError(false);
+                                console.log(
+                                  "file greater than 1 kb and less than 500 kb"
+                                );
+                              } else {
+                                setFileSizeError(true);
+                                console.log("hgrtryyryr");
+                              }
+                            }}
                           />
+                          {FileSizeError ? (
+                            <div>
+                              <label style={{ color: "red" }}>
+                                File size must be between 1kb and 500kb
+                              </label>
+                            </div>
+                          ) : (
+                            ""
+                          )}
                         </Form.Item>
                       </div>
                     </div>

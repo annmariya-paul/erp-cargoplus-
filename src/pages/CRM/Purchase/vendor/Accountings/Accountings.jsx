@@ -52,7 +52,7 @@ function Accounting({vendor}){
       vendor?.vendor_state && formData.append(`state`, vendor?.vendor_state);
       vendor?.vendor_address && formData.append(`address`, vendor?.vendor_address);
 
-      vendor?.remarks && formData.append(`remarks`, vendor?.remarks);
+      vendor?.vendor_remarks && formData.append(`remark`, vendor?.vendor_remarks);
 
       // formData.append(`country_id`, vendor.vendor_country_id);
       // formData.append(`city`, vendor.vendor_city);

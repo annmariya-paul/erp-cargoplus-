@@ -13,7 +13,7 @@ import SelectBox from "../../../components/Select Box/SelectBox";
 import CheckUnique from "../../../check Unique/CheckUnique";
 import { UniqueErrorMsg } from "../../../ErrorMessages/UniqueErrorMessage";
 import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
-
+import PageSizer from "../../../components/PageSizer/PageSizer";
 function Employees() {
   const [editForm] = Form.useForm();
   const [uniqueeditCode, setuniqueeditCode] = useState(false);
@@ -29,8 +29,8 @@ function Employees() {
   const [employeeroleid, setEmployeeroleid] = useState();
   const [empEmail, setEmpEmail] = useState();
   const [empPassword, setEmpPassword] = useState();
-  const [pageSize, setPageSize] = useState("25");
-  const [current, setCurrent] = useState(1);
+  // const [pageSize, setPageSize] = useState("25");
+  // const [current, setCurrent] = useState(1);
   const [allEmployees, setAllEmployees] = useState([]);
   const [allbranches, setAllBranches] = useState();
   const [alldesgination, setAllDesignation] = useState();
@@ -41,11 +41,35 @@ function Employees() {
   const [employeeName, setEmployeeName] = useState("");
   const [newName, setNewName] = useState();
   const [allRoles, setAllRoles] = useState();
-
+  // const [noofItems, setNoofItems] = useState("25");
+  const [totalCount, setTotalcount] = useState();
   const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
+  const [startcount, setstartcount] = useState();
+
+  let a = localStorage.getItem("noofitem");
+  const [pageSize, setPageSize] = useState(a);
+  const [current, setCurrent] = useState(1);
+
+  console.log("PageSize", pageSize);
+
+  const pageofIndex = pageSize * (current - 1) - 1 + 1;
 
   const getData = (current, pageSize) => {
     return allEmployees?.slice((current - 1) * pageSize, current * pageSize);
+  };
+  // const pageofIndex = noofItems * (current - 1) - 1 + 1;
+  // const pagesizecount = Math.ceil(totalCount / noofItems);
+  // console.log("page number isss", pagesizecount);
+  // const getData = (current, pageSize) => {
+  //   return allEmployees?.slice((current - 1) * pageSize, current * pageSize);
+  // };
+  const getFinalCount = (total) => {
+    const cutoff = Math.ceil(totalCount / pageSize);
+    console.log("FinalTest", cutoff, current);
+    if (current === cutoff) return totalCount;
+    return total;
+    // console.log("TotalPageTest",current,totalCount)
+    // console.log("TestCount",total)
   };
 
   //Columns
@@ -241,14 +265,17 @@ function Employees() {
   }, []);
 
   //API call to get all employee
-  const getAllEmployee = () => {
-    PublicFetch.get(`${CRM_BASE_URL_HRMS}/employees`)
+  const getAllEmployee = (query) => {
+    PublicFetch.get(`${CRM_BASE_URL_HRMS}/employees?startIndex=${pageofIndex}&noOfItems=${pageSize}&search=${query}`)
       .then((res) => {
-        console.log("Response", res);
+        console.log("Response of emp", res);
         if (res.data.success) {
-          console.log("Success of employee", res.data.data);
+          console.log("Success of employee", res.data.data.employees);
+          setTotalcount(res?.data?.data?.totalCount);
+          setstartcount(res?.data?.data?.startIndex);
+        
           let array = [];
-          res.data.data.forEach((item, index) => {
+          res.data.data.employees.forEach((item, index) => {
             array.push({
               employee_id: item.employee_id,
               // employee_email: item.employee_email,
@@ -291,9 +318,20 @@ function Employees() {
       });
   };
   useEffect(() => {
-    getAllEmployee();
+    // getAllEmployee();
     AllRoleData();
   }, []);
+  useEffect(() => {
+    const getData = setTimeout(() => {
+      getAllEmployee(searchedText);
+      
+    }, 1000);
+   
+
+
+    return () => clearTimeout(getData);
+ 
+  }, [pageSize, pageofIndex, searchedText]);
 
   const handleEditClick = (data) => {
     console.log("Edit data", data);
@@ -439,33 +477,26 @@ function Employees() {
         {/* <div className="row py-1" style={{ backgroundColor: "#f4f4f7" }}></div> */}
         <div className="row my-3">
           <div className="col-4 px-3">
-            <Select
-              bordered={false}
-              className="page_size_style"
-              value={pageSize}
-              onChange={(e) => {
-                setCurrent(1);
+          <div className="d-flex justify-content-start align-items-center gap-3">
+          <PageSizer
+              pageValue={(e) => {
+                console.log("Pge Sizer in location", e);
                 setPageSize(e);
               }}
-            >
-              <Select.Option value="25">
-                Show
-                <span className="vertical ms-1">|</span>
-                <span className="sizes ms-1">25</span>
-              </Select.Option>
-              <Select.Option value="50">
-                Show
-                <span className="vertical ms-1">|</span>
-                <span className="sizes ms-1"> 50</span>
-              </Select.Option>
-              <Select.Option value="100">
-                Show
-                <span className="vertical ms-1">|</span>
-                <span className="sizes ms-1">100</span>
-              </Select.Option>
-            </Select>
+            />
+             {totalCount > 0 && (
+              <div className="   d-flex  align-items-center mt-2">
+                <label className="font_size">
+                  Results: {startcount + 1} -{" "}
+                  {getFinalCount(1 * pageSize * current)}{" "}
+                  <span>of {totalCount} </span>{" "}
+                </label>
+              </div>
+            )}
+            </div>
           </div>
           <div className=" col-4 d-flex align-items-center justify-content-center">
+          {allEmployees?.length > 0 && (
             <MyPagination
               total={allEmployees?.length}
               current={current}
@@ -476,6 +507,7 @@ function Employees() {
                 setPageSize(pageSize);
               }}
             />
+            )}
           </div>
 
           <div className="col-4 d-flex justify-content-end">
@@ -493,6 +525,7 @@ function Employees() {
           />
         </div>
         <div className="d-flex py-2 justify-content-center">
+        {allEmployees?.length > 0 && (
           <MyPagination
             total={allEmployees?.length}
             current={current}
@@ -503,6 +536,7 @@ function Employees() {
               setPageSize(pageSize);
             }}
           />
+        )}
         </div>
       </div>
       <CustomModel

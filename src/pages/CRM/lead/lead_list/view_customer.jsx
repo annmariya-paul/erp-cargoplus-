@@ -50,7 +50,7 @@ export default function Viewcustomer() {
       key: "index",
       // width: "7%",
       render: (value, item, index) => serialNo + index,
-      align: "center",
+      align: "left",
     },
 ,
     {
@@ -91,7 +91,7 @@ export default function Viewcustomer() {
     key: "index",
     // width: "7%",
     render: (value, item, index) => serialNo + index,
-    align: "center",
+    align: "left",
   },
 
   {

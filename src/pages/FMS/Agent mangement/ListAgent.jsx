@@ -254,7 +254,7 @@ function ListAgent() {
 
     let data = {
       agent_vendor_id: parseInt(inpiutId),
-      agent_country: parseInt(agentcountry),
+      agent_country: parseInt(e.agentcountry),
       agent_commission_details: inputcommision,
     };
     let idss = parseInt(agentId);
@@ -332,7 +332,7 @@ function ListAgent() {
           });
         });
         setAgentdata(temp);
-        setTotalData(allagent?.data?.data?.agentTotal);
+        setTotalData(allagent?.data?.data?.totalCount);
         setStartIndex(allagent?.data?.data?.startIndex);
         console.log("teperaefr", allagent?.data?.data);
       }
@@ -594,7 +594,7 @@ function ListAgent() {
                       {/* Results 1-70 */}
                       Results: {StartIndex + 1} -
                       {getFinalCount(1 * pageSize * current)}{" "}
-                      <span>of {allagents?.length} </span>{" "}
+                      <span>of {totalData} </span>{" "}
                     </label>
                   </div>
                 </div>
@@ -604,10 +604,10 @@ function ListAgent() {
             )}
           </div>
           <div className="col-4 d-flex  align-items-center justify-content-center">
-            {agentdata ? (
+            {totalData > 0 ? (
               <>
                 <MyPagination
-                  total={allagents?.length}
+                  total={totalData}
                   current={current}
                   showSizeChanger={true}
                   pageSize={pageSize}
@@ -648,10 +648,10 @@ function ListAgent() {
           />
         </div>
         <div className="d-flex py-2 justify-content-center">
-          {agentdata ? (
+          {totalData > 0 ? (
             <>
               <MyPagination
-                total={agentdata?.length}
+                total={totalData}
                 current={current}
                 showSizeChanger={true}
                 pageSize={pageSize}
@@ -887,7 +887,7 @@ function ListAgent() {
                     form={editForm}
                     onFinish={(value) => {
                       console.log("the formvaluess iss", value);
-                      handleUpdate();
+                      handleUpdate(value);
                     }}
                     onFinishFailed={(error) => {
                       console.log(error);
@@ -960,7 +960,7 @@ function ListAgent() {
                                     <Select.Option
                                       key={item.country_id}
                                       id={item.country_id}
-                                      value={item.country_name}
+                                      value={item.country_id}
                                     >
                                       {item.country_name}
                                     </Select.Option>

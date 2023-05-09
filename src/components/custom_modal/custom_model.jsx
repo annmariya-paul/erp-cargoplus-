@@ -44,6 +44,7 @@ function Custom_model({
         className={"modal_window_style"}
         footer={false}
         destroyOnClose={true}
+        maskClosable={false} // setting maskClosable to false will prevent closing by clicking outside
       >
         {Adding_contents && (
           <>
@@ -66,7 +67,7 @@ function Custom_model({
             </div>
           </div>
         )}
-         {warning && (
+        {warning && (
           <div>
             <div className="row">
               {/* <HiBadgeCheck
@@ -74,7 +75,9 @@ function Custom_model({
                 style={{ fontSize: "100px" }}
               /> */}
               {/* <h5 className="warning_msg">Error !<br/></h5> */}
-              <h5 style={{color:"orange", textAlign: "center" }}>{cancelName}</h5>
+              <h5 style={{ color: "orange", textAlign: "center" }}>
+                {cancelName}
+              </h5>
               <p style={{ textAlign: "center" }}> Deletion is not allowed.</p>
             </div>
           </div>

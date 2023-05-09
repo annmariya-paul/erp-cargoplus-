@@ -13,12 +13,15 @@ import CustomModel from "../../../components/custom_modal/custom_model";
 import TextArea from "../../../components/ InputType TextArea/TextArea";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../routes";
+import PageSizer from "../../../components/PageSizer/PageSizer";
 
 function InvoiceList() {
   const [AddForm] = Form.useForm();
   const navigate = useNavigate();
   const [oppnew, setOppnew] = useState([]);
-  const [numOfItems, setNumOfItems] = useState("25");
+  const [numOfItems, setNumOfItems] = useState(
+    localStorage.getItem("noofitem")
+  );
   const [current, setCurrent] = useState(1); // current page
   const [searchSource, setSearchSource] = useState(""); // search by text input
   const [totalCount, setTotalcount] = useState("");
@@ -377,12 +380,14 @@ function InvoiceList() {
   };
 
   useEffect(() => {
-    const getData = setTimeout(() => {
-      getAllInvoices(searchSource);
-    }, 1000);
-    // getAllInvoices(searchSource);
-    return () => clearTimeout(getData);
-  }, [searchSource, pageofIndex, noofItems]);
+    if (numOfItems) {
+      const getData = setTimeout(() => {
+        getAllInvoices(searchSource);
+      }, 1000);
+      // getAllInvoices(searchSource);
+      return () => clearTimeout(getData);
+    }
+  }, [searchSource, pageofIndex, numOfItems]);
   return (
     <div>
       <div className="container-fluid">
@@ -444,35 +449,11 @@ function InvoiceList() {
                   <div className="col-xl-4  ">
                     <div className="d-flex align-items-center gap-3">
                       <div className="   ">
-                        <Select
-                          // defaultValue={"25"}
-                          bordered={false}
-                          className="page_size_style"
-                          value={numOfItems}
-                          // onChange={handleLastNameChange}
-                          onChange={(event, current) => {
-                            console.log("On page size selected : ", event);
-                            console.log("nfjnjfv", current);
-                            setNumOfItems(event);
-                            setCurrent(1);
+                        <PageSizer
+                          pageValue={(e) => {
+                            setNumOfItems(e);
                           }}
-                        >
-                          <Select.Option value="25">
-                            <span style={{ color: "#2f6b8f" }} className="ms-1">
-                              25
-                            </span>
-                          </Select.Option>
-                          <Select.Option value="50">
-                            <span style={{ color: "#2f6b8f" }} className="ms-1">
-                              50
-                            </span>
-                          </Select.Option>
-                          <Select.Option value="100">
-                            <span style={{ color: "#2f6b8f" }} className="ms-1">
-                              100
-                            </span>{" "}
-                          </Select.Option>
-                        </Select>
+                        />
                       </div>
                       <div className="   d-flex  align-items-center ">
                         <label className="font_size">

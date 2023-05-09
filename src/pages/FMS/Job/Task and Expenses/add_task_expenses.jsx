@@ -1664,7 +1664,7 @@ export default function Taskexpenses() {
   const getagents = async () => {
     try {
       const allagent = await PublicFetch.get(
-        `${process.env.REACT_APP_BASE_URL}/agents`
+        `${process.env.REACT_APP_BASE_URL}/agents/minimal`
       );
       console.log("all agentss are ::", allagent?.data?.data);
       let array = [];

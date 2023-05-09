@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { DatePicker, Form, Popconfirm } from "antd";
+import { DatePicker, Form, message, Popconfirm } from "antd";
 import SelectBox from "../../../components/Select Box/SelectBox";
 import InputType from "../../../components/Input Type textbox/InputType";
 import { Collapse } from "antd";
@@ -27,6 +27,7 @@ function InvoicePreView() {
   let totadyDate = new Date();
   let date = moment(totadyDate);
   const [Invoice_Date, setInvoiceDate] = useState(date);
+  const [AllTasksExpense, setAllTaskExpense] = useState();
 
   const { Panel } = Collapse;
 
@@ -38,6 +39,7 @@ function InvoicePreView() {
       }, time);
     }
   };
+  console.log("eiiwhiefef", TaskExpense?.length);
 
   const progress = [
     {
@@ -83,6 +85,7 @@ function InvoicePreView() {
         if (res.data.success) {
           console.log("success of job", res.data.data);
           setJobData(res?.data?.data);
+          setAllTaskExpense(res?.data?.data?.fms_v1_job_task_expenses);
           let total = 0;
 
           let temp = [];
@@ -433,8 +436,8 @@ function InvoicePreView() {
                       </div>
                       <div className="d-flex justify-content-end gap-3 mt-3">
                         <label style={{ fontWeight: 600 }}>Total</label>{" "}
-                        <lable style={{ fontWeight: 600 }}>:</lable>{" "}
-                        <lable style={{ fontWeight: 600 }}>{grandTotal} </lable>
+                        <label style={{ fontWeight: 600 }}>:</label>{" "}
+                        <label style={{ fontWeight: 600 }}>{grandTotal} </label>
                       </div>
                     </div>
 

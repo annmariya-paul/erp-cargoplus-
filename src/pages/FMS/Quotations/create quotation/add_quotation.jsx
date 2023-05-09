@@ -1112,26 +1112,26 @@ export default function Add_Quotation() {
   const [allservices, setAllservices] = useState();
   const [allLocations, setAllLocations] = useState();
   console.log("locations ", allLocations);
-  const getAllLocations = async () => {
-    try {
-      const locations = await PublicFetch.get(`${CRM_BASE_URL_FMS}/locations`);
-      console.log("all locations are", locations.data.data);
-      // setAllLocations(locations.data.data);
-      let temp = [];
-      locations.data.data.forEach((item, index) => {
-        temp.push({
-          location_id: item.location_id,
-          location_code: item.location_code,
-          location_name: item.location_name,
-          location_type: item.location_type,
-          location_country: item.countries.country_name,
-        });
-        // setAllLocations(temp);
-      });
-    } catch (err) {
-      console.log("error while getting the locations: ", err);
-    }
-  };
+  // const getAllLocations = async () => {
+  //   try {
+  //     const locations = await PublicFetch.get(`${CRM_BASE_URL_FMS}/locations`);
+  //     console.log("all locations are", locations.data.data);
+  //     // setAllLocations(locations.data.data);
+  //     let temp = [];
+  //     locations.data.data.forEach((item, index) => {
+  //       temp.push({
+  //         location_id: item.location_id,
+  //         location_code: item.location_code,
+  //         location_name: item.location_name,
+  //         location_type: item.location_type,
+  //         location_country: item.countries.country_name,
+  //       });
+  //       // setAllLocations(temp);
+  //     });
+  //   } catch (err) {
+  //     console.log("error while getting the locations: ", err);
+  //   }
+  // };
 
   const locationBytype = (data) => {
     PublicFetch.get(`${CRM_BASE_URL_FMS}/locations/type-location/${data}`)
@@ -1160,7 +1160,6 @@ export default function Add_Quotation() {
 
   useEffect(() => {
     getallunits();
-    getAllLocations();
     quotationDate();
   }, []);
 

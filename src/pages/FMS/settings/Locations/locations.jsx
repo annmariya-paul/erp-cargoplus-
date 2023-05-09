@@ -41,6 +41,7 @@ export default function Locations() {
   const [allLocations, setAllLocations] = useState();
   const [locationId, setLocationId] = useState();
   const [totallocation, settotallocation] = useState();
+  const [startcount, setStartCount] = useState();
 
   const close_modal = (mShow, time) => {
     if (!mShow) {
@@ -78,6 +79,7 @@ export default function Locations() {
       );
       console.log("all locations are", locations.data.data);
       settotallocation(locations.data.data?.locationCount);
+      setStartCount(locations.data.data?.startIndex);
       // setAllLocations(locations.data.data);
       let temp = [];
       locations.data.data.locations.forEach((item, index) => {
@@ -118,7 +120,7 @@ export default function Locations() {
           close_modal(successPopup, 1200);
           addForm.resetFields();
           setModalAddLocation(false);
-          getAllLocations();
+          getAllLocations(searchCode);
         }
       })
       .catch((err) => {
@@ -179,7 +181,7 @@ export default function Locations() {
         if (res.data.success) {
           setSuccessPopup(true);
           close_modal(successPopup, 1200);
-          getAllLocations();
+          getAllLocations(searchCode);
           setModalEditLocation(false);
         }
       })
@@ -302,6 +304,15 @@ export default function Locations() {
     item.location_countryname,
   ]);
 
+  const getFinalCount = (total) => {
+    const cutoff = Math.ceil(totallocation / pageSize);
+    console.log("FinalTest", cutoff, current);
+    if (current === cutoff) return totallocation;
+    return total;
+    // console.log("TotalPageTest",current,totalCount)
+    // console.log("TestCount",total)
+  };
+
   return (
     <>
       <div className="container-fluid container_fms pt-3">
@@ -359,14 +370,15 @@ export default function Locations() {
         </div> */}
         <div className="row my-3">
           <div className="col-4 px-3">
-            <PageSizer
-              pageValue={(e) => {
-                console.log("Pge Sizer in location", e);
-                setPageSize(e);
-              }}
-            />
+            <div className="d-flex justify-content-start align-items-center gap-2">
+              <PageSizer
+                pageValue={(e) => {
+                  console.log("Pge Sizer in location", e);
+                  setPageSize(e);
+                }}
+              />
 
-            {/* <Select
+              {/* <Select
               bordered={false}
               className="page_size_style"
               value={pageSize}
@@ -388,12 +400,22 @@ export default function Locations() {
                 <span className="sizes ms-1">100</span>
               </Select.Option>
             </Select> */}
+              {totallocation > 0 && (
+                <div className=" col-xl-10 col-lg-9 col-md-8 col-sm-12  d-flex  align-items-center ">
+                  <label className="font_size">
+                    Results: {startcount + 1} -{" "}
+                    {getFinalCount(1 * pageSize * current)}{" "}
+                    <span>of {totallocation} </span>{" "}
+                  </label>
+                </div>
+              )}
+            </div>
           </div>
 
           <div className=" col-4 d-flex align-items-center justify-content-center">
-            {totallocation?.length > 0 && (
+            {totallocation > 0 && (
               <MyPagination
-                total={parseInt(totallocation?.length)}
+                total={parseInt(totallocation)}
                 current={current}
                 showSizeChanger={true}
                 pageSize={pageSize}
@@ -418,16 +440,16 @@ export default function Locations() {
         </div>
         <div className="datatable">
           <TableData
-            data={getData(current, pageSize)}
-            // data={allLocations}
+            // data={getData(current, pageSize)}
+            data={allLocations}
             columns={columns}
             custom_table_css="table_lead_list"
           />
         </div>
         <div className="d-flex mt-4 justify-content-center">
-          {totallocation?.length > 0 && (
+          {totallocation > 0 && (
             <MyPagination
-              total={parseInt(totallocation?.length)}
+              total={parseInt(totallocation)}
               current={current}
               showSizeChanger={true}
               pageSize={pageSize}
@@ -752,6 +774,14 @@ export default function Locations() {
             </div>
           </div>
         }
+      />
+
+      <CustomModel
+        success
+        show={successPopup}
+        onHide={() => {
+          setSuccessPopup(false);
+        }}
       />
     </>
   );

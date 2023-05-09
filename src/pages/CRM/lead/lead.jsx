@@ -270,8 +270,8 @@ function Lead({}) {
 
   const handleMoreinfoTab = () => {
     toggleTab(5);
-    // setTimeOuts(false);
-    // setToggle4(false);
+    setTimeOuts(false);
+    setToggle4(false);
   };
 
   useEffect(() => {
@@ -343,8 +343,11 @@ function Lead({}) {
                 <button
                   className={toggleState === 5 ? "tabs active-tabs" : "tabs"}
                   onClick={(e) => {
+                    CustomerId == null
+                      ? errormessage()
+                      : handleMoreinfoTab(e);
                     // CustomerId !== null ? errormessage(): handleAccountingTab(e);
-                    handleMoreinfoTab();
+                    // handleMoreinfoTab();
                   }}
                 >
                   More Info

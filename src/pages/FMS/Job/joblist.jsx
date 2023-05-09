@@ -15,6 +15,7 @@ import { Checkbox } from "antd";
 import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
 import Custom_model from "../../../components/custom_modal/custom_model";
 import { GiCancel } from "react-icons/gi";
+import PageSizer from "../../../components/PageSizer/PageSizer";
 function Listjob() {
   const [searchedText, setSearchedText] = useState("");
   const [pageSize, setPageSize] = useState("25");
@@ -25,7 +26,7 @@ function Listjob() {
   const [searchStatus, setSearchStatus] = useState("");
   const [jobStatus, setJobStatus] = useState(JobStatus);
   const [startcount, setstartcount] = useState();
-  const [noofItems, setNoofItems] = useState("25");
+  const [noofItems, setNoofItems] = useState(localStorage.getItem("noofitem"));
   const [current, setCurrent] = useState(1);
   const [cancelPopup, setCancelPopup] = useState(false);
   const [totaljob, settotaljob] = useState("");
@@ -303,10 +304,12 @@ function Listjob() {
   };
 
   useEffect(() => {
-    const getData = setTimeout(() => {
-      getAllJobs(searchedText);
-    }, 1000);
-    return () => clearTimeout(getData);
+    if (noofItems) {
+      const getData = setTimeout(() => {
+        getAllJobs(searchedText);
+      }, 1000);
+      return () => clearTimeout(getData);
+    }
   }, [pageofIndex, noofItems, searchedText]);
 
   // useEffect(() => {
@@ -418,28 +421,11 @@ function Listjob() {
             <div className="d-flex justify-content-start align-items-center gap-3">
               {totaljob > 0 && (
                 <div className="   ">
-                  <Select
-                    bordered={false}
-                    className="page_size_style"
-                    value={noofItems}
-                    onChange={(e) => setNoofItems(e)}
-                  >
-                    <Select.Option value="25">
-                      <span style={{ color: "#2f6b8f" }} className="ms-1">
-                        25
-                      </span>
-                    </Select.Option>
-                    <Select.Option value="50">
-                      <span style={{ color: "#2f6b8f" }} className="ms-1">
-                        50
-                      </span>
-                    </Select.Option>
-                    <Select.Option value="100">
-                      <span style={{ color: "#2f6b8f" }} className="ms-1">
-                        100
-                      </span>
-                    </Select.Option>
-                  </Select>
+                  <PageSizer
+                    pageValue={(e) => {
+                      setNoofItems(e);
+                    }}
+                  />
                 </div>
               )}
               {totaljob > 0 && (

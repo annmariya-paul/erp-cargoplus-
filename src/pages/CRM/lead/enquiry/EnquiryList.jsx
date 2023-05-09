@@ -1,4 +1,4 @@
-import { Checkbox, Input, Select ,message} from "antd";
+import { Checkbox, Input, Select, message } from "antd";
 import React, { useEffect, useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { Popconfirm } from "antd";
@@ -13,7 +13,7 @@ import TableData from "../../../../components/table/table_data";
 import { ROUTES } from "../../../../routes";
 import CustomModel from "../../../../components/custom_modal/custom_model";
 import PublicFetch from "../../../../utils/PublicFetch";
-
+// import Error_model from "../../../../components/Error Modal/errorModal";
 import {
   LeadType,
   LeadStatus,
@@ -23,7 +23,8 @@ import moment from "moment";
 
 function EnquiryList() {
   const navigate = useNavigate();
- 
+  const [errorModalVisible, setErrorModalVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [successPopup, setSuccessPopup] = useState(false);
   const [cancelPopUp, setCancelPopUp] = useState(false);
   const [searchedText, setSearchedText] = useState("");
@@ -41,8 +42,8 @@ function EnquiryList() {
   const [startcount, setstartcount] = useState();
   const error = () => {
     messageApi.open({
-      type: 'error',
-      content: 'This is an error message',
+      type: "error",
+      content: "This is an error message",
     });
   };
 
@@ -67,9 +68,15 @@ function EnquiryList() {
         }
       })
       .catch((err) => {
-        console.log("Error", err.data.data.err.response.message);
-        
-      // {error}
+        // console.log("Error of delete converted enq", err.response.data.data.err.message);
+        // const errorMessage = err.response?.data?.data?.err?.message || "error occurred";
+        // message.error(errorMessage);
+        // {error}
+
+        const errorMessage =
+          err.response?.data?.data?.err?.message || "Error occurred";
+        setErrorMessage(errorMessage);
+        setErrorModalVisible(true);
       });
   };
 
@@ -341,7 +348,11 @@ function EnquiryList() {
   const GetAllEnquiries = (query) => {
     PublicFetch.get(
       `${CRM_BASE_URL_FMS}/enquiries?startIndex=${pageofIndex}&noOfItems=${noofItems}&search=${
-        query.toLowerCase() === "pending" ? 0 : query.toLowerCase() === "converted" ? 1 : query.toLowerCase()
+        query.toLowerCase() === "pending"
+          ? 0
+          : query.toLowerCase() === "converted"
+          ? 1
+          : query.toLowerCase()
       }`
     )
       .then((res) => {
@@ -400,179 +411,176 @@ function EnquiryList() {
   return (
     <div className="container-fluid container_fms pt-3">
       <div className="row flex-wrap align-items-center">
-      <div className="col-4 ">
-                <h5 className="lead_text mt-3">Enquiry</h5>
-              </div>
+        <div className="col-4 ">
+          <h5 className="lead_text mt-3">Enquiry</h5>
+        </div>
         <div className="col-4">
           {/* <div className=" "> */}
-            {/* <div className="row "> */}
-             
-              {/* <div
+          {/* <div className="row "> */}
+
+          {/* <div
                 // style={{ backgroundColor: "rgb(233, 233, 233)", width: "fit-content"}}
                 className="col-4 mb-3 "
               > */}
-                <Input.Search
-                  placeholder="Search "
-                  style={{
-                    // margin: "5px",
-                    borderRadius: "5px",
-                    backgroundColor: "whitesmoke",
-                  }}
-                  className="inputSearch"
-                  value={searchedText}
-                  onChange={(e) => {
-                    console.log("Entered value");
-                    //
-                    // if(e.target.value.toLowerCase() === "pending")
-                    // {
-                    //   setSearchedText(0);
-                    // }else if(e.target.value.toLowerCase === "converted")
-                    // {
-                    //   setSearchedText(1);
-                    // }else{
-                    setSearchedText(e.target.value ? [e.target.value] : []);
-                    // }
-                  }}
-                  onSearch={(value) => {
-                    setSearchedText(value);
-                  }}
-                />
-              </div>
+          <Input.Search
+            placeholder="Search "
+            style={{
+              // margin: "5px",
+              borderRadius: "5px",
+              backgroundColor: "whitesmoke",
+            }}
+            className="inputSearch"
+            value={searchedText}
+            onChange={(e) => {
+              console.log("Entered value");
+              //
+              // if(e.target.value.toLowerCase() === "pending")
+              // {
+              //   setSearchedText(0);
+              // }else if(e.target.value.toLowerCase === "converted")
+              // {
+              //   setSearchedText(1);
+              // }else{
+              setSearchedText(e.target.value ? [e.target.value] : []);
+              // }
+            }}
+            onSearch={(value) => {
+              setSearchedText(value);
+            }}
+          />
+        </div>
 
-                <div className="col-4 d-flex justify-content-end">
-                {AllEnquiries && (
-                  <Leadlist_Icons
-                    name={"Enquiry"}
-                    datas={allLeadList}
-                    columns={filteredColumns}
-                    items={data12}
-                    xlheading={EnquiryHeads}
-                    filename="data.csv"
-                    chechboxes={
-                      <Checkbox.Group
-                        onChange={onChange}
-                        value={selectedColumns}
-                      >
-                        {columnsKeys.map((column) => (
-                          <li>
-                            <Checkbox value={column} key={column}>
-                              {column}
-                            </Checkbox>
-                          </li>
-                        ))}
-                      </Checkbox.Group>
-                    }
-                  />
-                )}
-              </div>
-            </div>
+        <div className="col-4 d-flex justify-content-end">
+          {AllEnquiries && (
+            <Leadlist_Icons
+              name={"Enquiry"}
+              datas={allLeadList}
+              columns={filteredColumns}
+              items={data12}
+              xlheading={EnquiryHeads}
+              filename="data.csv"
+              chechboxes={
+                <Checkbox.Group onChange={onChange} value={selectedColumns}>
+                  {columnsKeys.map((column) => (
+                    <li>
+                      <Checkbox value={column} key={column}>
+                        {column}
+                      </Checkbox>
+                    </li>
+                  ))}
+                </Checkbox.Group>
+              }
+            />
+          )}
+        </div>
+      </div>
 
-            <div className="row my-3">
-              <div className="col-xl-4  ">
-                <div className="d-flex justify-content-start align-items-center gap-3">
-                {totalCount > 0 && (
-                  <div className="   ">
-                    <Select
-                      // defaultValue={"25"}
-                      bordered={false}
-                      className="page_size_style"
-                      value={noofItems}
-                      // onChange={handleLastNameChange}
-                      // onChange={(event, current) => {
-                      //   console.log("On page size selected : ", event);
-                      //   console.log("nfjnjfv", current);
-                      //   setNoofItems(event);
-                      //   setCurrent(1);
-                      // }}
-                      onChange={(e) => setNoofItems(e)}
-                    >
-                      <Select.Option value="25">
-                        <span style={{ color: "#2f6b8f" }} className="ms-1">
-                          25
-                        </span>
-                      </Select.Option>
-                      <Select.Option value="50">
-                        <span style={{ color: "#2f6b8f" }} className="ms-1">
-                          50
-                        </span>
-                      </Select.Option>
-                      <Select.Option value="100">
-                        <span style={{ color: "#2f6b8f" }} className="ms-1">
-                          100
-                        </span>
-                      </Select.Option>
-                    </Select>
-                  </div>
-                )}
-                  {totalCount > 0 && (
-                  <div className="   d-flex  align-items-center mt-2">
-                    <label className="font_size">
-                      Results: {startcount + 1} -{" "}
-                      {getFinalCount(1 * noofItems * current)}{" "}
-                      <span>of {totalCount} </span>{" "}
-                    </label>
-                  </div>
-                  )}
-                </div>
+      <div className="row my-3">
+        <div className="col-xl-4  ">
+          <div className="d-flex justify-content-start align-items-center gap-3">
+            {totalCount > 0 && (
+              <div className="   ">
+                <Select
+                  // defaultValue={"25"}
+                  bordered={false}
+                  className="page_size_style"
+                  value={noofItems}
+                  // onChange={handleLastNameChange}
+                  // onChange={(event, current) => {
+                  //   console.log("On page size selected : ", event);
+                  //   console.log("nfjnjfv", current);
+                  //   setNoofItems(event);
+                  //   setCurrent(1);
+                  // }}
+                  onChange={(e) => setNoofItems(e)}
+                >
+                  <Select.Option value="25">
+                    <span style={{ color: "#2f6b8f" }} className="ms-1">
+                      25
+                    </span>
+                  </Select.Option>
+                  <Select.Option value="50">
+                    <span style={{ color: "#2f6b8f" }} className="ms-1">
+                      50
+                    </span>
+                  </Select.Option>
+                  <Select.Option value="100">
+                    <span style={{ color: "#2f6b8f" }} className="ms-1">
+                      100
+                    </span>
+                  </Select.Option>
+                </Select>
               </div>
-              <div className="col-4 d-flex py-2 justify-content-center">
-                {totalCount > 0 && (
-                  <MyPagination
-                    total={parseInt(totalCount)}
-                    // total={parseInt(AllEnquiries)}
-                    current={current}
-                    pageSize={noofItems}
-                    // defaultPageSize={noofItems}
-                    showSizeChanger={false}
-                    onChange={(current, pageSize) => {
-                      console.log("page index isss", pageSize);
-                      setCurrent(current);
-                      // setPageSize(pageSize);
-                      // setNoofItems(pageSize);
-                      // setCurrent(noofItems !== pageSize ? 0 : current);
-                    }}
-                  />
-                )}
+            )}
+            {totalCount > 0 && (
+              <div className="   d-flex  align-items-center mt-2">
+                <label className="font_size">
+                  Results: {startcount + 1} -{" "}
+                  {getFinalCount(1 * noofItems * current)}{" "}
+                  <span>of {totalCount} </span>{" "}
+                </label>
               </div>
-              <div className="col-4 d-flex justify-content-end">
-                <Link to={ROUTES.CREATE_ENQUIRY}>
-                  <Button
-                    btnType="add"
-                    // className="add_opportunity"
-                  >
-                    New Enquiry
-                  </Button>
-                </Link>
-              </div>
-            </div>
-            <div className="datatable">
-              <TableData
-                // data={getData(numofItemsTo, pageofIndex)}
-                data={AllEnquiries}
-                columns={columns}
-                custom_table_css="table_lead_list"
-              />
-            </div>
-            <div className="d-flex py-2 justify-content-center">
-              {AllEnquiries?.length > 0 && (
-                <MyPagination
-                  total={AllEnquiries?.length}
-                  current={current}
-                  pageSize={noofItems}
-                  // defaultPageSize={noofItems}
-                  showSizeChanger={false}
-                  onChange={(current, pageSize) => {
-                    console.log("page index isss", pageSize);
-                    setCurrent(current);
-                    // setPageSize(pageSize);
-                    // setNoofItems(pageSize);
-                    // setCurrent(noofItems !== pageSize ? 0 : current);
-                  }}
-                />
-              )}
-            </div>
+            )}
+          </div>
+        </div>
+        <div className="col-4 d-flex py-2 justify-content-center">
+          {totalCount > 0 && (
+            <MyPagination
+              total={parseInt(totalCount)}
+              // total={parseInt(AllEnquiries)}
+              current={current}
+              pageSize={noofItems}
+              // defaultPageSize={noofItems}
+              showSizeChanger={false}
+              onChange={(current, pageSize) => {
+                console.log("page index isss", pageSize);
+                setCurrent(current);
+                // setPageSize(pageSize);
+                // setNoofItems(pageSize);
+                // setCurrent(noofItems !== pageSize ? 0 : current);
+              }}
+            />
+          )}
+        </div>
+        <div className="col-4 d-flex justify-content-end">
+          <Link to={ROUTES.CREATE_ENQUIRY}>
+            <Button
+              btnType="add"
+              // className="add_opportunity"
+            >
+              New Enquiry
+            </Button>
+          </Link>
+        </div>
+      </div>
+      <div className="datatable">
+        <TableData
+          // data={getData(numofItemsTo, pageofIndex)}
+          data={AllEnquiries}
+          columns={columns}
+          custom_table_css="table_lead_list"
+        />
+      </div>
+      <div className="d-flex py-2 justify-content-center">
+        {AllEnquiries?.length > 0 && (
+          <MyPagination
+            total={AllEnquiries?.length}
+            current={current}
+            pageSize={noofItems}
+            // defaultPageSize={noofItems}
+            showSizeChanger={false}
+            onChange={(current, pageSize) => {
+              console.log("page index isss", pageSize);
+              setCurrent(current);
+              // setPageSize(pageSize);
+              // setNoofItems(pageSize);
+              // setCurrent(noofItems !== pageSize ? 0 : current);
+            }}
+          />
+        )}
+      </div>
 
-            {/* <Custom_model
+      {/* <Custom_model
               show={modalViewLead}
               onHide={() => setModalViewLead(false)}
               View_list
@@ -637,8 +645,8 @@ function EnquiryList() {
                 </>
               }
             /> */}
-          {/* </div> */}
-        {/* </div>
+      {/* </div> */}
+      {/* </div>
       </div> */}
 
       <CustomModel
@@ -646,6 +654,13 @@ function EnquiryList() {
         show={successPopup}
         onHide={() => setSuccessPopup(false)}
         success
+      />
+       <CustomModel
+        size={"sm"}
+        cancelName={errorMessage}
+        show={errorModalVisible}
+        onHide={() => setErrorModalVisible(false)}
+        warning
       />
       <CustomModel
         cancelName={"Enquiry"}
@@ -655,6 +670,16 @@ function EnquiryList() {
           setCancelPopUp(false);
         }}
       />
+      {/* <Error_model
+       size={"sm"}
+        cancelName={errorMessage}
+        cancel
+        show={errorModalVisible}
+        onHide={() => setErrorModalVisible(false)}
+        footer={null}
+      >
+      
+      </Error_model> */}
     </div>
   );
 }

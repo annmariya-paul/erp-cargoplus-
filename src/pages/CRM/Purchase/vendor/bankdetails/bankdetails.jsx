@@ -23,11 +23,15 @@ function Bankdetails({ vendor, toggle }) {
   const [editmodalShow, seteditModalShow] = useState(false);
   const [bnkdetailid, setbnkdetailid] = useState("");
   const [bankdefault, setbankdefault] = useState(0);
+
+  const [isdefaultadd,setisdefaultadd]= useState(false)
+
   const [editbankdefault, seteditbankdefault] = useState(0);
 
   const [isdefault, setisdefault] = useState(false);
 
   const [defaultbnkname, setdefaultbnkname] = useState("");
+  const[newbnkname,setnewbnkname]= useState("")
 
   const [editdefaultbnkname, seteditdefaultbnkname] = useState("");
 
@@ -130,6 +134,8 @@ function Bankdetails({ vendor, toggle }) {
         getvendorbankdetails();
         setModalShow(false);
         addForm.resetFields();
+        setbankdefault(0)
+        setisdefaultadd(false)
         setSuccessPopup(true);
         close_modal(successPopup, 1000);
       }
@@ -275,16 +281,17 @@ function Bankdetails({ vendor, toggle }) {
     console.log("isChecked", e);
     if (e.target.checked) {
       // getdefaultbank();
-      PublicFetch.get(`${process.env.REACT_APP_BASE_URL}/misc/default?type=vendorbankdefault`)
+      PublicFetch.get(`${process.env.REACT_APP_BASE_URL}/crm/purchase/v1/vendor-bank-details/default/${vendor?.vendor_id}`)
       .then((res) => {
-       
-        console.log("exist bnkk", res?.data?.data?.exist);
-      
-        if (res?.data?.data?.exist == true) {
-          setisdefault(true);
+
+        console.log("exist bnkk", res?.data?.data);
+        // setdefaultbnkname(res?.data?.data)
+
+        if (res?.data?.data?.exists == true) {
+          setisdefaultadd(true);
           setbankdefault(1);
         } else {
-          setisdefault(false);
+          setisdefaultadd(false);
         setbankdefault(1);
           
         }
@@ -297,21 +304,21 @@ function Bankdetails({ vendor, toggle }) {
       // setbankdefault(1);
     } 
     else {
-      setisdefault(false);
-      setbankdefault(0);
-    }
+        setisdefaultadd(false);
+        setbankdefault(0);
+      }
   };
 
   const handleCheckededit = (e, key) => {
     console.log("isChecked", e);
       if (e.target.checked) {
         // getdefaultbank();
-        PublicFetch.get(`${process.env.REACT_APP_BASE_URL}/misc/default?type=vendorbankdefault`)
+        PublicFetch.get(`${process.env.REACT_APP_BASE_URL}/crm/purchase/v1/vendor-bank-details/default/${vendor?.vendor_id}`)
         .then((res) => {
          
           console.log("edit  exist bnkk", res?.data?.data?.data?.ven_bank_det_bank);
           setdefaultbnkname(res?.data?.data?.data?.ven_bank_det_bank)
-          if (res?.data?.data?.exist == true) {
+          if (res?.data?.data?.exists == true) {
             setisdefault(true);
             seteditbankdefault(1);
           } else {
@@ -355,8 +362,9 @@ function Bankdetails({ vendor, toggle }) {
         bodyStyle={{ height: 580, overflowY: "auto" }}
         show={modalShow}
         onHide={() => {
+          setisdefaultadd(false)
         setModalShow(false)
-        setisdefault(false)
+       
 
         }}
         View_list
@@ -423,7 +431,11 @@ function Bankdetails({ vendor, toggle }) {
                     },
                   ]}
                 >
-                  <InputType />
+                  <InputType   value={newbnkname}
+                  onChange={(e)=>{
+                   setnewbnkname(e.target.value)
+                  }}
+                  />
                 </Form.Item>
               </div>
 
@@ -477,8 +489,8 @@ function Bankdetails({ vendor, toggle }) {
                   </Form.Item>
                 </div>
               </div>
-              {isdefault ? (
-                <label style={{ color: "red" }}>Another Bank is changed to this Bank </label>
+              {isdefaultadd ? (
+                <label style={{ color: "orange" }}>Default Bank is changed from  {defaultbnkname}  to  {newbnkname}    </label>
               ) : (
                 ""
               )}
@@ -507,7 +519,7 @@ function Bankdetails({ vendor, toggle }) {
         list_content={
           <>
             <div className="row ">
-              <h5 className="lead_text">New Bank Details </h5>
+              <h5 className="lead_text">Edit Bank Details </h5>
             </div>
             <Form
               form={editForm}
@@ -586,13 +598,7 @@ function Bankdetails({ vendor, toggle }) {
         show={successPopup}
         onHide={() => setSuccessPopup(false)}
       />
-      {/* <Custom_model
-                  centered
-                  size={`sm`}
-                  success
-                  show={successPopup}
-                  onHide={() => setSuccessPopup(false)}
-                /> */}
+     
      
     </>
   );

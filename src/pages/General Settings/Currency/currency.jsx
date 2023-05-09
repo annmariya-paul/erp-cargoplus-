@@ -47,10 +47,17 @@ export default function Currency(props) {
   const [currency_id, setCurrency_id] = useState();
   const [currency_ids, setCurrency_ids] = useState();
   const [country, setCountry] = useState();
-  const [currencyDefault, setCurrencyDefault] = useState();
+  const [currencyDefault, setCurrencyDefault] = useState(0);
+
+  const [defaultcurrencyname,setdefaultcurrencyname] = useState()
+ const [newdefaultcurrencyname,setnewdefaultcurrencyname]= useState()
+
+ const [adddefaultcurrencyname,setadddefaultcurrencyname] =useState()
   console.log("checkeeddd", currencyDefault);
 
   const [isdefault, setisdefault] = useState(false);
+
+  const [addisdeault,setaddisdeault]= useState(false)
   // const [editForm] = Form.useForm();
 
   const onChange = (e) => {
@@ -64,8 +71,8 @@ export default function Currency(props) {
 
       PublicFetch.get(`${process.env.REACT_APP_BASE_URL}/misc/default?type=currencydefault`)
       .then((res) => {
-       
-        console.log("exist currency", res?.data?.data?.exist);
+        setdefaultcurrencyname(res?.data?.data?.data?.currency_name)
+        console.log("exist currency", res?.data?.data);
         if (res?.data?.data?.exist == true) {
           setisdefault(true);
           setCurrencyDefault(1);
@@ -88,6 +95,37 @@ export default function Currency(props) {
     }
   };
 
+  const addhandlechecked=(e,key)=>{
+    console.log("checkedd currency", e);
+    if (e.target.checked) {
+      // getdefaultcurrency()
+
+      PublicFetch.get(`${process.env.REACT_APP_BASE_URL}/misc/default?type=currencydefault`)
+      .then((res) => {
+        setdefaultcurrencyname(res?.data?.data?.data?.currency_name)
+        console.log("add checked currency", res?.data?.data);
+        if (res?.data?.data?.exist == true) {
+          setaddisdeault(true);
+          setCurrencyDefault(1);
+        } else {
+          setaddisdeault(false);
+          setCurrencyDefault(1);
+          
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+      console.log("suceccss checked", e.target.checked);
+      // setCurrencyDefault(1);
+    }
+    else {
+      setaddisdeault(false);
+      setCurrencyDefault(0)
+    
+    }
+  }
+
   const close_modal = (mShow, time) => {
     if (!mShow) {
       setTimeout(() => {
@@ -109,6 +147,7 @@ export default function Currency(props) {
     setCoinInput(e.currency_coin);
     setSymbolInput(e.symbol);
     setCurrencyDefault(e.currencyDefault);
+    setnewdefaultcurrencyname(e.currency_name)
 
     addForm.setFieldsValue({
       currency_id: e.currency_id,
@@ -242,16 +281,29 @@ export default function Currency(props) {
   ];
 
   const AddCurrency = (data) => {
-    PublicFetch.post(`${GENERAL_SETTING_BASE_URL}/currency`, data)
+    PublicFetch.post(`${GENERAL_SETTING_BASE_URL}/currency`, 
+    {
+       currency_name: data.currency_name,
+      currency_code: data.currency_code,
+      currency_coin: data.currency_coin,
+      currency_symbol: data.currency_symbol,
+      currency_country: data.currency_country,
+      currency_is_default: currencyDefault,
+    }
+    )
       .then((res) => {
         console.log("Response", res);
         if (res.data.success) {
           console.log("Success Data", res.data.data);
-          setSuccessPopup(true);
-          close_modal(successPopup, 1200);
+          setaddisdeault(false)
           addForm.resetFields();
+          setSuccessPopup(true);
+          setCurrencyDefault(0)
+          close_modal(successPopup, 1200);
+         
           setModalAddCurrency(false);
           getAllCurrency();
+         
         }
       })
       .catch((err) => {
@@ -325,6 +377,7 @@ export default function Currency(props) {
         console.log("response", res);
         if (res.data.success) {
           setSuccessPopup(true);
+          setisdefault(false);
           close_modal(successPopup, 1200);
           getAllCurrency();
           setCurrencyEditPopup(false);
@@ -359,9 +412,9 @@ export default function Currency(props) {
   };
 
   const getAllCountries = () => {
-    PublicFetch.get(`${GENERAL_SETTING_BASE_URL}/country`)
+    PublicFetch.get(`${GENERAL_SETTING_BASE_URL}/country/minimal`)
       .then((res) => {
-        console.log("Response", res);
+        console.log("country res", res);
         if (res.data.success) {
           console.log("Success", res.data.data);
 
@@ -528,7 +581,9 @@ export default function Currency(props) {
 
       <CustomModel
         show={modalAddCurrency}
-        onHide={() => setModalAddCurrency(false)}
+        onHide={() => {
+          setisdefault(false)
+          setModalAddCurrency(false)}}
         header="Add Currency"
         footer={false}
         // {...props}
@@ -565,12 +620,13 @@ export default function Currency(props) {
                         {country &&
                           country.length > 0 &&
                           country.map((item, index) => {
+                            console.log("maped country iss",item)
                             return (
                               <Select.Option
-                                key={item.country_id}
-                                value={item.country_id}
+                                key={item?.country_id}
+                                value={item?.country_id}
                               >
-                                {item.country_name}
+                                {item?.country_name}
                               </Select.Option>
                             );
                           })}
@@ -592,7 +648,8 @@ export default function Currency(props) {
                         },
                       ]}
                     >
-                      <InputType />
+                      <InputType  value={adddefaultcurrencyname} 
+                      onChange={(e)=>{setadddefaultcurrencyname(e.target.value) } } />
                     </Form.Item>
                   </div>
                 </div>
@@ -657,12 +714,18 @@ export default function Currency(props) {
                       // ]}
                     >
                       <Checkbox
-                      // onChange={onChange}
-                      //  value={}
+                      onChange={addhandlechecked}
+                      checked={currencyDefault === 1 ? true : false}
                       ></Checkbox>
                     </Form.Item>
                   </div>
                 </div>
+
+                {addisdeault ? (
+                <label style={{ color: "orange" }}>Default currency will change from {defaultcurrencyname}  to {adddefaultcurrencyname}  </label>
+              ) : (
+                ""
+              )}
                 <div className="col-12 d-flex justify-content-center mt-5 gap-2">
                   <Button btnType="save">Save</Button>
                   <Button
@@ -807,10 +870,10 @@ export default function Currency(props) {
                               country.map((item, index) => {
                                 return (
                                   <Select.Option
-                                    key={item.country_id}
-                                    value={item.country_id}
+                                    key={item?.country_id}
+                                    value={item?.country_id}
                                   >
-                                    {item.country_name}
+                                    {item?.country_name}
                                   </Select.Option>
                                 );
                               })}
@@ -906,7 +969,7 @@ export default function Currency(props) {
                     </div>
 
                     {isdefault ? (
-                <label style={{ color: "red" }}>Another Currency is changed to this Currency </label>
+                <label style={{ color: "orange" }}>Default currency will change from {defaultcurrencyname}  to {newdefaultcurrencyname}  </label>
               ) : (
                 ""
               )}

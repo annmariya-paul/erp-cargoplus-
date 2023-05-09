@@ -153,22 +153,21 @@ function Countrystate({ customerdetails, setIsAccountSave }) {
         if (res?.data?.success) {
           console.log("Unique Lead Id data", res?.data?.data);
           setOnecustomerData(res?.data?.data);
+          const data = res?.data?.data
+let tmp = {}
+data?.customer_tax_no && (tmp = {...tmp,customer_accounting_tax_no: data?.customer_tax_no })
+data?.customer_credit_days && (tmp = {...tmp,customer_accounting_credit_days: data?.customer_credit_days })
+data?.customer_credit_limit && (tmp = {...tmp,customer_accounting_credit_limit: data?.customer_credit_limit })
 
-          addForm.setFieldsValue({
-            // customer_type: res?.data?.data?.customer_type,
-            // customer_name: res?.data?.data?.customer_name,
-            // customer_address: res?.data?.data?.customer_address,
-            // customer_phone: res?.data?.data?.customer_phone,
-            // customer_email: res?.data?.data?.customer_email,
-            // customer_website: res?.data?.data?.customer_website,
-            // customer_logo: res?.data?.data?.customer_logo,
-            // customer_remarks: res?.data?.data?.customer_remarks,
-            customer_accounting_tax_no: res?.data?.data?.customer_tax_no,
-            customer_accounting_credit_days:
-              res?.data?.data?.customer_credit_days,
-            customer_accounting_credit_limit:
-              res?.data?.data?.customer_credit_limit,
-          });
+          // addForm.setFieldsValue({
+          
+          //   customer_accounting_tax_no: data?.customer_tax_no,
+          //   customer_accounting_credit_days:
+          //     data?.customer_credit_days,
+          //   customer_accounting_credit_limit:
+          //     data?.customer_credit_limit,
+          // });
+          addForm.setFieldsValue(tmp)
         } else {
           console.log("FAILED T LOAD DATA");
         }
@@ -197,9 +196,17 @@ function Countrystate({ customerdetails, setIsAccountSave }) {
     customerdetails?.customer_state && formData.append(`customer_state`, customerdetails.customer_state);
     customerdetails?.customer_city && formData.append(`customer_city`, customerdetails.customer_city);
 
-    data?.customer_accounting_tax_no && formData.append(`customer_tax_no`, data.customer_accounting_tax_no);
-    data?.customer_accounting_credit_days && formData.append(`customer_credit_days`,data.customer_accounting_credit_days);
-    data?.customer_accounting_credit_limit && formData.append(`customer_credit_limit`, data.customer_accounting_credit_limit);
+  formData.append(`customer_tax_no`, data.customer_accounting_tax_no ?? '' );
+formData.append(`customer_credit_days`,data.customer_accounting_credit_days ?? 0);
+   formData.append(`customer_credit_limit`, data.customer_accounting_credit_limit ?? 0);
+   
+let tmp=false
+if(data?.customer_accounting_tax_no || data?.customer_accounting_credit_days || data?.customer_accounting_credit_limit){
+  tmp=true
+}
+
+if( tmp === true){
+
 
     if (onecustomerData) {
       PublicFetch.patch(
@@ -215,19 +222,18 @@ function Countrystate({ customerdetails, setIsAccountSave }) {
             GetLeadData();
             setSuccessPopup(true);
             close_modal(modalShow, 1000, res?.data?.data);
+            setError(false)
             // setModalContact(false);
             // setSelectedState(true);
 
             // isSave = true;
           }
-          else{
-            setError(true)
-           }
+        
         })
 
         .catch((err) => {
           console.log("Error", err);
-          setError(true);
+        
         });
     } else {
       PublicFetch.post(`${CRM_BASE_URL}/customer`, 
@@ -244,10 +250,9 @@ function Countrystate({ customerdetails, setIsAccountSave }) {
             setSuccessPopup(true);
             close_modal(modalShow, 1000, res?.data?.data);
             // setModalContact(false);
+            setError(false)
           }
-          else{
-         setError(true)
-          }
+          
          
         })
 
@@ -256,6 +261,10 @@ function Countrystate({ customerdetails, setIsAccountSave }) {
         });
     }
   
+  }
+  else{
+    setError(true)
+  }
   };
 
   useEffect(() => {

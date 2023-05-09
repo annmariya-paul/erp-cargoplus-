@@ -119,6 +119,14 @@ function Moreinfo({ customerdetails }) {
     // if (leadimg) {
     //   formData.append(`customer_logo`, leadimg);
     // }
+
+    let tmp=false
+if(data?.customer_accounting_freighttype|| data?.customer_accounting_qtnvalidity_days ){
+  tmp=true
+}
+if(tmp === true){
+
+
     if (onecustomerData) {
       PublicFetch.patch(
         `${CRM_BASE_URL}/customer/${customerdetails?.customer_id}`,
@@ -135,14 +143,12 @@ function Moreinfo({ customerdetails }) {
             close_modal(modalShow, 1000, res?.data?.data);
             // setModalContact(false);
           }
-          else{
-            setError(true)
-          }
+         
         })
 
         .catch((err) => {
           console.log("Error", err);
-          setError(true);
+        
         });
     } else {
       PublicFetch.post(`${CRM_BASE_URL}/customer`, formData, {
@@ -156,9 +162,7 @@ function Moreinfo({ customerdetails }) {
             close_modal(modalShow, 1000, res?.data?.data);
             // setModalContact(false);
           }
-          else{
-            setError(true)
-          }
+          
         })
 
         .catch((err) => {
@@ -166,6 +170,11 @@ function Moreinfo({ customerdetails }) {
           setError(true)
         });
     }
+
+  }
+  else{
+    setError(true)
+  }
   };
 
   useEffect(() => {

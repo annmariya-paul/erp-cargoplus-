@@ -74,6 +74,9 @@ function ListAgent() {
   const [fright_id, setFright_id] = useState();
   const [employee_idd, setEmployee_Idd] = useState();
   const [agentId, setAgentId] = useState();
+  const [totalData, setTotalData] = useState();
+  const [StartIndex, setStartIndex] = useState();
+
   console.log("fright id in state", fright_id);
   const [editForm] = Form.useForm();
 
@@ -190,23 +193,9 @@ function ListAgent() {
       });
   };
 
-  const getCountry = () => {
-    PublicFetch.get(`${GENERAL_SETTING_BASE_URL}/country`)
-      .then((res) => {
-        console.log("response", res);
-        if (res.data.success) {
-          console.log("success", res.data.data);
-          setAllCountries(res.data.data);
-        }
-      })
-      .catch((err) => {
-        console.log("Error", err);
-      });
-  };
-
   useEffect(() => {
     getAllEmployee();
-    getCountry();
+    // getCountry();
   }, []);
 
   const handleChange = (e) => {
@@ -221,7 +210,7 @@ function ListAgent() {
   const [agentcountry, setAgentCountry] = useState();
   console.log("hhhhhh", agentcountry);
   const getAllCountries = () => {
-    PublicFetch.get(`${GENERAL_SETTING_BASE_URL}/country`)
+    PublicFetch.get(`${GENERAL_SETTING_BASE_URL}/country/minimal`)
       .then((res) => {
         console.log("response", res);
         if (res.data.success) {
@@ -278,7 +267,7 @@ function ListAgent() {
         console.log("success", res);
         if (res.data.success) {
           console.log("successDataa", res.data.data);
-          getagents();
+          getagents(searchedText);
           setSuccessPopup(true);
           close_modal(successPopup, 1200);
           setFrightEditPopup(false);
@@ -317,11 +306,12 @@ function ListAgent() {
   const getData = (current, pageSize) => {
     return agentdata?.slice((current - 1) * pageSize, current * pageSize);
   };
+  const pageofIndex = pageSize * (current - 1) - 1 + 1;
 
-  const getagents = async () => {
+  const getagents = async (name) => {
     try {
       const allagent = await PublicFetch.get(
-        `${process.env.REACT_APP_BASE_URL}/agents`
+        `${process.env.REACT_APP_BASE_URL}/agents?noOfItems=${pageSize}&startIndex=${pageofIndex}&search=${name}`
       );
 
       console.log("agent list iss", allagent.data);
@@ -329,7 +319,7 @@ function ListAgent() {
       setallagents(allagent.data.data);
       if (allagent?.data.success) {
         let temp = [];
-        allagent?.data.data.forEach((item, index) => {
+        allagent?.data.data.agents.forEach((item, index) => {
           console.log("agntt", item);
           temp.push({
             agent_id: item.agent_id,
@@ -342,6 +332,8 @@ function ListAgent() {
           });
         });
         setAgentdata(temp);
+        setTotalData(allagent?.data?.data?.agentTotal);
+        setStartIndex(allagent?.data?.data?.startIndex);
         console.log("teperaefr", allagent?.data?.data);
       }
     } catch (err) {
@@ -350,8 +342,13 @@ function ListAgent() {
   };
 
   useEffect(() => {
-    getagents();
-  }, []);
+    if (pageSize) {
+      const AgentData = setTimeout(() => {
+        getagents(searchedText);
+      }, 1000);
+      return () => clearTimeout(AgentData);
+    }
+  }, [pageSize, pageofIndex, searchedText]);
 
   const data = [
     {
@@ -422,21 +419,7 @@ function ListAgent() {
       title: "Commission",
       dataIndex: "agent_commission_details",
       width: "30%",
-      filteredValue: [searchedText],
-      onFilter: (value, record) => {
-        console.log("valuesss in", record);
-        return (
-          String(record.agent_emp_code)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.agent_country)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.agent_emp_name)
-            .toLowerCase()
-            .includes(value.toLowerCase())
-        );
-      },
+
       key: "agent_commission_details",
 
       align: "left",
@@ -482,7 +465,7 @@ function ListAgent() {
       console.log(" agent data is added ", addagent);
       if (addagent.data.success) {
         setSuccessPopup(true);
-        getagents();
+        getagents(searchedText);
         addForm.resetFields();
         setModalAddBranch(false);
         close_modal(successPopup, 1000);
@@ -517,13 +500,12 @@ function ListAgent() {
   ]);
   console.log("country", agentdata);
 
-  // const getFinalCount = (total) => {
-  //   const cutoff = Math.ceil(totalCount / noofItems);
-  //   console.log("FinalTest", cutoff, current);
-  //   if (current === cutoff) return totalCount;
-  //   return total;
-
-  // };
+  const getFinalCount = (total) => {
+    const cutoff = Math.ceil(totalData / pageSize);
+    console.log("FinalTest", cutoff, current);
+    if (current === cutoff) return totalData;
+    return total;
+  };
   return (
     <>
       <div className="container-fluid container_fms pt-3">
@@ -575,10 +557,16 @@ function ListAgent() {
         {/* </div> */}
         <div className="row my-3">
           <div className="col-4 px-3 ">
-            <div className="d-flex justify-content-start align-items-center gap-3">
-              <PageSizer />
+            {agentdata ? (
+              <>
+                <div className="d-flex justify-content-start align-items-center gap-3">
+                  <PageSizer
+                    pageValue={(e) => {
+                      setPageSize(e);
+                    }}
+                  />
 
-              {/* <Select
+                  {/* <Select
                 bordered={false}
                 className="page_size_style"
                 value={pageSize}
@@ -601,27 +589,37 @@ function ListAgent() {
                 </Select.Option>
               </Select> */}
 
-              <div className=" d-flex  align-items-center mt-2 ">
-                <label className="font_size">
-                  {/* Results 1-70 */}
-                  {/* Results: {startcount + 1} -
-                  {getFinalCount(1 * pageSize * current)}{" "}
-                  <span>of {allagents?.length} </span>{" "} */}
-                </label>
-              </div>
-            </div>
+                  <div className=" d-flex  align-items-center mt-2 ">
+                    <label className="font_size">
+                      {/* Results 1-70 */}
+                      Results: {StartIndex + 1} -
+                      {getFinalCount(1 * pageSize * current)}{" "}
+                      <span>of {allagents?.length} </span>{" "}
+                    </label>
+                  </div>
+                </div>
+              </>
+            ) : (
+              ""
+            )}
           </div>
           <div className="col-4 d-flex  align-items-center justify-content-center">
-            <MyPagination
-              total={allagents?.length}
-              current={current}
-              showSizeChanger={true}
-              pageSize={pageSize}
-              onChange={(current, pageSize) => {
-                setCurrent(current);
-                setPageSize(pageSize);
-              }}
-            />
+            {agentdata ? (
+              <>
+                <MyPagination
+                  total={allagents?.length}
+                  current={current}
+                  showSizeChanger={true}
+                  pageSize={pageSize}
+                  onChange={(current, pageSize) => {
+                    setCurrent(current);
+                    setPageSize(pageSize);
+                  }}
+                />
+              </>
+            ) : (
+              ""
+            )}
           </div>
           <div className="col-4 d-flex justify-content-end">
             {/* <Link to={ROUTES.CREATEAGENT} style={{ color: "white" }}> */}
@@ -642,23 +640,30 @@ function ListAgent() {
 
         <div className="datatable">
           <TableData
-            data={getData(current, pageSize)}
+            // data={getData(current, pageSize)}
+            data={agentdata}
             columns={columns}
             // columns={filteredColumns}
             custom_table_css="attribute_table"
           />
         </div>
         <div className="d-flex py-2 justify-content-center">
-          <MyPagination
-            total={agentdata?.length}
-            current={current}
-            showSizeChanger={true}
-            pageSize={pageSize}
-            onChange={(current, pageSize) => {
-              setCurrent(current);
-              setPageSize(pageSize);
-            }}
-          />
+          {agentdata ? (
+            <>
+              <MyPagination
+                total={agentdata?.length}
+                current={current}
+                showSizeChanger={true}
+                pageSize={pageSize}
+                onChange={(current, pageSize) => {
+                  setCurrent(current);
+                  setPageSize(pageSize);
+                }}
+              />
+            </>
+          ) : (
+            ""
+          )}
         </div>
 
         {/* Modal for add Agent */}

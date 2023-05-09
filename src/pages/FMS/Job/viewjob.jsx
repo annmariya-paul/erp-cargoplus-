@@ -247,9 +247,14 @@ export default function ViewJob() {
     window.print();
   };
 
-  // const handleviewtoedit = () => {
-  //   navigate(`${}`);
-  // };
+  const handleviewtoInvoice = () => {
+    let tmp = true;
+    if (tax?.length > 0) {
+      navigate(`${ROUTES.INVOICE_PREVIEW}/${id}`);
+    } else {
+      message.error("Please Enter Task and Expense");
+    }
+  };
 
   return (
     <>
@@ -271,13 +276,12 @@ export default function ViewJob() {
                   // onClick={handlePrint}
                   onClick={() => {
                     // window.open(
-                     
+
                     //   `${ROUTES.JOB_INVOICE}/${id}`,
                     //   `_blank`
                     // );
                     // navigate(`${ROUTES.JOB_INVOICE}/${id}`);
                     window.open(
-                      
                       `http://localhost:3000/job_invoice/${id}`,
                       `_blank`
                     );
@@ -307,11 +311,10 @@ export default function ViewJob() {
                     btnType="save"
                     className="edit_button "
                     onClick={() => {
-                      // handleviewtoedit();
                       if (invoice_status == 1) {
                         message.error("Invoice Already Created");
                       } else {
-                        navigate(`${ROUTES.INVOICE_PREVIEW}/${id}`);
+                        handleviewtoInvoice();
                       }
                     }}
                   >
@@ -323,7 +326,8 @@ export default function ViewJob() {
                     btnType="save"
                     className="edit_button rounded"
                     onClick={() => {
-                      navigate(`${ROUTES.INVOICE_PREVIEW}/${id}`);
+                      // navigate(`${ROUTES.INVOICE_PREVIEW}/${id}`);
+                      handleviewtoInvoice();
                     }}
                   >
                     Generate Invoice
@@ -526,9 +530,10 @@ export default function ViewJob() {
         </div>
         <div className="row mt-1 justify-content-between ">
           <div className="col-xl-6 col-lg-12 col-md-12 col-12 ">
-            <div className="row content-tabs-new justify-content  mb-3 " style={{height : "93%"
-
-            }}>
+            <div
+              className="row content-tabs-new justify-content  mb-3 "
+              style={{ height: "93%" }}
+            >
               <div className="row mt-2">
                 <h6 className="lead_text">Payment Info</h6>
               </div>

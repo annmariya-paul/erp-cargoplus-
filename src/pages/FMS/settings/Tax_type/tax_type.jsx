@@ -60,9 +60,7 @@ export default function TaxType() {
   // { function to get all tax types - Ann - 18/1/23}
   const getAllTaxTypes = async (name) => {
     try {
-      const allTxTypes = await PublicFetch.get(
-        `${CRM_BASE_URL_FMS}/tax-types?startIndex=${pageofIndex}&noOfItems=${numOfItems}&search=${name}`
-      );
+      const allTxTypes = await PublicFetch.get(`${CRM_BASE_URL_FMS}/tax-types`);
       console.log("all taxtype are", allTxTypes.data.data);
 
       let temp = [];
@@ -103,11 +101,11 @@ export default function TaxType() {
 
   useEffect(() => {
     const getData = setTimeout(() => {
-      getAllTaxTypes(searchedText);
-    }, 1000);
-    GetTaxGroups();
+      getAllTaxTypes();
+      GetTaxGroups();
+    }, 1);
     return () => clearTimeout(getData);
-  }, [pageofIndex, numOfItems, searchedText]);
+  }, []);
 
   // { function to add a tax type - Ann - 19/1/23}
   const createTaxTypes = async (data) => {
@@ -124,7 +122,7 @@ export default function TaxType() {
       console.log("fright added successfully", addtaxtypes);
       if (addtaxtypes.data.success) {
         setSuccessPopup(true);
-        getAllTaxTypes(searchedText);
+        getAllTaxTypes();
         addForm.resetFields();
         setModalAddTaxtype(false);
         close_modal(successPopup, 1000);
@@ -199,7 +197,7 @@ export default function TaxType() {
       if (updated.data.success) {
         setModalEditTaxtype(false);
         close_modal(successPopup, 1000);
-        getAllTaxTypes(searchedText);
+        getAllTaxTypes();
         setSuccessPopup(true);
       }
     } catch (err) {
@@ -221,7 +219,25 @@ export default function TaxType() {
       title: "TAX TYPE NAME",
       dataIndex: "tax_type_name",
       key: "tax_type_name",
+      filteredValue: [searchedText],
+      onFilter: (value, record) => {
+        // console.log("hai how are", record.children);
 
+        return (
+          String(record.tax_type_name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.tax_type_description)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.tax_type_percentage)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.tax_type_tax_group_name)
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
+      },
       align: "left",
     },
     {
@@ -388,7 +404,7 @@ export default function TaxType() {
             </div> */}
           </div>
           <div className="col-4  d-flex align-items-center justify-content-center">
-            {taxTypes && (
+            {/* {taxTypes && (
               <MyPagination
                 total={parseInt(totalCount)}
                 current={current}
@@ -397,7 +413,7 @@ export default function TaxType() {
                   setCurrent(current);
                 }}
               />
-            )}
+            )} */}
           </div>
           <div className="col-4 d-flex justify-content-end">
             <Button
@@ -420,7 +436,7 @@ export default function TaxType() {
           />
         </div>{" "}
         <div className="d-flex mt-4 justify-content-center">
-          {taxTypes && (
+          {/* {taxTypes && (
             <MyPagination
               total={parseInt(totalCount)}
               current={current}
@@ -429,7 +445,7 @@ export default function TaxType() {
                 setCurrent(current);
               }}
             />
-          )}
+          )} */}
         </div>
       </div>
 

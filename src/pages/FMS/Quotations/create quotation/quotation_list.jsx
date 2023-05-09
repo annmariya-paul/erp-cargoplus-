@@ -19,6 +19,7 @@ import moment from "moment";
 
 import { CRM_BASE_URL_HRMS, CRM_BASE_URL_FMS } from "../../../../api/bootapi";
 import MyPagination from "../../../../components/Pagination/MyPagination";
+import PageSizer from "../../../../components/PageSizer/PageSizer";
 
 export default function Quotations(props) {
   const navigate = useNavigate();
@@ -38,7 +39,8 @@ export default function Quotations(props) {
   const [CodeInput, setCodeInput] = useState();
   const [AllQuotations, setAllQuotations] = useState();
   //  const [showViewModal, setShowViewModal] = useState(false);
-  const [noofItems, setNoofItems] = useState("25");
+  let a = localStorage.getItem("noofitem");
+  const [noofItems, setNoofItems] = useState(a);
   const [current, setCurrent] = useState(1);
 
   const [totalquotation, settotalquotation] = useState("");
@@ -196,51 +198,51 @@ export default function Quotations(props) {
       },
       align: "center",
     },
-    {
-      title: "",
-      dataIndex: "assign",
-      key: "assign",
-      width: "6%",
-      align: "center",
-      render: (data, index) => {
-        return (
-          <>
-            <div className="row justify-content">
-              {index.fms_v1_quotation_agents &&
-              index.fms_v1_quotation_agents.length > 0 ? (
-                <div className="col-2 d-flex">
-                  <Button
-                    btnType="add"
-                    className="me-1 view_btn"
-                    onClick={() => {
-                      navigate(
-                        `${ROUTES.ASSIGN_QUOTATION}/${index.quotation_id}`
-                      );
-                    }}
-                  >
-                    view
-                  </Button>
-                </div>
-              ) : (
-                <div className="col-2 d-flex ">
-                  <Button
-                    btnType="add"
-                    className="me-1 assign_btn"
-                    onClick={() => {
-                      navigate(
-                        `${ROUTES.ASSIGN_QUOTATION}/${index.quotation_id}`
-                      );
-                    }}
-                  >
-                    Assign
-                  </Button>
-                </div>
-              )}
-            </div>
-          </>
-        );
-      },
-    },
+    // {
+    //   title: "",
+    //   dataIndex: "assign",
+    //   key: "assign",
+    //   width: "6%",
+    //   align: "center",
+    //   render: (data, index) => {
+    //     return (
+    //       <>
+    //         <div className="row justify-content">
+    //           {index.fms_v1_quotation_agents &&
+    //           index.fms_v1_quotation_agents.length > 0 ? (
+    //             <div className="col-2 d-flex">
+    //               <Button
+    //                 btnType="add"
+    //                 className="me-1 view_btn"
+    //                 onClick={() => {
+    //                   navigate(
+    //                     `${ROUTES.ASSIGN_QUOTATION}/${index.quotation_id}`
+    //                   );
+    //                 }}
+    //               >
+    //                 view
+    //               </Button>
+    //             </div>
+    //           ) : (
+    //             <div className="col-2 d-flex ">
+    //               <Button
+    //                 btnType="add"
+    //                 className="me-1 assign_btn"
+    //                 onClick={() => {
+    //                   navigate(
+    //                     `${ROUTES.ASSIGN_QUOTATION}/${index.quotation_id}`
+    //                   );
+    //                 }}
+    //               >
+    //                 Assign
+    //               </Button>
+    //             </div>
+    //           )}
+    //         </div>
+    //       </>
+    //     );
+    //   },
+    // },
   ];
 
   const data = [
@@ -439,47 +441,23 @@ export default function Quotations(props) {
         <div className="row my-3">
           <div className="col-xl-4 ">
             <div className="d-flex justify-content-start align-items-center gap-3">
-            {totalquotation > 0 && (
-              <div className=" ">
-                <Select
-                  // defaultValue={"25"}
-                  bordered={false}
-                  className="page_size_style"
-                  value={noofItems}
-                  // onChange={handleLastNameChange}
-                  onChange={(event, current) => {
-                    console.log("On page size selected : ", event);
-                    console.log("nfjnjfv", current);
-                    setNoofItems(event);
-                    setCurrent(1);
-                  }}
-                >
-                  <Select.Option value="25">
-                    <span style={{ color: "#2f6b8f" }} className="ms-1">
-                      25
-                    </span>
-                  </Select.Option>
-                  <Select.Option value="50">
-                    <span style={{ color: "#2f6b8f" }} className="ms-1">
-                      50
-                    </span>
-                  </Select.Option>
-                  <Select.Option value="100">
-                    <span style={{ color: "#2f6b8f" }} className="ms-1">
-                      100
-                    </span>{" "}
-                  </Select.Option>
-                </Select>
-              </div>
+              {totalquotation > 0 && (
+                <div className=" ">
+                  <PageSizer
+                    pageValue={(e) => {
+                      setNoofItems(e);
+                    }}
+                  />
+                </div>
               )}
               {totalquotation > 0 && (
-              <div className=" col-xl-10 col-lg-9 col-md-8 col-sm-12  d-flex  align-items-center ">
-                <label className="font_size">
-                  Results: {startcount + 1} -{" "}
-                  {getFinalCount(1 * noofItems * current)}{" "}
-                  <span>of {totalCount} </span>{" "}
-                </label>
-              </div>
+                <div className=" col-xl-10 col-lg-9 col-md-8 col-sm-12  d-flex  align-items-center ">
+                  <label className="font_size">
+                    Results: {startcount + 1} -{" "}
+                    {getFinalCount(1 * noofItems * current)}{" "}
+                    <span>of {totalCount} </span>{" "}
+                  </label>
+                </div>
               )}
             </div>
           </div>

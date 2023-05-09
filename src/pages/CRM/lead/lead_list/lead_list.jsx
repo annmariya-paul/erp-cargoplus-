@@ -170,11 +170,10 @@ export default function LeadList() {
   useEffect(() => {
     const getData = setTimeout(() => {
       GetAllLeadData(searchedText);
-      
     }, 1000);
 
     return () => clearTimeout(getData);
-  }, [noofItems, pageofIndex, pagesizecount,searchedText]);
+  }, [noofItems, pageofIndex, pagesizecount, searchedText]);
 
   const getData = (numofItemsTo, pageofIndex) => {
     return allLeadList?.slice(
@@ -295,7 +294,6 @@ export default function LeadList() {
       //   );
       // },
       align: "left",
-      
     },
     {
       title: "CONTACT ",
@@ -462,124 +460,118 @@ export default function LeadList() {
     <>
       <div className="container-fluid container_fms ">
         {/* <div className=" "> */}
-          <div className="row flex-wrap align-items-center">
-            <div className="col-4">
-              <h5 className="lead_text">Customer</h5>
-            </div>
-            <div className="col-4 pt-2">
-              <Input.Search
-                className="inputSearch"
-                placeholder="Search "
-                style={{ margin: "5px", borderRadius: "5px" }}
-                value={searchedText}
-                onChange={(e) => {
-                  setSearchedText(e.target.value ? [e.target.value] : []);
-                }}
-                onSearch={(value) => {
-                  setSearchedText(value);
-                }}
-              />
-            </div>
-            <div className="col-4 d-flex justify-content-end">
-              <Leadlist_Icons
-                name={"customer"}
-                datas={allLeadList}
-                columns={filteredColumns}
-                items={data12}
-                xlheading={LeadHeads}
-                filename="data.csv"
-                chechboxes={
-                  <Checkbox.Group onChange={onChange} value={selectedColumns}>
-                    {columnsKeys.map((column) => (
-                      <li>
-                        <Checkbox value={column} key={column}>
-                          {column}
-                        </Checkbox>
-                      </li>
-                    ))}
-                  </Checkbox.Group>
-                }
-              />
-            </div>
-       
+        <div className="row flex-wrap align-items-center">
+          <div className="col-4">
+            <h5 className="lead_text">Customer</h5>
+          </div>
+          <div className="col-4 pt-2">
+            <Input.Search
+              className="inputSearch"
+              placeholder="Search "
+              style={{ margin: "5px", borderRadius: "5px" }}
+              value={searchedText}
+              onChange={(e) => {
+                setSearchedText(e.target.value ? [e.target.value] : []);
+              }}
+              onSearch={(value) => {
+                setSearchedText(value);
+              }}
+            />
+          </div>
+          <div className="col-4 d-flex justify-content-end">
+            <Leadlist_Icons
+              name={"customer"}
+              datas={allLeadList}
+              columns={filteredColumns}
+              items={data12}
+              xlheading={LeadHeads}
+              filename="data.csv"
+              chechboxes={
+                <Checkbox.Group onChange={onChange} value={selectedColumns}>
+                  {columnsKeys.map((column) => (
+                    <li>
+                      <Checkbox value={column} key={column}>
+                        {column}
+                      </Checkbox>
+                    </li>
+                  ))}
+                </Checkbox.Group>
+              }
+            />
+          </div>
         </div>
-         
 
-           
         <div className="row my-3 ">
           <div className="col-xl-4 ">
             <div className="d-flex justify-content-start align-items-center gap-3">
-            {totalCount > 0 && ( 
-              <div className="  ">
-                <Select
-                  // defaultValue={"25"}
-                  bordered={false}
-                  className="page_size_style"
-                  value={noofItems}
-                  // onChange={handleLastNameChange}
-                  onChange={(event, current) => {
-                    console.log("On page size selected : ", event);
-                    console.log("nfjnjfv", current);
-                    setNoofItems(event);
-                    setCurrent(1);
-                  }}
-                >
-                   <Select.Option value="15">
-                    <span style={{ color: "#2f6b8f" }} className="ms-1">
-                      15
-                    </span>
-                  </Select.Option>
-                  <Select.Option value="25">
-                    <span style={{ color: "#2f6b8f" }} className="ms-1">
-                      25
-                    </span>
-                  </Select.Option>
-                  <Select.Option value="50">
-                    <span style={{ color: "#2f6b8f" }} className="ms-1">
-                      50
-                    </span>
-                  </Select.Option>
-                  <Select.Option value="100">
-                    <span style={{ color: "#2f6b8f" }} className="ms-1">
-                      100
-                    </span>{" "}
-                  </Select.Option>
-                </Select>
-              </div>
-            )}
-                {totalCount > 0 && ( 
-              <div className=" d-flex  align-items-center mt-2 ">
-                <label className="font_size">
-                  Results: {startcount + 1} -
-                  {getFinalCount(1 * noofItems * current)}{" "}
-                  <span>of {totalCount} </span>{" "}
-                </label>
-              </div>
-                )}
-            
+              {totalCount > 0 && (
+                <div className="  ">
+                  <Select
+                    // defaultValue={"25"}
+                    bordered={false}
+                    className="page_size_style"
+                    value={noofItems}
+                    // onChange={handleLastNameChange}
+                    onChange={(event, current) => {
+                      console.log("On page size selected : ", event);
+                      console.log("nfjnjfv", current);
+                      setNoofItems(event);
+                      setCurrent(1);
+                    }}
+                  >
+                    <Select.Option value="15">
+                      <span style={{ color: "#2f6b8f" }} className="ms-1">
+                        15
+                      </span>
+                    </Select.Option>
+                    <Select.Option value="25">
+                      <span style={{ color: "#2f6b8f" }} className="ms-1">
+                        25
+                      </span>
+                    </Select.Option>
+                    <Select.Option value="50">
+                      <span style={{ color: "#2f6b8f" }} className="ms-1">
+                        50
+                      </span>
+                    </Select.Option>
+                    <Select.Option value="100">
+                      <span style={{ color: "#2f6b8f" }} className="ms-1">
+                        100
+                      </span>{" "}
+                    </Select.Option>
+                  </Select>
+                </div>
+              )}
+              {totalCount > 0 && (
+                <div className=" d-flex  align-items-center mt-2 ">
+                  <label className="font_size">
+                    Results: {startcount + 1} -
+                    {getFinalCount(1 * noofItems * current)}{" "}
+                    <span>of {totalCount} </span>{" "}
+                  </label>
+                </div>
+              )}
             </div>
           </div>
 
-
           <div className="col-4 d-flex  align-items-center justify-content-center">
-          {totalCount > 0 && ( 
-            <MyPagination
-              total={parseInt(totalCount)}
-              current={current}
-              pageSize={noofItems}
-              // defaultPageSize={noofItems}
-              showSizeChanger={false}
-              onChange={(current, pageSize) => {
-                console.log("page index isss", pageSize);
-                setCurrent(current);
-                // setPageSize(pageSize);
-                // setNoofItems(pageSize);
-                // setCurrent(noofItems !== pageSize ? 0 : current);
-              }}
-            />
-          )}
+            {totalCount > 0 && (
+              <MyPagination
+                total={parseInt(totalCount)}
+                current={current}
+                pageSize={noofItems}
+                // defaultPageSize={noofItems}
+                showSizeChanger={false}
+                onChange={(current, pageSize) => {
+                  console.log("page index isss", pageSize);
+                  setCurrent(current);
+                  // setPageSize(pageSize);
+                  // setNoofItems(pageSize);
+                  // setCurrent(noofItems !== pageSize ? 0 : current);
+                }}
+              />
+            )}
           </div>
-
 
           <div className="col-4 d-flex justify-content-end">
             <div className="col mb-2 px-4">
@@ -593,11 +585,7 @@ export default function LeadList() {
               </Link>
             </div>
           </div>
-
-
-        
         </div>
-
 
         <div className="datatable">
           <TableData

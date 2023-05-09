@@ -1,12 +1,19 @@
 import { Select } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./pageSizer.scss";
 
-function PageSizer({ value, onClick, onChange }) {
-  const [pageSize, setPageSize] = useState("15");
+function PageSizer({ value, onClick, onChange, pageValue }) {
+  let pagebyNo = localStorage.getItem("noofitem");
+
+  const [pageSize, setPageSize] = useState(pagebyNo);
 
   localStorage.setItem("noofitem", pageSize);
-  // console.log("locaal",localStorage.getItem("noofitem"))
+  console.log("locaal", localStorage.getItem("noofitem"));
+
+  useEffect(() => {
+    let a = pageSize;
+    pageValue(a);
+  }, [pageSize]);
 
   return (
     <div>
@@ -15,7 +22,10 @@ function PageSizer({ value, onClick, onChange }) {
         className="showpage_size_style"
         value={pageSize}
         // onChange={onChange}
-        onChange={(e) => setPageSize(e)}
+        onChange={(e) => {
+          setPageSize(e);
+          localStorage.setItem("noofitem", e);
+        }}
         onClick={onClick}
       >
         <Select.Option value="15">

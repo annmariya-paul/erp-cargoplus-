@@ -16,7 +16,8 @@ export default function TableData({
   rowKey,
   footer,
   totalSummary,
-  // rowClassName
+  tableType,
+  rowClassName,
 }) {
   const { Text } = Typography;
   return (
@@ -33,13 +34,21 @@ export default function TableData({
           bordered={bordered}
           rowKey={rowKey}
           footer={footer}
-          rowClassName={(record, index) => index % 2 === 0 ? 'table-row-light' :  'table-row-dark'}
+          rowClassName={(record, index) =>
+            tableType === "secondary"
+              ? "table-row-light"
+              : index % 2 === 0
+              ? "table-row-light"
+              : "table-row-dark"
+          }
           summary={() => {
-            if(totalSummary){
+            if (totalSummary) {
               return (
                 <>
                   <Table.Summary.Row>
-                    <Table.Summary.Cell index={0} colSpan={4} align="right">Total</Table.Summary.Cell>
+                    <Table.Summary.Cell index={0} colSpan={4} align="right">
+                      Total
+                    </Table.Summary.Cell>
                     <Table.Summary.Cell index={1} align="right">
                       <Text>{totalSummary[0]?.costTotal}</Text>
                     </Table.Summary.Cell>
@@ -52,8 +61,7 @@ export default function TableData({
                   </Table.Summary.Row>
                 </>
               );
-            }
-            else {
+            } else {
               return null;
             }
           }}

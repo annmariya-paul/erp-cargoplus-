@@ -26,7 +26,8 @@ export default function Locations() {
   const [searchCode, setSearchCode] = useState("");
   const [searchName, setSearchName] = useState("");
   const [searchbyType, setSearchbyType] = useState("");
-  const [pageSize, setPageSize] = useState(localStorage.getItem("noofitem"));
+  let a = localStorage.getItem("noofitem");
+  const [pageSize, setPageSize] = useState(a);
   const [current, setCurrent] = useState(1);
 
   const [error, setError] = useState(false);
@@ -48,6 +49,9 @@ export default function Locations() {
       }, time);
     }
   };
+  console.log("PageSize", pageSize);
+
+  const pageofIndex = pageSize * (current - 1) - 1 + 1;
 
   const getData = (current, pageSize) => {
     return allLocations?.slice((current - 1) * pageSize, current * pageSize);
@@ -57,7 +61,7 @@ export default function Locations() {
   const getAllCountries = async () => {
     try {
       const allCountries = await PublicFetch.get(
-        `${GENERAL_SETTING_BASE_URL}/country`
+        `${GENERAL_SETTING_BASE_URL}/country/minimal`
       );
       console.log("countries are", allCountries.data.data);
       setSelectCountry(allCountries.data.data);
@@ -67,14 +71,16 @@ export default function Locations() {
   };
 
   // { API to fetch all locations - Ann - 25/1/23  }
-  const getAllLocations = async () => {
+  const getAllLocations = async (name) => {
     try {
-      const locations = await PublicFetch.get(`${CRM_BASE_URL_FMS}/locations`);
+      const locations = await PublicFetch.get(
+        `${CRM_BASE_URL_FMS}/locations?startIndex=${pageofIndex}&noOfItems=${pageSize}&search=${name}`
+      );
       console.log("all locations are", locations.data.data);
-      settotallocation(locations.data.data);
+      settotallocation(locations.data.data?.locationCount);
       // setAllLocations(locations.data.data);
       let temp = [];
-      locations.data.data.forEach((item, index) => {
+      locations.data.data.locations.forEach((item, index) => {
         temp.push({
           location_id: item.location_id,
           location_code: item.location_code,
@@ -82,7 +88,7 @@ export default function Locations() {
           location_type: item.location_type,
           location_country: item.countries.country_id,
           location_countryname: item.countries.country_name,
-          slno: index+1
+          slno: index + 1,
         });
         setAllLocations(temp);
       });
@@ -93,8 +99,13 @@ export default function Locations() {
 
   useEffect(() => {
     getAllCountries();
-    getAllLocations();
-  }, []);
+    if (pageSize) {
+      const getData = setTimeout(() => {
+        getAllLocations(searchCode);
+      }, 1000);
+      return () => clearTimeout(getData);
+    }
+  }, [pageSize, pageofIndex, searchCode]);
 
   // { API to add a tax type - Ann - 19/1/23}
   const createLocation = (data) => {
@@ -204,23 +215,23 @@ export default function Locations() {
       title: "NAME",
       dataIndex: "location_name",
       key: "location_name",
-      filteredValue: [searchCode],
-      onFilter: (value, record) => {
-        return (
-          String(record.location_name)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.location_code)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.location_countryname)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.location_type)
-            .toLowerCase()
-            .includes(value.toLowerCase())
-        );
-      },
+      // filteredValue: [searchCode],
+      // onFilter: (value, record) => {
+      //   return (
+      //     String(record.location_name)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.location_code)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.location_countryname)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase()) ||
+      //     String(record.location_type)
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase())
+      //   );
+      // },
       align: "left",
     },
     {
@@ -348,7 +359,12 @@ export default function Locations() {
         </div> */}
         <div className="row my-3">
           <div className="col-4 px-3">
-          <PageSizer/>
+            <PageSizer
+              pageValue={(e) => {
+                console.log("Pge Sizer in location", e);
+                setPageSize(e);
+              }}
+            />
 
             {/* <Select
               bordered={false}
@@ -447,7 +463,9 @@ export default function Locations() {
             >
               <div className="row py-4">
                 <div className="col-12 pt-1">
-                  <label>Code</label>
+                  <label>
+                    Code<span className="required">*</span>
+                  </label>
                   <div>
                     <Form.Item
                       name="location_code"
@@ -462,8 +480,10 @@ export default function Locations() {
                     </Form.Item>
                   </div>
                 </div>
-                <div className="col-12">
-                  <label>Name</label>
+                <div className="col-12  mt-1">
+                  <label>
+                    Name<span className="required">*</span>
+                  </label>
                   <div>
                     <Form.Item
                       name="location_name"
@@ -478,8 +498,10 @@ export default function Locations() {
                     </Form.Item>
                   </div>
                 </div>
-                <div className="col-12">
-                  <label>Type</label>
+                <div className="col-12  mt-1">
+                  <label>
+                    Type<span className="required">*</span>
+                  </label>
                   <Form.Item
                     name="location_type"
                     rules={[
@@ -496,33 +518,36 @@ export default function Locations() {
                     </SelectBox>
                   </Form.Item>
                 </div>
+                <div className="col-12 mt-1">
+                  <label>
+                    Country<span className="required">*</span>
+                  </label>
+                  <Form.Item
+                    name="location_country"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please select a Country",
+                      },
+                    ]}
+                  >
+                    <SelectBox>
+                      {selectCountry &&
+                        selectCountry.map((item, index) => {
+                          return (
+                            <Select.Option
+                              key={item.country_id}
+                              value={item.country_id}
+                            >
+                              {item.country_name}
+                            </Select.Option>
+                          );
+                        })}
+                    </SelectBox>
+                  </Form.Item>
+                </div>
               </div>
-              <div className="col-12">
-                <label>Country</label>
-                <Form.Item
-                  name="location_country"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please select a Country",
-                    },
-                  ]}
-                >
-                  <SelectBox>
-                    {selectCountry &&
-                      selectCountry.map((item, index) => {
-                        return (
-                          <Select.Option
-                            key={item.country_id}
-                            value={item.country_id}
-                          >
-                            {item.country_name}
-                          </Select.Option>
-                        );
-                      })}
-                  </SelectBox>
-                </Form.Item>
-              </div>
+
               <div className="row justify-content-center ">
                 <div className="col-auto">
                   <Button btnType="save">Save</Button>
@@ -556,7 +581,9 @@ export default function Locations() {
             >
               <div className="row py-4">
                 <div className="col-12 pt-1">
-                  <label>Code</label>
+                  <label>
+                    Code<span className="required">*</span>
+                  </label>
                   <div>
                     <Form.Item
                       name="locationCode"
@@ -574,8 +601,10 @@ export default function Locations() {
                     </Form.Item>
                   </div>
                 </div>
-                <div className="col-12">
-                  <label>Name</label>
+                <div className="col-12  mt-1">
+                  <label>
+                    Name<span className="required">*</span>
+                  </label>
                   <div>
                     <Form.Item
                       name="locationName"
@@ -593,8 +622,10 @@ export default function Locations() {
                     </Form.Item>
                   </div>
                 </div>
-                <div className="col-12">
-                  <label>Type</label>
+                <div className="col-12  mt-1">
+                  <label>
+                    Type<span className="required">*</span>
+                  </label>
                   <Form.Item
                     name="locationType"
                     rules={[
@@ -614,35 +645,36 @@ export default function Locations() {
                     </SelectBox>
                   </Form.Item>
                 </div>
+                <div className="col-12  mt-1">
+                  <label>
+                    Country<span className="required">*</span>
+                  </label>
+                  <Form.Item
+                    name="locationCountry"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please select a Country",
+                      },
+                    ]}
+                  >
+                    <SelectBox>
+                      {selectCountry &&
+                        selectCountry.length > 0 &&
+                        selectCountry.map((item, index) => {
+                          return (
+                            <Select.Option
+                              key={item.country_id}
+                              value={item.country_id}
+                            >
+                              {item.country_name}
+                            </Select.Option>
+                          );
+                        })}
+                    </SelectBox>
+                  </Form.Item>
+                </div>
               </div>
-              <div className="col-12">
-                <label>Country</label>
-                <Form.Item
-                  name="locationCountry"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please select a Country",
-                    },
-                  ]}
-                >
-                  <SelectBox>
-                    {selectCountry &&
-                      selectCountry.length > 0 &&
-                      selectCountry.map((item, index) => {
-                        return (
-                          <Select.Option
-                            key={item.country_id}
-                            value={item.country_id}
-                          >
-                            {item.country_name}
-                          </Select.Option>
-                        );
-                      })}
-                  </SelectBox>
-                </Form.Item>
-              </div>
-
               <div className="row justify-content-center ">
                 <div className="col-auto">
                   <Button btnType="save">Save</Button>

@@ -39,8 +39,14 @@ function AccountSettings() {
         console.log("Error", err);
       });
   };
+
+  const GetAccountSettings = () => {
+    PublicFetch.get(`${ACCOUNTS}/`)
+  }
   const CreateAccountSettings = (data) => {
-    PublicFetch.get(`${ACCOUNTS}/account_settings/create_settings`)
+    PublicFetch.get(`${ACCOUNTS}/account_settings/create_settings`,{
+        
+    })
       .then((res) => {
         console.log("Response from creating acc settings");
         if (res.data.success) {
@@ -55,6 +61,8 @@ function AccountSettings() {
         console.log("error", err);
       });
   };
+
+
 
   useEffect(() => {
     GetAllLedgers();

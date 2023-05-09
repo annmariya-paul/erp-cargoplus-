@@ -12,6 +12,7 @@ function Custom_model({
   children,
   footer,
   success,
+  warning,
   show,
   onHide,
   size,
@@ -62,6 +63,19 @@ function Custom_model({
               />
               <h4 className="success_msg">Save Success !</h4>
               <p style={{ textAlign: "center" }}>Your Data was Saved</p>
+            </div>
+          </div>
+        )}
+         {warning && (
+          <div>
+            <div className="row">
+              {/* <HiBadgeCheck
+                className="warning_msg"
+                style={{ fontSize: "100px" }}
+              /> */}
+              {/* <h5 className="warning_msg">Error !<br/></h5> */}
+              <h5 style={{color:"orange", textAlign: "center" }}>{cancelName}</h5>
+              <p style={{ textAlign: "center" }}> Deletion is not allowed.</p>
             </div>
           </div>
         )}

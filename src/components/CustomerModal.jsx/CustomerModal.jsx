@@ -1,5 +1,5 @@
 import { Form } from "antd";
-import React , { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "../button/button";
 import CustomModel from "../custom_modal/custom_model";
 import InputType from "../Input Type textbox/InputType";
@@ -9,12 +9,18 @@ import { CRM_BASE_URL } from "../../api/bootapi";
 import CheckUnique from "../../check Unique/CheckUnique";
 import { UniqueErrorMsg } from "../../ErrorMessages/UniqueErrorMessage";
 
-function CustomerModal({ onHide, show, setCustomerName ,setCustomernew,onCustomerAdded}) {
+function CustomerModal({
+  onHide,
+  show,
+  setCustomerName,
+  setCustomernew,
+  onCustomerAdded,
+}) {
   const [addForm] = Form.useForm();
   const [successPopup, setSuccessPopup] = useState(false);
   const [custype, setCustype] = useState("individual");
-  const [contactpname,setContactpname]=useState();
-  console.log("contact",contactpname);
+  const [contactpname, setContactpname] = useState();
+  console.log("contact", contactpname);
   const [uniqueName, setUniqueName] = useState(false);
   // setCustomerName("new Name")
   const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
@@ -32,7 +38,9 @@ function CustomerModal({ onHide, show, setCustomerName ,setCustomernew,onCustome
     if (!value || numericRegex.test(value)) {
       return Promise.resolve();
     }
-    return Promise.reject('Please enter only numeric digits for the phone number.');
+    return Promise.reject(
+      "Please enter only numeric digits for the phone number."
+    );
   };
   const validateEmail = (_, value) => {
     // Use a regular expression to validate the email format
@@ -40,46 +48,42 @@ function CustomerModal({ onHide, show, setCustomerName ,setCustomernew,onCustome
     if (!value || emailRegex.test(value)) {
       return Promise.resolve();
     }
-    return Promise.reject('Please enter a valid email address.');
+    return Promise.reject("Please enter a valid email address.");
   };
   const cusdata = (data) => {
-
- 
     const formData = new FormData();
-   
+
     formData.append("customer_name", data.customer);
     formData.append("customer_phone", data.phone);
     formData.append("customer_email", data.email);
-    formData.append("customer_type",custype);
+    formData.append("customer_type", custype);
     formData.append("contact_person_name", data.contactperson);
     // selectedValues.forEach((value) => {
     //   formData.append("opportunity_enquiries", value);
     // });
 
-  
     PublicFetch.post(`${CRM_BASE_URL}/customer`, formData, {
       "Content-Type": "Multipart/form-Data",
     })
       .then((res) => {
         console.log("success", res);
         if (res.data.success) {
-          PublicFetch.post(`${CRM_BASE_URL}/contact`,{
-            contact_customer_id:res.data.data.customer_id,
-            contact_person_name : data.contactperson,
-            contact_email:data.email,
-            contact_phone_1:data.phone,
-            contact_designation:"test",
-            contact_phone_2:"",
-          })
+          PublicFetch.post(`${CRM_BASE_URL}/contact`, {
+            contact_customer_id: res.data.data.customer_id,
+            contact_person_name: data.contactperson,
+            contact_email: data.email,
+            contact_phone_1: data.phone,
+            contact_designation: "test",
+            contact_phone_2: "",
+          });
 
           console.log("hello", res.data.data);
           setSuccessPopup(true);
           setCustomerName(res.data.data.customer_id);
           setCustomernew(res.data.data.customer_name);
-          
+
           addForm.resetFields();
-         onHide();
-         
+          onHide();
         } else {
           console.log("helo", res.data.data);
           // setBrandError(res.data.data);
@@ -91,12 +95,11 @@ function CustomerModal({ onHide, show, setCustomerName ,setCustomernew,onCustome
       });
   };
 
-
   useEffect(() => {
-    if(contactpname){
-      addForm.setFieldsValue({contactperson : contactpname })
+    if (contactpname) {
+      addForm.setFieldsValue({ contactperson: contactpname });
     }
-  },[contactpname]);
+  }, [contactpname]);
   return (
     <div className="container">
       <div className="row">
@@ -108,17 +111,15 @@ function CustomerModal({ onHide, show, setCustomerName ,setCustomernew,onCustome
             <>
               <div className="container ">
                 <Form
-                name="addForm"
-                form={addForm}
-                onFinish={(values) => {
-                  console.log("add customer", values);
-                  cusdata(values);
-                
-                }}
-                onFinishFailed={(error) => {
-                  console.log(error);
-                }}
-                
+                  name="addForm"
+                  form={addForm}
+                  onFinish={(values) => {
+                    console.log("add customer", values);
+                    cusdata(values);
+                  }}
+                  onFinishFailed={(error) => {
+                    console.log(error);
+                  }}
                 >
                   <div className="row ">
                     <div className="col-12">
@@ -128,7 +129,8 @@ function CustomerModal({ onHide, show, setCustomerName ,setCustomernew,onCustome
                       <lable>
                         Customer Name<span className="required">*</span>
                       </lable>
-                      <Form.Item name="customer"
+                      <Form.Item
+                        name="customer"
                         rules={[
                           {
                             required: true,
@@ -137,24 +139,24 @@ function CustomerModal({ onHide, show, setCustomerName ,setCustomernew,onCustome
                           {
                             min: 2, // Minimum length of 3 characters
                             max: 100, // Maximum length of 10 characters
-                            message: 'Name must be between 2 to 100 characters.',
+                            message:
+                              "Name must be between 2 to 100 characters.",
                           },
                         ]}
-                      
                       >
-                        <InputType 
-                        onChange={(e)=>{
-                          setContactpname(e.target.value);
-                          console.log("contact details ",contactpname);
-                          setUniqueName(false);
-                        }}
-                        onBlur={async () => {
-                          let n = await CheckUnique({
-                            type: "customername",
-                            value: contactpname,
-                          });
-                          setUniqueName(n);
-                        }}
+                        <InputType
+                          onChange={(e) => {
+                            setContactpname(e.target.value);
+                            console.log("contact details ", contactpname);
+                            setUniqueName(false);
+                          }}
+                          onBlur={async () => {
+                            let n = await CheckUnique({
+                              type: "customername",
+                              value: contactpname,
+                            });
+                            setUniqueName(n);
+                          }}
                         />
                       </Form.Item>
                       {uniqueName ? (
@@ -167,27 +169,31 @@ function CustomerModal({ onHide, show, setCustomerName ,setCustomernew,onCustome
                       <lable>
                         Contact Person<span className="required">*</span>
                       </lable>
-                      <Form.Item name="contactperson"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Contact person name is required",
-                        },
-                        
+                      <Form.Item
+                        name="contactperson"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Contact person name is required",
+                          },
+
                           {
                             min: 2, // Minimum length of 3 characters
                             max: 100, // Maximum length of 10 characters
-                            message: 'Contact person name must be between 2 to 100 characters.',
+                            message:
+                              "Contact person name must be between 2 to 100 characters.",
                           },
-                      
-                      ]}
+                        ]}
                       >
-                        <InputType 
-                        value={contactpname}
-                        onChange={(e)=>{
-                          setContactpname(e.target.value);
-                          console.log("contact person details ",contactpname);
-                        }}
+                        <InputType
+                          value={contactpname}
+                          onChange={(e) => {
+                            setContactpname(e.target.value);
+                            console.log(
+                              "contact person details ",
+                              contactpname
+                            );
+                          }}
                         />
                       </Form.Item>
                     </div>
@@ -195,17 +201,17 @@ function CustomerModal({ onHide, show, setCustomerName ,setCustomernew,onCustome
                       <lable>
                         Email<span className="required">*</span>
                       </lable>
-                      <Form.Item name="email"
-                      rules={[
-                        {
-                          required: true,
-                          message: 'Please enter your email address.',
-                        },
-                        {
-                          validator: validateEmail,
-                        },
-                      ]}
-                      
+                      <Form.Item
+                        name="email"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please enter your email address.",
+                          },
+                          {
+                            validator: validateEmail,
+                          },
+                        ]}
                       >
                         <InputType />
                       </Form.Item>
@@ -214,18 +220,17 @@ function CustomerModal({ onHide, show, setCustomerName ,setCustomernew,onCustome
                       <lable>
                         Phone<span className="required">*</span>
                       </lable>
-                      <Form.Item name="phone"
-                       rules={[
-                        {
-                          required: true,
-                          message: 'Please enter your phone number.',
-                        },
-                        {
-                          validator: validatePhoneNumber,
-                        },
-                      ]}
-                      
-                      
+                      <Form.Item
+                        name="phone"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please enter your phone number.",
+                          },
+                          {
+                            validator: validatePhoneNumber,
+                          },
+                        ]}
                       >
                         <Phone_Input />
                       </Form.Item>

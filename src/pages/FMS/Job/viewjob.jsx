@@ -25,6 +25,7 @@ const progress = [
     title: "TASKS",
     dataIndex: "quotation_details_service_id",
     key: "quotation_details_service_id",
+    width: "20%",
     align: "left",
     // render: (value, item, indx) => count + indx,
   },
@@ -35,30 +36,54 @@ const progress = [
     align: "left",
   },
   {
+    title: "TAX %",
+    dataIndex: "job_task_expense_tax_perc",
+    key: "job_task_expense_tax_perc",
+    align: "right",
+  },
+  {
     title: "COST",
     dataIndex: "quotation_details_cost",
     key: "quotation_details_cost",
+    width: "10%",
     align: "right",
   },
   {
     title: "TAX AMOUNT",
     dataIndex: "quotation_details_tax_amount",
     key: "quotation_details_tax_amount",
-    width: "35%",
+
     align: "right",
-    // render: (opportunity_update_next_date_contact) => {
-    //   return (
-    //     <label>
-    //       {moment(opportunity_update_next_date_contact).format("DD-MM-YYYY")}
-    //     </label>
-    //   );
-    // },
   },
   {
     title: "TOTAL AMOUNT",
     dataIndex: "quotation_details_total",
     key: "quotation_details_total",
 
+    align: "right",
+  },
+  {
+    title: "CURRENCY",
+    dataIndex: "job_task_expense_exp_curr_name",
+    key: "job_task_expense_exp_curr_name",
+    align: "right",
+  },
+  {
+    title: "EXCHANGE RATE",
+    dataIndex: "job_task_expense_exp_exch",
+    key: "job_task_expense_exp_exch",
+    align: "right",
+  },
+  {
+    title: "EXCHANGE COST",
+    dataIndex: "job_task_expense_exp_amountfx",
+    key: "job_task_expense_exp_amountfx",
+    align: "right",
+  },
+  {
+    title: "EXCHANGE TOTAL",
+    dataIndex: "job_task_expense_exp_amountlx",
+    key: "job_task_expense_exp_amountlx",
     align: "right",
   },
 ];
@@ -117,23 +142,36 @@ export default function ViewJob() {
 
           let total = 0;
           let newdatas = [];
+          let servdata = [];
           res?.data?.data?.fms_v1_quotation_jobs?.forEach((item, index) => {
             newdatas.push(item?.fms_v1_quotation.quotation_no);
             setQtnno(newdatas);
           });
-          let servdata = [];
-          res.data.data.fms_v1_job_task_expenses.forEach((item, index) => {
+
+          res?.data?.data?.fms_v1_job_task_expenses?.forEach((item, index) => {
+            console.log("task snd expense", item);
             servdata.push({
-              quotation_details_service_id: item.crm_v1_services.service_name,
+              job_task_expense_id: item?.job_task_expense_id,
+              quotation_details_service_id: item?.crm_v1_services?.service_name,
               quotation_details_cost:
-                item.job_task_expense_cost_amountfx.toFixed(2),
+                item?.job_task_expense_cost_amountfx?.toFixed(2),
               job_task_expense_tax_group_name:
-                item.fms_v1_tax_groups.tax_group_name,
+                item?.fms_v1_tax_groups?.tax_group_name,
               quotation_details_tax_amount:
-                item.job_task_expense_cost_taxfx.toFixed(2),
+                item?.job_task_expense_cost_taxfx?.toFixed(2),
               quotation_details_total:
-                item.job_task_expense_cost_subtotalfx.toFixed(2),
+                item?.job_task_expense_cost_subtotalfx?.toFixed(2),
+              job_task_expense_exp_amountfx:
+                item?.job_task_expense_exp_amountfx?.toFixed(2),
+              job_task_expense_exp_amountlx:
+                item?.job_task_expense_exp_amountlx?.toFixed(2),
+              job_task_expense_exp_curr: item?.job_task_expense_exp_curr,
+              job_task_expense_exp_exch:
+                item?.job_task_expense_exp_exch?.toFixed(2),
+              job_task_expense_tax_perc: item?.job_task_expense_tax_perc,
+              job_task_expense_exp_curr_name: item?.job_task_expense_exp_curr,
             });
+            console.log("Task and expense array", servdata);
             setTax(servdata);
             total = Number.parseFloat(total);
             total += item.job_task_expense_cost_subtotalfx;
@@ -228,7 +266,7 @@ export default function ViewJob() {
       });
   };
 
-  console.log("status", invoice_status);
+  console.log("status", invoice_status, tax);
 
   useEffect(() => {
     if (id) {
@@ -247,9 +285,14 @@ export default function ViewJob() {
     window.print();
   };
 
-  // const handleviewtoedit = () => {
-  //   navigate(`${}`);
-  // };
+  const handleviewtoInvoice = () => {
+    let tmp = true;
+    if (tax?.length > 0) {
+      navigate(`${ROUTES.INVOICE_PREVIEW}/${id}`);
+    } else {
+      message.error("Please Enter Task and Expense");
+    }
+  };
 
   return (
     <>
@@ -271,13 +314,12 @@ export default function ViewJob() {
                   // onClick={handlePrint}
                   onClick={() => {
                     // window.open(
-                     
+
                     //   `${ROUTES.JOB_INVOICE}/${id}`,
                     //   `_blank`
                     // );
                     // navigate(`${ROUTES.JOB_INVOICE}/${id}`);
                     window.open(
-                      
                       `http://localhost:3000/job_invoice/${id}`,
                       `_blank`
                     );
@@ -307,11 +349,10 @@ export default function ViewJob() {
                     btnType="save"
                     className="edit_button "
                     onClick={() => {
-                      // handleviewtoedit();
                       if (invoice_status == 1) {
                         message.error("Invoice Already Created");
                       } else {
-                        navigate(`${ROUTES.INVOICE_PREVIEW}/${id}`);
+                        handleviewtoInvoice();
                       }
                     }}
                   >
@@ -323,7 +364,8 @@ export default function ViewJob() {
                     btnType="save"
                     className="edit_button rounded"
                     onClick={() => {
-                      navigate(`${ROUTES.INVOICE_PREVIEW}/${id}`);
+                      // navigate(`${ROUTES.INVOICE_PREVIEW}/${id}`);
+                      handleviewtoInvoice();
                     }}
                   >
                     Generate Invoice
@@ -526,9 +568,10 @@ export default function ViewJob() {
         </div>
         <div className="row mt-1 justify-content-between ">
           <div className="col-xl-6 col-lg-12 col-md-12 col-12 ">
-            <div className="row content-tabs-new justify-content  mb-3 " style={{height : "93%"
-
-            }}>
+            <div
+              className="row content-tabs-new justify-content  mb-3 "
+              style={{ height: "93%" }}
+            >
               <div className="row mt-2">
                 <h6 className="lead_text">Payment Info</h6>
               </div>

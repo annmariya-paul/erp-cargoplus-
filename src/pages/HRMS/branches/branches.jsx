@@ -19,6 +19,7 @@ import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
 export default function Branches(props) {
   const [branch_id, setBranch_id] = useState();
   const [addForm] = Form.useForm();
+  const[loading,setLoading]=useState(false);
   const [error, setError] = useState(false);
   const [successPopup, setSuccessPopup] = useState(false);
   const [searchedText, setSearchedText] = useState("");
@@ -95,6 +96,7 @@ export default function Branches(props) {
   //API for Edit Branch Data
   const handleUpdate = (e) => {
     console.log("edit data", e);
+    setLoading(true);
     const formData = new FormData();
     let data = {
       branch_name: NameInput,
@@ -102,6 +104,7 @@ export default function Branches(props) {
     };
     PublicFetch.patch(`${CRM_BASE_URL_HRMS}/branch/${branch_id}`, data)
       .then((res) => {
+        setLoading(false);
         console.log("success branch edit", res);
         if (res.data.success) {
           console.log("success Data of branch", res.data.data);
@@ -114,6 +117,7 @@ export default function Branches(props) {
         }
       })
       .catch((err) => {
+        setLoading(false);
         console.log("Error", err);
         setError(true);
       });
@@ -188,6 +192,7 @@ export default function Branches(props) {
 
   //API for create Branches
   const createBranches = async () => {
+    setLoading(true);
     try {
       const addbranches = await PublicFetch.post(
         `${CRM_BASE_URL_HRMS}/branch`,
@@ -196,6 +201,7 @@ export default function Branches(props) {
           branch_code: branchcode,
         }
       );
+      setLoading(false);
       console.log("branch added successfully", addbranches);
       if (addbranches.data.success) {
         setSuccessPopup(true);
@@ -205,6 +211,7 @@ export default function Branches(props) {
         close_modal(successPopup, 1000);
       }
     } catch (err) {
+      setLoading(false);
       console.log("err to add the branches", err);
     }
   };
@@ -450,7 +457,7 @@ export default function Branches(props) {
                         {
                           required: true,
                           pattern: new RegExp("^[A-Za-z ]+$"),
-                          message: "Please enter a Valid Branch Name",
+                          message: "Please enter a valid branch name",
                         },
 
                         {
@@ -498,7 +505,7 @@ export default function Branches(props) {
                       {
                         required: true,
                         pattern: new RegExp("^[A-Za-z0-9]+$"),
-                        message: "Please enter a Valid Branch Code",
+                        message: "Please enter a valid branch Code",
                       },
                       {
                         min: 3,
@@ -535,7 +542,10 @@ export default function Branches(props) {
               </div>
               <div className="row justify-content-center ">
                 <div className="col-auto">
-                  <Button btnType="save">Save</Button>
+                  <Button
+                   className={loading ? "btn_loadingColor" : ""}
+                   disabled={loading}
+                  btnType="save">Save</Button>
                 </div>
               </div>
             </Form>
@@ -555,11 +565,11 @@ export default function Branches(props) {
         View_list
         list_content={
           <div>
-            <div className="container-fluid px-4 my-3">
-              <div>
+            {/* <div > */}
+              <div className="row">
                 <h5 className="lead_text">Edit Branch</h5>
               </div>
-              <div className="row my-3 ">
+              {/* <div className="row my-3 "> */}
                 <Form
                   form={editForm}
                   onFinish={(values) => {
@@ -570,17 +580,19 @@ export default function Branches(props) {
                     console.log(error);
                   }}
                 >
-                  <div className="col-12">
+                  <div className="row py-4">
+                  <div className="col-12 pt-1">
                     <label>
-                      Name<span className="required">*</span>
+                    Branch Name<span className="required">*</span>
                     </label>
+                    <div>
                     <Form.Item
                       name="NameInput"
                       rules={[
                         {
                           required: true,
                           pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid Branch Name",
+                          message: "Please enter a valid branch name",
                         },
                         {
                           min: 2,
@@ -617,9 +629,10 @@ export default function Branches(props) {
                       </p>
                     ) : null}
                   </div>
-                  <div className="col-12">
+                  </div>
+                  <div className="col-12 pt-1">
                     <label>
-                      Code<span className="required">*</span>
+                    Branch Code<span className="required">*</span>
                     </label>
                     <Form.Item
                       name="CodeInput"
@@ -627,7 +640,7 @@ export default function Branches(props) {
                         {
                           required: true,
                           pattern: new RegExp("^[A-Za-z0-9 ]+$"),
-                          message: "Please enter a Valid Branch Name",
+                          message: "Please enter a valid branch code",
                         },
                         {
                           min: 2,
@@ -663,13 +676,18 @@ export default function Branches(props) {
                       </p>
                     ) : null}
                   </div>
-
-                  <div className="col-12 d-flex justify-content-center mt-5">
-                    <Button className="save_button">Save</Button>
+                  </div>
+                  <div className="row justify-content-center ">
+                  <div className="col-auto">
+                    <Button
+                      className={loading ? "btn_loadingColor" : ""}
+                      disabled={loading}
+                      btnType="save">Save</Button>
+                  </div>
                   </div>
                 </Form>
-              </div>
-            </div>
+              {/* </div> */}
+            {/* </div> */}
           </div>
         }
       />

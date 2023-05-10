@@ -60,17 +60,15 @@ export default function Sidebar({ showSidebar }) {
   const [accountsReports, setAccountsReports] = useState(false);
   const [currentOpen, setCurrentOpen] = useState();
   const location = useLocation();
-  console.log("location",location);
+  console.log("location", location);
   // const[locationnew,setLocationnew]=useState();
   const { pathname } = location;
   // setLocationnew(pathname);
   useEffect(() => {
     console.log("hello");
-  window.scrollTo({top:0, behavior:'auto'});
-
+    window.scrollTo({ top: 0, behavior: "auto" });
   }, [pathname]);
 
- 
   useEffect(() => {
     let p = localStorage.getItem("userPermissions");
     if (p) {
@@ -2060,7 +2058,7 @@ export default function Sidebar({ showSidebar }) {
                           to={ROUTES.COMPANYINFO}
                         >
                           <div className="ms-3 ps-1 subactivelink">
-                            CompanyInfo
+                            Company Info
                           </div>
                         </NavLink>
                       </li>

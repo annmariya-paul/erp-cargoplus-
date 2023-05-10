@@ -13,6 +13,7 @@ import TableData from "../../../../components/table/table_data";
 import { ROUTES } from "../../../../routes";
 import CustomModel from "../../../../components/custom_modal/custom_model";
 import PublicFetch from "../../../../utils/PublicFetch";
+import PageSizer from "../../../../components/PageSizer/PageSizer";
 // import Error_model from "../../../../components/Error Modal/errorModal";
 import {
   LeadType,
@@ -31,7 +32,8 @@ function EnquiryList() {
   const [searchType, setSearchType] = useState("");
   const [searchStatus, setSearchStatus] = useState("");
   const [noofItems, setNoofItems] = useState("25");
-
+  let a = localStorage.getItem("noofitem");
+  const [pageSize, setPageSize] = useState(a);
   const [totalCount, setTotalcount] = useState();
   const [pageIndex, setPageIndex] = useState(0);
   const [current, setCurrent] = useState(1);
@@ -40,6 +42,15 @@ function EnquiryList() {
   const [AllEnquiries, setAllnquires] = useState();
   const [messageApi, contextHolder] = message.useMessage();
   const [startcount, setstartcount] = useState();
+  console.log("PageSize", pageSize);
+
+  const pageofIndex = pageSize * (current - 1) - 1 + 1;
+
+  const getDatas = (current, pageSize) => {
+    return AllEnquiries?.slice((current - 1) * pageSize, current * pageSize);
+  };
+
+
   const error = () => {
     messageApi.open({
       type: "error",
@@ -307,7 +318,7 @@ function EnquiryList() {
       align: "center",
     },
   ];
-
+  // const [current, setCurrent] = useState(1);
   const columnsKeys = columns.map((column) => column.key);
   const [selectedColumns, setSelectedColumns] = useState(columnsKeys);
   const filteredColumns = columns.filter((column) =>
@@ -341,18 +352,20 @@ function EnquiryList() {
     ],
   ];
 
-  const pageofIndex = noofItems * (current - 1) - 1 + 1;
-  const pagesizecount = Math.ceil(totalCount / noofItems);
+  // const pageofIndex = noofItems * (current - 1) - 1 + 1;
+  const pagesizecount = Math.ceil(totalCount / pageSize);
   console.log("page number isss", pagesizecount);
   // {query === 'pending' ? 0 : query=== "converted" ? 1: query}
   const GetAllEnquiries = (query) => {
+
+    console.log("query", query);
     PublicFetch.get(
-      `${CRM_BASE_URL_FMS}/enquiries?startIndex=${pageofIndex}&noOfItems=${noofItems}&search=${
-        query.toLowerCase() === "pending"
+      `${CRM_BASE_URL_FMS}/enquiries?startIndex=${pageofIndex}&noOfItems=${pageSize}&search=${
+        query?.toLowerCase() === "pending"
           ? 0
-          : query.toLowerCase() === "converted"
+          : query?.toLowerCase() === "converted"
           ? 1
-          : query.toLowerCase()
+          : query?.toLowerCase()
       }`
     )
       .then((res) => {
@@ -392,7 +405,7 @@ function EnquiryList() {
   };
 
   const getFinalCount = (total) => {
-    const cutoff = Math.ceil(totalCount / noofItems);
+    const cutoff = Math.ceil(totalCount / pageSize);
     console.log("FinalTest", cutoff, current);
     if (current === cutoff) return totalCount;
     return total;
@@ -401,12 +414,16 @@ function EnquiryList() {
   };
 
   useEffect(() => {
+    console.log("searched text ",searchedText);
     const getData = setTimeout(() => {
       GetAllEnquiries(searchedText);
+      
     }, 1000);
+   
+
 
     return () => clearTimeout(getData);
-  }, [noofItems, pageofIndex, pagesizecount, searchedText]);
+  }, [pageSize, pageofIndex,  searchedText]);
 
   return (
     <div className="container-fluid container_fms pt-3">
@@ -432,7 +449,7 @@ function EnquiryList() {
             className="inputSearch"
             value={searchedText}
             onChange={(e) => {
-              console.log("Entered value");
+              console.log("Entered value", e.target.value);
               //
               // if(e.target.value.toLowerCase() === "pending")
               // {
@@ -441,12 +458,12 @@ function EnquiryList() {
               // {
               //   setSearchedText(1);
               // }else{
-              setSearchedText(e.target.value ? [e.target.value] : []);
+              setSearchedText(e.target.value );
               // }
             }}
-            onSearch={(value) => {
-              setSearchedText(value);
-            }}
+            // onSearch={(value) => {
+            //   setSearchedText(value);
+            // }}
           />
         </div>
 
@@ -480,7 +497,7 @@ function EnquiryList() {
           <div className="d-flex justify-content-start align-items-center gap-3">
             {totalCount > 0 && (
               <div className="   ">
-                <Select
+                {/* <Select
                   // defaultValue={"25"}
                   bordered={false}
                   className="page_size_style"
@@ -509,14 +526,20 @@ function EnquiryList() {
                       100
                     </span>
                   </Select.Option>
-                </Select>
+                </Select> */}
+                 <PageSizer
+              pageValue={(e) => {
+                console.log("Pge Sizer in location", e);
+                setPageSize(e);
+              }}
+            />
               </div>
             )}
             {totalCount > 0 && (
               <div className="   d-flex  align-items-center mt-2">
                 <label className="font_size">
                   Results: {startcount + 1} -{" "}
-                  {getFinalCount(1 * noofItems * current)}{" "}
+                  {getFinalCount(1 * pageSize * current)}{" "}
                   <span>of {totalCount} </span>{" "}
                 </label>
               </div>
@@ -524,12 +547,12 @@ function EnquiryList() {
           </div>
         </div>
         <div className="col-4 d-flex py-2 justify-content-center">
-          {totalCount > 0 && (
+        {AllEnquiries?.length > 0 && (
             <MyPagination
-              total={parseInt(totalCount)}
+              total={parseInt(AllEnquiries?.length)}
               // total={parseInt(AllEnquiries)}
               current={current}
-              pageSize={noofItems}
+              pageSize={pageSize}
               // defaultPageSize={noofItems}
               showSizeChanger={false}
               onChange={(current, pageSize) => {
@@ -555,8 +578,8 @@ function EnquiryList() {
       </div>
       <div className="datatable">
         <TableData
-          // data={getData(numofItemsTo, pageofIndex)}
-          data={AllEnquiries}
+          data={getDatas(current, pageSize)}
+          // data={AllEnquiries}
           columns={columns}
           custom_table_css="table_lead_list"
         />
@@ -566,7 +589,7 @@ function EnquiryList() {
           <MyPagination
             total={AllEnquiries?.length}
             current={current}
-            pageSize={noofItems}
+            pageSize={pageSize}
             // defaultPageSize={noofItems}
             showSizeChanger={false}
             onChange={(current, pageSize) => {

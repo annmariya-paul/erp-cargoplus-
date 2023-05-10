@@ -104,7 +104,7 @@ export default function ViewQuotation() {
           let total = 0;
           res.data.data.quotation.fms_v1_quotation_details.forEach(
             (item, index) => {
-              total += item.quotation_details_total.toFixed(2);
+              total += item.quotation_details_total;
               temp11.push({
                 quotation_details_cost: item.quotation_details_cost.toFixed(2),
                 quotation_details_id: item.quotation_details_id,
@@ -121,7 +121,7 @@ export default function ViewQuotation() {
                 tax_type_name: item.fms_v1_tax_groups?.tax_group_name,
               });
               setTableData(temp11);
-              setTotalAmount(total);
+              setTotalAmount(total.toFixed(2));
             }
           );
         }
@@ -580,12 +580,12 @@ export default function ViewQuotation() {
                   custom_table_css="table_job_list"
                 />
               </div>
-              <div className="d-flex justify-content-end  mx-3 ">
-                <div className="col-lg-2 col-sm-4 col-xs-3 d-flex justify-content-end mt-3 me-2">
+              <div className="d-flex justify-content-end gap-2  py-2  ">
+                <div className=" d-flex justify-content-end mt-3 me-2">
                   <p style={{ fontWeight: 500 }}>Grand Total : </p>
                 </div>
-                <div className="col-lg-2 col-sm-2 col-xs-2 mt-3">
-                  <p>{TotalAmount.toFixed(2)}</p>
+                <div className=" mt-3">
+                  <p>{TotalAmount}</p>
                 </div>
               </div>
             </Panel>

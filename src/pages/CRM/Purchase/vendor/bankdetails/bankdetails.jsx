@@ -35,6 +35,8 @@ function Bankdetails({ vendor, toggle }) {
 
   const [editdefaultbnkname, seteditdefaultbnkname] = useState("");
 
+  const[adddefaultname,setadddefaultname]= useState("")
+
   const handleEditedclick = (e) => {
     console.log("bankdataa", e);
 
@@ -285,7 +287,7 @@ function Bankdetails({ vendor, toggle }) {
       .then((res) => {
 
         console.log("exist bnkk", res?.data?.data);
-        // setdefaultbnkname(res?.data?.data)
+        setadddefaultname(res?.data?.data?.data?.ven_bank_det_bank)
 
         if (res?.data?.data?.exists == true) {
           setisdefaultadd(true);
@@ -490,7 +492,7 @@ function Bankdetails({ vendor, toggle }) {
                 </div>
               </div>
               {isdefaultadd ? (
-                <label style={{ color: "orange" }}>Default Bank is changed from  {defaultbnkname}  to  {newbnkname}    </label>
+                <label style={{ color: "orange" }}>Default Bank is changed from  {adddefaultname}  to  {newbnkname}    </label>
               ) : (
                 ""
               )}

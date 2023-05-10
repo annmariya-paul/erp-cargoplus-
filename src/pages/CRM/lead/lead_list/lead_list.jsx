@@ -25,12 +25,13 @@ import Custom_model from "../../../../components/custom_modal/custom_model";
 import Leadlist_Icons from "../../../../components/lead_list_icon/lead_list_icon";
 import { ROUTES } from "../../../../routes";
 import MyPagination from "../../../../components/Pagination/MyPagination";
+import PageSizer from "../../../../components/PageSizer/PageSizer";
 
 export default function LeadList() {
   const [searchedText, setSearchedText] = useState("");
   const [searchType, setSearchType] = useState("");
   const [searchStatus, setSearchStatus] = useState("");
-  const [noofItems, setNoofItems] = useState("15");
+  const [noofItems, setNoofItems] = useState(localStorage.getItem("noofitem"));
   const [totalCount, setTotalcount] = useState();
   const [pageIndex, setPageIndex] = useState(0);
   const [current, setCurrent] = useState(1);
@@ -168,12 +169,15 @@ export default function LeadList() {
   };
 
   useEffect(() => {
-    const getData = setTimeout(() => {
-      GetAllLeadData(searchedText);
-    }, 1000);
-
-    return () => clearTimeout(getData);
-  }, [noofItems, pageofIndex, pagesizecount, searchedText]);
+    if(noofItems){
+      const getData = setTimeout(() => {
+        GetAllLeadData(searchedText);
+      }, 1000);
+  
+      return () => clearTimeout(getData);
+    }
+    
+  }, [noofItems, pageofIndex, searchedText]);
 
   const getData = (numofItemsTo, pageofIndex) => {
     return allLeadList?.slice(
@@ -506,7 +510,7 @@ export default function LeadList() {
             <div className="d-flex justify-content-start align-items-center gap-3">
               {totalCount > 0 && (
                 <div className="  ">
-                  <Select
+                  {/* <Select
                     // defaultValue={"25"}
                     bordered={false}
                     className="page_size_style"
@@ -539,13 +543,16 @@ export default function LeadList() {
                         100
                       </span>{" "}
                     </Select.Option>
-                  </Select>
+                  </Select> */}
+                 <PageSizer pageValue={(e)=>{
+                  setNoofItems(e)
+                 }} />
                 </div>
               )}
               {totalCount > 0 && (
                 <div className=" d-flex  align-items-center mt-2 ">
                   <label className="font_size">
-                    Results: {startcount + 1} -
+                    Results: {startcount + 1}-
                     {getFinalCount(1 * noofItems * current)}{" "}
                     <span>of {totalCount} </span>{" "}
                   </label>

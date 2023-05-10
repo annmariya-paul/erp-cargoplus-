@@ -11,6 +11,7 @@ import InputType from "../../../../components/Input Type textbox/InputType";
 import PhoneNumber from "../../../../components/phone_number/phonenumber";
 import Phone_Input from "../../../../components/PhoneInput/phoneInput";
 import { AiOutlinePlus } from "react-icons/ai";
+import { FaEdit, FaTrash } from "react-icons/fa";
 
 function ContactTable(props) {
   const [contactTable, setContactTable] = useState();
@@ -26,9 +27,14 @@ function ContactTable(props) {
   const [show, setShow] = useState(false);
   const [showError, setShowError] = useState(false);
   const [addForm] = Form.useForm();
+  const [editForm] = Form.useForm();
 
   const [oneLeadData, setOneLeadData] = useState();
   const [CustomerId, setCustomerId] = useState();
+
+  const [editContactModal, setEditContactModel] = useState(false);
+
+  const [contactId, setContactId] = useState();
   // {funtion to fetch each Lead data - Ann mariya (22/11/22) }
   console.log("hai halo", props.customer);
 
@@ -67,6 +73,7 @@ function ContactTable(props) {
                 contact_phone_1: item?.contact_phone_1,
                 contact_phone_2: item?.contact_phone_2,
                 contact_designation: item?.contact_designation,
+                contact_id:item?.contact_id
               });
             }
           });
@@ -96,6 +103,58 @@ function ContactTable(props) {
   //   });
   // };
 
+  const handleEditedclick = (i) => {
+    console.log("edit in list...", i);
+    setContactId(i.contact_id);
+    // setEditContacts({
+    //   editName: i.contact_person_name,
+    //   editEmail: i.contact_email,
+    //   editPhone: i.contact_phone_1,
+    //   editMobile: i.contact_phone_2,
+    //   editDesignation: i.contact_designation,
+    // });
+    editForm.setFieldsValue({
+      editName: i.contact_person_name,
+      editEmail: i.contact_email,
+      editPhone: i.contact_phone_1,
+      editMobile: i.contact_phone_2,
+      editDesignation: i.contact_designation,
+    });
+    setEditContactModel(true);
+  };
+
+
+  const EditContact = (data) => {
+    PublicFetch.patch(`${CRM_BASE_URL}/contact/${contactId}`, {
+      contact_customer_id:  parseInt(props.customer),
+      contact_person_name: data.editName,
+      contact_email: data.editEmail,
+      contact_phone_1: data.editPhone,
+      contact_phone_2: data.editMobile,
+      contact_designation: data.editDesignation,
+    })
+      .then((res) => {
+        console.log("contact data,", res);
+        if (res.data.success) {
+          getcontacttable()
+          // getContacts();
+          // setContactName();
+          // setEmail();
+          // setPhone();
+          // setMobile();
+          // setDesignation();
+          setEditContactModel(false);
+          setShowSuccessModal(true);
+          close_modal(showSuccessMOdal, 1200);
+          // props.onHide();
+        } else {
+          console.log("Cannot Get Data while fetching data");
+        }
+      })
+      .catch((err) => {
+        console.log("error while adding data", err);
+      });
+  };
   const columns = [
     {
       title: "Sl. No.",
@@ -128,6 +187,27 @@ function ContactTable(props) {
       dataIndex: "contact_designation",
       key: "contact_designation",
     },
+
+    {
+      title: "ACTION",
+      dataIndex: "action",
+      key: "action",
+      width: "15%",
+      render: (data, index) => {
+        return (
+          <div className="d-flex justify-content-center gap-2">
+            <div className="editcolor">
+              <FaEdit onClick={() => handleEditedclick(index)} />
+            </div>
+            <div className="editcolor">
+              <FaTrash />
+            </div>
+          </div>
+        );
+      },
+      align: "center",
+    },
+
   ];
 
   // # function AddContact to add contacts - Noufal
@@ -345,6 +425,163 @@ function ContactTable(props) {
           </>
         }
       />
+
+        <Custom_model
+        bodyStyle={{ height: 620, overflowY: "auto" }}
+        show={editContactModal}
+        onHide={() => setEditContactModel(false)}
+        View_list
+        footer={false}
+        list_content={
+          <>
+            <Form
+              form={editForm}
+              onFinish={(values) => {
+                console.log("values iss", values);
+                EditContact(values);
+              }}
+              onFinishFailed={(error) => {
+                console.log(error);
+              }}
+            >
+              <div className="row">
+                <h5 className="lead_text">Edit Contact</h5>
+              </div>
+
+              <div className="row mt-3">
+                <div className="px-3">
+                  <label className="mt-3">Name</label>
+                  <Form.Item
+                    name="editName"
+                    rules={[
+                      {
+                        required: true,
+                        pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                        message: "Please enter a Valid Name",
+                      },
+                      {
+                        whitespace: true,
+                      },
+                      {
+                        min: 2,
+                        message: "Name must be at least 2 characters",
+                      },
+                      {
+                        max: 100,
+                        message: "Name cannot be longer than 100 characters",
+                      },
+                    ]}
+                  >
+                    <InputType
+                      // onChange={(e) =>
+                      //   setEditContacts({
+                      //     ...editcontacts,
+                      //     editName: e.target.value,
+                      //   })
+                      // }
+                      // value={editcontacts.editName}
+                    />
+                  </Form.Item>
+                  <label className="mt-3">Designation</label>
+                  <Form.Item
+                    name="editDesignation"
+                    rules={[
+                      {
+                        required: true,
+                        pattern: new RegExp("^[A-Za-z0-9 ]+$"),
+                        message: "Please enter a Valid Designation",
+                      },
+                      {
+                        whitespace: true,
+                      },
+                      {
+                        min: 2,
+                        message: "Designation must be at least 2 characters",
+                      },
+                      {
+                        max: 100,
+                        message:
+                          "Designationcannot be longer than 100 characters",
+                      },
+                    ]}
+                  >
+                    <InputType
+                      // onChange={(e) =>
+                      //   setEditContacts({
+                      //     ...editcontacts,
+                      //     editDesignation: e.target.value,
+                      //   })
+                      // }
+                      // value={editcontacts.editDesignation}
+                    />
+                  </Form.Item>
+
+                  <label className="mt-3">Phone </label>
+                  <Form.Item
+                    name="editPhone"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please enter a Valid Phone number",
+                      },
+                    ]}
+                  >
+                    <Phone_Input
+                      countryCodeEditable={false}
+                      // value={editcontacts.editPhone}
+                      // onChange={(value) =>
+                      //   setEditContacts({
+                      //     ...editcontacts,
+                      //     editPhone: value,
+                      //   })
+                      // }
+                    />
+                  </Form.Item>
+
+                  <label className="mt-3">Mobile</label>
+                  <Form.Item name="editMobile">
+                    <Phone_Input
+                      // value={editcontacts.editMobile}
+                      // onChange={(value) =>
+                      //   setEditContacts({
+                      //     ...editcontacts,
+                      //     editMobile: value,
+                      //   })
+                      // }
+                    />
+                  </Form.Item>
+                  <label className="mt-3">Email</label>
+                  <Form.Item
+                    name="editEmail"
+                    rules={[
+                      {
+                        required: true,
+                        pattern: new RegExp(
+                          "^[A-Za-z0-9_!#$%&'*+/=?`{|}~^.-]+@[A-Za-z0-9.-]+$"
+                        ),
+                        message: "Please enter a Valid Email",
+                      },
+                    ]}
+                  >
+                    <InputType
+                      // onChange={(e) =>
+                      //   setEditContacts({
+                      //     ...editcontacts,
+                      //     editEmail: e.target.value,
+                      //   })
+                      // }
+                      // value={editcontacts.editEmail}
+                    />
+                  </Form.Item>
+                </div>
+                <div className="d-flex justify-content-center mt-3">
+                  <Button btnType="save">Save</Button>
+                </div>
+              </div>
+            </Form>
+          </>
+        }
+      ></Custom_model>
       <Custom_model
         centered
         size={`sm`}

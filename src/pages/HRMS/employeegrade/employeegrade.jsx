@@ -331,13 +331,13 @@ function Employeegrade() {
                     console.log(error);
                   }}
                 >
-                  <div className="row flex-wrap pt-1">
-                    <div className="row ms-0 py-1">
-                      <div className="col-12 pt-3">
+                  <div className="row ">
+                    {/* <div className="row ms-0 py-1"> */}
+                      <div className="col-12  ">
                         <label htmlfor="emp_type_name">
                         Name<span className="required">*</span>
                         </label>
-                        <Form.Item
+                        <Form.Item className="mt-2 "
                           name="Employment_grade_name"
                           rules={[
                             {
@@ -378,13 +378,11 @@ function Employeegrade() {
                           </p>
                         ) : null}
                       </div>
-                    </div>
+                    {/* </div> */}
                   </div>
                   <div className="row justify-content-center">
                     <div className="col-auto">
-                      <Button type="submit" className="p-2 save_button_style">
-                        Save
-                      </Button>
+                    <Button btnType="save">Save</Button>
                     </div>
                   </div>
                 </Form>
@@ -424,13 +422,13 @@ function Employeegrade() {
                   <div className="row">
                     <div className="col-12">
                       <label>Name<span className="required">*</span></label>
-                      <Form.Item
+                      <Form.Item className="mt-2"
                         name="Employment_grade_name"
                         rules={[
                           {
                             required: true,
                             pattern: new RegExp("^[A-Za-z ]+$"),
-                            message: "Please enter a valid Employee Grade Name",
+                            message: "Please enter a valid employee grade name",
                           },
                           {
                             min: 2,
@@ -467,8 +465,8 @@ function Employeegrade() {
                         </p>
                       ) : null}
                     </div>
-                    <div className="row d-flex justify-content-center">
-                      <div className="col-xl-2 col-lg-2 col-12 justify-content-center">
+                    <div className="row justify-content-center">
+                      <div className="col-auto mt-2">
                         <Button btnType="save">Save</Button>
                       </div>
                     </div>

@@ -42,7 +42,7 @@ export default function Designation() {
   const [editUniqueName, setEditUniqueName] = useState();
   const [editUniqueCode, setEditUniqueCode] = useState();
   const [uniqueErrMsg, setUniqueErrMsg] = useState(UniqueErrorMsg);
-
+  const[loading,setLoading]=useState(false);
   const [addshow, setAddshow] = useState(false);
 
   const [editForm] = Form.useForm();
@@ -97,6 +97,7 @@ export default function Designation() {
   };
 
   const updateClick = async (id) => {
+    setLoading(true);
     try {
       const updating = await PublicFetch.patch(
         `${CRM_BASE_URL_HRMS}/designation/${desigid}`,
@@ -105,6 +106,7 @@ export default function Designation() {
           designation_code: editdesignationcode,
         }
       );
+      setLoading(false);
       console.log("editedd data is", updating);
       if (updating.data.success) {
         console.log("successfully updating ");
@@ -117,11 +119,13 @@ export default function Designation() {
         alert(updating.data.data);
       }
     } catch (err) {
+      setLoading(false);
       console.log("error to getting all units", err);
     }
   };
 
   const submitaddunit = async () => {
+    setLoading(true);
     try {
       const adddesigntion = await PublicFetch.post(
         `${CRM_BASE_URL_HRMS}/designation`,
@@ -130,6 +134,7 @@ export default function Designation() {
           designation_code: designationcode,
         }
       );
+      setLoading(false);
       console.log("unit data is added ", adddesigntion);
       if (adddesigntion.data.success) {
         getalldesignation();
@@ -143,6 +148,7 @@ export default function Designation() {
       //   //  <ErrorMsg code={"500"} />
       //  }
     } catch (err) {
+      setLoading(false);
       console.log("err to add the unit", err);
     }
   };
@@ -394,7 +400,7 @@ export default function Designation() {
                           {
                             required: true,
                             pattern: new RegExp("^[A-Za-z ]+$"),
-                            message: "Please enter a valid Designation Name",
+                            message: "Please enter a valid designation name",
                           },
                         ]}
                       >
@@ -430,7 +436,7 @@ export default function Designation() {
                           {
                             required: true,
                             // pattern: new RegExp("^[A-Za-z]+$"),
-                            message: "Please enter a valid Designation Name",
+                            message: "Please enter a valid designation code",
                           },
                         ]}
                       >
@@ -458,7 +464,10 @@ export default function Designation() {
                 </div>
                 <div className="row justify-content-center">
                   <div className="col-auto">
-                    <Button btnType="save">Save</Button>
+                    <Button
+                     className={loading ? "btn_loadingColor" : ""}
+                     disabled={loading}
+                    btnType="save">Save</Button>
                   </div>
                 </div>
               </Form>
@@ -496,7 +505,7 @@ export default function Designation() {
                         {
                           required: true,
                           pattern: new RegExp("^[A-Za-z ]+$"),
-                          message: "Please enter a Valid Designation Name",
+                          message: "Please enter a valid designation name",
                         },
                         {
                           min: 2,
@@ -540,7 +549,7 @@ export default function Designation() {
                         {
                           required: true,
                           pattern: new RegExp("^[A-Za-z0-9]+$"),
-                          message: "Please enter a Valid Unit code",
+                          message: "Please enter a valid designation code",
                         },
                         {
                           min: 2,
@@ -580,6 +589,8 @@ export default function Designation() {
                     <div className="col-xl-2 col-lg-2 col-12 justify-content-center">
                       <Button
                         btnType="save"
+                        className={loading ? "btn_loadingColor" : ""}
+                        disabled={loading}
                         // onClick={(id) => {
                         //   updateClick();
                         //   setEditShow(false);

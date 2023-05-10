@@ -480,8 +480,8 @@ function Vendor() {
               {totalCount > 0 && (
               <div className=" d-flex  align-items-center mt-2 ">
                 <label className="font_size">
-                  Results: {startcount + 1} -
-                  {getFinalCount(1 * noofItems * current)}{" "}
+                  Results: {startcount + 1}-
+                   {getFinalCount(1 * noofItems * current)}{" "}
                   <span>of {totalCount} </span>{" "}
                 </label>
               </div>

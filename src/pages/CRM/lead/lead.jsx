@@ -28,6 +28,8 @@ import { UniqueErrorMsg } from "../../../ErrorMessages/UniqueErrorMessage";
 import CheckUnique from "../../../check Unique/CheckUnique";
 import Phone_Input from "../../../components/PhoneInput/phoneInput";
 import Moreinfo from "./accountings/MoreInfo";
+import EditContact from "./tables/edit_contacts"
+
 // import { useForm } from "react-hook-form";
 // import {  message } from 'antd';
 
@@ -848,6 +850,7 @@ function Lead({}) {
                       customer={CustomerId}
                       toggle={timeOut}
                     />
+                
                   </div>
                   <div className="col mt-4">
                     <Button btnType="save" onClick={(e) => handleAddressTab(e)}>

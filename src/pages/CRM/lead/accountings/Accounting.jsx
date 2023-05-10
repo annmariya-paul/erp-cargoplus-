@@ -374,8 +374,19 @@ if( tmp === true){
           </div>
           <div className="col-sm-3">
             <label>Credit Days</label>
-            <Form.Item name="customer_accounting_credit_days">
-            <InputType />
+            <Form.Item 
+            name="customer_accounting_credit_days"
+           rules={
+            [
+              {
+                pattern: new RegExp("^[0-9]+$"),
+                message: "please enter valid number",
+              },
+            ]
+           }
+            >
+            <InputType   />
+    
             </Form.Item>
           </div>
           <div className="col-sm-3">

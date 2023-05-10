@@ -16,6 +16,7 @@ import Leadlist_Icons from "../../../components/lead_list_icon/lead_list_icon";
 // { Add and list Employment Type - Ann mariya - 16/11/22 }
 export default function EmploymentType() {
   const [error, setError] = useState(false);
+  const[loading,setLoading]=useState(false);
   const [searchedText, setSearchedText] = useState("");
   const [pageSize, setPageSize] = useState("25");
   const [editShow, setEditShow] = useState(false);
@@ -72,6 +73,7 @@ export default function EmploymentType() {
   };
 
   const submitemptype = async () => {
+    setLoading(true);
     try {
       const addemptype = await PublicFetch.post(
         `${CRM_BASE_URL_HRMS}/employment-types`,
@@ -79,6 +81,7 @@ export default function EmploymentType() {
           employment_type_name: addemploytypename.trim(" "),
         }
       );
+      setLoading(false);
       console.log(" data is added  successfully", addemptype);
       if (addemptype.data.success) {
         getallemptype();
@@ -89,11 +92,13 @@ export default function EmploymentType() {
         close_modal(saveSuccess, 1000);
       }
     } catch (err) {
+      setLoading(false);
       console.log("err to add the emp  Type", err);
     }
   };
 
   const updateClick = async (id) => {
+    setLoading(true);
     try {
       const updating = await PublicFetch.patch(
         `${CRM_BASE_URL_HRMS}/employment-types/${emptypeid}`,
@@ -101,6 +106,7 @@ export default function EmploymentType() {
           employment_type_name: employeeTName.trim(""),
         }
       );
+      setLoading(false);
       console.log("editedd data is", updating);
       if (updating.data.success) {
         console.log("successfully updating ");
@@ -111,6 +117,7 @@ export default function EmploymentType() {
         close_modal(saveSuccess, 1200);
       }
     } catch (err) {
+      setLoading(false);
       console.log("error to getting all emp type", err);
     }
   };
@@ -395,8 +402,8 @@ export default function EmploymentType() {
           View_list
           list_content={
             <>
-              <h6 className="lead_text mb-2">New Employee Type</h6>
-              <div className="container-fluid px-4 my-4 ">
+              <h6 className="lead_text mb-2 ">New Employee Type</h6>
+              <div className="container-fluid  px-4 my-4 ">
                 <Form
                   name="addForm"
                   form={addForm}
@@ -408,13 +415,13 @@ export default function EmploymentType() {
                     console.log(error);
                   }}
                 >
-                  <div className="row flex-wrap pt-1">
-                    <div className="row ms-0 py-1">
-                      <div className="col-12 pt-3">
+                  <div className="row ">
+                    {/* <div className="row ms-0 py-1"> */}
+                      <div className="col-12 ">
                         <label htmlfor="emp_type_name">
                           Employee Type Name<span className="required">*</span>
                         </label>
-                        <Form.Item
+                        <Form.Item className="mt-2"
                           name="Employment Type Name"
                           rules={[
                             {
@@ -457,11 +464,14 @@ export default function EmploymentType() {
                           </p>
                         ) : null}
                       </div>
-                    </div>
+                    {/* </div> */}
                   </div>
-                  <div className="row justify-content-center">
+                  <div className="row justify-content-center mt-2">
                     <div className="col-auto">
-                      <Button btnType="save">Save</Button>
+                      <Button 
+                       className={loading ? "btn_loadingColor" : ""}
+                       disabled={loading}
+                      btnType="save">Save</Button>
                     </div>
                   </div>
                 </Form>
@@ -500,7 +510,7 @@ export default function EmploymentType() {
                   <div className="row">
                     <div className="col-12">
                       <label>Employee Type Name<span className="required">*</span></label>
-                      <Form.Item
+                      <Form.Item className="mt-2"
                         name="emptype_name"
                         rules={[
                           {
@@ -547,9 +557,12 @@ export default function EmploymentType() {
                       ) : null}
                     </div>
 
-                    <div className="row d-flex justify-content-center">
+                    <div className="row d-flex justify-content-center mt-2">
                       <div className="col-xl-2 col-lg-2 col-12 justify-content-center">
-                        <Button btnType="save">Save</Button>
+                        <Button 
+                         className={loading ? "btn_loadingColor" : ""}
+                         disabled={loading}
+                        btnType="save">Save</Button>
                       </div>
                     </div>
                   </div>

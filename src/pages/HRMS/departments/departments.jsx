@@ -138,12 +138,14 @@ export default function Departments(props) {
   };
 
   const UpdateDepartment = (data) => {
+    setLoading(true);
     console.log("updating data", data);
     PublicFetch.patch(`${CRM_BASE_URL_HRMS}/departments/${department_id}`, {
       department_name: data?.dept_name,
       department_code: data?.dept_code,
     })
       .then((res) => {
+        setLoading(false);
         console.log("response", res);
         if (res.data.success) {
           console.log("success", res.data.data);
@@ -154,6 +156,7 @@ export default function Departments(props) {
         }
       })
       .catch((err) => {
+        setLoading(false);
         console.log("Error", err);
       });
   };
@@ -664,7 +667,13 @@ export default function Departments(props) {
               </div>
               <div className="row justify-content-center">
                 <div className="col-auto">
-                  <Button disabled={true} btnType="save">Save</Button>
+                  <Button 
+                   className={loading ? "btn_loadingColor" : ""}
+                 disabled={loading}
+                   btnType="save"
+                   >
+                    Save
+                    </Button>
                 </div>
               </div>
             </Form>
